@@ -1,0 +1,17 @@
+numpy>=1.13.0
+pandas>=1.0.3
+beautifulsoup4>=4.4.0
+requests>=2.18.1
+lxml>=4.2.1
+pyarrow>=1.0.1
+pygithub>=1.51
+scipy>=1.4.0
+matplotlib>=2.0.0
+tqdm>=4.50.0
+attrs>=20.3.0
+
+[test]
+pytest>=6.0.2
+mypy>=0.782
+pytest-cov>=2.10.1
+pytest-xdist>=2.1.0

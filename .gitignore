@@ -1,0 +1,3 @@
+.vscod*
+requirements.txt
+.github/workflows/pytest.yml
