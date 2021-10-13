@@ -9,7 +9,7 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.png',
   organizationName: 'SportsDataverse', // Usually your GitHub org/user name.
   projectName: 'sportsdataverse-py', // Usually your repo name.
   themeConfig: {
@@ -20,13 +20,13 @@ module.exports = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
-    image: 'img/cfbfastR-py-gh.png',
+    image: 'img/sdv-purple-white-1240.png',
     navbar: {
       hideOnScroll: true,
       title: 'sportsdataverse-py',
       logo: {
         alt: 'sportsdataverse-py Logo',
-        src: 'img/logo.ico',
+        src: 'img/logo.png',
       },
       items: [
         {
