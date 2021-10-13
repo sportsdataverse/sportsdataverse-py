@@ -46,7 +46,7 @@ BibTex Citation
 @misc{gilani_sdvpy_2021,
   author = {Gilani, Saiem},
   title = {sportsdataverse-py: The SportsDataverse's Python Package for Sports Data.},
-  url = {https://csportsdataverse-py.sportsdataverse.org},
+  url = {https://sportsdataverse-py.sportsdataverse.org},
   season = {2021}
 }
 ```

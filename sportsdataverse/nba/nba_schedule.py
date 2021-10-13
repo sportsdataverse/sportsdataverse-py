@@ -6,7 +6,7 @@ from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
 def nba_schedule(dates=None, season_type=None) -> pd.DataFrame:
-    """nba_schedule - look up the NBA schedule for a given date
+    """nba_schedule - look up the NBA schedule for a given date from ESPN
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
@@ -57,7 +57,7 @@ def nba_schedule(dates=None, season_type=None) -> pd.DataFrame:
 
 
 def nba_calendar(season=None) -> pd.DataFrame:
-    """nba_calendar - look up the NBA calendar for a given season
+    """nba_calendar - look up the NBA calendar for a given season from ESPN
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.

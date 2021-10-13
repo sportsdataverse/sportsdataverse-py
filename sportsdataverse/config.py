@@ -10,8 +10,15 @@ NFL_BASE_URL = NFLVERSEGITHUB+'nflfastR-data/master/data/play_by_play_{season}.p
 NFL_PLAYER_STATS_URL = NFLVERSEGITHUB+'nflfastR-data/master/data/player_stats.parquet'
 NFL_ROSTER_URL = NFLVERSEGITHUB+'nflfastR-roster/master/data/nflfastR-roster.csv.gz'
 NFL_TEAM_LOGO_URL  = NFLVERSEGITHUB+'nflfastR-data/master/teams_colors_logos.csv'
-
 NFL_TEAM_SCHEDULE_URL = SGITHUB+'nflfastR-data/master/schedules/sched_{season}.parquet'
+
+NHL_BASE_URL = NFLVERSEGITHUB+'nflfastR-data/master/data/play_by_play_{season}.parquet'
+NHL_PLAYER_STATS_URL = NFLVERSEGITHUB+'nflfastR-data/master/data/player_stats.parquet'
+NHL_ROSTER_URL = NFLVERSEGITHUB+'nflfastR-roster/master/data/nflfastR-roster.csv.gz'
+NHL_TEAM_LOGO_URL  = NFLVERSEGITHUB+'nflfastR-data/master/teams_colors_logos.csv'
+NHL_TEAM_SCHEDULE_URL = SGITHUB+'nflfastR-data/master/schedules/sched_{season}.parquet'
+
+
 MBB_BASE_URL = SGITHUB+'hoopR-data/master/mbb/pbp/parquet/play_by_play_{season}.parquet'
 MBB_TEAM_BOX_URL = SGITHUB+'hoopR-data/master/mbb/team_box/parquet/team_box_{season}.parquet'
 MBB_PLAYER_BOX_URL = SGITHUB+'hoopR-data/master/mbb/player_box/parquet/player_box_{season}.parquet'

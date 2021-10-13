@@ -67,8 +67,6 @@ def mbb_calendar(season=None) -> pd.DataFrame:
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.
-        groups (int): Used to define different divisions. 50 is Division I, 51 is Division II, 52 is Division III.
-        season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
