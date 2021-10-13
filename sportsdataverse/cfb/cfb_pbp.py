@@ -45,39 +45,19 @@ class CFBPlayProcess(object):
         self.ran_pipeline = False
 
     def cfb_pbp(self):
-        """cfb_pbp() - Pull the game by id
-            Data from API endpoints:
-                * college-football/playbyplay
-                * college-football/summary
+        """cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`, `college-football/summary`
 
             Args:
                 game_id (int): Unique game_id, can be obtained from cfb_schedule().
 
             Returns:
-                Dict: Dictionary of game data with keys:
+                Dict: Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts",
+                 "videos", "playByPlaySource", "standings", "leaders", "timeouts", "homeTeamSpread", "overUnder",
+                 "pickcenter", "againstTheSpread", "odds", "predictor", "winprobability", "espnWP",
+                 "gameInfo", "season"
 
-                    * "gameId"
-                    * "plays"
-                    * "boxscore"
-                    * "header"
-                    * "broadcasts"
-                    * "videos"
-                    * "playByPlaySource"
-                    * "standings"
-                    * "leaders"
-                    * "timeouts"
-                    * "homeTeamSpread"
-                    * "overUnder"
-                    * "pickcenter"
-                    * "againstTheSpread"
-                    * "odds"
-                    * "predictor"
-                    * "winprobability"
-                    * "espnWP"
-                    * "gameInfo"
-                    * "season"
             Example:
-                cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).cfb_pbp()
+                `cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).cfb_pbp()`
         """
         cache_buster = int(time.time() * 1000)
         # play by play

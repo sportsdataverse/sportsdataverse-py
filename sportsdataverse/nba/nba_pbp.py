@@ -9,38 +9,18 @@ from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
 
 def nba_pbp(game_id: int) -> Dict:
-    """nba_pbp() - Pull the game by id
-        Data from API endpoints:
-            * nba/playbyplay
-            * nba/summary
+    """nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary`
 
         Args:
             game_id (int): Unique game_id, can be obtained from nba_schedule().
 
         Returns:
-            dict: Dictionary of game data with keys:
+            Dict: Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts",
+             "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread",
+             "odds", "predictor", "espnWP", "gameInfo", "season"
 
-                * "gameId"
-                * "plays"
-                * "winprobability"
-                * "boxscore"
-                * "header"
-                * "broadcasts"
-                * "videos"
-                * "playByPlaySource"
-                * "standings"
-                * "leaders"
-                * "seasonseries"
-                * "timeouts"
-                * "pickcenter"
-                * "againstTheSpread"
-                * "odds"
-                * "predictor"
-                * "espnWP"
-                * "gameInfo"
-                * "season"
-            Example:
-                nba_df = sportsdataverse.nba.nba_pbp(game_id=401307514)
+        Example:
+            `nba_df = sportsdataverse.nba.nba_pbp(game_id=401307514)`
     """
     # play by play
     pbp_url = "http://cdn.espn.com/core/nba/playbyplay?gameId={}&xhr=1&render=false&userab=18".format(game_id)

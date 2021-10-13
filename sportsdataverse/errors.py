@@ -1,5 +1,5 @@
 """
-Custom exceptions for cfbfastR module
+Custom exceptions for sportsdataverse module
 """
 
 class SeasonNotFoundError(Exception):

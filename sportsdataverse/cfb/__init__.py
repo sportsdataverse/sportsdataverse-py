@@ -1,3 +1,3 @@
-from .cfb_loaders import *
-from .cfb_pbp import *
-from .cfb_schedule import *
+from sportsdataverse.cfb.cfb_loaders import *
+from sportsdataverse.cfb.cfb_pbp import *
+from sportsdataverse.cfb.cfb_schedule import *

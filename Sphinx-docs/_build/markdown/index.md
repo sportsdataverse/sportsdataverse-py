@@ -1,40 +1,166 @@
-<!-- cfbfastR-py documentation master file, created by
-sphinx-quickstart on Tue Jun 29 10:38:52 2021.
+<!-- sdv-py documentation master file, created by
+sphinx-quickstart on Wed Oct 13 07:51:42 2021.
 You can adapt this file completely to your liking, but it should at least
 contain the root `toctree` directive. -->
-# Welcome to cfbfastR-py’s documentation!
+# Welcome to sdv-py’s documentation!
 
 # Contents:
 
 
-* cfbfastR package
+* setup module
+
+
+* sportsdataverse package
+
+
+    * Subpackages
+
+
+        * sportsdataverse.cfb package
+
+
+            * Submodules
+
+
+            * sportsdataverse.cfb.cfb_loaders module
+
+
+            * sportsdataverse.cfb.cfb_pbp module
+
+
+            * sportsdataverse.cfb.cfb_schedule module
+
+
+            * sportsdataverse.cfb.model_vars module
+
+
+            * Module contents
+
+
+        * sportsdataverse.mbb package
+
+
+            * Submodules
+
+
+            * sportsdataverse.mbb.mbb_loaders module
+
+
+            * sportsdataverse.mbb.mbb_pbp module
+
+
+            * sportsdataverse.mbb.mbb_schedule module
+
+
+            * Module contents
+
+
+        * sportsdataverse.nba package
+
+
+            * Submodules
+
+
+            * sportsdataverse.nba.nba_loaders module
+
+
+            * sportsdataverse.nba.nba_pbp module
+
+
+            * sportsdataverse.nba.nba_schedule module
+
+
+            * Module contents
+
+
+        * sportsdataverse.nfl package
+
+
+            * Submodules
+
+
+            * sportsdataverse.nfl.model_vars module
+
+
+            * sportsdataverse.nfl.nfl_loaders module
+
+
+            * sportsdataverse.nfl.nfl_pbp module
+
+
+            * sportsdataverse.nfl.nfl_schedule module
+
+
+            * Module contents
+
+
+        * sportsdataverse.nhl package
+
+
+            * Submodules
+
+
+            * sportsdataverse.nhl.nhl_loaders module
+
+
+            * sportsdataverse.nhl.nhl_pbp module
+
+
+            * sportsdataverse.nhl.nhl_schedule module
+
+
+            * Module contents
+
+
+        * sportsdataverse.wbb package
+
+
+            * Submodules
+
+
+            * sportsdataverse.wbb.wbb_loaders module
+
+
+            * sportsdataverse.wbb.wbb_pbp module
+
+
+            * sportsdataverse.wbb.wbb_schedule module
+
+
+            * Module contents
+
+
+        * sportsdataverse.wnba package
+
+
+            * Submodules
+
+
+            * sportsdataverse.wnba.wnba_loaders module
+
+
+            * sportsdataverse.wnba.wnba_pbp module
+
+
+            * sportsdataverse.wnba.wnba_schedule module
+
+
+            * Module contents
 
 
     * Submodules
 
 
-    * cfbfastR.cfb module
+    * sportsdataverse.config module
 
 
-    * cfbfastR.config module
+    * sportsdataverse.dl_utils module
 
 
-    * cfbfastR.dl_utils module
-
-
-    * cfbfastR.errors module
-
-
-    * cfbfastR.pbp module
-
-
-    * cfbfastR.schedule module
+    * sportsdataverse.errors module
 
 
     * Module contents
-
-
-* setup module
 
 
 # Indices and tables

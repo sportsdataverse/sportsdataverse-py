@@ -9,35 +9,18 @@ from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
 
 def nhl_pbp(game_id: int) -> Dict:
-    """nhl_pbp() - Pull the game by id
-        Data from API endpoints:
-            * nhl/playbyplay
-            * nhl/summary
+    """nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
 
-        Args:
-            game_id (int): Unique game_id, can be obtained from nhl_schedule().
+    Args:
+        game_id (int): Unique game_id, can be obtained from nhl_schedule().
 
-        Returns:
-            Dict: Dictionary of game data with keys:
+    Returns:
+        Dict: Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts",
+         "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "pickcenter", "againstTheSpread",
+         "odds", "onIce", "gameInfo", "season"
 
-                * "gameId"
-                * "plays"
-                * "boxscore"
-                * "header"
-                * "broadcasts"
-                * "videos"
-                * "playByPlaySource"
-                * "standings"
-                * "leaders"
-                * "seasonseries"
-                * "pickcenter"
-                * "againstTheSpread"
-                * "odds"
-                * "onIce"
-                * "gameInfo"
-                * "season"
-            Example:
-                nhl_df = sportsdataverse.nhl.nhl_pbp(game_id=401247153)
+    Example:
+        `nhl_df = sportsdataverse.nhl.nhl_pbp(game_id=401247153)`
     """
     # play by play
     pbp_txt = {}

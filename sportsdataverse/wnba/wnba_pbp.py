@@ -8,36 +8,16 @@ from typing import List, Callable, Iterator, Union, Optional, Dict
 from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
 def wnba_pbp(game_id: int) -> Dict:
-    """wnba_pbp() - Pull the game by id
-        Data from API endpoints:
-            * wnba/playbyplay
-            * wnba/summary
+    """wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary`
 
         Args:
             game_id (int): Unique game_id, can be obtained from wnba_schedule().
 
         Returns:
-            Dict: Dictionary of game data with keys:
+            Dict: Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header",
+             "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts",
+             "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
 
-                * "gameId"
-                * "plays"
-                * "winprobability"
-                * "boxscore"
-                * "header"
-                * "broadcasts"
-                * "videos"
-                * "playByPlaySource"
-                * "standings"
-                * "leaders"
-                * "seasonseries"
-                * "timeouts"
-                * "pickcenter"
-                * "againstTheSpread"
-                * "odds"
-                * "predictor"
-                * "espnWP"
-                * "gameInfo"
-                * "season"
         Example:
             `wnba_df = sportsdataverse.wnba.wnba_pbp(game_id=401370395)`
     """

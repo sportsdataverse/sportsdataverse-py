@@ -3,15 +3,15 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'cfbfastR-py',
-  tagline: "The SportsDataverse's Python Package for American Football Data.",
-  url: 'https://cfbfastr-py.sportsdataverse.org',
+  title: 'sportsdataverse-py',
+  tagline: "The SportsDataverse's Python Package for Sports Data.",
+  url: 'https://sportsdataverse-py.sportsdataverse.org',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'sportsdataverse', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'SportsDataverse', // Usually your GitHub org/user name.
+  projectName: 'sportsdataverse-py', // Usually your repo name.
   themeConfig: {
     hideableSidebar: true,
     sidebarCollapsible: false,
@@ -23,9 +23,9 @@ module.exports = {
     image: 'img/cfbfastR-py-gh.png',
     navbar: {
       hideOnScroll: true,
-      title: 'cfbfastR-py',
+      title: 'sportsdataverse-py',
       logo: {
-        alt: 'cfbfastR Logo',
+        alt: 'sportsdataverse-py Logo',
         src: 'img/logo.ico',
       },
       items: [
@@ -40,7 +40,6 @@ module.exports = {
           to: 'CHANGELOG',
           position: 'left',
         },
-        
         {
           label: 'SDV',
           position: 'left',
@@ -54,13 +53,18 @@ module.exports = {
               label: 'Python Packages',
             },
             {
+              label: 'cfbfastR-py',
+              href: 'https://cfbfastR-py.sportsdataverse.org',
+              target: '_self',
+            },
+            {
               label: 'hoopR-py',
-              href: 'https://hoopR-py.sportsdataverse.org/',
+              href: 'https://hoopR-py.sportsdataverse.org',
               target: '_self',
             },
             {
               label: 'wehoop-py',
-              href: 'https://wehoop-py.sportsdataverse.org/',
+              href: 'https://wehoop-py.sportsdataverse.org',
               target: '_self',
             },
             {
@@ -68,7 +72,7 @@ module.exports = {
             },
             {
               label: 'cfbfastR',
-              href: 'https://cfbfastR.sportsdataverse.org/',
+              href: 'https://saiemgilani.github.io/cfbfastR/',
               target: '_self',
             },
             {
@@ -102,6 +106,11 @@ module.exports = {
               target: '_self',
             },
             {
+              label: 'cfb4th',
+              href: 'https://kazink36.github.io/cfb4th/',
+              target: '_self',
+            },
+            {
               label: 'worldfootballR',
               href: 'https://jaseziv.github.io/worldfootballR/',
               target: '_self',
@@ -109,6 +118,11 @@ module.exports = {
             {
               label: 'hockeyR',
               href: 'https://hockeyr.netlify.app/',
+              target: '_self',
+            },
+            {
+              label: 'baseballr',
+              href: 'https://BillPetti.github.io/baseballr/',
               target: '_self',
             },
             {
@@ -127,7 +141,7 @@ module.exports = {
           ]
         },
         {
-          href: 'https://github.com/saiemgilani/cfbfastR-py',
+          href: 'https://github.com/saiemgilani/sportsdataverse-py/',
           label: 'GitHub',
           position: 'right',
         },
@@ -149,7 +163,11 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Twitter',
+              label: 'Twitter (Author)',
+              href: 'https://twitter.com/saiemgilani',
+            },
+            {
+              label: 'Twitter (SportsDataverse)',
               href: 'https://twitter.com/saiemgilani',
             },
           ],
@@ -159,12 +177,12 @@ module.exports = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/saiemgilani/cfbfastR-py',
+              href: 'https://github.com/saiemgilani/sportsdataverse-py',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} <strong>cfbfastR-py</strong>, developed by <a href='https://twitter.com/saiemgilani'>Saiem Gilani</a>, part of the <a href='https://sportsdataverse.org'>SportsDataverse</a>.`,
+      copyright: `Copyright © ${new Date().getFullYear()} <strong>sportsdataverse-py</strong>, developed by <a href='https://twitter.com/saiemgilani'>Saiem Gilani</a>, part of the <a href='https://sportsdataverse.org'>SportsDataverse</a>.`,
     },
     prism: {
       theme: lightCodeTheme,
@@ -179,7 +197,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/saiemgilani/cfbfastR-py/edit/master/docs/',
+            'https://github.com/saiemgilani/sportsdataverse-py/edit/master/docs/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

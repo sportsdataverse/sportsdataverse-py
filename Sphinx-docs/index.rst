@@ -1,17 +1,17 @@
-.. cfbfastR-py documentation master file, created by
-   sphinx-quickstart on Tue Jun 29 10:38:52 2021.
+.. sdv-py documentation master file, created by
+   sphinx-quickstart on Wed Oct 13 07:51:42 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to cfbfastR-py's documentation!
-=======================================
+Welcome to sdv-py's documentation!
+==================================
 
 .. toctree::
    :maxdepth: 4
    :caption: Contents:
 
-   cfbfastR
    setup
+   sportsdataverse
 
 
 Indices and tables

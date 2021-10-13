@@ -12,12 +12,12 @@
 #
 # import os
 # import sys
-# sys.path.insert(0, 'D:\\GitHub-Data\\cfbfastR-dev\\cfbfastR-py')
+# sys.path.insert(0, 'D:\\GitHub-Data\\sdv-dev\\sdv-py')
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'cfbfastR'
+project = 'sportsdataverse'
 copyright = '2021, Saiem Gilani'
 author = 'Saiem Gilani'
 
@@ -68,7 +68,6 @@ html_static_path = ['_static']
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
-
 import os
 import sys
 sys.path.insert(0,os.path.abspath('../'))

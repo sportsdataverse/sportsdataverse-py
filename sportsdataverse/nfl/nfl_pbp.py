@@ -39,39 +39,18 @@ class NFLPlayProcess(object):
         self.ran_pipeline = False
 
     def nfl_pbp(self):
-        """nfl_pbp() - Pull the game by id
-            Data from API endpoints:
-            * nfl/playbyplay
-            * nfl/summary
+        """nfl_pbp() - Pull the game by id - Data from API endpoints - `nfl/playbyplay`, `nfl/summary`
 
             Args:
                 game_id (int): Unique game_id, can be obtained from nfl_schedule().
 
             Returns:
-                dict: Dictionary of game data with keys:
+                Dict: Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts", "videos",
+                 "playByPlaySource", "standings", "leaders", "timeouts", "homeTeamSpread", "overUnder", "pickcenter",
+                 "againstTheSpread", "odds", "predictor", "winprobability", "espnWP", "gameInfo", "season"
 
-                    * "gameId"
-                    * "plays"
-                    * "boxscore"
-                    * "header"
-                    * "broadcasts"
-                    * "videos"
-                    * "playByPlaySource"
-                    * "standings"
-                    * "leaders"
-                    * "timeouts"
-                    * "homeTeamSpread"
-                    * "overUnder"
-                    * "pickcenter"
-                    * "againstTheSpread"
-                    * "odds"
-                    * "predictor"
-                    * "winprobability"
-                    * "espnWP"
-                    * "gameInfo"
-                    * "season"
             Example:
-                nfl_df = sportsdataverse.nfl.nfl_pbp(game_id=401220403)
+                `nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).nfl_pbp()`
         """
 
         cache_buster = int(time.time() * 1000)

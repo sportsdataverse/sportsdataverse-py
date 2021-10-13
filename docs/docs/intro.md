@@ -4,56 +4,55 @@ sidebar_label: Getting Started
 sidebar_position: 1
 ---
 
-## **cfbfastR-py**
+# sportsdataverse-py <a href='https://sportsdataverse-py.sportsdataverse.org'><img src='https://sportsdataverse-py.sportsdataverse.org/img/cfbfastR-py-logo.png' align="right" height="150" /></a>
 <!-- badges: start -->
 
 ![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)
-[![PyPI](https://img.shields.io/pypi/v/cfbfastR-py?label=cfbfastR-py&logo=python&style=for-the-badge)](https://pypi.org/project/cfbfastR-py/)
-![Contributors](https://img.shields.io/github/contributors/saiemgilani/cfbfastR-py?style=for-the-badge)
+[![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)
+![Contributors](https://img.shields.io/github/contributors/saiemgilani/sportsdataverse-py?style=for-the-badge)
 [![Twitter
-Follow](https://img.shields.io/twitter/follow/cfbfastR?color=blue&label=%40cfbfastR&logo=twitter&style=for-the-badge)](https://twitter.com/cfbfastR)
+Follow](https://img.shields.io/twitter/follow/sportsdataverse?color=blue&label=%40sportsdataverse&logo=twitter&style=for-the-badge)](https://twitter.com/sportsdataverse)
 
 <!-- badges: end -->
 
 
-See [CHANGELOG.md](https://cfbfastR-py.sportsdataverse.org/CHANGELOG) for details. <a href='https://cfbfastR-py.sportsdataverse.org'><img src='https://cfbfastR-py.sportsdataverse.org/img/cfbfastR-py-logo.png' align="right" height="150" /></a>
+See [CHANGELOG.md](https://sportsdataverse-py.sportsdataverse.org/CHANGELOG) for details.
 
-The goal of [cfbfastR-py](https://cfbfastR-py.sportsdataverse.org) is to provide the community with a python package for working with American Football data as a companion to the [cfbfastR](https://saiemgilani.github.io/cfbfastR) R package. Beyond data aggregation and tidying ease, one of the multitude of services that [cfbfastR-py](https://cfbfastR-py.sportsdataverse.org) provides is for benchmarking open-source expected points and win probability metrics.
+The goal of [sportsdataverse-py](https://sportsdataverse-py.sportsdataverse.org) is to provide the community with a python package for working with sports data as a companion to the [cfbfastR](https://saiemgilani.github.io/cfbfastR), [hoopR](https://hoopR.sportsdataverse.org/), and [wehoop](https://wehoop.sportsdataverse.org/) R packages. Beyond data aggregation and tidying ease, one of the multitude of services that [sportsdataverse-py](https://sportsdataverse-py.sportsdataverse.org) provides is for benchmarking open-source expected points and win probability metrics for American Football.
 
-## **Installation**
+## Installation
 
-cfbfastR-py can be installed via pip:
+sportsdataverse-py can be installed via pip:
 
 ```bash
-pip install cfbfastR-py
+pip install sportsdataverse
 ```
 
 or from the repo (which may at times be more up to date):
 
 ```bash
-git clone https://github.com/saiemgilani/cfbfastR-py
-cd cfbfastR-py
+git clone https://github.com/saiemgilani/sportsdataverse-py
+cd sportsdataverse-py
 pip install -e .
 ```
 
-## **Our Authors**
+# **Our Authors**
 
 -   [Saiem Gilani](https://twitter.com/saiemgilani)
-
 <a href="https://twitter.com/saiemgilani" target="blank"><img src="https://img.shields.io/twitter/follow/saiemgilani?color=blue&label=%40saiemgilani&logo=twitter&style=for-the-badge" alt="@saiemgilani" /></a>
 <a href="https://github.com/saiemgilani" target="blank"><img src="https://img.shields.io/github/followers/saiemgilani?color=eee&logo=Github&style=for-the-badge" alt="@saiemgilani" /></a>
 
 
 ## **Citations**
 
-To cite the [**`cfbfastR-py`**](https://cfbfastR-py.sportsdataverse.org) Python package in publications, use:
+To cite the [**`sportsdataverse-py`**](https://sportsdataverse-py.sportsdataverse.org) Python package in publications, use:
 
 BibTex Citation
 ```bibtex
-@misc{saiemgilani2021cfbfastRpy,
+@misc{gilani_sdvpy_2021,
   author = {Gilani, Saiem},
-  title = {cfbfastR-py: The SportsDataverse's Python Package for American Football Data.},
-  url = {https://cfbfastR-py.sportsdataverse.org},
+  title = {sportsdataverse-py: The SportsDataverse's Python Package for Sports Data.},
+  url = {https://sportsdataverse-py.sportsdataverse.org},
   season = {2021}
 }
 ```
