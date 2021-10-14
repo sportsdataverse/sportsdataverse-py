@@ -1,6 +1,6 @@
-# sportsdataverse.cfb package
+# CFB Function Index
 
-### sportsdataverse.cfb.cfb_teams()
+## sportsdataverse.cfb.cfb_teams()
 Load college football team ID information and logos
 
 Example:
@@ -13,7 +13,9 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
 
+----------------------------------------------------------------------------------------
 
+# CFB Loaders
 ### sportsdataverse.cfb.load_cfb_pbp(seasons: List[int])
 Load college football play by play data going back to 2003
 

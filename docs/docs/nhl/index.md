@@ -1,4 +1,5 @@
-# sportsdataverse.nhl package
+# NHL Function Index
+## sportsdataverse.nhl package
 
 ### sportsdataverse.nhl.load_nhl_pbp(seasons: List[int])
 Load NHL play by play data going back to 1999

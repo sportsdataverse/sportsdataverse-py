@@ -1,4 +1,5 @@
-# sportsdataverse.mbb package
+# MBB Function Index
+## sportsdataverse.mbb package
 
 ### sportsdataverse.mbb.load_mbb_pbp(seasons: List[int])
 Load men’s college basketball play by play data going back to 2002

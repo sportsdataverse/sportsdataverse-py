@@ -1,4 +1,6 @@
-# sportsdataverse.wnba package
+# WNBA Function Index
+
+## sportsdataverse.wnba package
 
 ## Submodules
 

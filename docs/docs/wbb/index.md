@@ -1,4 +1,6 @@
-# sportsdataverse.wbb package
+# WBB Function Index
+
+## sportsdataverse.wbb package
 
 ### sportsdataverse.wbb.load_wbb_pbp(seasons: List[int])
 Load women’s college basketball play by play data going back to 2002

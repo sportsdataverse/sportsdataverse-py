@@ -1,4 +1,5 @@
-# sportsdataverse.nfl package
+# NFL Function Index
+## sportsdataverse.nfl package
 
 ### sportsdataverse.nfl.load_nfl_pbp(seasons: List[int])
 Load NFL play by play data going back to 1999

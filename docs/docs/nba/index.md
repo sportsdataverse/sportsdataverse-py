@@ -1,4 +1,6 @@
-# sportsdataverse.nba package
+# NBA Function Index
+
+## sportsdataverse.nba package
 
 ### sportsdataverse.nba.load_nba_pbp(seasons: List[int])
 Load NBA play by play data going back to 2002
