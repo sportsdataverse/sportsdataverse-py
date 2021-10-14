@@ -8,16 +8,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
 @-webkit-keyframes glow {
   from {
-    text-shadow: 0 0 8px #F4FE85, 0 0 10px #F4FE85;
+    text-shadow: 0 0 8px #c77dff, 0 0 10px #c77dff;
   }
   to {
-    text-shadow: 0 0 10px #F4FE85, 0 0 11px #F4FE85;
+    text-shadow: 0 0 10px #c77dff, 0 0 11px #c77dff;
   }
 }
 
 @keyframes glow {
   to {
-    text-shadow: 0 0 10px #F4FE85, 0 0 11px #F4FE85;
+    text-shadow: 0 0 10px #c77dff, 0 0 11px #c77dff;
   }
 }
 html[data-theme='dark'] .navbar__title {
