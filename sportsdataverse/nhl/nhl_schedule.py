@@ -2,8 +2,8 @@ import pandas as pd
 import json
 from sportsdataverse.dl_utils import download
 
-def nhl_schedule(dates=None, season_type=None) -> pd.DataFrame:
-    """nhl_schedule - look up the NHL schedule for a given date
+def espn_nhl_schedule(dates=None, season_type=None) -> pd.DataFrame:
+    """espn_nhl_schedule - look up the NHL schedule for a given date
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
@@ -50,8 +50,8 @@ def nhl_schedule(dates=None, season_type=None) -> pd.DataFrame:
     ev = pd.DataFrame(ev)
     return ev
 
-def nhl_calendar(season=None) -> pd.DataFrame:
-    """nhl_calendar - look up the NHL calendar for a given season
+def espn_nhl_calendar(season=None) -> pd.DataFrame:
+    """espn_nhl_calendar - look up the NHL calendar for a given season
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.

@@ -7,8 +7,8 @@ import json
 from typing import List, Callable, Iterator, Union, Optional, Dict
 from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
-def mbb_pbp(game_id: int) -> Dict:
-    """mbb_pbp() - Pull the game by id. Data from API endpoints: `mens-college-basketball/playbyplay`, `mens-college-basketball/summary`
+def espn_mbb_pbp(game_id: int) -> Dict:
+    """espn_mbb_pbp() - Pull the game by id. Data from API endpoints: `mens-college-basketball/playbyplay`, `mens-college-basketball/summary`
 
     Args:
         game_id (int): Unique game_id, can be obtained from mbb_schedule().
@@ -19,7 +19,7 @@ def mbb_pbp(game_id: int) -> Dict:
         "espnWP", "gameInfo", "season"
 
     Example:
-        `mbb_df = sportsdataverse.mbb.mbb_pbp(game_id=401265031)`
+        `mbb_df = sportsdataverse.mbb.espn_mbb_pbp(game_id=401265031)`
     """
     # play by play
     pbp_url = "http://cdn.espn.com/core/mens-college-basketball/playbyplay?gameId={}&xhr=1&render=false&userab=18".format(game_id)

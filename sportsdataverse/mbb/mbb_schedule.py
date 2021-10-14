@@ -5,8 +5,8 @@ from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
-def mbb_schedule(dates=None, groups=None, season_type=None) -> pd.DataFrame:
-    """mbb_schedule - look up the men's college basketball scheduler for a given season
+def espn_mbb_schedule(dates=None, groups=None, season_type=None) -> pd.DataFrame:
+    """espn_mbb_schedule - look up the men's college basketball scheduler for a given season
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
@@ -62,8 +62,8 @@ def mbb_schedule(dates=None, groups=None, season_type=None) -> pd.DataFrame:
 
     return ev
 
-def mbb_calendar(season=None) -> pd.DataFrame:
-    """mbb_calendar - look up the men's college basketball calendar for a given season
+def espn_mbb_calendar(season=None) -> pd.DataFrame:
+    """espn_mbb_calendar - look up the men's college basketball calendar for a given season
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.

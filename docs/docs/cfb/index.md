@@ -1,11 +1,11 @@
 # CFB Function Index
 
-## sportsdataverse.cfb.cfb_teams()
+## sportsdataverse.cfb.espn_cfb_teams()
 Load college football team ID information and logos
 
 Example:
 
-    cfb_df = sportsdataverse.cfb.cfb_teams()
+    cfb_df = sportsdataverse.cfb.espn_cfb_teams()
 
 Args:
 
@@ -103,8 +103,8 @@ Bases: `object`
 Initialize self.  See help(type(self)) for accurate signature.
 
 
-#### cfb_pbp()
-cfb_pbp() - Pull the game by id. Data from API endpoints: college-football/playbyplay, college-football/summary
+#### espn_cfb_pbp()
+espn_cfb_pbp() - Pull the game by id. Data from API endpoints: college-football/playbyplay, college-football/summary
 
 Args:
 
@@ -120,7 +120,7 @@ Returns:
 
 Example:
 
-    cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).cfb_pbp()
+    cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).espn_cfb_pbp()
 
 
 #### create_box_score()
@@ -131,7 +131,7 @@ Example:
 
 #### run_processing_pipeline()
 
-### sportsdataverse.cfb.cfb_calendar(season=None, groups=None)
+### sportsdataverse.cfb.espn_cfb_calendar(season=None, groups=None)
 cfb_calendar - look up the men’s college football calendar for a given season
 
 Args:
@@ -148,7 +148,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.cfb.cfb_schedule(dates=None, week=None, season_type=None, groups=None)
+### sportsdataverse.cfb.espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None)
 cfb_schedule - look up the college football schedule for a given season
 
 Args:

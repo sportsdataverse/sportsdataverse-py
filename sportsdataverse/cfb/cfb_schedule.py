@@ -3,8 +3,8 @@ import json
 from sportsdataverse.dl_utils import download
 from urllib.error import URLError, HTTPError, ContentTooShortError
 
-def cfb_schedule(dates=None, week=None, season_type=None, groups=None) -> pd.DataFrame:
-    """cfb_schedule - look up the college football schedule for a given season
+def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None) -> pd.DataFrame:
+    """espn_cfb_schedule - look up the college football schedule for a given season
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
@@ -63,8 +63,8 @@ def cfb_schedule(dates=None, week=None, season_type=None, groups=None) -> pd.Dat
 
 
 
-def cfb_calendar(season=None, groups=None) -> pd.DataFrame:
-    """cfb_calendar - look up the men's college football calendar for a given season
+def espn_cfb_calendar(season=None, groups=None) -> pd.DataFrame:
+    """espn_cfb_calendar - look up the men's college football calendar for a given season
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.

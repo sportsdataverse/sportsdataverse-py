@@ -44,8 +44,8 @@ class CFBPlayProcess(object):
         # self.logger = logger
         self.ran_pipeline = False
 
-    def cfb_pbp(self):
-        """cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`, `college-football/summary`
+    def espn_cfb_pbp(self):
+        """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`, `college-football/summary`
 
             Args:
                 game_id (int): Unique game_id, can be obtained from cfb_schedule().
@@ -57,7 +57,7 @@ class CFBPlayProcess(object):
                  "gameInfo", "season"
 
             Example:
-                `cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).cfb_pbp()`
+                `cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).espn_cfb_pbp()`
         """
         cache_buster = int(time.time() * 1000)
         # play by play

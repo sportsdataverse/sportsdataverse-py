@@ -5,8 +5,8 @@ from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
-def wbb_schedule(dates=None, groups=None, season_type=None) -> pd.DataFrame:
-    """wbb_schedule - look up the women's college basketball schedule for a given season
+def espn_wbb_schedule(dates=None, groups=None, season_type=None) -> pd.DataFrame:
+    """espn_wbb_schedule - look up the women's college basketball schedule for a given season
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
@@ -62,8 +62,8 @@ def wbb_schedule(dates=None, groups=None, season_type=None) -> pd.DataFrame:
 
     return ev
 
-def wbb_calendar(season=None) -> pd.DataFrame:
-    """wbb_calendar - look up the women's college basketball calendar for a given season
+def espn_wbb_calendar(season=None) -> pd.DataFrame:
+    """espn_wbb_calendar - look up the women's college basketball calendar for a given season
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.

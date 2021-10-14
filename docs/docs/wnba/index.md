@@ -2,11 +2,6 @@
 
 ## sportsdataverse.wnba package
 
-## Submodules
-
-## sportsdataverse.wnba.wnba_loaders module
-
-
 ### sportsdataverse.wnba.load_wnba_pbp(seasons: List[int])
 Load WNBA play by play data going back to 2002
 
@@ -90,8 +85,8 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-### sportsdataverse.wnba.wnba_pbp(game_id: int)
-wnba_pbp() - Pull the game by id. Data from API endpoints - wnba/playbyplay, wnba/summary
+### sportsdataverse.wnba.espn_wnba_pbp(game_id: int)
+espn_wnba_pbp() - Pull the game by id. Data from API endpoints - wnba/playbyplay, wnba/summary
 
 Args:
 
@@ -106,10 +101,10 @@ Returns:
 
 Example:
 
-    wnba_df = sportsdataverse.wnba.wnba_pbp(game_id=401370395)
+    wnba_df = sportsdataverse.wnba.espn_wnba_pbp(game_id=401370395)
 
-### sportsdataverse.wnba.wnba_calendar(season=None)
-wnba_calendar - look up the WNBA calendar for a given season
+### sportsdataverse.wnba.espn_wnba_calendar(season=None)
+espn_wnba_calendar - look up the WNBA calendar for a given season
 
 Args:
 
@@ -125,8 +120,8 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_schedule(dates=None, season_type=None)
-wnba_schedule - look up the WNBA schedule for a given season
+### sportsdataverse.wnba.espn_wnba_schedule(dates=None, season_type=None)
+espn_wnba_schedule - look up the WNBA schedule for a given season
 
 Args:
 

@@ -2,8 +2,8 @@ import pandas as pd
 import json
 from sportsdataverse.dl_utils import download
 
-def nfl_schedule(dates=None, week=None, season_type=None) -> pd.DataFrame:
-    """nfl_schedule - look up the NFL schedule for a given date from ESPN
+def espn_nfl_schedule(dates=None, week=None, season_type=None) -> pd.DataFrame:
+    """espn_nfl_schedule - look up the NFL schedule for a given date from ESPN
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
@@ -57,8 +57,8 @@ def nfl_schedule(dates=None, week=None, season_type=None) -> pd.DataFrame:
 
 
 
-def nfl_calendar(season=None) -> pd.DataFrame:
-    """nfl_calendar - look up the NFL calendar for a given season from ESPN
+def espn_nfl_calendar(season=None) -> pd.DataFrame:
+    """espn_nfl_calendar - look up the NFL calendar for a given season from ESPN
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.

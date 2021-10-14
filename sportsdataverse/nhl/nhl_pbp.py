@@ -8,8 +8,8 @@ from typing import List, Callable, Iterator, Union, Optional, Dict
 from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
 
-def nhl_pbp(game_id: int) -> Dict:
-    """nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
+def espn_nhl_pbp(game_id: int) -> Dict:
+    """espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
 
     Args:
         game_id (int): Unique game_id, can be obtained from nhl_schedule().
@@ -20,7 +20,7 @@ def nhl_pbp(game_id: int) -> Dict:
          "odds", "onIce", "gameInfo", "season"
 
     Example:
-        `nhl_df = sportsdataverse.nhl.nhl_pbp(game_id=401247153)`
+        `nhl_df = sportsdataverse.nhl.espn_nhl_pbp(game_id=401247153)`
     """
     # play by play
     pbp_txt = {}

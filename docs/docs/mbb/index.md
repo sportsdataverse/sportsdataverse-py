@@ -84,7 +84,7 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-### sportsdataverse.mbb.mbb_pbp(game_id: int)
+### sportsdataverse.mbb.espn_mbb_pbp(game_id: int)
 mbb_pbp() - Pull the game by id. Data from API endpoints: mens-college-basketball/playbyplay, mens-college-basketball/summary
 
 Args:
@@ -99,9 +99,9 @@ Returns:
 
 Example:
 
-    mbb_df = sportsdataverse.mbb.mbb_pbp(game_id=401265031)
+    mbb_df = sportsdataverse.mbb.espn_mbb_pbp(game_id=401265031)
 
-### sportsdataverse.mbb.mbb_calendar(season=None)
+### sportsdataverse.mbb.espn_mbb_calendar(season=None)
 mbb_calendar - look up the men’s college basketball calendar for a given season
 
 Args:
@@ -113,7 +113,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
 
-### sportsdataverse.mbb.mbb_schedule(dates=None, groups=None, season_type=None)
+### sportsdataverse.mbb.espn_mbb_schedule(dates=None, groups=None, season_type=None)
 mbb_schedule - look up the men’s college basketball scheduler for a given season
 
 Args:

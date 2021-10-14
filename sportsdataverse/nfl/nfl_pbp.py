@@ -38,8 +38,8 @@ class NFLPlayProcess(object):
         # self.logger = logger
         self.ran_pipeline = False
 
-    def nfl_pbp(self):
-        """nfl_pbp() - Pull the game by id - Data from API endpoints - `nfl/playbyplay`, `nfl/summary`
+    def espn_nfl_pbp(self):
+        """espn_nfl_pbp() - Pull the game by id - Data from API endpoints - `nfl/playbyplay`, `nfl/summary`
 
             Args:
                 game_id (int): Unique game_id, can be obtained from nfl_schedule().
@@ -50,7 +50,7 @@ class NFLPlayProcess(object):
                  "againstTheSpread", "odds", "predictor", "winprobability", "espnWP", "gameInfo", "season"
 
             Example:
-                `nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).nfl_pbp()`
+                `nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).espn_nfl_pbp()`
         """
 
         cache_buster = int(time.time() * 1000)

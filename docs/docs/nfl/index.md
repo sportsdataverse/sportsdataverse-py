@@ -67,12 +67,12 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.nfl_teams()
+### sportsdataverse.nfl.espn_nfl_teams()
 Load NFL team ID information and logos
 
 Example:
 
-    nfl_df = sportsdataverse.nfl.nfl_teams()
+    nfl_df = sportsdataverse.nfl.espn_nfl_teams()
 
 Args:
 
@@ -92,8 +92,8 @@ Initialize self.  See help(type(self)) for accurate signature.
 
 #### gameId( = 0)
 
-#### nfl_pbp()
-nfl_pbp() - Pull the game by id - Data from API endpoints - nfl/playbyplay, nfl/summary
+#### espn_nfl_pbp()
+espn_nfl_pbp() - Pull the game by id - Data from API endpoints - nfl/playbyplay, nfl/summary
 
 Args:
 
@@ -108,7 +108,7 @@ Returns:
 
 Example:
 
-    nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).nfl_pbp()
+    nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).espn_nfl_pbp()
 
 
 #### ran_pipeline( = False)
@@ -116,8 +116,8 @@ Example:
 #### run_processing_pipeline()
 
 
-### sportsdataverse.nfl.nfl_calendar(season=None)
-nfl_calendar - look up the NFL calendar for a given season from ESPN
+### sportsdataverse.nfl.espn_nfl_calendar(season=None)
+espn_nfl_calendar - look up the NFL calendar for a given season from ESPN
 
 Args:
 
@@ -132,8 +132,8 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nfl.nfl_schedule(dates=None, week=None, season_type=None)
-nfl_schedule - look up the NFL schedule for a given date from ESPN
+### sportsdataverse.nfl.espn_nfl_schedule(dates=None, week=None, season_type=None)
+espn_nfl_schedule - look up the NFL schedule for a given date from ESPN
 
 Args:
 

@@ -7,8 +7,8 @@ import json
 from typing import List, Callable, Iterator, Union, Optional, Dict
 from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
-def wnba_pbp(game_id: int) -> Dict:
-    """wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary`
+def espn_wnba_pbp(game_id: int) -> Dict:
+    """espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary`
 
         Args:
             game_id (int): Unique game_id, can be obtained from wnba_schedule().
@@ -19,7 +19,7 @@ def wnba_pbp(game_id: int) -> Dict:
              "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
 
         Example:
-            `wnba_df = sportsdataverse.wnba.wnba_pbp(game_id=401370395)`
+            `wnba_df = sportsdataverse.wnba.espn_wnba_pbp(game_id=401370395)`
     """
     # play by play
     pbp_url = "http://cdn.espn.com/core/wnba/playbyplay?gameId={}&xhr=1&render=false&userab=18".format(game_id)

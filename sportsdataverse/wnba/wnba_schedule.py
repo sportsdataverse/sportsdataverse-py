@@ -6,8 +6,8 @@ from sportsdataverse.config import WNBA_BASE_URL, WNBA_TEAM_BOX_URL, WNBA_PLAYER
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
-def wnba_schedule(dates=None, season_type=None) -> pd.DataFrame:
-    """wnba_schedule - look up the WNBA schedule for a given season
+def espn_wnba_schedule(dates=None, season_type=None) -> pd.DataFrame:
+    """espn_wnba_schedule - look up the WNBA schedule for a given season
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
@@ -56,8 +56,8 @@ def wnba_schedule(dates=None, season_type=None) -> pd.DataFrame:
     ev = pd.DataFrame(ev)
     return ev
 
-def wnba_calendar(season=None) -> pd.DataFrame:
-    """wnba_calendar - look up the WNBA calendar for a given season
+def espn_wnba_calendar(season=None) -> pd.DataFrame:
+    """espn_wnba_calendar - look up the WNBA calendar for a given season
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.

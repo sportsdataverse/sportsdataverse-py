@@ -88,8 +88,8 @@ Raises:
 ## sportsdataverse.wbb.wbb_pbp module
 
 
-### sportsdataverse.wbb.wbb_pbp(game_id: int)
-wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay, womens-college-basketball/summary
+### sportsdataverse.wbb.espn_wbb_pbp(game_id: int)
+espn_wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay, womens-college-basketball/summary
 
 Args:
 
@@ -105,11 +105,11 @@ Returns:
 
 Example:
 
-    wbb_df = sportsdataverse.wbb.wbb_pbp(game_id=401266534)
+    wbb_df = sportsdataverse.wbb.espn_wbb_pbp(game_id=401266534)
 
 
-### sportsdataverse.wbb.wbb_calendar(season=None)
-wbb_calendar - look up the women’s college basketball calendar for a given season
+### sportsdataverse.wbb.espn_wbb_calendar(season=None)
+espn_wbb_calendar - look up the women’s college basketball calendar for a given season
 
 Args:
 
@@ -125,8 +125,8 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_schedule(dates=None, groups=None, season_type=None)
-wbb_schedule - look up the women’s college basketball schedule for a given season
+### sportsdataverse.wbb.espn_wbb_schedule(dates=None, groups=None, season_type=None)
+espn_wbb_schedule - look up the women’s college basketball schedule for a given season
 
 Args:
 
@@ -138,4 +138,3 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
-## Module contents

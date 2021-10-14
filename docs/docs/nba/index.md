@@ -85,7 +85,7 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-### sportsdataverse.nba.nba_pbp(game_id: int)
+### sportsdataverse.nba.espn_nba_pbp(game_id: int)
 nba_pbp() - Pull the game by id - Data from API endpoints - nba/playbyplay, nba/summary
 
 Args:
@@ -101,9 +101,9 @@ Returns:
 
 Example:
 
-    nba_df = sportsdataverse.nba.nba_pbp(game_id=401307514)
+    nba_df = sportsdataverse.nba.espn_nba_pbp(game_id=401307514)
 
-### sportsdataverse.nba.nba_calendar(season=None)
+### sportsdataverse.nba.espn_nba_calendar(season=None)
 nba_calendar - look up the NBA calendar for a given season from ESPN
 
 Args:
@@ -120,7 +120,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nba.nba_schedule(dates=None, season_type=None)
+### sportsdataverse.nba.espn_nba_schedule(dates=None, season_type=None)
 nba_schedule - look up the NBA schedule for a given date from ESPN
 
 Args:
