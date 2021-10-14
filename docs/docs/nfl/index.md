@@ -1,13 +1,6 @@
 # sportsdataverse.nfl package
 
-## Submodules
-
-## sportsdataverse.nfl.model_vars module
-
-## sportsdataverse.nfl.nfl_loaders module
-
-
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pbp(seasons: List[int])
+### sportsdataverse.nfl.load_nfl_pbp(seasons: List[int])
 Load NFL play by play data going back to 1999
 
 Example:
@@ -27,7 +20,7 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_player_stats()
+### sportsdataverse.nfl.load_nfl_player_stats()
 Load NFL player stats data
 
 Example:
@@ -41,7 +34,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing player stats.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_rosters()
+### sportsdataverse.nfl.load_nfl_rosters()
 Load NFL roster data for all seasons
 
 Example:
@@ -53,7 +46,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_schedule(seasons: List[int])
+### sportsdataverse.nfl.load_nfl_schedule(seasons: List[int])
 Load NFL schedule data
 
 Example:
@@ -73,7 +66,7 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.nfl_loaders.nfl_teams()
+### sportsdataverse.nfl.nfl_teams()
 Load NFL team ID information and logos
 
 Example:
@@ -86,10 +79,7 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
 
-## sportsdataverse.nfl.nfl_pbp module
-
-
-### class sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0)
+### class sportsdataverse.nfl.NFLPlayProcess(gameId=0)
 Bases: `object`
 
 
@@ -123,10 +113,9 @@ Example:
 #### ran_pipeline( = False)
 
 #### run_processing_pipeline()
-## sportsdataverse.nfl.nfl_schedule module
 
 
-### sportsdataverse.nfl.nfl_schedule.nfl_calendar(season=None)
+### sportsdataverse.nfl.nfl_calendar(season=None)
 nfl_calendar - look up the NFL calendar for a given season from ESPN
 
 Args:
@@ -142,7 +131,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nfl.nfl_schedule.nfl_schedule(dates=None, week=None, season_type=None)
+### sportsdataverse.nfl.nfl_schedule(dates=None, week=None, season_type=None)
 nfl_schedule - look up the NFL schedule for a given date from ESPN
 
 Args:
@@ -155,5 +144,3 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing
     schedule events for the requested season.
-
-## Module contents

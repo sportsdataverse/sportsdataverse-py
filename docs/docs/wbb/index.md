@@ -1,11 +1,6 @@
 # sportsdataverse.wbb package
 
-## Submodules
-
-## sportsdataverse.wbb.wbb_loaders module
-
-
-### sportsdataverse.wbb.wbb_loaders.load_wbb_pbp(seasons: List[int])
+### sportsdataverse.wbb.load_wbb_pbp(seasons: List[int])
 Load women’s college basketball play by play data going back to 2002
 
 Example:
@@ -26,7 +21,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_loaders.load_wbb_player_boxscore(seasons: List[int])
+### sportsdataverse.wbb.load_wbb_player_boxscore(seasons: List[int])
 Load women’s college basketball player boxscore data
 
 Example:
@@ -47,7 +42,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_loaders.load_wbb_schedule(seasons: List[int])
+### sportsdataverse.wbb.load_wbb_schedule(seasons: List[int])
 Load women’s college basketball schedule data
 
 Example:
@@ -68,7 +63,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_loaders.load_wbb_team_boxscore(seasons: List[int])
+### sportsdataverse.wbb.load_wbb_team_boxscore(seasons: List[int])
 Load women’s college basketball team boxscore data
 
 Example:
@@ -91,7 +86,7 @@ Raises:
 ## sportsdataverse.wbb.wbb_pbp module
 
 
-### sportsdataverse.wbb.wbb_pbp.wbb_pbp(game_id: int)
+### sportsdataverse.wbb.wbb_pbp(game_id: int)
 wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay, womens-college-basketball/summary
 
 Args:
@@ -100,19 +95,18 @@ Args:
 
 Returns:
 
-    Dict: Dictionary of game data with keys - “gameId”, “plays”, “winprobability”, “boxscore”, “header”, “broadcasts”,
-
-        “videos”, “playByPlaySource”, “standings”, “leaders”, “timeouts”, “pickcenter”, “againstTheSpread”, “odds”, “predictor”,
+    Dict: Dictionary of game data with keys - “gameId”, “plays”, “winprobability”,
+        “boxscore”, “header”, “broadcasts”, “videos”, “playByPlaySource”,
+        “standings”, “leaders”, “timeouts”, “pickcenter”,
+        “againstTheSpread”, “odds”, “predictor”,
         “espnWP”, “gameInfo”, “season”
 
 Example:
 
-    wbb_df = sportsdataverse.wb.wbb_pbp(game_id=401266534)
-
-## sportsdataverse.wbb.wbb_schedule module
+    wbb_df = sportsdataverse.wbb.wbb_pbp(game_id=401266534)
 
 
-### sportsdataverse.wbb.wbb_schedule.wbb_calendar(season=None)
+### sportsdataverse.wbb.wbb_calendar(season=None)
 wbb_calendar - look up the women’s college basketball calendar for a given season
 
 Args:
@@ -129,7 +123,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_schedule.wbb_schedule(dates=None, groups=None, season_type=None)
+### sportsdataverse.wbb.wbb_schedule(dates=None, groups=None, season_type=None)
 wbb_schedule - look up the women’s college basketball schedule for a given season
 
 Args:

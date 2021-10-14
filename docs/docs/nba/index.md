@@ -1,11 +1,6 @@
 # sportsdataverse.nba package
 
-## Submodules
-
-## sportsdataverse.nba.nba_loaders module
-
-
-### sportsdataverse.nba.nba_loaders.load_nba_pbp(seasons: List[int])
+### sportsdataverse.nba.load_nba_pbp(seasons: List[int])
 Load NBA play by play data going back to 2002
 
 Example:
@@ -26,7 +21,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nba.nba_loaders.load_nba_player_boxscore(seasons: List[int])
+### sportsdataverse.nba.load_nba_player_boxscore(seasons: List[int])
 Load NBA player boxscore data
 
 Example:
@@ -47,7 +42,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nba.nba_loaders.load_nba_schedule(seasons: List[int])
+### sportsdataverse.nba.load_nba_schedule(seasons: List[int])
 Load NBA schedule data
 
 Example:
@@ -68,7 +63,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nba.nba_loaders.load_nba_team_boxscore(seasons: List[int])
+### sportsdataverse.nba.load_nba_team_boxscore(seasons: List[int])
 Load NBA team boxscore data
 
 Example:
@@ -88,10 +83,7 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-## sportsdataverse.nba.nba_pbp module
-
-
-### sportsdataverse.nba.nba_pbp.nba_pbp(game_id: int)
+### sportsdataverse.nba.nba_pbp(game_id: int)
 nba_pbp() - Pull the game by id - Data from API endpoints - nba/playbyplay, nba/summary
 
 Args:
@@ -109,10 +101,7 @@ Example:
 
     nba_df = sportsdataverse.nba.nba_pbp(game_id=401307514)
 
-## sportsdataverse.nba.nba_schedule module
-
-
-### sportsdataverse.nba.nba_schedule.nba_calendar(season=None)
+### sportsdataverse.nba.nba_calendar(season=None)
 nba_calendar - look up the NBA calendar for a given season from ESPN
 
 Args:
@@ -129,7 +118,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nba.nba_schedule.nba_schedule(dates=None, season_type=None)
+### sportsdataverse.nba.nba_schedule(dates=None, season_type=None)
 nba_schedule - look up the NBA schedule for a given date from ESPN
 
 Args:
@@ -141,5 +130,3 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing
     schedule events for the requested season.
-
-## Module contents

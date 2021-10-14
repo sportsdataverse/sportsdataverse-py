@@ -1,11 +1,6 @@
 # sportsdataverse.cfb package
 
-## Submodules
-
-## sportsdataverse.cfb.cfb_loaders module
-
-
-### sportsdataverse.cfb.cfb_loaders.cfb_teams()
+### sportsdataverse.cfb.cfb_teams()
 Load college football team ID information and logos
 
 Example:
@@ -19,7 +14,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_pbp(seasons: List[int])
+### sportsdataverse.cfb.load_cfb_pbp(seasons: List[int])
 Load college football play by play data going back to 2003
 
 Example:
@@ -39,7 +34,7 @@ Raises:
     ValueError: If season is less than 2003.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_rosters(seasons: List[int])
+### sportsdataverse.cfb.load_cfb_rosters(seasons: List[int])
 Load roster data
 
 Example:
@@ -59,7 +54,7 @@ Raises:
     ValueError: If season is less than 2014.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_schedule(seasons: List[int])
+### sportsdataverse.cfb.load_cfb_schedule(seasons: List[int])
 Load college football schedule data
 
 Example:
@@ -79,7 +74,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_team_info(seasons: List[int])
+### sportsdataverse.cfb.load_cfb_team_info(seasons: List[int])
 Load college football team info
 
 Example:
@@ -98,10 +93,7 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-## sportsdataverse.cfb.cfb_pbp module
-
-
-### class sportsdataverse.cfb.cfb_pbp.CFBPlayProcess(gameId=0)
+### class sportsdataverse.cfb.CFBPlayProcess(gameId=0)
 Bases: `object`
 
 
@@ -136,10 +128,8 @@ Example:
 #### ran_pipeline( = False)
 
 #### run_processing_pipeline()
-## sportsdataverse.cfb.cfb_schedule module
 
-
-### sportsdataverse.cfb.cfb_schedule.cfb_calendar(season=None, groups=None)
+### sportsdataverse.cfb.cfb_calendar(season=None, groups=None)
 cfb_calendar - look up the men’s college football calendar for a given season
 
 Args:
@@ -156,7 +146,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.cfb.cfb_schedule.cfb_schedule(dates=None, week=None, season_type=None, groups=None)
+### sportsdataverse.cfb.cfb_schedule(dates=None, week=None, season_type=None, groups=None)
 cfb_schedule - look up the college football schedule for a given season
 
 Args:
@@ -170,6 +160,3 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
-## sportsdataverse.cfb.model_vars module
-
-## Module contents

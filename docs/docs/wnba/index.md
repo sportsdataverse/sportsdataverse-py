@@ -5,7 +5,7 @@
 ## sportsdataverse.wnba.wnba_loaders module
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_pbp(seasons: List[int])
+### sportsdataverse.wnba.load_wnba_pbp(seasons: List[int])
 Load WNBA play by play data going back to 2002
 
 Example:
@@ -26,7 +26,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_player_boxscore(seasons: List[int])
+### sportsdataverse.wnba.load_wnba_player_boxscore(seasons: List[int])
 Load WNBA player boxscore data
 
 Example:
@@ -47,7 +47,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_schedule(seasons: List[int])
+### sportsdataverse.wnba.load_wnba_schedule(seasons: List[int])
 Load WNBA schedule data
 
 Example:
@@ -68,7 +68,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_team_boxscore(seasons: List[int])
+### sportsdataverse.wnba.load_wnba_team_boxscore(seasons: List[int])
 Load WNBA team boxscore data
 
 Example:
@@ -88,10 +88,7 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-## sportsdataverse.wnba.wnba_pbp module
-
-
-### sportsdataverse.wnba.wnba_pbp.wnba_pbp(game_id: int)
+### sportsdataverse.wnba.wnba_pbp(game_id: int)
 wnba_pbp() - Pull the game by id. Data from API endpoints - wnba/playbyplay, wnba/summary
 
 Args:
@@ -109,10 +106,7 @@ Example:
 
     wnba_df = sportsdataverse.wnba.wnba_pbp(game_id=401370395)
 
-## sportsdataverse.wnba.wnba_schedule module
-
-
-### sportsdataverse.wnba.wnba_schedule.wnba_calendar(season=None)
+### sportsdataverse.wnba.wnba_calendar(season=None)
 wnba_calendar - look up the WNBA calendar for a given season
 
 Args:
@@ -129,7 +123,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_schedule.wnba_schedule(dates=None, season_type=None)
+### sportsdataverse.wnba.wnba_schedule(dates=None, season_type=None)
 wnba_schedule - look up the WNBA schedule for a given season
 
 Args:
@@ -141,4 +135,3 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
-## Module contents

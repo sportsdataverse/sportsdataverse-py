@@ -1,11 +1,6 @@
 # sportsdataverse.nhl package
 
-## Submodules
-
-## sportsdataverse.nhl.nhl_loaders module
-
-
-### sportsdataverse.nhl.nhl_loaders.load_nhl_pbp(seasons: List[int])
+### sportsdataverse.nhl.load_nhl_pbp(seasons: List[int])
 Load NHL play by play data going back to 1999
 
 Example:
@@ -25,7 +20,7 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nhl.nhl_loaders.load_nhl_player_stats()
+### sportsdataverse.nhl.load_nhl_player_stats()
 Load NHL player stats data
 
 Example:
@@ -39,7 +34,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing player stats.
 
 
-### sportsdataverse.nhl.nhl_loaders.load_nhl_rosters()
+### sportsdataverse.nhl.load_nhl_rosters()
 Load NHL roster data for all seasons
 
 Example:
@@ -51,7 +46,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
 
 
-### sportsdataverse.nhl.nhl_loaders.load_nhl_schedule(seasons: List[int])
+### sportsdataverse.nhl.load_nhl_schedule(seasons: List[int])
 Load NHL schedule data
 
 Example:
@@ -71,7 +66,7 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nhl.nhl_loaders.nhl_teams()
+### sportsdataverse.nhl.nhl_teams()
 Load NHL team ID information and logos
 
 Example:
@@ -84,10 +79,7 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
 
-## sportsdataverse.nhl.nhl_pbp module
-
-
-### sportsdataverse.nhl.nhl_pbp.nhl_pbp(game_id: int)
+### sportsdataverse.nhl.nhl_pbp(game_id: int)
 nhl_pbp() - Pull the game by id. Data from API endpoints - nhl/playbyplay, nhl/summary
 
 Args:
@@ -105,10 +97,7 @@ Example:
 
     nhl_df = sportsdataverse.nhl.nhl_pbp(game_id=401247153)
 
-## sportsdataverse.nhl.nhl_schedule module
-
-
-### sportsdataverse.nhl.nhl_schedule.nhl_calendar(season=None)
+### sportsdataverse.nhl.nhl_calendar(season=None)
 nhl_calendar - look up the NHL calendar for a given season
 
 Args:
@@ -124,7 +113,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nhl.nhl_schedule.nhl_schedule(dates=None, season_type=None)
+### sportsdataverse.nhl.nhl_schedule(dates=None, season_type=None)
 nhl_schedule - look up the NHL schedule for a given date
 
 Args:
@@ -137,4 +126,3 @@ Returns:
     pd.DataFrame: Pandas dataframe containing
     schedule events for the requested season.
 
-## Module contents

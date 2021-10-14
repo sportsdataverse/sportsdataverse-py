@@ -1,11 +1,6 @@
 # sportsdataverse.mbb package
 
-## Submodules
-
-## sportsdataverse.mbb.mbb_loaders module
-
-
-### sportsdataverse.mbb.mbb_loaders.load_mbb_pbp(seasons: List[int])
+### sportsdataverse.mbb.load_mbb_pbp(seasons: List[int])
 Load men’s college basketball play by play data going back to 2002
 
 Example:
@@ -26,7 +21,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_player_boxscore(seasons: List[int])
+### sportsdataverse.mbb.load_mbb_player_boxscore(seasons: List[int])
 Load men’s college basketball player boxscore data
 
 Example:
@@ -47,7 +42,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_schedule(seasons: List[int])
+### sportsdataverse.mbb.load_mbb_schedule(seasons: List[int])
 Load men’s college basketball schedule data
 
 Example:
@@ -68,7 +63,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_team_boxscore(seasons: List[int])
+### sportsdataverse.mbb.load_mbb_team_boxscore(seasons: List[int])
 Load men’s college basketball team boxscore data
 
 Example:
@@ -88,10 +83,7 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-## sportsdataverse.mbb.mbb_pbp module
-
-
-### sportsdataverse.mbb.mbb_pbp.mbb_pbp(game_id: int)
+### sportsdataverse.mbb.mbb_pbp(game_id: int)
 mbb_pbp() - Pull the game by id. Data from API endpoints: mens-college-basketball/playbyplay, mens-college-basketball/summary
 
 Args:
@@ -108,10 +100,7 @@ Example:
 
     mbb_df = sportsdataverse.mbb.mbb_pbp(game_id=401265031)
 
-## sportsdataverse.mbb.mbb_schedule module
-
-
-### sportsdataverse.mbb.mbb_schedule.mbb_calendar(season=None)
+### sportsdataverse.mbb.mbb_calendar(season=None)
 mbb_calendar - look up the men’s college basketball calendar for a given season
 
 Args:
@@ -123,7 +112,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
 
-### sportsdataverse.mbb.mbb_schedule.mbb_schedule(dates=None, groups=None, season_type=None)
+### sportsdataverse.mbb.mbb_schedule(dates=None, groups=None, season_type=None)
 mbb_schedule - look up the men’s college basketball scheduler for a given season
 
 Args:
