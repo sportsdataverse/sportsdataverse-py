@@ -1,3 +1,3 @@
-## 0.0.1 Release: October 13, 2021
+## 0.0.3 Release: October 15, 2021
 - f'in round
 - findin' out
