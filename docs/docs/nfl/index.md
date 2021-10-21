@@ -67,12 +67,12 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.espn_nfl_teams()
+### sportsdataverse.nfl.load_nfl_teams()
 Load NFL team ID information and logos
 
 Example:
 
-    nfl_df = sportsdataverse.nfl.espn_nfl_teams()
+    nfl_df = sportsdataverse.nfl.load_nfl_teams()
 
 Args:
 

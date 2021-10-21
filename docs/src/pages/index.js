@@ -8,6 +8,17 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
+    title: "Men's College Basketball",
+    // Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    description: (
+      <>
+        It provides users with the capability to access the ESPN API’s
+        men's college basketball game play-by-plays,
+        box scores, and schedules.
+      </>
+    ),
+  },
+  {
     title: "College Football",
     // Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
@@ -34,7 +45,19 @@ const FeatureList = [
     description: (
       <>
         It provides users with the capability to access the nflfastR team's
-        game play-by-plays, box scores, and schedules to analyze the data for themselves.
+        game play-by-plays, box scores, and schedules. Additionally, the
+        package provides users with functions to access the ESPN NFL API
+        endpoints during live game-play.
+      </>
+    ),
+  },
+  {
+    title: 'NHL',
+    // Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    description: (
+      <>
+        It provides users with the capability to access ESPN's NHL endpoints for
+        game play-by-plays, box scores, and schedules.
       </>
     ),
   },

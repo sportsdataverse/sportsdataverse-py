@@ -73,12 +73,12 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.nfl_loaders.nfl_teams()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_teams()
 Load NFL team ID information and logos
 
 Example:
 
-    nfl_df = sportsdataverse.nfl.nfl_teams()
+    nfl_df = sportsdataverse.nfl.load_nfl_teams()
 
 Args:
 
@@ -117,7 +117,7 @@ Returns:
 
 Example:
 
-    nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).nfl_pbp()
+    nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).espn_nfl_pbp()
 
 
 #### ran_pipeline( = False)

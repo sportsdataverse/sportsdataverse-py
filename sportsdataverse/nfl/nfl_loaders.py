@@ -73,7 +73,7 @@ def load_nfl_player_stats() -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing player stats.
     """
     data = pd.DataFrame()
-    i_data = pd.read_parquet(NFL_PLAYER_STATS_URL.format(season = i), engine='auto', columns=None)
+    i_data = pd.read_parquet(NFL_PLAYER_STATS_URL, engine='auto', columns=None)
     data = data.append(i_data)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -98,11 +98,11 @@ def load_nfl_rosters() -> pd.DataFrame:
 
     return data
 
-def nfl_teams() -> pd.DataFrame:
+def load_nfl_teams() -> pd.DataFrame:
     """Load NFL team ID information and logos
 
     Example:
-        `nfl_df = sportsdataverse.nfl.nfl_teams()`
+        `nfl_df = sportsdataverse.nfl.load_nfl_teams()`
 
     Args:
 
