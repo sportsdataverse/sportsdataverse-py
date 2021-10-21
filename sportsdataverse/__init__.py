@@ -1,4 +1,3 @@
-name = "sportsdataverse"
 from sportsdataverse.cfb import *
 from sportsdataverse.nfl import *
 from sportsdataverse.mbb import *
