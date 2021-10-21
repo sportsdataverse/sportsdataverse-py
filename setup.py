@@ -19,7 +19,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.7',
+    version='0.0.8',
 
     description='Retrieve Sports data in Python',
     long_description=long_description,
@@ -112,8 +112,8 @@ setup(
     # have to be included in MANIFEST.in as well.
     include_package_data=True,
     package_data={
-       'sportsdataverse': ['cfb/models/*'],
-       'sportsdataverse': ['nfl/models/*'],
+       'sportsdataverse': ['cfb/models/*',
+                            'nfl/models/*',]
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
