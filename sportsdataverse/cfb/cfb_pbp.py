@@ -39,11 +39,6 @@ qbr_model = xgb.Booster({"nthread": 4})  # init model
 qbr_model.load_model(qbr_model_file)
 
 
-def safe_retrieve_key(tmp_dict, key, default_value):
-    return tmp_dict[key] if (key in tmp_dict.keys()) else default_value
-    # ---------------------------------
-
-
 class CFBPlayProcess(object):
 
     gameId = 0
@@ -5377,7 +5372,7 @@ class CFBPlayProcess(object):
                 TFL_rush=("TFL_rush", sum),
                 havoc_total=("havoc", sum),
                 havoc_total_rate=("havoc", mean),
-                fumbles=("fumble_vec", sum),
+                fumbles=("forced_fumbles", sum),
                 def_int=("int", sum),
                 drive_stopped_rate=("drive_stopped", mean),
             )
@@ -5439,43 +5434,7 @@ class CFBPlayProcess(object):
         if len(turnover_box_json) < 2:
             for i in range(len(turnover_box_json), 2):
                 turnover_box_json.append({})
-
-        team_def_box = self.json["boxscore"]["players"]
-        for (idx, team) in enumerate(team_def_box):
-            def_box_stats_search = list(
-                filter(lambda x: "defensive" in x["name"], team["statistics"])
-            )
-            if len(def_box_stats_search) > 0:
-                def_box_stats = def_box_stats_search[0]
-                zipped_def_box_stat = zip(
-                    def_box_stats["labels"], def_box_stats["totals"]
-                )
-                # away first, home second
-                for (label, total) in zipped_def_box_stat:
-                    turnover_box_json[idx][label] = round(float(total), 2)
-                    def_box_json[idx][label] = round(float(total), 2)
-
-            def_box_json[idx]["havoc"] = (
-                safe_retrieve_key(def_box_json[idx], "Int", 0)
-                + safe_retrieve_key(def_box_json[idx], "PD", 0)
-                + safe_retrieve_key(def_box_json[idx], "TFL", 0)
-                + safe_retrieve_key(def_box_json[idx], "fumbles", 0)
-            )
-            def_box_json[idx]["havoc_rate"] = float(def_box_json[idx]["havoc"]) / float(
-                def_box_json[idx]["scrimmage_plays"]
-            )
-
-            def_box_json[idx]["havoc_total_pass"] -= safe_retrieve_key(
-                def_box_json[idx], "pass_breakups", 0
-            )
-            def_box_json[idx]["havoc_total_pass"] += safe_retrieve_key(
-                def_box_json[idx], "PD", 0
-            )
-
-            def_box_json[idx]["havoc_total_pass_rate"] = float(
-                def_box_json[idx]["havoc_total_pass"]
-            ) / float(def_box_json[idx]["num_pass_plays"])
-
+                
         total_fumbles = reduce(
             lambda x, y: x + y,
             map(
