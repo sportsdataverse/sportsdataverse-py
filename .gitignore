@@ -1,3 +1,10 @@
-.vscod*
+.vscode
 requirements.txt
 .github/workflows/pytest.yml
+__pycache__
+*/__pycache__
+./__pycache__
+.DS_Store
+*/.DS_Store
+.pytest_cache
+*/.pytest_cache
