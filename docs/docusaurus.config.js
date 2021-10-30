@@ -118,6 +118,7 @@ module.exports = {
             },
             {
               label: 'Node.js Packages',
+              to: 'CHANGELOG',
             },
             {
               label: 'sportsdataverse.js',
