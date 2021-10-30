@@ -200,6 +200,7 @@ sportsdataverse/nfl/nfl_loaders.py
 sportsdataverse/nfl/nfl_pbp.py
 sportsdataverse/nfl/nfl_schedule.py
 sportsdataverse/nhl/__init__.py
+sportsdataverse/nhl/nhl_api.py
 sportsdataverse/nhl/nhl_loaders.py
 sportsdataverse/nhl/nhl_pbp.py
 sportsdataverse/nhl/nhl_schedule.py

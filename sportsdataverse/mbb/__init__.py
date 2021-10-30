@@ -1,3 +1,4 @@
-from .mbb_loaders import *
-from .mbb_pbp import *
-from .mbb_schedule import *
+from sportsdataverse.mbb.mbb_loaders import *
+from sportsdataverse.mbb.mbb_pbp import *
+from sportsdataverse.mbb.mbb_schedule import *
+from sportsdataverse.mbb.mbb_teams import *
