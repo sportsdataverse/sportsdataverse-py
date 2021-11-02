@@ -1195,18 +1195,15 @@ class CFBPlayProcess(object):
         # --- Fumbles----
         play_df["fumble_vec"] = np.select(
             [
-                play_df["text"].str.contains(
-                    "fumble", case=False, flags=0, na=False, regex=True
-                ),
-                (
-                    ~play_df["text"].str.contains(
-                        "fumble", case=False, flags=0, na=False, regex=True
-                    )
-                )
-                & (play_df["type.text"] == "Rush")
-                & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True),
+                (~play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Rush") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                (~play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Sack") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
             ],
-            [True, True],
+            [
+                True, 
+                True,
+                True
+            ],
             default=False,
         )
         play_df["forced_fumble"] = play_df["text"].str.contains(
