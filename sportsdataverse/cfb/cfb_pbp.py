@@ -4860,7 +4860,7 @@ class CFBPlayProcess(object):
             EPA_per_Play = ('EPA', mean),
             WPA = ('wpa', sum),
             SR = ('EPA_success', mean),
-            Sck = ('sack', sum)
+            Sck = ('sack_vec', sum)
         ).round(2)
         passer_box = passer_box.replace({np.nan: None})
         qbs_list = passer_box.passer_player_name.to_list()
@@ -5136,8 +5136,8 @@ class CFBPlayProcess(object):
             num_pass_plays = ('pass', sum),
             havoc_total_pass = ('havoc', sum),
             havoc_total_pass_rate = ('havoc', mean),
-            sacks = ('sack', sum),
-            sacks_rate = ('sack', mean),
+            sacks = ('sack_vec', sum),
+            sacks_rate = ('sack_vec', mean),
             pass_breakups = ('pass_breakup', sum)
         )
         def_box_havoc_pass = def_box_havoc_pass.replace({np.nan:None})
