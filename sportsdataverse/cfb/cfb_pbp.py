@@ -1369,6 +1369,34 @@ class CFBPlayProcess(object):
             True,
             False,
         )
+        # --- Sacks----
+        play_df["sack_vec"] = np.where(
+            (
+                (play_df["type.text"].isin(["Sack", "Sack Touchdown"]))
+                | (
+                    (
+                        play_df["type.text"].isin(
+                            [
+                                "Fumble Recovery (Own)",
+                                "Fumble Recovery (Own) Touchdown",
+                                "Fumble Recovery (Opponent)",
+                                "Fumble Recovery (Opponent) Touchdown",
+                                "Fumble Return Touchdown",
+                            ]
+                        )
+                        & (play_df["pass"] == True)
+                        & (
+                            play_df["text"].str.contains(
+                                "sacked", case=False, flags=0, na=False, regex=True
+                            )
+                        )
+                    )
+                )
+            ),
+            True,
+            False,
+        )
+
         play_df["pass"] = np.where(
             (
                 (
@@ -1496,37 +1524,12 @@ class CFBPlayProcess(object):
                         )
                     )
                 )
+                | (play_df["sack_vec"] == True)
             ),
             True,
             False,
         )
-        # --- Sacks----
-        play_df["sack_vec"] = np.where(
-            (
-                (play_df["type.text"].isin(["Sack", "Sack Touchdown"]))
-                | (
-                    (
-                        play_df["type.text"].isin(
-                            [
-                                "Fumble Recovery (Own)",
-                                "Fumble Recovery (Own) Touchdown",
-                                "Fumble Recovery (Opponent)",
-                                "Fumble Recovery (Opponent) Touchdown",
-                                "Fumble Return Touchdown",
-                            ]
-                        )
-                        & (play_df["pass"] == True)
-                        & (
-                            play_df["text"].str.contains(
-                                "sacked", case=False, flags=0, na=False, regex=True
-                            )
-                        )
-                    )
-                )
-            ),
-            True,
-            False,
-        )
+        
         return play_df
 
     def __add_team_score_variables(self, play_df):
