@@ -1527,7 +1527,7 @@ class CFBPlayProcess(object):
             True,
             False,
         )
-        play_df["pass"] = np.select(play_df["sack_vec"] == True, True, play_df["pass"])
+        play_df["pass"] = np.where(play_df["sack_vec"] == True, True, play_df["pass"])
         return play_df
 
     def __add_team_score_variables(self, play_df):
