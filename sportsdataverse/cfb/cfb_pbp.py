@@ -1195,18 +1195,15 @@ class CFBPlayProcess(object):
         # --- Fumbles----
         play_df["fumble_vec"] = np.select(
             [
-                play_df["text"].str.contains(
-                    "fumble", case=False, flags=0, na=False, regex=True
-                ),
-                (
-                    ~play_df["text"].str.contains(
-                        "fumble", case=False, flags=0, na=False, regex=True
-                    )
-                )
-                & (play_df["type.text"] == "Rush")
-                & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True),
+                (~play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Rush") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                (~play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Sack") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
             ],
-            [True, True],
+            [
+                True, 
+                True,
+                True
+            ],
             default=False,
         )
         play_df["forced_fumble"] = play_df["text"].str.contains(
@@ -1530,6 +1527,7 @@ class CFBPlayProcess(object):
             True,
             False,
         )
+        play_df["pass"] = np.where(play_df["sack_vec"] == True, True, play_df["pass"])
         return play_df
 
     def __add_team_score_variables(self, play_df):
@@ -4863,7 +4861,7 @@ class CFBPlayProcess(object):
             EPA_per_Play = ('EPA', mean),
             WPA = ('wpa', sum),
             SR = ('EPA_success', mean),
-            Sck = ('sack', sum)
+            Sck = ('sack_vec', sum)
         ).round(2)
         passer_box = passer_box.replace({np.nan: None})
         qbs_list = passer_box.passer_player_name.to_list()
@@ -5139,8 +5137,8 @@ class CFBPlayProcess(object):
             num_pass_plays = ('pass', sum),
             havoc_total_pass = ('havoc', sum),
             havoc_total_pass_rate = ('havoc', mean),
-            sacks = ('sack', sum),
-            sacks_rate = ('sack', mean),
+            sacks = ('sack_vec', sum),
+            sacks_rate = ('sack_vec', mean),
             pass_breakups = ('pass_breakup', sum)
         )
         def_box_havoc_pass = def_box_havoc_pass.replace({np.nan:None})
