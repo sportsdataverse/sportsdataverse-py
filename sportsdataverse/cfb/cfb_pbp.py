@@ -1146,7 +1146,7 @@ class CFBPlayProcess(object):
         play_df = play_df[
             (
                 play_df["type.text"].str.contains(
-                    "end of|coin toss|end period", case=False, regex=True
+                    "end of|coin toss|end period|wins toss", case=False, regex=True
                 )
                 == False
             )
