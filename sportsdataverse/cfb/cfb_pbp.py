@@ -1146,7 +1146,7 @@ class CFBPlayProcess(object):
         play_df = play_df[
             (
                 play_df["type.text"].str.contains(
-                    "end of|coin toss|end period", case=False, regex=True
+                    "end of|coin toss|end period|wins toss", case=False, regex=True
                 )
                 == False
             )
@@ -4406,6 +4406,8 @@ class CFBPlayProcess(object):
             True,
             False,
         )
+        play_df["EPA_non_explosive"] = np.where((play_df["EPA_explosive"] == False), play_df.EPA, None)
+
         play_df["EPA_explosive_pass"] = np.where(
             ((play_df["pass"] == True) & (play_df["EPA"] >= 2.4)), True, False
         )
@@ -4934,6 +4936,8 @@ class CFBPlayProcess(object):
             EPA_overall_off = ('EPA', sum),
             EPA_overall_offense = ('EPA', sum),
             EPA_per_play = ('EPA', mean),
+            EPA_non_explosive = ('EPA_non_explosive', sum),
+            EPA_non_explosive_per_play = ('EPA_non_explosive', mean),
             EPA_explosive = ('EPA_explosive', sum),
             EPA_explosive_rate = ('EPA_explosive', mean),
             passes_rate = ('pass', mean),
@@ -4960,6 +4964,8 @@ class CFBPlayProcess(object):
             EPA_passing_per_play = ('EPA', mean),
             EPA_explosive_passing = ('EPA_explosive', sum),
             EPA_explosive_passing_rate = ('EPA_explosive', mean),
+            EPA_non_explosive_passing = ('EPA_non_explosive', sum),
+            EPA_non_explosive_passing_per_play = ('EPA_non_explosive', mean),
         ).round(2)
 
         team_scrimmage_box_rush = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json["scrimmage_play"] == True)].groupby(by=["pos_team"], as_index=False).agg(
@@ -4967,6 +4973,8 @@ class CFBPlayProcess(object):
             EPA_rushing_per_play = ('EPA', mean),
             EPA_explosive_rushing = ('EPA_explosive', sum),
             EPA_explosive_rushing_rate = ('EPA_explosive', mean),
+            EPA_non_explosive_rushing = ('EPA_non_explosive', sum),
+            EPA_non_explosive_rushing_per_play = ('EPA_non_explosive', mean),
             rushes = ('rush', sum),
             rush_yards = ('yds_rushed', sum),
             yards_per_rush = ('yds_rushed', mean),
