@@ -9,7 +9,7 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/logo.png',
+  favicon: 'img/favicon.ico',
   organizationName: 'SportsDataverse', // Usually your GitHub org/user name.
   projectName: 'sportsdataverse-py', // Usually your repo name.
   themeConfig: {
@@ -19,7 +19,7 @@ module.exports = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
-    image: 'img/sdv-purple-white-1240.png',
+    image: 'img/Sportsdataverse_gh.png',
     navbar: {
       hideOnScroll: true,
       title: 'sportsdataverse-py',
@@ -50,7 +50,7 @@ module.exports = {
             },
             {
               label: 'Python Packages',
-              to: 'CHANGELOG',
+              href: 'https://py.sportsdataverse.org/',
             },
             {
               label: 'sportsdataverse-py',
@@ -59,7 +59,7 @@ module.exports = {
             },
             {
               label: 'R Packages',
-              to: 'CHANGELOG',
+              href: 'https://saiemgilani.github.io/sportsdataverse-R/',
             },
             {
               label: 'sportsdataverse-R',
@@ -73,7 +73,7 @@ module.exports = {
             },
             {
               label: 'hoopR',
-              href: 'https://hoopR.sportsdataverse.org',
+              href: 'https://hoopR.sportsdataverse.org/',
               target: '_self',
             },
             {
@@ -82,23 +82,8 @@ module.exports = {
               target: '_self',
             },
             {
-              label: 'recruitR',
-              href: 'https://saiemgilani.github.io/recruitR/',
-              target: '_self',
-            },
-            {
-              label: 'puntr',
-              href: 'https://puntalytics.github.io/puntr/',
-              target: '_self',
-            },
-            {
-              label: 'gamezoneR',
-              href: 'https://jacklich10.github.io/gamezoneR/',
-              target: '_self',
-            },
-            {
-              label: 'cfbplotR',
-              href: 'https://kazink36.github.io/cfbplotR/',
+              label: 'fastRhockey',
+              href: 'https://BenHowell71.github.io/fastRhockey/',
               target: '_self',
             },
             {
@@ -112,18 +97,33 @@ module.exports = {
               target: '_self',
             },
             {
-              label: 'hockeyR',
-              href: 'https://hockeyr.netlify.app/',
+              label: 'cfbplotR',
+              href: 'https://kazink36.github.io/cfbplotR/',
               target: '_self',
             },
             {
-              label: 'fastRhockey',
-              href: 'https://BenHowell71.github.io/fastRhockey/',
+              label: 'cfb4th',
+              href: 'https://kazink36.github.io/cfb4th/',
+              target: '_self',
+            },
+            {
+              label: 'recruitR',
+              href: 'https://saiemgilani.github.io/recruitR/',
+              target: '_self',
+            },
+            {
+              label: 'gamezoneR',
+              href: 'https://jacklich10.github.io/gamezoneR/',
+              target: '_self',
+            },
+            {
+              label: 'puntr',
+              href: 'https://puntalytics.github.io/puntr/',
               target: '_self',
             },
             {
               label: 'Node.js Packages',
-              to: 'CHANGELOG',
+              href: 'https://saiemgilani.github.io/sportsdataverse/',
             },
             {
               label: 'sportsdataverse.js',

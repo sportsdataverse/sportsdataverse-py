@@ -6,20 +6,23 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono');
 @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
 @-webkit-keyframes glow {
   from {
-    text-shadow: 0 0 8px #c77dff, 0 0 10px #c77dff;
+    text-shadow: 0 0 8px #427FD4, 0 0 10px #39F8FF;
   }
+
   to {
-    text-shadow: 0 0 10px #c77dff, 0 0 11px #c77dff;
+    text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF;
   }
 }
 
 @keyframes glow {
   to {
-    text-shadow: 0 0 10px #c77dff, 0 0 11px #c77dff;
+    text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF;
   }
 }
+
 html[data-theme='dark'] .navbar__title {
   font-family: "Bungee";
   letter-spacing: 0.1px;
@@ -200,10 +203,17 @@ button,
   border-style: solid; /* 2 */
   border-color: #e2e8f0; /* 2 */
 }
+b {
+  font-family: 'Bungee';
+  animation: glow 3s ease-in-out infinite alternate;
+}
+a.menu__link.menu__link--active {
+  animation: glow 3s ease-in-out infinite alternate;
+}
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #3C096C;
-  --ifm-color-primary-dark:	hsl(273, 68%, 59%);
+  --ifm-color-primary: #014F84;
+  --ifm-color-primary-dark:	#3F72AF;
   --ifm-color-primary-darker: hsl(271, 100%, 14%);
   --ifm-color-primary-darkest: hsl(262, 100%, 8%);
   --ifm-color-primary-light: hsl(7deg, 100%, 76%);
@@ -223,7 +233,7 @@ button,
 }
 
 html[data-theme='dark'] {
-  --ifm-color-primary: #3C096C;
+  --ifm-color-primary: #014F84;
 }
 
 .docusaurus-highlight-code-line {
