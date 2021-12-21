@@ -80,8 +80,8 @@ def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in seasons:
-        if int(i) < 2014:
-            raise SeasonNotFoundError("season cannot be less than 2014")
+        if int(i) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         i_data = pd.read_parquet(CFB_ROSTER_URL.format(season = i), engine='auto', columns=None)
         data = data.append(i_data)
     #Give each row a unique index
