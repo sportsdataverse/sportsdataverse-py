@@ -2,31 +2,31 @@ import pyarrow.parquet as pq
 import pandas as pd
 import json
 from typing import List, Callable, Iterator, Union, Optional
-from sportsdataverse.config import NHL_BASE_URL, NHL_ROSTER_URL, NHL_TEAM_LOGO_URL, NHL_TEAM_SCHEDULE_URL, NHL_PLAYER_STATS_URL
+from sportsdataverse.config import NHL_BASE_URL, NHL_TEAM_BOX_URL, NHL_TEAM_SCHEDULE_URL, NHL_TEAM_LOGO_URL, NHL_PLAYER_BOX_URL
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
 def load_nhl_pbp(seasons: List[int]) -> pd.DataFrame:
-    """Load NHL play by play data going back to 1999
+    """Load NHL play by play data going back to 2011
 
     Example:
-        `nhl_df = sportsdataverse.nhl.load_nhl_pbp(seasons=range(1999,2021))`
+        `nhl_df = sportsdataverse.nhl.load_nhl_pbp(seasons=range(2011,2021))`
 
     Args:
-        seasons (list): Used to define different seasons. 1999 is the earliest available season.
+        seasons (list): Used to define different seasons. 2011 is the earliest available season.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the play-by-plays available for the requested seasons.
 
     Raises:
-        ValueError: If `season` is less than 1999.
+        ValueError: If `season` is less than 2011.
     """
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in seasons:
-        if int(i) < 1999:
-            raise SeasonNotFoundError("season cannot be less than 1999")
+        if int(i) < 2011:
+            raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pd.read_parquet(NHL_BASE_URL.format(season=i), engine='auto', columns=None)
         data = data.append(i_data)
     #Give each row a unique index
@@ -37,23 +37,23 @@ def load_nhl_schedule(seasons: List[int]) -> pd.DataFrame:
     """Load NHL schedule data
 
     Example:
-        `nhl_df = sportsdataverse.nhl.load_nhl_schedule(seasons=range(1999,2021))`
+        `nhl_df = sportsdataverse.nhl.load_nhl_schedule(seasons=range(2002,2021))`
 
     Args:
-        seasons (list): Used to define different seasons. 1999 is the earliest available season.
+        seasons (list): Used to define different seasons. 2002 is the earliest available season.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
 
     Raises:
-        ValueError: If `season` is less than 1999.
+        ValueError: If `season` is less than 2002.
     """
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in seasons:
-        if int(i) < 1999:
-            raise SeasonNotFoundError("season cannot be less than 1999")
+        if int(i) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pd.read_parquet(NHL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
         data = data.append(i_data)
     #Give each row a unique index
@@ -61,38 +61,59 @@ def load_nhl_schedule(seasons: List[int]) -> pd.DataFrame:
 
     return data
 
-def load_nhl_player_stats() -> pd.DataFrame:
-    """Load NHL player stats data
+def load_nhl_team_boxscore(seasons: List[int]) -> pd.DataFrame:
+    """Load NHL team boxscore data
 
     Example:
-        `nhl_df = sportsdataverse.nhl.load_nhl_player_stats()`
+        `nhl_df = sportsdataverse.nhl.load_nhl_team_boxscore(seasons=range(2011,2022))`
 
     Args:
+        seasons (list): Used to define different seasons. 2011 is the earliest available season.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing player stats.
+        pd.DataFrame: Pandas dataframe containing the
+        team boxscores available for the requested seasons.
+
+    Raises:
+        ValueError: If `season` is less than 2011.
     """
     data = pd.DataFrame()
-    i_data = pd.read_parquet(NHL_PLAYER_STATS_URL.format(season = i), engine='auto', columns=None)
-    data = data.append(i_data)
+    if type(seasons) is int:
+        seasons = [seasons]
+    for i in seasons:
+        if int(i) < 2011:
+            raise SeasonNotFoundError("season cannot be less than 2011")
+        i_data = pd.read_parquet(NHL_TEAM_BOX_URL.format(season = i), engine='auto', columns=None)
+        data = data.append(i_data)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
     return data
 
-def load_nhl_rosters() -> pd.DataFrame:
-    """Load NHL roster data for all seasons
+def load_nhl_player_boxscore(seasons: List[int]) -> pd.DataFrame:
+    """Load NHL player boxscore data
 
     Example:
-        `nhl_df = sportsdataverse.nhl.load_nhl_rosters(seasons=range(1999,2021))`
+        `nhl_df = sportsdataverse.nhl.load_nhl_player_boxscore(seasons=range(2011,2022))`
+
+    Args:
+        seasons (list): Used to define different seasons. 2011 is the earliest available season.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
+        pd.DataFrame: Pandas dataframe containing the
+        player boxscores available for the requested seasons.
 
+    Raises:
+        ValueError: If `season` is less than 2011.
     """
     data = pd.DataFrame()
-
-    data = pd.read_csv(NHL_ROSTER_URL, compression='gzip', error_bad_lines=False, low_memory=False)
+    if type(seasons) is int:
+        seasons = [seasons]
+    for i in seasons:
+        if int(i) < 2011:
+            raise SeasonNotFoundError("season cannot be less than 2011")
+        i_data = pd.read_parquet(NHL_PLAYER_BOX_URL.format(season = i), engine='auto', columns=None)
+        data = data.append(i_data)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
