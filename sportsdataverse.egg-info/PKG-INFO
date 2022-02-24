@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sportsdataverse
-Version: 0.0.9
+Version: 0.0.12
 Summary: Retrieve Sports data in Python
 Home-page: https://github.com/saiemgilani/sportsdataverse-py
 Author: Saiem Gilani
@@ -9,7 +9,7 @@ Maintainer: Saiem Gilani
 License: MIT
 Project-URL: Docs, https://sportsdataverse-py.sportsdataverse.org/
 Project-URL: Bug Tracker, https://github.com/saiemgilani/sportsdataverse-py/issues
-Description: # sportsdataverse-py <a href='https://sportsdataverse-py.sportsdataverse.org'><img src='https://sportsdataverse-py.sportsdataverse.org/img/logo.png' align="right" height="150" /></a>
+Description: # sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://py.sportsdataverse.org/img/logo.png' align="right" height="150" /></a>
         <!-- badges: start -->
 
         ![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)
