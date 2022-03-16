@@ -28,6 +28,14 @@ sportsdataverse.cfb.cfb\_schedule module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.cfb.cfb\_teams module
+-------------------------------------
+
+.. automodule:: sportsdataverse.cfb.cfb_teams
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.cfb.model\_vars module
 --------------------------------------
 

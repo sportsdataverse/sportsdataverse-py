@@ -99,10 +99,8 @@ Initialize self.  See help(type(self)) for accurate signature.
 
 #### create_box_score()
 
-#### gameId( = 0)
-
-#### nfl_pbp()
-nfl_pbp() - Pull the game by id - Data from API endpoints - nfl/playbyplay, nfl/summary
+#### espn_nfl_pbp()
+espn_nfl_pbp() - Pull the game by id - Data from API endpoints - nfl/playbyplay, nfl/summary
 
 Args:
 
@@ -120,14 +118,18 @@ Example:
     nfl_df = sportsdataverse.nfl.NFLPlayProcess(game_id=401220403).espn_nfl_pbp()
 
 
+#### gameId( = 0)
+
 #### ran_pipeline( = False)
 
 #### run_processing_pipeline()
+
+### sportsdataverse.nfl.nfl_pbp.safe_retrieve_key(tmp_dict, key, default_value)
 ## sportsdataverse.nfl.nfl_schedule module
 
 
-### sportsdataverse.nfl.nfl_schedule.nfl_calendar(season=None)
-nfl_calendar - look up the NFL calendar for a given season from ESPN
+### sportsdataverse.nfl.nfl_schedule.espn_nfl_calendar(season=None)
+espn_nfl_calendar - look up the NFL calendar for a given season from ESPN
 
 Args:
 
@@ -142,18 +144,29 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nfl.nfl_schedule.nfl_schedule(dates=None, week=None, season_type=None)
-nfl_schedule - look up the NFL schedule for a given date from ESPN
+### sportsdataverse.nfl.nfl_schedule.espn_nfl_schedule(dates=None, week=None, season_type=None, limit=500)
+espn_nfl_schedule - look up the NFL schedule for a given date from ESPN
 
 Args:
 
     dates (int): Used to define different seasons. 2002 is the earliest available season.
     week (int): Used to define different weeks.
     season_type (int): season type, 1 for pre-season, 2 for regular season, 3 for post-season, 4 for all-star, 5 for off-season
+    limit (int): number of records to return, default: 500.
 
 Returns:
 
     pd.DataFrame: Pandas dataframe containing
     schedule events for the requested season.
+
+## sportsdataverse.nfl.nfl_teams module
+
+
+### sportsdataverse.nfl.nfl_teams.espn_nfl_teams()
+espn_nfl_teams - look up NFL teams
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing teams for the requested league.
 
 ## Module contents

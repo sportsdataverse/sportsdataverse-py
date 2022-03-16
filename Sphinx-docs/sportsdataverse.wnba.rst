@@ -28,6 +28,14 @@ sportsdataverse.wnba.wnba\_schedule module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.wnba.wnba\_teams module
+---------------------------------------
+
+.. automodule:: sportsdataverse.wnba.wnba_teams
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

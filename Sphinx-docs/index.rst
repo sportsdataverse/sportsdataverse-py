@@ -1,5 +1,5 @@
 .. sdv-py documentation master file, created by
-   sphinx-quickstart on Wed Oct 13 07:51:42 2021.
+   sphinx-quickstart on Sun Mar  6 05:59:54 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -12,6 +12,7 @@ Welcome to sdv-py's documentation!
 
    setup
    sportsdataverse
+   tests
 
 
 Indices and tables

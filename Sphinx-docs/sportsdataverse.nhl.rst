@@ -4,6 +4,14 @@ sportsdataverse.nhl package
 Submodules
 ----------
 
+sportsdataverse.nhl.nhl\_api module
+-----------------------------------
+
+.. automodule:: sportsdataverse.nhl.nhl_api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.nhl.nhl\_loaders module
 ---------------------------------------
 
@@ -24,6 +32,14 @@ sportsdataverse.nhl.nhl\_schedule module
 ----------------------------------------
 
 .. automodule:: sportsdataverse.nhl.nhl_schedule
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+sportsdataverse.nhl.nhl\_teams module
+-------------------------------------
+
+.. automodule:: sportsdataverse.nhl.nhl_teams
    :members:
    :undoc-members:
    :show-inheritance:

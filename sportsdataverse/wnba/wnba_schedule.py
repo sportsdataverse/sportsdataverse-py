@@ -6,12 +6,13 @@ from sportsdataverse.config import WNBA_BASE_URL, WNBA_TEAM_BOX_URL, WNBA_PLAYER
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
-def espn_wnba_schedule(dates=None, season_type=None) -> pd.DataFrame:
+def espn_wnba_schedule(dates=None, season_type=None, limit = 500) -> pd.DataFrame:
     """espn_wnba_schedule - look up the WNBA schedule for a given season
 
     Args:
         dates (int): Used to define different seasons. 2002 is the earliest available season.
         season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+        limit (int): number of records to return, default: 500.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
@@ -25,34 +26,32 @@ def espn_wnba_schedule(dates=None, season_type=None) -> pd.DataFrame:
     else:
         season_type = '&seasontype=' + str(season_type)
 
-    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?limit=300{}{}".format(dates,season_type)
-    ev = pd.DataFrame()
+    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?limit={}{}{}".format(limit, dates, season_type)
     resp = download(url=url)
 
+    ev = pd.DataFrame()
     if resp is not None:
         events_txt = json.loads(resp)
 
-        events = events_txt['events']
+        events = events_txt.get('events')
         for event in events:
-            if 'links' in event['competitions'][0]['competitors'][0]['team'].keys():
-                del event['competitions'][0]['competitors'][0]['team']['links']
-            if 'links' in event['competitions'][0]['competitors'][1]['team'].keys():
-                del event['competitions'][0]['competitors'][1]['team']['links']
-            if event['competitions'][0]['competitors'][0]['homeAway']=='home':
-                event['competitions'][0]['home'] = event['competitions'][0]['competitors'][0]['team']
+            event.get('competitions')[0].get('competitors')[0].get('team').pop('links',None)
+            event.get('competitions')[0].get('competitors')[1].get('team').pop('links',None)
+            if event.get('competitions')[0].get('competitors')[0].get('homeAway')=='home':
+                event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[1].get('team')
             else:
-                event['competitions'][0]['away'] = event['competitions'][0]['competitors'][0]['team']
-            if event['competitions'][0]['competitors'][1]['homeAway']=='away':
-                event['competitions'][0]['away'] = event['competitions'][0]['competitors'][1]['team']
-            else:
-                event['competitions'][0]['home'] = event['competitions'][0]['competitors'][1]['team']
+                event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[1].get('team')
 
-            del_keys = ['broadcasts','geoBroadcasts', 'headlines']
+            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series']
             for k in del_keys:
-                if k in event['competitions'][0].keys():
-                    del event['competitions'][0][k]
-
-            ev = ev.append(pd.json_normalize(event['competitions'][0]))
+                event.get('competitions')[0].pop(k, None)
+            x = pd.json_normalize(event.get('competitions')[0])
+            x['game_id'] = x['id'].astype(int)
+            x['season'] = event.get('season').get('year')
+            x['season_type'] = event.get('season').get('type')
+            ev = pd.concat([ev, x], axis=0, ignore_index=True)
     ev = pd.DataFrame(ev)
     return ev
 

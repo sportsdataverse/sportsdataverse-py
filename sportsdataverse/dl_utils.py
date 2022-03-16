@@ -7,7 +7,7 @@ from urllib.error import URLError, HTTPError, ContentTooShortError
 from datetime import datetime
 from itertools import chain, starmap
 
-def download(url, num_retries=5):
+def download(url, num_retries=10):
     try:
         html = urllib.request.urlopen(url).read()
     except (URLError, HTTPError, ContentTooShortError, http.client.HTTPException, http.client.IncompleteRead) as e:
@@ -22,6 +22,8 @@ def download(url, num_retries=5):
             if e == http.client.IncompleteRead:
                 time.sleep(10)
                 return download(url, num_retries - 1)
+        if num_retries == 0:
+            print("Retry Limit Exceeded")
     return html
 
 def flatten_json_iterative(dictionary, sep = '.', ind_start = 0):

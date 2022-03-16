@@ -28,6 +28,14 @@ sportsdataverse.wbb.wbb\_schedule module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.wbb.wbb\_teams module
+-------------------------------------
+
+.. automodule:: sportsdataverse.wbb.wbb_teams
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

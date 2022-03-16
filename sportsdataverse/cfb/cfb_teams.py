@@ -17,17 +17,16 @@ def espn_cfb_teams(groups=None) -> pd.DataFrame:
     else:
         groups = '&groups=' + str(groups)
     ev = pd.DataFrame()
-    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams?groups={}&limit=1000".format(groups)
+    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams?{}&limit=1000".format(groups)
     resp = download(url=url)
     if resp is not None:
         events_txt = json.loads(resp)
 
         teams = events_txt.get('sports')[0].get('leagues')[0].get('teams')
+        del_keys = ['record', 'links']
         for team in teams:
-            if 'record' in team.get('team').keys():
-                del team.get('team')['record']
-            if 'links' in team.get('team').keys():
-                del team.get('team')['links']
+            for k in del_keys:
+                team.get('team').pop(k, None)
         teams = pd.json_normalize(teams)
     return teams
 

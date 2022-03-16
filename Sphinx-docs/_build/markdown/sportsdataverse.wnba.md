@@ -91,8 +91,8 @@ Raises:
 ## sportsdataverse.wnba.wnba_pbp module
 
 
-### sportsdataverse.wnba.wnba_pbp.wnba_pbp(game_id: int)
-wnba_pbp() - Pull the game by id. Data from API endpoints - wnba/playbyplay, wnba/summary
+### sportsdataverse.wnba.wnba_pbp.espn_wnba_pbp(game_id: int, raw=False)
+espn_wnba_pbp() - Pull the game by id. Data from API endpoints - wnba/playbyplay, wnba/summary
 
 Args:
 
@@ -107,13 +107,19 @@ Returns:
 
 Example:
 
-    wnba_df = sportsdataverse.wnba.wnba_pbp(game_id=401370395)
+    wnba_df = sportsdataverse.wnba.espn_wnba_pbp(game_id=401370395)
 
+
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp(game_id, pbp_txt)
+
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt)
+
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_pickcenter(pbp_txt)
 ## sportsdataverse.wnba.wnba_schedule module
 
 
-### sportsdataverse.wnba.wnba_schedule.wnba_calendar(season=None)
-wnba_calendar - look up the WNBA calendar for a given season
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_calendar(season=None)
+espn_wnba_calendar - look up the WNBA calendar for a given season
 
 Args:
 
@@ -129,16 +135,27 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_schedule.wnba_schedule(dates=None, season_type=None)
-wnba_schedule - look up the WNBA schedule for a given season
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_schedule(dates=None, season_type=None, limit=500)
+espn_wnba_schedule - look up the WNBA schedule for a given season
 
 Args:
 
     dates (int): Used to define different seasons. 2002 is the earliest available season.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+    limit (int): number of records to return, default: 500.
 
 Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+
+## sportsdataverse.wnba.wnba_teams module
+
+
+### sportsdataverse.wnba.wnba_teams.espn_wnba_teams()
+espn_wnba_teams - look up WNBA teams
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing teams for the requested league.
 
 ## Module contents

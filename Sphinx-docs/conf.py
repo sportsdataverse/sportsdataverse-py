@@ -17,8 +17,8 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'sportsdataverse'
-copyright = '2021, Saiem Gilani'
+project = 'sdv-py'
+copyright = '2022, Saiem Gilani'
 author = 'Saiem Gilani'
 
 

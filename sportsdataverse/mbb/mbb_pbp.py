@@ -58,16 +58,33 @@ def helper_mbb_pbp(game_id, pbp_txt):
     pbp_txt['season'] = pbp_txt['header']['season']
     pbp_txt['playByPlaySource'] = pbp_txt['header']['competitions'][0]['playByPlaySource']
     # Home and Away identification variables
-    homeTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['id'])
-    awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
-    homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
-    awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
-    homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
-    awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
-    homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
-    awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
-    homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
-    awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+    if pbp_txt['header']['competitions'][0]['competitors'][0]['homeAway']=='home':
+        pbp_txt['header']['competitions'][0]['home'] = pbp_txt['header']['competitions'][0]['competitors'][0]['team']
+        homeTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['id'])
+        homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
+        homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
+        homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
+        homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
+        pbp_txt['header']['competitions'][0]['away'] = pbp_txt['header']['competitions'][0]['competitors'][1]['team']
+        awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
+        awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
+        awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
+        awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
+        awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+    else:
+        pbp_txt['header']['competitions'][0]['away'] = pbp_txt['header']['competitions'][0]['competitors'][0]['team']
+        awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['id'])
+        awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
+        awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
+        awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
+        awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+        pbp_txt['header']['competitions'][0]['home'] = pbp_txt['header']['competitions'][0]['competitors'][1]['team']
+        homeTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
+        homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
+        homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
+        homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
+        homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
+
     if (pbp_txt['playByPlaySource'] != "none") & (len(pbp_txt['plays'])>1):
         helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt)
     else:
