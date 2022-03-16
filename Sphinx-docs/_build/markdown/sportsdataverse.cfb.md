@@ -109,8 +109,10 @@ Bases: `object`
 Initialize self.  See help(type(self)) for accurate signature.
 
 
-#### cfb_pbp()
-cfb_pbp() - Pull the game by id. Data from API endpoints: college-football/playbyplay, college-football/summary
+#### create_box_score()
+
+#### espn_cfb_pbp()
+espn_cfb_pbp() - Pull the game by id. Data from API endpoints: college-football/playbyplay, college-football/summary
 
 Args:
 
@@ -126,10 +128,8 @@ Returns:
 
 Example:
 
-    cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).cfb_pbp()
+    cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).espn_cfb_pbp()
 
-
-#### create_box_score()
 
 #### gameId( = 0)
 
@@ -139,8 +139,8 @@ Example:
 ## sportsdataverse.cfb.cfb_schedule module
 
 
-### sportsdataverse.cfb.cfb_schedule.cfb_calendar(season=None, groups=None)
-cfb_calendar - look up the men’s college football calendar for a given season
+### sportsdataverse.cfb.cfb_schedule.espn_cfb_calendar(season=None, groups=None)
+espn_cfb_calendar - look up the men’s college football calendar for a given season
 
 Args:
 
@@ -156,8 +156,8 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.cfb.cfb_schedule.cfb_schedule(dates=None, week=None, season_type=None, groups=None)
-cfb_schedule - look up the college football schedule for a given season
+### sportsdataverse.cfb.cfb_schedule.espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None)
+espn_cfb_schedule - look up the college football schedule for a given season
 
 Args:
 
@@ -165,6 +165,20 @@ Args:
     week (int): Week of the schedule.
     groups (int): Used to define different divisions. 80 is FBS, 81 is FCS.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+
+## sportsdataverse.cfb.cfb_teams module
+
+
+### sportsdataverse.cfb.cfb_teams.espn_cfb_teams(groups=None)
+espn_cfb_teams - look up the college football teams
+
+Args:
+
+    groups (int): Used to define different divisions. 80 is FBS, 81 is FCS.
 
 Returns:
 

@@ -35,9 +35,9 @@ def getEspnCfbCalendar():
     print(espnCfbCalendar)
 
 def getEspnSchedule():
-    print('sportsdataverse.cfb.espn_cfb_schedule(dates=2020, week=5, season_type=80, groups=2)')
+    print('sportsdataverse.cfb.espn_cfb_schedule(dates=2020, week=5, season_type=2, groups=80)')
     print('cfb_schedule - look up the college football schedule for a given season')
-    espnSchedule =  sportsdataverse.cfb.espn_cfb_schedule(dates=2020, week=5, season_type=80, groups=2)
+    espnSchedule =  sportsdataverse.cfb.espn_cfb_schedule(dates=2020, week=5, season_type=2, groups=80)
     print(espnSchedule)
 
 def loadCfbPbp():

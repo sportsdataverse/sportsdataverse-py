@@ -28,6 +28,14 @@ sportsdataverse.nba.nba\_schedule module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.nba.nba\_teams module
+-------------------------------------
+
+.. automodule:: sportsdataverse.nba.nba_teams
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

@@ -91,8 +91,8 @@ Raises:
 ## sportsdataverse.nba.nba_pbp module
 
 
-### sportsdataverse.nba.nba_pbp.nba_pbp(game_id: int)
-nba_pbp() - Pull the game by id - Data from API endpoints - nba/playbyplay, nba/summary
+### sportsdataverse.nba.nba_pbp.espn_nba_pbp(game_id: int, raw=False)
+espn_nba_pbp() - Pull the game by id - Data from API endpoints - nba/playbyplay, nba/summary
 
 Args:
 
@@ -107,13 +107,19 @@ Returns:
 
 Example:
 
-    nba_df = sportsdataverse.nba.nba_pbp(game_id=401307514)
+    nba_df = sportsdataverse.nba.espn_nba_pbp(game_id=401307514)
 
+
+### sportsdataverse.nba.nba_pbp.helper_nba_pbp(game_id, pbp_txt)
+
+### sportsdataverse.nba.nba_pbp.helper_nba_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt, gameSpread, homeFavorite, gameSpreadAvailable)
+
+### sportsdataverse.nba.nba_pbp.helper_nba_pickcenter(pbp_txt)
 ## sportsdataverse.nba.nba_schedule module
 
 
-### sportsdataverse.nba.nba_schedule.nba_calendar(season=None)
-nba_calendar - look up the NBA calendar for a given season from ESPN
+### sportsdataverse.nba.nba_schedule.espn_nba_calendar(season=None)
+espn_nba_calendar - look up the NBA calendar for a given season from ESPN
 
 Args:
 
@@ -129,8 +135,8 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nba.nba_schedule.nba_schedule(dates=None, season_type=None)
-nba_schedule - look up the NBA schedule for a given date from ESPN
+### sportsdataverse.nba.nba_schedule.espn_nba_schedule(dates=None, season_type=None)
+espn_nba_schedule - look up the NBA schedule for a given date from ESPN
 
 Args:
 
@@ -141,5 +147,15 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing
     schedule events for the requested season.
+
+## sportsdataverse.nba.nba_teams module
+
+
+### sportsdataverse.nba.nba_teams.espn_nba_teams()
+espn_nba_teams - look up NBA teams
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing teams for the requested league.
 
 ## Module contents

@@ -1,5 +1,5 @@
 <!-- sdv-py documentation master file, created by
-sphinx-quickstart on Wed Oct 13 07:51:42 2021.
+sphinx-quickstart on Sun Mar  6 05:59:54 2022.
 You can adapt this file completely to your liking, but it should at least
 contain the root `toctree` directive. -->
 # Welcome to sdv-py’s documentation!
@@ -31,6 +31,9 @@ contain the root `toctree` directive. -->
             * sportsdataverse.cfb.cfb_schedule module
 
 
+            * sportsdataverse.cfb.cfb_teams module
+
+
             * sportsdataverse.cfb.model_vars module
 
 
@@ -52,6 +55,9 @@ contain the root `toctree` directive. -->
             * sportsdataverse.mbb.mbb_schedule module
 
 
+            * sportsdataverse.mbb.mbb_teams module
+
+
             * Module contents
 
 
@@ -68,6 +74,9 @@ contain the root `toctree` directive. -->
 
 
             * sportsdataverse.nba.nba_schedule module
+
+
+            * sportsdataverse.nba.nba_teams module
 
 
             * Module contents
@@ -91,6 +100,9 @@ contain the root `toctree` directive. -->
             * sportsdataverse.nfl.nfl_schedule module
 
 
+            * sportsdataverse.nfl.nfl_teams module
+
+
             * Module contents
 
 
@@ -100,6 +112,9 @@ contain the root `toctree` directive. -->
             * Submodules
 
 
+            * sportsdataverse.nhl.nhl_api module
+
+
             * sportsdataverse.nhl.nhl_loaders module
 
 
@@ -107,6 +122,9 @@ contain the root `toctree` directive. -->
 
 
             * sportsdataverse.nhl.nhl_schedule module
+
+
+            * sportsdataverse.nhl.nhl_teams module
 
 
             * Module contents
@@ -127,6 +145,9 @@ contain the root `toctree` directive. -->
             * sportsdataverse.wbb.wbb_schedule module
 
 
+            * sportsdataverse.wbb.wbb_teams module
+
+
             * Module contents
 
 
@@ -145,6 +166,9 @@ contain the root `toctree` directive. -->
             * sportsdataverse.wnba.wnba_schedule module
 
 
+            * sportsdataverse.wnba.wnba_teams module
+
+
             * Module contents
 
 
@@ -158,6 +182,39 @@ contain the root `toctree` directive. -->
 
 
     * sportsdataverse.errors module
+
+
+    * Module contents
+
+
+* tests package
+
+
+    * Subpackages
+
+
+        * tests.cfb package
+
+
+            * Submodules
+
+
+            * tests.cfb.test_pbp module
+
+
+            * Module contents
+
+
+        * tests.mbb package
+
+
+            * Submodules
+
+
+            * tests.mbb.test_pbp module
+
+
+            * Module contents
 
 
     * Module contents

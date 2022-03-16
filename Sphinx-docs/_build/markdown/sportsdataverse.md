@@ -18,6 +18,9 @@
     * sportsdataverse.cfb.cfb_schedule module
 
 
+    * sportsdataverse.cfb.cfb_teams module
+
+
     * sportsdataverse.cfb.model_vars module
 
 
@@ -39,6 +42,9 @@
     * sportsdataverse.mbb.mbb_schedule module
 
 
+    * sportsdataverse.mbb.mbb_teams module
+
+
     * Module contents
 
 
@@ -55,6 +61,9 @@
 
 
     * sportsdataverse.nba.nba_schedule module
+
+
+    * sportsdataverse.nba.nba_teams module
 
 
     * Module contents
@@ -78,6 +87,9 @@
     * sportsdataverse.nfl.nfl_schedule module
 
 
+    * sportsdataverse.nfl.nfl_teams module
+
+
     * Module contents
 
 
@@ -87,6 +99,9 @@
     * Submodules
 
 
+    * sportsdataverse.nhl.nhl_api module
+
+
     * sportsdataverse.nhl.nhl_loaders module
 
 
@@ -94,6 +109,9 @@
 
 
     * sportsdataverse.nhl.nhl_schedule module
+
+
+    * sportsdataverse.nhl.nhl_teams module
 
 
     * Module contents
@@ -114,6 +132,9 @@
     * sportsdataverse.wbb.wbb_schedule module
 
 
+    * sportsdataverse.wbb.wbb_teams module
+
+
     * Module contents
 
 
@@ -130,6 +151,9 @@
 
 
     * sportsdataverse.wnba.wnba_schedule module
+
+
+    * sportsdataverse.wnba.wnba_teams module
 
 
     * Module contents

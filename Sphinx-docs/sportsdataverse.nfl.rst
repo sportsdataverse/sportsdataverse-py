@@ -36,6 +36,14 @@ sportsdataverse.nfl.nfl\_schedule module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.nfl.nfl\_teams module
+-------------------------------------
+
+.. automodule:: sportsdataverse.nfl.nfl_teams
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

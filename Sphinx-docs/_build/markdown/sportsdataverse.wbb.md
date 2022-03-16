@@ -91,8 +91,8 @@ Raises:
 ## sportsdataverse.wbb.wbb_pbp module
 
 
-### sportsdataverse.wbb.wbb_pbp.wbb_pbp(game_id: int)
-wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay, womens-college-basketball/summary
+### sportsdataverse.wbb.wbb_pbp.espn_wbb_pbp(game_id: int, raw=False)
+espn_wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay, womens-college-basketball/summary
 
 Args:
 
@@ -107,13 +107,19 @@ Returns:
 
 Example:
 
-    wbb_df = sportsdataverse.wb.wbb_pbp(game_id=401266534)
+    wbb_df = sportsdataverse.wb.espn_wbb_pbp(game_id=401266534)
 
+
+### sportsdataverse.wbb.wbb_pbp.helper_wbb_pbp(game_id, pbp_txt)
+
+### sportsdataverse.wbb.wbb_pbp.helper_wbb_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt, gameSpread, homeFavorite, gameSpreadAvailable)
+
+### sportsdataverse.wbb.wbb_pbp.helper_wbb_pickcenter(pbp_txt)
 ## sportsdataverse.wbb.wbb_schedule module
 
 
-### sportsdataverse.wbb.wbb_schedule.wbb_calendar(season=None)
-wbb_calendar - look up the women’s college basketball calendar for a given season
+### sportsdataverse.wbb.wbb_schedule.espn_wbb_calendar(season=None)
+espn_wbb_calendar - look up the women’s college basketball calendar for a given season
 
 Args:
 
@@ -129,8 +135,8 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_schedule.wbb_schedule(dates=None, groups=None, season_type=None)
-wbb_schedule - look up the women’s college basketball schedule for a given season
+### sportsdataverse.wbb.wbb_schedule.espn_wbb_schedule(dates=None, groups=None, season_type=None)
+espn_wbb_schedule - look up the women’s college basketball schedule for a given season
 
 Args:
 
@@ -141,5 +147,19 @@ Args:
 Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+
+## sportsdataverse.wbb.wbb_teams module
+
+
+### sportsdataverse.wbb.wbb_teams.espn_wbb_teams(groups=None)
+espn_wbb_teams - look up the women’s college basketball teams
+
+Args:
+
+    groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing teams for the requested league.
 
 ## Module contents
