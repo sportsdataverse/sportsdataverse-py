@@ -166,7 +166,7 @@
 ## sportsdataverse.dl_utils module
 
 
-### sportsdataverse.dl_utils.download(url, num_retries=5)
+### sportsdataverse.dl_utils.download(url, num_retries=10)
 
 ### sportsdataverse.dl_utils.flatten_json_iterative(dictionary, sep='.', ind_start=0)
 Flattening a nested json file

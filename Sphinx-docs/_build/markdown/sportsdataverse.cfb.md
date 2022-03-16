@@ -156,7 +156,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.cfb.cfb_schedule.espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None)
+### sportsdataverse.cfb.cfb_schedule.espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500)
 espn_cfb_schedule - look up the college football schedule for a given season
 
 Args:
@@ -165,6 +165,7 @@ Args:
     week (int): Week of the schedule.
     groups (int): Used to define different divisions. 80 is FBS, 81 is FCS.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+    limit (int): number of records to return, default: 500.
 
 Returns:
 

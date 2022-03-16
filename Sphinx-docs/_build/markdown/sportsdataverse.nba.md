@@ -135,13 +135,14 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nba.nba_schedule.espn_nba_schedule(dates=None, season_type=None)
+### sportsdataverse.nba.nba_schedule.espn_nba_schedule(dates=None, season_type=None, limit=500)
 espn_nba_schedule - look up the NBA schedule for a given date from ESPN
 
 Args:
 
     dates (int): Used to define different seasons. 2002 is the earliest available season.
     season_type (int): season type, 1 for pre-season, 2 for regular season, 3 for post-season, 4 for all-star, 5 for off-season
+    limit (int): number of records to return, default: 500.
 
 Returns:
 

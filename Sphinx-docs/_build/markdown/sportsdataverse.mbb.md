@@ -129,7 +129,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
 
-### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=None, season_type=None)
+### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=None, season_type=None, limit=500)
 espn_mbb_schedule - look up the men’s college basketball scheduler for a given season
 
 Args:
@@ -137,6 +137,7 @@ Args:
     dates (int): Used to define different seasons. 2002 is the earliest available season.
     groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+    limit (int): number of records to return, default: 500.
 
 Returns:
 

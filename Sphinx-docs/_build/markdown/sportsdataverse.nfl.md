@@ -144,7 +144,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nfl.nfl_schedule.espn_nfl_schedule(dates=None, week=None, season_type=None)
+### sportsdataverse.nfl.nfl_schedule.espn_nfl_schedule(dates=None, week=None, season_type=None, limit=500)
 espn_nfl_schedule - look up the NFL schedule for a given date from ESPN
 
 Args:
@@ -152,6 +152,7 @@ Args:
     dates (int): Used to define different seasons. 2002 is the earliest available season.
     week (int): Used to define different weeks.
     season_type (int): season type, 1 for pre-season, 2 for regular season, 3 for post-season, 4 for all-star, 5 for off-season
+    limit (int): number of records to return, default: 500.
 
 Returns:
 

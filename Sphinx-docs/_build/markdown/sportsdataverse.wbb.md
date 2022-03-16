@@ -135,14 +135,15 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_schedule.espn_wbb_schedule(dates=None, groups=None, season_type=None)
+### sportsdataverse.wbb.wbb_schedule.espn_wbb_schedule(dates=None, groups=None, season_type=None, limit=500)
 espn_wbb_schedule - look up the women’s college basketball schedule for a given season
 
 Args:
 
     dates (int): Used to define different seasons. 2002 is the earliest available season.
-    groups (int): Used to define different divisions. 50 is Division I, 51 is Division II, 52 is Division III.
+    groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+    limit (int): number of records to return, default: 500.
 
 Returns:
 

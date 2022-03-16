@@ -135,13 +135,14 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_schedule.espn_wnba_schedule(dates=None, season_type=None)
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_schedule(dates=None, season_type=None, limit=500)
 espn_wnba_schedule - look up the WNBA schedule for a given season
 
 Args:
 
     dates (int): Used to define different seasons. 2002 is the earliest available season.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+    limit (int): number of records to return, default: 500.
 
 Returns:
 
