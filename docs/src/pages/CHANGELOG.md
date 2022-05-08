@@ -1,3 +1,6 @@
+## 0.0.15 Release: May 8, 2022
+- Refactor schedule and teams functions for all existing leagues.
+- Created more robust home/away mappings to simplify assignment.
 ## 0.0.14 Release: March 16, 2022
 - Refactor schedule and teams functions for all existing leagues.
 - Created more robust home/away mappings to simplify assignment.

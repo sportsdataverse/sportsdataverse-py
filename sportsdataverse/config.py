@@ -1,4 +1,4 @@
-SGITHUB = 'https://raw.githubusercontent.com/saiemgilani/'
+SGITHUB = 'https://raw.githubusercontent.com/sportsdataverse/'
 NFLVERSEGITHUB='https://raw.githubusercontent.com/nflverse/'
 
 CFB_BASE_URL = SGITHUB+'cfbfastR-data/master/pbp/parquet/play_by_play_{season}.parquet'
