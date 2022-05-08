@@ -4,7 +4,7 @@ sidebar_label: Getting Started
 sidebar_position: 1
 ---
 
-# sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://py.sportsdataverse.org/img/logo.png' align="right" height="150" /></a>
+# sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>
 <!-- badges: start -->
 
 ![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)
