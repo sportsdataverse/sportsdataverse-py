@@ -3,7 +3,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'sportsdataverse-py',
+  title: 'sdv-py',
   tagline: "The SportsDataverse's Python Package for Sports Data.",
   url: 'https://sportsdataverse-py.sportsdataverse.org',
   baseUrl: '/',
@@ -11,9 +11,13 @@ module.exports = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'SportsDataverse', // Usually your GitHub org/user name.
-  projectName: 'sportsdataverse-py', // Usually your repo name.
+  projectName: 'Sportsdataverse', // Usually your repo name.
   themeConfig: {
-    hideableSidebar: true,
+    docs: {
+      sidebar: {
+        hideable: true,
+      },
+    },
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
@@ -22,7 +26,7 @@ module.exports = {
     image: 'img/Sportsdataverse_gh.png',
     navbar: {
       hideOnScroll: true,
-      title: 'sportsdataverse-py',
+      title: 'sdv-py',
       logo: {
         alt: 'sportsdataverse-py Logo',
         src: 'img/logo.png',
@@ -195,7 +199,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/saiemgilani/sportsdataverse-py/edit/master/docs/',
+            'https://github.com/sportsdataverse/sportsdataverse-py/edit/master/docs/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
