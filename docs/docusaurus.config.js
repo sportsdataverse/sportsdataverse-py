@@ -60,16 +60,16 @@ module.exports = {
             },
             {
               label: 'R Packages',
-              href: 'https://saiemgilani.github.io/sportsdataverse-R/',
+              href: 'https://r.sportsdataverse.org/',
             },
             {
               label: 'sportsdataverse-R',
-              href: 'https://saiemgilani.github.io/sportsdataverse-R/',
+              href: 'https://r.sportsdataverse.org/',
               target: '_self',
             },
             {
               label: 'cfbfastR',
-              href: 'https://saiemgilani.github.io/cfbfastR/',
+              href: 'https://cfbfastR.sportsdataverse.org/',
               target: '_self',
             },
             {
@@ -84,7 +84,7 @@ module.exports = {
             },
             {
               label: 'fastRhockey',
-              href: 'https://BenHowell71.github.io/fastRhockey/',
+              href: 'https://fastRhockey.sportsdataverse.org/',
               target: '_self',
             },
             {
@@ -109,7 +109,7 @@ module.exports = {
             },
             {
               label: 'recruitR',
-              href: 'https://saiemgilani.github.io/recruitR/',
+              href: 'https://recruitR.sportsdataverse.org/',
               target: '_self',
             },
             {
@@ -140,7 +140,7 @@ module.exports = {
         },
         {
           label: 'GitHub',
-          href: 'https://github.com/saiemgilani/sportsdataverse-py/',
+          href: 'https://github.com/sportsdataverse/sportsdataverse-py/',
           position: 'right',
         },
       ],
@@ -166,7 +166,7 @@ module.exports = {
             },
             {
               label: 'Twitter (SportsDataverse)',
-              href: 'https://twitter.com/saiemgilani',
+              href: 'https://twitter.com/sportsdataverse',
             },
           ],
         },
@@ -175,7 +175,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/saiemgilani/sportsdataverse-py',
+              href: 'https://github.com/sportsdataverse/sportsdataverse-py',
             },
           ],
         },
