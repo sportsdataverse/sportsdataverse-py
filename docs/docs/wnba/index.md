@@ -1,8 +1,11 @@
-# WNBA Function Index
+# sportsdataverse.wnba package
 
-## sportsdataverse.wnba package
+## Submodules
 
-### sportsdataverse.wnba.load_wnba_pbp(seasons: List[int])
+## sportsdataverse.wnba.wnba_loaders module
+
+
+### sportsdataverse.wnba.wnba_loaders.load_wnba_pbp(seasons: List[int])
 Load WNBA play by play data going back to 2002
 
 Example:
@@ -23,7 +26,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.load_wnba_player_boxscore(seasons: List[int])
+### sportsdataverse.wnba.wnba_loaders.load_wnba_player_boxscore(seasons: List[int])
 Load WNBA player boxscore data
 
 Example:
@@ -44,7 +47,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.load_wnba_schedule(seasons: List[int])
+### sportsdataverse.wnba.wnba_loaders.load_wnba_schedule(seasons: List[int])
 Load WNBA schedule data
 
 Example:
@@ -65,7 +68,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.load_wnba_team_boxscore(seasons: List[int])
+### sportsdataverse.wnba.wnba_loaders.load_wnba_team_boxscore(seasons: List[int])
 Load WNBA team boxscore data
 
 Example:
@@ -85,7 +88,10 @@ Raises:
 
     ValueError: If season is less than 2002.
 
-### sportsdataverse.wnba.espn_wnba_pbp(game_id: int)
+## sportsdataverse.wnba.wnba_pbp module
+
+
+### sportsdataverse.wnba.wnba_pbp.espn_wnba_pbp(game_id: int, raw=False)
 espn_wnba_pbp() - Pull the game by id. Data from API endpoints - wnba/playbyplay, wnba/summary
 
 Args:
@@ -103,7 +109,16 @@ Example:
 
     wnba_df = sportsdataverse.wnba.espn_wnba_pbp(game_id=401370395)
 
-### sportsdataverse.wnba.espn_wnba_calendar(season=None)
+
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp(game_id, pbp_txt)
+
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt)
+
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_pickcenter(pbp_txt)
+## sportsdataverse.wnba.wnba_schedule module
+
+
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_calendar(season=None)
 espn_wnba_calendar - look up the WNBA calendar for a given season
 
 Args:
@@ -120,15 +135,27 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.espn_wnba_schedule(dates=None, season_type=None)
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_schedule(dates=None, season_type=None, limit=500)
 espn_wnba_schedule - look up the WNBA schedule for a given season
 
 Args:
 
     dates (int): Used to define different seasons. 2002 is the earliest available season.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+    limit (int): number of records to return, default: 500.
 
 Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
+## sportsdataverse.wnba.wnba_teams module
+
+
+### sportsdataverse.wnba.wnba_teams.espn_wnba_teams()
+espn_wnba_teams - look up WNBA teams
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing teams for the requested league.
+
+## Module contents

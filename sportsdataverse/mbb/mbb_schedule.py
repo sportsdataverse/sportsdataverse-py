@@ -1,5 +1,6 @@
 import pyarrow.parquet as pq
 import pandas as pd
+import numpy as np
 import json
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.errors import SeasonNotFoundError
@@ -41,20 +42,93 @@ def espn_mbb_schedule(dates=None, groups=None, season_type=None, limit=500) -> p
             event.get('competitions')[0].get('competitors')[1].get('team').pop('links',None)
             if event.get('competitions')[0].get('competitors')[0].get('homeAway')=='home':
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
+                event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[1].get('team')
+                event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
+                event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
             else:
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
+                event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[1].get('team')
+                event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
+                event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
 
-            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series']
+            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series', 'situation', 'tickets', 'odds']
             for k in del_keys:
                 event.get('competitions')[0].pop(k, None)
+            if len(event.get('competitions')[0]['notes'])>0:
+                event.get('competitions')[0]['notes_type'] = event.get('competitions')[0]['notes'][0].get("type")
+                event.get('competitions')[0]['notes_headline'] = event.get('competitions')[0]['notes'][0].get("headline").replace('"','')
+            else:
+                event.get('competitions')[0]['notes_type'] = ''
+                event.get('competitions')[0]['notes_headline'] = ''
+            event.get('competitions')[0].pop('notes', None)
             x = pd.json_normalize(event.get('competitions')[0])
             x['game_id'] = x['id'].astype(int)
             x['season'] = event.get('season').get('year')
             x['season_type'] = event.get('season').get('type')
-            ev = pd.concat([ev, x], axis=0, ignore_index=True)
+            ev = ev.append(x)
     ev = pd.DataFrame(ev)
+    # ev = ev.astype({
+    #     'id': int,
+    #     'uid': str,
+    #     'date': str,
+    #     'notes_type': str,
+    #     'notes_headline': str,
+    #     'type.id': int,
+    #     'type.abbreviation': str,
+    #     'venue.id': int,
+    #     'venue.fullName': str,
+    #     'venue.address.city': str,
+    #     'venue.address.state': str,
+    #     'venue.capacity': int,
+    #     'venue.indoor': bool,
+    #     'status.clock': str,
+    #     'status.displayClock': str,
+    #     'status.period ': int,
+    #     'status.type.id': int,
+    #     'status.type.name': str,
+    #     'status.type.state': str,
+    #     'status.type.completed': bool,
+    #     'status.type.description': str,
+    #     'status.type.detail': str,
+    #     'status.type.shortDetail': str,
+    #     'format.regulation.periods': int,
+    #     'home.id': int,
+    #     'home.uid': str,
+    #     'home.location': str,
+    #     'home.name': str,
+    #     'home.abbreviation': str,
+    #     'home.displayName': str,
+    #     'home.shortDisplayName': str,
+    #     'home.color': str,
+    #     'home.alternateColor': str,
+    #     'home.isActive': bool,
+    #     'home.venue.id': int,
+    #     'home.logo': str,
+    #     'home.conferenceId': int,
+    #     'home.score': int,
+    #     'home.winner': bool,
+    #     'away.id': int,
+    #     'away.uid': str,
+    #     'away.location': str,
+    #     'away.name': str,
+    #     'away.abbreviation': str,
+    #     'away.displayName': str,
+    #     'away.shortDisplayName': str,
+    #     'away.color': str,
+    #     'away.alternateColor': str,
+    #     'away.isActive': bool,
+    #     'away.venue.id': int,
+    #     'away.logo': str,
+    #     'away.conferenceId': int,
+    #     'away.score': int,
+    #     'away.winner': bool,
+    #     'tournamentId': int
+    # },errors='ignore')
+    # print(ev.columns)
     return ev
 
 def espn_mbb_calendar(season=None) -> pd.DataFrame:

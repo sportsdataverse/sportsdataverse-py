@@ -1,8 +1,11 @@
-# WBB Function Index
+# sportsdataverse.wbb package
 
-## sportsdataverse.wbb package
+## Submodules
 
-### sportsdataverse.wbb.load_wbb_pbp(seasons: List[int])
+## sportsdataverse.wbb.wbb_loaders module
+
+
+### sportsdataverse.wbb.wbb_loaders.load_wbb_pbp(seasons: List[int])
 Load women’s college basketball play by play data going back to 2002
 
 Example:
@@ -23,7 +26,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.load_wbb_player_boxscore(seasons: List[int])
+### sportsdataverse.wbb.wbb_loaders.load_wbb_player_boxscore(seasons: List[int])
 Load women’s college basketball player boxscore data
 
 Example:
@@ -44,7 +47,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.load_wbb_schedule(seasons: List[int])
+### sportsdataverse.wbb.wbb_loaders.load_wbb_schedule(seasons: List[int])
 Load women’s college basketball schedule data
 
 Example:
@@ -65,7 +68,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.load_wbb_team_boxscore(seasons: List[int])
+### sportsdataverse.wbb.wbb_loaders.load_wbb_team_boxscore(seasons: List[int])
 Load women’s college basketball team boxscore data
 
 Example:
@@ -88,7 +91,7 @@ Raises:
 ## sportsdataverse.wbb.wbb_pbp module
 
 
-### sportsdataverse.wbb.espn_wbb_pbp(game_id: int)
+### sportsdataverse.wbb.wbb_pbp.espn_wbb_pbp(game_id: int, raw=False)
 espn_wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay, womens-college-basketball/summary
 
 Args:
@@ -97,18 +100,25 @@ Args:
 
 Returns:
 
-    Dict: Dictionary of game data with keys - “gameId”, “plays”, “winprobability”,
-        “boxscore”, “header”, “broadcasts”, “videos”, “playByPlaySource”,
-        “standings”, “leaders”, “timeouts”, “pickcenter”,
-        “againstTheSpread”, “odds”, “predictor”,
+    Dict: Dictionary of game data with keys - “gameId”, “plays”, “winprobability”, “boxscore”, “header”, “broadcasts”,
+
+        “videos”, “playByPlaySource”, “standings”, “leaders”, “timeouts”, “pickcenter”, “againstTheSpread”, “odds”, “predictor”,
         “espnWP”, “gameInfo”, “season”
 
 Example:
 
-    wbb_df = sportsdataverse.wbb.espn_wbb_pbp(game_id=401266534)
+    wbb_df = sportsdataverse.wb.espn_wbb_pbp(game_id=401266534)
 
 
-### sportsdataverse.wbb.espn_wbb_calendar(season=None)
+### sportsdataverse.wbb.wbb_pbp.helper_wbb_pbp(game_id, pbp_txt)
+
+### sportsdataverse.wbb.wbb_pbp.helper_wbb_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt, gameSpread, homeFavorite, gameSpreadAvailable)
+
+### sportsdataverse.wbb.wbb_pbp.helper_wbb_pickcenter(pbp_txt)
+## sportsdataverse.wbb.wbb_schedule module
+
+
+### sportsdataverse.wbb.wbb_schedule.espn_wbb_calendar(season=None)
 espn_wbb_calendar - look up the women’s college basketball calendar for a given season
 
 Args:
@@ -125,16 +135,32 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.espn_wbb_schedule(dates=None, groups=None, season_type=None)
+### sportsdataverse.wbb.wbb_schedule.espn_wbb_schedule(dates=None, groups=None, season_type=None, limit=500)
 espn_wbb_schedule - look up the women’s college basketball schedule for a given season
 
 Args:
 
     dates (int): Used to define different seasons. 2002 is the earliest available season.
-    groups (int): Used to define different divisions. 50 is Division I, 51 is Division II, 52 is Division III.
+    groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
+    limit (int): number of records to return, default: 500.
 
 Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
+## sportsdataverse.wbb.wbb_teams module
+
+
+### sportsdataverse.wbb.wbb_teams.espn_wbb_teams(groups=None)
+espn_wbb_teams - look up the women’s college basketball teams
+
+Args:
+
+    groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing teams for the requested league.
+
+## Module contents

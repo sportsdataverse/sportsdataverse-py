@@ -52,7 +52,7 @@ def espn_nfl_schedule(dates=None, week=None, season_type=None, limit=500) -> pd.
             x['game_id'] = x['id'].astype(int)
             x['season'] = event.get('season').get('year')
             x['season_type'] = event.get('season').get('type')
-            ev = pd.concat([ev, x], axis=0, ignore_index=True)
+            ev = ev.append(x)
     ev = pd.DataFrame(ev)
     return ev
 
