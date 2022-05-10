@@ -313,7 +313,8 @@ class CFBPlayProcess(object):
             pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
             pbp_txt["plays"]["start.team.id"] = (
                 pbp_txt["plays"]["start.team.id"]
-                .fillna(method="ffill")
+                .fillna(method="ffill") # fill downward first to make sure all playIDs are accurate
+                .fillna(method="bfill") # fill upward so that any remaining NAs are covered
                 .apply(lambda x: int(x))
             )
             pbp_txt["plays"]["end.team.id"] = (
