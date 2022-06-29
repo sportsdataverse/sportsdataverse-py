@@ -1,6 +1,7 @@
 import pyarrow.parquet as pq
 import pandas as pd
 import json
+from tqdm import tqdm
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.config import CFB_BASE_URL, CFB_ROSTER_URL, CFB_TEAM_LOGO_URL, CFB_TEAM_SCHEDULE_URL, CFB_TEAM_INFO_URL
 from sportsdataverse.errors import SeasonNotFoundError
@@ -24,11 +25,12 @@ def load_cfb_pbp(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2003:
             raise SeasonNotFoundError("season cannot be less than 2003")
         i_data = pd.read_parquet(CFB_BASE_URL.format(season=i), engine='auto', columns=None)
-        data = data.append(i_data)
+        #data = data.append(i_data)
+        data = pd.concat([data,i_data],ignore_index=True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
     return data
@@ -51,11 +53,12 @@ def load_cfb_schedule(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pd.read_parquet(CFB_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
-        data = data.append(i_data)
+        #data = data.append(i_data)
+        data = pd.concat([data,i_data],ignore_index=True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
@@ -79,7 +82,7 @@ def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2004:
             raise SeasonNotFoundError("season cannot be less than 2004")
         i_data = pd.read_parquet(CFB_ROSTER_URL.format(season = i), engine='auto', columns=None)
@@ -107,7 +110,7 @@ def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pd.read_parquet(CFB_TEAM_INFO_URL.format(season = i), engine='auto', columns=None)
