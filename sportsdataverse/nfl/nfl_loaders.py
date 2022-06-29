@@ -54,7 +54,9 @@ def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
     for i in seasons:
         if int(i) < 1999:
             raise SeasonNotFoundError("season cannot be less than 1999")
-        i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
+        schedule_url = f"https://raw.githubusercontent.com/cooperdff/nfl_data_py/main/data/schedules/{i}.csv"
+        #i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
+        i_data = pd.read_csv(schedule_url)
         data = data.append(i_data)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
