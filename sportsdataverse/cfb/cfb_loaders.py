@@ -113,14 +113,17 @@ def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
-        i_data = pd.read_parquet(CFB_TEAM_INFO_URL.format(season = i), engine='auto', columns=None)
+        try:
+            i_data = pd.read_parquet(CFB_TEAM_INFO_URL.format(season = i), engine='auto', columns=None)
+        except:
+            print(f'We don\'t seem to have data for the {i} season.')
         data = data.append(i_data)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
     return data
 
-def cfb_teams() -> pd.DataFrame:
+def get_cfb_teams() -> pd.DataFrame:
     """Load college football team ID information and logos
 
     Example:
@@ -132,4 +135,5 @@ def cfb_teams() -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
     """
     df = pd.read_parquet(CFB_TEAM_LOGO_URL, engine='auto', columns=None)
+    
     return df
