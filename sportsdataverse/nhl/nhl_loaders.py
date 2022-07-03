@@ -1,6 +1,7 @@
 import pyarrow.parquet as pq
 import pandas as pd
 import json
+from tqdm import tqdm
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.config import NHL_BASE_URL, NHL_TEAM_BOX_URL, NHL_TEAM_SCHEDULE_URL, NHL_TEAM_LOGO_URL, NHL_PLAYER_BOX_URL
 from sportsdataverse.errors import SeasonNotFoundError
@@ -24,7 +25,7 @@ def load_nhl_pbp(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pd.read_parquet(NHL_BASE_URL.format(season=i), engine='auto', columns=None)
@@ -51,7 +52,7 @@ def load_nhl_schedule(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pd.read_parquet(NHL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
@@ -80,7 +81,7 @@ def load_nhl_team_boxscore(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pd.read_parquet(NHL_TEAM_BOX_URL.format(season = i), engine='auto', columns=None)
@@ -109,7 +110,7 @@ def load_nhl_player_boxscore(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pd.read_parquet(NHL_PLAYER_BOX_URL.format(season = i), engine='auto', columns=None)
