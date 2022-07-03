@@ -1,6 +1,7 @@
 import pyarrow.parquet as pq
 import pandas as pd
 import json
+from tqdm import tqdm
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.config import WBB_BASE_URL, WBB_TEAM_BOX_URL, WBB_PLAYER_BOX_URL, WBB_TEAM_SCHEDULE_URL
 from sportsdataverse.errors import SeasonNotFoundError
@@ -25,7 +26,7 @@ def load_wbb_pbp(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pd.read_parquet(WBB_BASE_URL.format(season=i), engine='auto', columns=None)
@@ -53,7 +54,7 @@ def load_wbb_team_boxscore(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2002:
             raise ValueError("season cannot be less than 2002")
         i_data = pd.read_parquet(WBB_TEAM_BOX_URL.format(season = i), engine='auto', columns=None)
@@ -82,7 +83,7 @@ def load_wbb_player_boxscore(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2002:
             raise ValueError("season cannot be less than 2002")
         i_data = pd.read_parquet(WBB_PLAYER_BOX_URL.format(season = i), engine='auto', columns=None)
@@ -111,7 +112,7 @@ def load_wbb_schedule(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 2002:
             raise ValueError("season cannot be less than 2002")
         i_data = pd.read_parquet(WBB_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)

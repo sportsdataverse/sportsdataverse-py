@@ -1,6 +1,7 @@
 import pyarrow.parquet as pq
 import pandas as pd
 import json
+from tqdm import tqdm
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.config import NFL_BASE_URL, NFL_ROSTER_URL, NFL_TEAM_LOGO_URL, NFL_TEAM_SCHEDULE_URL, NFL_PLAYER_STATS_URL
 from sportsdataverse.errors import SeasonNotFoundError
@@ -24,7 +25,7 @@ def load_nfl_pbp(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 1999:
             raise SeasonNotFoundError("season cannot be less than 1999")
         i_data = pd.read_parquet(NFL_BASE_URL.format(season=i), engine='auto', columns=None)
@@ -51,7 +52,7 @@ def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
     data = pd.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    for i in seasons:
+    for i in tqdm(seasons):
         if int(i) < 1999:
             raise SeasonNotFoundError("season cannot be less than 1999")
         schedule_url = f"https://raw.githubusercontent.com/cooperdff/nfl_data_py/main/data/schedules/{i}.csv"
