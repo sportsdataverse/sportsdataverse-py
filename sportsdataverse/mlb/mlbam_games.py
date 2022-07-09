@@ -8,46 +8,6 @@ from sportsdataverse.dl_utils import download
 from datetime import datetime
 import os
 
-def pullCopyrightInfo(saveFile=False,returnFile=False):
-	"""
-	Displays the copyright info for the MLBAM API.
-
-	Args:
-	saveFile (boolean) = False
-		If saveFile is set to True, the copyright file generated is saved.
-
-	returnFile (boolean) = False
-		If returnFile is set to True, the copyright file is returned.
-	"""
-	url = "http://gdx.mlb.com/components/copyright.txt"
-	resp = download(url=url)
-
-	l_string = str(resp, 'UTF-8')
-	if resp is not None:
-		with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
-			file.writelines(str(l_string))
-
-		with open("mlbam_copyright.txt", "r" ,encoding = "utf-8") as file:
-			mlbam = file.read()
-
-		if saveFile == False:
-			if os.path.exists("mlbam_copyright.txt"):
-				os.remove("mlbam_copyright.txt")
-			else:
-				pass
-		else:
-			pass
-		print(mlbam)
-
-		if returnFile == True:
-			return mlbam
-		else:
-			pass
-
-
-	else:
-		print('Could not connect to the internet. \nPlease fix this issue to be able to use this package.')
-
 
 def getGamesInSeason(season=0,gameType="R"):
 	'''
@@ -74,7 +34,7 @@ def getGamesInSeason(season=0,gameType="R"):
 		'L' - League Championship
 		'W' - World Series
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 	
@@ -101,9 +61,9 @@ def getGamesInSeason(season=0,gameType="R"):
 
 	resp = download(searchURL)
 
-	print(searchURL)
+	#print(searchURL)
 	resp_str = str(resp, 'UTF-8')
-	print(resp_str)
+	#print(resp_str)
 
 	resp_json = json.loads(resp_str)
 	try:
@@ -113,11 +73,10 @@ def getGamesInSeason(season=0,gameType="R"):
 
 	if result_count > 0:
 		#print(resp_json['player_teams']['queryResults']['row'])
-
-		print(f'{result_count} statlines found,\nParsing results into a dataframe.')
+		#print(f'{result_count} statlines found,\nParsing results into a dataframe.')
 		#players = resp_json['search_player_all']['queryResults']['row']
 		main_df = json_normalize(resp_json['org_game_type_date_info']['queryResults']['row']) 
-		print('Done')
+		#print('Done')
 	else:
 		print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
 		

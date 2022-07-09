@@ -9,45 +9,7 @@ from datetime import datetime
 
 import os
 
-def pullCopyrightInfo(saveFile=False,returnFile=False):
-	"""
-	Displays the copyright info for the MLBAM API.
 
-	Args:
-	saveFile (boolean) = False
-		If saveFile is set to True, the copyright file generated is saved.
-
-	returnFile (boolean) = False
-		If returnFile is set to True, the copyright file is returned.
-	"""
-	url = "http://gdx.mlb.com/components/copyright.txt"
-	resp = download(url=url)
-
-	l_string = str(resp, 'UTF-8')
-	if resp is not None:
-		with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
-			file.writelines(str(l_string))
-
-		with open("mlbam_copyright.txt", "r" ,encoding = "utf-8") as file:
-			mlbam = file.read()
-
-		if saveFile == False:
-			if os.path.exists("mlbam_copyright.txt"):
-				os.remove("mlbam_copyright.txt")
-			else:
-				pass
-		else:
-			pass
-		print(mlbam)
-
-		if returnFile == True:
-			return mlbam
-		else:
-			pass
-
-
-	else:
-		print('Could not connect to the internet. \nPlease fix this issue to be able to use this package.')
 
 
 def getTransactionsInRange(startDate=0,endDate=0):
@@ -67,7 +29,7 @@ def getTransactionsInRange(startDate=0,endDate=0):
 		Required paramater. If no endDate is provided, the function wil not work.
 		Additionally, endDate must be in YYYYMMDD format.
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 	
@@ -90,7 +52,7 @@ def getTransactionsInRange(startDate=0,endDate=0):
 	if len(str(sd)) == 8 and len(str(ed)) == 8:
 		resp = download(searchURL)
 
-		print(searchURL)
+		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
 		#print(resp_str)
 
@@ -131,6 +93,8 @@ def getBroadcastInfo(season=0,home_away="e",startDate=0,endDate=0):
 
 		If you want away broadcasters only, set home_away='A' or home_away='a'.
 
+		If you want both home and away broadcasters, set home_away='E' or home_away='e'.
+		
 	startDate (int):
 		Optional paramater. If no startDate is provided, 
 		the function will get all broadcasters starting at the start of the given MLB season.
@@ -143,7 +107,7 @@ def getBroadcastInfo(season=0,home_away="e",startDate=0,endDate=0):
 		Additionally, endDate must be in YYYYMMDD format. If it is not in that format,
 		the function may not work properly.
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 	

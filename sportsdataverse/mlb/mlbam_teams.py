@@ -11,56 +11,20 @@ from sportsdataverse.dl_utils import download
 import os
 
 
-def pullCopyrightInfo(saveFile=False,returnFile=False):
-	"""
-	Displays the copyright info for the MLBAM API.
-
-	Args:
-	saveFile (boolean) = False
-		If saveFile is set to True, the copyright file generated is saved.
-
-	returnFile (boolean) = False
-		If returnFile is set to True, the copyright file is returned.
-	"""
-	url = "http://gdx.mlb.com/components/copyright.txt"
-	resp = download(url=url)
-
-	l_string = str(resp, 'UTF-8')
-	if resp is not None:
-		with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
-			file.writelines(str(l_string))
-
-		with open("mlbam_copyright.txt", "r" ,encoding = "utf-8") as file:
-			mlbam = file.read()
-
-		if saveFile == False:
-			if os.path.exists("mlbam_copyright.txt"):
-				os.remove("mlbam_copyright.txt")
-			else:
-				pass
-		else:
-			pass
-		print(mlbam)
-
-		if returnFile == True:
-			return mlbam
-		else:
-			pass
-
-
-	else:
-		print('Could not connect to the internet. \nPlease fix this issue to be able to use this package.')
-
 def getTeamData(season=0,retriveAllStarRosters=False):
 	'''
-	Retrives the player info for an MLB player, given a proper MLBAM ID
+	Retrives the player info for an MLB team, given an MLB season
 
 	Args:
 	
-	playerID (int):
-		Required paramater. If no playerID is provided, the function wil not work.
+	season (int):
+		Required paramater. If no season is provided, the function wil not work.
+
+	retriveAllStarRosters (boolean):
+		Optional parameter. If set to 'True', MLB All-Star rosters will be returned when 
+		running this function.
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 	
@@ -86,9 +50,9 @@ def getTeamData(season=0,retriveAllStarRosters=False):
 
 	resp = download(searchURL)
 
-	print(searchURL)
+	#print(searchURL)
 	resp_str = str(resp, 'UTF-8')
-	print(resp_str)
+	#print(resp_str)
 
 	resp_json = json.loads(resp_str)
 	try:
@@ -108,16 +72,16 @@ def getTeamData(season=0,retriveAllStarRosters=False):
 		
 	return main_df
 
-def get40ManRoster(teamID=120):
+def get40ManRoster(teamID=113):
 	'''
 	Retrives the player info for an MLB player, given a proper MLBAM ID
 
 	Args:
 	
-	playerID (int):
-		Required paramater. If no playerID is provided, the function wil not work.
+	teamID (int):
+		Required paramater. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	
 	main_df = pd.DataFrame()
 	
@@ -127,9 +91,9 @@ def get40ManRoster(teamID=120):
 
 	resp = download(searchURL)
 
-	print(searchURL)
+	#print(searchURL)
 	resp_str = str(resp, 'UTF-8')
-	print(resp_str)
+	#print(resp_str)
 
 	resp_json = json.loads(resp_str)
 	try:
@@ -149,16 +113,22 @@ def get40ManRoster(teamID=120):
 		
 	return main_df
 
-def getAllTimeRoster(teamID=120,startSeason=2020,endSeason=2021):
+def getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021):
 	'''
-	Retrives the player info for an MLB player, given a proper MLBAM ID
+	Retrives the cumulative roster for a MLB team in a specified timeframe.
 
 	Args:
 	
-	playerID (int):
-		Required paramater. If no playerID is provided, the function wil not work.
+	teamID (int):
+		Required paramater. If no MLBAM Team ID is provided, the cumulative roster for the Cincinnati Reds will be returned.
+
+	startSeason (int):
+		Required parameter. This value must be less than endSeason for this function to work.
+		
+	endSeason (int):
+		Required parameter. This value must be greater than startSeason for this function to work.
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	
 	holding_num = 0
 	main_df = pd.DataFrame()
