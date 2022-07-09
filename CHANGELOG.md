@@ -1,7 +1,7 @@
 ## 0.0.17 Release: July 9, 2022
 - Added MLBAM API functionality to the sportsdataverse-py package. For more information on how to use these new functions, refer to the docs. 
 - Fixed a bug where the "sportsdataverse.nfl.load_nfl_schedule()" function would cause a 404 error when run.
-- For functions where multiple files are loaded in, progress bars have been added to indicate how far along the sportsdataverse-py package is in completing its tasks.
+- For functions where multiple files are loaded in, progress bars have been added to indicate how far along the sportsdataverse-py package is in completing its task(s).
 - Renamed "sportsdataverse.cfb.cfb_teams()" to "sportsdataverse.cfb.get_cfb_teams()" to avoid an edge case issue when running the function.
 
 ## 0.0.15 Release: May 8, 2022
