@@ -21,7 +21,7 @@ MLBAM_copyright_info = sdv.mlb.pullCopyrightInfo()
 print(MLBAM_copyright_info)
 ```
 
-## getGamesInSeason(season=0,gameType="R"):
+## getGamesInSeason(season:int,gameType="R"):
 
 Retrives the start and end date for games for every leauge, and the MLB,
 for a given season.
@@ -54,7 +54,7 @@ df = sdv.mlb.getGamesInSeason(2020)
 print(df)
 ```
 
-## searchMlbPlayers(search="",isActive=""):
+## searchMlbPlayers(search:str,isActive=""):
 
 Searches for an MLB player in the MLBAM API.
 
@@ -76,11 +76,11 @@ in your search.
 
 ```
 import sportsdataverse as sdv
-df = sdv.mlb.searchMlbPlayers(search="Votto",isActive="y")
+df = sdv.mlb.searchMlbPlayers(search="Joe",isActive="y")
 print(df)
 ```
 
-## getPlayerInfo(playerID=0):
+## getPlayerInfo(playerID:int):
 
 Retrives the player info for an MLB player, given a proper MLBAM ID
 
@@ -97,7 +97,7 @@ df = sdv.mlb.getPlayerInfo(playerID=458015)
 print(df)
 ```
 
-## getPlayerTeams(playerID=0,season=0):
+## getPlayerTeams(playerID:int,season:int):
 
 Retrives the info regarding which teams that player played for in a given
 season, or in the player's career
@@ -108,18 +108,18 @@ playerID (int):
 Required paramater. If no playerID is provided, the function wil not work.
 
 season (int):
-Optional parameter. If provided, the search will only look for teams
+Required parameter. If provided, the search will only look for teams
 that player played for in that season.
 
 ### Example:
 
 ```
 import sportsdataverse as sdv
-df = sdv.mlb.getPlayerInfo(playerID=523260,season=2014)
+df = sdv.mlb.getPlayerTeams(playerID=523260,season=2014)
 print(df)
 ```
 
-## def getSeasonHittingStats(playerID=0,season=0,gameType="R"):
+## def getSeasonHittingStats(playerID:int,season:int,gameType="R"):
 
 Retrives the hitting stats for an MLB player in a given season, given a proper MLBAM ID
 
@@ -185,7 +185,7 @@ df = sdv.mlb.getSeasonPitchingStats(playerID=642840,season=2019,gameType="R")
 print(df)
 ```
 
-## getCareerHittingStats(playerID=0,gameType="R"):
+## getCareerHittingStats(playerID:int,gameType="R"):
 
 Retrives the career hitting stats for an MLB player, given a proper MLBAM ID
 
@@ -193,9 +193,6 @@ Retrives the career hitting stats for an MLB player, given a proper MLBAM ID
 
 playerID (int):
 Required paramater. If no playerID is provided, the function wil not work.
-
-season (int):
-Required paramater. Indicates the season you are trying to find the games for.
 
 gameType (string) = "R":
 Optional parameter. If there's no input, this function will get the info for the regular season.
@@ -218,7 +215,7 @@ df = sdv.mlb.getCareerHittingStats(playerID=458015,gameType="R")
 print(df)
 ```
 
-## getCareerPitchingStats(playerID=0,gameType="R"):
+## getCareerPitchingStats(playerID:int,gameType="R"):
 
 Retrives the career pitching stats for an MLB player, given a proper MLBAM ID
 
@@ -248,7 +245,7 @@ df = sdv.mlb.getCareerPitchingStats(playerID=642840,gameType="R")
 print(df)
 ```
 
-## getTransactionsInRange(startDate=0,endDate=0):
+## getTransactionsInRange(startDate:str,endDate:str):
 
 Retrives all transactions in a given range of dates.
 You MUST provide two dates for this function to work, and both dates must
@@ -269,11 +266,11 @@ Additionally, endDate must be in YYYYMMDD format.
 
 ```
 import sportsdataverse as sdv
-df =sdv.mlb.getTransactionsInRange(startDate=20200901,endDate=20200914)
+df =sdv.mlb.getTransactionsInRange(startDate="09/01/2020",endDate="09/14/2020")
 print(df)
 ```
 
-## getBroadcastInfo(season=0,home_away="e",startDate=0,endDate=0):
+## getBroadcastInfo(season:int,home_away="e"):
 
 Retrives the broadcasters (radio and TV) involved with certian games.
 
@@ -292,18 +289,6 @@ Leave blank if you want both home and away broadcasters.
 
     If you want both home and away broadcasters, set home_away='E' or home_away='e'.
 
-startDate (int):
-Optional paramater. If no startDate is provided,
-the function will get all broadcasters starting at the start of the given MLB season.
-Additionally, startDate must be in YYYYMMDD format. If it is not in that format,
-the function may not work properly.
-
-endDate (int):
-Optional paramater. If no endDate is provided,
-the function will get all broadcasters until the end of the given MLB season.
-Additionally, endDate must be in YYYYMMDD format. If it is not in that format,
-the function may not work properly.
-
 ### Example:
 
 ```
@@ -312,7 +297,7 @@ df = sdv.mlb.getBroadcastInfo(season=2020,home_away="e")
 print(df)
 ```
 
-## getTeamData(season=0,retriveAllStarRosters=False):
+## getTeamData(season:int,retriveAllStarRosters=False):
 
 Retrives the player info for an MLB player, given a proper MLBAM ID
 
@@ -333,14 +318,15 @@ df = sdv.mlb.getTeamData(season=2020)
 print(df)
 ```
 
-## get40ManRoster(teamID=113):
+## get40ManRoster(teamID:int):
 
 Retrives the current 40-man roster for a team, given a proper MLBAM Team ID.
 
 ### Args:
 
 teamID (int):
-Required paramater. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
+Required paramater. This should be the number MLBAM associates for an MLB team.
+For example, the Cincinnati Reds have an MLBAM team ID of 113.
 
 ### Example:
 
@@ -350,7 +336,7 @@ df = sdv.mlb.get40ManRoster(teamID=113)
 print(df)
 ```
 
-## getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021):
+## getAllTimeRoster(teamID:int,startSeason:int,endSeason:int):
 
 Retrives the cumulative roster for a MLB team in a specified timeframe.
 

@@ -19,29 +19,31 @@ def pullCopyrightInfo(saveFile=False,returnFile=False):
 	"""
 	url = "http://gdx.mlb.com/components/copyright.txt"
 	resp = download(url=url)
+	try:
+		l_string = str(resp, 'UTF-8')
+		if resp is not None:
+			with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
+				file.writelines(str(l_string))
 
-	l_string = str(resp, 'UTF-8')
-	if resp is not None:
-		with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
-			file.writelines(str(l_string))
+			with open("mlbam_copyright.txt", "r" ,encoding = "utf-8") as file:
+				mlbam = file.read()
 
-		with open("mlbam_copyright.txt", "r" ,encoding = "utf-8") as file:
-			mlbam = file.read()
-
-		if saveFile == False:
-			if os.path.exists("mlbam_copyright.txt"):
-				os.remove("mlbam_copyright.txt")
+			if saveFile == False:
+				if os.path.exists("mlbam_copyright.txt"):
+					os.remove("mlbam_copyright.txt")
+				else:
+					pass
 			else:
 				pass
+			print(mlbam)
+
+			if returnFile == True:
+				return mlbam
+			else:
+				pass
+
+
 		else:
-			pass
-		print(mlbam)
-
-		if returnFile == True:
-			return mlbam
-		else:
-			pass
-
-
-	else:
+			print('Could not connect to the internet. \nPlease fix this issue to be able to use this package.')
+	except:
 		print('Could not connect to the internet. \nPlease fix this issue to be able to use this package.')

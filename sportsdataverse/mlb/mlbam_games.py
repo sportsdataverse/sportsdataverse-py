@@ -9,7 +9,7 @@ from datetime import datetime
 import os
 
 
-def getGamesInSeason(season=0,gameType="R"):
+def getGamesInSeason(season:int,gameType="R"):
 	'''
 	Retrives the start and end date for games for every leauge, and the MLB, 
 	for a given season. 

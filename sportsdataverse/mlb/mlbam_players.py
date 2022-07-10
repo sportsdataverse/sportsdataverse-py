@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 import os
 
-def searchMlbPlayers(search="",isActive=""):
+def searchMlbPlayers(search:str,isActive=""):
 	"""
 	Searches for an MLB player in the MLBAM API.
 	
@@ -73,7 +73,7 @@ def searchMlbPlayers(search="",isActive=""):
 	else:
 		print("To search for MLB players in the MLBAM API, you must include text relating to the player you're searching for.")
 
-def getPlayerInfo(playerID=0):
+def getPlayerInfo(playerID:int):
 	'''
 	Retrives the player info for an MLB player, given a proper MLBAM ID
 
@@ -120,7 +120,7 @@ def getPlayerInfo(playerID=0):
 		
 		return main_df
 
-def getPlayerTeams(playerID=0,season=0):
+def getPlayerTeams(playerID:int,season:int):
 	'''
 	Retrives the info regarding which teams that player played for in a given
 	season, or in the player's career
@@ -131,7 +131,7 @@ def getPlayerTeams(playerID=0,season=0):
 		Required paramater. If no playerID is provided, the function wil not work.
 
 	season (int):
-		Optional parameter. If provided, the search will only look for teams 
+		Required parameter. If provided, the search will only look for teams 
 		that player played for in that season.
 	'''
 	#pullCopyrightInfo()

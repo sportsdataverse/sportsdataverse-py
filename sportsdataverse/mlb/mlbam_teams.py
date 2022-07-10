@@ -11,7 +11,7 @@ from sportsdataverse.dl_utils import download
 import os
 
 
-def getTeamData(season=0,retriveAllStarRosters=False):
+def getTeamData(season:int,retriveAllStarRosters=False):
 	'''
 	Retrives the player info for an MLB team, given an MLB season
 
@@ -37,7 +37,7 @@ def getTeamData(season=0,retriveAllStarRosters=False):
 
 	now = datetime.now()
 
-	if season < 1860:
+	if season < 1860 or season == None:
 		print('1_Please input a proper year. The search will continue with the current year instead.')
 		season = int(now.year)
 		searchURL = searchURL  + f'sort_order=\'name_asc\'&season=\'{season}\''
@@ -72,14 +72,15 @@ def getTeamData(season=0,retriveAllStarRosters=False):
 		
 	return main_df
 
-def get40ManRoster(teamID=113):
+def get40ManRoster(teamID:int):
 	'''
 	Retrives the player info for an MLB player, given a proper MLBAM ID
 
 	Args:
 	
 	teamID (int):
-		Required paramater. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
+		Required paramater. This should be the number MLBAM associates for an MLB team.
+		For example, the Cincinnati Reds have an MLBAM team ID of 113.
 	'''
 	#pullCopyrightInfo()
 	
@@ -113,14 +114,15 @@ def get40ManRoster(teamID=113):
 		
 	return main_df
 
-def getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021):
+def getAllTimeRoster(teamID:int,startSeason:int,endSeason:int):
 	'''
 	Retrives the cumulative roster for a MLB team in a specified timeframe.
 
 	Args:
 	
 	teamID (int):
-		Required paramater. If no MLBAM Team ID is provided, the cumulative roster for the Cincinnati Reds will be returned.
+		Required paramater. This should be the number MLBAM associates for an MLB team.
+		For example, the Cincinnati Reds have an MLBAM team ID of 113.
 
 	startSeason (int):
 		Required parameter. This value must be less than endSeason for this function to work.
