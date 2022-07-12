@@ -42,6 +42,11 @@ def getTransactionsInRange(startDate:str,endDate:str):
 		ed_date = datetime.strptime(endDate, '%m/%d/%Y')
 		sd = sd_date.strftime("%Y%m%d")
 		ed = ed_date.strftime("%Y%m%d")
+
+		if sd > ed:
+			print('There is an issue with your inputted dates.\nPlease verify that your start date is older than your end date.')
+			return None
+			
 		diff_days = ed_date.date() - sd_date.date()
 		if (diff_days.days)> 30:
 			print('Getting transaction data. This will take some time.')

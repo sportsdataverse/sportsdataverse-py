@@ -20,8 +20,9 @@ def pullCopyrightInfo(saveFile=False,returnFile=False):
 	url = "http://gdx.mlb.com/components/copyright.txt"
 	resp = download(url=url)
 	try:
-		l_string = str(resp, 'UTF-8')
+		
 		if resp is not None:
+			l_string = str(resp, 'UTF-8')
 			with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
 				file.writelines(str(l_string))
 
