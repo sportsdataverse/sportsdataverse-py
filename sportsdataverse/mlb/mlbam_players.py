@@ -9,48 +9,7 @@ from tqdm import tqdm
 
 import os
 
-def pullCopyrightInfo(saveFile=False,returnFile=False):
-	"""
-	Displays the copyright info for the MLBAM API.
-
-	Args:
-	saveFile (boolean) = False
-		If saveFile is set to True, the copyright file generated is saved.
-
-	returnFile (boolean) = False
-		If returnFile is set to True, the copyright file is returned.
-	"""
-	url = "http://gdx.mlb.com/components/copyright.txt"
-	resp = download(url=url)
-
-	l_string = str(resp, 'UTF-8')
-	if resp is not None:
-		with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
-			file.writelines(str(l_string))
-
-		with open("mlbam_copyright.txt", "r" ,encoding = "utf-8") as file:
-			mlbam = file.read()
-
-		if saveFile == False:
-			if os.path.exists("mlbam_copyright.txt"):
-				os.remove("mlbam_copyright.txt")
-			else:
-				pass
-		else:
-			pass
-		print(mlbam)
-
-		if returnFile == True:
-			return mlbam
-		else:
-			pass
-
-
-	else:
-		print('Could not connect to the internet. \nPlease fix this issue to be able to use this package.')
-
-
-def searchMlbPlayers(search="",isActive=""):
+def searchMlbPlayers(search:str,isActive=""):
 	"""
 	Searches for an MLB player in the MLBAM API.
 	
@@ -67,7 +26,7 @@ def searchMlbPlayers(search="",isActive=""):
 
 		If you want inactive players, set isActive to "N" or "No".
 	"""
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?sport_code='mlb'"
 	
 	p_df = pd.DataFrame()
@@ -107,14 +66,14 @@ def searchMlbPlayers(search="",isActive=""):
 				main_df = pd.concat([p_df,main_df],ignore_index=True)
 		else:
 			print(f'No results found for {search}. \nTry a diffrient search for better results.')
-		
+		main_df.drop_duplicates(subset="player_id",keep="first",inplace=True)
 		return main_df
 		
 
 	else:
 		print("To search for MLB players in the MLBAM API, you must include text relating to the player you're searching for.")
 
-def getPlayerInfo(playerID=0):
+def getPlayerInfo(playerID:int):
 	'''
 	Retrives the player info for an MLB player, given a proper MLBAM ID
 
@@ -123,7 +82,7 @@ def getPlayerInfo(playerID=0):
 	playerID (int):
 		Required paramater. If no playerID is provided, the function wil not work.
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 	
@@ -139,9 +98,9 @@ def getPlayerInfo(playerID=0):
 		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		print(searchURL)
+		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		print(resp_str)
+		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -150,9 +109,9 @@ def getPlayerInfo(playerID=0):
 			result_count = 0
 
 		if result_count > 0:
-			print(resp_json['player_info']['queryResults']['row'])
+			#print(resp_json['player_info']['queryResults']['row'])
 
-			print(f'{result_count} players found,\nParsing results into a dataframe.')
+			#print(f'{result_count} players found,\nParsing results into a dataframe.')
 			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['player_info']['queryResults']['row']) 
 			print('Done')
@@ -161,7 +120,7 @@ def getPlayerInfo(playerID=0):
 		
 		return main_df
 
-def getPlayerTeams(playerID=0,season=0):
+def getPlayerTeams(playerID:int,season:int):
 	'''
 	Retrives the info regarding which teams that player played for in a given
 	season, or in the player's career
@@ -172,10 +131,10 @@ def getPlayerTeams(playerID=0,season=0):
 		Required paramater. If no playerID is provided, the function wil not work.
 
 	season (int):
-		Optional parameter. If provided, the search will only look for teams 
+		Required parameter. If provided, the search will only look for teams 
 		that player played for in that season.
 	'''
-	pullCopyrightInfo()
+	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 	
