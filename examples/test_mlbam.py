@@ -2,7 +2,7 @@ import sportsdataverse as sdv
 
 """
 pullCopyrightInfo(saveFile=False,returnFile=False):
-	
+
 Displays the copyright info for the MLBAM API.
 
 Args:
@@ -23,22 +23,22 @@ print(sdv.mlb.pullCopyrightInfo())
 print('')
 """
 getGamesInSeason(season=0,gameType="R"):
-	
-Retrives the start and end date for games for every leauge, and the MLB, 
-for a given season. 
+
+Retrieves the start and end date for games for every league, and the MLB,
+for a given season.
 
 This function does not get individual games.
 
 Args:
 
 season (int):
-    Required paramater. Indicates the season you are trying to find the games for.
+    Required parameter. Indicates the season you are trying to find the games for.
 
 gameType (string) = "R":
     Optional parameter. If there's no input, this function will get the info for the regular season.
 
     Other parts of the season are indicated as follows in the MLBAM API:
-    
+
     'S' - Spring Training
     'E' - Exhibition
     'A' - All Star Game
@@ -48,7 +48,7 @@ gameType (string) = "R":
     'W' - World Series
 
 Example:
-	
+
 import sportsdataverse as sdv
 df = sdv.mlb.getGamesInSeason(2020)
 print(df)
@@ -58,13 +58,13 @@ print(sdv.mlb.getGamesInSeason(2020))
 print('')
 """
 searchMlbPlayers(search="",isActive=""):
-	
+
 Searches for an MLB player in the MLBAM API.
 
 Args:
 search (string):
     Inputted string of the player(s) the user is intending to search.
-    If there is nothin inputted, nothing will be searched.
+    If there is nothing inputted, nothing will be searched.
 
 isActive (string, optional):
     If called, it will specify if you want active players, or innactive players
@@ -76,7 +76,7 @@ isActive (string, optional):
 
 Example:
 
-import sportsdataverse as sdv	
+import sportsdataverse as sdv
 df = sdv.mlb.searchMlbPlayers(search="Votto",isActive="y")
 print(df)
 """
@@ -86,13 +86,13 @@ print(sdv.mlb.searchMlbPlayers(search="Joe",isActive="y"))
 print('')
 """
 getPlayerInfo(playerID=0):
-	
-Retrives the player info for an MLB player, given a proper MLBAM ID
+
+Retrieves the player info for an MLB player, given a proper MLBAM ID
 
 Args:
 
 playerID (int):
-    Required paramater. If no playerID is provided, the function wil not work.
+    Required parameter. If no playerID is provided, the function wil not work.
 
 Example:
 
@@ -106,16 +106,16 @@ print('')
 """
 def getPlayerTeams(playerID=0,season=0):
 
-Retrives the info regarding which teams that player played for in a given
+Retrieves the info regarding which teams that player played for in a given
 season, or in the player's career
 
 Args:
 
 playerID (int):
-    Required paramater. If no playerID is provided, the function wil not work.
+    Required parameter. If no playerID is provided, the function wil not work.
 
 season (int):
-    Optional parameter. If provided, the search will only look for teams 
+    Optional parameter. If provided, the search will only look for teams
     that player played for in that season.
 
 Example:
@@ -130,21 +130,21 @@ print('')
 """
 def getSeasonHittingStats(playerID=0,season=0,gameType="R"):
 
-Retrives the hitting stats for an MLB player in a given season, given a proper MLBAM ID
+Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID
 
 Args:
 
 playerID (int):
-    Required paramater. If no playerID is provided, the function wil not work.
+    Required parameter. If no playerID is provided, the function wil not work.
 
 season (int):
-    Required paramater. Indicates the season you are trying to find the games for.
+    Required parameter. Indicates the season you are trying to find the games for.
 
 gameType (string) = "R":
     Optional parameter. If there's no input, this function will get the info for the regular season.
 
     Other parts of the season are indicated as follows in the MLBAM API:
-    
+
     'S' - Spring Training
     'E' - Exhibition
     'A' - All Star Game
@@ -165,21 +165,21 @@ print('')
 """
 def getSeasonPitchingStats(playerID=0,gameType="R",season=0):
 
-Retrives the pitching stats for an MLB player in a given season, given a proper MLBAM ID
+Retrieves the pitching stats for an MLB player in a given season, given a proper MLBAM ID
 
 Args:
 
 playerID (int):
-    Required paramater. If no playerID is provided, the function wil not work.
+    Required parameter. If no playerID is provided, the function wil not work.
 
 season (int):
-    Required paramater. Indicates the season you are trying to find the games for.
+    Required parameter. Indicates the season you are trying to find the games for.
 
 gameType (string) = "R":
     Optional parameter. If there's no input, this function will get the info for the regular season.
 
     Other parts of the season are indicated as follows in the MLBAM API:
-    
+
     'S' - Spring Training
     'E' - Exhibition
     'A' - All Star Game
@@ -200,21 +200,21 @@ print('')
 """
 def getCareerHittingStats(playerID=0,gameType="R"):
 
-Retrives the career hitting stats for an MLB player, given a proper MLBAM ID
+Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
 
 Args:
 
 playerID (int):
-    Required paramater. If no playerID is provided, the function wil not work.
+    Required parameter. If no playerID is provided, the function wil not work.
 
 season (int):
-    Required paramater. Indicates the season you are trying to find the games for.
+    Required parameter. Indicates the season you are trying to find the games for.
 
 gameType (string) = "R":
     Optional parameter. If there's no input, this function will get the info for the regular season.
 
     Other parts of the season are indicated as follows in the MLBAM API:
-    
+
     'S' - Spring Training
     'E' - Exhibition
     'A' - All Star Game
@@ -235,18 +235,18 @@ print('')
 """
 getCareerPitchingStats(playerID=0,gameType="R"):
 
-Retrives the career pitching stats for an MLB player, given a proper MLBAM ID
+Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
 
 Args:
 
 playerID (int):
-    Required paramater. If no playerID is provided, the function wil not work.
+    Required parameter. If no playerID is provided, the function wil not work.
 
 gameType (string) = "R":
     Optional parameter. If there's no input, this function will get the info for the regular season.
 
     Other parts of the season are indicated as follows in the MLBAM API:
-    
+
     'S' - Spring Training
     'E' - Exhibition
     'A' - All Star Game
@@ -267,19 +267,19 @@ print('')
 """
 getTransactionsInRange(startDate=0,endDate=0):
 
-Retrives all transactions in a given range of dates.
-You MUST provide two dates for this function to work, and both dates must 
+Retrieves all transactions in a given range of dates.
+You MUST provide two dates for this function to work, and both dates must
 be in YYYYMMDD format. For example, December 31st, 2021 would be represented
 as 20211231
 
 Args:
 
 startDate (int):
-    Required paramater. If no startDate is provided, the function wil not work.
+    Required parameter. If no startDate is provided, the function wil not work.
     Additionally, startDate must be in YYYYMMDD format.
 
 endDate (int):
-    Required paramater. If no endDate is provided, the function wil not work.
+    Required parameter. If no endDate is provided, the function wil not work.
     Additionally, endDate must be in YYYYMMDD format.
 
 Example:
@@ -294,32 +294,32 @@ print('')
 """
 getBroadcastInfo(season=0,home_away="e",startDate=0,endDate=0):
 
-Retrives the broadcasters (radio and TV) involved with certian games.
+Retrieves the broadcasters (radio and TV) involved with certian games.
 
 Args:
 
 season (int):
-    Required paramater. If no season is provided, the function wil not work.
+    Required parameter. If no season is provided, the function wil not work.
 
 home_away (string):
-    Optional paramater. Used to get broadcasters from either the home OR the away side.
+    Optional parameter. Used to get broadcasters from either the home OR the away side.
     Leave blank if you want both home and away broadcasters.
 
     If you want home broadcasters only, set home_away='H' or home_away='a'.
 
     If you want away broadcasters only, set home_away='A' or home_away='a'.
-	
+
     If you want both home and away broadcasters, set home_away='E' or home_away='e'.
-		
+
 
 startDate (int):
-    Optional paramater. If no startDate is provided, 
+    Optional parameter. If no startDate is provided,
     the function will get all broadcasters starting at the start of the given MLB season.
     Additionally, startDate must be in YYYYMMDD format. If it is not in that format,
     the function may not work properly.
 
 endDate (int):
-    Optional paramater. If no endDate is provided, 
+    Optional parameter. If no endDate is provided,
     the function will get all broadcasters until the end of the given MLB season.
     Additionally, endDate must be in YYYYMMDD format. If it is not in that format,
     the function may not work properly.
@@ -336,15 +336,15 @@ print('')
 """
 getTeamData(season=0,retriveAllStarRosters=False):
 
-Retrives the player info for an MLB player, given a proper MLBAM ID
+Retrieves the player info for an MLB player, given a proper MLBAM ID
 
 Args:
 
 season (int):
-    Required paramater. If no season is provided, the function wil not work.
+    Required parameter. If no season is provided, the function wil not work.
 
 retriveAllStarRosters (boolean):
-    Optional parameter. If set to 'True', MLB All-Star rosters will be returned when 
+    Optional parameter. If set to 'True', MLB All-Star rosters will be returned when
     running this function.
 
 Example:
@@ -359,12 +359,12 @@ print('')
 """
 get40ManRoster(teamID=113):
 
-Retrives the current 40-man roster for a team, given a proper MLBAM Team ID
+Retrieves the current 40-man roster for a team, given a proper MLBAM Team ID
 
 Args:
 
 teamID (int):
-    Required paramater. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
+    Required parameter. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
 
 Example:
 
@@ -378,16 +378,16 @@ print('')
 """
 getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021):
 
-Retrives the cumulative roster for a MLB team in a specified timeframe.
+Retrieves the cumulative roster for a MLB team in a specified timeframe.
 
 Args:
 
 teamID (int):
-    Required paramater. If no MLBAM Team ID is provided, the cumulative roster for the Cincinnati Reds will be returned.
+    Required parameter. If no MLBAM Team ID is provided, the cumulative roster for the Cincinnati Reds will be returned.
 
 startSeason (int):
     Required parameter. This value must be less than endSeason for this function to work.
-    
+
 endSeason (int):
     Required parameter. This value must be greater than startSeason for this function to work.
 

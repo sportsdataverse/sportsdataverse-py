@@ -20,6 +20,7 @@ def espn_nhl_teams() -> pd.DataFrame:
         for team in teams:
             for k in del_keys:
                 team.get('team').pop(k, None)
-        teams = pd.json_normalize(teams)
+        teams = pd.json_normalize(teams, sep='_')
+    teams.columns = [underscore(c) for c in teams.columns.tolist()]
     return teams
 

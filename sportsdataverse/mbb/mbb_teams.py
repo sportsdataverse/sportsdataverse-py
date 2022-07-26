@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import download, underscore
 from urllib.error import URLError, HTTPError, ContentTooShortError
 
 def espn_mbb_teams(groups=None) -> pd.DataFrame:
@@ -27,6 +27,7 @@ def espn_mbb_teams(groups=None) -> pd.DataFrame:
         for team in teams:
             for k in del_keys:
                 team.get('team').pop(k, None)
-        teams = pd.json_normalize(teams)
+        teams = pd.json_normalize(teams, sep='_')
+    teams.columns = [underscore(c) for c in teams.columns.tolist()]
     return teams
 

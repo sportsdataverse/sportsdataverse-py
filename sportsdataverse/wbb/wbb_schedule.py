@@ -3,9 +3,9 @@ import pandas as pd
 import json
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.errors import SeasonNotFoundError
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import download, underscore
 
-def espn_wbb_schedule(dates=None, groups=None, season_type=None, limit=500) -> pd.DataFrame:
+def espn_wbb_schedule(dates=None, groups=50, season_type=None, limit=500) -> pd.DataFrame:
     """espn_wbb_schedule - look up the women's college basketball schedule for a given season
 
     Args:
@@ -22,7 +22,7 @@ def espn_wbb_schedule(dates=None, groups=None, season_type=None, limit=500) -> p
     else:
         dates = '&dates=' + str(dates)
     if groups is None:
-        groups = '&groups=50'
+        groups = ''
     else:
         groups = '&groups=' + str(groups)
     if season_type is None:
@@ -50,19 +50,21 @@ def espn_wbb_schedule(dates=None, groups=None, season_type=None, limit=500) -> p
             del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series']
             for k in del_keys:
                 event.get('competitions')[0].pop(k, None)
-            x = pd.json_normalize(event.get('competitions')[0])
+            x = pd.json_normalize(event.get('competitions')[0], sep='_')
             x['game_id'] = x['id'].astype(int)
             x['season'] = event.get('season').get('year')
             x['season_type'] = event.get('season').get('type')
-            ev = ev.append(x)
+            ev = pd.concat([ev,x],axis=0, ignore_index=True)
     ev = pd.DataFrame(ev)
+    ev.columns = [underscore(c) for c in ev.columns.tolist()]
     return ev
 
-def espn_wbb_calendar(season=None) -> pd.DataFrame:
+def espn_wbb_calendar(season=None, ondays=None) -> pd.DataFrame:
     """espn_wbb_calendar - look up the women's college basketball calendar for a given season
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.
+        ondays (boolean): Used to return dates for calendar ondays
 
     Returns:
         pd.DataFrame: Pandas dataframe containing
@@ -73,27 +75,35 @@ def espn_wbb_calendar(season=None) -> pd.DataFrame:
     """
     if int(season) < 2002:
         raise SeasonNotFoundError("season cannot be less than 2002")
-    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates={}".format(season)
-    resp = download(url=url)
-    txt = json.loads(resp)['leagues'][0]['calendar']
-    datenum = list(map(lambda x: x[:10].replace("-",""),txt))
-    date = list(map(lambda x: x[:10],txt))
+    if ondays is not None:
+        url = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/{}/types/2/calendar/ondays".format(season)
+        resp = download(url=url)
+        txt = json.loads(resp).get('eventDate').get('dates')
+        full_schedule = pd.DataFrame(txt,columns=['dates'])
+        full_schedule['dateURL'] = list(map(lambda x: x[:10].replace("-",""),full_schedule['dates']))
+        full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates="
+        full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
+    else:
+        url = "http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates={}".format(season)
+        resp = download(url=url)
+        txt = json.loads(resp)['leagues'][0]['calendar']
+        datenum = list(map(lambda x: x[:10].replace("-",""),txt))
+        date = list(map(lambda x: x[:10],txt))
 
-    year = list(map(lambda x: x[:4],txt))
-    month = list(map(lambda x: x[5:7],txt))
-    day = list(map(lambda x: x[8:10],txt))
+        year = list(map(lambda x: x[:4],txt))
+        month = list(map(lambda x: x[5:7],txt))
+        day = list(map(lambda x: x[8:10],txt))
 
-    data = {
-        "season": season,
-        "datetime" : txt,
-        "date" : date,
-        "year": year,
-        "month": month,
-        "day": day,
-        "dateURL": datenum
-    }
-    df = pd.DataFrame(data)
-    df['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates="
-    df['url']= df['url'] + df['dateURL']
-    return df
+        data = {"season": season,
+                "datetime" : txt,
+                "date" : date,
+                "year": year,
+                "month": month,
+                "day": day,
+                "dateURL": datenum
+        }
+        full_schedule = pd.DataFrame(data)
+        full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates="
+        full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
+    return full_schedule
 

@@ -10,25 +10,24 @@ from tqdm import tqdm
 import os
 
 def searchMlbPlayers(search:str,isActive=""):
-	"""
-	Searches for an MLB player in the MLBAM API.
-	
+	"""Searches for an MLB player in the MLBAM API.
+
 	Args:
-	search (string):
-		Inputted string of the player(s) the user is intending to search.
-		If there is nothin inputted, nothing will be searched.
-	
-	isActive (string, optional):
-		If called, it will specify if you want active players, or innactive players
-		in your search.
+		search (string):
+			Inputted string of the player(s) the user is intending to search.
+			If there is nothing inputted, nothing will be searched.
 
-		If you want active players, set isActive to "Y" or "Yes".
+		isActive (string, optional):
+			If called, it will specify if you want active players, or inactive players
+			in your search.
 
-		If you want inactive players, set isActive to "N" or "No".
+			If you want active players, set isActive to "Y" or "Yes".
+
+			If you want inactive players, set isActive to "N" or "No".
 	"""
 	#pullCopyrightInfo()
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?sport_code='mlb'"
-	
+
 	p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
@@ -43,15 +42,13 @@ def searchMlbPlayers(search:str,isActive=""):
 		print('Improper input for the isActive input. \nIf you want active players, set isActive to "Y" or "Yes". \nIf you want inactive players, set isActive to "N" or "No".\n\nIn the meantime, your search will search for all players in MLB history.')
 
 	if len(search) > 0:
-		print(f"Searching for a player nammed \"{search}\".")
-		
+		print(f"Searching for a player named \"{search}\".")
+
 		searchURL= searchURL + f"&name_part='{search}%25'"
-		
-		
+
 		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		
 		resp_str = str(resp, 'UTF-8')
 		#print(resp_str)
 
@@ -62,30 +59,27 @@ def searchMlbPlayers(search:str,isActive=""):
 
 			for i in resp_json['search_player_all']['queryResults']['row']:
 
-				p_df = json_normalize(resp_json['search_player_all']['queryResults']['row']) 
+				p_df = json_normalize(resp_json['search_player_all']['queryResults']['row'])
 				main_df = pd.concat([p_df,main_df],ignore_index=True)
 		else:
-			print(f'No results found for {search}. \nTry a diffrient search for better results.')
+			print(f'No results found for {search}. \nTry a different search for better results.')
 		main_df.drop_duplicates(subset="player_id",keep="first",inplace=True)
 		return main_df
-		
 
 	else:
 		print("To search for MLB players in the MLBAM API, you must include text relating to the player you're searching for.")
 
 def getPlayerInfo(playerID:int):
-	'''
-	Retrives the player info for an MLB player, given a proper MLBAM ID
+	"""Retrieves the player info for an MLB player, given a proper MLBAM ID
 
 	Args:
-	
-	playerID (int):
-		Required paramater. If no playerID is provided, the function wil not work.
-	'''
+		playerID (int):
+			Required parameter. If no playerID is provided, the function wil not work.
+	"""
 	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
-	
+
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.player_info.bam?sport_code='mlb'&player_id="
 
 	if playerID < 1:
@@ -93,8 +87,7 @@ def getPlayerInfo(playerID:int):
 		return None
 	else:
 		searchURL= searchURL + f"\'{playerID}\'%27"
-		
-		
+
 		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
@@ -113,35 +106,33 @@ def getPlayerInfo(playerID:int):
 
 			#print(f'{result_count} players found,\nParsing results into a dataframe.')
 			#players = resp_json['search_player_all']['queryResults']['row']
-			main_df = json_normalize(resp_json['player_info']['queryResults']['row']) 
+			main_df = json_normalize(resp_json['player_info']['queryResults']['row'])
 			print('Done')
 		else:
-			print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
-		
+			print(f'No results found for the provided playerID. \nTry a different search for better results.')
+
 		return main_df
 
 def getPlayerTeams(playerID:int,season:int):
-	'''
-	Retrives the info regarding which teams that player played for in a given
+	"""Retrieves the info regarding which teams that player played for in a given
 	season, or in the player's career
 
 	Args:
-	
-	playerID (int):
-		Required paramater. If no playerID is provided, the function wil not work.
+		playerID (int):
+			Required parameter. If no playerID is provided, the function wil not work.
 
-	season (int):
-		Required parameter. If provided, the search will only look for teams 
-		that player played for in that season.
-	'''
+		season (int):
+			Required parameter. If provided, the search will only look for teams
+			that player played for in that season.
+	"""
 	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
-	
+
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.player_teams.bam?"
 
 	if season >1 and season < 1860:
-		print('Enter a valid season. Baseball wasn\'t really a thing in the year you spefified.')
+		print('Enter a valid season. Baseball wasn\'t really a thing in the year you specified.')
 	elif season > 1860:
 		searchURL = searchURL + f'season=\'{season}\'&'
 	else:
@@ -152,8 +143,7 @@ def getPlayerTeams(playerID:int,season:int):
 		return None
 	else:
 		searchURL= searchURL + f"player_id=\'{playerID}\'"
-		
-		
+
 		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
@@ -172,9 +162,8 @@ def getPlayerTeams(playerID:int,season:int):
 
 			print(f'{result_count} players found,\nParsing results into a dataframe.')
 			#players = resp_json['search_player_all']['queryResults']['row']
-			main_df = json_normalize(resp_json['player_teams']['queryResults']['row']) 
+			main_df = json_normalize(resp_json['player_teams']['queryResults']['row'])
 			print('Done')
 		else:
-			print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
-		
+			print(f'No results found for the provided playerID. \nTry a different search for better results.')
 		return main_df

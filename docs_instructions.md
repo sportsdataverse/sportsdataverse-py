@@ -1,3 +1,9 @@
+## Documentation update
+```bash
+bash create_docs.sh
+```
+Don't forget to include any new modules in the [sidebars](https://github.com/sportsdataverse/sportsdataverse-py/blob/d1fd11e367d8cf180bb11ea2c676295771434225/docs/sidebars.js) for the docusaurus config
+
 ## Documentation Creation
 ```bash
 pip install sphinx sphinx-markdown-builder;

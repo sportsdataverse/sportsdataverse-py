@@ -1,5 +1,4 @@
 include MANIFEST.in
-include setup.py
 include pavement.py
 include *.cfg
 include *.ini

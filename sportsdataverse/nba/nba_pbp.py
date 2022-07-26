@@ -2,8 +2,9 @@ from typing import Dict
 import pyarrow.parquet as pq
 import pandas as pd
 import numpy as np
-import re
+import os
 import json
+import re
 from typing import List, Callable, Iterator, Union, Optional, Dict
 from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
@@ -28,46 +29,96 @@ def espn_nba_pbp(game_id: int, raw = False) -> Dict:
     summary_url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event={}".format(game_id)
     summary_resp = download(summary_url)
     summary = json.loads(summary_resp)
-    for k in ['plays', 'seasonseries', 'videos', 'broadcasts', 'pickcenter', 'againstTheSpread', 'odds', 'winprobability', 'teamInfo', 'espnWP', 'leaders']:
-        pbp_txt[k]=key_check(obj=summary, key = k, replacement = np.array([]))
-    for k in ['boxscore','format', 'gameInfo', 'predictor', 'article', 'header', 'season', 'standings']:
-        pbp_txt[k] = key_check(obj=summary, key = k, replacement = {})
-    for k in ['news','shop']:
-        if k in pbp_txt.keys():
-            del pbp_txt[k]
-    incoming_keys_expected = ['boxscore', 'format', 'gameInfo', 'leaders', 'seasonseries', 'broadcasts',
-                              'predictor', 'pickcenter', 'againstTheSpread', 'odds', 'winprobability',
-                              'header', 'plays', 'article', 'videos', 'standings',
-                              'teamInfo', 'espnWP', 'season', 'timeouts']
+
+    incoming_keys_expected = [
+        'boxscore', 'format', 'gameInfo', 'leaders', 'seasonseries',
+        'broadcasts', 'predictor', 'pickcenter', 'againstTheSpread',
+        'odds', 'winprobability', 'header', 'plays',
+        'article', 'videos', 'standings',
+        'teamInfo', 'espnWP', 'season', 'timeouts'
+    ]
+    dict_keys_expected = [
+        'boxscore','format', 'gameInfo', 'predictor',
+        'article', 'header', 'season', 'standings'
+    ]
+    array_keys_expected = [
+        'plays', 'seasonseries', 'videos', 'broadcasts', 'pickcenter',
+        'againstTheSpread', 'odds', 'winprobability', 'teamInfo', 'espnWP',
+        'leaders'
+    ]
     if raw == True:
-        # reorder keys in raw format, appending empty keys which are defined later to the end
+        # reorder keys in raw format
         pbp_json = {}
         for k in incoming_keys_expected:
-            if k in pbp_txt.keys():
-                pbp_json[k] = pbp_txt[k]
+            if k in summary.keys():
+                pbp_json[k] = summary[k]
             else:
-                pbp_json[k] = {}
+                if k in dict_keys_expected:
+                    pbp_json[k] = {}
+                else:
+                    pbp_json[k] = []
         return pbp_json
+
+    for k in incoming_keys_expected:
+        if k in summary.keys():
+            pbp_txt[k] = summary[k]
+        else:
+            if k in dict_keys_expected:
+                pbp_txt[k] = {}
+            else:
+                pbp_txt[k] = []
+
+    for k in ['news','shop']:
+        pbp_txt.pop('{}'.format(k), None)
     pbp_json = helper_nba_pbp(game_id, pbp_txt)
     return pbp_json
 
-def helper_nba_pbp(game_id, pbp_txt):
-    gameSpread, homeFavorite, gameSpreadAvailable = helper_nba_pickcenter(pbp_txt)
+def nba_pbp_disk(game_id, path_to_json):
+    with open(os.path.join(path_to_json, "{}.json".format(game_id))) as json_file:
+        pbp_txt = json.load(json_file)
+    return pbp_txt
 
+def helper_nba_pbp(game_id, pbp_txt):
+    gameSpread, overUnder, homeFavorite, gameSpreadAvailable = helper_nba_pickcenter(pbp_txt)
+    pbp_txt['timeouts'] = {}
     pbp_txt['teamInfo'] = pbp_txt['header']['competitions'][0]
     pbp_txt['season'] = pbp_txt['header']['season']
     pbp_txt['playByPlaySource'] = pbp_txt['header']['competitions'][0]['playByPlaySource']
+    pbp_txt['boxscoreSource'] = pbp_txt['header']['competitions'][0]['boxscoreSource']
+    pbp_txt['gameSpreadAvailable'] = gameSpreadAvailable
+    pbp_txt['gameSpread'] = gameSpread
+    pbp_txt["homeFavorite"] = homeFavorite
+    pbp_txt["homeTeamSpread"] = np.where(
+        homeFavorite == True, abs(gameSpread), -1 * abs(gameSpread)
+    )
+    pbp_txt["overUnder"] = float(overUnder)
     # Home and Away identification variables
-    homeTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['id'])
-    awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
-    homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
-    awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
-    homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
-    awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
-    homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
-    awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
-    homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
-    awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+    if pbp_txt['header']['competitions'][0]['competitors'][0]['homeAway']=='home':
+        pbp_txt['header']['competitions'][0]['home'] = pbp_txt['header']['competitions'][0]['competitors'][0]['team']
+        homeTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['id'])
+        homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
+        homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
+        homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
+        homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
+        pbp_txt['header']['competitions'][0]['away'] = pbp_txt['header']['competitions'][0]['competitors'][1]['team']
+        awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
+        awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
+        awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
+        awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
+        awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+    else:
+        pbp_txt['header']['competitions'][0]['away'] = pbp_txt['header']['competitions'][0]['competitors'][0]['team']
+        awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['id'])
+        awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
+        awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
+        awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
+        awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+        pbp_txt['header']['competitions'][0]['home'] = pbp_txt['header']['competitions'][0]['competitors'][1]['team']
+        homeTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
+        homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
+        homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
+        homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
+        homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
     if (pbp_txt['playByPlaySource'] != "none") & (len(pbp_txt['plays'])>1):
         helper_nba_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt, gameSpread, homeFavorite, gameSpreadAvailable)
     else:
@@ -256,18 +307,21 @@ def helper_nba_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMa
     del pbp_txt['plays']['clock.mm']
 
 def helper_nba_pickcenter(pbp_txt):
-    if len(pbp_txt['pickcenter']) > 1:
-        if 'spread' in pbp_txt['pickcenter'][1].keys():
-            gameSpread =  pbp_txt['pickcenter'][1]['spread']
-            homeFavorite = pbp_txt['pickcenter'][1]['homeTeamOdds']['favorite']
+    # Spread definition
+    if len(pbp_txt["pickcenter"]) > 1:
+        homeFavorite = pbp_txt["pickcenter"][0]["homeTeamOdds"]["favorite"]
+        if "spread" in pbp_txt["pickcenter"][1].keys():
+            gameSpread = pbp_txt["pickcenter"][1]["spread"]
+            overUnder = pbp_txt["pickcenter"][1]["overUnder"]
             gameSpreadAvailable = True
         else:
-            gameSpread =  pbp_txt['pickcenter'][0]['spread']
-            homeFavorite = pbp_txt['pickcenter'][0]['homeTeamOdds']['favorite']
+            gameSpread = pbp_txt["pickcenter"][0]["spread"]
+            overUnder = pbp_txt["pickcenter"][0]["overUnder"]
             gameSpreadAvailable = True
-
+        # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
     else:
         gameSpread = 2.5
+        overUnder = 190.5
         homeFavorite = True
         gameSpreadAvailable = False
-    return gameSpread,homeFavorite,gameSpreadAvailable
+    return gameSpread, overUnder, homeFavorite, gameSpreadAvailable
