@@ -6,28 +6,26 @@ import pandas as pd
 from pandas import json_normalize
 import json
 from datetime import datetime
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import download, underscore
 
 import os
 
 
 def getTeamData(season:int,retriveAllStarRosters=False):
-	'''
-	Retrives the player info for an MLB team, given an MLB season
+	"""Retrieves the player info for an MLB team, given an MLB season
 
 	Args:
-	
-	season (int):
-		Required paramater. If no season is provided, the function wil not work.
+		season (int):
+			Required parameter. If no season is provided, the function wil not work.
 
-	retriveAllStarRosters (boolean):
-		Optional parameter. If set to 'True', MLB All-Star rosters will be returned when 
-		running this function.
-	'''
+		retriveAllStarRosters (boolean):
+			Optional parameter. If set to 'True', MLB All-Star rosters will be returned when
+			running this function.
+	"""
 	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
-	
+
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.team_all_season.bam?sport_code='mlb'&"
 
 	if retriveAllStarRosters == True:
@@ -65,30 +63,28 @@ def getTeamData(season:int,retriveAllStarRosters=False):
 
 		print(f'{result_count} statlines found,\nParsing results into a dataframe.')
 		#players = resp_json['search_player_all']['queryResults']['row']
-		main_df = json_normalize(resp_json['team_all_season']['queryResults']['row']) 
+		main_df = json_normalize(resp_json['team_all_season']['queryResults']['row'])
 		print('Done')
 	else:
-		print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
-		
+		print(f'No results found for the provided playerID. \nTry a different search for better results.')
+
 	return main_df
 
 def get40ManRoster(teamID:int):
-	'''
-	Retrives the player info for an MLB player, given a proper MLBAM ID
+	"""Retrieves the player info for an MLB player, given a proper MLBAM ID
 
 	Args:
-	
-	teamID (int):
-		Required paramater. This should be the number MLBAM associates for an MLB team.
-		For example, the Cincinnati Reds have an MLBAM team ID of 113.
-	'''
+		teamID (int):
+			Required parameter. This should be the number MLBAM associates for an MLB team.
+			For example, the Cincinnati Reds have an MLBAM team ID of 113.
+	"""
 	#pullCopyrightInfo()
-	
+
 	main_df = pd.DataFrame()
-	
+
 	searchURL = 'http://lookup-service-prod.mlb.com/json/named.roster_40.bam?team_id='
 
-	searchURL = searchURL + f'\'{teamID}\''	
+	searchURL = searchURL + f'\'{teamID}\''
 
 	resp = download(searchURL)
 
@@ -107,34 +103,32 @@ def get40ManRoster(teamID:int):
 
 		print(f'{result_count} statlines found,\nParsing results into a dataframe.')
 		#players = resp_json['search_player_all']['queryResults']['row']
-		main_df = json_normalize(resp_json['roster_40']['queryResults']['row']) 
+		main_df = json_normalize(resp_json['roster_40']['queryResults']['row'])
 		print('Done')
 	else:
-		print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
-		
+		print(f'No results found for the provided playerID. \nTry a different search for better results.')
+
 	return main_df
 
 def getAllTimeRoster(teamID:int,startSeason:int,endSeason:int):
-	'''
-	Retrives the cumulative roster for a MLB team in a specified timeframe.
+	"""Retrieves the cumulative roster for a MLB team in a specified timeframe.
 
 	Args:
-	
-	teamID (int):
-		Required paramater. This should be the number MLBAM associates for an MLB team.
-		For example, the Cincinnati Reds have an MLBAM team ID of 113.
+		teamID (int):
+			Required parameter. This should be the number MLBAM associates for an MLB team.
+			For example, the Cincinnati Reds have an MLBAM team ID of 113.
 
-	startSeason (int):
-		Required parameter. This value must be less than endSeason for this function to work.
-		
-	endSeason (int):
-		Required parameter. This value must be greater than startSeason for this function to work.
-	'''
+		startSeason (int):
+			Required parameter. This value must be less than endSeason for this function to work.
+
+		endSeason (int):
+			Required parameter. This value must be greater than startSeason for this function to work.
+	"""
 	#pullCopyrightInfo()
-	
+
 	holding_num = 0
 	main_df = pd.DataFrame()
-	
+
 	if endSeason < startSeason:
 		holding_num = endSeason
 		startSeason = endSeason
@@ -148,12 +142,12 @@ def getAllTimeRoster(teamID:int,startSeason:int,endSeason:int):
 
 	searchURL = searchURL + f'start_season=\'{startSeason}\'&end_season=\'{endSeason}\'&'
 	## Add the TeamID
-	searchURL = searchURL + f'team_id=\'{teamID}\''	
+	searchURL = searchURL + f'team_id=\'{teamID}\''
 
 	resp = download(searchURL)
 
 	#print(searchURL)
-	
+
 	resp_str = str(resp, 'latin-1')
 	#print(resp_str)
 
@@ -168,9 +162,9 @@ def getAllTimeRoster(teamID:int,startSeason:int,endSeason:int):
 
 		print(f'{result_count} statlines found,\nParsing results into a dataframe.')
 		#players = resp_json['search_player_all']['queryResults']['row']
-		main_df = json_normalize(resp_json['roster_team_alltime']['queryResults']['row']) 
+		main_df = json_normalize(resp_json['roster_team_alltime']['queryResults']['row'])
 		print('Done')
 	else:
-		print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
-		
+		print(f'No results found for the provided playerID. \nTry a different search for better results.')
+
 	return main_df

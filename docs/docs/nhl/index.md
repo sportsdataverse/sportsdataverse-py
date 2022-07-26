@@ -164,6 +164,8 @@ Example:
 ### sportsdataverse.nhl.nhl_pbp.helper_nhl_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt, gameSpread, homeFavorite, gameSpreadAvailable)
 
 ### sportsdataverse.nhl.nhl_pbp.helper_nhl_pickcenter(pbp_txt)
+
+### sportsdataverse.nhl.nhl_pbp.nhl_pbp_disk(game_id, path_to_json)
 ## sportsdataverse.nhl.nhl_schedule module
 
 

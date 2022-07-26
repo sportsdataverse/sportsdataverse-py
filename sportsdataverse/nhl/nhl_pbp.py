@@ -2,8 +2,9 @@ from typing import Dict
 import pyarrow.parquet as pq
 import pandas as pd
 import numpy as np
-import re
+import os
 import json
+import re
 from typing import List, Callable, Iterator, Union, Optional, Dict
 from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
@@ -50,6 +51,11 @@ def espn_nhl_pbp(game_id: int, raw = False) -> Dict:
         return pbp_json
     pbp_json = helper_nhl_pbp(game_id, pbp_txt)
     return pbp_json
+
+def nhl_pbp_disk(game_id, path_to_json):
+    with open(os.path.join(path_to_json, "{}.json".format(game_id))) as json_file:
+        pbp_txt = json.load(json_file)
+    return pbp_txt
 
 def helper_nhl_pbp(game_id, pbp_txt):
 

@@ -3,7 +3,7 @@ import pandas as pd
 import json
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.errors import SeasonNotFoundError
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import download, underscore
 
 def espn_nba_schedule(dates=None, season_type=None, limit=500) -> pd.DataFrame:
     """espn_nba_schedule - look up the NBA schedule for a given date from ESPN
@@ -46,12 +46,13 @@ def espn_nba_schedule(dates=None, season_type=None, limit=500) -> pd.DataFrame:
             del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series']
             for k in del_keys:
                 event.get('competitions')[0].pop(k, None)
-            x = pd.json_normalize(event.get('competitions')[0])
+            x = pd.json_normalize(event.get('competitions')[0], sep='_')
             x['game_id'] = x['id'].astype(int)
             x['season'] = event.get('season').get('year')
             x['season_type'] = event.get('season').get('type')
-            ev = ev.append(x)
+            ev = pd.concat([ev,x],axis=0, ignore_index=True)
     ev = pd.DataFrame(ev)
+    ev.columns = [underscore(c) for c in ev.columns.tolist()]
     return ev
 
 

@@ -1,13 +1,4 @@
-<!-- sdv-py documentation master file, created by
-sphinx-quickstart on Fri Jul 15 21:29:49 2022.
-You can adapt this file completely to your liking, but it should at least
-contain the root `toctree` directive. -->
-# Welcome to sdv-py’s documentation!
-
-# Contents:
-
-
-* setup module
+# sportsdataverse
 
 
 * sportsdataverse package
@@ -212,48 +203,3 @@ contain the root `toctree` directive. -->
 
 
     * Module contents
-
-
-* tests package
-
-
-    * Subpackages
-
-
-        * tests.cfb package
-
-
-            * Submodules
-
-
-            * tests.cfb.test_pbp module
-
-
-            * Module contents
-
-
-        * tests.mbb package
-
-
-            * Submodules
-
-
-            * tests.mbb.test_pbp module
-
-
-            * Module contents
-
-
-    * Module contents
-
-
-# Indices and tables
-
-
-* Index
-
-
-* Module Index
-
-
-* Search Page

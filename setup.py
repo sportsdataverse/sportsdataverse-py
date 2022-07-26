@@ -13,11 +13,10 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="sportsdataverse",
-    project_name="sportsdataverse",
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version="0.0.17",
+    version="0.0.18",
     description="Retrieve Sports data in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -70,9 +69,11 @@ setup(
         "numpy>=1.13.0",
         "pandas >= 1.0.3",
         "beautifulsoup4>=4.4.0",
+        "inflection>=0.5.1",
         "requests>=2.18.1",
         "lxml>=4.2.1",
         "pyarrow>=1.0.1",
+        "pyjanitor>=0.23.1",
         "pygithub>=1.51",
         "scipy>=1.4.0",
         "matplotlib>=2.0.0",

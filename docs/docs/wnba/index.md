@@ -115,20 +115,22 @@ Example:
 ### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt)
 
 ### sportsdataverse.wnba.wnba_pbp.helper_wnba_pickcenter(pbp_txt)
+
+### sportsdataverse.wnba.wnba_pbp.wnba_pbp_disk(game_id, path_to_json)
 ## sportsdataverse.wnba.wnba_schedule module
 
 
-### sportsdataverse.wnba.wnba_schedule.espn_wnba_calendar(season=None)
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_calendar(season=None, ondays=None)
 espn_wnba_calendar - look up the WNBA calendar for a given season
 
 Args:
 
     season (int): Used to define different seasons. 2002 is the earliest available season.
+    ondays (boolean): Used to return dates for calendar ondays
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing
-    calendar dates for the requested season.
+    pd.DataFrame: Pandas dataframe containing calendar dates for the requested season.
 
 Raises:
 

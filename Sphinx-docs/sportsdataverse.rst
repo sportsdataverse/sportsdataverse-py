@@ -9,6 +9,7 @@ Subpackages
 
    sportsdataverse.cfb
    sportsdataverse.mbb
+   sportsdataverse.mlb
    sportsdataverse.nba
    sportsdataverse.nfl
    sportsdataverse.nhl

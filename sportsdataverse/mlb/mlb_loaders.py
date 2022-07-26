@@ -7,20 +7,19 @@ from sportsdataverse.dl_utils import download
 
 import os
 def pullCopyrightInfo(saveFile=False,returnFile=False):
-	"""
-	Displays the copyright info for the MLBAM API.
+	"""Displays the copyright info for the MLBAM API.
 
 	Args:
-	saveFile (boolean) = False
+		saveFile (boolean) = False
 		If saveFile is set to True, the copyright file generated is saved.
 
-	returnFile (boolean) = False
+		returnFile (boolean) = False
 		If returnFile is set to True, the copyright file is returned.
+
 	"""
 	url = "http://gdx.mlb.com/components/copyright.txt"
 	resp = download(url=url)
 	try:
-		
 		if resp is not None:
 			l_string = str(resp, 'UTF-8')
 			with open("mlbam_copyright.txt","w+" ,encoding = "utf-8") as file:
