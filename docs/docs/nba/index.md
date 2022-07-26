@@ -115,6 +115,8 @@ Example:
 ### sportsdataverse.nba.nba_pbp.helper_nba_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt, gameSpread, homeFavorite, gameSpreadAvailable)
 
 ### sportsdataverse.nba.nba_pbp.helper_nba_pickcenter(pbp_txt)
+
+### sportsdataverse.nba.nba_pbp.nba_pbp_disk(game_id, path_to_json)
 ## sportsdataverse.nba.nba_schedule module
 
 

@@ -2417,7 +2417,7 @@ class CFBPlayProcess(object):
         return play_df
 
     def __add_yardage_cols(self, play_df):
-        play_df.insert(0,"yds_rushed", None)
+        play_df.insert(0,"yds_rushed", None, allow_duplicates=True)
         play_df["yds_rushed"] = np.select(
             [
                 (play_df.rush == True)
@@ -2539,7 +2539,7 @@ class CFBPlayProcess(object):
             default=None,
         )
 
-        play_df.insert(0,"yds_receiving", None)
+        play_df.insert(0,"yds_receiving", None, allow_duplicates=True)
         play_df["yds_receiving"] = np.select(
             [
                 (play_df["pass"] == True)
@@ -2582,7 +2582,7 @@ class CFBPlayProcess(object):
             default=None,
         )
 
-        play_df.insert(0,"yds_int_return", None)
+        play_df.insert(0,"yds_int_return", None, allow_duplicates=True)
         play_df["yds_int_return"] = np.select(
             [
                 (play_df["pass"] == True)
@@ -2636,7 +2636,7 @@ class CFBPlayProcess(object):
         #     play_df['yds_fumble_return'] = None
         #     play_df['yds_penalty'] = None
 
-        play_df.insert(0,"yds_kickoff", None)
+        play_df.insert(0,"yds_kickoff", None, allow_duplicates=True)
         play_df["yds_kickoff"] = np.where(
             (play_df["kickoff_play"] == True),
             play_df.text.str.extract(r"((?<= kickoff for)[^,]+)", flags=re.IGNORECASE)[
@@ -2703,7 +2703,7 @@ class CFBPlayProcess(object):
             default=play_df["yds_kickoff_return"],
         )
 
-        play_df.insert(0,"yds_punted", None)
+        play_df.insert(0,"yds_punted", None, allow_duplicates=True)
         play_df["yds_punted"] = np.select(
             [
                 (play_df.punt == True) & (play_df.punt_blocked == True),
@@ -2778,7 +2778,7 @@ class CFBPlayProcess(object):
             ],
             default=None,
         )
-        play_df.insert(0,"yds_fumble_return", None)
+        play_df.insert(0,"yds_fumble_return", None, allow_duplicates=True)
 
         play_df["yds_fumble_return"] = np.select(
             [(play_df.fumble_vec == True) & (play_df.kickoff_play == False)],
@@ -2791,7 +2791,7 @@ class CFBPlayProcess(object):
             ],
             default=None,
         )
-        play_df.insert(0,"yds_sacked", None)
+        play_df.insert(0,"yds_sacked", None, allow_duplicates=True)
 
         play_df["yds_sacked"] = np.select(
             [(play_df.sack == True)],
@@ -2862,45 +2862,45 @@ class CFBPlayProcess(object):
         return play_df
 
     def __add_player_cols(self, play_df):
-        play_df.insert(0,"rush_player", None)
-        play_df.insert(0,"receiver_player", None)
-        play_df.insert(0,"pass_player", None)
-        play_df.insert(0,"sack_players", None)
-        play_df.insert(0,"sack_player1", None)
-        play_df.insert(0,"sack_player2", None)
-        play_df.insert(0,"interception_player", None)
-        play_df.insert(0,"pass_breakup_player", None)
-        play_df.insert(0,"fg_kicker_player", None)
-        play_df.insert(0,"fg_return_player", None)
-        play_df.insert(0,"fg_block_player", None)
-        play_df.insert(0,"punter_player", None)
-        play_df.insert(0,"punt_return_player", None)
-        play_df.insert(0,"punt_block_player", None)
-        play_df.insert(0,"punt_block_return_player", None)
-        play_df.insert(0,"kickoff_player", None)
-        play_df.insert(0,"kickoff_return_player", None)
-        play_df.insert(0,"fumble_player", None)
-        play_df.insert(0,"fumble_forced_player", None)
-        play_df.insert(0,"fumble_recovered_player", None)
-        play_df.insert(0,"rush_player_name", None)
-        play_df.insert(0,"receiver_player_name", None)
-        play_df.insert(0,"passer_player_name", None)
-        play_df.insert(0,"sack_player_name", None)
-        play_df.insert(0,"sack_player_name2", None)
-        play_df.insert(0,"interception_player_name", None)
-        play_df.insert(0,"pass_breakup_player_name", None)
-        play_df.insert(0,"fg_kicker_player_name", None)
-        play_df.insert(0,"fg_return_player_name", None)
-        play_df.insert(0,"fg_block_player_name", None)
-        play_df.insert(0,"punter_player_name", None)
-        play_df.insert(0,"punt_return_player_name", None)
-        play_df.insert(0,"punt_block_player_name", None)
-        play_df.insert(0,"punt_block_return_player_name", None)
-        play_df.insert(0,"kickoff_player_name", None)
-        play_df.insert(0,"kickoff_return_player_name", None)
-        play_df.insert(0,"fumble_player_name", None)
-        play_df.insert(0,"fumble_forced_player_name", None)
-        play_df.insert(0,"fumble_recovered_player_name", None)
+        play_df.insert(0,"rush_player", None, allow_duplicates=True)
+        play_df.insert(0,"receiver_player", None, allow_duplicates=True)
+        play_df.insert(0,"pass_player", None, allow_duplicates=True)
+        play_df.insert(0,"sack_players", None, allow_duplicates=True)
+        play_df.insert(0,"sack_player1", None, allow_duplicates=True)
+        play_df.insert(0,"sack_player2", None, allow_duplicates=True)
+        play_df.insert(0,"interception_player", None, allow_duplicates=True)
+        play_df.insert(0,"pass_breakup_player", None, allow_duplicates=True)
+        play_df.insert(0,"fg_kicker_player", None, allow_duplicates=True)
+        play_df.insert(0,"fg_return_player", None, allow_duplicates=True)
+        play_df.insert(0,"fg_block_player", None, allow_duplicates=True)
+        play_df.insert(0,"punter_player", None, allow_duplicates=True)
+        play_df.insert(0,"punt_return_player", None, allow_duplicates=True)
+        play_df.insert(0,"punt_block_player", None, allow_duplicates=True)
+        play_df.insert(0,"punt_block_return_player", None, allow_duplicates=True)
+        play_df.insert(0,"kickoff_player", None, allow_duplicates=True)
+        play_df.insert(0,"kickoff_return_player", None, allow_duplicates=True)
+        play_df.insert(0,"fumble_player", None, allow_duplicates=True)
+        play_df.insert(0,"fumble_forced_player", None, allow_duplicates=True)
+        play_df.insert(0,"fumble_recovered_player", None, allow_duplicates=True)
+        play_df.insert(0,"rush_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"receiver_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"passer_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"sack_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"sack_player_name2", None, allow_duplicates=True)
+        play_df.insert(0,"interception_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"pass_breakup_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"fg_kicker_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"fg_return_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"fg_block_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"punter_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"punt_return_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"punt_block_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"punt_block_return_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"kickoff_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"kickoff_return_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"fumble_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"fumble_forced_player_name", None, allow_duplicates=True)
+        play_df.insert(0,"fumble_recovered_player_name", None, allow_duplicates=True)
 
         ## Extract player names
         # RB names

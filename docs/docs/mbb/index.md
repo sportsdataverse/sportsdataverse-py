@@ -114,6 +114,8 @@ Example:
 ### sportsdataverse.mbb.mbb_pbp.helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt)
 
 ### sportsdataverse.mbb.mbb_pbp.helper_mbb_pickcenter(pbp_txt)
+
+### sportsdataverse.mbb.mbb_pbp.mbb_pbp_disk(game_id, path_to_json)
 ## sportsdataverse.mbb.mbb_schedule module
 
 
@@ -129,7 +131,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
 
-### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=None, season_type=None, limit=500)
+### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500)
 espn_mbb_schedule - look up the men’s college basketball scheduler for a given season
 
 Args:

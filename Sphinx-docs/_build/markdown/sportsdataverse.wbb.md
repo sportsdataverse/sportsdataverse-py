@@ -115,15 +115,18 @@ Example:
 ### sportsdataverse.wbb.wbb_pbp.helper_wbb_pbp_features(game_id, pbp_txt, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt, gameSpread, homeFavorite, gameSpreadAvailable)
 
 ### sportsdataverse.wbb.wbb_pbp.helper_wbb_pickcenter(pbp_txt)
+
+### sportsdataverse.wbb.wbb_pbp.wbb_pbp_disk(game_id, path_to_json)
 ## sportsdataverse.wbb.wbb_schedule module
 
 
-### sportsdataverse.wbb.wbb_schedule.espn_wbb_calendar(season=None)
+### sportsdataverse.wbb.wbb_schedule.espn_wbb_calendar(season=None, ondays=None)
 espn_wbb_calendar - look up the women’s college basketball calendar for a given season
 
 Args:
 
     season (int): Used to define different seasons. 2002 is the earliest available season.
+    ondays (boolean): Used to return dates for calendar ondays
 
 Returns:
 
@@ -135,7 +138,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wbb.wbb_schedule.espn_wbb_schedule(dates=None, groups=None, season_type=None, limit=500)
+### sportsdataverse.wbb.wbb_schedule.espn_wbb_schedule(dates=None, groups=50, season_type=None, limit=500)
 espn_wbb_schedule - look up the women’s college basketball schedule for a given season
 
 Args:
