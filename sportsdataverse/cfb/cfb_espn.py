@@ -13,26 +13,50 @@ from datetime import datetime
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-def getEspnCfbBoxScore(gameID:int) -> pd.DataFrame():
+def espn_cfb_box_score(gameID:int) -> pd.DataFrame():
     """
-    getEspnCfbBoxScore(gameID:int) -> pd.DataFrame()
+    espn_cfb_box_score(gameID:int) -> pd.DataFrame()
+
+    Retrives the JSON file corresponding to a real ESPN CFB gameID,
+    and parses it into a pandas dataframe containing box score data
+    from that game.
+
+    Args:
+        gameId(int): Required input. This should correspond to the 
+        ESPN CFB gameID you want box score stats from.
+
+    Returns:
+
+        A pd.DataFrame() object. If there are box score stats for this gameID,
+        you will recive a pandas dataframe with any box score stats that ESPN has
+        for that gameID. If there isn't any box score stats for that gameID, or 
+        the inputted gameID doesn't correspond to an actual gameID for ESPN's CFB API,
+        the function will return an empty dataframe.
 
     Example:
-        401301018
+        sdv.cfb.getEspnCfbBoxScore(401301018)
     """
     url = f"http://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={gameID}"
     try:
         resp = download(url)
         resp_str = str(resp,'UTF-8')
         resp_json = json.loads(resp_str)
-        df = parseEspnJson(resp_json)
+        df = parse_espn_cfb_json(resp_json)
         return df
     except:
         print(f'Something went wrong when attempting to acces the JSON file for game #{gameID}.')
         return pd.DataFrame()
 
 
-def parseEspnJson(espnFile:dict) -> pd.DataFrame():
+def parse_espn_cfb_json(espnFile:dict) -> pd.DataFrame():
+    """
+    parseEspnJson(espnFile:dict) -> pd.DataFrame()
+
+    DO NOT CALL THIS FUNCTION DIRECTLY!
+    This function is to be called by getEspnCfbBoxScore(), and parses the JSON file
+    into a pandas dataframe
+    
+    """
     main_df = pd.DataFrame(columns=['Season','Season_Week','Game_ID','Game_Date','Team_Name','Team_ABV','Team_ID','Home_Away','Opp_Team_Name','Opp_Team_ABV','Opp_Team_ID','Player_ID','Player_Name'])
     s_df = pd.DataFrame()
 

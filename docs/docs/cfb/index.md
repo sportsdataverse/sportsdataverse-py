@@ -198,4 +198,24 @@ Returns:
 
 ## sportsdataverse.cfb.cfb_espn module
 
+### sportsdataverse.cfb.cfb_espn.espn_cfb_box_score(gameID:int) -> pd.DataFrame()
+
+getEspnCfbBoxScore - Retrives the JSON file corresponding to a real ESPN CFB gameID,
+and parses it into a pandas dataframe containing box score data from that game.
+
+Args:
+gameId(int): Required input. This should correspond to the
+ESPN CFB gameID you want box score stats from.
+
+Returns:
+
+    A pd.DataFrame() object. If there are box score stats for this gameID,
+    you will recive a pandas dataframe with any box score stats that ESPN has
+    for that gameID. If there isn't any box score stats for that gameID, or
+    the inputted gameID doesn't correspond to an actual gameID for ESPN's CFB API,
+    the function will return an empty dataframe.
+
+Example:
+sdv.cfb.getEspnCfbBoxScore(401301018)
+
 ## Module contents
