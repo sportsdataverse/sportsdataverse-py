@@ -13,17 +13,26 @@ from datetime import datetime
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-def getEspnCfbBoxScore(gameID:int):
+def getEspnCfbBoxScore(gameID:int) -> pd.DataFrame():
+    """
+    getEspnCfbBoxScore(gameID:int) -> pd.DataFrame()
+
+    Example:
+        401301018
+    """
     url = f"http://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={gameID}"
+    try:
+        resp = download(url)
+        resp_str = str(resp,'UTF-8')
+        resp_json = json.loads(resp_str)
+        df = parseEspnJson(resp_json)
+        return df
+    except:
+        print(f'Something went wrong when attempting to acces the JSON file for game #{gameID}.')
+        return pd.DataFrame()
 
-    resp = download(url)
-    resp_str = str(resp,'UTF-8')
-    resp_json = json.loads(resp_str)
-    df = parseEspnJson(resp_json)
-    return df
 
-
-def parseEspnJson(espnFile:dict):
+def parseEspnJson(espnFile:dict) -> pd.DataFrame():
     main_df = pd.DataFrame(columns=['Season','Season_Week','Game_ID','Game_Date','Team_Name','Team_ABV','Team_ID','Home_Away','Opp_Team_Name','Opp_Team_ABV','Opp_Team_ID','Player_ID','Player_Name'])
     s_df = pd.DataFrame()
 
@@ -59,7 +68,7 @@ def parseEspnJson(espnFile:dict):
     sdv_id = py_date.strftime('%Y-%m-%d')
     try:
         is_neutral_site = data['header']['competitions'][0]['neutralSite']
-        print(is_neutral_site)
+        #print(is_neutral_site)
         #print(type(is_neutral_site))
         #is_neutral_site = str(is_neutral_site)
     except:

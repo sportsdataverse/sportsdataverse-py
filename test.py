@@ -1,3 +1,3 @@
 import sportsdataverse as sdv
 
-print(sdv.getEspnCfbBoxScore(401212553))
+print(sdv.getEspnCfbBoxScore(-1))
