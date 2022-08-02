@@ -54,7 +54,7 @@ df = sdv.mlb.load_mlbam_schedule(2020)
 print(df)
 """
 print('load_mlbam_schedule')
-print(sdv.mlb.load_mlbam_schedule(2020))
+print(sdv.mlb.load_mlbam_schedule(2017))
 print('')
 """
 mlbam_search_mlb_players(search:str,isActive=""):
@@ -128,7 +128,7 @@ print('getPlayerTeams')
 print(sdv.mlb.load_mlbam_player_teams(playerID=523260,season=2014))
 print('')
 """
-def getSeasonHittingStats(playerID=0,season=0,gameType="R"):
+def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 
 Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID
 
@@ -156,14 +156,14 @@ gameType (string) = "R":
 Example:
 
 import sportsdataverse as sdv
-df = sdv.mlb.getSeasonHittingStats(playerID=458015,season=2021,gameType="R")
+df = sdv.mlb.mlbam_player_season_hitting_stats(playerID=458015,season=2021,gameType="R")
 print(df)
 """
-print('getSeasonHittingStats')
-print(sdv.mlb.getSeasonHittingStats(playerID=458015,season=2021,gameType="R"))
+print('mlbam_player_season_hitting_stats')
+print(sdv.mlb.mlbam_player_season_hitting_stats(playerID=458015,season=2021,gameType="R"))
 print('')
 """
-def getSeasonPitchingStats(playerID=0,gameType="R",season=0):
+def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 
 Retrieves the pitching stats for an MLB player in a given season, given a proper MLBAM ID
 
@@ -191,14 +191,14 @@ gameType (string) = "R":
 Example:
 
 import sportsdataverse as sdv
-df = sdv.mlb.getSeasonPitchingStats(playerID=642840,season=2019,gameType="R")
+df = sdv.mlb.mlbam_player_season_pitching_stats(playerID=642840,season=2019,gameType="R")
 print(df)
 """
-print('getSeasonPitchingStats')
-print(sdv.mlb.getSeasonPitchingStats(playerID=642840,season=2019,gameType="R"))
+print('mlbam_player_season_pitching_stats')
+print(sdv.mlb.mlbam_player_season_pitching_stats(playerID=642840,season=2019,gameType="R"))
 print('')
 """
-def getCareerHittingStats(playerID=0,gameType="R"):
+def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 
 Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
 
@@ -226,14 +226,14 @@ gameType (string) = "R":
 Example:
 
 import sportsdataverse as sdv
-df = sdv.mlb.getCareerHittingStats(playerID=458015,gameType="R")
+df = sdv.mlb.mlbam_player_career_hitting_stats(playerID=458015,gameType="R")
 print(df)
 """
-print('getCareerHittingStats')
-print(sdv.mlb.getCareerHittingStats(playerID=458015,gameType="R"))
+print('mlbam_player_career_hitting_stats')
+print(sdv.mlb.mlbam_player_career_hitting_stats(playerID=458015,gameType="R"))
 print('')
 """
-getCareerPitchingStats(playerID=0,gameType="R"):
+mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 
 Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
 
@@ -258,11 +258,11 @@ gameType (string) = "R":
 Example:
 
 import sportsdataverse as sdv
-df = sdv.mlb.getCareerPitchingStats(playerID=642840,gameType="R")
+df = sdv.mlb.mlbam_player_career_pitching_stats(playerID=642840,gameType="R")
 print(df)
 """
-print('getCareerPitchingStats')
-print(sdv.mlb.getCareerPitchingStats(playerID=642840,gameType="R"))
+print('mlbam_player_career_pitching_stats')
+print(sdv.mlb.mlbam_player_career_pitching_stats(playerID=642840,gameType="R"))
 print('')
 """
 load_mlbam_transactions(startDate=0,endDate=0):
@@ -321,7 +321,7 @@ print('load_mlbam_broadcast_info')
 print(sdv.mlb.load_mlbam_broadcast_info(season=2020,home_away="e"))
 print('')
 """
-getTeamData(season=0,retriveAllStarRosters=False):
+load_mlbam_teams(season:int,retriveAllStarRosters=False):
 
 Retrieves the player info for an MLB player, given a proper MLBAM ID
 
@@ -337,14 +337,14 @@ retriveAllStarRosters (boolean):
 Example:
 
 import sportsdataverse as sdv
-df = sdv.mlb.getTeamData(season=2020)
+df = sdv.mlb.load_mlbam_teams(season=2020)
 print(df)
 """
-print('getTeamData')
-print(sdv.mlb.getTeamData(season=2020))
+print('load_mlbam_teams')
+print(sdv.mlb.load_mlbam_teams(season=2020))
 print('')
 """
-get40ManRoster(teamID=113):
+load_mlbam_40_man_roster(teamID=113):
 
 Retrieves the current 40-man roster for a team, given a proper MLBAM Team ID
 
@@ -356,14 +356,14 @@ teamID (int):
 Example:
 
 import sportsdataverse as sdv
-df = sdv.mlb.get40ManRoster(teamID=113)
+df = sdv.mlb.load_mlbam_40_man_roster(teamID=113)
 print(df)
 """
-print('get40ManRoster')
-print(sdv.mlb.get40ManRoster(teamID=113))
+print('load_mlbam_40_man_roster')
+print(sdv.mlb.load_mlbam_40_man_roster(teamID=113))
 print('')
 """
-getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021):
+load_mlbam_team_roster(teamID=113,startSeason=2020,endSeason=2021):
 
 Retrieves the cumulative roster for a MLB team in a specified timeframe.
 
@@ -381,11 +381,10 @@ endSeason (int):
 Example:
 
 import sportsdataverse as sdv
-df = sdv.mlb.getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021)
+df = sdv.mlb.load_mlbam_team_roster(teamID=113,startSeason=2020,endSeason=2021)
 print(df)
 """
-print('getAllTimeRoster')
-#print(sdv.mlb.getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021))
-df = sdv.mlb.getAllTimeRoster(teamID=113,startSeason=2020,endSeason=2021)
+print('load_mlbam_team_roster')
+df = sdv.mlb.load_mlbam_team_roster(teamID=113,startSeason=2020,endSeason=2021)
 print(df)
 print('')

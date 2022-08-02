@@ -95,7 +95,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_reports module
 
-### sportsdataverse.mlb.mlbam_reports.getBroadcastInfo(season: int, home_away='e')
+### sportsdataverse.mlb.mlbam_reports.load_mlbam_broadcast_info(season:int, home_away='e')
 
 Retrieves the broadcasters (radio and TV) involved with certain games.
 
@@ -116,7 +116,7 @@ Args:
 
         If you want both home and away broadcasters, set home_away=’E’ or home_away=’e’.
 
-### sportsdataverse.mlb.mlbam_reports.getTransactionsInRange(startDate: str, endDate: str)
+### sportsdataverse.mlb.mlbam_reports.load_mlbam_transactions(startDate: str, endDate: str)
 
 Retrieves all transactions in a given range of dates.
 You MUST provide two dates for this function to work, and both dates must
@@ -137,7 +137,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_stats module
 
-### sportsdataverse.mlb.mlbam_stats.getCareerHittingStats(playerID: int, gameType='R')
+### sportsdataverse.mlb.mlbam_stats.mlbam_player_career_hitting_stats(playerID: int, gameType='R')
 
 Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
 
@@ -161,7 +161,7 @@ Args:
         ‘L’ - League Championship
         ‘W’ - World Series
 
-### sportsdataverse.mlb.mlbam_stats.getCareerPitchingStats(playerID: int, gameType='R')
+### sportsdataverse.mlb.mlbam_stats.mlbam_player_career_pitching_stats(playerID: int, gameType='R')
 
 Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
 
@@ -185,7 +185,7 @@ Args:
 >     ‘L’ - League Championship
 >     ‘W’ - World Series
 
-### sportsdataverse.mlb.mlbam_stats.getSeasonHittingStats(playerID: int, season: int, gameType='R')
+### sportsdataverse.mlb.mlbam_stats.mlbam_player_season_hitting_stats(playerID: int, season: int, gameType='R')
 
 Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID
 
@@ -213,7 +213,7 @@ Args:
         ‘L’ - League Championship
         ‘W’ - World Series
 
-### sportsdataverse.mlb.mlbam_stats.getSeasonPitchingStats(playerID: int, season: int, gameType='R')
+### sportsdataverse.mlb.mlbam_stats.mlbam_player_season_pitching_stats(playerID: int, season: int, gameType='R')
 
 Retrieves the pitching stats for an MLB player in a given season, given a proper MLBAM ID
 
@@ -243,18 +243,16 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_teams module
 
-### sportsdataverse.mlb.mlbam_teams.get40ManRoster(teamID: int)
+### sportsdataverse.mlb.mlbam_teams.load_mlbam_40_man_roster(teamID: int)
 
-Retrieves the player info for an MLB player, given a proper MLBAM ID
+Retrieves the current 40-man roster for a team, given a proper MLBAM Team ID
 
 Args:
 
-    teamID (int):
+teamID (int):
+Required parameter. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
 
-        Required parameter. This should be the number MLBAM associates for an MLB team.
-        For example, the Cincinnati Reds have an MLBAM team ID of 113.
-
-### sportsdataverse.mlb.mlbam_teams.getAllTimeRoster(teamID: int, startSeason: int, endSeason: int)
+### sportsdataverse.mlb.mlbam_teams.load_mlbam_team_roster(teamID: int, startSeason: int, endSeason: int)
 
 Retrieves the cumulative roster for a MLB team in a specified timeframe.
 
@@ -273,7 +271,7 @@ Args:
 
         Required parameter. This value must be greater than startSeason for this function to work.
 
-### sportsdataverse.mlb.mlbam_teams.getTeamData(season: int, retriveAllStarRosters=False)
+### sportsdataverse.mlb.mlbam_teams.load_mlbam_teams(season: int, retriveAllStarRosters=False)
 
 Retrieves the player info for an MLB team, given an MLB season
 
