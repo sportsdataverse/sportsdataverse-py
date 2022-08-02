@@ -47,7 +47,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_players module
 
-### sportsdataverse.mlb.mlbam_players.getPlayerInfo(playerID: int)
+### sportsdataverse.mlb.mlbam_players.load_mlbam_player_info(playerID: int)
 
 Retrieves the player info for an MLB player, given a proper MLBAM ID
 
@@ -73,7 +73,7 @@ Args:
         Required parameter. If provided, the search will only look for teams
         that player played for in that season.
 
-### sportsdataverse.mlb.mlbam_players.searchMlbPlayers(search: str, isActive='')
+### sportsdataverse.mlb.mlbam_players.mlbam_search_mlb_players(search: str, isActive='')
 
 Searches for an MLB player in the MLBAM API.
 

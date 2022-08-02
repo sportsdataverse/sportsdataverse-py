@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 import os
 
-def searchMlbPlayers(search:str,isActive=""):
+def mlbam_search_mlb_players(search:str,isActive=""):
 	"""Searches for an MLB player in the MLBAM API.
 
 	Args:
@@ -69,7 +69,7 @@ def searchMlbPlayers(search:str,isActive=""):
 	else:
 		print("To search for MLB players in the MLBAM API, you must include text relating to the player you're searching for.")
 
-def getPlayerInfo(playerID:int):
+def load_mlbam_player_info(playerID:int):
 	"""Retrieves the player info for an MLB player, given a proper MLBAM ID
 
 	Args:
@@ -113,7 +113,7 @@ def getPlayerInfo(playerID:int):
 
 		return main_df
 
-def getPlayerTeams(playerID:int,season:int):
+def load_mlbam_player_teams(playerID:int,season:int):
 	"""Retrieves the info regarding which teams that player played for in a given
 	season, or in the player's career
 
