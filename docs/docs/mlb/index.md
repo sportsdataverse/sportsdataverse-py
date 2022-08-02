@@ -18,7 +18,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_games module
 
-### sportsdataverse.mlb.mlbam_games.getGamesInSeason(season: int, gameType='R')
+### sportsdataverse.mlb.mlbam_games.load_mlbam_schedule(season: int, gameType='R')
 
 Retrieves the start and end date for games for every league, and the MLB,
 for a given season.
