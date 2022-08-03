@@ -103,14 +103,15 @@ def helper_nhl_pbp(game_id, pbp_txt):
     return pbp_json
 
 def helper_nhl_pickcenter(pbp_txt):
-    if len(pbp_txt['pickcenter']) > 1:
-        if 'spread' in pbp_txt['pickcenter'][1].keys():
-            gameSpread =  pbp_txt['pickcenter'][1]['spread']
-            homeFavorite = pbp_txt['pickcenter'][1]['homeTeamOdds']['favorite']
+    if len(pbp_txt.get("pickcenter")) > 1:
+        homeFavorite = pbp_txt.get("pickcenter")[0].get("homeTeamOdds").get("favorite")
+        if "spread" in pbp_txt.get("pickcenter")[1].keys():
+            gameSpread = pbp_txt.get("pickcenter")[1].get("spread")
+            overUnder = pbp_txt.get("pickcenter")[1].get("overUnder")
             gameSpreadAvailable = True
         else:
-            gameSpread =  pbp_txt['pickcenter'][0]['spread']
-            homeFavorite = pbp_txt['pickcenter'][0]['homeTeamOdds']['favorite']
+            gameSpread = pbp_txt.get("pickcenter")[0].get("spread")
+            overUnder = pbp_txt.get("pickcenter")[0].get("overUnder")
             gameSpreadAvailable = True
 
     else:

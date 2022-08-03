@@ -82,10 +82,10 @@ def wnba_pbp_disk(game_id, path_to_json):
 def helper_wnba_pbp(game_id, pbp_txt):
     gameSpread, overUnder, homeFavorite, gameSpreadAvailable = helper_wnba_pickcenter(pbp_txt)
     pbp_txt['timeouts'] = {}
-    pbp_txt['teamInfo'] = pbp_txt['header']['competitions'][0]
-    pbp_txt['season'] = pbp_txt['header']['season']
-    pbp_txt['playByPlaySource'] = pbp_txt['header']['competitions'][0]['playByPlaySource']
-    pbp_txt['boxscoreSource'] = pbp_txt['header']['competitions'][0]['boxscoreSource']
+    pbp_txt['teamInfo'] = pbp_txt.get('header').get('competitions')[0]
+    pbp_txt['season'] = pbp_txt.get('header').get('season')
+    pbp_txt['playByPlaySource'] = pbp_txt.get('header').get('competitions')[0].get('playByPlaySource')
+    pbp_txt['boxscoreSource'] = pbp_txt.get('header').get('competitions')[0].get('boxscoreSource')
     pbp_txt['gameSpreadAvailable'] = gameSpreadAvailable
     pbp_txt['gameSpread'] = gameSpread
     pbp_txt["homeFavorite"] = homeFavorite
@@ -290,15 +290,15 @@ def helper_wnba_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpr
 
 def helper_wnba_pickcenter(pbp_txt):
     # Spread definition
-    if len(pbp_txt["pickcenter"]) > 1:
-        homeFavorite = pbp_txt["pickcenter"][0]["homeTeamOdds"]["favorite"]
-        if "spread" in pbp_txt["pickcenter"][1].keys():
-            gameSpread = pbp_txt["pickcenter"][1]["spread"]
-            overUnder = pbp_txt["pickcenter"][1]["overUnder"]
+    if len(pbp_txt.get("pickcenter")) > 1:
+        homeFavorite = pbp_txt.get("pickcenter")[0].get("homeTeamOdds").get("favorite")
+        if "spread" in pbp_txt.get("pickcenter")[1].keys():
+            gameSpread = pbp_txt.get("pickcenter")[1].get("spread")
+            overUnder = pbp_txt.get("pickcenter")[1].get("overUnder")
             gameSpreadAvailable = True
         else:
-            gameSpread = pbp_txt["pickcenter"][0]["spread"]
-            overUnder = pbp_txt["pickcenter"][0]["overUnder"]
+            gameSpread = pbp_txt.get("pickcenter")[0].get("spread")
+            overUnder = pbp_txt.get("pickcenter")[0].get("overUnder")
             gameSpreadAvailable = True
         # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
     else:

@@ -1,4 +1,5 @@
 ## Documentation update
+[create_docs.sh](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/create_docs.sh)
 ```bash
 bash create_docs.sh
 ```
