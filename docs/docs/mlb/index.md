@@ -18,7 +18,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_games module
 
-### sportsdataverse.mlb.mlbam_games.load_mlbam_schedule(season: int, gameType='R')
+### sportsdataverse.mlb.mlbam_games.mlbam_schedule(season: int, gameType='R')
 
 Retrieves the start and end date for games for every league, and the MLB,
 for a given season.
@@ -47,7 +47,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_players module
 
-### sportsdataverse.mlb.mlbam_players.load_mlbam_player_info(playerID: int)
+### sportsdataverse.mlb.mlbam_players.mlbam_player_info(playerID: int)
 
 Retrieves the player info for an MLB player, given a proper MLBAM ID
 
@@ -95,7 +95,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_reports module
 
-### sportsdataverse.mlb.mlbam_reports.load_mlbam_broadcast_info(season:int, home_away='e')
+### sportsdataverse.mlb.mlbam_reports.mlbam_broadcast_info(season:int, home_away='e')
 
 Retrieves the broadcasters (radio and TV) involved with certain games.
 
@@ -116,7 +116,7 @@ Args:
 
         If you want both home and away broadcasters, set home_away=’E’ or home_away=’e’.
 
-### sportsdataverse.mlb.mlbam_reports.load_mlbam_transactions(startDate: str, endDate: str)
+### sportsdataverse.mlb.mlbam_reports.mlbam_transactions(startDate: str, endDate: str)
 
 Retrieves all transactions in a given range of dates.
 You MUST provide two dates for this function to work, and both dates must
@@ -243,7 +243,7 @@ Args:
 
 ## sportsdataverse.mlb.mlbam_teams module
 
-### sportsdataverse.mlb.mlbam_teams.load_mlbam_40_man_roster(teamID: int)
+### sportsdataverse.mlb.mlbam_teams.mlbam_40_man_roster(teamID: int)
 
 Retrieves the current 40-man roster for a team, given a proper MLBAM Team ID
 
@@ -252,7 +252,7 @@ Args:
 teamID (int):
 Required parameter. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
 
-### sportsdataverse.mlb.mlbam_teams.load_mlbam_team_roster(teamID: int, startSeason: int, endSeason: int)
+### sportsdataverse.mlb.mlbam_teams.mlbam_team_roster(teamID: int, startSeason: int, endSeason: int)
 
 Retrieves the cumulative roster for a MLB team in a specified timeframe.
 
@@ -271,7 +271,7 @@ Args:
 
         Required parameter. This value must be greater than startSeason for this function to work.
 
-### sportsdataverse.mlb.mlbam_teams.load_mlbam_teams(season: int, retriveAllStarRosters=False)
+### sportsdataverse.mlb.mlbam_teams.mlbam_teams(season: int, retriveAllStarRosters=False)
 
 Retrieves the player info for an MLB team, given an MLB season
 

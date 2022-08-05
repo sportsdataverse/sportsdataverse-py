@@ -9,7 +9,7 @@ from datetime import datetime
 import os
 
 
-def load_mlbam_schedule(season:int,gameType="R"):
+def mlbam_schedule(season:int,gameType="R"):
 	"""Retrieves the start and end date for games for every league, and the MLB,
 	for a given season.
 

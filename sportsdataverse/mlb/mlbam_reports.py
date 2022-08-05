@@ -9,7 +9,7 @@ from datetime import datetime
 
 import os
 
-def load_mlbam_transactions(startDate:str,endDate:str):
+def mlbam_transactions(startDate:str,endDate:str):
 	"""
 	Retrieves all transactions in a given range of dates.
 	You MUST provide two dates for this function to work, and both dates must
@@ -84,7 +84,7 @@ def load_mlbam_transactions(startDate:str,endDate:str):
 	except:
 		print('Could not locate dates ')
 
-def load_mlbam_broadcast_info(season:int,home_away="e"):
+def mlbam_broadcast_info(season:int,home_away="e"):
 	"""Retrieves the broadcasters (radio and TV) involved with certain games.
 
 	Args:
