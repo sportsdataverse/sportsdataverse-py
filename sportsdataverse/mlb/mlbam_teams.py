@@ -11,7 +11,7 @@ from sportsdataverse.dl_utils import download, underscore
 import os
 
 
-def getTeamData(season:int,retriveAllStarRosters=False):
+def mlbam_teams(season:int,retriveAllStarRosters=False):
 	"""Retrieves the player info for an MLB team, given an MLB season
 
 	Args:
@@ -70,13 +70,15 @@ def getTeamData(season:int,retriveAllStarRosters=False):
 
 	return main_df
 
-def get40ManRoster(teamID:int):
-	"""Retrieves the player info for an MLB player, given a proper MLBAM ID
+def mlbam_40_man_roster(teamID:int):
+	"""
+	Retrieves the current 40-man roster for a team, given a proper MLBAM Team ID
 
 	Args:
-		teamID (int):
-			Required parameter. This should be the number MLBAM associates for an MLB team.
-			For example, the Cincinnati Reds have an MLBAM team ID of 113.
+
+	teamID (int):
+    	Required parameter. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
+
 	"""
 	#pullCopyrightInfo()
 
@@ -110,7 +112,7 @@ def get40ManRoster(teamID:int):
 
 	return main_df
 
-def getAllTimeRoster(teamID:int,startSeason:int,endSeason:int):
+def mlbam_team_roster(teamID:int,startSeason:int,endSeason:int):
 	"""Retrieves the cumulative roster for a MLB team in a specified timeframe.
 
 	Args:

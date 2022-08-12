@@ -11,7 +11,7 @@ import os
 
 
 
-def getSeasonHittingStats(playerID:int,season:int,gameType="R"):
+def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 	"""Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID
 
 	Args:
@@ -66,8 +66,6 @@ def getSeasonHittingStats(playerID:int,season:int,gameType="R"):
 	else:
 		searchURL = searchURL  + f'season=\'{season}\'&'
 
-
-
 	if playerID < 1 or playerID == None or season == None or season < 1860:
 		print('You must provide a playerID and a proper season. Function aborted.')
 		return None
@@ -100,7 +98,7 @@ def getSeasonHittingStats(playerID:int,season:int,gameType="R"):
 		return main_df
 
 
-def getSeasonPitchingStats(playerID:int,season:int,gameType="R"):
+def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 	"""Retrieves the pitching stats for an MLB player in a given season, given a proper MLBAM ID
 
 	Args:
@@ -152,8 +150,6 @@ def getSeasonPitchingStats(playerID:int,season:int,gameType="R"):
 	else:
 		searchURL = searchURL  + f'season=\'{season}\'&'
 
-
-
 	if playerID < 1 or playerID == None:
 		print('You must provide a playerID. Without a proper playerID, this function will not work.')
 		return None
@@ -184,9 +180,8 @@ def getSeasonPitchingStats(playerID:int,season:int,gameType="R"):
 			print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
 
 		return main_df
-
-
-def getCareerHittingStats(playerID:int,gameType="R"):
+#mlbam_player_career_hitting_stats
+def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 	"""Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
 
 	Args:
@@ -226,9 +221,6 @@ def getCareerHittingStats(playerID:int,gameType="R"):
 		gameType = "R"
 		searchURL = searchURL  + f'game_type=\'{gameType}\'&'
 
-
-
-
 	if playerID < 1 or playerID == None:
 		print('You must provide a playerID. Without a proper playerID, this function will not work.')
 		return None
@@ -260,8 +252,7 @@ def getCareerHittingStats(playerID:int,gameType="R"):
 
 		return main_df
 
-
-def getCareerPitchingStats(playerID:int,gameType="R"):
+def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 	"""Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
 
 	Args:

@@ -9,23 +9,24 @@ from datetime import datetime
 
 import os
 
-
-
-
-def getTransactionsInRange(startDate:str,endDate:str):
-	"""Retrieves all transactions in a given range of dates.
+def mlbam_transactions(startDate:str,endDate:str):
+	"""
+	Retrieves all transactions in a given range of dates.
 	You MUST provide two dates for this function to work, and both dates must
-	be in YYYYMMDD format. For example, December 31st, 2021 would be represented
-	as 20211231
+	be in MM/DD/YYYY format. For example, December 31st, 2021 would be represented
+	as 12/31/2021.
 
 	Args:
+
 		startDate (int):
+
 			Required parameter. If no startDate is provided, the function wil not work.
-			Additionally, startDate must be in YYYYMMDD format.
+			Additionally, startDate must be in MM/DD/YYYY format.
 
 		endDate (int):
+
 			Required parameter. If no endDate is provided, the function wil not work.
-			Additionally, endDate must be in YYYYMMDD format.
+			Additionally, endDate must be in MM/DD/YYYY format.
 	"""
 	#pullCopyrightInfo()
 	#p_df = pd.DataFrame()
@@ -83,7 +84,7 @@ def getTransactionsInRange(startDate:str,endDate:str):
 	except:
 		print('Could not locate dates ')
 
-def getBroadcastInfo(season:int,home_away="e"):
+def mlbam_broadcast_info(season:int,home_away="e"):
 	"""Retrieves the broadcasters (radio and TV) involved with certain games.
 
 	Args:
