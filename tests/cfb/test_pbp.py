@@ -37,4 +37,4 @@ def test_havoc_rate(box_score):
 
     assert plays > 0
     assert defense_home["havoc_total"] == (pd + home_int + tfl + fum)
-    assert defense_home["havoc_total_rate"] == ((pd + home_int + tfl + fum) / plays)
+    assert round(defense_home["havoc_total_rate"], 4) == round(((pd + home_int + tfl + fum) / plays), 4)
