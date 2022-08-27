@@ -4787,9 +4787,15 @@ class CFBPlayProcess(object):
             100 - play_df["drive.start.yardLine"],
             play_df["drive.start.yardLine"],
         )
-        play_df["drive_stopped"] = play_df["drive.result"].str.contains(
+        play_df["drive_stopped"] = np.select([
+            play_df['drive.result'].isna()
+        ],
+        [
+            False
+        ],
+        default = play_df["drive.result"].str.contains(
             "punt|fumble|interception|downs", regex=True, case=False
-        )
+        ))
         play_df["drive_start"] = play_df["drive_start"].astype(float)
         play_df["drive_play_index"] = base_groups["scrimmage_play"].apply(
             lambda x: x.cumsum()
