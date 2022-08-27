@@ -5215,8 +5215,8 @@ class CFBPlayProcess(object):
         turnover_box_json[0]["expected_turnover_margin"] = turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
         turnover_box_json[1]["expected_turnover_margin"] = turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]
 
-        away_to = turnover_box_json[0]["fumbles_lost"] + turnover_box_json[0]["Int"]
-        home_to = turnover_box_json[1]["fumbles_lost"] + turnover_box_json[1]["Int"]
+        away_to = turnover_box_json[0].get("fumbles_lost", 0) + turnover_box_json[0]["Int"]
+        home_to = turnover_box_json[1].get("fumbles_lost", 0) + turnover_box_json[1]["Int"]
 
         turnover_box_json[0]["turnovers"] = away_to
         turnover_box_json[1]["turnovers"] = home_to
