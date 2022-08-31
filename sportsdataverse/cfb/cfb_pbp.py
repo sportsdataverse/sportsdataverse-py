@@ -1165,7 +1165,7 @@ class CFBPlayProcess(object):
         play_df.loc[:, "id"] = play_df.id.astype(float)
         play_df.sort_values(by=["id", "start.adj_TimeSecsRem"], inplace=True)
         play_df.drop_duplicates(
-            subset=["text", "id", "type.text", "start.down"], keep="last", inplace=True
+            subset=["text", "id", "type.text", "start.down", "sequenceNumber"], keep="last", inplace=True
         )
         play_df = play_df[
             (
@@ -4793,7 +4793,7 @@ class CFBPlayProcess(object):
         [
             False
         ],
-        default = play_df["drive.result"].str.contains(
+        default = play_df["drive.result"].str.lower().str.contains(
             "punt|fumble|interception|downs", regex=True, case=False
         ))
         play_df["drive_start"] = play_df["drive_start"].astype(float)
