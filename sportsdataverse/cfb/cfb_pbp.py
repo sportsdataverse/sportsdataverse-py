@@ -4793,7 +4793,7 @@ class CFBPlayProcess(object):
         [
             False
         ],
-        default = play_df["drive.result"].str.lower().contains(
+        default = play_df["drive.result"].str.lower().str.contains(
             "punt|fumble|interception|downs", regex=True, case=False
         ))
         play_df["drive_start"] = play_df["drive_start"].astype(float)
