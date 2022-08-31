@@ -1165,7 +1165,7 @@ class CFBPlayProcess(object):
         play_df.loc[:, "id"] = play_df.id.astype(float)
         play_df.sort_values(by=["id", "start.adj_TimeSecsRem"], inplace=True)
         play_df.drop_duplicates(
-            subset=["text", "id", "type.text", "start.down"], keep="last", inplace=True
+            subset=["text", "id", "type.text", "start.down", "sequenceNumber"], keep="last", inplace=True
         )
         play_df = play_df[
             (
