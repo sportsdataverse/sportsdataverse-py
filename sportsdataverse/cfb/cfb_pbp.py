@@ -207,7 +207,6 @@ class CFBPlayProcess(object):
 
         pbp_txt["plays"] = pbp_txt["plays"].to_dict(orient="records")
         pbp_txt["plays"] = pd.DataFrame(pbp_txt["plays"])
-        pbp_txt["plays"]["id"] = int(self.gameId)
         pbp_txt["plays"]["game_id"] = int(self.gameId)
         pbp_txt["plays"]["season"] = pbp_txt.get("header").get("season").get("year")
         pbp_txt["plays"]["seasonType"] = pbp_txt.get("header").get("season").get("type")
