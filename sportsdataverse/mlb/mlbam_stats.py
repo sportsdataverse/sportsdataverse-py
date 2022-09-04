@@ -12,7 +12,8 @@ import os
 
 
 def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
-	"""Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID
+	"""
+	Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID.
 
 	Args:
 		playerID (int):
@@ -33,6 +34,9 @@ def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+
+	Returns:
+		A pandas dataframe containing career hitting stats for an MLB player.
 	"""
 	main_df = pd.DataFrame()
 
@@ -113,6 +117,10 @@ def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+
+	Returns:
+		A pandas dataframe containing pitching stats for an MLB player in a given season.
+	
 	"""
 	main_df = pd.DataFrame()
 
@@ -168,7 +176,8 @@ def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 		return main_df
 
 def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
-	"""Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
+	"""
+	Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
 
 	Args:
 		playerID (int):
@@ -186,6 +195,8 @@ def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+	Returns:
+		A pandas dataframe containing hitting stats for an MLB player in a given season.
 	"""
 	main_df = pd.DataFrame()
 
@@ -232,10 +243,10 @@ def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 		return main_df
 
 def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
-	"""Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
+	"""
+	Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
 
 	Args:
-
 		playerID (int):
 			Required parameter. If no playerID is provided, the function wil not work.
 
@@ -251,6 +262,9 @@ def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+			
+	Returns:
+		A pandas dataframe containing career pitching stats for an MLB player.
 	"""
 	main_df = pd.DataFrame()
 

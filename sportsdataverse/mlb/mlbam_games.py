@@ -6,13 +6,12 @@ from pandas import json_normalize
 import json
 from sportsdataverse.dl_utils import download
 from datetime import datetime
-import os
+
 
 
 def mlbam_schedule(season:int,gameType="R"):
-	"""Retrieves the start and end date for games for every league, and the MLB,
-	for a given season.
-
+	"""
+	Retrieves the start and end date for games for every league, and the MLB,for a given season.
 	This function does not get individual games.
 
 	Args:
@@ -31,6 +30,9 @@ def mlbam_schedule(season:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+
+	Returns: 
+		A pandas dataframe containing MLB scheduled games.
 	"""
 	main_df = pd.DataFrame()
 

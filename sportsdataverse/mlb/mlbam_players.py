@@ -5,12 +5,11 @@ import pandas as pd
 from pandas import json_normalize
 import json
 from sportsdataverse.dl_utils import download
-from tqdm import tqdm
 
-import os
 
 def mlbam_search_mlb_players(search:str,isActive=""):
-	"""Searches for an MLB player in the MLBAM API.
+	"""
+	Searches for an MLB player in the MLBAM API.
 
 	Args:
 		search (string):
@@ -24,6 +23,10 @@ def mlbam_search_mlb_players(search:str,isActive=""):
 			If you want active players, set isActive to "Y" or "Yes".
 
 			If you want inactive players, set isActive to "N" or "No".
+
+	Returns:
+		A pandas dataframe containing MLBAM players whose name(s) matches the input string.
+
 	"""
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?sport_code='mlb'"
 
@@ -71,6 +74,9 @@ def mlbam_player_info(playerID:int):
 	Args:
 		playerID (int):
 			Required parameter. If no playerID is provided, the function wil not work.
+	
+	Returns:
+		A pandas dataframe cointaining player information for the specified MLBAM player ID.
 	"""
 	main_df = pd.DataFrame()
 
@@ -101,8 +107,8 @@ def mlbam_player_info(playerID:int):
 		return main_df
 
 def mlbam_player_teams(playerID:int,season:int):
-	"""Retrieves the info regarding which teams that player played for in a given
-	season, or in the player's career
+	"""
+	Retrieves the info regarding which teams that player played for in a given season, or in the player's career.
 
 	Args:
 		playerID (int):
@@ -111,6 +117,9 @@ def mlbam_player_teams(playerID:int,season:int):
 		season (int):
 			Required parameter. If provided, the search will only look for teams
 			that player played for in that season.
+
+	Returns:
+		A pandas dataframe containing teams a player played for in that season.
 	"""
 	main_df = pd.DataFrame()
 

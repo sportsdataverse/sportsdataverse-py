@@ -12,7 +12,8 @@ import os
 
 
 def mlbam_teams(season:int,retriveAllStarRosters=False):
-	"""Retrieves the player info for an MLB team, given an MLB season
+	"""
+	Retrieves the player info for an MLB team, given an MLB season.
 
 	Args:
 		season (int):
@@ -21,6 +22,10 @@ def mlbam_teams(season:int,retriveAllStarRosters=False):
 		retriveAllStarRosters (boolean):
 			Optional parameter. If set to 'True', MLB All-Star rosters will be returned when
 			running this function.
+
+	Returns:
+		A pandas dataframe containing information about MLB teams that played in that season.
+	
 	"""
 	main_df = pd.DataFrame()
 
@@ -66,13 +71,15 @@ def mlbam_teams(season:int,retriveAllStarRosters=False):
 
 def mlbam_40_man_roster(teamID:int):
 	"""
-	Retrieves the current 40-man roster for a team, given a proper MLBAM Team ID
+	Retrieves the current 40-man roster for a team, given a proper MLBAM team ID.
 
 	Args:
 
 	teamID (int):
-    	Required parameter. If no MLBAM Team ID is provided, the current 40-man roster for the Cincinnati Reds will be returned.
+    	Required parameter. This should be the MLBAM team ID for the MLB team you want a 40-man roster from.
 
+	Returns:
+		A pandas dataframe containing the current 40-man roster for the given MLBAM team ID.
 	"""
 
 	main_df = pd.DataFrame()
@@ -102,7 +109,8 @@ def mlbam_40_man_roster(teamID:int):
 	return main_df
 
 def mlbam_team_roster(teamID:int,startSeason:int,endSeason:int):
-	"""Retrieves the cumulative roster for a MLB team in a specified timeframe.
+	"""
+	Retrieves the cumulative roster for a MLB team in a specified timeframe.
 
 	Args:
 		teamID (int):
@@ -114,8 +122,10 @@ def mlbam_team_roster(teamID:int,startSeason:int,endSeason:int):
 
 		endSeason (int):
 			Required parameter. This value must be greater than startSeason for this function to work.
+	
+	Returns:
+		A pandas dataframe containg the roster(s) for the MLB team.
 	"""
-
 	holding_num = 0
 	main_df = pd.DataFrame()
 

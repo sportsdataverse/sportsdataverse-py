@@ -7,14 +7,11 @@ import json
 from sportsdataverse.dl_utils import download
 from datetime import datetime
 
-import os
-
 def mlbam_transactions(startDate:str,endDate:str):
 	"""
 	Retrieves all transactions in a given range of dates.
-	You MUST provide two dates for this function to work, and both dates must
-	be in MM/DD/YYYY format. For example, December 31st, 2021 would be represented
-	as 12/31/2021.
+	You MUST provide two dates for this function to work, and both dates must be in MM/DD/YYYY format. 
+	For example, December 31st, 2021 would be represented as 12/31/2021.
 
 	Args:
 
@@ -27,6 +24,8 @@ def mlbam_transactions(startDate:str,endDate:str):
 
 			Required parameter. If no endDate is provided, the function wil not work.
 			Additionally, endDate must be in MM/DD/YYYY format.
+	Returns:
+		A pandas dataframe containing MLB transactions between two dates.
 	"""
 	main_df = pd.DataFrame()
 
@@ -76,7 +75,8 @@ def mlbam_transactions(startDate:str,endDate:str):
 		print('Could not locate dates ')
 
 def mlbam_broadcast_info(season:int,home_away="e"):
-	"""Retrieves the broadcasters (radio and TV) involved with certain games.
+	"""
+	Retrieves the broadcasters (radio and TV) involved with certain games.
 
 	Args:
 		season (int):
@@ -91,6 +91,10 @@ def mlbam_broadcast_info(season:int,home_away="e"):
 			If you want away broadcasters only, set home_away='A' or home_away='a'.
 
 			If you want both home and away broadcasters, set home_away='E' or home_away='e'.
+		
+	Returns:
+		A pandas dataframe containing TV and radio broadcast information for various MLB games.
+
 	"""
 	main_df = pd.DataFrame()
 
