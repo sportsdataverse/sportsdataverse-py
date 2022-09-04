@@ -32,8 +32,6 @@ def mlbam_schedule(season:int,gameType="R"):
 			'L' - League Championship
 			'W' - World Series
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.org_game_type_date_info.bam?current_sw='Y'&sport_code='mlb'&"
@@ -59,9 +57,7 @@ def mlbam_schedule(season:int,gameType="R"):
 
 	resp = download(searchURL)
 
-	#print(searchURL)
 	resp_str = str(resp, 'UTF-8')
-	#print(resp_str)
 
 	resp_json = json.loads(resp_str)
 	try:
@@ -70,11 +66,7 @@ def mlbam_schedule(season:int,gameType="R"):
 		result_count = 0
 
 	if result_count > 0:
-		#print(resp_json['player_teams']['queryResults']['row'])
-		#print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-		#players = resp_json['search_player_all']['queryResults']['row']
 		main_df = json_normalize(resp_json['org_game_type_date_info']['queryResults']['row'])
-		#print('Done')
 	else:
 		print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
 	return main_df

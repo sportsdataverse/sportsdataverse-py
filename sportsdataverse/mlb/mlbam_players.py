@@ -25,14 +25,12 @@ def mlbam_search_mlb_players(search:str,isActive=""):
 
 			If you want inactive players, set isActive to "N" or "No".
 	"""
-	#pullCopyrightInfo()
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?sport_code='mlb'"
 
 	p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	if len(isActive) == 0:
-		#print('Searching for all MLB players.')
 		print('')
 	elif isActive.lower() == "y" or isActive.lower() == "yes":
 		searchURL = searchURL + "&active_sw='Y'"
@@ -46,11 +44,9 @@ def mlbam_search_mlb_players(search:str,isActive=""):
 
 		searchURL= searchURL + f"&name_part='{search}%25'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		result_count = int(resp_json['search_player_all']['queryResults']['totalSize'])
@@ -76,8 +72,6 @@ def mlbam_player_info(playerID:int):
 		playerID (int):
 			Required parameter. If no playerID is provided, the function wil not work.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.player_info.bam?sport_code='mlb'&player_id="
@@ -88,12 +82,9 @@ def mlbam_player_info(playerID:int):
 	else:
 		searchURL= searchURL + f"\'{playerID}\'%27"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -102,10 +93,6 @@ def mlbam_player_info(playerID:int):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_info']['queryResults']['row'])
-
-			#print(f'{result_count} players found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['player_info']['queryResults']['row'])
 			print('Done')
 		else:
@@ -125,8 +112,6 @@ def mlbam_player_teams(playerID:int,season:int):
 			Required parameter. If provided, the search will only look for teams
 			that player played for in that season.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.player_teams.bam?"
@@ -144,12 +129,9 @@ def mlbam_player_teams(playerID:int,season:int):
 	else:
 		searchURL= searchURL + f"player_id=\'{playerID}\'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -158,10 +140,8 @@ def mlbam_player_teams(playerID:int,season:int):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} players found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['player_teams']['queryResults']['row'])
 			print('Done')
 		else:
