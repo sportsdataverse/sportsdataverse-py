@@ -16,6 +16,289 @@ Args:
     returnFile (boolean) = False
     If returnFile is set to True, the copyright file is returned.
 
+## sportsdataverse.mlb.mlb_retrosheet module
+
+### sportsdataverse.mlb.mlb_retrosheet.retrosheet_ballparks()
+
+Retrives the current TEAMABR.txt file from the
+Retrosheet website, and then returns the current file as
+a pandas dataframe.
+
+Args:
+None
+
+Returns:
+A pandas Dataframe with the biographical information
+of notable major leauge teams.
+
+### sportsdataverse.mlb.mlb_retrosheet.retrosheet_ejections()
+
+Retrives the current Ejecdata.txt file from the
+Retrosheet website, and then returns the current file as
+a pandas dataframe.
+
+Args:
+None
+
+Returns:
+A pandas Dataframe with the biographical information
+of known MLB ejections.
+
+### sportsdataverse.mlb.mlb_retrosheet.retrosheet_franchises()
+
+Retrives the current TEAMABR.txt file from the
+Retrosheet website, and then returns the current file as
+a pandas dataframe.
+
+Args:
+None
+
+Returns:
+A pandas Dataframe with the biographical information
+of notable major leauge teams.
+
+### sportsdataverse.mlb.mlb_retrosheet.retrosheet_people()
+
+Retrives the current BioFile.txt file from the
+Retrosheet website, and then returns the current file as
+a pandas dataframe.
+
+Args:
+None
+
+Returns:
+A pandas Dataframe with the biographical information
+of various individuals who have played baseball.
+
+### sportsdataverse.mlb.mlb_retrosheet.retrosheet_schedule(first_season:int,last_season=0,original_2020_schedule=False)
+
+Retrives the scheduled games of an MLB season, or MLB seasons.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+    original_2020_schedule (bool):
+        Retrosheet keeps a record of the orignial 2020 MLB season,
+        before the season was delayed due to the COVID-19 pandemic.
+
+        > If this is set to True, this function will return the original
+        2020 MLB season, before it was altered due to
+        the COVID-19 pandemic, if the user wants this function to return
+        the schedule for the 2020 MLB season.
+
+        > If this is set to False, this function will return the altered
+        2020 MLB season, after it was altered due to
+        the COVID-19 pandemic, if the user wants this function to return
+        the schedule for the 2020 MLB season.
+
+Returns:
+A pandas dataframe containg historical MLB schedules.
+
+### sportsdataverse.mlb.mlb_retrosheet.retrosheet_game_logs_team(first_season:int,last_season=0,game_type="regular",filter_out_seasons=True)
+
+Retrives the team-level stats for MLB games in a season, or range of seasons.
+THIS DOES NOT GET PLAYER STATS!
+Use retrosplits_game_logs_player() for player-level game stats.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+    game_type (str):
+        Optional parameter. By default, this is set to "regular",
+        or to put it in another way, this function call will return
+        only regular season games.
+
+        The full list of supported keywards for game_type are as follows.
+        Case does not matter (you can set game_type to "rEgUlAr",
+        and the function call will still work):
+
+            - "regular": Regular season games.
+
+            - "asg": All-Star games.
+
+            - "playoffs": Playoff games.
+
+Returns:
+A pandas dataframe containing team-level stats for MLB
+games.
+
+## sportsdataverse.mlb.mlb_retrosplits module
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_game_logs_player(first_season:int,last_season=0)
+
+Retrives game-level player stats from the Retrosplits project.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+Returns:
+A pandas dataframe containing game-level player stats from historical MLB games.
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_game_logs_team(first_season:int,last_season=0)
+
+Retrives game-level team stats from the Retrosplits project.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+Returns:
+A pandas dataframe containing game-level team stats from historical MLB games.
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_player_batting_by_position(first_season:int,last_season=0)
+
+Retrives player-level, batting by position split stats from the Retrosplits project.
+The stats returned by this function are season-level stats, not game-level stats.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+Returns:
+A pandas dataframe containing batting by position split stats for MLB players.
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_player_batting_by_runners(first_season:int,last_season=0)
+
+Retrives player-level, batting by runners split stats from the Retrosplits project.
+The stats are batting stats, based off of how many runners are on base at the time of the at bat.
+The stats returned by this function are season-level stats, not game-level stats.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+Returns:
+A pandas dataframe containing player-level, batting by runners split stats.
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_player_batting_by_platoon(first_season:int,last_season=0)
+
+    Retrives player-level, batting by platoon (left/right hitting vs. left/right pitching) split stats from the Retrosplits project.
+    The stats are batting stats, based off of the handedness of the batter vs the handedness of the pitcher.
+    The stats returned by this function are season-level stats, not game-level stats.
+
+    Args:
+        first_season (int):
+            Required parameter. Indicates the season you are trying to
+            find the games for, or the first season you are trying to
+            find games for, if you want games from a range of seasons.
+
+        last_season (int):
+            Optional parameter. If you want to get games
+            from a range of seasons, set this variable to the last season you
+            want games from.
+
+    Returns:
+        A pandas dataframe containing player-level, batting by platoon stats for batters.
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_player_head_to_head_stats(first_season:int,last_season=0)
+
+Retrives batter vs. pitcher stats from the Retrosplits project.
+The stats are batting stats, based off of the preformance of that specific batter
+agianst a specific pitcher for the durration of that specific season.
+The stats returned by this function are season-level stats, not game-level stats.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+Returns:
+A pandas dataframe containing batter vs. pitcher stats for a season,
+or for a range of seasons.
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_player_pitching_by_runners(first_season:int,last_season=0)
+
+Retrives player-level, pitching by runners split stats from the Retrosplits project.
+The stats are pitching stats,
+based off of how many runners are on base at the time of the at bat.
+The stats returned by this function are season-level stats, not game-level stats.
+
+Args:
+first_season (int):
+Required parameter. Indicates the season you are trying to
+find the games for, or the first season you are trying to
+find games for, if you want games from a range of seasons.
+
+    last_season (int):
+        Optional parameter. If you want to get games
+        from a range of seasons, set this variable to the last season you
+        want games from.
+
+Returns:
+A pandas dataframe containing pitching by runners split stats for a season,
+or for a range of seasons.
+
+### sportsdataverse.mlb.mlb_retrosplits.retrosplits_player_pitching_by_platoon(first_season:int,last_season=0)
+
+    Retrives player-level, pitching by platoon (left/right pitching vs. left/right hitting) split stats from the Retrosplits project.
+    The stats are pitching stats, based off of the handedness of the pitcher vs the handedness of the batter.
+    The stats returned by this function are season-level stats, not game-level stats.
+
+    Args:
+        first_season (int):
+            Required parameter. Indicates the season you are trying to
+            find the games for, or the first season you are trying to
+            find games for, if you want games from a range of seasons.
+
+        last_season (int):
+            Optional parameter. If you want to get games
+            from a range of seasons, set this variable to the last season you
+            want games from.
+
+    Returns:
+        A pandas dataframe containing player-level, pitching by platoon stats for pitchers.
+
 ## sportsdataverse.mlb.mlbam_games module
 
 ### sportsdataverse.mlb.mlbam_games.mlbam_schedule(season: int, gameType='R')
