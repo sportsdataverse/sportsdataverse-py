@@ -7,14 +7,11 @@ import json
 from sportsdataverse.dl_utils import download
 from datetime import datetime
 
-import os
-
 def mlbam_transactions(startDate:str,endDate:str):
 	"""
 	Retrieves all transactions in a given range of dates.
-	You MUST provide two dates for this function to work, and both dates must
-	be in MM/DD/YYYY format. For example, December 31st, 2021 would be represented
-	as 12/31/2021.
+	You MUST provide two dates for this function to work, and both dates must be in MM/DD/YYYY format. 
+	For example, December 31st, 2021 would be represented as 12/31/2021.
 
 	Args:
 
@@ -27,16 +24,14 @@ def mlbam_transactions(startDate:str,endDate:str):
 
 			Required parameter. If no endDate is provided, the function wil not work.
 			Additionally, endDate must be in MM/DD/YYYY format.
+	Returns:
+		A pandas dataframe containing MLB transactions between two dates.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.transaction_all.bam?sport_code='mlb'&"
 
 	try:
-		#sd = int(startDate)
-		#ed = int(endDate)
 		sd_date = datetime.strptime(startDate, '%m/%d/%Y')
 		ed_date = datetime.strptime(endDate, '%m/%d/%Y')
 		sd = sd_date.strftime("%Y%m%d")
@@ -51,7 +46,6 @@ def mlbam_transactions(startDate:str,endDate:str):
 			print('Getting transaction data. This will take some time.')
 		else:
 			print('Getting transaction data.')
-		#print(sd,ed)
 		searchURL = searchURL + f'start_date=\'{sd}\''
 		searchURL = searchURL + f'start_date=\'{ed}\''
 
@@ -61,9 +55,7 @@ def mlbam_transactions(startDate:str,endDate:str):
 	try:
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -72,10 +64,8 @@ def mlbam_transactions(startDate:str,endDate:str):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['transaction_all']['queryResults']['row'])
 			print('Done')
 		else:
@@ -85,7 +75,8 @@ def mlbam_transactions(startDate:str,endDate:str):
 		print('Could not locate dates ')
 
 def mlbam_broadcast_info(season:int,home_away="e"):
-	"""Retrieves the broadcasters (radio and TV) involved with certain games.
+	"""
+	Retrieves the broadcasters (radio and TV) involved with certain games.
 
 	Args:
 		season (int):
@@ -100,9 +91,11 @@ def mlbam_broadcast_info(season:int,home_away="e"):
 			If you want away broadcasters only, set home_away='A' or home_away='a'.
 
 			If you want both home and away broadcasters, set home_away='E' or home_away='e'.
+		
+	Returns:
+		A pandas dataframe containing TV and radio broadcast information for various MLB games.
+
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.mlb_broadcast_info.bam?tcid=mm_mlb_schedule&"
@@ -123,9 +116,7 @@ def mlbam_broadcast_info(season:int,home_away="e"):
 
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -134,10 +125,8 @@ def mlbam_broadcast_info(season:int,home_away="e"):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['mlb_broadcast_info']['queryResults']['row'])
 			print('Done')
 		else:
