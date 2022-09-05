@@ -12,7 +12,8 @@ import os
 
 
 def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
-	"""Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID
+	"""
+	Retrieves the hitting stats for an MLB player in a given season, given a proper MLBAM ID.
 
 	Args:
 		playerID (int):
@@ -33,9 +34,10 @@ def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+
+	Returns:
+		A pandas dataframe containing career hitting stats for an MLB player.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.sport_hitting_tm.bam?league_list_id='mlb'&"
@@ -72,12 +74,9 @@ def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 	else:
 		searchURL= searchURL + f"player_id=\'{playerID}\'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -86,10 +85,8 @@ def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['sport_hitting_tm']['queryResults']['row'])
 			print('Done')
 		else:
@@ -120,9 +117,11 @@ def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+
+	Returns:
+		A pandas dataframe containing pitching stats for an MLB player in a given season.
+	
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.sport_pitching_tm.bam?league_list_id='mlb'&"
@@ -156,12 +155,9 @@ def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 	else:
 		searchURL= searchURL + f"player_id=\'{playerID}\'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -170,19 +166,18 @@ def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['sport_pitching_tm']['queryResults']['row'])
 			print('Done')
 		else:
 			print(f'No results found for the provided playerID. \nTry a diffrient search for better results.')
 
 		return main_df
-#mlbam_player_career_hitting_stats
+
 def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
-	"""Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
+	"""
+	Retrieves the career hitting stats for an MLB player, given a proper MLBAM ID
 
 	Args:
 		playerID (int):
@@ -200,9 +195,9 @@ def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+	Returns:
+		A pandas dataframe containing hitting stats for an MLB player in a given season.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.sport_career_hitting.bam?league_list_id='mlb'&"
@@ -227,12 +222,9 @@ def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 	else:
 		searchURL= searchURL + f"player_id=\'{playerID}\'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -241,10 +233,8 @@ def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['sport_career_hitting']['queryResults']['row'])
 			print('Done')
 		else:
@@ -253,10 +243,10 @@ def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 		return main_df
 
 def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
-	"""Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
+	"""
+	Retrieves the career pitching stats for an MLB player, given a proper MLBAM ID
 
 	Args:
-
 		playerID (int):
 			Required parameter. If no playerID is provided, the function wil not work.
 
@@ -272,9 +262,10 @@ def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
+			
+	Returns:
+		A pandas dataframe containing career pitching stats for an MLB player.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.sport_career_pitching.bam?league_list_id='mlb'&"
@@ -299,12 +290,9 @@ def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 	else:
 		searchURL= searchURL + f"player_id=\'{playerID}\'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -313,10 +301,8 @@ def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['sport_career_pitching']['queryResults']['row'])
 			print('Done')
 		else:

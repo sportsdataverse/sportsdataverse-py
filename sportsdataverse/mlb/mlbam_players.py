@@ -5,12 +5,11 @@ import pandas as pd
 from pandas import json_normalize
 import json
 from sportsdataverse.dl_utils import download
-from tqdm import tqdm
 
-import os
 
 def mlbam_search_mlb_players(search:str,isActive=""):
-	"""Searches for an MLB player in the MLBAM API.
+	"""
+	Searches for an MLB player in the MLBAM API.
 
 	Args:
 		search (string):
@@ -24,15 +23,17 @@ def mlbam_search_mlb_players(search:str,isActive=""):
 			If you want active players, set isActive to "Y" or "Yes".
 
 			If you want inactive players, set isActive to "N" or "No".
+
+	Returns:
+		A pandas dataframe containing MLBAM players whose name(s) matches the input string.
+
 	"""
-	#pullCopyrightInfo()
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?sport_code='mlb'"
 
 	p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	if len(isActive) == 0:
-		#print('Searching for all MLB players.')
 		print('')
 	elif isActive.lower() == "y" or isActive.lower() == "yes":
 		searchURL = searchURL + "&active_sw='Y'"
@@ -46,11 +47,9 @@ def mlbam_search_mlb_players(search:str,isActive=""):
 
 		searchURL= searchURL + f"&name_part='{search}%25'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		result_count = int(resp_json['search_player_all']['queryResults']['totalSize'])
@@ -75,9 +74,10 @@ def mlbam_player_info(playerID:int):
 	Args:
 		playerID (int):
 			Required parameter. If no playerID is provided, the function wil not work.
+	
+	Returns:
+		A pandas dataframe cointaining player information for the specified MLBAM player ID.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.player_info.bam?sport_code='mlb'&player_id="
@@ -88,12 +88,9 @@ def mlbam_player_info(playerID:int):
 	else:
 		searchURL= searchURL + f"\'{playerID}\'%27"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -102,10 +99,6 @@ def mlbam_player_info(playerID:int):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_info']['queryResults']['row'])
-
-			#print(f'{result_count} players found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['player_info']['queryResults']['row'])
 			print('Done')
 		else:
@@ -114,8 +107,8 @@ def mlbam_player_info(playerID:int):
 		return main_df
 
 def mlbam_player_teams(playerID:int,season:int):
-	"""Retrieves the info regarding which teams that player played for in a given
-	season, or in the player's career
+	"""
+	Retrieves the info regarding which teams that player played for in a given season, or in the player's career.
 
 	Args:
 		playerID (int):
@@ -124,9 +117,10 @@ def mlbam_player_teams(playerID:int,season:int):
 		season (int):
 			Required parameter. If provided, the search will only look for teams
 			that player played for in that season.
+
+	Returns:
+		A pandas dataframe containing teams a player played for in that season.
 	"""
-	#pullCopyrightInfo()
-	#p_df = pd.DataFrame()
 	main_df = pd.DataFrame()
 
 	searchURL = "http://lookup-service-prod.mlb.com/json/named.player_teams.bam?"
@@ -144,12 +138,9 @@ def mlbam_player_teams(playerID:int,season:int):
 	else:
 		searchURL= searchURL + f"player_id=\'{playerID}\'"
 
-		#searchURL = urllib.parse.quote_plus(str(searchURL))
 		resp = download(searchURL)
 
-		#print(searchURL)
 		resp_str = str(resp, 'UTF-8')
-		#print(resp_str)
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -158,10 +149,8 @@ def mlbam_player_teams(playerID:int,season:int):
 			result_count = 0
 
 		if result_count > 0:
-			#print(resp_json['player_teams']['queryResults']['row'])
 
 			print(f'{result_count} players found,\nParsing results into a dataframe.')
-			#players = resp_json['search_player_all']['queryResults']['row']
 			main_df = json_normalize(resp_json['player_teams']['queryResults']['row'])
 			print('Done')
 		else:
