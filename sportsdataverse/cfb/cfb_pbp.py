@@ -5058,11 +5058,13 @@ class CFBPlayProcess(object):
         )
 
         situation_box_rz = self.plays_json[(self.plays_json.rz_play == True)].groupby(by=["pos_team"], as_index=False).agg(
+            rz_plays = ('play', sum),
             EPA_success_rz = ('EPA_success', sum),
             EPA_success_rate_rz = ('EPA_success', mean),
         )
 
-        situation_box_third = self.plays_json[(self.plays_json.down == 3)].groupby(by=["pos_team"], as_index=False).agg(
+        situation_box_third = self.plays_json[(self.plays_json["start.down"] == 3)].groupby(by=["pos_team"], as_index=False).agg(
+            third_down_plays = ('play', sum),
             EPA_success_third = ('EPA_success', sum),
             EPA_success_rate_third = ('EPA_success', mean),
         )
