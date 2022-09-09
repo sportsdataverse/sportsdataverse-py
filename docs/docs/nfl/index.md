@@ -7,6 +7,130 @@
 ## sportsdataverse.nfl.nfl_loaders module
 
 
+### sportsdataverse.nfl.nfl_loaders.load_nfl_combine()
+Load NFL Combine information
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_combine()
+
+Args:
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing NFL combine data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_contracts()
+Load NFL Historical contracts information
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_contracts()
+
+Args:
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing historical contracts available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_depth_charts(seasons: List[int])
+Load NFL Depth Chart data for selected seasons
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_depth_charts(seasons=range(2001,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2001 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing depth chart data available for the requested seasons.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_draft_picks()
+Load NFL Draft picks information
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_draft_picks()
+
+Args:
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing NFL Draft picks data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_injuries(seasons: List[int])
+Load NFL injuries data for selected seasons
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_injuries(seasons=range(2009,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2009 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing injuries data available for the requested seasons.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_passing()
+Load NFL NextGen Stats Passing data going back to 2016
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_ngs_passing()
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing the NextGen Stats Passing data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_receiving()
+Load NFL NextGen Stats Receiving data going back to 2016
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_ngs_receiving()
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing the NextGen Stats Receiving data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_rushing()
+Load NFL NextGen Stats Rushing data going back to 2016
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_ngs_rushing()
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing the NextGen Stats Rushing data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_officials()
+Load NFL Officials information
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_officials()
+
+Args:
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing officials available.
+
+
 ### sportsdataverse.nfl.nfl_loaders.load_nfl_pbp(seasons: List[int])
 Load NFL play by play data going back to 1999
 
@@ -27,7 +151,165 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_player_stats()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pbp_participation(seasons: List[int])
+Load NFL play-by-play participation data for selected seasons
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pbp_participation(seasons=range(2016,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2016 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing play-by-play participation data available for the requested seasons.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_def()
+Load NFL Pro-Football Reference Advanced Defensive data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_def()
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced defensive stats data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_pass()
+Load NFL Pro-Football Reference Advanced Passing data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_pass()
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced passing stats data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rec()
+Load NFL Pro-Football Reference Advanced Receiving data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_rec()
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced receiving stats data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rush()
+Load NFL Pro-Football Reference Advanced Rushing data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_rush()
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced rushing stats data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_def(seasons: List[int])
+Load NFL Pro-Football Reference Weekly Advanced Defensive data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_def(seasons=range(2018,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2018 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced defensive stats data available for the requested seasons.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_pass(seasons: List[int])
+Load NFL Pro-Football Reference Weekly Advanced Passing data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_pass(seasons=range(2018,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2018 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced passing stats data available for the requested seasons.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rec(seasons: List[int])
+Load NFL Pro-Football Reference Weekly Advanced Receiving data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_rec(seasons=range(2018,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2018 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced receiving stats data available for the requested seasons.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rush(seasons: List[int])
+Load NFL Pro-Football Reference Weekly Advanced Rushing data going back to 2018
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_rush(seasons=range(2018,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2018 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+
+        advanced rushing stats data available for the requested seasons.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_player_contracts_detail()
+Load NFL Player contracts detail information
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_player_contracts_detail()
+
+Args:
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing player contracts detail data available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_player_stats(kicking=False)
 Load NFL player stats data
 
 Example:
@@ -36,17 +318,37 @@ Example:
 
 Args:
 
+    kicking (bool): If True, load kicking stats. If False, load all other stats.
+
 Returns:
 
     pd.DataFrame: Pandas dataframe containing player stats.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_rosters()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_players()
+Load NFL Player ID information
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_players()
+
+Args:
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing players available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_rosters(seasons: List[int])
 Load NFL roster data for all seasons
 
 Example:
 
     nfl_df = sportsdataverse.nfl.load_nfl_rosters(seasons=range(1999,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 1920 is the earliest available season.
 
 Returns:
 
@@ -73,6 +375,22 @@ Raises:
     ValueError: If season is less than 1999.
 
 
+### sportsdataverse.nfl.nfl_loaders.load_nfl_snap_counts(seasons: List[int])
+Load NFL snap counts data for selected seasons
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_snap_counts(seasons=range(2012,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2012 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing snap counts available for the requested seasons.
+
+
 ### sportsdataverse.nfl.nfl_loaders.load_nfl_teams()
 Load NFL team ID information and logos
 
@@ -84,7 +402,23 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+    pd.DataFrame: Pandas dataframe containing teams available.
+
+
+### sportsdataverse.nfl.nfl_loaders.load_nfl_weekly_rosters(seasons: List[int])
+Load NFL weekly roster data for selected seasons
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.load_nfl_weekly_rosters(seasons=range(2002,2021))
+
+Args:
+
+    seasons (list): Used to define different seasons. 2002 is the earliest available season.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing weekly rosters available for the requested seasons.
 
 ## sportsdataverse.nfl.nfl_pbp module
 

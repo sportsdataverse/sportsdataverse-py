@@ -16,7 +16,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version="0.0.23",
+    version="0.0.24",
     description="Retrieve Sports data in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -75,6 +75,7 @@ setup(
         "pyarrow>=1.0.1",
         "pyjanitor>=0.23.1",
         "pygithub>=1.51",
+        "pyreadr>=0.4.0",
         "scipy>=1.4.0",
         "matplotlib>=2.0.0",
         "tqdm>=4.50.0",
