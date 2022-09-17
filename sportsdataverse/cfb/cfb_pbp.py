@@ -291,8 +291,31 @@ class CFBPlayProcess(object):
         pbp_txt["plays"] = pbp_txt["plays"].sort_values(
                 by=["id", "start.adj_TimeSecsRem"]
             )
-        pbp_txt["plays"]["game_play_number"] = np.arange(len(pbp_txt["plays"])) + 1
+
+        # drop play text dupes intelligently, even if they have different play_id values
         pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
+        pbp_txt["plays"]["lead_text"] = pbp_txt["plays"]["text"].shift(-1)
+        pbp_txt["plays"]["lead_start_team"] = pbp_txt["plays"]["start.team.id"].shift(-1)
+        pbp_txt["plays"]["lead_start_yardsToEndzone"] = pbp_txt["plays"]["start.yardsToEndzone"].shift(-1)
+        pbp_txt["plays"]["lead_start_down"] = pbp_txt["plays"]["start.down"].shift(-1)
+        pbp_txt["plays"]["lead_start_distance"] = pbp_txt["plays"]["start.distance"].shift(-1)
+        pbp_txt["plays"]["lead_scoringPlay"] = pbp_txt["plays"]["scoringPlay"].shift(-1)
+        pbp_txt["plays"]["text_dupe"] = False
+
+        def play_text_dupe_checker(row):
+            if (row["start.team.id"] == row["lead_start_team"]) and (row["start.down"] == row["lead_start_down"]) and (row["start.yardsToEndzone"] == row["lead_start_yardsToEndzone"]) and (row["start.distance"] == row["lead_start_distance"]):
+                if (row["text"] == row["lead_text"]):
+                    return True
+                if (row["text"] in row["lead_text"]) and (row["lead_scoringPlay"] == row["scoringPlay"]):
+                    return True
+        
+            return False
+
+        pbp_txt["plays"]["text_dupe"] = pbp_txt["plays"].apply(lambda x: play_text_dupe_checker(x), axis=1)
+
+        pbp_txt["plays"] = pbp_txt["plays"][pbp_txt["plays"]["text_dupe"] == False]
+
+        pbp_txt["plays"]["game_play_number"] = np.arange(len(pbp_txt["plays"])) + 1
         pbp_txt["plays"]["start.team.id"] = (
                 pbp_txt["plays"]["start.team.id"]
                 .fillna(method="ffill") # fill downward first to make sure all playIDs are accurate
@@ -4822,7 +4845,9 @@ class CFBPlayProcess(object):
         if (self.ran_pipeline == False):
             self.run_processing_pipeline()
         # have to run the pipeline before pulling this in
-        self.plays_json['completion'] = self.plays_json['completion'].astype(float)
+        if ('completion' in self.plays_json.columns):
+            self.plays_json['completion'] = self.plays_json['completion'].astype(float)
+
         self.plays_json['pass_attempt'] = self.plays_json['pass_attempt'].astype(float)
         self.plays_json['target'] = self.plays_json['target'].astype(float)
         self.plays_json['yds_receiving'] = self.plays_json['yds_receiving'].astype(float)
