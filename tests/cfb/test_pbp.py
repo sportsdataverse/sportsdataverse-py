@@ -24,7 +24,7 @@ def test_basic_pbp(generated_data):
 
 def test_adv_box_score(box_score):
     assert box_score != None
-    assert len(set(box_score.keys()).difference({"pass","team","situational","receiver","rush","receiver","defensive","turnover","drives"})) == 0
+    assert len(set(box_score.keys()).difference({"win_pct","pass","team","situational","receiver","rush","receiver","defensive","turnover","drives"})) == 0
 
 def test_havoc_rate(box_score):
     defense_home = box_score["defensive"][0]
@@ -38,3 +38,56 @@ def test_havoc_rate(box_score):
     assert plays > 0
     assert defense_home["havoc_total"] == (pd + home_int + tfl + fum)
     assert round(defense_home["havoc_total_rate"], 4) == round(((pd + home_int + tfl + fum) / plays), 4)
+
+@pytest.fixture()
+def dupe_play_base():
+    test = CFBPlayProcess(gameId = 401411109)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+    yield test.plays_json
+
+def test_play_dedupe(dupe_play_base):
+    target_strings = [
+        {
+            "text": "Jordan Travis pass intercepted Rance Conner return for no gain to the FlaSt 45",
+            "down": 3,
+            "distance": 9,
+            "yardsToEndzone": 74
+        },
+        {
+            "down" : 4,
+            "text": "Malik Cunningham pass incomplete to Tyler Hudson",
+            "distance": 2,
+            "yardsToEndzone": 45
+        }
+    ]
+
+    regression_cases = [
+        {
+            "text" : "Alex Mastromanno punt for 52 yds , Braden Smith returns for no gain to the Lvile 37",
+            "down" : 4,
+            "distance" : 9,
+            "yardsToEndzone" : 89
+        }
+    ]
+
+    for item in target_strings:
+        print(f"Checking known test cases for dupes for play_text '{item}'")
+        assert len(dupe_play_base[
+            (dupe_play_base["text"] == item["text"])
+            & (dupe_play_base["start.down"] == item["down"])
+            & (dupe_play_base["start.distance"] == item["distance"])
+            & (dupe_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+        ]) == 1
+        print(f"No dupes for play_text '{item}'")
+
+
+    for item in regression_cases:
+        print(f"Checking non-dupe base cases for dupes for play_text '{item}'")
+        assert len(dupe_play_base[
+            (dupe_play_base["text"] == item["text"])
+            & (dupe_play_base["start.down"] == item["down"])
+            & (dupe_play_base["start.distance"] == item["distance"])
+            & (dupe_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+        ]) == 1
+        print(f"confirmed no dupes for regression case of play_text '{item}'")

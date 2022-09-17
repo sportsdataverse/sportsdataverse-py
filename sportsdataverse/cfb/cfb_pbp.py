@@ -291,6 +291,16 @@ class CFBPlayProcess(object):
         pbp_txt["plays"] = pbp_txt["plays"].sort_values(
                 by=["id", "start.adj_TimeSecsRem"]
             )
+
+        # drop play text dupes intelligently, even if they have different play_id values
+        pbp_txt["plays"]["lag_text"] = pbp_txt["plays"]["text"].shift(1)
+        pbp_txt["plays"]["lag_start_team"] = pbp_txt["plays"]["start.team.id"].shift(1)
+        pbp_txt["plays"]["lag_start_yardsToEndzone"] = pbp_txt["plays"]["start.yardsToEndzone"].shift(1)
+        pbp_txt["plays"]["lag_start_down"] = pbp_txt["plays"]["start.down"].shift(1)
+        pbp_txt["plays"]["lag_start_distance"] = pbp_txt["plays"]["start.distance"].shift(1)
+        pbp_txt["plays"]["text_dupe"] = (pbp_txt["plays"]["text"] == pbp_txt["plays"]["lag_text"]) & (pbp_txt["plays"]["start.team.id"] == pbp_txt["plays"]["lag_start_team"]) & (pbp_txt["plays"]["start.down"] == pbp_txt["plays"]["lag_start_down"]) & (pbp_txt["plays"]["start.yardsToEndzone"] == pbp_txt["plays"]["lag_start_yardsToEndzone"]) & (pbp_txt["plays"]["start.distance"] == pbp_txt["plays"]["lag_start_distance"])
+        pbp_txt["plays"] = pbp_txt["plays"][pbp_txt["plays"]["text_dupe"] == False]
+
         pbp_txt["plays"]["game_play_number"] = np.arange(len(pbp_txt["plays"])) + 1
         pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
         pbp_txt["plays"]["start.team.id"] = (
@@ -4822,7 +4832,9 @@ class CFBPlayProcess(object):
         if (self.ran_pipeline == False):
             self.run_processing_pipeline()
         # have to run the pipeline before pulling this in
-        self.plays_json['completion'] = self.plays_json['completion'].astype(float)
+        if ('completion' in self.plays_json.columns):
+            self.plays_json['completion'] = self.plays_json['completion'].astype(float)
+
         self.plays_json['pass_attempt'] = self.plays_json['pass_attempt'].astype(float)
         self.plays_json['target'] = self.plays_json['target'].astype(float)
         self.plays_json['yds_receiving'] = self.plays_json['yds_receiving'].astype(float)
