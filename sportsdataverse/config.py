@@ -1,5 +1,5 @@
 SGITHUB = 'https://raw.githubusercontent.com/sportsdataverse/'
-NFLVERSEGITHUB='https://raw.githubusercontent.com/nflverse/nflverse-data/releases/download/'
+NFLVERSEGITHUB='https://github.com/nflverse/nflverse-data/releases/download/'
 NFLVERSEGITHUBPBP='https://raw.githubusercontent.com/nflverse/'
 CFB_BASE_URL = SGITHUB+'cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet'
 CFB_ROSTER_URL = SGITHUB+'cfbfastR-data/main/rosters/parquet/rosters_{season}.parquet'
@@ -22,7 +22,7 @@ NFL_PFR_WEEK_RUSH_URL = NFLVERSEGITHUB+'pfr_advstats/advstats_week_rush_{season}
 NFL_NGS_RUSHING_URL = NFLVERSEGITHUB+'nextgen_stats/ngs_rushing.parquet'
 NFL_NGS_PASSING_URL = NFLVERSEGITHUB+'nextgen_stats/ngs_passing.parquet'
 NFL_NGS_RECEIVING_URL = NFLVERSEGITHUB+'nextgen_stats/ngs_receiving.parquet'
-NFL_ROSTER_URL = NFLVERSEGITHUB+'rosters/rosters_{season}.parquet'  #done
+NFL_ROSTER_URL = NFLVERSEGITHUB+'rosters/roster_{season}.parquet'  #done
 NFL_WEEKLY_ROSTER_URL = NFLVERSEGITHUB+'weekly_rosters/roster_weekly_{season}.parquet'  #done
 NFL_SNAP_COUNTS_URL = NFLVERSEGITHUB+'snap_counts/snap_counts_{season}.parquet'
 NFL_PBP_PARTICIPATION_URL = NFLVERSEGITHUB+'pbp_participation/pbp_participation_{season}.parquet'

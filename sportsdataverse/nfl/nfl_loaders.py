@@ -15,7 +15,7 @@ from sportsdataverse.config import NFL_BASE_URL, NFL_PLAYER_URL, NFL_ROSTER_URL,
     NFL_NGS_RECEIVING_URL, NFL_PFR_SEASON_DEF_URL, NFL_PFR_WEEK_DEF_URL,\
     NFL_PFR_SEASON_PASS_URL, NFL_PFR_WEEK_PASS_URL, NFL_PFR_SEASON_REC_URL,\
     NFL_PFR_WEEK_REC_URL, NFL_PFR_SEASON_RUSH_URL, NFL_PFR_WEEK_RUSH_URL
-from sportsdataverse.errors import SeasonNotFoundError
+from sportsdataverse.errors import SeasonNotFoundError, season_not_found_error
 from sportsdataverse.dl_utils import download
 
 def load_nfl_pbp(seasons: List[int]) -> pd.DataFrame:
@@ -37,8 +37,7 @@ def load_nfl_pbp(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 1999:
-            raise SeasonNotFoundError("season cannot be less than 1999")
+        season_not_found_error(int(i), 1999)
         i_data = pd.read_parquet(NFL_BASE_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
     #Give each row a unique index
@@ -65,8 +64,7 @@ def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
         seasons = [seasons]
     with tempfile.TemporaryDirectory() as tempdirname:
         for i in tqdm(seasons):
-            if int(i) < 1999:
-                raise SeasonNotFoundError("season cannot be less than 1999")
+            season_not_found_error(int(i), 1999)
             schedule_url = NFL_TEAM_SCHEDULE_URL.format(season=i)
             #i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
             i_data = pyreadr.read_r(pyreadr.download_file(schedule_url, "{}/nfl_sched_{}.rds".format(tempdirname, i)))[None]
@@ -91,10 +89,9 @@ def load_nfl_player_stats(kicking = False) -> pd.DataFrame:
     """
     data = pd.DataFrame()
     if kicking is False:
-        i_data = pd.read_parquet(NFL_PLAYER_STATS_URL, engine='auto', columns=None)
-    if kicking is True:
-        i_data = pd.read_parquet(NFL_PLAYER_KICKING_STATS_URL, engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.read_parquet(NFL_PLAYER_STATS_URL, engine='auto', columns=None)
+    else:
+        data = pd.read_parquet(NFL_PLAYER_KICKING_STATS_URL, engine='auto', columns=None)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -171,8 +168,7 @@ def load_nfl_pfr_weekly_pass(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2018:
-            raise SeasonNotFoundError("season cannot be less than 2018")
+        season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_PASS_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -212,8 +208,7 @@ def load_nfl_pfr_weekly_rush(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2018:
-            raise SeasonNotFoundError("season cannot be less than 2018")
+        season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_RUSH_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -253,8 +248,7 @@ def load_nfl_pfr_weekly_rec(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2018:
-            raise SeasonNotFoundError("season cannot be less than 2018")
+        season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_REC_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -294,8 +288,7 @@ def load_nfl_pfr_weekly_def(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2018:
-            raise SeasonNotFoundError("season cannot be less than 2018")
+        season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_DEF_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -321,8 +314,7 @@ def load_nfl_rosters(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 1920:
-            raise SeasonNotFoundError("season cannot be less than 1920")
+        season_not_found_error(int(i), 1920)
         i_data = pd.read_parquet(NFL_ROSTER_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -347,8 +339,7 @@ def load_nfl_weekly_rosters(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        season_not_found_error(int(i), 2002)
         i_data = pd.read_parquet(NFL_WEEKLY_ROSTER_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -401,8 +392,7 @@ def load_nfl_snap_counts(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2012:
-            raise SeasonNotFoundError("season cannot be less than 2012")
+        season_not_found_error(int(i), 2012)
         i_data = pd.read_parquet(NFL_SNAP_COUNTS_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -427,8 +417,7 @@ def load_nfl_pbp_participation(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2016:
-            raise SeasonNotFoundError("season cannot be less than 2016")
+        season_not_found_error(int(i), 2016)
         i_data = pd.read_parquet(NFL_PBP_PARTICIPATION_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -453,8 +442,7 @@ def load_nfl_injuries(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2009:
-            raise SeasonNotFoundError("season cannot be less than 2009")
+        season_not_found_error(int(i), 2009)
         i_data = pd.read_parquet(NFL_INJURIES_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -479,8 +467,7 @@ def load_nfl_depth_charts(seasons: List[int]) -> pd.DataFrame:
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
-        if int(i) < 2001:
-            raise SeasonNotFoundError("season cannot be less than 2001")
+        season_not_found_error(int(i), 2001)
         i_data = pd.read_parquet(NFL_DEPTH_CHARTS_URL.format(season=i), engine='auto', columns=None)
         data = pd.concat([data, i_data], ignore_index=True)
 
@@ -502,23 +489,6 @@ def load_nfl_contracts() -> pd.DataFrame:
     df = pd.read_parquet(NFL_CONTRACTS_URL, engine='auto', columns=None)
     return df
 
-def load_nfl_player_contracts_detail() -> pd.DataFrame:
-    """Load NFL Player contracts detail information
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_player_contracts_detail()`
-
-    Args:
-
-    Returns:
-        pd.DataFrame: Pandas dataframe containing player contracts detail data available.
-    """
-    with tempfile.TemporaryDirectory() as tempdirname:
-        df = pyreadr.read_r(
-            pyreadr.download_file(NFL_OTC_PLAYER_DETAILS_URL,
-                "{}/otc_player_details.rds".format(tempdirname)))[None]
-        df = pd.DataFrame(df)
-    return df
 
 def load_nfl_combine() -> pd.DataFrame:
     """Load NFL Combine information
@@ -561,3 +531,27 @@ def load_nfl_officials() -> pd.DataFrame:
     """
     df = pd.read_parquet(NFL_OFFICIALS_URL, engine='auto', columns=None)
     return df
+## Currently removed due to unsupported features of pyreadr's method.
+## there is a list-column of nested tibbles within the data
+## that is not supported by pyreadr
+# def load_nfl_player_contracts_detail() -> pd.DataFrame:
+#     """Load NFL Player contracts detail information
+
+#     Example:
+#         `nfl_df = sportsdataverse.nfl.load_nfl_player_contracts_detail()`
+
+#     Args:
+
+#     Returns:
+#         pd.DataFrame: Pandas dataframe containing player contracts detail data available.
+#     """
+#     data = pd.DataFrame()
+#     with tempfile.TemporaryDirectory() as tempdirname:
+#         df = pyreadr.read_r(
+#             pyreadr.download_file(NFL_OTC_PLAYER_DETAILS_URL,
+#                 "{}/otc_player_details.rds".format(tempdirname)))[None]
+#         df = pd.DataFrame(df)
+#         data = pd.concat([data, df], ignore_index=True)
+#     #Give each row a unique index
+#     data.reset_index(drop=True, inplace=True)
+#     return df
