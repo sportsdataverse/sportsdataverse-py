@@ -40,13 +40,13 @@ def test_havoc_rate(box_score):
     assert round(defense_home["havoc_total_rate"], 4) == round(((pd + home_int + tfl + fum) / plays), 4)
 
 @pytest.fixture()
-def dupe_play_base():
+def dupe_fsu_play_base():
     test = CFBPlayProcess(gameId = 401411109)
     test.espn_cfb_pbp()
     test.run_processing_pipeline()
     yield test.plays_json
 
-def test_play_dedupe(dupe_play_base):
+def test_fsu_play_dedupe(dupe_fsu_play_base):
     target_strings = [
         {
             "text": "Jordan Travis pass intercepted Rance Conner return for no gain to the FlaSt 45",
@@ -73,21 +73,67 @@ def test_play_dedupe(dupe_play_base):
 
     for item in target_strings:
         print(f"Checking known test cases for dupes for play_text '{item}'")
-        assert len(dupe_play_base[
-            (dupe_play_base["text"] == item["text"])
-            & (dupe_play_base["start.down"] == item["down"])
-            & (dupe_play_base["start.distance"] == item["distance"])
-            & (dupe_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+        assert len(dupe_fsu_play_base[
+            (dupe_fsu_play_base["text"] == item["text"])
+            & (dupe_fsu_play_base["start.down"] == item["down"])
+            & (dupe_fsu_play_base["start.distance"] == item["distance"])
+            & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
         ]) == 1
         print(f"No dupes for play_text '{item}'")
 
 
     for item in regression_cases:
         print(f"Checking non-dupe base cases for dupes for play_text '{item}'")
-        assert len(dupe_play_base[
-            (dupe_play_base["text"] == item["text"])
-            & (dupe_play_base["start.down"] == item["down"])
-            & (dupe_play_base["start.distance"] == item["distance"])
-            & (dupe_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+        assert len(dupe_fsu_play_base[
+            (dupe_fsu_play_base["text"] == item["text"])
+            & (dupe_fsu_play_base["start.down"] == item["down"])
+            & (dupe_fsu_play_base["start.distance"] == item["distance"])
+            & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
         ]) == 1
         print(f"confirmed no dupes for regression case of play_text '{item}'")
+
+@pytest.fixture()
+def dupe_iu_play_base():
+    test = CFBPlayProcess(gameId = 401426563)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+    yield test.plays_json
+
+def test_iu_play_dedupe(dupe_iu_play_base):
+    target_strings = [
+        {
+            "text": "Austin Reed pass complete to Joey Beljan for 26 yds for a TD (Brayden Narveson KICK)",
+            "down": 2,
+            "distance": 9,
+            "yardsToEndzone": 26
+        }
+    ]
+
+    elimination_strings = [
+        {
+            "text" : "Austin Reed pass complete to Joey Beljan for 26 yds for a TD",
+            "down": 2,
+            "distance": 9,
+            "yardsToEndzone": 26
+        }
+    ]
+
+    for item in target_strings:
+        print(f"Checking known test cases for dupes for play_text '{item}'")
+        assert len(dupe_iu_play_base[
+            (dupe_iu_play_base["text"] == item["text"])
+            & (dupe_iu_play_base["start.down"] == item["down"])
+            & (dupe_iu_play_base["start.distance"] == item["distance"])
+            & (dupe_iu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+        ]) == 1
+        print(f"No dupes for play_text '{item}'")
+
+    for item in elimination_strings:
+        print(f"Checking for strings that should have been removed by dupe check for play_text '{item}'")
+        assert len(dupe_iu_play_base[
+            (dupe_iu_play_base["text"] == item["text"])
+            & (dupe_iu_play_base["start.down"] == item["down"])
+            & (dupe_iu_play_base["start.distance"] == item["distance"])
+            & (dupe_iu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+        ]) == 0
+        print(f"Confirmed no values for play_text '{item}'")
