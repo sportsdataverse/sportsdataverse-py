@@ -293,6 +293,7 @@ class CFBPlayProcess(object):
             )
 
         # drop play text dupes intelligently, even if they have different play_id values
+        pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
         pbp_txt["plays"]["lag_text"] = pbp_txt["plays"]["text"].shift(1)
         pbp_txt["plays"]["lag_start_team"] = pbp_txt["plays"]["start.team.id"].shift(1)
         pbp_txt["plays"]["lag_start_yardsToEndzone"] = pbp_txt["plays"]["start.yardsToEndzone"].shift(1)
@@ -302,7 +303,6 @@ class CFBPlayProcess(object):
         pbp_txt["plays"] = pbp_txt["plays"][pbp_txt["plays"]["text_dupe"] == False]
 
         pbp_txt["plays"]["game_play_number"] = np.arange(len(pbp_txt["plays"])) + 1
-        pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
         pbp_txt["plays"]["start.team.id"] = (
                 pbp_txt["plays"]["start.team.id"]
                 .fillna(method="ffill") # fill downward first to make sure all playIDs are accurate
