@@ -102,7 +102,7 @@ def dupe_iu_play_base():
 def test_iu_play_dedupe(dupe_iu_play_base):
     target_strings = [
         {
-            "text": "Austin Reed pass complete to Joey Beljan for 26 yds for a TD (Brayden Narveson KICK)",
+            "text": "A. Reed pass,to J. Beljan for 26 yds for a TD, (B. Narveson KICK)",
             "down": 2,
             "distance": 9,
             "yardsToEndzone": 26

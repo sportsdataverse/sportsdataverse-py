@@ -295,20 +295,6 @@ Returns:
         advanced rushing stats data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_player_contracts_detail()
-Load NFL Player contracts detail information
-
-Example:
-
-    nfl_df = sportsdataverse.nfl.load_nfl_player_contracts_detail()
-
-Args:
-
-Returns:
-
-    pd.DataFrame: Pandas dataframe containing player contracts detail data available.
-
-
 ### sportsdataverse.nfl.nfl_loaders.load_nfl_player_stats(kicking=False)
 Load NFL player stats data
 

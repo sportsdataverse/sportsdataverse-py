@@ -141,15 +141,15 @@ For example, December 31st, 2021 would be represented as 12/31/2021.
 
 Args:
 
-> startDate (int):
+    startDate (int):
 
-> > Required parameter. If no startDate is provided, the function wil not work.
-> > Additionally, startDate must be in MM/DD/YYYY format.
+        Required parameter. If no startDate is provided, the function wil not work.
+        Additionally, startDate must be in MM/DD/YYYY format.
 
-> endDate (int):
+    endDate (int):
 
-> > Required parameter. If no endDate is provided, the function wil not work.
-> > Additionally, endDate must be in MM/DD/YYYY format.
+        Required parameter. If no endDate is provided, the function wil not work.
+        Additionally, endDate must be in MM/DD/YYYY format.
 
 Returns:
 
