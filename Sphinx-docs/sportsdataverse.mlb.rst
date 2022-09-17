@@ -52,6 +52,22 @@ sportsdataverse.mlb.mlbam\_teams module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.mlb.retrosheet module
+-------------------------------------
+
+.. automodule:: sportsdataverse.mlb.retrosheet
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+sportsdataverse.mlb.retrosplits module
+--------------------------------------
+
+.. automodule:: sportsdataverse.mlb.retrosplits
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

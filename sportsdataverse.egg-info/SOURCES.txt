@@ -218,6 +218,9 @@ sportsdataverse/mlb/mlbam_players.py
 sportsdataverse/mlb/mlbam_reports.py
 sportsdataverse/mlb/mlbam_stats.py
 sportsdataverse/mlb/mlbam_teams.py
+sportsdataverse/mlb/retrosheet.py
+sportsdataverse/mlb/retrosplits.py
+sportsdataverse/nba/__init__.py
 sportsdataverse/nba/nba_loaders.py
 sportsdataverse/nba/nba_pbp.py
 sportsdataverse/nba/nba_schedule.py

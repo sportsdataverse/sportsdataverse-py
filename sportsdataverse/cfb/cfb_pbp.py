@@ -286,7 +286,7 @@ class CFBPlayProcess(object):
                 default=60 * pbp_txt["plays"]["clock.minutes"].astype(int)
                 + pbp_txt["plays"]["clock.seconds"].astype(int),
             )
-            # Pos Team - Start and End Id
+        # Pos Team - Start and End Id
         pbp_txt["plays"]["id"] = pbp_txt["plays"]["id"].apply(lambda x: int(x))
         pbp_txt["plays"] = pbp_txt["plays"].sort_values(
                 by=["id", "start.adj_TimeSecsRem"]
@@ -318,8 +318,10 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["game_play_number"] = np.arange(len(pbp_txt["plays"])) + 1
         pbp_txt["plays"]["start.team.id"] = (
                 pbp_txt["plays"]["start.team.id"]
-                .fillna(method="ffill") # fill downward first to make sure all playIDs are accurate
-                .fillna(method="bfill") # fill upward so that any remaining NAs are covered
+                # fill downward first to make sure all playIDs are accurate
+                .fillna(method="ffill")
+                # fill upward so that any remaining NAs are covered
+                .fillna(method="bfill")
                 .apply(lambda x: int(x))
             )
         pbp_txt["plays"]["end.team.id"] = (
@@ -2313,7 +2315,7 @@ class CFBPlayProcess(object):
         play_df["yds_fg"] = (
             play_df["text"]
             .str.extract(
-                r"(\\d{0,2}\s?)Yd|(\\d{0,2}\s?)Yard FG|(\\d{0,2}\s?)Field|(\\d{0,2}\s?)Yard Field",
+                r"(\d+)\s?Yd Field|(\d+)\s?YD FG|(\d+)\s?Yard FG|(\d+)\s?Field|(\d+)\s?Yard Field",
                 flags=re.IGNORECASE,
             )
             .bfill(axis=1)[0]
@@ -2778,7 +2780,7 @@ class CFBPlayProcess(object):
                 (play_df.punt == True)
                 & (
                     play_df["text"].str.contains(
-                        r"no return", case=False, flags=0, na=False, regex=True
+                        r"no return|no gain", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.punt == True)
@@ -3406,7 +3408,8 @@ class CFBPlayProcess(object):
         play_df["kickoff_return_player"] = np.where(
             play_df["type.text"].str.contains("ickoff"),
             play_df.text.str.extract(
-                ", (.{0,25}) return|, (.{0,25}) fumble|returned by (.{0,25})|touchback by (.{0,25})"
+                ", (.{0,25}) return|, (.{0,25}) fumble|returned by (.{0,25})|touchback by (.{0,25})",
+                flags=re.IGNORECASE,
             ).bfill(axis=1)[0],
             play_df.kickoff_return_player,
         )
@@ -3426,7 +3429,8 @@ class CFBPlayProcess(object):
         play_df["fg_kicker_player"] = np.where(
             play_df["type.text"].str.contains("Field Goal"),
             play_df.text.str.extract(
-                "(.{0,25} )\\d{0,2} yd field goal| (.{0,25} )\\d{0,2} yd fg|(.{0,25} )\\d{0,2} yard field goal"
+                "(.{0,25} )\\d{0,2} yd field goal|(.{0,25} )\\d{0,2} yd fg|(.{0,25} )\\d{0,2} yard field goal",
+                flags=re.IGNORECASE,
             ).bfill(axis=1)[0],
             play_df.fg_kicker_player,
         )
@@ -3439,18 +3443,18 @@ class CFBPlayProcess(object):
 
         play_df["fg_block_player"] = np.where(
             play_df["type.text"].str.contains("Field Goal"),
-            play_df.text.str.extract("blocked by (.{0,25})"),
+            play_df.text.str.extract("blocked by (.{0,25})", flags=re.IGNORECASE),
             play_df.fg_block_player,
         )
-        play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
-            ",(.+)", "", case=False, regex=True
-        )
-        play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
-            "blocked by ", "", case=False, regex=True
-        )
-        play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
-            "  (.)+", "", case=False, regex=True
-        )
+        # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
+        #     ",(.+)", "", case=False, regex=True
+        # )
+        # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
+        #     "blocked by ", "", case=False, regex=True
+        # )
+        # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
+        #     "  (.)+", "", case=False, regex=True
+        # )
 
         play_df["fg_return_player"] = np.where(
             (play_df["type.text"].str.contains("Field Goal"))
@@ -5083,13 +5087,11 @@ class CFBPlayProcess(object):
         )
 
         situation_box_rz = self.plays_json[(self.plays_json.rz_play == True)].groupby(by=["pos_team"], as_index=False).agg(
-            rz_plays = ('play', sum),
             EPA_success_rz = ('EPA_success', sum),
             EPA_success_rate_rz = ('EPA_success', mean),
         )
 
-        situation_box_third = self.plays_json[(self.plays_json["start.down"] == 3)].groupby(by=["pos_team"], as_index=False).agg(
-            third_down_plays = ('play', sum),
+        situation_box_third = self.plays_json[(self.plays_json.down == 3)].groupby(by=["pos_team"], as_index=False).agg(
             EPA_success_third = ('EPA_success', sum),
             EPA_success_rate_third = ('EPA_success', mean),
         )
