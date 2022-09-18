@@ -4845,67 +4845,75 @@ class CFBPlayProcess(object):
         ].apply(lambda x: x.cumsum())
         return play_df
 
+    def __cast_box_score_column(self, column, target_type):
+        if (column in self.plays_json.columns):
+            self.plays_json[column] = self.plays_json[column].astype(target_type)
+        else:
+            self.plays_json[column] = np.NaN
+
     def create_box_score(self):
+        # have to run the pipeline before pulling this in
         if (self.ran_pipeline == False):
             self.run_processing_pipeline()
-        # have to run the pipeline before pulling this in
-        if ('completion' in self.plays_json.columns):
-            self.plays_json['completion'] = self.plays_json['completion'].astype(float)
 
-        self.plays_json['pass_attempt'] = self.plays_json['pass_attempt'].astype(float)
-        self.plays_json['target'] = self.plays_json['target'].astype(float)
-        self.plays_json['yds_receiving'] = self.plays_json['yds_receiving'].astype(float)
-        self.plays_json['yds_rushed'] = self.plays_json['yds_rushed'].astype(float)
-        self.plays_json['rush'] = self.plays_json['rush'].astype(float)
-        self.plays_json['rush_td'] = self.plays_json['rush_td'].astype(float)
-        self.plays_json['pass'] = self.plays_json['pass'].astype(float)
-        self.plays_json['pass_td'] = self.plays_json['pass_td'].astype(float)
-        self.plays_json['EPA'] = self.plays_json['EPA'].astype(float)
-        self.plays_json['wpa'] = self.plays_json['wpa'].astype(float)
-        self.plays_json['int'] = self.plays_json['int'].astype(float)
-        self.plays_json['int_td'] = self.plays_json['int_td'].astype(float)
-        self.plays_json['def_EPA'] = self.plays_json['def_EPA'].astype(float)
-        self.plays_json['EPA_rush'] = self.plays_json['EPA_rush'].astype(float)
-        self.plays_json['EPA_pass'] = self.plays_json['EPA_pass'].astype(float)
-        self.plays_json['EPA_success'] = self.plays_json['EPA_success'].astype(float)
-        self.plays_json['EPA_success_pass'] = self.plays_json['EPA_success_pass'].astype(float)
-        self.plays_json['EPA_success_rush'] = self.plays_json['EPA_success_rush'].astype(float)
-        self.plays_json['EPA_success_standard_down'] = self.plays_json['EPA_success_standard_down'].astype(float)
-        self.plays_json['EPA_success_passing_down'] = self.plays_json['EPA_success_passing_down'].astype(float)
-        self.plays_json['middle_8'] = self.plays_json['middle_8'].astype(float)
-        self.plays_json['rz_play'] = self.plays_json['rz_play'].astype(float)
-        self.plays_json['scoring_opp'] = self.plays_json['scoring_opp'].astype(float)
-        self.plays_json['stuffed_run'] = self.plays_json['stuffed_run'].astype(float)
-        self.plays_json['stopped_run'] = self.plays_json['stopped_run'].astype(float)
-        self.plays_json['opportunity_run'] = self.plays_json['opportunity_run'].astype(float)
-        self.plays_json['highlight_run'] =  self.plays_json['highlight_run'].astype(float)
-        self.plays_json['short_rush_success'] = self.plays_json['short_rush_success'].astype(float)
-        self.plays_json['short_rush_attempt'] = self.plays_json['short_rush_attempt'].astype(float)
-        self.plays_json['power_rush_success'] = self.plays_json['power_rush_success'].astype(float)
-        self.plays_json['power_rush_attempt'] = self.plays_json['power_rush_attempt'].astype(float)
-        self.plays_json['EPA_explosive'] = self.plays_json['EPA_explosive'].astype(float)
-        self.plays_json['EPA_explosive_pass'] = self.plays_json['EPA_explosive_pass'].astype(float)
-        self.plays_json['EPA_explosive_rush'] = self.plays_json['EPA_explosive_rush'].astype(float)
-        self.plays_json['standard_down'] = self.plays_json['standard_down'].astype(float)
-        self.plays_json['passing_down'] = self.plays_json['passing_down'].astype(float)
-        self.plays_json['fumble_vec'] = self.plays_json['fumble_vec'].astype(float)
-        self.plays_json['sack'] = self.plays_json['sack'].astype(float)
-        self.plays_json['penalty_flag'] = self.plays_json['penalty_flag'].astype(float)
-        self.plays_json['play'] = self.plays_json['play'].astype(float)
-        self.plays_json['scrimmage_play'] = self.plays_json['scrimmage_play'].astype(float)
-        self.plays_json['sp'] = self.plays_json['sp'].astype(float)
-        self.plays_json['kickoff_play'] = self.plays_json['kickoff_play'].astype(float)
-        self.plays_json['punt'] = self.plays_json['punt'].astype(float)
-        self.plays_json['fg_attempt'] = self.plays_json['fg_attempt'].astype(float)
-        self.plays_json['EPA_penalty'] = self.plays_json['EPA_penalty'].astype(float)
-        self.plays_json['EPA_sp'] = self.plays_json['EPA_sp'].astype(float)
-        self.plays_json['EPA_fg'] = self.plays_json['EPA_fg'].astype(float)
-        self.plays_json['EPA_punt'] = self.plays_json['EPA_punt'].astype(float)
-        self.plays_json['EPA_kickoff'] = self.plays_json['EPA_kickoff'].astype(float)
-        self.plays_json['TFL'] = self.plays_json['TFL'].astype(float)
-        self.plays_json['TFL_pass'] = self.plays_json['TFL_pass'].astype(float)
-        self.plays_json['TFL_rush'] = self.plays_json['TFL_rush'].astype(float)
-        self.plays_json['havoc'] = self.plays_json['havoc'].astype(float)
+        box_score_columns = [
+            'completion',
+            'target',
+            'yds_receiving',
+            'yds_rushed',
+            'rush',
+            'rush_td',
+            'pass',
+            'pass_td',
+            'EPA',
+            'wpa',
+            'int',
+            'int_td',
+            'def_EPA',
+            'EPA_rush',
+            'EPA_pass',
+            'EPA_success',
+            'EPA_success_pass',
+            'EPA_success_rush',
+            'EPA_success_standard_down',
+            'EPA_success_passing_down',
+            'middle_8',
+            'rz_play',
+            'scoring_opp',
+            'stuffed_run',
+            'stopped_run',
+            'opportunity_run',
+            'highlight_run',
+            'short_rush_success',
+            'short_rush_attempt',
+            'power_rush_success',
+            'power_rush_attempt',
+            'EPA_explosive',
+            'EPA_explosive_pass',
+            'EPA_explosive_rush',
+            'standard_down',
+            'passing_down',
+            'fumble_vec',
+            'sack',
+            'penalty_flag',
+            'play',
+            'scrimmage_play',
+            'sp',
+            'kickoff_play',
+            'punt',
+            'fg_attempt',
+            'EPA_penalty',
+            'EPA_sp',
+            'EPA_fg',
+            'EPA_punt',
+            'EPA_kickoff',
+            'TFL',
+            'TFL_pass',
+            'TFL_rush',
+            'havoc',
+        ]
+        for item in box_score_columns:
+            self.__cast_box_score_column(item, float)
 
         pass_box = self.plays_json[(self.plays_json["pass"] == True) & (self.plays_json.scrimmage_play == True)]
         rush_box = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json.scrimmage_play == True)]
