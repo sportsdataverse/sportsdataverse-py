@@ -72,6 +72,12 @@
     * sportsdataverse.mlb.mlbam_teams module
 
 
+    * sportsdataverse.mlb.retrosheet module
+
+
+    * sportsdataverse.mlb.retrosplits module
+
+
     * Module contents
 
 
@@ -292,4 +298,6 @@ Custom exceptions for sportsdataverse module
 ### exception sportsdataverse.errors.SeasonNotFoundError()
 Bases: `Exception`
 
+
+### sportsdataverse.errors.season_not_found_error(season, min_season)
 ## Module contents

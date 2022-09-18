@@ -10,18 +10,14 @@ from datetime import datetime
 def mlbam_transactions(startDate:str,endDate:str):
 	"""
 	Retrieves all transactions in a given range of dates.
-	You MUST provide two dates for this function to work, and both dates must be in MM/DD/YYYY format. 
+	You MUST provide two dates for this function to work, and both dates must be in MM/DD/YYYY format.
 	For example, December 31st, 2021 would be represented as 12/31/2021.
 
 	Args:
-
 		startDate (int):
-
 			Required parameter. If no startDate is provided, the function wil not work.
 			Additionally, startDate must be in MM/DD/YYYY format.
-
 		endDate (int):
-
 			Required parameter. If no endDate is provided, the function wil not work.
 			Additionally, endDate must be in MM/DD/YYYY format.
 	Returns:
@@ -91,7 +87,7 @@ def mlbam_broadcast_info(season:int,home_away="e"):
 			If you want away broadcasters only, set home_away='A' or home_away='a'.
 
 			If you want both home and away broadcasters, set home_away='E' or home_away='e'.
-		
+
 	Returns:
 		A pandas dataframe containing TV and radio broadcast information for various MLB games.
 
