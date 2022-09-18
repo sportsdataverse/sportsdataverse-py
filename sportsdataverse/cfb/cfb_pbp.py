@@ -4848,6 +4848,8 @@ class CFBPlayProcess(object):
     def __cast_box_score_column(self, column, target_type):
         if (column in self.plays_json.columns):
             self.plays_json[column] = self.plays_json[column].astype(target_type)
+        else:
+            self.plays_json[column] = np.NaN
 
     def create_box_score(self):
         # have to run the pipeline before pulling this in
