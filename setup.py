@@ -75,6 +75,7 @@ setup(
         "pyarrow>=1.0.1",
         "pyjanitor>=0.23.1",
         "pygithub>=1.51",
+        "pyreadr>=0.4.0",
         "scipy>=1.4.0",
         "matplotlib>=2.0.0",
         "tqdm>=4.50.0",
