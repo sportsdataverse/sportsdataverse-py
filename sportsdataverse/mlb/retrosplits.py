@@ -33,8 +33,6 @@ def retrosplits_game_logs_player(first_season:int,last_season=None) -> pd.DataFr
     Returns:
         A pandas dataframe containing game-level player stats from historical MLB games.
     """
-    #now = datetime.now()
-    #current_year = int(now.year)
     game_log_df = pd.DataFrame()
     main_df = pd.DataFrame()
     try:
@@ -60,14 +58,13 @@ def retrosplits_game_logs_player(first_season:int,last_season=None) -> pd.DataFr
     for i in tqdm(range(first_season,last_season+1)):
         season = i
         print(season)
-        game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/daybyday/teams-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/daybyday/playing-{season}.csv"
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get player game logs for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
         main_df = pd.concat([main_df,game_log_df],ignore_index=True)
-    #print(game_log_df)
     return main_df
 
 
@@ -85,8 +82,6 @@ def retrosplits_game_logs_team(first_season:int,last_season=None) -> pd.DataFram
     Returns:
         A pandas dataframe containing game-level team stats from historical MLB games.
     """
-    #now = datetime.now()
-    #current_year = int(now.year)
     game_log_df = pd.DataFrame()
     main_df = pd.DataFrame()
  
@@ -112,14 +107,14 @@ def retrosplits_game_logs_team(first_season:int,last_season=None) -> pd.DataFram
     for i in tqdm(range(first_season,last_season+1)):
         season = i
         print(season)
-        game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/daybyday/playing-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/daybyday/team-{season}.csv"
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get team game logs for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
-    #print(game_log_df)
     return main_df
 
 def retrosplits_player_batting_by_position(first_season:int,last_season=None) -> pd.DataFrame():
@@ -173,13 +168,13 @@ def retrosplits_player_batting_by_position(first_season:int,last_season=None) ->
         season = i
         print(season)
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/batting-byposition-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get batting by position split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
-    #print(game_log_df)
     return main_df
 
 
@@ -236,13 +231,12 @@ def retrosplits_player_batting_by_runners(first_season:int,last_season=None) -> 
         season = i
         print(season)
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/batting-byrunners-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get batting by runners split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
-    #print(game_log_df)
     return main_df
 
 def retrosplits_player_batting_by_platoon(first_season:int,last_season=None) -> pd.DataFrame():
@@ -298,11 +292,11 @@ def retrosplits_player_batting_by_platoon(first_season:int,last_season=None) -> 
         season = i
         print(season)
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/batting-platoon-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get batting by platoon split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)
     return main_df
@@ -361,11 +355,11 @@ def retrosplits_player_head_to_head_stats(first_season:int,last_season=None) -> 
         season = i
         print(season)
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/headtohead-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get batter vs pitcher split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)
     return main_df
@@ -423,11 +417,11 @@ def retrosplits_player_pitching_by_runners(first_season:int,last_season=None) ->
         season = i
         print(season)
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/pitching-byrunners-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get pitching by runners split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)
     return main_df
@@ -486,11 +480,12 @@ def retrosplits_player_pitching_by_platoon(first_season:int,last_season=None) ->
         season = i
         print(season)
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/pitching-platoon-{season}.csv"
-        #print(game_log_url)
-        resp = download(game_log_url)
-        resp_str = StringIO(str(resp, 'UTF-8'))
-        #season_game_log_df = pd.read_csv(resp_str,sep=",")
-        game_log_df = pd.read_csv(resp_str,sep=",")
+        try:
+            game_log_df = pd.read_csv(game_log_url,sep=",")
+        except:
+            game_log_df = pd.DataFrame()
+            print(f'Could not get pitching by platoon split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)
     return main_df
