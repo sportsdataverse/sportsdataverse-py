@@ -5241,6 +5241,7 @@ class CFBPlayProcess(object):
         def_box_json = json.loads(def_box.to_json(orient="records"))
 
         turnover_box = self.plays_json[(self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False).agg(
+            pass_breakups = ('pass_breakup', sum),
             fumbles_lost = ('fumble_lost', sum),
             fumbles_recovered = ('fumble_recovered', sum),
             total_fumbles = ('fumble_vec', sum),
@@ -5253,18 +5254,19 @@ class CFBPlayProcess(object):
             for i in range(len(turnover_box_json), 2):
                 turnover_box_json.append({})
 
-        total_fumbles = reduce(lambda x, y: x+y, map(lambda x: x.get("total_fumbles", 0), turnover_box_json))
+        turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
+        turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
 
         away_passes_def = turnover_box_json[1].get("pass_breakups", 0)
         away_passes_int = turnover_box_json[0].get("Int", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * total_fumbles) + (0.22 * (away_passes_def + away_passes_int))
+        away_fumbles_off = turnover_box_json[1].get("total_fumbles", 0)
+        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles_off) + (0.22 * (away_passes_def + away_passes_int))
 
         home_passes_def = turnover_box_json[0].get("pass_breakups", 0)
         home_passes_int = turnover_box_json[1].get("Int", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * total_fumbles) + (0.22 * (home_passes_def + home_passes_int))
+        home_fumbles_off = turnover_box_json[0].get("total_fumbles", 0)
+        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles_off) + (0.22 * (home_passes_def + home_passes_int))
 
-        turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
-        turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
 
         turnover_box_json[0]["expected_turnover_margin"] = turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
         turnover_box_json[1]["expected_turnover_margin"] = turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]
