@@ -1291,6 +1291,7 @@ class CFBPlayProcess(object):
                 regex=True,
             )
         ) & (play_df.kickoff_play == True)
+
         play_df["kickoff_fair_catch"] = (
             play_df["text"].str.contains(
                 r"fair catch|fair caught", case=False, flags=0, na=False, regex=True
@@ -4363,6 +4364,8 @@ class CFBPlayProcess(object):
                 ),
                 # Flips for Turnovers that are on kickoffs
                 (play_df["type.text"].isin(kickoff_turnovers)),
+                # onside recoveries
+                (play_df["kickoff_onside"] == True) & (play_df["change_of_pos_team"] == True),
             ],
             [
                 0,
@@ -4386,6 +4389,7 @@ class CFBPlayProcess(object):
                 0,
                 0,
                 2,
+                (play_df.EP_end * -1),
                 (play_df.EP_end * -1),
                 (play_df.EP_end * -1),
             ],
@@ -4771,9 +4775,7 @@ class CFBPlayProcess(object):
                 (play_df.lead_play_type.isin(["End Period", "End of Half"]))
                 & (play_df.change_of_pos_team == 1),
                 (play_df["kickoff_onside"] == True)
-                & (
-                    play_df["start.def_pos_team.id"] == play_df["end.pos_team.id"]
-                ),  # onside recovery
+                & (play_df["change_of_pos_team"] == True),  # onside recovery
                 (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
             ],
             [
@@ -5099,7 +5101,7 @@ class CFBPlayProcess(object):
             EPA_success_rate_rz = ('EPA_success', mean),
         )
 
-        situation_box_third = self.plays_json[(self.plays_json.down == 3)].groupby(by=["pos_team"], as_index=False).agg(
+        situation_box_third = self.plays_json[(self.plays_json["start.down"] == 3)].groupby(by=["pos_team"], as_index=False).agg(
             EPA_success_third = ('EPA_success', sum),
             EPA_success_rate_third = ('EPA_success', mean),
         )
@@ -5239,6 +5241,7 @@ class CFBPlayProcess(object):
         def_box_json = json.loads(def_box.to_json(orient="records"))
 
         turnover_box = self.plays_json[(self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False).agg(
+            pass_breakups = ('pass_breakup', sum),
             fumbles_lost = ('fumble_lost', sum),
             fumbles_recovered = ('fumble_recovered', sum),
             total_fumbles = ('fumble_vec', sum),
@@ -5251,18 +5254,19 @@ class CFBPlayProcess(object):
             for i in range(len(turnover_box_json), 2):
                 turnover_box_json.append({})
 
-        total_fumbles = reduce(lambda x, y: x+y, map(lambda x: x.get("total_fumbles", 0), turnover_box_json))
+        turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
+        turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
 
         away_passes_def = turnover_box_json[1].get("pass_breakups", 0)
         away_passes_int = turnover_box_json[0].get("Int", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * total_fumbles) + (0.22 * (away_passes_def + away_passes_int))
+        away_fumbles_off = turnover_box_json[1].get("total_fumbles", 0)
+        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles_off) + (0.22 * (away_passes_def + away_passes_int))
 
         home_passes_def = turnover_box_json[0].get("pass_breakups", 0)
         home_passes_int = turnover_box_json[1].get("Int", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * total_fumbles) + (0.22 * (home_passes_def + home_passes_int))
+        home_fumbles_off = turnover_box_json[0].get("total_fumbles", 0)
+        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles_off) + (0.22 * (home_passes_def + home_passes_int))
 
-        turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
-        turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
 
         turnover_box_json[0]["expected_turnover_margin"] = turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
         turnover_box_json[1]["expected_turnover_margin"] = turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]
