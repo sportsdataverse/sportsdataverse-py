@@ -1291,6 +1291,7 @@ class CFBPlayProcess(object):
                 regex=True,
             )
         ) & (play_df.kickoff_play == True)
+
         play_df["kickoff_fair_catch"] = (
             play_df["text"].str.contains(
                 r"fair catch|fair caught", case=False, flags=0, na=False, regex=True
@@ -4363,6 +4364,8 @@ class CFBPlayProcess(object):
                 ),
                 # Flips for Turnovers that are on kickoffs
                 (play_df["type.text"].isin(kickoff_turnovers)),
+                # onside recoveries
+                (play_df["kickoff_onside"] == True) & (play_df["change_of_pos_team"] == True),
             ],
             [
                 0,
@@ -4386,6 +4389,7 @@ class CFBPlayProcess(object):
                 0,
                 0,
                 2,
+                (play_df.EP_end * -1),
                 (play_df.EP_end * -1),
                 (play_df.EP_end * -1),
             ],
@@ -4771,9 +4775,7 @@ class CFBPlayProcess(object):
                 (play_df.lead_play_type.isin(["End Period", "End of Half"]))
                 & (play_df.change_of_pos_team == 1),
                 (play_df["kickoff_onside"] == True)
-                & (
-                    play_df["start.def_pos_team.id"] == play_df["end.pos_team.id"]
-                ),  # onside recovery
+                & (play_df["change_of_pos_team"] == True),  # onside recovery
                 (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
             ],
             [
