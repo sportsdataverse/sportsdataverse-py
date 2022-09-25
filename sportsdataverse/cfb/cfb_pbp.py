@@ -5101,7 +5101,7 @@ class CFBPlayProcess(object):
             EPA_success_rate_rz = ('EPA_success', mean),
         )
 
-        situation_box_third = self.plays_json[(self.plays_json.down == 3)].groupby(by=["pos_team"], as_index=False).agg(
+        situation_box_third = self.plays_json[(self.plays_json["start.down"] == 3)].groupby(by=["pos_team"], as_index=False).agg(
             EPA_success_third = ('EPA_success', sum),
             EPA_success_rate_third = ('EPA_success', mean),
         )
