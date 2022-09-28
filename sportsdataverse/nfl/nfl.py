@@ -1,5 +1,8 @@
 import json
 import requests
+from typing import List, Callable, Iterator, Union, Optional, Dict
+from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
+
 def nfl_token_gen():
     url = "https://api.nfl.com/v1/reroute"
 
