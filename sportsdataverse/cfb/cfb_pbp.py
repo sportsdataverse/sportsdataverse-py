@@ -303,12 +303,15 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["text_dupe"] = False
 
         def play_text_dupe_checker(row):
-            if (row["start.team.id"] == row["lead_start_team"]) and (row["start.down"] == row["lead_start_down"]) and (row["start.yardsToEndzone"] == row["lead_start_yardsToEndzone"]) and (row["start.distance"] == row["lead_start_distance"]):
+            if (row["start.team.id"] == row["lead_start_team"]) and \
+                (row["start.down"] == row["lead_start_down"]) and \
+                (row["start.yardsToEndzone"] == row["lead_start_yardsToEndzone"]) and \
+                (row["start.distance"] == row["lead_start_distance"]):
                 if (row["text"] == row["lead_text"]):
                     return True
-                if (row["text"] in row["lead_text"]) and (row["lead_scoringPlay"] == row["scoringPlay"]):
+                if (row["text"] in row["lead_text"]) and \
+                    (row["lead_scoringPlay"] == row["scoringPlay"]):
                     return True
-        
             return False
 
         pbp_txt["plays"]["text_dupe"] = pbp_txt["plays"].apply(lambda x: play_text_dupe_checker(x), axis=1)
