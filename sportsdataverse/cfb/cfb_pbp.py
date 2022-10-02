@@ -5257,16 +5257,15 @@ class CFBPlayProcess(object):
         turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
         turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
 
-        away_passes_def = turnover_box_json[1].get("pass_breakups", 0)
+        away_passes_def = turnover_box_json[0].get("pass_breakups", 0)
         away_passes_int = turnover_box_json[0].get("Int", 0)
-        away_fumbles_off = turnover_box_json[1].get("total_fumbles", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles_off) + (0.22 * (away_passes_def + away_passes_int))
+        away_fumbles = turnover_box_json[0].get('total_fumbles', 0)
+        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles) + (0.22 * (away_passes_def + away_passes_int))
 
-        home_passes_def = turnover_box_json[0].get("pass_breakups", 0)
+        home_passes_def = turnover_box_json[1].get("pass_breakups", 0)
         home_passes_int = turnover_box_json[1].get("Int", 0)
-        home_fumbles_off = turnover_box_json[0].get("total_fumbles", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles_off) + (0.22 * (home_passes_def + home_passes_int))
-
+        home_fumbles = turnover_box_json[1].get('total_fumbles', 0)
+        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles) + (0.22 * (home_passes_def + home_passes_int))
 
         turnover_box_json[0]["expected_turnover_margin"] = turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
         turnover_box_json[1]["expected_turnover_margin"] = turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]
