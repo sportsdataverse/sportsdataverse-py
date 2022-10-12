@@ -2,10 +2,10 @@ SGITHUB = 'https://raw.githubusercontent.com/sportsdataverse/'
 NFLVERSEGITHUB='https://github.com/nflverse/nflverse-data/releases/download/'
 NFLVERSEGITHUBPBP='https://raw.githubusercontent.com/nflverse/'
 CFB_BASE_URL = SGITHUB+'cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet'
-CFB_ROSTER_URL = SGITHUB+'cfbfastR-data/main/rosters/parquet/rosters_{season}.parquet'
+CFB_ROSTER_URL = SGITHUB+'cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet'
 CFB_TEAM_LOGO_URL  = SGITHUB+'cfbfastR-data/main/teams/teams_colors_logos.parquet'
-CFB_TEAM_SCHEDULE_URL = SGITHUB+'cfbfastR-data/main/schedules/parquet/schedules_{season}.parquet'
-CFB_TEAM_INFO_URL = SGITHUB+'cfbfastR-data/main/team_info/parquet/team_info_{season}.parquet'
+CFB_TEAM_SCHEDULE_URL = SGITHUB+'cfbfastR-data/main/schedules/parquet/cfb_schedules_{season}.parquet'
+CFB_TEAM_INFO_URL = SGITHUB+'cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet'
 
 NFL_BASE_URL = NFLVERSEGITHUB+'pbp/play_by_play_{season}.parquet' #done
 NFL_PLAYER_URL = NFLVERSEGITHUB+'players/players.parquet' #done

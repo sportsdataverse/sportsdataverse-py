@@ -12,3 +12,5 @@ __pycache__
 */*.pyc
 *.pyc
 docs/node_modules
+build
+dist
