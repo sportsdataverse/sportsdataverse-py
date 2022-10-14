@@ -2718,7 +2718,7 @@ class NFLPlayProcess(object):
             default=play_df["yds_kickoff_return"],
         )
 
-        play_df.insert(0,"yds_punted", None)
+        play_df["yds_punted"] = None
         play_df["yds_punted"] = np.select(
             [
                 (play_df.punt == True) & (play_df.punt_blocked == True),
