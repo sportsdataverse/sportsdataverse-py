@@ -5328,7 +5328,7 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
-        return pbp_json
+        return self.json
 
     def run_cleaning_pipeline(self):
         if self.ran_cleaning_pipeline == False:
@@ -5401,4 +5401,4 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
-        return pbp_json
+        return self.json
