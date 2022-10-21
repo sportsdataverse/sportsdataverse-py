@@ -32,21 +32,35 @@ def espn_wnba_schedule(dates=None, season_type=None, limit = 500) -> pd.DataFram
     ev = pd.DataFrame()
     if resp is not None:
         events_txt = json.loads(resp)
-
         events = events_txt.get('events')
         for event in events:
             event.get('competitions')[0].get('competitors')[0].get('team').pop('links',None)
             event.get('competitions')[0].get('competitors')[1].get('team').pop('links',None)
             if event.get('competitions')[0].get('competitors')[0].get('homeAway')=='home':
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
+                event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[1].get('team')
+                event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
+                event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
             else:
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
+                event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[1].get('team')
+                event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
+                event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
 
-            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series']
+            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series', 'situation', 'tickets', 'odds']
             for k in del_keys:
                 event.get('competitions')[0].pop(k, None)
+            if len(event.get('competitions')[0]['notes'])>0:
+                event.get('competitions')[0]['notes_type'] = event.get('competitions')[0]['notes'][0].get("type")
+                event.get('competitions')[0]['notes_headline'] = event.get('competitions')[0]['notes'][0].get("headline").replace('"','')
+            else:
+                event.get('competitions')[0]['notes_type'] = ''
+                event.get('competitions')[0]['notes_headline'] = ''
+            event.get('competitions')[0].pop('notes', None)
             x = pd.json_normalize(event.get('competitions')[0], sep='_')
             x['game_id'] = x['id'].astype(int)
             x['season'] = event.get('season').get('year')
@@ -83,7 +97,6 @@ def espn_wnba_calendar(season=None, ondays=None) -> pd.DataFrame:
         txt = json.loads(resp)['leagues'][0]['calendar']
         datenum = list(map(lambda x: x[:10].replace("-",""),txt))
         date = list(map(lambda x: x[:10],txt))
-
         year = list(map(lambda x: x[:4],txt))
         month = list(map(lambda x: x[5:7],txt))
         day = list(map(lambda x: x[8:10],txt))
