@@ -227,7 +227,7 @@ sportsdataverse/nba/nba_schedule.py
 sportsdataverse/nba/nba_teams.py
 sportsdataverse/nfl/__init__.py
 sportsdataverse/nfl/model_vars.py
-sportsdataverse/nfl/nfl.py
+sportsdataverse/nfl/nfl_games.py
 sportsdataverse/nfl/nfl_loaders.py
 sportsdataverse/nfl/nfl_pbp.py
 sportsdataverse/nfl/nfl_schedule.py
