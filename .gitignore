@@ -14,3 +14,4 @@ __pycache__
 docs/node_modules
 build
 dist
+*.ipynb
