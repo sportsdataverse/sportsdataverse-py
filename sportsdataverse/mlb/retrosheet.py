@@ -24,12 +24,12 @@ def retrosheet_ballparks() -> pd.DataFrame():
         None
     
     Returns:
-        A pandas Dataframe with the biographical information of notable major leauge teams.
+        A pandas Dataframe with the biographical information of notable major league teams.
     """
     park_url = "https://www.retrosheet.org/parkcode.txt"
     try:
         park_columns=['park_id','park_name','park_alt_name','park_city',
-        'park_state','park_start_date','park_end_date','park_leauge','park_notes']
+        'park_state','park_start_date','park_end_date','park_league','park_notes']
         park_df = pd.read_csv(park_url,sep=",",header=0,names=park_columns)
         return park_df
     except:
@@ -49,7 +49,7 @@ def retrosheet_ejections() -> pd.DataFrame():
     ejections_url = "https://www.retrosheet.org/Ejecdata.txt"
     try:
         ejections_df = pd.read_csv(ejections_url,sep=",")
-        ejections_df.columns = ['game_id','date','dh','ejectee','ejectee_name','team','job','umpire','umpire_name','inning','reason']
+        ejections_df.columns = ['game_id','date','dh','ejectee_id','ejectee_name','team','job','umpire_id','umpire_name','inning','reason']
         return ejections_df
     except:
         print('Could not downoad the MLB ejection file from Retrosheet. Check your internet connection before running this function agian.')
@@ -63,10 +63,10 @@ def retrosheet_franchises() -> pd.DataFrame():
         None
     
     Returns:
-        A pandas Dataframe with the biographical information of notable major leauge teams.
+        A pandas Dataframe with the biographical information of notable major league teams.
     """
     people_url = "https://www.retrosheet.org/TEAMABR.TXT"
-    fran_columns = ['fran_id','leauge','city','nickname','first_year','last_year']
+    fran_columns = ['franchise_id','league','city','nickname','first_year','last_year']
     try:
         fran_df = pd.read_csv(people_url,sep=",",header=None,names=fran_columns)
         fran_df.dropna()
@@ -93,9 +93,9 @@ def retrosheet_people() -> pd.DataFrame():
         'play_last_game','mgr_debut','mgr_last_game','coach_debut',
         'coach_last_game','ump_debut','ump_last_game','death_date',
         'death_city','death_state','death_country','bats','throws',
-        'height','weight','cemetery','ceme_city','ceme_state','ceme_country',
-        'ceme_note','birth_name','name_chg','bat_chg','hof']
-        people_df.dropna()
+        'height','weight','cemetery','cemetery_city','cemetery_state','cemetery_country',
+        'cemetery_note','birth_name','name_chg','bat_chg','hof']
+        #people_df.dropna()
         return people_df
     except:
         print('Could not downoad the MLB bio file from Retrosheet. Check your internet connection before running this function agian.')
@@ -154,8 +154,8 @@ def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule
             schedule_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/schedule/{i}SKED.TXT"
         
         schedule_columns = ['date','game_num','day_of_week',
-        'road_team','road_leauge','road_team_game_num',
-        'home_team','home_leauge','home_team_game_num','time_of_game',
+        'road_team','road_league','road_team_game_num',
+        'home_team','home_league','home_team_game_num','time_of_game',
         'postponement_indicator','makeup_date']
         try:
             season_schedule_df = pd.read_csv(schedule_url,sep=",",header=None,names=schedule_columns)
@@ -208,8 +208,8 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
     columns_list = [
             ## Game Info
             'date','game_num','day_of_week',
-            'away_team','away_leauge','away_team_game_num',
-            'home_team','home_leauge','home_team_game_num',
+            'away_team','away_league','away_team_game_num',
+            'home_team','home_league','home_team_game_num',
             ## Scores
             'away_team_score','home_team_score',
             ## Additional Game Info
