@@ -303,12 +303,15 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["text_dupe"] = False
 
         def play_text_dupe_checker(row):
-            if (row["start.team.id"] == row["lead_start_team"]) and (row["start.down"] == row["lead_start_down"]) and (row["start.yardsToEndzone"] == row["lead_start_yardsToEndzone"]) and (row["start.distance"] == row["lead_start_distance"]):
+            if (row["start.team.id"] == row["lead_start_team"]) and \
+                (row["start.down"] == row["lead_start_down"]) and \
+                (row["start.yardsToEndzone"] == row["lead_start_yardsToEndzone"]) and \
+                (row["start.distance"] == row["lead_start_distance"]):
                 if (row["text"] == row["lead_text"]):
                     return True
-                if (row["text"] in row["lead_text"]) and (row["lead_scoringPlay"] == row["scoringPlay"]):
+                if (row["text"] in row["lead_text"]) and \
+                    (row["lead_scoringPlay"] == row["scoringPlay"]):
                     return True
-        
             return False
 
         pbp_txt["plays"]["text_dupe"] = pbp_txt["plays"].apply(lambda x: play_text_dupe_checker(x), axis=1)
@@ -798,15 +801,15 @@ class CFBPlayProcess(object):
 
     def __helper_cfb_pickcenter(self, pbp_txt):
                 # Spread definition
-        if len(pbp_txt["pickcenter"]) > 1:
-            homeFavorite = pbp_txt["pickcenter"][0]["homeTeamOdds"]["favorite"]
-            if "spread" in pbp_txt["pickcenter"][1].keys():
-                gameSpread = pbp_txt["pickcenter"][1]["spread"]
-                overUnder = pbp_txt["pickcenter"][1]["overUnder"]
+        if len(pbp_txt.get("pickcenter",[])) > 1:
+            homeFavorite = pbp_txt.get("pickcenter",{})[0].get("homeTeamOdds",{}).get("favorite","")
+            if "spread" in pbp_txt.get("pickcenter",{})[1].keys():
+                gameSpread = pbp_txt.get("pickcenter",{})[1].get("spread","")
+                overUnder = pbp_txt.get("pickcenter",{})[1].get("overUnder","")
                 gameSpreadAvailable = True
             else:
-                gameSpread = pbp_txt["pickcenter"][0]["spread"]
-                overUnder = pbp_txt["pickcenter"][0]["overUnder"]
+                gameSpread = pbp_txt.get("pickcenter",{})[0].get("spread","")
+                overUnder = pbp_txt.get("pickcenter",{})[0].get("overUnder","")
                 gameSpreadAvailable = True
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
@@ -5257,16 +5260,15 @@ class CFBPlayProcess(object):
         turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
         turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
 
-        away_passes_def = turnover_box_json[1].get("pass_breakups", 0)
+        away_passes_def = turnover_box_json[0].get("pass_breakups", 0)
         away_passes_int = turnover_box_json[0].get("Int", 0)
-        away_fumbles_off = turnover_box_json[1].get("total_fumbles", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles_off) + (0.22 * (away_passes_def + away_passes_int))
+        away_fumbles = turnover_box_json[0].get('total_fumbles', 0)
+        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles) + (0.22 * (away_passes_def + away_passes_int))
 
-        home_passes_def = turnover_box_json[0].get("pass_breakups", 0)
+        home_passes_def = turnover_box_json[1].get("pass_breakups", 0)
         home_passes_int = turnover_box_json[1].get("Int", 0)
-        home_fumbles_off = turnover_box_json[0].get("total_fumbles", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles_off) + (0.22 * (home_passes_def + home_passes_int))
-
+        home_fumbles = turnover_box_json[1].get('total_fumbles', 0)
+        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles) + (0.22 * (home_passes_def + home_passes_int))
 
         turnover_box_json[0]["expected_turnover_margin"] = turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
         turnover_box_json[1]["expected_turnover_margin"] = turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]

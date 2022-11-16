@@ -2718,7 +2718,7 @@ class NFLPlayProcess(object):
             default=play_df["yds_kickoff_return"],
         )
 
-        play_df.insert(0,"yds_punted", None)
+        play_df["yds_punted"] = None
         play_df["yds_punted"] = np.select(
             [
                 (play_df.punt == True) & (play_df.punt_blocked == True),
@@ -5328,7 +5328,7 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
-        return pbp_json
+        return self.json
 
     def run_cleaning_pipeline(self):
         if self.ran_cleaning_pipeline == False:
@@ -5401,4 +5401,4 @@ class NFLPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
-        return pbp_json
+        return self.json

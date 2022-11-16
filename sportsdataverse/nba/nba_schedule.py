@@ -28,24 +28,39 @@ def espn_nba_schedule(dates=None, season_type=None, limit=500) -> pd.DataFrame:
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit={}{}{}".format(limit, dates, season_type)
     resp = download(url=url)
 
+
     ev = pd.DataFrame()
     if resp is not None:
         events_txt = json.loads(resp)
-
         events = events_txt.get('events')
         for event in events:
             event.get('competitions')[0].get('competitors')[0].get('team').pop('links',None)
             event.get('competitions')[0].get('competitors')[1].get('team').pop('links',None)
             if event.get('competitions')[0].get('competitors')[0].get('homeAway')=='home':
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
+                event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[1].get('team')
+                event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
+                event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
             else:
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[0].get('team')
+                event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
+                event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[1].get('team')
+                event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
+                event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
 
-            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series']
+            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series', 'situation', 'tickets', 'odds']
             for k in del_keys:
                 event.get('competitions')[0].pop(k, None)
+            if len(event.get('competitions')[0]['notes'])>0:
+                event.get('competitions')[0]['notes_type'] = event.get('competitions')[0]['notes'][0].get("type")
+                event.get('competitions')[0]['notes_headline'] = event.get('competitions')[0]['notes'][0].get("headline").replace('"','')
+            else:
+                event.get('competitions')[0]['notes_type'] = ''
+                event.get('competitions')[0]['notes_headline'] = ''
+            event.get('competitions')[0].pop('notes', None)
             x = pd.json_normalize(event.get('competitions')[0], sep='_')
             x['game_id'] = x['id'].astype(int)
             x['season'] = event.get('season').get('year')
@@ -56,7 +71,7 @@ def espn_nba_schedule(dates=None, season_type=None, limit=500) -> pd.DataFrame:
     return ev
 
 
-def espn_nba_calendar(season=None) -> pd.DataFrame:
+def espn_nba_calendar(season=None, ondays=None) -> pd.DataFrame:
     """espn_nba_calendar - look up the NBA calendar for a given season from ESPN
 
     Args:
@@ -69,29 +84,33 @@ def espn_nba_calendar(season=None) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    if int(season) < 2002:
-        raise SeasonNotFoundError("season cannot be less than 2002")
+    if ondays is not None:
+        url = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{}/types/2/calendar/ondays".format(season)
+        resp = download(url=url)
+        txt = json.loads(resp).get('eventDate').get('dates')
+        full_schedule = pd.DataFrame(txt,columns=['dates'])
+        full_schedule['dateURL'] = list(map(lambda x: x[:10].replace("-",""),full_schedule['dates']))
+        full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates="
+        full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
+    else:
+        url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={}".format(season)
+        resp = download(url=url)
+        txt = json.loads(resp)['leagues'][0]['calendar']
+        datenum = list(map(lambda x: x[:10].replace("-",""),txt))
+        date = list(map(lambda x: x[:10],txt))
+        year = list(map(lambda x: x[:4],txt))
+        month = list(map(lambda x: x[5:7],txt))
+        day = list(map(lambda x: x[8:10],txt))
 
-    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={}".format(season)
-    resp = download(url=url)
-    json_txt = json.loads(resp)
-    txt = json_txt.get('leagues')[0].get('calendar')
-    datenum = list(map(lambda x: x[:10].replace("-",""),txt))
-    date = list(map(lambda x: x[:10],txt))
-
-    year = list(map(lambda x: x[:4],txt))
-    month = list(map(lambda x: x[5:7],txt))
-    day = list(map(lambda x: x[8:10],txt))
-
-    data = {"season": season,
-            "datetime" : txt,
-            "date" : date,
-            "year": year,
-            "month": month,
-            "day": day,
-            "dateURL": datenum
-    }
-    df = pd.DataFrame(data)
-    df['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates="
-    df['url']= df['url'] + df['dateURL']
-    return df
+        data = {"season": season,
+                "datetime" : txt,
+                "date" : date,
+                "year": year,
+                "month": month,
+                "day": day,
+                "dateURL": datenum
+        }
+        full_schedule = pd.DataFrame(data)
+        full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates="
+        full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
+    return full_schedule
