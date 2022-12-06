@@ -144,8 +144,8 @@ def retrosplits_player_batting_by_position(first_season:int,last_season=None) ->
         
     if first_season < 1974:
         raise SeasonNotFoundError("Batting by position splits are not advalible for seasons before 1974.")
-        first_season = 1974
-        print("Batting by position splits are not advalible for seasons before 1974.")
+        # first_season = 1974
+        # print("Batting by position splits are not advalible for seasons before 1974.")
     elif first_season > current_year:
         first_season = current_year
         print(f"The people behind retrosplits do not have a time machine to get stats for {first_season} at this time.")
@@ -456,8 +456,8 @@ def retrosplits_player_pitching_by_platoon(first_season:int,last_season=None) ->
         
     if first_season < 1974:
         raise SeasonNotFoundError("Pitching by platoon splits are not advalible for seasons before 1974.")
-        first_season = 1974
-        print("Pitching by platoon splits are not advalible for seasons before 1974.")
+        # first_season = 1974
+        # print("Pitching by platoon splits are not advalible for seasons before 1974.")
     elif first_season > current_year:
         first_season = current_year
         print(f"The people behind retrosplits do not have a time machine to get stats for {first_season} at this time.")
@@ -482,9 +482,9 @@ def retrosplits_player_pitching_by_platoon(first_season:int,last_season=None) ->
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/pitching-platoon-{season}.csv"
         try:
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get pitching by platoon split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'There was an error getting pitching by platoon split stats for the {i} season.\nError:\n{e}')
 
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)

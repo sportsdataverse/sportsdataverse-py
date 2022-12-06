@@ -32,8 +32,8 @@ def retrosheet_ballparks() -> pd.DataFrame():
         'park_state','park_start_date','park_end_date','park_league','park_notes']
         park_df = pd.read_csv(park_url,sep=",",header=0,names=park_columns)
         return park_df
-    except:
-        print('Could not downoad the MLB ballpark file from Retrosheet. Check your internet connection before running this function agian.')
+    except Exception as e:
+        print(f'Could not download the MLB ballpark file from Retrosheet.\nError:\n{e}')
         return pd.DataFrame()
 
 def retrosheet_ejections() -> pd.DataFrame():
@@ -97,8 +97,8 @@ def retrosheet_people() -> pd.DataFrame():
         'cemetery_note','birth_name','name_chg','bat_chg','hof']
         #people_df.dropna()
         return people_df
-    except:
-        print('Could not downoad the MLB bio file from Retrosheet. Check your internet connection before running this function agian.')
+    except Exception as e:
+        print(f'An error has occurred when downloading Retrosheet people data.\nError:\n{e}')
         return pd.DataFrame()
 
 def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule=False) -> pd.DataFrame():
@@ -159,9 +159,9 @@ def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule
         'postponement_indicator','makeup_date']
         try:
             season_schedule_df = pd.read_csv(schedule_url,sep=",",header=None,names=schedule_columns)
-        except:
+        except Exception as e:
             season_schedule_df = pd.DataFrame()
-            print(f'Could not get schedules for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'An error has occurred when downloading Retrosheet schedule data.\nError:\n{e}')
         schedule_df = pd.concat([schedule_df,season_schedule_df],ignore_index=True)
         del season_schedule_df
     
@@ -206,66 +206,68 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
         last_season = None
         
     columns_list = [
-            ## Game Info
-            'date','game_num','day_of_week',
-            'away_team','away_league','away_team_game_num',
-            'home_team','home_league','home_team_game_num',
-            ## Scores
-            'away_team_score','home_team_score',
-            ## Additional Game Info
-            'game_length','day_night_indicator','completion_info','forfeit_info','protest_info',
-            'park_id','attendance','time_of_game','away_line_score','home_line_score',
-            ## Away Batting stats
-            'away_AB','away_H','away_2B','away_3B','away_HR','away_RBI','away_SH','away_SF', 
-            'away_HBP','away_BB','away_IBB','away_K','away_SB','away_CS','away_GDP','away_CI',
-            'away_LOB',
-            ## Away Pitching
-            'away_pitchers_used','away_ER','away_team_ER','away_WP','away_BK', 
-            ## Away Fielding
-            'away_PO','away_A','away_E','away_PB','away_DP','away_TP', 
-            ## Home Batting stats
-            'home_AB','home_H','home_2B','home_3B','home_HR','home_RBI','home_SH','home_SF', 
-            'home_HBP','home_BB','home_IBB','home_K','home_SB','home_CS','home_GDP','home_CI',
-            'home_LOB',
-            ## Home Pitching
-            'home_pitchers_used','home_ER','home_team_ER','home_WP','home_BK', 
-            ## Home Fielding
-            'away_PO','home_A','home_E','home_PB','home_DP','home_TP', 
-            ## Umpires
-            'home_plate_umpire_id','home_plate_umpire_name','1B_umpire_id','1B_umpire_name',
-            '2B_umpire_id','2B_umpire_name','3B_umpire_id','3B_umpire_name',
-            'LF_umpire_id','LF_umpire_name','RF_umpire_id','RF_umpire_name',
-            ## Managers
-            'away_manager_id','away_manager_name','home_manager_id','home_manager_name',
-            ## Winning/Losing/Saving pitchers
-            'winning_pitcher_id','winning_pitcher_name',
-            'losing_pitcher_id','losing_pitcher_name',
-            'saving_pitcher_id','saving_pitcher_name',
-            ## Winning Hit+RBI batter
-            'game_winning_hitter_id','game_winning_hitter_name',
-            ## Starting Pitchers
-            'away_SP_id','away_SP_name','home_SP_id','home_SP_name',
-            ## Away Team Batting Lineup
-            'away_batter_01_id','away_batter_01_name','away_batter_01_position',
-            'away_batter_02_id','away_batter_02_name','away_batter_02_position',
-            'away_batter_03_id','away_batter_03_name','away_batter_03_position',
-            'away_batter_04_id','away_batter_04_name','away_batter_04_position',
-            'away_batter_05_id','away_batter_05_name','away_batter_05_position',
-            'away_batter_06_id','away_batter_06_name','away_batter_06_position',
-            'away_batter_07_id','away_batter_07_name','away_batter_07_position',
-            'away_batter_08_id','away_batter_08_name','away_batter_08_position',
-            'away_batter_09_id','away_batter_09_name','away_batter_09_position',
-            ## Home Team Batting Lineup
-            'home_batter_01_id','home_batter_01_name','home_batter_01_position',
-            'home_batter_02_id','home_batter_02_name','home_batter_02_position',
-            'home_batter_03_id','home_batter_03_name','home_batter_03_position',
-            'home_batter_04_id','home_batter_04_name','home_batter_04_position',
-            'home_batter_05_id','home_batter_05_name','home_batter_05_position',
-            'home_batter_06_id','home_batter_06_name','home_batter_06_position',
-            'home_batter_07_id','home_batter_07_name','home_batter_07_position',
-            'home_batter_08_id','home_batter_08_name','home_batter_08_position',
-            'home_batter_09_id','home_batter_09_name','home_batter_09_position',
-            'additional_info','acquisition_info']
+        ## Game Info
+        'date','game_num','day_of_week',
+        'away_team','away_league','away_team_game_num',
+        'home_team','home_league','home_team_game_num',
+        ## Scores
+        'away_team_score','home_team_score',
+        ## Additional Game Info
+        'game_length','day_night_indicator','completion_info','forfeit_info','protest_info',
+        'park_id','attendance','time_of_game','away_line_score','home_line_score',
+        ## Away Batting stats
+        'away_AB','away_H','away_2B','away_3B','away_HR','away_RBI','away_SH','away_SF', 
+        'away_HBP','away_BB','away_IBB','away_K','away_SB','away_CS','away_GDP','away_CI',
+        'away_LOB',
+        ## Away Pitching
+        'away_pitchers_used','away_ER','away_team_ER','away_WP','away_BK', 
+        ## Away Fielding
+        'away_PO','away_A','away_E','away_PB','away_DP','away_TP', 
+        ## Home Batting stats
+        'home_AB','home_H','home_2B','home_3B','home_HR','home_RBI','home_SH','home_SF', 
+        'home_HBP','home_BB','home_IBB','home_K','home_SB','home_CS','home_GDP','home_CI',
+        'home_LOB',
+        ## Home Pitching
+        'home_pitchers_used','home_ER','home_team_ER','home_WP','home_BK', 
+        ## Home Fielding
+        'home_PO','home_A','home_E','home_PB','home_DP','home_TP', 
+        ## Umpires
+        'home_plate_umpire_id','home_plate_umpire_name','1B_umpire_id','1B_umpire_name',
+        '2B_umpire_id','2B_umpire_name','3B_umpire_id','3B_umpire_name',
+        'LF_umpire_id','LF_umpire_name','RF_umpire_id','RF_umpire_name',
+        ## Managers
+        'away_manager_id','away_manager_name','home_manager_id','home_manager_name',
+        ## Winning/Losing/Saving pitchers
+        'winning_pitcher_id','winning_pitcher_name',
+        'losing_pitcher_id','losing_pitcher_name',
+        'saving_pitcher_id','saving_pitcher_name',
+        ## Winning Hit+RBI batter
+        'game_winning_hitter_id','game_winning_hitter_name',
+        ## Starting Pitchers
+        'away_SP_id','away_SP_name','home_SP_id','home_SP_name',
+        ## Away Team Batting Lineup
+        'away_batter_01_id','away_batter_01_name','away_batter_01_position',
+        'away_batter_02_id','away_batter_02_name','away_batter_02_position',
+        'away_batter_03_id','away_batter_03_name','away_batter_03_position',
+        'away_batter_04_id','away_batter_04_name','away_batter_04_position',
+        'away_batter_05_id','away_batter_05_name','away_batter_05_position',
+        'away_batter_06_id','away_batter_06_name','away_batter_06_position',
+        'away_batter_07_id','away_batter_07_name','away_batter_07_position',
+        'away_batter_08_id','away_batter_08_name','away_batter_08_position',
+        'away_batter_09_id','away_batter_09_name','away_batter_09_position',
+        ## Home Team Batting Lineup
+        'home_batter_01_id','home_batter_01_name','home_batter_01_position',
+        'home_batter_02_id','home_batter_02_name','home_batter_02_position',
+        'home_batter_03_id','home_batter_03_name','home_batter_03_position',
+        'home_batter_04_id','home_batter_04_name','home_batter_04_position',
+        'home_batter_05_id','home_batter_05_name','home_batter_05_position',
+        'home_batter_06_id','home_batter_06_name','home_batter_06_position',
+        'home_batter_07_id','home_batter_07_name','home_batter_07_position',
+        'home_batter_08_id','home_batter_08_name','home_batter_08_position',
+        'home_batter_09_id','home_batter_09_name','home_batter_09_position',
+        'additional_info','acquisition_info'
+    ]
+    
     if last_season == None:
         last_season = first_season
         print(f'Getting all of the games for the {first_season} MLB season!')
@@ -287,8 +289,8 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
             game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GL{i}.TXT"
             try:
                 season_game_log_df = pd.read_csv(game_log_url,sep=",",header=None,names=columns_list)
-                season_game_log_df = season_game_log_df.astype({"date":"str"})
-                season_game_log_df['season'] = season_game_log_df['date'].str[0:4]
+                #season_game_log_df = season_game_log_df.astype({"date":"str"})
+                season_game_log_df['season'] = season_game_log_df['date'].astype(str)[0:4]
             except:
                 season_game_log_df = pd.DataFrame()
                 print(f'Could not get team game logs for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
@@ -300,18 +302,22 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLAS.TXT"
         try:
             game_log_df = pd.read_csv(game_log_url,sep=",",header=None,names=columns_list)
-            game_log_df = game_log_df.astype({"date":"str"})
-            game_log_df['season'] = game_log_df['date'].str[0:4]
-            game_log_df = game_log_df.astype({'season':'int32'})
+            #game_log_df = game_log_df.astype({"date":"str"})
+            #game_log_df['season'] = game_log_df['date'].str[0:4]
+            #game_log_df = game_log_df.astype({'season':'int32'})
+            game_log_df['season'] = game_log_df['date'].astype(str)[0:4]
             if filter_out_seasons == True:
                 game_log_df = game_log_df[game_log_df.season >= first_season]
                 game_log_df = game_log_df[game_log_df.season <= last_season]
-            else:
-                pass
+
         except:
                 print(f'There was an issue when trying to get the team game logs for All-Star games.\nYou may have an issue with your internet connection.')
 
-    elif game_type.lower() == "playoffs" or game_type.lower() == "october baseball" or game_type.lower() == "post" or game_type.lower() == "postseason" or game_type.lower() == "october" or game_type.lower() == "november" or game_type.lower() == "november baseball":
+    elif game_type.lower() == "playoffs" or game_type.lower() == "october baseball" \
+        or game_type.lower() == "post" or game_type.lower() == "postseason" \
+        or game_type.lower() == "october" or game_type.lower() == "november" \
+        or game_type.lower() == "november baseball":
+        
         wildcard_round_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLWC.TXT"
         divisional_round_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLDV.TXT"
         championship_round_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLLC.TXT"
