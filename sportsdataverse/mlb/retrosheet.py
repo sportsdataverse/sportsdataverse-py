@@ -51,8 +51,8 @@ def retrosheet_ejections() -> pd.DataFrame():
         ejections_df = pd.read_csv(ejections_url,sep=",")
         ejections_df.columns = ['game_id','date','dh','ejectee_id','ejectee_name','team','job','umpire_id','umpire_name','inning','reason']
         return ejections_df
-    except:
-        print('Could not downoad the MLB ejection file from Retrosheet. Check your internet connection before running this function agian.')
+    except Exception as e:
+        print(f'Could not download the MLB ejections file from Retrosheet.\nError:\n{e}')
         return pd.DataFrame()
 
 def retrosheet_franchises() -> pd.DataFrame():
@@ -71,8 +71,8 @@ def retrosheet_franchises() -> pd.DataFrame():
         fran_df = pd.read_csv(people_url,sep=",",header=None,names=fran_columns)
         fran_df.dropna()
         return fran_df
-    except:
-        print('Could not downoad the MLB franchises file from Retrosheet. Check your internet connection before running this function agian.')
+    except Exception as e:
+        print(f'Could not download the MLB franchises file from Retrosheet.\nError:\n{e}')
         return pd.DataFrame()
 
 def retrosheet_people() -> pd.DataFrame():
@@ -98,7 +98,7 @@ def retrosheet_people() -> pd.DataFrame():
         #people_df.dropna()
         return people_df
     except Exception as e:
-        print(f'An error has occurred when downloading Retrosheet people data.\nError:\n{e}')
+        print(f'An error has occurred when downloading the Retrosheet people data.\nError:\n{e}')
         return pd.DataFrame()
 
 def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule=False) -> pd.DataFrame():
@@ -291,9 +291,9 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
                 season_game_log_df = pd.read_csv(game_log_url,sep=",",header=None,names=columns_list)
                 #season_game_log_df = season_game_log_df.astype({"date":"str"})
                 season_game_log_df['season'] = season_game_log_df['date'].astype(str)[0:4]
-            except:
+            except Exception as e:
                 season_game_log_df = pd.DataFrame()
-                print(f'Could not get team game logs for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+                print(f'Could not download the MLB team game logs file from Retrosheet for the {i} season.\nError:\n{e}')
 
             game_log_df = pd.concat([game_log_df,season_game_log_df],ignore_index=True)
             del season_game_log_df
@@ -310,8 +310,8 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
                 game_log_df = game_log_df[game_log_df.season >= first_season]
                 game_log_df = game_log_df[game_log_df.season <= last_season]
 
-        except:
-                print(f'There was an issue when trying to get the team game logs for All-Star games.\nYou may have an issue with your internet connection.')
+        except Exception as e:
+                print(f'There was an issue when trying to get the team game logs for All-Star games.\nError:\n{e}')
 
     elif game_type.lower() == "playoffs" or game_type.lower() == "october baseball" \
         or game_type.lower() == "post" or game_type.lower() == "postseason" \
@@ -327,9 +327,9 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
             game_log_url = i
             try:
                 season_game_log_df = pd.read_csv(game_log_url,sep=",",header=None,names=columns_list)
-            except:
+            except Exception as e:
                 season_game_log_df = pd.DataFrame()
-                print('There was an issue when trying to get the team game logs for the post-season games.\nYou may have an issue with your internet connection.')
+                print(f'There was an issue when trying to get the team game logs for the post-season games.\nError:\n{e}')
             game_log_df = pd.concat([game_log_df,season_game_log_df],ignore_index=True)
             del season_game_log_df
         game_log_df = game_log_df.astype({"date":"str"})

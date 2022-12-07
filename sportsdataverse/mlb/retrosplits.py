@@ -12,9 +12,9 @@ RETROSHEET NOTICE:
     parties may contact Retrosheet at "www.retrosheet.org".
 """
 import pandas as pd
-from sportsdataverse.dl_utils import download
+#from sportsdataverse.dl_utils import download
 from datetime import datetime
-from io import StringIO
+#from io import StringIO
 from tqdm import tqdm
 from datetime import datetime
 from sportsdataverse.errors import SeasonNotFoundError
@@ -61,9 +61,9 @@ def retrosplits_game_logs_player(first_season:int,last_season=None) -> pd.DataFr
         try:
             game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/daybyday/playing-{season}.csv"
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get player game logs for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'Could not get player game logs for the {i} season.\nError:\n{e}')
         main_df = pd.concat([main_df,game_log_df],ignore_index=True)
     return main_df
 
@@ -110,9 +110,9 @@ def retrosplits_game_logs_team(first_season:int,last_season=None) -> pd.DataFram
         try:
             game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/daybyday/team-{season}.csv"
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get team game logs for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'Could not get team game logs for the {i} season.\nError:\n{e}')
 
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     return main_df
@@ -170,9 +170,9 @@ def retrosplits_player_batting_by_position(first_season:int,last_season=None) ->
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/batting-byposition-{season}.csv"
         try:
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get batting by position split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'Could not get batting by position split stats for the {i} season.\nError:\n{e}')
 
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     return main_df
@@ -233,9 +233,9 @@ def retrosplits_player_batting_by_runners(first_season:int,last_season=None) -> 
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/batting-byrunners-{season}.csv"
         try:
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get batting by runners split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'Could not get batting by runners split stats for the {i} season.\nError:\n{e}')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     return main_df
 
@@ -268,8 +268,8 @@ def retrosplits_player_batting_by_platoon(first_season:int,last_season=None) -> 
         
     if first_season < 1974:
         raise SeasonNotFoundError("Batting by platoon splits are not advalible for seasons before 1974.")
-        first_season = 1974
-        print("Batting by platoon splits are not advalible for seasons before 1974.")
+        #first_season = 1974
+        #print("Batting by platoon splits are not advalible for seasons before 1974.")
     elif first_season > current_year:
         first_season = current_year
         print(f"The people behind retrosplits do not have a time machine to get stats for {first_season} at this time.")
@@ -294,9 +294,9 @@ def retrosplits_player_batting_by_platoon(first_season:int,last_season=None) -> 
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/batting-platoon-{season}.csv"
         try:
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get batting by platoon split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'Could not get batting by platoon split stats for the {i} season.\nError:\n{e}')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)
     return main_df
@@ -331,8 +331,8 @@ def retrosplits_player_head_to_head_stats(first_season:int,last_season=None) -> 
         
     if first_season < 1974:
         raise SeasonNotFoundError("Batter vs. pitcher splits are not advalible for seasons before 1974.")
-        first_season = 1974
-        print("Batter vs. pitcher splits are not advalible for seasons before 1974.")
+        #first_season = 1974
+        #print("Batter vs. pitcher splits are not advalible for seasons before 1974.")
     elif first_season > current_year:
         first_season = current_year
         print(f"The people behind retrosplits do not have a time machine to get stats for {first_season} at this time.")
@@ -357,9 +357,9 @@ def retrosplits_player_head_to_head_stats(first_season:int,last_season=None) -> 
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/headtohead-{season}.csv"
         try:
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get batter vs pitcher split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'Could not get batter vs pitcher split stats for the {i} season.\nError:\n{e}')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)
     return main_df
@@ -393,8 +393,8 @@ def retrosplits_player_pitching_by_runners(first_season:int,last_season=None) ->
         
     if first_season < 1974:
         raise SeasonNotFoundError("Pitching by runners splits are not advalible for seasons before 1974.")
-        first_season = 1974
-        print("Pitching by runners splits are not advalible for seasons before 1974.")
+        #first_season = 1974
+        #print("Pitching by runners splits are not advalible for seasons before 1974.")
     elif first_season > current_year:
         first_season = current_year
         print(f"The people behind retrosplits do not have a time machine to get stats for {first_season} at this time.")
@@ -419,9 +419,9 @@ def retrosplits_player_pitching_by_runners(first_season:int,last_season=None) ->
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosplits/master/splits/pitching-byrunners-{season}.csv"
         try:
             game_log_df = pd.read_csv(game_log_url,sep=",")
-        except:
+        except Exception as e:
             game_log_df = pd.DataFrame()
-            print(f'Could not get pitching by runners split stats for the {i} season. The file may not exist, or you may have an issue with your internet connection.')
+            print(f'Could not get pitching by runners split stats for the {i} season.\nError:\n{e}')
         main_df = pd.concat([game_log_df,main_df],ignore_index=True)
     #print(game_log_df)
     return main_df
