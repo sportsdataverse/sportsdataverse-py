@@ -184,3 +184,25 @@ def camelize(string, uppercase_first_letter=True):
         return re.sub(r"(?:^|_)(.)", lambda m: m.group(1).upper(), string)
     else:
         return string[0].lower() + camelize(string)[1:]
+
+def valid_url(url, params = {}, num_retries=15):
+    try:
+        req = requests.head(url)
+        if hasattr(req, 'status_code'): 
+            if req.status_code < 400:
+                # Successful responses and redirections are valid
+                return True
+            elif 500 <= req.status_code < 600:
+                time.sleep(2)
+                # recursively retry 5xx HTTP errors
+                return valid_url(url, params, num_retries=num_retries-1)
+            else:
+                # 4xx HTTP responses
+                return False
+    except requests.ConnectTimeout as e:
+        # Per docs, requests that produced this error are safe to retry.
+        return valid_url(url, params, num_retries=num_retries-1)
+    except Exception:
+        print('Invalid URL:', url)
+        return False
+    return False
