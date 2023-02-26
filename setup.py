@@ -103,7 +103,6 @@ setup(
     package_data={
         "sportsdataverse": [
             "cfb/models/*",
-            "nfl/models/*",
         ]
     },
     # Although 'package_data' is the preferred approach, in some case you may
