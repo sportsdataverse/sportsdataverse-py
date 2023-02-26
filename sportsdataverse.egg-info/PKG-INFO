@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sportsdataverse
-Version: 0.0.31
+Version: 0.0.32
 Summary: Retrieve Sports data in Python
 Home-page: https://github.com/sportsdataverse/sportsdataverse-py
 Author: Saiem Gilani
@@ -21,7 +21,10 @@ Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Description-Content-Type: text/markdown
-Provides-Extra: test
+Provides-Extra: tests
+Provides-Extra: docs
+Provides-Extra: models
+Provides-Extra: all
 License-File: LICENSE
 
 # sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>

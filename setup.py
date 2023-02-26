@@ -11,12 +11,34 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
+extras = {
+        "tests": ["pytest>=6.0.2",
+              "mypy>=0.782",
+              "pytest-cov>=2.10.1",
+              "pytest-xdist>=2.1.0",],
+        "docs": ["sphinx"],
+        "models": ["beautifulsoup4>=4.4.0",
+                "inflection>=0.5.1",
+                "requests>=2.18.1",
+                "lxml>=4.2.1",
+                "pyarrow>=1.0.1",
+                "pyjanitor>=0.23.1",
+                "pyreadr>=0.4.0",
+                "scipy>=1.4.0",
+                "matplotlib>=2.0.0",
+                "tqdm>=4.50.0",
+                "attrs>=20.3.0",
+                "xgboost>=1.2.0",]
+}
+
+extras["all"] = extras["tests"] + extras["docs"] + extras["models"]
+
 setup(
     name="sportsdataverse",
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version="0.0.31",
+    version="0.0.32",
     description="Retrieve Sports data in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -68,33 +90,12 @@ setup(
     install_requires=[
         "numpy>=1.13.0",
         "pandas >= 1.0.3",
-        "beautifulsoup4>=4.4.0",
-        "inflection>=0.5.1",
-        "requests>=2.18.1",
-        "lxml>=4.2.1",
-        "pyarrow>=1.0.1",
-        "pyjanitor>=0.23.1",
-        "pygithub>=1.51",
-        "pyreadr>=0.4.0",
-        "scipy>=1.4.0",
-        "matplotlib>=2.0.0",
-        "tqdm>=4.50.0",
-        "attrs>=20.3.0",
-        "xgboost>=1.2.0",
     ],
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
     # for example:
     # $ pip install -e .[dev,test]
-    extras_require={
-        #    'dev': ['check-manifest'],
-        "test": [
-            "pytest>=6.0.2",
-            "mypy>=0.782",
-            "pytest-cov>=2.10.1",
-            "pytest-xdist>=2.1.0",
-        ],
-    },
+    extras_require=extras,
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
