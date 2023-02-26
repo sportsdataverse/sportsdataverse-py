@@ -1,11 +1,10 @@
-from typing import List, Callable, Iterator, Union, Optional, Dict
-from sportsdataverse.dl_utils import download, underscore
-import pyarrow.parquet as pq
 import pandas as pd
 import numpy as np
 import os
 import json
 import re
+from typing import List, Callable, Iterator, Union, Optional, Dict
+from sportsdataverse.dl_utils import download, underscore
 
 def espn_mbb_game_rosters(game_id: int, raw = False) -> pd.DataFrame:
     """espn_mbb_game_rosters() - Pull the game by id.
@@ -89,7 +88,7 @@ def helper_mbb_team_items(items):
     for x in items['team_href']:
         team = json.loads(download(x))
         for k in pop_cols:
-            team.pop('{}'.format(k), None)
+            team.pop(k, None)
         team_row = pd.json_normalize(team, sep = '_')
         teams_df = pd.concat([teams_df, team_row], axis = 0, ignore_index = True)
 
@@ -123,24 +122,24 @@ def helper_mbb_team_items(items):
 
 def helper_mbb_roster_items(items, summary_url):
     team_ids = list(items['team_id'])
-    team_rosters = pd.DataFrame()
+    game_rosters = pd.DataFrame()
     for tm in team_ids:
         team_roster_url = "{x}/{t}/roster".format(x = summary_url,t = tm)
         team_roster_resp = download(team_roster_url)
         team_roster = pd.json_normalize(json.loads(team_roster_resp).get('entries',[]), sep = '_')
         team_roster.columns = [col.replace("$ref", "href") for col in team_roster.columns]
         team_roster.columns = [underscore(c) for c in team_roster.columns.tolist()]
-        team_roster['team_id'] = tm
-        team_rosters = pd.concat([team_rosters, team_roster], axis = 0, ignore_index = True)
-    team_rosters = team_rosters.drop(["period", "for_player_id", "active"], axis = 1)
-    team_rosters['player_id'] = team_rosters['player_id'].astype(int)
-    team_rosters['team_id'] = team_rosters['team_id'].astype(int)
-    return team_rosters
+        team_roster['team_id'] = int(tm)
+        game_rosters = pd.concat([game_rosters, team_roster], axis = 0, ignore_index = True)
+    game_rosters = game_rosters.drop(["period", "for_player_id", "active"], axis = 1)
+    game_rosters['player_id'] = game_rosters['player_id'].astype(int)
+    game_rosters['team_id'] = game_rosters['team_id'].astype(int)
+    return game_rosters
 
 
 def helper_mbb_athlete_items(teams_rosters):
     athlete_hrefs = list(teams_rosters['athlete_href'])
-    athletes = pd.DataFrame()
+    game_athletes = pd.DataFrame()
     pop_cols = [
         'links',
         'injuries',
@@ -159,21 +158,20 @@ def helper_mbb_athlete_items(teams_rosters):
         athlete_res = download(athlete_href)
         athlete_resp = json.loads(athlete_res)
         for k in pop_cols:
-            if k in athlete_resp.keys():
-                athlete_resp.pop('{}'.format(k))
+            athlete_resp.pop(k, None)
         athlete = pd.json_normalize(athlete_resp, sep='_')
         athlete.columns = [col.replace("$ref", "href") for col in athlete.columns]
         athlete.columns = [underscore(c) for c in athlete.columns.tolist()]
 
-        athletes = pd.concat([athletes, athlete], axis = 0, ignore_index = True)
+        game_athletes = pd.concat([game_athletes, athlete], axis = 0, ignore_index = True)
 
 
-    athletes = athletes.rename(columns={
+    game_athletes = game_athletes.rename(columns={
         "id": "athlete_id",
         "uid": "athlete_uid",
         "guid": "athlete_guid",
         "type": "athlete_type",
         "display_name": "athlete_display_name"
     })
-    athletes['athlete_id'] = athletes['athlete_id'].astype(int)
-    return athletes
+    game_athletes['athlete_id'] = game_athletes['athlete_id'].astype(int)
+    return game_athletes
