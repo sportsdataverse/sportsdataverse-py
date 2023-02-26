@@ -1,7 +1,7 @@
-from re import search
+import json
 import pandas as pd
 from pandas import json_normalize
-import json
+from re import search
 from datetime import datetime
 from sportsdataverse.dl_utils import download
 
@@ -16,7 +16,7 @@ def mlbam_copyright_info(saveFile=False,returnFile=False):
 
 		returnFile (boolean) = False
 		If returnFile is set to True, the copyright file is returned.
-	
+
 	"""
 	url = "http://gdx.mlb.com/components/copyright.txt"
 	resp = download(url=url)
