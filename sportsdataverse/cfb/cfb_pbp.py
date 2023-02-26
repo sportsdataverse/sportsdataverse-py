@@ -1,17 +1,15 @@
-from numpy.core.fromnumeric import mean
 import pandas as pd
 import numpy as np
 import xgboost as xgb
 import re
-import urllib
-from urllib.error import URLError, HTTPError, ContentTooShortError
-from sportsdataverse.dl_utils import download, key_check
 import os
 import json
 import time
+import pkg_resources
+from sportsdataverse.dl_utils import download, key_check
+from numpy.core.fromnumeric import mean
 from functools import reduce, partial
 from .model_vars import *
-import pkg_resources
 
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),

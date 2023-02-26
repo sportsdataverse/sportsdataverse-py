@@ -4,85 +4,10 @@ import re
 import time
 import http.client
 import urllib.request
-import requests
 import json
 from urllib.error import URLError, HTTPError, ContentTooShortError
 from datetime import datetime
 from itertools import chain, starmap
-class ESPNResponse:
-    def __init__(self, response, status_code, url):
-        self._response = response
-        self._status_code = status_code
-        self._url = url
-
-    def get_response(self):
-        return self._response
-
-    def get_dict(self):
-        return json.loads(self._response)
-
-    def get_json(self):
-        return json.dumps(self.get_dict())
-
-    def valid_json(self):
-        try:
-            self.get_dict()
-        except ValueError:
-            return False
-        return True
-
-    def get_url(self):
-        return self._url
-
-class ESPNHTTP:
-
-    espn_response = ESPNResponse
-
-    base_url = None
-
-    parameters = None
-
-    headers = None
-
-    def clean_contents(self, contents):
-        return contents
-
-    def send_api_request(self, endpoint, parameters, referer=None, headers=None, timeout=None, raise_exception_on_error=False):
-        if not self.base_url:
-            raise Exception('Cannot use send_api_request from _HTTP class.')
-        base_url = self.base_url.format(endpoint=endpoint)
-        endpoint = endpoint.lower()
-        self.parameters = parameters
-
-        if headers is None:
-            request_headers = self.headers
-        else:
-            request_headers = headers
-
-        if referer:
-            request_headers['Referer'] = referer
-
-        url = None
-        status_code = None
-        contents = None
-
-        # Sort parameters by key... for some reason this matters for some requests...
-        parameters = sorted(parameters.items(), key=lambda kv: kv[0])
-
-        if not contents:
-            response = requests.get(url=base_url, params=parameters, headers=request_headers, timeout=timeout)
-            url = response.url
-            status_code = response.status_code
-            contents = response.text
-
-        contents = self.clean_contents(contents)
-
-        data = self.espn_response(response=contents, status_code=status_code, url=url)
-
-        if raise_exception_on_error and not data.valid_json():
-            raise Exception('InvalidResponse: Response is not in a valid JSON format.')
-
-        return data
 
 def download(url, params = {}, num_retries=15):
     try:
@@ -184,3 +109,78 @@ def camelize(string, uppercase_first_letter=True):
         return re.sub(r"(?:^|_)(.)", lambda m: m.group(1).upper(), string)
     else:
         return string[0].lower() + camelize(string)[1:]
+
+class ESPNResponse:
+    def __init__(self, response, status_code, url):
+        self._response = response
+        self._status_code = status_code
+        self._url = url
+
+    def get_response(self):
+        return self._response
+
+    def get_dict(self):
+        return json.loads(self._response)
+
+    def get_json(self):
+        return json.dumps(self.get_dict())
+
+    def valid_json(self):
+        try:
+            self.get_dict()
+        except ValueError:
+            return False
+        return True
+
+    def get_url(self):
+        return self._url
+
+class ESPNHTTP:
+
+    espn_response = ESPNResponse
+
+    base_url = None
+
+    parameters = None
+
+    headers = None
+
+    def clean_contents(self, contents):
+        return contents
+
+    def send_api_request(self, endpoint, parameters, referer=None, headers=None, timeout=None, raise_exception_on_error=False):
+        if not self.base_url:
+            raise Exception('Cannot use send_api_request from _HTTP class.')
+        base_url = self.base_url.format(endpoint=endpoint)
+        endpoint = endpoint.lower()
+        self.parameters = parameters
+
+        if headers is None:
+            request_headers = self.headers
+        else:
+            request_headers = headers
+
+        if referer:
+            request_headers['Referer'] = referer
+
+        url = None
+        status_code = None
+        contents = None
+
+        # Sort parameters by key... for some reason this matters for some requests...
+        parameters = sorted(parameters.items(), key=lambda kv: kv[0])
+
+        if not contents:
+            response = requests.get(url=base_url, params=parameters, headers=request_headers, timeout=timeout)
+            url = response.url
+            status_code = response.status_code
+            contents = response.text
+
+        contents = self.clean_contents(contents)
+
+        data = self.espn_response(response=contents, status_code=status_code, url=url)
+
+        if raise_exception_on_error and not data.valid_json():
+            raise Exception('InvalidResponse: Response is not in a valid JSON format.')
+
+        return data
