@@ -90,6 +90,7 @@ setup(
     install_requires=[
         "numpy>=1.13.0",
         "pandas >= 1.0.3",
+        "tqdm>=4.50.0",
     ],
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
