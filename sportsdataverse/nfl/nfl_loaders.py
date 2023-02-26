@@ -1,10 +1,8 @@
-import pyarrow.parquet as pq
 import pandas as pd
-import pyreadr
 import tempfile
 import json
 from tqdm import tqdm
-from pyreadr import read_r
+from pyreadr import read_r, download_file
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.config import NFL_BASE_URL, NFL_PLAYER_URL, NFL_ROSTER_URL,\
     NFL_WEEKLY_ROSTER_URL, NFL_TEAM_LOGO_URL, NFL_TEAM_SCHEDULE_URL,\
@@ -67,7 +65,7 @@ def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
             season_not_found_error(int(i), 1999)
             schedule_url = NFL_TEAM_SCHEDULE_URL.format(season=i)
             #i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
-            i_data = pyreadr.read_r(pyreadr.download_file(schedule_url, "{}/nfl_sched_{}.rds".format(tempdirname, i)))[None]
+            i_data = read_r(download_file(schedule_url, "{}/nfl_sched_{}.rds".format(tempdirname, i)))[None]
             i_data = pd.DataFrame(i_data)
             data = pd.concat([data, i_data], ignore_index=True)
     #Give each row a unique index
@@ -547,8 +545,8 @@ def load_nfl_officials() -> pd.DataFrame:
 #     """
 #     data = pd.DataFrame()
 #     with tempfile.TemporaryDirectory() as tempdirname:
-#         df = pyreadr.read_r(
-#             pyreadr.download_file(NFL_OTC_PLAYER_DETAILS_URL,
+#         df = read_r(
+#             download_file(NFL_OTC_PLAYER_DETAILS_URL,
 #                 "{}/otc_player_details.rds".format(tempdirname)))[None]
 #         df = pd.DataFrame(df)
 #         data = pd.concat([data, df], ignore_index=True)

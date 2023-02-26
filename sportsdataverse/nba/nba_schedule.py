@@ -1,4 +1,3 @@
-import pyarrow.parquet as pq
 import pandas as pd
 import json
 from typing import List, Callable, Iterator, Union, Optional

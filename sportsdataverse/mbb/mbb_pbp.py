@@ -1,5 +1,4 @@
 from typing import Dict
-import pyarrow.parquet as pq
 import pandas as pd
 import numpy as np
 import os
