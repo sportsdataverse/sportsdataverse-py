@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import download, underscore
 from urllib.error import URLError, HTTPError, ContentTooShortError
 
 def espn_nhl_teams() -> pd.DataFrame:
