@@ -2,7 +2,6 @@ import pandas as pd
 import json
 import time
 from sportsdataverse.dl_utils import download, underscore
-from urllib.error import URLError, HTTPError, ContentTooShortError
 
 def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500) -> pd.DataFrame:
     """espn_cfb_schedule - look up the college football schedule for a given season

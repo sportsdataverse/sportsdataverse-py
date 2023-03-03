@@ -1,7 +1,6 @@
 import pandas as pd
 import json
 from sportsdataverse.dl_utils import download, underscore
-from urllib.error import URLError, HTTPError, ContentTooShortError
 
 def espn_cfb_teams(groups=None) -> pd.DataFrame:
     """espn_cfb_teams - look up the college football teams

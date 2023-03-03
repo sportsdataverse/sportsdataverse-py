@@ -1,4 +1,4 @@
-from sportsdataverse.nfl import NFLPlayProcess
+from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess
 import pandas as pd
 import pytest
 

@@ -207,6 +207,7 @@ sportsdataverse/cfb/models/ep_model.model
 sportsdataverse/cfb/models/qbr_model.model
 sportsdataverse/cfb/models/wp_spread.model
 sportsdataverse/mbb/__init__.py
+sportsdataverse/mbb/mbb_game_rosters.py
 sportsdataverse/mbb/mbb_loaders.py
 sportsdataverse/mbb/mbb_pbp.py
 sportsdataverse/mbb/mbb_schedule.py
@@ -232,9 +233,6 @@ sportsdataverse/nfl/nfl_loaders.py
 sportsdataverse/nfl/nfl_pbp.py
 sportsdataverse/nfl/nfl_schedule.py
 sportsdataverse/nfl/nfl_teams.py
-sportsdataverse/nfl/models/ep_model.model
-sportsdataverse/nfl/models/qbr_model.model
-sportsdataverse/nfl/models/wp_spread.model
 sportsdataverse/nhl/__init__.py
 sportsdataverse/nhl/nhl_api.py
 sportsdataverse/nhl/nhl_loaders.py

@@ -1,4 +1,3 @@
-import pyarrow.parquet as pq
 import pandas as pd
 import json
 from tqdm import tqdm
@@ -135,5 +134,5 @@ def get_cfb_teams() -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
     """
     df = pd.read_parquet(CFB_TEAM_LOGO_URL, engine='auto', columns=None)
-    
+
     return df

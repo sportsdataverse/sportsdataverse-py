@@ -19,5 +19,6 @@ jobs:
         pip install setuptools pytest wheel
     - name: Run basic tests
       run: |
-        pip install .
-        pytest ./tests
+        pip install .[all]
+        pytest ./tests/cfb
+        pytest ./tests/mbb

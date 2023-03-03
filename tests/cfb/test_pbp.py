@@ -1,4 +1,4 @@
-from sportsdataverse.cfb import CFBPlayProcess
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 import pandas as pd
 import pytest
 

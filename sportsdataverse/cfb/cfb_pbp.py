@@ -1,17 +1,15 @@
-from numpy.core.fromnumeric import mean
 import pandas as pd
 import numpy as np
-import xgboost as xgb
 import re
-import urllib
-from urllib.error import URLError, HTTPError, ContentTooShortError
-from sportsdataverse.dl_utils import download, key_check
 import os
 import json
 import time
-from functools import reduce, partial
-from .model_vars import *
 import pkg_resources
+from xgboost import Booster, DMatrix
+from numpy.core.fromnumeric import mean
+from functools import reduce, partial
+from sportsdataverse.dl_utils import download, key_check
+from .model_vars import *
 
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
@@ -30,13 +28,13 @@ qbr_model_file = pkg_resources.resource_filename(
     "sportsdataverse", "cfb/models/qbr_model.model"
 )
 
-ep_model = xgb.Booster({"nthread": 4})  # init model
+ep_model = Booster({"nthread": 4})  # init model
 ep_model.load_model(ep_model_file)
 
-wp_model = xgb.Booster({"nthread": 4})  # init model
+wp_model = Booster({"nthread": 4})  # init model
 wp_model.load_model(wp_spread_file)
 
-qbr_model = xgb.Booster({"nthread": 4})  # init model
+qbr_model = Booster({"nthread": 4})  # init model
 qbr_model.load_model(qbr_model_file)
 
 class CFBPlayProcess(object):
@@ -4088,7 +4086,7 @@ class CFBPlayProcess(object):
         start_touchback_data.columns = ep_final_names
         # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
 
-        dtest_start_touchback = xgb.DMatrix(start_touchback_data)
+        dtest_start_touchback = DMatrix(start_touchback_data)
         EP_start_touchback_parts = ep_model.predict(dtest_start_touchback)
         EP_start_touchback = self.__calculate_ep_exp_val(EP_start_touchback_parts)
 
@@ -4096,7 +4094,7 @@ class CFBPlayProcess(object):
         start_data.columns = ep_final_names
         # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
 
-        dtest_start = xgb.DMatrix(start_data)
+        dtest_start = DMatrix(start_data)
         EP_start_parts = ep_model.predict(dtest_start)
         EP_start = self.__calculate_ep_exp_val(EP_start_parts)
 
@@ -4132,7 +4130,7 @@ class CFBPlayProcess(object):
         end_data = play_df[ep_end_columns]
         end_data.columns = ep_final_names
         # self.logger.info(end_data.iloc[[36]].to_json(orient="records"))
-        dtest_end = xgb.DMatrix(end_data)
+        dtest_end = DMatrix(end_data)
         EP_end_parts = ep_model.predict(dtest_end)
 
         EP_end = self.__calculate_ep_exp_val(EP_end_parts)
@@ -4712,12 +4710,12 @@ class CFBPlayProcess(object):
         start_touchback_data = play_df[wp_start_touchback_columns]
         start_touchback_data.columns = wp_final_names
         # self.logger.info(start_touchback_data.iloc[[36]].to_json(orient="records"))
-        dtest_start_touchback = xgb.DMatrix(start_touchback_data)
+        dtest_start_touchback = DMatrix(start_touchback_data)
         WP_start_touchback = wp_model.predict(dtest_start_touchback)
         start_data = play_df[wp_start_columns]
         start_data.columns = wp_final_names
         # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
-        dtest_start = xgb.DMatrix(start_data)
+        dtest_start = DMatrix(start_data)
         WP_start = wp_model.predict(dtest_start)
         play_df["wp_before"] = WP_start
         play_df["wp_touchback"] = WP_start_touchback
@@ -4741,7 +4739,7 @@ class CFBPlayProcess(object):
         end_data = play_df[wp_end_columns]
         end_data.columns = wp_final_names
         # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
-        dtest_end = xgb.DMatrix(end_data)
+        dtest_end = DMatrix(end_data)
         WP_end = wp_model.predict(dtest_end)
 
         play_df["lead_wp_before"] = play_df["wp_before"].shift(-1)
@@ -4957,7 +4955,7 @@ class CFBPlayProcess(object):
         )
         # self.logger.info(pass_qbr)
 
-        dtest_qbr = xgb.DMatrix(pass_qbr[qbr_vars])
+        dtest_qbr = DMatrix(pass_qbr[qbr_vars])
         qbr_result = qbr_model.predict(dtest_qbr)
         pass_qbr["exp_qbr"] = qbr_result
         passer_box = pd.merge(passer_box, pass_qbr, left_on=["passer_player_name","pos_team"], right_on=["athlete_name","pos_team"])
