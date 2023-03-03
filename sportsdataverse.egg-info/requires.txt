@@ -1,5 +1,6 @@
 numpy>=1.13.0
 pandas>=1.0.3
+tqdm>=4.50.0
 
 [all]
 pytest>=6.0.2
