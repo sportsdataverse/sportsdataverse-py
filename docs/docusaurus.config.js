@@ -63,6 +63,26 @@ module.exports = {
               target: '_self',
             },
             {
+              label: 'sportypy',
+              href: 'https://sportypy.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'collegebaseball',
+              href: 'https://collegebaseball.readthedocs.io/en/latest/index.html',
+              target: '_self',
+            },
+            {
+              label: 'nwslpy',
+              href: 'https://github.com/nwslR/nwslpy',
+              target: '_self',
+            },
+            {
+              label: 'recruitR-py',
+              href: 'https://github.com/sportsdataverse/recruitR-py/',
+              target: '_self',
+            },
+            {
               label: 'R Packages',
               href: 'https://r.sportsdataverse.org/',
             },
@@ -97,18 +117,38 @@ module.exports = {
               target: '_self',
             },
             {
+              label: 'chessR',
+              href: 'https://jaseziv.github.io/chessR/',
+              target: '_self',
+            },
+            {
               label: 'baseballr',
               href: 'https://BillPetti.github.io/baseballr/',
               target: '_self',
             },
             {
               label: 'cfbplotR',
-              href: 'https://kazink36.github.io/cfbplotR/',
+              href: 'https://cfbplotR.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'mlbplotR',
+              href: 'https://camdenk.github.io/mlbplotR/',
+              target: '_self',
+            },
+            {
+              label: 'softballR',
+              href: 'https://github.com/sportsdataverse/softballR/',
               target: '_self',
             },
             {
               label: 'cfb4th',
-              href: 'https://kazink36.github.io/cfb4th/',
+              href: 'https://cfb4th.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'nwslR',
+              href: 'https://github.com/nwslR/nwslR/',
               target: '_self',
             },
             {
@@ -191,6 +231,7 @@ module.exports = {
       darkTheme: darkCodeTheme,
     },
   },
+  scripts: [{src: 'https://plausible.io/js/script.js', defer: true, 'data-domain': 'py.sportsdataverse.org'}],
   presets: [
     [
       '@docusaurus/preset-classic',
