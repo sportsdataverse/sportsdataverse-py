@@ -739,7 +739,7 @@ class NFLPlayProcess(object):
         pbp_txt["homeTeamSpread"] = np.where(
             homeFavorite == True, abs(gameSpread), -1 * abs(gameSpread)
         )
-        pbp_txt["overUnder"] = float(overUnder)
+        pbp_txt["overUnder"] = overUnder
         # Home and Away identification variables
         if pbp_txt['header']['competitions'][0]['competitors'][0]['homeAway']=='home':
             pbp_txt['header']['competitions'][0]['home'] = pbp_txt['header']['competitions'][0]['competitors'][0]['team']
@@ -772,16 +772,16 @@ class NFLPlayProcess(object):
             awayTeamId,awayTeamMascot,awayTeamName,awayTeamAbbrev,awayTeamNameAlt
 
     def __helper_nfl_pickcenter(self, pbp_txt):
-                # Spread definition
-        if len(pbp_txt["pickcenter"]) > 1:
-            homeFavorite = pbp_txt["pickcenter"][0]["homeTeamOdds"]["favorite"]
-            if "spread" in pbp_txt["pickcenter"][1].keys():
-                gameSpread = pbp_txt["pickcenter"][1]["spread"]
-                overUnder = pbp_txt["pickcenter"][1]["overUnder"]
+        # Spread definition
+        if len(pbp_txt.get("pickcenter",[])) > 1:
+            homeFavorite = pbp_txt.get("pickcenter",{})[0].get("homeTeamOdds",{}).get("favorite","")
+            if "spread" in pbp_txt.get("pickcenter",{})[1].keys():
+                gameSpread = pbp_txt.get("pickcenter",{})[1].get("spread","")
+                overUnder = pbp_txt.get("pickcenter",{})[1].get("overUnder","")
                 gameSpreadAvailable = True
             else:
-                gameSpread = pbp_txt["pickcenter"][0]["spread"]
-                overUnder = pbp_txt["pickcenter"][0]["overUnder"]
+                gameSpread = pbp_txt.get("pickcenter",{})[0].get("spread","")
+                overUnder = pbp_txt.get("pickcenter",{})[0].get("overUnder","")
                 gameSpreadAvailable = True
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
