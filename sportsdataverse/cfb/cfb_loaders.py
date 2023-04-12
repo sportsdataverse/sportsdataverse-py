@@ -29,7 +29,7 @@ def load_cfb_pbp(seasons: List[int]) -> pd.DataFrame:
             raise SeasonNotFoundError("season cannot be less than 2003")
         i_data = pd.read_parquet(CFB_BASE_URL.format(season=i), engine='auto', columns=None)
         #data = data.append(i_data)
-        data = pd.concat([data,i_data],ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
     return data
@@ -57,7 +57,7 @@ def load_cfb_schedule(seasons: List[int]) -> pd.DataFrame:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pd.read_parquet(CFB_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
         #data = data.append(i_data)
-        data = pd.concat([data,i_data],ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
@@ -85,7 +85,7 @@ def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
         if int(i) < 2004:
             raise SeasonNotFoundError("season cannot be less than 2004")
         i_data = pd.read_parquet(CFB_ROSTER_URL.format(season = i), engine='auto', columns=None)
-        data = data.append(i_data)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
@@ -116,7 +116,7 @@ def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
             i_data = pd.read_parquet(CFB_TEAM_INFO_URL.format(season = i), engine='auto', columns=None)
         except:
             print(f'We don\'t seem to have data for the {i} season.')
-        data = data.append(i_data)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 

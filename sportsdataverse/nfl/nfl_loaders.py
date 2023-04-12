@@ -37,7 +37,7 @@ def load_nfl_pbp(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1999)
         i_data = pd.read_parquet(NFL_BASE_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
     return data
@@ -67,7 +67,7 @@ def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
             #i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
             i_data = read_r(download_file(schedule_url, "{}/nfl_sched_{}.rds".format(tempdirname, i)))[None]
             i_data = pd.DataFrame(i_data)
-            data = pd.concat([data, i_data], ignore_index=True)
+            data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
@@ -168,7 +168,7 @@ def load_nfl_pfr_weekly_pass(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_PASS_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -208,7 +208,7 @@ def load_nfl_pfr_weekly_rush(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_RUSH_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -248,7 +248,7 @@ def load_nfl_pfr_weekly_rec(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_REC_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -288,7 +288,7 @@ def load_nfl_pfr_weekly_def(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pd.read_parquet(NFL_PFR_WEEK_DEF_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -314,7 +314,7 @@ def load_nfl_rosters(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1920)
         i_data = pd.read_parquet(NFL_ROSTER_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -339,7 +339,7 @@ def load_nfl_weekly_rosters(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2002)
         i_data = pd.read_parquet(NFL_WEEKLY_ROSTER_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -392,7 +392,7 @@ def load_nfl_snap_counts(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2012)
         i_data = pd.read_parquet(NFL_SNAP_COUNTS_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -417,7 +417,7 @@ def load_nfl_pbp_participation(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2016)
         i_data = pd.read_parquet(NFL_PBP_PARTICIPATION_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -442,7 +442,7 @@ def load_nfl_injuries(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2009)
         i_data = pd.read_parquet(NFL_INJURIES_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
@@ -467,7 +467,7 @@ def load_nfl_depth_charts(seasons: List[int]) -> pd.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2001)
         i_data = pd.read_parquet(NFL_DEPTH_CHARTS_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], ignore_index=True)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
 
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)

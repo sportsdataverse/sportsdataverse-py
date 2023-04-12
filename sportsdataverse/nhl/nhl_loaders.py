@@ -28,7 +28,7 @@ def load_nhl_pbp(seasons: List[int]) -> pd.DataFrame:
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pd.read_parquet(NHL_BASE_URL.format(season=i), engine='auto', columns=None)
-        data = data.append(i_data)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
     return data
@@ -55,7 +55,7 @@ def load_nhl_schedule(seasons: List[int]) -> pd.DataFrame:
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pd.read_parquet(NHL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
-        data = data.append(i_data)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
@@ -84,7 +84,7 @@ def load_nhl_team_boxscore(seasons: List[int]) -> pd.DataFrame:
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pd.read_parquet(NHL_TEAM_BOX_URL.format(season = i), engine='auto', columns=None)
-        data = data.append(i_data)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
@@ -113,7 +113,7 @@ def load_nhl_player_boxscore(seasons: List[int]) -> pd.DataFrame:
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pd.read_parquet(NHL_PLAYER_BOX_URL.format(season = i), engine='auto', columns=None)
-        data = data.append(i_data)
+        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
     #Give each row a unique index
     data.reset_index(drop=True, inplace=True)
 
