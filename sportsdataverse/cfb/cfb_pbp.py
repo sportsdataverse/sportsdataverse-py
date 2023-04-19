@@ -3341,7 +3341,7 @@ class CFBPlayProcess(object):
 
         play_df["punt_block_player"] = np.where(
             play_df["type.text"].str.contains("yd return of blocked punt"),
-            play_df.text.str.extract("(.+) yd return of blocked"),
+            play_df.text.str.extract("(.+) yd return of blocked").bfill(axis=1)[0],
             play_df.punt_block_player,
         )
         play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
@@ -3445,7 +3445,7 @@ class CFBPlayProcess(object):
 
         play_df["fg_block_player"] = np.where(
             play_df["type.text"].str.contains("Field Goal"),
-            play_df.text.str.extract("blocked by (.{0,25})", flags=re.IGNORECASE),
+            play_df.text.str.extract("blocked by (.{0,25})", flags=re.IGNORECASE).bfill(axis=1)[0],
             play_df.fg_block_player,
         )
         # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
@@ -3462,7 +3462,7 @@ class CFBPlayProcess(object):
             (play_df["type.text"].str.contains("Field Goal"))
             & (play_df["type.text"].str.contains("blocked by|missed"))
             & (play_df["type.text"].str.contains("return")),
-            play_df.text.str.extract("  (.+)"),
+            play_df.text.str.extract("  (.+)").bfill(axis=1)[0],
             play_df.fg_return_player,
         )
 
@@ -3486,7 +3486,7 @@ class CFBPlayProcess(object):
             play_df["type.text"].isin(
                 ["Missed Field Goal Return", "Missed Field Goal Return Touchdown"]
             ),
-            play_df.text.str.extract("(.+)return"),
+            play_df.text.str.extract("(.+)return").bfill(axis=1)[0],
             play_df.fg_return_player,
         )
         play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
@@ -3500,7 +3500,7 @@ class CFBPlayProcess(object):
             play_df["text"].str.contains(
                 "fumble", case=False, flags=0, na=False, regex=True
             ),
-            play_df["text"].str.extract("(.{0,25} )fumble"),
+            play_df["text"].str.extract("(.{0,25} )fumble").bfill(axis=1)[0],
             play_df.fumble_player,
         )
         play_df["fumble_player"] = play_df["fumble_player"].str.replace(
@@ -3554,7 +3554,7 @@ class CFBPlayProcess(object):
                     "forced by", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("forced by(.{0,25})"),
+            play_df.text.str.extract("forced by(.{0,25})").bfill(axis=1)[0],
             play_df.fumble_forced_player,
         )
 
@@ -3594,7 +3594,7 @@ class CFBPlayProcess(object):
                     "recovered by", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("recovered by(.{0,30})"),
+            play_df.text.str.extract("recovered by(.{0,30})").bfill(axis=1)[0],
             play_df.fumble_recovered_player,
         )
 
