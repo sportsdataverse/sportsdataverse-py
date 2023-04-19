@@ -1,211 +1,280 @@
 # sportsdataverse
 
 
-* sportsdataverse package
+* [sportsdataverse package](sportsdataverse.md)
 
 
-    * Subpackages
+    * [Subpackages](sportsdataverse.md#subpackages)
 
 
-        * sportsdataverse.cfb package
+        * [sportsdataverse.cfb package](sportsdataverse.cfb.md)
 
 
-            * Submodules
+            * [Submodules](sportsdataverse.cfb.md#submodules)
 
 
-            * sportsdataverse.cfb.cfb_loaders module
+            * [sportsdataverse.cfb.cfb_loaders module](sportsdataverse.cfb.md#module-sportsdataverse.cfb.cfb_loaders)
 
 
-            * sportsdataverse.cfb.cfb_pbp module
+            * [sportsdataverse.cfb.cfb_pbp module](sportsdataverse.cfb.md#module-sportsdataverse.cfb.cfb_pbp)
 
 
-            * sportsdataverse.cfb.cfb_schedule module
+            * [sportsdataverse.cfb.cfb_schedule module](sportsdataverse.cfb.md#module-sportsdataverse.cfb.cfb_schedule)
 
 
-            * sportsdataverse.cfb.cfb_teams module
+            * [sportsdataverse.cfb.cfb_teams module](sportsdataverse.cfb.md#module-sportsdataverse.cfb.cfb_teams)
 
 
-            * sportsdataverse.cfb.model_vars module
+            * [sportsdataverse.cfb.model_vars module](sportsdataverse.cfb.md#module-sportsdataverse.cfb.model_vars)
 
 
-            * Module contents
+            * [Module contents](sportsdataverse.cfb.md#module-sportsdataverse.cfb)
 
 
-        * sportsdataverse.mbb package
+        * [sportsdataverse.mbb package](sportsdataverse.mbb.md)
 
 
-            * Submodules
+            * [Submodules](sportsdataverse.mbb.md#submodules)
 
 
-            * sportsdataverse.mbb.mbb_loaders module
+            * [sportsdataverse.mbb.mbb_game_rosters module](sportsdataverse.mbb.md#module-sportsdataverse.mbb.mbb_game_rosters)
 
 
-            * sportsdataverse.mbb.mbb_pbp module
+            * [sportsdataverse.mbb.mbb_loaders module](sportsdataverse.mbb.md#module-sportsdataverse.mbb.mbb_loaders)
 
 
-            * sportsdataverse.mbb.mbb_schedule module
+            * [sportsdataverse.mbb.mbb_pbp module](sportsdataverse.mbb.md#module-sportsdataverse.mbb.mbb_pbp)
 
 
-            * sportsdataverse.mbb.mbb_teams module
+            * [sportsdataverse.mbb.mbb_schedule module](sportsdataverse.mbb.md#module-sportsdataverse.mbb.mbb_schedule)
 
 
-            * Module contents
+            * [sportsdataverse.mbb.mbb_teams module](sportsdataverse.mbb.md#module-sportsdataverse.mbb.mbb_teams)
 
 
-        * sportsdataverse.mlb package
+            * [Module contents](sportsdataverse.mbb.md#module-sportsdataverse.mbb)
 
 
-            * Submodules
+        * [sportsdataverse.mlb package](sportsdataverse.mlb.md)
 
 
-            * sportsdataverse.mlb.mlb_loaders module
+            * [Submodules](sportsdataverse.mlb.md#submodules)
 
 
-            * sportsdataverse.mlb.mlbam_games module
+            * [sportsdataverse.mlb.mlb_loaders module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.mlb_loaders)
 
 
-            * sportsdataverse.mlb.mlbam_players module
+            * [sportsdataverse.mlb.mlbam_games module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.mlbam_games)
 
 
-            * sportsdataverse.mlb.mlbam_reports module
+            * [sportsdataverse.mlb.mlbam_players module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.mlbam_players)
 
 
-            * sportsdataverse.mlb.mlbam_stats module
+            * [sportsdataverse.mlb.mlbam_reports module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.mlbam_reports)
 
 
-            * sportsdataverse.mlb.mlbam_teams module
+            * [sportsdataverse.mlb.mlbam_stats module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.mlbam_stats)
 
 
-            * sportsdataverse.mlb.retrosheet module
+            * [sportsdataverse.mlb.mlbam_teams module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.mlbam_teams)
 
 
-            * sportsdataverse.mlb.retrosplits module
+            * [sportsdataverse.mlb.retrosheet module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.retrosheet)
 
 
-            * Module contents
+            * [sportsdataverse.mlb.retrosplits module](sportsdataverse.mlb.md#module-sportsdataverse.mlb.retrosplits)
 
 
-        * sportsdataverse.nba package
+            * [Module contents](sportsdataverse.mlb.md#module-sportsdataverse.mlb)
 
 
-            * Submodules
+        * [sportsdataverse.nba package](sportsdataverse.nba.md)
 
 
-            * sportsdataverse.nba.nba_loaders module
+            * [Submodules](sportsdataverse.nba.md#submodules)
 
 
-            * sportsdataverse.nba.nba_pbp module
+            * [sportsdataverse.nba.nba_loaders module](sportsdataverse.nba.md#module-sportsdataverse.nba.nba_loaders)
 
 
-            * sportsdataverse.nba.nba_schedule module
+            * [sportsdataverse.nba.nba_pbp module](sportsdataverse.nba.md#module-sportsdataverse.nba.nba_pbp)
 
 
-            * sportsdataverse.nba.nba_teams module
+            * [sportsdataverse.nba.nba_schedule module](sportsdataverse.nba.md#module-sportsdataverse.nba.nba_schedule)
 
 
-            * Module contents
+            * [sportsdataverse.nba.nba_teams module](sportsdataverse.nba.md#module-sportsdataverse.nba.nba_teams)
 
 
-        * sportsdataverse.nfl package
+            * [Module contents](sportsdataverse.nba.md#module-sportsdataverse.nba)
 
 
-            * Submodules
+        * [sportsdataverse.nfl package](sportsdataverse.nfl.md)
 
 
-            * sportsdataverse.nfl.model_vars module
+            * [Submodules](sportsdataverse.nfl.md#submodules)
 
 
-            * sportsdataverse.nfl.nfl_loaders module
+            * [sportsdataverse.nfl.model_vars module](sportsdataverse.nfl.md#module-sportsdataverse.nfl.model_vars)
 
 
-            * sportsdataverse.nfl.nfl_pbp module
+            * [sportsdataverse.nfl.nfl_games module](sportsdataverse.nfl.md#module-sportsdataverse.nfl.nfl_games)
 
 
-            * sportsdataverse.nfl.nfl_schedule module
+            * [sportsdataverse.nfl.nfl_loaders module](sportsdataverse.nfl.md#module-sportsdataverse.nfl.nfl_loaders)
 
 
-            * sportsdataverse.nfl.nfl_teams module
+            * [sportsdataverse.nfl.nfl_pbp module](sportsdataverse.nfl.md#module-sportsdataverse.nfl.nfl_pbp)
 
 
-            * Module contents
+            * [sportsdataverse.nfl.nfl_schedule module](sportsdataverse.nfl.md#module-sportsdataverse.nfl.nfl_schedule)
 
 
-        * sportsdataverse.nhl package
+            * [sportsdataverse.nfl.nfl_teams module](sportsdataverse.nfl.md#module-sportsdataverse.nfl.nfl_teams)
 
 
-            * Submodules
+            * [Module contents](sportsdataverse.nfl.md#module-sportsdataverse.nfl)
 
 
-            * sportsdataverse.nhl.nhl_api module
+        * [sportsdataverse.nhl package](sportsdataverse.nhl.md)
 
 
-            * sportsdataverse.nhl.nhl_loaders module
+            * [Submodules](sportsdataverse.nhl.md#submodules)
 
 
-            * sportsdataverse.nhl.nhl_pbp module
+            * [sportsdataverse.nhl.nhl_api module](sportsdataverse.nhl.md#module-sportsdataverse.nhl.nhl_api)
 
 
-            * sportsdataverse.nhl.nhl_schedule module
+            * [sportsdataverse.nhl.nhl_loaders module](sportsdataverse.nhl.md#module-sportsdataverse.nhl.nhl_loaders)
 
 
-            * sportsdataverse.nhl.nhl_teams module
+            * [sportsdataverse.nhl.nhl_pbp module](sportsdataverse.nhl.md#module-sportsdataverse.nhl.nhl_pbp)
 
 
-            * Module contents
+            * [sportsdataverse.nhl.nhl_schedule module](sportsdataverse.nhl.md#module-sportsdataverse.nhl.nhl_schedule)
 
 
-        * sportsdataverse.wbb package
+            * [sportsdataverse.nhl.nhl_teams module](sportsdataverse.nhl.md#module-sportsdataverse.nhl.nhl_teams)
 
 
-            * Submodules
+            * [Module contents](sportsdataverse.nhl.md#module-sportsdataverse.nhl)
 
 
-            * sportsdataverse.wbb.wbb_loaders module
+        * [sportsdataverse.wbb package](sportsdataverse.wbb.md)
 
 
-            * sportsdataverse.wbb.wbb_pbp module
+            * [Submodules](sportsdataverse.wbb.md#submodules)
 
 
-            * sportsdataverse.wbb.wbb_schedule module
+            * [sportsdataverse.wbb.wbb_loaders module](sportsdataverse.wbb.md#module-sportsdataverse.wbb.wbb_loaders)
 
 
-            * sportsdataverse.wbb.wbb_teams module
+            * [sportsdataverse.wbb.wbb_pbp module](sportsdataverse.wbb.md#module-sportsdataverse.wbb.wbb_pbp)
 
 
-            * Module contents
+            * [sportsdataverse.wbb.wbb_schedule module](sportsdataverse.wbb.md#module-sportsdataverse.wbb.wbb_schedule)
 
 
-        * sportsdataverse.wnba package
+            * [sportsdataverse.wbb.wbb_teams module](sportsdataverse.wbb.md#module-sportsdataverse.wbb.wbb_teams)
 
 
-            * Submodules
+            * [Module contents](sportsdataverse.wbb.md#module-sportsdataverse.wbb)
 
 
-            * sportsdataverse.wnba.wnba_loaders module
+        * [sportsdataverse.wnba package](sportsdataverse.wnba.md)
 
 
-            * sportsdataverse.wnba.wnba_pbp module
+            * [Submodules](sportsdataverse.wnba.md#submodules)
 
 
-            * sportsdataverse.wnba.wnba_schedule module
+            * [sportsdataverse.wnba.wnba_loaders module](sportsdataverse.wnba.md#module-sportsdataverse.wnba.wnba_loaders)
 
 
-            * sportsdataverse.wnba.wnba_teams module
+            * [sportsdataverse.wnba.wnba_pbp module](sportsdataverse.wnba.md#module-sportsdataverse.wnba.wnba_pbp)
 
 
-            * Module contents
+            * [sportsdataverse.wnba.wnba_schedule module](sportsdataverse.wnba.md#module-sportsdataverse.wnba.wnba_schedule)
 
 
-    * Submodules
+            * [sportsdataverse.wnba.wnba_teams module](sportsdataverse.wnba.md#module-sportsdataverse.wnba.wnba_teams)
 
 
-    * sportsdataverse.config module
+            * [Module contents](sportsdataverse.wnba.md#module-sportsdataverse.wnba)
 
 
-    * sportsdataverse.dl_utils module
+    * [Submodules](sportsdataverse.md#submodules)
 
 
-    * sportsdataverse.errors module
+    * [sportsdataverse.config module](sportsdataverse.md#module-sportsdataverse.config)
 
 
-    * Module contents
+    * [sportsdataverse.dl_utils module](sportsdataverse.md#module-sportsdataverse.dl_utils)
+
+
+        * [`ESPNHTTP`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNHTTP)
+
+
+            * [`ESPNHTTP.base_url`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNHTTP.base_url)
+
+
+            * [`ESPNHTTP.clean_contents()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNHTTP.clean_contents)
+
+
+            * [`ESPNHTTP.espn_response`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNHTTP.espn_response)
+
+
+            * [`ESPNHTTP.headers`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNHTTP.headers)
+
+
+            * [`ESPNHTTP.parameters`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNHTTP.parameters)
+
+
+            * [`ESPNHTTP.send_api_request()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNHTTP.send_api_request)
+
+
+        * [`ESPNResponse`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNResponse)
+
+
+            * [`ESPNResponse.__init__()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNResponse.__init__)
+
+
+            * [`ESPNResponse.get_dict()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNResponse.get_dict)
+
+
+            * [`ESPNResponse.get_json()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNResponse.get_json)
+
+
+            * [`ESPNResponse.get_response()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNResponse.get_response)
+
+
+            * [`ESPNResponse.get_url()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNResponse.get_url)
+
+
+            * [`ESPNResponse.valid_json()`](sportsdataverse.md#sportsdataverse.dl_utils.ESPNResponse.valid_json)
+
+
+        * [`camelize()`](sportsdataverse.md#sportsdataverse.dl_utils.camelize)
+
+
+        * [`download()`](sportsdataverse.md#sportsdataverse.dl_utils.download)
+
+
+        * [`flatten_json_iterative()`](sportsdataverse.md#sportsdataverse.dl_utils.flatten_json_iterative)
+
+
+        * [`key_check()`](sportsdataverse.md#sportsdataverse.dl_utils.key_check)
+
+
+        * [`underscore()`](sportsdataverse.md#sportsdataverse.dl_utils.underscore)
+
+
+    * [sportsdataverse.errors module](sportsdataverse.md#module-sportsdataverse.errors)
+
+
+        * [`SeasonNotFoundError`](sportsdataverse.md#sportsdataverse.errors.SeasonNotFoundError)
+
+
+        * [`season_not_found_error()`](sportsdataverse.md#sportsdataverse.errors.season_not_found_error)
+
+
+    * [Module contents](sportsdataverse.md#module-sportsdataverse)

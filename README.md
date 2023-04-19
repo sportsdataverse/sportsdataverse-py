@@ -20,6 +20,9 @@ sportsdataverse-py can be installed via pip:
 
 ```bash
 pip install sportsdataverse
+
+# with full dependencies
+pip install sportsdataverse[all]
 ```
 
 or from the repo (which may at times be more up to date):
@@ -27,7 +30,7 @@ or from the repo (which may at times be more up to date):
 ```bash
 git clone https://github.com/sportsdataverse/sportsdataverse-py
 cd sportsdataverse-py
-pip install -e .
+pip install -e .[all]
 ```
 
 # **Our Authors**

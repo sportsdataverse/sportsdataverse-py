@@ -91,6 +91,18 @@ setup(
         "numpy>=1.13.0",
         "pandas >= 1.0.3",
         "tqdm>=4.50.0",
+        "beautifulsoup4>=4.4.0",
+        "inflection>=0.5.1",
+        "requests>=2.18.1",
+        "lxml>=4.2.1",
+        "pyarrow>=1.0.1",
+        "pyjanitor>=0.23.1",
+        "pyreadr>=0.4.0",
+        "scipy>=1.4.0",
+        "matplotlib>=2.0.0",
+        "tqdm>=4.50.0",
+        "attrs>=20.3.0",
+        "xgboost>=1.2.0",
     ],
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
@@ -104,6 +116,7 @@ setup(
     package_data={
         "sportsdataverse": [
             "cfb/models/*",
+            "nfl/models/*",
         ]
     },
     # Although 'package_data' is the preferred approach, in some case you may

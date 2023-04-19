@@ -4,6 +4,54 @@
 
 ## sportsdataverse.nfl.model_vars module
 
+## sportsdataverse.nfl.nfl_games module
+
+
+### sportsdataverse.nfl.nfl_games.nfl_game_details()
+Args:
+
+    game_id (int): Game ID
+
+Returns:
+
+    Dict: Dictionary of odds and props data with keys
+
+Example:
+
+    nfl_df = nfl_game_details(
+    game_id = ‘7ae87c4c-d24c-11ec-b23d-d15a91047884’
+    )
+
+
+### sportsdataverse.nfl.nfl_games.nfl_game_schedule()
+Args:
+
+    season (int): season
+    season_type (str): season type - REG, POST
+    week (int): week
+
+Returns:
+
+    Dict: Dictionary of odds and props data with keys
+
+Example:
+
+    
+
+    ```
+    `
+    ```
+
+    nfl_df = nfl_game_schedule(
+
+        season = 2021, seasonType=’REG’, week=1
+
+    )\`
+
+
+### sportsdataverse.nfl.nfl_games.nfl_headers_gen()
+
+### sportsdataverse.nfl.nfl_games.nfl_token_gen()
 ## sportsdataverse.nfl.nfl_loaders module
 
 
@@ -409,13 +457,11 @@ Returns:
 ## sportsdataverse.nfl.nfl_pbp module
 
 
-### class sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0, raw=False, path_to_json='/')
+### _class_ sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0, raw=False, path_to_json='/')
 Bases: `object`
 
 
 #### \__init__(gameId=0, raw=False, path_to_json='/')
-Initialize self.  See help(type(self)) for accurate signature.
-
 
 #### create_box_score()
 
@@ -439,17 +485,17 @@ Example:
     nfl_df = sportsdataverse.nfl.NFLPlayProcess(gameId=401256137).espn_nfl_pbp()
 
 
-#### gameId( = 0)
+#### gameId(_ = _ )
 
 #### nfl_pbp_disk()
 
-#### path_to_json( = '/')
+#### path_to_json(_ = '/_ )
 
-#### ran_cleaning_pipeline( = False)
+#### ran_cleaning_pipeline(_ = Fals_ )
 
-#### ran_pipeline( = False)
+#### ran_pipeline(_ = Fals_ )
 
-#### raw( = False)
+#### raw(_ = Fals_ )
 
 #### run_cleaning_pipeline()
 

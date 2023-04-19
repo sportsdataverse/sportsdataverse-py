@@ -101,13 +101,11 @@ Raises:
 ## sportsdataverse.cfb.cfb_pbp module
 
 
-### class sportsdataverse.cfb.cfb_pbp.CFBPlayProcess(gameId=0, raw=False, path_to_json='/')
+### _class_ sportsdataverse.cfb.cfb_pbp.CFBPlayProcess(gameId=0, raw=False, path_to_json='/')
 Bases: `object`
 
 
 #### \__init__(gameId=0, raw=False, path_to_json='/')
-Initialize self.  See help(type(self)) for accurate signature.
-
 
 #### cfb_pbp_disk()
 
@@ -133,15 +131,15 @@ Example:
     cfb_df = sportsdataverse.cfb.CFBPlayProcess(gameId=401256137).espn_cfb_pbp()
 
 
-#### gameId( = 0)
+#### gameId(_ = _ )
 
-#### path_to_json( = '/')
+#### path_to_json(_ = '/_ )
 
-#### ran_cleaning_pipeline( = False)
+#### ran_cleaning_pipeline(_ = Fals_ )
 
-#### ran_pipeline( = False)
+#### ran_pipeline(_ = Fals_ )
 
-#### raw( = False)
+#### raw(_ = Fals_ )
 
 #### run_cleaning_pipeline()
 

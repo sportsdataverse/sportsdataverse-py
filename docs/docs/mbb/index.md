@@ -2,6 +2,49 @@
 
 ## Submodules
 
+## sportsdataverse.mbb.mbb_game_rosters module
+
+
+### sportsdataverse.mbb.mbb_game_rosters.espn_mbb_game_rosters(game_id: int, raw=False)
+espn_mbb_game_rosters() - Pull the game by id.
+
+Args:
+
+    game_id (int): Unique game_id, can be obtained from mbb_schedule().
+
+Returns:
+
+    pd.DataFrame: Data frame of game roster data with columns:
+    ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
+    ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
+    ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
+    ‘age’, ‘date_of_birth’, ‘slug’, ‘jersey’, ‘linked’, ‘active’,
+    ‘alternate_ids_sdr’, ‘birth_place_city’, ‘birth_place_state’,
+    ‘birth_place_country’, ‘headshot_href’, ‘headshot_alt’,
+    ‘experience_years’, ‘experience_display_value’,
+    ‘experience_abbreviation’, ‘status_id’, ‘status_name’, ‘status_type’,
+    ‘status_abbreviation’, ‘hand_type’, ‘hand_abbreviation’,
+    ‘hand_display_value’, ‘draft_display_text’, ‘draft_round’, ‘draft_year’,
+    ‘draft_selection’, ‘player_id’, ‘starter’, ‘valid’, ‘did_not_play’,
+    ‘display_name’, ‘ejected’, ‘athlete_href’, ‘position_href’,
+    ‘statistics_href’, ‘team_id’, ‘team_guid’, ‘team_uid’, ‘team_slug’,
+    ‘team_location’, ‘team_name’, ‘team_nickname’, ‘team_abbreviation’,
+    ‘team_display_name’, ‘team_short_display_name’, ‘team_color’,
+    ‘team_alternate_color’, ‘is_active’, ‘is_all_star’,
+    ‘team_alternate_ids_sdr’, ‘logo_href’, ‘logo_dark_href’, ‘game_id’
+
+Example:
+
+    mbb_df = sportsdataverse.mbb.espn_mbb_game_rosters(game_id=401265031)
+
+
+### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_athlete_items(teams_rosters)
+
+### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_game_items(summary)
+
+### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_roster_items(items, summary_url)
+
+### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_team_items(items)
 ## sportsdataverse.mbb.mbb_loaders module
 
 
@@ -119,16 +162,22 @@ Example:
 ## sportsdataverse.mbb.mbb_schedule module
 
 
-### sportsdataverse.mbb.mbb_schedule.espn_mbb_calendar(season=None)
+### sportsdataverse.mbb.mbb_schedule.espn_mbb_calendar(season=None, ondays=None)
 espn_mbb_calendar - look up the men’s college basketball calendar for a given season
 
 Args:
 
     season (int): Used to define different seasons. 2002 is the earliest available season.
+    ondays (boolean): Used to return dates for calendar ondays
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+    pd.DataFrame: Pandas dataframe containing
+    calendar dates for the requested season.
+
+Raises:
+
+    ValueError: If season is less than 2002.
 
 
 ### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500)

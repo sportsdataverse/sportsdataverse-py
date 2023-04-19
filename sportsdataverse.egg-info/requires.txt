@@ -1,6 +1,18 @@
+attrs>=20.3.0
+beautifulsoup4>=4.4.0
+inflection>=0.5.1
+lxml>=4.2.1
+matplotlib>=2.0.0
 numpy>=1.13.0
 pandas>=1.0.3
+pyarrow>=1.0.1
+pyjanitor>=0.23.1
+pyreadr>=0.4.0
+requests>=2.18.1
+scipy>=1.4.0
 tqdm>=4.50.0
+tqdm>=4.50.0
+xgboost>=1.2.0
 
 [all]
 attrs>=20.3.0

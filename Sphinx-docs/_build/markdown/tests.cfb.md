@@ -9,13 +9,19 @@
 
 ### tests.cfb.test_pbp.dupe_fsu_play_base()
 
-### tests.cfb.test_pbp.dupe_iu_play_base()
+### tests.cfb.test_pbp.dupe_iu_play_base(iu_play_base)
 
 ### tests.cfb.test_pbp.generated_data()
+
+### tests.cfb.test_pbp.iu_play_base()
+
+### tests.cfb.test_pbp.iu_play_base_box(iu_play_base)
 
 ### tests.cfb.test_pbp.test_adv_box_score(box_score)
 
 ### tests.cfb.test_pbp.test_basic_pbp(generated_data)
+
+### tests.cfb.test_pbp.test_expected_turnovers(iu_play_base_box)
 
 ### tests.cfb.test_pbp.test_fsu_play_dedupe(dupe_fsu_play_base)
 

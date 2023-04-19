@@ -4,6 +4,14 @@ sportsdataverse.mbb package
 Submodules
 ----------
 
+sportsdataverse.mbb.mbb\_game\_rosters module
+---------------------------------------------
+
+.. automodule:: sportsdataverse.mbb.mbb_game_rosters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.mbb.mbb\_loaders module
 ---------------------------------------
 

@@ -120,7 +120,7 @@ Example:
 ## sportsdataverse.nba.nba_schedule module
 
 
-### sportsdataverse.nba.nba_schedule.espn_nba_calendar(season=None)
+### sportsdataverse.nba.nba_schedule.espn_nba_calendar(season=None, ondays=None)
 espn_nba_calendar - look up the NBA calendar for a given season from ESPN
 
 Args:
