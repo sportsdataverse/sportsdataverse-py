@@ -3368,7 +3368,7 @@ class CFBPlayProcess(object):
                     "return", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("(.+) return"),
+            play_df.text.str.extract("(.+) return").bfill(axis=1)[0],
             play_df.punt_block_return_player,
         )
         play_df["punt_block_return_player"] = play_df[
