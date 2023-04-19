@@ -3217,7 +3217,7 @@ class CFBPlayProcess(object):
 
         play_df["pass_breakup_player"] = np.where(
             play_df["pass"] == True,
-            play_df.text.str.extract("broken up by (.+)"),
+            play_df.text.str.extract("broken up by (.+)").bfill(axis=1)[0],
             play_df.pass_breakup_player,
         )
         play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
