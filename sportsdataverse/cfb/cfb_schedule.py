@@ -84,14 +84,15 @@ def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limi
             x['game_id'] = x['id'].astype(int)
             x['season'] = event.get('season').get('year')
             x['season_type'] = event.get('season').get('type')
-            ev = pd.concat([ev,x],axis=0, ignore_index=True)
+            x['week'] = event.get('week', {}).get('number')
+            ev = pd.concat([ev, x], axis = 0, ignore_index = True)
     ev = pd.DataFrame(ev)
     ev.columns = [underscore(c) for c in ev.columns.tolist()]
     return ev
 
 
 
-def espn_cfb_calendar(season=None, groups=None, ondays=None) -> pd.DataFrame:
+def espn_cfb_calendar(season = None, groups = None, ondays = None) -> pd.DataFrame:
     """espn_cfb_calendar - look up the men's college football calendar for a given season
 
     Args:
@@ -110,7 +111,9 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None) -> pd.DataFrame:
         resp = download(url=url)
         txt = json.loads(resp).get('eventDate').get('dates')
         full_schedule = pd.DataFrame(txt,columns=['dates'])
-        full_schedule['datenum'] = list(map(lambda x: x[:10].replace("-",""),full_schedule['dates']))
+        full_schedule['dateURL'] = list(map(lambda x: x[:10].replace("-",""),full_schedule['dates']))
+        full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates="
+        full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
     else:
         if season is None:
             season_url = ''
