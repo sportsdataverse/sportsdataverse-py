@@ -1,3 +1,8 @@
+## 0.0.34 Release: May 7, 2023
+- Reconfigured some imports
+- Improved compliance with pandas upgrades
+- Updated loader locations to use sportsdataverse-data releases and nflverse releases
+
 ## 0.0.18 Release: July 25, 2022
 - Added ondays parameter to ESPN calendar functions
 - Renamed "sportsdataverse.cfb.cfb_teams()" to "sportsdataverse.cfb.espn_cfb_teams()" to avoid an edge case issue when running the function.

@@ -36,7 +36,7 @@ Returns:
 
 Example:
 
-    
+
 
     ```
     `
@@ -457,11 +457,13 @@ Returns:
 ## sportsdataverse.nfl.nfl_pbp module
 
 
-### _class_ sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0, raw=False, path_to_json='/')
+### class sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0, raw=False, path_to_json='/')
 Bases: `object`
 
 
 #### \__init__(gameId=0, raw=False, path_to_json='/')
+Initialize self.  See help(type(self)) for accurate signature.
+
 
 #### create_box_score()
 
@@ -485,17 +487,17 @@ Example:
     nfl_df = sportsdataverse.nfl.NFLPlayProcess(gameId=401256137).espn_nfl_pbp()
 
 
-#### gameId(_ = _ )
+#### gameId( = 0)
 
 #### nfl_pbp_disk()
 
-#### path_to_json(_ = '/_ )
+#### path_to_json( = '/')
 
-#### ran_cleaning_pipeline(_ = Fals_ )
+#### ran_cleaning_pipeline( = False)
 
-#### ran_pipeline(_ = Fals_ )
+#### ran_pipeline( = False)
 
-#### raw(_ = Fals_ )
+#### raw( = False)
 
 #### run_cleaning_pipeline()
 
