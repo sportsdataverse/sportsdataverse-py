@@ -59,18 +59,30 @@ def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limi
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[0].get('team')
                 event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
                 event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
+                event['competitions'][0]['home']['currentRank'] = event.get('competitions')[0].get('competitors')[0].get('curatedRank', {}).get('current', '99')
+                event['competitions'][0]['home']['linescores'] = event.get('competitions')[0].get('competitors')[0].get('linescores', [])
+                event['competitions'][0]['home']['records'] = event.get('competitions')[0].get('competitors')[0].get('records', [])
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[1].get('team')
                 event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
                 event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
+                event['competitions'][0]['away']['currentRank'] = event.get('competitions')[0].get('competitors')[1].get('curatedRank', {}).get('current', '99')
+                event['competitions'][0]['away']['linescores'] = event.get('competitions')[0].get('competitors')[1].get('linescores', [])
+                event['competitions'][0]['away']['records'] = event.get('competitions')[0].get('competitors')[1].get('records', [])
             else:
                 event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[0].get('team')
                 event['competitions'][0]['away']['score'] = event.get('competitions')[0].get('competitors')[0].get('score')
                 event['competitions'][0]['away']['winner'] = event.get('competitions')[0].get('competitors')[0].get('winner')
+                event['competitions'][0]['away']['currentRank'] = event.get('competitions')[0].get('competitors')[0].get('curatedRank', {}).get('current', '99')
+                event['competitions'][0]['away']['linescores'] = event.get('competitions')[0].get('competitors')[0].get('linescores', [])
+                event['competitions'][0]['away']['records'] = event.get('competitions')[0].get('competitors')[0].get('records', [])
                 event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[1].get('team')
                 event['competitions'][0]['home']['score'] = event.get('competitions')[0].get('competitors')[1].get('score')
                 event['competitions'][0]['home']['winner'] = event.get('competitions')[0].get('competitors')[1].get('winner')
+                event['competitions'][0]['home']['currentRank'] = event.get('competitions')[0].get('competitors')[1].get('curatedRank', {}).get('current', '99')
+                event['competitions'][0]['home']['linescores'] = event.get('competitions')[0].get('competitors')[1].get('linescores', [])
+                event['competitions'][0]['home']['records'] = event.get('competitions')[0].get('competitors')[1].get('records', [])
 
-            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series', 'situation', 'tickets', 'odds']
+            del_keys = ['geoBroadcasts', 'headlines', 'series', 'situation', 'tickets', 'odds']
             for k in del_keys:
                 event.get('competitions')[0].pop(k, None)
             if len(event.get('competitions')[0]['notes'])>0:
@@ -79,6 +91,13 @@ def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limi
             else:
                 event.get('competitions')[0]['notes_type'] = ''
                 event.get('competitions')[0]['notes_headline'] = ''
+            if len(event.get('competitions')[0].get('broadcasts'))>0:
+                event.get('competitions')[0]['broadcast_market'] = event.get('competitions')[0].get('broadcasts', [])[0].get('market', "")
+                event.get('competitions')[0]['broadcast_name'] = event.get('competitions')[0].get('broadcasts', [])[0].get('names', [])[0]
+            else:
+                event.get('competitions')[0]['broadcast_market'] = ""
+                event.get('competitions')[0]['broadcast_name'] = ""
+            event.get('competitions')[0].pop('broadcasts', None)
             event.get('competitions')[0].pop('notes', None)
             x = pd.json_normalize(event.get('competitions')[0], sep='_')
             x['game_id'] = x['id'].astype(int)
