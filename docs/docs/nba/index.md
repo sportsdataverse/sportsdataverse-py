@@ -151,6 +151,10 @@ Returns:
     pd.DataFrame: Pandas dataframe containing
     schedule events for the requested season.
 
+
+### sportsdataverse.nba.nba_schedule.most_recent_nba_season()
+
+### sportsdataverse.nba.nba_schedule.year_to_season(year)
 ## sportsdataverse.nba.nba_teams module
 
 

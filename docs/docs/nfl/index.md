@@ -536,6 +536,10 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
+
+### sportsdataverse.nfl.nfl_schedule.get_current_week()
+
+### sportsdataverse.nfl.nfl_schedule.most_recent_nfl_season()
 ## sportsdataverse.nfl.nfl_teams module
 
 

@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+from datetime import datetime
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.config import WNBA_BASE_URL, WNBA_TEAM_BOX_URL, WNBA_PLAYER_BOX_URL, WNBA_TEAM_SCHEDULE_URL
 from sportsdataverse.errors import SeasonNotFoundError
@@ -112,3 +113,10 @@ def espn_wnba_calendar(season=None, ondays=None) -> pd.DataFrame:
         full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates="
         full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
     return full_schedule
+
+def most_recent_wnba_season():
+    today = datetime.date(datetime.now())
+    if today.month >= 5:
+        return today.year
+    else:
+        return today.year - 1

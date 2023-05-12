@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import time
+import datetime
 from sportsdataverse.dl_utils import download, underscore
 from urllib.error import URLError, HTTPError, ContentTooShortError
 
@@ -129,3 +130,33 @@ def espn_nfl_calendar(season=None, ondays=None) -> pd.DataFrame:
         full_schedule.columns = [underscore(c) for c in full_schedule.columns.tolist()]
         full_schedule = full_schedule.rename(columns={"week_value": "week", "season_type_value": "season_type"})
     return full_schedule
+
+def most_recent_nfl_season():
+    today = datetime.datetime.today()
+    current_year = today.year
+    current_month = today.month
+    current_day = today.day
+    if current_month >= 9:
+        return current_year
+    return current_year - 1
+
+def get_current_week():
+
+    # Find first Monday of September in current season
+    week1_sep = pd.to_datetime([f"{most_recent_nfl_season()}-09-0{num}" for num in range(1, 8)]).to_series()
+    monday1_sep = week1_sep[week1_sep.dt.dayofweek == 0]
+
+    # NFL season starts 3 days later
+    first_game = monday1_sep
+    first_game += pd.Timedelta(days=3)
+
+    # current week number of nfl season is 1 + how many weeks have elapsed since first game
+    current_week = int((pd.to_datetime("today") - first_game).dt.days / 7 + 1)
+
+    # hardcoded week bounds because this whole date based thing has assumptions anyway
+    if current_week < 1:
+        current_week = 1
+    if current_week > 22:
+        current_week = 22
+
+    return current_week

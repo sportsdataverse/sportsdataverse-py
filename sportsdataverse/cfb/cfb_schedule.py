@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import time
+import datetime
 from sportsdataverse.dl_utils import download, underscore
 
 def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500) -> pd.DataFrame:
@@ -161,3 +162,12 @@ def espn_cfb_calendar(season = None, groups = None, ondays = None) -> pd.DataFra
         full_schedule.columns = [underscore(c) for c in full_schedule.columns.tolist()]
         full_schedule = full_schedule.rename(columns={"week_value": "week", "season_type_value": "season_type"})
     return full_schedule
+
+def most_recent_cfb_season():
+    date = datetime.datetime.now()
+    if date.month >= 8 and date.day >= 15:
+        return date.year
+    elif date.month >= 9:
+        return date.year
+    else:
+        return date.year - 1

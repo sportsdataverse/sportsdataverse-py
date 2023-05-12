@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import datetime
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download, underscore
@@ -113,3 +114,20 @@ def espn_nba_calendar(season=None, ondays=None) -> pd.DataFrame:
         full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates="
         full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
     return full_schedule
+
+def most_recent_nba_season():
+    if int(str(datetime.date.today())[5:7]) >= 10:
+        return int(str(datetime.date.today())[0:4]) + 1
+    else:
+        return int(str(datetime.date.today())[0:4])
+
+def year_to_season(year):
+    first_year = str(year)[2:4]
+    next_year = int(first_year) + 1
+    if int(next_year) < 10 and int(first_year) >= 0:
+        next_year_formatted = f"0{next_year}"
+    elif int(first_year) == 99:
+        next_year_formatted = "00"
+    else:
+        next_year_formatted = str(next_year)
+    return f"{year}-{next_year_formatted}"

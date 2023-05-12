@@ -199,6 +199,10 @@ Returns:
     pd.DataFrame: Pandas dataframe containing
     schedule events for the requested season.
 
+
+### sportsdataverse.nhl.nhl_schedule.most_recent_nhl_season()
+
+### sportsdataverse.nhl.nhl_schedule.year_to_season(year)
 ## sportsdataverse.nhl.nhl_teams module
 
 

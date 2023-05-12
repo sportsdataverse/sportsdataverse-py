@@ -150,6 +150,8 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
+
+### sportsdataverse.wnba.wnba_schedule.most_recent_wnba_season()
 ## sportsdataverse.wnba.wnba_teams module
 
 

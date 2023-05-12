@@ -182,6 +182,8 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
+
+### sportsdataverse.cfb.cfb_schedule.most_recent_cfb_season()
 ## sportsdataverse.cfb.cfb_teams module
 
 

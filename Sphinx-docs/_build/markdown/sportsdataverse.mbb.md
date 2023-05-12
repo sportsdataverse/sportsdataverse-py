@@ -194,6 +194,8 @@ Returns:
 
     pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
 
+
+### sportsdataverse.mbb.mbb_schedule.most_recent_mbb_season()
 ## sportsdataverse.mbb.mbb_teams module
 
 

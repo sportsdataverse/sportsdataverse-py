@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import json
+import datetime
 from typing import List, Callable, Iterator, Union, Optional
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download, underscore
@@ -118,3 +119,9 @@ def espn_mbb_calendar(season=None, ondays=None) -> pd.DataFrame:
         full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates="
         full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
     return full_schedule
+
+def most_recent_mbb_season():
+  if datetime.datetime.today().month >= 10:
+    return datetime.datetime.today().year + 1
+  else:
+    return datetime.datetime.today().year
