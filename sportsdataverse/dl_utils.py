@@ -4,29 +4,30 @@ import re
 import time
 import http.client
 import urllib.request
+import logging
+import requests
 import json
 from urllib.error import URLError, HTTPError, ContentTooShortError
 from datetime import datetime
 from itertools import chain, starmap
 
-def download(url, params = {}, num_retries=15):
+def download(url, params = None, headers = None, proxy = None, timeout = 30, num_retries = 15, logger = None):
+    if params is None:
+        params = {}
+    if logger is None:
+        logger = logging.getLogger(__name__)
     try:
-        html = urllib.request.urlopen(url).read()
+        response = requests.get(url, params = params, proxies = proxy, headers = headers, timeout = timeout)
+        # print(response.url)
     except (URLError, HTTPError, ContentTooShortError, http.client.HTTPException, http.client.IncompleteRead) as e:
-        print('Download error:', url)
-        html = None
-        if num_retries > 0:
-            if hasattr(e, 'code') and 500 <= e.code < 600:
-                time.sleep(2)
-                # recursively retry 5xx HTTP errors
-                return download(url, num_retries=num_retries - 1)
-        if num_retries > 0:
-            if e == http.client.IncompleteRead:
-                time.sleep(2)
-                return download(url, num_retries=num_retries - 1)
+        logger.warn("Download error: %i - %s for url (%s)", response.status_code, response.reason, response.url)
+        response = None
+        if num_retries > 0 and (hasattr(e, 'code') and 500 <= getattr(e, 'code') < 600):
+            time.sleep(2)
+            return download(url, params = params, proxies = proxy, headers = headers, timeout = timeout, num_retries = num_retries - 1, logger = logger)
         if num_retries == 0:
-            print("Retry Limit Exceeded")
-    return html
+            logger.error("Retry Limit Exceeded")
+    return response
 
 def flatten_json_iterative(dictionary, sep = '.', ind_start = 0):
     """Flattening a nested json file"""
@@ -57,11 +58,7 @@ def flatten_json_iterative(dictionary, sep = '.', ind_start = 0):
     return dictionary
 
 def key_check(obj, key, replacement = np.array([])):
-    if key in obj.keys():
-        obj_key = obj[key]
-    else:
-        obj_key = replacement
-    return obj_key
+    return obj[key] if key in obj.keys() else replacement
 
 def underscore(word):
     """
