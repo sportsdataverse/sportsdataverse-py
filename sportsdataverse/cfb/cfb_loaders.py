@@ -1,4 +1,5 @@
 import pandas as pd
+import polars as pl
 import json
 from tqdm import tqdm
 from typing import List, Callable, Iterator, Union, Optional
@@ -21,18 +22,17 @@ def load_cfb_pbp(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2003.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2003:
             raise SeasonNotFoundError("season cannot be less than 2003")
-        i_data = pd.read_parquet(CFB_BASE_URL.format(season=i), engine='auto', columns=None)
+        i_data = pl.read_parquet(CFB_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
         #data = data.append(i_data)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
+        data = pl.concat([data, i_data], how = 'vertical')
+
+    return data.to_pandas(use_pyarrow_extension_array = True)
 
 def load_cfb_schedule(seasons: List[int]) -> pd.DataFrame:
     """Load college football schedule data
@@ -49,19 +49,17 @@ def load_cfb_schedule(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
-        i_data = pd.read_parquet(CFB_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
+        i_data = pl.read_parquet(CFB_TEAM_SCHEDULE_URL.format(season = i), use_pyarrow=True, columns=None)
         #data = data.append(i_data)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
+        data = pl.concat([data, i_data], how = 'vertical')
 
-    return data
+    return data.to_pandas(use_pyarrow_extension_array = True)
 
 def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
     """Load roster data
@@ -78,18 +76,16 @@ def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2014.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2004:
             raise SeasonNotFoundError("season cannot be less than 2004")
-        i_data = pd.read_parquet(CFB_ROSTER_URL.format(season = i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
+        i_data = pl.read_parquet(CFB_ROSTER_URL.format(season = i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
 
-    return data
+    return data.to_pandas(use_pyarrow_extension_array = True)
 
 def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
     """Load college football team info
@@ -106,21 +102,18 @@ def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         try:
-            i_data = pd.read_parquet(CFB_TEAM_INFO_URL.format(season = i), engine='auto', columns=None)
-        except:
+            i_data = pl.read_parquet(CFB_TEAM_INFO_URL.format(season = i), use_pyarrow=True, columns=None)
+        except Exception:
             print(f'We don\'t seem to have data for the {i} season.')
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-
-    return data
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True)
 
 def get_cfb_teams() -> pd.DataFrame:
     """Load college football team ID information and logos
@@ -133,6 +126,5 @@ def get_cfb_teams() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
     """
-    df = pd.read_parquet(CFB_TEAM_LOGO_URL, engine='auto', columns=None)
 
-    return df
+    return pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True)

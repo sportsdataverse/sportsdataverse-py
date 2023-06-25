@@ -1,8 +1,9 @@
 import pandas as pd
+import polars as pl
 import json
 from sportsdataverse.dl_utils import download, underscore
 
-def espn_cfb_teams(groups=None) -> pd.DataFrame:
+def espn_cfb_teams(groups=None, **kwargs) -> pd.DataFrame:
     """espn_cfb_teams - look up the college football teams
 
     Args:
@@ -11,15 +12,14 @@ def espn_cfb_teams(groups=None) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
     """
-    if groups is None:
-        groups = '&groups=80'
-    else:
-        groups = '&groups=' + str(groups)
-    ev = pd.DataFrame()
-    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams?{}&limit=1000".format(groups)
-    resp = download(url=url)
+    params = {
+        "groups": groups if groups is not None else "80",
+        "limit": 1000
+    }
+    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
+    resp = download(url=url, params = params, **kwargs)
     if resp is not None:
-        events_txt = json.loads(resp)
+        events_txt = resp.json()
 
         teams = events_txt.get('sports')[0].get('leagues')[0].get('teams')
         del_keys = ['record', 'links']

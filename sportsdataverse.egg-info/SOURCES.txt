@@ -190,6 +190,7 @@ docs/src/css/custom.css
 docs/src/pages/styles.module.css
 sportsdataverse/__init__.py
 sportsdataverse/config.py
+sportsdataverse/decorators.py
 sportsdataverse/dl_utils.py
 sportsdataverse/errors.py
 sportsdataverse.egg-info/PKG-INFO
@@ -200,6 +201,7 @@ sportsdataverse.egg-info/top_level.txt
 sportsdataverse/cfb/__init__.py
 sportsdataverse/cfb/cfb_loaders.py
 sportsdataverse/cfb/cfb_pbp.py
+sportsdataverse/cfb/cfb_pbp_pd.py
 sportsdataverse/cfb/cfb_schedule.py
 sportsdataverse/cfb/cfb_teams.py
 sportsdataverse/cfb/model_vars.py
