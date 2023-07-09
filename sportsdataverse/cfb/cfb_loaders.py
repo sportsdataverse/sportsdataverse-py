@@ -7,7 +7,7 @@ from sportsdataverse.config import CFB_BASE_URL, CFB_ROSTER_URL, CFB_TEAM_LOGO_U
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
-def load_cfb_pbp(seasons: List[int]) -> pd.DataFrame:
+def load_cfb_pbp(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load college football play by play data going back to 2003
 
     Example:
@@ -15,6 +15,7 @@ def load_cfb_pbp(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2003 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the play-by-plays available for the requested seasons.
@@ -31,10 +32,9 @@ def load_cfb_pbp(seasons: List[int]) -> pd.DataFrame:
         i_data = pl.read_parquet(CFB_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
         #data = data.append(i_data)
         data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    return data.to_pandas(use_pyarrow_extension_array = True)
-
-def load_cfb_schedule(seasons: List[int]) -> pd.DataFrame:
+def load_cfb_schedule(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load college football schedule data
 
     Example:
@@ -42,6 +42,7 @@ def load_cfb_schedule(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
@@ -58,10 +59,10 @@ def load_cfb_schedule(seasons: List[int]) -> pd.DataFrame:
         i_data = pl.read_parquet(CFB_TEAM_SCHEDULE_URL.format(season = i), use_pyarrow=True, columns=None)
         #data = data.append(i_data)
         data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    return data.to_pandas(use_pyarrow_extension_array = True)
 
-def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
+def load_cfb_rosters(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load roster data
 
     Example:
@@ -69,6 +70,7 @@ def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2014 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
@@ -84,10 +86,9 @@ def load_cfb_rosters(seasons: List[int]) -> pd.DataFrame:
             raise SeasonNotFoundError("season cannot be less than 2004")
         i_data = pl.read_parquet(CFB_ROSTER_URL.format(season = i), use_pyarrow=True, columns=None)
         data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    return data.to_pandas(use_pyarrow_extension_array = True)
-
-def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
+def load_cfb_team_info(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load college football team info
 
     Example:
@@ -95,6 +96,7 @@ def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the team info available for the requested seasons.
@@ -113,18 +115,20 @@ def load_cfb_team_info(seasons: List[int]) -> pd.DataFrame:
         except Exception:
             print(f'We don\'t seem to have data for the {i} season.')
         data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True)
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-def get_cfb_teams() -> pd.DataFrame:
+def get_cfb_teams(return_as_pandas = True) -> pd.DataFrame:
     """Load college football team ID information and logos
 
     Example:
         `cfb_df = sportsdataverse.cfb.cfb_teams()`
 
     Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
     """
 
-    return pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True)
+    return pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None)
