@@ -2,7 +2,6 @@ import pandas as pd
 import polars as pl
 import json
 from sportsdataverse.dl_utils import download, underscore
-from urllib.error import URLError, HTTPError, ContentTooShortError
 
 def espn_nba_teams(return_as_pandas=True, **kwargs) -> pd.DataFrame:
     """espn_nba_teams - look up NBA teams

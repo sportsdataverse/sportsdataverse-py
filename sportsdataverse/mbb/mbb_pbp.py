@@ -1,4 +1,3 @@
-from typing import Dict
 import pandas as pd
 import polars as pl
 import numpy as np
@@ -22,6 +21,7 @@ def espn_mbb_pbp(game_id: int, raw = False, **kwargs) -> Dict:
 
     Example:
         `mbb_df = sportsdataverse.mbb.espn_mbb_pbp(game_id=401265031)`
+
     """
     # play by play
     pbp_txt = {'timeouts': {}}

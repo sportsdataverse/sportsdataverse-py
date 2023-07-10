@@ -12,6 +12,10 @@ def espn_cfb_teams(groups=None, return_as_pandas = True, **kwargs) -> pd.DataFra
 
     Returns:
         pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+
+    Example:
+        `cfb_df = sportsdataverse.cfb.espn_cfb_teams()`
+
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
     params = {
