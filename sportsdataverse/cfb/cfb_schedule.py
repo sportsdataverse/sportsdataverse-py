@@ -130,7 +130,7 @@ def espn_cfb_calendar(season = None, groups = None, ondays = None,
         ValueError: If `season` is less than 2002.
     """
     if ondays is not None:
-        full_schedule = _ondays_from_espn_cfb_calendar(season)
+        full_schedule = __ondays_from_espn_cfb_calendar(season)
     else:
         params = {
             'dates': season,
@@ -159,9 +159,9 @@ def espn_cfb_calendar(season = None, groups = None, ondays = None,
     return full_schedule.to_pandas() if return_as_pandas else full_schedule
 
 
-def _ondays_cfb_calendar(season):
+def __ondays_cfb_calendar(season, **kwargs):
     url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/{season}/types/2/calendar/ondays"
-    resp = download(url=url)
+    resp = download(url=url, **kwargs)
     if resp is not None:
         txt = resp.json().get('eventDate').get('dates')
         result = pl.DataFrame(txt, schema=['dates'])

@@ -13,11 +13,11 @@ def espn_cfb_teams(groups=None, return_as_pandas = True, **kwargs) -> pd.DataFra
     Returns:
         pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
     """
+    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
     params = {
         "groups": groups if groups is not None else "80",
         "limit": 1000
     }
-    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
     resp = download(url=url, params = params, **kwargs)
     if resp is not None:
         events_txt = resp.json()

@@ -46,19 +46,22 @@ class CFBPlayProcess(object):
     ran_cleaning_pipeline = False
     raw = False
     path_to_json = '/'
-    def __init__(self, gameId=0, raw=False, path_to_json='/', **kwargs):
+    return_keys = None
+    def __init__(self, gameId=0, raw=False, path_to_json='/', return_keys=None, **kwargs):
         self.gameId = int(gameId)
         # self.logger = logger
         self.ran_pipeline = False
         self.ran_cleaning_pipeline = False
         self.raw = raw
         self.path_to_json = path_to_json
+        self.return_keys = return_keys
 
     def espn_cfb_pbp(self, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`, `college-football/summary`
 
         Args:
             game_id (int): Unique game_id, can be obtained from cfb_schedule().
+            raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
 
         Returns:
             Dict: Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts",
@@ -633,26 +636,26 @@ class CFBPlayProcess(object):
             homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
             homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
             homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
-            homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
+            homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
             pbp_txt['header']['competitions'][0]['away'] = pbp_txt['header']['competitions'][0]['competitors'][1]['team']
             awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
             awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
             awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
             awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
-            awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+            awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
         else:
             pbp_txt['header']['competitions'][0]['away'] = pbp_txt['header']['competitions'][0]['competitors'][0]['team']
             awayTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['id'])
             awayTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['name'])
             awayTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['location'])
             awayTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][0]['team']['abbreviation'])
-            awayTeamNameAlt = re.sub("Stat(.+)", "St", str(awayTeamName))
+            awayTeamNameAlt = re.sub("Stat(.+)", "St", awayTeamName)
             pbp_txt['header']['competitions'][0]['home'] = pbp_txt['header']['competitions'][0]['competitors'][1]['team']
             homeTeamId = int(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['id'])
             homeTeamMascot = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['name'])
             homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
             homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
-            homeTeamNameAlt = re.sub("Stat(.+)", "St", str(homeTeamName))
+            homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
         return pbp_txt, gameSpread, overUnder, homeFavorite, gameSpreadAvailable, homeTeamId,\
             homeTeamMascot,homeTeamName,homeTeamAbbrev,homeTeamNameAlt,\
             awayTeamId,awayTeamMascot,awayTeamName,awayTeamAbbrev,awayTeamNameAlt
@@ -3861,7 +3864,7 @@ class CFBPlayProcess(object):
             self.plays_json = pbp_txt['plays']
 
             pbp_json = {
-                "gameId": self.gameId,
+                "gameId": int(self.gameId),
                 "plays":self.plays_json,
                 "season": pbp_txt["season"],
                 "week": pbp_txt['header']['week'],
@@ -3922,7 +3925,7 @@ class CFBPlayProcess(object):
                 advBoxScore = self.create_box_score(self.plays_json)
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
-                    "gameId": self.gameId,
+                    "gameId": int(self.gameId),
                     "plays": self.plays_json,
                     "season": pbp_txt["season"],
                     "week": pbp_txt['header']['week'],
@@ -3948,7 +3951,7 @@ class CFBPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
-            return pbp_json
+            return self.json if self.return_keys is None else {k: self.json[k] for k in self.return_keys}
 
     def run_cleaning_pipeline(self):
         if self.ran_cleaning_pipeline == False:
@@ -3956,7 +3959,7 @@ class CFBPlayProcess(object):
             self.plays_json = pbp_txt['plays']
 
             pbp_json = {
-                "gameId": self.gameId,
+                "gameId": int(self.gameId),
                 "plays": self.plays_json,
                 "season": pbp_txt["season"],
                 "week": pbp_txt['header']['week'],
@@ -4007,7 +4010,7 @@ class CFBPlayProcess(object):
                 )
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
-                    "gameId": self.gameId,
+                    "gameId": int(self.gameId),
                     "plays": self.plays_json,
                     "season": pbp_txt["season"],
                     "week": pbp_txt['header']['week'],
@@ -4032,4 +4035,4 @@ class CFBPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
-            return pbp_json
+            return self.json
