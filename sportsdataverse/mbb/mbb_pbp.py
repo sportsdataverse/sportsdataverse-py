@@ -70,19 +70,11 @@ def mbb_pbp_disk(game_id, path_to_json):
     return pbp_txt
 
 def helper_mbb_pbp(game_id, pbp_txt):
-    gameSpread, overUnder, homeFavorite, gameSpreadAvailable = helper_mbb_pickcenter(pbp_txt)
-    pbp_txt, gameSpread, overUnder, homeFavorite, gameSpreadAvailable, \
-        homeTeamId, homeTeamMascot, homeTeamName,\
-        homeTeamAbbrev, homeTeamNameAlt,\
-        awayTeamId, awayTeamMascot, awayTeamName,\
-        awayTeamAbbrev, awayTeamNameAlt = helper_mbb_game_data(pbp_txt, gameSpread, overUnder, homeFavorite, gameSpreadAvailable)
+    init = helper_mbb_pickcenter(pbp_txt)
+    pbp_txt, init = helper_mbb_game_data(pbp_txt, init)
 
     if "plays" in pbp_txt.keys() and pbp_txt.get('header').get('competitions')[0].get('playByPlaySource') != 'none':
-        pbp_txt = helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite,
-                                gameSpreadAvailable, homeTeamId, awayTeamId,
-                                homeTeamMascot, awayTeamMascot, homeTeamName,
-                                awayTeamName, homeTeamAbbrev, awayTeamAbbrev,
-                                homeTeamNameAlt, awayTeamNameAlt)
+        pbp_txt = helper_mbb_pbp_features(game_id, pbp_txt, init)
     else:
         pbp_txt['plays'] = pl.DataFrame()
         pbp_txt['timeouts'] = {
@@ -114,19 +106,19 @@ def helper_mbb_pbp(game_id, pbp_txt):
         "season": np.array(pbp_txt['season']).tolist(),
     }
 
-def helper_mbb_game_data(pbp_txt, gameSpread, overUnder, homeFavorite, gameSpreadAvailable):
+def helper_mbb_game_data(pbp_txt, init):
     pbp_txt['timeouts'] = {}
     pbp_txt['teamInfo'] = pbp_txt['header']['competitions'][0]
     pbp_txt['season'] = pbp_txt['header']['season']
     pbp_txt['playByPlaySource'] = pbp_txt['header']['competitions'][0]['playByPlaySource']
     pbp_txt['boxscoreSource'] = pbp_txt['header']['competitions'][0]['boxscoreSource']
-    pbp_txt['gameSpreadAvailable'] = gameSpreadAvailable
-    pbp_txt['gameSpread'] = gameSpread
-    pbp_txt["homeFavorite"] = homeFavorite
+    pbp_txt['gameSpreadAvailable'] = init["gameSpreadAvailable"]
+    pbp_txt['gameSpread'] = init["gameSpread"]
+    pbp_txt["homeFavorite"] = init["homeFavorite"]
     pbp_txt["homeTeamSpread"] = np.where(
-        homeFavorite == True, abs(gameSpread), -1 * abs(gameSpread)
+        init["homeFavorite"] == True, abs(init["gameSpread"]), -1 * abs(init["gameSpread"])
     )
-    pbp_txt["overUnder"] = overUnder
+    pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
     if pbp_txt['header']['competitions'][0]['competitors'][0]['homeAway']=='home':
         pbp_txt['header']['competitions'][0]['home'] = pbp_txt['header']['competitions'][0]['competitors'][0]['team']
@@ -154,9 +146,17 @@ def helper_mbb_game_data(pbp_txt, gameSpread, overUnder, homeFavorite, gameSprea
         homeTeamName = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['location'])
         homeTeamAbbrev = str(pbp_txt['header']['competitions'][0]['competitors'][1]['team']['abbreviation'])
         homeTeamNameAlt = re.sub("Stat(.+)", "St", homeTeamName)
-    return pbp_txt, gameSpread, overUnder, homeFavorite, gameSpreadAvailable, homeTeamId,\
-            homeTeamMascot,homeTeamName,homeTeamAbbrev,homeTeamNameAlt,\
-            awayTeamId,awayTeamMascot,awayTeamName,awayTeamAbbrev,awayTeamNameAlt
+    init["homeTeamId"] = homeTeamId
+    init["homeTeamMascot"] = homeTeamMascot
+    init["homeTeamName"] = homeTeamName
+    init["homeTeamAbbrev"] = homeTeamAbbrev
+    init["homeTeamNameAlt"] = homeTeamNameAlt
+    init["awayTeamId"] = awayTeamId
+    init["awayTeamMascot"] = awayTeamMascot
+    init["awayTeamName"] = awayTeamName
+    init["awayTeamAbbrev"] = awayTeamAbbrev
+    init["awayTeamNameAlt"] = awayTeamNameAlt
+    return pbp_txt, init
 
 def helper_mbb_pickcenter(pbp_txt):
     # Spread definition
@@ -175,9 +175,15 @@ def helper_mbb_pickcenter(pbp_txt):
         overUnder = 140.5
         homeFavorite = True
         gameSpreadAvailable = False
-    return gameSpread, overUnder, homeFavorite, gameSpreadAvailable
 
-def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt):
+    return {
+        "gameSpread": gameSpread,
+        "overUnder": overUnder,
+        "homeFavorite": homeFavorite,
+        "gameSpreadAvailable": gameSpreadAvailable
+    }
+
+def helper_mbb_pbp_features(game_id, pbp_txt, init):
     pbp_txt['plays_mod'] = []
     for play in pbp_txt['plays']:
         p = flatten_json_iterative(play)
@@ -188,25 +194,23 @@ def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpre
         id = (pl.col('id').cast(pl.Int64)),
         season = pl.lit(pbp_txt['header']['season']['year']),
         seasonType = pl.lit(pbp_txt['header']['season']['type']),
-        homeTeamId = pl.lit(homeTeamId),
-        homeTeamName = pl.lit(homeTeamName),
-        homeTeamMascot = pl.lit(homeTeamMascot),
-        homeTeamAbbrev = pl.lit(homeTeamAbbrev),
-        homeTeamNameAlt = pl.lit(homeTeamNameAlt),
-        awayTeamId = pl.lit(awayTeamId),
-        awayTeamName = pl.lit(awayTeamName),
-        awayTeamMascot = pl.lit(awayTeamMascot),
-        awayTeamAbbrev = pl.lit(awayTeamAbbrev),
-        awayTeamNameAlt = pl.lit(awayTeamNameAlt),
-        gameSpread = pl.lit(gameSpread).abs(),
-        homeFavorite = pl.lit(homeFavorite),
-        gameSpreadAvailable = pl.lit(gameSpreadAvailable),
+        homeTeamId = pl.lit(init["homeTeamId"]),
+        homeTeamName = pl.lit(init["homeTeamName"]),
+        homeTeamMascot = pl.lit(init["homeTeamMascot"]),
+        homeTeamAbbrev = pl.lit(init["homeTeamAbbrev"]),
+        homeTeamNameAlt = pl.lit(init["homeTeamNameAlt"]),
+        awayTeamId = pl.lit(init["awayTeamId"]),
+        awayTeamName = pl.lit(init["awayTeamName"]),
+        awayTeamMascot = pl.lit(init["awayTeamMascot"]),
+        awayTeamAbbrev = pl.lit(init["awayTeamAbbrev"]),
+        awayTeamNameAlt = pl.lit(init["awayTeamNameAlt"]),
+        gameSpread = pl.lit(init["gameSpread"]).abs(),
+        homeFavorite = pl.lit(init["homeFavorite"]),
+        gameSpreadAvailable = pl.lit(init["gameSpreadAvailable"]),
     ).with_columns(
         homeTeamSpread = pl.when(pl.col('homeFavorite') == True)
             .then(pl.col('gameSpread'))
             .otherwise(-1*pl.col('gameSpread')),
-
-
     ).with_columns(
         pl.col("period.number").cast(pl.Int32).alias("period.number"),
         pl.col("period.number").cast(pl.Int32).alias("half"),
@@ -221,12 +225,12 @@ def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpre
         pl.col("clock.seconds").cast(pl.Int32),
         pl.when((pl.col("type.text") == "ShortTimeOut")
             .and_(
-                pl.col("text").str.to_lowercase().str.contains(str(homeTeamAbbrev).lower())
+                pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower())
                 .or_(
-                    pl.col("text").str.to_lowercase().str.contains(str(homeTeamAbbrev).lower()),
-                    pl.col("text").str.to_lowercase().str.contains(str(homeTeamName).lower()),
-                    pl.col("text").str.to_lowercase().str.contains(str(homeTeamMascot).lower()),
-                    pl.col("text").str.to_lowercase().str.contains(str(homeTeamNameAlt).lower())
+                    pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
+                    pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
+                    pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
+                    pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower())
                 )
             ))
         .then(True)
@@ -234,12 +238,12 @@ def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpre
         .alias("homeTimeoutCalled"),
         pl.when((pl.col("type.text") == "ShortTimeOut")
             .and_(
-                pl.col("text").str.to_lowercase().str.contains(str(awayTeamAbbrev).lower())
+                pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower())
                 .or_(
-                    pl.col("text").str.to_lowercase().str.contains(str(awayTeamAbbrev).lower()),
-                    pl.col("text").str.to_lowercase().str.contains(str(awayTeamName).lower()),
-                    pl.col("text").str.to_lowercase().str.contains(str(awayTeamMascot).lower()),
-                    pl.col("text").str.to_lowercase().str.contains(str(awayTeamNameAlt).lower())
+                    pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
+                    pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
+                    pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
+                    pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower())
                 )
             ))
         .then(True)
@@ -263,10 +267,10 @@ def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpre
         pl.col("start.game_seconds_remaining").shift(-1).alias("end.game_seconds_remaining"),
     )
     pbp_txt["timeouts"] = {
-        homeTeamId: {"1": [], "2": []},
-        awayTeamId: {"1": [], "2": []},
+        init["homeTeamId"]: {"1": [], "2": []},
+        init["awayTeamId"]: {"1": [], "2": []},
     }
-    pbp_txt["timeouts"][homeTeamId]["1"] = (
+    pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
         pbp_txt["plays"]
         .filter(
             (pl.col("homeTimeoutCalled") == True)
@@ -275,7 +279,7 @@ def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpre
         .get_column("id")
         .to_list()
     )
-    pbp_txt["timeouts"][homeTeamId]["2"] = (
+    pbp_txt["timeouts"][init["homeTeamId"]]["2"] = (
         pbp_txt["plays"]
         .filter(
             (pl.col("homeTimeoutCalled") == True)
@@ -284,7 +288,7 @@ def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpre
         .get_column("id")
         .to_list()
     )
-    pbp_txt["timeouts"][awayTeamId]["1"] = (
+    pbp_txt["timeouts"][init["awayTeamId"]]["1"] = (
         pbp_txt["plays"]
         .filter(
             (pl.col("awayTimeoutCalled") == True)
@@ -293,7 +297,7 @@ def helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpre
         .get_column("id")
         .to_list()
     )
-    pbp_txt["timeouts"][awayTeamId]["2"] = (
+    pbp_txt["timeouts"][init["awayTeamId"]]["2"] = (
         pbp_txt["plays"]
         .filter(
             (pl.col("awayTimeoutCalled") == True)
