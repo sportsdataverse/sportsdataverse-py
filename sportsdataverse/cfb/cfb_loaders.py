@@ -30,7 +30,6 @@ def load_cfb_pbp(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
         if int(i) < 2003:
             raise SeasonNotFoundError("season cannot be less than 2003")
         i_data = pl.read_parquet(CFB_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
-        #data = data.append(i_data)
         data = pl.concat([data, i_data], how = 'vertical')
     return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 

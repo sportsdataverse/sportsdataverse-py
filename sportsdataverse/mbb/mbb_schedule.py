@@ -1,4 +1,5 @@
 import pandas as pd
+import polars as pl
 import numpy as np
 import json
 import datetime
@@ -19,13 +20,13 @@ def espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500,
     Returns:
         pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
     """
+    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
     params = {
         'dates': dates,
         'seasonType': season_type,
         'groups': groups if groups is not None else '50',
         'limit': limit
     }
-    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
     resp = download(url=url, params=params, **kwargs)
 
     ev = pl.DataFrame()
