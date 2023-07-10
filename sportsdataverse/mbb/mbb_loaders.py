@@ -1,5 +1,5 @@
 import pandas as pd
-import pandas as pl
+import polars as pl
 import json
 from tqdm import tqdm
 from typing import List, Callable, Iterator, Union, Optional
