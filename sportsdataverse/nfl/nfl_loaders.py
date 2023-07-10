@@ -1,4 +1,5 @@
 import pandas as pd
+import polars as pl
 import tempfile
 import json
 from tqdm import tqdm
@@ -31,18 +32,16 @@ def load_nfl_pbp(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 1999.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1999)
-        i_data = pd.read_parquet(NFL_BASE_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
+        i_data = pl.read_parquet(NFL_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_schedule(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL schedule data
 
     Example:
@@ -57,7 +56,7 @@ def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 1999.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     with tempfile.TemporaryDirectory() as tempdirname:
@@ -65,15 +64,14 @@ def load_nfl_schedule(seasons: List[int]) -> pd.DataFrame:
             season_not_found_error(int(i), 1999)
             schedule_url = NFL_TEAM_SCHEDULE_URL.format(season=i)
             #i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
-            i_data = read_r(download_file(schedule_url, "{}/nfl_sched_{}.rds".format(tempdirname, i)))[None]
-            i_data = pd.DataFrame(i_data)
-            data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
+            i_data = read_r(
+                download_file(schedule_url, f"{tempdirname}/nfl_sched_{i}.rds")
+            )[None]
+            i_data = pl.DataFrame(i_data)
+            data = pl.concat([data, i_data], how = "vertical")
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    return data
-
-def load_nfl_player_stats(kicking = False) -> pd.DataFrame:
+def load_nfl_player_stats(kicking = False, return_as_pandas = True) -> pd.DataFrame:
     """Load NFL player stats data
 
     Example:
@@ -85,17 +83,15 @@ def load_nfl_player_stats(kicking = False) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing player stats.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if kicking is False:
-        data = pd.read_parquet(NFL_PLAYER_STATS_URL, engine='auto', columns=None)
+        data = pl.read_parquet(NFL_PLAYER_STATS_URL, use_pyarrow=True, columns=None)
     else:
-        data = pd.read_parquet(NFL_PLAYER_KICKING_STATS_URL, engine='auto', columns=None)
+        data = pl.read_parquet(NFL_PLAYER_KICKING_STATS_URL, use_pyarrow=True, columns=None)
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-def load_nfl_ngs_passing() -> pd.DataFrame:
+def load_nfl_ngs_passing(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL NextGen Stats Passing data going back to 2016
 
     Example:
@@ -105,10 +101,10 @@ def load_nfl_ngs_passing() -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing the NextGen Stats Passing data available.
 
     """
-    df = pd.read_parquet(NFL_NGS_PASSING_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_NGS_PASSING_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_NGS_PASSING_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_ngs_rushing() -> pd.DataFrame:
+def load_nfl_ngs_rushing(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL NextGen Stats Rushing data going back to 2016
 
     Example:
@@ -118,10 +114,10 @@ def load_nfl_ngs_rushing() -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing the NextGen Stats Rushing data available.
 
     """
-    df = pd.read_parquet(NFL_NGS_RUSHING_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_NGS_RUSHING_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_NGS_RUSHING_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_ngs_receiving() -> pd.DataFrame:
+def load_nfl_ngs_receiving(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL NextGen Stats Receiving data going back to 2016
 
     Example:
@@ -131,10 +127,10 @@ def load_nfl_ngs_receiving() -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing the NextGen Stats Receiving data available.
 
     """
-    df = pd.read_parquet(NFL_NGS_RECEIVING_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_NGS_RECEIVING_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_NGS_RECEIVING_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_pfr_pass() -> pd.DataFrame:
+def load_nfl_pfr_pass(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Advanced Passing data going back to 2018
 
     Example:
@@ -145,10 +141,10 @@ def load_nfl_pfr_pass() -> pd.DataFrame:
             advanced passing stats data available.
 
     """
-    df = pd.read_parquet(NFL_PFR_SEASON_PASS_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_PFR_SEASON_PASS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_PFR_SEASON_PASS_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_pfr_weekly_pass(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Passing data going back to 2018
 
     Example:
@@ -162,19 +158,16 @@ def load_nfl_pfr_weekly_pass(seasons: List[int]) -> pd.DataFrame:
             advanced passing stats data available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
-        i_data = pd.read_parquet(NFL_PFR_WEEK_PASS_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_PFR_WEEK_PASS_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_pfr_rush() -> pd.DataFrame:
+def load_nfl_pfr_rush(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Advanced Rushing data going back to 2018
 
     Example:
@@ -185,10 +178,10 @@ def load_nfl_pfr_rush() -> pd.DataFrame:
             advanced rushing stats data available.
 
     """
-    df = pd.read_parquet(NFL_PFR_SEASON_RUSH_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_PFR_SEASON_RUSH_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_PFR_SEASON_RUSH_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_pfr_weekly_rush(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Rushing data going back to 2018
 
     Example:
@@ -202,19 +195,16 @@ def load_nfl_pfr_weekly_rush(seasons: List[int]) -> pd.DataFrame:
             advanced rushing stats data available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
-        i_data = pd.read_parquet(NFL_PFR_WEEK_RUSH_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_PFR_WEEK_RUSH_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_pfr_rec() -> pd.DataFrame:
+def load_nfl_pfr_rec(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Advanced Receiving data going back to 2018
 
     Example:
@@ -225,10 +215,10 @@ def load_nfl_pfr_rec() -> pd.DataFrame:
             advanced receiving stats data available.
 
     """
-    df = pd.read_parquet(NFL_PFR_SEASON_REC_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_PFR_SEASON_REC_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_PFR_SEASON_REC_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_pfr_weekly_rec(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Receiving data going back to 2018
 
     Example:
@@ -242,19 +232,16 @@ def load_nfl_pfr_weekly_rec(seasons: List[int]) -> pd.DataFrame:
             advanced receiving stats data available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
-        i_data = pd.read_parquet(NFL_PFR_WEEK_REC_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_PFR_WEEK_REC_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_pfr_def() -> pd.DataFrame:
+def load_nfl_pfr_def(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Advanced Defensive data going back to 2018
 
     Example:
@@ -265,10 +252,10 @@ def load_nfl_pfr_def() -> pd.DataFrame:
             advanced defensive stats data available.
 
     """
-    df = pd.read_parquet(NFL_PFR_SEASON_DEF_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_PFR_SEASON_DEF_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_PFR_SEASON_DEF_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_pfr_weekly_def(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Defensive data going back to 2018
 
     Example:
@@ -282,20 +269,17 @@ def load_nfl_pfr_weekly_def(seasons: List[int]) -> pd.DataFrame:
             advanced defensive stats data available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
-        i_data = pd.read_parquet(NFL_PFR_WEEK_DEF_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
+        i_data = pl.read_parquet(NFL_PFR_WEEK_DEF_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
 
-def load_nfl_rosters(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_rosters(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL roster data for all seasons
 
     Example:
@@ -308,19 +292,16 @@ def load_nfl_rosters(seasons: List[int]) -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1920)
-        i_data = pd.read_parquet(NFL_ROSTER_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_ROSTER_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_weekly_rosters(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL weekly roster data for selected seasons
 
     Example:
@@ -333,19 +314,16 @@ def load_nfl_weekly_rosters(seasons: List[int]) -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing weekly rosters available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2002)
-        i_data = pd.read_parquet(NFL_WEEKLY_ROSTER_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_WEEKLY_ROSTER_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_teams() -> pd.DataFrame:
+def load_nfl_teams(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL team ID information and logos
 
     Example:
@@ -357,9 +335,10 @@ def load_nfl_teams() -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing teams available.
     """
     df = pd.read_csv(NFL_TEAM_LOGO_URL, low_memory=False)
-    return df
+    return pl.read_csv(NFL_TEAM_LOGO_URL).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_csv(NFL_TEAM_LOGO_URL)
 
-def load_nfl_players() -> pd.DataFrame:
+def load_nfl_players(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Player ID information
 
     Example:
@@ -370,10 +349,10 @@ def load_nfl_players() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing players available.
     """
-    df = pd.read_parquet(NFL_PLAYER_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_PLAYER_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_OFFICIALS_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_snap_counts(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_snap_counts(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL snap counts data for selected seasons
 
     Example:
@@ -386,19 +365,16 @@ def load_nfl_snap_counts(seasons: List[int]) -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing snap counts available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2012)
-        i_data = pd.read_parquet(NFL_SNAP_COUNTS_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_SNAP_COUNTS_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_pbp_participation(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_pbp_participation(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL play-by-play participation data for selected seasons
 
     Example:
@@ -411,19 +387,16 @@ def load_nfl_pbp_participation(seasons: List[int]) -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing play-by-play participation data available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2016)
-        i_data = pd.read_parquet(NFL_PBP_PARTICIPATION_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_PBP_PARTICIPATION_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_injuries(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_injuries(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL injuries data for selected seasons
 
     Example:
@@ -436,19 +409,16 @@ def load_nfl_injuries(seasons: List[int]) -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing injuries data available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2009)
-        i_data = pd.read_parquet(NFL_INJURIES_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_INJURIES_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_depth_charts(seasons: List[int]) -> pd.DataFrame:
+def load_nfl_depth_charts(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Depth Chart data for selected seasons
 
     Example:
@@ -461,19 +431,16 @@ def load_nfl_depth_charts(seasons: List[int]) -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing depth chart data available for the requested seasons.
 
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2001)
-        i_data = pd.read_parquet(NFL_DEPTH_CHARTS_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
+        i_data = pl.read_parquet(NFL_DEPTH_CHARTS_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
-
-def load_nfl_contracts() -> pd.DataFrame:
+def load_nfl_contracts(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Historical contracts information
 
     Example:
@@ -484,11 +451,11 @@ def load_nfl_contracts() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing historical contracts available.
     """
-    df = pd.read_parquet(NFL_CONTRACTS_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_CONTRACTS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_CONTRACTS_URL, use_pyarrow=True, columns=None)
 
 
-def load_nfl_combine() -> pd.DataFrame:
+def load_nfl_combine(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Combine information
 
     Example:
@@ -499,10 +466,10 @@ def load_nfl_combine() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing NFL combine data available.
     """
-    df = pd.read_parquet(NFL_COMBINE_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_COMBINE_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_COMBINE_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_draft_picks() -> pd.DataFrame:
+def load_nfl_draft_picks(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Draft picks information
 
     Example:
@@ -513,10 +480,10 @@ def load_nfl_draft_picks() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing NFL Draft picks data available.
     """
-    df = pd.read_parquet(NFL_DRAFT_PICKS_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_DRAFT_PICKS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_DRAFT_PICKS_URL, use_pyarrow=True, columns=None)
 
-def load_nfl_officials() -> pd.DataFrame:
+def load_nfl_officials(return_as_pandas = True) -> pd.DataFrame:
     """Load NFL Officials information
 
     Example:
@@ -527,8 +494,8 @@ def load_nfl_officials() -> pd.DataFrame:
     Returns:
         pd.DataFrame: Pandas dataframe containing officials available.
     """
-    df = pd.read_parquet(NFL_OFFICIALS_URL, engine='auto', columns=None)
-    return df
+    return pl.read_parquet(NFL_OFFICIALS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array = True) \
+        if return_as_pandas else pl.read_parquet(NFL_OFFICIALS_URL, use_pyarrow=True, columns=None)
 ## Currently removed due to unsupported features of pyreadr's method.
 ## there is a list-column of nested tibbles within the data
 ## that is not supported by pyreadr

@@ -16,12 +16,11 @@ def nfl_token_gen():
 
     response = requests.request("POST", url, headers=headers, data = payload)
 
-    access_token = json.loads(response.content)['access_token']
-    return access_token
+    return json.loads(response.content)['access_token']
 
 def nfl_headers_gen():
     token = nfl_token_gen()
-    NFL_HEADERS = {
+    return {
         "Host": "api.nfl.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
         "Accept": "*/*",
@@ -37,7 +36,6 @@ def nfl_headers_gen():
         "Pragma": "no-cache",
         "Cache-Control": "no-cache",
     }
-    return NFL_HEADERS
 
 def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
     """nfl_game_details()
@@ -117,13 +115,8 @@ def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
         if k in summary.keys():
             pbp_txt[k] = summary.get(f"{k}")
         else:
-            if k in dict_keys_expected:
-                pbp_txt[k] = {}
-            else:
-                pbp_txt[k] = []
-
-    pbp_json = pbp_txt
-    return pbp_json
+            pbp_txt[k] = {} if k in dict_keys_expected else []
+    return pbp_txt
 
 
 def nfl_game_schedule(season=2021,
@@ -151,7 +144,7 @@ def nfl_game_schedule(season=2021,
         "week": week
     }
     pbp_txt = {}
-    summary_url = f"https://api.nfl.com/experience/v1/games"
+    summary_url = "https://api.nfl.com/experience/v1/games"
     summary_resp = requests.get(summary_url,
                                 headers=headers,
                                params=params)
@@ -171,17 +164,4 @@ def nfl_game_schedule(season=2021,
         'drives',
         'plays'
     ]
-    if raw == True:
-        return summary
-
-    # for k in incoming_keys_expected:
-    #     if k in summary.keys():
-    #         pbp_txt[k] = summary.get(f"{k}")
-    #     else:
-    #         if k in dict_keys_expected:
-    #             pbp_txt[k] = {}
-    #         else:
-    #             pbp_txt[k] = []
-
-    pbp_json = summary
-    return pbp_json
+    return summary

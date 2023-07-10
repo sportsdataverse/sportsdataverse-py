@@ -64,8 +64,12 @@ def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limi
             season = (event.get('season').get('year')),
             season_type = (event.get('season').get('type')),
             week = (event.get('week', {}).get('number')),
-            home_linescores = pl.when(pl.col('status_type_description') == 'Postponed').then(None).otherwise(pl.col('home_linescores')),
-            away_linescores = pl.when(pl.col('status_type_description') == 'Postponed').then(None).otherwise(pl.col('away_linescores')),
+            home_linescores = pl.when(pl.col('status_type_description') == 'Postponed')
+                .then(None)
+                .otherwise(pl.col('home_linescores')),
+            away_linescores = pl.when(pl.col('status_type_description') == 'Postponed')
+                .then(None)
+                .otherwise(pl.col('away_linescores')),
         )
         x = x[[s.name for s in x if s.null_count() != x.height]]
         ev = pl.concat([ev, x], how = 'diagonal')
@@ -130,13 +134,13 @@ def espn_cfb_calendar(season = None, groups = None, ondays = None,
         ValueError: If `season` is less than 2002.
     """
     if ondays is not None:
-        full_schedule = __ondays_from_espn_cfb_calendar(season)
+        full_schedule = __ondays_cfb_calendar(season, **kwargs)
     else:
+        url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
         params = {
             'dates': season,
             'groups': groups if groups is not None else '80'
         }
-        url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
         resp = download(url = url, params = params, **kwargs)
         txt = resp.json()
         txt = txt.get('leagues')[0].get('calendar')
