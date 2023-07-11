@@ -8,7 +8,7 @@ from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download, underscore
 
 def espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500,
-                      return_as_pandas=True) -> pd.DataFrame:
+                      return_as_pandas=True, **kwargs) -> pd.DataFrame:
     """espn_mbb_schedule - look up the men's college basketball scheduler for a given season
 
     Args:

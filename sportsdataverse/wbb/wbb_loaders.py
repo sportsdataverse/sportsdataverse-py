@@ -1,4 +1,5 @@
 import pandas as pd
+import polars as pl
 import json
 from tqdm import tqdm
 from typing import List, Callable, Iterator, Union, Optional
@@ -6,7 +7,7 @@ from sportsdataverse.config import WBB_BASE_URL, WBB_TEAM_BOX_URL, WBB_PLAYER_BO
 from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.dl_utils import download
 
-def load_wbb_pbp(seasons: List[int]) -> pd.DataFrame:
+def load_wbb_pbp(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load women's college basketball play by play data going back to 2002
 
     Example:
@@ -14,6 +15,7 @@ def load_wbb_pbp(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the
@@ -22,19 +24,17 @@ def load_wbb_pbp(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
-        i_data = pd.read_parquet(WBB_BASE_URL.format(season=i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-    return data
+        i_data = pl.read_parquet(WBB_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-def load_wbb_team_boxscore(seasons: List[int]) -> pd.DataFrame:
+def load_wbb_team_boxscore(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load women's college basketball team boxscore data
 
     Example:
@@ -42,6 +42,7 @@ def load_wbb_team_boxscore(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the
@@ -50,20 +51,17 @@ def load_wbb_team_boxscore(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise ValueError("season cannot be less than 2002")
-        i_data = pd.read_parquet(WBB_TEAM_BOX_URL.format(season = i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
+        i_data = pl.read_parquet(WBB_TEAM_BOX_URL.format(season = i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    return data
-
-def load_wbb_player_boxscore(seasons: List[int]) -> pd.DataFrame:
+def load_wbb_player_boxscore(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load women's college basketball player boxscore data
 
     Example:
@@ -71,6 +69,7 @@ def load_wbb_player_boxscore(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the
@@ -79,20 +78,17 @@ def load_wbb_player_boxscore(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise ValueError("season cannot be less than 2002")
-        i_data = pd.read_parquet(WBB_PLAYER_BOX_URL.format(season = i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
+        i_data = pl.read_parquet(WBB_PLAYER_BOX_URL.format(season = i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
 
-    return data
-
-def load_wbb_schedule(seasons: List[int]) -> pd.DataFrame:
+def load_wbb_schedule(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
     """Load women's college basketball schedule data
 
     Example:
@@ -100,6 +96,7 @@ def load_wbb_schedule(seasons: List[int]) -> pd.DataFrame:
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing the
@@ -108,15 +105,12 @@ def load_wbb_schedule(seasons: List[int]) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    data = pd.DataFrame()
+    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise ValueError("season cannot be less than 2002")
-        i_data = pd.read_parquet(WBB_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
-        data = pd.concat([data, i_data], axis = 0, ignore_index = True)
-    #Give each row a unique index
-    data.reset_index(drop=True, inplace=True)
-
-    return data
+        i_data = pl.read_parquet(WBB_TEAM_SCHEDULE_URL.format(season = i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how = 'vertical')
+    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
