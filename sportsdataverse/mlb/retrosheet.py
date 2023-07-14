@@ -11,6 +11,7 @@ RETROSHEET NOTICE:
     parties may contact Retrosheet at "www.retrosheet.org".
 """
 import pandas as pd
+import polars as pl
 from sportsdataverse.dl_utils import download
 from io import StringIO
 from tqdm import tqdm
@@ -18,11 +19,11 @@ from datetime import datetime
 
 def retrosheet_ballparks() -> pd.DataFrame():
     """
-    Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe. 
+    Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe.
 
     Args:
         None
-    
+
     Returns:
         A pandas Dataframe with the biographical information of notable major league teams.
     """
@@ -38,11 +39,11 @@ def retrosheet_ballparks() -> pd.DataFrame():
 
 def retrosheet_ejections() -> pd.DataFrame():
     """
-    Retrives the current Ejecdata.txt file from the  Retrosheet website, and then returns the current file as a pandas dataframe. 
+    Retrives the current Ejecdata.txt file from the  Retrosheet website, and then returns the current file as a pandas dataframe.
 
     Args:
         None
-    
+
     Returns:
         A pandas Dataframe with the ejection data of known MLB ejections.
     """
@@ -57,11 +58,11 @@ def retrosheet_ejections() -> pd.DataFrame():
 
 def retrosheet_franchises() -> pd.DataFrame():
     """
-    Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as  a pandas dataframe. 
+    Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as  a pandas dataframe.
 
     Args:
         None
-    
+
     Returns:
         A pandas Dataframe with the biographical information of notable major league teams.
     """
@@ -77,11 +78,11 @@ def retrosheet_franchises() -> pd.DataFrame():
 
 def retrosheet_people() -> pd.DataFrame():
     """
-    Retrives the current BioFile.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe. 
+    Retrives the current BioFile.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe.
 
     Args:
         None
-    
+
     Returns:
         A pandas Dataframe with the biographical information of various individuals who have played baseball.
     """
@@ -110,13 +111,13 @@ def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule
             Required parameter. Indicates the season you are trying to find the games for, or the first season you are trying to find games for, if you want games from a range of seasons.
 
         last_season (int):
-            Optional parameter. If you want to get games from a range of seasons, set this variable to the last season you want games from. 
+            Optional parameter. If you want to get games from a range of seasons, set this variable to the last season you want games from.
 
         original_2020_schedule (bool):
             Retrosheet keeps a record of the orignial 2020 MLB season, before the season was delayed due to the COVID-19 pandemic.
-            
+
             - If this is set to True, this function will return the original 2020 MLB season, before it was altered due to the COVID-19 pandemic, if the user wants this function to return the schedule for the 2020 MLB season.
-        
+
             - If this is set to False, this function will return the altered 2020 MLB season, after it was altered due to the COVID-19 pandemic, if the user wants this function to return the schedule for the 2020 MLB season.
 
     Returns:
@@ -134,7 +135,7 @@ def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule
         print(f'Getting all of the games for the {first_season} MLB season!')
     elif last_season == first_season:
         print(f'Getting all of the games for the {first_season} MLB season!')
-    elif first_season > last_season: 
+    elif first_season > last_season:
         last_season = first_season
         print(f'CAUGHT EXCEPTION!\nlast_season is greater than first_season!')
         print(f'Getting all of the games for the {first_season} MLB season instead.')
@@ -152,7 +153,7 @@ def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule
             schedule_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/schedule/2020REV.TXT"
         else:
             schedule_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/schedule/{i}SKED.TXT"
-        
+
         schedule_columns = ['date','game_num','day_of_week',
         'road_team','road_league','road_team_game_num',
         'home_team','home_league','home_team_game_num','time_of_game',
@@ -164,13 +165,13 @@ def retrosheet_schedule(first_season:int,last_season=None,original_2020_schedule
             print(f'An error has occurred when downloading Retrosheet schedule data.\nError:\n{e}')
         schedule_df = pd.concat([schedule_df,season_schedule_df],ignore_index=True)
         del season_schedule_df
-    
+
     return schedule_df
- 
+
 def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regular",filter_out_seasons=True) -> pd.DataFrame():
     """
-    Retrives the team-level stats for MLB games in a season, or range of seasons. 
-    THIS DOES NOT GET PLAYER STATS! 
+    Retrives the team-level stats for MLB games in a season, or range of seasons.
+    THIS DOES NOT GET PLAYER STATS!
     Use retrosplits_game_logs_player() for player-level game stats.
 
     Args:
@@ -178,7 +179,7 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
             Required parameter. Indicates the season you are trying to find the games for, or the first season you are trying to find games for, if you want games from a range of seasons.
 
         last_season (int):
-            Optional parameter. If you want to get games from a range of seasons, set this variable to the last season you want games from. 
+            Optional parameter. If you want to get games from a range of seasons, set this variable to the last season you want games from.
 
         game_type (str):
             Optional parameter. By default, this is set to "regular", or to put it in another way, this function call will return only regular season games.
@@ -186,7 +187,7 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
             The full list of supported keywards for game_type are as follows. Case does not matter (you can set game_type to "rEgUlAr", and the function call will still work):
 
                 - "regular": Regular season games.
-            
+
                 - "asg": All-Star games.
 
                 - "playoffs": Playoff games.
@@ -196,7 +197,7 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
 
     Returns:
         A pandas dataframe containing team-level stats for MLB games.
-    
+
     """
     game_log_df = pd.DataFrame()
     season_game_log_df = pd.DataFrame()
@@ -204,7 +205,7 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
         last_season = int(last_season)
     except:
         last_season = None
-        
+
     columns_list = [
         ## Game Info
         'date','game_num','day_of_week',
@@ -216,21 +217,21 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
         'game_length','day_night_indicator','completion_info','forfeit_info','protest_info',
         'park_id','attendance','time_of_game','away_line_score','home_line_score',
         ## Away Batting stats
-        'away_AB','away_H','away_2B','away_3B','away_HR','away_RBI','away_SH','away_SF', 
+        'away_AB','away_H','away_2B','away_3B','away_HR','away_RBI','away_SH','away_SF',
         'away_HBP','away_BB','away_IBB','away_K','away_SB','away_CS','away_GDP','away_CI',
         'away_LOB',
         ## Away Pitching
-        'away_pitchers_used','away_ER','away_team_ER','away_WP','away_BK', 
+        'away_pitchers_used','away_ER','away_team_ER','away_WP','away_BK',
         ## Away Fielding
-        'away_PO','away_A','away_E','away_PB','away_DP','away_TP', 
+        'away_PO','away_A','away_E','away_PB','away_DP','away_TP',
         ## Home Batting stats
-        'home_AB','home_H','home_2B','home_3B','home_HR','home_RBI','home_SH','home_SF', 
+        'home_AB','home_H','home_2B','home_3B','home_HR','home_RBI','home_SH','home_SF',
         'home_HBP','home_BB','home_IBB','home_K','home_SB','home_CS','home_GDP','home_CI',
         'home_LOB',
         ## Home Pitching
-        'home_pitchers_used','home_ER','home_team_ER','home_WP','home_BK', 
+        'home_pitchers_used','home_ER','home_team_ER','home_WP','home_BK',
         ## Home Fielding
-        'home_PO','home_A','home_E','home_PB','home_DP','home_TP', 
+        'home_PO','home_A','home_E','home_PB','home_DP','home_TP',
         ## Umpires
         'home_plate_umpire_id','home_plate_umpire_name','1B_umpire_id','1B_umpire_name',
         '2B_umpire_id','2B_umpire_name','3B_umpire_id','3B_umpire_name',
@@ -267,13 +268,13 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
         'home_batter_09_id','home_batter_09_name','home_batter_09_position',
         'additional_info','acquisition_info'
     ]
-    
+
     if last_season == None:
         last_season = first_season
         print(f'Getting all of the games for the {first_season} MLB season!')
     elif last_season == first_season:
         print(f'Getting all of the games for the {first_season} MLB season!')
-    elif first_season > last_season: 
+    elif first_season > last_season:
         last_season = first_season
         print(f'CAUGHT EXCEPTION!\nlast_season is greater than first_season!')
         print(f'Getting all of the games for the {first_season} MLB season instead.')
@@ -297,7 +298,7 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
 
             game_log_df = pd.concat([game_log_df,season_game_log_df],ignore_index=True)
             del season_game_log_df
-    
+
     elif game_type.lower() == "asg" or game_type.lower() == "all star" or game_type.lower() == "all-star":
         game_log_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLAS.TXT"
         try:
@@ -317,7 +318,7 @@ def retrosheet_game_logs_team(first_season:int,last_season=None,game_type="regul
         or game_type.lower() == "post" or game_type.lower() == "postseason" \
         or game_type.lower() == "october" or game_type.lower() == "november" \
         or game_type.lower() == "november baseball":
-        
+
         wildcard_round_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLWC.TXT"
         divisional_round_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLDV.TXT"
         championship_round_url = f"https://raw.githubusercontent.com/chadwickbureau/retrosheet/master/gamelog/GLLC.TXT"
