@@ -66,11 +66,10 @@ def helper_nhl_pbp(game_id, pbp_txt):
     if (pbp_txt['playByPlaySource'] != "none") & (len(pbp_txt['plays'])>1):
         pbp_txt = helper_nhl_pbp_features(game_id, pbp_txt, init)
     else:
-        pbp_txt['plays'] = pd.DataFrame()
-    pbp_txt['plays'] = pbp_txt['plays'].replace({np.nan: None})
+        pbp_txt['plays'] = pl.DataFrame()
     return {
         "gameId": game_id,
-        "plays": pbp_txt['plays'].to_dict(orient='records'),
+        "plays": pbp_txt['plays'].to_dicts(),
         "boxscore": pbp_txt['boxscore'],
         "header": pbp_txt['header'],
         "format": pbp_txt['format'],
