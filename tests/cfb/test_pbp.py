@@ -9,10 +9,10 @@ def generated_data():
     test.run_processing_pipeline()
     yield test
 
-@pytest.fixture()
-def box_score(generated_data):
-    box = generated_data.create_box_score()
-    yield box
+# @pytest.fixture()
+# def box_score(generated_data):
+#     box = generated_data.create_box_score()
+#     yield box
 
 def test_basic_pbp(generated_data):
     assert generated_data.json != None
@@ -20,7 +20,7 @@ def test_basic_pbp(generated_data):
     generated_data.run_processing_pipeline()
     assert len(generated_data.plays_json) > 0
     assert generated_data.ran_pipeline == True
-    assert isinstance(generated_data.plays_json, pd.DataFrame)
+    assert isinstance(generated_data.plays_json, pl.DataFrame)
 
 def test_adv_box_score(box_score):
     assert box_score != None
