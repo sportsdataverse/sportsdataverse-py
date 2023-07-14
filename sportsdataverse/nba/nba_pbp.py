@@ -1,4 +1,3 @@
-from typing import Dict
 import pandas as pd
 import polars as pl
 import numpy as np
@@ -251,11 +250,11 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
             .otherwise(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
             .alias("start.half_seconds_remaining"),
         pl.when(pl.col('qtr') == 1)
-            .then(2880 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .when(pl.col('qtr') == 2)
             .then(2160 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .when(pl.col('qtr') == 3)
+            .when(pl.col('qtr') == 2)
             .then(1440 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
+            .when(pl.col('qtr') == 3)
+            .then(720 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
             .otherwise(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
             .alias("start.game_seconds_remaining"),
     ).with_columns(
