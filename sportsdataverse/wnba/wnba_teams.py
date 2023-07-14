@@ -1,19 +1,29 @@
 import pandas as pd
+import polars as pl
 import json
 from sportsdataverse.dl_utils import download, underscore
 from urllib.error import URLError, HTTPError, ContentTooShortError
 
-def espn_wnba_teams() -> pd.DataFrame:
+def espn_wnba_teams(return_as_pandas = True, **kwargs) -> pd.DataFrame:
     """espn_wnba_teams - look up WNBA teams
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pd.DataFrame: Pandas dataframe containing teams for the requested league.
+
+    Example:
+        `wnba_df = sportsdataverse.wnba.espn_wnba_teams()`
+
     """
-    ev = pd.DataFrame()
-    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams?limit=1000"
-    resp = download(url=url)
+    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams"
+    params = {
+        "limit": 1000
+    }
+    resp = download(url=url, params = params, **kwargs)
     if resp is not None:
-        events_txt = json.loads(resp)
+        events_txt = resp.json()
 
         teams = events_txt.get('sports')[0].get('leagues')[0].get('teams')
         del_keys = ['record', 'links']
@@ -22,5 +32,5 @@ def espn_wnba_teams() -> pd.DataFrame:
                 team.get('team').pop(k, None)
         teams = pd.json_normalize(teams, sep='_')
     teams.columns = [underscore(c) for c in teams.columns.tolist()]
-    return teams
+    return teams if return_as_pandas else pl.from_pandas(teams)
 
