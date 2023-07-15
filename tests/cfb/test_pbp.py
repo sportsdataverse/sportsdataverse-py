@@ -1,5 +1,6 @@
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 import pandas as pd
+import polars as pl
 import pytest
 
 @pytest.fixture()
@@ -9,10 +10,10 @@ def generated_data():
     test.run_processing_pipeline()
     yield test
 
-# @pytest.fixture()
-# def box_score(generated_data):
-#     box = generated_data.create_box_score()
-#     yield box
+@pytest.fixture()
+def box_score(generated_data):
+    box = generated_data.create_box_score(pl.DataFrame(generated_data.plays_json, infer_schema_length=400))
+    yield box
 
 def test_basic_pbp(generated_data):
     assert generated_data.json != None
@@ -20,7 +21,7 @@ def test_basic_pbp(generated_data):
     generated_data.run_processing_pipeline()
     assert len(generated_data.plays_json) > 0
     assert generated_data.ran_pipeline == True
-    assert isinstance(generated_data.plays_json, pl.DataFrame)
+    assert isinstance(pl.DataFrame(generated_data.plays_json, infer_schema_length=400), pl.DataFrame)
 
 def test_adv_box_score(box_score):
     assert box_score != None
@@ -44,7 +45,7 @@ def dupe_fsu_play_base():
     test = CFBPlayProcess(gameId = 401411109)
     test.espn_cfb_pbp()
     test.run_processing_pipeline()
-    yield test.plays_json
+    yield pl.DataFrame(test.plays_json, infer_schema_length=400)
 
 def test_fsu_play_dedupe(dupe_fsu_play_base):
     target_strings = [
@@ -73,23 +74,23 @@ def test_fsu_play_dedupe(dupe_fsu_play_base):
 
     for item in target_strings:
         print(f"Checking known test cases for dupes for play_text '{item}'")
-        assert len(dupe_fsu_play_base[
-            (dupe_fsu_play_base["text"] == item["text"])
-            & (dupe_fsu_play_base["start.down"] == item["down"])
-            & (dupe_fsu_play_base["start.distance"] == item["distance"])
-            & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
-        ]) == 1
+        assert len(dupe_fsu_play_base.filter(
+            (pl.col("text") == item["text"])
+            & (pl.col("start.down") == item["down"])
+            & (pl.col("start.distance") == item["distance"])
+            & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
+        )) == 1
         print(f"No dupes for play_text '{item}'")
 
 
     for item in regression_cases:
         print(f"Checking non-dupe base cases for dupes for play_text '{item}'")
-        assert len(dupe_fsu_play_base[
-            (dupe_fsu_play_base["text"] == item["text"])
-            & (dupe_fsu_play_base["start.down"] == item["down"])
-            & (dupe_fsu_play_base["start.distance"] == item["distance"])
-            & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
-        ]) == 1
+        assert len(dupe_fsu_play_base.filter(
+            (pl.col("text") == item["text"])
+            & (pl.col("start.down") == item["down"])
+            & (pl.col("start.distance") == item["distance"])
+            & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
+        )) == 1
         print(f"confirmed no dupes for regression case of play_text '{item}'")
 
 @pytest.fixture()
@@ -101,7 +102,7 @@ def iu_play_base():
 
 @pytest.fixture()
 def dupe_iu_play_base(iu_play_base):
-    yield iu_play_base.plays_json
+    yield pl.DataFrame(iu_play_base.plays_json, infer_schema_length=400)
 
 def test_iu_play_dedupe(dupe_iu_play_base):
     target_strings = [
@@ -124,28 +125,27 @@ def test_iu_play_dedupe(dupe_iu_play_base):
 
     for item in target_strings:
         print(f"Checking known test cases for dupes for play_text '{item}'")
-        assert len(dupe_iu_play_base[
-            (dupe_iu_play_base["text"] == item["text"])
-            & (dupe_iu_play_base["start.down"] == item["down"])
-            & (dupe_iu_play_base["start.distance"] == item["distance"])
-            & (dupe_iu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
-        ]) == 1
+        assert len(dupe_iu_play_base.filter(
+            (pl.col("text") == item["text"])
+            & (pl.col("start.down") == item["down"])
+            & (pl.col("start.distance") == item["distance"])
+            & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
+        )) == 1
         print(f"No dupes for play_text '{item}'")
 
     for item in elimination_strings:
         print(f"Checking for strings that should have been removed by dupe check for play_text '{item}'")
-        assert len(dupe_iu_play_base[
-            (dupe_iu_play_base["text"] == item["text"])
-            & (dupe_iu_play_base["start.down"] == item["down"])
-            & (dupe_iu_play_base["start.distance"] == item["distance"])
-            & (dupe_iu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
-        ]) == 0
+        assert len(dupe_iu_play_base.filter(
+            (pl.col("text") == item["text"])
+            & (pl.col("start.down") == item["down"])
+            & (pl.col("start.distance") == item["distance"])
+            & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
+        )) == 0
         print(f"Confirmed no values for play_text '{item}'")
 
 @pytest.fixture()
 def iu_play_base_box(iu_play_base):
-    box = iu_play_base.create_box_score()
-    yield box
+    yield iu_play_base.create_box_score(pl.DataFrame(iu_play_base.plays_json, infer_schema_length=400))
 
 def test_expected_turnovers(iu_play_base_box):
     defense_home = iu_play_base_box["defensive"][1]
