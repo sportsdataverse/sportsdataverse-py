@@ -1,4 +1,6 @@
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
+
 import pandas as pd
 import polars as pl
 import pytest
@@ -12,8 +14,9 @@ def generated_data():
 
 @pytest.fixture()
 def box_score(generated_data):
-    box = generated_data.create_box_score(pl.DataFrame(generated_data.plays_json, infer_schema_length=400))
-    yield box
+    yield generated_data.create_box_score(
+        pl.DataFrame(generated_data.plays_json, infer_schema_length=400)
+    )
 
 def test_basic_pbp(generated_data):
     assert generated_data.json != None
@@ -25,7 +28,19 @@ def test_basic_pbp(generated_data):
 
 def test_adv_box_score(box_score):
     assert box_score != None
-    assert len(set(box_score.keys()).difference({"win_pct","pass","team","situational","receiver","rush","receiver","defensive","turnover","drives"})) == 0
+    assert not set(box_score.keys()).difference(
+        {
+            "win_pct",
+            "pass",
+            "team",
+            "situational",
+            "rush",
+            "receiver",
+            "defensive",
+            "turnover",
+            "drives",
+        }
+    )
 
 def test_havoc_rate(box_score):
     defense_home = box_score["defensive"][0]
@@ -172,3 +187,47 @@ def test_expected_turnovers(iu_play_base_box):
     print(f"away off {away_team} vs def {def_home_team} - fum: {away_fum}, int: {away_off_int}, pd: {away_pd} -> xTO: {away_exp_xTO}")
     assert round(away_exp_xTO, 4) == round(away_actual_xTO, 4)
     assert round(home_exp_xTO, 4) == round(home_actual_xTO, 4)
+
+
+
+@pytest.fixture()
+def calendar_data():
+    yield espn_cfb_calendar(season=most_recent_cfb_season(), return_as_pandas=False)
+
+def calendar_data_check(calendar_data):
+    assert isinstance(calendar_data, pl.DataFrame)
+    assert len(calendar_data) > 0
+
+@pytest.fixture()
+def calendar_ondays_data():
+    yield espn_cfb_calendar(season=2021, ondays=True, return_as_pandas=False)
+
+
+def calendar_ondays_data_check(calendar_ondays_data):
+    assert isinstance(calendar_ondays_data, pl.DataFrame)
+    assert len(calendar_ondays_data) > 0
+
+@pytest.fixture()
+def schedule_data():
+    yield espn_cfb_schedule(return_as_pandas=False)
+
+def schedule_data_check(schedule_data):
+    assert isinstance(schedule_data, pl.DataFrame)
+    assert len(schedule_data) > 0
+
+@pytest.fixture()
+def schedule_data2():
+    yield espn_cfb_schedule(dates=20220901, return_as_pandas=False)
+
+def schedule_data_check2(schedule_data2):
+    assert isinstance(schedule_data, pl.DataFrame)
+    assert len(schedule_data) > 0
+
+@pytest.fixture()
+def week_1_schedule():
+    yield espn_cfb_schedule(dates = 2022, week = 1, return_as_pandas=False)
+
+
+def week_1_schedule_check(week_1_schedule):
+    assert isinstance(week_1_schedule, pl.DataFrame)
+    assert len(week_1_schedule) > 0

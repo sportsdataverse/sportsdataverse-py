@@ -22,3 +22,4 @@ jobs:
         pip install .[all]
         pytest ./tests/cfb
         pytest ./tests/mbb
+        pytest ./tests/test_dl_utils.py
