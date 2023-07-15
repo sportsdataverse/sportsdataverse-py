@@ -1,4 +1,5 @@
 import pandas as pd
+import polars as pl
 import numpy as np
 import re
 import os
@@ -66,7 +67,7 @@ class NFLPlayProcess(object):
              "gameInfo", "season"
 
         Example:
-            `nfl_df = sportsdataverse.nfl.NFLPlayProcess(gameId=401256137).espn_nfl_pbp()`
+            `nfl_df = sportsdataverse.nfl.NFLPlayProcess(gameId=401220403).espn_nfl_pbp()`
         """
         cache_buster = int(time.time() * 1000)
         pbp_txt = {}
@@ -74,7 +75,7 @@ class NFLPlayProcess(object):
         # summary endpoint for pickcenter array
         summary_url = f"http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={self.gameId}&{cache_buster}"
         summary_resp = download(summary_url)
-        summary = json.loads(summary_resp)
+        summary = summary_resp.json()
         incoming_keys_expected = [
             'boxscore', 'format', 'gameInfo', 'drives', 'leaders', 'broadcasts',
             'predictor', 'pickcenter', 'againstTheSpread', 'odds', 'winprobability',
@@ -95,21 +96,14 @@ class NFLPlayProcess(object):
                 if k in summary.keys():
                     pbp_json[k] = summary[k]
                 else:
-                    if k in dict_keys_expected:
-                        pbp_json[k] = {}
-                    else:
-                        pbp_json[k] = []
+                    pbp_json[k] = {} if k in dict_keys_expected else []
             return pbp_json
 
         for k in incoming_keys_expected:
             if k in summary.keys():
                 pbp_txt[k] = summary[k]
             else:
-                if k in dict_keys_expected:
-                    pbp_txt[k] = {}
-                else:
-                    pbp_txt[k] = []
-
+                pbp_txt[k] = {} if k in dict_keys_expected else []
         for k in [
             "scoringPlays",
             "standings",
@@ -127,13 +121,13 @@ class NFLPlayProcess(object):
         ]:
             pbp_txt[k] = key_check(obj=summary, key=k)
         for k in ['news','shop']:
-            pbp_txt.pop('{}'.format(k), None)
+            pbp_txt.pop(f'{k}', None)
         self.json = pbp_txt
 
         return self.json
 
     def nfl_pbp_disk(self):
-        with open(os.path.join(self.path_to_json, "{}.json".format(self.gameId))) as json_file:
+        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:
             pbp_txt = json.load(json_file)
             self.json = pbp_txt
         return self.json
@@ -170,35 +164,35 @@ class NFLPlayProcess(object):
         pbp_txt["plays"] = pd.DataFrame()
         for key in pbp_txt.get("drives").keys():
             prev_drives = pd.json_normalize(
-                    data=pbp_txt.get("drives").get("{}".format(key)),
-                    record_path="plays",
-                    meta=[
-                        "id",
-                        "displayResult",
-                        "isScore",
-                        ["team", "shortDisplayName"],
-                        ["team", "displayName"],
-                        ["team", "name"],
-                        ["team", "abbreviation"],
-                        "yards",
-                        "offensivePlays",
-                        "result",
-                        "description",
-                        "shortDisplayResult",
-                        ["timeElapsed", "displayValue"],
-                        ["start", "period", "number"],
-                        ["start", "period", "type"],
-                        ["start", "yardLine"],
-                        ["start", "clock", "displayValue"],
-                        ["start", "text"],
-                        ["end", "period", "number"],
-                        ["end", "period", "type"],
-                        ["end", "yardLine"],
-                        ["end", "clock", "displayValue"],
-                    ],
-                    meta_prefix="drive.",
-                    errors="ignore",
-                )
+                data=pbp_txt.get("drives").get(f"{key}"),
+                record_path="plays",
+                meta=[
+                    "id",
+                    "displayResult",
+                    "isScore",
+                    ["team", "shortDisplayName"],
+                    ["team", "displayName"],
+                    ["team", "name"],
+                    ["team", "abbreviation"],
+                    "yards",
+                    "offensivePlays",
+                    "result",
+                    "description",
+                    "shortDisplayResult",
+                    ["timeElapsed", "displayValue"],
+                    ["start", "period", "number"],
+                    ["start", "period", "type"],
+                    ["start", "yardLine"],
+                    ["start", "clock", "displayValue"],
+                    ["start", "text"],
+                    ["end", "period", "number"],
+                    ["end", "period", "type"],
+                    ["end", "yardLine"],
+                    ["end", "clock", "displayValue"],
+                ],
+                meta_prefix="drive.",
+                errors="ignore",
+            )
             pbp_txt["plays"] = pd.concat(
                 [pbp_txt["plays"], prev_drives], ignore_index=True
             )
@@ -237,12 +231,10 @@ class NFLPlayProcess(object):
         pbp_txt["overUnder"] = float(overUnder)
         pbp_txt["homeFavorite"] = homeFavorite
 
-            # ----- Figuring out Timeouts ---------
-        pbp_txt["timeouts"] = {}
-        pbp_txt["timeouts"][homeTeamId] = {"1": [], "2": []}
-        pbp_txt["timeouts"][awayTeamId] = {"1": [], "2": []}
-
-            # ----- Time ---------------
+        pbp_txt["timeouts"] = {
+            homeTeamId: {"1": [], "2": []},
+            awayTeamId: {"1": [], "2": []},
+        }
         pbp_txt["plays"]["clock.mm"] = pbp_txt["plays"][
                 "clock.displayValue"
             ].str.split(pat=":")
@@ -285,7 +277,6 @@ class NFLPlayProcess(object):
                 default=60 * pbp_txt["plays"]["clock.minutes"].astype(int)
                 + pbp_txt["plays"]["clock.seconds"].astype(int),
             )
-            # Pos Team - Start and End Id
         pbp_txt["plays"]["id"] = pbp_txt["plays"]["id"].apply(lambda x: int(x))
         pbp_txt["plays"] = pbp_txt["plays"].sort_values(
                 by=["id", "start.adj_TimeSecsRem"]

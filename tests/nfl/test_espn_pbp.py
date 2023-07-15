@@ -1,5 +1,6 @@
 from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess
 import pandas as pd
+import polars as pl
 import pytest
 
 @pytest.fixture()
@@ -15,4 +16,4 @@ def test_basic_pbp(generated_data):
     generated_data.run_processing_pipeline()
     assert len(generated_data.plays_json) > 0
     assert generated_data.ran_pipeline == True
-    assert isinstance(generated_data.plays_json, pd.DataFrame)
+    assert isinstance(generated_data.plays_json, pl.DataFrame)
