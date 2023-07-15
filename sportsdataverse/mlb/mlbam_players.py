@@ -49,7 +49,7 @@ def mlbam_search_mlb_players(search:str,isActive=""):
 
 		resp = download(searchURL)
 
-		resp_str = str(resp, 'UTF-8')
+		resp_str = str(resp.json(), 'UTF-8')
 
 		resp_json = json.loads(resp_str)
 		result_count = int(resp_json['search_player_all']['queryResults']['totalSize'])
@@ -74,7 +74,7 @@ def mlbam_player_info(playerID:int):
 	Args:
 		playerID (int):
 			Required parameter. If no playerID is provided, the function wil not work.
-	
+
 	Returns:
 		A pandas dataframe cointaining player information for the specified MLBAM player ID.
 	"""

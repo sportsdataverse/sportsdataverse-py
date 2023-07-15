@@ -51,7 +51,7 @@ def mlbam_transactions(startDate:str,endDate:str):
 	try:
 		resp = download(searchURL)
 
-		resp_str = str(resp, 'UTF-8')
+		resp_str = str(resp.json(), 'UTF-8')
 
 		resp_json = json.loads(resp_str)
 		try:

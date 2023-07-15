@@ -25,7 +25,7 @@ def mlbam_teams(season:int,retriveAllStarRosters=False):
 
 	Returns:
 		A pandas dataframe containing information about MLB teams that played in that season.
-	
+
 	"""
 	main_df = pd.DataFrame()
 
@@ -51,7 +51,7 @@ def mlbam_teams(season:int,retriveAllStarRosters=False):
 
 	resp = download(searchURL)
 
-	resp_str = str(resp, 'UTF-8')
+	resp_str = str(resp.json(), 'UTF-8')
 
 	resp_json = json.loads(resp_str)
 	try:
@@ -122,7 +122,7 @@ def mlbam_team_roster(teamID:int,startSeason:int,endSeason:int):
 
 		endSeason (int):
 			Required parameter. This value must be greater than startSeason for this function to work.
-	
+
 	Returns:
 		A pandas dataframe containg the roster(s) for the MLB team.
 	"""

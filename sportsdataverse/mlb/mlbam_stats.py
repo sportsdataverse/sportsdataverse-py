@@ -76,7 +76,7 @@ def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 
 		resp = download(searchURL)
 
-		resp_str = str(resp, 'UTF-8')
+		resp_str = str(resp.json(), 'UTF-8')
 
 		resp_json = json.loads(resp_str)
 		try:
@@ -120,7 +120,7 @@ def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 
 	Returns:
 		A pandas dataframe containing pitching stats for an MLB player in a given season.
-	
+
 	"""
 	main_df = pd.DataFrame()
 
@@ -262,7 +262,7 @@ def mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 			'F' - First Round (Wild Card)
 			'L' - League Championship
 			'W' - World Series
-			
+
 	Returns:
 		A pandas dataframe containing career pitching stats for an MLB player.
 	"""

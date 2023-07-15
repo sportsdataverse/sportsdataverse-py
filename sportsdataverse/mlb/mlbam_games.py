@@ -31,7 +31,7 @@ def mlbam_schedule(season:int,gameType="R"):
 			'L' - League Championship
 			'W' - World Series
 
-	Returns: 
+	Returns:
 		A pandas dataframe containing MLB scheduled games.
 	"""
 	main_df = pd.DataFrame()
@@ -59,7 +59,7 @@ def mlbam_schedule(season:int,gameType="R"):
 
 	resp = download(searchURL)
 
-	resp_str = str(resp, 'UTF-8')
+	resp_str = str(resp.json(), 'UTF-8')
 
 	resp_json = json.loads(resp_str)
 	try:
