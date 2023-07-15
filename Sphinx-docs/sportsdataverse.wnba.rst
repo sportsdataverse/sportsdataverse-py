@@ -4,6 +4,14 @@ sportsdataverse.wnba package
 Submodules
 ----------
 
+sportsdataverse.wnba.wnba\_game\_rosters module
+-----------------------------------------------
+
+.. automodule:: sportsdataverse.wnba.wnba_game_rosters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.wnba.wnba\_loaders module
 -----------------------------------------
 

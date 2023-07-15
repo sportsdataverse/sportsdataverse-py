@@ -27,6 +27,14 @@ sportsdataverse.config module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.decorators module
+---------------------------------
+
+.. automodule:: sportsdataverse.decorators
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.dl\_utils module
 --------------------------------
 

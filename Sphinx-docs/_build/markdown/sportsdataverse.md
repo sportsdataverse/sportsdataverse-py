@@ -9,6 +9,9 @@
     * Submodules
 
 
+    * sportsdataverse.cfb.cfb_game_rosters module
+
+
     * sportsdataverse.cfb.cfb_loaders module
 
 
@@ -90,6 +93,9 @@
     * Submodules
 
 
+    * sportsdataverse.nba.nba_game_rosters module
+
+
     * sportsdataverse.nba.nba_loaders module
 
 
@@ -112,6 +118,9 @@
 
 
     * sportsdataverse.nfl.model_vars module
+
+
+    * sportsdataverse.nfl.nfl_game_rosters module
 
 
     * sportsdataverse.nfl.nfl_games module
@@ -141,6 +150,9 @@
     * sportsdataverse.nhl.nhl_api module
 
 
+    * sportsdataverse.nhl.nhl_game_rosters module
+
+
     * sportsdataverse.nhl.nhl_loaders module
 
 
@@ -160,6 +172,9 @@
 
 
     * Submodules
+
+
+    * sportsdataverse.wbb.wbb_game_rosters module
 
 
     * sportsdataverse.wbb.wbb_loaders module
@@ -183,6 +198,9 @@
     * Submodules
 
 
+    * sportsdataverse.wnba.wnba_game_rosters module
+
+
     * sportsdataverse.wnba.wnba_loaders module
 
 
@@ -201,6 +219,24 @@
 ## Submodules
 
 ## sportsdataverse.config module
+
+## sportsdataverse.decorators module
+
+
+### sportsdataverse.decorators.record_mem_usage(func)
+
+### sportsdataverse.decorators.record_time_usage(func)
+
+### sportsdataverse.decorators.timer(number=10)
+Decorator that times the function it wraps over repeated executions
+
+Args:
+
+    number: int, The number of repeated executions of the function being wrapped
+
+Returns:
+
+    func
 
 ## sportsdataverse.dl_utils module
 
@@ -270,7 +306,7 @@ although there are some cases where that does not hold:
 
 
 
-### sportsdataverse.dl_utils.download(url, params={}, num_retries=15)
+### sportsdataverse.dl_utils.download(url, params=None, headers=None, proxy=None, timeout=30, num_retries=15, logger=None)
 
 ### sportsdataverse.dl_utils.flatten_json_iterative(dictionary, sep='.', ind_start=0)
 Flattening a nested json file

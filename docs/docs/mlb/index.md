@@ -43,7 +43,7 @@ Args:
         ‘L’ - League Championship
         ‘W’ - World Series
 
-Returns: 
+Returns:
 
     A pandas dataframe containing MLB scheduled games.
 
@@ -380,8 +380,8 @@ Returns:
 
 
 ### sportsdataverse.mlb.retrosheet.retrosheet_game_logs_team()
-Retrives the team-level stats for MLB games in a season, or range of seasons. 
-THIS DOES NOT GET PLAYER STATS! 
+Retrives the team-level stats for MLB games in a season, or range of seasons.
+THIS DOES NOT GET PLAYER STATS!
 Use retrosplits_game_logs_player() for player-level game stats.
 
 Args:
@@ -400,7 +400,7 @@ Args:
 
         The full list of supported keywards for game_type are as follows. Case does not matter (you can set game_type to “rEgUlAr”, and the function call will still work):
 
-        > 
+        >
         > * “regular”: Regular season games.
 
 

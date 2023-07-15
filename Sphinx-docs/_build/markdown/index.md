@@ -22,6 +22,9 @@ contain the root `toctree` directive. -->
             * Submodules
 
 
+            * sportsdataverse.cfb.cfb_game_rosters module
+
+
             * sportsdataverse.cfb.cfb_loaders module
 
 
@@ -103,6 +106,9 @@ contain the root `toctree` directive. -->
             * Submodules
 
 
+            * sportsdataverse.nba.nba_game_rosters module
+
+
             * sportsdataverse.nba.nba_loaders module
 
 
@@ -125,6 +131,9 @@ contain the root `toctree` directive. -->
 
 
             * sportsdataverse.nfl.model_vars module
+
+
+            * sportsdataverse.nfl.nfl_game_rosters module
 
 
             * sportsdataverse.nfl.nfl_games module
@@ -154,6 +163,9 @@ contain the root `toctree` directive. -->
             * sportsdataverse.nhl.nhl_api module
 
 
+            * sportsdataverse.nhl.nhl_game_rosters module
+
+
             * sportsdataverse.nhl.nhl_loaders module
 
 
@@ -173,6 +185,9 @@ contain the root `toctree` directive. -->
 
 
             * Submodules
+
+
+            * sportsdataverse.wbb.wbb_game_rosters module
 
 
             * sportsdataverse.wbb.wbb_loaders module
@@ -196,6 +211,9 @@ contain the root `toctree` directive. -->
             * Submodules
 
 
+            * sportsdataverse.wnba.wnba_game_rosters module
+
+
             * sportsdataverse.wnba.wnba_loaders module
 
 
@@ -215,6 +233,9 @@ contain the root `toctree` directive. -->
 
 
     * sportsdataverse.config module
+
+
+    * sportsdataverse.decorators module
 
 
     * sportsdataverse.dl_utils module

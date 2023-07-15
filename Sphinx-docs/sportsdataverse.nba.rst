@@ -4,6 +4,14 @@ sportsdataverse.nba package
 Submodules
 ----------
 
+sportsdataverse.nba.nba\_game\_rosters module
+---------------------------------------------
+
+.. automodule:: sportsdataverse.nba.nba_game_rosters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.nba.nba\_loaders module
 ---------------------------------------
 

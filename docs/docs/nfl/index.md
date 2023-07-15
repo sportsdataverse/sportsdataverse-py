@@ -4,6 +4,50 @@
 
 ## sportsdataverse.nfl.model_vars module
 
+## sportsdataverse.nfl.nfl_game_rosters module
+
+
+### sportsdataverse.nfl.nfl_game_rosters.espn_nfl_game_rosters(game_id: int, raw=False, return_as_pandas=True, \*\*kwargs)
+espn_nfl_game_rosters() - Pull the game by id.
+
+Args:
+
+    game_id (int): Unique game_id, can be obtained from espn_nfl_schedule().
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+Returns:
+
+    pd.DataFrame: Data frame of game roster data with columns:
+    ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
+    ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
+    ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
+    ‘age’, ‘date_of_birth’, ‘slug’, ‘jersey’, ‘linked’, ‘active’,
+    ‘alternate_ids_sdr’, ‘birth_place_city’, ‘birth_place_state’,
+    ‘birth_place_country’, ‘headshot_href’, ‘headshot_alt’,
+    ‘experience_years’, ‘experience_display_value’,
+    ‘experience_abbreviation’, ‘status_id’, ‘status_name’, ‘status_type’,
+    ‘status_abbreviation’, ‘hand_type’, ‘hand_abbreviation’,
+    ‘hand_display_value’, ‘draft_display_text’, ‘draft_round’, ‘draft_year’,
+    ‘draft_selection’, ‘player_id’, ‘starter’, ‘valid’, ‘did_not_play’,
+    ‘display_name’, ‘ejected’, ‘athlete_href’, ‘position_href’,
+    ‘statistics_href’, ‘team_id’, ‘team_guid’, ‘team_uid’, ‘team_slug’,
+    ‘team_location’, ‘team_name’, ‘team_nickname’, ‘team_abbreviation’,
+    ‘team_display_name’, ‘team_short_display_name’, ‘team_color’,
+    ‘team_alternate_color’, ‘is_active’, ‘is_all_star’,
+    ‘team_alternate_ids_sdr’, ‘logo_href’, ‘logo_dark_href’, ‘game_id’
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.espn_nfl_game_rosters(game_id=401220403)
+
+
+### sportsdataverse.nfl.nfl_game_rosters.helper_nfl_athlete_items(teams_rosters, \*\*kwargs)
+
+### sportsdataverse.nfl.nfl_game_rosters.helper_nfl_game_items(summary)
+
+### sportsdataverse.nfl.nfl_game_rosters.helper_nfl_roster_items(items, summary_url, \*\*kwargs)
+
+### sportsdataverse.nfl.nfl_game_rosters.helper_nfl_team_items(items, \*\*kwargs)
 ## sportsdataverse.nfl.nfl_games module
 
 
@@ -55,7 +99,7 @@ Example:
 ## sportsdataverse.nfl.nfl_loaders module
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_combine()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_combine(return_as_pandas=True)
 Load NFL Combine information
 
 Example:
@@ -69,7 +113,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing NFL combine data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_contracts()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_contracts(return_as_pandas=True)
 Load NFL Historical contracts information
 
 Example:
@@ -83,7 +127,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing historical contracts available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_depth_charts(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_depth_charts(seasons: List[int], return_as_pandas=True)
 Load NFL Depth Chart data for selected seasons
 
 Example:
@@ -99,7 +143,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing depth chart data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_draft_picks()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_draft_picks(return_as_pandas=True)
 Load NFL Draft picks information
 
 Example:
@@ -113,7 +157,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing NFL Draft picks data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_injuries(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_injuries(seasons: List[int], return_as_pandas=True)
 Load NFL injuries data for selected seasons
 
 Example:
@@ -129,7 +173,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing injuries data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_passing()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_passing(return_as_pandas=True)
 Load NFL NextGen Stats Passing data going back to 2016
 
 Example:
@@ -141,7 +185,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing the NextGen Stats Passing data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_receiving()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_receiving(return_as_pandas=True)
 Load NFL NextGen Stats Receiving data going back to 2016
 
 Example:
@@ -153,7 +197,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing the NextGen Stats Receiving data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_rushing()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_rushing(return_as_pandas=True)
 Load NFL NextGen Stats Rushing data going back to 2016
 
 Example:
@@ -165,7 +209,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing the NextGen Stats Rushing data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_officials()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_officials(return_as_pandas=True)
 Load NFL Officials information
 
 Example:
@@ -199,7 +243,7 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pbp_participation(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pbp_participation(seasons: List[int], return_as_pandas=True)
 Load NFL play-by-play participation data for selected seasons
 
 Example:
@@ -215,7 +259,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing play-by-play participation data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_def()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_def(return_as_pandas=True)
 Load NFL Pro-Football Reference Advanced Defensive data going back to 2018
 
 Example:
@@ -229,7 +273,7 @@ Returns:
         advanced defensive stats data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_pass()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_pass(return_as_pandas=True)
 Load NFL Pro-Football Reference Advanced Passing data going back to 2018
 
 Example:
@@ -243,7 +287,7 @@ Returns:
         advanced passing stats data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rec()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rec(return_as_pandas=True)
 Load NFL Pro-Football Reference Advanced Receiving data going back to 2018
 
 Example:
@@ -257,7 +301,7 @@ Returns:
         advanced receiving stats data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rush()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rush(return_as_pandas=True)
 Load NFL Pro-Football Reference Advanced Rushing data going back to 2018
 
 Example:
@@ -271,7 +315,7 @@ Returns:
         advanced rushing stats data available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_def(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas=True)
 Load NFL Pro-Football Reference Weekly Advanced Defensive data going back to 2018
 
 Example:
@@ -289,7 +333,7 @@ Returns:
         advanced defensive stats data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_pass(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=True)
 Load NFL Pro-Football Reference Weekly Advanced Passing data going back to 2018
 
 Example:
@@ -307,7 +351,7 @@ Returns:
         advanced passing stats data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rec(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=True)
 Load NFL Pro-Football Reference Weekly Advanced Receiving data going back to 2018
 
 Example:
@@ -325,7 +369,7 @@ Returns:
         advanced receiving stats data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rush(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=True)
 Load NFL Pro-Football Reference Weekly Advanced Rushing data going back to 2018
 
 Example:
@@ -343,7 +387,7 @@ Returns:
         advanced rushing stats data available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_player_stats(kicking=False)
+### sportsdataverse.nfl.nfl_loaders.load_nfl_player_stats(kicking=False, return_as_pandas=True)
 Load NFL player stats data
 
 Example:
@@ -359,7 +403,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing player stats.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_players()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_players(return_as_pandas=True)
 Load NFL Player ID information
 
 Example:
@@ -373,7 +417,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing players available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_rosters(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_rosters(seasons: List[int], return_as_pandas=True)
 Load NFL roster data for all seasons
 
 Example:
@@ -389,7 +433,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_schedule(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_schedule(seasons: List[int], return_as_pandas=True)
 Load NFL schedule data
 
 Example:
@@ -409,7 +453,7 @@ Raises:
     ValueError: If season is less than 1999.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_snap_counts(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_snap_counts(seasons: List[int], return_as_pandas=True)
 Load NFL snap counts data for selected seasons
 
 Example:
@@ -425,7 +469,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing snap counts available for the requested seasons.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_teams()
+### sportsdataverse.nfl.nfl_loaders.load_nfl_teams(return_as_pandas=True)
 Load NFL team ID information and logos
 
 Example:
@@ -439,7 +483,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing teams available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_weekly_rosters(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=True)
 Load NFL weekly roster data for selected seasons
 
 Example:
@@ -484,7 +528,7 @@ Returns:
 
 Example:
 
-    nfl_df = sportsdataverse.nfl.NFLPlayProcess(gameId=401256137).espn_nfl_pbp()
+    nfl_df = sportsdataverse.nfl.NFLPlayProcess(gameId=401220403).espn_nfl_pbp()
 
 
 #### gameId( = 0)
@@ -505,13 +549,14 @@ Example:
 ## sportsdataverse.nfl.nfl_schedule module
 
 
-### sportsdataverse.nfl.nfl_schedule.espn_nfl_calendar(season=None, ondays=None)
+### sportsdataverse.nfl.nfl_schedule.espn_nfl_calendar(season=None, ondays=None, return_as_pandas=True, \*\*kwargs)
 espn_nfl_calendar - look up the NFL calendar for a given season
 
 Args:
 
     season (int): Used to define different seasons. 2002 is the earliest available season.
     ondays (boolean): Used to return dates for calendar ondays
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
@@ -522,7 +567,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.nfl.nfl_schedule.espn_nfl_schedule(dates=None, week=None, season_type=None, limit=500)
+### sportsdataverse.nfl.nfl_schedule.espn_nfl_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=True, \*\*kwargs)
 espn_nfl_schedule - look up the NFL schedule for a given season
 
 Args:
@@ -531,6 +576,7 @@ Args:
     week (int): Week of the schedule.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
     limit (int): number of records to return, default: 500.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
@@ -543,11 +589,19 @@ Returns:
 ## sportsdataverse.nfl.nfl_teams module
 
 
-### sportsdataverse.nfl.nfl_teams.espn_nfl_teams()
+### sportsdataverse.nfl.nfl_teams.espn_nfl_teams(return_as_pandas=True, \*\*kwargs)
 espn_nfl_teams - look up NFL teams
+
+Args:
+
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
     pd.DataFrame: Pandas dataframe containing teams for the requested league.
+
+Example:
+
+    nfl_df = sportsdataverse.nfl.espn_nfl_teams()
 
 ## Module contents

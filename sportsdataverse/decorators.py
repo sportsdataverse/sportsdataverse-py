@@ -7,13 +7,11 @@ import psutil
 def timer(number=10):
     """Decorator that times the function it wraps over repeated executions
 
-    Parameters
-    ----------
-    number : int
-        The number of repeated executions of the function being wrapped
-    Returns
-    -------
-    func
+    Args:
+        number: int, The number of repeated executions of the function being wrapped
+
+    Returns:
+        func
     """
     def actual_wrapper(func):
         @functools.wraps(func)
