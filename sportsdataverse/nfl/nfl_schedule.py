@@ -59,7 +59,7 @@ def espn_nfl_schedule(dates=None, week=None, season_type=None, groups=None, limi
         event.get('competitions')[0].pop('competitors', None)
         x = pl.from_pandas(pd.json_normalize(event.get('competitions')[0], sep = '_'))
         x = x.with_columns(
-            game_id = (pl.col('id').cast(pl.Int64)),
+            game_id = (pl.col('id').cast(pl.Int32)),
             season = (event.get('season').get('year')),
             season_type = (event.get('season').get('type')),
             week = (event.get('week', {}).get('number')),

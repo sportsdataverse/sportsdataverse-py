@@ -55,7 +55,7 @@ def espn_nba_schedule(dates=None, season_type=None, limit=500,
 
         x = pl.from_pandas(pd.json_normalize(event.get('competitions')[0], sep = '_'))
         x = x.with_columns(
-            game_id = (pl.col('id').cast(pl.Int64)),
+            game_id = (pl.col('id').cast(pl.Int32)),
             season = (event.get('season').get('year')),
             season_type = (event.get('season').get('type')),
             home_linescores = pl.when(pl.col('status_type_description') == 'Postponed')

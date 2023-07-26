@@ -50,7 +50,7 @@ def espn_nhl_game_rosters(game_id: int, raw = False, return_as_pandas = True, **
     athletes = helper_nhl_athlete_items(teams_rosters = team_rosters, **kwargs)
     rosters = athletes.join(teams_rosters, how = 'left', left_on = 'athlete_id', right_on = 'player_id')
     rosters = rosters.with_columns(
-        game_id = pl.lit(game_id).cast(pl.Int64)
+        game_id = pl.lit(game_id).cast(pl.Int32)
     )
     rosters.columns = [underscore(c) for c in rosters.columns]
     return rosters.to_pandas() if return_as_pandas else rosters

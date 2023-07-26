@@ -5,6 +5,7 @@ import time
 import datetime
 from sportsdataverse.dl_utils import download, underscore
 
+
 def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500,
                       return_as_pandas = True,
                       **kwargs) -> pd.DataFrame:
@@ -60,7 +61,7 @@ def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limi
         event.get('competitions')[0].pop('competitors', None)
         x = pl.from_pandas(pd.json_normalize(event.get('competitions')[0], sep = '_'))
         x = x.with_columns(
-            game_id = (pl.col('id').cast(pl.Int64)),
+            game_id = (pl.col('id').cast(pl.Int32)),
             season = (event.get('season').get('year')),
             season_type = (event.get('season').get('type')),
             week = (event.get('week', {}).get('number')),
@@ -77,6 +78,7 @@ def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limi
     ev.columns = [underscore(c) for c in ev.columns]
 
     return ev.to_pandas() if return_as_pandas else ev
+
 
 # TODO Rename this here and in `espn_cfb_schedule`
 def _extract_home_away(event, arg1, arg2):
@@ -116,6 +118,7 @@ def _extract_home_away(event, arg1, arg2):
         .get('records', [])
     )
     return event
+
 
 def espn_cfb_calendar(season = None, groups = None, ondays = None,
                       return_as_pandas = True, **kwargs) -> pd.DataFrame:
@@ -164,6 +167,7 @@ def espn_cfb_calendar(season = None, groups = None, ondays = None,
 
 
 def __ondays_cfb_calendar(season, **kwargs):
+
     url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/{season}/types/2/calendar/ondays"
     resp = download(url=url, **kwargs)
     if resp is not None:
@@ -176,6 +180,7 @@ def __ondays_cfb_calendar(season, **kwargs):
         )
 
     return result
+
 
 def most_recent_cfb_season():
     date = datetime.datetime.now()
