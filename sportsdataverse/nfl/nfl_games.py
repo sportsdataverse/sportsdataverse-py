@@ -1,22 +1,19 @@
 import json
 import requests
-from typing import List, Callable, Iterator, Union, Optional, Dict
-from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
+from typing import Dict
+
 
 def nfl_token_gen():
     url = "https://api.nfl.com/v1/reroute"
 
     # TODO: resolve if DNT or x-domain-id are necessary.  pulled them from chrome inspector
-    payload = 'grant_type=client_credentials'
-    headers = {
-      'DNT': '1',
-      'x-domain-id': '100',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    payload = "grant_type=client_credentials"
+    headers = {"DNT": "1", "x-domain-id": "100", "Content-Type": "application/x-www-form-urlencoded"}
 
-    response = requests.request("POST", url, headers=headers, data = payload)
+    response = requests.request("POST", url, headers=headers, data=payload)
 
-    return json.loads(response.content)['access_token']
+    return json.loads(response.content)["access_token"]
+
 
 def nfl_headers_gen():
     token = nfl_token_gen()
@@ -37,16 +34,17 @@ def nfl_headers_gen():
         "Cache-Control": "no-cache",
     }
 
+
 def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
     """nfl_game_details()
-        Args:
-            game_id (int): Game ID
-        Returns:
-            Dict: Dictionary of odds and props data with keys
-        Example:
-            `nfl_df = nfl_game_details(
-            game_id = '7ae87c4c-d24c-11ec-b23d-d15a91047884'
-            )`
+    Args:
+        game_id (int): Game ID
+    Returns:
+        Dict: Dictionary of odds and props data with keys
+    Example:
+        `nfl_df = nfl_game_details(
+        game_id = '7ae87c4c-d24c-11ec-b23d-d15a91047884'
+        )`
     """
     if headers is None:
         headers = nfl_headers_gen()
@@ -56,58 +54,49 @@ def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
     summary = summary_resp.json()
 
     incoming_keys_expected = [
-        'attendance',
-        'distance',
-        'down',
-        'gameClock',
-        'goalToGo',
-        'homePointsOvertime',
-        'homePointsQ1',
-        'homePointsQ2',
-        'homePointsQ3',
-        'homePointsQ4',
-        'homePointsTotal',
-        'homeTeam',
-        'homeTimeoutsRemaining',
-        'homeTimeoutsUsed',
-        'id',
-        'offset',
-        'period',
-        'phase',
-        'playReview',
-        'possessionTeam',
-        'quarter',
-        'redzone',
-        'scoringSummaries',
-        'stadium',
-        'startTime',
-        'totalOffset',
-        'visitorPointsOvertime',
-        'visitorPointsQ1',
-        'visitorPointsQ2',
-        'visitorPointsQ3',
-        'visitorPointsQ4',
-        'visitorPointsTotal',
-        'visitorTeam',
-        'visitorTimeoutsRemaining',
-        'visitorTimeoutsUsed',
-        'weather',
-        'yardLine',
-        'yardsToGo',
-        'drives',
-        'plays'
+        "attendance",
+        "distance",
+        "down",
+        "gameClock",
+        "goalToGo",
+        "homePointsOvertime",
+        "homePointsQ1",
+        "homePointsQ2",
+        "homePointsQ3",
+        "homePointsQ4",
+        "homePointsTotal",
+        "homeTeam",
+        "homeTimeoutsRemaining",
+        "homeTimeoutsUsed",
+        "id",
+        "offset",
+        "period",
+        "phase",
+        "playReview",
+        "possessionTeam",
+        "quarter",
+        "redzone",
+        "scoringSummaries",
+        "stadium",
+        "startTime",
+        "totalOffset",
+        "visitorPointsOvertime",
+        "visitorPointsQ1",
+        "visitorPointsQ2",
+        "visitorPointsQ3",
+        "visitorPointsQ4",
+        "visitorPointsTotal",
+        "visitorTeam",
+        "visitorTimeoutsRemaining",
+        "visitorTimeoutsUsed",
+        "weather",
+        "yardLine",
+        "yardsToGo",
+        "drives",
+        "plays",
     ]
-    dict_keys_expected = [
-        'homeTeam',
-        'possessionTeam',
-        'visitorTeam',
-        'weather'
-    ]
-    array_keys_expected = [
-        'scoringSummaries',
-        'drives',
-        'plays'
-    ]
+    dict_keys_expected = ["homeTeam", "possessionTeam", "visitorTeam", "weather"]
+    array_keys_expected = ["scoringSummaries", "drives", "plays"]
     if raw == True:
         return summary
 
@@ -119,49 +108,47 @@ def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
     return pbp_txt
 
 
-def nfl_game_schedule(season=2021,
-                      season_type="REG",
-                      week=1,
-                      headers=None,
-                      raw=False) -> Dict:
+def nfl_game_schedule(season=2021, season_type="REG", week=1, headers=None, raw=False) -> Dict:
     """nfl_game_schedule()
-        Args:
-            season (int): season
-            season_type (str): season type - REG, POST
-            week (int): week
-        Returns:
-            Dict: Dictionary of odds and props data with keys
-        Example:
-            `nfl_df = nfl_game_schedule(
-                season = 2021, seasonType='REG', week=1
-            )`
+    Args:
+        season (int): season
+        season_type (str): season type - REG, POST
+        week (int): week
+    Returns:
+        Dict: Dictionary of odds and props data with keys
+    Example:
+        `nfl_df = nfl_game_schedule(
+            season = 2021, seasonType='REG', week=1
+        )`
     """
     if headers is None:
         headers = nfl_headers_gen()
-    params = {
-        "season": season,
-        "seasonType": season_type,
-        "week": week
-    }
+    params = {"season": season, "seasonType": season_type, "week": week}
     pbp_txt = {}
     summary_url = "https://api.nfl.com/experience/v1/games"
-    summary_resp = requests.get(summary_url,
-                                headers=headers,
-                               params=params)
+    summary_resp = requests.get(summary_url, headers=headers, params=params)
     summary = summary_resp.json()
 
     incoming_keys_expected = [
-        'id', 'homeTeam', 'awayTeam', 'category', 'date', 'time', 'broadcastInfo', 'neutralSite', 'venue', 'season', 'seasonType', 'status', 'week', 'weekType', 'externalIds', 'ticketUrl', 'ticketVendors', 'detail'
+        "id",
+        "homeTeam",
+        "awayTeam",
+        "category",
+        "date",
+        "time",
+        "broadcastInfo",
+        "neutralSite",
+        "venue",
+        "season",
+        "seasonType",
+        "status",
+        "week",
+        "weekType",
+        "externalIds",
+        "ticketUrl",
+        "ticketVendors",
+        "detail",
     ]
-    dict_keys_expected = [
-        'homeTeam',
-        'possessionTeam',
-        'visitorTeam',
-        'weather'
-    ]
-    array_keys_expected = [
-        'scoringSummaries',
-        'drives',
-        'plays'
-    ]
+    dict_keys_expected = ["homeTeam", "possessionTeam", "visitorTeam", "weather"]
+    array_keys_expected = ["scoringSummaries", "drives", "plays"]
     return summary

@@ -5,7 +5,7 @@
 ## sportsdataverse.mlb.mlb_loaders module
 
 
-### sportsdataverse.mlb.mlb_loaders.mlbam_copyright_info(saveFile=False, returnFile=False)
+### sportsdataverse.mlb.mlb_loaders.mlbam_copyright_info(saveFile=False, returnFile=False, \*\*kwargs)
 Displays the copyright info for the MLBAM API.
 
 Args:

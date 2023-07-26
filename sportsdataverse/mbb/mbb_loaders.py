@@ -1,13 +1,12 @@
 import pandas as pd
 import polars as pl
-import json
 from tqdm import tqdm
-from typing import List, Callable, Iterator, Union, Optional
+from typing import List
 from sportsdataverse.config import MBB_BASE_URL, MBB_TEAM_BOX_URL, MBB_PLAYER_BOX_URL, MBB_TEAM_SCHEDULE_URL
 from sportsdataverse.errors import SeasonNotFoundError
-from sportsdataverse.dl_utils import download
 
-def load_mbb_pbp(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+
+def load_mbb_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load men's college basketball play by play data going back to 2002
 
     Example:
@@ -31,10 +30,11 @@ def load_mbb_pbp(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pl.read_parquet(MBB_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
-def load_mbb_team_boxscore(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+
+def load_mbb_team_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load men's college basketball team boxscore data
 
     Example:
@@ -57,12 +57,12 @@ def load_mbb_team_boxscore(seasons: List[int], return_as_pandas = True) -> pd.Da
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
-        i_data = pl.read_parquet(MBB_TEAM_BOX_URL.format(season = i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        i_data = pl.read_parquet(MBB_TEAM_BOX_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_mbb_player_boxscore(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+def load_mbb_player_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load men's college basketball player boxscore data
 
     Example:
@@ -85,11 +85,12 @@ def load_mbb_player_boxscore(seasons: List[int], return_as_pandas = True) -> pd.
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
-        i_data = pl.read_parquet(MBB_PLAYER_BOX_URL.format(season = i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        i_data = pl.read_parquet(MBB_PLAYER_BOX_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
-def load_mbb_schedule(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+
+def load_mbb_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load men's college basketball schedule data
 
     Example:
@@ -112,6 +113,6 @@ def load_mbb_schedule(seasons: List[int], return_as_pandas = True) -> pd.DataFra
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
-        i_data = pl.read_parquet(MBB_TEAM_SCHEDULE_URL.format(season = i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        i_data = pl.read_parquet(MBB_TEAM_SCHEDULE_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data

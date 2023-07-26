@@ -1,13 +1,18 @@
 import pandas as pd
 import polars as pl
-import json
 from tqdm import tqdm
-from typing import List, Callable, Iterator, Union, Optional
-from sportsdataverse.config import NHL_BASE_URL, NHL_TEAM_BOX_URL, NHL_TEAM_SCHEDULE_URL, NHL_TEAM_LOGO_URL, NHL_PLAYER_BOX_URL
+from typing import List
+from sportsdataverse.config import (
+    NHL_BASE_URL,
+    NHL_TEAM_BOX_URL,
+    NHL_TEAM_SCHEDULE_URL,
+    NHL_TEAM_LOGO_URL,
+    NHL_PLAYER_BOX_URL,
+)
 from sportsdataverse.errors import SeasonNotFoundError
-from sportsdataverse.dl_utils import download
 
-def load_nhl_pbp(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+
+def load_nhl_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load NHL play by play data going back to 2011
 
     Example:
@@ -30,10 +35,11 @@ def load_nhl_pbp(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
         i_data = pl.read_parquet(NHL_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
-def load_nhl_schedule(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+
+def load_nhl_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load NHL schedule data
 
     Example:
@@ -55,11 +61,12 @@ def load_nhl_schedule(seasons: List[int], return_as_pandas = True) -> pd.DataFra
     for i in tqdm(seasons):
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
-        i_data = pl.read_parquet(NHL_TEAM_SCHEDULE_URL.format(season = i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        i_data = pl.read_parquet(NHL_TEAM_SCHEDULE_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
-def load_nhl_team_boxscore(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+
+def load_nhl_team_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load NHL team boxscore data
 
     Example:
@@ -82,11 +89,12 @@ def load_nhl_team_boxscore(seasons: List[int], return_as_pandas = True) -> pd.Da
     for i in tqdm(seasons):
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
-        i_data = pl.read_parquet(NHL_TEAM_BOX_URL.format(season = i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        i_data = pl.read_parquet(NHL_TEAM_BOX_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
-def load_nhl_player_boxscore(seasons: List[int], return_as_pandas = True) -> pd.DataFrame:
+
+def load_nhl_player_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     """Load NHL player boxscore data
 
     Example:
@@ -109,11 +117,12 @@ def load_nhl_player_boxscore(seasons: List[int], return_as_pandas = True) -> pd.
     for i in tqdm(seasons):
         if int(i) < 2011:
             raise SeasonNotFoundError("season cannot be less than 2011")
-        i_data = pl.read_parquet(NHL_PLAYER_BOX_URL.format(season = i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how = 'vertical')
-    return data.to_pandas(use_pyarrow_extension_array = True) if return_as_pandas else data
+        i_data = pl.read_parquet(NHL_PLAYER_BOX_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
-def nhl_teams(return_as_pandas = True) -> pd.DataFrame:
+
+def nhl_teams(return_as_pandas=True) -> pd.DataFrame:
     """Load NHL team ID information and logos
 
     Example:

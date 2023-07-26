@@ -223,7 +223,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing officials available.
 
 
-### sportsdataverse.nfl.nfl_loaders.load_nfl_pbp(seasons: List[int])
+### sportsdataverse.nfl.nfl_loaders.load_nfl_pbp(seasons: List[int], return_as_pandas=True)
 Load NFL play by play data going back to 1999
 
 Example:
@@ -233,6 +233,7 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 1999 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 

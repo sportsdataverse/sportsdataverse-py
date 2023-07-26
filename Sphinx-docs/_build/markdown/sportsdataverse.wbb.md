@@ -140,7 +140,8 @@ Raises:
 
 
 ### sportsdataverse.wbb.wbb_pbp.espn_wbb_pbp(game_id: int, raw=False, \*\*kwargs)
-espn_wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay, womens-college-basketball/summary
+espn_wbb_pbp() - Pull the game by id. Data from API endpoints - womens-college-basketball/playbyplay,
+womens-college-basketball/summary
 
 Args:
 
@@ -150,10 +151,9 @@ raw (bool): If True, returns the raw json from the API endpoint. If False, retur
 
 Returns:
 
-    Dict: Dictionary of game data with keys - “gameId”, “plays”, “winprobability”, “boxscore”, “header”, “broadcasts”,
-
-        “videos”, “playByPlaySource”, “standings”, “leaders”, “timeouts”, “pickcenter”, “againstTheSpread”, “odds”, “predictor”,
-        “espnWP”, “gameInfo”, “season”
+    Dict: Dictionary of game data with keys - “gameId”, “plays”, “winprobability”, “boxscore”, “header”,
+    “broadcasts”, “videos”, “playByPlaySource”, “standings”, “leaders”, “timeouts”, “pickcenter”,
+    “againstTheSpread”, “odds”, “predictor”,”espnWP”, “gameInfo”, “season”
 
 Example:
 
