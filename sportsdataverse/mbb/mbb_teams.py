@@ -1,9 +1,12 @@
+from functools import lru_cache
+
 import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import download, underscore
 
 
+@lru_cache(maxsize=None)
 def espn_mbb_teams(groups=None, return_as_pandas=True, **kwargs) -> pd.DataFrame:
     """espn_mbb_teams - look up the men's college basketball teams
 

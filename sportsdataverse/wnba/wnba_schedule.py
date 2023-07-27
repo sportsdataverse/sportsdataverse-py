@@ -1,8 +1,8 @@
+from datetime import datetime
+
 import pandas as pd
 import polars as pl
-from datetime import datetime
-from sportsdataverse.config import WNBA_BASE_URL, WNBA_TEAM_BOX_URL, WNBA_PLAYER_BOX_URL, WNBA_TEAM_SCHEDULE_URL
-from sportsdataverse.errors import SeasonNotFoundError
+
 from sportsdataverse.dl_utils import download, underscore
 
 

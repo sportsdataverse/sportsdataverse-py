@@ -1,10 +1,12 @@
-import pandas as pd
-import polars as pl
-import numpy as np
-import os
 import json
+import os
 import re
 from typing import Dict
+
+import numpy as np
+import pandas as pd
+import polars as pl
+
 from sportsdataverse.dl_utils import download, flatten_json_iterative
 
 

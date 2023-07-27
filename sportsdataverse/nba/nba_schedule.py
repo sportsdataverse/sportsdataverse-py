@@ -1,6 +1,8 @@
+import datetime
+
 import pandas as pd
 import polars as pl
-import datetime
+
 from sportsdataverse.dl_utils import download, underscore
 
 

@@ -1,6 +1,7 @@
 import json
-import requests
 from typing import Dict
+
+import requests
 
 
 def nfl_token_gen():

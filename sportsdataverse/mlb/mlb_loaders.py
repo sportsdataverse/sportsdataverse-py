@@ -1,6 +1,6 @@
-from sportsdataverse.dl_utils import download
-
 import os
+
+from sportsdataverse.dl_utils import download
 
 
 def mlbam_copyright_info(saveFile=False, returnFile=False, **kwargs):

@@ -1,8 +1,10 @@
+import datetime
+
 import pandas as pd
 import polars as pl
-import datetime
-from sportsdataverse.errors import SeasonNotFoundError
+
 from sportsdataverse.dl_utils import download, underscore
+from sportsdataverse.errors import SeasonNotFoundError
 
 
 def espn_wbb_schedule(

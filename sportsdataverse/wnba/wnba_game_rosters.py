@@ -1,6 +1,6 @@
 import pandas as pd
 import polars as pl
-from typing import Dict
+
 from sportsdataverse.dl_utils import download, underscore
 
 

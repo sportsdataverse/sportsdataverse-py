@@ -1,39 +1,39 @@
+import tempfile
+from typing import List
+
 import pandas as pd
 import polars as pl
-import tempfile
-import json
+from pyreadr import download_file, read_r
 from tqdm import tqdm
-from pyreadr import read_r, download_file
-from typing import List
+
 from sportsdataverse.config import (
     NFL_BASE_URL,
+    NFL_COMBINE_URL,
+    NFL_CONTRACTS_URL,
+    NFL_DEPTH_CHARTS_URL,
+    NFL_DRAFT_PICKS_URL,
+    NFL_INJURIES_URL,
+    NFL_NGS_PASSING_URL,
+    NFL_NGS_RECEIVING_URL,
+    NFL_NGS_RUSHING_URL,
+    NFL_OFFICIALS_URL,
+    NFL_PBP_PARTICIPATION_URL,
+    NFL_PFR_SEASON_DEF_URL,
+    NFL_PFR_SEASON_PASS_URL,
+    NFL_PFR_SEASON_REC_URL,
+    NFL_PFR_SEASON_RUSH_URL,
+    NFL_PFR_WEEK_DEF_URL,
+    NFL_PFR_WEEK_PASS_URL,
+    NFL_PFR_WEEK_REC_URL,
+    NFL_PFR_WEEK_RUSH_URL,
+    NFL_PLAYER_KICKING_STATS_URL,
+    NFL_PLAYER_STATS_URL,
     NFL_PLAYER_URL,
     NFL_ROSTER_URL,
-    NFL_WEEKLY_ROSTER_URL,
+    NFL_SNAP_COUNTS_URL,
     NFL_TEAM_LOGO_URL,
     NFL_TEAM_SCHEDULE_URL,
-    NFL_PLAYER_STATS_URL,
-    NFL_PLAYER_KICKING_STATS_URL,
-    NFL_SNAP_COUNTS_URL,
-    NFL_PBP_PARTICIPATION_URL,
-    NFL_CONTRACTS_URL,
-    NFL_DRAFT_PICKS_URL,
-    NFL_COMBINE_URL,
-    NFL_INJURIES_URL,
-    NFL_DEPTH_CHARTS_URL,
-    NFL_OFFICIALS_URL,
-    NFL_OTC_PLAYER_DETAILS_URL,
-    NFL_NGS_PASSING_URL,
-    NFL_NGS_RUSHING_URL,
-    NFL_NGS_RECEIVING_URL,
-    NFL_PFR_SEASON_DEF_URL,
-    NFL_PFR_WEEK_DEF_URL,
-    NFL_PFR_SEASON_PASS_URL,
-    NFL_PFR_WEEK_PASS_URL,
-    NFL_PFR_SEASON_REC_URL,
-    NFL_PFR_WEEK_REC_URL,
-    NFL_PFR_SEASON_RUSH_URL,
-    NFL_PFR_WEEK_RUSH_URL,
+    NFL_WEEKLY_ROSTER_URL,
 )
 from sportsdataverse.errors import season_not_found_error
 

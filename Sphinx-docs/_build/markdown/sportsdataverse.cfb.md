@@ -164,12 +164,14 @@ Initialize self.  See help(type(self)) for accurate signature.
 #### create_box_score(play_df)
 
 #### espn_cfb_pbp(\*\*kwargs)
-espn_cfb_pbp() - Pull the game by id. Data from API endpoints: college-football/playbyplay, college-football/summary
+espn_cfb_pbp() - Pull the game by id. Data from API endpoints: college-football/playbyplay,
+college-football/summary
 
 Args:
 
     game_id (int): Unique game_id, can be obtained from cfb_schedule().
-    raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
+    raw (bool): If True, returns the raw json from the API endpoint. If False, returns a
+    cleaned dictionary of datasets.
 
 Returns:
 

@@ -18,9 +18,9 @@ import sportsdataverse as sdv
 MLBAM_copyright_info = sdv.mlb.mlbam_copyright_info()
 print(MLBAM_copyright_info)
 """
-print('mlbam_copyright_info')
+print("mlbam_copyright_info")
 print(sdv.mlb.mlbam_copyright_info())
-print('')
+print("")
 """
 mlbam_schedule(season:int,gameType="R"):
 
@@ -53,9 +53,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_schedule(2020)
 print(df)
 """
-print('mlbam_schedule')
+print("mlbam_schedule")
 print(sdv.mlb.mlbam_schedule(2017))
-print('')
+print("")
 """
 mlbam_search_mlb_players(search:str,isActive=""):
 
@@ -80,10 +80,10 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_search_mlb_players(search="Votto",isActive="y")
 print(df)
 """
-print('mlbam_search_mlb_players')
-print(sdv.mlb.mlbam_search_mlb_players(search="Votto",isActive="y"))
-print(sdv.mlb.mlbam_search_mlb_players(search="Joe",isActive="y"))
-print('')
+print("mlbam_search_mlb_players")
+print(sdv.mlb.mlbam_search_mlb_players(search="Votto", isActive="y"))
+print(sdv.mlb.mlbam_search_mlb_players(search="Joe", isActive="y"))
+print("")
 """
 mlbam_player_info(playerID:int):
 
@@ -100,9 +100,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_player_info(playerID=458015)
 print(df)
 """
-print('getPlayerInfo')
+print("getPlayerInfo")
 print(sdv.mlb.mlbam_player_info(playerID=458015))
-print('')
+print("")
 """
 def mlbam_player_teams(playerID:int,season:int):
 
@@ -124,9 +124,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_player_teams(playerID=523260,season=2014)
 print(df)
 """
-print('getPlayerTeams')
-print(sdv.mlb.mlbam_player_teams(playerID=523260,season=2014))
-print('')
+print("getPlayerTeams")
+print(sdv.mlb.mlbam_player_teams(playerID=523260, season=2014))
+print("")
 """
 def mlbam_player_season_hitting_stats(playerID:int,season:int,gameType="R"):
 
@@ -159,9 +159,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_player_season_hitting_stats(playerID=458015,season=2021,gameType="R")
 print(df)
 """
-print('mlbam_player_season_hitting_stats')
-print(sdv.mlb.mlbam_player_season_hitting_stats(playerID=458015,season=2021,gameType="R"))
-print('')
+print("mlbam_player_season_hitting_stats")
+print(sdv.mlb.mlbam_player_season_hitting_stats(playerID=458015, season=2021, gameType="R"))
+print("")
 """
 def mlbam_player_season_pitching_stats(playerID:int,season:int,gameType="R"):
 
@@ -194,9 +194,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_player_season_pitching_stats(playerID=642840,season=2019,gameType="R")
 print(df)
 """
-print('mlbam_player_season_pitching_stats')
-print(sdv.mlb.mlbam_player_season_pitching_stats(playerID=642840,season=2019,gameType="R"))
-print('')
+print("mlbam_player_season_pitching_stats")
+print(sdv.mlb.mlbam_player_season_pitching_stats(playerID=642840, season=2019, gameType="R"))
+print("")
 """
 def mlbam_player_career_hitting_stats(playerID:int,gameType="R"):
 
@@ -229,9 +229,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_player_career_hitting_stats(playerID=458015,gameType="R")
 print(df)
 """
-print('mlbam_player_career_hitting_stats')
-print(sdv.mlb.mlbam_player_career_hitting_stats(playerID=458015,gameType="R"))
-print('')
+print("mlbam_player_career_hitting_stats")
+print(sdv.mlb.mlbam_player_career_hitting_stats(playerID=458015, gameType="R"))
+print("")
 """
 mlbam_player_career_pitching_stats(playerID:int,gameType="R"):
 
@@ -261,9 +261,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_player_career_pitching_stats(playerID=642840,gameType="R")
 print(df)
 """
-print('mlbam_player_career_pitching_stats')
-print(sdv.mlb.mlbam_player_career_pitching_stats(playerID=642840,gameType="R"))
-print('')
+print("mlbam_player_career_pitching_stats")
+print(sdv.mlb.mlbam_player_career_pitching_stats(playerID=642840, gameType="R"))
+print("")
 """
 mlbam_transactions(startDate=0,endDate=0):
 
@@ -288,9 +288,9 @@ import sportsdataverse as sdv
 df =sdv.mlb.mlbam_transactions(startDate=20200901,endDate=20200914)
 print(df)
 """
-print('mlbam_transactions')
-print(sdv.mlb.mlbam_transactions(startDate="09/01/2020",endDate="09/01/2020"))
-print('')
+print("mlbam_transactions")
+print(sdv.mlb.mlbam_transactions(startDate="09/01/2020", endDate="09/01/2020"))
+print("")
 """
 mlbam_broadcast_info(season:int,home_away="e"):
 
@@ -317,9 +317,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_broadcast_info(season=2020,home_away="e")
 print(df)
 """
-print('mlbam_broadcast_info')
-print(sdv.mlb.mlbam_broadcast_info(season=2020,home_away="e"))
-print('')
+print("mlbam_broadcast_info")
+print(sdv.mlb.mlbam_broadcast_info(season=2020, home_away="e"))
+print("")
 """
 mlbam_teams(season:int,retriveAllStarRosters=False):
 
@@ -340,9 +340,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_teams(season=2020)
 print(df)
 """
-print('mlbam_teams')
+print("mlbam_teams")
 print(sdv.mlb.mlbam_teams(season=2020))
-print('')
+print("")
 """
 mlbam_40_man_roster(teamID=113):
 
@@ -359,9 +359,9 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_40_man_roster(teamID=113)
 print(df)
 """
-print('mlbam_40_man_roster')
+print("mlbam_40_man_roster")
 print(sdv.mlb.mlbam_40_man_roster(teamID=113))
-print('')
+print("")
 """
 mlbam_team_roster(teamID=113,startSeason=2020,endSeason=2021):
 
@@ -384,7 +384,7 @@ import sportsdataverse as sdv
 df = sdv.mlb.mlbam_team_roster(teamID=113,startSeason=2020,endSeason=2021)
 print(df)
 """
-print('mlbam_team_roster')
-df = sdv.mlb.mlbam_team_roster(teamID=113,startSeason=2020,endSeason=2021)
+print("mlbam_team_roster")
+df = sdv.mlb.mlbam_team_roster(teamID=113, startSeason=2020, endSeason=2021)
 print(df)
-print('')
+print("")

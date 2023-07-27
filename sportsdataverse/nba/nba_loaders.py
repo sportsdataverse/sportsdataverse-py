@@ -1,8 +1,15 @@
+from typing import List
+
 import pandas as pd
 import polars as pl
 from tqdm import tqdm
-from typing import List
-from sportsdataverse.config import NBA_BASE_URL, NBA_TEAM_BOX_URL, NBA_PLAYER_BOX_URL, NBA_TEAM_SCHEDULE_URL
+
+from sportsdataverse.config import (
+    NBA_BASE_URL,
+    NBA_PLAYER_BOX_URL,
+    NBA_TEAM_BOX_URL,
+    NBA_TEAM_SCHEDULE_URL,
+)
 from sportsdataverse.errors import SeasonNotFoundError
 
 

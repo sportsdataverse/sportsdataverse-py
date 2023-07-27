@@ -1,10 +1,9 @@
+from typing import Dict
+
 import pandas as pd
 import polars as pl
-import numpy as np
-import re
-import json
-from typing import Dict
-from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
+
+from sportsdataverse.dl_utils import download
 
 
 def nhl_api_pbp(game_id: int, **kwargs) -> Dict:

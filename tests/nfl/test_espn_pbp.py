@@ -1,14 +1,16 @@
-from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess
-import pandas as pd
 import polars as pl
 import pytest
 
+from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess
+
+
 @pytest.fixture()
 def generated_data():
-    test = NFLPlayProcess(gameId = 401437777)
+    test = NFLPlayProcess(gameId=401437777)
     test.espn_nfl_pbp()
     test.run_processing_pipeline()
     yield test
+
 
 def test_basic_pbp(generated_data):
     assert generated_data.json != None
