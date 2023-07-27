@@ -15,6 +15,7 @@ from sportsdataverse.cfb.model_vars import (
     end_change_vec,
     ep_class_to_score_mapping,
     ep_end_columns,
+    ep_final_names,
     ep_start_columns,
     ep_start_touchback_columns,
     int_vec,
@@ -28,6 +29,7 @@ from sportsdataverse.cfb.model_vars import (
     scores_vec,
     turnover_vec,
     wp_end_columns,
+    wp_final_names,
     wp_start_columns,
     wp_start_touchback_columns,
 )

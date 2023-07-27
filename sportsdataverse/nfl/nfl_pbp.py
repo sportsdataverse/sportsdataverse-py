@@ -10,9 +10,30 @@ import pkg_resources
 from numpy.core.fromnumeric import mean
 from xgboost import Booster, DMatrix
 
+from sportsdataverse.cfb.model_vars import (
+    defense_score_vec,
+    end_change_vec,
+    ep_class_to_score_mapping,
+    ep_end_columns,
+    ep_final_names,
+    ep_start_columns,
+    ep_start_touchback_columns,
+    int_vec,
+    kickoff_turnovers,
+    kickoff_vec,
+    normalplay,
+    offense_score_vec,
+    penalty,
+    punt_vec,
+    qbr_vars,
+    scores_vec,
+    turnover_vec,
+    wp_end_columns,
+    wp_final_names,
+    wp_start_columns,
+    wp_start_touchback_columns,
+)
 from sportsdataverse.dl_utils import download, key_check
-
-from .model_vars import *
 
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
