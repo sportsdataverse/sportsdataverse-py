@@ -55,19 +55,19 @@ def espn_wnba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
         "timeouts",
     ]
     dict_keys_expected = ["boxscore", "format", "gameInfo", "predictor", "article", "header", "season", "standings"]
-    array_keys_expected = [
-        "plays",
-        "seasonseries",
-        "videos",
-        "broadcasts",
-        "pickcenter",
-        "againstTheSpread",
-        "odds",
-        "winprobability",
-        "teamInfo",
-        "espnWP",
-        "leaders",
-    ]
+    # array_keys_expected = [
+    #     "plays",
+    #     "seasonseries",
+    #     "videos",
+    #     "broadcasts",
+    #     "pickcenter",
+    #     "againstTheSpread",
+    #     "odds",
+    #     "winprobability",
+    #     "teamInfo",
+    #     "espnWP",
+    #     "leaders",
+    # ]
     if raw == True:
         # reorder keys in raw format, appending empty keys which are defined later to the end
         pbp_json = {}

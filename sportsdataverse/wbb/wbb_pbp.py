@@ -67,7 +67,7 @@ def espn_wbb_pbp(game_id: int, raw=False, **kwargs) -> Dict:
         "espnWP",
         "leaders",
     ]
-    array_keys_expected = ["boxscore", "format", "gameInfo", "predictor", "article", "header", "season", "standings"]
+    # array_keys_expected = ["boxscore", "format", "gameInfo", "predictor", "article", "header", "season", "standings"]
     if raw == True:
         # reorder keys in raw format, appending empty keys which are defined later to the end
         pbp_json = {}

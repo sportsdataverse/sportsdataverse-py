@@ -109,16 +109,16 @@ class CFBPlayProcess(object):
             "standings",
         ]
         dict_keys_expected = ["boxscore", "format", "gameInfo", "drives", "predictor", "header", "standings"]
-        array_keys_expected = [
-            "leaders",
-            "broadcasts",
-            "pickcenter",
-            "againstTheSpread",
-            "odds",
-            "winprobability",
-            "scoringPlays",
-            "videos",
-        ]
+        # array_keys_expected = [
+        #     "leaders",
+        #     "broadcasts",
+        #     "pickcenter",
+        #     "againstTheSpread",
+        #     "odds",
+        #     "winprobability",
+        #     "scoringPlays",
+        #     "videos",
+        # ]
         if self.raw == True:
             # reorder keys in raw format, appending empty keys which are defined later to the end
             pbp_json = {}
@@ -3198,7 +3198,6 @@ class CFBPlayProcess(object):
             EP_end=pl.lit(EP_end),
         )
 
-        kick = "kick)"
         play_df = (
             play_df.with_columns(
                 EP_start=pl.when(
@@ -3730,7 +3729,6 @@ class CFBPlayProcess(object):
         return play_df
 
     def __add_drive_data(self, play_df):
-        base_groups = play_df.groupby(["drive.id"])
         play_df = (
             play_df.with_columns(
                 drive_start=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
@@ -3865,7 +3863,6 @@ class CFBPlayProcess(object):
             & (pl.col("scrimmage_play") == True)
             & (pl.col("athlete_name").is_in(qbs_list))
         )
-        pass_qbr_box_df = pass_qbr_box.groupby(by=["pos_team", "athlete_name"])
         pass_qbr = (
             pass_qbr_box.groupby(by=["pos_team", "athlete_name"])
             .agg(
