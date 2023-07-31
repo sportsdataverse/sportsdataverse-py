@@ -6,8 +6,8 @@ from functools import reduce
 
 import numpy as np
 import pandas as pd
-import pkg_resources
 import polars as pl
+from pkg_resources import resource_filename
 from xgboost import Booster, DMatrix
 
 from sportsdataverse.cfb.model_vars import (
@@ -35,9 +35,9 @@ from sportsdataverse.cfb.model_vars import (
 )
 from sportsdataverse.dl_utils import download, key_check
 
-ep_model_file = pkg_resources.resource_filename("sportsdataverse", "cfb/models/ep_model.model")
-wp_spread_file = pkg_resources.resource_filename("sportsdataverse", "cfb/models/wp_spread.model")
-qbr_model_file = pkg_resources.resource_filename("sportsdataverse", "cfb/models/qbr_model.model")
+ep_model_file = resource_filename("sportsdataverse", "cfb/models/ep_model.model")
+wp_spread_file = resource_filename("sportsdataverse", "cfb/models/wp_spread.model")
+qbr_model_file = resource_filename("sportsdataverse", "cfb/models/qbr_model.model")
 
 ep_model = Booster({"nthread": 4})  # init model
 ep_model.load_model(ep_model_file)
@@ -622,13 +622,13 @@ class CFBPlayProcess(object):
                 pbp_txt["plays"]
                 .with_columns(
                     pl.when(pl.col("scoringType.displayName") == "Field Goal")
-                    .then("Field Goal Good")
+                    .then(pl.lit("Field Goal Good"))
                     .otherwise(pl.col("type.text"))
                     .alias("type.text")
                 )
                 .with_columns(
                     pl.when(pl.col("scoringType.displayName") == "Extra Point")
-                    .then("Extra Point Good")
+                    .then(pl.lit("Extra Point Good"))
                     .otherwise(pl.col("type.text"))
                     .alias("type.text")
                 )
@@ -637,7 +637,7 @@ class CFBPlayProcess(object):
             pbp_txt["plays"]
             .with_columns(
                 pl.when(pl.col("type.text").is_null())
-                .then("Unknown")
+                .then(pl.lit("Unknown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text")
             )
@@ -648,7 +648,7 @@ class CFBPlayProcess(object):
                     .str.contains("(?i)extra point")
                     .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good"))
                 )
-                .then("Extra Point Missed")
+                .then(pl.lit("Extra Point Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text")
             )
@@ -659,7 +659,7 @@ class CFBPlayProcess(object):
                     .str.contains("(?i)extra point")
                     .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked"))
                 )
-                .then("Extra Point Missed")
+                .then(pl.lit("Extra Point Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text")
             )
@@ -670,7 +670,7 @@ class CFBPlayProcess(object):
                     .str.contains("(?i)field goal")
                     .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)blocked"))
                 )
-                .then("Extra Point Missed")
+                .then(pl.lit("Extra Point Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text")
             )
@@ -681,7 +681,7 @@ class CFBPlayProcess(object):
                     .str.contains("(?i)field goal")
                     .and_(pl.col("type.text").str.to_lowercase().str.contains("(?i)no good"))
                 )
-                .then("Extra Point Missed")
+                .then(pl.lit("Extra Point Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text")
             )
@@ -1245,7 +1245,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("start.down") != 4)
                     .and_(pl.col("type.text").is_in(defense_score_vec) == False)
                 )
-                .then("Fumble Recovery (Opponent)")
+                .then(pl.lit("Fumble Recovery (Opponent)"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1256,7 +1256,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("change_of_poss") == 1)
                     .and_(pl.col("td_play") == True)
                 )
-                .then("Fumble Recovery (Opponent) Touchdown")
+                .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1270,7 +1270,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("start.down") != 4)
                     .and_(pl.col("type.text").is_in(defense_score_vec) == False)
                 )
-                .then("Fumble Recovery (Opponent)")
+                .then(pl.lit("Fumble Recovery (Opponent)"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1281,7 +1281,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("change_of_poss") == 1)
                     .and_(pl.col("td_play") == True)
                 )
-                .then("Fumble Recovery (Opponent) Touchdown")
+                .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1293,14 +1293,14 @@ class CFBPlayProcess(object):
                     .and_(pl.col("td_play") == True)
                     .and_(pl.col("td_check") == True)
                 )
-                .then("Kickoff Return Touchdown")
+                .then(pl.lit("Kickoff Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 # -- Fix punt return TDs ----
                 pl.when((pl.col("punt_play") == True).and_(pl.col("td_play") == True).and_(pl.col("td_check") == True))
-                .then("Punt Return Touchdown")
+                .then(pl.lit("Punt Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1312,7 +1312,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("td_play") == True)
                     .and_(pl.col("td_check") == True)
                 )
-                .then("Kickoff Return Touchdown")
+                .then(pl.lit("Kickoff Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1324,7 +1324,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("fumble_vec") == False)
                     .and_(pl.col("td_check") == True)
                 )
-                .then("Rushing Touchdown")
+                .then(pl.lit("Rushing Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1336,7 +1336,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("td_check") == True)
                     .and_(pl.col("type.text").is_in(int_vec) == False)
                 )
-                .then("Passing Touchdown")
+                .then(pl.lit("Passing Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1348,7 +1348,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("fumble_vec") == False)
                     .and_(pl.col("type.text").is_in(int_vec) == False)
                 )
-                .then("Passing Touchdown")
+                .then(pl.lit("Passing Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1358,7 +1358,7 @@ class CFBPlayProcess(object):
                         pl.col("text").str.contains("(?i)for a TD")
                     )
                 )
-                .then("Blocked Field Goal Touchdown")
+                .then(pl.lit("Blocked Field Goal Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1366,7 +1366,7 @@ class CFBPlayProcess(object):
                 pl.when(
                     (pl.col("type.text").is_in(["Blocked Punt"])).and_(pl.col("text").str.contains("(?i)for a TD"))
                 )
-                .then("Blocked Punt Touchdown")
+                .then(pl.lit("Blocked Punt Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1379,7 +1379,7 @@ class CFBPlayProcess(object):
             .with_columns(
                 # -- Fix Pass Interception Return TD play_type labels----
                 pl.when(pl.col("text").str.contains("(?i)pass intercepted for a TD"))
-                .then("Interception Return Touchdown")
+                .then(pl.lit("Interception Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1390,7 +1390,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)fumbled"))
                     .and_(pl.col("text").str.contains("(?i)TD"))
                 )
-                .then("Fumble Recovery (Opponent) Touchdown")
+                .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1398,28 +1398,28 @@ class CFBPlayProcess(object):
                 # -- Fix generic pass plays ----
                 ##-- first one looks for complete pass
                 pl.when((pl.col("type.text") == "Pass").and_(pl.col("text").str.contains("(?i)pass complete")))
-                .then("Pass Completion")
+                .then(pl.lit("Pass Completion"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 ##-- second one looks for incomplete pass
                 pl.when((pl.col("type.text") == "Pass").and_(pl.col("text").str.contains("(?i)pass incomplete")))
-                .then("Pass Incompletion")
+                .then(pl.lit("Pass Incompletion"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 ##-- third one looks for interceptions
                 pl.when((pl.col("type.text") == "Pass").and_(pl.col("text").str.contains("(?i)pass intercepted")))
-                .then("Pass Interception")
+                .then(pl.lit("Pass Interception"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 ##-- fourth one looks for sacked
                 pl.when((pl.col("type.text") == "Pass").and_(pl.col("text").str.contains("(?i)sacked")))
-                .then("Sack")
+                .then(pl.lit("Sack"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1430,21 +1430,21 @@ class CFBPlayProcess(object):
                         pl.col("text").str.contains("(?i)pass intercepted for a TD")
                     )
                 )
-                .then("Interception Return Touchdown")
+                .then(pl.lit("Interception Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 # --- Moving non-Touchdown pass interceptions to one play_type: "Interception Return" -----
                 pl.when(pl.col("type.text").is_in(["Interception", "Pass Interception", "Pass Interception Return"]))
-                .then("Interception Return")
+                .then(pl.lit("Interception Return"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 # --- Moving Kickoff/Punt Touchdowns without fumbles to Kickoff/Punt Return Touchdown
                 pl.when((pl.col("type.text") == "Kickoff Touchdown").and_(pl.col("fumble_vec") == False))
-                .then("Kickoff Return Touchdown")
+                .then(pl.lit("Kickoff Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1454,13 +1454,13 @@ class CFBPlayProcess(object):
                     .and_(pl.col("td_play") == True)
                     .and_(pl.col("fumble_vec") == False)
                 )
-                .then("Kickoff Return Touchdown")
+                .then(pl.lit("Kickoff Return Touchdown"))
                 .when(
                     (pl.col("type.text") == "Kickoff")
                     .and_(pl.col("text").str.contains("(?i)for a TD"))
                     .and_(pl.col("fumble_vec") == False)
                 )
-                .then("Kickoff Return Touchdown")
+                .then(pl.lit("Kickoff Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1470,7 +1470,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("fumble_vec") == True)
                     .and_(pl.col("change_of_poss") == 1)
                 )
-                .then("Kickoff Team Fumble Recovery")
+                .then(pl.lit("Kickoff Team Fumble Recovery"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1480,13 +1480,13 @@ class CFBPlayProcess(object):
                     .and_(pl.col("fumble_vec") == False)
                     .and_(pl.col("change_of_poss") == 1)
                 )
-                .then("Punt Return Touchdown")
+                .then(pl.lit("Punt Return Touchdown"))
                 .when(
                     (pl.col("type.text") == "Punt")
                     .and_(pl.col("text").str.contains("(?i)for a TD"))
                     .and_(pl.col("change_of_poss") == 1)
                 )
-                .then("Punt Return Touchdown")
+                .then(pl.lit("Punt Return Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1496,25 +1496,25 @@ class CFBPlayProcess(object):
                     .and_(pl.col("fumble_vec") == True)
                     .and_(pl.col("change_of_poss") == 0)
                 )
-                .then("Punt Team Fumble Recovery")
+                .then(pl.lit("Punt Team Fumble Recovery"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 pl.when(pl.col("type.text").is_in(["Punt Touchdown"]))
-                .then("Punt Team Fumble Recovery Touchdown")
+                .then(pl.lit("Punt Team Fumble Recovery Touchdown"))
                 .when(
                     (pl.col("scoringPlay") == True)
                     .and_(pl.col("punt_play") == True)
                     .and_(pl.col("change_of_poss") == 0)
                 )
-                .then("Punt Team Fumble Recovery Touchdown")
+                .then(pl.lit("Punt Team Fumble Recovery Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 pl.when(pl.col("type.text").is_in(["Kickoff Touchdown"]))
-                .then("Kickoff Team Fumble Recovery Touchdown")
+                .then(pl.lit("Kickoff Team Fumble Recovery Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1524,7 +1524,7 @@ class CFBPlayProcess(object):
                         (pl.col("pass") == True).or_(pl.col("rush") == True)
                     )
                 )
-                .then("Fumble Recovery (Opponent) Touchdown")
+                .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1535,31 +1535,31 @@ class CFBPlayProcess(object):
                     .and_((pl.col("pass") == True).or_(pl.col("rush") == True))
                     .and_(pl.col("safety") == True)
                 )
-                .then("Safety")
+                .then(pl.lit("Safety"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 pl.when(pl.col("kickoff_safety") == True)
-                .then("Kickoff (Safety)")
+                .then(pl.lit("Kickoff (Safety)"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 pl.when(pl.col("punt_safety") == True)
-                .then("Punt (Safety)")
+                .then(pl.lit("Punt (Safety)"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 pl.when(pl.col("penalty_safety") == True)
-                .then("Penalty (Safety)")
+                .then(pl.lit("Penalty (Safety)"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
             .with_columns(
                 pl.when((pl.col("type.text") == "Extra Point Good").and_(pl.col("text").str.contains("(?i)Two-Point")))
-                .then("Two-Point Conversion Good")
+                .then(pl.lit("Two-Point Conversion Good"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1567,7 +1567,7 @@ class CFBPlayProcess(object):
                 pl.when(
                     (pl.col("type.text") == "Extra Point Missed").and_(pl.col("text").str.contains("(?i)Two-Point"))
                 )
-                .then("Two-Point Conversion Missed")
+                .then(pl.lit("Two-Point Conversion Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1639,121 +1639,121 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 penalty_detail=pl.when(pl.col("penalty_offset") == 1)
-                .then("Offsetting")
+                .then(pl.lit("Offsetting"))
                 .when(pl.col("penalty_declined") == 1)
-                .then("Declined")
+                .then(pl.lit("Declined"))
                 .when(pl.col("text").str.contains("(?i)roughing passer"))
-                .then("Roughing the Passer")
+                .then(pl.lit("Roughing the Passer"))
                 .when(pl.col("text").str.contains("(?i)offensive holding"))
-                .then("Offensive Holding")
+                .then(pl.lit("Offensive Holding"))
                 .when(pl.col("text").str.contains("(?i)pass interference"))
-                .then("Pass Interference")
+                .then(pl.lit("Pass Interference"))
                 .when(pl.col("text").str.contains("(?i)encroachment"))
-                .then("Encroachment")
+                .then(pl.lit("Encroachment"))
                 .when(pl.col("text").str.contains("(?i)defensive pass interference"))
-                .then("Defensive Pass Interference")
+                .then(pl.lit("Defensive Pass Interference"))
                 .when(pl.col("text").str.contains("(?i)offensive pass interference"))
-                .then("Offensive Pass Interference")
+                .then(pl.lit("Offensive Pass Interference"))
                 .when(pl.col("text").str.contains("(?i)illegal procedure"))
-                .then("Illegal Procedure")
+                .then(pl.lit("Illegal Procedure"))
                 .when(pl.col("text").str.contains("(?i)defensive holding"))
-                .then("Defensive Holding")
+                .then(pl.lit("Defensive Holding"))
                 .when(pl.col("text").str.contains("(?i)holding"))
-                .then("Holding")
+                .then(pl.lit("Holding"))
                 .when(pl.col("text").str.contains("(?i)offensive offside|(?i)offside offense"))
-                .then("Offensive Offside")
+                .then(pl.lit("Offensive Offside"))
                 .when(pl.col("text").str.contains("(?i)defensive offside|(?i)offside defense"))
-                .then("Defensive Offside")
+                .then(pl.lit("Defensive Offside"))
                 .when(pl.col("text").str.contains("(?i)offside"))
-                .then("Offside")
+                .then(pl.lit("Offside"))
                 .when(pl.col("text").str.contains("(?i)illegal fair catch signal"))
-                .then("Illegal Fair Catch Signal")
+                .then(pl.lit("Illegal Fair Catch Signal"))
                 .when(pl.col("text").str.contains("(?i)illegal batting"))
-                .then("Illegal Batting")
+                .then(pl.lit("Illegal Batting"))
                 .when(pl.col("text").str.contains("(?i)neutral zone infraction"))
-                .then("Neutral Zone Infraction")
+                .then(pl.lit("Neutral Zone Infraction"))
                 .when(pl.col("text").str.contains("(?i)ineligible downfield"))
-                .then("Ineligible Downfield")
+                .then(pl.lit("Ineligible Downfield"))
                 .when(pl.col("text").str.contains("(?i)illegal use of hands"))
-                .then("Illegal Use of Hands")
+                .then(pl.lit("Illegal Use of Hands"))
                 .when(pl.col("text").str.contains("(?i)kickoff out of bounds|(?i)kickoff out-of-bounds"))
-                .then("Kickoff Out of Bounds")
+                .then(pl.lit("Kickoff Out of Bounds"))
                 .when(pl.col("text").str.contains("(?i)12 men on the field"))
-                .then("12 Men on the Field")
+                .then(pl.lit("12 Men on the Field"))
                 .when(pl.col("text").str.contains("(?i)illegal block"))
-                .then("Illegal Block")
+                .then(pl.lit("Illegal Block"))
                 .when(pl.col("text").str.contains("(?i)personal foul"))
-                .then("Personal Foul")
+                .then(pl.lit("Personal Foul"))
                 .when(pl.col("text").str.contains("(?i)false start"))
-                .then("False Start")
+                .then(pl.lit("False Start"))
                 .when(pl.col("text").str.contains("(?i)substitution infraction"))
-                .then("Substitution Infraction")
+                .then(pl.lit("Substitution Infraction"))
                 .when(pl.col("text").str.contains("(?i)illegal formation"))
-                .then("Illegal Formation")
+                .then(pl.lit("Illegal Formation"))
                 .when(pl.col("text").str.contains("(?i)illegal touching"))
-                .then("Illegal Touching")
+                .then(pl.lit("Illegal Touching"))
                 .when(pl.col("text").str.contains("(?i)sideline interference"))
-                .then("Sideline Interference")
+                .then(pl.lit("Sideline Interference"))
                 .when(pl.col("text").str.contains("(?i)clipping"))
-                .then("Clipping")
+                .then(pl.lit("Clipping"))
                 .when(pl.col("text").str.contains("(?i)sideline infraction"))
-                .then("Sideline Infraction")
+                .then(pl.lit("Sideline Infraction"))
                 .when(pl.col("text").str.contains("(?i)crackback"))
-                .then("Crackback")
+                .then(pl.lit("Crackback"))
                 .when(pl.col("text").str.contains("(?i)illegal snap"))
-                .then("Illegal Snap")
+                .then(pl.lit("Illegal Snap"))
                 .when(pl.col("text").str.contains("(?i)illegal helmet contact"))
-                .then("Illegal Helmet Contact")
+                .then(pl.lit("Illegal Helmet Contact"))
                 .when(pl.col("text").str.contains("(?i)roughing holder"))
-                .then("Roughing the Holder")
+                .then(pl.lit("Roughing the Holder"))
                 .when(pl.col("text").str.contains("(?i)horse collar tackle"))
-                .then("Horse Collar Tackle")
+                .then(pl.lit("Horse Collar Tackle"))
                 .when(pl.col("text").str.contains("(?i)illegal participation"))
-                .then("Illegal Participation")
+                .then(pl.lit("Illegal Participation"))
                 .when(pl.col("text").str.contains("(?i)tripping"))
-                .then("Tripping")
+                .then(pl.lit("Tripping"))
                 .when(pl.col("text").str.contains("(?i)illegal shift"))
-                .then("Illegal Shift")
+                .then(pl.lit("Illegal Shift"))
                 .when(pl.col("text").str.contains("(?i)illegal motion"))
-                .then("Illegal Motion")
+                .then(pl.lit("Illegal Motion"))
                 .when(pl.col("text").str.contains("(?i)roughing the kicker"))
-                .then("Roughing the Kicker")
+                .then(pl.lit("Roughing the Kicker"))
                 .when(pl.col("text").str.contains("(?i)delay of game"))
-                .then("Delay of Game")
+                .then(pl.lit("Delay of Game"))
                 .when(pl.col("text").str.contains("(?i)targeting"))
-                .then("Targeting")
+                .then(pl.lit("Targeting"))
                 .when(pl.col("text").str.contains("(?i)face mask"))
-                .then("Face Mask")
+                .then(pl.lit("Face Mask"))
                 .when(pl.col("text").str.contains("(?i)illegal forward pass"))
-                .then("Illegal Forward Pass")
+                .then(pl.lit("Illegal Forward Pass"))
                 .when(pl.col("text").str.contains("(?i)intentional grounding"))
-                .then("Intentional Grounding")
+                .then(pl.lit("Intentional Grounding"))
                 .when(pl.col("text").str.contains("(?i)illegal kicking"))
-                .then("Illegal Kicking")
+                .then(pl.lit("Illegal Kicking"))
                 .when(pl.col("text").str.contains("(?i)illegal conduct"))
-                .then("Illegal Conduct")
+                .then(pl.lit("Illegal Conduct"))
                 .when(pl.col("text").str.contains("(?i)kick catching interference"))
-                .then("Kick Catch Interference")
+                .then(pl.lit("Kick Catch Interference"))
                 .when(pl.col("text").str.contains("(?i)kick catch interference"))
-                .then("Kick Catch Interference")
+                .then(pl.lit("Kick Catch Interference"))
                 .when(pl.col("text").str.contains("(?i)unnecessary roughness"))
-                .then("Unnecessary Roughness")
+                .then(pl.lit("Unnecessary Roughness"))
                 .when(pl.col("text").str.contains("(?i)Penalty, UR"))
-                .then("Unnecessary Roughness")
+                .then(pl.lit("Unnecessary Roughness"))
                 .when(pl.col("text").str.contains("(?i)roughing the snapper"))
-                .then("Roughing the Snapper")
+                .then(pl.lit("Roughing the Snapper"))
                 .when(pl.col("text").str.contains("(?i)illegal blindside block"))
-                .then("Illegal Blindside Block")
+                .then(pl.lit("Illegal Blindside Block"))
                 .when(pl.col("text").str.contains("(?i)unsportsmanlike conduct"))
-                .then("Unsportsmanlike Conduct")
+                .then(pl.lit("Unsportsmanlike Conduct"))
                 .when(pl.col("text").str.contains("(?i)running into kicker"))
-                .then("Running Into Kicker")
+                .then(pl.lit("Running Into Kicker"))
                 .when(pl.col("text").str.contains("(?i)failure to wear required equipment"))
-                .then("Failure to Wear Required Equipment")
+                .then(pl.lit("Failure to Wear Required Equipment"))
                 .when(pl.col("text").str.contains("(?i)player disqualification"))
-                .then("Player Disqualification")
+                .then(pl.lit("Player Disqualification"))
                 .when(pl.col("penalty_flag") == True)
-                .then("Missing")
+                .then(pl.lit("Missing"))
             )
             .with_columns(
                 penalty_text=pl.when(pl.col("penalty_flag") == True)
@@ -1951,23 +1951,23 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 pos_unit=pl.when(pl.col("punt") == True)
-                .then("Punt Offense")
+                .then(pl.lit("Punt Offense"))
                 .when(pl.col("kickoff_play") == True)
-                .then("Kickoff Return")
+                .then(pl.lit("Kickoff Return"))
                 .when(pl.col("fg_attempt") == True)
-                .then("Field Goal Offense")
+                .then(pl.lit("Field Goal Offense"))
                 .when(pl.col("type.text") == "Defensive 2pt Conversion")
-                .then("Offense")
-                .otherwise("Offense"),
+                .then(pl.lit("Offense"))
+                .otherwise(pl.lit("Offense")),
                 def_pos_unit=pl.when(pl.col("punt") == True)
-                .then("Punt Return")
+                .then(pl.lit("Punt Return"))
                 .when(pl.col("kickoff_play") == True)
-                .then("Kickoff Defense")
+                .then(pl.lit("Kickoff Defense"))
                 .when(pl.col("fg_attempt") == True)
-                .then("Field Goal Defense")
+                .then(pl.lit("Field Goal Defense"))
                 .when(pl.col("type.text") == "Defensive 2pt Conversion")
-                .then("Defense")
-                .otherwise("Defense"),
+                .then(pl.lit("Defense"))
+                .otherwise(pl.lit("Defense")),
                 # --- Lags/Leads play type ----
                 lead_play_type=pl.col("type.text").shift(-1),
                 sp=pl.when(
@@ -2324,7 +2324,7 @@ class CFBPlayProcess(object):
                         ((pl.col("pass_player").str.strip().str.n_chars() == 0).or_(pl.col("pass_player").is_null()))
                     )
                 )
-                .then("TEAM")
+                .then(pl.lit("TEAM"))
                 .otherwise(pl.col("pass_player")),
                 # --- WR Names -----
                 receiver_player=pl.when(

@@ -510,7 +510,7 @@ Bases: `object`
 Initialize self.  See help(type(self)) for accurate signature.
 
 
-#### create_box_score()
+#### create_box_score(play_df)
 
 #### espn_nfl_pbp()
 espn_nfl_pbp() - Pull the game by id. Data from API endpoints: nfl/playbyplay, nfl/summary
