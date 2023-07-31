@@ -34,6 +34,8 @@ def espn_wbb_schedule(
     ev = pl.DataFrame()
     events_txt = resp.json()
     events = events_txt.get("events")
+    if events is None:
+        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
     if len(events) == 0:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
 

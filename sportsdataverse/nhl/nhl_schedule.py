@@ -28,6 +28,8 @@ def espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
     ev = pl.DataFrame()
     events_txt = resp.json()
     events = events_txt.get("events")
+    if events is None:
+        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
     if len(events) == 0:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
 
