@@ -1,4 +1,3 @@
-import pandas as pd
 import polars as pl
 import pytest
 
@@ -24,7 +23,7 @@ def box_score(generated_data):
 
 
 def test_basic_pbp(generated_data):
-    assert generated_data.json != None
+    assert generated_data.json is not None
 
     generated_data.run_processing_pipeline()
     assert len(generated_data.plays_json) > 0
@@ -33,7 +32,7 @@ def test_basic_pbp(generated_data):
 
 
 def test_adv_box_score(box_score):
-    assert box_score != None
+    assert box_score is not None
     assert not set(box_score.keys()).difference(
         {
             "win_pct",
@@ -52,15 +51,15 @@ def test_adv_box_score(box_score):
 def test_havoc_rate(box_score):
     defense_home = box_score["defensive"][0]
     # print(defense_home)
-    pd = defense_home.get("pass_breakups", 0)
+    passes_defended = defense_home.get("pass_breakups", 0)
     home_int = defense_home.get("Int", 0)
     tfl = defense_home.get("TFL", 0)
     fum = defense_home.get("fumbles", 0)
     plays = defense_home.get("scrimmage_plays", 0)
 
     assert plays > 0
-    assert defense_home["havoc_total"] == (pd + home_int + tfl + fum)
-    assert round(defense_home["havoc_total_rate"], 4) == round(((pd + home_int + tfl + fum) / plays), 4)
+    assert defense_home["havoc_total"] == (passes_defended + home_int + tfl + fum)
+    assert round(defense_home["havoc_total_rate"], 4) == round(((passes_defended + home_int + tfl + fum) / plays), 4)
 
 
 @pytest.fixture()
@@ -262,10 +261,10 @@ def schedule_data_check2(schedule_data2):
 
 
 @pytest.fixture()
-def week_1_schedule():
+def week_1_cfb_schedule():
     yield espn_cfb_schedule(dates=2022, week=1, return_as_pandas=False)
 
 
-def week_1_schedule_check(week_1_schedule):
-    assert isinstance(week_1_schedule, pl.DataFrame)
-    assert len(week_1_schedule) > 0
+def week_1_schedule_check(week_1_cfb_schedule):
+    assert isinstance(week_1_cfb_schedule, pl.DataFrame)
+    assert len(week_1_cfb_schedule) > 0
