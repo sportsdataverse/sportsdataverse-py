@@ -222,22 +222,6 @@
 
 ## sportsdataverse.decorators module
 
-
-### sportsdataverse.decorators.record_mem_usage(func)
-
-### sportsdataverse.decorators.record_time_usage(func)
-
-### sportsdataverse.decorators.timer(number=10)
-Decorator that times the function it wraps over repeated executions
-
-Args:
-
-    number: int, The number of repeated executions of the function being wrapped
-
-Returns:
-
-    func
-
 ## sportsdataverse.dl_utils module
 
 

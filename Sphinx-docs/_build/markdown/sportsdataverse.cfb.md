@@ -5,7 +5,7 @@
 ## sportsdataverse.cfb.cfb_game_rosters module
 
 
-### sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters(game_id: int, raw=False, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters(game_id: int, raw=False, return_as_pandas=False, \*\*kwargs)
 espn_cfb_game_rosters() - Pull the game by id.
 
 Args:
@@ -49,7 +49,7 @@ Example:
 ## sportsdataverse.cfb.cfb_loaders module
 
 
-### sportsdataverse.cfb.cfb_loaders.get_cfb_teams(return_as_pandas=True)
+### sportsdataverse.cfb.cfb_loaders.get_cfb_teams(return_as_pandas=False)
 Load college football team ID information and logos
 
 Example:
@@ -65,7 +65,7 @@ Returns:
     pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_pbp(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.cfb.cfb_loaders.load_cfb_pbp(seasons: List[int], return_as_pandas=False)
 Load college football play by play data going back to 2003
 
 Example:
@@ -86,7 +86,7 @@ Raises:
     ValueError: If season is less than 2003.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_rosters(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.cfb.cfb_loaders.load_cfb_rosters(seasons: List[int], return_as_pandas=False)
 Load roster data
 
 Example:
@@ -107,7 +107,7 @@ Raises:
     ValueError: If season is less than 2014.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_schedule(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.cfb.cfb_loaders.load_cfb_schedule(seasons: List[int], return_as_pandas=False)
 Load college football schedule data
 
 Example:
@@ -128,7 +128,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.cfb.cfb_loaders.load_cfb_team_info(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.cfb.cfb_loaders.load_cfb_team_info(seasons: List[int], return_as_pandas=False)
 Load college football team info
 
 Example:
@@ -204,7 +204,7 @@ Example:
 ## sportsdataverse.cfb.cfb_schedule module
 
 
-### sportsdataverse.cfb.cfb_schedule.espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.cfb.cfb_schedule.espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=False, \*\*kwargs)
 espn_cfb_calendar - look up the men’s college football calendar for a given season
 
 Args:
@@ -223,7 +223,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.cfb.cfb_schedule.espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.cfb.cfb_schedule.espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, \*\*kwargs)
 espn_cfb_schedule - look up the college football schedule for a given season
 
 Args:
@@ -244,7 +244,7 @@ Returns:
 ## sportsdataverse.cfb.cfb_teams module
 
 
-### sportsdataverse.cfb.cfb_teams.espn_cfb_teams(groups=None, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.cfb.cfb_teams.espn_cfb_teams(groups=None, return_as_pandas=False, \*\*kwargs)
 espn_cfb_teams - look up the college football teams
 
 Args:

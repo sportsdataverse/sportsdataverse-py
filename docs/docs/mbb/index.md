@@ -5,7 +5,7 @@
 ## sportsdataverse.mbb.mbb_game_rosters module
 
 
-### sportsdataverse.mbb.mbb_game_rosters.espn_mbb_game_rosters(game_id: int, raw=False, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.mbb.mbb_game_rosters.espn_mbb_game_rosters(game_id: int, raw=False, return_as_pandas=False, \*\*kwargs)
 espn_mbb_game_rosters() - Pull the game by id.
 
 Args:
@@ -49,7 +49,7 @@ Example:
 ## sportsdataverse.mbb.mbb_loaders module
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_pbp(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.mbb.mbb_loaders.load_mbb_pbp(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball play by play data going back to 2002
 
 Example:
@@ -71,7 +71,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_player_boxscore(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.mbb.mbb_loaders.load_mbb_player_boxscore(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball player boxscore data
 
 Example:
@@ -93,7 +93,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_schedule(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.mbb.mbb_loaders.load_mbb_schedule(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball schedule data
 
 Example:
@@ -115,7 +115,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_team_boxscore(seasons: List[int], return_as_pandas=True)
+### sportsdataverse.mbb.mbb_loaders.load_mbb_team_boxscore(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball team boxscore data
 
 Example:
@@ -170,7 +170,7 @@ Example:
 ## sportsdataverse.mbb.mbb_schedule module
 
 
-### sportsdataverse.mbb.mbb_schedule.espn_mbb_calendar(season=None, ondays=None, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.mbb.mbb_schedule.espn_mbb_calendar(season=None, ondays=None, return_as_pandas=False, \*\*kwargs)
 espn_mbb_calendar - look up the men’s college basketball calendar for a given season
 
 Args:
@@ -189,7 +189,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, \*\*kwargs)
 espn_mbb_schedule - look up the men’s college basketball scheduler for a given season
 
 Args:
@@ -209,7 +209,7 @@ Returns:
 ## sportsdataverse.mbb.mbb_teams module
 
 
-### sportsdataverse.mbb.mbb_teams.espn_mbb_teams(groups=None, return_as_pandas=True, \*\*kwargs)
+### sportsdataverse.mbb.mbb_teams.espn_mbb_teams(groups=None, return_as_pandas=False, \*\*kwargs)
 espn_mbb_teams - look up the men’s college basketball teams
 
 Args:
