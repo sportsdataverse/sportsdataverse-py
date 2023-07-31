@@ -89,7 +89,7 @@ def mlbam_player_season_hitting_stats(playerID: int, season: int, gameType="R"):
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["sport_hitting_tm"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:
@@ -178,7 +178,7 @@ def mlbam_player_season_pitching_stats(playerID: int, season: int, gameType="R")
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["sport_pitching_tm"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:
@@ -254,7 +254,7 @@ def mlbam_player_career_hitting_stats(playerID: int, gameType="R"):
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["sport_career_hitting"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:
@@ -331,7 +331,7 @@ def mlbam_player_career_pitching_stats(playerID: int, gameType="R"):
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["sport_career_pitching"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:

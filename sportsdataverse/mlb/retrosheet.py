@@ -15,7 +15,7 @@ import pandas as pd
 from tqdm import tqdm
 
 
-def retrosheet_ballparks() -> pl.DataFrame():
+def retrosheet_ballparks() -> pd.DataFrame():
     """
     Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe.
 
@@ -45,7 +45,7 @@ def retrosheet_ballparks() -> pl.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_ejections() -> pl.DataFrame():
+def retrosheet_ejections() -> pd.DataFrame():
     """
     Retrives the current Ejecdata.txt file from the  Retrosheet website, and then returns the current file as a pandas dataframe.
 
@@ -77,7 +77,7 @@ def retrosheet_ejections() -> pl.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_franchises() -> pl.DataFrame():
+def retrosheet_franchises() -> pd.DataFrame():
     """
     Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as  a pandas dataframe.
 
@@ -98,7 +98,7 @@ def retrosheet_franchises() -> pl.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_people() -> pl.DataFrame():
+def retrosheet_people() -> pd.DataFrame():
     """
     Retrives the current BioFile.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe.
 
@@ -156,7 +156,7 @@ def retrosheet_people() -> pl.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_schedule(first_season: int, last_season=None, original_2020_schedule=False) -> pl.DataFrame():
+def retrosheet_schedule(first_season: int, last_season=None, original_2020_schedule=False) -> pd.DataFrame():
     """
     Retrives the scheduled games of an MLB season, or MLB seasons.
 
@@ -181,7 +181,7 @@ def retrosheet_schedule(first_season: int, last_season=None, original_2020_sched
     season_schedule_df = pd.DataFrame()
     try:
         last_season = int(last_season)
-    except:
+    except Exception:
         last_season = None
 
     if last_season == None:
@@ -235,7 +235,7 @@ def retrosheet_schedule(first_season: int, last_season=None, original_2020_sched
 
 def retrosheet_game_logs_team(
     first_season: int, last_season=None, game_type="regular", filter_out_seasons=True
-) -> pl.DataFrame():
+) -> pd.DataFrame():
     """
     Retrives the team-level stats for MLB games in a season, or range of seasons.
     THIS DOES NOT GET PLAYER STATS!
@@ -270,7 +270,7 @@ def retrosheet_game_logs_team(
     season_game_log_df = pd.DataFrame()
     try:
         last_season = int(last_season)
-    except:
+    except Exception:
         last_season = None
 
     columns_list = [

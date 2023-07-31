@@ -50,7 +50,7 @@ def mlbam_transactions(startDate: str, endDate: str):
         searchURL = searchURL + f"start_date='{sd}'"
         searchURL = searchURL + f"start_date='{ed}'"
 
-    except:
+    except Exception:
         print("There's an issue with the way you've formatted you inputs.")
 
     try:
@@ -61,7 +61,7 @@ def mlbam_transactions(startDate: str, endDate: str):
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["transaction_all"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:
@@ -71,7 +71,7 @@ def mlbam_transactions(startDate: str, endDate: str):
         else:
             print(f"No results found for the provided playerID. \nTry a different search for better results.")
         return main_df
-    except:
+    except Exception:
         print("Could not locate dates ")
 
 
@@ -122,7 +122,7 @@ def mlbam_broadcast_info(season: int, home_away="e"):
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["mlb_broadcast_info"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:

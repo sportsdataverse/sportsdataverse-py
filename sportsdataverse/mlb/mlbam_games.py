@@ -76,11 +76,11 @@ def mlbam_schedule(season: int, gameType="R"):
     resp_json = json.loads(resp_str)
     try:
         result_count = int(resp_json["org_game_type_date_info"]["queryResults"]["totalSize"])
-    except:
+    except Exception:
         result_count = 0
 
     if result_count > 0:
         main_df = json_normalize(resp_json["org_game_type_date_info"]["queryResults"]["row"])
     else:
-        print(f"No results found for the provided playerID. \nTry a diffrient search for better results.")
+        print("No results found for the provided playerID. \nTry a different search for better results.")
     return main_df

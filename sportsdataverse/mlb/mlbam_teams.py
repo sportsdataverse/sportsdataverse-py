@@ -55,7 +55,7 @@ def mlbam_teams(season: int, retriveAllStarRosters=False):
     resp_json = json.loads(resp_str)
     try:
         result_count = int(resp_json["team_all_season"]["queryResults"]["totalSize"])
-    except:
+    except Exception:
         result_count = 0
 
     if result_count > 0:
@@ -94,7 +94,7 @@ def mlbam_40_man_roster(teamID: int):
     resp_json = json.loads(resp_str)
     try:
         result_count = int(resp_json["roster_40"]["queryResults"]["totalSize"])
-    except:
+    except Exception:
         result_count = 0
 
     if result_count > 0:
@@ -149,7 +149,7 @@ def mlbam_team_roster(teamID: int, startSeason: int, endSeason: int):
     resp_json = json.loads(resp_str)
     try:
         result_count = int(resp_json["roster_team_alltime"]["queryResults"]["totalSize"])
-    except:
+    except Exception:
         result_count = 0
 
     if result_count > 0:

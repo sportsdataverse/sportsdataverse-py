@@ -101,14 +101,14 @@ def mlbam_player_info(playerID: int):
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["player_info"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:
             main_df = json_normalize(resp_json["player_info"]["queryResults"]["row"])
             print("Done")
         else:
-            print(f"No results found for the provided playerID. \nTry a different search for better results.")
+            print("No results found for the provided playerID. \nTry a different search for better results.")
 
         return main_df
 
@@ -152,7 +152,7 @@ def mlbam_player_teams(playerID: int, season: int):
         resp_json = json.loads(resp_str)
         try:
             result_count = int(resp_json["player_teams"]["queryResults"]["totalSize"])
-        except:
+        except Exception:
             result_count = 0
 
         if result_count > 0:
