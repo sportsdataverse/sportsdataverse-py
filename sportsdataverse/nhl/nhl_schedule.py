@@ -61,17 +61,7 @@ def espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
             if len(event.get("competitions")[0].get("broadcasts")) > 0
             else ""
         )
-        del_keys = [
-            "geoBroadcasts",
-            "headlines",
-            "series",
-            "situation",
-            "tickets",
-            "odds",
-            "broadcasts",
-            "notes",
-            "competitors",
-        ]
+        del_keys = ["geoBroadcasts", "headlines", "series", "situation", "tickets", "odds", "leaders"]
         for k in del_keys:
             event.get("competitions")[0].pop(k, None)
 

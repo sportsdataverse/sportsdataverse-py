@@ -49,7 +49,7 @@ def espn_cfb_schedule(
         else:
             event = _extract_home_away(event, 0, "away")
             event = _extract_home_away(event, 1, "home")
-        del_keys = ["geoBroadcasts", "headlines", "series", "situation", "tickets", "odds"]
+        del_keys = ["geoBroadcasts", "headlines", "series", "situation", "tickets", "odds", "leaders"]
         for k in del_keys:
             event.get("competitions")[0].pop(k, None)
         event.get("competitions")[0]["notes_type"] = (
