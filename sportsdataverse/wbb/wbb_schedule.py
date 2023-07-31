@@ -31,7 +31,7 @@ def espn_wbb_schedule(
     }
     resp = download(url=url, params=params, **kwargs)
 
-    ev = pl.DataFrame()
+    ev = pd.DataFrame()
     events_txt = resp.json()
     events = events_txt.get("events")
     if events is None:
@@ -85,10 +85,13 @@ def espn_wbb_schedule(
             away_linescores=pl.when(pl.col("status_type_description") == "Postponed")
             .then(None)
             .otherwise(pl.col("away_linescores")),
+        ).with_columns(
+            season=pl.col("season").cast(pl.Int32),
+            season_type=pl.col("season_type").cast(pl.Int32),
         )
         x = x[[s.name for s in x if s.null_count() != x.height]]
-        ev = pl.concat([ev, x], how="diagonal")
-
+        ev = pd.concat([ev, x.to_pandas()], axis=0, ignore_index=True)
+    ev = pl.from_pandas(ev)
     ev.columns = [underscore(c) for c in ev.columns]
 
     return ev.to_pandas() if return_as_pandas else ev
@@ -106,14 +109,28 @@ def __extract_home_away(event, arg1, arg2):
         event.get("competitions")[0].get("competitors")[arg1].get("curatedRank", {}).get("current", 99)
     )
     event["competitions"][0][arg2]["linescores"] = (
-        event.get("competitions")[0].get("competitors")[arg1].get("linescores", [{"value": "N/A"}])
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
     )
     # add linescores back to main competitors if does not exist
     event["competitions"][0]["competitors"][arg1]["linescores"] = (
-        event.get("competitions")[0].get("competitors")[arg1].get("linescores", [])
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
     )
     event["competitions"][0][arg2]["records"] = (
-        event.get("competitions")[0].get("competitors")[arg1].get("records", [])
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get(
+            "records",
+            [
+                {"abbreviation": "Game", "name": "overall", "summary": "0-0", "type": "total"},
+                {"abbreviation": "null", "name": "Home", "summary": "0-0", "type": "home"},
+                {"abbreviation": "null", "name": "Road", "summary": "0-0", "type": "road"},
+                {"abbreviation": "null", "name": "vs. Conf.", "summary": "0-0", "type": "vsconf"},
+            ],
+        )
     )
     return event
 

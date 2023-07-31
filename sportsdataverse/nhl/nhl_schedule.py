@@ -25,7 +25,7 @@ def espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
     params = {"dates": dates, "seasonType": season_type, "limit": limit}
     resp = download(url=url, params=params, **kwargs)
 
-    ev = pl.DataFrame()
+    ev = pd.DataFrame()
     events_txt = resp.json()
     events = events_txt.get("events")
     if events is None:
@@ -78,10 +78,13 @@ def espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
             away_linescores=pl.when(pl.col("status_type_description") == "Postponed")
             .then(None)
             .otherwise(pl.col("away_linescores")),
+        ).with_columns(
+            season=pl.col("season").cast(pl.Int32),
+            season_type=pl.col("season_type").cast(pl.Int32),
         )
         x = x[[s.name for s in x if s.null_count() != x.height]]
-        ev = pl.concat([ev, x], how="diagonal")
-
+        ev = pd.concat([ev, x.to_pandas()], axis=0, ignore_index=True)
+    ev = pl.from_pandas(ev)
     ev.columns = [underscore(c) for c in ev.columns]
 
     return ev.to_pandas() if return_as_pandas else ev
@@ -95,18 +98,29 @@ def __extract_home_away(event, arg1, arg2):
     event["competitions"][0]["competitors"][arg1]["winner"] = (
         event.get("competitions")[0].get("competitors")[arg1].get("winner", False)
     )
-
     event["competitions"][0][arg2]["linescores"] = (
-        event.get("competitions")[0].get("competitors")[arg1].get("linescores", [{"value": "N/A"}])
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}])
     )
     # add linescores back to main competitors if does not exist
     event["competitions"][0]["competitors"][arg1]["linescores"] = (
-        event.get("competitions")[0].get("competitors")[arg1].get("linescores", [])
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}])
     )
     event["competitions"][0][arg2]["records"] = (
-        event.get("competitions")[0].get("competitors")[arg1].get("records", [])
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get(
+            "records",
+            [
+                {"abbreviation": "Game", "name": "YTD", "summary": "0-0", "type": "ytd"},
+                {"abbreviation": "HOME", "name": "Home", "summary": "0-0", "type": "home"},
+                {"abbreviation": "AWAY", "name": "Road", "summary": "0-0", "type": "road"},
+            ],
+        )
     )
-    return event
 
 
 def espn_nhl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
