@@ -136,7 +136,7 @@ def load_cfb_betting_lines(return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+        pd.DataFrame: Pandas dataframe containing betting lines available for the available seasons.
     """
 
     return (
@@ -158,7 +158,7 @@ def get_cfb_teams(return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+        pd.DataFrame: Pandas dataframe containing teams available.
     """
 
     return (

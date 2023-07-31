@@ -62,7 +62,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+    pd.DataFrame: Pandas dataframe containing teams available.
 
 
 ### sportsdataverse.cfb.cfb_loaders.load_cfb_betting_lines(return_as_pandas=False)
@@ -78,7 +78,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+    pd.DataFrame: Pandas dataframe containing betting lines available for the available seasons.
 
 
 ### sportsdataverse.cfb.cfb_loaders.load_cfb_pbp(seasons: List[int], return_as_pandas=False)
