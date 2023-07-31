@@ -6,6 +6,7 @@ CFB_ROSTER_URL = SGITHUB + "cfbfastR-data/main/rosters/parquet/cfb_rosters_{seas
 CFB_TEAM_LOGO_URL = SGITHUB + "cfbfastR-data/main/teams/teams_colors_logos.parquet"
 CFB_TEAM_SCHEDULE_URL = SGITHUB + "cfbfastR-data/main/schedules/parquet/cfb_schedules_{season}.parquet"
 CFB_TEAM_INFO_URL = SGITHUB + "cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet"
+CFB_BETTING_LINES_URL = SGITHUB + "cfbfastR-data/main/betting/parquet/cfb_line_odds.parquet"
 
 NHL_BASE_URL = SGITHUB + "fastRhockey-data/main/nhl/pbp/parquet/play_by_play_{season}.parquet"
 NHL_PLAYER_BOX_URL = SGITHUB + "fastRhockey-data/main/nhl/player_box/parquet/player_box_{season}.parquet"

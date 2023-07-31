@@ -54,7 +54,23 @@ Load college football team ID information and logos
 
 Example:
 
-    cfb_df = sportsdataverse.cfb.cfb_teams()
+    cfb_df = sportsdataverse.cfb.get_cfb_teams()
+
+Args:
+
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+Returns:
+
+    pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+
+
+### sportsdataverse.cfb.cfb_loaders.load_cfb_betting_lines(return_as_pandas=False)
+Load college football betting lines information
+
+Example:
+
+    cfb_df = sportsdataverse.cfb.load_cfb_betting_lines()
 
 Args:
 

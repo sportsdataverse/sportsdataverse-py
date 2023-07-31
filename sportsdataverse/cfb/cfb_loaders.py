@@ -5,6 +5,7 @@ from tqdm import tqdm
 
 from sportsdataverse.config import (
     CFB_BASE_URL,
+    CFB_BETTING_LINES_URL,
     CFB_ROSTER_URL,
     CFB_TEAM_INFO_URL,
     CFB_TEAM_LOGO_URL,
@@ -125,11 +126,33 @@ def load_cfb_team_info(seasons: List[int], return_as_pandas=False) -> pl.DataFra
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+def load_cfb_betting_lines(return_as_pandas=False) -> pl.DataFrame:
+    """Load college football betting lines information
+
+    Example:
+        `cfb_df = sportsdataverse.cfb.load_cfb_betting_lines()`
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+    """
+
+    return (
+        pl.read_parquet(CFB_BETTING_LINES_URL, use_pyarrow=True, columns=None).to_pandas(
+            use_pyarrow_extension_array=True
+        )
+        if return_as_pandas
+        else pl.read_parquet(CFB_BETTING_LINES_URL, use_pyarrow=True, columns=None)
+    )
+
+
 def get_cfb_teams(return_as_pandas=False) -> pl.DataFrame:
     """Load college football team ID information and logos
 
     Example:
-        `cfb_df = sportsdataverse.cfb.cfb_teams()`
+        `cfb_df = sportsdataverse.cfb.get_cfb_teams()`
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.

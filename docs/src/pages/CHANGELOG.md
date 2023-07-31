@@ -7,6 +7,7 @@
 - Function `espn_nhl_game_rosters()` added.
 - Function `espn_wbb_game_rosters()` added.
 - Function `espn_wnba_game_rosters()` added.
+- Function `load_cfb_betting_lines()` added.
 
 ## 0.0.34-35 Release: May 7-9, 2023
 - Reconfigured some imports
