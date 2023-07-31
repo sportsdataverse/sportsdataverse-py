@@ -502,17 +502,17 @@ Returns:
 ## sportsdataverse.nfl.nfl_pbp module
 
 
-### class sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0, raw=False, path_to_json='/')
+### class sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, \*\*kwargs)
 Bases: `object`
 
 
-#### \__init__(gameId=0, raw=False, path_to_json='/')
+#### \__init__(gameId=0, raw=False, path_to_json='/', return_keys=None, \*\*kwargs)
 Initialize self.  See help(type(self)) for accurate signature.
 
 
 #### create_box_score(play_df)
 
-#### espn_nfl_pbp()
+#### espn_nfl_pbp(\*\*kwargs)
 espn_nfl_pbp() - Pull the game by id. Data from API endpoints: nfl/playbyplay, nfl/summary
 
 Args:
@@ -543,6 +543,8 @@ Example:
 #### ran_pipeline( = False)
 
 #### raw( = False)
+
+#### return_keys( = None)
 
 #### run_cleaning_pipeline()
 

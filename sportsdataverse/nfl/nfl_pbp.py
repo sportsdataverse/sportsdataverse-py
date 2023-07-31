@@ -63,16 +63,18 @@ class NFLPlayProcess(object):
     ran_cleaning_pipeline = False
     raw = False
     path_to_json = "/"
+    return_keys = None
 
-    def __init__(self, gameId=0, raw=False, path_to_json="/"):
+    def __init__(self, gameId=0, raw=False, path_to_json="/", return_keys=None, **kwargs):
         self.gameId = int(gameId)
         # self.logger = logger
         self.ran_pipeline = False
         self.ran_cleaning_pipeline = False
         self.raw = raw
         self.path_to_json = path_to_json
+        self.return_keys = return_keys
 
-    def espn_nfl_pbp(self):
+    def espn_nfl_pbp(self, **kwargs):
         """espn_nfl_pbp() - Pull the game by id. Data from API endpoints: `nfl/playbyplay`, `nfl/summary`
 
         Args:
@@ -88,8 +90,7 @@ class NFLPlayProcess(object):
             `nfl_df = sportsdataverse.nfl.NFLPlayProcess(gameId=401220403).espn_nfl_pbp()`
         """
         cache_buster = int(time.time() * 1000)
-        pbp_txt = {}
-        pbp_txt["timeouts"] = {}
+        pbp_txt = {"timeouts": {}}
         # summary endpoint for pickcenter array
         summary_url = (
             f"http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={self.gameId}&{cache_buster}"
