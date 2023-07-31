@@ -1,7 +1,6 @@
 import tempfile
 from typing import List
 
-import pandas as pd
 import polars as pl
 from pyreadr import download_file, read_r
 from tqdm import tqdm
@@ -38,7 +37,7 @@ from sportsdataverse.config import (
 from sportsdataverse.errors import season_not_found_error
 
 
-def load_nfl_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL play by play data going back to 1999
 
     Example:
@@ -64,7 +63,7 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL schedule data
 
     Example:
@@ -93,7 +92,7 @@ def load_nfl_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_player_stats(kicking=False, return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_player_stats(kicking=False, return_as_pandas=False) -> pl.DataFrame:
     """Load NFL player stats data
 
     Example:
@@ -114,7 +113,7 @@ def load_nfl_player_stats(kicking=False, return_as_pandas=True) -> pd.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_ngs_passing(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_ngs_passing(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL NextGen Stats Passing data going back to 2016
 
     Example:
@@ -133,7 +132,7 @@ def load_nfl_ngs_passing(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_ngs_rushing(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_ngs_rushing(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL NextGen Stats Rushing data going back to 2016
 
     Example:
@@ -152,7 +151,7 @@ def load_nfl_ngs_rushing(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_ngs_receiving(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_ngs_receiving(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL NextGen Stats Receiving data going back to 2016
 
     Example:
@@ -171,7 +170,7 @@ def load_nfl_ngs_receiving(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_pfr_pass(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_pass(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Passing data going back to 2018
 
     Example:
@@ -191,7 +190,7 @@ def load_nfl_pfr_pass(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Passing data going back to 2018
 
     Example:
@@ -215,7 +214,7 @@ def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=True) -> pd.Da
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_pfr_rush(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_rush(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Rushing data going back to 2018
 
     Example:
@@ -235,7 +234,7 @@ def load_nfl_pfr_rush(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Rushing data going back to 2018
 
     Example:
@@ -259,7 +258,7 @@ def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=True) -> pd.Da
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_pfr_rec(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_rec(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Receiving data going back to 2018
 
     Example:
@@ -279,7 +278,7 @@ def load_nfl_pfr_rec(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Receiving data going back to 2018
 
     Example:
@@ -303,7 +302,7 @@ def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=True) -> pd.Dat
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_pfr_def(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_def(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Defensive data going back to 2018
 
     Example:
@@ -323,7 +322,7 @@ def load_nfl_pfr_def(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Weekly Advanced Defensive data going back to 2018
 
     Example:
@@ -347,7 +346,7 @@ def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas=True) -> pd.Dat
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_rosters(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL roster data for all seasons
 
     Example:
@@ -370,7 +369,7 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL weekly roster data for selected seasons
 
     Example:
@@ -393,7 +392,7 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=True) -> pd.Dat
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_teams(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL team ID information and logos
 
     Example:
@@ -411,7 +410,7 @@ def load_nfl_teams(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_players(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Player ID information
 
     Example:
@@ -429,7 +428,7 @@ def load_nfl_players(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_snap_counts(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL snap counts data for selected seasons
 
     Example:
@@ -452,7 +451,7 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=True) -> pd.DataFr
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL play-by-play participation data for selected seasons
 
     Example:
@@ -475,7 +474,7 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=True) -> pd.
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_injuries(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL injuries data for selected seasons
 
     Example:
@@ -498,7 +497,7 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=True) -> pd.DataFrame
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_depth_charts(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Depth Chart data for selected seasons
 
     Example:
@@ -521,7 +520,7 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=True) -> pd.DataF
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_contracts(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_contracts(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Historical contracts information
 
     Example:
@@ -539,7 +538,7 @@ def load_nfl_contracts(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_combine(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_combine(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Combine information
 
     Example:
@@ -557,7 +556,7 @@ def load_nfl_combine(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_draft_picks(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_draft_picks(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Draft picks information
 
     Example:
@@ -577,7 +576,7 @@ def load_nfl_draft_picks(return_as_pandas=True) -> pd.DataFrame:
     )
 
 
-def load_nfl_officials(return_as_pandas=True) -> pd.DataFrame:
+def load_nfl_officials(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Officials information
 
     Example:
@@ -598,7 +597,7 @@ def load_nfl_officials(return_as_pandas=True) -> pd.DataFrame:
 ## Currently removed due to unsupported features of pyreadr's method.
 ## there is a list-column of nested tibbles within the data
 ## that is not supported by pyreadr
-# def load_nfl_player_contracts_detail() -> pd.DataFrame:
+# def load_nfl_player_contracts_detail() -> pl.DataFrame:
 #     """Load NFL Player contracts detail information
 
 #     Example:

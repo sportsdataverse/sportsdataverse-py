@@ -1,6 +1,5 @@
 from typing import List
 
-import pandas as pd
 import polars as pl
 from tqdm import tqdm
 
@@ -14,7 +13,7 @@ from sportsdataverse.config import (
 from sportsdataverse.errors import SeasonNotFoundError
 
 
-def load_nhl_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nhl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NHL play by play data going back to 2011
 
     Example:
@@ -41,7 +40,7 @@ def load_nhl_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nhl_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nhl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NHL schedule data
 
     Example:
@@ -68,7 +67,7 @@ def load_nhl_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nhl_team_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nhl_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NHL team boxscore data
 
     Example:
@@ -96,7 +95,7 @@ def load_nhl_team_boxscore(seasons: List[int], return_as_pandas=True) -> pd.Data
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nhl_player_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nhl_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NHL player boxscore data
 
     Example:
@@ -124,7 +123,7 @@ def load_nhl_player_boxscore(seasons: List[int], return_as_pandas=True) -> pd.Da
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def nhl_teams(return_as_pandas=True) -> pd.DataFrame:
+def nhl_teams(return_as_pandas=False) -> pl.DataFrame:
     """Load NHL team ID information and logos
 
     Example:

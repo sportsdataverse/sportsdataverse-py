@@ -1,6 +1,5 @@
 from typing import List
 
-import pandas as pd
 import polars as pl
 from tqdm import tqdm
 
@@ -14,7 +13,7 @@ from sportsdataverse.config import (
 from sportsdataverse.errors import SeasonNotFoundError
 
 
-def load_cfb_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_cfb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load college football play by play data going back to 2003
 
     Example:
@@ -41,7 +40,7 @@ def load_cfb_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_cfb_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_cfb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load college football schedule data
 
     Example:
@@ -69,7 +68,7 @@ def load_cfb_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_cfb_rosters(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_cfb_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load roster data
 
     Example:
@@ -96,7 +95,7 @@ def load_cfb_rosters(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_cfb_team_info(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_cfb_team_info(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load college football team info
 
     Example:
@@ -126,7 +125,7 @@ def load_cfb_team_info(seasons: List[int], return_as_pandas=True) -> pd.DataFram
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def get_cfb_teams(return_as_pandas=True) -> pd.DataFrame:
+def get_cfb_teams(return_as_pandas=False) -> pl.DataFrame:
     """Load college football team ID information and logos
 
     Example:

@@ -1,6 +1,5 @@
 from typing import List
 
-import pandas as pd
 import polars as pl
 from tqdm import tqdm
 
@@ -13,7 +12,7 @@ from sportsdataverse.config import (
 from sportsdataverse.errors import SeasonNotFoundError
 
 
-def load_nba_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nba_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA play by play data going back to 2002
 
     Example:
@@ -41,7 +40,7 @@ def load_nba_pbp(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nba_team_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nba_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA team boxscore data
 
     Example:
@@ -69,7 +68,7 @@ def load_nba_team_boxscore(seasons: List[int], return_as_pandas=True) -> pd.Data
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nba_player_boxscore(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nba_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA player boxscore data
 
     Example:
@@ -97,7 +96,7 @@ def load_nba_player_boxscore(seasons: List[int], return_as_pandas=True) -> pd.Da
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nba_schedule(seasons: List[int], return_as_pandas=True) -> pd.DataFrame:
+def load_nba_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA schedule data
 
     Example:

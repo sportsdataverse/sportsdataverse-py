@@ -4,7 +4,7 @@ import polars as pl
 from sportsdataverse.dl_utils import download, underscore
 
 
-def espn_mbb_game_rosters(game_id: int, raw=False, return_as_pandas=True, **kwargs) -> pd.DataFrame:
+def espn_mbb_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_mbb_game_rosters() - Pull the game by id.
 
     Args:

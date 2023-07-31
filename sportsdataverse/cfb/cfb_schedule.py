@@ -7,8 +7,8 @@ from sportsdataverse.dl_utils import download, underscore
 
 
 def espn_cfb_schedule(
-    dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=True, **kwargs
-) -> pd.DataFrame:
+    dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs
+) -> pl.DataFrame:
     """espn_cfb_schedule - look up the college football schedule for a given season
 
     Args:
@@ -121,7 +121,7 @@ def _extract_home_away(event, arg1, arg2):
     return event
 
 
-def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=True, **kwargs) -> pd.DataFrame:
+def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_cfb_calendar - look up the men's college football calendar for a given season
 
     Args:

@@ -6,7 +6,7 @@ import polars as pl
 from sportsdataverse.dl_utils import download, underscore
 
 
-def espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=True, **kwargs) -> pd.DataFrame:
+def espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_nhl_schedule - look up the NHL schedule for a given date
 
     Args:
@@ -117,7 +117,7 @@ def __extract_home_away(event, arg1, arg2):
     return event
 
 
-def espn_nhl_calendar(season=None, ondays=None, return_as_pandas=True, **kwargs) -> pd.DataFrame:
+def espn_nhl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_nhl_calendar - look up the NHL calendar for a given season
 
     Args:

@@ -7,7 +7,7 @@ from sportsdataverse.dl_utils import download, underscore
 
 
 @lru_cache(maxsize=None)
-def espn_nhl_teams(return_as_pandas=True, **kwargs) -> pd.DataFrame:
+def espn_nhl_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_nhl_teams - look up NHL teams
 
     Args:

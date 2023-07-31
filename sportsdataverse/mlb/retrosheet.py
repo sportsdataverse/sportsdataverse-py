@@ -15,7 +15,7 @@ import pandas as pd
 from tqdm import tqdm
 
 
-def retrosheet_ballparks() -> pd.DataFrame():
+def retrosheet_ballparks() -> pl.DataFrame():
     """
     Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe.
 
@@ -45,7 +45,7 @@ def retrosheet_ballparks() -> pd.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_ejections() -> pd.DataFrame():
+def retrosheet_ejections() -> pl.DataFrame():
     """
     Retrives the current Ejecdata.txt file from the  Retrosheet website, and then returns the current file as a pandas dataframe.
 
@@ -77,7 +77,7 @@ def retrosheet_ejections() -> pd.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_franchises() -> pd.DataFrame():
+def retrosheet_franchises() -> pl.DataFrame():
     """
     Retrives the current TEAMABR.txt file from the Retrosheet website, and then returns the current file as  a pandas dataframe.
 
@@ -98,7 +98,7 @@ def retrosheet_franchises() -> pd.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_people() -> pd.DataFrame():
+def retrosheet_people() -> pl.DataFrame():
     """
     Retrives the current BioFile.txt file from the Retrosheet website, and then returns the current file as a pandas dataframe.
 
@@ -156,7 +156,7 @@ def retrosheet_people() -> pd.DataFrame():
         return pd.DataFrame()
 
 
-def retrosheet_schedule(first_season: int, last_season=None, original_2020_schedule=False) -> pd.DataFrame():
+def retrosheet_schedule(first_season: int, last_season=None, original_2020_schedule=False) -> pl.DataFrame():
     """
     Retrives the scheduled games of an MLB season, or MLB seasons.
 
@@ -235,7 +235,7 @@ def retrosheet_schedule(first_season: int, last_season=None, original_2020_sched
 
 def retrosheet_game_logs_team(
     first_season: int, last_season=None, game_type="regular", filter_out_seasons=True
-) -> pd.DataFrame():
+) -> pl.DataFrame():
     """
     Retrives the team-level stats for MLB games in a season, or range of seasons.
     THIS DOES NOT GET PLAYER STATS!

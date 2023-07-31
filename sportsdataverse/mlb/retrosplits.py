@@ -22,7 +22,7 @@ from tqdm import tqdm
 from sportsdataverse.errors import SeasonNotFoundError
 
 
-def retrosplits_game_logs_player(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_game_logs_player(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives game-level player stats from the Retrosplits project.
 
@@ -72,7 +72,7 @@ def retrosplits_game_logs_player(first_season: int, last_season=None) -> pd.Data
     return main_df
 
 
-def retrosplits_game_logs_team(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_game_logs_team(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives game-level team stats from the Retrosplits project.
 
@@ -124,7 +124,7 @@ def retrosplits_game_logs_team(first_season: int, last_season=None) -> pd.DataFr
     return main_df
 
 
-def retrosplits_player_batting_by_position(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_player_batting_by_position(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives player-level, batting by position split stats from the Retrosplits project.
     The stats returned by this function are season-level stats, not game-level stats.
@@ -187,7 +187,7 @@ def retrosplits_player_batting_by_position(first_season: int, last_season=None) 
     return main_df
 
 
-def retrosplits_player_batting_by_runners(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_player_batting_by_runners(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives player-level, batting by runners split stats from the Retrosplits project.
     The stats are batting stats, based off of how many runners are on base at the time of the at bat.
@@ -251,7 +251,7 @@ def retrosplits_player_batting_by_runners(first_season: int, last_season=None) -
     return main_df
 
 
-def retrosplits_player_batting_by_platoon(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_player_batting_by_platoon(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives player-level, batting by platoon (left/right hitting vs. left/right pitching) split stats from the Retrosplits project.
     The stats are batting stats, based off of the handedness of the batter vs the handedness of the pitcher.
@@ -318,7 +318,7 @@ def retrosplits_player_batting_by_platoon(first_season: int, last_season=None) -
     return main_df
 
 
-def retrosplits_player_head_to_head_stats(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_player_head_to_head_stats(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives batter vs. pitcher stats from the Retrosplits project.
     The stats are batting stats, based off of the preformance of that specific batter agianst a specific pitcher for the durration of that specific season.
@@ -385,7 +385,7 @@ def retrosplits_player_head_to_head_stats(first_season: int, last_season=None) -
     return main_df
 
 
-def retrosplits_player_pitching_by_runners(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_player_pitching_by_runners(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives player-level, pitching by runners split stats from the Retrosplits project.
     The stats are pitching stats, based off of how many runners are on base at the time of the at bat.
@@ -450,7 +450,7 @@ def retrosplits_player_pitching_by_runners(first_season: int, last_season=None) 
     return main_df
 
 
-def retrosplits_player_pitching_by_platoon(first_season: int, last_season=None) -> pd.DataFrame():
+def retrosplits_player_pitching_by_platoon(first_season: int, last_season=None) -> pl.DataFrame():
     """
     Retrives player-level, pitching by platoon (left/right pitching vs. left/right hitting) split stats from the Retrosplits project.
     The stats are pitching stats, based off of the handedness of the pitcher vs the handedness of the batter.

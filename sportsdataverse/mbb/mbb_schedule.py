@@ -8,8 +8,8 @@ from sportsdataverse.errors import SeasonNotFoundError
 
 
 def espn_mbb_schedule(
-    dates=None, groups=50, season_type=None, limit=500, return_as_pandas=True, **kwargs
-) -> pd.DataFrame:
+    dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs
+) -> pl.DataFrame:
     """espn_mbb_schedule - look up the men's college basketball scheduler for a given season
 
     Args:
@@ -115,7 +115,7 @@ def __extract_home_away(event, arg1, arg2):
     return event
 
 
-def espn_mbb_calendar(season=None, ondays=None, return_as_pandas=True, **kwargs) -> pd.DataFrame:
+def espn_mbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_mbb_calendar - look up the men's college basketball calendar for a given season
 
     Args:

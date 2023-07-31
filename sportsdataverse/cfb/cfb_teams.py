@@ -7,7 +7,7 @@ from sportsdataverse.dl_utils import download, underscore
 
 
 @lru_cache(maxsize=None)
-def espn_cfb_teams(groups=None, return_as_pandas=True, **kwargs) -> pd.DataFrame:
+def espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_cfb_teams - look up the college football teams
 
     Args:

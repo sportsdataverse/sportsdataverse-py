@@ -35,7 +35,7 @@ def nhl_api_pbp(game_id: int, **kwargs) -> Dict:
     return pbp_txt
 
 
-def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=True) -> pd.DataFrame:
+def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False) -> pl.DataFrame:
     """nhl_api_schedule() - Pull the game by id. Data from API endpoints - `nhl/schedule`
 
     Args:
