@@ -180,7 +180,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing calendar dates for the requested season.
+    pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
 Raises:
 
@@ -198,7 +198,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+    pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
 
 
 ### sportsdataverse.wnba.wnba_schedule.most_recent_wnba_season()

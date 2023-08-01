@@ -17,8 +17,7 @@ def espn_nba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing
-        schedule events for the requested season.
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
     params = {"dates": dates, "seasonType": season_type, "limit": limit}
@@ -132,8 +131,7 @@ def espn_nba_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing
-        calendar dates for the requested season.
+        pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
     Raises:
         ValueError: If `season` is less than 2002.

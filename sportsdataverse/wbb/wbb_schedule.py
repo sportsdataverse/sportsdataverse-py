@@ -20,7 +20,7 @@ def espn_wbb_schedule(
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard"
     params = {
@@ -144,8 +144,7 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing
-        calendar dates for the requested season.
+        pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
     Raises:
         ValueError: If `season` is less than 2002.

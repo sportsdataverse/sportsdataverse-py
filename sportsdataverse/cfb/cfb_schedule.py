@@ -20,7 +20,7 @@ def espn_cfb_schedule(
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
     """
 
     params = {
@@ -151,7 +151,7 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing calendar dates for the requested season.
+        pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
     Raises:
         ValueError: If `season` is less than 2002.
