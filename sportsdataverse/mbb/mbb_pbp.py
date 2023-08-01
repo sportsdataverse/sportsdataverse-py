@@ -224,6 +224,7 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
         .with_columns(
             game_id=pl.lit(game_id).cast(pl.Int32),
             id=(pl.col("id").cast(pl.Int64)),
+            sequenceNumber=pl.col("sequenceNumber").cast(pl.Int32),
             season=pl.lit(pbp_txt["header"]["season"]["year"]),
             seasonType=pl.lit(pbp_txt["header"]["season"]["type"]),
             homeTeamId=pl.lit(init["homeTeamId"]),

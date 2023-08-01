@@ -281,6 +281,7 @@ class NFLPlayProcess(object):
                 .otherwise(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
                 .alias("start.adj_TimeSecsRem"),
                 pl.col("id").cast(pl.Int64),
+                pl.col("sequenceNumber").cast(pl.Int32),
             )
         )
         pbp_txt["plays"] = pbp_txt["plays"].sort(by=["id", "start.adj_TimeSecsRem"])
