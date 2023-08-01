@@ -306,6 +306,7 @@ class NFLPlayProcess(object):
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
                     .and_(pl.col("text") == pl.col("lead_text"))
+                    .and_(pl.col("type.text") != "Timeout")
                 )
                 .then(pl.lit(True))
                 .when(
@@ -314,6 +315,7 @@ class NFLPlayProcess(object):
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
                     .and_(pl.col("text").is_in(pl.col("lead_text")))
+                    .and_(pl.col("type.text") != "Timeout")
                 )
                 .then(pl.lit(True))
                 .otherwise(pl.lit(False))
@@ -441,82 +443,40 @@ class NFLPlayProcess(object):
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
-                pl.when(
-                    (
-                        (pbp_txt["timeouts"][init["homeTeamId"]]["1"] <= pl.col("id")).and_(
-                            pl.col("period.number") <= 2, len(pbp_txt["timeouts"][init["homeTeamId"]]["1"]) == 1
+                (
+                    3
+                    - pl.struct(pl.col(["id", "period.number"])).apply(
+                        lambda x: (
+                            sum(
+                                (i <= x["id"]) & (x["period.number"] <= 2)
+                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
+                            )
                         )
-                    ).or_(
-                        (pbp_txt["timeouts"][init["homeTeamId"]]["2"] <= pl.col("id")).and_(
-                            pl.col("period.number") > 2, len(pbp_txt["timeouts"][init["homeTeamId"]]["2"]) == 1
-                        )
+                        | (
+                            sum(
+                                (i <= x["id"]) & (x["period.number"] > 2)
+                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
+                            )
+                        ),
                     )
-                )
-                .then(2)
-                .when(
-                    (
-                        (pbp_txt["timeouts"][init["homeTeamId"]]["1"] <= pl.col("id")).and_(
-                            pl.col("period.number") <= 2, len(pbp_txt["timeouts"][init["homeTeamId"]]["1"]) == 2
+                ).alias("end.homeTeamTimeouts"),
+                (
+                    3
+                    - pl.struct(pl.col(["id", "period.number"])).apply(
+                        lambda x: (
+                            sum(
+                                (i <= x["id"]) & (x["period.number"] <= 2)
+                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
+                            )
                         )
-                    ).or_(
-                        (pbp_txt["timeouts"][init["homeTeamId"]]["2"] <= pl.col("id")).and_(
-                            pl.col("period.number") > 2, len(pbp_txt["timeouts"][init["homeTeamId"]]["2"]) == 2
-                        )
+                        | (
+                            sum(
+                                (i <= x["id"]) & (x["period.number"] > 2)
+                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
+                            )
+                        ),
                     )
-                )
-                .then(1)
-                .when(
-                    (
-                        (pbp_txt["timeouts"][init["homeTeamId"]]["1"] <= pl.col("id")).and_(
-                            pl.col("period.number") <= 2, len(pbp_txt["timeouts"][init["homeTeamId"]]["1"]) == 3
-                        )
-                    ).or_(
-                        (pbp_txt["timeouts"][init["homeTeamId"]]["2"] <= pl.col("id")).and_(
-                            pl.col("period.number") > 2, len(pbp_txt["timeouts"][init["homeTeamId"]]["2"]) == 3
-                        )
-                    )
-                )
-                .then(0)
-                .otherwise(3)
-                .alias("end.homeTeamTimeouts"),
-                pl.when(
-                    (
-                        (pbp_txt["timeouts"][init["awayTeamId"]]["1"] <= pl.col("id")).and_(
-                            pl.col("period.number") <= 2, len(pbp_txt["timeouts"][init["awayTeamId"]]["1"]) == 1
-                        )
-                    ).or_(
-                        (pbp_txt["timeouts"][init["awayTeamId"]]["2"] <= pl.col("id")).and_(
-                            pl.col("period.number") > 2, len(pbp_txt["timeouts"][init["awayTeamId"]]["2"]) == 1
-                        )
-                    )
-                )
-                .then(2)
-                .when(
-                    (
-                        (pbp_txt["timeouts"][init["awayTeamId"]]["1"] <= pl.col("id")).and_(
-                            pl.col("period.number") <= 2, len(pbp_txt["timeouts"][init["awayTeamId"]]["1"]) == 2
-                        )
-                    ).or_(
-                        (pbp_txt["timeouts"][init["awayTeamId"]]["2"] <= pl.col("id")).and_(
-                            pl.col("period.number") > 2, len(pbp_txt["timeouts"][init["awayTeamId"]]["2"]) == 2
-                        )
-                    )
-                )
-                .then(1)
-                .when(
-                    (
-                        (pbp_txt["timeouts"][init["awayTeamId"]]["1"] <= pl.col("id")).and_(
-                            pl.col("period.number") <= 2, len(pbp_txt["timeouts"][init["awayTeamId"]]["1"]) == 3
-                        )
-                    ).or_(
-                        (pbp_txt["timeouts"][init["awayTeamId"]]["2"] <= pl.col("id")).and_(
-                            pl.col("period.number") > 2, len(pbp_txt["timeouts"][init["awayTeamId"]]["2"]) == 3
-                        )
-                    )
-                )
-                .then(0)
-                .otherwise(3)
-                .alias("end.awayTeamTimeouts"),
+                ).alias("end.awayTeamTimeouts"),
             )
             .with_columns(
                 pl.col("end.homeTeamTimeouts").shift_and_fill(periods=1, fill_value=3).alias("start.homeTeamTimeouts"),
