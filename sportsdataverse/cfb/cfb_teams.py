@@ -16,6 +16,8 @@ def espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFram
 
     Returns:
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season.
+        This function caches by default, so if you want to refresh the data, use the command
+        sportsdataverse.cfb.espn_cfb_teams.clear_cache().
 
     Example:
         `cfb_df = sportsdataverse.cfb.espn_cfb_teams()`

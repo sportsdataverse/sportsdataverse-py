@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import re
 import time
@@ -47,6 +48,9 @@ wp_model.load_model(wp_spread_file)
 
 qbr_model = Booster({"nthread": 4})  # init model
 qbr_model.load_model(qbr_model_file)
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class CFBPlayProcess(object):
@@ -120,6 +124,7 @@ class CFBPlayProcess(object):
         #     "videos",
         # ]
         if self.raw == True:
+            logging.debug(f"{self.gameId}: raw cfb_pbp data requested, returning keys: {summary.keys()}")
             # reorder keys in raw format, appending empty keys which are defined later to the end
             pbp_json = {}
             for k in incoming_keys_expected:
@@ -129,6 +134,7 @@ class CFBPlayProcess(object):
                     pbp_json[k] = {} if k in dict_keys_expected else []
             return pbp_json
 
+        logging.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")
         for k in incoming_keys_expected:
             if k in summary.keys():
                 pbp_txt[k] = summary[k]
@@ -180,6 +186,7 @@ class CFBPlayProcess(object):
     def __helper_cfb_pbp_features(self, pbp_txt, init):
         pbp_txt["plays"] = pl.DataFrame()
         for key in pbp_txt.get("drives").keys():
+            logging.debug(f"{self.gameId}: drives key - {key}")
             prev_drives = pd.json_normalize(
                 data=pbp_txt.get("drives").get("{}".format(key)),
                 record_path="plays",
@@ -214,6 +221,7 @@ class CFBPlayProcess(object):
 
         # pbp_txt["plays"] = pbp_txt["plays"].to_dict(orient="records")
         # pbp_txt["plays"] = pd.DataFrame(pbp_txt["plays"])
+        logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(

@@ -15,6 +15,7 @@ def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries
         params = {}
     if logger is None:
         logger = logging.getLogger(__name__)
+        logger.addHandler(logging.NullHandler())
     try:
         response = requests.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
         # print(response.url)
@@ -32,8 +33,12 @@ def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries
                 num_retries=num_retries - 1,
                 logger=logger,
             )
+        if num_retries > 0 and (hasattr(e, "code") and getattr(e, "code") == 404):
+            print(f"404: {url} \nparams: {params}")
+            logger.error(f"404: {url} \nparams: {params}")
         if num_retries == 0:
-            logger.error("Retry Limit Exceeded")
+            print(f"Retry Limit Exceeded: {url} \nparams: {params}")
+            logger.error(f"Retry Limit Exceeded: {url} \nparams: {params}")
     return response
 
 

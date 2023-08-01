@@ -16,6 +16,8 @@ def espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFram
 
     Returns:
         pl.DataFrame: Polars dataframe containing teams for the requested league.
+        This function caches by default, so if you want to refresh the data, use the command
+        sportsdataverse.mbb.espn_mbb_teams.clear_cache().
 
     Example:
         `mbb_df = sportsdataverse.mbb.espn_mbb_teams()`

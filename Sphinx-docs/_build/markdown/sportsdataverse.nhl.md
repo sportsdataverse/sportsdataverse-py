@@ -272,6 +272,8 @@ Args:
 Returns:
 
     pl.DataFrame: Polars dataframe containing teams for the requested league.
+    This function caches by default, so if you want to refresh the data, use the command
+    sportsdataverse.nhl.espn_nhl_teams.clear_cache().
 
 Example:
 
