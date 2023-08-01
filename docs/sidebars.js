@@ -26,11 +26,6 @@ module.exports = {
     },
     {
       type: "category",
-      label: "MLB",
-      items: ["mlb/index"],
-    },
-    {
-      type: "category",
       label: "NBA",
       items: ["nba/index"],
     },
