@@ -34,7 +34,7 @@ from sportsdataverse.cfb.model_vars import (
     wp_start_columns,
     wp_start_touchback_columns,
 )
-from sportsdataverse.dl_utils import download, key_check
+from sportsdataverse.dl_utils import download
 
 ep_model_file = resource_filename("sportsdataverse", "cfb/models/ep_model.model")
 wp_spread_file = resource_filename("sportsdataverse", "cfb/models/wp_spread.model")
@@ -150,12 +150,14 @@ class CFBPlayProcess(object):
             "odds",
             "predictor",
             "winprobability",
-            "espnWP",
             "gameInfo",
-            "season",
             "leaders",
+            "drives",
         ]:
-            pbp_txt[k] = key_check(obj=summary, key=k)
+            if k in summary.keys():
+                pbp_txt[k] = summary[k]
+            else:
+                pbp_txt[k] = {} if k in dict_keys_expected else []
         for k in ["news", "shop"]:
             pbp_txt.pop(f"{k}", None)
         self.json = pbp_txt
@@ -219,8 +221,11 @@ class CFBPlayProcess(object):
             )
             pbp_txt["plays"] = pl.concat([pbp_txt["plays"], pl.from_pandas(prev_drives)], how="vertical")
 
-        # pbp_txt["plays"] = pbp_txt["plays"].to_dict(orient="records")
-        # pbp_txt["plays"] = pd.DataFrame(pbp_txt["plays"])
+        pbp_txt["timeouts"] = {
+            init["homeTeamId"]: {"1": [], "2": []},
+            init["awayTeamId"]: {"1": [], "2": []},
+        }
+
         logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
         pbp_txt["plays"] = (
             pbp_txt["plays"]
@@ -676,7 +681,7 @@ class CFBPlayProcess(object):
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
             gameSpread = 2.5
-            overUnder = 140.5
+            overUnder = 55.0
             homeFavorite = True
             gameSpreadAvailable = False
 

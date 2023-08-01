@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import re
 import time
@@ -10,7 +11,7 @@ import polars as pl
 from pkg_resources import resource_filename
 from xgboost import Booster, DMatrix
 
-from sportsdataverse.dl_utils import download, key_check
+from sportsdataverse.dl_utils import download
 from sportsdataverse.nfl.model_vars import (
     defense_score_vec,
     end_change_vec,
@@ -54,6 +55,9 @@ wp_model.load_model(wp_spread_file)
 
 qbr_model = Booster({"nthread": 4})  # init model
 qbr_model.load_model(qbr_model_file)
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class NFLPlayProcess(object):
@@ -126,6 +130,7 @@ class NFLPlayProcess(object):
         #     "videos",
         # ]
         if self.raw == True:
+            logging.debug(f"{self.gameId}: raw nfl_pbp data requested, returning keys: {summary.keys()}")
             # reorder keys in raw format, appending empty keys which are defined later to the end
             pbp_json = {}
             for k in incoming_keys_expected:
@@ -135,6 +140,7 @@ class NFLPlayProcess(object):
                     pbp_json[k] = {} if k in dict_keys_expected else []
             return pbp_json
 
+        logging.debug(f"{self.gameId}: full nfl_pbp data requested, returning keys: {summary.keys()}")
         for k in incoming_keys_expected:
             if k in summary.keys():
                 pbp_txt[k] = summary[k]
@@ -150,12 +156,14 @@ class NFLPlayProcess(object):
             "odds",
             "predictor",
             "winprobability",
-            "espnWP",
             "gameInfo",
-            "season",
             "leaders",
+            "drives",
         ]:
-            pbp_txt[k] = key_check(obj=summary, key=k)
+            if k in summary.keys():
+                pbp_txt[k] = summary[k]
+            else:
+                pbp_txt[k] = {} if k in dict_keys_expected else []
         for k in ["news", "shop"]:
             pbp_txt.pop(f"{k}", None)
         self.json = pbp_txt
@@ -218,8 +226,11 @@ class NFLPlayProcess(object):
             )
             pbp_txt["plays"] = pl.concat([pbp_txt["plays"], pl.from_pandas(prev_drives)], how="vertical")
 
-        # pbp_txt["plays"] = pbp_txt["plays"].to_dict(orient="records")
-        # pbp_txt["plays"] = pd.DataFrame(pbp_txt["plays"])
+        pbp_txt["timeouts"] = {
+            init["homeTeamId"]: {"1": [], "2": []},
+            init["awayTeamId"]: {"1": [], "2": []},
+        }
+
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -413,10 +424,6 @@ class NFLPlayProcess(object):
             )
         )
 
-        pbp_txt["timeouts"] = {
-            init["homeTeamId"]: {"1": [], "2": []},
-            init["awayTeamId"]: {"1": [], "2": []},
-        }
         pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
             pbp_txt["plays"]
             .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
