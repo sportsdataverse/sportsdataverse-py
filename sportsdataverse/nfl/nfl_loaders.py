@@ -48,7 +48,7 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the play-by-plays available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the play-by-plays available for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 1999.
@@ -71,9 +71,10 @@ def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 1999.
@@ -100,9 +101,10 @@ def load_nfl_player_stats(kicking=False, return_as_pandas=False) -> pl.DataFrame
 
     Args:
         kicking (bool): If True, load kicking stats. If False, load all other stats.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing player stats.
+        pl.DataFrame: Polars dataframe containing player stats.
     """
     data = pl.DataFrame()
     if kicking is False:
@@ -116,11 +118,14 @@ def load_nfl_player_stats(kicking=False, return_as_pandas=False) -> pl.DataFrame
 def load_nfl_ngs_passing(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL NextGen Stats Passing data going back to 2016
 
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
     Example:
         `nfl_df = sportsdataverse.nfl.load_nfl_ngs_passing()`
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the NextGen Stats Passing data available.
+        pl.DataFrame: Polars dataframe containing the NextGen Stats Passing data available.
 
     """
     return (
@@ -135,11 +140,14 @@ def load_nfl_ngs_passing(return_as_pandas=False) -> pl.DataFrame:
 def load_nfl_ngs_rushing(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL NextGen Stats Rushing data going back to 2016
 
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
     Example:
         `nfl_df = sportsdataverse.nfl.load_nfl_ngs_rushing()`
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the NextGen Stats Rushing data available.
+        pl.DataFrame: Polars dataframe containing the NextGen Stats Rushing data available.
 
     """
     return (
@@ -154,11 +162,14 @@ def load_nfl_ngs_rushing(return_as_pandas=False) -> pl.DataFrame:
 def load_nfl_ngs_receiving(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL NextGen Stats Receiving data going back to 2016
 
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
     Example:
         `nfl_df = sportsdataverse.nfl.load_nfl_ngs_receiving()`
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the NextGen Stats Receiving data available.
+        pl.DataFrame: Polars dataframe containing the NextGen Stats Receiving data available.
 
     """
     return (
@@ -173,11 +184,14 @@ def load_nfl_ngs_receiving(return_as_pandas=False) -> pl.DataFrame:
 def load_nfl_pfr_pass(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Passing data going back to 2018
 
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
     Example:
         `nfl_df = sportsdataverse.nfl.load_nfl_pfr_pass()`
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced passing stats data available.
 
     """
@@ -198,9 +212,10 @@ def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=False) -> pl.D
 
     Args:
         seasons (list): Used to define different seasons. 2018 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced passing stats data available for the requested seasons.
 
     """
@@ -217,11 +232,14 @@ def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=False) -> pl.D
 def load_nfl_pfr_rush(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Rushing data going back to 2018
 
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
     Example:
         `nfl_df = sportsdataverse.nfl.load_nfl_pfr_rush()`
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced rushing stats data available.
 
     """
@@ -242,9 +260,10 @@ def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=False) -> pl.D
 
     Args:
         seasons (list): Used to define different seasons. 2018 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced rushing stats data available for the requested seasons.
 
     """
@@ -261,11 +280,14 @@ def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=False) -> pl.D
 def load_nfl_pfr_rec(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Receiving data going back to 2018
 
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
     Example:
         `nfl_df = sportsdataverse.nfl.load_nfl_pfr_rec()`
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced receiving stats data available.
 
     """
@@ -286,9 +308,10 @@ def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=False) -> pl.Da
 
     Args:
         seasons (list): Used to define different seasons. 2018 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced receiving stats data available for the requested seasons.
 
     """
@@ -305,11 +328,14 @@ def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=False) -> pl.Da
 def load_nfl_pfr_def(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Pro-Football Reference Advanced Defensive data going back to 2018
 
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
     Example:
         `nfl_df = sportsdataverse.nfl.load_nfl_pfr_def()`
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced defensive stats data available.
 
     """
@@ -330,9 +356,10 @@ def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas=False) -> pl.Da
 
     Args:
         seasons (list): Used to define different seasons. 2018 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing Pro-Football Reference
+        pl.DataFrame: Polars dataframe containing Pro-Football Reference
             advanced defensive stats data available for the requested seasons.
 
     """
@@ -354,9 +381,10 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
 
     Args:
         seasons (list): Used to define different seasons. 1920 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing rosters available for the requested seasons.
 
     """
     data = pl.DataFrame()
@@ -377,9 +405,10 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing weekly rosters available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing weekly rosters available for the requested seasons.
 
     """
     data = pl.DataFrame()
@@ -399,9 +428,10 @@ def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
         `nfl_df = sportsdataverse.nfl.load_nfl_teams()`
 
     Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing teams available.
+        pl.DataFrame: Polars dataframe containing teams available.
     """
     return (
         pl.read_csv(NFL_TEAM_LOGO_URL).to_pandas(use_pyarrow_extension_array=True)
@@ -417,9 +447,10 @@ def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
         `nfl_df = sportsdataverse.nfl.load_nfl_players()`
 
     Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing players available.
+        pl.DataFrame: Polars dataframe containing players available.
     """
     return (
         pl.read_parquet(NFL_PLAYER_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
@@ -436,9 +467,10 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataF
 
     Args:
         seasons (list): Used to define different seasons. 2012 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing snap counts available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing snap counts available for the requested seasons.
 
     """
     data = pl.DataFrame()
@@ -459,9 +491,10 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl
 
     Args:
         seasons (list): Used to define different seasons. 2016 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing play-by-play participation data available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing play-by-play participation data available for the requested seasons.
 
     """
     data = pl.DataFrame()
@@ -482,9 +515,10 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Args:
         seasons (list): Used to define different seasons. 2009 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing injuries data available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing injuries data available for the requested seasons.
 
     """
     data = pl.DataFrame()
@@ -505,9 +539,10 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.Data
 
     Args:
         seasons (list): Used to define different seasons. 2001 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing depth chart data available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing depth chart data available for the requested seasons.
 
     """
     data = pl.DataFrame()
@@ -527,9 +562,10 @@ def load_nfl_contracts(return_as_pandas=False) -> pl.DataFrame:
         `nfl_df = sportsdataverse.nfl.load_nfl_contracts()`
 
     Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing historical contracts available.
+        pl.DataFrame: Polars dataframe containing historical contracts available.
     """
     return (
         pl.read_parquet(NFL_CONTRACTS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
@@ -545,9 +581,10 @@ def load_nfl_combine(return_as_pandas=False) -> pl.DataFrame:
         `nfl_df = sportsdataverse.nfl.load_nfl_combine()`
 
     Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing NFL combine data available.
+        pl.DataFrame: Polars dataframe containing NFL combine data available.
     """
     return (
         pl.read_parquet(NFL_COMBINE_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
@@ -563,9 +600,10 @@ def load_nfl_draft_picks(return_as_pandas=False) -> pl.DataFrame:
         `nfl_df = sportsdataverse.nfl.load_nfl_draft_picks()`
 
     Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing NFL Draft picks data available.
+        pl.DataFrame: Polars dataframe containing NFL Draft picks data available.
     """
     return (
         pl.read_parquet(NFL_DRAFT_PICKS_URL, use_pyarrow=True, columns=None).to_pandas(
@@ -583,9 +621,10 @@ def load_nfl_officials(return_as_pandas=False) -> pl.DataFrame:
         `nfl_df = sportsdataverse.nfl.load_nfl_officials()`
 
     Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing officials available.
+        pl.DataFrame: Polars dataframe containing officials available.
     """
     return (
         pl.read_parquet(NFL_OFFICIALS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
@@ -606,7 +645,7 @@ def load_nfl_officials(return_as_pandas=False) -> pl.DataFrame:
 #     Args:
 
 #     Returns:
-#         pd.DataFrame: Pandas dataframe containing player contracts detail data available.
+#         pl.DataFrame: Polars dataframe containing player contracts detail data available.
 #     """
 #     data = pd.DataFrame()
 #     with tempfile.TemporaryDirectory() as tempdirname:

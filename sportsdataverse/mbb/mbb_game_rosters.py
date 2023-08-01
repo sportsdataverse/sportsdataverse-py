@@ -12,7 +12,7 @@ def espn_mbb_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Data frame of game roster data with columns:
+        pl.DataFrame: Polars dataframe of game roster data with columns:
         'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type',
         'first_name', 'last_name', 'full_name', 'athlete_display_name',
         'short_name', 'weight', 'display_weight', 'height', 'display_height',

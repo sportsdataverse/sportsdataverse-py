@@ -35,14 +35,16 @@ def nhl_api_pbp(game_id: int, **kwargs) -> Dict:
     return pbp_txt
 
 
-def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False) -> pl.DataFrame:
-    """nhl_api_schedule() - Pull the game by id. Data from API endpoints - `nhl/schedule`
+def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False, **kwargs) -> pl.DataFrame:
+    """nhl_api_schedule() - Pull the schedule by start and end date. Data from API endpoints - `nhl/schedule`
 
     Args:
-        game_id (int): Unique game_id, can be obtained from nhl_schedule().
+        start_date (str): Start date to pull the NHL API schedule.
+        end_date (str): End date to pull the NHL API schedule.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
     Example:
         `nhl_sched_df = sportsdataverse.nhl.nhl_api_schedule(start_date=2021-10-23, end_date=2021-10-28)`

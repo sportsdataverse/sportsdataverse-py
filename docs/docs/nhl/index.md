@@ -24,16 +24,18 @@ Example:
     nhl_df = sportsdataverse.nhl.nhl_api_pbp(game_id=2021020079)
 
 
-### sportsdataverse.nhl.nhl_api.nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False)
-nhl_api_schedule() - Pull the game by id. Data from API endpoints - nhl/schedule
+### sportsdataverse.nhl.nhl_api.nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False, \*\*kwargs)
+nhl_api_schedule() - Pull the schedule by start and end date. Data from API endpoints - nhl/schedule
 
 Args:
 
-    game_id (int): Unique game_id, can be obtained from nhl_schedule().
+    start_date (str): Start date to pull the NHL API schedule.
+    end_date (str): End date to pull the NHL API schedule.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
+    pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
 Example:
 
@@ -52,7 +54,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Data frame of game roster data with columns:
+    pl.DataFrame: Polars dataframe of game roster data with columns:
     ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
     ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
     ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
@@ -100,7 +102,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the play-by-plays available for the requested seasons.
+    pl.DataFrame: Polars dataframe containing the play-by-plays available for the requested seasons.
 
 Raises:
 
@@ -121,7 +123,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     player boxscores available for the requested seasons.
 
 Raises:
@@ -143,7 +145,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
+    pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
 Raises:
 
@@ -164,7 +166,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     team boxscores available for the requested seasons.
 
 Raises:
@@ -185,7 +187,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+    pl.DataFrame: Polars dataframe containing teams available for the requested seasons.
 
 ## sportsdataverse.nhl.nhl_pbp module
 
@@ -269,7 +271,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams for the requested league.
+    pl.DataFrame: Polars dataframe containing teams for the requested league.
 
 Example:
 

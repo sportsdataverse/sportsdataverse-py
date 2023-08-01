@@ -15,7 +15,7 @@ def espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFram
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing teams for the requested league.
+        pl.DataFrame: Polars dataframe containing teams for the requested league.
 
     Example:
         `mbb_df = sportsdataverse.mbb.espn_mbb_teams()`

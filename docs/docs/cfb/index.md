@@ -15,7 +15,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Data frame of game roster data with columns:
+    pl.DataFrame: Polars dataframe of game roster data with columns:
     ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
     ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
     ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
@@ -62,7 +62,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams available.
+    pl.DataFrame: Polars dataframe containing teams available.
 
 
 ### sportsdataverse.cfb.cfb_loaders.load_cfb_betting_lines(return_as_pandas=False)
@@ -78,7 +78,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing betting lines available for the available seasons.
+    pl.DataFrame: Polars dataframe containing betting lines available for the available seasons.
 
 
 ### sportsdataverse.cfb.cfb_loaders.load_cfb_pbp(seasons: List[int], return_as_pandas=False)
@@ -95,7 +95,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the play-by-plays available for the requested seasons.
+    pl.DataFrame: Polars dataframe containing the play-by-plays available for the requested seasons.
 
 Raises:
 
@@ -116,7 +116,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
+    pl.DataFrame: Polars dataframe containing rosters available for the requested seasons.
 
 Raises:
 
@@ -137,7 +137,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
+    pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
 Raises:
 
@@ -158,7 +158,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the team info available for the requested seasons.
+    pl.DataFrame: Polars dataframe containing the team info available for the requested seasons.
 
 Raises:
 
@@ -270,7 +270,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+    pl.DataFrame: Polars dataframe containing schedule dates for the requested season.
 
 Example:
 

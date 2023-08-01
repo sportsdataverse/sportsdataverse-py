@@ -184,8 +184,8 @@ def helper_nhl_pickcenter(pbp_txt):
         gameSpreadAvailable = True
         # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
     else:
-        gameSpread = 2.5
-        overUnder = 190.5
+        gameSpread = 1.5
+        overUnder = 5.5
         homeFavorite = True
         gameSpreadAvailable = False
 

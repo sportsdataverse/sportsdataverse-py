@@ -1,14 +1,14 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-  - repo: local
-    hooks:
-    - id: update-docs
-      name: update-docs
-      entry: bash create_docs.sh
-      language: system
-      types: [python]
-      pass_filenames: false
+  # - repo: local
+  #   hooks:
+  #   - id: update-docs
+  #     name: update-docs
+  #     entry: bash create_docs.sh
+  #     language: system
+  #     types: [python]
+  #     pass_filenames: false
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1

@@ -23,7 +23,7 @@ def load_wnba_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the
+        pl.DataFrame: Polars dataframe containing the
         play-by-plays available for the requested seasons.
 
     Raises:
@@ -51,7 +51,7 @@ def load_wnba_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Da
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the
+        pl.DataFrame: Polars dataframe containing the
         team boxscores available for the requested seasons.
 
     Raises:
@@ -79,7 +79,7 @@ def load_wnba_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the
+        pl.DataFrame: Polars dataframe containing the
         player boxscores available for the requested seasons.
 
     Raises:
@@ -107,7 +107,7 @@ def load_wnba_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFra
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the
+        pl.DataFrame: Polars dataframe containing the
         schedule for  the requested seasons.
 
     Raises:

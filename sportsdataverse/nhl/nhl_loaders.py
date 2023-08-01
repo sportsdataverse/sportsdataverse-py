@@ -24,7 +24,7 @@ def load_nhl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the play-by-plays available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the play-by-plays available for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 2011.
@@ -51,7 +51,7 @@ def load_nhl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 2002.
@@ -78,7 +78,7 @@ def load_nhl_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Dat
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the
+        pl.DataFrame: Polars dataframe containing the
         team boxscores available for the requested seasons.
 
     Raises:
@@ -106,7 +106,7 @@ def load_nhl_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.D
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the
+        pl.DataFrame: Polars dataframe containing the
         player boxscores available for the requested seasons.
 
     Raises:
@@ -133,6 +133,6 @@ def nhl_teams(return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing teams available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing teams available for the requested seasons.
     """
     return pl.read_csv(NHL_TEAM_LOGO_URL).to_pandas if return_as_pandas else pl.read_csv(NHL_TEAM_LOGO_URL)

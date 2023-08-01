@@ -14,7 +14,7 @@ def espn_nfl_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing teams for the requested league.
+        pl.DataFrame: Polars dataframe containing teams for the requested league.
 
     Example:
         `nfl_df = sportsdataverse.nfl.espn_nfl_teams()`

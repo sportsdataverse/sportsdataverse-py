@@ -25,7 +25,7 @@ def load_cfb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the play-by-plays available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the play-by-plays available for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 2003.
@@ -52,7 +52,7 @@ def load_cfb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the schedule for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 2002.
@@ -80,7 +80,7 @@ def load_cfb_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing rosters available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing rosters available for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 2014.
@@ -107,7 +107,7 @@ def load_cfb_team_info(seasons: List[int], return_as_pandas=False) -> pl.DataFra
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing the team info available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing the team info available for the requested seasons.
 
     Raises:
         ValueError: If `season` is less than 2002.
@@ -136,7 +136,7 @@ def load_cfb_betting_lines(return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing betting lines available for the available seasons.
+        pl.DataFrame: Polars dataframe containing betting lines available for the available seasons.
     """
 
     return (
@@ -158,7 +158,7 @@ def get_cfb_teams(return_as_pandas=False) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing teams available.
+        pl.DataFrame: Polars dataframe containing teams available.
     """
 
     return (

@@ -15,7 +15,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Data frame of game roster data with columns:
+    pl.DataFrame: Polars dataframe of game roster data with columns:
     ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
     ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
     ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
@@ -63,7 +63,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     play-by-plays available for the requested seasons.
 
 Raises:
@@ -85,7 +85,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     player boxscores available for the requested seasons.
 
 Raises:
@@ -107,7 +107,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     schedule for  the requested seasons.
 
 Raises:
@@ -129,7 +129,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     team boxscores available for the requested seasons.
 
 Raises:
@@ -220,7 +220,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams for the requested league.
+    pl.DataFrame: Polars dataframe containing teams for the requested league.
 
 Example:
 

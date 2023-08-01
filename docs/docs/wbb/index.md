@@ -15,7 +15,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Data frame of game roster data with columns:
+    pl.DataFrame: Polars dataframe of game roster data with columns:
     ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
     ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
     ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
@@ -63,7 +63,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     play-by-plays available for the requested seasons.
 
 Raises:
@@ -85,7 +85,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     player boxscores available for the requested seasons.
 
 Raises:
@@ -107,7 +107,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     schedule for  the requested seasons.
 
 Raises:
@@ -129,7 +129,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     team boxscores available for the requested seasons.
 
 Raises:
@@ -146,8 +146,7 @@ womens-college-basketball/summary
 Args:
 
     game_id (int): Unique game_id, can be obtained from wbb_schedule().
-
-raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
+    raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
 
 Returns:
 
@@ -168,7 +167,7 @@ Example:
 
 ### sportsdataverse.wbb.wbb_pbp.helper_wbb_pickcenter(pbp_txt)
 
-### sportsdataverse.wbb.wbb_pbp.mbb_pbp_disk(game_id, path_to_json)
+### sportsdataverse.wbb.wbb_pbp.wbb_pbp_disk(game_id, path_to_json)
 ## sportsdataverse.wbb.wbb_schedule module
 
 
@@ -220,7 +219,7 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams for the requested league.
+    pl.DataFrame: Polars dataframe containing teams for the requested league.
 
 Example:
 

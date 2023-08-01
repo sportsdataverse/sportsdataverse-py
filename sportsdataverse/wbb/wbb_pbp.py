@@ -16,7 +16,7 @@ def espn_wbb_pbp(game_id: int, raw=False, **kwargs) -> Dict:
 
     Args:
         game_id (int): Unique game_id, can be obtained from wbb_schedule().
-    raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
+        raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
 
     Returns:
         Dict: Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header",
@@ -90,7 +90,7 @@ def espn_wbb_pbp(game_id: int, raw=False, **kwargs) -> Dict:
     return helper_wbb_pbp(game_id, pbp_txt)
 
 
-def mbb_pbp_disk(game_id, path_to_json):
+def wbb_pbp_disk(game_id, path_to_json):
     with open(os.path.join(path_to_json, f"{game_id}.json")) as json_file:
         pbp_txt = json.load(json_file)
     return pbp_txt
