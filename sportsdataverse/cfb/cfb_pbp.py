@@ -188,7 +188,7 @@ class CFBPlayProcess(object):
         for key in pbp_txt.get("drives").keys():
             logging.debug(f"{self.gameId}: drives key - {key}")
             prev_drives = pd.json_normalize(
-                data=pbp_txt.get("drives").get("{}".format(key)),
+                data=pbp_txt.get("drives").get(f"{key}"),
                 record_path="plays",
                 meta=[
                     "id",
@@ -2484,8 +2484,10 @@ class CFBPlayProcess(object):
             .with_columns(
                 punt_block_return_player=pl.struct(["punt_block_player", "punt_block_return_player"]).apply(
                     lambda cols: cols["punt_block_return_player"]
-                    .str.replace(r"(?i)(.+)blocked by", "")
-                    .str.replace(pl.format(r"(?i)blocked by {}", cols["punt_block_player"]), ""),
+                    .replace(r"(?i)(.+)blocked by", "")
+                    .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
+                    if cols["punt_block_return_player"] is not None
+                    else None,
                     return_dtype=pl.Utf8,
                 )
             )
@@ -4556,7 +4558,7 @@ class CFBPlayProcess(object):
                 }
                 self.json = pbp_json
             self.ran_pipeline = True
-            return self.json if self.return_keys is None else {k: self.json[k] for k in self.return_keys}
+            return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
     def run_cleaning_pipeline(self):
         if self.ran_cleaning_pipeline == False:

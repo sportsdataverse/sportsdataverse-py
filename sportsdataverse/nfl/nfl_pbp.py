@@ -2482,8 +2482,10 @@ class NFLPlayProcess(object):
             .with_columns(
                 punt_block_return_player=pl.struct(["punt_block_player", "punt_block_return_player"]).apply(
                     lambda cols: cols["punt_block_return_player"]
-                    .str.replace(r"(?i)(.+)blocked by", "")
-                    .str.replace(pl.format(r"(?i)blocked by {}", cols["punt_block_player"]), ""),
+                    .replace(r"(?i)(.+)blocked by", "")
+                    .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
+                    if cols["punt_block_return_player"] is not None
+                    else None,
                     return_dtype=pl.Utf8,
                 )
             )
