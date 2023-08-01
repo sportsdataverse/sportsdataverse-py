@@ -681,7 +681,7 @@ class NFLPlayProcess(object):
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
             gameSpread = 2.5
-            overUnder = 140.5
+            overUnder = 46.5
             homeFavorite = True
             gameSpreadAvailable = False
 
