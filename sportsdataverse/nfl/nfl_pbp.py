@@ -231,6 +231,10 @@ class NFLPlayProcess(object):
             init["awayTeamId"]: {"1": [], "2": []},
         }
 
+        logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
+        if len(pbp_txt["plays"]) == 0:
+            return pbp_txt
+
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -4515,7 +4519,10 @@ class NFLPlayProcess(object):
             }
             self.json = pbp_json
             self.plays_json = pbp_txt["plays"]
-            if pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none":
+            if (
+                pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none"
+                and len(pbp_txt["plays"]) > 0
+            ):
                 self.plays_json = (
                     self.plays_json.pipe(self.__add_downs_data)
                     .pipe(self.__add_play_type_flags)

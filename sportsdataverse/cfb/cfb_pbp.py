@@ -227,6 +227,8 @@ class CFBPlayProcess(object):
         }
 
         logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
+        if len(pbp_txt["plays"]) == 0:
+            return pbp_txt
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -420,10 +422,6 @@ class CFBPlayProcess(object):
             )
         )
 
-        pbp_txt["timeouts"] = {
-            init["homeTeamId"]: {"1": [], "2": []},
-            init["awayTeamId"]: {"1": [], "2": []},
-        }
         pbp_txt["timeouts"][init["homeTeamId"]]["1"] = (
             pbp_txt["plays"]
             .filter((pl.col("homeTimeoutCalled") == True).and_(pl.col("period.number") <= 2))
@@ -4515,7 +4513,10 @@ class CFBPlayProcess(object):
             }
             self.json = pbp_json
             self.plays_json = pbp_txt["plays"]
-            if pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none":
+            if (
+                pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none"
+                and len(pbp_txt["plays"]) > 0
+            ):
                 self.plays_json = (
                     self.plays_json.pipe(self.__add_downs_data)
                     .pipe(self.__add_play_type_flags)
@@ -4596,7 +4597,10 @@ class CFBPlayProcess(object):
             }
             self.json = pbp_json
             self.plays_json = pbp_txt["plays"]
-            if pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none":
+            if (
+                pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none"
+                and len(pbp_txt["plays"]) > 0
+            ):
                 self.plays_json = (
                     self.plays_json.pipe(self.__add_downs_data)
                     .pipe(self.__add_play_type_flags)
