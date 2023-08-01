@@ -2,15 +2,10 @@ import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
-from sportsdataverse.cfb.cfb_schedule import (
-    espn_cfb_calendar,
-    espn_cfb_schedule,
-    most_recent_cfb_season,
-)
 
 
 @pytest.fixture()
-def generated_data():
+def generated_cfb_data():
     test = CFBPlayProcess(gameId=401301025)
     test.espn_cfb_pbp()
     test.run_processing_pipeline()
@@ -18,22 +13,22 @@ def generated_data():
 
 
 @pytest.fixture()
-def box_score(generated_data):
-    yield generated_data.create_box_score(pl.DataFrame(generated_data.plays_json, infer_schema_length=400))
+def cfb_box_score(generated_cfb_data):
+    yield generated_cfb_data.create_box_score(pl.DataFrame(generated_cfb_data.plays_json, infer_schema_length=400))
 
 
-def test_basic_pbp(generated_data):
-    assert generated_data.json is not None
+def test_basic_cfb_pbp(generated_cfb_data):
+    assert generated_cfb_data.json is not None
 
-    generated_data.run_processing_pipeline()
-    assert len(generated_data.plays_json) > 0
-    assert generated_data.ran_pipeline == True
-    assert isinstance(pl.DataFrame(generated_data.plays_json, infer_schema_length=400), pl.DataFrame)
+    generated_cfb_data.run_processing_pipeline()
+    assert len(generated_cfb_data.plays_json) > 0
+    assert generated_cfb_data.ran_pipeline == True
+    assert isinstance(pl.DataFrame(generated_cfb_data.plays_json, infer_schema_length=400), pl.DataFrame)
 
 
-def test_adv_box_score(box_score):
-    assert box_score is not None
-    assert not set(box_score.keys()).difference(
+def test_cfb_adv_box_score(cfb_box_score):
+    assert cfb_box_score is not None
+    assert not set(cfb_box_score.keys()).difference(
         {
             "win_pct",
             "pass",
@@ -48,8 +43,8 @@ def test_adv_box_score(box_score):
     )
 
 
-def test_havoc_rate(box_score):
-    defense_home = box_score["defensive"][0]
+def test_havoc_rate(cfb_box_score):
+    defense_home = cfb_box_score["defensive"][0]
     # print(defense_home)
     passes_defended = defense_home.get("pass_breakups", 0)
     home_int = defense_home.get("Int", 0)
@@ -218,53 +213,3 @@ def test_expected_turnovers(iu_play_base_box):
     )
     assert round(away_exp_xTO, 4) == round(away_actual_xTO, 4)
     assert round(home_exp_xTO, 4) == round(home_actual_xTO, 4)
-
-
-@pytest.fixture()
-def calendar_data():
-    yield espn_cfb_calendar(season=most_recent_cfb_season(), return_as_pandas=False)
-
-
-def calendar_data_check(calendar_data):
-    assert isinstance(calendar_data, pl.DataFrame)
-    assert len(calendar_data) > 0
-
-
-@pytest.fixture()
-def calendar_ondays_data():
-    yield espn_cfb_calendar(season=2021, ondays=True, return_as_pandas=False)
-
-
-def calendar_ondays_data_check(calendar_ondays_data):
-    assert isinstance(calendar_ondays_data, pl.DataFrame)
-    assert len(calendar_ondays_data) > 0
-
-
-@pytest.fixture()
-def schedule_data():
-    yield espn_cfb_schedule(return_as_pandas=False)
-
-
-def schedule_data_check(schedule_data):
-    assert isinstance(schedule_data, pl.DataFrame)
-    assert len(schedule_data) > 0
-
-
-@pytest.fixture()
-def schedule_data2():
-    yield espn_cfb_schedule(dates=20220901, return_as_pandas=False)
-
-
-def schedule_data_check2(schedule_data2):
-    assert isinstance(schedule_data, pl.DataFrame)
-    assert len(schedule_data) > 0
-
-
-@pytest.fixture()
-def week_1_cfb_schedule():
-    yield espn_cfb_schedule(dates=2022, week=1, return_as_pandas=False)
-
-
-def week_1_schedule_check(week_1_cfb_schedule):
-    assert isinstance(week_1_cfb_schedule, pl.DataFrame)
-    assert len(week_1_cfb_schedule) > 0

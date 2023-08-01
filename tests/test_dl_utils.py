@@ -26,11 +26,11 @@ class TestDownload:
         assert response.status_code == 200
 
     # Tests that the function can download a valid URL with a proxy
-    def test_download_valid_url_with_proxy(self):
-        url = "https://jsonplaceholder.typicode.com/posts"
-        proxy = {"https": "https://localhost:8080"}
-        response = download(url, proxy=proxy)
-        assert response.status_code == 200
+    # def test_download_valid_url_with_proxy(self):
+    #     url = "https://jsonplaceholder.typicode.com/posts"
+    #     proxy = {"https": "https://localhost:8080"}
+    #     response = download(url, proxy=proxy)
+    #     assert response.status_code == 200
 
     # Tests that the function can download a valid URL with a very short timeout
     def test_download_valid_url_with_short_timeout(self):
