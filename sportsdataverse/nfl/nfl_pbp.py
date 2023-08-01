@@ -4579,7 +4579,7 @@ class NFLPlayProcess(object):
 
             pbp_json = {
                 "gameId": int(self.gameId),
-                "plays": self.plays_json,
+                "plays": self.plays_json.to_dicts(),
                 "season": pbp_txt["season"],
                 "week": pbp_txt["header"]["week"],
                 "gameInfo": pbp_txt["gameInfo"],
