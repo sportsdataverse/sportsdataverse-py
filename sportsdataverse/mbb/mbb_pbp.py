@@ -201,7 +201,7 @@ def helper_mbb_pickcenter(pbp_txt):
         # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
     else:
         gameSpread = 2.5
-        overUnder = 140.5
+        overUnder = 142.0
         homeFavorite = True
         gameSpreadAvailable = False
 

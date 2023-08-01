@@ -393,7 +393,7 @@ def helper_nba_pickcenter(pbp_txt):
         # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
     else:
         gameSpread = 2.5
-        overUnder = 190.5
+        overUnder = 215.5
         homeFavorite = True
         gameSpreadAvailable = False
 

@@ -195,7 +195,7 @@ class NFLPlayProcess(object):
         pbp_txt["plays"] = pl.DataFrame()
         for key in pbp_txt.get("drives").keys():
             prev_drives = pd.json_normalize(
-                data=pbp_txt.get("drives").get("{}".format(key)),
+                data=pbp_txt.get("drives").get(f"{key}"),
                 record_path="plays",
                 meta=[
                     "id",
