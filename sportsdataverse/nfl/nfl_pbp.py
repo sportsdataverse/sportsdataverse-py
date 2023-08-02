@@ -674,13 +674,23 @@ class NFLPlayProcess(object):
     def __helper_nfl_pickcenter(self, pbp_txt):
         # Spread definition
         if len(pbp_txt.get("pickcenter", [])) > 1:
-            homeFavorite = pbp_txt.get("pickcenter", {})[0].get("homeTeamOdds", {}).get("favorite", "")
-            if "spread" in pbp_txt.get("pickcenter", {})[1].keys():
-                gameSpread = pbp_txt.get("pickcenter", {})[1].get("spread", "")
-                overUnder = pbp_txt.get("pickcenter", {})[1].get("overUnder", "")
-            else:
-                gameSpread = pbp_txt.get("pickcenter", {})[0].get("spread", "")
-                overUnder = pbp_txt.get("pickcenter", {})[0].get("overUnder", "")
+            pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
+            pickcenter = pickcenter.sort_values(by=["provider.id"])
+            homeFavorite = (
+                pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
+                if "homeTeamOdds.favorite" in pickcenter.columns
+                else True
+            )
+            gameSpread = (
+                pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0]
+                if "spread" in pickcenter.columns
+                else 2.5
+            )
+            overUnder = (
+                pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
+                if "overUnder" in pickcenter.columns
+                else 46.5
+            )
             gameSpreadAvailable = True
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
@@ -3711,6 +3721,15 @@ class NFLPlayProcess(object):
     def __add_drive_data(self, play_df):
         play_df = (
             play_df.with_columns(
+                (
+                    pl.when(pl.col("drive.result").is_null())
+                    .then(pl.lit("Not provided"))
+                    .otherwise(pl.col("drive.result"))
+                )
+                .cast(pl.Utf8)
+                .alias("drive.result"),
+            )
+            .with_columns(
                 drive_start=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
                 .then(100 - pl.col("drive.start.yardLine"))
                 .otherwise(pl.col("drive.start.yardLine")),
