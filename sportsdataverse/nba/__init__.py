@@ -1,3 +1,4 @@
+from sportsdataverse.nba.nba_game_rosters import *
 from sportsdataverse.nba.nba_loaders import *
 from sportsdataverse.nba.nba_pbp import *
 from sportsdataverse.nba.nba_schedule import *

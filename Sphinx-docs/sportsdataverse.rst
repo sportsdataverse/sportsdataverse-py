@@ -9,7 +9,6 @@ Subpackages
 
    sportsdataverse.cfb
    sportsdataverse.mbb
-   sportsdataverse.mlb
    sportsdataverse.nba
    sportsdataverse.nfl
    sportsdataverse.nhl
@@ -23,6 +22,14 @@ sportsdataverse.config module
 -----------------------------
 
 .. automodule:: sportsdataverse.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+sportsdataverse.decorators module
+---------------------------------
+
+.. automodule:: sportsdataverse.decorators
    :members:
    :undoc-members:
    :show-inheritance:

@@ -12,6 +12,14 @@ sportsdataverse.nfl.model\_vars module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.nfl.nfl\_game\_rosters module
+---------------------------------------------
+
+.. automodule:: sportsdataverse.nfl.nfl_game_rosters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.nfl.nfl\_games module
 -------------------------------------
 

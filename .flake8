@@ -1,0 +1,8 @@
+[flake8]
+max-line-length = 120
+max-complexity = 18
+select = B,C,E,F,W,T4,B9
+extend-ignore = E203, E265, E266, E400, E501, E712, W503, B905, B907
+enable-extensions = G
+import-order-style = google
+application-import-names = sportsdataverse,test

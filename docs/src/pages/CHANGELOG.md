@@ -1,4 +1,13 @@
-
+## 0.0.36-7 Release: July 9, 2023
+- Switched most under the hood dataframe operations to use the python `polars` library and many functions now have a parameter `return_as_pandas` which defaults to `False` but can be set to `True` to return a pandas dataframe instead of a polars dataframe. This is a **breaking change.**
+- Added `**kwargs` which pass arguments to the `dl_utils.download()` function, including `headers`, `proxy`, `timeout` (default 30s), `num_retries` (default = 15), `logger` (default = None)
+- Function `espn_cfb_game_rosters()` added.
+- Function `espn_nba_game_rosters()` added.
+- Function `espn_nfl_game_rosters()` added.
+- Function `espn_nhl_game_rosters()` added.
+- Function `espn_wbb_game_rosters()` added.
+- Function `espn_wnba_game_rosters()` added.
+- Function `load_cfb_betting_lines()` added (only 2006 through 2019).
 
 ## 0.0.34-35 Release: May 7-9, 2023
 - Reconfigured some imports

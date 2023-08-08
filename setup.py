@@ -12,23 +12,32 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 extras = {
-        "tests": ["pytest>=6.0.2",
-              "mypy>=0.782",
-              "pytest-cov>=2.10.1",
-              "pytest-xdist>=2.1.0",],
-        "docs": ["sphinx"],
-        "models": ["beautifulsoup4>=4.4.0",
-                "inflection>=0.5.1",
-                "requests>=2.18.1",
-                "lxml>=4.2.1",
-                "pyarrow>=1.0.1",
-                "pyjanitor>=0.23.1",
-                "pyreadr>=0.4.0",
-                "scipy>=1.4.0",
-                "matplotlib>=2.0.0",
-                "tqdm>=4.50.0",
-                "attrs>=20.3.0",
-                "xgboost>=1.2.0",]
+    "tests": [
+        "black>=22.3.0",
+        "flake8>=5.0.0",
+        "isort>=5.10.1",
+        "mypy>=0.782",
+        "pycln>=2.1.6",
+        "pydocstyle>=6.3.0",
+        "pytest>=6.0.2",
+        "pytest-cov>=2.10.1",
+        "pytest-xdist>=2.1.0",
+    ],
+    "docs": ["sphinx"],
+    "models": [
+        "beautifulsoup4>=4.4.0",
+        "inflection>=0.5.1",
+        "requests>=2.18.1",
+        "lxml>=4.2.1",
+        "pyarrow>=1.0.1",
+        "pyjanitor>=0.23.1",
+        "pyreadr>=0.4.0",
+        "scipy>=1.4.0",
+        "matplotlib>=2.0.0",
+        "tqdm>=4.50.0",
+        "attrs>=20.3.0",
+        "xgboost>=1.2.0",
+    ],
 }
 
 extras["all"] = extras["tests"] + extras["docs"] + extras["models"]
@@ -38,7 +47,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version="0.0.36",
+    version="0.0.37",
     description="Retrieve Sports data in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -89,18 +98,18 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         "numpy>=1.13.0",
-        "pandas >= 1.0.3",
+        "pandas>= 1.0.3",
+        "polars>=0.18.10",
         "tqdm>=4.50.0",
         "beautifulsoup4>=4.4.0",
         "inflection>=0.5.1",
         "requests>=2.18.1",
         "lxml>=4.2.1",
-        "pyarrow>=1.0.1",
+        "pyarrow>=8.0.0",
         "pyjanitor>=0.23.1",
         "pyreadr>=0.4.0",
         "scipy>=1.4.0",
         "matplotlib>=2.0.0",
-        "tqdm>=4.50.0",
         "attrs>=20.3.0",
         "xgboost>=1.2.0",
     ],

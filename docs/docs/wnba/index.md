@@ -2,10 +2,54 @@
 
 ## Submodules
 
+## sportsdataverse.wnba.wnba_game_rosters module
+
+
+### sportsdataverse.wnba.wnba_game_rosters.espn_wnba_game_rosters(game_id: int, raw=False, return_as_pandas=False, \*\*kwargs)
+espn_wnba_game_rosters() - Pull the game by id.
+
+Args:
+
+    game_id (int): Unique game_id, can be obtained from espn_wnba_schedule().
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+Returns:
+
+    pl.DataFrame: Polars Data frame of game roster data with columns:
+    ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
+    ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
+    ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
+    ‘age’, ‘date_of_birth’, ‘slug’, ‘jersey’, ‘linked’, ‘active’,
+    ‘alternate_ids_sdr’, ‘birth_place_city’, ‘birth_place_state’,
+    ‘birth_place_country’, ‘headshot_href’, ‘headshot_alt’,
+    ‘experience_years’, ‘experience_display_value’,
+    ‘experience_abbreviation’, ‘status_id’, ‘status_name’, ‘status_type’,
+    ‘status_abbreviation’, ‘hand_type’, ‘hand_abbreviation’,
+    ‘hand_display_value’, ‘draft_display_text’, ‘draft_round’, ‘draft_year’,
+    ‘draft_selection’, ‘player_id’, ‘starter’, ‘valid’, ‘did_not_play’,
+    ‘display_name’, ‘ejected’, ‘athlete_href’, ‘position_href’,
+    ‘statistics_href’, ‘team_id’, ‘team_guid’, ‘team_uid’, ‘team_slug’,
+    ‘team_location’, ‘team_name’, ‘team_abbreviation’,
+    ‘team_display_name’, ‘team_short_display_name’, ‘team_color’,
+    ‘team_alternate_color’, ‘is_active’, ‘is_all_star’,
+    ‘logo_href’, ‘logo_dark_href’, ‘game_id’
+
+Example:
+
+    wnba_df = sportsdataverse.wnba.espn_wnba_game_rosters(game_id=401370395)
+
+
+### sportsdataverse.wnba.wnba_game_rosters.helper_wnba_athlete_items(teams_rosters, \*\*kwargs)
+
+### sportsdataverse.wnba.wnba_game_rosters.helper_wnba_game_items(summary)
+
+### sportsdataverse.wnba.wnba_game_rosters.helper_wnba_roster_items(items, summary_url, \*\*kwargs)
+
+### sportsdataverse.wnba.wnba_game_rosters.helper_wnba_team_items(items, \*\*kwargs)
 ## sportsdataverse.wnba.wnba_loaders module
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_pbp(seasons: List[int])
+### sportsdataverse.wnba.wnba_loaders.load_wnba_pbp(seasons: List[int], return_as_pandas=False)
 Load WNBA play by play data going back to 2002
 
 Example:
@@ -15,10 +59,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     play-by-plays available for the requested seasons.
 
 Raises:
@@ -26,7 +71,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_player_boxscore(seasons: List[int])
+### sportsdataverse.wnba.wnba_loaders.load_wnba_player_boxscore(seasons: List[int], return_as_pandas=False)
 Load WNBA player boxscore data
 
 Example:
@@ -36,10 +81,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     player boxscores available for the requested seasons.
 
 Raises:
@@ -47,7 +93,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_schedule(seasons: List[int])
+### sportsdataverse.wnba.wnba_loaders.load_wnba_schedule(seasons: List[int], return_as_pandas=False)
 Load WNBA schedule data
 
 Example:
@@ -57,10 +103,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     schedule for  the requested seasons.
 
 Raises:
@@ -68,7 +115,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_loaders.load_wnba_team_boxscore(seasons: List[int])
+### sportsdataverse.wnba.wnba_loaders.load_wnba_team_boxscore(seasons: List[int], return_as_pandas=False)
 Load WNBA team boxscore data
 
 Example:
@@ -78,10 +125,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     team boxscores available for the requested seasons.
 
 Raises:
@@ -91,7 +139,7 @@ Raises:
 ## sportsdataverse.wnba.wnba_pbp module
 
 
-### sportsdataverse.wnba.wnba_pbp.espn_wnba_pbp(game_id: int, raw=False)
+### sportsdataverse.wnba.wnba_pbp.espn_wnba_pbp(game_id: int, raw=False, \*\*kwargs)
 espn_wnba_pbp() - Pull the game by id. Data from API endpoints - wnba/playbyplay, wnba/summary
 
 Args:
@@ -110,9 +158,11 @@ Example:
     wnba_df = sportsdataverse.wnba.espn_wnba_pbp(game_id=401370395)
 
 
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_game_data(pbp_txt, init)
+
 ### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp(game_id, pbp_txt)
 
-### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt)
+### sportsdataverse.wnba.wnba_pbp.helper_wnba_pbp_features(game_id, pbp_txt, init)
 
 ### sportsdataverse.wnba.wnba_pbp.helper_wnba_pickcenter(pbp_txt)
 
@@ -120,7 +170,7 @@ Example:
 ## sportsdataverse.wnba.wnba_schedule module
 
 
-### sportsdataverse.wnba.wnba_schedule.espn_wnba_calendar(season=None, ondays=None)
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_calendar(season=None, ondays=None, return_as_pandas=False, \*\*kwargs)
 espn_wnba_calendar - look up the WNBA calendar for a given season
 
 Args:
@@ -130,14 +180,14 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing calendar dates for the requested season.
+    pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
 Raises:
 
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.wnba.wnba_schedule.espn_wnba_schedule(dates=None, season_type=None, limit=500)
+### sportsdataverse.wnba.wnba_schedule.espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, \*\*kwargs)
 espn_wnba_schedule - look up the WNBA schedule for a given season
 
 Args:
@@ -148,18 +198,28 @@ Args:
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+    pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
 
 
 ### sportsdataverse.wnba.wnba_schedule.most_recent_wnba_season()
 ## sportsdataverse.wnba.wnba_teams module
 
 
-### sportsdataverse.wnba.wnba_teams.espn_wnba_teams()
+### sportsdataverse.wnba.wnba_teams.espn_wnba_teams(return_as_pandas=False, \*\*kwargs)
 espn_wnba_teams - look up WNBA teams
+
+Args:
+
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams for the requested league.
+    pl.DataFrame: Polars dataframe containing teams for the requested league.
+    This function caches by default, so if you want to refresh the data, use the command
+    sportsdataverse.wnba.espn_wnba_teams.clear_cache().
+
+Example:
+
+    wnba_df = sportsdataverse.wnba.espn_wnba_teams()
 
 ## Module contents

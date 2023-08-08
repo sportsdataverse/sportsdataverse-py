@@ -5,16 +5,17 @@
 ## sportsdataverse.mbb.mbb_game_rosters module
 
 
-### sportsdataverse.mbb.mbb_game_rosters.espn_mbb_game_rosters(game_id: int, raw=False)
+### sportsdataverse.mbb.mbb_game_rosters.espn_mbb_game_rosters(game_id: int, raw=False, return_as_pandas=False, \*\*kwargs)
 espn_mbb_game_rosters() - Pull the game by id.
 
 Args:
 
     game_id (int): Unique game_id, can be obtained from mbb_schedule().
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Data frame of game roster data with columns:
+    pl.DataFrame: Polars dataframe of game roster data with columns:
     ‘athlete_id’, ‘athlete_uid’, ‘athlete_guid’, ‘athlete_type’,
     ‘first_name’, ‘last_name’, ‘full_name’, ‘athlete_display_name’,
     ‘short_name’, ‘weight’, ‘display_weight’, ‘height’, ‘display_height’,
@@ -38,17 +39,17 @@ Example:
     mbb_df = sportsdataverse.mbb.espn_mbb_game_rosters(game_id=401265031)
 
 
-### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_athlete_items(teams_rosters)
+### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_athlete_items(teams_rosters, \*\*kwargs)
 
 ### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_game_items(summary)
 
-### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_roster_items(items, summary_url)
+### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_roster_items(items, summary_url, \*\*kwargs)
 
-### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_team_items(items)
+### sportsdataverse.mbb.mbb_game_rosters.helper_mbb_team_items(items, \*\*kwargs)
 ## sportsdataverse.mbb.mbb_loaders module
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_pbp(seasons: List[int])
+### sportsdataverse.mbb.mbb_loaders.load_mbb_pbp(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball play by play data going back to 2002
 
 Example:
@@ -58,10 +59,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     play-by-plays available for the requested seasons.
 
 Raises:
@@ -69,7 +71,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_player_boxscore(seasons: List[int])
+### sportsdataverse.mbb.mbb_loaders.load_mbb_player_boxscore(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball player boxscore data
 
 Example:
@@ -79,10 +81,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     player boxscores available for the requested seasons.
 
 Raises:
@@ -90,7 +93,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_schedule(seasons: List[int])
+### sportsdataverse.mbb.mbb_loaders.load_mbb_schedule(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball schedule data
 
 Example:
@@ -100,10 +103,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     schedule for  the requested seasons.
 
 Raises:
@@ -111,7 +115,7 @@ Raises:
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_loaders.load_mbb_team_boxscore(seasons: List[int])
+### sportsdataverse.mbb.mbb_loaders.load_mbb_team_boxscore(seasons: List[int], return_as_pandas=False)
 Load men’s college basketball team boxscore data
 
 Example:
@@ -121,10 +125,11 @@ Example:
 Args:
 
     seasons (list): Used to define different seasons. 2002 is the earliest available season.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing the
+    pl.DataFrame: Polars dataframe containing the
     team boxscores available for the requested seasons.
 
 Raises:
@@ -134,12 +139,13 @@ Raises:
 ## sportsdataverse.mbb.mbb_pbp module
 
 
-### sportsdataverse.mbb.mbb_pbp.espn_mbb_pbp(game_id: int, raw=False)
+### sportsdataverse.mbb.mbb_pbp.espn_mbb_pbp(game_id: int, raw=False, \*\*kwargs)
 espn_mbb_pbp() - Pull the game by id. Data from API endpoints: mens-college-basketball/playbyplay, mens-college-basketball/summary
 
 Args:
 
     game_id (int): Unique game_id, can be obtained from mbb_schedule().
+    raw (bool): If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets.
 
 Returns:
 
@@ -152,9 +158,11 @@ Example:
     mbb_df = sportsdataverse.mbb.espn_mbb_pbp(game_id=401265031)
 
 
+### sportsdataverse.mbb.mbb_pbp.helper_mbb_game_data(pbp_txt, init)
+
 ### sportsdataverse.mbb.mbb_pbp.helper_mbb_pbp(game_id, pbp_txt)
 
-### sportsdataverse.mbb.mbb_pbp.helper_mbb_pbp_features(game_id, pbp_txt, gameSpread, homeFavorite, gameSpreadAvailable, homeTeamId, awayTeamId, homeTeamMascot, awayTeamMascot, homeTeamName, awayTeamName, homeTeamAbbrev, awayTeamAbbrev, homeTeamNameAlt, awayTeamNameAlt)
+### sportsdataverse.mbb.mbb_pbp.helper_mbb_pbp_features(game_id, pbp_txt, init)
 
 ### sportsdataverse.mbb.mbb_pbp.helper_mbb_pickcenter(pbp_txt)
 
@@ -162,25 +170,25 @@ Example:
 ## sportsdataverse.mbb.mbb_schedule module
 
 
-### sportsdataverse.mbb.mbb_schedule.espn_mbb_calendar(season=None, ondays=None)
+### sportsdataverse.mbb.mbb_schedule.espn_mbb_calendar(season=None, ondays=None, return_as_pandas=False, \*\*kwargs)
 espn_mbb_calendar - look up the men’s college basketball calendar for a given season
 
 Args:
 
     season (int): Used to define different seasons. 2002 is the earliest available season.
     ondays (boolean): Used to return dates for calendar ondays
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing
-    calendar dates for the requested season.
+    pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
 Raises:
 
     ValueError: If season is less than 2002.
 
 
-### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500)
+### sportsdataverse.mbb.mbb_schedule.espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, \*\*kwargs)
 espn_mbb_schedule - look up the men’s college basketball scheduler for a given season
 
 Args:
@@ -189,25 +197,33 @@ Args:
     groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
     season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
     limit (int): number of records to return, default: 500.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
+    pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
 
 
 ### sportsdataverse.mbb.mbb_schedule.most_recent_mbb_season()
 ## sportsdataverse.mbb.mbb_teams module
 
 
-### sportsdataverse.mbb.mbb_teams.espn_mbb_teams(groups=None)
+### sportsdataverse.mbb.mbb_teams.espn_mbb_teams(groups=None, return_as_pandas=False, \*\*kwargs)
 espn_mbb_teams - look up the men’s college basketball teams
 
 Args:
 
     groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
+    return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
 Returns:
 
-    pd.DataFrame: Pandas dataframe containing teams for the requested league.
+    pl.DataFrame: Polars dataframe containing teams for the requested league.
+    This function caches by default, so if you want to refresh the data, use the command
+    sportsdataverse.mbb.espn_mbb_teams.clear_cache().
+
+Example:
+
+    mbb_df = sportsdataverse.mbb.espn_mbb_teams()
 
 ## Module contents

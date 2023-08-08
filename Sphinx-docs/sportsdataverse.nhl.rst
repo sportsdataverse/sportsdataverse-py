@@ -12,6 +12,14 @@ sportsdataverse.nhl.nhl\_api module
    :undoc-members:
    :show-inheritance:
 
+sportsdataverse.nhl.nhl\_game\_rosters module
+---------------------------------------------
+
+.. automodule:: sportsdataverse.nhl.nhl_game_rosters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sportsdataverse.nhl.nhl\_loaders module
 ---------------------------------------
 

@@ -1,31 +1,39 @@
+from functools import lru_cache
+
 import pandas as pd
-import json
+import polars as pl
+
 from sportsdataverse.dl_utils import download, underscore
 
-def espn_cfb_teams(groups=None) -> pd.DataFrame:
+
+@lru_cache(maxsize=None)
+def espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_cfb_teams - look up the college football teams
 
     Args:
         groups (int): Used to define different divisions. 80 is FBS, 81 is FCS.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pd.DataFrame: Pandas dataframe containing schedule dates for the requested season.
-    """
-    if groups is None:
-        groups = '&groups=80'
-    else:
-        groups = '&groups=' + str(groups)
-    ev = pd.DataFrame()
-    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams?{}&limit=1000".format(groups)
-    resp = download(url=url)
-    if resp is not None:
-        events_txt = json.loads(resp)
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season.
+        This function caches by default, so if you want to refresh the data, use the command
+        sportsdataverse.cfb.espn_cfb_teams.clear_cache().
 
-        teams = events_txt.get('sports')[0].get('leagues')[0].get('teams')
-        del_keys = ['record', 'links']
+    Example:
+        `cfb_df = sportsdataverse.cfb.espn_cfb_teams()`
+
+    """
+    url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
+    params = {"groups": groups if groups is not None else "80", "limit": 1000}
+    resp = download(url=url, params=params, **kwargs)
+    if resp is not None:
+        events_txt = resp.json()
+
+        teams = events_txt.get("sports")[0].get("leagues")[0].get("teams")
+        del_keys = ["record", "links"]
         for team in teams:
             for k in del_keys:
-                team.get('team').pop(k, None)
-        teams = pd.json_normalize(teams, sep='_')
+                team.get("team").pop(k, None)
+        teams = pd.json_normalize(teams, sep="_")
     teams.columns = [underscore(c) for c in teams.columns.tolist()]
-    return teams
+    return teams if return_as_pandas else pl.from_pandas(teams)

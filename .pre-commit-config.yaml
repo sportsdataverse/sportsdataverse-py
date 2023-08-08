@@ -1,7 +1,52 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
+  # - repo: local
+  #   hooks:
+  #   - id: update-docs
+  #     name: update-docs
+  #     entry: bash create_docs.sh
+  #     language: system
+  #     types: [python]
+  #     pass_filenames: false
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
-      - id: trailing-whitespace
+    - id: trailing-whitespace
+    - id: check-merge-conflict
+    - id: check-ast
+    - id: check-toml
+    - id: check-json
+    - id: check-xml
+    - id: check-yaml
+    - id: check-symlinks
+    - id: check-vcs-permalinks
+    - id: end-of-file-fixer
+    - id: requirements-txt-fixer
+    - id: check-added-large-files
+      args: [--maxkb=10000]
+    - id: debug-statements
+
+  - repo: https://github.com/psf/black
+    rev: '23.1.0'
+    hooks:
+    - id: black
+  - repo: https://github.com/pycqa/isort
+    rev: '5.12.0'
+    hooks:
+    - id: isort
+  - repo: https://github.com/hadialqattan/pycln
+    rev: 'v2.1.5'
+    hooks:
+    - id: pycln
+      args: ['.', "--all"]
+  # - repo: https://github.com/pycqa/flake8
+  #   rev: '3.9.2'
+  #   hooks:
+  #   - id: flake8
+  # - repo: https://github.com/pycqa/pydocstyle
+  #   rev: '6.3.0'
+  #   hooks:
+  #   - id: pydocstyle
+  #     args: ['.', '--ignore=D100,D203,D405']

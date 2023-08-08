@@ -5,3 +5,5 @@ from sportsdataverse.nfl import *
 from sportsdataverse.nhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
+
+# from sportsdataverse.mlb import *

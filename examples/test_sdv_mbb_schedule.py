@@ -1,6 +1,7 @@
 import pandas as pd
+
 import sportsdataverse as sdv
-from functools import reduce
+
 
 def main():
     df = pd.Series(sdv.mbb.espn_mbb_calendar(season=2022).dateURL)
