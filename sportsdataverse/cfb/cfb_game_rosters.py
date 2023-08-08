@@ -90,7 +90,7 @@ def helper_cfb_team_items(items, **kwargs):
             team.pop(k, None)
         team_row = pl.from_pandas(pd.json_normalize(team, sep="_"))
         teams_df = pl.concat([teams_df, team_row], how="vertical")
-    print(teams_df.columns)
+
     teams_df.columns = [
         "team_id",
         "team_guid",
