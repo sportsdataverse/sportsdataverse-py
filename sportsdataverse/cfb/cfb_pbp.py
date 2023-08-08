@@ -49,7 +49,7 @@ wp_model.load_model(wp_spread_file)
 qbr_model = Booster({"nthread": 4})  # init model
 qbr_model.load_model(qbr_model_file)
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
 
 
@@ -170,6 +170,10 @@ class CFBPlayProcess(object):
             self.json = pbp_txt
         return self.json
 
+    def cfb_pbp_json(self, **kwargs):
+        self.json = json
+        return self.json
+
     def __helper_cfb_pbp_drives(self, pbp_txt):
         pbp_txt, init = self.__helper_cfb_pbp(pbp_txt)
 
@@ -219,7 +223,7 @@ class CFBPlayProcess(object):
                 meta_prefix="drive.",
                 errors="ignore",
             )
-            pbp_txt["plays"] = pl.concat([pbp_txt["plays"], pl.from_pandas(prev_drives)], how="vertical")
+            pbp_txt["plays"] = pl.concat([pbp_txt["plays"], pl.from_pandas(prev_drives)], how="diagonal")
 
         pbp_txt["timeouts"] = {
             init["homeTeamId"]: {"1": [], "2": []},
@@ -228,6 +232,16 @@ class CFBPlayProcess(object):
 
         logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
         if len(pbp_txt["plays"]) == 0:
+            return pbp_txt
+        if (len(pbp_txt["plays"]) < 50) and (
+            pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
+        ):
+            logging.debug(f"{self.gameId}: appear to be too few plays ({len(pbp_txt['plays'])}) for a completed game")
+            return pbp_txt
+        if (len(pbp_txt["plays"]) > 500) and (
+            pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
+        ):
+            logging.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
         pbp_txt["plays"] = (
             pbp_txt["plays"]
@@ -4532,9 +4546,14 @@ class CFBPlayProcess(object):
             }
             self.json = pbp_json
             self.plays_json = pbp_txt["plays"]
-            if (
-                pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none"
-                and len(pbp_txt["plays"]) > 0
+
+            confirmed_corrupt = self.corrupt_pbp_check()
+
+            if confirmed_corrupt:
+                return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
+
+            if (pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none") and (
+                len(pbp_txt["drives"]) > 0
             ):
                 self.plays_json = (
                     self.plays_json.pipe(self.__add_downs_data)
@@ -4554,7 +4573,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__process_qbr)
                 )
                 self.ran_pipeline = True
-                advBoxScore = self.create_box_score(self.plays_json)
+                advBoxScore = self.plays_json.pipe(self.create_box_score)
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
                     "gameId": int(self.gameId),
@@ -4616,9 +4635,15 @@ class CFBPlayProcess(object):
             }
             self.json = pbp_json
             self.plays_json = pbp_txt["plays"]
+
+            confirmed_corrupt = self.corrupt_pbp_check()
+
+            if confirmed_corrupt:
+                return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
+
             if (
                 pbp_json.get("header").get("competitions")[0].get("playByPlaySource") != "none"
-                and len(pbp_txt["plays"]) > 0
+                and len(pbp_txt["drives"]) > 0
             ):
                 self.plays_json = (
                     self.plays_json.pipe(self.__add_downs_data)
@@ -4661,3 +4686,25 @@ class CFBPlayProcess(object):
                 self.json = pbp_json
             self.ran_cleaning_pipeline = True
             return self.json
+
+    def corrupt_pbp_check(self):
+        if len(self.json["plays"]) == 0:
+            logging.debug(
+                f"{self.gameId}: appear to be too no plays available ({len(self.json['plays'])}). run_processing_pipeline did not run"
+            )
+            return True
+        if (len(self.json["plays"]) < 50) and (
+            self.json.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
+        ):
+            logging.debug(
+                f"{self.gameId}: appear to be too few plays ({len(self.json['plays'])}) for a completed game. run_processing_pipeline did not run"
+            )
+            return True
+        if (len(self.json["plays"]) > 500) and (
+            self.json.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
+        ):
+            logging.debug(
+                f"{self.gameId}: appear to be too many plays ({len(self.json['plays'])}) for a completed game. run_processing_pipeline did not run"
+            )
+            return True
+        return False
