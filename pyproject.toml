@@ -2,7 +2,10 @@
 line-length = 119
 py38 = true
 py39 = true
-target-version = ['py39', 'py38']
+py310 = true
+py311 = true
+py312 = true
+target-version = ['py312', 'py311', 'py310', 'py39', 'py38']
 include = '\.pyi?$'
 exclude = '''
 /(
