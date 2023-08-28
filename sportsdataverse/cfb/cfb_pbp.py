@@ -2288,7 +2288,7 @@ class CFBPlayProcess(object):
                     pl.col("text")
                     .str.extract(r"(?i)pass from(.+)")
                     .str.replace(r"pass from", "")
-                    # .str.replace(r"\((.+)\)", "")
+                    .str.replace(r" \((.+)\)", "")
                     .str.replace(r" \,", "")
                 )
                 .otherwise(None),
@@ -2402,15 +2402,7 @@ class CFBPlayProcess(object):
                 .then(pl.col("sack_players").str.replace(r"(.+) and", ""))
                 .otherwise(None),
                 # --- Interception Names -----
-                interception_player=pl.when(
-                    (
-                        (pl.col("type.text") == "Interception Return").or_(
-                            pl.col("type.text") == "Interception Return Touchdown"
-                        )
-                    ).and_(pl.col("pass") == True)
-                )
-                .then(pl.col("text").str.extract(r"(?i)intercepted (.+)"))
-                .when(pl.col("text").str.contains(r"Yd Interception Return"))
+                interception_player=pl.when(pl.col("text").str.contains(r"Yd Interception Return"))
                 .then(
                     pl.col("text")
                     .str.extract(
@@ -2426,6 +2418,14 @@ class CFBPlayProcess(object):
                     .str.replace(r"at the (.+)", "")
                     .str.replace(r" by ", "")
                 )
+                .when(
+                    (
+                        (pl.col("type.text") == "Interception Return").or_(
+                            pl.col("type.text") == "Interception Return Touchdown"
+                        )
+                    ).and_(pl.col("pass") == True)
+                )
+                .then(pl.col("text").str.extract(r"(?i)intercepted (.+)"))
                 .otherwise(None),
                 # --- Pass Breakup Players ----
                 pass_breakup_player=pl.when(pl.col("pass") == True)
@@ -3705,8 +3705,10 @@ class CFBPlayProcess(object):
                 .then(1 - pl.col("lead_wp_before"))
                 .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
                 .then(pl.col("wp_after"))
-                .when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
-                .then(1 - pl.col("wp_after"))
+                .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
+                .then(1 - pl.col("lead_wp_before"))
+                .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
+                .then(pl.col("lead_wp_before"))
                 .otherwise(pl.col("wp_after")),
             )
             .with_columns(

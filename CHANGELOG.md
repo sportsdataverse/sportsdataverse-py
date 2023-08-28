@@ -1,4 +1,7 @@
-## 0.0.36-7 Release: July 9, 2023
+## 0.0.38 Release: August 28, 2023
+- Minor changes to cfb_pbp functions to improve WP calculation and player parsing.
+
+## 0.0.36-37 Release: July 9, 2023
 - Switched most under the hood dataframe operations to use the python `polars` library and many functions now have a parameter `return_as_pandas` which defaults to `False` but can be set to `True` to return a pandas dataframe instead of a polars dataframe. This is a **breaking change.**
 - Added `**kwargs` which pass arguments to the `dl_utils.download()` function, including `headers`, `proxy`, `timeout` (default 30s), `num_retries` (default = 15), `logger` (default = None)
 - Function `espn_cfb_game_rosters()` added.
