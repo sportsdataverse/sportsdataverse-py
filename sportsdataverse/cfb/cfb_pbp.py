@@ -268,7 +268,7 @@ class CFBPlayProcess(object):
                 gameSpread=pl.lit(init["gameSpread"]).abs(),
                 homeFavorite=pl.lit(init["homeFavorite"]),
                 gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
-                overUnder=pl.lit(float(init["overUnder"])),
+                overUnder=pl.lit(float(init["overUnder"][0])),
             )
             .with_columns(
                 homeTeamSpread=pl.when(pl.col("homeFavorite") == True)
@@ -706,7 +706,10 @@ class CFBPlayProcess(object):
             overUnder = 55.0
             homeFavorite = True
             gameSpreadAvailable = False
-
+        self.gameSpread = gameSpread
+        self.overUnder = overUnder
+        self.homeFavorite = homeFavorite
+        self.gameSpreadAvailable = gameSpreadAvailable
         return {
             "gameSpread": gameSpread,
             "overUnder": overUnder,
@@ -772,6 +775,16 @@ class CFBPlayProcess(object):
         init["awayTeamName"] = awayTeamName
         init["awayTeamAbbrev"] = awayTeamAbbrev
         init["awayTeamNameAlt"] = awayTeamNameAlt
+        self.homeTeamId = homeTeamId
+        self.homeTeamMascot = homeTeamMascot
+        self.homeTeamName = homeTeamName
+        self.homeTeamAbbrev = homeTeamAbbrev
+        self.homeTeamNameAlt = homeTeamNameAlt
+        self.awayTeamId = awayTeamId
+        self.awayTeamMascot = awayTeamMascot
+        self.awayTeamName = awayTeamName
+        self.awayTeamAbbrev = awayTeamAbbrev
+        self.awayTeamNameAlt = awayTeamNameAlt
         return pbp_txt, init
 
     def __add_downs_data(self, play_df):
