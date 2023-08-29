@@ -1,4 +1,4 @@
-# .vscode
+.vscode
 requirements.txt
 .github/workflows/pytest.yml
 __pycache__
