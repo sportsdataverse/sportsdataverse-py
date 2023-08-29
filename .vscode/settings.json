@@ -1,0 +1,65 @@
+{
+    "cSpell.words": [
+        "advstats",
+        "akshay",
+        "Akshay",
+        "Carleen",
+        "carlie",
+        "cfbfast",
+        "COASTL",
+        "crackback",
+        "Crackback",
+        "cumsum",
+        "dataframe",
+        "dtest",
+        "dtype",
+        "Easwaran",
+        "Endzone",
+        "fillna",
+        "Gilani",
+        "ickoff",
+        "iloc",
+        "Markey",
+        "nextgen",
+        "nflverse",
+        "NFLVERSEGITHUB",
+        "NFLVERSEGITHUBPBP",
+        "normalplay",
+        "nthread",
+        "playbyplay",
+        "pyarrow",
+        "recove",
+        "Rhockey",
+        "saiem",
+        "Saiem",
+        "SDVRELEASES",
+        "SGITHUB",
+        "tqdm",
+        "unnest",
+        "unnesting",
+        "womens",
+        "xgboost",
+        "yardline",
+        "ydstogo"
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "120"
+    ],
+    "editor.rulers": [
+        120
+    ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+}

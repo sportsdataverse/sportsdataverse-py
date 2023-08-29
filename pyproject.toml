@@ -1,11 +1,10 @@
 [tool.black]
-line-length = 119
+line-length = 120
 py38 = true
 py39 = true
 py310 = true
 py311 = true
-py312 = true
-target-version = ['py312', 'py311', 'py310', 'py39', 'py38']
+target-version = ['py311', 'py310', 'py39', 'py38']
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -30,5 +29,5 @@ profile = 'black'
 
 
 [tool.zimports]
-black-line-length = 119
+black-line-length = 120
 keep-unused-type-checking = true

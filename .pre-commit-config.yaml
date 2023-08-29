@@ -13,34 +13,33 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
-    - id: trailing-whitespace
-    - id: check-merge-conflict
-    - id: check-ast
-    - id: check-toml
-    - id: check-json
-    - id: check-xml
-    - id: check-yaml
-    - id: check-symlinks
-    - id: check-vcs-permalinks
-    - id: end-of-file-fixer
-    - id: requirements-txt-fixer
-    - id: check-added-large-files
-      args: [--maxkb=10000]
-    - id: debug-statements
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: check-ast
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+      - id: check-symlinks
+      - id: check-vcs-permalinks
+      - id: end-of-file-fixer
+      - id: requirements-txt-fixer
+      - id: check-added-large-files
+        args: [--maxkb=10000]
+      - id: debug-statements
 
   - repo: https://github.com/psf/black
-    rev: '23.1.0'
+    rev: "23.1.0"
     hooks:
-    - id: black
+      - id: black
   - repo: https://github.com/pycqa/isort
-    rev: '5.12.0'
+    rev: "5.12.0"
     hooks:
-    - id: isort
+      - id: isort
   - repo: https://github.com/hadialqattan/pycln
-    rev: 'v2.1.5'
+    rev: "v2.1.5"
     hooks:
-    - id: pycln
-      args: ['.', "--all"]
+      - id: pycln
+        args: [".", "--all"]
   # - repo: https://github.com/pycqa/flake8
   #   rev: '3.9.2'
   #   hooks:
