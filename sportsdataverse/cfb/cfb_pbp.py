@@ -867,15 +867,11 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 kickoff_fair_catch=pl.when(
-                    (pl.col("text").str.contains("(?i)fair catch|(?i)fair caught")).and_(
-                        pl.col("kickoff_play") == True
-                    )
+                    (pl.col("text").str.contains("(?i)fair catch|(?i)fair caught")).and_(pl.col("kickoff_play") == True)
                 )
                 .then(True)
                 .otherwise(False),
-                kickoff_downed=pl.when(
-                    (pl.col("text").str.contains("(?i)downed")).and_(pl.col("kickoff_play") == True)
-                )
+                kickoff_downed=pl.when((pl.col("text").str.contains("(?i)downed")).and_(pl.col("kickoff_play") == True))
                 .then(True)
                 .otherwise(False),
                 kick_play=pl.col("text").str.contains("(?i)kick|(?i)kickoff"),
@@ -1007,9 +1003,7 @@ class CFBPlayProcess(object):
                             pl.col("text").str.contains(r"pass complete|pass incomplete")
                         )
                     )
-                    .or_(
-                        (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked"))
-                    )
+                    .or_((pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")))
                 )
                 .then(True)
                 .otherwise(False)
@@ -1070,9 +1064,7 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 homeScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("H_score_diff") >= 9)
+                    (pl.col("scoringPlay") == False) & (pl.col("game_play_number") != 1) & (pl.col("H_score_diff") >= 9)
                 )
                 .then(pl.col("lag_homeScore"))
                 .when(
@@ -1091,9 +1083,7 @@ class CFBPlayProcess(object):
                 .then(pl.col("homeScore"))
                 .otherwise(pl.col("homeScore")),
                 awayScore=pl.when(
-                    (pl.col("scoringPlay") == False)
-                    & (pl.col("game_play_number") != 1)
-                    & (pl.col("A_score_diff") >= 9)
+                    (pl.col("scoringPlay") == False) & (pl.col("game_play_number") != 1) & (pl.col("A_score_diff") >= 9)
                 )
                 .then(pl.col("lag_awayScore"))
                 .when(
@@ -1359,9 +1349,7 @@ class CFBPlayProcess(object):
                 .alias("type.text"),
             )
             .with_columns(
-                pl.when(
-                    (pl.col("type.text").is_in(["Blocked Punt"])).and_(pl.col("text").str.contains("(?i)for a TD"))
-                )
+                pl.when((pl.col("type.text").is_in(["Blocked Punt"])).and_(pl.col("text").str.contains("(?i)for a TD")))
                 .then(pl.lit("Blocked Punt Touchdown"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
@@ -1586,9 +1574,7 @@ class CFBPlayProcess(object):
         play_df = (
             play_df.with_columns(
                 # -- T/F flag conditions penalty_flag
-                penalty_flag=pl.when(
-                    (pl.col("type.text") == "Penalty").or_(pl.col("text").str.contains("(?i)penalty"))
-                )
+                penalty_flag=pl.when((pl.col("type.text") == "Penalty").or_(pl.col("text").str.contains("(?i)penalty")))
                 .then(True)
                 .otherwise(False),
                 # -- T/F flag conditions penalty_declined
@@ -1608,9 +1594,7 @@ class CFBPlayProcess(object):
                     (pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains("(?i)off-setting"))
                 )
                 .then(True)
-                .when(
-                    (pl.col("text").str.contains("(?i)penalty")).and_(pl.col("text").str.contains("(?i)off-setting"))
-                )
+                .when((pl.col("text").str.contains("(?i)penalty")).and_(pl.col("text").str.contains("(?i)off-setting")))
                 .then(True)
                 .otherwise(False),
                 # -- T/F flag conditions penalty_1st_conv
@@ -2939,15 +2923,11 @@ class CFBPlayProcess(object):
                 .then(False)
                 .otherwise(None),
                 power_rush_attempt=pl.when(
-                    (pl.col("start.distance") < 2)
-                    .and_(pl.col("rush") == True)
-                    .and_(pl.col("start.down").is_in([3, 4]))
+                    (pl.col("start.distance") < 2).and_(pl.col("rush") == True).and_(pl.col("start.down").is_in([3, 4]))
                 )
                 .then(True)
                 .when(
-                    (pl.col("start.distance") < 2)
-                    .and_(pl.col("rush") == True)
-                    .and_(pl.col("start.down").is_in([3, 4]))
+                    (pl.col("start.distance") < 2).and_(pl.col("rush") == True).and_(pl.col("start.down").is_in([3, 4]))
                 )
                 .then(False)
                 .otherwise(None),
@@ -2978,21 +2958,15 @@ class CFBPlayProcess(object):
                 standard_down=pl.when((pl.col("scrimmage_play") == True).and_(pl.col("down_1") == True))
                 .then(True)
                 .when(
-                    (pl.col("scrimmage_play") == True)
-                    .and_(pl.col("down_2") == True)
-                    .and_(pl.col("start.distance") < 8)
+                    (pl.col("scrimmage_play") == True).and_(pl.col("down_2") == True).and_(pl.col("start.distance") < 8)
                 )
                 .then(True)
                 .when(
-                    (pl.col("scrimmage_play") == True)
-                    .and_(pl.col("down_3") == True)
-                    .and_(pl.col("start.distance") < 5)
+                    (pl.col("scrimmage_play") == True).and_(pl.col("down_3") == True).and_(pl.col("start.distance") < 5)
                 )
                 .then(True)
                 .when(
-                    (pl.col("scrimmage_play") == True)
-                    .and_(pl.col("down_4") == True)
-                    .and_(pl.col("start.distance") < 5)
+                    (pl.col("scrimmage_play") == True).and_(pl.col("down_4") == True).and_(pl.col("start.distance") < 5)
                 )
                 .then(True)
                 .otherwise(False),
@@ -4200,9 +4174,7 @@ class CFBPlayProcess(object):
         )
 
         situation_box_middle8_pass = (
-            play_df.filter(
-                (pl.col("pass") == True) & (pl.col("middle_8") == True) & (pl.col("scrimmage_play") == True)
-            )
+            play_df.filter((pl.col("pass") == True) & (pl.col("middle_8") == True) & (pl.col("scrimmage_play") == True))
             .groupby(by=["pos_team"])
             .agg(
                 middle_8_pass=pl.col("pass").sum(),
@@ -4218,9 +4190,7 @@ class CFBPlayProcess(object):
         )
 
         situation_box_middle8_rush = (
-            play_df.filter(
-                (pl.col("rush") == True) & (pl.col("middle_8") == True) & (pl.col("scrimmage_play") == True)
-            )
+            play_df.filter((pl.col("rush") == True) & (pl.col("middle_8") == True) & (pl.col("scrimmage_play") == True))
             .groupby(by=["pos_team"])
             .agg(
                 middle_8_rush=pl.col("rush").sum(),
@@ -4454,16 +4424,12 @@ class CFBPlayProcess(object):
         away_passes_def = turnover_box_json[0].get("pass_breakups", 0)
         away_passes_int = turnover_box_json[0].get("Int", 0)
         away_fumbles = turnover_box_json[0].get("total_fumbles", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles) + (
-            0.22 * (away_passes_def + away_passes_int)
-        )
+        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles) + (0.22 * (away_passes_def + away_passes_int))
 
         home_passes_def = turnover_box_json[1].get("pass_breakups", 0)
         home_passes_int = turnover_box_json[1].get("Int", 0)
         home_fumbles = turnover_box_json[1].get("total_fumbles", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles) + (
-            0.22 * (home_passes_def + home_passes_int)
-        )
+        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles) + (0.22 * (home_passes_def + home_passes_int))
 
         turnover_box_json[0]["expected_turnover_margin"] = (
             turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
