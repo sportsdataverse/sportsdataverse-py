@@ -507,13 +507,13 @@ class CFBPlayProcess(object):
                     - pl.struct(["id", "period.number"]).apply(
                         lambda x: (
                             sum(
-                                (i <= x.struct.field("id")) & (x.struct.field("period.number") <= 2)
+                                (i <= x["id"]) & (x["period.number"] <= 2)
                                 for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
                             )
                         )
                         | (
                             sum(
-                                (i <= x.struct.field("id")) & (x.struct.field("period.number") > 2)
+                                (i <= x["id"]) & (x["period.number"] > 2)
                                 for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
                             )
                         ),
@@ -525,13 +525,13 @@ class CFBPlayProcess(object):
                     - pl.struct(["id", "period.number"]).apply(
                         lambda x: (
                             sum(
-                                (i <= x.struct.field("id")) & (x.struct.field("period.number") <= 2)
+                                (i <= x["id"]) & (x["period.number"] <= 2)
                                 for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
                             )
                         )
                         | (
                             sum(
-                                (i <= x.struct.field("id")) & (x.struct.field("period.number") > 2)
+                                (i <= x["id"]) & (x["period.number"] > 2)
                                 for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
                             )
                         ),
@@ -2548,10 +2548,10 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 punt_block_return_player=pl.struct(["punt_block_player", "punt_block_return_player"]).apply(
-                    lambda cols: cols.struct.field("punt_block_return_player")
+                    lambda cols: cols["punt_block_return_player"]
                     .replace(r"(?i)(.+)blocked by", "")
-                    .replace(str(pl.format(r"(?i)blocked by {}", cols.struct.field("punt_block_player"))), "")
-                    if cols.struct.field("punt_block_return_player") is not None
+                    .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
+                    if cols["punt_block_return_player"] is not None
                     else None,
                     return_dtype=pl.Utf8,
                 )
