@@ -193,11 +193,11 @@ def test_play_order():
     should_be_next = test.plays_json[
         (test.plays_json["text"] == "Tahj Brooks 6 Yd Run (Gino Garcia Kick)")
     ]
-    
-    LOGGER.info("OT Plays")
-    LOGGER.info(test.plays_json[
-        test.plays_json["period.number"] == 5
-    ])
+
+    pbp_ot = test.plays_json[
+        (test.plays_json["period.number"] == 5)
+    ]
+    LOGGER.info(pbp_ot[["id", "sequenceNumber", "period", "start.down", "start.distance", "text"]])
     # LOGGER.info()
 
     assert int(should_be_first.iloc[0]["sequenceNumber"]) + 1 == int(should_be_next.iloc[0]["sequenceNumber"])

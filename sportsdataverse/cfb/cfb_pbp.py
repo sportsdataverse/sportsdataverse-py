@@ -160,6 +160,26 @@ class CFBPlayProcess(object):
             pbp_txt["drives"] = {}
         return pbp_txt
 
+    def __helper_cfb_sort_plays__(self, plays_df):
+        plays_df = plays_df.sort_values(
+            by=["id", "start.adj_TimeSecsRem"]
+        )
+        
+        # 03-Sept-2023: ESPN changed their handling of OT, slotting every play of OT into the same quarter instead of adding new periods. 
+        # Sort all of these plays separately
+        pbp_ot = plays_df[
+            plays_df["period.number"] >= 5
+        ]
+
+        plays_df = plays_df.drop(pbp_ot.index, axis = 0)
+
+        pbp_ot = pbp_ot.sort_values(by = ["sequenceNumber"])
+        plays_df = pd.concat([
+            plays_df,
+            pbp_ot
+        ])
+        return plays_df
+
     def __helper_cfb_pbp_features(self, pbp_txt,
         gameSpread, gameSpreadAvailable,
         overUnder, homeFavorite,
@@ -286,23 +306,7 @@ class CFBPlayProcess(object):
             )
         # Pos Team - Start and End Id
         pbp_txt["plays"]["id"] = pbp_txt["plays"]["id"].apply(lambda x: int(x))
-        pbp_txt["plays"] = pbp_txt["plays"].sort_values(
-                by=["id", "start.adj_TimeSecsRem"]
-            )
-        
-        # 03-Sept-2023: ESPN changed their handling of OT, slotting every play of OT into the same quarter instead of adding new periods. 
-        # Sort all of these plays separately
-        pbp_ot = pbp_txt["plays"][
-            pbp_txt["plays"]["period.number"] == 5
-        ]
-
-        pbp_txt["plays"] = pbp_txt["plays"].drop(pbp_ot.index, axis = 0)
-
-        pbp_ot = pbp_ot.sort_values(by = ["sequenceNumber"])
-        pbp_txt["plays"] = pd.concat([
-            pbp_txt["plays"],
-            pbp_ot
-        ])
+        pbp_txt["plays"] = self.__helper_cfb_sort_plays__(pbp_txt["plays"])
 
         # drop play text dupes intelligently, even if they have different play_id values
         pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
@@ -1202,7 +1206,7 @@ class CFBPlayProcess(object):
         """
         play_df = play_df.copy(deep=True)
         play_df.loc[:, "id"] = play_df["id"].astype(float)
-        play_df.sort_values(by=["id", "start.adj_TimeSecsRem"], inplace=True)
+        play_df = self.__helper_cfb_sort_plays__(play_df)
         play_df.drop_duplicates(
             subset=["text", "id", "type.text", "start.down", "sequenceNumber"], keep="last", inplace=True
         )
