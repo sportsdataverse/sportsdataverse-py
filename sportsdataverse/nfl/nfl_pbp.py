@@ -196,7 +196,7 @@ class NFLPlayProcess(object):
         return pbp_txt
 
     def __helper_nfl_pbp_features(self, pbp_txt, init):
-        pbp_txt["plays"] = pl.DataFrame()
+        pbp_txt["plays"] = pd.DataFrame()
         for key in pbp_txt.get("drives").keys():
             logging.debug(f"{self.gameId}: drives key - {key}")
             prev_drives = pd.json_normalize(
@@ -229,8 +229,8 @@ class NFLPlayProcess(object):
                 meta_prefix="drive.",
                 errors="ignore",
             )
-            pbp_txt["plays"] = pl.concat([pbp_txt["plays"], pl.from_pandas(prev_drives)], how="diagonal")
-
+            pbp_txt["plays"] = pd.concat([pbp_txt["plays"], prev_drives], axis=0, ignore_index=True)
+        pbp_txt["plays"] = pl.from_pandas(pbp_txt["plays"])
         pbp_txt["timeouts"] = {
             init["homeTeamId"]: {"1": [], "2": []},
             init["awayTeamId"]: {"1": [], "2": []},
@@ -274,7 +274,7 @@ class NFLPlayProcess(object):
                 gameSpread=pl.lit(init["gameSpread"]).abs(),
                 homeFavorite=pl.lit(init["homeFavorite"]),
                 gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
-                overUnder=pl.lit(float(init["overUnder"][0])),
+                overUnder=pl.lit(init["overUnder"].astype(float)),
             )
             .with_columns(
                 homeTeamSpread=pl.when(pl.col("homeFavorite") == True)

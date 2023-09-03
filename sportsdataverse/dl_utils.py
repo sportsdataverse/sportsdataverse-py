@@ -28,7 +28,7 @@ def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries
             logger.error(f"404: {url} \nparams: {params}")
 
         if num_retries > 0:
-            logger.warn("%s: %i - %s for url (%s)", e, response.status_code, response.reason, response.url)
+            logger.warning("%s: %i - %s for url (%s)", e, response.status_code, response.reason, response.url)
             time.sleep(2)
             return download(
                 url,

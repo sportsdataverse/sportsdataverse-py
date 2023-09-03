@@ -85,7 +85,6 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
     ],
     # What does your project relate to?
     keywords="nfl college football data epa statistics web scraping",
@@ -110,7 +109,7 @@ setup(
         "lxml>=4.2.1",
         "pyarrow>=8.0.0",
         "pyjanitor>=0.23.1",
-        "pyreadr>=0.4.0",
+        "pyreadr>=0.4.9",
         "scipy>=1.4.0",
         "matplotlib>=2.0.0",
         "attrs>=20.3.0",
