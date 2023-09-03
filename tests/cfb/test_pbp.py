@@ -1,6 +1,10 @@
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 import pandas as pd
 import pytest
+import logging
+
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig()
 
 @pytest.fixture()
 def generated_data():
@@ -172,3 +176,29 @@ def test_expected_turnovers(iu_play_base_box):
     print(f"away off {away_team} vs def {def_home_team} - fum: {away_fum}, int: {away_off_int}, pd: {away_pd} -> xTO: {away_exp_xTO}")
     assert round(away_exp_xTO, 4) == round(away_actual_xTO, 4)
     assert round(home_exp_xTO, 4) == round(home_actual_xTO, 4)
+
+
+def test_play_order():
+    test = CFBPlayProcess(gameId = 401525825)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+    
+    should_be_first = test.plays_json[
+        (test.plays_json["text"] == "Tahj Brooks run for 1 yd to the WYO 6")
+        & (test.plays_json["start.down"] == 2)
+        & (test.plays_json["start.distance"] == 3)
+        & (test.plays_json["start.yardsToEndzone"] == 7)
+    ]
+
+    should_be_next = test.plays_json[
+        (test.plays_json["text"] == "Tahj Brooks 6 Yd Run (Gino Garcia Kick)")
+    ]
+    
+    LOGGER.info("OT Plays")
+    LOGGER.info(test.plays_json[
+        test.plays_json["period.number"] == 5
+    ])
+    # LOGGER.info()
+
+    assert int(should_be_first.iloc[0]["sequenceNumber"]) + 1 == int(should_be_next.iloc[0]["sequenceNumber"])
+    assert int(should_be_first.iloc[0]["game_play_number"]) + 1 == int(should_be_next.iloc[0]["game_play_number"])

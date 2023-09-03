@@ -289,6 +289,20 @@ class CFBPlayProcess(object):
         pbp_txt["plays"] = pbp_txt["plays"].sort_values(
                 by=["id", "start.adj_TimeSecsRem"]
             )
+        
+        # 03-Sept-2023: ESPN changed their handling of OT, slotting every play of OT into the same quarter instead of adding new periods. 
+        # Sort all of these plays separately
+        pbp_ot = pbp_txt["plays"][
+            pbp_txt["plays"]["period.number"] == 5
+        ]
+
+        pbp_txt["plays"] = pbp_txt["plays"].drop(pbp_ot.index, axis = 0)
+
+        pbp_ot = pbp_ot.sort_values(by = ["sequenceNumber"])
+        pbp_txt["plays"] = pd.concat([
+            pbp_txt["plays"],
+            pbp_ot
+        ])
 
         # drop play text dupes intelligently, even if they have different play_id values
         pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
