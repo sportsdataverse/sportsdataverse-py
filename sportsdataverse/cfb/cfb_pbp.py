@@ -465,7 +465,7 @@ class CFBPlayProcess(object):
             .with_columns(
                 (
                     3
-                    - pl.struct(pl.col(["id", "period.number"])).apply(
+                    - pl.struct(pl.col(["id", "period.number"])).map_elements(
                         lambda x: (
                             sum(
                                 (i <= x["id"]) & (x["period.number"] <= 2)
@@ -482,7 +482,7 @@ class CFBPlayProcess(object):
                 ).alias("end.homeTeamTimeouts"),
                 (
                     3
-                    - pl.struct(pl.col(["id", "period.number"])).apply(
+                    - pl.struct(pl.col(["id", "period.number"])).map_elements(
                         lambda x: (
                             sum(
                                 (i <= x["id"]) & (x["period.number"] <= 2)
@@ -2506,7 +2506,7 @@ class CFBPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
-                punt_block_return_player=pl.struct(["punt_block_player", "punt_block_return_player"]).apply(
+                punt_block_return_player=pl.struct(["punt_block_player", "punt_block_return_player"]).map_elements(
                     lambda cols: cols["punt_block_return_player"]
                     .replace(r"(?i)(.+)blocked by", "")
                     .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
