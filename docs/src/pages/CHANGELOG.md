@@ -1,4 +1,4 @@
-## 0.0.38 Release: August 28, 2023
+## 0.0.38-39 Release: August 28, 2023
 - Minor changes to cfb_pbp functions to improve WP calculation and player parsing.
 
 ## 0.0.36-37 Release: July 9, 2023

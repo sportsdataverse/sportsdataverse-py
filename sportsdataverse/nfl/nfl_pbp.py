@@ -471,7 +471,7 @@ class NFLPlayProcess(object):
             .with_columns(
                 (
                     3
-                    - pl.struct(pl.col(["id", "period.number"])).map_elements(
+                    - pl.struct(pl.col(["id", "period.number"])).apply(
                         lambda x: (
                             sum(
                                 (i <= x["id"]) & (x["period.number"] <= 2)
@@ -488,7 +488,7 @@ class NFLPlayProcess(object):
                 ).alias("end.homeTeamTimeouts"),
                 (
                     3
-                    - pl.struct(pl.col(["id", "period.number"])).map_elements(
+                    - pl.struct(pl.col(["id", "period.number"])).apply(
                         lambda x: (
                             sum(
                                 (i <= x["id"]) & (x["period.number"] <= 2)
@@ -2512,7 +2512,7 @@ class NFLPlayProcess(object):
                 .otherwise(None),
             )
             .with_columns(
-                punt_block_return_player=pl.struct(["punt_block_player", "punt_block_return_player"]).map_elements(
+                punt_block_return_player=pl.struct(["punt_block_player", "punt_block_return_player"]).apply(
                     lambda cols: cols["punt_block_return_player"]
                     .replace(r"(?i)(.+)blocked by", "")
                     .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
@@ -3840,7 +3840,7 @@ class NFLPlayProcess(object):
         # pass_box.yds_receiving.fillna(0.0, inplace=True)
         passer_box = (
             pass_box.fill_null(0.0)
-            .group_by(by=["pos_team", "passer_player_name"])
+            .groupby(by=["pos_team", "passer_player_name"])
             .agg(
                 Comp=pl.col("completion").sum(),
                 Att=pl.col("pass_attempt").sum(),
@@ -3866,7 +3866,7 @@ class NFLPlayProcess(object):
             & (pl.col("athlete_name").is_in(qbs_list))
         )
         pass_qbr = (
-            pass_qbr_box.group_by(by=["pos_team", "athlete_name"])
+            pass_qbr_box.groupby(by=["pos_team", "athlete_name"])
             .agg(
                 qbr_epa=(pl.col("qbr_epa") * pl.col("weight")).sum() / pl.col("weight").sum(),
                 sack_epa=(pl.col("sack_epa") * pl.col("sack_weight")).sum() / pl.col("sack_weight").sum(),
@@ -3889,7 +3889,7 @@ class NFLPlayProcess(object):
 
         rusher_box = (
             rush_box.fill_null(0.0)
-            .group_by(by=["pos_team", "rusher_player_name"])
+            .groupby(by=["pos_team", "rusher_player_name"])
             .agg(
                 Car=pl.col("rush").sum(),
                 Yds=pl.col("yds_rushed").sum(),
@@ -3909,7 +3909,7 @@ class NFLPlayProcess(object):
 
         receiver_box = (
             pass_box.fill_null(0.0)
-            .group_by(by=["pos_team", "receiver_player_name"])
+            .groupby(by=["pos_team", "receiver_player_name"])
             .agg(
                 Rec=pl.col("completion").sum(),
                 Tar=pl.col("target").sum(),
@@ -3928,7 +3928,7 @@ class NFLPlayProcess(object):
         )
 
         team_base_box = (
-            play_df.group_by(by=["pos_team"])
+            play_df.groupby(by=["pos_team"])
             .agg(
                 EPA_plays=pl.col("play").sum(),
                 total_yards=pl.col("statYardage").sum(),
@@ -3940,7 +3940,7 @@ class NFLPlayProcess(object):
 
         team_pen_box = (
             play_df.filter(pl.col("penalty_flag") == True)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 total_pen_yards=pl.col("statYardage").sum(),
                 EPA_penalty=pl.col("EPA_penalty").sum(),
@@ -3953,7 +3953,7 @@ class NFLPlayProcess(object):
 
         team_scrimmage_box = (
             play_df.filter(pl.col("scrimmage_play") == True)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 scrimmage_plays=pl.col("scrimmage_play").sum(),
                 EPA_overall_off=pl.col("EPA").sum(),
@@ -3974,7 +3974,7 @@ class NFLPlayProcess(object):
 
         team_sp_box = (
             play_df.filter(pl.col("sp") == True)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 special_teams_plays=pl.col("sp").sum(),
                 EPA_sp=pl.col("EPA_sp").sum(),
@@ -3993,7 +3993,7 @@ class NFLPlayProcess(object):
         team_scrimmage_box_pass = (
             play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True))
             .fill_null(0.0)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 passes=pl.col("pass").sum(),
                 pass_yards=pl.col("yds_receiving").sum(),
@@ -4014,7 +4014,7 @@ class NFLPlayProcess(object):
         team_scrimmage_box_rush = (
             play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
             .fill_null(0.0)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 rushes=pl.col("rush").sum(),
                 rush_yards=pl.col("yds_rushed").sum(),
@@ -4036,7 +4036,7 @@ class NFLPlayProcess(object):
         team_rush_base_box = (
             play_df.filter((pl.col("scrimmage_play") == True))
             .fill_null(0.0)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 rushes_rate=pl.col("rush").mean(),
                 first_downs_created=pl.col("first_down_created").sum(),
@@ -4049,7 +4049,7 @@ class NFLPlayProcess(object):
         team_rush_power_box = (
             play_df.filter((pl.col("power_rush_attempt") == True) & (pl.col("scrimmage_play") == True))
             .fill_null(0.0)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_rushing_power=pl.col("EPA").sum(),
                 EPA_rushing_power_per_play=pl.col("EPA").mean(),
@@ -4072,7 +4072,7 @@ class NFLPlayProcess(object):
         team_rush_box = (
             play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
             .fill_null(0.0)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 rushing_stuff=pl.col("stuffed_run").sum(),
                 rushing_stuff_rate=pl.col("stuffed_run").mean(),
@@ -4097,7 +4097,7 @@ class NFLPlayProcess(object):
                 (pl.col("rush") == True) & (pl.col("scrimmage_play") == True) & (pl.col("opportunity_run") == True)
             )
             .fill_null(0.0)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 rushing_highlight_yards_per_opp=pl.col("opp_highlight_yards").mean(),
             )
@@ -4121,7 +4121,7 @@ class NFLPlayProcess(object):
 
         situation_box_normal = (
             play_df.filter(pl.col("scrimmage_play") == True)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success=pl.col("EPA_success").sum(),
                 EPA_success_rate=pl.col("EPA_success").mean(),
@@ -4132,7 +4132,7 @@ class NFLPlayProcess(object):
 
         situation_box_rz = (
             play_df.filter((pl.col("rz_play") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_rz=pl.col("EPA_success").sum(),
                 EPA_success_rate_rz=pl.col("EPA_success").mean(),
@@ -4143,7 +4143,7 @@ class NFLPlayProcess(object):
 
         situation_box_third = (
             play_df.filter((pl.col("start.down") == 3) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_third=pl.col("EPA_success").sum(),
                 EPA_success_rate_third=pl.col("EPA_success").mean(),
@@ -4154,7 +4154,7 @@ class NFLPlayProcess(object):
 
         situation_box_pass = (
             play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_pass=pl.col("EPA_success").sum(),
                 EPA_success_pass_rate=pl.col("EPA_success").mean(),
@@ -4165,7 +4165,7 @@ class NFLPlayProcess(object):
 
         situation_box_rush = (
             play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_rush=pl.col("EPA_success").sum(),
                 EPA_success_rush_rate=pl.col("EPA_success").mean(),
@@ -4176,7 +4176,7 @@ class NFLPlayProcess(object):
 
         situation_box_middle8 = (
             play_df.filter((pl.col("middle_8") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 middle_8=pl.col("middle_8").sum(),
                 middle_8_pass_rate=pl.col("pass").mean(),
@@ -4194,7 +4194,7 @@ class NFLPlayProcess(object):
 
         situation_box_middle8_pass = (
             play_df.filter((pl.col("pass") == True) & (pl.col("middle_8") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 middle_8_pass=pl.col("pass").sum(),
                 EPA_middle_8_pass=pl.col("EPA").sum(),
@@ -4210,7 +4210,7 @@ class NFLPlayProcess(object):
 
         situation_box_middle8_rush = (
             play_df.filter((pl.col("rush") == True) & (pl.col("middle_8") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 middle_8_rush=pl.col("rush").sum(),
                 EPA_middle_8_rush=pl.col("EPA").sum(),
@@ -4226,7 +4226,7 @@ class NFLPlayProcess(object):
 
         situation_box_early = (
             play_df.filter((pl.col("early_down") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_early_down=pl.col("EPA_success").sum(),
                 EPA_success_early_down_rate=pl.col("EPA_success").mean(),
@@ -4248,7 +4248,7 @@ class NFLPlayProcess(object):
             play_df.filter(
                 (pl.col("pass") == True) & (pl.col("early_down") == True) & (pl.col("scrimmage_play") == True)
             )
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 early_down_pass=pl.col("pass").sum(),
                 EPA_early_down_pass=pl.col("EPA").sum(),
@@ -4266,7 +4266,7 @@ class NFLPlayProcess(object):
             play_df.filter(
                 (pl.col("rush") == True) & (pl.col("early_down") == True) & (pl.col("scrimmage_play") == True)
             )
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 early_down_rush=pl.col("rush").sum(),
                 EPA_early_down_rush=pl.col("EPA").sum(),
@@ -4282,7 +4282,7 @@ class NFLPlayProcess(object):
 
         situation_box_late = (
             play_df.filter((pl.col("late_down") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_late_down=pl.col("EPA_success_late_down").sum(),
                 EPA_success_late_down_pass=pl.col("EPA_success_late_down_pass").sum(),
@@ -4306,7 +4306,7 @@ class NFLPlayProcess(object):
 
         situation_box_standard = (
             play_df.filter((pl.col("standard_down") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_standard_down=pl.col("EPA_success").sum(),
                 EPA_success_standard_down_rate=pl.col("EPA_success").mean(),
@@ -4322,7 +4322,7 @@ class NFLPlayProcess(object):
 
         situation_box_passing = (
             play_df.filter((pl.col("passing_down") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 EPA_success_passing_down=pl.col("EPA_success").sum(),
                 EPA_success_passing_down_rate=pl.col("EPA_success").mean(),
@@ -4364,7 +4364,7 @@ class NFLPlayProcess(object):
 
         def_base_box = (
             play_df.filter(pl.col("scrimmage_play") == True)
-            .group_by(by=["def_pos_team"])
+            .groupby(by=["def_pos_team"])
             .agg(
                 scrimmage_plays=pl.col("scrimmage_play").sum(),
                 TFL=pl.col("TFL").sum(),
@@ -4384,7 +4384,7 @@ class NFLPlayProcess(object):
 
         def_box_havoc_pass = (
             play_df.filter((pl.col("pass") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["def_pos_team"])
+            .groupby(by=["def_pos_team"])
             .agg(
                 num_pass_plays=pl.col("pass").sum(),
                 havoc_total_pass=pl.col("havoc").sum(),
@@ -4401,7 +4401,7 @@ class NFLPlayProcess(object):
 
         def_box_havoc_rush = (
             play_df.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
-            .group_by(by=["def_pos_team"])
+            .groupby(by=["def_pos_team"])
             .agg(
                 havoc_total_rush=pl.col("havoc").sum(),
                 havoc_total_rush_rate=pl.col("havoc").mean(),
@@ -4418,7 +4418,7 @@ class NFLPlayProcess(object):
 
         turnover_box = (
             play_df.filter(pl.col("scrimmage_play") == True)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 pass_breakups=pl.col("pass_breakup").sum(),
                 fumbles_lost=pl.col("fumble_lost").sum(),
@@ -4475,7 +4475,7 @@ class NFLPlayProcess(object):
 
         drives_data = (
             play_df.filter(pl.col("scrimmage_play") == True)
-            .group_by(by=["pos_team"])
+            .groupby(by=["pos_team"])
             .agg(
                 drive_total_available_yards=pl.col("drive_start").sum(),
                 drive_total_gained_yards=pl.col("drive.yards").sum(),
