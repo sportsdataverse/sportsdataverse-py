@@ -148,6 +148,7 @@
       * [`NFLPlayProcess.espn_nfl_pbp()`](sportsdataverse.nfl.md#sportsdataverse.nfl.nfl_pbp.NFLPlayProcess.espn_nfl_pbp)
       * [`NFLPlayProcess.gameId`](sportsdataverse.nfl.md#sportsdataverse.nfl.nfl_pbp.NFLPlayProcess.gameId)
       * [`NFLPlayProcess.nfl_pbp_disk()`](sportsdataverse.nfl.md#sportsdataverse.nfl.nfl_pbp.NFLPlayProcess.nfl_pbp_disk)
+      * [`NFLPlayProcess.nfl_pbp_json()`](sportsdataverse.nfl.md#sportsdataverse.nfl.nfl_pbp.NFLPlayProcess.nfl_pbp_json)
       * [`NFLPlayProcess.path_to_json`](sportsdataverse.nfl.md#sportsdataverse.nfl.nfl_pbp.NFLPlayProcess.path_to_json)
       * [`NFLPlayProcess.ran_cleaning_pipeline`](sportsdataverse.nfl.md#sportsdataverse.nfl.nfl_pbp.NFLPlayProcess.ran_cleaning_pipeline)
       * [`NFLPlayProcess.ran_pipeline`](sportsdataverse.nfl.md#sportsdataverse.nfl.nfl_pbp.NFLPlayProcess.ran_pipeline)

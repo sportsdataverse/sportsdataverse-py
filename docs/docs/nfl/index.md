@@ -483,6 +483,8 @@ Example:
 
 #### nfl_pbp_disk()
 
+#### nfl_pbp_json(\*\*kwargs)
+
 #### path_to_json *= '/'*
 
 #### ran_cleaning_pipeline *= False*

@@ -12,7 +12,6 @@ Welcome to sdv-py's documentation!
 
    setup
    sportsdataverse
-   tests
 
 
 Indices and tables
