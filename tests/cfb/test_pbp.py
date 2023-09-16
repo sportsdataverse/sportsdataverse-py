@@ -178,6 +178,48 @@ def test_expected_turnovers(iu_play_base_box):
     assert round(home_exp_xTO, 4) == round(home_actual_xTO, 4)
 
 
+def test_onside_kickoff_recovery():
+    test_fsu_23 = CFBPlayProcess(gameId = 401525493)
+    test_fsu_23.espn_cfb_pbp()
+    test_fsu_23.run_processing_pipeline()
+
+    target_plays_fsu_23 = test_fsu_23.plays_json[
+        (test_fsu_23.plays_json["text"] == "Ryan Fitzgerald on-side kick recovered by Florida State at the FSU 49")
+    ]
+
+    # winning team kicks onside
+    LOGGER.info("---- ONSIDE KICK (FSU/SOMISS 2023) ----")
+    LOGGER.info(target_plays_fsu_23.iloc[0]["type.text"])
+    LOGGER.info(target_plays_fsu_23.iloc[0]["kickoff_onside"])
+    LOGGER.info(target_plays_fsu_23.iloc[0]["change_of_pos_team"])
+    LOGGER.info(target_plays_fsu_23.iloc[0]["change_of_poss"])
+    LOGGER.info(target_plays_fsu_23.iloc[0]["wp_after"])
+    LOGGER.info(target_plays_fsu_23.iloc[0]["wpa"])
+    LOGGER.info(target_plays_fsu_23.iloc[0]["pos_score_diff_end"])
+    assert float(target_plays_fsu_23.iloc[0]["wp_after"]) < 0.1
+    assert float(target_plays_fsu_23.iloc[0]["wpa"]) < 0.9
+
+    test_gatech_15 = CFBPlayProcess(gameId = 400756922)
+    test_gatech_15.espn_cfb_pbp()
+    test_gatech_15.run_processing_pipeline()
+
+    target_plays_gatech_15 = test_gatech_15.plays_json[
+        (test_gatech_15.plays_json["text"] == "Harrison Butker on-side kick recovered by GEORGIA TECH at the NDame 43")
+    ]
+
+    # losing team kicks onside
+    LOGGER.info("---- ONSIDE KICK (GT/ND 2015) ----")
+    LOGGER.info(target_plays_gatech_15.iloc[0]["type.text"])
+    LOGGER.info(target_plays_gatech_15.iloc[0]["kickoff_onside"])
+    LOGGER.info(target_plays_gatech_15.iloc[0]["change_of_pos_team"])
+    LOGGER.info(target_plays_gatech_15.iloc[0]["change_of_poss"])
+    LOGGER.info(target_plays_gatech_15.iloc[0]["wp_after"])
+    LOGGER.info(target_plays_gatech_15.iloc[0]["wpa"])
+    LOGGER.info(target_plays_gatech_15.iloc[0]["pos_score_diff_end"])
+    assert float(target_plays_gatech_15.iloc[0]["wp_after"]) > 0.9
+    assert float(target_plays_gatech_15.iloc[0]["wpa"]) < 0.1
+    
+
 def test_play_order():
     test = CFBPlayProcess(gameId = 401525825)
     test.espn_cfb_pbp()

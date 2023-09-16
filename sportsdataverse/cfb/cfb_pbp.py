@@ -2447,7 +2447,8 @@ class CFBPlayProcess(object):
                 (play_df["type.text"].isin(end_change_vec))
                 & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])
             )
-            | (play_df.downs_turnover == True),
+            | (play_df.downs_turnover == True)
+            | ((play_df.kickoff_onside == True) & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])),
             -1 * play_df.pos_score_diff,
             play_df.pos_score_diff,
         )
@@ -2464,14 +2465,30 @@ class CFBPlayProcess(object):
             default=play_df["pos_score_diff_end"],
         )
 
-        play_df["fumble_lost"] = np.where(
-            (play_df.fumble_vec == True) & (play_df.change_of_poss == True), True, False
+        play_df['fumble_lost'] = np.select(
+            [
+                (play_df.fumble_vec == True) & (play_df.change_of_poss == True),
+                (play_df.fumble_vec == True) & (play_df.change_of_pos_team == True)
+            ],
+            [
+                True,
+                True
+            ],
+            default = False
         )
-        play_df["fumble_recovered"] = np.where(
-            (play_df.fumble_vec == True) & (play_df.change_of_poss == False),
-            True,
-            False,
+
+        play_df['fumble_recovered'] = np.select(
+            [
+                (play_df.fumble_vec == True) & (play_df.change_of_poss == False),
+                (play_df.fumble_vec == True) & (play_df.change_of_pos_team == False)
+            ],
+            [
+                True,
+                True
+            ],
+            default = False
         )
+
         return play_df
 
     def __add_yardage_cols(self, play_df):
@@ -4384,7 +4401,7 @@ class CFBPlayProcess(object):
                 # Flips for Turnovers that are on kickoffs
                 (play_df["type.text"].isin(kickoff_turnovers)),
                 # onside recoveries
-                (play_df["kickoff_onside"] == True) & (play_df["change_of_pos_team"] == True),
+                (play_df["kickoff_onside"] == True) & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True)),
             ],
             [
                 0,
@@ -4794,7 +4811,7 @@ class CFBPlayProcess(object):
                 (play_df.lead_play_type.isin(["End Period", "End of Half"]))
                 & (play_df.change_of_pos_team == 1),
                 (play_df["kickoff_onside"] == True)
-                & (play_df["change_of_pos_team"] == True),  # onside recovery
+                & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True)),  # onside recovery
                 (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
             ],
             [
@@ -4806,7 +4823,7 @@ class CFBPlayProcess(object):
                 play_df.wp_after,
                 play_df.lead_wp_before,
                 (1 - play_df.lead_wp_before),
-                play_df.wp_after,
+                (1 - play_df.lead_wp_before),
                 (1 - play_df.wp_after),
             ],
             default=play_df.wp_after,
