@@ -1,3 +1,4 @@
+import pandas as pd
 from warnings import simplefilter
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
