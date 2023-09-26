@@ -338,9 +338,9 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["start.team.id"] = (
                 pbp_txt["plays"]["start.team.id"]
                 # fill downward first to make sure all playIDs are accurate
-                .fillna(method="ffill")
+                .ffill()
                 # fill upward so that any remaining NAs are covered
-                .fillna(method="bfill")
+                .bfill()
                 .apply(lambda x: int(x))
             )
         pbp_txt["plays"]["end.team.id"] = (
@@ -2492,7 +2492,7 @@ class CFBPlayProcess(object):
         return self.plays_json
 
     def __add_yardage_cols(self):
-        self.plays_json["yds_rushed"] = None
+        # self.plays_json["yds_rushed"] = None
         self.plays_json["yds_rushed"] = np.select(
             [
                 (self.plays_json.rush == True)
@@ -2614,7 +2614,7 @@ class CFBPlayProcess(object):
             default=None,
         )
 
-        self.plays_json["yds_receiving"] = None
+        # self.plays_json["yds_receiving"] = None
         self.plays_json["yds_receiving"] = np.select(
             [
                 (self.plays_json["pass"] == True)
@@ -2657,7 +2657,7 @@ class CFBPlayProcess(object):
             default=None,
         )
 
-        self.plays_json["yds_int_return"] = None
+        # self.plays_json["yds_int_return"] = None
         self.plays_json["yds_int_return"] = np.select(
             [
                 (self.plays_json["pass"] == True)
@@ -2711,7 +2711,7 @@ class CFBPlayProcess(object):
         #     self.plays_json['yds_fumble_return'] = None
         #     self.plays_json['yds_penalty'] = None
 
-        self.plays_json["yds_kickoff"] = None
+        # self.plays_json["yds_kickoff"] = None
         self.plays_json["yds_kickoff"] = np.where(
             (self.plays_json["kickoff_play"] == True),
             self.plays_json.text.str.extract(r"((?<= kickoff for)[^,]+)", flags=re.IGNORECASE)[
@@ -2719,10 +2719,10 @@ class CFBPlayProcess(object):
             ]
             .str.extract(r"(\d+)")[0]
             .astype(float),
-            self.plays_json["yds_kickoff"],
+            None,
         )
 
-        self.plays_json["yds_kickoff_return"] = None
+        # self.plays_json["yds_kickoff_return"] = None
         self.plays_json["yds_kickoff_return"] = np.select(
             [
                 (self.plays_json.kickoff_play == True)
@@ -2775,10 +2775,10 @@ class CFBPlayProcess(object):
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
             ],
-            default=self.plays_json["yds_kickoff_return"],
+            default=None,
         )
 
-        self.plays_json["yds_punted"] = None
+        # self.plays_json["yds_punted"] = None
         self.plays_json["yds_punted"] = np.select(
             [
                 (self.plays_json.punt == True) & (self.plays_json.punt_blocked == True),
@@ -2792,7 +2792,7 @@ class CFBPlayProcess(object):
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
             ],
-            default=self.plays_json.yds_punted,
+            default=None,
         )
 
         self.plays_json["yds_punt_return"] = np.select(
