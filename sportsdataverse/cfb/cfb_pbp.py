@@ -817,9 +817,9 @@ class CFBPlayProcess(object):
 
     def __helper_cfb_pickcenter(self, pbp_txt):
                 # Spread definition
-        if len(pbp_txt.get("pickcenter",[])) > 1:
+        if len(pbp_txt.get("pickcenter",[])) > 0:
             homeFavorite = pbp_txt.get("pickcenter",{})[0].get("homeTeamOdds",{}).get("favorite","")
-            if "spread" in pbp_txt.get("pickcenter",{})[1].keys():
+            if len(pbp_txt.get("pickcenter",{})) > 1 and "spread" in pbp_txt.get("pickcenter",{})[1].keys():
                 gameSpread = pbp_txt.get("pickcenter",{})[1].get("spread","")
                 overUnder = pbp_txt.get("pickcenter",{})[1].get("overUnder","")
                 gameSpreadAvailable = True
@@ -828,11 +828,6 @@ class CFBPlayProcess(object):
                 overUnder = pbp_txt.get("pickcenter",{})[0].get("overUnder","")
                 gameSpreadAvailable = True
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
-        elif len(pbp_txt.get("pickcenter", [])) == 1:
-            homeFavorite = pbp_txt.get("pickcenter",{})[0].get("homeTeamOdds",{}).get("favorite","")
-            gameSpread = pbp_txt.get("pickcenter",{})[0].get("spread","")
-            overUnder = pbp_txt.get("pickcenter",{})[0].get("overUnder","")
-            gameSpreadAvailable = True
         else:
             gameSpread = 2.5
             overUnder = 55.5
