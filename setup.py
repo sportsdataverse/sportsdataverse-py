@@ -88,8 +88,8 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        # "numpy>=1.13.0",
-        "pandas>=2.0.0",
+        "numpy>=1.13.0",
+        "pandas>=1.0.3",
         "tqdm>=4.50.0",
         "beautifulsoup4>=4.4.0",
         "inflection>=0.5.1",
@@ -98,7 +98,7 @@ setup(
         "pyarrow>=1.0.1",
         "pyjanitor>=0.23.1",
         "pyreadr>=0.4.0",
-        # "scipy>=1.4.0",
+        "scipy>=1.4.0",
         "matplotlib>=2.0.0",
         "tqdm>=4.50.0",
         "attrs>=20.3.0",

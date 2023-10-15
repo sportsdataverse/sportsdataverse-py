@@ -278,3 +278,12 @@ def test_explosive_play_count():
     LOGGER.info(len(bc_naive_expl_plays))
 
     # assert fsu_expl_total == len(fsu_expl_plays)
+
+def test_spread_available():
+    test = CFBPlayProcess(gameId = 401525519)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    print(json_dict_stuff["pickcenter"])
+
+    assert test.plays_json.loc[0, "gameSpreadAvailable"] == True
