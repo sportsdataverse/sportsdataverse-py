@@ -38,7 +38,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version="0.0.36.2",
+    version="0.0.36.3",
     description="Retrieve Sports data in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -89,7 +89,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         "numpy>=1.13.0",
-        "pandas >= 1.0.3",
+        "pandas>=1.0.3",
         "tqdm>=4.50.0",
         "beautifulsoup4>=4.4.0",
         "inflection>=0.5.1",

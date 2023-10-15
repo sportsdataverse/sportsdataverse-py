@@ -243,3 +243,47 @@ def test_play_order():
 
     assert int(should_be_first.iloc[0]["sequenceNumber"]) + 1 == int(should_be_next.iloc[0]["sequenceNumber"])
     assert int(should_be_first.iloc[0]["game_play_number"]) + 1 == int(should_be_next.iloc[0]["game_play_number"])
+
+
+def test_explosive_play_count():
+    test = CFBPlayProcess(gameId = 401525500)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    box = test.create_box_score()
+    
+    fsu_expl_total = box['team'][0]['EPA_explosive']
+    LOGGER.info(fsu_expl_total)
+
+    fsu_expl_plays = test.plays_json[
+        (test.plays_json["pos_team"] == 52)
+        & ((test.plays_json["EPA"] >= 1.8))
+    ]
+    LOGGER.info(fsu_expl_plays[["id", "text", "statYardage", "pass", "rush", "EPA", "EPA_explosive"]])
+
+    fsu_naive_expl_plays = test.plays_json[
+        (test.plays_json["pos_team"] == 52)
+        & (test.plays_json["statYardage"] >= 15)
+        # & (test.plays_json["scrimmage_play"] == True)
+    ]
+    LOGGER.info(fsu_naive_expl_plays[["id", "text", "statYardage", "pass", "rush", "EPA", "EPA_explosive"]])
+    LOGGER.info(len(fsu_naive_expl_plays))
+
+    bc_naive_expl_plays = test.plays_json[
+        (test.plays_json["pos_team"] != 52)
+        & (test.plays_json["statYardage"] >= 15)
+        # & (test.plays_json["scrimmage_play"] == True)
+    ]
+    LOGGER.info(bc_naive_expl_plays[["id", "text", "statYardage", "pass", "rush", "EPA", "EPA_explosive"]])
+    LOGGER.info(len(bc_naive_expl_plays))
+
+    # assert fsu_expl_total == len(fsu_expl_plays)
+
+def test_spread_available():
+    test = CFBPlayProcess(gameId = 401525519)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    print(json_dict_stuff["pickcenter"])
+
+    assert test.plays_json.loc[0, "gameSpreadAvailable"] == True

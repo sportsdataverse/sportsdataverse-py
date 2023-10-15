@@ -1,3 +1,7 @@
+import pandas as pd
+from warnings import simplefilter
+simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
+
 from sportsdataverse.cfb import *
 from sportsdataverse.mbb import *
 from sportsdataverse.nba import *
