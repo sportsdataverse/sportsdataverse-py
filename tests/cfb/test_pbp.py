@@ -286,3 +286,25 @@ def test_spread_available():
     print(json_dict_stuff["pickcenter"])
 
     assert test.plays_json.loc[0, "gameSpreadAvailable"] == True
+
+def test_def_fumbles_lost():
+    test = CFBPlayProcess(gameId = 401525530)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    box_score = test.create_box_score()
+    LOGGER.info(box_score['turnover'][0])
+
+    fsu_fumbles_lost = box_score['turnover'][0]['fumbles_lost']
+    fsu_fumbles_recovered = box_score['turnover'][0]['fumbles_recovered']
+    fsu_fumbles_total = box_score['turnover'][0]['total_fumbles']
+
+    fsu_fum_plays = test.plays_json[
+        (test.plays_json["pos_team"] == 52)
+        & (test.plays_json["fumble_lost"] == True)
+    ]
+    LOGGER.info(fsu_fum_plays[["pos_team", "text"]]) #, "fumble_lost", "fumble_vec", "fumble_recovered"]])
+
+    assert fsu_fumbles_total == 1
+    assert fsu_fumbles_lost == 0
+    assert fsu_fumbles_recovered == 1
