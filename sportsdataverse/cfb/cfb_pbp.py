@@ -1259,6 +1259,7 @@ class CFBPlayProcess(object):
         play_df["safety"] = play_df["text"].str.contains(
             "safety", case=False, flags=0, na=False, regex=True
         )
+
         # --- Fumbles----
         play_df["fumble_vec"] = np.select(
             [
@@ -2306,6 +2307,15 @@ class CFBPlayProcess(object):
             & (play_df["penalty_1st_conv"] == False),
             True,
             False,
+        )
+        play_df["fumble_vec"] = np.select(
+            [
+                play_df["downs_turnover"] == True
+            ],
+            [
+                False
+            ],
+            default = play_df["fumble_vec"]
         )
         # --- Touchdowns----
         play_df["scoring_play"] = play_df["type.text"].isin(scores_vec)
