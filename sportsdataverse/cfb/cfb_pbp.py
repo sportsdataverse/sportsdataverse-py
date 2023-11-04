@@ -72,7 +72,7 @@ class CFBPlayProcess(object):
         pbp_txt = {}
         pbp_txt["timeouts"] = {}
         # summary endpoint for pickcenter array
-        summary_url = f"http://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={self.gameId}&{cache_buster}"
+        summary_url = f"https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={self.gameId}&{cache_buster}"
         summary_resp = download(summary_url)
         summary = json.loads(summary_resp)
         incoming_keys_expected = [
@@ -818,16 +818,31 @@ class CFBPlayProcess(object):
     def __helper_cfb_pickcenter(self, pbp_txt):
                 # Spread definition
         if len(pbp_txt.get("pickcenter",[])) > 0:
-            homeFavorite = pbp_txt.get("pickcenter",{})[0].get("homeTeamOdds",{}).get("favorite","")
             if len(pbp_txt.get("pickcenter",{})) > 1 and "spread" in pbp_txt.get("pickcenter",{})[1].keys():
-                gameSpread = pbp_txt.get("pickcenter",{})[1].get("spread","")
-                overUnder = pbp_txt.get("pickcenter",{})[1].get("overUnder","")
+                homeFavorite = pbp_txt.get("pickcenter",{})[1].get("homeTeamOdds",{}).get("favorite", "")
+                gameSpread = pbp_txt.get("pickcenter",{})[1].get("spread", "")
+                overUnder = pbp_txt.get("pickcenter",{})[1].get("overUnder", "")
+                gameSpreadAvailable = True
+            elif "spread" in pbp_txt.get("pickcenter",{})[0].keys():
+                homeFavorite = pbp_txt.get("pickcenter",{})[0].get("homeTeamOdds",{}).get("favorite", "")
+                gameSpread = pbp_txt.get("pickcenter",{})[0].get("spread", "")
+                overUnder = pbp_txt.get("pickcenter",{})[0].get("overUnder", "")
                 gameSpreadAvailable = True
             else:
-                gameSpread = pbp_txt.get("pickcenter",{})[0].get("spread","")
-                overUnder = pbp_txt.get("pickcenter",{})[0].get("overUnder","")
-                gameSpreadAvailable = True
-            # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
+                gameSpread = ""
+                overUnder = ""
+                homeFavorite = ""
+                gameSpreadAvailable = False
+
+            # fix any type errors
+            if homeFavorite == "":
+                homeFavorite = True
+            
+            if gameSpread == "":
+                gameSpread = 2.5
+
+            if overUnder == "":
+                overUnder = 2.5
         else:
             gameSpread = 2.5
             overUnder = 55.5
