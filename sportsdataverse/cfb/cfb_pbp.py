@@ -840,6 +840,7 @@ class CFBPlayProcess(object):
             
             if gameSpread == "":
                 gameSpread = 2.5
+                gameSpreadAvailable = False
 
             if overUnder == "":
                 overUnder = 2.5
