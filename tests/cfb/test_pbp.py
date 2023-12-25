@@ -283,17 +283,9 @@ def test_spread_available():
     test.espn_cfb_pbp()
     json_dict_stuff = test.run_processing_pipeline()
 
-    LOGGER.info(json_dict_stuff["pickcenter"])
-
+    # assert that pickcenter is dead for all games
+    assert len(json_dict_stuff["pickcenter"]) == 0
     assert test.plays_json.loc[0, "gameSpreadAvailable"] == True
-
-    test2 = CFBPlayProcess(gameId = 401520260)
-    test2.espn_cfb_pbp()
-    json_dict_stuff2 = test2.run_processing_pipeline()
-
-    LOGGER.info(json_dict_stuff2["pickcenter"])
-
-    assert test2.plays_json.loc[0, "gameSpreadAvailable"] == False
 
 def test_def_fumbles_lost():
     test = CFBPlayProcess(gameId = 401525530)
@@ -315,4 +307,4 @@ def test_def_fumbles_lost():
 
     assert fsu_fumbles_total == 1
     assert fsu_fumbles_lost == 0
-    assert fsu_fumbles_recovered == 1
+    assert fsu_fumbles_recovered == 1    assert fsu_fumbles_recovered == 1
