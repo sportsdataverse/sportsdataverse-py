@@ -307,4 +307,4 @@ def test_def_fumbles_lost():
 
     assert fsu_fumbles_total == 1
     assert fsu_fumbles_lost == 0
-    assert fsu_fumbles_recovered == 1    assert fsu_fumbles_recovered == 1
+    assert fsu_fumbles_recovered == 1
