@@ -308,3 +308,15 @@ def test_def_fumbles_lost():
     assert fsu_fumbles_total == 1
     assert fsu_fumbles_lost == 0
     assert fsu_fumbles_recovered == 1
+
+def test_ou_tul_bad_spread():
+    test = CFBPlayProcess(gameId = 401287894)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    LOGGER.info(json_dict_stuff["pickcenter"])
+
+    # assert len(json_dict_stuff["pickcenter"]) == 0
+    assert test.plays_json.loc[0, "gameSpreadAvailable"] == True
+    assert test.plays_json.loc[0, "homeTeamSpread"] == -31.5
+    assert test.plays_json.loc[0, "homeTeamId"] == 201

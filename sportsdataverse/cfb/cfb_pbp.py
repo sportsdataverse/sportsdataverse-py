@@ -846,42 +846,42 @@ class CFBPlayProcess(object):
             awayTeamId,awayTeamMascot,awayTeamName,awayTeamAbbrev,awayTeamNameAlt
 
     def __helper_cfb_pickcenter(self, pbp_txt):
-        # Spread definition
-        if len(pbp_txt.get("pickcenter",[])) > 0:
-            if len(pbp_txt.get("pickcenter", [])) > 1 and "spread" in pbp_txt.get("pickcenter", [])[1].keys():
-                homeFavorite = pbp_txt.get("pickcenter", [])[1].get("homeTeamOdds",{}).get("favorite", "")
-                gameSpread = pbp_txt.get("pickcenter", [])[1].get("spread", "")
-                overUnder = pbp_txt.get("pickcenter", [])[1].get("overUnder", "")
-                gameSpreadAvailable = True
-            elif "spread" in pbp_txt.get("pickcenter", [])[0].keys():
-                homeFavorite = pbp_txt.get("pickcenter", [])[0].get("homeTeamOdds",{}).get("favorite", "")
-                gameSpread = pbp_txt.get("pickcenter", [])[0].get("spread", "")
-                overUnder = pbp_txt.get("pickcenter", [])[0].get("overUnder", "")
-                gameSpreadAvailable = True
-            else:
-                gameSpread = ""
-                overUnder = ""
-                homeFavorite = ""
-                gameSpreadAvailable = False
+        # # Spread definition
+        # if len(pbp_txt.get("pickcenter",[])) > 0:
+        #     if len(pbp_txt.get("pickcenter", [])) > 1 and "spread" in pbp_txt.get("pickcenter", [])[1].keys():
+        #         homeFavorite = pbp_txt.get("pickcenter", [])[1].get("homeTeamOdds",{}).get("favorite", "")
+        #         gameSpread = pbp_txt.get("pickcenter", [])[1].get("spread", "")
+        #         overUnder = pbp_txt.get("pickcenter", [])[1].get("overUnder", "")
+        #         gameSpreadAvailable = True
+        #     elif "spread" in pbp_txt.get("pickcenter", [])[0].keys():
+        #         homeFavorite = pbp_txt.get("pickcenter", [])[0].get("homeTeamOdds",{}).get("favorite", "")
+        #         gameSpread = pbp_txt.get("pickcenter", [])[0].get("spread", "")
+        #         overUnder = pbp_txt.get("pickcenter", [])[0].get("overUnder", "")
+        #         gameSpreadAvailable = True
+        #     else:
+        #         gameSpread = ""
+        #         overUnder = ""
+        #         homeFavorite = ""
+        #         gameSpreadAvailable = False
 
-            # fix any type errors
-            if homeFavorite == "":
-                homeFavorite = True
+        #     # fix any type errors
+        #     if homeFavorite == "":
+        #         homeFavorite = True
             
-            if gameSpread == "":
-                gameSpread = 2.5
-                gameSpreadAvailable = False
+        #     if gameSpread == "":
+        #         gameSpread = 2.5
+        #         gameSpreadAvailable = False
 
-            if overUnder == "":
-                overUnder = 55.5
-        else:
-            gameSpread = 2.5
-            overUnder = 55.5
-            homeFavorite = True
-            gameSpreadAvailable = False
+        #     if overUnder == "":
+        #         overUnder = 55.5
+        # else:
+        #     gameSpread = 2.5
+        #     overUnder = 55.5
+        #     homeFavorite = True
+        #     gameSpreadAvailable = False
 
-        if gameSpreadAvailable:
-            return gameSpread, overUnder, homeFavorite, gameSpreadAvailable
+        # if gameSpreadAvailable:
+        #     return gameSpread, overUnder, homeFavorite, gameSpreadAvailable
         
         # only use this if we still can't find the odds info from pickcenter
         return self.__helper__espn_cfb_odds_information__()
