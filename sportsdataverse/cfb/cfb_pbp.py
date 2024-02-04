@@ -614,10 +614,30 @@ class CFBPlayProcess(object):
             ].apply(lambda x: int(x))
         pbp_txt["plays"]["end.TimeSecsRem"] = pbp_txt["plays"][
                 "start.TimeSecsRem"
-            ].shift(1)
+            ].shift(-1)
+        pbp_txt["plays"]["end.TimeSecsRem"] = np.select(
+            [
+                pbp_txt["plays"]["end.TimeSecsRem"].isna() == True
+            ],
+            [
+                0
+            ],
+            default = pbp_txt["plays"]["end.TimeSecsRem"]
+        )
+
         pbp_txt["plays"]["end.adj_TimeSecsRem"] = pbp_txt["plays"][
                 "start.adj_TimeSecsRem"
-            ].shift(1)
+            ].shift(-1)
+        pbp_txt["plays"]["end.adj_TimeSecsRem"] = np.select(
+            [
+                pbp_txt["plays"]["end.adj_TimeSecsRem"].isna() == True
+            ],
+            [
+                0
+            ],
+            default = pbp_txt["plays"]["end.adj_TimeSecsRem"]
+        )
+
         pbp_txt["plays"]["end.TimeSecsRem"] = np.where(
                 (pbp_txt["plays"]["game_play_number"] == 1)
                 | (
@@ -847,41 +867,35 @@ class CFBPlayProcess(object):
 
     def __helper_cfb_pickcenter(self, pbp_txt):
         # # Spread definition
-        # if len(pbp_txt.get("pickcenter",[])) > 0:
-        #     if len(pbp_txt.get("pickcenter", [])) > 1 and "spread" in pbp_txt.get("pickcenter", [])[1].keys():
-        #         homeFavorite = pbp_txt.get("pickcenter", [])[1].get("homeTeamOdds",{}).get("favorite", "")
-        #         gameSpread = pbp_txt.get("pickcenter", [])[1].get("spread", "")
-        #         overUnder = pbp_txt.get("pickcenter", [])[1].get("overUnder", "")
-        #         gameSpreadAvailable = True
-        #     elif "spread" in pbp_txt.get("pickcenter", [])[0].keys():
-        #         homeFavorite = pbp_txt.get("pickcenter", [])[0].get("homeTeamOdds",{}).get("favorite", "")
-        #         gameSpread = pbp_txt.get("pickcenter", [])[0].get("spread", "")
-        #         overUnder = pbp_txt.get("pickcenter", [])[0].get("overUnder", "")
-        #         gameSpreadAvailable = True
-        #     else:
-        #         gameSpread = ""
-        #         overUnder = ""
-        #         homeFavorite = ""
-        #         gameSpreadAvailable = False
 
-        #     # fix any type errors
-        #     if homeFavorite == "":
-        #         homeFavorite = True
+        consensus = list(filter(lambda x: x["provider"]["name"] == "consensus" and "spread" in x.keys(), pbp_txt.get("pickcenter",[])))
+        if (len(consensus) == 0):
+            consensus = pbp_txt.get("pickcenter",[])
+
+        if len(consensus) > 0:
+            homeFavorite = consensus[0].get("homeTeamOdds",{}).get("favorite", "")
+            gameSpread = consensus[0].get("spread", "")
+            overUnder = consensus[0].get("overUnder", "")
+            gameSpreadAvailable = (gameSpread != "")
+
+            # fix any type errors
+            if homeFavorite == "":
+                homeFavorite = True
             
-        #     if gameSpread == "":
-        #         gameSpread = 2.5
-        #         gameSpreadAvailable = False
+            if gameSpread == "":
+                gameSpread = 2.5
+                gameSpreadAvailable = False
 
-        #     if overUnder == "":
-        #         overUnder = 55.5
-        # else:
-        #     gameSpread = 2.5
-        #     overUnder = 55.5
-        #     homeFavorite = True
-        #     gameSpreadAvailable = False
+            if overUnder == "":
+                overUnder = 55.5
+        else:
+            gameSpread = 2.5
+            overUnder = 55.5
+            homeFavorite = True
+            gameSpreadAvailable = False
 
-        # if gameSpreadAvailable:
-        #     return gameSpread, overUnder, homeFavorite, gameSpreadAvailable
+        if gameSpreadAvailable:
+            return gameSpread, overUnder, homeFavorite, gameSpreadAvailable
         
         # only use this if we still can't find the odds info from pickcenter
         return self.__helper__espn_cfb_odds_information__()
@@ -4885,9 +4899,56 @@ class CFBPlayProcess(object):
                 play_df.lead_wp_before,
                 (1 - play_df.lead_wp_before),
                 (1 - play_df.lead_wp_before),
-                (1 - play_df.wp_after),
+                play_df.wp_after
             ],
             default=play_df.wp_after,
+        )
+
+        play_df["wp_after_case"] = np.select(
+            [
+                (play_df["type.text"] == "Timeout"),
+                game_complete
+                & (
+                    (play_df.lead_play_type.isna())
+                    | (play_df.game_play_number == max(play_df.game_play_number))
+                )
+                & (play_df.pos_score_diff_end > 0),
+                game_complete
+                & (
+                    (play_df.lead_play_type.isna())
+                    | (play_df.game_play_number == max(play_df.game_play_number))
+                )
+                & (play_df.pos_score_diff_end < 0),
+                (play_df.end_of_half == 1)
+                & (play_df["start.pos_team.id"] == play_df.lead_pos_team)
+                & (play_df["type.text"] != "Timeout"),
+                (play_df.end_of_half == 1)
+                & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])
+                & (play_df["type.text"] != "Timeout"),
+                (play_df.end_of_half == 1)
+                & (play_df["start.pos_team_receives_2H_kickoff"] == False)
+                & (play_df["type.text"] == "Timeout"),
+                (play_df.lead_play_type.isin(["End Period", "End of Half"]))
+                & (play_df.change_of_pos_team == 0),
+                (play_df.lead_play_type.isin(["End Period", "End of Half"]))
+                & (play_df.change_of_pos_team == 1),
+                (play_df["kickoff_onside"] == True)
+                & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True)),  # onside recovery
+                (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+            ],
+            [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+            ],
+            default=None,
         )
 
         play_df["def_wp_after"] = 1 - play_df.wp_after

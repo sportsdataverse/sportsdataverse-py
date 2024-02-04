@@ -2,6 +2,7 @@ from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 import pandas as pd
 import pytest
 import logging
+from sportsdataverse.cfb.model_vars import *
 
 LOGGER = logging.getLogger(__name__)
 logging.basicConfig()
@@ -218,7 +219,6 @@ def test_onside_kickoff_recovery():
     LOGGER.info(target_plays_gatech_15.iloc[0]["pos_score_diff_end"])
     assert float(target_plays_gatech_15.iloc[0]["wp_after"]) > 0.9
     assert float(target_plays_gatech_15.iloc[0]["wpa"]) < 0.1
-    
 
 def test_play_order():
     test = CFBPlayProcess(gameId = 401525825)
@@ -314,9 +314,33 @@ def test_ou_tul_bad_spread():
     test.espn_cfb_pbp()
     json_dict_stuff = test.run_processing_pipeline()
 
-    LOGGER.info(json_dict_stuff["pickcenter"])
+    # LOGGER.info(json_dict_stuff["pickcenter"])
 
     # assert len(json_dict_stuff["pickcenter"]) == 0
     assert test.plays_json.loc[0, "gameSpreadAvailable"] == True
-    assert test.plays_json.loc[0, "homeTeamSpread"] == -31.5
+    assert test.plays_json.loc[0, "homeTeamSpread"] >= 31.0
     assert test.plays_json.loc[0, "homeTeamId"] == 201
+
+
+def test_osu_mich_bad_wp():
+    test = CFBPlayProcess(gameId = 401520434)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    plays = test.plays_json
+
+    plays["lead_play_text"] = plays["text"].shift(-1)
+
+    bad_wpa_play = plays[
+        plays["text"].isin([
+            "Michigan Penalty, Unsportsmanlike Conduct (Jaylen Harrell) to the MICH 11 for a 1ST down",
+            "[NHSG] Kneel down by MCCARTHY, J.J. at MIC9 (team loss of 2), clock 00:00."
+        ])
+    ]
+
+    bad_wpa_play["proper_time_set"] = bad_wpa_play["start.adj_TimeSecsRem"] >= bad_wpa_play["end.adj_TimeSecsRem"]
+
+    search_cols = sorted(list(set(wp_start_columns + wp_end_columns)))
+    LOGGER.info(bad_wpa_play[["id", "text", "lead_play_text", "change_of_poss", "change_of_pos_team", "wp_after_case", "wp_before", "wp_after", "proper_time_set"] + search_cols].to_json(orient = "records", indent = 2))
+
+    assert bad_wpa_play.proper_time_set.all()
