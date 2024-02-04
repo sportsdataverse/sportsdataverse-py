@@ -4210,7 +4210,7 @@ class CFBPlayProcess(object):
 
         play_df.loc[play_df["end.TimeSecsRem"] <= 0, "end.TimeSecsRem"] = 0
         play_df.loc[
-            (play_df["end.TimeSecsRem"] <= 0) & (play_df.period < 5),
+            (play_df["end.TimeSecsRem"] <= 0) & (play_df["game_play_number"] == max(play_df["game_play_number"])) & (play_df.period < 5),
             "end.yardsToEndzone",
         ] = 99
         play_df.loc[
@@ -4865,13 +4865,25 @@ class CFBPlayProcess(object):
                     (play_df.lead_play_type.isna())
                     | (play_df.game_play_number == max(play_df.game_play_number))
                 )
-                & (play_df.pos_score_diff_end > 0),
+                & (play_df.pos_score_diff_end > 0) & (play_df["start.pos_team.id"] == play_df["end.pos_team.id"]),
                 game_complete
                 & (
                     (play_df.lead_play_type.isna())
                     | (play_df.game_play_number == max(play_df.game_play_number))
                 )
-                & (play_df.pos_score_diff_end < 0),
+                & (play_df.pos_score_diff_end < 0) & (play_df["start.pos_team.id"] == play_df["end.pos_team.id"]),
+                game_complete
+                & (
+                    (play_df.lead_play_type.isna())
+                    | (play_df.game_play_number == max(play_df.game_play_number))
+                )
+                & (play_df.pos_score_diff_end > 0) & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                game_complete
+                & (
+                    (play_df.lead_play_type.isna())
+                    | (play_df.game_play_number == max(play_df.game_play_number))
+                )
+                & (play_df.pos_score_diff_end < 0) & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
                 (play_df.end_of_half == 1)
                 & (play_df["start.pos_team.id"] == play_df.lead_pos_team)
                 & (play_df["type.text"] != "Timeout"),
@@ -4894,6 +4906,8 @@ class CFBPlayProcess(object):
                 play_df.wp_before,
                 1.0,
                 0.0,
+                0.0,
+                1.0,
                 play_df.lead_wp_before,
                 (1 - play_df.lead_wp_before),
                 play_df.wp_after,
@@ -4914,13 +4928,25 @@ class CFBPlayProcess(object):
                     (play_df.lead_play_type.isna())
                     | (play_df.game_play_number == max(play_df.game_play_number))
                 )
-                & (play_df.pos_score_diff_end > 0),
+                & (play_df.pos_score_diff_end > 0) & (play_df["start.pos_team.id"] == play_df["end.pos_team.id"]),
                 game_complete
                 & (
                     (play_df.lead_play_type.isna())
                     | (play_df.game_play_number == max(play_df.game_play_number))
                 )
-                & (play_df.pos_score_diff_end < 0),
+                & (play_df.pos_score_diff_end < 0) & (play_df["start.pos_team.id"] == play_df["end.pos_team.id"]),
+                game_complete
+                & (
+                    (play_df.lead_play_type.isna())
+                    | (play_df.game_play_number == max(play_df.game_play_number))
+                )
+                & (play_df.pos_score_diff_end > 0) & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                game_complete
+                & (
+                    (play_df.lead_play_type.isna())
+                    | (play_df.game_play_number == max(play_df.game_play_number))
+                )
+                & (play_df.pos_score_diff_end < 0) & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
                 (play_df.end_of_half == 1)
                 & (play_df["start.pos_team.id"] == play_df.lead_pos_team)
                 & (play_df["type.text"] != "Timeout"),
@@ -4951,6 +4977,8 @@ class CFBPlayProcess(object):
                 8,
                 9,
                 10,
+                11,
+                12
             ],
             default=None,
         )

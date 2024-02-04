@@ -323,7 +323,7 @@ def test_ou_tul_bad_spread():
 
 
 def test_bad_wp_after_situations():
-    test = CFBPlayProcess(gameId = 401551750) # Ohio St/Mich: 401520434 vs BC/SMU: 401551750
+    test = CFBPlayProcess(gameId = 401551786) # Ohio St/Mich: 401520434 vs BC/SMU: 401551750
     test.espn_cfb_pbp()
     json_dict_stuff = test.run_processing_pipeline()
 
@@ -338,13 +338,14 @@ def test_bad_wp_after_situations():
             "Jesse Mirco punt for 43 yds, downed at the MICH 36",
             "Tommy Doman punt for 49 yds, downed at the OSU 2",
             "Ryan Bujcevski punt blocked by TEAM blocked by TEAM Bujcevski, Ryan punt 29 yards to the SMU44, recovered by BOSTONCOLL # at SMU44 (blocked by TEAM).",
-            "Kevin Jennings pass incomplete, broken up by #"
+            "Kevin Jennings pass incomplete, broken up by #",
+            "Jalen Milroe run for 1 yd to the MICH 2"
         ])
     ]
 
     bad_wpa_play["proper_time_set"] = bad_wpa_play["start.adj_TimeSecsRem"] >= bad_wpa_play["end.adj_TimeSecsRem"]
 
     search_cols = sorted(list(set(wp_start_columns + wp_end_columns + ["end.ExpScoreDiff", "start.ExpScoreDiff"])))
-    LOGGER.info(bad_wpa_play[["id", "text", "lead_play_text", "change_of_poss", "change_of_pos_team", "wp_after_case", "wp_before", "wp_after", "proper_time_set"] + search_cols].to_json(orient = "records", indent = 2))
+    LOGGER.info(bad_wpa_play[["id", "text", "lead_play_text", "change_of_poss", "change_of_pos_team", "wp_after_case", "wp_before", "wp_after", "proper_time_set", "game_play_number"] + search_cols].to_json(orient = "records", indent = 2))
 
     assert bad_wpa_play.proper_time_set.all()
