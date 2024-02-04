@@ -322,8 +322,8 @@ def test_ou_tul_bad_spread():
     assert test.plays_json.loc[0, "homeTeamId"] == 201
 
 
-def test_osu_mich_bad_wp():
-    test = CFBPlayProcess(gameId = 401520434)
+def test_bad_wp_after_situations():
+    test = CFBPlayProcess(gameId = 401551750) # Ohio St/Mich: 401520434 vs BC/SMU: 401551750
     test.espn_cfb_pbp()
     json_dict_stuff = test.run_processing_pipeline()
 
@@ -334,13 +334,17 @@ def test_osu_mich_bad_wp():
     bad_wpa_play = plays[
         plays["text"].isin([
             "Michigan Penalty, Unsportsmanlike Conduct (Jaylen Harrell) to the MICH 11 for a 1ST down",
-            "[NHSG] Kneel down by MCCARTHY, J.J. at MIC9 (team loss of 2), clock 00:00."
+            "[NHSG] Kneel down by MCCARTHY, J.J. at MIC9 (team loss of 2), clock 00:00.",
+            "Jesse Mirco punt for 43 yds, downed at the MICH 36",
+            "Tommy Doman punt for 49 yds, downed at the OSU 2",
+            "Ryan Bujcevski punt blocked by TEAM blocked by TEAM Bujcevski, Ryan punt 29 yards to the SMU44, recovered by BOSTONCOLL # at SMU44 (blocked by TEAM).",
+            "Kevin Jennings pass incomplete, broken up by #"
         ])
     ]
 
     bad_wpa_play["proper_time_set"] = bad_wpa_play["start.adj_TimeSecsRem"] >= bad_wpa_play["end.adj_TimeSecsRem"]
 
-    search_cols = sorted(list(set(wp_start_columns + wp_end_columns)))
+    search_cols = sorted(list(set(wp_start_columns + wp_end_columns + ["end.ExpScoreDiff", "start.ExpScoreDiff"])))
     LOGGER.info(bad_wpa_play[["id", "text", "lead_play_text", "change_of_poss", "change_of_pos_team", "wp_after_case", "wp_before", "wp_after", "proper_time_set"] + search_cols].to_json(orient = "records", indent = 2))
 
     assert bad_wpa_play.proper_time_set.all()
