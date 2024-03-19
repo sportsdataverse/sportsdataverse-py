@@ -59,7 +59,7 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1999)
         i_data = pl.read_parquet(NFL_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -89,7 +89,7 @@ def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
             # i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
             i_data = read_r(download_file(schedule_url, f"{tempdirname}/nfl_sched_{i}.rds"))[None]
             i_data = pl.DataFrame(i_data)
-            data = pl.concat([data, i_data], how="vertical")
+            data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -225,7 +225,7 @@ def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=False) -> pl.D
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pl.read_parquet(NFL_PFR_WEEK_PASS_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -273,7 +273,7 @@ def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=False) -> pl.D
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pl.read_parquet(NFL_PFR_WEEK_RUSH_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -321,7 +321,7 @@ def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=False) -> pl.Da
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pl.read_parquet(NFL_PFR_WEEK_REC_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -369,7 +369,7 @@ def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas=False) -> pl.Da
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
         i_data = pl.read_parquet(NFL_PFR_WEEK_DEF_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -393,7 +393,7 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1920)
         i_data = pl.read_parquet(NFL_ROSTER_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -417,7 +417,7 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2002)
         i_data = pl.read_parquet(NFL_WEEKLY_ROSTER_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -479,7 +479,7 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataF
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2012)
         i_data = pl.read_parquet(NFL_SNAP_COUNTS_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -503,7 +503,7 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2016)
         i_data = pl.read_parquet(NFL_PBP_PARTICIPATION_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -527,7 +527,7 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFram
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2009)
         i_data = pl.read_parquet(NFL_INJURIES_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -551,7 +551,7 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.Data
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2001)
         i_data = pl.read_parquet(NFL_DEPTH_CHARTS_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 

@@ -85,7 +85,7 @@ def helper_wbb_team_items(items, **kwargs):
         for k in pop_cols:
             team.pop(k, None)
         team_row = pl.from_pandas(pd.json_normalize(team, sep="_"))
-        teams_df = pl.concat([teams_df, team_row], how="vertical")
+        teams_df = pl.concat([teams_df, team_row], how="diagonal")
 
     teams_df.columns = [
         "team_id",
@@ -127,7 +127,7 @@ def helper_wbb_roster_items(items, summary_url, **kwargs):
         team_roster.columns = [col.replace("$ref", "href") for col in team_roster.columns]
         team_roster.columns = [underscore(c) for c in team_roster.columns]
         team_roster = team_roster.with_columns(team_id=pl.lit(tm).cast(pl.Int32))
-        game_rosters = pl.concat([game_rosters, team_roster], how="vertical")
+        game_rosters = pl.concat([game_rosters, team_roster], how="diagonal")
     game_rosters = game_rosters.drop(["period", "for_player_id", "active"])
     game_rosters = game_rosters.with_columns(
         player_id=pl.col("player_id").cast(pl.Int64), team_id=pl.col("team_id").cast(pl.Int32)

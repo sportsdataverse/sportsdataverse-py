@@ -169,7 +169,7 @@ def espn_nfl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
                     errors="ignore",
                     sep="_",
                 )
-                full_schedule = pl.concat([full_schedule, pl.from_pandas(reg)], how="vertical")
+                full_schedule = pl.concat([full_schedule, pl.from_pandas(reg)], how="diagonal")
         full_schedule = full_schedule.with_columns(season=season)
         full_schedule = full_schedule.janitor.clean_names()
         full_schedule = full_schedule.rename({"week_value": "week", "season_type_value": "season_type"})
