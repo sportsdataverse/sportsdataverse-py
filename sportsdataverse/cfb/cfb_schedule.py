@@ -221,7 +221,7 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
                     sep="_",
                 )
 
-                full_schedule = pl.concat([full_schedule, pl.from_pandas(reg)], how="vertical")
+                full_schedule = pl.concat([full_schedule, pl.from_pandas(reg)], how="diagonal")
 
         full_schedule = full_schedule.with_columns(season=season)
 

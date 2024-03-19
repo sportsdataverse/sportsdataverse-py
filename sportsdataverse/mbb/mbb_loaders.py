@@ -36,7 +36,7 @@ def load_mbb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pl.read_parquet(MBB_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -64,7 +64,7 @@ def load_mbb_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Dat
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pl.read_parquet(MBB_TEAM_BOX_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -92,7 +92,7 @@ def load_mbb_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.D
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pl.read_parquet(MBB_PLAYER_BOX_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -120,5 +120,5 @@ def load_mbb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
         if int(i) < 2002:
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pl.read_parquet(MBB_TEAM_SCHEDULE_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data

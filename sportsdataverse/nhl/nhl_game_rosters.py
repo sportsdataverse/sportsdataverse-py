@@ -94,7 +94,7 @@ def helper_nhl_team_items(items, **kwargs):
         for k in pop_cols:
             team.pop(k, None)
         team_row = pl.from_pandas(pd.json_normalize(team, sep="_"))
-        teams_df = pl.concat([teams_df, team_row], how="vertical")
+        teams_df = pl.concat([teams_df, team_row], how="diagonal")
 
     teams_df.columns = [
         "team_id",

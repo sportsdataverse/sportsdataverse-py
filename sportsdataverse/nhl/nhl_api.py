@@ -58,5 +58,5 @@ def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False, **k
     pbp_txt_games = pl.DataFrame()
     for date in pbp_txt["dates"]:
         game = pl.from_pandas(pd.json_normalize(date, record_path="games", meta=["date"]))
-        pbp_txt_games = pl.concat([pbp_txt_games, game], how="vertical")
+        pbp_txt_games = pl.concat([pbp_txt_games, game], how="diagonal")
     return pbp_txt_games.to_pandas() if return_as_pandas else pbp_txt_games

@@ -37,7 +37,7 @@ def load_cfb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         if int(i) < 2003:
             raise SeasonNotFoundError("season cannot be less than 2003")
         i_data = pl.read_parquet(CFB_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -65,7 +65,7 @@ def load_cfb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
             raise SeasonNotFoundError("season cannot be less than 2002")
         i_data = pl.read_parquet(CFB_TEAM_SCHEDULE_URL.format(season=i), use_pyarrow=True, columns=None)
         # data = data.append(i_data)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -92,7 +92,7 @@ def load_cfb_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
         if int(i) < 2004:
             raise SeasonNotFoundError("season cannot be less than 2004")
         i_data = pl.read_parquet(CFB_ROSTER_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -122,7 +122,7 @@ def load_cfb_team_info(seasons: List[int], return_as_pandas=False) -> pl.DataFra
             i_data = pl.read_parquet(CFB_TEAM_INFO_URL.format(season=i), use_pyarrow=True, columns=None)
         except Exception:
             print(f"We don't seem to have data for the {i} season.")
-        data = pl.concat([data, i_data], how="vertical")
+        data = pl.concat([data, i_data], how="diagonal")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
