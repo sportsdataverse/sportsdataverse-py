@@ -138,12 +138,12 @@ def __extract_home_away(event, arg1, arg2):
     return event
 
 
-def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
+def espn_wbb_calendar(season=None, onoffdays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_wbb_calendar - look up the women's college basketball calendar for a given season
 
     Args:
         season (int): Used to define different seasons. 2002 is the earliest available season.
-        ondays (boolean): Used to return dates for calendar ondays
+        onoffdays (boolean): Used to return dates for calendar ondays and offdays
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
@@ -154,8 +154,8 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     """
     if int(season) < 2002:
         raise SeasonNotFoundError("season cannot be less than 2002")
-    if ondays is not None:
-        full_schedule = __ondays_wbb_calendar(season, **kwargs)
+    if onoffdays is not None:
+        full_schedule = __onoffdays_wbb_calendar(season, **kwargs)
     else:
         url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates={season}"
         resp = download(url=url, **kwargs)
@@ -182,16 +182,22 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     return full_schedule.to_pandas() if return_as_pandas else full_schedule
 
 
-def __ondays_wbb_calendar(season, **kwargs):
-    url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/{season}/types/2/calendar/ondays"
-    resp = download(url=url, **kwargs)
-    txt = resp.json().get("eventDate").get("dates")
-    result = pl.DataFrame(txt, schema=["dates"])
+def __onoffdays_wbb_calendar(season, **kwargs):
+    url_on = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/{season}/types/2/calendar/ondays"
+    resp_on = download(url=url_on, **kwargs)
+    txt_on = resp_on.json().get("eventDate").get("dates")
+    url_off = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/{season}/types/2/calendar/offdays"
+    resp_off = download(url=url_off, **kwargs)
+    txt_off = resp_off.json().get("eventDate").get("dates")
+    result = pl.concat(
+        [pl.DataFrame(txt_on, schema=["dates"]), pl.DataFrame(txt_off, schema=["dates"])],
+        how="diagonal_relaxed"
+    )
     result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
     result = result.with_columns(
         url="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates="
         + pl.col("dateURL")
-    )
+    ).unique(subset="url")
 
     return result
 
