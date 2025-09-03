@@ -538,3 +538,12 @@ def test_kickoff_tb():
 #     LOGGER.info("AFTER:")
 #     LOGGER.info(bad_yards_play[["text", "penalty_flag", "wp_after_case", "wp_after", "wpa", "end.ExpScoreDiff_case", "EP_end", "EPA"] + wp_end_columns].to_json(orient = "records", indent = 2))
 
+def test_yards_per_drive():
+    test = CFBPlayProcess(gameId = 401757219)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    box = test.create_box_score()
+    LOGGER.info(box['drives'])
+    assert round(box['drives'][1]['plays_per_drive'] * box['drives'][1]['drives']) == 62
+    assert round(box['drives'][0]['plays_per_drive'] * box['drives'][0]['drives']) == 70

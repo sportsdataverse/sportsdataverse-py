@@ -10,6 +10,7 @@ from numpy.core.fromnumeric import mean
 from functools import reduce, partial
 from sportsdataverse.dl_utils import download, key_check
 from .model_vars import *
+import logging
 
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
@@ -5626,14 +5627,24 @@ class CFBPlayProcess(object):
         turnover_box_json[1]["turnover_luck"] = 5.0 * (turnover_box_json[1]["turnover_margin"] - turnover_box_json[1]["expected_turnover_margin"])
 
         self.plays_json.drive_start = self.plays_json.drive_start.astype(float)
-        drives_data = self.plays_json[(self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
-            drive_total_available_yards = ('drive_start', mean),
-            drive_total_gained_yards = ('drive.yards', mean),
-            avg_field_position = ('drive_start', mean),
-            plays_per_drive = ('drive.offensivePlays', mean),
-            yards_per_drive = ('drive.yards', mean),
+        drives_data = self.plays_json[(self.plays_json.scrimmage_play == True)].groupby(by=["pos_team","drive.id"], as_index=False, group_keys = False).agg(
+            drive_total_available_yards = ('drive_start', lambda x: x.iloc[0]),
+            # drive_total_gained_yards = ('drive.yards', mean),
+            avg_field_position = ('drive_start', lambda x: x.iloc[0]),
+            drive_plays = ('scrimmage_play', sum),
+            drive_yards = ('statYardage', sum),
+            # drives = ('drive.id', pd.Series.nunique)
+        ).reset_index().groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
+            drive_total_available_yards = ('drive_total_available_yards', sum),
+            drive_total_gained_yards = ('drive_yards', sum),
+            avg_field_position = ('avg_field_position', mean),
+            total_plays = ('drive_plays', sum),
+            plays_per_drive = ('drive_plays', mean),
+            total_yards = ('drive_yards', sum),
+            yards_per_drive = ('drive_yards', mean),
             drives = ('drive.id', pd.Series.nunique)
         )
+
         drives_data['drive_total_gained_yards_rate'] = (100 * drives_data.drive_total_gained_yards / drives_data.drive_total_available_yards).round(2)
 
         return {
