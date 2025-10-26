@@ -569,7 +569,8 @@ def test_25_pass_receipt_parsing():
         ("(14:46) Shotgun #10 H.King pass complete short right to #1 J.Haynes caught at GT27, for 15 yards to the GT40 (#13 G.Bryant III), 1ST DOWN", "yds_receiving", 15),
         ("(14:17) No Huddle-Shotgun #10 H.King pass complete short right to #4 I.Canion caught at GT46, for 2 yards to the GT42 fumbled by #4 I.Canion at GT46 forced by #16 C.Peal recovered by SU #8 D.Reese at GT42, End Of Play", "yds_receiving", 2),
         ("(06:15) Shotgun #10 H.King pass incomplete short left to #17 J.Beetham thrown to SU01", "yds_receiving", 0),
-        ("(13:31) Shotgun #10 H.King rush right for 7 yards gain to the SU30, out of bounds at SU30, 1ST DOWN", "yds_rushed", 7)
+        ("(13:31) Shotgun #10 H.King rush right for 7 yards gain to the SU30, out of bounds at SU30, 1ST DOWN", "yds_rushed", 7),
+        ("(07:16) No Huddle-Shotgun #1 J.Haynes rush left for 4 yards loss to the SU35 (#6 J.Heard Jr.; #3 K.Singleton)", "yds_rushed", -4)
     ]
 )
 def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: int):
@@ -581,6 +582,7 @@ def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: 
     target_plays = plays[
         plays['text'].isin([play_text])
     ]
-
+    LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], yards_field] == expected_yards
 

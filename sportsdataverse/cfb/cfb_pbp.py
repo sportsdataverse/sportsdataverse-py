@@ -241,7 +241,7 @@ class CFBPlayProcess(object):
                         ["start", "period", "type"],
                         ["start", "yardLine"],
                         ["start", "clock", "displayValue"],
-                        ["start", "text"],
+                        ["start", "cleaned_text"],
                         ["end", "period", "number"],
                         ["end", "period", "type"],
                         ["end", "yardLine"],
@@ -341,7 +341,17 @@ class CFBPlayProcess(object):
 
         # drop play text dupes intelligently, even if they have different play_id values
         pbp_txt["plays"]["text"] = pbp_txt["plays"]["text"].astype(str)
-        pbp_txt["plays"]["lead_text"] = pbp_txt["plays"]["text"].shift(-1)
+
+        # # remove weird text stuff
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["text"]
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["text"].str.replace("^\\(\d{1,2}:\d{2}\\) ", "", regex=True)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" short|long ", "", regex=True)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" left|middle|right\s+", "", regex=True)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s*No Huddle-Shotgun\s+", "", regex=True)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("No Huddle-", "", regex=False)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s*Shotgun\s+", "", regex=True)
+
+        pbp_txt["plays"]["lead_text"] = pbp_txt["plays"]["cleaned_text"].shift(-1)
         pbp_txt["plays"]["lead_start_team"] = pbp_txt["plays"]["start.team.id"].shift(-1)
         pbp_txt["plays"]["lead_start_yardsToEndzone"] = pbp_txt["plays"]["start.yardsToEndzone"].shift(-1)
         pbp_txt["plays"]["lead_start_down"] = pbp_txt["plays"]["start.down"].shift(-1)
@@ -354,9 +364,9 @@ class CFBPlayProcess(object):
                 (row["start.down"] == row["lead_start_down"]) and \
                 (row["start.yardsToEndzone"] == row["lead_start_yardsToEndzone"]) and \
                 (row["start.distance"] == row["lead_start_distance"]):
-                if (row["text"] == row["lead_text"]):
+                if (row["cleaned_text"] == row["lead_text"]):
                     return True
-                if (row["text"] in row["lead_text"]) and \
+                if (row["cleaned_text"] in row["lead_text"]) and \
                     (row["lead_scoringPlay"] == row["scoringPlay"]):
                     return True
             return False
@@ -456,22 +466,22 @@ class CFBPlayProcess(object):
                 (pbp_txt["plays"]["type.text"] == "Timeout")
                 & (
                     (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(homeTeamAbbrev), case=False)
                     )
                     | (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(homeTeamName), case=False)
                     )
                     | (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(homeTeamMascot), case=False)
                     )
                     | (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(homeTeamNameAlt), case=False)
                     )
@@ -483,22 +493,22 @@ class CFBPlayProcess(object):
                 (pbp_txt["plays"]["type.text"] == "Timeout")
                 & (
                     (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(awayTeamAbbrev), case=False)
                     )
                     | (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(awayTeamName), case=False)
                     )
                     | (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(awayTeamMascot), case=False)
                     )
                     | (
-                        pbp_txt["plays"]["text"]
+                        pbp_txt["plays"]["cleaned_text"]
                         .str.lower()
                         .str.contains(str(awayTeamNameAlt), case=False)
                     )
@@ -721,7 +731,7 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["end.yard"] = np.where(
                 (pbp_txt["plays"]["type.text"] == "Penalty")
                 & (
-                    pbp_txt["plays"]["text"].str.contains(
+                    pbp_txt["plays"]["cleaned_text"].str.contains(
                         "declined", case=False, flags=0, na=False, regex=True
                     )
                 ),
@@ -736,7 +746,7 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["end.yardsToEndzone"] = np.where(
                 (pbp_txt["plays"]["type.text"] == "Penalty")
                 & (
-                    pbp_txt["plays"]["text"].str.contains(
+                    pbp_txt["plays"]["cleaned_text"].str.contains(
                         "declined", case=False, flags=0, na=False, regex=True
                     )
                 ),
@@ -785,40 +795,40 @@ class CFBPlayProcess(object):
                 "Unknown",
             )
         pbp_txt["plays"]["type.text"] = np.where(
-                pbp_txt["plays"]["text"]
+                pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("extra point", case=False)
-                & pbp_txt["plays"]["text"]
+                & pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("no good", case=False),
                 "Extra Point Missed",
                 pbp_txt["plays"]["type.text"],
             )
         pbp_txt["plays"]["type.text"] = np.where(
-                pbp_txt["plays"]["text"]
+                pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("extra point", case=False)
-                & pbp_txt["plays"]["text"]
+                & pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("blocked", case=False),
                 "Extra Point Missed",
                 pbp_txt["plays"]["type.text"],
             )
         pbp_txt["plays"]["type.text"] = np.where(
-                pbp_txt["plays"]["text"]
+                pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("field goal", case=False)
-                & pbp_txt["plays"]["text"]
+                & pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("blocked", case=False),
                 "Blocked Field Goal",
                 pbp_txt["plays"]["type.text"],
             )
         pbp_txt["plays"]["type.text"] = np.where(
-                pbp_txt["plays"]["text"]
+                pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("field goal", case=False)
-                & pbp_txt["plays"]["text"]
+                & pbp_txt["plays"]["cleaned_text"]
                 .str.lower()
                 .str.contains("no good", case=False),
                 "Field Goal Missed",
@@ -924,7 +934,7 @@ class CFBPlayProcess(object):
         play_df["penalty_flag"] = False
         play_df.loc[(play_df["type.text"] == "Penalty"), "penalty_flag"] = True
         play_df.loc[
-            play_df["text"].str.contains(
+            play_df["cleaned_text"].str.contains(
                 "penalty", case=False, flags=0, na=False, regex=True
             ),
             "penalty_flag",
@@ -935,7 +945,7 @@ class CFBPlayProcess(object):
         play_df.loc[
             (play_df["type.text"] == "Penalty")
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "declined", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -943,12 +953,12 @@ class CFBPlayProcess(object):
         ] = True
         play_df.loc[
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "penalty", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "declined", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -960,7 +970,7 @@ class CFBPlayProcess(object):
         play_df.loc[
             (play_df["type.text"] == "Penalty")
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "no play", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -968,12 +978,12 @@ class CFBPlayProcess(object):
         ] = True
         play_df.loc[
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "penalty", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "no play", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -985,7 +995,7 @@ class CFBPlayProcess(object):
         play_df.loc[
             (play_df["type.text"] == "Penalty")
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     r"off-setting", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -993,12 +1003,12 @@ class CFBPlayProcess(object):
         ] = True
         play_df.loc[
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "penalty", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     r"off-setting", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -1010,7 +1020,7 @@ class CFBPlayProcess(object):
         play_df.loc[
             (play_df["type.text"] == "Penalty")
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "1st down", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -1018,12 +1028,12 @@ class CFBPlayProcess(object):
         ] = True
         play_df.loc[
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "penalty", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "1st down", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -1034,23 +1044,23 @@ class CFBPlayProcess(object):
         play_df["penalty_in_text"] = False
         play_df.loc[
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "penalty", case=False, flags=0, na=False, regex=True
                 )
             )
             & (~(play_df["type.text"] == "Penalty"))
             & (
-                ~play_df["text"].str.contains(
+                ~play_df["cleaned_text"].str.contains(
                     "declined", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                ~play_df["text"].str.contains(
+                ~play_df["cleaned_text"].str.contains(
                     r"off-setting", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                ~play_df["text"].str.contains(
+                ~play_df["cleaned_text"].str.contains(
                     "no play", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -1061,116 +1071,116 @@ class CFBPlayProcess(object):
             [
                 (play_df.penalty_offset == 1),
                 (play_df.penalty_declined == 1),
-                play_df.text.str.contains(" roughing passer ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" roughing passer ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " offensive holding ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" pass interference", case=False, regex=True),
-                play_df.text.str.contains(" encroachment", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" pass interference", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" encroachment", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " defensive pass interference ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " offensive pass interference ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " illegal procedure ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " defensive holding ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" holding ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" holding ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " offensive offside | offside offense", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " defensive offside | offside defense", case=False, regex=True
                 ),
-                play_df.text.str.contains(" offside ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" offside ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " illegal fair catch signal ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" illegal batting ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" illegal batting ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " neutral zone infraction ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " ineligible downfield ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " illegal use of hands ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " kickoff out of bounds | kickoff out-of-bounds ",
                     case=False,
                     regex=True,
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " 12 men on the field ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" illegal block ", case=False, regex=True),
-                play_df.text.str.contains(" personal foul ", case=False, regex=True),
-                play_df.text.str.contains(" false start ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" illegal block ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" personal foul ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" false start ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " substitution infraction ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " illegal formation ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" illegal touching ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" illegal touching ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " sideline interference ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" clipping ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" clipping ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " sideline infraction ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" crackback ", case=False, regex=True),
-                play_df.text.str.contains(" illegal snap ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" crackback ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" illegal snap ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " illegal helmet contact ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" roughing holder ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" roughing holder ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " horse collar tackle ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " illegal participation ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" tripping ", case=False, regex=True),
-                play_df.text.str.contains(" illegal shift ", case=False, regex=True),
-                play_df.text.str.contains(" illegal motion ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" tripping ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" illegal shift ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" illegal motion ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " roughing the kicker ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" delay of game ", case=False, regex=True),
-                play_df.text.str.contains(" targeting ", case=False, regex=True),
-                play_df.text.str.contains(" face mask ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" delay of game ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" targeting ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" face mask ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " illegal forward pass ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " intentional grounding ", case=False, regex=True
                 ),
-                play_df.text.str.contains(" illegal kicking ", case=False, regex=True),
-                play_df.text.str.contains(" illegal conduct ", case=False, regex=True),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(" illegal kicking ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(" illegal conduct ", case=False, regex=True),
+                play_df.cleaned_text.str.contains(
                     " kick catching interference ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " unnecessary roughness ", case=False, regex=True
                 ),
-                play_df.text.str.contains("Penalty, UR"),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains("Penalty, UR"),
+                play_df.cleaned_text.str.contains(
                     " unsportsmanlike conduct ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " running into kicker ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " failure to wear required equipment ", case=False, regex=True
                 ),
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     " player disqualification ", case=False, regex=True
                 ),
                 (play_df.penalty_flag == True),
@@ -1256,7 +1266,7 @@ class CFBPlayProcess(object):
         play_df["yds_penalty"] = np.select(
             [
                 (play_df.penalty_flag == True)
-                & (play_df.text.str.contains(r"ards\)", case=False, regex=True))
+                & (play_df.cleaned_text.str.contains(r"ards\)", case=False, regex=True))
                 & (play_df.yds_penalty.isna()),
             ],
             [
@@ -1286,7 +1296,7 @@ class CFBPlayProcess(object):
         play_df.loc[:, "id"] = play_df["id"].astype(float)
         play_df = self.__helper_cfb_sort_plays__(play_df)
         play_df.drop_duplicates(
-            subset=["text", "id", "type.text", "start.down", "sequenceNumber"], keep="last", inplace=True
+            subset=["cleaned_text", "id", "type.text", "start.down", "sequenceNumber"], keep="last", inplace=True
         )
         play_df = play_df[
             (
@@ -1325,26 +1335,26 @@ class CFBPlayProcess(object):
         # --- Touchdown, Fumble, Special Teams flags -----------------
         play_df.loc[:, "scoring_play"] = False
         play_df.loc[play_df["type.text"].isin(scores_vec), "scoring_play"] = True
-        play_df["td_play"] = play_df.text.str.contains(
+        play_df["td_play"] = play_df.cleaned_text.str.contains(
             r"touchdown|for a TD", case=False, flags=0, na=False, regex=True
         )
         play_df["touchdown"] = play_df["type.text"].str.contains(
             "touchdown", case=False, flags=0, na=False, regex=True
         )
         ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
-        play_df["td_check"] = play_df["text"].str.contains(
+        play_df["td_check"] = play_df["cleaned_text"].str.contains(
             "Touchdown", case=False, flags=0, na=False, regex=True
         )
-        play_df["safety"] = play_df["text"].str.contains(
+        play_df["safety"] = play_df["cleaned_text"].str.contains(
             "safety", case=False, flags=0, na=False, regex=True
         )
 
         # --- Fumbles----
         play_df["fumble_vec"] = np.select(
             [
-                play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True),
-                (~play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Rush") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
-                (~play_df["text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Sack") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                play_df["cleaned_text"].str.contains("fumble", case=False, flags=0, na=False, regex=True),
+                (~play_df["cleaned_text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Rush") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+                (~play_df["cleaned_text"].str.contains("fumble", case=False, flags=0, na=False, regex=True)) & (play_df["type.text"] == "Sack") & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
             ],
             [
                 True,
@@ -1353,7 +1363,7 @@ class CFBPlayProcess(object):
             ],
             default=False,
         )
-        play_df["forced_fumble"] = play_df["text"].str.contains(
+        play_df["forced_fumble"] = play_df["cleaned_text"].str.contains(
             "forced by", case=False, flags=0, na=False, regex=True
         )
         # --- Kicks----
@@ -1361,25 +1371,25 @@ class CFBPlayProcess(object):
         play_df["kickoff_tb"] = np.select(
             [
                 (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         "touchback", case=False, flags=0, na=False, regex=True
                     )
                 )
                 & (play_df.kickoff_play == True),
                 (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         "fair catch", case=False, flags=0, na=False, regex=True
                     )
                 )
                 & (play_df.kickoff_play == True),
                 (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         "fair caught", case=False, flags=0, na=False, regex=True
                     )
                 )
                 & (play_df.kickoff_play == True),
                 (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         "kickoff$", case=False, flags=0, na=False, regex=True
                     )
                 )
@@ -1389,12 +1399,12 @@ class CFBPlayProcess(object):
             default=False,
         )
         play_df["kickoff_onside"] = (
-            play_df["text"].str.contains(
+            play_df["cleaned_text"].str.contains(
                 r"on-side|onside|on side", case=False, flags=0, na=False, regex=True
             )
         ) & (play_df.kickoff_play == True)
         play_df["kickoff_oob"] = (
-            play_df["text"].str.contains(
+            play_df["cleaned_text"].str.contains(
                 r"out-of-bounds|out of bounds",
                 case=False,
                 flags=0,
@@ -1404,22 +1414,22 @@ class CFBPlayProcess(object):
         ) & (play_df.kickoff_play == True)
 
         play_df["kickoff_fair_catch"] = (
-            play_df["text"].str.contains(
+            play_df["cleaned_text"].str.contains(
                 r"fair catch|fair caught", case=False, flags=0, na=False, regex=True
             )
         ) & (play_df.kickoff_play == True)
         play_df["kickoff_downed"] = (
-            play_df["text"].str.contains(
+            play_df["cleaned_text"].str.contains(
                 "downed", case=False, flags=0, na=False, regex=True
             )
         ) & (play_df.kickoff_play == True)
-        play_df["kick_play"] = play_df["text"].str.contains(
+        play_df["kick_play"] = play_df["cleaned_text"].str.contains(
             r"kick|kickoff", case=False, flags=0, na=False, regex=True
         )
         play_df["kickoff_safety"] = (
             (~play_df["type.text"].isin(["Blocked Punt", "Penalty"]))
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "kickoff", case=False, flags=0, na=False, regex=True
                 )
             )
@@ -1427,12 +1437,12 @@ class CFBPlayProcess(object):
         )
         # --- Punts----
         play_df["punt"] = np.where(play_df["type.text"].isin(punt_vec), True, False)
-        play_df["punt_play"] = play_df["text"].str.contains(
+        play_df["punt_play"] = play_df["cleaned_text"].str.contains(
             "punt", case=False, flags=0, na=False, regex=True
         )
         play_df["punt_tb"] = np.where(
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "touchback", case=False, flags=0, na=False, regex=True
                 )
             )
@@ -1442,7 +1452,7 @@ class CFBPlayProcess(object):
         )
         play_df["punt_oob"] = np.where(
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     r"out-of-bounds|out of bounds",
                     case=False,
                     flags=0,
@@ -1456,7 +1466,7 @@ class CFBPlayProcess(object):
         )
         play_df["punt_fair_catch"] = np.where(
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     r"fair catch|fair caught", case=False, flags=0, na=False, regex=True
                 )
             )
@@ -1466,7 +1476,7 @@ class CFBPlayProcess(object):
         )
         play_df["punt_downed"] = np.where(
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "downed", case=False, flags=0, na=False, regex=True
                 )
             )
@@ -1477,7 +1487,7 @@ class CFBPlayProcess(object):
         play_df["punt_safety"] = np.where(
             (play_df["type.text"].isin(["Blocked Punt", "Punt"]))
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "punt", case=False, flags=0, na=False, regex=True
                 )
             )
@@ -1492,7 +1502,7 @@ class CFBPlayProcess(object):
         )
         play_df["punt_blocked"] = np.where(
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "blocked", case=False, flags=0, na=False, regex=True
                 )
             )
@@ -1523,7 +1533,7 @@ class CFBPlayProcess(object):
                             "Fumble Return Touchdown",
                         ]
                     )
-                    & play_df["text"].str.contains("run for")
+                    & play_df["cleaned_text"].str.contains("run for")
                 )
             ),
             True,
@@ -1551,7 +1561,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Safety")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -1559,7 +1569,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Safety")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "pass complete", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -1567,7 +1577,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Recovery (Own)")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             r"pass complete|pass incomplete|pass intercepted",
                             case=False,
                             flags=0,
@@ -1579,7 +1589,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Recovery (Own)")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -1587,7 +1597,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Recovery (Own) Touchdown")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             r"pass complete|pass incomplete|pass intercepted",
                             case=False,
                             flags=0,
@@ -1599,7 +1609,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Recovery (Own) Touchdown")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -1607,7 +1617,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Recovery (Opponent)")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             r"pass complete|pass incomplete|pass intercepted",
                             case=False,
                             flags=0,
@@ -1619,7 +1629,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Recovery (Opponent)")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -1627,7 +1637,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Recovery (Opponent) Touchdown")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             r"pass complete|pass incomplete",
                             case=False,
                             flags=0,
@@ -1639,7 +1649,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Return Touchdown")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             r"pass complete|pass incomplete",
                             case=False,
                             flags=0,
@@ -1651,7 +1661,7 @@ class CFBPlayProcess(object):
                 | (
                     (play_df["type.text"] == "Fumble Return Touchdown")
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -1664,12 +1674,12 @@ class CFBPlayProcess(object):
         play_df['statYardage'] = np.select(
             [
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" complete to ", case=False)) 
+                & (play_df.cleaned_text.str.contains(" complete to ", case=False)) 
                 & (play_df['statYardage'] == 0)
                 & (play_df['start.team.id'] != play_df['end.team.id']),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" complete to ", case=False)) 
+                & (play_df.cleaned_text.str.contains(" complete to ", case=False)) 
                 & (play_df['statYardage'] == 0)
             ],
             [
@@ -1696,7 +1706,7 @@ class CFBPlayProcess(object):
                         )
                         & (play_df["pass"] == True)
                         & (
-                            play_df["text"].str.contains(
+                            play_df["cleaned_text"].str.contains(
                                 "sacked", case=False, flags=0, na=False, regex=True
                             )
                         )
@@ -1964,7 +1974,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"].isin(["Blocked Field Goal"]))
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "for a TD", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -1975,7 +1985,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"].isin(["Blocked Punt"]))
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "for a TD", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2005,7 +2015,7 @@ class CFBPlayProcess(object):
         )
         # -- Fix Pass Interception Return TD play_type labels----
         play_df["type.text"] = np.where(
-            play_df["text"].str.contains(
+            play_df["cleaned_text"].str.contains(
                 "pass intercepted for a TD", case=False, flags=0, na=False, regex=True
             ),
             "Interception Return Touchdown",
@@ -2014,17 +2024,17 @@ class CFBPlayProcess(object):
         # -- Fix Sack/Fumbles Touchdown play_type labels----
         play_df["type.text"] = np.where(
             (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "sacked", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "fumbled", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "TD", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2036,7 +2046,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Pass")
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "pass complete", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2047,7 +2057,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Pass")
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "pass incomplete", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2058,7 +2068,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Pass")
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "pass intercepted", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2069,7 +2079,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Pass")
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "sacked", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2080,7 +2090,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Passing Touchdown")
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "pass intercepted for a TD",
                     case=False,
                     flags=0,
@@ -2094,7 +2104,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Passing Touchdown")
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "pass intercepted for a TD",
                     case=False,
                     flags=0,
@@ -2139,7 +2149,7 @@ class CFBPlayProcess(object):
                 & (play_df.fumble_vec == False),
                 (play_df["type.text"] == "Kickoff")
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "for a TD", case=False, flags=0, na=False, regex=True
                     )
                 )
@@ -2168,7 +2178,7 @@ class CFBPlayProcess(object):
                 & (play_df.change_of_poss == 1),
                 (play_df["type.text"] == "Punt")
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "for a TD", case=False, flags=0, na=False, regex=True
                     )
                 )
@@ -2231,7 +2241,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Extra Point Good")
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "Two-Point", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2241,7 +2251,7 @@ class CFBPlayProcess(object):
         play_df["type.text"] = np.where(
             (play_df["type.text"] == "Extra Point Missed")
             & (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "Two-Point", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2268,14 +2278,14 @@ class CFBPlayProcess(object):
                 )
                 & (play_df["pass"] == True)
                 & (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         "sacked", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (
                     (play_df["type.text"].isin(["Safety"]))
                     & (
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -2307,7 +2317,7 @@ class CFBPlayProcess(object):
                     )
                     & (play_df["pass"] == True)
                     & ~(
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -2340,7 +2350,7 @@ class CFBPlayProcess(object):
                     )
                     & (play_df["pass"] == True)
                     & ~(
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -2348,7 +2358,7 @@ class CFBPlayProcess(object):
                 (
                     (play_df["pass"] == True)
                     & ~(
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -2382,7 +2392,7 @@ class CFBPlayProcess(object):
                     )
                     & (play_df["pass"] == True)
                     & ~(
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -2390,7 +2400,7 @@ class CFBPlayProcess(object):
                 (
                     (play_df["pass"] == True)
                     & ~(
-                        play_df["text"].str.contains(
+                        play_df["cleaned_text"].str.contains(
                             "sacked", case=False, flags=0, na=False, regex=True
                         )
                     )
@@ -2400,7 +2410,7 @@ class CFBPlayProcess(object):
             default=False,
         )
 
-        play_df["pass_breakup"] = play_df["text"].str.contains(
+        play_df["pass_breakup"] = play_df["cleaned_text"].str.contains(
             "broken up by", case=False, flags=0, na=False, regex=True
         )
         # --- Pass/Rush TDs ------
@@ -2434,7 +2444,7 @@ class CFBPlayProcess(object):
         # --- Touchdowns----
         play_df["scoring_play"] = play_df["type.text"].isin(scores_vec)
         play_df["yds_punted"] = (
-            play_df["text"]
+            play_df["cleaned_text"]
             .str.extract(r"(?<= punt for)[^,]+(\d+)", flags=re.IGNORECASE)
             .astype(float)
         )
@@ -2448,7 +2458,7 @@ class CFBPlayProcess(object):
                 )
             )
             | (
-                play_df["text"].str.contains(
+                play_df["cleaned_text"].str.contains(
                     "Field Goal", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -2457,7 +2467,7 @@ class CFBPlayProcess(object):
         )
         play_df["fg_made"] = play_df["type.text"] == "Field Goal Good"
         play_df["yds_fg"] = (
-            play_df["text"]
+            play_df["cleaned_text"]
             .str.extract(
                 r"(\d+)\s?Yd Field|(\d+)\s?YD FG|(\d+)\s?Yard FG|(\d+)\s?Field|(\d+)\s?Yard Field",
                 flags=re.IGNORECASE,
@@ -2621,77 +2631,97 @@ class CFBPlayProcess(object):
             [
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "run for no gain", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "for no gain", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "run for a loss of", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "rush for a loss of", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "run for", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
+                        "rush for", case=False, flags=0, na=False, regex=True
+                    )
+                ) & (
+                    play_df.cleaned_text.str.contains(
+                        " loss ", case=False, flags=0, na=False, regex=True
+                    )
+                ),
+                (play_df.rush == True)
+                & (
+                    play_df.cleaned_text.str.contains(
+                        "rush for", case=False, flags=0, na=False, regex=True
+                    )
+                ) & (
+                    play_df.cleaned_text.str.contains(
+                        " gain ", case=False, flags=0, na=False, regex=True
+                    )
+                ),
+                (play_df.rush == True)
+                & (
+                    play_df.cleaned_text.str.contains(
                         "rush for", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "Yd Run", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "Yd Rush", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "Yard Rush", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "rushed", case=False, flags=0, na=False, regex=True
                     )
                 )
                 & (
-                    ~play_df.text.str.contains(
+                    ~play_df.cleaned_text.str.contains(
                         "touchdown", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.rush == True)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "rushed", case=False, flags=0, na=False, regex=True
                     )
                 )
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         "touchdown", case=False, flags=0, na=False, regex=True
                     )
                 ),
@@ -2712,6 +2742,16 @@ class CFBPlayProcess(object):
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
                 play_df.text.str.extract(r"((?<=run for)[^,]+)", flags=re.IGNORECASE)[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+                -1 * play_df.text.str.extract(r"(\d+) y.*ds loss", flags=re.IGNORECASE)[
+                    0
+                ]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+                play_df.text.str.extract(r"(\d+) y.*ds gain", flags=re.IGNORECASE)[
+                    0
+                ]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
                 play_df.text.str.extract(r"((?<=rush for)[^,]+)", flags=re.IGNORECASE)[
@@ -2742,85 +2782,85 @@ class CFBPlayProcess(object):
         play_df["yds_receiving"] = np.select(
             [
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" complete to", case=False))
-                & (play_df.text.str.contains(r"for no gain", case=False)),
+                & (play_df.cleaned_text.str.contains(" complete to", case=False))
+                & (play_df.cleaned_text.str.contains(r"for no gain", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" complete to", case=False))
-                & (play_df.text.str.contains("for a loss", case=False)),
+                & (play_df.cleaned_text.str.contains(" complete to", case=False))
+                & (play_df.cleaned_text.str.contains("for a loss", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" complete to", case=False))#,
-                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+                & (play_df.cleaned_text.str.contains(" complete to", case=False))#,
+                & (play_df.cleaned_text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
 
                 # (play_df["pass"] == True)
-                # & (play_df.text.str.contains(" complete to", case=False)) & (play_df.downs_turnover == True),
+                # & (play_df.cleaned_text.str.contains(" complete to", case=False)) & (play_df.downs_turnover == True),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" complete to", case=False)),
+                & (play_df.cleaned_text.str.contains(" complete to", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("incomplete", case=False)),
+                & (play_df.cleaned_text.str.contains("incomplete", case=False)),
 
                 (play_df["pass"] == True)
                 & (play_df["type.text"].str.contains("incompletion", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("Yd pass", case=False)),
+                & (play_df.cleaned_text.str.contains("Yd pass", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" pass to", case=False))
-                & (play_df.text.str.contains(r"for no gain", case=False)),
+                & (play_df.cleaned_text.str.contains(" pass to", case=False))
+                & (play_df.cleaned_text.str.contains(r"for no gain", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" pass to", case=False))
-                & (play_df.text.str.contains("for a loss", case=False)),
+                & (play_df.cleaned_text.str.contains(" pass to", case=False))
+                & (play_df.cleaned_text.str.contains("for a loss", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains(" pass to", case=False))#,
-                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+                & (play_df.cleaned_text.str.contains(" pass to", case=False))#,
+                & (play_df.cleaned_text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains(" pass \(\w", case=False))
-                & (play_df.text.str.contains(r"for no gain", case=False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains(" pass \(\w", case=False))
+                & (play_df.cleaned_text.str.contains(r"for no gain", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains(" pass \(\w", case=False))
-                & (play_df.text.str.contains("for a loss", case=False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains(" pass \(\w", case=False))
+                & (play_df.cleaned_text.str.contains("for a loss", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains(" pass \(\w", case=False))
-                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains(" pass \(\w", case=False))
+                & (play_df.cleaned_text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains(" pass$", case=False))
-                & (play_df.text.str.contains(r"for no gain", case=False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains(" pass$", case=False))
+                & (play_df.cleaned_text.str.contains(r"for no gain", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains(" pass$", case=False))
-                & (play_df.text.str.contains("for a loss", case=False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains(" pass$", case=False))
+                & (play_df.cleaned_text.str.contains("for a loss", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains(" pass$", case=False))
-                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains(" pass$", case=False))
+                & (play_df.cleaned_text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains(r"for no gain", case=False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains(r"for no gain", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))
-                & (play_df.text.str.contains("for a loss", case=False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))
+                & (play_df.cleaned_text.str.contains("for a loss", case=False)),
 
                 (play_df["pass"] == True)
-                & (play_df.text.str.contains("^to ", case=False))#,
-                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+                & (play_df.cleaned_text.str.contains("^to ", case=False))#,
+                & (play_df.cleaned_text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
             ],
             [
                 0.0,
@@ -2909,19 +2949,19 @@ class CFBPlayProcess(object):
             [
                 (play_df["pass"] == True)
                 & (play_df["int_td"] == True)
-                & (play_df.text.str.contains("Yd Interception Return", case=False)),
+                & (play_df.cleaned_text.str.contains("Yd Interception Return", case=False)),
                 (play_df["pass"] == True)
                 & (play_df["int"] == True)
-                & (play_df.text.str.contains(r"for no gain", case=False)),
+                & (play_df.cleaned_text.str.contains(r"for no gain", case=False)),
                 (play_df["pass"] == True)
                 & (play_df["int"] == True)
-                & (play_df.text.str.contains(r"for a loss of", case=False)),
+                & (play_df.cleaned_text.str.contains(r"for a loss of", case=False)),
                 (play_df["pass"] == True)
                 & (play_df["int"] == True)
-                & (play_df.text.str.contains(r"for a TD", case=False)),
+                & (play_df.cleaned_text.str.contains(r"for a TD", case=False)),
                 (play_df["pass"] == True)
                 & (play_df["int"] == True)
-                & (play_df.text.str.contains(r"return for", case=False)),
+                & (play_df.cleaned_text.str.contains(r"return for", case=False)),
                 (play_df["pass"] == True) & (play_df["int"] == True),
             ],
             [
@@ -2981,14 +3021,14 @@ class CFBPlayProcess(object):
                 (play_df.kickoff_play == True)
                 & (play_df.fumble_vec == False)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         r"for no gain|fair catch|fair caught", regex=True, case=False
                     )
                 ),
                 (play_df.kickoff_play == True)
                 & (play_df.fumble_vec == False)
                 & (
-                    play_df.text.str.contains(
+                    play_df.cleaned_text.str.contains(
                         r"out-of-bounds|out of bounds", regex=True, case=False
                     )
                 ),
@@ -2997,9 +3037,9 @@ class CFBPlayProcess(object):
                     | (play_df.kickoff_fair_catch == True)
                 ),
                 (play_df.kickoff_play == True)
-                & (play_df.text.str.contains(r"returned by", regex=True, case=False)),
+                & (play_df.cleaned_text.str.contains(r"returned by", regex=True, case=False)),
                 (play_df.kickoff_play == True)
-                & (play_df.text.str.contains(r"return for", regex=True, case=False)),
+                & (play_df.cleaned_text.str.contains(r"return for", regex=True, case=False)),
                 (play_df.kickoff_play == True),
             ],
             [
@@ -3047,7 +3087,7 @@ class CFBPlayProcess(object):
                 (play_df.punt == True) & (play_df.punt_tb == 1),
                 (play_df.punt == True)
                 & (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         r"fair catch|fair caught",
                         case=False,
                         flags=0,
@@ -3063,13 +3103,13 @@ class CFBPlayProcess(object):
                 ),
                 (play_df.punt == True)
                 & (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         r"no return|no gain", case=False, flags=0, na=False, regex=True
                     )
                 ),
                 (play_df.punt == True)
                 & (
-                    play_df["text"].str.contains(
+                    play_df["cleaned_text"].str.contains(
                         r"returned \d+ yards", case=False, flags=0, na=False, regex=True
                     )
                 ),
@@ -3309,7 +3349,7 @@ class CFBPlayProcess(object):
 
         play_df["receiver_player"] = np.where(
             (play_df["pass"] == 1)
-            & ~play_df.text.str.contains(
+            & ~play_df.cleaned_text.str.contains(
                 "sacked", case=False, flags=0, na=False, regex=True
             ),
             play_df.text.str.extract("to (.+)")[0],
@@ -3317,7 +3357,7 @@ class CFBPlayProcess(object):
         )
 
         play_df["receiver_player"] = np.where(
-            play_df.text.str.contains(
+            play_df.cleaned_text.str.contains(
                 "Yd pass", case=False, flags=0, na=False, regex=True
             ),
             play_df.text.str.extract("(.{0,25} )\\d{0,2} Yd pass", flags=re.IGNORECASE)[
@@ -3327,7 +3367,7 @@ class CFBPlayProcess(object):
         )
 
         play_df["receiver_player"] = np.where(
-            play_df.text.str.contains("Yd TD pass", case=False),
+            play_df.cleaned_text.str.contains("Yd TD pass", case=False),
             play_df.text.str.extract(
                 "(.{0,25} )\\d{0,2} Yd TD pass", flags=re.IGNORECASE
             )[0],
@@ -3345,7 +3385,7 @@ class CFBPlayProcess(object):
                         "Fumble Recovery (Opponent)",
                     ]
                 )
-                & play_df.text.str.contains("sacked", case=False)
+                & play_df.cleaned_text.str.contains("sacked", case=False)
             ),
             None,
             play_df["receiver_player"],
@@ -3471,7 +3511,7 @@ class CFBPlayProcess(object):
         )
 
         play_df["interception_player"] = np.where(
-            play_df.text.str.contains("Yd Interception Return", case=True, regex=True),
+            play_df.cleaned_text.str.contains("Yd Interception Return", case=True, regex=True),
             play_df.text.str.extract(
                 "(.{0,25} )\\d{0,2} Yd Interception Return|(.{0,25} )\\d{0,2} yd interception return",
                 flags=re.IGNORECASE,
@@ -3652,10 +3692,10 @@ class CFBPlayProcess(object):
                 )
             )
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "blocked", case=False, flags=0, na=False, regex=True
                 )
-                & play_df.text.str.contains(
+                & play_df.cleaned_text.str.contains(
                     "return", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -3788,10 +3828,10 @@ class CFBPlayProcess(object):
         )
 
         play_df["fumble_player"] = np.where(
-            play_df["text"].str.contains(
+            play_df["cleaned_text"].str.contains(
                 "fumble", case=False, flags=0, na=False, regex=True
             ),
-            play_df["text"].str.extract("(.{0,25} )fumble").bfill(axis=1)[0],
+            play_df["cleaned_text"].str.extract("(.{0,25} )fumble").bfill(axis=1)[0],
             play_df.fumble_player,
         )
         play_df["fumble_player"] = play_df["fumble_player"].str.replace(
@@ -3836,12 +3876,12 @@ class CFBPlayProcess(object):
 
         play_df["fumble_forced_player"] = np.where(
             (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "fumble", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "forced by", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -3876,12 +3916,12 @@ class CFBPlayProcess(object):
 
         play_df["fumble_recovered_player"] = np.where(
             (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "fumble", case=False, flags=0, na=False, regex=True
                 )
             )
             & (
-                play_df.text.str.contains(
+                play_df.cleaned_text.str.contains(
                     "recovered by", case=False, flags=0, na=False, regex=True
                 )
             ),
@@ -4490,7 +4530,7 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(defense_score_vec))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("safety", case=False, regex=True)
                     )
@@ -4499,12 +4539,12 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(defense_score_vec))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("conversion", case=False, regex=False)
                     )
                     & (
-                        ~play_df["text"]
+                        ~play_df["cleaned_text"]
                         .str.lower()
                         .str.contains(r"failed\s?\)", case=False, regex=True)
                     )
@@ -4513,12 +4553,12 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(defense_score_vec))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("conversion", case=False, regex=False)
                     )
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains(r"failed\s?\)", case=False, regex=True)
                     )
@@ -4526,9 +4566,9 @@ class CFBPlayProcess(object):
                 # Defense TD + Kick/PAT Missed
                 (
                     (play_df["type.text"].isin(defense_score_vec))
-                    & (play_df["text"].str.contains("PAT", case=True, regex=False))
+                    & (play_df["cleaned_text"].str.contains("PAT", case=True, regex=False))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains(r"missed\s?\)", case=False, regex=True)
                     )
@@ -4537,7 +4577,7 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(defense_score_vec))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains(kick, case=False, regex=False)
                     )
@@ -4548,12 +4588,12 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(offense_score_vec))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("conversion", case=False, regex=False)
                     )
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains(r"failed\s?\)", case=False, regex=True)
                     )
@@ -4562,12 +4602,12 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(offense_score_vec))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("conversion", case=False, regex=False)
                     )
                     & (
-                        ~play_df["text"]
+                        ~play_df["cleaned_text"]
                         .str.lower()
                         .str.contains(r"failed\s?\)", case=False, regex=True)
                     )
@@ -4596,14 +4636,14 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(offense_score_vec))
                     & (
-                        ~play_df["text"]
+                        ~play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("conversion", case=False, regex=False)
                     )
-                    & ((play_df["text"].str.contains("PAT", case=True, regex=False)))
+                    & ((play_df["cleaned_text"].str.contains("PAT", case=True, regex=False)))
                     & (
                         (
-                            play_df["text"]
+                            play_df["cleaned_text"]
                             .str.lower()
                             .str.contains(r"missed\s?\)", case=False, regex=True)
                         )
@@ -4613,7 +4653,7 @@ class CFBPlayProcess(object):
                 (
                     (play_df["type.text"].isin(offense_score_vec))
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains(kick, case=False, regex=False)
                     )
@@ -4637,7 +4677,7 @@ class CFBPlayProcess(object):
                         | (play_df["type.text"] == "Two Point Rush")
                     )
                     & (
-                        play_df["text"]
+                        play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("no good", case=False, regex=False)
                     )
@@ -4649,7 +4689,7 @@ class CFBPlayProcess(object):
                         | (play_df["type.text"] == "Two Point Rush")
                     )
                     & (
-                        ~play_df["text"]
+                        ~play_df["cleaned_text"]
                         .str.lower()
                         .str.contains("no good", case=False, regex=False)
                     )
