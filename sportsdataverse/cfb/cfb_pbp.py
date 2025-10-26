@@ -346,10 +346,11 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["text"]
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["text"].str.replace("^\\(\d{1,2}:\d{2}\\) ", "", regex=True)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" short|deep ", "", regex=True)
-        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" left|middle|right\s+", "", regex=True)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" left|middle|right ", "", regex=True)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s*No Huddle-Shotgun\s+", "", regex=True)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("No Huddle-", "", regex=False)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s*Shotgun\s+", "", regex=True)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s+", " ", regex=True)
 
         pbp_txt["plays"]["lead_text"] = pbp_txt["plays"]["cleaned_text"].shift(-1)
         pbp_txt["plays"]["lead_start_team"] = pbp_txt["plays"]["start.team.id"].shift(-1)
