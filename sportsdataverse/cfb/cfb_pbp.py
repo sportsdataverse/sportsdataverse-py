@@ -2767,6 +2767,60 @@ class CFBPlayProcess(object):
 
                 (play_df["pass"] == True)
                 & (play_df.text.str.contains("Yd pass", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains(" pass to", case=False))
+                & (play_df.text.str.contains(r"for no gain", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains(" pass to", case=False))
+                & (play_df.text.str.contains("for a loss", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains(" pass to", case=False))#,
+                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains(" pass \(\w", case=False))
+                & (play_df.text.str.contains(r"for no gain", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains(" pass \(\w", case=False))
+                & (play_df.text.str.contains("for a loss", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains(" pass \(\w", case=False))
+                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains(" pass$", case=False))
+                & (play_df.text.str.contains(r"for no gain", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains(" pass$", case=False))
+                & (play_df.text.str.contains("for a loss", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains(" pass$", case=False))
+                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains(r"for no gain", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))
+                & (play_df.text.str.contains("for a loss", case=False)),
+
+                (play_df["pass"] == True)
+                & (play_df.text.str.contains("^to ", case=False))#,
+                & (play_df.text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
             ],
             [
                 0.0,
@@ -2791,6 +2845,59 @@ class CFBPlayProcess(object):
                 0.0,
 
                 play_df.text.str.extract(r"(\d+)\s+Yd\s+pass", flags=re.IGNORECASE)[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                0.0,
+
+                -1
+                * play_df.text.str.extract(
+                    r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
+                )[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+
+                0.0,
+
+                -1
+                * play_df.text.str.extract(
+                    r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
+                )[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                0.0,
+
+                -1
+                * play_df.text.str.extract(
+                    r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
+                )[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                0.0,
+
+                -1
+                * play_df.text.str.extract(
+                    r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
+                )[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
             ],

@@ -547,3 +547,18 @@ def test_yards_per_drive():
     LOGGER.info(box['drives'])
     assert round(box['drives'][1]['plays_per_drive'] * box['drives'][1]['drives']) == 62
     assert round(box['drives'][0]['plays_per_drive'] * box['drives'][0]['drives']) == 70
+
+
+def test_25_pass_receipt_parsing():
+    test = CFBPlayProcess(gameId = 401754622)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    target_plays = plays[
+        plays['text'].isin([
+            "Aaron Philo pass to Dean Patterson for 6 yds to the GWEB 48",
+        ])
+    ]
+
+    assert target_plays.loc[target_plays.index[0], 'yds_receiving'] == 6
+
