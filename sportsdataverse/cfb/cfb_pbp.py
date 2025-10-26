@@ -2511,15 +2511,16 @@ class CFBPlayProcess(object):
             ],
             default=play_df["start.yardsToEndzone"],
         )
+        # errored format punts
         play_df.loc[
             (play_df.punt == True) 
-            | (play_df.fumble_vec == True) 
-            | (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+            & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
+            & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
             "end.yardsToEndzone"
         ] = 100 - play_df.loc[
             (play_df.punt == True) 
-            | (play_df.fumble_vec == True) 
-            | (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]), 
+            & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
+            & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]), 
             "end.yardsToEndzone"
         ]
 

@@ -582,31 +582,39 @@ def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: 
     target_plays = plays[
         plays['text'].isin([play_text])
     ]
-    LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], yards_field] == expected_yards
 
 
-def test_muffed_punt():
-    test = CFBPlayProcess(gameId = 401754571)
+@pytest.mark.parametrize(
+    "game_id, play_text, yds_punted, yds_punt_return, fumble_vec, change_of_poss, end_yardsToEndzone, end_pos_team_id",
+    [
+        # error case
+        (401754571, "(13:37) #47 M.Nichols punt 57 yards to the SU22 #10 D.Kerr return for loss of 11 yards to the SU20 fumbled by #10 D.Kerr at SU20 forced by #17 J.Hamilton recovered by SU #26 T.Haile at SU11, End Of Play", 57, -11, True, True, 89, 183),
+        # base case
+        (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", 48, 14, False, True, 68, 245),
+        # other error case
+        (401754572, "(02:21) #94 D.Joyce punt 47 yards to the STAN15 fair catch by #13 L.Thorpe at STAN15", 47, 0, False, True, 85, 24),
+
+    ]
+)
+def test_errored_punt_yardlines(game_id, play_text, yds_punted, yds_punt_return, fumble_vec, change_of_poss, end_yardsToEndzone, end_pos_team_id):
+    test = CFBPlayProcess(gameId = game_id)
     test.espn_cfb_pbp()
     json_dict_stuff = test.run_processing_pipeline()
 
     plays = test.plays_json
     target_plays = plays[
-        plays['text'].isin(
-            [
-                "(13:37) #47 M.Nichols punt 57 yards to the SU22 #10 D.Kerr return for loss of 11 yards to the SU20 fumbled by #10 D.Kerr at SU20 forced by #17 J.Hamilton recovered by SU #26 T.Haile at SU11, End Of Play"
-            ]
-        )
+        plays['text'].isin([play_text])
     ]
-    LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
     assert len(target_plays) == 1
-    assert target_plays.loc[target_plays.index[0], "yds_punted"] == 57
-    assert target_plays.loc[target_plays.index[0], "yds_punt_return"] == -11
-    assert target_plays.loc[target_plays.index[0], "fumble_vec"] == True
-    assert target_plays.loc[target_plays.index[0], "change_of_poss"] == True
-    assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == 89
-    assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == 183
+    assert target_plays.loc[target_plays.index[0], "yds_punted"] == yds_punted
+    assert target_plays.loc[target_plays.index[0], "yds_punt_return"] == yds_punt_return
+    assert target_plays.loc[target_plays.index[0], "fumble_vec"] == fumble_vec
+    assert target_plays.loc[target_plays.index[0], "change_of_poss"] == change_of_poss
+    assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
+    assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
 
 
