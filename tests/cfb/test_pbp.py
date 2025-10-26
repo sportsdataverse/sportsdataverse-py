@@ -581,7 +581,9 @@ def test_yards_per_drive():
         ("(13:31) Shotgun #10 H.King rush right for 7 yards gain to the SU30, out of bounds at SU30, 1ST DOWN", "yds_rushed", 7),
         ("(07:16) No Huddle-Shotgun #1 J.Haynes rush left for 4 yards loss to the SU35 (#6 J.Heard Jr.; #3 K.Singleton)", "yds_rushed", -4),
         ("(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", "yds_passing", 41),
-        ("(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", "yds_receiving", 41)
+        ("(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", "yds_receiving", 41),
+        ("(09:25) No Huddle-Shotgun #10 R.Collins pass complete short left to #2 J.Cook II caught at SU31, for 4 yards to the SU34 (#2 E.Lightsey)", "yds_passing", 4),
+        ("(05:49) Shotgun #10 H.King pass complete short middle to #85 J.Allen caught at SU33, for 19 yards to the SU09 (#0 B.Long Jr.)", "yds_passing", 19)
     ]
 )
 def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: int):
@@ -593,7 +595,7 @@ def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: 
     target_plays = plays[
         plays['text'].isin([play_text])
     ]
-    # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], yards_field] == expected_yards
 
