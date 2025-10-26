@@ -548,20 +548,28 @@ def test_yards_per_drive():
     assert round(box['drives'][1]['plays_per_drive'] * box['drives'][1]['drives']) == 62
     assert round(box['drives'][0]['plays_per_drive'] * box['drives'][0]['drives']) == 70
 
+# # ESPN pulled the PBP for this game, so can't test anything 
+# @pytest.mark.parametrize(
+#     "play_text,field_name,expected_yards",
+#     [
+#         ("Aaron Philo pass to Dean Patterson for 6 yds to the GWEB 48", 'yds_receiving', 6),
+#         ("Cole Pennington sacked  by Christian Garrett for a loss of 2 yards to the GWEB 37", 'yds_sacked', 2),
+#         ("to Anthony Lowe for 1 yd to the GT 0, for a TD, Nate Hampton pass (Charlie Viorel PAT MISSED)", 'yds_receiving', 1),
+#         ("to Anthony Lowe for 6 yds to the GWEB 35, Nate Hampton pass", 'yds_receiving', 6),
+#         ("to Brett Seither for 21 yds to the GWEB 32 for a 1ST down", 'yds_receiving', 31)
+#     ]
+# )
+# def test_25_pass_receipt_parsing(play_text, field_name, expected_yards):
+#     test = CFBPlayProcess(gameId = 401754622)
+#     test.espn_cfb_pbp()
+#     json_dict_stuff = test.run_processing_pipeline()
+#     plays = test.plays_json
 
-def test_25_pass_receipt_parsing():
-    test = CFBPlayProcess(gameId = 401754622)
-    test.espn_cfb_pbp()
-    json_dict_stuff = test.run_processing_pipeline()
-    plays = test.plays_json
+#     target_plays = plays[
+#         plays['text'].isin([play_text])
+#     ]
 
-    target_plays = plays[
-        plays['text'].isin([
-            "Aaron Philo pass to Dean Patterson for 6 yds to the GWEB 48",
-        ])
-    ]
-
-    assert target_plays.loc[target_plays.index[0], 'yds_receiving'] == 6
+#     assert target_plays.loc[target_plays.index[0], field_name] == expected_yards
 
 @pytest.mark.parametrize(
     "play_text,yards_field,expected_yards",
