@@ -345,7 +345,7 @@ class CFBPlayProcess(object):
         # # remove weird text stuff
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["text"]
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["text"].str.replace("^\\(\d{1,2}:\d{2}\\) ", "", regex=True)
-        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" short|long ", "", regex=True)
+        pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" short|deep ", "", regex=True)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace(" left|middle|right\s+", "", regex=True)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s*No Huddle-Shotgun\s+", "", regex=True)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("No Huddle-", "", regex=False)

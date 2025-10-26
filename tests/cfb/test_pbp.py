@@ -574,11 +574,14 @@ def test_yards_per_drive():
 @pytest.mark.parametrize(
     "play_text,yards_field,expected_yards",
     [
+        ("(14:46) Shotgun #10 H.King pass complete short right to #1 J.Haynes caught at GT27, for 15 yards to the GT40 (#13 G.Bryant III), 1ST DOWN", "yds_passing", 15),
         ("(14:46) Shotgun #10 H.King pass complete short right to #1 J.Haynes caught at GT27, for 15 yards to the GT40 (#13 G.Bryant III), 1ST DOWN", "yds_receiving", 15),
         ("(14:17) No Huddle-Shotgun #10 H.King pass complete short right to #4 I.Canion caught at GT46, for 2 yards to the GT42 fumbled by #4 I.Canion at GT46 forced by #16 C.Peal recovered by SU #8 D.Reese at GT42, End Of Play", "yds_receiving", 2),
         ("(06:15) Shotgun #10 H.King pass incomplete short left to #17 J.Beetham thrown to SU01", "yds_receiving", 0),
         ("(13:31) Shotgun #10 H.King rush right for 7 yards gain to the SU30, out of bounds at SU30, 1ST DOWN", "yds_rushed", 7),
-        ("(07:16) No Huddle-Shotgun #1 J.Haynes rush left for 4 yards loss to the SU35 (#6 J.Heard Jr.; #3 K.Singleton)", "yds_rushed", -4)
+        ("(07:16) No Huddle-Shotgun #1 J.Haynes rush left for 4 yards loss to the SU35 (#6 J.Heard Jr.; #3 K.Singleton)", "yds_rushed", -4),
+        ("(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", "yds_passing", 41),
+        ("(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", "yds_receiving", 41)
     ]
 )
 def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: int):
