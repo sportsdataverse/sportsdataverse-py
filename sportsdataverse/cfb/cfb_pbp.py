@@ -241,7 +241,7 @@ class CFBPlayProcess(object):
                         ["start", "period", "type"],
                         ["start", "yardLine"],
                         ["start", "clock", "displayValue"],
-                        ["start", "cleaned_text"],
+                        ["start", "text"],
                         ["end", "period", "number"],
                         ["end", "period", "type"],
                         ["end", "yardLine"],
