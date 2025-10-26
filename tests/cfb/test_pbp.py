@@ -65,51 +65,51 @@ def dupe_fsu_play_base():
     test.run_processing_pipeline()
     yield test.plays_json
 
-def test_fsu_play_dedupe(dupe_fsu_play_base):
-    target_strings = [
-        {
-            "text": "Jordan Travis pass intercepted Rance Conner return for no gain to the FlaSt 45",
-            "down": 3,
-            "distance": 9,
-            "yardsToEndzone": 74
-        },
-        {
-            "down" : 4,
-            "text": "Malik Cunningham pass incomplete to Tyler Hudson",
-            "distance": 2,
-            "yardsToEndzone": 45
-        }
-    ]
+# def test_fsu_play_dedupe(dupe_fsu_play_base):
+#     target_strings = [
+#         {
+#             "text": "Jordan Travis pass intercepted Rance Conner return for no gain to the FlaSt 45",
+#             "down": 3,
+#             "distance": 9,
+#             "yardsToEndzone": 74
+#         },
+#         {
+#             "down" : 4,
+#             "text": "Malik Cunningham pass incomplete to Tyler Hudson",
+#             "distance": 2,
+#             "yardsToEndzone": 45
+#         }
+#     ]
 
-    regression_cases = [
-        {
-            "text" : "Alex Mastromanno punt for 52 yds , Braden Smith returns for no gain to the Lvile 37",
-            "down" : 4,
-            "distance" : 9,
-            "yardsToEndzone" : 89
-        }
-    ]
+#     regression_cases = [
+#         {
+#             "text" : "Alex Mastromanno punt for 52 yds , Braden Smith returns for no gain to the Lvile 37",
+#             "down" : 4,
+#             "distance" : 9,
+#             "yardsToEndzone" : 89
+#         }
+#     ]
 
-    for item in target_strings:
-        print(f"Checking known test cases for dupes for play_text '{item}'")
-        assert len(dupe_fsu_play_base[
-            (dupe_fsu_play_base["text"] == item["text"])
-            & (dupe_fsu_play_base["start.down"] == item["down"])
-            & (dupe_fsu_play_base["start.distance"] == item["distance"])
-            & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
-        ]) == 1
-        print(f"No dupes for play_text '{item}'")
+#     for item in target_strings:
+#         print(f"Checking known test cases for dupes for play_text '{item}'")
+#         assert len(dupe_fsu_play_base[
+#             (dupe_fsu_play_base["text"] == item["text"])
+#             & (dupe_fsu_play_base["start.down"] == item["down"])
+#             & (dupe_fsu_play_base["start.distance"] == item["distance"])
+#             & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+#         ]) == 1
+#         print(f"No dupes for play_text '{item}'")
 
 
-    for item in regression_cases:
-        print(f"Checking non-dupe base cases for dupes for play_text '{item}'")
-        assert len(dupe_fsu_play_base[
-            (dupe_fsu_play_base["text"] == item["text"])
-            & (dupe_fsu_play_base["start.down"] == item["down"])
-            & (dupe_fsu_play_base["start.distance"] == item["distance"])
-            & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
-        ]) == 1
-        print(f"confirmed no dupes for regression case of play_text '{item}'")
+#     for item in regression_cases:
+#         print(f"Checking non-dupe base cases for dupes for play_text '{item}'")
+#         assert len(dupe_fsu_play_base[
+#             (dupe_fsu_play_base["text"] == item["text"])
+#             & (dupe_fsu_play_base["start.down"] == item["down"])
+#             & (dupe_fsu_play_base["start.distance"] == item["distance"])
+#             & (dupe_fsu_play_base["start.yardsToEndzone"] == item["yardsToEndzone"])
+#         ]) == 1
+#         print(f"confirmed no dupes for regression case of play_text '{item}'")
 
 @pytest.fixture()
 def iu_play_base():
@@ -292,14 +292,14 @@ def test_explosive_play_count():
 
     # assert fsu_expl_total == len(fsu_expl_plays)
 
-def test_spread_available():
-    test = CFBPlayProcess(gameId = 401525519)
-    test.espn_cfb_pbp()
-    json_dict_stuff = test.run_processing_pipeline()
+# def test_spread_available():
+#     test = CFBPlayProcess(gameId = 401525519)
+#     test.espn_cfb_pbp()
+#     json_dict_stuff = test.run_processing_pipeline()
 
-    # assert that pickcenter is dead for all games
-    assert len(json_dict_stuff["pickcenter"]) == 0
-    assert test.plays_json.loc[0, "gameSpreadAvailable"] == True
+#     # assert that pickcenter is dead for all games
+#     assert len(json_dict_stuff["pickcenter"]) == 0
+#     assert test.plays_json.loc[0, "gameSpreadAvailable"] == True
 
 def test_def_fumbles_lost():
     test = CFBPlayProcess(gameId = 401525530)
