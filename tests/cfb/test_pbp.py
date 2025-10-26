@@ -617,4 +617,35 @@ def test_errored_punt_yardlines(game_id, play_text, yds_punted, yds_punt_return,
     assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
     assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
 
+@pytest.mark.parametrize(
+    "game_id, box_type, field_name, player_name",
+    [
+        # error case
+        (401754571, "pass", "passer_player_name", "H.King"),
+        (401754571, "rush", "rusher_player_name", "A.Philo"),
+        (401754571, "receiver", "receiver_player_name", "B.Stockton"),
+        # base case
+        (401752748, "pass", "passer_player_name", "Garrett Nussmeier"),
+        (401752748, "rush", "rusher_player_name", "Caden Durham"),
+        (401752748, "receiver", "receiver_player_name", "Aaron Anderson"),
+    ]
+)
+def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_name):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    box = test.create_box_score()
+    # LOGGER.info(box[box_type])
+    # assert box[box_type][0][field_name] == player_name
+
+
+    players = list(map(lambda x: x[field_name], box[box_type]))
+    # LOGGER.info(players)
+    assert players[0] == player_name
+    assert all(["caught at" not in p for p in players]) == True
+    assert all(["thrown" not in p for p in players]) == True
+    assert all(["Shotgun" not in p for p in players]) == True
+    assert all(["Huddle" not in p for p in players]) == True
+    assert all(["#" not in p for p in players]) == True
 

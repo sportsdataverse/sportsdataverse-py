@@ -1247,7 +1247,7 @@ class CFBPlayProcess(object):
 
         play_df["penalty_text"] = np.select(
             [(play_df.penalty_flag == True)],
-            [play_df.text.str.extract(r"Penalty(.+)", flags=re.IGNORECASE)[0]],
+            [play_df.cleaned_text.str.extract(r"Penalty(.+)", flags=re.IGNORECASE)[0]],
             default=None,
         )
 
@@ -1270,7 +1270,7 @@ class CFBPlayProcess(object):
                 & (play_df.yds_penalty.isna()),
             ],
             [
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"(.{0,4})yards\)|Yards\)|yds\)|Yds\)", flags=re.IGNORECASE
                 )[0]
             ],
@@ -2511,7 +2511,7 @@ class CFBPlayProcess(object):
             ],
             default=play_df["start.yardsToEndzone"],
         )
-        # errored format punts
+        # errored format punts -- NOTE: THESE MUST USE THE RAW PLAY TEXT IN THE "text" COLUMN
         play_df.loc[
             (play_df.punt == True) 
             & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
@@ -2758,48 +2758,48 @@ class CFBPlayProcess(object):
                 0.0,
                 0.0,
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<=run for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<=rush for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(r"((?<=run for)[^,]+)", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"((?<=run for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                -1 * play_df.text.str.extract(r"(\d+) y.*ds loss", flags=re.IGNORECASE)[
+                -1 * play_df.cleaned_text.str.extract(r"(\d+) y.*ds loss", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(r"(\d+) y.*ds gain", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"(\d+) y.*ds gain", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(r"((?<=rush for)[^,]+)", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"((?<=rush for)[^,]+)", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(r"(\d+) Yd Run", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"(\d+) Yd Run", flags=re.IGNORECASE)[
                     0
                 ].astype(float),
-                play_df.text.str.extract(r"(\d+) Yd Rush", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"(\d+) Yd Rush", flags=re.IGNORECASE)[
                     0
                 ].astype(float),
-                play_df.text.str.extract(r"(\d+) Yard Rush", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"(\d+) Yard Rush", flags=re.IGNORECASE)[
                     0
                 ].astype(float),
-                play_df.text.str.extract(r"for (\d+) yards", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"for (\d+) yards", flags=re.IGNORECASE)[
                     0
                 ].astype(float),
-                play_df.text.str.extract(r"for a (\d+) yard", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"for a (\d+) yard", flags=re.IGNORECASE)[
                     0
                 ].astype(float),
             ],
@@ -2894,13 +2894,13 @@ class CFBPlayProcess(object):
                 0.0,
 
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
-                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
@@ -2912,20 +2912,20 @@ class CFBPlayProcess(object):
 
                 0.0,
 
-                play_df.text.str.extract(r"(\d+)\s+Yd\s+pass", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"(\d+)\s+Yd\s+pass", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
                 0.0,
 
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
-                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
@@ -2933,39 +2933,39 @@ class CFBPlayProcess(object):
                 0.0,
 
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
-                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
                 0.0,
 
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
-                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
                 0.0,
 
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
 
-                play_df.text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
             ],
@@ -2993,29 +2993,29 @@ class CFBPlayProcess(object):
                 (play_df["pass"] == True) & (play_df["int"] == True),
             ],
             [
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"(.+) Interception Return", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
                 0.0,
                 -1
-                * play_df.text.str.extract(
+                * play_df.cleaned_text.str.extract(
                     r"((?<= for a loss of)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"((?<= return for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"((?<= return for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.replace("for a 1st", "")
+                play_df.cleaned_text.str.replace("for a 1st", "")
                 .str.extract(r"((?<=for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
@@ -3029,7 +3029,7 @@ class CFBPlayProcess(object):
         play_df["yds_kickoff"] = None
         play_df["yds_kickoff"] = np.where(
             (play_df["kickoff_play"] == True),
-            play_df.text.str.extract(r"((?<= kickoff for)[^,]+)", flags=re.IGNORECASE)[
+            play_df.cleaned_text.str.extract(r"((?<= kickoff for)[^,]+)", flags=re.IGNORECASE)[
                 0
             ]
             .str.extract(r"(\d+)")[0]
@@ -3076,15 +3076,15 @@ class CFBPlayProcess(object):
                 0,
                 40,
                 0,
-                play_df.text.str.extract(r"((?<= for)[^,]+)", flags=re.IGNORECASE)[0]
+                play_df.cleaned_text.str.extract(r"((?<= for)[^,]+)", flags=re.IGNORECASE)[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"((?<= return for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"((?<= returned for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
@@ -3157,21 +3157,21 @@ class CFBPlayProcess(object):
                 20,
                 0,
                 0,
-                -1 * play_df.text.str.extract(
+                -1 * play_df.cleaned_text.str.extract(
                     r"return for loss of (\d+) y.*ds", flags=re.IGNORECASE
                 )[0].astype(float),
                 0,
-                play_df.text.str.extract(r"((?<= returned)[^,]+)", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"((?<= returned)[^,]+)", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"((?<= returns for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"((?<= return for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
@@ -3183,7 +3183,7 @@ class CFBPlayProcess(object):
         play_df["yds_fumble_return"] = np.select(
             [(play_df.fumble_vec == True) & (play_df.kickoff_play == False)],
             [
-                play_df.text.str.extract(
+                play_df.cleaned_text.str.extract(
                     r"((?<= return for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
@@ -3196,7 +3196,7 @@ class CFBPlayProcess(object):
             [(play_df.sack == True)],
             [
                 -1
-                * play_df.text.str.extract(r"((?<= sacked)[^,]+)", flags=re.IGNORECASE)[
+                * play_df.cleaned_text.str.extract(r"((?<= sacked)[^,]+)", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
@@ -3218,7 +3218,7 @@ class CFBPlayProcess(object):
             [(play_df.penalty_detail == 1)],
             [
                 -1
-                * play_df.text.str.extract(r"((?<= sacked)[^,]+)", flags=re.IGNORECASE)[
+                * play_df.cleaned_text.str.extract(r"((?<= sacked)[^,]+)", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
@@ -3313,7 +3313,7 @@ class CFBPlayProcess(object):
         # RB names
         play_df["rush_player"] = np.where(
             (play_df.rush == 1),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 r"(.{0,25} )run |(.{0,25} )\d{0,2} Yd Run|(.{0,25} )rush |(.{0,25} )rushed "
             ).bfill(axis=1)[0],
             None,
@@ -3324,11 +3324,32 @@ class CFBPlayProcess(object):
         play_df["rush_player"] = play_df.rush_player.str.replace(
             r" \((.+)\)", "", regex=True
         )
+        play_df.rush_player = play_df.rush_player.str.replace(
+            r"No Huddle-?", "", regex=True
+        )
+        play_df["rush_player"] = play_df.rush_player.str.replace(
+            r"#\d+ ", "", regex=True
+        )
+        play_df["rush_player"] = np.where(
+            (play_df["rush"] == 1)
+            & play_df.rush_player.str.isnumeric() == True,
+            "TEAM",
+            play_df.rush_player,
+        )
+        play_df["rush_player"] = np.where(
+            (play_df["rush"] == 1)
+            & (
+                (play_df.rush_player.str.strip().str.len == 0)
+                | play_df.rush_player.isna()
+            ),
+            "TEAM",
+            play_df.rush_player,
+        )
 
         # QB names
         play_df["pass_player"] = np.where(
             (play_df["pass"] == 1) & (play_df["type.text"] != "Passing Touchdown"),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 r"pass from (.*?) \(|(.{0,30} )pass |(.+) sacked by|(.+) sacked for|(.{0,30} )incomplete "
             ).bfill(axis=1)[0],
             play_df["pass_player"],
@@ -3339,7 +3360,7 @@ class CFBPlayProcess(object):
 
         play_df["pass_player"] = np.where(
             (play_df["pass"] == 1) & (play_df["type.text"] == "Passing Touchdown"),
-            play_df.text.str.extract("pass from(.+)")[0],
+            play_df.cleaned_text.str.extract("pass from(.+)")[0],
             play_df["pass_player"],
         )
         play_df["pass_player"] = play_df.pass_player.str.replace(
@@ -3352,7 +3373,7 @@ class CFBPlayProcess(object):
 
         play_df["pass_player"] = np.where(
             (play_df["type.text"] == "Passing Touchdown") & play_df.pass_player.isna(),
-            play_df.text.str.extract("(.+)pass(.+)? complete to")[0],
+            play_df.cleaned_text.str.extract("(.+)pass(.+)? complete to")[0],
             play_df["pass_player"],
         )
         play_df["pass_player"] = play_df.pass_player.str.replace(
@@ -3364,7 +3385,7 @@ class CFBPlayProcess(object):
 
         play_df["pass_player"] = np.where(
             (play_df["type.text"] == "Passing Touchdown") & play_df.pass_player.isna(),
-            play_df.text.str.extract("(.+)pass,to")[0],
+            play_df.cleaned_text.str.extract("(.+)pass,to")[0],
             play_df["pass_player"],
         )
 
@@ -3376,6 +3397,12 @@ class CFBPlayProcess(object):
         )
         play_df["pass_player"] = play_df.pass_player.str.replace(
             r" \((.+)\)", "", regex=True
+        )
+        play_df.pass_player = play_df.pass_player.str.replace(
+            r"No Huddle-?", "", regex=True
+        )
+        play_df["pass_player"] = play_df.pass_player.str.replace(
+            r"#\d+ ", "", regex=True
         )
         play_df["pass_player"] = np.where(
             (play_df["pass"] == 1)
@@ -3392,7 +3419,7 @@ class CFBPlayProcess(object):
             & ~play_df.cleaned_text.str.contains(
                 "sacked", case=False, flags=0, na=False, regex=True
             ),
-            play_df.text.str.extract("to (.+)")[0],
+            play_df.cleaned_text.str.extract("to (.+)")[0],
             None,
         )
 
@@ -3400,7 +3427,7 @@ class CFBPlayProcess(object):
             play_df.cleaned_text.str.contains(
                 "Yd pass", case=False, flags=0, na=False, regex=True
             ),
-            play_df.text.str.extract("(.{0,25} )\\d{0,2} Yd pass", flags=re.IGNORECASE)[
+            play_df.cleaned_text.str.extract("(.{0,25} )\\d{0,2} Yd pass", flags=re.IGNORECASE)[
                 0
             ],
             play_df["receiver_player"],
@@ -3408,7 +3435,7 @@ class CFBPlayProcess(object):
 
         play_df["receiver_player"] = np.where(
             play_df.cleaned_text.str.contains("Yd TD pass", case=False),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 "(.{0,25} )\\d{0,2} Yd TD pass", flags=re.IGNORECASE
             )[0],
             play_df["receiver_player"],
@@ -3457,6 +3484,12 @@ class CFBPlayProcess(object):
         )
         play_df.receiver_player = play_df.receiver_player.str.replace(
             ' "', "", case=False, regex=True
+        )
+        play_df.receiver_player = play_df.receiver_player.str.replace(
+            ' caught at .*', "", case=False, regex=True
+        )
+        play_df.receiver_player = play_df.receiver_player.str.replace(
+            ' thrown .*', "", case=False, regex=True
         )
         play_df.receiver_player = np.where(
             ~(play_df.receiver_player.str.contains("III", na=False)),
@@ -3515,11 +3548,17 @@ class CFBPlayProcess(object):
         play_df.receiver_player = play_df.receiver_player.str.replace(
             r" \((.+)\)", "", regex=True
         )
+        play_df.receiver_player = play_df.receiver_player.str.replace(
+            r"No Huddle-?", "", regex=True
+        )
+        play_df["receiver_player"] = play_df.receiver_player.str.replace(
+            r"#\d+ ", "", regex=True
+        )
 
         play_df["sack_players"] = np.where(
             (play_df["sack"] == True)
             | (play_df["fumble_vec"] == True) & (play_df["pass"] == True),
-            play_df.text.str.extract("sacked by(.+)", flags=re.IGNORECASE)[0],
+            play_df.cleaned_text.str.extract("sacked by(.+)", flags=re.IGNORECASE)[0],
             play_df.sack_players,
         )
 
@@ -3546,13 +3585,13 @@ class CFBPlayProcess(object):
             | (play_df["type.text"] == "Interception Return Touchdown")
             & play_df["pass"]
             == True,
-            play_df.text.str.extract("intercepted (.+)", flags=re.IGNORECASE)[0],
+            play_df.cleaned_text.str.extract("intercepted (.+)", flags=re.IGNORECASE)[0],
             play_df.interception_player,
         )
 
         play_df["interception_player"] = np.where(
             play_df.cleaned_text.str.contains("Yd Interception Return", case=True, regex=True),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 "(.{0,25} )\\d{0,2} Yd Interception Return|(.{0,25} )\\d{0,2} yd interception return",
                 flags=re.IGNORECASE,
             ).bfill(axis=1)[0],
@@ -3588,7 +3627,7 @@ class CFBPlayProcess(object):
 
         play_df["pass_breakup_player"] = np.where(
             play_df["pass"] == True,
-            play_df.text.str.extract("broken up by (.+)").bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("broken up by (.+)").bfill(axis=1)[0],
             play_df.pass_breakup_player,
         )
         play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
@@ -3618,7 +3657,7 @@ class CFBPlayProcess(object):
 
         play_df["punter_player"] = np.where(
             play_df["type.text"].str.contains("Punt", regex=True),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 r"(.{0,30}) punt|Punt by (.{0,30})", flags=re.IGNORECASE
             ).bfill(axis=1)[0],
             play_df.punter_player,
@@ -3647,7 +3686,7 @@ class CFBPlayProcess(object):
 
         play_df["punt_return_player"] = np.where(
             play_df["type.text"].str.contains("Punt", regex=True),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 r", (.{0,25}) returns|fair catch by (.{0,25})|, returned by (.{0,25})|yards by (.{0,30})| return by (.{0,25})",
                 flags=re.IGNORECASE,
             ).bfill(axis=1)[0],
@@ -3686,7 +3725,7 @@ class CFBPlayProcess(object):
 
         play_df["punt_block_player"] = np.where(
             play_df["type.text"].str.contains("Punt", case=True, regex=True),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 "punt blocked by (.{0,25})| blocked by(.+)", flags=re.IGNORECASE
             ).bfill(axis=1)[0],
             play_df.punt_block_player,
@@ -3712,7 +3751,7 @@ class CFBPlayProcess(object):
 
         play_df["punt_block_player"] = np.where(
             play_df["type.text"].str.contains("yd return of blocked punt"),
-            play_df.text.str.extract("(.+) yd return of blocked").bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("(.+) yd return of blocked").bfill(axis=1)[0],
             play_df.punt_block_player,
         )
         play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
@@ -3739,7 +3778,7 @@ class CFBPlayProcess(object):
                     "return", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("(.+) return").bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("(.+) return").bfill(axis=1)[0],
             play_df.punt_block_return_player,
         )
         play_df["punt_block_return_player"] = play_df[
@@ -3769,7 +3808,7 @@ class CFBPlayProcess(object):
 
         play_df["kickoff_player"] = np.where(
             play_df["type.text"].str.contains("Kickoff"),
-            play_df.text.str.extract("(.{0,25}) kickoff|(.{0,25}) on-side").bfill(
+            play_df.cleaned_text.str.extract("(.{0,25}) kickoff|(.{0,25}) on-side").bfill(
                 axis=1
             )[0],
             play_df.kickoff_player,
@@ -3780,7 +3819,7 @@ class CFBPlayProcess(object):
 
         play_df["kickoff_return_player"] = np.where(
             play_df["type.text"].str.contains("ickoff"),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 ", (.{0,25}) return|, (.{0,25}) fumble|returned by (.{0,25})|touchback by (.{0,25})",
                 flags=re.IGNORECASE,
             ).bfill(axis=1)[0],
@@ -3801,7 +3840,7 @@ class CFBPlayProcess(object):
 
         play_df["fg_kicker_player"] = np.where(
             play_df["type.text"].str.contains("Field Goal"),
-            play_df.text.str.extract(
+            play_df.cleaned_text.str.extract(
                 "(.{0,25} )\\d{0,2} yd field goal|(.{0,25} )\\d{0,2} yd fg|(.{0,25} )\\d{0,2} yard field goal",
                 flags=re.IGNORECASE,
             ).bfill(axis=1)[0],
@@ -3816,7 +3855,7 @@ class CFBPlayProcess(object):
 
         play_df["fg_block_player"] = np.where(
             play_df["type.text"].str.contains("Field Goal"),
-            play_df.text.str.extract("blocked by (.{0,25})", flags=re.IGNORECASE).bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("blocked by (.{0,25})", flags=re.IGNORECASE).bfill(axis=1)[0],
             play_df.fg_block_player,
         )
         # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
@@ -3833,7 +3872,7 @@ class CFBPlayProcess(object):
             (play_df["type.text"].str.contains("Field Goal"))
             & (play_df["type.text"].str.contains("blocked by|missed"))
             & (play_df["type.text"].str.contains("return")),
-            play_df.text.str.extract("  (.+)").bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("  (.+)").bfill(axis=1)[0],
             play_df.fg_return_player,
         )
 
@@ -3857,7 +3896,7 @@ class CFBPlayProcess(object):
             play_df["type.text"].isin(
                 ["Missed Field Goal Return", "Missed Field Goal Return Touchdown"]
             ),
-            play_df.text.str.extract("(.+)return").bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("(.+)return").bfill(axis=1)[0],
             play_df.fg_return_player,
         )
         play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
@@ -3925,7 +3964,7 @@ class CFBPlayProcess(object):
                     "forced by", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("forced by(.{0,25})").bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("forced by(.{0,25})").bfill(axis=1)[0],
             play_df.fumble_forced_player,
         )
 
@@ -3965,7 +4004,7 @@ class CFBPlayProcess(object):
                     "recovered by", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("recovered by(.{0,30})").bfill(axis=1)[0],
+            play_df.cleaned_text.str.extract("recovered by(.{0,30})").bfill(axis=1)[0],
             play_df.fumble_recovered_player,
         )
 
