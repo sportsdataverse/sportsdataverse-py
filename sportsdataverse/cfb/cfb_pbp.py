@@ -421,8 +421,8 @@ class CFBPlayProcess(object):
                 pbp_txt["plays"]["homeTeamId"].astype(int),
             )
         pbp_txt["plays"]["end.pos_team.id"] = pbp_txt["plays"]["end.team.id"].apply(
-                lambda x: int(x)
-            )
+            lambda x: int(x)
+        )
         pbp_txt["plays"]["end.def_pos_team.id"] = pbp_txt["plays"][
                 "end.def_team.id"
             ].apply(lambda x: int(x))
@@ -2443,10 +2443,25 @@ class CFBPlayProcess(object):
         )
         # --- Touchdowns----
         play_df["scoring_play"] = play_df["type.text"].isin(scores_vec)
-        play_df["yds_punted"] = (
-            play_df["cleaned_text"]
-            .str.extract(r"(?<= punt for)[^,]+(\d+)", flags=re.IGNORECASE)
-            .astype(float)
+
+        play_df["yds_punted"] = None
+        play_df["yds_punted"] = np.select(
+            [
+                (play_df.punt == True) & (play_df.punt_blocked == True),
+                (play_df.punt == True) & (play_df.cleaned_text.str.contains(" punt for ")),
+                (play_df.punt == True),
+            ],
+            [
+                0,
+                play_df.cleaned_text.str.extract(r"((?<= punt for)[^,]+)", flags=re.IGNORECASE)[
+                    0
+                ]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+                play_df.cleaned_text.str.extract(r" punt (\d+) y.*ds ")[0]
+                .astype(float),
+            ],
+            default=play_df.yds_punted,
         )
         play_df["yds_punt_gained"] = np.where(
             play_df.punt == True, play_df["statYardage"], None
@@ -2496,6 +2511,18 @@ class CFBPlayProcess(object):
             ],
             default=play_df["start.yardsToEndzone"],
         )
+        play_df.loc[
+            (play_df.punt == True) 
+            | (play_df.fumble_vec == True) 
+            | (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+            "end.yardsToEndzone"
+        ] = 100 - play_df.loc[
+            (play_df.punt == True) 
+            | (play_df.fumble_vec == True) 
+            | (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]), 
+            "end.yardsToEndzone"
+        ]
+
         play_df["pos_unit"] = np.select(
             [
                 play_df.punt == True,
@@ -3069,14 +3096,17 @@ class CFBPlayProcess(object):
         play_df["yds_punted"] = np.select(
             [
                 (play_df.punt == True) & (play_df.punt_blocked == True),
+                (play_df.punt == True) & (play_df.cleaned_text.str.contains(" punt for ")),
                 (play_df.punt == True),
             ],
             [
                 0,
-                play_df.text.str.extract(r"((?<= punt for)[^,]+)", flags=re.IGNORECASE)[
+                play_df.cleaned_text.str.extract(r"((?<= punt for)[^,]+)", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
+                .astype(float),
+                play_df.cleaned_text.str.extract(r" punt (\d+) y.*ds ")[0]
                 .astype(float),
             ],
             default=play_df.yds_punted,
@@ -3104,6 +3134,12 @@ class CFBPlayProcess(object):
                 (play_df.punt == True)
                 & (
                     play_df["cleaned_text"].str.contains(
+                        r" return for loss of \d+ y.*ds", case=False, flags=0, na=False, regex=True
+                    )
+                ),
+                (play_df.punt == True)
+                & (
+                    play_df["cleaned_text"].str.contains(
                         r"no return|no gain", case=False, flags=0, na=False, regex=True
                     )
                 ),
@@ -3120,6 +3156,9 @@ class CFBPlayProcess(object):
                 20,
                 0,
                 0,
+                -1 * play_df.text.str.extract(
+                    r"return for loss of (\d+) y.*ds", flags=re.IGNORECASE
+                )[0].astype(float),
                 0,
                 play_df.text.str.extract(r"((?<= returned)[^,]+)", flags=re.IGNORECASE)[
                     0

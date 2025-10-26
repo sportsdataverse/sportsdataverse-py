@@ -586,3 +586,27 @@ def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: 
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], yards_field] == expected_yards
 
+
+def test_muffed_punt():
+    test = CFBPlayProcess(gameId = 401754571)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin(
+            [
+                "(13:37) #47 M.Nichols punt 57 yards to the SU22 #10 D.Kerr return for loss of 11 yards to the SU20 fumbled by #10 D.Kerr at SU20 forced by #17 J.Hamilton recovered by SU #26 T.Haile at SU11, End Of Play"
+            ]
+        )
+    ]
+    LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "yds_punted"] == 57
+    assert target_plays.loc[target_plays.index[0], "yds_punt_return"] == -11
+    assert target_plays.loc[target_plays.index[0], "fumble_vec"] == True
+    assert target_plays.loc[target_plays.index[0], "change_of_poss"] == True
+    assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == 89
+    assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == 183
+
+
