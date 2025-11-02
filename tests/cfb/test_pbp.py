@@ -662,3 +662,31 @@ def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_n
     assert all(["Huddle" not in p for p in players]) == True
     assert all(["#" not in p for p in players]) == True
 
+@pytest.mark.parametrize(
+    "game_id, play_text, end_yardsToEndzone, end_pos_team_id",
+    [
+        # # error case
+        (401754579, "(10:26) No Huddle-Shotgun #1 J.Haynes rush middle for 0 yards to the NCSU02 (#52 C.Wallace)", 2, 59),
+        (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", 2, 59),
+        (401754579, "(03:32) Shotgun #10 H.King pass incomplete short middle to #85 J.Allen thrown to GT34 QB hurried by #4 T.Thomas PENALTY NCSU Targeting (#4 T.Thomas) 15 yards from GT28 to GT43, 1ST DOWN. NO PLAY", 57, 59),
+        # # base case
+        (401754579, "(07:03) Shotgun #0 M.Hosley rush middle for 0 yards to the NCSU02 (#1 C.Fordham; #33 K.Soares, Jr.)", 2, 59),
+        (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", 68, 245),
+        (401752748, "TEAM run for a loss of 11 yards to the TA&M 16 TEAM fumbled, recovered by TA&M Rueben Owens II", 84, 245),
+        (401754579, "PENALTY NCSU False Start (#44 C.Hardy) 5 yards from GT06 to GT11. NO PLAY", 11, 152)
+        
+    ]
+)
+def test_25_weird_format_end_of_play(game_id, play_text, end_yardsToEndzone, end_pos_team_id):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    json_dict_stuff = test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+    # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
+    assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id

@@ -385,6 +385,7 @@ class CFBPlayProcess(object):
                 .fillna(method="bfill")
                 .apply(lambda x: int(x))
             )
+        pbp_txt["plays"]["end.team.id_missing"] = pbp_txt["plays"]["end.team.id"].isna()
         pbp_txt["plays"]["end.team.id"] = (
                 pbp_txt["plays"]["end.team.id"]
                 .fillna(value=pbp_txt["plays"]["start.team.id"])
@@ -744,6 +745,23 @@ class CFBPlayProcess(object):
                 pbp_txt["plays"]["end.yardsToEndzone"],
                 pbp_txt["plays"]["end.yard"],
             )
+        
+        # 2025: ESPN has some short-yardage/no-yardage/penalty plays with no end.team.id field and therefore a bugged end.yardsToEndzone field
+        # This is a janky way of filling in end.yardsToEndzone in those very specific scenarios.
+        pbp_txt["plays"]["end.yardsToEndzone"] = np.where(
+            (pbp_txt["plays"]["end.team.id_missing"] == True) & (pbp_txt["plays"]["start.pos_team.id"] == pbp_txt["plays"]["end.pos_team.id"]),
+            100 - pbp_txt["plays"]["end.yardsToEndzone"],
+            pbp_txt["plays"]["end.yardsToEndzone"],
+        )
+        pbp_txt["plays"]["end.yardsToEndzone"] = np.where(
+            (pbp_txt["plays"]["end.team.id_missing"] == True) 
+                & (pbp_txt["plays"]["start.pos_team.id"] == pbp_txt["plays"]["end.pos_team.id"])
+                & (pbp_txt["plays"]["start.pos_team.id"].shift(-1) == pbp_txt["plays"]["end.pos_team.id"])
+                & (pbp_txt["plays"]["type.text"] == "Penalty")
+                & (pbp_txt["plays"]["text"].str.lower().str.contains("no play")),
+            pbp_txt["plays"]["start.yardsToEndzone"].shift(-1),
+            pbp_txt["plays"]["end.yardsToEndzone"],
+        )
         pbp_txt["plays"]["end.yardsToEndzone"] = np.where(
                 (pbp_txt["plays"]["type.text"] == "Penalty")
                 & (
