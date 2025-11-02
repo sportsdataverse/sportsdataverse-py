@@ -607,6 +607,7 @@ def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: 
         (401754571, "(13:37) #47 M.Nichols punt 57 yards to the SU22 #10 D.Kerr return for loss of 11 yards to the SU20 fumbled by #10 D.Kerr at SU20 forced by #17 J.Hamilton recovered by SU #26 T.Haile at SU11, End Of Play", 57, -11, True, True, 89, 183),
         (401754572, "(02:21) #94 D.Joyce punt 47 yards to the STAN15 fair catch by #13 L.Thorpe at STAN15", 47, 0, False, True, 85, 24),
         (401757292, "(08:05) #32 A.Logan punt 39 yards to the JSU10, out of bounds at JSU10", 39, 0, False, True, 90, 55),
+        (401757292, "(05:26) #32 A.Logan punt 45 yards to the JSU19 #1 M.Pettway return 3 yards to the JSU22 (#9 P.Hughes) PENALTY JSU Holding (#80 C.Williams) 10 yards from JSU22 to JSU12", 45, 3, False, True, 88, 55),
         # base case
         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", 48, 14, False, True, 68, 245),
 

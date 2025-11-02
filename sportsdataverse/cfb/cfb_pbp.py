@@ -2535,13 +2535,15 @@ class CFBPlayProcess(object):
             (play_df.punt == True) 
             & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
             & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])
-            & (~(play_df["punt_oob"])),
+            & (~(play_df["punt_oob"]))
+            & (~(play_df["penalty_in_text"])),
             "end.yardsToEndzone"
         ] = 100 - play_df.loc[
             (play_df.punt == True) 
             & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
             & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])
-            & (~(play_df["punt_oob"])),
+            & (~(play_df["punt_oob"]))
+            & (~(play_df["penalty_in_text"])),
             "end.yardsToEndzone"
         ]
 
@@ -3168,6 +3170,12 @@ class CFBPlayProcess(object):
                 (play_df.punt == True)
                 & (
                     play_df["cleaned_text"].str.contains(
+                        r"return \d+ yards", case=False, flags=0, na=False, regex=True
+                    )
+                ),
+                (play_df.punt == True)
+                & (
+                    play_df["cleaned_text"].str.contains(
                         r"returned \d+ yards", case=False, flags=0, na=False, regex=True
                     )
                 ),
@@ -3178,20 +3186,28 @@ class CFBPlayProcess(object):
                 20,
                 0,
                 0,
+
                 -1 * play_df.cleaned_text.str.extract(
                     r"return for loss of (\d+) y.*ds", flags=re.IGNORECASE
                 )[0].astype(float),
+
                 0,
+
+                play_df.cleaned_text.str.extract(r"return (\d+) y.*ds")[0]
+                .astype(float),
+
                 play_df.cleaned_text.str.extract(r"((?<= returned)[^,]+)", flags=re.IGNORECASE)[
                     0
                 ]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
+
                 play_df.cleaned_text.str.extract(
                     r"((?<= returns for)[^,]+)", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
+
                 play_df.cleaned_text.str.extract(
                     r"((?<= return for)[^,]+)", flags=re.IGNORECASE
                 )[0]
