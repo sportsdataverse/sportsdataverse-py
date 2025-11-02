@@ -2534,12 +2534,14 @@ class CFBPlayProcess(object):
         play_df.loc[
             (play_df.punt == True) 
             & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
-            & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
+            & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])
+            & (~(play_df["punt_oob"])),
             "end.yardsToEndzone"
         ] = 100 - play_df.loc[
             (play_df.punt == True) 
             & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
-            & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]), 
+            & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])
+            & (~(play_df["punt_oob"])),
             "end.yardsToEndzone"
         ]
 
