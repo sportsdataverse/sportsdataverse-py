@@ -670,6 +670,7 @@ def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_n
         (401754579, "(10:26) No Huddle-Shotgun #1 J.Haynes rush middle for 0 yards to the NCSU02 (#52 C.Wallace)", 2, 59),
         (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", 2, 59),
         (401754579, "(03:32) Shotgun #10 H.King pass incomplete short middle to #85 J.Allen thrown to GT34 QB hurried by #4 T.Thomas PENALTY NCSU Targeting (#4 T.Thomas) 15 yards from GT28 to GT43, 1ST DOWN. NO PLAY", 57, 59),
+        (401757292, "(05:21) No Huddle-Shotgun #29 D.Taylor rush middle for 0 yards to the JSU16 (#91 G.Stansbury)", 16, 2393),
         # # base case
         (401754579, "(07:03) Shotgun #0 M.Hosley rush middle for 0 yards to the NCSU02 (#1 C.Fordham; #33 K.Soares, Jr.)", 2, 59),
         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", 68, 245),
