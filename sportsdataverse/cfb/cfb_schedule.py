@@ -51,8 +51,15 @@ def espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limi
 
     ev = pd.DataFrame()
     if resp is not None:
-        events_txt = json.loads(resp)
-        events = events_txt.get('events')
+        try:
+            events_txt = json.loads(resp)
+            events = events_txt.get('events')
+            if events is None:
+                events = []
+        except (json.JSONDecodeError, ValueError) as e:
+            print(f"Error decoding JSON from {url}: {e}")
+            events = []
+        
         for event in events:
             event.get('competitions')[0].get('competitors')[0].get('team').pop('links',None)
             event.get('competitions')[0].get('competitors')[1].get('team').pop('links',None)
@@ -129,11 +136,18 @@ def espn_cfb_calendar(season = None, groups = None, ondays = None) -> pd.DataFra
     if ondays is not None:
         url = "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/{}/types/2/calendar/ondays".format(season)
         resp = download(url=url)
-        txt = json.loads(resp).get('eventDate').get('dates')
-        full_schedule = pd.DataFrame(txt,columns=['dates'])
-        full_schedule['dateURL'] = list(map(lambda x: x[:10].replace("-",""),full_schedule['dates']))
-        full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates="
-        full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
+        if resp is not None:
+            try:
+                txt = json.loads(resp).get('eventDate', {}).get('dates', [])
+                full_schedule = pd.DataFrame(txt,columns=['dates'])
+                full_schedule['dateURL'] = list(map(lambda x: x[:10].replace("-",""),full_schedule['dates']))
+                full_schedule['url']="http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates="
+                full_schedule['url']= full_schedule['url'] + full_schedule['dateURL']
+            except (json.JSONDecodeError, ValueError, KeyError) as e:
+                print(f"Error decoding calendar JSON from {url}: {e}")
+                full_schedule = pd.DataFrame()
+        else:
+            full_schedule = pd.DataFrame()
     else:
         if season is None:
             season_url = ''
@@ -145,22 +159,28 @@ def espn_cfb_calendar(season = None, groups = None, ondays = None) -> pd.DataFra
             groups_url = '&groups=' + str(groups)
         url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?{}{}".format(season_url, groups_url)
         resp = download(url=url)
-        txt = json.loads(resp)
-        txt = txt.get('leagues')[0].get('calendar')
         full_schedule = pd.DataFrame()
-        for i in range(len(txt)):
-            if txt[i].get('entries', None) is not None:
-                reg = pd.json_normalize(data = txt[i],
-                                        record_path = 'entries',
-                                        meta=["label","value","startDate","endDate"],
-                                        meta_prefix='season_type_',
-                                        record_prefix='week_',
-                                        errors="ignore",
-                                        sep='_')
-                full_schedule = pd.concat([full_schedule,reg], ignore_index=True)
-        full_schedule['season']=season
-        full_schedule.columns = [underscore(c) for c in full_schedule.columns.tolist()]
-        full_schedule = full_schedule.rename(columns={"week_value": "week", "season_type_value": "season_type"})
+        if resp is not None:
+            try:
+                txt = json.loads(resp)
+                txt = txt.get('leagues', [{}])[0].get('calendar', [])
+                for i in range(len(txt)):
+                    if txt[i].get('entries', None) is not None:
+                        reg = pd.json_normalize(data = txt[i],
+                                                record_path = 'entries',
+                                                meta=["label","value","startDate","endDate"],
+                                                meta_prefix='season_type_',
+                                                record_prefix='week_',
+                                                errors="ignore",
+                                                sep='_')
+                        full_schedule = pd.concat([full_schedule,reg], ignore_index=True)
+                if not full_schedule.empty:
+                    full_schedule['season']=season
+                    full_schedule.columns = [underscore(c) for c in full_schedule.columns.tolist()]
+                    full_schedule = full_schedule.rename(columns={"week_value": "week", "season_type_value": "season_type"})
+            except (json.JSONDecodeError, ValueError, KeyError, IndexError) as e:
+                print(f"Error decoding calendar JSON from {url}: {e}")
+                full_schedule = pd.DataFrame()
     return full_schedule
 
 def most_recent_cfb_season():

@@ -5,6 +5,7 @@ import time
 import http.client
 import urllib.request
 import json
+import requests
 from urllib.error import URLError, HTTPError, ContentTooShortError
 from datetime import datetime
 from itertools import chain, starmap
@@ -171,10 +172,18 @@ class ESPNHTTP:
         parameters = sorted(parameters.items(), key=lambda kv: kv[0])
 
         if not contents:
-            response = requests.get(url=base_url, params=parameters, headers=request_headers, timeout=timeout)
-            url = response.url
-            status_code = response.status_code
-            contents = response.text
+            try:
+                response = requests.get(url=base_url, params=parameters, headers=request_headers, timeout=timeout)
+                url = response.url
+                status_code = response.status_code
+                contents = response.text
+            except requests.exceptions.RequestException as e:
+                print(f"Request error for {base_url}: {e}")
+                # Return empty response with error status
+                data = self.espn_response(response="", status_code=500, url=base_url)
+                if raise_exception_on_error:
+                    raise Exception(f'RequestError: Failed to fetch data from {base_url}: {e}')
+                return data
 
         contents = self.clean_contents(contents)
 

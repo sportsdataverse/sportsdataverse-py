@@ -4,7 +4,7 @@ import re
 import os
 import json
 import time
-import pkg_resources
+from importlib.resources import files
 from xgboost import Booster, DMatrix
 from sportsdataverse.dl_utils import download, key_check
 from numpy.core.fromnumeric import mean
@@ -18,15 +18,9 @@ from .model_vars import *
 # "safety" : float(p[4]),
 # "opp_safety" : float(p[5]),
 # "no_score" : float(p[6])
-ep_model_file = pkg_resources.resource_filename(
-    "sportsdataverse", "nfl/models/ep_model.model"
-)
-wp_spread_file = pkg_resources.resource_filename(
-    "sportsdataverse", "nfl/models/wp_spread.model"
-)
-qbr_model_file = pkg_resources.resource_filename(
-    "sportsdataverse", "nfl/models/qbr_model.model"
-)
+ep_model_file = str(files("sportsdataverse").joinpath("nfl/models/ep_model.model"))
+wp_spread_file = str(files("sportsdataverse").joinpath("nfl/models/wp_spread.model"))
+qbr_model_file = str(files("sportsdataverse").joinpath("nfl/models/qbr_model.model"))
 
 ep_model = Booster({"nthread": 4})  # init model
 ep_model.load_model(ep_model_file)
@@ -3194,7 +3188,7 @@ class NFLPlayProcess(object):
 
         play_df["pass_breakup_player"] = np.where(
             play_df["pass"] == True,
-            play_df.text.str.extract("broken up by (.+)"),
+            play_df.text.str.extract("broken up by (.+)")[0],
             play_df.pass_breakup_player,
         )
         play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
@@ -3318,7 +3312,7 @@ class NFLPlayProcess(object):
 
         play_df["punt_block_player"] = np.where(
             play_df["type.text"].str.contains("yd return of blocked punt"),
-            play_df.text.str.extract("(.+) yd return of blocked"),
+            play_df.text.str.extract("(.+) yd return of blocked")[0],
             play_df.punt_block_player,
         )
         play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
@@ -3345,7 +3339,7 @@ class NFLPlayProcess(object):
                     "return", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("(.+) return"),
+            play_df.text.str.extract("(.+) return")[0],
             play_df.punt_block_return_player,
         )
         play_df["punt_block_return_player"] = play_df[
@@ -3420,7 +3414,7 @@ class NFLPlayProcess(object):
 
         play_df["fg_block_player"] = np.where(
             play_df["type.text"].str.contains("Field Goal"),
-            play_df.text.str.extract("blocked by (.{0,25})"),
+            play_df.text.str.extract("blocked by (.{0,25})")[0],
             play_df.fg_block_player,
         )
         play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
@@ -3437,7 +3431,7 @@ class NFLPlayProcess(object):
             (play_df["type.text"].str.contains("Field Goal"))
             & (play_df["type.text"].str.contains("blocked by|missed"))
             & (play_df["type.text"].str.contains("return")),
-            play_df.text.str.extract("  (.+)"),
+            play_df.text.str.extract("  (.+)")[0],
             play_df.fg_return_player,
         )
 
@@ -3461,7 +3455,7 @@ class NFLPlayProcess(object):
             play_df["type.text"].isin(
                 ["Missed Field Goal Return", "Missed Field Goal Return Touchdown"]
             ),
-            play_df.text.str.extract("(.+)return"),
+            play_df.text.str.extract("(.+)return")[0],
             play_df.fg_return_player,
         )
         play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
@@ -3475,7 +3469,7 @@ class NFLPlayProcess(object):
             play_df["text"].str.contains(
                 "fumble", case=False, flags=0, na=False, regex=True
             ),
-            play_df["text"].str.extract("(.{0,25} )fumble"),
+            play_df["text"].str.extract("(.{0,25} )fumble")[0],
             play_df.fumble_player,
         )
         play_df["fumble_player"] = play_df["fumble_player"].str.replace(
@@ -3529,7 +3523,7 @@ class NFLPlayProcess(object):
                     "forced by", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("forced by(.{0,25})"),
+            play_df.text.str.extract("forced by(.{0,25})")[0],
             play_df.fumble_forced_player,
         )
 
@@ -3569,7 +3563,7 @@ class NFLPlayProcess(object):
                     "recovered by", case=False, flags=0, na=False, regex=True
                 )
             ),
-            play_df.text.str.extract("recovered by(.{0,30})"),
+            play_df.text.str.extract("recovered by(.{0,30})")[0],
             play_df.fumble_recovered_player,
         )
 
@@ -4795,7 +4789,7 @@ class NFLPlayProcess(object):
         play_df["drive_start"] = play_df["drive_start"].astype(float)
         play_df["drive_play_index"] = base_groups["scrimmage_play"].apply(
             lambda x: x.cumsum()
-        )
+        ).reset_index(level=0, drop=True)
         play_df["drive_offense_plays"] = np.where(
             (play_df["sp"] == False) & (play_df["scrimmage_play"] == True),
             play_df["play"].astype(int),
@@ -4803,8 +4797,8 @@ class NFLPlayProcess(object):
         )
         play_df["prog_drive_EPA"] = base_groups["EPA_scrimmage"].apply(
             lambda x: x.cumsum()
-        )
-        play_df["prog_drive_WPA"] = base_groups["wpa"].apply(lambda x: x.cumsum())
+        ).reset_index(level=0, drop=True)
+        play_df["prog_drive_WPA"] = base_groups["wpa"].apply(lambda x: x.cumsum()).reset_index(level=0, drop=True)
         play_df["drive_offense_yards"] = np.where(
             (play_df["sp"] == False) & (play_df["scrimmage_play"] == True),
             play_df["statYardage"],
@@ -4812,7 +4806,7 @@ class NFLPlayProcess(object):
         )
         play_df["drive_total_yards"] = play_df.groupby(["drive.id"])[
             "drive_offense_yards"
-        ].apply(lambda x: x.cumsum())
+        ].apply(lambda x: x.cumsum()).reset_index(level=0, drop=True)
         return play_df
 
     def create_box_score(self):

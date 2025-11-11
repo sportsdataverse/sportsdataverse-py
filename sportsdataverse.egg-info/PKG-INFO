@@ -1,30 +1,50 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: sportsdataverse
-Version: 0.0.36
+Version: 0.0.36.2.36
 Summary: Retrieve Sports data in Python
-Home-page: https://github.com/sportsdataverse/sportsdataverse-py
-Author: Saiem Gilani
-Author-email: saiem.gilani@gmail.com
-Maintainer: Saiem Gilani
-License: MIT
-Project-URL: Docs, https://py.sportsdataverse.org/
+Author-email: Saiem Gilani <saiem.gilani@gmail.com>
+Maintainer-email: Saiem Gilani <saiem.gilani@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/sportsdataverse/sportsdataverse-py
+Project-URL: Documentation, https://py.sportsdataverse.org/
 Project-URL: Bug Tracker, https://github.com/sportsdataverse/sportsdataverse-py/issues
-Keywords: nfl college football data epa statistics web scraping
+Keywords: nfl,college,football,data,epa,statistics,web,scraping
 Classifier: Development Status :: 3 - Alpha
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Software Development :: Libraries
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
-Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
-Provides-Extra: tests
-Provides-Extra: docs
-Provides-Extra: models
-Provides-Extra: all
 License-File: LICENSE
+Requires-Dist: numpy>=1.26.4
+Requires-Dist: pandas>=1.5.3
+Requires-Dist: tqdm>=4.67.1
+Requires-Dist: beautifulsoup4>=4.14.3
+Requires-Dist: inflection>=0.5.1
+Requires-Dist: requests>=2.32.5
+Requires-Dist: lxml>=6.0.2
+Requires-Dist: pyarrow>=21.0.0
+Requires-Dist: pyjanitor>=0.32.1
+Requires-Dist: pyreadr>=0.5.4
+Requires-Dist: scipy>=1.13.1
+Requires-Dist: matplotlib>=3.9.4
+Requires-Dist: attrs>=25.4.0
+Requires-Dist: xgboost<3
+Requires-Dist: ruff>=0.14.7
+Provides-Extra: tests
+Requires-Dist: pytest>=8.4.2; extra == "tests"
+Requires-Dist: mypy>=1.19.0; extra == "tests"
+Requires-Dist: pytest-cov>=7.0.0; extra == "tests"
+Requires-Dist: pytest-xdist>=3.8.0; extra == "tests"
+Provides-Extra: docs
+Requires-Dist: sphinx>=7.4.7; extra == "docs"
+Provides-Extra: all
+Requires-Dist: pytest>=8.4.2; extra == "all"
+Requires-Dist: mypy>=1.19.0; extra == "all"
+Requires-Dist: pytest-cov>=7.0.0; extra == "all"
+Requires-Dist: pytest-xdist>=3.8.0; extra == "all"
+Requires-Dist: sphinx>=7.4.7; extra == "all"
+Dynamic: license-file
 
 # sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>
 <!-- badges: start -->

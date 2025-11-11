@@ -14,10 +14,17 @@ def nfl_token_gen():
       'Content-Type': 'application/x-www-form-urlencoded'
     }
 
-    response = requests.request("POST", url, headers=headers, data = payload)
-
-    access_token = json.loads(response.content)['access_token']
-    return access_token
+    try:
+        response = requests.request("POST", url, headers=headers, data = payload)
+        response.raise_for_status()
+        access_token = json.loads(response.content)['access_token']
+        return access_token
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching NFL token from {url}: {e}")
+        raise ValueError(f"Failed to generate NFL API token: {e}")
+    except (json.JSONDecodeError, KeyError) as e:
+        print(f"Error parsing NFL token response: {e}")
+        raise ValueError(f"Failed to parse NFL API token: {e}")
 
 def nfl_headers_gen():
     token = nfl_token_gen()
@@ -54,8 +61,17 @@ def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
         headers = nfl_headers_gen()
     pbp_txt = {}
     summary_url = f"https://api.nfl.com/experience/v1/gamedetails/{game_id}"
-    summary_resp = requests.get(summary_url, headers=headers)
-    summary = summary_resp.json()
+    
+    try:
+        summary_resp = requests.get(summary_url, headers=headers)
+        summary_resp.raise_for_status()
+        summary = summary_resp.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching NFL game details from {summary_url}: {e}")
+        raise ValueError(f"Failed to fetch NFL game details: {e}")
+    except json.JSONDecodeError as e:
+        print(f"Error parsing NFL game details JSON: {e}")
+        raise ValueError(f"Failed to parse NFL game details: {e}")
 
     incoming_keys_expected = [
         'attendance',

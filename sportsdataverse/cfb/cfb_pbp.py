@@ -4,9 +4,8 @@ import re
 import os
 import json
 import time
-import pkg_resources
+from importlib.resources import files
 from xgboost import Booster, DMatrix
-from numpy.core.fromnumeric import mean
 from functools import reduce, partial
 from sportsdataverse.dl_utils import download, key_check
 from .model_vars import *
@@ -19,15 +18,9 @@ import logging
 # "safety" : float(p[4]),
 # "opp_safety" : float(p[5]),
 # "no_score" : float(p[6])
-ep_model_file = pkg_resources.resource_filename(
-    "sportsdataverse", "cfb/models/ep_model.model"
-)
-wp_spread_file = pkg_resources.resource_filename(
-    "sportsdataverse", "cfb/models/wp_spread.model"
-)
-qbr_model_file = pkg_resources.resource_filename(
-    "sportsdataverse", "cfb/models/qbr_model.model"
-)
+ep_model_file = str(files("sportsdataverse").joinpath("cfb/models/ep_model.model"))
+wp_spread_file = str(files("sportsdataverse").joinpath("cfb/models/wp_spread.model"))
+qbr_model_file = str(files("sportsdataverse").joinpath("cfb/models/qbr_model.model"))
 
 ep_model = Booster({"nthread": 4})  # init model
 ep_model.load_model(ep_model_file)
@@ -163,7 +156,14 @@ class CFBPlayProcess(object):
         # summary endpoint for pickcenter array
         summary_url = f"https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={self.gameId}&{cache_buster}"
         summary_resp = download(summary_url)
-        summary = json.loads(summary_resp)
+        
+        if summary_resp is None:
+            raise ValueError(f"Failed to download summary data from {summary_url}")
+        
+        try:
+            summary = json.loads(summary_resp)
+        except (json.JSONDecodeError, ValueError) as e:
+            raise ValueError(f"Failed to decode JSON from {summary_url}: {e}")
         incoming_keys_expected = [
             'boxscore', 'format', 'gameInfo', 'drives', 'leaders', 'broadcasts',
             'predictor', 'pickcenter', 'againstTheSpread', 'odds', 'winprobability',
@@ -232,9 +232,17 @@ class CFBPlayProcess(object):
         odds_url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/{self.gameId}/competitions/{self.gameId}/odds?limit=100&{cache_buster}"
 
         odds_resp = download(odds_url)
-        odds = json.loads(odds_resp)
-        if len(odds['items']) == 0:
+        if odds_resp is None:
             # spread, overUnder, homeFavorite, gameSpreadAvailable 
+            return (2.5, 55.5, True, False)
+        
+        try:
+            odds = json.loads(odds_resp)
+            if len(odds.get('items', [])) == 0:
+                # spread, overUnder, homeFavorite, gameSpreadAvailable 
+                return (2.5, 55.5, True, False)
+        except (json.JSONDecodeError, ValueError) as e:
+            print(f"Error decoding odds JSON from {odds_url}: {e}")
             return (2.5, 55.5, True, False)
 
         # first index is assumedly ESPN BET
@@ -5078,11 +5086,11 @@ class CFBPlayProcess(object):
             Yds = ('yds_passing', sum),
             Pass_TD = ('pass_td', sum),
             Int = ('int', sum),
-            YPA = ('yds_passing', mean),
+            YPA = ('yds_passing', np.mean),
             EPA = ('EPA', sum),
-            EPA_per_Play = ('EPA', mean),
+            EPA_per_Play = ('EPA', np.mean),
             WPA = ('wpa', sum),
-            SR = ('EPA_success', mean),
+            SR = ('EPA_success', np.mean),
             Sck = ('sack_vec', sum),
             SckYds = ('yds_sacked', sum)
         ).round(2)
@@ -5118,11 +5126,11 @@ class CFBPlayProcess(object):
             Car= ('rush', sum),
             Yds= ('yds_rushed',sum),
             Rush_TD = ('rush_td',sum),
-            YPC= ('yds_rushed', mean),
+            YPC= ('yds_rushed', np.mean),
             EPA= ('EPA', sum),
-            EPA_per_Play= ('EPA', mean),
+            EPA_per_Play= ('EPA', np.mean),
             WPA= ('wpa', sum),
-            SR = ('EPA_success', mean),
+            SR = ('EPA_success', np.mean),
             Fum = ('fumble_vec', sum),
             Fum_Lost = ('fumble_lost', sum)
         ).round(2)
@@ -5134,11 +5142,11 @@ class CFBPlayProcess(object):
             Tar= ('target',sum),
             Yds= ('yds_receiving',sum),
             Rec_TD = ('pass_td', sum),
-            YPT= ('yds_receiving', mean),
+            YPT= ('yds_receiving', np.mean),
             EPA= ('EPA', sum),
-            EPA_per_Play= ('EPA', mean),
+            EPA_per_Play= ('EPA', np.mean),
             WPA= ('wpa', sum),
-            SR = ('EPA_success', mean),
+            SR = ('EPA_success', np.mean),
             Fum = ('fumble_vec', sum),
             Fum_Lost = ('fumble_lost', sum)
         ).round(2)
@@ -5160,15 +5168,15 @@ class CFBPlayProcess(object):
             scrimmage_plays = ('scrimmage_play', sum),
             EPA_overall_off = ('EPA', sum),
             EPA_overall_offense = ('EPA', sum),
-            EPA_per_play = ('EPA', mean),
+            EPA_per_play = ('EPA', np.mean),
             EPA_non_explosive = ('EPA_non_explosive', sum),
-            EPA_non_explosive_per_play = ('EPA_non_explosive', mean),
+            EPA_non_explosive_per_play = ('EPA_non_explosive', np.mean),
             EPA_explosive = ('EPA_explosive', sum),
-            EPA_explosive_rate = ('EPA_explosive', mean),
-            passes_rate = ('pass', mean),
+            EPA_explosive_rate = ('EPA_explosive', np.mean),
+            passes_rate = ('pass', np.mean),
             off_yards = ('statYardage', sum),
             total_off_yards = ('statYardage', sum),
-            yards_per_play = ('statYardage', mean)
+            yards_per_play = ('statYardage', np.mean)
         ).round(2)
 
         team_sp_box = self.plays_json[(self.plays_json.sp == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
@@ -5184,38 +5192,38 @@ class CFBPlayProcess(object):
         team_scrimmage_box_pass = self.plays_json[(self.plays_json["pass"] == True) & (self.plays_json["scrimmage_play"] == True)].fillna(0).groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             passes = ('pass', sum),
             pass_yards = ('yds_receiving', sum),
-            yards_per_pass = ('yds_receiving', mean),
+            yards_per_pass = ('yds_receiving', np.mean),
             EPA_passing_overall = ('EPA', sum),
-            EPA_passing_per_play = ('EPA', mean),
+            EPA_passing_per_play = ('EPA', np.mean),
             EPA_explosive_passing = ('EPA_explosive', sum),
-            EPA_explosive_passing_rate = ('EPA_explosive', mean),
+            EPA_explosive_passing_rate = ('EPA_explosive', np.mean),
             EPA_non_explosive_passing = ('EPA_non_explosive', sum),
-            EPA_non_explosive_passing_per_play = ('EPA_non_explosive', mean),
+            EPA_non_explosive_passing_per_play = ('EPA_non_explosive', np.mean),
         ).round(2)
 
         team_scrimmage_box_rush = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json["scrimmage_play"] == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_rushing_overall = ('EPA', sum),
-            EPA_rushing_per_play = ('EPA', mean),
+            EPA_rushing_per_play = ('EPA', np.mean),
             EPA_explosive_rushing = ('EPA_explosive', sum),
-            EPA_explosive_rushing_rate = ('EPA_explosive', mean),
+            EPA_explosive_rushing_rate = ('EPA_explosive', np.mean),
             EPA_non_explosive_rushing = ('EPA_non_explosive', sum),
-            EPA_non_explosive_rushing_per_play = ('EPA_non_explosive', mean),
+            EPA_non_explosive_rushing_per_play = ('EPA_non_explosive', np.mean),
             rushes = ('rush', sum),
             rush_yards = ('yds_rushed', sum),
-            yards_per_rush = ('yds_rushed', mean),
-            rushing_power_rate = ('power_rush_attempt', mean),
+            yards_per_rush = ('yds_rushed', np.mean),
+            rushing_power_rate = ('power_rush_attempt', np.mean),
         ).round(2)
 
         team_rush_base_box = self.plays_json[(self.plays_json["scrimmage_play"] == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
-            rushes_rate = ('rush', mean),
+            rushes_rate = ('rush', np.mean),
             first_downs_created = ('first_down_created', sum),
-            first_downs_created_rate = ('first_down_created', mean)
+            first_downs_created_rate = ('first_down_created', np.mean)
         )
         team_rush_power_box = self.plays_json[(self.plays_json["power_rush_attempt"] == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_rushing_power = ('EPA', sum),
-            EPA_rushing_power_per_play = ('EPA', mean),
+            EPA_rushing_power_per_play = ('EPA', np.mean),
             rushing_power_success = ('power_rush_success', sum),
-            rushing_power_success_rate = ('power_rush_success', mean),
+            rushing_power_success_rate = ('power_rush_success', np.mean),
             rushing_power = ('power_rush_attempt', sum),
         )
 
@@ -5226,22 +5234,22 @@ class CFBPlayProcess(object):
         self.plays_json.open_field_yards = self.plays_json.open_field_yards.astype(float)
         team_rush_box = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json["scrimmage_play"] == True)].fillna(0).groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             rushing_stuff = ('stuffed_run', sum),
-            rushing_stuff_rate = ('stuffed_run', mean),
+            rushing_stuff_rate = ('stuffed_run', np.mean),
             rushing_stopped = ('stopped_run', sum),
-            rushing_stopped_rate = ('stopped_run', mean),
+            rushing_stopped_rate = ('stopped_run', np.mean),
             rushing_opportunity = ('opportunity_run', sum),
-            rushing_opportunity_rate = ('opportunity_run', mean),
+            rushing_opportunity_rate = ('opportunity_run', np.mean),
             rushing_highlight = ('highlight_run', sum),
-            rushing_highlight_rate = ('highlight_run', mean),
+            rushing_highlight_rate = ('highlight_run', np.mean),
             rushing_highlight_yards = ('highlight_yards', sum),
             line_yards = ('line_yards', sum),
-            line_yards_per_carry = ('line_yards', mean),
+            line_yards_per_carry = ('line_yards', np.mean),
             second_level_yards = ('second_level_yards', sum),
             open_field_yards = ('open_field_yards', sum)
         ).round(2)
 
         team_rush_opp_box = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json["scrimmage_play"] == True) & (self.plays_json.opportunity_run == True)].fillna(0).groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
-            rushing_highlight_yards_per_opp = ('opp_highlight_yards', mean),
+            rushing_highlight_yards_per_opp = ('opp_highlight_yards', np.mean),
         ).round(2)
 
         team_data_frames = [team_rush_opp_box, team_pen_box, team_sp_box, team_scrimmage_box_rush, team_scrimmage_box_pass, team_scrimmage_box, team_base_box, team_rush_base_box, team_rush_power_box, team_rush_box]
@@ -5250,125 +5258,125 @@ class CFBPlayProcess(object):
 
         situation_box_normal = self.plays_json[(self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success = ('EPA_success', sum),
-            EPA_success_rate = ('EPA_success', mean),
+            EPA_success_rate = ('EPA_success', np.mean),
         )
 
         situation_box_rz = self.plays_json[(self.plays_json.rz_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_rz = ('EPA_success', sum),
-            EPA_success_rate_rz = ('EPA_success', mean),
+            EPA_success_rate_rz = ('EPA_success', np.mean),
         )
 
         situation_box_third = self.plays_json[(self.plays_json["start.down"] == 3)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_third = ('EPA_success', sum),
-            EPA_success_rate_third = ('EPA_success', mean),
+            EPA_success_rate_third = ('EPA_success', np.mean),
         )
 
         situation_box_pass = self.plays_json[(self.plays_json["pass"] == True) & (self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_pass = ('EPA_success', sum),
-            EPA_success_pass_rate = ('EPA_success', mean),
+            EPA_success_pass_rate = ('EPA_success', np.mean),
         )
 
         situation_box_rush = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_rush = ('EPA_success', sum),
-            EPA_success_rush_rate = ('EPA_success', mean),
+            EPA_success_rush_rate = ('EPA_success', np.mean),
         )
 
         situation_box_middle8 = self.plays_json[(self.plays_json["middle_8"] == True) & (self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             middle_8 = ('middle_8', sum),
-            middle_8_pass_rate = ('pass', mean),
-            middle_8_rush_rate = ('rush', mean),
+            middle_8_pass_rate = ('pass', np.mean),
+            middle_8_rush_rate = ('rush', np.mean),
             EPA_middle_8 = ('EPA', sum),
-            EPA_middle_8_per_play = ('EPA', mean),
+            EPA_middle_8_per_play = ('EPA', np.mean),
             EPA_middle_8_success = ('EPA_success', sum),
-            EPA_middle_8_success_rate = ('EPA_success', mean),
+            EPA_middle_8_success_rate = ('EPA_success', np.mean),
         )
 
         situation_box_middle8_pass = self.plays_json[(self.plays_json["pass"] == True) & (self.plays_json["middle_8"] == True) & (self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             middle_8_pass = ('pass', sum),
             EPA_middle_8_pass = ('EPA', sum),
-            EPA_middle_8_pass_per_play = ('EPA', mean),
+            EPA_middle_8_pass_per_play = ('EPA', np.mean),
             EPA_middle_8_success_pass = ('EPA_success', sum),
-            EPA_middle_8_success_pass_rate = ('EPA_success', mean),
+            EPA_middle_8_success_pass_rate = ('EPA_success', np.mean),
         )
 
         situation_box_middle8_rush = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json["middle_8"] == True) & (self.plays_json.scrimmage_play == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             middle_8_rush = ('rush', sum),
 
             EPA_middle_8_rush = ('EPA', sum),
-            EPA_middle_8_rush_per_play = ('EPA', mean),
+            EPA_middle_8_rush_per_play = ('EPA', np.mean),
 
             EPA_middle_8_success_rush = ('EPA_success', sum),
-            EPA_middle_8_success_rush_rate = ('EPA_success', mean),
+            EPA_middle_8_success_rush_rate = ('EPA_success', np.mean),
         )
 
         situation_box_early = self.plays_json[(self.plays_json.early_down == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_early_down = ('EPA_success', sum),
-            EPA_success_early_down_rate = ('EPA_success', mean),
+            EPA_success_early_down_rate = ('EPA_success', np.mean),
             early_downs = ('early_down', sum),
-            early_down_pass_rate = ('pass', mean),
-            early_down_rush_rate = ('rush', mean),
+            early_down_pass_rate = ('pass', np.mean),
+            early_down_rush_rate = ('rush', np.mean),
             EPA_early_down = ('EPA', sum),
-            EPA_early_down_per_play = ('EPA', mean),
+            EPA_early_down_per_play = ('EPA', np.mean),
             early_down_first_down = ('first_down_created', sum),
-            early_down_first_down_rate = ('first_down_created', mean)
+            early_down_first_down_rate = ('first_down_created', np.mean)
         )
 
         situation_box_early_pass = self.plays_json[(self.plays_json["pass"] == True) & (self.plays_json.early_down == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             early_down_pass = ('pass', sum),
             EPA_early_down_pass = ('EPA', sum),
-            EPA_early_down_pass_per_play = ('EPA', mean),
+            EPA_early_down_pass_per_play = ('EPA', np.mean),
             EPA_success_early_down_pass = ('EPA_success', sum),
-            EPA_success_early_down_pass_rate = ('EPA_success', mean),
+            EPA_success_early_down_pass_rate = ('EPA_success', np.mean),
         )
 
         situation_box_early_rush = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json.early_down == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             early_down_rush = ('rush', sum),
             EPA_early_down_rush = ('EPA', sum),
-            EPA_early_down_rush_per_play = ('EPA', mean),
+            EPA_early_down_rush_per_play = ('EPA', np.mean),
             EPA_success_early_down_rush = ('EPA_success', sum),
-            EPA_success_early_down_rush_rate = ('EPA_success', mean),
+            EPA_success_early_down_rush_rate = ('EPA_success', np.mean),
         )
 
         situation_box_late = self.plays_json[(self.plays_json.late_down == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_late_down = ('EPA_success', sum),
-            EPA_success_late_down_rate = ('EPA_success', mean),
+            EPA_success_late_down_rate = ('EPA_success', np.mean),
             late_downs = ('late_down', sum),
-            late_down_pass_rate = ('pass', mean),
-            late_down_rush_rate = ('rush', mean),
+            late_down_pass_rate = ('pass', np.mean),
+            late_down_rush_rate = ('rush', np.mean),
             EPA_late_down = ('EPA', sum),
-            EPA_late_down_per_play = ('EPA', mean),
+            EPA_late_down_per_play = ('EPA', np.mean),
             late_down_first_down = ('first_down_created', sum),
-            late_down_first_down_rate = ('first_down_created', mean),
-            late_down_avg_distance = ('start.distance', mean)
+            late_down_first_down_rate = ('first_down_created', np.mean),
+            late_down_avg_distance = ('start.distance', np.mean)
         )
 
         situation_box_late_pass = self.plays_json[(self.plays_json["pass"] == True) & (self.plays_json.late_down == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             late_down_pass = ('pass', sum),
             EPA_late_down_pass = ('EPA', sum),
-            EPA_late_down_pass_per_play = ('EPA', mean),
+            EPA_late_down_pass_per_play = ('EPA', np.mean),
             EPA_success_late_down_pass = ('EPA_success', sum),
-            EPA_success_late_down_pass_rate = ('EPA_success', mean),
+            EPA_success_late_down_pass_rate = ('EPA_success', np.mean),
         )
 
         situation_box_late_rush = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json.late_down == True)].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             late_down_rush = ('rush', sum),
             EPA_late_down_rush = ('EPA', sum),
-            EPA_late_down_rush_per_play = ('EPA', mean),
+            EPA_late_down_rush_per_play = ('EPA', np.mean),
             EPA_success_late_down_rush = ('EPA_success', sum),
-            EPA_success_late_down_rush_rate = ('EPA_success', mean),
+            EPA_success_late_down_rush_rate = ('EPA_success', np.mean),
         )
 
         situation_box_standard = self.plays_json[self.plays_json.standard_down == True].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_standard_down = ('EPA_success_standard_down', sum),
-            EPA_success_standard_down_rate = ('EPA_success_standard_down', mean),
+            EPA_success_standard_down_rate = ('EPA_success_standard_down', np.mean),
             EPA_standard_down = ('EPA_success_standard_down', sum),
-            EPA_standard_down_per_play = ('EPA_success_standard_down', mean)
+            EPA_standard_down_per_play = ('EPA_success_standard_down', np.mean)
         )
         situation_box_passing = self.plays_json[self.plays_json.passing_down == True].groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_success_passing_down = ('EPA_success_passing_down', sum),
-            EPA_success_passing_down_rate = ('EPA_success_passing_down', mean),
+            EPA_success_passing_down_rate = ('EPA_success_passing_down', np.mean),
             EPA_passing_down = ('EPA_success_standard_down', sum),
-            EPA_passing_down_per_play = ('EPA_success_standard_down', mean)
+            EPA_passing_down_per_play = ('EPA_success_standard_down', np.mean)
         )
         situation_data_frames = [situation_box_normal, situation_box_pass, situation_box_rush, situation_box_rz, situation_box_third, situation_box_early, situation_box_early_pass, situation_box_early_rush, situation_box_middle8, situation_box_middle8_pass, situation_box_middle8_rush, situation_box_late, situation_box_late_pass, situation_box_late_rush, situation_box_standard, situation_box_passing]
         situation_box = reduce(lambda left,right: pd.merge(left,right,on=['pos_team'], how='outer'), situation_data_frames)
@@ -5381,10 +5389,10 @@ class CFBPlayProcess(object):
             TFL_pass = ('TFL_pass', sum),
             TFL_rush = ('TFL_rush', sum),
             havoc_total = ('havoc', sum),
-            havoc_total_rate = ('havoc', mean),
+            havoc_total_rate = ('havoc', np.mean),
             fumbles = ('forced_fumble', sum),
             def_int = ('int', sum),
-            drive_stopped_rate = ('drive_stopped', mean)
+            drive_stopped_rate = ('drive_stopped', np.mean)
         )
         def_base_box.drive_stopped_rate = 100 * def_base_box.drive_stopped_rate
         def_base_box = def_base_box.replace({np.nan:None})
@@ -5392,16 +5400,16 @@ class CFBPlayProcess(object):
         def_box_havoc_pass = self.plays_json[(self.plays_json.scrimmage_play == True) & (self.plays_json["pass"] == True)].groupby(by=["def_pos_team"], as_index=False, group_keys = False).agg(
             num_pass_plays = ('pass', sum),
             havoc_total_pass = ('havoc', sum),
-            havoc_total_pass_rate = ('havoc', mean),
+            havoc_total_pass_rate = ('havoc', np.mean),
             sacks = ('sack_vec', sum),
-            sacks_rate = ('sack_vec', mean),
+            sacks_rate = ('sack_vec', np.mean),
             pass_breakups = ('pass_breakup', sum)
         )
         def_box_havoc_pass = def_box_havoc_pass.replace({np.nan:None})
 
         def_box_havoc_rush = self.plays_json[(self.plays_json.scrimmage_play == True) & (self.plays_json["rush"] == True)].groupby(by=["def_pos_team"], as_index=False, group_keys = False).agg(
             havoc_total_rush = ('havoc', sum),
-            havoc_total_rush_rate = ('havoc', mean),
+            havoc_total_rush_rate = ('havoc', np.mean),
         )
         def_box_havoc_rush = def_box_havoc_rush.replace({np.nan:None})
 
@@ -5455,7 +5463,7 @@ class CFBPlayProcess(object):
         self.plays_json.drive_start = self.plays_json.drive_start.astype(float)
         drives_data = self.plays_json[(self.plays_json.scrimmage_play == True)].groupby(by=["pos_team","drive.id"], as_index=False, group_keys = False).agg(
             drive_total_available_yards = ('drive_start', lambda x: x.iloc[0]),
-            # drive_total_gained_yards = ('drive.yards', mean),
+            # drive_total_gained_yards = ('drive.yards', np.mean),
             avg_field_position = ('drive_start', lambda x: x.iloc[0]),
             drive_plays = ('scrimmage_play', sum),
             drive_yards = ('statYardage', sum),
@@ -5463,11 +5471,11 @@ class CFBPlayProcess(object):
         ).reset_index().groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             drive_total_available_yards = ('drive_total_available_yards', sum),
             drive_total_gained_yards = ('drive_yards', sum),
-            avg_field_position = ('avg_field_position', mean),
+            avg_field_position = ('avg_field_position', np.mean),
             total_plays = ('drive_plays', sum),
-            plays_per_drive = ('drive_plays', mean),
+            plays_per_drive = ('drive_plays', np.mean),
             total_yards = ('drive_yards', sum),
-            yards_per_drive = ('drive_yards', mean),
+            yards_per_drive = ('drive_yards', np.mean),
             drives = ('drive.id', pd.Series.nunique)
         )
 
