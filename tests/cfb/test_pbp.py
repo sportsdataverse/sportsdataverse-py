@@ -725,3 +725,30 @@ def test_25_weird_format_end_of_play(game_id, play_text, end_yardsToEndzone, end
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
     assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
+
+
+@pytest.mark.parametrize(
+    "game_id, play_text, start_pos_team_id",
+    [
+        # error case
+        (401754591, "Timeout Louisville, clock 01:26", 228),
+
+        # base case
+        (401754591, "Timeout Louisville, clock 05:36", 97),
+        (401752748, "Timeout LSU, clock 13:06", 99),
+        (401752748, "Timeout Texas A&M, clock 04:26", 99),
+        (401754579, "(07:03) Shotgun #0 M.Hosley rush middle for 0 yards to the NCSU02 (#1 C.Fordham; #33 K.Soares, Jr.)", 59),
+    ]
+)
+def test_25_weird_format_timeouts(game_id, play_text, start_pos_team_id):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+    # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "start.pos_team.id"] == start_pos_team_id

@@ -404,10 +404,12 @@ class CFBPlayProcess(object):
                         pbp_txt["plays"]["start.team.id"].astype(int)
                         == pbp_txt["plays"]["awayTeamId"].astype(int)
                     ),
+                    (pbp_txt["plays"]["type.text"] == "Timeout"),
                 ],
                 [
                     pbp_txt["plays"]["awayTeamId"].astype(int),
                     pbp_txt["plays"]["homeTeamId"].astype(int),
+                    pbp_txt["plays"]["end.team.id"]
                 ],
                 default=pbp_txt["plays"]["start.team.id"].astype(int),
             )
