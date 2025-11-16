@@ -2531,13 +2531,13 @@ class CFBPlayProcess(object):
             & (~(play_df["punt_oob"]))
             & (~(play_df["penalty_in_text"])),
             "end.yardsToEndzone"
-        ] = 100 - play_df.loc[
+        ] = play_df.loc[
             (play_df.punt == True) 
             & (play_df.text.str.contains("^\\(\d{1,2}:\d{2}\\) ", regex=True))
             & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])
             & (~(play_df["punt_oob"]))
             & (~(play_df["penalty_in_text"])),
-            "end.yardsToEndzone"
+            "lead_start_yardsToEndzone"
         ]
 
         play_df["pos_unit"] = np.select(
