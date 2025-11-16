@@ -608,21 +608,23 @@ def test_25_yardage_detection(play_text: str, yards_field: str, expected_yards: 
         (401754572, "(02:21) #94 D.Joyce punt 47 yards to the STAN15 fair catch by #13 L.Thorpe at STAN15", 47, 0, False, True, 85, 24),
         (401757292, "(08:05) #32 A.Logan punt 39 yards to the JSU10, out of bounds at JSU10", 39, 0, False, True, 90, 55),
         (401757292, "(05:26) #32 A.Logan punt 45 yards to the JSU19 #1 M.Pettway return 3 yards to the JSU22 (#9 P.Hughes) PENALTY JSU Holding (#80 C.Williams) 10 yards from JSU22 to JSU12", 45, 3, False, True, 88, 55),
+        (401754592, "(11:26) #47 M.Nichols punt 37 yards to the BCE01", 37, None, False, True, 99, 103),
+        (401754592, "(08:35) #28 S.Florio punt 21 yards to the GT 17 fair catch by #3 E.Rivers at GT 17", 21, 0, False, True, 83, 59),
+
         # base case
         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", 48, 14, False, True, 68, 245),
-
     ]
 )
 def test_errored_punt_yardlines(game_id, play_text, yds_punted, yds_punt_return, fumble_vec, change_of_poss, end_yardsToEndzone, end_pos_team_id):
     test = CFBPlayProcess(gameId = game_id)
     test.espn_cfb_pbp()
-    json_dict_stuff = test.run_processing_pipeline()
+    test.run_processing_pipeline()
 
     plays = test.plays_json
     target_plays = plays[
         plays['text'].isin([play_text])
     ]
-    # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "yds_punted"] == yds_punted
     assert target_plays.loc[target_plays.index[0], "yds_punt_return"] == yds_punt_return
@@ -671,18 +673,18 @@ def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_n
         (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", 2, 59),
         (401754579, "(03:32) Shotgun #10 H.King pass incomplete short middle to #85 J.Allen thrown to GT34 QB hurried by #4 T.Thomas PENALTY NCSU Targeting (#4 T.Thomas) 15 yards from GT28 to GT43, 1ST DOWN. NO PLAY", 57, 59),
         (401757292, "(05:21) No Huddle-Shotgun #29 D.Taylor rush middle for 0 yards to the JSU16 (#91 G.Stansbury)", 16, 2393),
+
         # # base case
         (401754579, "(07:03) Shotgun #0 M.Hosley rush middle for 0 yards to the NCSU02 (#1 C.Fordham; #33 K.Soares, Jr.)", 2, 59),
         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", 68, 245),
         (401752748, "TEAM run for a loss of 11 yards to the TA&M 16 TEAM fumbled, recovered by TA&M Rueben Owens II", 84, 245),
         (401754579, "PENALTY NCSU False Start (#44 C.Hardy) 5 yards from GT06 to GT11. NO PLAY", 11, 152)
-        
     ]
 )
 def test_25_weird_format_end_of_play(game_id, play_text, end_yardsToEndzone, end_pos_team_id):
     test = CFBPlayProcess(gameId = game_id)
     test.espn_cfb_pbp()
-    json_dict_stuff = test.run_processing_pipeline()
+    test.run_processing_pipeline()
 
     plays = test.plays_json
     target_plays = plays[
