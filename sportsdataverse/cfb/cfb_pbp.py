@@ -385,6 +385,7 @@ class CFBPlayProcess(object):
                 .fillna(method="bfill")
                 .apply(lambda x: int(x))
             )
+        pbp_txt["plays"]["lead_start_team"] = pbp_txt["plays"]["start.team.id"].shift(-1)
         pbp_txt["plays"]["end.team.id_missing"] = pbp_txt["plays"]["end.team.id"].isna()
         pbp_txt["plays"]["end.team.id"] = (
                 pbp_txt["plays"]["end.team.id"]
@@ -1051,6 +1052,30 @@ class CFBPlayProcess(object):
             ),
             "penalty_1st_conv",
         ] = True
+
+        play_df.loc[
+            (
+                play_df["cleaned_text"].str.contains(
+                    "penalty", case=False, flags=0, na=False, regex=True
+                )
+            )
+            & ~(
+                play_df["cleaned_text"].str.contains(
+                    "1st down", case=False, flags=0, na=False, regex=True
+                )
+            )
+            & (play_df["end.down"] == 1) 
+            & (play_df["start.pos_team.id"] == play_df["lead_start_team"]),
+            "penalty_1st_conv",
+        ] = True
+
+        play_df.loc[
+            (play_df["start.pos_team.id"] == play_df["lead_start_team"]) & (play_df["penalty_1st_conv"]),
+            "end.pos_team.id"
+        ] = play_df.loc[
+            (play_df["start.pos_team.id"] == play_df["lead_start_team"]) & (play_df["penalty_1st_conv"]),
+            "lead_start_team"
+        ]
 
         # -- T/F flag for penalty text but not penalty play type --
         play_df["penalty_in_text"] = False

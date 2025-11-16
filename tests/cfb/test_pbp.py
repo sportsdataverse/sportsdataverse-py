@@ -666,6 +666,37 @@ def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_n
     assert all(["#" not in p for p in players]) == True
 
 @pytest.mark.parametrize(
+    "game_id, play_text, end_yardsToEndzone, end_pos_team_id, penalty_declined, penalty_no_play, penalty_1st_conv",
+    [
+        # error case
+        (401754591, "(11:29) #2 C.Klubnik rush middle for 3 yards loss to the LOU04 fumbled by #2 C.Klubnik at LOU04 recovered by LOU #99 J.Guerad at LOU04, End Of Play PENALTY LOU UNS: Unsportsmanlike Conduct (#21 D.Hutchinson) 2 yards from LOU04 to LOU02", 2, 228, False, False, True),
+
+        # base case
+        (401754591, "(11:24) Shotgun #22 K.Brown rush right for 18 yards gain to the LOU20 (#6 R.Jones), out of bounds PENALTY LOU Holding (#85 N.Kurisky) 1 yard from LOU02 to LOU01. NO PLAY", 99, 97, False, True, False),
+    ]
+)
+def test_25_weird_format_penalty(game_id, play_text, end_yardsToEndzone, end_pos_team_id, penalty_declined, penalty_no_play, penalty_1st_conv):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "start.pos_team.id"] == end_pos_team_id
+    assert target_plays.loc[target_plays.index[0], "lead_start_team"] == end_pos_team_id
+
+    assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
+    assert target_plays.loc[target_plays.index[0], "penalty_1st_conv"] == penalty_1st_conv
+    assert target_plays.loc[target_plays.index[0], "penalty_declined"] == penalty_declined
+    assert target_plays.loc[target_plays.index[0], "penalty_no_play"] == penalty_no_play
+    assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
+
+
+@pytest.mark.parametrize(
     "game_id, play_text, end_yardsToEndzone, end_pos_team_id",
     [
         # # error case
