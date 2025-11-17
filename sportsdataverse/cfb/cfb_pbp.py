@@ -1988,7 +1988,7 @@ class CFBPlayProcess(object):
             play_df["end.pos_team.id"] == play_df.firstHalfKickoffTeamId
         )
         play_df["change_of_poss"] = np.where(
-            play_df["start.pos_team.id"] == play_df["end.pos_team.id"], False, True
+            play_df["start.pos_team.id"] == play_df["start.pos_team.id"].shift(-1), False, True
         )
         play_df["change_of_poss"] = np.where(
             play_df["change_of_poss"].isna(), 0, play_df["change_of_poss"]
@@ -4079,8 +4079,8 @@ class CFBPlayProcess(object):
                 # Flips for Turnovers that aren't kickoffs
                 (
                     (
-                        (play_df["type.text"].isin(end_change_vec))
-                        | (play_df.downs_turnover == True)
+                        ((play_df["type.text"].isin(end_change_vec)) | (play_df.downs_turnover == True)) 
+                        & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True))
                     )
                     & (play_df.kickoff_play == False)
                 ),

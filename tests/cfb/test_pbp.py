@@ -707,27 +707,19 @@ def test_game_athletes(game_id, expected_rows):
     assert "headshot" not in df.columns
     assert "headshot.href" not in df.columns
     assert "team_id" in df.columns
-    print(df.head())
-
-    # target_plays = df[
-    #     df['play_id'].isin([play_id])
-    # ]
-
-    # assert len(target_plays) == 1
-    # assert target_plays.loc[target_plays.index[0], f"{participant_type}_id"] == athlete_id
 
 
 @pytest.mark.parametrize(
-    "game_id, play_text, end_yardsToEndzone, end_pos_team_id, penalty_declined, penalty_no_play, penalty_1st_conv",
+    "game_id, play_text, end_yardsToEndzone, end_pos_team_id, penalty_declined, penalty_no_play, penalty_1st_conv, change_of_poss",
     [
         # error case
-        (401754591, "(11:29) #2 C.Klubnik rush middle for 3 yards loss to the LOU04 fumbled by #2 C.Klubnik at LOU04 recovered by LOU #99 J.Guerad at LOU04, End Of Play PENALTY LOU UNS: Unsportsmanlike Conduct (#21 D.Hutchinson) 2 yards from LOU04 to LOU02", 2, 228, False, False, True),
+        (401754591, "(11:29) #2 C.Klubnik rush middle for 3 yards loss to the LOU04 fumbled by #2 C.Klubnik at LOU04 recovered by LOU #99 J.Guerad at LOU04, End Of Play PENALTY LOU UNS: Unsportsmanlike Conduct (#21 D.Hutchinson) 2 yards from LOU04 to LOU02", 2, 228, False, False, True, False),
 
         # base case
-        (401754591, "(11:24) Shotgun #22 K.Brown rush right for 18 yards gain to the LOU20 (#6 R.Jones), out of bounds PENALTY LOU Holding (#85 N.Kurisky) 1 yard from LOU02 to LOU01. NO PLAY", 99, 97, False, True, False),
+        (401754591, "(11:24) Shotgun #22 K.Brown rush right for 18 yards gain to the LOU20 (#6 R.Jones), out of bounds PENALTY LOU Holding (#85 N.Kurisky) 1 yard from LOU02 to LOU01. NO PLAY", 99, 97, False, True, False, False),
     ]
 )
-def test_25_weird_format_penalty(game_id, play_text, end_yardsToEndzone, end_pos_team_id, penalty_declined, penalty_no_play, penalty_1st_conv):
+def test_25_weird_format_penalty(game_id, play_text, end_yardsToEndzone, end_pos_team_id, penalty_declined, penalty_no_play, penalty_1st_conv, change_of_poss):
     test = CFBPlayProcess(gameId = game_id)
     test.espn_cfb_pbp()
     test.run_processing_pipeline()
@@ -740,6 +732,8 @@ def test_25_weird_format_penalty(game_id, play_text, end_yardsToEndzone, end_pos
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "start.pos_team.id"] == end_pos_team_id
     assert target_plays.loc[target_plays.index[0], "lead_start_team"] == end_pos_team_id
+    assert target_plays.loc[target_plays.index[0], "change_of_poss"] == change_of_poss
+    assert target_plays.loc[target_plays.index[0], "change_of_pos_team"] == change_of_poss
 
     assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
     assert target_plays.loc[target_plays.index[0], "penalty_1st_conv"] == penalty_1st_conv
