@@ -5174,7 +5174,7 @@ class CFBPlayProcess(object):
             drives = ('drive.id', pd.Series.nunique)
         )
 
-        drives_data['drive_total_gained_yards_rate'] = (100 * drives_data.drive_total_gained_yards / drives_data.drive_total_available_yards).round(2)
+        drives_data['drive_total_gained_yards_rate'] = (100 * drives_data.drive_total_gained_yards.astype(float) / drives_data.drive_total_available_yards.astype(float)).round(2)
 
         return {
             "pass" : json.loads(passer_box.to_json(orient="records")),
