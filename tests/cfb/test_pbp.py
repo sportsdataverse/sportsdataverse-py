@@ -637,9 +637,9 @@ def test_errored_punt_yardlines(game_id, play_text, yds_punted, yds_punt_return,
     "game_id, box_type, field_name, player_name",
     [
         # error case
-        (401754571, "pass", "passer_player_name", "H.King"),
-        (401754571, "rush", "rusher_player_name", "A.Philo"),
-        (401754571, "receiver", "receiver_player_name", "B.Stockton"),
+        (401754571, "pass", "passer_player_name", "Haynes King"),
+        (401754571, "rush", "rusher_player_name", "Aaron Philo"),
+        (401754571, "receiver", "receiver_player_name", "Bailey Stockton"),
         # base case
         (401752748, "pass", "passer_player_name", "Garrett Nussmeier"),
         (401752748, "rush", "rusher_player_name", "Caden Durham"),
@@ -649,21 +649,73 @@ def test_errored_punt_yardlines(game_id, play_text, yds_punted, yds_punt_return,
 def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_name):
     test = CFBPlayProcess(gameId = game_id)
     test.espn_cfb_pbp()
-    json_dict_stuff = test.run_processing_pipeline()
+    test.run_processing_pipeline()
 
     box = test.create_box_score()
     # LOGGER.info(box[box_type])
-    # assert box[box_type][0][field_name] == player_name
-
 
     players = list(map(lambda x: x[field_name], box[box_type]))
     # LOGGER.info(players)
+
     assert players[0] == player_name
+    assert all(["hurried" not in p for p in players]) == True
     assert all(["caught at" not in p for p in players]) == True
     assert all(["thrown" not in p for p in players]) == True
     assert all(["Shotgun" not in p for p in players]) == True
     assert all(["Huddle" not in p for p in players]) == True
     assert all(["#" not in p for p in players]) == True
+
+
+@pytest.mark.parametrize(
+    "game_id, expected_rows, play_id, athlete_id, participant_type",
+    [
+        (401754594, 151, "40175459415", "4678010", "passer"),
+    ]
+)
+def test_play_participants(game_id, expected_rows, play_id, athlete_id, participant_type):
+    test = CFBPlayProcess(gameId = game_id)
+    df = test.espn_cfb_play_participants()
+
+    assert len(df) == expected_rows
+    assert len(df) == df.play_id.nunique()
+    assert "passDefender" not in df.columns
+    assert "pass_defender" not in df.columns
+    assert "pass_defender_player_id" in df.columns
+
+    target_plays = df[
+        df['play_id'].isin([play_id])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], f"{participant_type}_player_id"] == athlete_id
+    assert target_plays.loc[target_plays.index[0], f"{participant_type}_player_name"] == "Kyron Drones"
+
+
+
+@pytest.mark.parametrize(
+    "game_id, expected_rows",
+    [
+        (401754594, 69),
+    ]
+)
+def test_game_athletes(game_id, expected_rows):
+    test = CFBPlayProcess(gameId = game_id)
+    df = test.espn_cfb_athletes()
+
+    assert len(df) == expected_rows
+    assert "homeAway" not in df.columns
+    assert "headshot" not in df.columns
+    assert "headshot.href" not in df.columns
+    assert "team_id" in df.columns
+    print(df.head())
+
+    # target_plays = df[
+    #     df['play_id'].isin([play_id])
+    # ]
+
+    # assert len(target_plays) == 1
+    # assert target_plays.loc[target_plays.index[0], f"{participant_type}_id"] == athlete_id
+
 
 @pytest.mark.parametrize(
     "game_id, play_text, end_yardsToEndzone, end_pos_team_id, penalty_declined, penalty_no_play, penalty_1st_conv",
@@ -752,3 +804,27 @@ def test_25_weird_format_timeouts(game_id, play_text, start_pos_team_id):
     # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "start.pos_team.id"] == start_pos_team_id
+
+# @pytest.mark.parametrize(
+#     "game_id, play_text, clock_minutes, clock_seconds",
+#     [
+#         # error case
+#         (401754579, "(10:26) No Huddle-Shotgun #1 J.Haynes rush middle for 0 yards to the NCSU02 (#52 C.Wallace)", '10', '26'),
+#         (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", '07', '42'),
+#         # base case
+#         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", '12', '47'),
+#     ]
+# )
+# def test_25_weird_format_play_timestamp(game_id, play_text, clock_minutes, clock_seconds):
+#     test = CFBPlayProcess(gameId = game_id)
+#     test.espn_cfb_pbp()
+#     test.run_processing_pipeline()
+
+#     plays = test.plays_json
+#     target_plays = plays[
+#         plays['text'].isin([play_text])
+#     ]
+
+#     assert len(target_plays) == 1
+#     assert target_plays.loc[target_plays.index[0], "clock.minutes"] == clock_minutes
+#     assert target_plays.loc[target_plays.index[0], "clock.seconds"] == clock_seconds

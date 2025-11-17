@@ -54,6 +54,88 @@ class CFBPlayProcess(object):
         self.raw = raw
         self.path_to_json = path_to_json
 
+    def to_snake_case(self, s):
+        return ''.join(['_' + c.lower() if c.isupper() else c for c in s]).lstrip('_')
+    
+    def espn_cfb_athletes(self):
+        pbp_url = f"https://cdn.espn.com/core/college-football/playbyplay?xhr=1&gameId={self.gameId}"
+        pbp_resp = download(pbp_url)
+        pbp_xhr_raw = json.loads(pbp_resp)
+        game_pkg_raw = pbp_xhr_raw.get("__gamepackage__", {})
+        player_hash = game_pkg_raw.get("playerHash", {})
+        home_team = game_pkg_raw.get("homeTeam", {})
+        away_team = game_pkg_raw.get("awayTeam", {})
+
+        players = []
+        for _, j in player_hash.items():
+            id_val = home_team.get("id") if j["homeAway"] == "home" else away_team.get("id")
+            player_data = j.get("json", {}).get("athlete", {})
+            p = {
+                "team_id": id_val,
+                **player_data
+            }
+            players.append(p)
+
+        base = pd.DataFrame(players)
+        base.drop(base.columns[base.columns.isin(["links", "headshot", "headshot.href", "headshot.alt"])], axis=1, inplace=True)
+        base.rename(self.to_snake_case, axis=1, inplace=True)
+        return base
+
+    def espn_cfb_play_participants(self):
+        plays_url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/{self.gameId}/competitions/{self.gameId}/plays?limit=1000"
+        plays_resp = download(plays_url)
+        plays_raw = json.loads(plays_resp)
+        plays_raw = plays_raw.get("items", [])
+
+        athletes = self.espn_cfb_athletes()
+
+        play_participants = []
+        for p in plays_raw:
+            participants = p.get("participants", [])
+            if len(participants) > 0:
+                participants = [
+                    {
+                        "athlete_url": k.get("athlete", {}).get("$ref", ""),
+                        "position_url": k.get("position", {}).get("$ref", ""),
+                        "participant_type": k.get("type"),
+                        "play_id": p["id"]
+                    } for k in participants
+                ]
+                play_participants += participants
+        
+        base = pd.DataFrame(play_participants)
+        base["game_id"] = self.gameId
+        base["athlete_id"] = base["athlete_url"].str.extract(r'/athletes/(\d+)')
+        base["position_id"] = base["position_url"].str.extract(r'/positions/(\d+)')
+        base.drop(base.columns[base.columns.isin(["athlete_url", "position_url"])], axis=1, inplace=True)
+
+        base = pd.merge(
+            base,
+            athletes[["id", "display_name"]],
+            left_on="athlete_id",
+            right_on="id",
+            how="left"
+        )
+        base.rename(
+            {
+                "athlete_id": "player_id",
+                "display_name": "player_name"
+            },
+            axis=1,
+            inplace=True
+        )
+        base = (
+            base
+                .drop_duplicates(subset=["game_id", "play_id", "participant_type"])
+                .pivot_table(index=["game_id", "play_id"], columns=["participant_type"], values = ["player_id", "player_name"], aggfunc="first")
+                .reset_index()
+        )
+        base.columns = ['_'.join(reversed(col)).strip() for col in base.columns.values]
+        base.columns = [col.strip("_") for col in base.columns.values]
+        base.columns = [self.to_snake_case(col) for col in base.columns.values]
+        return base
+
+
     def espn_cfb_pbp(self):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`, `college-football/summary`
 
@@ -336,6 +418,7 @@ class CFBPlayProcess(object):
                 + pbp_txt["plays"]["clock.seconds"].astype(int),
             )
         # Pos Team - Start and End Id
+        pbp_txt["plays"]["play_id"] = pbp_txt["plays"]["id"].apply(lambda x: str(x))
         pbp_txt["plays"]["id"] = pbp_txt["plays"]["id"].apply(lambda x: int(x))
         pbp_txt["plays"] = self.__helper_cfb_sort_plays__(pbp_txt["plays"])
 
@@ -3326,854 +3409,17 @@ class CFBPlayProcess(object):
         return play_df
 
     def __add_player_cols(self, play_df):
-        play_df["rush_player"] = None
-        play_df["receiver_player"] = None
-        play_df["pass_player"] = None
-        play_df["sack_players"] = None
-        play_df["sack_player1"] = None
-        play_df["sack_player2"] = None
-        play_df["interception_player"] = None
-        play_df["pass_breakup_player"] = None
-        play_df["fg_kicker_player"] = None
-        play_df["fg_return_player"] = None
-        play_df["fg_block_player"] = None
-        play_df["punter_player"] = None
-        play_df["punt_return_player"] = None
-        play_df["punt_block_player"] = None
-        play_df["punt_block_return_player"] = None
-        play_df["kickoff_player"] = None
-        play_df["kickoff_return_player"] = None
-        play_df["fumble_player"] = None
-        play_df["fumble_forced_player"] = None
-        play_df["fumble_recovered_player"] = None
-        play_df["rush_player_name"] = None
-        play_df["receiver_player_name"] = None
-        play_df["passer_player_name"] = None
-        play_df["sack_player_name"] = None
-        play_df["sack_player_name2"] = None
-        play_df["interception_player_name"] = None
-        play_df["pass_breakup_player_name"] = None
-        play_df["fg_kicker_player_name"] = None
-        play_df["fg_return_player_name"] = None
-        play_df["fg_block_player_name"] = None
-        play_df["punter_player_name"] = None
-        play_df["punt_return_player_name"] = None
-        play_df["punt_block_player_name"] = None
-        play_df["punt_block_return_player_name"] = None
-        play_df["kickoff_player_name"] = None
-        play_df["kickoff_return_player_name"] = None
-        play_df["fumble_player_name"] = None
-        play_df["fumble_forced_player_name"] = None
-        play_df["fumble_recovered_player_name"] = None
-
-        ## Extract player names
-        # RB names
-        play_df["rush_player"] = np.where(
-            (play_df.rush == 1),
-            play_df.cleaned_text.str.extract(
-                r"(.{0,25} )run |(.{0,25} )\d{0,2} Yd Run|(.{0,25} )rush |(.{0,25} )rushed "
-            ).bfill(axis=1)[0],
-            None,
-        )
-        play_df["rush_player"] = play_df.rush_player.str.replace(
-            r" run | \d+ Yd Run| rush ", "", regex=True
-        )
-        play_df["rush_player"] = play_df.rush_player.str.replace(
-            r" \((.+)\)", "", regex=True
-        )
-        play_df.rush_player = play_df.rush_player.str.replace(
-            r"No Huddle-?", "", regex=True
-        )
-        play_df["rush_player"] = play_df.rush_player.str.replace(
-            r"#\d+ ", "", regex=True
-        )
-        play_df["rush_player"] = np.where(
-            (play_df["rush"] == 1)
-            & play_df.rush_player.str.isnumeric() == True,
-            "TEAM",
-            play_df.rush_player,
-        )
-        play_df["rush_player"] = np.where(
-            (play_df["rush"] == 1)
-            & (
-                (play_df.rush_player.str.strip().str.len == 0)
-                | play_df.rush_player.isna()
-            ),
-            "TEAM",
-            play_df.rush_player,
+        play_df = pd.merge(
+            play_df,
+            self.play_participants,
+            on="play_id",
+            how="left"
         )
 
-        # QB names
-        play_df["pass_player"] = np.where(
-            (play_df["pass"] == 1) & (play_df["type.text"] != "Passing Touchdown"),
-            play_df.cleaned_text.str.extract(
-                r"pass from (.*?) \(|(.{0,30} )pass |(.+) sacked by|(.+) sacked for|(.{0,30} )incomplete "
-            ).bfill(axis=1)[0],
-            play_df["pass_player"],
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            r"pass | sacked by| sacked for| incomplete", "", regex=True
-        )
+        name_fields = self.play_participants.columns[self.play_participants.columns.str.endswith("_player_name")]
+        for n in name_fields:
+            play_df.loc[play_df[n].isna(), n] = "TEAM"
 
-        play_df["pass_player"] = np.where(
-            (play_df["pass"] == 1) & (play_df["type.text"] == "Passing Touchdown"),
-            play_df.cleaned_text.str.extract("pass from(.+)")[0],
-            play_df["pass_player"],
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            "pass from", "", regex=True
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            r"\(.+\)", "", regex=True
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(r" \,", "", regex=True)
-
-        play_df["pass_player"] = np.where(
-            (play_df["type.text"] == "Passing Touchdown") & play_df.pass_player.isna(),
-            play_df.cleaned_text.str.extract("(.+)pass(.+)? complete to")[0],
-            play_df["pass_player"],
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            r" pass complete to(.+)", "", regex=True
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            " pass complete to", "", regex=True
-        )
-
-        play_df["pass_player"] = np.where(
-            (play_df["type.text"] == "Passing Touchdown") & play_df.pass_player.isna(),
-            play_df.cleaned_text.str.extract("(.+)pass,to")[0],
-            play_df["pass_player"],
-        )
-
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            r" pass,to(.+)", "", regex=True
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            r" pass,to", "", regex=True
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            r" \((.+)\)", "", regex=True
-        )
-        play_df.pass_player = play_df.pass_player.str.replace(
-            r"No Huddle-?", "", regex=True
-        )
-        play_df["pass_player"] = play_df.pass_player.str.replace(
-            r"#\d+ ", "", regex=True
-        )
-        play_df["pass_player"] = np.where(
-            (play_df["pass"] == 1)
-            & (
-                (play_df.pass_player.str.strip().str.len == 0)
-                | play_df.pass_player.isna()
-            ),
-            "TEAM",
-            play_df.pass_player,
-        )
-
-        play_df["receiver_player"] = np.where(
-            (play_df["pass"] == 1)
-            & ~play_df.cleaned_text.str.contains(
-                "sacked", case=False, flags=0, na=False, regex=True
-            ),
-            play_df.cleaned_text.str.extract("to (.+)")[0],
-            None,
-        )
-
-        play_df["receiver_player"] = np.where(
-            play_df.cleaned_text.str.contains(
-                "Yd pass", case=False, flags=0, na=False, regex=True
-            ),
-            play_df.cleaned_text.str.extract("(.{0,25} )\\d{0,2} Yd pass", flags=re.IGNORECASE)[
-                0
-            ],
-            play_df["receiver_player"],
-        )
-
-        play_df["receiver_player"] = np.where(
-            play_df.cleaned_text.str.contains("Yd TD pass", case=False),
-            play_df.cleaned_text.str.extract(
-                "(.{0,25} )\\d{0,2} Yd TD pass", flags=re.IGNORECASE
-            )[0],
-            play_df["receiver_player"],
-        )
-
-        play_df["receiver_player"] = np.where(
-            (play_df["type.text"] == "Sack")
-            | (play_df["type.text"] == "Interception Return")
-            | (play_df["type.text"] == "Interception Return Touchdown")
-            | (
-                play_df["type.text"].isin(
-                    [
-                        "Fumble Recovery (Opponent) Touchdown",
-                        "Fumble Recovery (Opponent)",
-                    ]
-                )
-                & play_df.cleaned_text.str.contains("sacked", case=False)
-            ),
-            None,
-            play_df["receiver_player"],
-        )
-
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "to ", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "\\,.+", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "for (.+)", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            r" (\d{1,2})", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " Yd pass", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " Yd TD pass", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "pass complete to", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "penalty", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            ' "', "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            ' caught at .*', "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            ' thrown .*', "", case=False, regex=True
-        )
-        play_df.receiver_player = np.where(
-            ~(play_df.receiver_player.str.contains("III", na=False)),
-            play_df.receiver_player.str.replace("[A-Z]{3,}", "", case=True, regex=True),
-            play_df.receiver_player,
-        )
-
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " &", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "A&M", "", case=True, regex=False
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " ST", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " GA", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " UL", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " FL", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " OH", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " NC", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            ' "', "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " \\u00c9", "", case=True, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            " fumbled,", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "the (.+)", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "pass incomplete to", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "(.+)pass incomplete to", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "(.+)pass incomplete", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            "pass incomplete", "", case=False, regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            r" \((.+)\)", "", regex=True
-        )
-        play_df.receiver_player = play_df.receiver_player.str.replace(
-            r"No Huddle-?", "", regex=True
-        )
-        play_df["receiver_player"] = play_df.receiver_player.str.replace(
-            r"#\d+ ", "", regex=True
-        )
-
-        play_df["sack_players"] = np.where(
-            (play_df["sack"] == True)
-            | (play_df["fumble_vec"] == True) & (play_df["pass"] == True),
-            play_df.cleaned_text.str.extract("sacked by(.+)", flags=re.IGNORECASE)[0],
-            play_df.sack_players,
-        )
-
-        play_df["sack_players"] = play_df["sack_players"].str.replace(
-            "for (.+)", "", case=True, regex=True
-        )
-        play_df["sack_players"] = play_df["sack_players"].str.replace(
-            "(.+) by ", "", case=True, regex=True
-        )
-        play_df["sack_players"] = play_df["sack_players"].str.replace(
-            " at the (.+)", "", case=True, regex=True
-        )
-        play_df["sack_player1"] = play_df["sack_players"].str.replace(
-            "and (.+)", "", case=True, regex=True
-        )
-        play_df["sack_player2"] = np.where(
-            play_df["sack_players"].str.contains("and (.+)"),
-            play_df["sack_players"].str.replace("(.+) and", "", case=True, regex=True),
-            None,
-        )
-
-        play_df["interception_player"] = np.where(
-            (play_df["type.text"] == "Interception Return")
-            | (play_df["type.text"] == "Interception Return Touchdown")
-            & play_df["pass"]
-            == True,
-            play_df.cleaned_text.str.extract("intercepted (.+)", flags=re.IGNORECASE)[0],
-            play_df.interception_player,
-        )
-
-        play_df["interception_player"] = np.where(
-            play_df.cleaned_text.str.contains("Yd Interception Return", case=True, regex=True),
-            play_df.cleaned_text.str.extract(
-                "(.{0,25} )\\d{0,2} Yd Interception Return|(.{0,25} )\\d{0,2} yd interception return",
-                flags=re.IGNORECASE,
-            ).bfill(axis=1)[0],
-            play_df.interception_player,
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "return (.+)", "", case=True, regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "(.+) intercepted", "", case=True, regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "intercepted", "", case=True, regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "Yd Interception Return", "", regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "for a 1st down", "", case=True, regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "(\\d{1,2})", "", case=True, regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "for a TD", "", case=True, regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            "at the (.+)", "", case=True, regex=True
-        )
-        play_df["interception_player"] = play_df["interception_player"].str.replace(
-            " by ", "", case=True, regex=True
-        )
-
-        play_df["pass_breakup_player"] = np.where(
-            play_df["pass"] == True,
-            play_df.cleaned_text.str.extract("broken up by (.+)").bfill(axis=1)[0],
-            play_df.pass_breakup_player,
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "(.+) broken up by", "", case=True, regex=True
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "broken up by", "", case=True, regex=True
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "Penalty(.+)", "", case=True, regex=True
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "SOUTH FLORIDA", "", case=True, regex=True
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "WEST VIRGINIA", "", case=True, regex=True
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "MISSISSIPPI ST", "", case=True, regex=True
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "CAMPBELL", "", case=True, regex=True
-        )
-        play_df["pass_breakup_player"] = play_df["pass_breakup_player"].str.replace(
-            "COASTL CAROLINA", "", case=True, regex=True
-        )
-
-        play_df["punter_player"] = np.where(
-            play_df["type.text"].str.contains("Punt", regex=True),
-            play_df.cleaned_text.str.extract(
-                r"(.{0,30}) punt|Punt by (.{0,30})", flags=re.IGNORECASE
-            ).bfill(axis=1)[0],
-            play_df.punter_player,
-        )
-        play_df["punter_player"] = play_df["punter_player"].str.replace(
-            " punt", "", case=False, regex=True
-        )
-        play_df["punter_player"] = play_df["punter_player"].str.replace(
-            r" for(.+)", "", case=False, regex=True
-        )
-        play_df["punter_player"] = play_df["punter_player"].str.replace(
-            "Punt by ", "", case=False, regex=True
-        )
-        play_df["punter_player"] = play_df["punter_player"].str.replace(
-            r"\((.+)\)", "", case=False, regex=True
-        )
-        play_df["punter_player"] = play_df["punter_player"].str.replace(
-            r" returned \d+", "", case=False, regex=True
-        )
-        play_df["punter_player"] = play_df["punter_player"].str.replace(
-            " returned", "", case=False, regex=True
-        )
-        play_df["punter_player"] = play_df["punter_player"].str.replace(
-            " no return", "", case=False, regex=True
-        )
-
-        play_df["punt_return_player"] = np.where(
-            play_df["type.text"].str.contains("Punt", regex=True),
-            play_df.cleaned_text.str.extract(
-                r", (.{0,25}) returns|fair catch by (.{0,25})|, returned by (.{0,25})|yards by (.{0,30})| return by (.{0,25})",
-                flags=re.IGNORECASE,
-            ).bfill(axis=1)[0],
-            play_df.punt_return_player,
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            ", ", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            " returns", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            " returned", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            " return", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            "fair catch by", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            r" at (.+)", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            r" for (.+)", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            r"(.+) by ", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            r" to (.+)", "", case=False, regex=True
-        )
-        play_df["punt_return_player"] = play_df["punt_return_player"].str.replace(
-            r"\((.+)\)", "", case=False, regex=True
-        )
-
-        play_df["punt_block_player"] = np.where(
-            play_df["type.text"].str.contains("Punt", case=True, regex=True),
-            play_df.cleaned_text.str.extract(
-                "punt blocked by (.{0,25})| blocked by(.+)", flags=re.IGNORECASE
-            ).bfill(axis=1)[0],
-            play_df.punt_block_player,
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            r"punt blocked by |for a(.+)", "", case=True, regex=True
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            r"blocked by(.+)", "", case=True, regex=True
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            r"blocked(.+)", "", case=True, regex=True
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            r" for(.+)", "", case=True, regex=True
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            r",(.+)", "", case=True, regex=True
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            r"punt blocked by |for a(.+)", "", case=True, regex=True
-        )
-
-        play_df["punt_block_player"] = np.where(
-            play_df["type.text"].str.contains("yd return of blocked punt"),
-            play_df.cleaned_text.str.extract("(.+) yd return of blocked").bfill(axis=1)[0],
-            play_df.punt_block_player,
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            "blocked|Blocked", "", regex=True
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            r"\\d+", "", regex=True
-        )
-        play_df["punt_block_player"] = play_df["punt_block_player"].str.replace(
-            "yd return of", "", regex=True
-        )
-
-        play_df["punt_block_return_player"] = np.where(
-            (
-                play_df["type.text"].str.contains(
-                    "Punt", case=False, flags=0, na=False, regex=True
-                )
-            )
-            & (
-                play_df.cleaned_text.str.contains(
-                    "blocked", case=False, flags=0, na=False, regex=True
-                )
-                & play_df.cleaned_text.str.contains(
-                    "return", case=False, flags=0, na=False, regex=True
-                )
-            ),
-            play_df.cleaned_text.str.extract("(.+) return").bfill(axis=1)[0],
-            play_df.punt_block_return_player,
-        )
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace("(.+)blocked by {punt_block_player}", "")
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace("blocked by {punt_block_player}", "")
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace("return(.+)", "", regex=True)
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace("return", "", regex=True)
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace("(.+)blocked by", "", regex=True)
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace("for a TD(.+)|for a SAFETY(.+)", "", regex=True)
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace("blocked by", "", regex=True)
-        play_df["punt_block_return_player"] = play_df[
-            "punt_block_return_player"
-        ].str.replace(", ", "", regex=True)
-
-        play_df["kickoff_player"] = np.where(
-            play_df["type.text"].str.contains("Kickoff"),
-            play_df.cleaned_text.str.extract("(.{0,25}) kickoff|(.{0,25}) on-side").bfill(
-                axis=1
-            )[0],
-            play_df.kickoff_player,
-        )
-        play_df["kickoff_player"] = play_df["kickoff_player"].str.replace(
-            " on-side| kickoff", "", regex=True
-        )
-
-        play_df["kickoff_return_player"] = np.where(
-            play_df["type.text"].str.contains("ickoff"),
-            play_df.cleaned_text.str.extract(
-                ", (.{0,25}) return|, (.{0,25}) fumble|returned by (.{0,25})|touchback by (.{0,25})",
-                flags=re.IGNORECASE,
-            ).bfill(axis=1)[0],
-            play_df.kickoff_return_player,
-        )
-        play_df["kickoff_return_player"] = play_df["kickoff_return_player"].str.replace(
-            ", ", "", case=False, regex=True
-        )
-        play_df["kickoff_return_player"] = play_df["kickoff_return_player"].str.replace(
-            " return| fumble| returned by| for |touchback by ",
-            "",
-            case=False,
-            regex=True,
-        )
-        play_df["kickoff_return_player"] = play_df["kickoff_return_player"].str.replace(
-            r"\((.+)\)(.+)", "", case=False, regex=True
-        )
-
-        play_df["fg_kicker_player"] = np.where(
-            play_df["type.text"].str.contains("Field Goal"),
-            play_df.cleaned_text.str.extract(
-                "(.{0,25} )\\d{0,2} yd field goal|(.{0,25} )\\d{0,2} yd fg|(.{0,25} )\\d{0,2} yard field goal",
-                flags=re.IGNORECASE,
-            ).bfill(axis=1)[0],
-            play_df.fg_kicker_player,
-        )
-        play_df["fg_kicker_player"] = play_df["fg_kicker_player"].str.replace(
-            " Yd Field Goal|Yd FG |yd FG| yd FG", "", case=False, regex=True
-        )
-        play_df["fg_kicker_player"] = play_df["fg_kicker_player"].str.replace(
-            "(\\d{1,2})", "", case=False, regex=True
-        )
-
-        play_df["fg_block_player"] = np.where(
-            play_df["type.text"].str.contains("Field Goal"),
-            play_df.cleaned_text.str.extract("blocked by (.{0,25})", flags=re.IGNORECASE).bfill(axis=1)[0],
-            play_df.fg_block_player,
-        )
-        # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
-        #     ",(.+)", "", case=False, regex=True
-        # )
-        # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
-        #     "blocked by ", "", case=False, regex=True
-        # )
-        # play_df["fg_block_player"] = play_df["fg_block_player"].str.replace(
-        #     "  (.)+", "", case=False, regex=True
-        # )
-
-        play_df["fg_return_player"] = np.where(
-            (play_df["type.text"].str.contains("Field Goal"))
-            & (play_df["type.text"].str.contains("blocked by|missed"))
-            & (play_df["type.text"].str.contains("return")),
-            play_df.cleaned_text.str.extract("  (.+)").bfill(axis=1)[0],
-            play_df.fg_return_player,
-        )
-
-        play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
-            ",(.+)", "", case=False, regex=True
-        )
-        play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
-            "return ", "", case=False, regex=True
-        )
-        play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
-            "returned ", "", case=False, regex=True
-        )
-        play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
-            " for (.+)", "", case=False, regex=True
-        )
-        play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
-            " for (.+)", "", case=False, regex=True
-        )
-
-        play_df["fg_return_player"] = np.where(
-            play_df["type.text"].isin(
-                ["Missed Field Goal Return", "Missed Field Goal Return Touchdown"]
-            ),
-            play_df.cleaned_text.str.extract("(.+)return").bfill(axis=1)[0],
-            play_df.fg_return_player,
-        )
-        play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
-            " return", "", case=False, regex=True
-        )
-        play_df["fg_return_player"] = play_df["fg_return_player"].str.replace(
-            "(.+),", "", case=False, regex=True
-        )
-
-        play_df["fumble_player"] = np.where(
-            play_df["cleaned_text"].str.contains(
-                "fumble", case=False, flags=0, na=False, regex=True
-            ),
-            play_df["cleaned_text"].str.extract("(.{0,25} )fumble").bfill(axis=1)[0],
-            play_df.fumble_player,
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            " fumble(.+)", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            "fumble", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            " yds", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            " yd", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            "yardline", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            " yards| yard|for a TD|or a safety", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            " for ", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            " a safety", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            "r no gain", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            "(.+)(\\d{1,2})", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            "(\\d{1,2})", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = play_df["fumble_player"].str.replace(
-            ", ", "", case=False, regex=True
-        )
-        play_df["fumble_player"] = np.where(
-            play_df["type.text"] == "Penalty", None, play_df.fumble_player
-        )
-
-        play_df["fumble_forced_player"] = np.where(
-            (
-                play_df.cleaned_text.str.contains(
-                    "fumble", case=False, flags=0, na=False, regex=True
-                )
-            )
-            & (
-                play_df.cleaned_text.str.contains(
-                    "forced by", case=False, flags=0, na=False, regex=True
-                )
-            ),
-            play_df.cleaned_text.str.extract("forced by(.{0,25})").bfill(axis=1)[0],
-            play_df.fumble_forced_player,
-        )
-
-        play_df["fumble_forced_player"] = play_df["fumble_forced_player"].str.replace(
-            "(.+)forced by", "", case=False, regex=True
-        )
-        play_df["fumble_forced_player"] = play_df["fumble_forced_player"].str.replace(
-            "forced by", "", case=False, regex=True
-        )
-        play_df["fumble_forced_player"] = play_df["fumble_forced_player"].str.replace(
-            ", recove(.+)", "", case=False, regex=True
-        )
-        play_df["fumble_forced_player"] = play_df["fumble_forced_player"].str.replace(
-            ", re(.+)", "", case=False, regex=True
-        )
-        play_df["fumble_forced_player"] = play_df["fumble_forced_player"].str.replace(
-            ", fo(.+)", "", case=False, regex=True
-        )
-        play_df["fumble_forced_player"] = play_df["fumble_forced_player"].str.replace(
-            ", r", "", case=False, regex=True
-        )
-        play_df["fumble_forced_player"] = play_df["fumble_forced_player"].str.replace(
-            ", ", "", case=False, regex=True
-        )
-        play_df["fumble_forced_player"] = np.where(
-            play_df["type.text"] == "Penalty", None, play_df.fumble_forced_player
-        )
-
-        play_df["fumble_recovered_player"] = np.where(
-            (
-                play_df.cleaned_text.str.contains(
-                    "fumble", case=False, flags=0, na=False, regex=True
-                )
-            )
-            & (
-                play_df.cleaned_text.str.contains(
-                    "recovered by", case=False, flags=0, na=False, regex=True
-                )
-            ),
-            play_df.cleaned_text.str.extract("recovered by(.{0,30})").bfill(axis=1)[0],
-            play_df.fumble_recovered_player,
-        )
-
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("for a 1ST down", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("for a 1st down", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("(.+)recovered", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("(.+) by", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(", recove(.+)", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(", re(.+)", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("a 1st down", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(" a 1st down", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(", for(.+)", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(" for a", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(" fo", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(" , r", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(", r", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("  (.+)", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace(" ,", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("penalty(.+)", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = play_df[
-            "fumble_recovered_player"
-        ].str.replace("for a 1ST down", "", case=False, regex=True)
-        play_df["fumble_recovered_player"] = np.where(
-            play_df["type.text"] == "Penalty", None, play_df.fumble_recovered_player
-        )
-
-        ## Extract player names
-        play_df["passer_player_name"] = play_df["pass_player"].str.strip()
-        play_df["rusher_player_name"] = play_df["rush_player"].str.strip()
-        play_df["receiver_player_name"] = play_df["receiver_player"].str.strip()
-        play_df["sack_player_name"] = play_df["sack_player1"].str.strip()
-        play_df["sack_player_name2"] = play_df["sack_player2"].str.strip()
-        play_df["pass_breakup_player_name"] = play_df["pass_breakup_player"].str.strip()
-        play_df["interception_player_name"] = play_df["interception_player"].str.strip()
-        play_df["fg_kicker_player_name"] = play_df["fg_kicker_player"].str.strip()
-        play_df["fg_block_player_name"] = play_df["fg_block_player"].str.strip()
-        play_df["fg_return_player_name"] = play_df["fg_return_player"].str.strip()
-        play_df["kickoff_player_name"] = play_df["kickoff_player"].str.strip()
-        play_df["kickoff_return_player_name"] = play_df[
-            "kickoff_return_player"
-        ].str.strip()
-        play_df["punter_player_name"] = play_df["punter_player"].str.strip()
-        play_df["punt_block_player_name"] = play_df["punt_block_player"].str.strip()
-        play_df["punt_return_player_name"] = play_df["punt_return_player"].str.strip()
-        play_df["punt_block_return_player_name"] = play_df[
-            "punt_block_return_player"
-        ].str.strip()
-        play_df["fumble_player_name"] = play_df["fumble_player"].str.strip()
-        play_df["fumble_forced_player_name"] = play_df[
-            "fumble_forced_player"
-        ].str.strip()
-        play_df["fumble_recovered_player_name"] = play_df[
-            "fumble_recovered_player"
-        ].str.strip()
-
-        play_df.drop(
-            [
-                "rush_player",
-                "receiver_player",
-                "pass_player",
-                "sack_player1",
-                "sack_player2",
-                "pass_breakup_player",
-                "interception_player",
-                "punter_player",
-                "fg_kicker_player",
-                "fg_block_player",
-                "fg_return_player",
-                "kickoff_player",
-                "kickoff_return_player",
-                "punt_return_player",
-                "punt_block_player",
-                "punt_block_return_player",
-                "fumble_player",
-                "fumble_forced_player",
-                "fumble_recovered_player",
-            ],
-            axis=1,
-            inplace=True,
-        )
         return play_df
 
     def __after_cols(self, play_df):
@@ -5532,7 +4778,7 @@ class CFBPlayProcess(object):
 
         pass_box = self.plays_json[(self.plays_json["pass"] == True) & (self.plays_json.scrimmage_play == True)]
         rush_box = self.plays_json[(self.plays_json["rush"] == True) & (self.plays_json.scrimmage_play == True)]
-        # pass_box.yds_receiving.fillna(0.0, inplace=True)
+
         passer_box = pass_box[(pass_box["pass"] == True) & (pass_box["scrimmage_play"] == True)].fillna(0.0).groupby(by=["pos_team","passer_player_name"], as_index=False, group_keys = False).agg(
             Comp = ('completion', sum),
             Att = ('pass_attempt',sum),
@@ -5943,6 +5189,8 @@ class CFBPlayProcess(object):
 
     def run_processing_pipeline(self):
         if self.ran_pipeline == False:
+            self.athletes = self.espn_cfb_athletes()
+            self.play_participants = self.espn_cfb_play_participants()
             pbp_txt = self.__helper_cfb_pbp_drives(self.json)
             pbp_txt['plays']['week'] = pbp_txt['header']['week']
             self.plays_json = pbp_txt['plays']
@@ -6020,6 +5268,7 @@ class CFBPlayProcess(object):
 
     def run_cleaning_pipeline(self):
         if self.ran_cleaning_pipeline == False:
+            self.play_participants = self.espn_cfb_play_participants()
             pbp_txt = self.__helper_cfb_pbp_drives(self.json)
             pbp_txt['plays']['week'] = pbp_txt['header']['week']
             self.plays_json = pbp_txt['plays']
