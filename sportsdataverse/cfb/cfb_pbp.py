@@ -4794,6 +4794,8 @@ class CFBPlayProcess(object):
             SckYds = ('yds_sacked', sum)
         ).round(2)
         passer_box = passer_box.replace({np.nan: None})
+        passer_box.sort_values(by="Att", ascending=False, inplace=True)
+
         qbs_list = passer_box.passer_player_name.to_list()
 
         def weighted_mean(s, df, wcol):
@@ -4832,6 +4834,7 @@ class CFBPlayProcess(object):
             Fum_Lost = ('fumble_lost', sum)
         ).round(2)
         rusher_box = rusher_box.replace({np.nan: None})
+        rusher_box.sort_values(by="Car", ascending=False, inplace=True)
 
         receiver_box = pass_box.groupby(by=["pos_team","receiver_player_name"], as_index=False, group_keys = False).agg(
             Rec= ('completion', sum),
@@ -4847,6 +4850,7 @@ class CFBPlayProcess(object):
             Fum_Lost = ('fumble_lost', sum)
         ).round(2)
         receiver_box = receiver_box.replace({np.nan: None})
+        receiver_box.sort_values(by="Tar", ascending=False, inplace=True)
 
         team_base_box = self.plays_json.groupby(by=["pos_team"], as_index=False, group_keys = False).agg(
             EPA_plays = ('play', sum),

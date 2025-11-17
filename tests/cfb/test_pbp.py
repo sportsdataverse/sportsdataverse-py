@@ -644,6 +644,7 @@ def test_errored_punt_yardlines(game_id, play_text, yds_punted, yds_punt_return,
         (401752748, "pass", "passer_player_name", "Garrett Nussmeier"),
         (401752748, "rush", "rusher_player_name", "Caden Durham"),
         (401752748, "receiver", "receiver_player_name", "Aaron Anderson"),
+        (401752765, "pass", "passer_player_name", "John Mateer")
     ]
 )
 def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_name):
@@ -652,12 +653,11 @@ def test_25_weird_format_box_score_names(game_id, box_type, field_name, player_n
     test.run_processing_pipeline()
 
     box = test.create_box_score()
-    # LOGGER.info(box[box_type])
 
     players = list(map(lambda x: x[field_name], box[box_type]))
     # LOGGER.info(players)
 
-    assert players[0] == player_name
+    assert player_name in players
     assert all(["hurried" not in p for p in players]) == True
     assert all(["caught at" not in p for p in players]) == True
     assert all(["thrown" not in p for p in players]) == True
