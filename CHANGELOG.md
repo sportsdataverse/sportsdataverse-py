@@ -1,3 +1,6 @@
+## 0.0.40 Release: December 6, 2025
+- Minor changes to mbb_calendar and wbb_calendar functions to include all games, even when top 25 teams are not competing
+
 ## 0.0.38-39 Release: August 28, 2023
 - Minor changes to cfb_pbp functions to improve WP calculation and player parsing.
 

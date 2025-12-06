@@ -157,7 +157,7 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     if ondays is not None:
         full_schedule = __ondays_wbb_calendar(season, **kwargs)
     else:
-        url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates={season}"
+        url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates={season}"
         resp = download(url=url, **kwargs)
         txt = resp.json().get("leagues")[0].get("calendar")
         datenum = list(map(lambda x: x[:10].replace("-", ""), txt))
@@ -176,20 +176,20 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         }
         full_schedule = pl.DataFrame(data)
         full_schedule = full_schedule.with_columns(
-            url="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates="
+            url="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates="
             + pl.col("dateURL")
         )
     return full_schedule.to_pandas() if return_as_pandas else full_schedule
 
 
 def __ondays_wbb_calendar(season, **kwargs):
-    url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/{season}/types/2/calendar/ondays"
+    url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/{season}/types/2/calendar/ondays?groups=50"
     resp = download(url=url, **kwargs)
     txt = resp.json().get("eventDate").get("dates")
     result = pl.DataFrame(txt, schema=["dates"])
     result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
     result = result.with_columns(
-        url="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?dates="
+        url="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates="
         + pl.col("dateURL")
     )
 
