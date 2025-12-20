@@ -2945,6 +2945,10 @@ class CFBPlayProcess(object):
 
                 (play_df["pass"] == True)
                 & (play_df.cleaned_text.str.contains(" complete to", case=False))#,
+                & (play_df.cleaned_text.str.contains(" for .* y\w*ds? loss", regex = True, case = False)),
+
+                (play_df["pass"] == True)
+                & (play_df.cleaned_text.str.contains(" complete to", case=False))#,
                 & (play_df.cleaned_text.str.contains(" for .* y\w*ds?", regex = True, case = False)),
 
                 # (play_df["pass"] == True)
@@ -3022,6 +3026,13 @@ class CFBPlayProcess(object):
                 -1
                 * play_df.cleaned_text.str.extract(
                     r"((?<=for a loss of)[^,]+)", flags=re.IGNORECASE
+                )[0]
+                .str.extract(r"(\d+)")[0]
+                .astype(float),
+
+                -1
+                * play_df.cleaned_text.str.extract(
+                    r" for (.*) y\w*ds? loss", flags=re.IGNORECASE
                 )[0]
                 .str.extract(r"(\d+)")[0]
                 .astype(float),
