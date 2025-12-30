@@ -755,12 +755,15 @@ def test_25_weird_format_penalty(game_id, play_text, end_yardsToEndzone, end_pos
         (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", 2, 59),
         (401754579, "(03:32) Shotgun #10 H.King pass incomplete short middle to #85 J.Allen thrown to GT34 QB hurried by #4 T.Thomas PENALTY NCSU Targeting (#4 T.Thomas) 15 yards from GT28 to GT43, 1ST DOWN. NO PLAY", 57, 59),
         (401757292, "(05:21) No Huddle-Shotgun #29 D.Taylor rush middle for 0 yards to the JSU16 (#91 G.Stansbury)", 16, 2393),
+        (401677184, "Gunner Stockton pass complete to Dillon Bell for no gain to the ND 42", 58, 87),
+        (401762521, "(09:03) No Huddle #22 E.Heidenreich rush right for 9 yards gain to the Army13 (#5 J.Weaver; #14 G.Shields), 1ST DOWN", 13, 2426),
 
         # base case
         (401754579, "(07:03) Shotgun #0 M.Hosley rush middle for 0 yards to the NCSU02 (#1 C.Fordham; #33 K.Soares, Jr.)", 2, 59),
         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", 68, 245),
         (401752748, "TEAM run for a loss of 11 yards to the TA&M 16 TEAM fumbled, recovered by TA&M Rueben Owens II", 84, 245),
-        (401754579, "PENALTY NCSU False Start (#44 C.Hardy) 5 yards from GT06 to GT11. NO PLAY", 11, 152)
+        (401754579, "PENALTY NCSU False Start (#44 C.Hardy) 5 yards from GT06 to GT11. NO PLAY", 11, 152),
+        (401778317, "No Huddle-Shotgun #17 E.Grunkemeyer pass complete short left to #87 A.Rappleyea caught at CLE46, for 1 yard to the CLE46, End Of Play, TURNOVER ON DOWNS", 54, 228)
     ]
 )
 def test_25_weird_format_end_of_play(game_id, play_text, end_yardsToEndzone, end_pos_team_id):

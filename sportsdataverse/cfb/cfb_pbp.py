@@ -470,11 +470,22 @@ class CFBPlayProcess(object):
             )
         pbp_txt["plays"]["lead_start_team"] = pbp_txt["plays"]["start.team.id"].shift(-1)
         pbp_txt["plays"]["end.team.id_missing"] = pbp_txt["plays"]["end.team.id"].isna()
-        pbp_txt["plays"]["end.team.id"] = (
-                pbp_txt["plays"]["end.team.id"]
-                .fillna(value=pbp_txt["plays"]["start.team.id"])
-                .apply(lambda x: int(x))
+        pbp_txt["plays"]["end_state_missing"] = (
+            (pbp_txt["plays"]["end.team.id_missing"])
+            | (
+                (pbp_txt["plays"]["end.yardLine"] == 0)
+                & (pbp_txt["plays"]["end.yardsToEndzone"] == 0)
+                & (pbp_txt["plays"]["end.down"] == 0)
+                & (pbp_txt["plays"]["end.distance"] == 0)
             )
+        )
+        pbp_txt["plays"]["end.team.id"] = (
+            pbp_txt["plays"]["end.team.id"]
+                .fillna(value=pbp_txt["plays"]["start.team.id"].shift(-1))
+        )
+        pbp_txt["plays"].loc[pbp_txt["plays"]["end.team.id"].isna(), "end.team.id"] = pbp_txt["plays"].loc[pbp_txt["plays"]["end.team.id"].isna(), "start.team.id"]
+        pbp_txt["plays"]["end.team.id"] = pbp_txt["plays"]["end.team.id"].astype(int)
+
         pbp_txt["plays"]["start.pos_team.id"] = np.select(
                 [
                     (pbp_txt["plays"]["type.text"].isin(kickoff_vec))
@@ -835,8 +846,14 @@ class CFBPlayProcess(object):
         # 2025: ESPN has some short-yardage/no-yardage/penalty plays with no end.team.id field and therefore a bugged end.yardsToEndzone field
         # This is a janky way of filling in end.yardsToEndzone in those very specific scenarios.
         pbp_txt["plays"]["end.yardsToEndzone"] = np.where(
-            (pbp_txt["plays"]["end.team.id_missing"] == True) 
+            ((pbp_txt["plays"]["end.team.id_missing"] == True) | (pbp_txt["plays"]["end_state_missing"] == True)) 
                 & (pbp_txt["plays"]["start.pos_team.id"] == pbp_txt["plays"]["end.pos_team.id"])
+                & (pbp_txt["plays"]["start.pos_team.id"].shift(-1) == pbp_txt["plays"]["end.pos_team.id"]),
+            pbp_txt["plays"]["start.yardsToEndzone"].shift(-1),
+            pbp_txt["plays"]["end.yardsToEndzone"],
+        )
+        pbp_txt["plays"]["end.yardsToEndzone"] = np.where(
+            ((pbp_txt["plays"]["end.team.id_missing"] == True) | (pbp_txt["plays"]["end_state_missing"] == True)) 
                 & (pbp_txt["plays"]["start.pos_team.id"].shift(-1) == pbp_txt["plays"]["end.pos_team.id"]),
             pbp_txt["plays"]["start.yardsToEndzone"].shift(-1),
             pbp_txt["plays"]["end.yardsToEndzone"],
