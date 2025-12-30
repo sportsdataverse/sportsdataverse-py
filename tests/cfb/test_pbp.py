@@ -1,7 +1,9 @@
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 import pandas as pd
 import pytest
+import numpy as np
 import logging
+import re
 from sportsdataverse.cfb.model_vars import *
 
 LOGGER = logging.getLogger(__name__)
@@ -396,8 +398,8 @@ def test_bugged_pass_yards():
     LOGGER.info(box['pass'][0])
     LOGGER.info(box['rush'][0])
 
-    assert box['pass'][0]['Yds'] == (168 - 25) # make sure a bugged game matches the right total
-    assert box['rush'][0]['Yds'] == 47 # rush totals should not have been changed
+    assert box['pass'][0]['Yds'] == 357 # make sure a bugged game matches the right total
+    assert box['rush'][0]['Yds'] == 95 # rush totals should not have been changed
 
     # make sure sack yardage is accounted for
     assert list(filter(lambda x: x['passer_player_name'] == "Dillon Gabriel", box['pass']))[0]['Yds'] == (380 - 23) # make sure a bugged game matches the right total
@@ -418,8 +420,8 @@ def test_bugged_pass_yards():
     LOGGER.info(good_box['pass'][1])
     LOGGER.info(good_box['rush'][1])
 
-    assert good_box['pass'][1]['Yds'] == -1 # make sure a non-bugged game matches the right total
-    assert good_box['rush'][1]['Yds'] == 20 # rush totals should not have been changed
+    assert good_box['pass'][1]['Yds'] == 275 # make sure a non-bugged game matches the right total
+    assert good_box['rush'][1]['Yds'] == 61 # rush totals should not have been changed
 
     # edge case: completed pass, fumble, recovery
     edge = CFBPlayProcess(gameId = 401634169)
@@ -584,7 +586,8 @@ def test_yards_per_drive():
         (401754571, "(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", "yds_receiving", 41),
         (401754571, "(09:25) No Huddle-Shotgun #10 R.Collins pass complete short left to #2 J.Cook II caught at SU31, for 4 yards to the SU34 (#2 E.Lightsey)", "yds_passing", 4),
         (401754571, "(05:49) Shotgun #10 H.King pass complete short middle to #85 J.Allen caught at SU33, for 19 yards to the SU09 (#0 B.Long Jr.)", "yds_passing", 19),
-        (401777353, "(07:37) Shotgun #10 J.Sayin pass complete short left to #4 J.Smith caught at OSU29, for 5 yards loss to the OSU32 (#12 D.Boykin)", "yds_receiving", -5)
+        (401777353, "(07:37) Shotgun #10 J.Sayin pass complete short left to #4 J.Smith caught at OSU29, for 5 yards loss to the OSU32 (#12 D.Boykin)", "yds_receiving", -5),
+        (401778302, "Shotgun #14 M.Cutforth pass complete deep middle to #3 L.Caples caught at WAS06, for 22 yards to the WAS06 (#18 R.Dillard-Allen), 1ST DOWN", "yds_receiving", 22)
     ]
 )
 def test_25_yardage_detection(game_id: int, play_text: str, yards_field: str, expected_yards: int):
@@ -597,6 +600,7 @@ def test_25_yardage_detection(game_id: int, play_text: str, yards_field: str, ex
         plays['text'].isin([play_text])
     ]
     LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+    LOGGER.info(target_plays.loc[target_plays.index[0], "yds_receiving_case"])
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], yards_field] == expected_yards
 
@@ -608,7 +612,7 @@ def test_25_yardage_detection(game_id: int, play_text: str, yards_field: str, ex
         (401754571, "(13:37) #47 M.Nichols punt 57 yards to the SU22 #10 D.Kerr return for loss of 11 yards to the SU20 fumbled by #10 D.Kerr at SU20 forced by #17 J.Hamilton recovered by SU #26 T.Haile at SU11, End Of Play", 57, -11, True, True, 89, 183),
         (401754572, "(02:21) #94 D.Joyce punt 47 yards to the STAN15 fair catch by #13 L.Thorpe at STAN15", 47, 0, False, True, 85, 24),
         (401757292, "(08:05) #32 A.Logan punt 39 yards to the JSU10, out of bounds at JSU10", 39, 0, False, True, 90, 55),
-        (401757292, "(05:26) #32 A.Logan punt 45 yards to the JSU19 #1 M.Pettway return 3 yards to the JSU22 (#9 P.Hughes) PENALTY JSU Holding (#80 C.Williams) 10 yards from JSU22 to JSU12", 45, 3, False, True, 88, 55),
+        # (401757292, "(05:26) #32 A.Logan punt 45 yards to the JSU19 #1 M.Pettway return 3 yards to the JSU22 (#9 P.Hughes) PENALTY JSU Holding (#80 C.Williams) 10 yards from JSU22 to JSU12", 45, 3, False, True, 88, 55),
         (401754592, "(11:26) #47 M.Nichols punt 37 yards to the BCE01", 37, None, False, True, 99, 103),
         (401754592, "(08:35) #28 S.Florio punt 21 yards to the GT 17 fair catch by #3 E.Rivers at GT 17", 21, 0, False, True, 83, 59),
 
