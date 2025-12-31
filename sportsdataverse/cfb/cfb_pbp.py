@@ -1664,6 +1664,11 @@ class CFBPlayProcess(object):
             True,
             False,
         )
+        
+        ## 2025 season: ESPN added No Huddle / Shotgun text in play text
+        play_df["no_huddle"] = (play_df["text"].str.contains(" No Huddle")) | (play_df["text"].str.contains(" No-Huddle"))
+        play_df["from_shotgun"] = (play_df["text"].str.contains("Shotgun "))
+        
         return play_df
 
     def __add_rush_pass_flags(self, play_df):
