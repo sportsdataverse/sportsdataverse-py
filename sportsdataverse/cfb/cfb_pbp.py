@@ -4934,6 +4934,12 @@ class CFBPlayProcess(object):
             pd.NA
         )
 
+        play_df["yards_after_catch"] = np.where(
+            (play_df["yds_receiving"].notna()) & (play_df["air_yards"].notna()) & (play_df["completion"] == True),
+            (play_df["yds_receiving"] - play_df["air_yards"]),
+            pd.NA
+        )
+
         return play_df.drop(["pos_team_cosine_similarity", "def_pos_team_cosine_similarity"], axis=1)
 
 

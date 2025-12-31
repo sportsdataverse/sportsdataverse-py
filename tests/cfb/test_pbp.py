@@ -833,26 +833,26 @@ def test_25_weird_format_timeouts(game_id, play_text, start_pos_team_id):
 
 
 @pytest.mark.parametrize(
-    "game_id,play_text,expected_air_yardsToEndzone, expected_air_yards",
+    "game_id,play_text,expected_air_yardsToEndzone, expected_air_yards, expected_yards_after_catch",
     [
-        (401754571, "(14:46) Shotgun #10 H.King pass complete short right to #1 J.Haynes caught at GT27, for 15 yards to the GT40 (#13 G.Bryant III), 1ST DOWN", 73, 2),
-        (401754571, "(14:17) No Huddle-Shotgun #10 H.King pass complete short right to #4 I.Canion caught at GT46, for 2 yards to the GT42 fumbled by #4 I.Canion at GT46 forced by #16 C.Peal recovered by SU #8 D.Reese at GT42, End Of Play", 54, 6),
-        (401754571, "(06:15) Shotgun #10 H.King pass incomplete short left to #17 J.Beetham thrown to SU01", 1, 2),
-        (401754571, "(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", 37, 38),
-        (401754571, "(09:25) No Huddle-Shotgun #10 R.Collins pass complete short left to #2 J.Cook II caught at SU31, for 4 yards to the SU34 (#2 E.Lightsey)", 69, 1),
-        (401777353, "(07:37) Shotgun #10 J.Sayin pass complete short left to #4 J.Smith caught at OSU29, for 5 yards loss to the OSU32 (#12 D.Boykin)", 71, -8),
+        (401754571, "(14:46) Shotgun #10 H.King pass complete short right to #1 J.Haynes caught at GT27, for 15 yards to the GT40 (#13 G.Bryant III), 1ST DOWN", 73, 2, 13),
+        (401754571, "(14:17) No Huddle-Shotgun #10 H.King pass complete short right to #4 I.Canion caught at GT46, for 2 yards to the GT42 fumbled by #4 I.Canion at GT46 forced by #16 C.Peal recovered by SU #8 D.Reese at GT42, End Of Play", 54, 6, -4),
+        (401754571, "(06:15) Shotgun #10 H.King pass incomplete short left to #17 J.Beetham thrown to SU01", 1, 2, None),
+        (401754571, "(15:00) No Huddle-Shotgun #10 R.Collins pass complete deep right to #2 J.Cook II caught at GT37, for 41 yards to the GT34 (#6 R.Shelley), 1ST DOWN", 37, 38, 3),
+        (401754571, "(09:25) No Huddle-Shotgun #10 R.Collins pass complete short left to #2 J.Cook II caught at SU31, for 4 yards to the SU34 (#2 E.Lightsey)", 69, 1, 3),
+        (401777353, "(07:37) Shotgun #10 J.Sayin pass complete short left to #4 J.Smith caught at OSU29, for 5 yards loss to the OSU32 (#12 D.Boykin)", 71, -8, 3),
         
         # no air yards on rush plays
-        (401777353, "(09:50) Shotgun #25 B.Jackson rush middle for 4 yards gain to the OSU29 (#7 L.Moore; #5 D.Ponds)", None, None),
+        (401777353, "(09:50) Shotgun #25 B.Jackson rush middle for 4 yards gain to the OSU29 (#7 L.Moore; #5 D.Ponds)", None, None, None),
 
         # extreme cases, cosine similarity should kick in here -- TOO similar
-        (401833989, "No Huddle-Shotgun #8 J.Lamson pass complete short middle to #1 C.Long caught at UMT16, for 21 yards to the UMT04 (#5 K.Loud), 1ST DOWN", None, None) # 16, 9),
+        (401833989, "No Huddle-Shotgun #8 J.Lamson pass complete short middle to #1 C.Long caught at UMT16, for 21 yards to the UMT04 (#5 K.Loud), 1ST DOWN", None, None, None), # 16, 9),
 
         # old PBP, no air yards
-        (400756962, "Justin Thomas pass complete to Ricky Jeune for 33 yds to the GTech 36 for a 1ST down", None, None),
+        (400756962, "Justin Thomas pass complete to Ricky Jeune for 33 yds to the GTech 36 for a 1ST down", None, None, None),
     ]
 )
-def test_25_air_yards_detection(game_id: int, play_text: str, expected_air_yardsToEndzone: int, expected_air_yards: int):
+def test_25_air_yards_detection(game_id: int, play_text: str, expected_air_yardsToEndzone: int, expected_air_yards: int, expected_yards_after_catch: int):
     test = CFBPlayProcess(gameId = game_id)
     test.espn_cfb_pbp()
     test.run_processing_pipeline()
@@ -867,4 +867,5 @@ def test_25_air_yards_detection(game_id: int, play_text: str, expected_air_yards
         
     assert x_play["air_yardsToEndzone"] == expected_air_yardsToEndzone
     assert x_play["air_yards"] == expected_air_yards
+    assert x_play["yards_after_catch"] == expected_yards_after_catch
 
