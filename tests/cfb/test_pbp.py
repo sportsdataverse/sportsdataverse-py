@@ -858,66 +858,12 @@ def test_25_air_yards_detection(game_id: int, play_text: str, expected_air_yards
     test.run_processing_pipeline()
 
     plays = test.plays_json
-    # plays["pos_team_abbreviation"] = np.where(plays["pos_team"] == plays["homeTeamId"], plays["homeTeamAbbrev"], plays["awayTeamAbbrev"])
-    # plays["def_pos_team_abbreviation"] = np.where(plays["pos_team"] == plays["homeTeamId"], plays["awayTeamAbbrev"], plays["homeTeamAbbrev"])
-    # plays["air_yards_yardline_team"] = np.select(
-    #     [
-    #         plays["text"].str.contains(" caught at "),
-    #         plays["text"].str.contains(" thrown to ")
-    #     ],
-    #     [
-    #         plays["text"].str.extract(r" caught at (\w{2,3})\d{2}")[0],
-    #         plays["text"].str.extract(r" thrown to (\w{2,3})\d{2}")[0]
-    #     ],
-    #     default = None
-    # )
-
-    # plays["air_yards_yardline"] = np.select(
-    #     [
-    #         plays["text"].str.contains(" caught at "),
-    #         plays["text"].str.contains(" thrown to ")
-    #     ],
-    #     [
-    #         plays["text"].str.extract(" caught at \w{2,3}(\d{2})")[0],
-    #         plays["text"].str.extract(" thrown to \w{2,3}(\d{2})")[0]
-    #     ],
-    #     default = None
-    # )
-
     target_plays = plays[
         plays['text'].isin([play_text])
     ]
     assert len(target_plays) == 1
 
     x_play = target_plays.loc[target_plays.index[0], :]
-    # x_play["air_yardsToEndzone"] = None
-    # x_play["air_yards"] = None
-
-    # if x_play["air_yards_yardline"] is not None and x_play["air_yards_yardline_team"] is not None:
-    #     if (x_play["air_yards_yardline_team"] == x_play["pos_team_abbreviation"]):
-    #         x_play["air_yardsToEndzone"] = 100 - int(x_play["air_yards_yardline"])
-    #     elif (x_play["air_yards_yardline_team"] == x_play["def_pos_team_abbreviation"]):
-    #         x_play["air_yardsToEndzone"] = int(x_play["air_yards_yardline"])
-    #     else:
-    #         pos_team_cos_sim = cosine_similarity(x_play["air_yards_yardline_team"], x_play["pos_team_abbreviation"])
-    #         def_pos_team_cos_sim = cosine_similarity(x_play["air_yards_yardline_team"], x_play["def_pos_team_abbreviation"])
-    #         LOGGER.info(f"pos team cos sim: {pos_team_cos_sim}")
-    #         LOGGER.info(f"def pos team cos sim: {def_pos_team_cos_sim}")
-
-    #         if (pos_team_cos_sim >= 0.50 and def_pos_team_cos_sim >= 0.50):
-    #             LOGGER.warning("can't safely determine team, no air yards")
-    #             x_play["air_yardsToEndzone"] = None
-    #         elif (pos_team_cos_sim > def_pos_team_cos_sim):
-    #             x_play["air_yardsToEndzone"] = 100 - int(x_play["air_yards_yardline"])
-    #         elif (pos_team_cos_sim < def_pos_team_cos_sim):
-    #             x_play["air_yardsToEndzone"] = int(x_play["air_yards_yardline"])
-    #         else:
-    #             x_play["air_yardsToEndzone"] = None
-
-    #     if x_play["start.yardsToEndzone"] is not None and x_play["air_yardsToEndzone"] is not None:
-    #         x_play["air_yards"] = (x_play["start.yardsToEndzone"] - x_play["air_yardsToEndzone"])
-    #     else:
-    #         x_play["air_yards"] = None
         
     assert x_play["air_yardsToEndzone"] == expected_air_yardsToEndzone
     assert x_play["air_yards"] == expected_air_yards
