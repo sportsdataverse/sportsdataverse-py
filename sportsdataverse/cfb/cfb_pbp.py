@@ -375,6 +375,7 @@ class CFBPlayProcess(object):
         pbp_txt["timeouts"][awayTeamId] = {"1": [], "2": []}
 
         # ----- Time ---------------
+        ## 2025 season: ESPN adds clock text in-line for some games
         pbp_txt["plays"]["play_text_clock"] = pbp_txt["plays"]["text"].str.extract("^\\((\d{1,2}:\d{2})\\)\s")[0]
         pbp_txt["plays"]["clock.mm"] = np.where(
             pbp_txt["plays"]["play_text_clock"].notna(),
