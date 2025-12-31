@@ -11,6 +11,7 @@ from functools import reduce, partial
 from sportsdataverse.dl_utils import download, key_check
 from .model_vars import *
 import logging
+from collections import Counter
 
 # "td" : float(p[0]),
 # "opp_td" : float(p[1]),
@@ -134,7 +135,6 @@ class CFBPlayProcess(object):
         base.columns = [col.strip("_") for col in base.columns.values]
         base.columns = [self.to_snake_case(col) for col in base.columns.values]
         return base
-
 
     def espn_cfb_pbp(self):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`, `college-football/summary`
@@ -531,12 +531,22 @@ class CFBPlayProcess(object):
                 pbp_txt["plays"]["homeTeamName"],
                 pbp_txt["plays"]["awayTeamName"],
             )
+        pbp_txt["plays"]["start.pos_team.abbreviation"] = np.where(
+            pbp_txt["plays"]["start.pos_team.id"].astype(int) == pbp_txt["plays"]["homeTeamId"].astype(int), 
+            pbp_txt["plays"]["homeTeamAbbrev"], 
+            pbp_txt["plays"]["awayTeamAbbrev"]
+        )
         pbp_txt["plays"]["start.def_pos_team.name"] = np.where(
                 pbp_txt["plays"]["start.pos_team.id"].astype(int)
                 == pbp_txt["plays"]["homeTeamId"].astype(int),
                 pbp_txt["plays"]["awayTeamName"],
                 pbp_txt["plays"]["homeTeamName"],
             )
+        pbp_txt["plays"]["start.def_pos_team.abbreviation"] = np.where(
+            pbp_txt["plays"]["start.pos_team.id"].astype(int) == pbp_txt["plays"]["homeTeamId"].astype(int), 
+            pbp_txt["plays"]["awayTeamAbbrev"], 
+            pbp_txt["plays"]["homeTeamAbbrev"]
+        )
         pbp_txt["plays"]["end.pos_team.name"] = np.where(
                 pbp_txt["plays"]["end.pos_team.id"].astype(int)
                 == pbp_txt["plays"]["homeTeamId"].astype(int),
@@ -4860,6 +4870,103 @@ class CFBPlayProcess(object):
         ].apply(lambda x: x.cumsum())
         return play_df
 
+    def __add_air_yards(self, play_df):
+        play_df["air_yardsToEndzone"] = None
+        play_df["air_yards"] = None
+
+        play_df["air_yards_yardline_team"] = np.select(
+            [
+                play_df["text"].str.contains(" caught at "),
+                play_df["text"].str.contains(" thrown to ")
+            ],
+            [
+                play_df["text"].str.extract(r" caught at (\w{2,3})\d{2}")[0],
+                play_df["text"].str.extract(r" thrown to (\w{2,3})\d{2}")[0]
+            ],
+            default = pd.NA
+        )
+
+        play_df["air_yards_yardline"] = np.select(
+            [
+                play_df["text"].str.contains(" caught at "),
+                play_df["text"].str.contains(" thrown to ")
+            ],
+            [
+                play_df["text"].str.extract(" caught at \w{2,3}(\d{2})")[0],
+                play_df["text"].str.extract(" thrown to \w{2,3}(\d{2})")[0]
+            ],
+            default = pd.NA
+        )
+        play_df.loc[play_df["air_yards_yardline"].notna(), "air_yards_yardline"] = play_df.loc[play_df["air_yards_yardline"].notna(), "air_yards_yardline"].astype(int)
+
+        play_df["pos_team_cosine_similarity"] = self.__series_calculate_cosine_similarity(play_df["air_yards_yardline_team"], play_df["start.pos_team.abbreviation"]) #play_df.apply(lambda x: self.__calculate_cosine_similarity(x["air_yards_yardline_team"], x["pos_team_abbreviation"]), axis=1)
+        play_df["def_pos_team_cosine_similarity"] = self.__series_calculate_cosine_similarity(play_df["air_yards_yardline_team"], play_df["start.def_pos_team.abbreviation"]) #play_df.apply(lambda x: self.__calculate_cosine_similarity(x["air_yards_yardline_team"], x["def_pos_team_abbreviation"]), axis=1)
+
+        play_df["air_yardsToEndzone"] = np.select(
+            [
+                (play_df["air_yards_yardline"].isna()) | (play_df["air_yards_yardline_team"].isna()),
+                (play_df["air_yards_yardline"].notna()) & (play_df["air_yards_yardline_team"].notna()) & (play_df["air_yards_yardline_team"] == play_df["start.pos_team.abbreviation"]),
+                (play_df["air_yards_yardline"].notna()) & (play_df["air_yards_yardline_team"].notna()) & (play_df["air_yards_yardline_team"] == play_df["start.def_pos_team.abbreviation"]),
+                (play_df["air_yards_yardline"].notna()) & (play_df["air_yards_yardline_team"].notna()) & ((play_df["pos_team_cosine_similarity"] >= 0.50) & (play_df["def_pos_team_cosine_similarity"] >= 0.50)),
+                (play_df["air_yards_yardline"].notna()) & (play_df["air_yards_yardline_team"].notna()) & (play_df["pos_team_cosine_similarity"] > play_df["def_pos_team_cosine_similarity"]),
+                (play_df["air_yards_yardline"].notna()) & (play_df["air_yards_yardline_team"].notna()) & (play_df["pos_team_cosine_similarity"] < play_df["def_pos_team_cosine_similarity"])
+            ],
+            [
+                pd.NA,
+                (100 - play_df["air_yards_yardline"]),
+                play_df["air_yards_yardline"],
+                pd.NA,
+                (100 - play_df["air_yards_yardline"]),
+                play_df["air_yards_yardline"],
+            ],
+            default = pd.NA
+        )
+
+        play_df["air_yards"] = np.where(
+            (play_df["start.yardsToEndzone"].notna()) & (play_df["air_yardsToEndzone"].notna()),
+            (play_df["start.yardsToEndzone"] - play_df["air_yardsToEndzone"]),
+            pd.NA
+        )
+
+        return play_df.drop(["pos_team_cosine_similarity", "def_pos_team_cosine_similarity"], axis=1)
+
+
+    def __series_calculate_cosine_similarity(self, a: pd.Series, b: pd.Series) -> pd.Series:
+        result = []
+        for (index_a, index_b) in zip(a.index, b.index):
+            element_a = a[index_a]
+            element_b = b[index_b]
+            result.append(self.__calculate_cosine_similarity(element_a, element_b))
+        
+        return pd.Series(result)
+
+    def __calculate_cosine_similarity(self, a: str, b: str) -> float:
+        if a is None or pd.isna(a):
+            return 0
+        if b is None or pd.isna(b):
+            return 0
+
+        a_file = list(a) #['a', 'b', 'c']
+        b_file = list(b) #['b', 'x', 'y', 'z']
+
+        # count word occurrences
+        a_vals = Counter(a_file)
+        b_vals = Counter(b_file)
+
+        # convert to word-vectors
+        words  = list(a_vals.keys() | b_vals.keys())
+        a_vect = [a_vals.get(word, 0) for word in words]       
+        b_vect = [b_vals.get(word, 0) for word in words]        
+
+        # find cosine
+        len_a  = sum(av*av for av in a_vect) ** 0.5             
+        len_b  = sum(bv*bv for bv in b_vect) ** 0.5             
+        dot    = sum(av*bv for av,bv in zip(a_vect, b_vect))   
+        cosine = dot / (len_a * len_b)
+
+        return cosine
+
+
     def __cast_box_score_column(self, column, target_type):
         if (column in self.plays_json.columns):
             self.plays_json[column] = self.plays_json[column].astype(target_type)
@@ -5394,6 +5501,7 @@ class CFBPlayProcess(object):
                 self.plays_json = self.__process_epa(self.plays_json)
                 self.plays_json = self.__process_wpa(self.plays_json)
                 self.plays_json = self.__add_drive_data(self.plays_json)
+                self.plays_json = self.__add_air_yards(self.plays_json)
                 self.plays_json = self.__process_qbr(self.plays_json)
                 self.plays_json = self.plays_json.replace({np.nan: None})
                 pbp_json = {
