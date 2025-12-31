@@ -5064,7 +5064,8 @@ class CFBPlayProcess(object):
             WPA = ('wpa', sum),
             SR = ('EPA_success', mean),
             Sck = ('sack_vec', sum),
-            SckYds = ('yds_sacked', sum)
+            SckYds = ('yds_sacked', sum),
+            ADOT = ('air_yards', mean),
         ).round(2)
         passer_box = passer_box.replace({np.nan: None})
         passer_box.sort_values(by="Att", ascending=False, inplace=True)
@@ -5120,7 +5121,9 @@ class CFBPlayProcess(object):
             WPA= ('wpa', sum),
             SR = ('EPA_success', mean),
             Fum = ('fumble_vec', sum),
-            Fum_Lost = ('fumble_lost', sum)
+            Fum_Lost = ('fumble_lost', sum),
+            YAC = ('yards_after_catch', sum),
+            ADOT = ('air_yards', mean)
         ).round(2)
         receiver_box = receiver_box.replace({np.nan: None})
         receiver_box.sort_values(by="Tar", ascending=False, inplace=True)
