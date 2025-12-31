@@ -844,6 +844,9 @@ def test_25_weird_format_play_timestamp(game_id, play_text, clock_minutes, clock
         (401754571, "(09:25) No Huddle-Shotgun #10 R.Collins pass complete short left to #2 J.Cook II caught at SU31, for 4 yards to the SU34 (#2 E.Lightsey)", 69, 1, 3),
         (401777353, "(07:37) Shotgun #10 J.Sayin pass complete short left to #4 J.Smith caught at OSU29, for 5 yards loss to the OSU32 (#12 D.Boykin)", 71, -8, 3),
 
+        ## full name / short team name
+        (401778328, "(03:53) Shotgun #2 D.Pavia pass complete short middle to #0 J.Sherrill caught at Vandy45, for 37 yards to the Iowa35 (#3 J.Watson), out of bounds, 1ST DOWN", 55, 17, 20),
+
         ## cosine similarity
         (401777353, "(00:46) Shotgun #15 F.Mendoza pass incomplete deep middle to #80 C.Becker thrown to OSU23 PENALTY OSU Pass Interference (#3 L.Styles Jr.) 15 yards from IND25 to IND40, 1ST DOWN. NO PLAY", 23, 52, None),
         (401777353, "(12:54) Shotgun #10 J.Sayin pass complete deep middle to #4 J.Smith caught at IND32, for 52 yards to the IND22 (#1 A.Ferrell), 1ST DOWN, PENALTY IND Personal Foul (#6 M.Kamara) 11 yard from IND22 to IND11, 1ST DOWN", 32, 42, 10),

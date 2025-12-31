@@ -4896,8 +4896,8 @@ class CFBPlayProcess(object):
                 play_df["text"].str.contains(" thrown to ")
             ],
             [
-                play_df["text"].str.extract(r" caught at (\w{2,3})\d{2}")[0],
-                play_df["text"].str.extract(r" thrown to (\w{2,3})\d{2}")[0]
+                play_df["text"].str.extract(r" caught at (\w+)\d{2}")[0],
+                play_df["text"].str.extract(r" thrown to (\w+)\d{2}")[0]
             ],
             default = pd.NA
         )
@@ -4908,8 +4908,8 @@ class CFBPlayProcess(object):
                 play_df["text"].str.contains(" thrown to ")
             ],
             [
-                play_df["text"].str.extract(" caught at \w{2,3}(\d{2})")[0],
-                play_df["text"].str.extract(" thrown to \w{2,3}(\d{2})")[0]
+                play_df["text"].str.extract(r" caught at \w+(\d{2})")[0],
+                play_df["text"].str.extract(r" thrown to \w+(\d{2})")[0]
             ],
             default = pd.NA
         )
