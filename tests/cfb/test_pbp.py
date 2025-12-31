@@ -867,41 +867,4 @@ def test_25_air_yards_detection(game_id: int, play_text: str, expected_air_yards
         
     assert x_play["air_yardsToEndzone"] == expected_air_yardsToEndzone
     assert x_play["air_yards"] == expected_air_yards
-            
 
-
-
-
-
-from collections import Counter
-
-def cosine_similarity(a: str, b: str) -> float:
-
-
-    a_file = list(a) #['a', 'b', 'c']
-    b_file = list(b) #['b', 'x', 'y', 'z']
-
-    # count word occurrences
-    a_vals = Counter(a_file)
-    b_vals = Counter(b_file)
-
-    # convert to word-vectors
-    words  = list(a_vals.keys() | b_vals.keys())
-    a_vect = [a_vals.get(word, 0) for word in words]       
-    b_vect = [b_vals.get(word, 0) for word in words]        
-
-    # find cosine
-    len_a  = sum(av*av for av in a_vect) ** 0.5             
-    len_b  = sum(bv*bv for bv in b_vect) ** 0.5             
-    dot    = sum(av*bv for av,bv in zip(a_vect, b_vect))   
-    cosine = dot / (len_a * len_b)
-
-    return cosine
-
-
-# three states: 
-# - abbreviation matches def pos team --> yardsToEndzone < 50
-# - abbreviation matches pos team --> yardsToEndzone > 50
-# - abbreviation matches neither team:
-#   - abbreviation closest to pos team --> yardsToEndzone > 50
-#   - abbreviation closest to def pos team --> yardsToEndzone < 50

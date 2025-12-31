@@ -4871,6 +4871,12 @@ class CFBPlayProcess(object):
         return play_df
 
     def __add_air_yards(self, play_df):
+        # three states: 
+        # - abbreviation matches def pos team --> yardsToEndzone < 50
+        # - abbreviation matches pos team --> yardsToEndzone > 50
+        # - abbreviation matches neither team:
+        #   - abbreviation closest to pos team --> yardsToEndzone > 50
+        #   - abbreviation closest to def pos team --> yardsToEndzone < 50
         play_df["air_yardsToEndzone"] = None
         play_df["air_yards"] = None
 
@@ -4915,7 +4921,7 @@ class CFBPlayProcess(object):
                 pd.NA,
                 (100 - play_df["air_yards_yardline"]),
                 play_df["air_yards_yardline"],
-                pd.NA,
+                pd.NA, ## abbreviations are too similar
                 (100 - play_df["air_yards_yardline"]),
                 play_df["air_yards_yardline"],
             ],
