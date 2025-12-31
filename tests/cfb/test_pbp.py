@@ -807,29 +807,30 @@ def test_25_weird_format_timeouts(game_id, play_text, start_pos_team_id):
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "start.pos_team.id"] == start_pos_team_id
 
-# @pytest.mark.parametrize(
-#     "game_id, play_text, clock_minutes, clock_seconds",
-#     [
-#         # error case
-#         (401754579, "(10:26) No Huddle-Shotgun #1 J.Haynes rush middle for 0 yards to the NCSU02 (#52 C.Wallace)", '10', '26'),
-#         (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", '07', '42'),
-#         # base case
-#         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", '12', '47'),
-#     ]
-# )
-# def test_25_weird_format_play_timestamp(game_id, play_text, clock_minutes, clock_seconds):
-#     test = CFBPlayProcess(gameId = game_id)
-#     test.espn_cfb_pbp()
-#     test.run_processing_pipeline()
+@pytest.mark.parametrize(
+    "game_id, play_text, clock_minutes, clock_seconds",
+    [
+        # error case
+        (401754579, "(10:26) No Huddle-Shotgun #1 J.Haynes rush middle for 0 yards to the NCSU02 (#52 C.Wallace)", '10', '26'),
+        (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", '07', '42'),
+        (401778328, "(08:57) Shotgun #11 M.Gronowski pass complete deep right to #81 D.Vonnahme caught at Vandy00, for 21 yards to the Vandy00 TOUCHDOWN, clock 08:50, 1ST DOWN #18 D.Stevens kick attempt good (H: #99 T.Nissen, LS: #45 B.Worrell)", '08', '57'),
+        # base case
+        (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", '12', '47'),
+    ]
+)
+def test_25_weird_format_play_timestamp(game_id, play_text, clock_minutes, clock_seconds):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
 
-#     plays = test.plays_json
-#     target_plays = plays[
-#         plays['text'].isin([play_text])
-#     ]
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
 
-#     assert len(target_plays) == 1
-#     assert target_plays.loc[target_plays.index[0], "clock.minutes"] == clock_minutes
-#     assert target_plays.loc[target_plays.index[0], "clock.seconds"] == clock_seconds
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "clock.minutes"] == clock_minutes
+    assert target_plays.loc[target_plays.index[0], "clock.seconds"] == clock_seconds
 
 
 @pytest.mark.parametrize(

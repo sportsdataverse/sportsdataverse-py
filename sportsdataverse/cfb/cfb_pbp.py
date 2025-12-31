@@ -374,10 +374,14 @@ class CFBPlayProcess(object):
         pbp_txt["timeouts"][homeTeamId] = {"1": [], "2": []}
         pbp_txt["timeouts"][awayTeamId] = {"1": [], "2": []}
 
-            # ----- Time ---------------
-        pbp_txt["plays"]["clock.mm"] = pbp_txt["plays"][
-                "clock.displayValue"
-            ].str.split(pat=":")
+        # ----- Time ---------------
+        pbp_txt["plays"]["play_text_clock"] = pbp_txt["plays"]["text"].str.extract("^\\((\d{1,2}:\d{2})\\)\s")[0]
+        pbp_txt["plays"]["clock.mm"] = np.where(
+            pbp_txt["plays"]["play_text_clock"].notna(),
+            pbp_txt["plays"]["play_text_clock"],
+            pbp_txt["plays"]["clock.displayValue"]
+        )
+        pbp_txt["plays"]["clock.mm"] = pbp_txt["plays"]["clock.mm"].str.split(pat=":")
         pbp_txt["plays"][["clock.minutes", "clock.seconds"]] = pbp_txt["plays"][
                 "clock.mm"
             ].to_list()
