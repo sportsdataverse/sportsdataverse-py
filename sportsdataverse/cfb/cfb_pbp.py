@@ -2009,8 +2009,19 @@ class CFBPlayProcess(object):
         play_df["end.pos_team_receives_2H_kickoff"] = (
             play_df["end.pos_team.id"] == play_df.firstHalfKickoffTeamId
         )
-        play_df["change_of_poss"] = np.where(
-            play_df["start.pos_team.id"] == play_df["start.pos_team.id"].shift(-1), False, True
+        play_df["change_of_poss"] = False
+        play_df["change_of_poss"] = np.select(
+            [
+                play_df["type.text"].isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]),
+                play_df["type.text"].shift(-1).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]),
+                play_df["type.text"].shift(-1).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]) & play_df["type.text"].shift(-2).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"])
+            ],
+            [
+                False,
+                play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-2),
+                play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-3)
+            ],
+            default = (play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-1))
         )
         play_df["change_of_poss"] = np.where(
             play_df["change_of_poss"].isna(), 0, play_df["change_of_poss"]
@@ -2733,7 +2744,7 @@ class CFBPlayProcess(object):
         play_df["change_of_pos_team"] = np.where(
             (play_df.pos_team == play_df.lead_pos_team)
             & (
-                ~(play_df.lead_play_type.isin(["End Period", "End of Half"]))
+                ~(play_df.lead_play_type.isin(["End Period", "End of Half", "Timeout"]))
                 | play_df.lead_play_type.isna()
                 == True
             ),
@@ -2741,7 +2752,7 @@ class CFBPlayProcess(object):
             np.where(
                 (play_df.pos_team == play_df.lead_pos_team2)
                 & (
-                    (play_df.lead_play_type.isin(["End Period", "End of Half"]))
+                    (play_df.lead_play_type.isin(["End Period", "End of Half", "Timeout"]))
                     | play_df.lead_play_type.isna()
                     == True
                 ),

@@ -776,7 +776,7 @@ def test_25_weird_format_end_of_play(game_id, play_text, end_yardsToEndzone, end
     target_plays = plays[
         plays['text'].isin([play_text])
     ]
-    # LOGGER.info(target_plays.loc[target_plays.index[0], "cleaned_text"])
+
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
     assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
@@ -832,6 +832,40 @@ def test_25_weird_yardage_totals(game_id: int, team_id: int, expected_total_off_
     assert expected_total_off_yards == plays.loc[(plays["int"] == False), 'statYardage'].sum()
 
 
-#     assert len(target_plays) == 1
-#     assert target_plays.loc[target_plays.index[0], "clock.minutes"] == clock_minutes
-#     assert target_plays.loc[target_plays.index[0], "clock.seconds"] == clock_seconds
+@pytest.mark.parametrize(
+    "game_id, play_text, fumble_vec, change_of_poss, end_yardsToEndzone, end_pos_team_id",
+    [
+        # punts
+        (401754571, "(13:37) #47 M.Nichols punt 57 yards to the SU22 #10 D.Kerr return for loss of 11 yards to the SU20 fumbled by #10 D.Kerr at SU20 forced by #17 J.Hamilton recovered by SU #26 T.Haile at SU11, End Of Play", True, True, 89, 183),
+        (401754572, "(02:21) #94 D.Joyce punt 47 yards to the STAN15 fair catch by #13 L.Thorpe at STAN15", False, True, 85, 24),
+        (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", False, True, 68, 245),
+
+        # not actual turnover
+        (401778302, "Shotgun #14 M.Cutforth pass complete deep middle to #3 L.Caples caught at WAS06, for 22 yards to the WAS06 (#18 R.Dillard-Allen), 1ST DOWN", False, False, 6, 68),
+
+        # TOD not marked in PBP x old style PBP
+        (401677184, "Gunner Stockton pass complete to Dillon Bell for no gain to the ND 42", False, True, 58, 87),
+
+        # normal TOD
+        (401778317, "No Huddle-Shotgun #17 E.Grunkemeyer pass complete short left to #87 A.Rappleyea caught at CLE46, for 1 yard to the CLE46, End Of Play, TURNOVER ON DOWNS", False, True, 54, 228),
+
+        # TOD with timeout
+        (401769072, "(12:44) Shotgun #4 D.Hill pass complete short middle to #5 G.Bernard caught at ALA32, for 0 yards to the ALA34 (#46 I.Jones; #21 R.Hardy), TURNOVER ON DOWNS", False, True, 34, 84),
+    ]
+)
+def test_errored_change_of_poss(game_id, play_text, fumble_vec, change_of_poss, end_yardsToEndzone, end_pos_team_id):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "fumble_vec"] == fumble_vec
+    assert target_plays.loc[target_plays.index[0], "change_of_poss"] == change_of_poss
+    assert target_plays.loc[target_plays.index[0], "change_of_pos_team"] == change_of_poss
+    assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
+    assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
