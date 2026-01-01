@@ -1,5 +1,6 @@
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 import pandas as pd
+pd.set_option('display.max_rows', 500)
 import pytest
 import numpy as np
 import logging
@@ -807,25 +808,29 @@ def test_25_weird_format_timeouts(game_id, play_text, start_pos_team_id):
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "start.pos_team.id"] == start_pos_team_id
 
-# @pytest.mark.parametrize(
-#     "game_id, play_text, clock_minutes, clock_seconds",
-#     [
-#         # error case
-#         (401754579, "(10:26) No Huddle-Shotgun #1 J.Haynes rush middle for 0 yards to the NCSU02 (#52 C.Wallace)", '10', '26'),
-#         (401754579, "(07:42) Shotgun #10 H.King rush middle for 0 yards to the NCSU02 (#44 B.Cleveland; #1 C.Fordham)", '07', '42'),
-#         # base case
-#         (401752748, "Grant Chadwick punt for 48 yds , KC Concepcion returns for 14 yds to the TA&M 32", '12', '47'),
-#     ]
-# )
-# def test_25_weird_format_play_timestamp(game_id, play_text, clock_minutes, clock_seconds):
-#     test = CFBPlayProcess(gameId = game_id)
-#     test.espn_cfb_pbp()
-#     test.run_processing_pipeline()
 
-#     plays = test.plays_json
-#     target_plays = plays[
-#         plays['text'].isin([play_text])
-#     ]
+@pytest.mark.parametrize(
+    "game_id, team_id, expected_total_off_yards",
+    [
+        (401778317, 194, 332),
+    ]
+)
+def test_25_weird_yardage_totals(game_id: int, team_id: int, expected_total_off_yards: int):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+    
+
+    plays = test.plays_json[
+        (test.plays_json["pos_team"].isin([team_id, str(team_id)]))
+        & (test.plays_json["scrimmage_play"] == True)
+        
+    ]
+    # LOGGER.info(plays['statYardage'].sum())
+    LOGGER.info(plays.loc[:, ['clock.displayValue', 'text', 'statYardage']])
+    assert expected_total_off_yards == plays['statYardage'].sum()
+    assert expected_total_off_yards == plays.loc[(plays["int"] == False), 'statYardage'].sum()
+
 
 #     assert len(target_plays) == 1
 #     assert target_plays.loc[target_plays.index[0], "clock.minutes"] == clock_minutes

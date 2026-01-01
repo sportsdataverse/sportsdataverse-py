@@ -1819,12 +1819,17 @@ class CFBPlayProcess(object):
 
                 (play_df["pass"] == True)
                 & (play_df.cleaned_text.str.contains(" complete to ", case=False)) 
-                & (play_df['statYardage'] == 0)
+                & (play_df['statYardage'] == 0),
+
+                # 2025: do not consider interception return yardage as part of offensive yardage
+                (play_df['type.text'].str.contains("Interception"))
             ],
             [
                 play_df['start.yardsToEndzone'] - (100 - play_df['end.yardsToEndzone']),
 
-                play_df['start.yardsToEndzone'] - play_df['end.yardsToEndzone']
+                play_df['start.yardsToEndzone'] - play_df['end.yardsToEndzone'],
+
+                0
             ],
             default = play_df['statYardage']
         )
