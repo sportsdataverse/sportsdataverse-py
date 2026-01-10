@@ -133,6 +133,12 @@ class CFBPlayProcess(object):
         base.columns = ['_'.join(reversed(col)).strip() for col in base.columns.values]
         base.columns = [col.strip("_") for col in base.columns.values]
         base.columns = [self.to_snake_case(col) for col in base.columns.values]
+        if "receiver_player_name" not in base.columns:
+            base["receiver_player_name"] = pd.NA
+        if "rusher_player_name" not in base.columns:
+            base["rusher_player_name"] = pd.NA
+        if "passer_player_name" not in base.columns:
+            base["passer_player_name"] = pd.NA
         return base
 
 
