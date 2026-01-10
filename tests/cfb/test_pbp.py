@@ -720,6 +720,7 @@ def test_game_athletes(game_id, expected_rows):
     [
         # error case
         (401754591, "(11:29) #2 C.Klubnik rush middle for 3 yards loss to the LOU04 fumbled by #2 C.Klubnik at LOU04 recovered by LOU #99 J.Guerad at LOU04, End Of Play PENALTY LOU UNS: Unsportsmanlike Conduct (#21 D.Hutchinson) 2 yards from LOU04 to LOU02", 2, 228, False, False, True, False),
+        # (401769075, "(08:36) No Huddle-Shotgun #5 K.Lacy rush middle for 5 yards gain to the MIA16 (#16 J.Antoine) PENALTY MIA Personal Foul (#11 D.Blay) 8 yards from MIA16 to MIA08, 1ST DOWN", 8, 145, False, False, True, False),
 
         # base case
         (401754591, "(11:24) Shotgun #22 K.Brown rush right for 18 yards gain to the LOU20 (#6 R.Jones), out of bounds PENALTY LOU Holding (#85 N.Kurisky) 1 yard from LOU02 to LOU01. NO PLAY", 99, 97, False, True, False, False),
@@ -869,3 +870,26 @@ def test_errored_change_of_poss(game_id, play_text, fumble_vec, change_of_poss, 
     assert target_plays.loc[target_plays.index[0], "change_of_pos_team"] == change_of_poss
     assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
     assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
+
+@pytest.mark.parametrize(
+    "game_id, play_text, is_scrimmage_play",
+    [
+        (401769074, "(00:20) Kneel down by Indiana at Ind24 for loss of 1 yard", False),
+        (401769074, "(00:22) #36 A.Sappington kickoff 65 yards to the Ind00, Touchback", False),
+        (401769074, "Timeout Oregon, clock 02:00", False),
+        (401769074, "(00:37) #5 D.Moore pass incomplete short right to #83 R.Saleapaga thrown to Ind00 PENALTY Ind Pass Interference (#18 A.Turvy) 1 yard from Ind02 to Ind01, 1ST DOWN. NO PLAY", False),
+        (401769072, "(12:44) Shotgun #4 D.Hill pass complete short middle to #5 G.Bernard caught at ALA32, for 0 yards to the ALA34 (#46 I.Jones; #21 R.Hardy), TURNOVER ON DOWNS", True),
+    ]
+)
+def test_is_scrimmage_play(game_id, play_text, is_scrimmage_play):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "scrimmage_play"] == is_scrimmage_play

@@ -2730,8 +2730,8 @@ class CFBPlayProcess(object):
         )
         play_df["scrimmage_play"] = np.where(
             (play_df.sp == False)
-            & (
-                ~play_df["type.text"].isin(
+            & ~(
+                play_df["type.text"].isin(
                     [
                         "Timeout",
                         "Extra Point Good",
@@ -2740,6 +2740,22 @@ class CFBPlayProcess(object):
                         "Two-Point Rush",
                         "Penalty",
                     ]
+                )
+            ) & ~(
+                (
+                    play_df["cleaned_text"].str.contains(
+                        r"\s?kneel-down\s?", case=False, flags=0, na=False, regex=True
+                    )
+                )
+                | (
+                    play_df["cleaned_text"].str.contains(
+                        r"\s?kneel down\s?", case=False, flags=0, na=False, regex=True
+                    )
+                )
+                | (
+                    play_df["cleaned_text"].str.contains(
+                        r"\s?kneel\s?", case=False, flags=0, na=False, regex=True
+                    )
                 )
             ),
             True,
