@@ -893,3 +893,27 @@ def test_is_scrimmage_play(game_id, play_text, is_scrimmage_play):
 
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "scrimmage_play"] == is_scrimmage_play
+
+@pytest.mark.parametrize(
+    "game_id, play_text, is_kneel_down",
+    [
+        (401769074, "(00:20) Kneel down by Indiana at Ind24 for loss of 1 yard", True),
+        (401754546, "R. Ashford takes a knee", True),
+        (401551786, "TEAM run for a loss of 1 yard to the MICH 1", True),
+        (401769074, "(00:22) #36 A.Sappington kickoff 65 yards to the Ind00, Touchback", False),
+        (401769074, "Timeout Oregon, clock 02:00", False),
+        (401551786, "Blake Corum run for 1 yd to the MICH 2", False)
+    ]
+)
+def test_is_kneel_down(game_id, play_text, is_kneel_down):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "kneel_down"] == is_kneel_down

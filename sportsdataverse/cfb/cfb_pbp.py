@@ -2728,8 +2728,73 @@ class CFBPlayProcess(object):
             True,
             False,
         )
+        play_df["kneel_down"] = np.select(
+            [
+                (play_df.sp == True),
+                (
+                    play_df["type.text"].isin(
+                        [
+                            "Timeout",
+                            "Extra Point Good",
+                            "Extra Point Missed",
+                            "Two-Point Pass",
+                            "Two-Point Rush",
+                            "Penalty",
+                        ]
+                    )
+                ),
+                (play_df["pass"] == True),
+                (
+                    play_df["cleaned_text"].str.contains(
+                        r"\s?kneel-down\s?", case=False, flags=0, na=False, regex=True
+                    )
+                ), 
+                (
+                    play_df["cleaned_text"].str.contains(
+                        r"\s?kneel down\s?", case=False, flags=0, na=False, regex=True
+                    )
+                ),
+                (
+                    play_df["cleaned_text"].str.contains(
+                        r"\s?kneel\s?", case=False, flags=0, na=False, regex=True
+                    )
+                ),
+                (
+                    play_df["cleaned_text"].str.contains(
+                        r"\stakes a knee", case=False, flags=0, na=False, regex=True
+                    )
+                ),
+                # if they're marked as TEAM rushes for -1,-2 within the last minute of a half, it's probably a kneel
+                (
+                    (
+                        ((play_df["start.adj_TimeSecsRem"] <= 1860) & (play_df["start.adj_TimeSecsRem"] >= 1800))
+                        | ((play_df["start.adj_TimeSecsRem"] <= 60) & (play_df["start.adj_TimeSecsRem"] >= 0))
+                    )
+                    & (
+                        (play_df["cleaned_text"].str.contains(
+                            r"^team run for a loss of 1 yard", case=False, flags=0, na=False, regex=True
+                        ))
+                        | (play_df["cleaned_text"].str.contains(
+                            r"^team run for a loss of 2 yards", case=False, flags=0, na=False, regex=True
+                        ))
+                    )
+                )
+            ],
+            [
+                False,
+                False,
+                False,
+                True,
+                True,
+                True,
+                True,
+                True
+            ],
+            default = False
+        )
         play_df["scrimmage_play"] = np.where(
             (play_df.sp == False)
+            & (play_df.kneel_down == False)
             & ~(
                 play_df["type.text"].isin(
                     [
@@ -2740,22 +2805,6 @@ class CFBPlayProcess(object):
                         "Two-Point Rush",
                         "Penalty",
                     ]
-                )
-            ) & ~(
-                (
-                    play_df["cleaned_text"].str.contains(
-                        r"\s?kneel-down\s?", case=False, flags=0, na=False, regex=True
-                    )
-                )
-                | (
-                    play_df["cleaned_text"].str.contains(
-                        r"\s?kneel down\s?", case=False, flags=0, na=False, regex=True
-                    )
-                )
-                | (
-                    play_df["cleaned_text"].str.contains(
-                        r"\s?kneel\s?", case=False, flags=0, na=False, regex=True
-                    )
                 )
             ),
             True,
