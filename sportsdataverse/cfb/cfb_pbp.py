@@ -469,6 +469,11 @@ class CFBPlayProcess(object):
            "Interception",
            pbp_txt["plays"]["type.text"]
         )
+        pbp_txt["plays"]["drive.id"] = np.where(
+            ncg_2025_gw_mask,
+            40176907631,
+            pbp_txt["plays"]["drive.id"]
+        )
 
         pbp_txt["plays"]["lead_text"] = pbp_txt["plays"]["cleaned_text"].shift(-1)
         pbp_txt["plays"]["lead_start_team"] = pbp_txt["plays"]["start.team.id"].shift(-1)
