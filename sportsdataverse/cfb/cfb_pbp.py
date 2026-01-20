@@ -2030,16 +2030,16 @@ class CFBPlayProcess(object):
 
         play_df["change_of_poss"] = np.select(
             [
-                (play_df["isTurnover"].notna()),
                 play_df["type.text"].isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]),
                 play_df["type.text"].shift(-1).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]),
-                play_df["type.text"].shift(-1).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]) & play_df["type.text"].shift(-2).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"])
+                play_df["type.text"].shift(-1).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]) & play_df["type.text"].shift(-2).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]),
+                (play_df["isTurnover"].notna()) & (play_df["isTurnover"] == True) & (play_df["start.pos_team.id"] == play_df["start.pos_team.id"].shift(-1)),
             ],
             [
-                (play_df["isTurnover"]),
                 False,
                 play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-2),
-                play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-3)
+                play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-3),
+                True,
             ],
             default = (play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-1))
         )
