@@ -1487,8 +1487,17 @@ class CFBPlayProcess(object):
             "touchdown", case=False, flags=0, na=False, regex=True
         )
         ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
-        play_df["td_check"] = play_df["cleaned_text"].str.contains(
-            "Touchdown", case=False, flags=0, na=False, regex=True
+        play_df["td_check"] = (
+            (play_df["cleaned_text"].str.contains(
+                "Touchdown", case=False, flags=0, na=False, regex=True
+            ))
+            & ~(
+                (
+                    play_df["cleaned_text"].str.contains(
+                        "CALL OVERTURNED\. \(Original Play: .* TOUCHDOWN", case=False, flags=0, na=False, regex=True
+                    )
+                )
+            )
         )
         play_df["safety"] = play_df["cleaned_text"].str.contains(
             "safety", case=False, flags=0, na=False, regex=True

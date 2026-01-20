@@ -945,3 +945,27 @@ def test_punt_wpa(game_id, play_text, wp_after_case, expected_wp):
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "wp_after_case"] == wp_after_case
     assert round(target_plays.loc[target_plays.index[0], "wp_after"], 2) == expected_wp
+
+
+@pytest.mark.parametrize(
+    "game_id, play_text, expected_td_check, expected_play_type",
+    [
+        (401769076, "(07:56) Shotgun #15 F.Mendoza pass complete short right to #80 C.Becker caught at Miami14, for 15 yards to the Miami05 (#8 J.Thomas), 1ST DOWN. The previous play is under automatic review - \"Runner was down by contact\". CALL OVERTURNED. (Original Play: (07:56) Shotgun #15 F.Mendoza pass complete short right to #80 C.Becker caught at Miami14, for 20 yards to the Miami00 TOUCHDOWN, clock 07:56, 1ST DOWN)", False, "Pass Reception"),
+        (401778315, "(12:26) No Huddle-Shotgun #16 J.Pesansky pass complete short right to #7 K.McNeal caught at UTSA05, for 19 yards to the UTSA00 TOUCHDOWN, clock 12:17, 1ST DOWN. The previous play is under automatic review - \"Runner broke the plane\". CALL UPHELD #16 N.Grant kick attempt good (H: #6 T.Wilhoit, LS: #47 J.Wood)", True, "Passing Touchdown"),
+        (401778323, "No Huddle-Shotgun #1 C.Weigman pass complete short right to #0 A.Thomas caught at LSU12, for 8 yards to the LSU00 TOUCHDOWN, clock 06:08. The previous play is under automatic review - \"Runner broke the plane\". CALL OVERTURNED. (Original Play: No Huddle-Shotgun #1 C.Weigman pass complete short right to #0 A.Thomas caught at LSU12, for 7 yards to the LSU01 (#0 T.Cooley), out of bounds) #92 E.Sanchez kick attempt good (H: #15 J.Sock, LS: #56 J.Garza)", True, "Passing Touchdown")
+
+    ]
+)
+def test_reviews(game_id, play_text, expected_td_check, expected_play_type):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "td_check"] == expected_td_check
+    assert target_plays.loc[target_plays.index[0], "type.text"] == expected_play_type
