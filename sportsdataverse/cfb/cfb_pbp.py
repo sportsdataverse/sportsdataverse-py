@@ -471,7 +471,7 @@ class CFBPlayProcess(object):
         )
         pbp_txt["plays"]["drive.id"] = np.where(
             ncg_2025_gw_mask,
-            40176907631,
+            "40176907631",
             pbp_txt["plays"]["drive.id"]
         )
 
