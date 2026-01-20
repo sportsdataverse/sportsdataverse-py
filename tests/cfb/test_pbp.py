@@ -928,7 +928,8 @@ def test_is_kneel_down(game_id, play_text, is_kneel_down):
         (401628463, "Jared Campbell punt for 45 yds , Myles Price returns for no gain to the IU 26 Western Illinois Penalty, Personal Foul (-15 Yards) to the IU 47", 11, 0.0),
         (401628463, "(02:04) QB Keeper LAMB, Nathan rush to the right for no gain to the WIU35 (CARR JR., Lanell), out of bounds, clock 01:57. PENALTY WIU Holding on TRECCIA, Joey enforced 10 yards from the WIU35 to the WIU25 [SG]. NO PLAY (replay the down).", None, 0.0),
         (401628465, "Ryan Eckley punt blocked, PENALTY MSU Face mask enforced 15 yards after the change of possession from the end of the play at the MD 23 to the MD 38", 11, 0.09),
-        (401831583, "(02:46) #43 W.McSparron punt 52 yards to the ARIZ00, Touchback PENALTY SMU Illegal Formation 5 yards from ARIZ20 to ARIZ25", 11, 0.99)
+        (401831583, "(02:46) #43 W.McSparron punt 52 yards to the ARIZ00, Touchback PENALTY SMU Illegal Formation 5 yards from ARIZ20 to ARIZ25", 11, 0.99),
+        (401628359, "Garrett Nussmeier pass intercepted Nick Emmanwori return for 20 yds to the SC 0 South Carolina Penalty, Unnecessary Roughness (Kyle Kennard) to the SC 10", 11, 0.32)
     ]
 )
 def test_punt_wpa(game_id, play_text, wp_after_case, expected_wp):
