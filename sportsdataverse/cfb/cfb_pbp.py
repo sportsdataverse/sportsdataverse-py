@@ -4816,8 +4816,8 @@ class CFBPlayProcess(object):
                 & (play_df.change_of_pos_team == 1),
                 (play_df["kickoff_onside"] == True)
                 & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True)),  # onside recovery
-                (play_df["penalty_flag"] == True & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]) & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True))),
-                (play_df["penalty_flag"] == True & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])),
+                # (play_df["penalty_flag"] == True & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]) & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True))),
+                # ((play_df["penalty_flag"] == True) & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])),
                 (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
                 ((play_df["penalty_flag"] == True) & (play_df.penalty_assessed_on_kickoff == True)),
             ],
@@ -4833,8 +4833,8 @@ class CFBPlayProcess(object):
                 play_df.lead_wp_before,
                 (1 - play_df.lead_wp_before),
                 (1 - play_df.lead_wp_before),
-                (1 - play_df.wp_after),
-                play_df.wp_after,
+                # (1 - play_df.wp_after),
+                # play_df.wp_after,
                 (1 - play_df.wp_after),
                 WP_start_touchback
             ],
@@ -4883,8 +4883,8 @@ class CFBPlayProcess(object):
                 & (play_df.change_of_pos_team == 1),
                 (play_df["kickoff_onside"] == True)
                 & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True)),  # onside recovery
-                (play_df["penalty_flag"] == True & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]) & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True))),
-                (play_df["penalty_flag"] == True & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])),
+                # ((play_df["penalty_flag"] == True) & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]) & ((play_df["change_of_pos_team"] == True) | (play_df["change_of_poss"] == True))),
+                # (play_df["penalty_flag"] == True & (play_df["start.pos_team.id"] != play_df["end.pos_team.id"])),
                 (play_df["start.pos_team.id"] != play_df["end.pos_team.id"]),
                 ((play_df["penalty_flag"] == True) & (play_df.penalty_assessed_on_kickoff == True)),
             ],
@@ -4902,8 +4902,8 @@ class CFBPlayProcess(object):
                 10,
                 11,
                 12,
-                13,
-                14
+                # 13,
+                # 14
             ],
             default=None,
         )
