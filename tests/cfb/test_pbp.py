@@ -871,6 +871,31 @@ def test_errored_change_of_poss(game_id, play_text, fumble_vec, change_of_poss, 
     assert target_plays.loc[target_plays.index[0], "end.yardsToEndzone"] == end_yardsToEndzone
     assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_pos_team_id
 
+
+@pytest.mark.parametrize(
+    "game_id, play_text, play_type, end_EP",
+    [
+        (401769076, "(05:00) #94 D.Joyce punt 0 yards to the Miami16 blocked by #6 M.Kamara recovered by IND #46 I.Jones at Miami00 TOUCHDOWN, clock 05:04 #15 N.Radicic kick attempt good (H: #44 M.McCarthy, LS: #47 M.Langston)", "Punt Return Touchdown", -6.92)
+
+    ]
+)
+def test_mismarked_punt_block_td(game_id, play_text, play_type, end_EP):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "type.text"] == play_type
+    assert target_plays.loc[target_plays.index[0], "EP_end"] == end_EP
+    assert target_plays.loc[target_plays.index[0], "start.pos_score_diff"] == -3
+    assert target_plays.loc[target_plays.index[0], "end.pos_score_diff"] == 10
+
+
 @pytest.mark.parametrize(
     "game_id, play_text, is_scrimmage_play",
     [

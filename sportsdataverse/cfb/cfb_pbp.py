@@ -2025,13 +2025,18 @@ class CFBPlayProcess(object):
             play_df["end.pos_team.id"] == play_df.firstHalfKickoffTeamId
         )
         play_df["change_of_poss"] = False
+        if "isTurnover" not in play_df.columns:
+            play_df["isTurnover"] = pd.NA
+
         play_df["change_of_poss"] = np.select(
             [
+                (play_df["isTurnover"].notna()),
                 play_df["type.text"].isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]),
                 play_df["type.text"].shift(-1).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]),
                 play_df["type.text"].shift(-1).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"]) & play_df["type.text"].shift(-2).isin(["Timeout", "End of Half", "End of Period", "End Period", "End Quarter"])
             ],
             [
+                (play_df["isTurnover"]),
                 False,
                 play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-2),
                 play_df["start.pos_team.id"] != play_df["start.pos_team.id"].shift(-3)
