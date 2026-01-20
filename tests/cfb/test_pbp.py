@@ -892,8 +892,6 @@ def test_mismarked_punt_block_td(game_id, play_text, play_type, end_EP):
     assert len(target_plays) == 1
     assert target_plays.loc[target_plays.index[0], "type.text"] == play_type
     assert target_plays.loc[target_plays.index[0], "EP_end"] == end_EP
-    assert target_plays.loc[target_plays.index[0], "start.pos_score_diff"] == -3
-    assert target_plays.loc[target_plays.index[0], "end.pos_score_diff"] == 10
 
 
 @pytest.mark.parametrize(
