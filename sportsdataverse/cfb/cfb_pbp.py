@@ -441,6 +441,35 @@ class CFBPlayProcess(object):
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s*Shotgun\s+", "", regex=True)
         pbp_txt["plays"]["cleaned_text"] = pbp_txt["plays"]["cleaned_text"].str.replace("\s+", " ", regex=True)
 
+        # 2025 NCG - ESPN bungles the play type and yardage on the GW play
+        # we're not going to make a habit of hardcoding things like this, but given that this play won the game...
+        ncg_2025_gw_mask = pbp_txt["plays"]["text"].str.contains("#11 C. Beck pass deep to the left intercepted by Sharpe, Jamari at the IND6. Sharpe return for 0 yards to the IND6")
+        pbp_txt["plays"]["start.team.id"] = np.where(
+           ncg_2025_gw_mask,
+           2390,
+           pbp_txt["plays"]["start.team.id"]
+        )
+        pbp_txt["plays"]["start.down"] = np.where(
+           ncg_2025_gw_mask,
+           1,
+           pbp_txt["plays"]["start.down"]
+        )
+        pbp_txt["plays"]["start.distance"] = np.where(
+           ncg_2025_gw_mask,
+           10,
+           pbp_txt["plays"]["start.distance"]
+        )
+        pbp_txt["plays"]["start.yardsToEndzone"] = np.where(
+           ncg_2025_gw_mask,
+           41,
+           pbp_txt["plays"]["start.yardsToEndzone"]
+        )
+        pbp_txt["plays"]["type.text"] = np.where(
+           ncg_2025_gw_mask,
+           "Interception",
+           pbp_txt["plays"]["type.text"]
+        )
+
         pbp_txt["plays"]["lead_text"] = pbp_txt["plays"]["cleaned_text"].shift(-1)
         pbp_txt["plays"]["lead_start_team"] = pbp_txt["plays"]["start.team.id"].shift(-1)
         pbp_txt["plays"]["lead_start_yardsToEndzone"] = pbp_txt["plays"]["start.yardsToEndzone"].shift(-1)

@@ -972,6 +972,32 @@ def test_wp_after_cases(game_id, play_text, wp_after_case, expected_wp):
 
 
 @pytest.mark.parametrize(
+    "game_id, play_text, start_team_id, end_team_id, change_of_poss",
+    [
+        (401769076, "(10:21) #44 M.McCarthy punt 50 yards to the Miami32 #10 M.Toney return 9 yards to the Miami41 (#46 I.Jones) PENALTY Miami Holding (#22 C.Pruitt) 10 yards from Miami33 to Miami23", 84, 2390, True),
+        (401769076, "#11 C. Beck pass deep to the left intercepted by Sharpe, Jamari at the IND6. Sharpe return for 0 yards to the IND6", 2390, 84, True),
+    ]
+)
+def test_2025_ncg_gw_play(game_id, play_text, start_team_id, end_team_id, change_of_poss):
+    test = CFBPlayProcess(gameId = game_id)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+
+    plays = test.plays_json
+    target_plays = plays[
+        plays['text'].isin([play_text])
+    ]
+
+    assert len(target_plays) == 1
+    assert target_plays.loc[target_plays.index[0], "start.team.id"] == start_team_id
+    assert target_plays.loc[target_plays.index[0], "start.pos_team.id"] == start_team_id
+    assert target_plays.loc[target_plays.index[0], "end.team.id"] == end_team_id
+    assert target_plays.loc[target_plays.index[0], "end.pos_team.id"] == end_team_id
+    assert target_plays.loc[target_plays.index[0], "change_of_poss"] == change_of_poss
+    assert target_plays.loc[target_plays.index[0], "change_of_pos_team"] == change_of_poss
+
+
+@pytest.mark.parametrize(
     "game_id, play_text, expected_td_check, expected_play_type",
     [
         (401769076, "(07:56) Shotgun #15 F.Mendoza pass complete short right to #80 C.Becker caught at Miami14, for 15 yards to the Miami05 (#8 J.Thomas), 1ST DOWN. The previous play is under automatic review - \"Runner was down by contact\". CALL OVERTURNED. (Original Play: (07:56) Shotgun #15 F.Mendoza pass complete short right to #80 C.Becker caught at Miami14, for 20 yards to the Miami00 TOUCHDOWN, clock 07:56, 1ST DOWN)", False, "Pass Reception"),
