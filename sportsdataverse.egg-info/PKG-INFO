@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sportsdataverse
-Version: 0.0.36.2.36
+Version: 0.0.36.2.46
 Summary: Retrieve Sports data in Python
 Author-email: Saiem Gilani <saiem.gilani@gmail.com>
 Maintainer-email: Saiem Gilani <saiem.gilani@gmail.com>
@@ -30,7 +30,7 @@ Requires-Dist: scipy>=1.13.1
 Requires-Dist: matplotlib>=3.9.4
 Requires-Dist: attrs>=25.4.0
 Requires-Dist: xgboost<3
-Requires-Dist: ruff>=0.14.7
+Requires-Dist: ruff>=0.14.13
 Provides-Extra: tests
 Requires-Dist: pytest>=8.4.2; extra == "tests"
 Requires-Dist: mypy>=1.19.0; extra == "tests"

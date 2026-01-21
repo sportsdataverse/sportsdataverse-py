@@ -3,6 +3,7 @@ import json
 from sportsdataverse.dl_utils import download, underscore
 from urllib.error import URLError, HTTPError, ContentTooShortError
 
+
 def espn_nba_teams() -> pd.DataFrame:
     """espn_nba_teams - look up NBA teams
 
@@ -15,12 +16,11 @@ def espn_nba_teams() -> pd.DataFrame:
     if resp is not None:
         events_txt = json.loads(resp)
 
-        teams = events_txt.get('sports')[0].get('leagues')[0].get('teams')
-        del_keys = ['record', 'links']
+        teams = events_txt.get("sports")[0].get("leagues")[0].get("teams")
+        del_keys = ["record", "links"]
         for team in teams:
             for k in del_keys:
-                team.get('team').pop(k, None)
-        teams = pd.json_normalize(teams, sep='_')
+                team.get("team").pop(k, None)
+        teams = pd.json_normalize(teams, sep="_")
     teams.columns = [underscore(c) for c in teams.columns.tolist()]
     return teams
-

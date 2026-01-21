@@ -3088,7 +3088,7 @@ wheels = [
 
 [[package]]
 name = "sportsdataverse"
-version = "0.0.36.2.36"
+version = "0.0.36.2.46"
 source = { editable = "." }
 dependencies = [
     { name = "attrs" },
@@ -3162,7 +3162,7 @@ requires-dist = [
     { name = "pytest-xdist", marker = "extra == 'all'", specifier = ">=3.8.0" },
     { name = "pytest-xdist", marker = "extra == 'tests'", specifier = ">=3.8.0" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "ruff", specifier = ">=0.14.7" },
+    { name = "ruff", specifier = ">=0.14.13" },
     { name = "scipy", specifier = ">=1.13.1" },
     { name = "sphinx", marker = "extra == 'all'", specifier = ">=7.4.7" },
     { name = "sphinx", marker = "extra == 'docs'", specifier = ">=7.4.7" },

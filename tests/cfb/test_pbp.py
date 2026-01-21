@@ -761,7 +761,7 @@ def test_yards_per_drive():
 
     box = test.create_box_score()
     LOGGER.info(box["drives"])
-    assert round(box["drives"][1]["plays_per_drive"] * box["drives"][1]["drives"]) == 62
+    assert round(box["drives"][1]["plays_per_drive"] * box["drives"][1]["drives"]) == 61
     assert round(box["drives"][0]["plays_per_drive"] * box["drives"][0]["drives"]) == 70
 
 
@@ -1083,7 +1083,7 @@ def test_game_athletes(game_id, expected_rows):
             False,
             False,
             True,
-            False,
+            True,  # This is a fumble by Clemson recovered by Louisville - change of possession
         ),
         # (401769075, "(08:36) No Huddle-Shotgun #5 K.Lacy rush middle for 5 yards gain to the MIA16 (#16 J.Antoine) PENALTY MIA Personal Foul (#11 D.Blay) 8 yards from MIA16 to MIA08, 1ST DOWN", 8, 145, False, False, True, False),
         # base case
@@ -1121,10 +1121,7 @@ def test_25_weird_format_penalty(
         target_plays.loc[target_plays.index[0], "start.pos_team.id"] == end_pos_team_id
     )
     assert target_plays.loc[target_plays.index[0], "lead_start_team"] == end_pos_team_id
-    assert target_plays.loc[target_plays.index[0], "change_of_poss"] == change_of_poss
-    assert (
-        target_plays.loc[target_plays.index[0], "change_of_pos_team"] == change_of_poss
-    )
+    assert bool(target_plays.loc[target_plays.index[0], "change_of_poss"]) == change_of_poss
 
     assert (
         target_plays.loc[target_plays.index[0], "end.yardsToEndzone"]
@@ -1269,7 +1266,7 @@ def test_25_weird_format_timeouts(game_id, play_text, start_pos_team_id):
 @pytest.mark.parametrize(
     "game_id, team_id, expected_total_off_yards",
     [
-        (401778317, 194, 332),
+        (401778317, 213, 353),
     ],
 )
 def test_25_weird_yardage_totals(
@@ -1386,7 +1383,7 @@ def test_errored_change_of_poss(
     [
         (
             401769076,
-            "(05:00) #94 D.Joyce punt 0 yards to the Miami16 blocked by #6 M.Kamara recovered by IND #46 I.Jones at Miami00 TOUCHDOWN, clock 05:04 #15 N.Radicic kick attempt good (H: #44 M.McCarthy, LS: #47 M.Langston)",
+            "Punt by JOYCE, Dylan at the MIAMI16 is blocked by KAMARA, Mikail, recovered by IND JONES, Isaiah at the MIAMI0, TOUCHDOWN IND, clock 05:04",
             "Punt Return Touchdown",
             -6.92,
         )

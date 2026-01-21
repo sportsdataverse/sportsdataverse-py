@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sportsdataverse"
-version = "0.0.36.2.36"
+version = "0.0.36.2.46"
 description = "Retrieve Sports data in Python"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -38,7 +38,7 @@ dependencies = [
     "matplotlib>=3.9.4",
     "attrs>=25.4.0",
     "xgboost<3",
-    "ruff>=0.14.7",
+    "ruff>=0.14.13",
 ]
 
 [project.urls]
@@ -71,6 +71,9 @@ exclude = ["tests", "tests.*"]
 [tool.setuptools.package-data]
 "sportsdataverse" = ["cfb/models/*", "nfl/models/*"]
 
+[tool.ruff]
+include = ["sportsdataverse/**/*.py"]
+
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "NPY001", "NPY002", "NPY003", "NPY201", "PERF"]
-ignore = ["F403", "F405"]
+ignore = ["F403", "F405", "E712"]
