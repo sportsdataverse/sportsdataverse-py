@@ -33,6 +33,94 @@ cd sportsdataverse-py
 pip install -e .[all]
 ```
 
+## Development
+
+This project uses [uv](https://docs.astral.sh/uv/) for fast, reliable Python package management. The minimum supported Python version is 3.9.
+
+### Prerequisites
+
+Install uv if you haven't already:
+
+```bash
+pip install uv
+```
+
+Or follow the [official installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+
+### Setting Up the Development Environment
+
+Clone the repository and install all dependencies including development tools:
+
+```bash
+git clone https://github.com/sportsdataverse/sportsdataverse-py
+cd sportsdataverse-py
+
+# Install all dependencies (including test and doc dependencies)
+uv sync --locked --all-extras --dev
+
+# Install the package in editable mode
+pip install -e .[all]
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+uv run pytest ./tests
+
+# Run tests for a specific sport module
+uv run pytest ./tests/cfb
+uv run pytest ./tests/mbb
+uv run pytest ./tests/nfl
+
+# Run tests with coverage
+uv run pytest --cov=sportsdataverse
+
+# Run tests in parallel (much faster)
+uv run pytest -n auto
+```
+
+### Code Quality
+
+The project uses [ruff](https://docs.astral.sh/ruff/) for linting and formatting:
+
+```bash
+# Format all Python code
+uv run ruff format .
+
+# Check for linting issues
+uv run ruff check .
+
+# Type checking (requires mypy)
+uv run mypy sportsdataverse
+```
+
+### Building the Package
+
+```bash
+# Build distribution packages (wheel and source)
+uv build
+
+# Run smoke tests on built distributions
+uv run --isolated --no-project --with dist/*.whl tests/smoke_test.py
+uv run --isolated --no-project --with dist/*.tar.gz tests/smoke_test.py
+```
+
+### Project Structure
+
+The package is organized by sport, with each module providing data loading and processing functions:
+
+- `sportsdataverse/cfb/` - College Football
+- `sportsdataverse/nfl/` - NFL
+- `sportsdataverse/mbb/` - Men's College Basketball
+- `sportsdataverse/nba/` - NBA
+- `sportsdataverse/wbb/` - Women's College Basketball
+- `sportsdataverse/wnba/` - WNBA
+- `sportsdataverse/nhl/` - NHL
+- `sportsdataverse/mlb/` - MLB
+
+Football modules include pre-trained XGBoost models for expected points (EP) and win probability (WP) calculations.
+
 # **Our Authors**
 
 -   [Saiem Gilani](https://twitter.com/saiemgilani)
