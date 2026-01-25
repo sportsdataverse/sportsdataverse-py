@@ -3088,7 +3088,7 @@ wheels = [
 
 [[package]]
 name = "sportsdataverse"
-version = "0.0.36.3.1"
+version = "0.0.36.3.2"
 source = { editable = "." }
 dependencies = [
     { name = "attrs" },

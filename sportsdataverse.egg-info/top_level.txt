@@ -1,5 +1,5 @@
 Sphinx-docs
-dist
+build
 docs
 examples
 sportsdataverse
