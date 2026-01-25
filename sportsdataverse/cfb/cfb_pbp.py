@@ -1698,8 +1698,8 @@ class CFBPlayProcess(object):
         ]
 
         play_df.loc[:, "period"] = play_df["period.number"].astype(int)
-        play_df.loc[(play_df.period <= 2), "half"] = 1
-        play_df.loc[(play_df.period > 2), "half"] = 2
+        play_df.loc[(play_df.period <= 2), "half"] = "1"
+        play_df.loc[(play_df.period > 2), "half"] = "2"
         play_df["lead_half"] = play_df.half.shift(-1)
         play_df["lag_scoringPlay"] = play_df.scoringPlay.shift(1)
         play_df.loc[
