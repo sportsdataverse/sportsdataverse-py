@@ -7,128 +7,141 @@ import json
 from sportsdataverse.dl_utils import download
 from datetime import datetime
 
-def mlbam_transactions(startDate:str,endDate:str):
-	"""
-	Retrieves all transactions in a given range of dates.
-	You MUST provide two dates for this function to work, and both dates must be in MM/DD/YYYY format.
-	For example, December 31st, 2021 would be represented as 12/31/2021.
 
-	Args:
-		startDate (int):
-			Required parameter. If no startDate is provided, the function wil not work.
-			Additionally, startDate must be in MM/DD/YYYY format.
-		endDate (int):
-			Required parameter. If no endDate is provided, the function wil not work.
-			Additionally, endDate must be in MM/DD/YYYY format.
-	Returns:
-		A pandas dataframe containing MLB transactions between two dates.
-	"""
-	main_df = pd.DataFrame()
+def mlbam_transactions(startDate: str, endDate: str):
+    """
+    Retrieves all transactions in a given range of dates.
+    You MUST provide two dates for this function to work, and both dates must be in MM/DD/YYYY format.
+    For example, December 31st, 2021 would be represented as 12/31/2021.
 
-	searchURL = "http://lookup-service-prod.mlb.com/json/named.transaction_all.bam?sport_code='mlb'&"
+    Args:
+            startDate (int):
+                    Required parameter. If no startDate is provided, the function wil not work.
+                    Additionally, startDate must be in MM/DD/YYYY format.
+            endDate (int):
+                    Required parameter. If no endDate is provided, the function wil not work.
+                    Additionally, endDate must be in MM/DD/YYYY format.
+    Returns:
+            A pandas dataframe containing MLB transactions between two dates.
+    """
+    main_df = pd.DataFrame()
 
-	try:
-		sd_date = datetime.strptime(startDate, '%m/%d/%Y')
-		ed_date = datetime.strptime(endDate, '%m/%d/%Y')
-		sd = sd_date.strftime("%Y%m%d")
-		ed = ed_date.strftime("%Y%m%d")
+    searchURL = "http://lookup-service-prod.mlb.com/json/named.transaction_all.bam?sport_code='mlb'&"
 
-		if sd > ed:
-			print('There is an issue with your inputted dates.\nPlease verify that your start date is older than your end date.')
-			return None
+    try:
+        sd_date = datetime.strptime(startDate, "%m/%d/%Y")
+        ed_date = datetime.strptime(endDate, "%m/%d/%Y")
+        sd = sd_date.strftime("%Y%m%d")
+        ed = ed_date.strftime("%Y%m%d")
 
-		diff_days = ed_date.date() - sd_date.date()
-		if (diff_days.days)> 30:
-			print('Getting transaction data. This will take some time.')
-		else:
-			print('Getting transaction data.')
-		searchURL = searchURL + f'start_date=\'{sd}\''
-		searchURL = searchURL + f'start_date=\'{ed}\''
+        if sd > ed:
+            print(
+                "There is an issue with your inputted dates.\nPlease verify that your start date is older than your end date."
+            )
+            return None
 
-	except:
-		print('There\'s an issue with the way you\'ve formatted you inputs.')
+        diff_days = ed_date.date() - sd_date.date()
+        if (diff_days.days) > 30:
+            print("Getting transaction data. This will take some time.")
+        else:
+            print("Getting transaction data.")
+        searchURL = searchURL + f"start_date='{sd}'"
+        searchURL = searchURL + f"start_date='{ed}'"
 
-	try:
-		resp = download(searchURL)
+    except:
+        print("There's an issue with the way you've formatted you inputs.")
 
-		resp_str = str(resp, 'UTF-8')
+    try:
+        resp = download(searchURL)
 
-		resp_json = json.loads(resp_str)
-		try:
-			result_count = int(resp_json['transaction_all']['queryResults']['totalSize'])
-		except:
-			result_count = 0
+        resp_str = str(resp, "UTF-8")
 
-		if result_count > 0:
+        resp_json = json.loads(resp_str)
+        try:
+            result_count = int(
+                resp_json["transaction_all"]["queryResults"]["totalSize"]
+            )
+        except:
+            result_count = 0
 
-			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			main_df = json_normalize(resp_json['transaction_all']['queryResults']['row'])
-			print('Done')
-		else:
-			print(f'No results found for the provided playerID. \nTry a different search for better results.')
-		return main_df
-	except:
-		print('Could not locate dates ')
+        if result_count > 0:
+            print(f"{result_count} statlines found,\nParsing results into a dataframe.")
+            main_df = json_normalize(
+                resp_json["transaction_all"]["queryResults"]["row"]
+            )
+            print("Done")
+        else:
+            print(
+                f"No results found for the provided playerID. \nTry a different search for better results."
+            )
+        return main_df
+    except:
+        print("Could not locate dates ")
 
-def mlbam_broadcast_info(season:int,home_away="e"):
-	"""
-	Retrieves the broadcasters (radio and TV) involved with certain games.
 
-	Args:
-		season (int):
-			Required parameter. If no season is provided, the function wil not work.
+def mlbam_broadcast_info(season: int, home_away="e"):
+    """
+    Retrieves the broadcasters (radio and TV) involved with certain games.
 
-		home_away (string):
-			Optional parameter. Used to get broadcasters from either the home OR the away side.
-			Leave blank if you want both home and away broadcasters.
+    Args:
+            season (int):
+                    Required parameter. If no season is provided, the function wil not work.
 
-			If you want home broadcasters only, set home_away='H' or home_away='a'.
+            home_away (string):
+                    Optional parameter. Used to get broadcasters from either the home OR the away side.
+                    Leave blank if you want both home and away broadcasters.
 
-			If you want away broadcasters only, set home_away='A' or home_away='a'.
+                    If you want home broadcasters only, set home_away='H' or home_away='a'.
 
-			If you want both home and away broadcasters, set home_away='E' or home_away='e'.
+                    If you want away broadcasters only, set home_away='A' or home_away='a'.
 
-	Returns:
-		A pandas dataframe containing TV and radio broadcast information for various MLB games.
+                    If you want both home and away broadcasters, set home_away='E' or home_away='e'.
 
-	"""
-	main_df = pd.DataFrame()
+    Returns:
+            A pandas dataframe containing TV and radio broadcast information for various MLB games.
 
-	searchURL = "http://lookup-service-prod.mlb.com/json/named.mlb_broadcast_info.bam?tcid=mm_mlb_schedule&"
+    """
+    main_df = pd.DataFrame()
 
-	if home_away.lower() == "a":
-		searchURL = searchURL + '&home_away=\'A\''
-	elif home_away.lower() == "h":
-		searchURL = searchURL + '&home_away=\'H\''
-	elif home_away.lower() == "e":
-		searchURL = searchURL + '&home_away=\'E\''
-	else:
-		pass
+    searchURL = "http://lookup-service-prod.mlb.com/json/named.mlb_broadcast_info.bam?tcid=mm_mlb_schedule&"
 
-	now = datetime.now()
+    if home_away.lower() == "a":
+        searchURL = searchURL + "&home_away='A'"
+    elif home_away.lower() == "h":
+        searchURL = searchURL + "&home_away='H'"
+    elif home_away.lower() == "e":
+        searchURL = searchURL + "&home_away='E'"
+    else:
+        pass
 
-	if season >1860 and season < now.year:
-		searchURL = searchURL + f'&season=\'{season}\''
+    now = datetime.now()
 
-		resp = download(searchURL)
+    if season > 1860 and season < now.year:
+        searchURL = searchURL + f"&season='{season}'"
 
-		resp_str = str(resp, 'UTF-8')
+        resp = download(searchURL)
 
-		resp_json = json.loads(resp_str)
-		try:
-			result_count = int(resp_json['mlb_broadcast_info']['queryResults']['totalSize'])
-		except:
-			result_count = 0
+        resp_str = str(resp, "UTF-8")
 
-		if result_count > 0:
+        resp_json = json.loads(resp_str)
+        try:
+            result_count = int(
+                resp_json["mlb_broadcast_info"]["queryResults"]["totalSize"]
+            )
+        except:
+            result_count = 0
 
-			print(f'{result_count} statlines found,\nParsing results into a dataframe.')
-			main_df = json_normalize(resp_json['mlb_broadcast_info']['queryResults']['row'])
-			print('Done')
-		else:
-			print(f'No results found for the provided inputs. \nTry a different search for better results.')
+        if result_count > 0:
+            print(f"{result_count} statlines found,\nParsing results into a dataframe.")
+            main_df = json_normalize(
+                resp_json["mlb_broadcast_info"]["queryResults"]["row"]
+            )
+            print("Done")
+        else:
+            print(
+                f"No results found for the provided inputs. \nTry a different search for better results."
+            )
 
-		return main_df
-	else:
-		print('Please enter a valid year to use this function.')
-
+        return main_df
+    else:
+        print("Please enter a valid year to use this function.")

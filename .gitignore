@@ -18,3 +18,4 @@ dist
 *_box_score_*.csv
 .venv
 sportsdataverse.egg-info/PKG-INFO
+.coverage

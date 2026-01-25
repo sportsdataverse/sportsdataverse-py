@@ -3,6 +3,7 @@ import json
 import datetime
 from sportsdataverse.dl_utils import download, underscore
 
+
 def espn_nhl_schedule(dates=None, season_type=None, limit=500) -> pd.DataFrame:
     """espn_nhl_schedule - look up the NHL schedule for a given date
 
@@ -15,43 +16,61 @@ def espn_nhl_schedule(dates=None, season_type=None, limit=500) -> pd.DataFrame:
         schedule events for the requested season.
     """
     if dates is None:
-        dates = ''
+        dates = ""
     else:
-        dates = '&dates=' + str(dates)
+        dates = "&dates=" + str(dates)
     if season_type is None:
-        season_type = ''
+        season_type = ""
     else:
-        season_type = '&seasontype=' + str(season_type)
+        season_type = "&seasontype=" + str(season_type)
 
-    url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?limit={}{}{}".format(limit, dates, season_type)
+    url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?limit={}{}{}".format(
+        limit, dates, season_type
+    )
     resp = download(url=url)
 
     ev = pd.DataFrame()
     if resp is not None:
         events_txt = json.loads(resp)
 
-        events = events_txt.get('events')
+        events = events_txt.get("events")
         for event in events:
-            event.get('competitions')[0].get('competitors')[0].get('team').pop('links',None)
-            event.get('competitions')[0].get('competitors')[1].get('team').pop('links',None)
-            if event.get('competitions')[0].get('competitors')[0].get('homeAway')=='home':
-                event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[0].get('team')
-                event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[1].get('team')
+            event.get("competitions")[0].get("competitors")[0].get("team").pop(
+                "links", None
+            )
+            event.get("competitions")[0].get("competitors")[1].get("team").pop(
+                "links", None
+            )
+            if (
+                event.get("competitions")[0].get("competitors")[0].get("homeAway")
+                == "home"
+            ):
+                event["competitions"][0]["home"] = (
+                    event.get("competitions")[0].get("competitors")[0].get("team")
+                )
+                event["competitions"][0]["away"] = (
+                    event.get("competitions")[0].get("competitors")[1].get("team")
+                )
             else:
-                event['competitions'][0]['away'] = event.get('competitions')[0].get('competitors')[0].get('team')
-                event['competitions'][0]['home'] = event.get('competitions')[0].get('competitors')[1].get('team')
+                event["competitions"][0]["away"] = (
+                    event.get("competitions")[0].get("competitors")[0].get("team")
+                )
+                event["competitions"][0]["home"] = (
+                    event.get("competitions")[0].get("competitors")[1].get("team")
+                )
 
-            del_keys = ['broadcasts','geoBroadcasts', 'headlines', 'series']
+            del_keys = ["broadcasts", "geoBroadcasts", "headlines", "series"]
             for k in del_keys:
-                event.get('competitions')[0].pop(k, None)
-            x = pd.json_normalize(event.get('competitions')[0], sep='_')
-            x['game_id'] = x['id'].astype(int)
-            x['season'] = event.get('season').get('year')
-            x['season_type'] = event.get('season').get('type')
-            ev = pd.concat([ev,x],axis=0, ignore_index=True)
+                event.get("competitions")[0].pop(k, None)
+            x = pd.json_normalize(event.get("competitions")[0], sep="_")
+            x["game_id"] = x["id"].astype(int)
+            x["season"] = event.get("season").get("year")
+            x["season_type"] = event.get("season").get("type")
+            ev = pd.concat([ev, x], axis=0, ignore_index=True)
     ev = pd.DataFrame(ev)
     ev.columns = [underscore(c) for c in ev.columns.tolist()]
     return ev
+
 
 def espn_nhl_calendar(season=None) -> pd.DataFrame:
     """espn_nhl_calendar - look up the NHL calendar for a given season
@@ -65,35 +84,41 @@ def espn_nhl_calendar(season=None) -> pd.DataFrame:
     Raises:
         ValueError: If `season` is less than 2002.
     """
-    url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates={}".format(season)
+    url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates={}".format(
+        season
+    )
     resp = download(url=url)
-    txt = json.loads(resp)['leagues'][0]['calendar']
-    datenum = list(map(lambda x: x[:10].replace("-",""),txt))
-    date = list(map(lambda x: x[:10],txt))
+    txt = json.loads(resp)["leagues"][0]["calendar"]
+    datenum = list(map(lambda x: x[:10].replace("-", ""), txt))
+    date = list(map(lambda x: x[:10], txt))
 
-    year = list(map(lambda x: x[:4],txt))
-    month = list(map(lambda x: x[5:7],txt))
-    day = list(map(lambda x: x[8:10],txt))
+    year = list(map(lambda x: x[:4], txt))
+    month = list(map(lambda x: x[5:7], txt))
+    day = list(map(lambda x: x[8:10], txt))
 
     data = {
         "season": season,
-        "datetime" : txt,
-        "date" : date,
+        "datetime": txt,
+        "date": date,
         "year": year,
         "month": month,
         "day": day,
-        "dateURL": datenum
+        "dateURL": datenum,
     }
     df = pd.DataFrame(data)
-    df['url']="http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates="
-    df['url']= df['url'] + df['dateURL']
+    df["url"] = (
+        "http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates="
+    )
+    df["url"] = df["url"] + df["dateURL"]
     return df
+
 
 def most_recent_nhl_season():
     if int(str(datetime.date.today())[5:7]) >= 10:
         return int(str(datetime.date.today())[0:4]) + 1
     else:
         return int(str(datetime.date.today())[0:4])
+
 
 def year_to_season(year):
     first_year = str(year)[2:4]

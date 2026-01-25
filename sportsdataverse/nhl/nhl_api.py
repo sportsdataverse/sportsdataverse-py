@@ -24,17 +24,21 @@ def nhl_api_pbp(game_id: int) -> Dict:
     # play by play
     pbp_txt = {}
     # summary endpoint for pickcenter array
-    summary_url = "https://statsapi.web.nhl.com/api/v1/game/{}/feed/live?site=en_nhl".format(game_id)
+    summary_url = (
+        "https://statsapi.web.nhl.com/api/v1/game/{}/feed/live?site=en_nhl".format(
+            game_id
+        )
+    )
     summary_resp = download(summary_url)
     summary = json.loads(summary_resp)
-    pbp_txt['datetime'] = summary.get("gameData").get("datetime")
-    pbp_txt['game'] = summary.get("gameData").get("game")
-    pbp_txt['players'] = summary.get("gameData").get("players")
-    pbp_txt['status'] = summary.get("gameData").get("status")
-    pbp_txt['teams'] = summary.get("gameData").get("teams")
-    pbp_txt['venues'] = summary.get("gameData").get("venues")
-    pbp_txt['gameId'] = summary.get("gameData").get("gamePk")
-    pbp_txt['gameLink'] = summary.get("gameData").get("link")
+    pbp_txt["datetime"] = summary.get("gameData").get("datetime")
+    pbp_txt["game"] = summary.get("gameData").get("game")
+    pbp_txt["players"] = summary.get("gameData").get("players")
+    pbp_txt["status"] = summary.get("gameData").get("status")
+    pbp_txt["teams"] = summary.get("gameData").get("teams")
+    pbp_txt["venues"] = summary.get("gameData").get("venues")
+    pbp_txt["gameId"] = summary.get("gameData").get("gamePk")
+    pbp_txt["gameLink"] = summary.get("gameData").get("link")
     return pbp_txt
 
 
@@ -53,12 +57,14 @@ def nhl_api_schedule(start_date: str, end_date: str) -> Dict:
     # play by play
     pbp_txt = {}
     # summary endpoint for pickcenter array
-    summary_url = "https://statsapi.web.nhl.com/api/v1/schedule?site=en_nhl&startDate={}&endDate={}".format(start_date, end_date)
+    summary_url = "https://statsapi.web.nhl.com/api/v1/schedule?site=en_nhl&startDate={}&endDate={}".format(
+        start_date, end_date
+    )
     summary_resp = download(summary_url)
     summary = json.loads(summary_resp)
-    pbp_txt['dates'] = summary.get("dates")
+    pbp_txt["dates"] = summary.get("dates")
     pbp_txt_games = pd.DataFrame()
-    for date in pbp_txt['dates']:
+    for date in pbp_txt["dates"]:
         game = pd.json_normalize(date, record_path="games", meta=["date"])
         pbp_txt_games = pd.concat([pbp_txt_games, game], ignore_index=True)
     return pbp_txt_games

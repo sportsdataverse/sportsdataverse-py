@@ -1,1 +1,5 @@
+Sphinx-docs
+dist
+docs
+examples
 sportsdataverse

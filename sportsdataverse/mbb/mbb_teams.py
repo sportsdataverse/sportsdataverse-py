@@ -3,6 +3,7 @@ import json
 from sportsdataverse.dl_utils import download, underscore
 from urllib.error import URLError, HTTPError, ContentTooShortError
 
+
 def espn_mbb_teams(groups=None) -> pd.DataFrame:
     """espn_mbb_teams - look up the men's college basketball teams
 
@@ -13,21 +14,22 @@ def espn_mbb_teams(groups=None) -> pd.DataFrame:
         pd.DataFrame: Pandas dataframe containing teams for the requested league.
     """
     if groups is None:
-        groups = '&groups=50'
+        groups = "&groups=50"
     else:
-        groups = '&groups=' + str(groups)
+        groups = "&groups=" + str(groups)
     ev = pd.DataFrame()
-    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams?limit=1000{}".format(groups)
+    url = "http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams?limit=1000{}".format(
+        groups
+    )
     resp = download(url=url)
     if resp is not None:
         events_txt = json.loads(resp)
 
-        teams = events_txt.get('sports')[0].get('leagues')[0].get('teams')
-        del_keys = ['record', 'links']
+        teams = events_txt.get("sports")[0].get("leagues")[0].get("teams")
+        del_keys = ["record", "links"]
         for team in teams:
             for k in del_keys:
-                team.get('team').pop(k, None)
-        teams = pd.json_normalize(teams, sep='_')
+                team.get("team").pop(k, None)
+        teams = pd.json_normalize(teams, sep="_")
     teams.columns = [underscore(c) for c in teams.columns.tolist()]
     return teams
-
