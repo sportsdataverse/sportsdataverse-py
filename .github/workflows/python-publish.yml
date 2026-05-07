@@ -1,4 +1,4 @@
-# Build the sdist + wheel via uv build (PEP 517 backend = setuptools, per
+# Build the sdist + wheel via `uv build` (PEP 517 backend = setuptools, per
 # pyproject.toml [build-system]) and publish to PyPI on every release.
 #
 # Uses PyPI Trusted Publishing (OIDC) instead of an API token — register
@@ -24,9 +24,12 @@ jobs:
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: "pyproject.toml"
+          cache-dependency-glob: "uv.lock"
       - name: Set up Python
         run: uv python install 3.13.2
+      # `uv build` uses the build backend from pyproject.toml's
+      # [build-system] table (setuptools) in an isolated environment —
+      # no project-side dep install needed.
       - name: Build sdist + wheel
         run: uv build
       - name: Upload build artifacts for the publish job

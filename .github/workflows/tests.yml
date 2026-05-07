@@ -2,7 +2,9 @@
 # workflow_dispatch. Live tests (gated by SDV_PY_LIVE_TESTS=1) stay off in CI
 # to avoid hitting third-party APIs from PR forks.
 #
-# Uses uv for dep install + test execution — see CONTRIBUTING.md.
+# Uses `uv sync --all-extras --all-groups` against the committed uv.lock for
+# reproducible installs, then `uv run --frozen pytest` for execution. See
+# CONTRIBUTING.md.
 name: tests
 on:
   pull_request:
@@ -49,13 +51,20 @@ jobs:
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: "pyproject.toml"
+          # Cache key tracks the lockfile; re-resolves on dep bumps.
+          cache-dependency-glob: "uv.lock"
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
-      - name: Install package + test extras
-        run: uv pip install --python "${{ matrix.python-version }}" --system ".[tests]"
+      # `uv sync` against the committed lockfile installs:
+      #   - the project (editable)
+      #   - every [project.optional-dependencies] group (--all-extras)
+      #   - every [dependency-groups] group (--all-groups)
+      # into a managed .venv. --frozen guarantees CI doesn't drift from
+      # the lockfile.
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python ${{ matrix.python-version }}
       - name: Run offline tests
         env:
           # Off by default; the workflow_dispatch input flips it on.
           SDV_PY_LIVE_TESTS: ${{ github.event.inputs.live_tests == 'true' && '1' || '' }}
-        run: uv run --python "${{ matrix.python-version }}" --with-editable . pytest --maxfail=10
+        run: uv run --frozen pytest --maxfail=10

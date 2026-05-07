@@ -121,6 +121,40 @@ Repository = "https://github.com/sportsdataverse/sportsdataverse-py"
 Changelog = "https://github.com/sportsdataverse/sportsdataverse-py/blob/main/CHANGELOG.md"
 
 
+# PEP 735 dependency groups — dev-only deps that shouldn't ship as
+# user-facing extras. uv sync resolves these by name (`uv sync --group test`)
+# or in bulk (`uv sync --all-groups --all-extras`).
+#
+# `[project.optional-dependencies]` above is retained for legacy
+# `pip install sportsdataverse[tests]` invocations; new contributor flows
+# should prefer `uv sync --all-groups --all-extras`.
+[dependency-groups]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pytest-xdist>=3.0",
+]
+lint = [
+    "mypy>=1.0",
+    "ruff>=0.6",
+]
+docs = [
+    "sphinx>=7.0",
+    "sphinx-markdown-builder>=0.6",
+    "sphinx-material>=0.0.35",
+]
+dev = [
+    {include-group = "test"},
+    {include-group = "lint"},
+    {include-group = "docs"},
+    "build>=1.0",
+    "twine>=4.0",
+    "ipykernel>=6.0",  # for executing examples/notebooks/*.ipynb locally
+    "nbformat>=5.0",
+    "pre-commit>=3.0",
+]
+
+
 [tool.setuptools]
 include-package-data = true
 
