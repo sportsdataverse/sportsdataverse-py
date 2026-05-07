@@ -86,9 +86,13 @@ stricter typed baseline; legacy modules stay un-typed for the time being.
 The rules below apply to **new modules** (and to legacy modules that you
 are intentionally migrating).
 
-- **Python target:** 3.9–3.14. The `pyproject.toml` `[tool.black]`,
-  `[tool.mypy]`, and `[tool.ruff]` blocks pin to py39 as the floor, with
-  classifiers and black `target-version` covering through py314.
+- **Python target:** 3.9–3.14. `pyproject.toml` `[tool.ruff]` pins
+  `line-length = 120` and `fix = true`; the `[project]` classifiers
+  cover through py314. Linting + formatting run via Ruff
+  (`ruff check --fix` and `ruff format`) — see `.pre-commit-config.yaml`
+  for the full pre-commit chain (Ruff + isort future-import injector +
+  pygrep-hooks + add-trailing-comma + actionlint + yamlfmt + doctoc +
+  markdownlint-cli2).
 - **Type hints required** on all new public functions and helpers
   (parameters and return types). Internal one-line lambdas and trivial
   callbacks may be omitted at author discretion.

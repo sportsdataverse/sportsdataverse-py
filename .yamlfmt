@@ -1,0 +1,3 @@
+formatter:
+  line_ending: lf
+  eof_newline: true

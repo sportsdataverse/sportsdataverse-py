@@ -132,34 +132,34 @@ exclude = ["tests*", "Sphinx-docs*", "docs*", "examples*", "archive*"]
 sportsdataverse = ["cfb/models/*", "nfl/models/*"]
 
 
-[tool.black]
-line-length = 120
-target-version = ["py39", "py310", "py311", "py312", "py313", "py314"]
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-
-    # The following are specific to Black, you probably don't want those.
-    | blib2to3
-    | tests/data
-)/
-'''
-
-
 [tool.isort]
 profile = "black"
-line_length = 120
+# Note: `known_first_party = ["functions", "queries", "db_utils"]` was the
+# copy-pasted starter; sdv-py's first-party package is `sportsdataverse`.
+known_first_party = ["sportsdataverse"]
+add_imports = ["from __future__ import annotations"]
 
 
-[tool.zimports]
-black-line-length = 120
-keep-unused-type-checking = true
+[tool.ruff]
+line-length = 120
+fix = true
+show-fixes = true
+exclude = [
+    "venv",
+    "env",
+    ".venv",
+    ".env",
+    "__pycache__",
+    "build",
+    "dist",
+    "*.ipynb",
+]
+
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+ignore = ["E501", "E402", "F601", "F841"]
+
+
+[tool.ruff.format]
+skip-magic-trailing-comma = false

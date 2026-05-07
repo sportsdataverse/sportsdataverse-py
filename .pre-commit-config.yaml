@@ -1,15 +1,19 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-  # - repo: local
-  #   hooks:
-  #   - id: update-docs
-  #     name: update-docs
-  #     entry: bash create_docs.sh
-  #     language: system
-  #     types: [python]
-  #     pass_filenames: false
-
+  - repo: https://github.com/pycqa/isort
+    rev: "5.12.0"
+    hooks:
+      - id: isort
+        args: [--add-import, "from __future__ import annotations"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.14.14
+    hooks:
+      # Run the linter.
+      - id: ruff-check
+      - id: ruff-format
+        # # Run the formatter.
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
@@ -20,34 +24,70 @@ repos:
       - id: check-json
       - id: check-xml
       - id: check-yaml
-        exclude: ^recipe/meta\.yaml$  # Jinja2-templated; not valid YAML pre-substitution
+        exclude: ^recipe/meta\.yaml$
       - id: check-symlinks
-      - id: check-vcs-permalinks
       - id: end-of-file-fixer
+        # - id: check-vcs-permalinks
       - id: requirements-txt-fixer
       - id: check-added-large-files
         args: [--maxkb=10000]
       - id: debug-statements
-
-  - repo: https://github.com/psf/black
-    rev: "23.1.0"
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0 # Use the ref you want to point at
     hooks:
-      - id: black
-  - repo: https://github.com/pycqa/isort
-    rev: "5.12.0"
+      - id: python-use-type-annotations
+      - id: python-no-eval
+      - id: python-no-log-warn
+      - id: rst-backticks
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+      - id: text-unicode-replacement-char
+      - id: python-check-mock-methods
+      - id: python-check-blanket-noqa
+      - id: python-check-blanket-type-ignore
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v4.0.0
     hooks:
-      - id: isort
-  - repo: https://github.com/hadialqattan/pycln
-    rev: "v2.1.5"
+      - id: add-trailing-comma
+  - repo: https://github.com/pre-commit/sync-pre-commit-deps
+    rev: v0.0.3
     hooks:
-      - id: pycln
-        args: [".", "--all"]
-  # - repo: https://github.com/pycqa/flake8
-  #   rev: '3.9.2'
-  #   hooks:
-  #   - id: flake8
-  # - repo: https://github.com/pycqa/pydocstyle
-  #   rev: '6.3.0'
-  #   hooks:
-  #   - id: pydocstyle
-  #     args: ['.', '--ignore=D100,D203,D405']
+      - id: sync-pre-commit-deps
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.36.1
+    hooks:
+      - id: check-github-workflows
+        args: ["--verbose"]
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.10
+    hooks:
+      - id: actionlint
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.19.0
+    hooks:
+      - id: yamlfmt
+  - repo: https://github.com/thlorenz/doctoc
+    rev: "v2.2.0" # substitute a tagged version
+    hooks:
+      - id: doctoc
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.20.0
+    hooks:
+      - id: markdownlint-cli2
+        args: ["--config", ".markdownlint-cli2.yaml"]
+# - repo: https://github.com/nbQA-dev/nbQA
+#   rev: 1.9.1
+#   hooks:
+#     - id: nbqa-black
+#     - id: nbqa-isort
+#     - id: nbqa-pylint
+#     - id: nbqa-flake8
+#     - id: nbqa-autopep8
+# - repo: https://github.com/codespell-project/codespell
+#   rev: v2.4.1
+#   hooks:
+#     - id: codespell
+# - repo: https://github.com/crate-ci/typos
+#   rev: v1.42.3
+#   hooks:
+#     - id: typos

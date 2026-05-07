@@ -44,11 +44,16 @@ is the sole attributable contributor.
 
 ## Code Style
 
-- Follow PEP 8 with `black` formatting (line-length 120, configured in
-  `pyproject.toml [tool.black]`).
-- Lint with `ruff` and type-check with `mypy` before committing:
+- Follow PEP 8 with Ruff formatting (line-length 120, configured in
+  `pyproject.toml [tool.ruff]`). Ruff also handles import sorting,
+  pyupgrade, and unused-import removal — black, isort, pycln, and
+  flake8 are NOT used directly. The standalone `isort` hook in
+  `.pre-commit-config.yaml` runs only to inject `from __future__ import
+  annotations` at the top of every Python file via `--add-import`.
+- Lint, format, and type-check before committing:
   ```sh
-  uv run ruff check sportsdataverse/<your_module>.py
+  uv run ruff check --fix sportsdataverse/<your_module>.py
+  uv run ruff format sportsdataverse/<your_module>.py
   uv run mypy sportsdataverse/<your_module>.py
   ```
 - New modules: full type hints required (params + returns); legacy modules

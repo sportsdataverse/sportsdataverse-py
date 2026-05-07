@@ -146,7 +146,7 @@ docs/                       # Docusaurus site (don't pollute with internal docs)
 docs_instructions.md        # Reference for the docs build workflow
 dev/                        # Local-only working notes (gitignored)
 recipe/                     # Conda-build recipe (meta.yaml + README)
-pyproject.toml              # PEP 621 metadata + tooling (mypy, ruff, black)
+pyproject.toml              # PEP 621 metadata + tooling (ruff lint+format, mypy)
 pytest.ini                  # filterwarnings for env-level pkg_resources / nspkg.pth noise
 uv.lock                     # Committed
 CONTRIBUTING.md             # uv workflow + new-module standards
