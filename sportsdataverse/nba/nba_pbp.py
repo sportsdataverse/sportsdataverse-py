@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 import re
@@ -24,7 +26,26 @@ def espn_nba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
          "odds", "predictor", "espnWP", "gameInfo", "season"
 
     Example:
-        `nba_df = sportsdataverse.nba.espn_nba_pbp(game_id=401307514)`
+        Quick start::
+
+            from sportsdataverse.nba import espn_nba_pbp
+            pbp = espn_nba_pbp(game_id=401585183)
+            print(list(pbp.keys()))
+
+        Pull only the raw ESPN summary payload (skip cleaning)::
+
+            raw_pbp = espn_nba_pbp(game_id=401585183, raw=True)
+
+        Pipeline next step (load plays into a polars DataFrame)::
+
+            import polars as pl
+            pbp = espn_nba_pbp(game_id=401585183)
+            plays_df = pl.from_dicts(pbp["plays"])
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA PBP
+            * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball parallel
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     # play by play
     pbp_txt = {"timeouts": {}}
@@ -92,12 +113,49 @@ def espn_nba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
 
 
 def nba_pbp_disk(game_id, path_to_json):
+    """Load a previously cached ESPN NBA summary JSON for a game from disk.
+
+    Reads ``{path_to_json}/{game_id}.json``.
+
+    Args:
+        game_id (int): ESPN game / event identifier.
+        path_to_json (str): Directory containing the cached JSON file.
+
+    Returns:
+        dict: Parsed JSON contents.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_pbp_disk
+            pbp = nba_pbp_disk(game_id=401585183, path_to_json="./cache")
+            print(list(pbp.keys()))
+    """
     with open(os.path.join(path_to_json, f"{game_id}.json")) as json_file:
         pbp_txt = json.load(json_file)
     return pbp_txt
 
 
 def helper_nba_pbp(game_id, pbp_txt):
+    """Internal helper that runs the ESPN summary payload through pickcenter,
+    game-data, and feature pipelines and returns the cleaned dictionary
+    consumed by :func:`espn_nba_pbp`.
+
+    Args:
+        game_id (int): ESPN game / event identifier.
+        pbp_txt (dict): Trimmed ESPN summary payload (already filtered to
+            the keys :func:`espn_nba_pbp` keeps).
+
+    Returns:
+        dict: Cleaned game payload with cleaned plays, boxscore, broadcasts,
+        odds, etc.
+
+    Example:
+        Used internally by :func:`espn_nba_pbp`::
+
+            from sportsdataverse.nba import espn_nba_pbp
+            pbp = espn_nba_pbp(game_id=401585183)
+    """
     init = helper_nba_pickcenter(pbp_txt)
     pbp_txt, init = helper_nba_game_data(pbp_txt, init)
     if "plays" in pbp_txt.keys() and pbp_txt.get("header").get("competitions")[0].get("playByPlaySource") != "none":
@@ -135,6 +193,23 @@ def helper_nba_pbp(game_id, pbp_txt):
 
 
 def helper_nba_game_data(pbp_txt, init):
+    """Internal helper that lifts home/away team identification fields from the
+    ESPN summary payload onto the cleaned ``pbp_txt`` and ``init`` dictionaries.
+
+    Args:
+        pbp_txt (dict): ESPN summary payload.
+        init (dict): Pickcenter-derived spread / favorite / over-under metadata.
+
+    Returns:
+        tuple[dict, dict]: ``(pbp_txt, init)`` with team-id, mascot, location,
+        abbreviation, and alt-name fields populated for both sides.
+
+    Example:
+        Used internally by :func:`espn_nba_pbp`::
+
+            from sportsdataverse.nba import espn_nba_pbp
+            pbp = espn_nba_pbp(game_id=401585183)
+    """
     pbp_txt["timeouts"] = {}
     pbp_txt["teamInfo"] = pbp_txt["header"]["competitions"][0]
     pbp_txt["season"] = pbp_txt["header"]["season"]
@@ -144,7 +219,9 @@ def helper_nba_game_data(pbp_txt, init):
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
     pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True, abs(init["gameSpread"]), -1 * abs(init["gameSpread"])
+        init["homeFavorite"] == True,
+        abs(init["gameSpread"]),
+        -1 * abs(init["gameSpread"]),
     )
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
@@ -188,6 +265,29 @@ def helper_nba_game_data(pbp_txt, init):
 
 
 def helper_nba_pbp_features(game_id, pbp_txt, init):
+    """Internal helper that builds the polars play-by-play frame and timeout
+    metadata from the ESPN summary payload.
+
+    Adds clock decomposition (minutes/seconds), per-quarter and per-half
+    seconds-remaining columns, half/quarter lag-lead helpers, and a per-game
+    timeout map keyed by team id and half.
+
+    Args:
+        game_id (int): ESPN game / event identifier.
+        pbp_txt (dict): ESPN summary payload (with ``plays`` already lifted).
+        init (dict): Output of :func:`helper_nba_pickcenter` plus team-id
+            metadata from :func:`helper_nba_game_data`.
+
+    Returns:
+        dict: ``pbp_txt`` mutated with ``plays`` (a polars DataFrame) and
+        ``timeouts`` populated.
+
+    Example:
+        Used internally by :func:`espn_nba_pbp`::
+
+            from sportsdataverse.nba import espn_nba_pbp
+            pbp = espn_nba_pbp(game_id=401585183)
+    """
     pbp_txt["plays_mod"] = []
     for play in pbp_txt["plays"]:
         p = flatten_json_iterative(play)
@@ -250,8 +350,8 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)
@@ -266,8 +366,8 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)
@@ -340,7 +440,7 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
             (pl.col("game_play_number") == 1)
             .or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
             .or_((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-            .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
+            .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4)),
         )
         .then(720)
         .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))
@@ -380,6 +480,24 @@ def helper_nba_pbp_features(game_id, pbp_txt, init):
 
 
 def helper_nba_pickcenter(pbp_txt):
+    """Internal helper that extracts spread / over-under / home-favorite info
+    from the ESPN ``pickcenter`` array.
+
+    Falls back to sensible defaults (spread 2.5, OU 215.5, home favorite True,
+    spread unavailable) when no pickcenter data is present.
+
+    Args:
+        pbp_txt (dict): ESPN summary payload.
+
+    Returns:
+        dict: ``{"gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable"}``.
+
+    Example:
+        Used internally by :func:`espn_nba_pbp`::
+
+            from sportsdataverse.nba import espn_nba_pbp
+            pbp = espn_nba_pbp(game_id=401585183)
+    """
     # Spread definition
     if len(pbp_txt.get("pickcenter", [])) > 1:
         pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")

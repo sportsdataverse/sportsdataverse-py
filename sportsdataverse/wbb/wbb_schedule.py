@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 
 import pandas as pd
@@ -8,7 +10,12 @@ from sportsdataverse.errors import SeasonNotFoundError
 
 
 def espn_wbb_schedule(
-    dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs
+    dates=None,
+    groups=50,
+    season_type=None,
+    limit=500,
+    return_as_pandas=False,
+    **kwargs,
 ) -> pl.DataFrame:
     """espn_wbb_schedule - look up the women's college basketball schedule for a given season
 
@@ -21,6 +28,39 @@ def espn_wbb_schedule(
 
     Returns:
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+
+    Example:
+        Single date (April 7, 2024 - 2024 NCAA W championship day)::
+
+            from sportsdataverse.wbb import espn_wbb_schedule
+            day = espn_wbb_schedule(dates=20240407)
+            print(day.shape)
+
+        Season-level pull (2024 season)::
+
+            season = espn_wbb_schedule(dates=2024, limit=1500)
+            print(season.shape)
+
+        Filter to a specific team (UConn ``team_id=2509``)::
+
+            import polars as pl
+            uconn = season.filter(
+                (pl.col("home_id") == "2509") | (pl.col("away_id") == "2509")
+            )
+
+        Pandas round-trip::
+
+            season_pd = espn_wbb_schedule(dates=2024, return_as_pandas=True)
+            season_pd.head()
+
+        See Also:
+            * `wehoop`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard"
     params = {
@@ -151,6 +191,32 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Calendar dates for a single season::
+
+            from sportsdataverse.wbb import espn_wbb_calendar
+            cal = espn_wbb_calendar(season=2024)
+            cal.head()
+
+        On-days only (dates with games on the schedule)::
+
+            ondays = espn_wbb_calendar(season=2024, ondays=True)
+            ondays.head()
+
+        Pandas round-trip::
+
+            cal_pd = espn_wbb_calendar(season=2024, return_as_pandas=True)
+            cal_pd.head()
+
+        See Also:
+            * `wehoop`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     if int(season) < 2002:
         raise SeasonNotFoundError("season cannot be less than 2002")
@@ -177,7 +243,7 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         full_schedule = pl.DataFrame(data)
         full_schedule = full_schedule.with_columns(
             url="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates="
-            + pl.col("dateURL")
+            + pl.col("dateURL"),
         )
     return full_schedule.to_pandas() if return_as_pandas else full_schedule
 
@@ -190,13 +256,36 @@ def __ondays_wbb_calendar(season, **kwargs):
     result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
     result = result.with_columns(
         url="http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates="
-        + pl.col("dateURL")
+        + pl.col("dateURL"),
     )
 
     return result
 
 
 def most_recent_wbb_season():
+    """Return the most recent women's college basketball season year.
+
+    The women's college basketball season spans late October through early
+    April; for any month October-December the "current season" is the
+    following calendar year (e.g. October 2025 returns ``2026``).
+
+    Returns:
+        int: The most recent / current season year.
+
+    Example:
+        Use as a default season argument::
+
+            from sportsdataverse.wbb import most_recent_wbb_season, espn_wbb_schedule
+            season = most_recent_wbb_season()
+            sched = espn_wbb_schedule(dates=season)
+
+        See Also:
+            * `wehoop`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
     if datetime.datetime.now().month >= 10:
         return datetime.datetime.now().year + 1
     else:

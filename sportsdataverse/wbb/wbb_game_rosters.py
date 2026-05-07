@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 import polars as pl
 
@@ -30,12 +32,38 @@ def espn_wbb_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
         'team_display_name', 'team_short_display_name', 'team_color',
         'team_alternate_color', 'is_active', 'is_all_star',
         'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id'
+
     Example:
-        `wbb_df = sportsdataverse.wbb.espn_wbb_game_rosters(game_id=401266534)`
+        Quick start (2024 NCAA W championship game)::
+
+            from sportsdataverse.wbb import espn_wbb_game_rosters
+            roster = espn_wbb_game_rosters(game_id=401587902)
+            print(roster.shape)
+
+        Identify starters::
+
+            import polars as pl
+            starters = roster.filter(pl.col("starter") == True).select(
+                ["full_name", "jersey", "team_display_name"]
+            )
+
+        Pandas round-trip::
+
+            roster_pd = espn_wbb_game_rosters(game_id=401587902, return_as_pandas=True)
+            roster_pd.head()
+
+        See Also:
+            * `wehoop`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     # summary endpoint for pickcenter array
     summary_url = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/{x}/competitions/{x}/competitors".format(
-        x=game_id
+        x=game_id,
     )
     summary_resp = download(summary_url, **kwargs)
     summary = summary_resp.json()
@@ -130,7 +158,8 @@ def helper_wbb_roster_items(items, summary_url, **kwargs):
         game_rosters = pl.concat([game_rosters, team_roster], how="vertical")
     game_rosters = game_rosters.drop(["period", "for_player_id", "active"])
     game_rosters = game_rosters.with_columns(
-        player_id=pl.col("player_id").cast(pl.Int64), team_id=pl.col("team_id").cast(pl.Int32)
+        player_id=pl.col("player_id").cast(pl.Int64),
+        team_id=pl.col("team_id").cast(pl.Int32),
     )
     return game_rosters
 
@@ -169,7 +198,7 @@ def helper_wbb_athlete_items(teams_rosters, **kwargs):
             "guid": "athlete_guid",
             "type": "athlete_type",
             "display_name": "athlete_display_name",
-        }
+        },
     )
     game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
     return game_athletes

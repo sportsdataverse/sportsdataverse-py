@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 
 import pandas as pd
@@ -19,8 +21,25 @@ def espn_nba_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         sportsdataverse.nba.espn_nba_teams.clear_cache().
 
     Example:
-        `nba_df = sportsdataverse.nba.espn_nba_teams()`
+        Quick start::
 
+            from sportsdataverse.nba import espn_nba_teams
+            teams = espn_nba_teams()
+            print(teams.shape)
+
+        Pandas round-trip::
+
+            teams_pd = espn_nba_teams(return_as_pandas=True)
+            teams_pd.head()
+
+        Pipeline next step (build a team_id to abbreviation map)::
+
+            teams = espn_nba_teams()
+            abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA team data
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams"
     params = {"limit": 1000}

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 import re
@@ -22,7 +24,31 @@ def espn_nhl_pbp(game_id: int, raw=False, **kwargs) -> Dict:
          "odds", "onIce", "gameInfo", "season"
 
     Example:
-        `nhl_df = sportsdataverse.nhl.espn_nhl_pbp(game_id=401247153)`
+        Pull a single game's parsed feed (Stanley Cup Finals 2023 game)::
+
+            from sportsdataverse.nhl import espn_nhl_pbp
+            game = espn_nhl_pbp(game_id=401559395)
+            list(game.keys())  # 'gameId', 'plays', 'boxscore', ...
+
+        Inspect parsed plays and a quick filter on goal events::
+
+            import polars as pl
+            plays = pl.DataFrame(game["plays"])
+            print(plays.shape)
+            goals = plays.filter(pl.col("type.text") == "Goal")
+            goals.select(["period", "time", "text"]).head()
+
+        Pull the unparsed payload for custom downstream parsing::
+
+            raw = espn_nhl_pbp(game_id=401559395, raw=True)
+            sorted(raw.keys())[:5]
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     pbp_txt = {}
     summary_url = f"http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary?event={game_id}"
@@ -128,7 +154,9 @@ def helper_nhl_game_data(pbp_txt, init):
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
     pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True, abs(init["gameSpread"]), -1 * abs(init["gameSpread"])
+        init["homeFavorite"] == True,
+        abs(init["gameSpread"]),
+        -1 * abs(init["gameSpread"]),
     )
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables

@@ -23,37 +23,37 @@ sportsdataverse.config module
 
 .. automodule:: sportsdataverse.config
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 sportsdataverse.decorators module
 ---------------------------------
 
 .. automodule:: sportsdataverse.decorators
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 sportsdataverse.dl\_utils module
 --------------------------------
 
 .. automodule:: sportsdataverse.dl_utils
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 sportsdataverse.errors module
 -----------------------------
 
 .. automodule:: sportsdataverse.errors
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Module contents
 ---------------
 
 .. automodule:: sportsdataverse
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:

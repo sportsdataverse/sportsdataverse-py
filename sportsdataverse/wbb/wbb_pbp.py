@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 import re
@@ -24,7 +26,39 @@ def espn_wbb_pbp(game_id: int, raw=False, **kwargs) -> Dict:
         "againstTheSpread", "odds", "predictor","espnWP", "gameInfo", "season"
 
     Example:
-        `wbb_df = sportsdataverse.wb.espn_wbb_pbp(game_id=401266534)`
+        Quick start (2024 NCAA Division I women's championship game)::
+
+            from sportsdataverse.wbb import espn_wbb_pbp
+            game = espn_wbb_pbp(game_id=401587902)
+            print(game["gameId"])
+            print(len(game["plays"]))
+
+        Convert plays to a DataFrame and filter shooting plays::
+
+            import polars as pl
+            plays = pl.DataFrame(game["plays"])
+            shots = plays.filter(pl.col("scoring_play") | pl.col("shooting_play"))
+            shots.select(["period_number", "clock_display_value", "team_id", "coordinate_x", "coordinate_y", "score_value", "text"]).head()
+
+        Convert to pandas for downstream analysis::
+
+            import pandas as pd
+            shots_pd = pd.DataFrame(game["plays"])
+            shots_pd[shots_pd["shooting_play"] == True].head()
+
+        Raw payload (skip the cleaning pipeline) for debugging::
+
+            raw = espn_wbb_pbp(game_id=401587902, raw=True)
+            sorted(raw.keys())
+
+        See Also:
+            * `wehoop`_ - R sister package; mirrors this surface for women's basketball
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     # play by play
     pbp_txt = {"timeouts": {}}
@@ -144,7 +178,9 @@ def helper_wbb_game_data(pbp_txt, init):
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
     pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True, abs(init["gameSpread"]), -1 * abs(init["gameSpread"])
+        init["homeFavorite"] == True,
+        abs(init["gameSpread"]),
+        -1 * abs(init["gameSpread"]),
     )
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
@@ -284,8 +320,8 @@ def helper_wbb_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)
@@ -300,8 +336,8 @@ def helper_wbb_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)
@@ -374,7 +410,7 @@ def helper_wbb_pbp_features(game_id, pbp_txt, init):
             (pl.col("game_play_number") == 1)
             .or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
             .or_((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-            .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
+            .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4)),
         )
         .then(600)
         .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))

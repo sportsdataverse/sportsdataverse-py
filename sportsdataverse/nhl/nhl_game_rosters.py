@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 import polars as pl
 
@@ -31,12 +33,34 @@ def espn_nhl_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
         'team_alternate_color', 'is_active', 'is_all_star',
         'logo_href', 'logo_dark_href', 'game_id'
     Example:
-        `nhl_df = sportsdataverse.nhl.espn_nhl_game_rosters(game_id=401247153)`
+        Pull both teams' rosters for a single game (Stanley Cup Final 2023)::
+
+            from sportsdataverse.nhl import espn_nhl_game_rosters
+            rosters = espn_nhl_game_rosters(game_id=401559395)
+            print(rosters.shape)
+            rosters.select(["athlete_display_name", "jersey", "team_abbreviation", "starter"]).head(10)
+
+        Just the starters::
+
+            import polars as pl
+            rosters.filter(pl.col("starter") == True).select(["athlete_display_name", "team_abbreviation"])
+
+        Pandas round-trip::
+
+            rosters_pd = espn_nhl_game_rosters(game_id=401559395, return_as_pandas=True)
+            rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     # summary endpoint for pickcenter array
     summary_url = (
         "https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/{x}/competitions/{x}/competitors".format(
-            x=game_id
+            x=game_id,
         )
     )
     summary_resp = download(summary_url, **kwargs)
@@ -137,7 +161,8 @@ def helper_nhl_roster_items(items, summary_url, **kwargs):
         team_roster = team_roster.with_columns(team_id=pl.lit(tm).cast(pl.Int32))
         game_rosters = pl.concat([game_rosters, team_roster], how="diagonal")
     game_rosters = game_rosters.with_columns(
-        player_id=pl.col("player_id").cast(pl.Int64), team_id=pl.col("team_id").cast(pl.Int32)
+        player_id=pl.col("player_id").cast(pl.Int64),
+        team_id=pl.col("team_id").cast(pl.Int32),
     )
     return game_rosters
 
@@ -176,7 +201,7 @@ def helper_nhl_athlete_items(teams_rosters, **kwargs):
             "guid": "athlete_guid",
             "type": "athlete_type",
             "display_name": "athlete_display_name",
-        }
+        },
     )
     game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
     return game_athletes

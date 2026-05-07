@@ -158,7 +158,22 @@ exclude = [
 
 [tool.ruff.lint]
 fixable = ["ALL"]
-ignore = ["E501", "E402", "F601", "F841"]
+ignore = [
+    "E501",  # line too long — long URLs / docstring tables
+    "E402",  # module-level imports not at top — sometimes intentional after sys.path setup
+    "F601",  # repeated dict literal key
+    "F841",  # local variable assigned but never used (legacy pbp parsers)
+    # The codebase intentionally uses `pl.col(...) == True/False` for polars
+    # boolean masks because the polars expression engine requires it
+    # (`is True/False` doesn't work on `pl.Expr`). See CLAUDE.md.
+    "E712",
+]
+
+
+[tool.ruff.lint.per-file-ignores]
+# Star-imports + re-exports are intentional in package __init__ files.
+"sportsdataverse/__init__.py" = ["F401", "F403"]
+"sportsdataverse/**/__init__.py" = ["F401", "F403"]
 
 
 [tool.ruff.format]

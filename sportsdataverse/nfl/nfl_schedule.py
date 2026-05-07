@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 
 import pandas as pd
@@ -7,7 +9,13 @@ from sportsdataverse.dl_utils import download
 
 
 def espn_nfl_schedule(
-    dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs
+    dates=None,
+    week=None,
+    season_type=None,
+    groups=None,
+    limit=500,
+    return_as_pandas=False,
+    **kwargs,
 ) -> pl.DataFrame:
     """espn_nfl_schedule - look up the NFL schedule for a given season
 
@@ -20,6 +28,20 @@ def espn_nfl_schedule(
 
     Returns:
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+
+    Example:
+        Single date (YYYYMMDD)::
+
+            from sportsdataverse.nfl import espn_nfl_schedule
+            sched = espn_nfl_schedule(dates=20240908)
+
+        Specific week of regular season (``season_type=2``)::
+
+            wk1 = espn_nfl_schedule(dates=2024, week=1, season_type=2)
+
+        Pandas round-trip::
+
+            sched_pd = espn_nfl_schedule(dates=20240908, return_as_pandas=True)
     """
 
     params = {"week": week, "dates": dates, "seasonType": season_type, "limit": limit}
@@ -63,6 +85,33 @@ def espn_nfl_schedule(
 
 
 def scoreboard_event_parsing(event):
+    """Normalize one ESPN scoreboard ``event`` into a flatter shape.
+
+    Splits the competitors list into ``home`` / ``away`` siblings, hoists
+    notes / broadcast metadata onto the competition root, and drops the
+    fields the schedule helper does not need (``odds``, ``leaders``,
+    ``geoBroadcasts``, etc.). Used internally by
+    :func:`espn_nfl_schedule`.
+
+    Args:
+        event (Dict): A single ``events[i]`` dict from the ESPN
+            scoreboard endpoint.
+
+    Returns:
+        Dict: The mutated event dict with normalized ``home`` / ``away`` /
+        broadcast keys.
+
+    Example:
+        Wire it into a custom schedule pull::
+
+            from sportsdataverse.dl_utils import download
+            from sportsdataverse.nfl.nfl_schedule import scoreboard_event_parsing
+            url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+            payload = download(url=url).json()
+            for ev in payload.get("events", []):
+                scoreboard_event_parsing(ev)
+                ev["competitions"][0]["home"]["abbreviation"]
+    """
     event.get("competitions")[0].get("competitors")[0].get("team").pop("links", None)
     event.get("competitions")[0].get("competitors")[1].get("team").pop("links", None)
     if event.get("competitions")[0].get("competitors")[0].get("homeAway") == "home":
@@ -148,6 +197,20 @@ def espn_nfl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Fetch the calendar for a single season::
+
+            from sportsdataverse.nfl import espn_nfl_calendar
+            cal = espn_nfl_calendar(season=2024)
+
+        Fetch the ondays-style flattened schedule URLs::
+
+            on_days = espn_nfl_calendar(season=2024, ondays=True)
+
+        Pandas round-trip::
+
+            cal_pd = espn_nfl_calendar(season=2024, return_as_pandas=True)
     """
     if ondays is not None:
         full_schedule = __ondays_nfl_calendar(season, **kwargs)
@@ -184,13 +247,29 @@ def __ondays_nfl_calendar(season, **kwargs):
         result = pl.DataFrame(txt, schema=["dates"])
         result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
         result = result.with_columns(
-            url="http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=" + pl.col("dateURL")
+            url="http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=" + pl.col("dateURL"),
         )
 
     return result
 
 
 def most_recent_nfl_season():
+    """Return the most recent NFL season year using a coarse September cutoff.
+
+    Simpler counterpart to :func:`sportsdataverse.nfl.get_current_nfl_season` --
+    flips on September 1 rather than the Thursday after Labor Day. Use the
+    ``utils_date`` version when you need calendar precision; this one is
+    fine for "what's the current season" UI labels.
+
+    Returns:
+        int: Current season year.
+
+    Example:
+        Quick label for a UI banner::
+
+            from sportsdataverse.nfl.nfl_schedule import most_recent_nfl_season
+            label = f"NFL {most_recent_nfl_season()} season"
+    """
     today = datetime.datetime.now()
     current_year = today.year
     current_month = today.month
@@ -199,6 +278,28 @@ def most_recent_nfl_season():
 
 
 def get_current_week():
+    """Return the current NFL week (1-22) using a calendar-driven heuristic.
+
+    Counts whole weeks since the first Thursday of September of the
+    current season (Labor Day Monday + 3 days) and clamps to ``[1, 22]``.
+
+    Returns:
+        int: Current week number, capped at 22.
+
+    Example:
+        Pair with ``most_recent_nfl_season`` for a season+week label::
+
+            from sportsdataverse.nfl.nfl_schedule import (
+                get_current_week, most_recent_nfl_season,
+            )
+            season, week = most_recent_nfl_season(), get_current_week()
+            label = f"NFL {season} -- Week {week}"
+
+        See Also:
+            * :func:`sportsdataverse.nfl.get_current_nfl_week` -- the
+              unified ``utils_date`` variant; supports a schedule-driven
+              ``use_date=False`` mode and a ``roster=True`` flag.
+    """
     # Find first Monday of September in current season
     week1_sep = pd.to_datetime([f"{most_recent_nfl_season()}-09-0{num}" for num in range(1, 8)]).to_series()
     monday1_sep = week1_sep[week1_sep.dt.dayofweek == 0]

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 
 import pandas as pd
@@ -7,7 +9,13 @@ from sportsdataverse.dl_utils import download
 
 
 def espn_cfb_schedule(
-    dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs
+    dates=None,
+    week=None,
+    season_type=None,
+    groups=None,
+    limit=500,
+    return_as_pandas=False,
+    **kwargs,
 ) -> pl.DataFrame:
     """espn_cfb_schedule - look up the college football schedule for a given season
 
@@ -30,6 +38,28 @@ def espn_cfb_schedule(
     Returns:
 
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+
+    Example:
+        Quick start (today's slate)::
+
+            from sportsdataverse.cfb import espn_cfb_schedule
+            slate = espn_cfb_schedule()
+            print(slate.shape if slate is not None else "no games")
+
+        Pull a specific week of FBS games::
+
+            week5 = espn_cfb_schedule(dates=2023, week=5, season_type=2)
+
+        Pipeline next step (extract finals only)::
+
+            import polars as pl
+            finals = espn_cfb_schedule(dates=2023, week=5).filter(
+                pl.col("status_type_completed") == True
+            )
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB schedules
+            * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
     """
 
     params = {
@@ -86,6 +116,23 @@ def espn_cfb_schedule(
 
 
 def scoreboard_event_parsing(event):
+    """Internal helper that flattens an ESPN scoreboard event dict into a shape
+    suitable for ``pd.json_normalize``.
+
+    Args:
+        event (dict): A single scoreboard ``events[*]`` entry from the ESPN
+            college-football scoreboard API.
+
+    Returns:
+        dict: The same event dict, mutated in place with ``home``/``away``
+        copies of the competitors and trimmed of unused link/odds keys.
+
+    Example:
+        Used internally by :func:`espn_cfb_schedule`::
+
+            from sportsdataverse.cfb import espn_cfb_schedule
+            sched = espn_cfb_schedule(dates=2023, week=5)
+    """
     event.get("competitions")[0].get("competitors")[0].get("team").pop("links", None)
     event.get("competitions")[0].get("competitors")[1].get("team").pop("links", None)
     if event.get("competitions")[0].get("competitors")[0].get("homeAway") == "home":
@@ -191,6 +238,25 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
     Raises:
 
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import espn_cfb_calendar
+            cal = espn_cfb_calendar(season=2023)
+            print(cal.shape)
+
+        Use ondays to get every scheduled date for the season::
+
+            ondays = espn_cfb_calendar(season=2023, ondays=True)
+
+        Pipeline next step (loop the URLs to scrape day-by-day)::
+
+            cal = espn_cfb_calendar(season=2023, ondays=True)
+            urls = cal["url"].to_list()  # feed each into espn_cfb_schedule
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB schedules
     """
 
     if ondays is not None:
@@ -246,13 +312,34 @@ def __ondays_cfb_calendar(season, **kwargs):
 
         result = result.with_columns(
             url="http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates="
-            + pl.col("dateURL")
+            + pl.col("dateURL"),
         )
 
     return result
 
 
 def most_recent_cfb_season():
+    """Return the most recent college football season year based on today's date.
+
+    The college football season starts in mid-August. If today is on or after
+    August 15 (or any day in September or later), this returns the current
+    calendar year. Otherwise, it returns the previous calendar year.
+
+    Returns:
+        int: The most recent CFB season year.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import most_recent_cfb_season
+            year = most_recent_cfb_season()
+            print(year)
+
+        Combine with the loaders for a "current season" pull::
+
+            from sportsdataverse.cfb import load_cfb_schedule, most_recent_cfb_season
+            sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
+    """
     date = datetime.datetime.now()
 
     if date.month >= 8 and date.day >= 15:

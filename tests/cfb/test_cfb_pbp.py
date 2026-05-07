@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from tests.conftest import skip_if_no_live
 
 
 @pytest.fixture()
@@ -39,7 +42,7 @@ def test_cfb_adv_box_score(cfb_box_score):
             "defensive",
             "turnover",
             "drives",
-        }
+        },
     )
 
 
@@ -82,7 +85,7 @@ def test_fsu_play_dedupe(dupe_fsu_play_base):
             "down": 4,
             "distance": 9,
             "yardsToEndzone": 89,
-        }
+        },
     ]
 
     for item in target_strings:
@@ -93,8 +96,8 @@ def test_fsu_play_dedupe(dupe_fsu_play_base):
                     (pl.col("text") == item["text"])
                     & (pl.col("start.down") == item["down"])
                     & (pl.col("start.distance") == item["distance"])
-                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
-                )
+                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"]),
+                ),
             )
             == 1
         )
@@ -108,8 +111,8 @@ def test_fsu_play_dedupe(dupe_fsu_play_base):
                     (pl.col("text") == item["text"])
                     & (pl.col("start.down") == item["down"])
                     & (pl.col("start.distance") == item["distance"])
-                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
-                )
+                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"]),
+                ),
             )
             == 1
         )
@@ -136,7 +139,7 @@ def test_iu_play_dedupe(dupe_iu_play_base):
             "down": 2,
             "distance": 9,
             "yardsToEndzone": 26,
-        }
+        },
     ]
 
     elimination_strings = [
@@ -145,7 +148,7 @@ def test_iu_play_dedupe(dupe_iu_play_base):
             "down": 2,
             "distance": 9,
             "yardsToEndzone": 26,
-        }
+        },
     ]
 
     for item in target_strings:
@@ -156,8 +159,8 @@ def test_iu_play_dedupe(dupe_iu_play_base):
                     (pl.col("text") == item["text"])
                     & (pl.col("start.down") == item["down"])
                     & (pl.col("start.distance") == item["distance"])
-                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
-                )
+                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"]),
+                ),
             )
             == 1
         )
@@ -171,8 +174,8 @@ def test_iu_play_dedupe(dupe_iu_play_base):
                     (pl.col("text") == item["text"])
                     & (pl.col("start.down") == item["down"])
                     & (pl.col("start.distance") == item["distance"])
-                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"])
-                )
+                    & (pl.col("start.yardsToEndzone") == item["yardsToEndzone"]),
+                ),
             )
             == 0
         )
@@ -206,10 +209,68 @@ def test_expected_turnovers(iu_play_base_box):
     home_team = iu_play_base_box["turnover"][1].get("pos_team", "NA")
 
     print(
-        f"home team: {home_team} vs def {def_away_team} - fum: {home_fum}, int: {home_off_int}, pd: {home_pd} -> xTO: {home_exp_xTO}"
+        f"home team: {home_team} vs def {def_away_team} - fum: {home_fum}, int: {home_off_int}, pd: {home_pd} -> xTO: {home_exp_xTO}",
     )
     print(
-        f"away off {away_team} vs def {def_home_team} - fum: {away_fum}, int: {away_off_int}, pd: {away_pd} -> xTO: {away_exp_xTO}"
+        f"away off {away_team} vs def {def_home_team} - fum: {away_fum}, int: {away_off_int}, pd: {away_pd} -> xTO: {away_exp_xTO}",
     )
     assert round(away_exp_xTO, 4) == round(away_actual_xTO, 4)
     assert round(home_exp_xTO, 4) == round(home_actual_xTO, 4)
+
+
+@skip_if_no_live
+def test_pbp_handles_python_float_overUnder():
+    """Regression: 2024 CFP semifinal (game_id=401628334) previously failed in
+    ``__helper_cfb_pbp_features`` because ``init["overUnder"].astype(float)``
+    was called on a Python ``float`` (no ``.astype()`` attribute). The
+    defensive cast in ``__helper_cfb_game_data`` now handles both numpy and
+    Python scalar shapes for ``overUnder`` / ``gameSpread`` / ``homeFavorite``.
+    """
+    test = CFBPlayProcess(gameId=401628334)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()  # must not raise
+    assert test.ran_pipeline is True
+    assert len(test.plays_json) > 0
+
+
+@skip_if_no_live
+def test_modern_2024_game_gets_real_spread_not_default():
+    """ESPN emptied the legacy ``pickcenter`` array on the summary endpoint
+    for 2024+ games. Before the modern-odds cascade, every play in those
+    games silently inherited the defaults ``(2.5, 55.0/55.5, True)`` —
+    corrupting WPA / EP. The modern core-odds endpoint
+    (``sports.core.api.espn.com/v2/.../events/{gid}/competitions/{gid}/odds``)
+    has 5 items for ``401628334`` (2024 CFP semifinal), so the cascade
+    should pull a real spread / total instead of the defaults.
+    """
+    test = CFBPlayProcess(gameId=401628334)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+    assert test.ran_pipeline is True
+    assert len(test.plays_json) > 0
+    # gameSpreadAvailable should be True via the modern cascade (was False
+    # before the cascade landed for this game).
+    assert test.gameSpreadAvailable is True
+    # Defaults are 2.5 spread / 55.5 (or 55.0 legacy) overUnder. Modern
+    # endpoint reports a real spread + total for this game.
+    assert float(test.gameSpread) != 2.5
+    assert float(test.overUnder) not in (55.0, 55.5)
+
+
+@skip_if_no_live
+def test_old_2014_game_still_uses_legacy_pickcenter_when_available():
+    """Regression guard: a pre-2024 game with a populated legacy
+    ``pickcenter`` (``400547765`` historically had 3+ entries) must continue
+    to use that legacy path — the cascade only invokes the modern endpoint
+    when legacy is empty. This guards against accidentally regressing the
+    older games while restoring the modern ones.
+    """
+    test = CFBPlayProcess(gameId=400547765)
+    test.espn_cfb_pbp()
+    test.run_processing_pipeline()
+    assert test.ran_pipeline is True
+    assert len(test.plays_json) > 0
+    # Either real legacy values OR (if legacy was actually empty for this
+    # game on ESPN's current API) modern fallback values; in neither case
+    # should we crash, and gameSpreadAvailable should be True.
+    assert test.gameSpreadAvailable is True

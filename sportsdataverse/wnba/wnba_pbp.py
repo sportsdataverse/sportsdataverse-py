@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 import re
@@ -22,7 +24,32 @@ def espn_wnba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
          "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
 
     Example:
-        `wnba_df = sportsdataverse.wnba.espn_wnba_pbp(game_id=401370395)`
+        Pull a single game's play-by-play feed::
+
+            from sportsdataverse.wnba import espn_wnba_pbp
+            game = espn_wnba_pbp(game_id=401620238)  # 2024 WNBA Finals Game 1
+            list(game.keys())  # ['gameId', 'plays', 'winprobability', ...]
+
+        Inspect the parsed plays and a header summary::
+
+            import polars as pl
+            plays = pl.DataFrame(game["plays"])
+            print(plays.shape)
+            print(plays.select(["period", "time", "type.text", "text"]).head(5))
+
+        Fetch the unparsed payload for custom downstream parsing::
+
+            raw = espn_wnba_pbp(game_id=401620238, raw=True)
+            sorted(raw.keys())[:5]  # raw ESPN summary keys, no flattening
+
+        See Also:
+            * `wehoop`_ — R sister package; mirrors this surface
+            * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
+            * `hoopR`_ — companion R package for men's basketball
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     # play by play
     # play by play
@@ -143,7 +170,9 @@ def helper_wnba_game_data(pbp_txt, init):
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
     pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True, abs(init["gameSpread"]), -1 * abs(init["gameSpread"])
+        init["homeFavorite"] == True,
+        abs(init["gameSpread"]),
+        -1 * abs(init["gameSpread"]),
     )
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
@@ -249,8 +278,8 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)
@@ -265,8 +294,8 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)
@@ -339,7 +368,7 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
             (pl.col("game_play_number") == 1)
             .or_((pl.col("lag_qtr") == 1).and_(pl.col("period.number") == 2))
             .or_((pl.col("lag_qtr") == 2).and_(pl.col("period.number") == 3))
-            .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4))
+            .or_((pl.col("lag_qtr") == 3).and_(pl.col("period.number") == 4)),
         )
         .then(600)
         .when((pl.col("lag_qtr") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 5))

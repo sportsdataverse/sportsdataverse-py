@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 
 import pandas as pd
@@ -18,6 +20,28 @@ def espn_nba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
 
     Returns:
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+
+    Example:
+        Quick start (today's slate)::
+
+            from sportsdataverse.nba import espn_nba_schedule
+            slate = espn_nba_schedule()
+            print(slate.shape)
+
+        Pull a specific date::
+
+            jan2 = espn_nba_schedule(dates=20230102, season_type=2)
+
+        Pipeline next step (extract finals only)::
+
+            import polars as pl
+            finals = espn_nba_schedule(dates=20230102).filter(
+                pl.col("status_type_completed") == True
+            )
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA data
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
     params = {"dates": dates, "seasonType": season_type, "limit": limit}
@@ -57,6 +81,23 @@ def espn_nba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
 
 
 def scoreboard_event_parsing(event):
+    """Internal helper that flattens an ESPN NBA scoreboard event dict into a
+    shape suitable for ``pd.json_normalize``.
+
+    Args:
+        event (dict): A single scoreboard ``events[*]`` entry from the ESPN
+            NBA scoreboard API.
+
+    Returns:
+        dict: The same event dict, mutated in place with ``home``/``away``
+        copies of the competitors and trimmed of unused link/odds keys.
+
+    Example:
+        Used internally by :func:`espn_nba_schedule`::
+
+            from sportsdataverse.nba import espn_nba_schedule
+            sched = espn_nba_schedule(dates=20230102)
+    """
     event.get("competitions")[0].get("competitors")[0].get("team").pop("links", None)
     event.get("competitions")[0].get("competitors")[1].get("team").pop("links", None)
     if event.get("competitions")[0].get("competitors")[0].get("homeAway") == "home":
@@ -139,6 +180,25 @@ def espn_nba_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import espn_nba_calendar
+            cal = espn_nba_calendar(season=2023)
+            print(cal.shape)
+
+        Use ondays to get every scheduled date for the season::
+
+            ondays = espn_nba_calendar(season=2023, ondays=True)
+
+        Pipeline next step (loop the URLs to scrape day-by-day)::
+
+            cal = espn_nba_calendar(season=2023, ondays=True)
+            urls = cal["url"].to_list()  # feed each into espn_nba_schedule
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA data
     """
     if ondays is not None:
         full_schedule = __ondays_nba_calendar(season, **kwargs)
@@ -162,7 +222,7 @@ def espn_nba_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         }
         full_schedule = pl.DataFrame(data)
         full_schedule = full_schedule.with_columns(
-            url="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=" + pl.col("dateURL")
+            url="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=" + pl.col("dateURL"),
         )
     return full_schedule.to_pandas() if return_as_pandas else full_schedule
 
@@ -174,13 +234,34 @@ def __ondays_nba_calendar(season, **kwargs):
     result = pl.DataFrame(txt, schema=["dates"])
     result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
     result = result.with_columns(
-        url="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=" + pl.col("dateURL")
+        url="http://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=" + pl.col("dateURL"),
     )
 
     return result
 
 
 def most_recent_nba_season():
+    """Return the most recent NBA season year based on today's date.
+
+    The NBA season crosses calendar years -- a season started in October of
+    year Y is reported as season Y+1. If today is in October or later, this
+    returns next calendar year; otherwise it returns the current calendar year.
+
+    Returns:
+        int: The most recent NBA season year (e.g. 2024 for the 2023-24 season).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import most_recent_nba_season
+            year = most_recent_nba_season()
+            print(year)
+
+        Combine with the loaders for a "current season" pull::
+
+            from sportsdataverse.nba import load_nba_schedule, most_recent_nba_season
+            sched = load_nba_schedule(seasons=[most_recent_nba_season()])
+    """
     if int(str(datetime.date.today())[5:7]) >= 10:
         return int(str(datetime.date.today())[:4]) + 1
     else:
@@ -188,6 +269,30 @@ def most_recent_nba_season():
 
 
 def year_to_season(year):
+    """Convert a season-end year (e.g. 2024) to the NBA's hyphenated label
+    (e.g. ``"2023-24"``).
+
+    Handles century rollover (1999 -> ``"1999-00"``) and zero-pads the
+    second half of the label.
+
+    Args:
+        year (int): The starting calendar year of the season (e.g. 2023 for
+            the 2023-24 season).
+
+    Returns:
+        str: NBA-style season label.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import year_to_season
+            label = year_to_season(2023)
+            print(label)  # "2023-24"
+
+        Century rollover::
+
+            print(year_to_season(1999))  # "1999-00"
+    """
     first_year = str(year)[2:4]
     next_year = int(first_year) + 1
     if int(next_year) < 10 and int(first_year) >= 0:

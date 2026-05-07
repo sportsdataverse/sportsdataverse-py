@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List
 
 import polars as pl
@@ -17,9 +19,6 @@ from sportsdataverse.errors import SeasonNotFoundError
 def load_cfb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load college football play by play data going back to 2003
 
-    Example:
-        `cfb_df = sportsdataverse.cfb.load_cfb_pbp(seasons=range(2003,2021))`
-
     Args:
         seasons (list): Used to define different seasons. 2003 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -29,6 +28,27 @@ def load_cfb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
 
     Raises:
         ValueError: If `season` is less than 2003.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import load_cfb_pbp
+            pbp = load_cfb_pbp(seasons=[2023])
+            print(pbp.shape)
+
+        Multi-season pull as pandas::
+
+            pbp_pd = load_cfb_pbp(seasons=range(2020, 2024), return_as_pandas=True)
+            pbp_pd.head()
+
+        Pipeline next step (filter to rushing plays)::
+
+            import polars as pl
+            rushes = load_cfb_pbp(seasons=[2023]).filter(pl.col("rush") == True)
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB PBP
+            * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -44,9 +64,6 @@ def load_cfb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
 def load_cfb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load college football schedule data
 
-    Example:
-        `cfb_df = sportsdataverse.cfb.load_cfb_schedule(seasons=range(2002,2021))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -56,6 +73,27 @@ def load_cfb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import load_cfb_schedule
+            sched = load_cfb_schedule(seasons=[2023])
+            print(sched.shape)
+
+        Multi-season pull as pandas::
+
+            sched_pd = load_cfb_schedule(seasons=range(2020, 2024), return_as_pandas=True)
+            sched_pd.head()
+
+        Pipeline next step (extract bowl games)::
+
+            import polars as pl
+            bowls = load_cfb_schedule(seasons=[2023]).filter(pl.col("season_type") == 3)
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB schedules
+            * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -72,9 +110,6 @@ def load_cfb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 def load_cfb_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load roster data
 
-    Example:
-        `cfb_df = sportsdataverse.cfb.load_cfb_rosters(seasons=range(2014,2021))`
-
     Args:
         seasons (list): Used to define different seasons. 2014 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -84,6 +119,32 @@ def load_cfb_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
 
     Raises:
         ValueError: If `season` is less than 2014.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import load_cfb_rosters
+            rosters = load_cfb_rosters(seasons=[2023])
+            print(rosters.shape)
+
+        Pandas round-trip::
+
+            rosters_pd = load_cfb_rosters(seasons=[2023], return_as_pandas=True)
+            rosters_pd.head()
+
+        Pipeline next step (count quarterbacks per team)::
+
+            import polars as pl
+            qbs = (
+                load_cfb_rosters(seasons=[2023])
+                .filter(pl.col("position").eq("QB"))
+                .group_by("team")
+                .len()
+            )
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB rosters
+            * `recruitR <https://github.com/sportsdataverse/recruitR>`_ -- recruiting data companion
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -99,9 +160,6 @@ def load_cfb_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
 def load_cfb_team_info(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load college football team info
 
-    Example:
-        `cfb_df = sportsdataverse.cfb.load_cfb_team_info(seasons=range(2002,2021))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -111,6 +169,29 @@ def load_cfb_team_info(seasons: List[int], return_as_pandas=False) -> pl.DataFra
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import load_cfb_team_info
+            teams = load_cfb_team_info(seasons=[2023])
+            print(teams.shape)
+
+        Pandas round-trip::
+
+            teams_pd = load_cfb_team_info(seasons=[2023], return_as_pandas=True)
+            teams_pd.head()
+
+        Pipeline next step (join team info onto schedule)::
+
+            from sportsdataverse.cfb import load_cfb_schedule
+            sched = load_cfb_schedule(seasons=[2023])
+            teams = load_cfb_team_info(seasons=[2023])
+            enriched = sched.join(teams, left_on="home_id", right_on="team_id", how="left")
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB team data
+            * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -129,19 +210,39 @@ def load_cfb_team_info(seasons: List[int], return_as_pandas=False) -> pl.DataFra
 def load_cfb_betting_lines(return_as_pandas=False) -> pl.DataFrame:
     """Load college football betting lines information
 
-    Example:
-        `cfb_df = sportsdataverse.cfb.load_cfb_betting_lines()`
-
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing betting lines available for the available seasons.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import load_cfb_betting_lines
+            lines = load_cfb_betting_lines()
+            print(lines.shape)
+
+        Pandas round-trip::
+
+            lines_pd = load_cfb_betting_lines(return_as_pandas=True)
+            lines_pd.head()
+
+        Pipeline next step (filter to one provider in 2023)::
+
+            import polars as pl
+            consensus_2023 = load_cfb_betting_lines().filter(
+                (pl.col("season") == 2023) & (pl.col("provider") == "consensus")
+            )
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB betting lines
+            * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
     """
 
     return (
         pl.read_parquet(CFB_BETTING_LINES_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
+            use_pyarrow_extension_array=True,
         )
         if return_as_pandas
         else pl.read_parquet(CFB_BETTING_LINES_URL, use_pyarrow=True, columns=None)
@@ -151,14 +252,31 @@ def load_cfb_betting_lines(return_as_pandas=False) -> pl.DataFrame:
 def get_cfb_teams(return_as_pandas=False) -> pl.DataFrame:
     """Load college football team ID information and logos
 
-    Example:
-        `cfb_df = sportsdataverse.cfb.get_cfb_teams()`
-
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing teams available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import get_cfb_teams
+            teams = get_cfb_teams()
+            print(teams.shape)
+
+        Pandas round-trip::
+
+            teams_pd = get_cfb_teams(return_as_pandas=True)
+            teams_pd.head()
+
+        Pipeline next step (build a team_id to logo URL map)::
+
+            teams = get_cfb_teams()
+            logo_map = dict(zip(teams["team_id"], teams["logo"]))
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB team metadata
     """
 
     return (

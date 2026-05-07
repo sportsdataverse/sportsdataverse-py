@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 
 import pandas as pd
@@ -19,8 +21,30 @@ def espn_wnba_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         sportsdataverse.wnba.espn_wnba_teams.clear_cache().
 
     Example:
-        `wnba_df = sportsdataverse.wnba.espn_wnba_teams()`
+        Pull the full WNBA team directory::
 
+            from sportsdataverse.wnba import espn_wnba_teams
+            teams = espn_wnba_teams()
+            print(teams.shape)
+            teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
+
+        Find Las Vegas Aces (team_id 17)::
+
+            teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
+
+        Refresh the cache (the call is ``lru_cache``'d)::
+
+            espn_wnba_teams.cache_clear()  # cached at function-level
+            teams_pd = espn_wnba_teams(return_as_pandas=True)
+
+        See Also:
+            * `wehoop`_ — R sister package; mirrors this surface
+            * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
+            * `hoopR`_ — companion R package for men's basketball
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams"
     params = {"limit": 1000}

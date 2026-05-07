@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 
 import pandas as pd
@@ -20,7 +22,31 @@ def espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFram
         sportsdataverse.mbb.espn_mbb_teams.clear_cache().
 
     Example:
-        `mbb_df = sportsdataverse.mbb.espn_mbb_teams()`
+        Default groups (D1)::
+
+            from sportsdataverse.mbb import espn_mbb_teams
+            teams = espn_mbb_teams()
+            print(teams.shape)
+            print(teams.columns[:8])
+
+        Walk every team-id (handy for batched scrapes)::
+
+            team_ids = teams["team_id"].to_list()
+            print(len(team_ids), "D1 teams")
+
+        Pandas round-trip + Division II/III::
+
+            d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
+            d2_d3.head()
+
+        See Also:
+            * `hoopR`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
 
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams"

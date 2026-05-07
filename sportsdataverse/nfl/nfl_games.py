@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from typing import Dict
 
@@ -5,6 +7,28 @@ import requests
 
 
 def nfl_token_gen():
+    """Mint a fresh ``api.nfl.com`` access token via the public reroute endpoint.
+
+    Wraps the unauthenticated ``client_credentials`` grant the NFL.com web
+    app uses. The returned bearer token is what ``nfl_headers_gen()`` puts
+    on the ``Authorization`` header.
+
+    Returns:
+        str: The access token string.
+
+    Example:
+        Mint a token and inspect its prefix::
+
+            from sportsdataverse.nfl.nfl_games import nfl_token_gen
+            token = nfl_token_gen()
+            assert isinstance(token, str)
+
+        Pair with a downstream call (``nfl_headers_gen`` does this for you)::
+
+            import requests
+            token = nfl_token_gen()
+            headers = {"Authorization": f"Bearer {token}"}
+    """
     url = "https://api.nfl.com/v1/reroute"
 
     # TODO: resolve if DNT or x-domain-id are necessary.  pulled them from chrome inspector
@@ -17,6 +41,25 @@ def nfl_token_gen():
 
 
 def nfl_headers_gen():
+    """Build the full request-header dict expected by ``api.nfl.com``.
+
+    Mints a fresh bearer token via :func:`nfl_token_gen` and combines it
+    with the browser-style headers (``Origin``, ``Referer``, ``User-Agent``,
+    ``Sec-Fetch-*``, etc.) the NFL.com web app sends on every request.
+
+    Returns:
+        Dict[str, str]: Header dict ready to drop into ``requests.get``.
+
+    Example:
+        Reuse one header set across many calls::
+
+            from sportsdataverse.nfl.nfl_games import (
+                nfl_headers_gen, nfl_game_schedule,
+            )
+            hdrs = nfl_headers_gen()
+            week_one = nfl_game_schedule(season=2024, season_type="REG", week=1, headers=hdrs)
+            week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdrs)
+    """
     token = nfl_token_gen()
     return {
         "Host": "api.nfl.com",
@@ -37,15 +80,40 @@ def nfl_headers_gen():
 
 
 def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
-    """nfl_game_details()
+    """nfl_game_details() -- pull full ``api.nfl.com`` game details by game id.
+
     Args:
-        game_id (int): Game ID
+        game_id (str): UUID-style game id from ``api.nfl.com`` (e.g. ``'7ae87c4c-d24c-11ec-b23d-d15a91047884'``).
+        headers (Dict[str, str] | None): Pre-built header dict (skip the auth roundtrip).
+            Defaults to a fresh ``nfl_headers_gen()`` call.
+        raw (bool): If True, return the ESPN payload untouched. If False (default),
+            normalize keys to the expected schema (filling missing keys with
+            empty dicts/lists).
+
     Returns:
-        Dict: Dictionary of odds and props data with keys
+        Dict: Dictionary of game details (drives, plays, scoring summaries,
+        timeouts, weather, attendance, etc.).
+
     Example:
-        `nfl_df = nfl_game_details(
-        game_id = '7ae87c4c-d24c-11ec-b23d-d15a91047884'
-        )`
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_games import nfl_game_details
+            details = nfl_game_details(game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884")
+            sorted(details.keys())[:5]
+
+        Reuse headers across many calls (avoids re-minting tokens)::
+
+            from sportsdataverse.nfl.nfl_games import nfl_game_details, nfl_headers_gen
+            hdrs = nfl_headers_gen()
+            details = nfl_game_details(
+                game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", headers=hdrs
+            )
+
+        Raw passthrough::
+
+            raw = nfl_game_details(
+                game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", raw=True
+            )
     """
     if headers is None:
         headers = nfl_headers_gen()
@@ -110,17 +178,39 @@ def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
 
 
 def nfl_game_schedule(season=2021, season_type="REG", week=1, headers=None, raw=False) -> Dict:
-    """nfl_game_schedule()
+    """nfl_game_schedule() -- list ``api.nfl.com`` games for a season/week slice.
+
     Args:
-        season (int): season
-        season_type (str): season type - REG, POST
-        week (int): week
+        season (int): season year (e.g. ``2024``).
+        season_type (str): season type. One of ``"REG"`` or ``"POST"``.
+        week (int): week number (1-18 regular season, 1-4 post-season).
+        headers (Dict[str, str] | None): Pre-built header dict.
+            Defaults to a fresh ``nfl_headers_gen()`` call.
+        raw (bool): Currently ignored -- the function always returns the
+            raw NFL.com summary payload.
+
     Returns:
-        Dict: Dictionary of odds and props data with keys
+        Dict: Dictionary with the games list under ``"games"`` plus
+        pagination metadata.
+
     Example:
-        `nfl_df = nfl_game_schedule(
-            season = 2021, seasonType='REG', week=1
-        )`
+        Week 1 of the 2024 regular season::
+
+            from sportsdataverse.nfl.nfl_games import nfl_game_schedule
+            week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
+
+        Wild Card weekend (post-season)::
+
+            wild_card = nfl_game_schedule(season=2023, season_type="POST", week=1)
+
+        Reuse headers across many calls::
+
+            from sportsdataverse.nfl.nfl_games import nfl_game_schedule, nfl_headers_gen
+            hdrs = nfl_headers_gen()
+            for week in range(1, 19):
+                summary = nfl_game_schedule(
+                    season=2024, season_type="REG", week=week, headers=hdrs,
+                )
     """
     if headers is None:
         headers = nfl_headers_gen()

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Dict
 
 import pandas as pd
@@ -18,7 +20,23 @@ def nhl_api_pbp(game_id: int, **kwargs) -> Dict:
          "odds", "onIce", "gameInfo", "season"
 
     Example:
-        `nhl_df = sportsdataverse.nhl.nhl_api_pbp(game_id=2021020079)`
+        Pull a single game's metadata via the legacy NHL Stats API endpoint::
+
+            from sportsdataverse.nhl import nhl_api_pbp
+            game = nhl_api_pbp(game_id=2021020079)
+            sorted(game.keys())  # ['datetime', 'game', 'gameId', 'gameLink', 'players', 'status', 'teams', 'venues']
+            print(game["gameId"], game["status"]["abstractGameState"])
+
+        Inspect the home / away team summary blocks::
+
+            game["teams"]["home"]["name"], game["teams"]["away"]["name"]
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     # summary endpoint for pickcenter array
     summary_url = f"https://statsapi.web.nhl.com/api/v1/game/{game_id}/feed/live?site=en_nhl"
@@ -47,7 +65,26 @@ def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False, **k
         pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
 
     Example:
-        `nhl_sched_df = sportsdataverse.nhl.nhl_api_schedule(start_date=2021-10-23, end_date=2021-10-28)`
+        Pull a one-week schedule slice::
+
+            from sportsdataverse.nhl import nhl_api_schedule
+            sched = nhl_api_schedule(start_date="2021-10-23", end_date="2021-10-28")
+            print(sched.shape)
+            sched.select(["gamePk", "gameDate", "teams.home.team.name", "teams.away.team.name"]).head()
+
+        Pandas round-trip::
+
+            sched_pd = nhl_api_schedule(
+                start_date="2021-10-23", end_date="2021-10-28", return_as_pandas=True
+            )
+            sched_pd[["gamePk", "gameDate", "status.detailedState"]].head()
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     # summary endpoint for pickcenter array
     summary_url = "https://statsapi.web.nhl.com/api/v1/schedule"

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 import re
@@ -23,7 +25,49 @@ def espn_mbb_pbp(game_id: int, raw=False, **kwargs) -> Dict:
         "espnWP", "gameInfo", "season"
 
     Example:
-        `mbb_df = sportsdataverse.mbb.espn_mbb_pbp(game_id=401265031)`
+        Quick start (2024 NCAA Division I men's championship game)::
+
+            from sportsdataverse.mbb import espn_mbb_pbp
+            game = espn_mbb_pbp(game_id=401638637)
+            print(game["gameId"])
+            print(len(game["plays"]))
+
+        Filter shooting plays for a basic shot chart::
+
+            import polars as pl
+            plays = pl.DataFrame(game["plays"])
+            shots = plays.filter(pl.col("shooting_play") == True)
+            shots.select(
+                [
+                    "period_number",
+                    "clock_display_value",
+                    "team_id",
+                    "coordinate_x",
+                    "coordinate_y",
+                    "score_value",
+                    "text",
+                ]
+            ).head()
+
+        Convert to pandas::
+
+            import pandas as pd
+            plays_pd = pd.DataFrame(game["plays"])
+            plays_pd[plays_pd["shooting_play"] == True].head()
+
+        Raw payload (skip the cleaning pipeline) for debugging::
+
+            raw = espn_mbb_pbp(game_id=401638637, raw=True)
+            sorted(raw.keys())
+
+        See Also:
+            * `hoopR`_ - R sister package; mirrors this surface for men's basketball
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
 
     """
     # play by play
@@ -144,7 +188,9 @@ def helper_mbb_game_data(pbp_txt, init):
     pbp_txt["gameSpread"] = init["gameSpread"]
     pbp_txt["homeFavorite"] = init["homeFavorite"]
     pbp_txt["homeTeamSpread"] = np.where(
-        init["homeFavorite"] == True, abs(init["gameSpread"]), -1 * abs(init["gameSpread"])
+        init["homeFavorite"] == True,
+        abs(init["gameSpread"]),
+        -1 * abs(init["gameSpread"]),
     )
     pbp_txt["overUnder"] = init["overUnder"]
     # Home and Away identification variables
@@ -275,8 +321,8 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)
@@ -291,8 +337,8 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
                         pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                    )
-                )
+                    ),
+                ),
             )
             .then(True)
             .otherwise(False)

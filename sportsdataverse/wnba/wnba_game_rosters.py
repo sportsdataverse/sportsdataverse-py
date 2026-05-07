@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 import polars as pl
 
@@ -31,11 +33,35 @@ def espn_wnba_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kw
         'team_alternate_color', 'is_active', 'is_all_star',
         'logo_href', 'logo_dark_href', 'game_id'
     Example:
-        `wnba_df = sportsdataverse.wnba.espn_wnba_game_rosters(game_id=401370395)`
+        Pull both teams' rosters for a single game::
+
+            from sportsdataverse.wnba import espn_wnba_game_rosters
+            rosters = espn_wnba_game_rosters(game_id=401620238)  # 2024 WNBA Finals Game 1
+            print(rosters.shape)
+            rosters.select(["athlete_display_name", "jersey", "team_abbreviation", "starter"]).head(10)
+
+        Just the starters::
+
+            import polars as pl
+            rosters.filter(pl.col("starter") == True).select(["athlete_display_name", "team_abbreviation"])
+
+        Pandas round-trip::
+
+            rosters_pd = espn_wnba_game_rosters(game_id=401620238, return_as_pandas=True)
+            rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
+
+        See Also:
+            * `wehoop`_ — R sister package; mirrors this surface
+            * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
+            * `hoopR`_ — companion R package for men's basketball
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     # summary endpoint for pickcenter array
     summary_url = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{x}/competitions/{x}/competitors".format(
-        x=game_id
+        x=game_id,
     )
     summary_resp = download(summary_url, **kwargs)
     summary = summary_resp.json()
@@ -133,7 +159,8 @@ def helper_wnba_roster_items(items, summary_url, **kwargs):
         game_rosters = pl.concat([game_rosters, team_roster], how="vertical")
     game_rosters = game_rosters.drop(["period", "for_player_id", "active"])
     game_rosters = game_rosters.with_columns(
-        player_id=pl.col("player_id").cast(pl.Int64), team_id=pl.col("team_id").cast(pl.Int32)
+        player_id=pl.col("player_id").cast(pl.Int64),
+        team_id=pl.col("team_id").cast(pl.Int32),
     )
     return game_rosters
 
@@ -172,7 +199,7 @@ def helper_wnba_athlete_items(teams_rosters, **kwargs):
             "guid": "athlete_guid",
             "type": "athlete_type",
             "display_name": "athlete_display_name",
-        }
+        },
     )
     game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
     return game_athletes

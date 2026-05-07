@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 logger = logging.getLogger("sdv.dl_utils")
@@ -50,6 +52,8 @@ WNBA_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_wnba_schedules/wnba_schedule_{seaso
 
 NFLVERSEGITHUB = "https://github.com/nflverse/nflverse-data/releases/download/"
 NFLVERSEGITHUBPBP = "https://raw.githubusercontent.com/nflverse/"
+DYNASTYPROCESSGITHUB = "https://github.com/dynastyprocess/data/raw/master/files/"
+FFOPPORTUNITYGITHUB = "https://github.com/ffverse/ffopportunity/releases/download/"
 NFL_BASE_URL = NFLVERSEGITHUB + "pbp/play_by_play_{season}.parquet"  # done
 NFL_PLAYER_URL = f"{NFLVERSEGITHUB}players/players.parquet"
 NFL_PLAYER_STATS_URL = f"{NFLVERSEGITHUB}player_stats/player_stats.parquet"
@@ -77,4 +81,16 @@ NFL_INJURIES_URL = NFLVERSEGITHUB + "injuries/injuries_{season}.parquet"
 NFL_DEPTH_CHARTS_URL = NFLVERSEGITHUB + "depth_charts/depth_charts_{season}.parquet"
 NFL_OFFICIALS_URL = f"{NFLVERSEGITHUB}officials/officials.parquet"
 NFL_TEAM_LOGO_URL = f"{NFLVERSEGITHUBPBP}nflverse-pbp/master/teams_colors_logos.csv"
-NFL_TEAM_SCHEDULE_URL = NFLVERSEGITHUBPBP + "nflverse-pbp/master/schedules/sched_{season}.rds"
+# Single combined parquet covering all seasons (1999-present); filtered post-load by `season`.
+# Mirrors nflreadpy's `schedules/games` asset.
+NFL_TEAM_SCHEDULE_URL = f"{NFLVERSEGITHUB}schedules/games.parquet"
+
+# nflreadpy parity additions: coverage gaps the canonical loaders fill
+NFL_TEAM_STATS_URL = NFLVERSEGITHUB + "stats_team/stats_team_{level}_{season}.parquet"
+NFL_FTN_CHARTING_URL = NFLVERSEGITHUB + "ftn_charting/ftn_charting_{season}.parquet"
+NFL_TRADES_URL = f"{NFLVERSEGITHUB}trades/trades.parquet"
+NFL_FF_PLAYERIDS_URL = f"{DYNASTYPROCESSGITHUB}db_playerids.csv"
+NFL_FF_RANKINGS_DRAFT_URL = f"{DYNASTYPROCESSGITHUB}db_fpecr_latest.csv"
+NFL_FF_RANKINGS_WEEK_URL = f"{DYNASTYPROCESSGITHUB}fp_latest_weekly.csv"
+NFL_FF_RANKINGS_ALL_URL = f"{DYNASTYPROCESSGITHUB}db_fpecr.parquet"
+NFL_FF_OPPORTUNITY_URL = FFOPPORTUNITYGITHUB + "{model_version}-data/ep_{stat_type}_{season}.parquet"

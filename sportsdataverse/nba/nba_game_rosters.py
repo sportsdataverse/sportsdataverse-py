@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 import polars as pl
 
@@ -30,12 +32,34 @@ def espn_nba_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
         'team_display_name', 'team_short_display_name', 'team_color',
         'team_alternate_color', 'is_active', 'is_all_star',
         'logo_href', 'logo_dark_href', 'game_id'
+
     Example:
-        `nba_df = sportsdataverse.nba.espn_nba_game_rosters(game_id=401307514)`
+        Quick start::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            rosters = espn_nba_game_rosters(game_id=401585183)
+            print(rosters.shape)
+
+        Pandas round-trip::
+
+            rosters_pd = espn_nba_game_rosters(game_id=401585183, return_as_pandas=True)
+            rosters_pd.head()
+
+        Pipeline next step (filter to game starters)::
+
+            import polars as pl
+            starters = espn_nba_game_rosters(game_id=401585183).filter(
+                pl.col("starter") == True
+            )
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA rosters
+            * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball parallel
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     # summary endpoint for pickcenter array
     summary_url = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/{x}/competitions/{x}/competitors".format(
-        x=game_id
+        x=game_id,
     )
     summary_resp = download(summary_url, **kwargs)
     summary = summary_resp.json()
@@ -52,6 +76,21 @@ def espn_nba_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
 
 
 def helper_nba_game_items(summary):
+    """Internal helper that flattens the ESPN ``competitions/competitors``
+    summary payload into a polars DataFrame keyed by ``team_id``.
+
+    Args:
+        summary (dict): Parsed JSON from the ESPN competitors summary endpoint.
+
+    Returns:
+        pl.DataFrame: Polars dataframe with one row per competitor team in the game.
+
+    Example:
+        Used internally by :func:`espn_nba_game_rosters`::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            rosters = espn_nba_game_rosters(game_id=401585183)
+    """
     items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
     items.columns = [col.replace("$ref", "href") for col in items.columns]
 
@@ -63,6 +102,22 @@ def helper_nba_game_items(summary):
 
 
 def helper_nba_team_items(items, **kwargs):
+    """Internal helper that fetches team detail rows for every team referenced in
+    the competitors summary and returns them as a flat polars DataFrame.
+
+    Args:
+        items (pl.DataFrame): Output of :func:`helper_nba_game_items`.
+        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
+
+    Returns:
+        pl.DataFrame: Team detail rows with logo URLs flattened out.
+
+    Example:
+        Used internally by :func:`espn_nba_game_rosters`::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            rosters = espn_nba_game_rosters(game_id=401585183)
+    """
     pop_cols = [
         "$ref",
         "record",
@@ -120,6 +175,23 @@ def helper_nba_team_items(items, **kwargs):
 
 
 def helper_nba_roster_items(items, summary_url, **kwargs):
+    """Internal helper that fetches the roster entries for every team in a game.
+
+    Args:
+        items (pl.DataFrame): Output of :func:`helper_nba_game_items`.
+        summary_url (str): Base ESPN summary URL used to derive each team's
+            roster endpoint.
+        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
+
+    Returns:
+        pl.DataFrame: One row per game-roster entry across both teams.
+
+    Example:
+        Used internally by :func:`espn_nba_game_rosters`::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            rosters = espn_nba_game_rosters(game_id=401585183)
+    """
     team_ids = list(items["team_id"])
     game_rosters = pl.DataFrame()
     for tm in team_ids:
@@ -132,12 +204,30 @@ def helper_nba_roster_items(items, summary_url, **kwargs):
         game_rosters = pl.concat([game_rosters, team_roster], how="vertical")
     game_rosters = game_rosters.drop(["period", "for_player_id", "active"])
     game_rosters = game_rosters.with_columns(
-        player_id=pl.col("player_id").cast(pl.Int64), team_id=pl.col("team_id").cast(pl.Int32)
+        player_id=pl.col("player_id").cast(pl.Int64),
+        team_id=pl.col("team_id").cast(pl.Int32),
     )
     return game_rosters
 
 
 def helper_nba_athlete_items(teams_rosters, **kwargs):
+    """Internal helper that resolves each athlete ``$ref`` in a team-rosters frame
+    to the canonical athlete detail row.
+
+    Args:
+        teams_rosters (pl.DataFrame): Output of :func:`helper_nba_roster_items`
+            (must contain an ``athlete_href`` column).
+        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
+
+    Returns:
+        pl.DataFrame: One row per resolved athlete.
+
+    Example:
+        Used internally by :func:`espn_nba_game_rosters`::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            rosters = espn_nba_game_rosters(game_id=401585183)
+    """
     athlete_hrefs = list(teams_rosters["athlete_href"])
     game_athletes = pl.DataFrame()
     pop_cols = [
@@ -171,7 +261,7 @@ def helper_nba_athlete_items(teams_rosters, **kwargs):
             "guid": "athlete_guid",
             "type": "athlete_type",
             "display_name": "athlete_display_name",
-        }
+        },
     )
     game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
     return game_athletes

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 
 import pandas as pd
@@ -19,8 +21,30 @@ def espn_nhl_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         sportsdataverse.nhl.espn_nhl_teams.clear_cache().
 
     Example:
-        `nhl_df = sportsdataverse.nhl.espn_nhl_teams()`
+        Pull the full NHL team directory::
 
+            from sportsdataverse.nhl import espn_nhl_teams
+            teams = espn_nhl_teams()
+            print(teams.shape)
+            teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
+
+        Find Tampa Bay Lightning (team_id 14)::
+
+            import polars as pl
+            teams.filter(pl.col("team_id") == "14").to_dicts()
+
+        Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas::
+
+            espn_nhl_teams.cache_clear()
+            teams_pd = espn_nhl_teams(return_as_pandas=True)
+            teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams"
     params = {"limit": 1000}

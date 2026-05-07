@@ -1,8 +1,9 @@
-import tempfile
+from __future__ import annotations
+
+import warnings
 from typing import List
 
 import polars as pl
-from pyreadr import download_file, read_r
 from tqdm import tqdm
 
 from sportsdataverse.config import (
@@ -11,6 +12,12 @@ from sportsdataverse.config import (
     NFL_CONTRACTS_URL,
     NFL_DEPTH_CHARTS_URL,
     NFL_DRAFT_PICKS_URL,
+    NFL_FF_OPPORTUNITY_URL,
+    NFL_FF_PLAYERIDS_URL,
+    NFL_FF_RANKINGS_ALL_URL,
+    NFL_FF_RANKINGS_DRAFT_URL,
+    NFL_FF_RANKINGS_WEEK_URL,
+    NFL_FTN_CHARTING_URL,
     NFL_INJURIES_URL,
     NFL_NGS_PASSING_URL,
     NFL_NGS_RECEIVING_URL,
@@ -32,16 +39,17 @@ from sportsdataverse.config import (
     NFL_SNAP_COUNTS_URL,
     NFL_TEAM_LOGO_URL,
     NFL_TEAM_SCHEDULE_URL,
+    NFL_TEAM_STATS_URL,
+    NFL_TRADES_URL,
     NFL_WEEKLY_ROSTER_URL,
 )
 from sportsdataverse.errors import season_not_found_error
+from sportsdataverse.nfl.cache import cached_loader
 
 
+@cached_loader
 def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL play by play data going back to 1999
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pbp(seasons=range(1999,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
@@ -52,6 +60,37 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
 
     Raises:
         ValueError: If `season` is less than 1999.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_pbp
+            pbp = load_nfl_pbp(seasons=[2024])
+            print(pbp.shape)
+
+        Multi-season range::
+
+            pbp = load_nfl_pbp(seasons=range(2020, 2025))
+
+        With cache off (development workflow)::
+
+            from sportsdataverse.nfl import load_nfl_pbp, update_config
+            update_config(cache_mode="off")
+            pbp = load_nfl_pbp(seasons=[2024])
+
+        Pandas round-trip::
+
+            pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
+            pbp_pd.head()
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+            * `nflfastR`_ -- R sister package for NFL PBP
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+        .. _nflfastR: https://www.nflfastr.com
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -63,11 +102,9 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL schedule data
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_schedule(seasons=range(1999,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
@@ -78,26 +115,51 @@ def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Raises:
         ValueError: If `season` is less than 1999.
+
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_schedule
+            schedule = load_nfl_schedule(seasons=[2024])
+            schedule.shape
+
+        Multi-season range::
+
+            schedule = load_nfl_schedule(seasons=range(2020, 2025))
+
+        Filter to a single week::
+
+            import polars as pl
+            week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
+
+        Pandas round-trip::
+
+            schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
+            schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
-    with tempfile.TemporaryDirectory() as tempdirname:
-        for i in tqdm(seasons):
-            season_not_found_error(int(i), 1999)
-            schedule_url = NFL_TEAM_SCHEDULE_URL.format(season=i)
-            # i_data = pd.read_parquet(NFL_TEAM_SCHEDULE_URL.format(season = i), engine='auto', columns=None)
-            i_data = read_r(download_file(schedule_url, f"{tempdirname}/nfl_sched_{i}.rds"))[None]
-            i_data = pl.DataFrame(i_data)
-            data = pl.concat([data, i_data], how="vertical")
+    for i in seasons:
+        season_not_found_error(int(i), 1999)
+    # Upstream (nflverse-data `schedules/games`) is a single combined parquet
+    # covering all seasons (1999-present). Read once and post-filter by season.
+    data = pl.read_parquet(NFL_TEAM_SCHEDULE_URL, use_pyarrow=True, columns=None)
+    if "season" in data.columns and seasons:
+        season_ints = [int(s) for s in seasons]
+        data = data.filter(pl.col("season").is_in(season_ints))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_player_stats(kicking=False, return_as_pandas=False) -> pl.DataFrame:
     """Load NFL player stats data
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_player_stats()`
 
     Args:
         kicking (bool): If True, load kicking stats. If False, load all other stats.
@@ -105,6 +167,29 @@ def load_nfl_player_stats(kicking=False, return_as_pandas=False) -> pl.DataFrame
 
     Returns:
         pl.DataFrame: Polars dataframe containing player stats.
+
+    Example:
+        Quick start (offense / defense / special teams)::
+
+            from sportsdataverse.nfl import load_nfl_player_stats
+            stats = load_nfl_player_stats()
+            stats.shape
+
+        Kicking-only stats::
+
+            kicking = load_nfl_player_stats(kicking=True)
+
+        Filter to a single season after load::
+
+            import polars as pl
+            stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     data = pl.DataFrame()
     if kicking is False:
@@ -115,269 +200,497 @@ def load_nfl_player_stats(kicking=False, return_as_pandas=False) -> pl.DataFrame
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_ngs_passing(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL NextGen Stats Passing data going back to 2016
+# NextGen Stats URL dispatch table. Used by load_nfl_nextgen_stats and the
+# 3 deprecated per-stat-type aliases.
+_NFL_NGS_URLS = {
+    "passing": NFL_NGS_PASSING_URL,
+    "rushing": NFL_NGS_RUSHING_URL,
+    "receiving": NFL_NGS_RECEIVING_URL,
+}
+
+
+@cached_loader
+def load_nfl_nextgen_stats(
+    seasons: List[int],
+    stat_type: str = "passing",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame:
+    """Load NFL NextGen Stats data going back to 2016.
+
+    Unified loader that consolidates the per-stat-type NextGen Stats
+    accessors. Mirrors the API surface of nflreadpy's
+    ``load_nextgen_stats`` so downstream code can swap engines without
+    changing call sites.
 
     Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_ngs_passing()`
-
-    Returns:
-        pl.DataFrame: Polars dataframe containing the NextGen Stats Passing data available.
-
-    """
-    return (
-        pl.read_parquet(NFL_NGS_PASSING_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else pl.read_parquet(NFL_NGS_PASSING_URL, use_pyarrow=True, columns=None)
-    )
-
-
-def load_nfl_ngs_rushing(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL NextGen Stats Rushing data going back to 2016
-
-    Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_ngs_rushing()`
+        seasons (list[int]): Seasons to filter to. The upstream parquet
+            covers a single combined file per stat type — ``seasons`` is
+            applied as a post-filter on the ``season`` column.
+        stat_type (str): One of ``"passing"``, ``"rushing"``,
+            ``"receiving"``. Defaults to ``"passing"``.
+        return_as_pandas (bool): If True, returns a pandas dataframe.
+            If False, returns a polars dataframe.
 
     Returns:
-        pl.DataFrame: Polars dataframe containing the NextGen Stats Rushing data available.
+        pl.DataFrame: Polars dataframe containing NextGen Stats data
+            for the requested ``stat_type`` and ``seasons``.
 
-    """
-    return (
-        pl.read_parquet(NFL_NGS_RUSHING_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else pl.read_parquet(NFL_NGS_RUSHING_URL, use_pyarrow=True, columns=None)
-    )
-
-
-def load_nfl_ngs_receiving(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL NextGen Stats Receiving data going back to 2016
-
-    Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+    Raises:
+        ValueError: If ``stat_type`` is not one of the allowed values.
 
     Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_ngs_receiving()`
+        Passing NextGen stats (default)::
 
-    Returns:
-        pl.DataFrame: Polars dataframe containing the NextGen Stats Receiving data available.
+            from sportsdataverse.nfl import load_nfl_nextgen_stats
+            ngs_pass = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 
+        Rushing NextGen stats::
+
+            ngs_rush = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
+
+        Receiving NextGen stats with a follow-up filter::
+
+            import polars as pl
+            ngs_rec = (
+                load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
+                .filter(pl.col("week") > 0)
+            )
+
+        Pandas round-trip::
+
+            ngs_pd = load_nfl_nextgen_stats(
+                seasons=[2024], stat_type="passing", return_as_pandas=True
+            )
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    return (
-        pl.read_parquet(NFL_NGS_RECEIVING_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else pl.read_parquet(NFL_NGS_RECEIVING_URL, use_pyarrow=True, columns=None)
-    )
+    if stat_type not in _NFL_NGS_URLS:
+        raise ValueError(f"stat_type must be one of {sorted(_NFL_NGS_URLS)}; got {stat_type!r}")
 
-
-def load_nfl_pfr_pass(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Advanced Passing data going back to 2018
-
-    Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_pass()`
-
-    Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced passing stats data available.
-
-    """
-    return (
-        pl.read_parquet(NFL_PFR_SEASON_PASS_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else pl.read_parquet(NFL_PFR_SEASON_PASS_URL, use_pyarrow=True, columns=None)
-    )
-
-
-def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Weekly Advanced Passing data going back to 2018
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_pass(seasons=range(2018,2021))`
-
-    Args:
-        seasons (list): Used to define different seasons. 2018 is the earliest available season.
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
-
-    Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced passing stats data available for the requested seasons.
-
-    """
-    data = pl.DataFrame()
-    if type(seasons) is int:
+    if isinstance(seasons, int):
         seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2018)
-        i_data = pl.read_parquet(NFL_PFR_WEEK_PASS_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+
+    url = _NFL_NGS_URLS[stat_type]
+    # The upstream NGS parquet is a single combined file per stat type,
+    # so the read happens once and we filter by season afterwards.
+    data = pl.read_parquet(url, use_pyarrow=True, columns=None)
+
+    if "season" in data.columns and seasons:
+        season_ints = [int(s) for s in seasons]
+        data = data.filter(pl.col("season").is_in(season_ints))
+
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_pfr_rush(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Advanced Rushing data going back to 2018
+@cached_loader
+def load_nfl_ngs_passing(seasons: List[int] = None, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_nextgen_stats(stat_type='passing')``.
 
-    Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_nextgen_stats`` function.
 
     Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_rush()`
+        Migrate to the unified entry point::
 
-    Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced rushing stats data available.
-
+            from sportsdataverse.nfl import load_nfl_nextgen_stats
+            ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
     """
-    return (
-        pl.read_parquet(NFL_PFR_SEASON_RUSH_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else pl.read_parquet(NFL_PFR_SEASON_RUSH_URL, use_pyarrow=True, columns=None)
+    warnings.warn(
+        "load_nfl_ngs_passing is deprecated; use load_nfl_nextgen_stats(stat_type='passing') instead",
+        DeprecationWarning,
+        stacklevel=2,
     )
+    if seasons is None:
+        # Preserve the legacy "load every season" behavior of the original alias.
+        data = pl.read_parquet(NFL_NGS_PASSING_URL, use_pyarrow=True, columns=None)
+        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+    return load_nfl_nextgen_stats(seasons, stat_type="passing", return_as_pandas=return_as_pandas)
 
 
-def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Weekly Advanced Rushing data going back to 2018
+@cached_loader
+def load_nfl_ngs_rushing(seasons: List[int] = None, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_nextgen_stats(stat_type='rushing')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_nextgen_stats`` function.
 
     Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_rush(seasons=range(2018,2021))`
+        Migrate to the unified entry point::
+
+            from sportsdataverse.nfl import load_nfl_nextgen_stats
+            ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
+    """
+    warnings.warn(
+        "load_nfl_ngs_rushing is deprecated; use load_nfl_nextgen_stats(stat_type='rushing') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    if seasons is None:
+        data = pl.read_parquet(NFL_NGS_RUSHING_URL, use_pyarrow=True, columns=None)
+        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+    return load_nfl_nextgen_stats(seasons, stat_type="rushing", return_as_pandas=return_as_pandas)
+
+
+@cached_loader
+def load_nfl_ngs_receiving(seasons: List[int] = None, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_nextgen_stats(stat_type='receiving')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_nextgen_stats`` function.
+
+    Example:
+        Migrate to the unified entry point::
+
+            from sportsdataverse.nfl import load_nfl_nextgen_stats
+            ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
+    """
+    warnings.warn(
+        "load_nfl_ngs_receiving is deprecated; use load_nfl_nextgen_stats(stat_type='receiving') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    if seasons is None:
+        data = pl.read_parquet(NFL_NGS_RECEIVING_URL, use_pyarrow=True, columns=None)
+        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+    return load_nfl_nextgen_stats(seasons, stat_type="receiving", return_as_pandas=return_as_pandas)
+
+
+# PFR advstats URL dispatch table. Keyed by (stat_type, summary_level)
+# matching nflreadpy's ``load_pfr_advstats`` semantics. ``season``-level
+# URLs are single combined files; ``week``-level URLs are per-season
+# templates with a ``{season}`` placeholder.
+_NFL_PFR_URLS = {
+    ("pass", "season"): NFL_PFR_SEASON_PASS_URL,
+    ("pass", "week"): NFL_PFR_WEEK_PASS_URL,
+    ("rush", "season"): NFL_PFR_SEASON_RUSH_URL,
+    ("rush", "week"): NFL_PFR_WEEK_RUSH_URL,
+    ("rec", "season"): NFL_PFR_SEASON_REC_URL,
+    ("rec", "week"): NFL_PFR_WEEK_REC_URL,
+    ("def", "season"): NFL_PFR_SEASON_DEF_URL,
+    ("def", "week"): NFL_PFR_WEEK_DEF_URL,
+}
+
+_NFL_PFR_STAT_TYPES = ("pass", "rush", "rec", "def")
+_NFL_PFR_SUMMARY_LEVELS = ("week", "season")
+
+
+@cached_loader
+def load_nfl_pfr_advstats(
+    seasons: List[int],
+    stat_type: str = "pass",
+    summary_level: str = "week",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame:
+    """Load Pro-Football Reference advanced statistics going back to 2018.
+
+    Unified loader that consolidates the per-stat-type / per-summary-level
+    PFR advstats accessors. Mirrors the API surface of nflreadpy's
+    ``load_pfr_advstats`` so downstream code can swap engines without
+    changing call sites.
 
     Args:
-        seasons (list): Used to define different seasons. 2018 is the earliest available season.
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+        seasons (list[int]): Seasons to load. For ``summary_level='week'``
+            this drives the per-season parquet fan-out; for
+            ``summary_level='season'`` it post-filters the combined
+            parquet by the ``season`` column.
+        stat_type (str): One of ``"pass"``, ``"rush"``, ``"rec"``,
+            ``"def"``. Defaults to ``"pass"``.
+        summary_level (str): One of ``"week"`` or ``"season"``. Defaults
+            to ``"week"``.
+        return_as_pandas (bool): If True, returns a pandas dataframe.
+            If False, returns a polars dataframe.
 
     Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced rushing stats data available for the requested seasons.
+        pl.DataFrame: Polars dataframe containing PFR advanced stats
+            data for the requested ``stat_type``, ``summary_level``,
+            and ``seasons``.
 
+    Raises:
+        ValueError: If ``stat_type`` or ``summary_level`` are not allowed
+            values, or if any season is less than 2018.
+
+    Example:
+        Weekly passing advanced stats (per-game splits)::
+
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            pass_week = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="pass", summary_level="week"
+            )
+
+        Season-level rushing summaries (one row per player per season)::
+
+            rush_season = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="rush", summary_level="season"
+            )
+
+        Defensive stats with a follow-up filter::
+
+            import polars as pl
+            def_week = (
+                load_nfl_pfr_advstats(seasons=[2024], stat_type="def", summary_level="week")
+                .filter(pl.col("week") <= 8)
+            )
+
+        Pandas round-trip::
+
+            rec_pd = load_nfl_pfr_advstats(
+                seasons=[2024],
+                stat_type="rec",
+                summary_level="season",
+                return_as_pandas=True,
+            )
+
+        See Also:
+            * `Pro Football Reference`_ -- upstream source for advanced stats
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _Pro Football Reference: https://www.pro-football-reference.com
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
+    if stat_type not in _NFL_PFR_STAT_TYPES:
+        raise ValueError(f"stat_type must be one of {list(_NFL_PFR_STAT_TYPES)}; got {stat_type!r}")
+    if summary_level not in _NFL_PFR_SUMMARY_LEVELS:
+        raise ValueError(f"summary_level must be one of {list(_NFL_PFR_SUMMARY_LEVELS)}; got {summary_level!r}")
+
+    if isinstance(seasons, int):
         seasons = [seasons]
+
+    url = _NFL_PFR_URLS[(stat_type, summary_level)]
+
+    if summary_level == "season":
+        # Single combined parquet per stat type — read once and filter
+        # by season afterwards.
+        data = pl.read_parquet(url, use_pyarrow=True, columns=None)
+        if "season" in data.columns and seasons:
+            season_ints = [int(s) for s in seasons]
+            for s in season_ints:
+                season_not_found_error(s, 2018)
+            data = data.filter(pl.col("season").is_in(season_ints))
+        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+    # summary_level == "week": per-season parquet fan-out. Adopt the
+    # cleaner concat pattern: collect frames in a list, then concat once
+    # at the end. Avoids the empty-seed-DataFrame schema-conflict gotcha
+    # that ``how="vertical"`` triggers when the seed has no columns.
+    frames: list[pl.DataFrame] = []
     for i in tqdm(seasons):
         season_not_found_error(int(i), 2018)
-        i_data = pl.read_parquet(NFL_PFR_WEEK_RUSH_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+        i_data = pl.read_parquet(url.format(season=i), use_pyarrow=True, columns=None)
+        frames.append(i_data)
+
+    if not frames:
+        data = pl.DataFrame()
+    elif len(frames) == 1:
+        data = frames[0]
+    else:
+        data = pl.concat(frames, how="vertical")
+
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_pfr_rec(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Advanced Receiving data going back to 2018
+@cached_loader
+def load_nfl_pfr_pass(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='season')``.
 
-    Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
 
     Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_rec()`
+        Migrate to the unified entry point::
 
-    Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced receiving stats data available.
-
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="pass", summary_level="season"
+            )
     """
-    return (
-        pl.read_parquet(NFL_PFR_SEASON_REC_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else pl.read_parquet(NFL_PFR_SEASON_REC_URL, use_pyarrow=True, columns=None)
+    warnings.warn(
+        "load_nfl_pfr_pass is deprecated; use load_nfl_pfr_advstats(stat_type='pass', summary_level='season') instead",
+        DeprecationWarning,
+        stacklevel=2,
     )
-
-
-def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Weekly Advanced Receiving data going back to 2018
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_rec(seasons=range(2018,2021))`
-
-    Args:
-        seasons (list): Used to define different seasons. 2018 is the earliest available season.
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
-
-    Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced receiving stats data available for the requested seasons.
-
-    """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2018)
-        i_data = pl.read_parquet(NFL_PFR_WEEK_REC_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+    # Preserve the legacy "no seasons filter" behavior — read the full combined parquet.
+    data = pl.read_parquet(NFL_PFR_SEASON_PASS_URL, use_pyarrow=True, columns=None)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
-def load_nfl_pfr_def(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Advanced Defensive data going back to 2018
+@cached_loader
+def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='week')``.
 
-    Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
 
     Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_def()`
+        Migrate to the unified entry point::
 
-    Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced defensive stats data available.
-
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="pass", summary_level="week"
+            )
     """
-    return (
-        pl.read_parquet(NFL_PFR_SEASON_DEF_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
-        if return_as_pandas
-        else pl.read_parquet(NFL_PFR_SEASON_DEF_URL, use_pyarrow=True, columns=None)
+    warnings.warn(
+        "load_nfl_pfr_weekly_pass is deprecated; "
+        "use load_nfl_pfr_advstats(stat_type='pass', summary_level='week') instead",
+        DeprecationWarning,
+        stacklevel=2,
     )
+    return load_nfl_pfr_advstats(seasons, stat_type="pass", summary_level="week", return_as_pandas=return_as_pandas)
 
 
-def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Pro-Football Reference Weekly Advanced Defensive data going back to 2018
+@cached_loader
+def load_nfl_pfr_rush(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='season')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
 
     Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pfr_weekly_def(seasons=range(2018,2021))`
+        Migrate to the unified entry point::
 
-    Args:
-        seasons (list): Used to define different seasons. 2018 is the earliest available season.
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
-
-    Returns:
-        pl.DataFrame: Polars dataframe containing Pro-Football Reference
-            advanced defensive stats data available for the requested seasons.
-
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="rush", summary_level="season"
+            )
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2018)
-        i_data = pl.read_parquet(NFL_PFR_WEEK_DEF_URL.format(season=i), use_pyarrow=True, columns=None)
-        data = pl.concat([data, i_data], how="vertical")
+    warnings.warn(
+        "load_nfl_pfr_rush is deprecated; use load_nfl_pfr_advstats(stat_type='rush', summary_level='season') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    data = pl.read_parquet(NFL_PFR_SEASON_RUSH_URL, use_pyarrow=True, columns=None)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
+def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='week')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
+
+    Example:
+        Migrate to the unified entry point::
+
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="rush", summary_level="week"
+            )
+    """
+    warnings.warn(
+        "load_nfl_pfr_weekly_rush is deprecated; "
+        "use load_nfl_pfr_advstats(stat_type='rush', summary_level='week') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return load_nfl_pfr_advstats(seasons, stat_type="rush", summary_level="week", return_as_pandas=return_as_pandas)
+
+
+@cached_loader
+def load_nfl_pfr_rec(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='season')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
+
+    Example:
+        Migrate to the unified entry point::
+
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="rec", summary_level="season"
+            )
+    """
+    warnings.warn(
+        "load_nfl_pfr_rec is deprecated; use load_nfl_pfr_advstats(stat_type='rec', summary_level='season') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    data = pl.read_parquet(NFL_PFR_SEASON_REC_URL, use_pyarrow=True, columns=None)
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='week')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
+
+    Example:
+        Migrate to the unified entry point::
+
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="rec", summary_level="week"
+            )
+    """
+    warnings.warn(
+        "load_nfl_pfr_weekly_rec is deprecated; "
+        "use load_nfl_pfr_advstats(stat_type='rec', summary_level='week') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return load_nfl_pfr_advstats(seasons, stat_type="rec", summary_level="week", return_as_pandas=return_as_pandas)
+
+
+@cached_loader
+def load_nfl_pfr_def(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='season')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
+
+    Example:
+        Migrate to the unified entry point::
+
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="def", summary_level="season"
+            )
+    """
+    warnings.warn(
+        "load_nfl_pfr_def is deprecated; use load_nfl_pfr_advstats(stat_type='def', summary_level='season') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    data = pl.read_parquet(NFL_PFR_SEASON_DEF_URL, use_pyarrow=True, columns=None)
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas: bool = False) -> pl.DataFrame:
+    """Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='week')``.
+
+    Will be removed in a future release. Migrate callers to the unified
+    ``load_nfl_pfr_advstats`` function.
+
+    Example:
+        Migrate to the unified entry point::
+
+            from sportsdataverse.nfl import load_nfl_pfr_advstats
+            df = load_nfl_pfr_advstats(
+                seasons=[2024], stat_type="def", summary_level="week"
+            )
+    """
+    warnings.warn(
+        "load_nfl_pfr_weekly_def is deprecated; "
+        "use load_nfl_pfr_advstats(stat_type='def', summary_level='week') instead",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return load_nfl_pfr_advstats(seasons, stat_type="def", summary_level="week", return_as_pandas=return_as_pandas)
+
+
+@cached_loader
 def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL roster data for all seasons
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_rosters(seasons=range(1999,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 1920 is the earliest available season.
@@ -386,6 +699,27 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
     Returns:
         pl.DataFrame: Polars dataframe containing rosters available for the requested seasons.
 
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_rosters
+            rosters = load_nfl_rosters(seasons=[2024])
+
+        Multi-season range::
+
+            rosters = load_nfl_rosters(seasons=range(2020, 2025))
+
+        Filter to a single team::
+
+            import polars as pl
+            kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -397,11 +731,9 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL weekly roster data for selected seasons
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_weekly_rosters(seasons=range(2002,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
@@ -410,6 +742,26 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
     Returns:
         pl.DataFrame: Polars dataframe containing weekly rosters available for the requested seasons.
 
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_weekly_rosters
+            weekly = load_nfl_weekly_rosters(seasons=[2024])
+
+        Multi-season range with a follow-up week filter::
+
+            import polars as pl
+            wk1 = (
+                load_nfl_weekly_rosters(seasons=range(2022, 2025))
+                .filter(pl.col("week") == 1)
+            )
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -421,17 +773,34 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL team ID information and logos
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_teams()`
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing teams available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_teams
+            teams = load_nfl_teams()
+            teams.shape
+
+        Pandas round-trip::
+
+            teams_pd = load_nfl_teams(return_as_pandas=True)
+            teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     return (
         pl.read_csv(NFL_TEAM_LOGO_URL).to_pandas(use_pyarrow_extension_array=True)
@@ -440,17 +809,34 @@ def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
     )
 
 
+@cached_loader
 def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Player ID information
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_players()`
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing players available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_players
+            players = load_nfl_players()
+            players.shape
+
+        Pandas round-trip::
+
+            players_pd = load_nfl_players(return_as_pandas=True)
+            players_pd.head()
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     return (
         pl.read_parquet(NFL_PLAYER_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
@@ -459,11 +845,9 @@ def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
     )
 
 
+@cached_loader
 def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL snap counts data for selected seasons
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_snap_counts(seasons=range(2012,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 2012 is the earliest available season.
@@ -472,6 +856,26 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataF
     Returns:
         pl.DataFrame: Polars dataframe containing snap counts available for the requested seasons.
 
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_snap_counts
+            snaps = load_nfl_snap_counts(seasons=[2024])
+
+        Multi-season range with offense-only filter::
+
+            import polars as pl
+            offense = (
+                load_nfl_snap_counts(seasons=range(2022, 2025))
+                .filter(pl.col("offense_snaps") > 0)
+            )
+
+        See Also:
+            * `Pro Football Reference`_ -- upstream snap-count source
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _Pro Football Reference: https://www.pro-football-reference.com
+        .. _nflverse: https://nflverse.nflverse.com
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -483,11 +887,9 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataF
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL play-by-play participation data for selected seasons
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_pbp_participation(seasons=range(2016,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 2016 is the earliest available season.
@@ -496,6 +898,22 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl
     Returns:
         pl.DataFrame: Polars dataframe containing play-by-play participation data available for the requested seasons.
 
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_pbp_participation
+            participation = load_nfl_pbp_participation(seasons=[2022])
+
+        Multi-season range::
+
+            participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -507,11 +925,9 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL injuries data for selected seasons
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_injuries(seasons=range(2009,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 2009 is the earliest available season.
@@ -520,6 +936,26 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFram
     Returns:
         pl.DataFrame: Polars dataframe containing injuries data available for the requested seasons.
 
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_injuries
+            injuries = load_nfl_injuries(seasons=[2024])
+
+        Multi-season range with team filter::
+
+            import polars as pl
+            sf_injuries = (
+                load_nfl_injuries(seasons=range(2020, 2025))
+                .filter(pl.col("team") == "SF")
+            )
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -531,11 +967,9 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFram
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Depth Chart data for selected seasons
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_depth_charts(seasons=range(2001,2021))`
 
     Args:
         seasons (list): Used to define different seasons. 2001 is the earliest available season.
@@ -544,6 +978,22 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.Data
     Returns:
         pl.DataFrame: Polars dataframe containing depth chart data available for the requested seasons.
 
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_depth_charts
+            depth = load_nfl_depth_charts(seasons=[2024])
+
+        Multi-season range::
+
+            depth = load_nfl_depth_charts(seasons=range(2020, 2025))
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -555,17 +1005,34 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.Data
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
+@cached_loader
 def load_nfl_contracts(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Historical contracts information
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_contracts()`
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing historical contracts available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_contracts
+            contracts = load_nfl_contracts()
+            contracts.shape
+
+        Pandas round-trip with sort by APY::
+
+            contracts_pd = load_nfl_contracts(return_as_pandas=True)
+            contracts_pd.sort_values("apy", ascending=False).head()
+
+        See Also:
+            * `Over The Cap`_ -- upstream contracts source
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _Over The Cap: https://overthecap.com
+        .. _nflverse: https://nflverse.nflverse.com
     """
     return (
         pl.read_parquet(NFL_CONTRACTS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
@@ -574,17 +1041,37 @@ def load_nfl_contracts(return_as_pandas=False) -> pl.DataFrame:
     )
 
 
+@cached_loader
 def load_nfl_combine(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Combine information
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_combine()`
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing NFL combine data available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_combine
+            combine = load_nfl_combine()
+            combine.shape
+
+        Filter by draft year and position::
+
+            import polars as pl
+            qbs_2024 = (
+                load_nfl_combine()
+                .filter((pl.col("season") == 2024) & (pl.col("pos") == "QB"))
+            )
+
+        See Also:
+            * `Pro Football Reference`_ -- upstream combine source
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _Pro Football Reference: https://www.pro-football-reference.com
+        .. _nflverse: https://nflverse.nflverse.com
     """
     return (
         pl.read_parquet(NFL_COMBINE_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
@@ -593,44 +1080,393 @@ def load_nfl_combine(return_as_pandas=False) -> pl.DataFrame:
     )
 
 
+@cached_loader
 def load_nfl_draft_picks(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Draft picks information
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_draft_picks()`
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing NFL Draft picks data available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_draft_picks
+            picks = load_nfl_draft_picks()
+            picks.shape
+
+        Filter to a single year and round::
+
+            import polars as pl
+            r1_2024 = (
+                load_nfl_draft_picks()
+                .filter((pl.col("season") == 2024) & (pl.col("round") == 1))
+            )
+
+        See Also:
+            * `Pro Football Reference`_ -- upstream draft source
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _Pro Football Reference: https://www.pro-football-reference.com
+        .. _nflverse: https://nflverse.nflverse.com
     """
     return (
-        pl.read_parquet(NFL_DRAFT_PICKS_URL, use_pyarrow=True, columns=None).to_pandas(
-            use_pyarrow_extension_array=True
-        )
+        pl.read_parquet(NFL_DRAFT_PICKS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
         if return_as_pandas
         else pl.read_parquet(NFL_DRAFT_PICKS_URL, use_pyarrow=True, columns=None)
     )
 
 
+@cached_loader
 def load_nfl_officials(return_as_pandas=False) -> pl.DataFrame:
     """Load NFL Officials information
-
-    Example:
-        `nfl_df = sportsdataverse.nfl.load_nfl_officials()`
 
     Args:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing officials available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_officials
+            officials = load_nfl_officials()
+            officials.shape
+
+        Pandas round-trip::
+
+            officials_pd = load_nfl_officials(return_as_pandas=True)
+            officials_pd.head()
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     return (
         pl.read_parquet(NFL_OFFICIALS_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
         if return_as_pandas
         else pl.read_parquet(NFL_OFFICIALS_URL, use_pyarrow=True, columns=None)
     )
+
+
+@cached_loader
+def load_nfl_team_stats(seasons: List[int], summary_level: str = "week", return_as_pandas=False) -> pl.DataFrame:
+    """Load NFL team stats data going back to 1999
+
+    Args:
+        seasons (list): Used to define different seasons. 1999 is the earliest available season.
+        summary_level (str): Aggregation level. One of "week", "reg", "post", "reg+post". Defaults to "week".
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing team stats available for the requested seasons.
+
+    Raises:
+        ValueError: If `season` is less than 1999, or if `summary_level` is not one of the
+            allowed values.
+
+    Example:
+        Weekly team stats (default)::
+
+            from sportsdataverse.nfl import load_nfl_team_stats
+            weekly = load_nfl_team_stats(seasons=[2024])
+
+        Regular-season-only team stats::
+
+            reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
+
+        Combined regular + post-season at season grain::
+
+            combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    """
+    if summary_level not in ("week", "reg", "post", "reg+post"):
+        raise ValueError("summary_level must be one of 'week', 'reg', 'post', 'reg+post'")
+
+    level_str = summary_level.replace("+", "")  # "reg+post" -> "regpost"
+
+    data = pl.DataFrame()
+    if type(seasons) is int:
+        seasons = [seasons]
+    for i in tqdm(seasons):
+        season_not_found_error(int(i), 1999)
+        i_data = pl.read_parquet(
+            NFL_TEAM_STATS_URL.format(level=level_str, season=i),
+            use_pyarrow=True,
+            columns=None,
+        )
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_ftn_charting(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
+    """Load NFL FTN charting data going back to 2022
+
+    Args:
+        seasons (list): Used to define different seasons. 2022 is the earliest available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing FTN charting data available for the requested seasons.
+
+    Raises:
+        ValueError: If `season` is less than 2022.
+
+    Example:
+        Single season::
+
+            from sportsdataverse.nfl import load_nfl_ftn_charting
+            charting = load_nfl_ftn_charting(seasons=[2024])
+
+        Multi-season range::
+
+            charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
+
+        Filter to plays with motion::
+
+            import polars as pl
+            motion_plays = (
+                load_nfl_ftn_charting(seasons=[2024])
+                .filter(pl.col("is_motion") == 1)
+            )
+
+        See Also:
+            * `FTN Network`_ -- upstream charting source
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _FTN Network: https://ftnfantasy.com
+        .. _nflverse: https://nflverse.nflverse.com
+    """
+    data = pl.DataFrame()
+    if type(seasons) is int:
+        seasons = [seasons]
+    for i in tqdm(seasons):
+        season_not_found_error(int(i), 2022)
+        i_data = pl.read_parquet(NFL_FTN_CHARTING_URL.format(season=i), use_pyarrow=True, columns=None)
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_trades(return_as_pandas=False) -> pl.DataFrame:
+    """Load NFL trades data
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing NFL trade information.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_trades
+            trades = load_nfl_trades()
+            trades.shape
+
+        Filter to a single season::
+
+            import polars as pl
+            trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    """
+    return (
+        pl.read_parquet(NFL_TRADES_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
+        if return_as_pandas
+        else pl.read_parquet(NFL_TRADES_URL, use_pyarrow=True, columns=None)
+    )
+
+
+@cached_loader
+def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
+    """Load fantasy football player IDs from DynastyProcess.com
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing fantasy football player ID mappings across platforms.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_ff_playerids
+            ids = load_nfl_ff_playerids()
+            ids.shape
+
+        Filter to active QBs::
+
+            import polars as pl
+            qbs = (
+                load_nfl_ff_playerids()
+                .filter((pl.col("position") == "QB") & (pl.col("status") == "ACT"))
+            )
+
+        See Also:
+            * `DynastyProcess`_ -- upstream ID-mapping project
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _DynastyProcess: https://github.com/dynastyprocess
+        .. _nflverse: https://nflverse.nflverse.com
+    """
+    return (
+        pl.read_csv(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""]).to_pandas(use_pyarrow_extension_array=True)
+        if return_as_pandas
+        else pl.read_csv(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""])
+    )
+
+
+@cached_loader
+def load_nfl_ff_rankings(
+    type: str = "draft",
+    kind: str = None,
+    return_as_pandas=False,
+) -> pl.DataFrame:
+    """Load fantasy football rankings and projections
+
+    Args:
+        type (str): Type of rankings to load. One of ``"draft"`` (current draft
+            rankings), ``"week"`` (weekly rankings), or ``"all"`` (full historical
+            rankings). Defaults to ``"draft"``. Kept for nflreadpy parity since
+            its parameter is also called ``type``; the forward-going preferred
+            name is ``kind``.
+        kind (str): Preferred parameter name. Same semantics and allowed values
+            as ``type``. If both are supplied, ``kind`` wins. If neither is
+            supplied, defaults to ``"draft"`` via ``type``.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing fantasy football rankings data.
+
+    Raises:
+        ValueError: If the resolved value is not one of the allowed values.
+
+    Note:
+        Available as the alias ``sportsdataverse.nfl.load_ff_rankings`` for
+        nflreadpy parity.
+
+    Example:
+        Preferred ``kind=`` parameter::
+
+            from sportsdataverse.nfl import load_nfl_ff_rankings
+            draft = load_nfl_ff_rankings(kind="draft")
+
+        Weekly rankings::
+
+            weekly = load_nfl_ff_rankings(kind="week")
+
+        Full historical rankings (parquet)::
+
+            history = load_nfl_ff_rankings(kind="all")
+
+        nflreadpy-parity ``type=`` parameter (still supported)::
+
+            draft = load_nfl_ff_rankings(type="draft")
+
+        See Also:
+            * `DynastyProcess`_ -- upstream rankings source
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _DynastyProcess: https://github.com/dynastyprocess
+        .. _nflverse: https://nflverse.nflverse.com
+    """
+    effective = kind if kind is not None else type
+    if effective not in ("draft", "week", "all"):
+        raise ValueError("type/kind must be one of 'draft', 'week', 'all'")
+
+    if effective == "draft":
+        data = pl.read_csv(NFL_FF_RANKINGS_DRAFT_URL, null_values=["NA", "NULL", ""])
+    elif effective == "week":
+        data = pl.read_csv(NFL_FF_RANKINGS_WEEK_URL, null_values=["NA", "NULL", ""])
+    else:  # all
+        data = pl.read_parquet(NFL_FF_RANKINGS_ALL_URL, use_pyarrow=True, columns=None)
+
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_ff_opportunity(
+    seasons: List[int],
+    stat_type: str = "weekly",
+    model_version: str = "latest",
+    return_as_pandas=False,
+) -> pl.DataFrame:
+    """Load NFL fantasy football opportunity data from ffverse/ffopportunity
+
+    Args:
+        seasons (list): Used to define different seasons. 2006 is the earliest available season.
+        stat_type (str): One of "weekly", "pbp_pass", "pbp_rush". Defaults to "weekly".
+        model_version (str): One of "latest", "v1.0.0". Defaults to "latest".
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing fantasy football opportunity data
+            for the requested seasons.
+
+    Raises:
+        ValueError: If `season` is less than 2006, or if `stat_type` / `model_version`
+            are not allowed values.
+
+    Example:
+        Weekly opportunity stats (default)::
+
+            from sportsdataverse.nfl import load_nfl_ff_opportunity
+            weekly = load_nfl_ff_opportunity(seasons=[2024])
+
+        Pass play-by-play opportunity stats::
+
+            pbp_pass = load_nfl_ff_opportunity(seasons=[2024], stat_type="pbp_pass")
+
+        Rush play-by-play opportunity stats with pinned model version::
+
+            pbp_rush = load_nfl_ff_opportunity(
+                seasons=[2024], stat_type="pbp_rush", model_version="v1.0.0"
+            )
+
+        See Also:
+            * `ffopportunity`_ -- upstream opportunity model
+            * `nflverse`_ -- full data ecosystem (R + Python)
+
+        .. _ffopportunity: https://github.com/ffverse/ffopportunity
+        .. _nflverse: https://nflverse.nflverse.com
+    """
+    if stat_type not in ("weekly", "pbp_pass", "pbp_rush"):
+        raise ValueError("stat_type must be one of 'weekly', 'pbp_pass', 'pbp_rush'")
+    if model_version not in ("latest", "v1.0.0"):
+        raise ValueError("model_version must be one of 'latest', 'v1.0.0'")
+
+    data = pl.DataFrame()
+    if type(seasons) is int:
+        seasons = [seasons]
+    for i in tqdm(seasons):
+        season_not_found_error(int(i), 2006)
+        i_data = pl.read_parquet(
+            NFL_FF_OPPORTUNITY_URL.format(model_version=model_version, stat_type=stat_type, season=i),
+            use_pyarrow=True,
+            columns=None,
+        )
+        data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
 ## Currently removed due to unsupported features of pyreadr's method.

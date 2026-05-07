@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 
 import pandas as pd
@@ -20,8 +22,25 @@ def espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> pl.DataFram
         sportsdataverse.cfb.espn_cfb_teams.clear_cache().
 
     Example:
-        `cfb_df = sportsdataverse.cfb.espn_cfb_teams()`
+        Quick start (FBS only by default)::
 
+            from sportsdataverse.cfb import espn_cfb_teams
+            teams = espn_cfb_teams()
+            print(teams.shape)
+
+        Pull FCS teams (group 81)::
+
+            fcs = espn_cfb_teams(groups=81, return_as_pandas=True)
+            fcs.head()
+
+        Pipeline next step (build an abbreviation lookup)::
+
+            teams = espn_cfb_teams()
+            abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB team data
+            * `recruitR <https://github.com/sportsdataverse/recruitR>`_ -- recruiting data companion
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/teams"
     params = {"groups": groups if groups is not None else "80", "limit": 1000}

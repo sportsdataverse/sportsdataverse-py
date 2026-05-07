@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 
 import pandas as pd
@@ -16,6 +18,32 @@ def espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas
 
     Returns:
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+
+    Example:
+        Pull a single date's slate (YYYYMMDD)::
+
+            from sportsdataverse.wnba import espn_wnba_schedule
+            sched = espn_wnba_schedule(dates=20241011)  # 2024 WNBA Finals Game 1
+            print(sched.shape)
+            sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
+
+        Pull a full regular season's worth of games::
+
+            reg = espn_wnba_schedule(dates=2024, season_type=2, limit=500)
+            reg.group_by("status_type_description").len().sort("len", descending=True)
+
+        Pandas round-trip for a single date::
+
+            espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
+
+        See Also:
+            * `wehoop`_ — R sister package; mirrors this surface
+            * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
+            * `hoopR`_ — companion R package for men's basketball
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
     params = {"dates": dates, "seasonType": season_type, "limit": limit}
@@ -136,6 +164,29 @@ def espn_wnba_calendar(season=None, ondays=None, return_as_pandas=False, **kwarg
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Calendar entries for a season::
+
+            from sportsdataverse.wnba import espn_wnba_calendar
+            cal = espn_wnba_calendar(season=2024)
+            print(cal.shape)
+            cal.head()
+
+        Just the on-days (game-played dates), useful for batch loops::
+
+            ondays = espn_wnba_calendar(season=2024, ondays=True)
+            for url in ondays["url"].head(3).to_list():
+                print(url)
+
+        See Also:
+            * `wehoop`_ — R sister package; mirrors this surface
+            * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
+            * `hoopR`_ — companion R package for men's basketball
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     if ondays is not None:
         full_schedule = __ondays_wnba_calendar(season, **kwargs)
@@ -159,26 +210,50 @@ def espn_wnba_calendar(season=None, ondays=None, return_as_pandas=False, **kwarg
         }
         full_schedule = pl.DataFrame(data)
         full_schedule = full_schedule.with_columns(
-            url="http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=" + pl.col("dateURL")
+            url="http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=" + pl.col("dateURL"),
         )
     return full_schedule.to_pandas() if return_as_pandas else full_schedule
 
 
 def __ondays_wnba_calendar(season, **kwargs):
-    url = (
-        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/2/calendar/ondays"
-    )
+    url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/2/calendar/ondays"
     resp = download(url=url, **kwargs)
     txt = resp.json().get("eventDate").get("dates")
     result = pl.DataFrame(txt, schema=["dates"])
     result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
     result = result.with_columns(
-        url="http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=" + pl.col("dateURL")
+        url="http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=" + pl.col("dateURL"),
     )
 
     return result
 
 
 def most_recent_wnba_season():
+    """most_recent_wnba_season - return the most recent (likely-completed) WNBA season year.
+
+    Returns the current calendar year if it's May or later (the WNBA regular
+    season has tipped off), otherwise the previous calendar year.
+
+    Returns:
+        int: Year (e.g. ``2024``) suitable for passing as a ``season`` argument
+        to schedule / loader functions.
+
+    Example:
+        Use as a default for season-aware loaders::
+
+            from sportsdataverse.wnba import most_recent_wnba_season, espn_wnba_calendar
+            season = most_recent_wnba_season()
+            cal = espn_wnba_calendar(season=season)
+            print(season, cal.height)
+
+        See Also:
+            * `wehoop`_ — R sister package; mirrors this surface
+            * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
+            * `hoopR`_ — companion R package for men's basketball
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
     today = datetime.date(datetime.now())
     return today.year if today.month >= 5 else today.year - 1

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List
 
 import polars as pl
@@ -15,9 +17,6 @@ from sportsdataverse.errors import SeasonNotFoundError
 def load_nba_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA play by play data going back to 2002
 
-    Example:
-        `nba_df = sportsdataverse.nba.load_nba_pbp(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -28,6 +27,30 @@ def load_nba_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import load_nba_pbp
+            pbp = load_nba_pbp(seasons=[2023])
+            print(pbp.shape)
+
+        Multi-season pull as pandas::
+
+            pbp_pd = load_nba_pbp(seasons=range(2020, 2024), return_as_pandas=True)
+            pbp_pd.head()
+
+        Pipeline next step (filter to made 3-pointers)::
+
+            import polars as pl
+            threes = load_nba_pbp(seasons=[2023]).filter(
+                pl.col("type_text") == "3PT Field Goal"
+            )
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA data
+            * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball parallel
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -43,9 +66,6 @@ def load_nba_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
 def load_nba_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA team boxscore data
 
-    Example:
-        `nba_df = sportsdataverse.nba.load_nba_team_boxscore(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -56,6 +76,31 @@ def load_nba_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Dat
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import load_nba_team_boxscore
+            box = load_nba_team_boxscore(seasons=[2023])
+            print(box.shape)
+
+        Pandas round-trip::
+
+            box_pd = load_nba_team_boxscore(seasons=[2023], return_as_pandas=True)
+            box_pd.head()
+
+        Pipeline next step (compute average team OFF rating)::
+
+            import polars as pl
+            avg = (
+                load_nba_team_boxscore(seasons=[2023])
+                .group_by("team_display_name")
+                .agg(pl.col("offensive_rating").mean())
+            )
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA data
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -71,9 +116,6 @@ def load_nba_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Dat
 def load_nba_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA player boxscore data
 
-    Example:
-        `nba_df = sportsdataverse.nba.load_nba_player_boxscore(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -84,6 +126,34 @@ def load_nba_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.D
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import load_nba_player_boxscore
+            box = load_nba_player_boxscore(seasons=[2023])
+            print(box.shape)
+
+        Pandas round-trip::
+
+            box_pd = load_nba_player_boxscore(seasons=[2023], return_as_pandas=True)
+            box_pd.head()
+
+        Pipeline next step (top season scorers)::
+
+            import polars as pl
+            top = (
+                load_nba_player_boxscore(seasons=[2023])
+                .group_by("athlete_display_name")
+                .agg(pl.col("points").sum())
+                .sort("points", descending=True)
+                .head(10)
+            )
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA data
+            * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball parallel
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -99,9 +169,6 @@ def load_nba_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.D
 def load_nba_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load NBA schedule data
 
-    Example:
-        `nba_df = sportsdataverse.nba.load_nba_schedule(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -112,6 +179,27 @@ def load_nba_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import load_nba_schedule
+            sched = load_nba_schedule(seasons=[2023])
+            print(sched.shape)
+
+        Pandas round-trip::
+
+            sched_pd = load_nba_schedule(seasons=range(2020, 2024), return_as_pandas=True)
+            sched_pd.head()
+
+        Pipeline next step (filter to playoff games)::
+
+            import polars as pl
+            playoffs = load_nba_schedule(seasons=[2023]).filter(pl.col("season_type") == 3)
+
+        See Also:
+            * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA data
+            * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
     """
     data = pl.DataFrame()
     if type(seasons) is int:

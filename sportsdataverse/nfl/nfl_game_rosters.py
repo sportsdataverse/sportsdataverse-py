@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 import polars as pl
 
@@ -30,12 +32,23 @@ def espn_nfl_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
         'team_display_name', 'team_short_display_name', 'team_color',
         'team_alternate_color', 'is_active', 'is_all_star',
         'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id'
+
     Example:
-        `nfl_df = sportsdataverse.nfl.espn_nfl_game_rosters(game_id=401220403)`
+        Quick start::
+
+            from sportsdataverse.nfl import espn_nfl_game_rosters
+            rosters = espn_nfl_game_rosters(game_id=401220403)
+            rosters.shape
+
+        Pandas round-trip with home/away split::
+
+            rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
+            home = rosters_pd[rosters_pd["home_away"] == "home"]
+            away = rosters_pd[rosters_pd["home_away"] == "away"]
     """
     # summary endpoint for pickcenter array
     summary_url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{x}/competitions/{x}/competitors".format(
-        x=game_id
+        x=game_id,
     )
     summary_resp = download(summary_url, **kwargs)
     summary = summary_resp.json()
@@ -52,6 +65,24 @@ def espn_nfl_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
 
 
 def helper_nfl_game_items(summary):
+    """Internal helper -- normalize the ``items`` array from the ESPN
+    ``/competitors`` endpoint into a tidy team-level DataFrame.
+
+    Used by :func:`espn_nfl_game_rosters`. Exposed for advanced callers
+    who already have the JSON payload and want to skip the network call.
+
+    Example:
+        Reuse against a cached payload::
+
+            from sportsdataverse.dl_utils import download
+            from sportsdataverse.nfl.nfl_game_rosters import helper_nfl_game_items
+            url = (
+                "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/"
+                "events/401220403/competitions/401220403/competitors"
+            )
+            items = helper_nfl_game_items(download(url).json())
+            items.columns
+    """
     items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
     items.columns = [col.replace("$ref", "href") for col in items.columns]
 
@@ -64,6 +95,21 @@ def helper_nfl_game_items(summary):
 
 
 def helper_nfl_team_items(items, **kwargs):
+    """Internal helper -- fan out from ``items.team_href`` to the per-team
+    ESPN payloads and return a tidy team-detail DataFrame (logos,
+    colors, slugs).
+
+    Used by :func:`espn_nfl_game_rosters`.
+
+    Example:
+        Pair with :func:`helper_nfl_game_items` for an offline-style flow::
+
+            from sportsdataverse.nfl.nfl_game_rosters import (
+                helper_nfl_game_items, helper_nfl_team_items,
+            )
+            # items = helper_nfl_game_items(...)
+            # teams = helper_nfl_team_items(items)
+    """
     pop_cols = [
         "$ref",
         "record",
@@ -125,6 +171,17 @@ def helper_nfl_team_items(items, **kwargs):
 
 
 def helper_nfl_roster_items(items, summary_url, **kwargs):
+    """Internal helper -- pull each team's roster from ESPN and return a
+    combined per-game roster DataFrame.
+
+    Used by :func:`espn_nfl_game_rosters`.
+
+    Example:
+        Wired into the public flow (preferred entry point)::
+
+            from sportsdataverse.nfl import espn_nfl_game_rosters
+            rosters = espn_nfl_game_rosters(game_id=401220403)
+    """
     team_ids = list(items["team_id"])
     game_rosters = pl.DataFrame()
     for tm in team_ids:
@@ -137,12 +194,24 @@ def helper_nfl_roster_items(items, summary_url, **kwargs):
         game_rosters = pl.concat([game_rosters, team_roster], how="vertical")
     game_rosters = game_rosters.drop(["period", "for_player_id", "active"])
     game_rosters = game_rosters.with_columns(
-        player_id=pl.col("player_id").cast(pl.Int64), team_id=pl.col("team_id").cast(pl.Int32)
+        player_id=pl.col("player_id").cast(pl.Int64),
+        team_id=pl.col("team_id").cast(pl.Int32),
     )
     return game_rosters
 
 
 def helper_nfl_athlete_items(teams_rosters, **kwargs):
+    """Internal helper -- expand each ``athlete_href`` from the team
+    rosters into a tidy per-player DataFrame (names, dob, headshot, etc.).
+
+    Used by :func:`espn_nfl_game_rosters`.
+
+    Example:
+        Wired into the public flow (preferred entry point)::
+
+            from sportsdataverse.nfl import espn_nfl_game_rosters
+            rosters = espn_nfl_game_rosters(game_id=401220403)
+    """
     athlete_hrefs = list(teams_rosters["athlete_href"])
     game_athletes = pl.DataFrame()
     pop_cols = [
@@ -176,7 +245,7 @@ def helper_nfl_athlete_items(teams_rosters, **kwargs):
             "guid": "athlete_guid",
             "type": "athlete_type",
             "display_name": "athlete_display_name",
-        }
+        },
     )
     game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
     return game_athletes

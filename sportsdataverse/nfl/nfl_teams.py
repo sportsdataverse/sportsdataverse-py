@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 
 import pandas as pd
@@ -19,7 +21,21 @@ def espn_nfl_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         sportsdataverse.nfl.espn_nfl_teams.clear_cache().
 
     Example:
-        `nfl_df = sportsdataverse.nfl.espn_nfl_teams()`
+        Quick start::
+
+            from sportsdataverse.nfl import espn_nfl_teams
+            teams = espn_nfl_teams()
+            teams.shape
+
+        Pandas round-trip::
+
+            teams_pd = espn_nfl_teams(return_as_pandas=True)
+            teams_pd[["team_abbreviation", "team_display_name"]].head()
+
+        Force a refresh after upstream ESPN updates::
+
+            espn_nfl_teams.cache_clear()  # underlying lru_cache
+            teams = espn_nfl_teams()
 
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"

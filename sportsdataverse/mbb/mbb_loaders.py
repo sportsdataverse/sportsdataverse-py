@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List
 
 import polars as pl
@@ -15,9 +17,6 @@ from sportsdataverse.errors import SeasonNotFoundError
 def load_mbb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load men's college basketball play by play data going back to 2002
 
-    Example:
-        `mbb_df = sportsdataverse.mbb.load_mbb_pbp(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -28,6 +27,32 @@ def load_mbb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Single season::
+
+            from sportsdataverse.mbb import load_mbb_pbp
+            pbp = load_mbb_pbp(seasons=[2024])
+            print(pbp.shape)
+
+        Range of seasons::
+
+            pbp_multi = load_mbb_pbp(seasons=range(2022, 2025))
+            print(pbp_multi["season"].unique().sort())
+
+        Pandas round-trip::
+
+            pbp_pd = load_mbb_pbp(seasons=[2024], return_as_pandas=True)
+            pbp_pd.head()
+
+        See Also:
+            * `hoopR`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -43,9 +68,6 @@ def load_mbb_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
 def load_mbb_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load men's college basketball team boxscore data
 
-    Example:
-        `mbb_df = sportsdataverse.mbb.load_mbb_team_boxscore(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -56,6 +78,33 @@ def load_mbb_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Dat
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Single season::
+
+            from sportsdataverse.mbb import load_mbb_team_boxscore
+            tb = load_mbb_team_boxscore(seasons=[2024])
+            print(tb.shape)
+
+        Range of seasons + filter to a specific team (Duke ``team_id=150``)::
+
+            import polars as pl
+            tb_multi = load_mbb_team_boxscore(seasons=range(2022, 2025))
+            duke = tb_multi.filter(pl.col("team_id") == 150)
+
+        Pandas round-trip::
+
+            tb_pd = load_mbb_team_boxscore(seasons=[2024], return_as_pandas=True)
+            tb_pd.head()
+
+        See Also:
+            * `hoopR`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -71,9 +120,6 @@ def load_mbb_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Dat
 def load_mbb_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load men's college basketball player boxscore data
 
-    Example:
-        `mbb_df = sportsdataverse.mbb.load_mbb_player_boxscore(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -84,6 +130,39 @@ def load_mbb_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.D
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Single season::
+
+            from sportsdataverse.mbb import load_mbb_player_boxscore
+            pb = load_mbb_player_boxscore(seasons=[2024])
+            print(pb.shape)
+
+        Range of seasons + top scorers::
+
+            import polars as pl
+            pb_multi = load_mbb_player_boxscore(seasons=range(2022, 2025))
+            top = (
+                pb_multi
+                .group_by("athlete_display_name")
+                .agg(pl.col("points").sum().alias("total_points"))
+                .sort("total_points", descending=True)
+                .head(10)
+            )
+
+        Pandas round-trip::
+
+            pb_pd = load_mbb_player_boxscore(seasons=[2024], return_as_pandas=True)
+            pb_pd.head()
+
+        See Also:
+            * `hoopR`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     data = pl.DataFrame()
     if type(seasons) is int:
@@ -99,9 +178,6 @@ def load_mbb_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.D
 def load_mbb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
     """Load men's college basketball schedule data
 
-    Example:
-        `mbb_df = sportsdataverse.mbb.load_mbb_schedule(seasons=range(2002,2022))`
-
     Args:
         seasons (list): Used to define different seasons. 2002 is the earliest available season.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -112,6 +188,32 @@ def load_mbb_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Single season::
+
+            from sportsdataverse.mbb import load_mbb_schedule
+            sched = load_mbb_schedule(seasons=[2024])
+            print(sched.shape)
+
+        Range of seasons::
+
+            sched_multi = load_mbb_schedule(seasons=range(2022, 2025))
+            print(sched_multi["season"].unique().sort())
+
+        Pandas round-trip::
+
+            sched_pd = load_mbb_schedule(seasons=[2024], return_as_pandas=True)
+            sched_pd.head()
+
+        See Also:
+            * `hoopR`_ - R sister package
+            * `cfbfastR`_ - companion R package for college football
+            * `ESPN`_ - data origin
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+        .. _ESPN: https://www.espn.com
     """
     data = pl.DataFrame()
     if type(seasons) is int:

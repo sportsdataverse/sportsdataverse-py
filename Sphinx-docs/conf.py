@@ -4,8 +4,9 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Path setup --------------------------------------------------------------
+from __future__ import annotations
 
+# -- Path setup --------------------------------------------------------------
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -30,10 +31,25 @@ author = "Saiem Gilani"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
+    "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx.ext.todo",
     "sphinx_markdown_builder",
 ]
+
+# -- Napoleon (Google-style docstring) settings ------------------------------
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False
+napoleon_include_init_with_doc = False
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True
+napoleon_attr_annotations = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -48,7 +64,7 @@ language = "en"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "setup.py"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -80,6 +96,38 @@ def skip(app, what, name, obj, would_skip, options):
     if name in ("__init__",):
         return False
     return would_skip
+
+
+def _patch_markdown_builder_for_abbreviation():
+    """Teach sphinx_markdown_builder how to render docutils abbreviation nodes.
+
+    Sphinx 9 emits ``abbreviation`` nodes for the keyword-only ``*`` separator
+    in rendered function signatures (and a few other inline contexts).
+    sphinx_markdown_builder 0.6.10 has no visitor for that node type, so each
+    occurrence raises ``unknown node type`` warnings during the build. We
+    register a no-op visitor that just emits the inner text — the markdown
+    output is identical to what visit_Text would have produced.
+    """
+    try:
+        from sphinx_markdown_builder.translator import MarkdownTranslator
+    except ImportError:
+        return
+
+    if hasattr(MarkdownTranslator, "visit_abbreviation"):
+        return
+
+    def _visit_abbreviation(self, node):
+        self.add(node.astext())
+        raise __import__("docutils").nodes.SkipNode
+
+    def _depart_abbreviation(self, node):
+        pass
+
+    MarkdownTranslator.visit_abbreviation = _visit_abbreviation
+    MarkdownTranslator.depart_abbreviation = _depart_abbreviation
+
+
+_patch_markdown_builder_for_abbreviation()
 
 
 def setup(app):

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import logging
 import re
@@ -15,6 +17,70 @@ logger.addHandler(logging.NullHandler())
 
 
 def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries=15, session=None, logger=None):
+    """Download a URL with retries and ESPN-aware error handling.
+
+    Canonical HTTP gateway used by every wrapper in the package. Wraps
+    :mod:`requests` with an exponential-style retry loop, raises
+    :class:`~sportsdataverse.errors.NoESPNDataError` on ESPN 404 payloads,
+    and surfaces transient failures through the supplied ``logger`` rather
+    than raising.
+
+    Args:
+        url: Target URL.
+        params: Query-string parameters as a ``dict``. Forwarded to
+            ``requests.Session.get``.
+        headers: Extra HTTP headers as a ``dict``.
+        proxy: Proxy configuration in the ``requests`` ``proxies=`` shape
+            (e.g. ``{"http": "http://host:port", "https": "http://host:port"}``).
+        timeout: Per-request timeout in seconds. Defaults to ``30``.
+        num_retries: Maximum retries before giving up. Defaults to ``15``.
+        session: Optional ``requests.Session`` to reuse. A fresh session
+            is constructed when ``None``.
+        logger: Optional ``logging.Logger``. Defaults to the package
+            logger ``"sdv.dl_utils"``.
+
+    Returns:
+        The final ``requests.Response``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.dl_utils import download
+
+            url = "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams"
+            resp = download(url)
+            data = resp.json()
+
+        Custom retries and timeout::
+
+            resp = download(url, num_retries=5, timeout=30)
+
+        Add headers (e.g. for a stats.wnba.com endpoint that needs an Origin)::
+
+            resp = download(
+                "https://stats.wnba.com/stats/leaguedashteamstats",
+                headers={
+                    "Origin": "https://stats.wnba.com",
+                    "Referer": "https://www.wnba.com/",
+                    "User-Agent": "sportsdataverse-py",
+                },
+            )
+
+        Pass query-string parameters with ``params=``::
+
+            resp = download(
+                "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+                params={"groups": "80", "dates": "20240907"},
+            )
+
+        See Also:
+            * `requests`_ -- underlying HTTP library.
+            * `httpx`_ -- modern async alternative if a future refactor
+              wants concurrent fetching.
+
+        .. _requests: https://requests.readthedocs.io
+        .. _httpx: https://www.python-httpx.org
+    """
     session, params, logger = init_request_settings(params, session, logger)
     try:
         response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
@@ -60,7 +126,32 @@ def init_request_settings(params, session, logger):
 
 
 def flatten_json_iterative(dictionary, sep=".", ind_start=0):
-    """Flattening a nested json file"""
+    """Flatten a nested JSON dict into a single-level dict.
+
+    Args:
+        dictionary: Nested dict to flatten.
+        sep: Separator used to join nested keys. Defaults to ``"."``.
+        ind_start: Starting index for list elements. Defaults to ``0``.
+
+    Returns:
+        A flat ``dict`` with composite string keys.
+
+    Example:
+        Flatten a nested ESPN-shaped payload::
+
+            from sportsdataverse.dl_utils import flatten_json_iterative
+
+            payload = {
+                "game": {
+                    "id": "401628334",
+                    "competitors": [{"team": "Ohio State"}, {"team": "Marshall"}],
+                }
+            }
+            flat = flatten_json_iterative(payload)
+            # {'game.id': '401628334',
+            #  'game.competitors.0.team': 'Ohio State',
+            #  'game.competitors.1.team': 'Marshall'}
+    """
 
     def unpack_one(parent_key, parent_value):
         """Unpack one level (only one) of nesting in json file"""
@@ -103,6 +194,34 @@ def flatten_json_iterative(dictionary, sep=".", ind_start=0):
 
 
 def key_check(obj, key, replacement=np.array([])):
+    """Return ``obj[key]`` when present, otherwise ``replacement``.
+
+    Convenience helper used throughout the parsers when an upstream JSON
+    payload sometimes omits a field. Defaults the fallback to an empty
+    NumPy array so the result slots into vectorized downstream code
+    without a branch.
+
+    Args:
+        obj: Mapping-like object to look up in.
+        key: Key to fetch.
+        replacement: Value to return when ``key`` is missing.
+
+    Example:
+        Default empty-array fallback::
+
+            from sportsdataverse.dl_utils import key_check
+
+            payload = {"score": 21}
+            key_check(payload, "score")
+            # 21
+            key_check(payload, "missing")
+            # array([], dtype=float64)
+
+        Custom fallback::
+
+            key_check(payload, "missing", replacement=None)
+            # None
+    """
     return obj[key] if key in obj.keys() else replacement
 
 
@@ -125,29 +244,25 @@ class ColumnJanitor:
 
 
 def underscore(word):
-    """
+    """Make an underscored, lowercase form from the expression in the string.
 
-    Make an underscored, lowercase form from the expression in the string.
+    Roughly the inverse of :func:`camelize`, though edge cases (e.g.
+    consecutive capitals like ``"IOError"``) do not perfectly round-trip.
 
+    Example:
+        Basic input -> output::
 
-    Example::
+            from sportsdataverse.dl_utils import underscore
 
+            underscore("DeviceType")
+            # 'device_type'
 
-        >>> underscore("DeviceType")
+        Round-trip caveat (capital runs do not survive)::
 
-        'device_type'
+            from sportsdataverse.dl_utils import camelize, underscore
 
-
-    As a rule of thumb you can think of :func:`underscore` as the inverse of
-
-    :func:`camelize`, though there are cases where that does not hold::
-
-
-        >>> camelize(underscore("IOError"))
-
-        'IoError'
-
-
+            camelize(underscore("IOError"))
+            # 'IoError'
     """
 
     word = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", word)
@@ -160,23 +275,22 @@ def underscore(word):
 
 
 def kebabize(word):
-    """
+    """Make a kebab-case, lowercase form from the expression in the string.
 
-    Make a kebab-case, lowercase form from the expression in the string.
+    Sister function of :func:`underscore` -- same boundary detection, but
+    emits dashes instead of underscores. Useful for URL slugs and
+    hyphen-friendly schema labels.
 
+    Example:
+        Basic input -> output::
 
-    Example::
+            from sportsdataverse.dl_utils import kebabize
 
+            kebabize("DeviceType")
+            # 'device-type'
 
-        >>> kebabize("DeviceType")
-
-        'device-type'
-
-
-    As a rule of thumb you can think of :func:`kebabize` as the sister function of
-
-    :func:`underscore`, replacing underscores with dashes
-
+            kebabize("home_team_score")
+            # 'home-team-score'
     """
 
     word = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", word)
@@ -189,39 +303,34 @@ def kebabize(word):
 
 
 def camelize(string, uppercase_first_letter=True):
-    """
+    """Convert strings to CamelCase.
 
-    Convert strings to CamelCase.
+    Args:
+        string: Input identifier in ``snake_case`` (or any underscore-
+            separated form).
+        uppercase_first_letter: When ``True`` (default) emit
+            ``UpperCamelCase``; when ``False`` emit ``lowerCamelCase``.
 
+    Example:
+        Default UpperCamelCase::
 
-    Examples::
+            from sportsdataverse.dl_utils import camelize
 
+            camelize("device_type")
+            # 'DeviceType'
 
-        >>> camelize("device_type")
+        lowerCamelCase form::
 
-        'DeviceType'
+            camelize("device_type", False)
+            # 'deviceType'
 
-        >>> camelize("device_type", False)
+        Round-trip with :func:`underscore` is not lossless for capital
+        runs::
 
-        'deviceType'
+            from sportsdataverse.dl_utils import underscore
 
-
-    :func:`camelize` can be thought of as a inverse of :func:`underscore`,
-
-    although there are some cases where that does not hold::
-
-
-        >>> camelize(underscore("IOError"))
-
-        'IoError'
-
-
-    :param uppercase_first_letter: if set to `True` :func:`camelize` converts
-
-        strings to UpperCamelCase. If set to `False` :func:`camelize` produces
-
-        lowerCamelCase. Defaults to `True`.
-
+            camelize(underscore("IOError"))
+            # 'IoError'
     """
     if uppercase_first_letter:
         return re.sub(r"(?:^|_)(.)", lambda m: m.group(1).upper(), string)
@@ -272,7 +381,13 @@ class ESPNHTTP:
         return contents
 
     def send_api_request(
-        self, endpoint, parameters, referer=None, headers=None, timeout=None, raise_exception_on_error=False
+        self,
+        endpoint,
+        parameters,
+        referer=None,
+        headers=None,
+        timeout=None,
+        raise_exception_on_error=False,
     ):
         if not self.base_url:
             raise Exception("Cannot use send_api_request from _HTTP class.")

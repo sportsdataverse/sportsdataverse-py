@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 
 import pandas as pd
@@ -18,6 +20,29 @@ def espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
     Returns:
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
 
+    Example:
+        Pull a single date's slate (YYYYMMDD)::
+
+            from sportsdataverse.nhl import espn_nhl_schedule
+            sched = espn_nhl_schedule(dates=20230613)  # 2023 Stanley Cup Final game date
+            print(sched.shape)
+            sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
+
+        Pull a regular-season slate from a season-year::
+
+            reg = espn_nhl_schedule(dates=2023, season_type=2, limit=500)
+            reg.group_by("status_type_description").len().sort("len", descending=True)
+
+        Pandas round-trip for one date::
+
+            espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
 
     url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard"
@@ -139,6 +164,27 @@ def espn_nhl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
 
     Raises:
         ValueError: If `season` is less than 2002.
+
+    Example:
+        Calendar dates for a season::
+
+            from sportsdataverse.nhl import espn_nhl_calendar
+            cal = espn_nhl_calendar(season=2023)
+            print(cal.shape)
+            cal.head()
+
+        Just the on-days (game-played dates), useful for batch loops::
+
+            ondays = espn_nhl_calendar(season=2023, ondays=True)
+            for url in ondays["url"].head(3).to_list():
+                print(url)
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     if ondays is not None:
         full_schedule = __ondays_nhl_calendar(season, **kwargs)
@@ -162,7 +208,7 @@ def espn_nhl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         }
         full_schedule = pl.DataFrame(data)
         full_schedule = full_schedule.with_columns(
-            url="http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=" + pl.col("dateURL")
+            url="http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=" + pl.col("dateURL"),
         )
     return full_schedule.to_pandas() if return_as_pandas else full_schedule
 
@@ -174,13 +220,37 @@ def __ondays_nhl_calendar(season, **kwargs):
     result = pl.DataFrame(txt, schema=["dates"])
     result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
     result = result.with_columns(
-        url="http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=" + pl.col("dateURL")
+        url="http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=" + pl.col("dateURL"),
     )
 
     return result
 
 
 def most_recent_nhl_season():
+    """most_recent_nhl_season - return the season year for "today".
+
+    NHL seasons are labeled by the year they end in. October flips the
+    label to next calendar year (the new season just started), otherwise
+    the current calendar year is returned.
+
+    Returns:
+        int: A season year suitable for season-aware loaders / schedule helpers.
+
+    Example:
+        Use as a default season for downstream calls::
+
+            from sportsdataverse.nhl import most_recent_nhl_season, espn_nhl_calendar
+            season = most_recent_nhl_season()
+            cal = espn_nhl_calendar(season=season)
+            print(season, cal.height)
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+    """
     if int(str(datetime.date.today())[5:7]) >= 10:
         return int(str(datetime.date.today())[:4]) + 1
     else:
@@ -188,6 +258,32 @@ def most_recent_nhl_season():
 
 
 def year_to_season(year):
+    """year_to_season - format a starting year as the canonical ``YYYY-YY`` season string.
+
+    NHL season strings (used by ``statsapi`` / ``api-web.nhle.com``) are of the form
+    ``"2023-24"``. This helper converts a starting year (``2023``) into that string.
+
+    Args:
+        year: Starting calendar year of the season (e.g. ``2023``).
+
+    Returns:
+        str: Season string formatted as ``"YYYY-YY"``.
+
+    Example:
+        Convert a starting year::
+
+            from sportsdataverse.nhl import year_to_season
+            year_to_season(2023)  # '2023-24'
+            year_to_season(2009)  # '2009-10'
+            year_to_season(1999)  # '1999-00'
+
+        See Also:
+            * `fastRhockey`_ — R companion package; mirrors this surface
+            * `nhl-api-py`_ — alternative Python source for the NHL stats API
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+        .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+    """
     first_year = str(year)[2:4]
     next_year = int(first_year) + 1
     if int(next_year) < 10 and int(first_year) >= 0:
