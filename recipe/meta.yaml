@@ -1,5 +1,6 @@
 {% set name = "sportsdataverse" %}
 {% set version = "0.0.50" %}
+{% set python_min = "3.9" %}
 
 # Conda recipe for the sportsdataverse-py package.
 #
@@ -19,7 +20,7 @@ package:
 
 source:
   path: ..
-  # url: https://pypi.io/packages/source/s/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  # url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   # sha256: 0000000000000000000000000000000000000000000000000000000000000000
 
 build:
@@ -29,12 +30,12 @@ build:
 
 requirements:
   host:
-    - python >=3.9
+    - python {{ python_min }}
     - pip
     - setuptools >=68
     - wheel
   run:
-    - python >=3.9
+    - python >={{ python_min }}
     # Mirror [project.dependencies] in pyproject.toml. Keep the lower bounds
     # in sync — conda-forge requires explicit lower bounds to be re-renderable.
     - attrs >=20.3.0
