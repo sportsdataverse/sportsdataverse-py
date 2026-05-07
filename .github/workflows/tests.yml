@@ -65,6 +65,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libbz2-dev liblzma-dev
+      # xgboost on macOS dynamically links against libomp.dylib and
+      # apple-clang doesn't ship OpenMP. The macos-15 runner image
+      # stopped pre-installing libomp via Homebrew, so xgboost.core
+      # raises "OpenMP runtime is not installed" at import time.
+      - name: Install macOS runtime deps for xgboost (libomp)
+        if: runner.os == 'macOS'
+        run: brew install libomp
       # `uv sync` against the committed lockfile installs:
       #   - the project (editable)
       #   - every [project.optional-dependencies] group (--all-extras)
