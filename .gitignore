@@ -14,10 +14,14 @@ __pycache__
 docs/node_modules
 build
 dist
+# Notebook checkpoints + scratch notebooks at unconventional locations.
+# Curated tutorial notebooks under examples/notebooks/ are explicitly
+# tracked via the !examples/notebooks/*.ipynb negative pattern below.
 *.ipynb
 .ipynb_checkpoints
 ./.ipynb_checkpoints
 */.ipynb_checkpoints
+!examples/notebooks/*.ipynb
 *.egg-info
 *.sqlite
 
