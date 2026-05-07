@@ -45,7 +45,7 @@ dependencies = [
     "requests>=2.28.0",
     "scipy>=1.10.0",
     "tqdm>=4.50.0",
-    "xgboost>=1.7.0",
+    "xgboost>=2.0.0",
 ]
 
 
@@ -79,7 +79,7 @@ models = [
     "matplotlib>=3.5.0",
     "tqdm>=4.50.0",
     "attrs>=20.3.0",
-    "xgboost>=1.7.0",
+    "xgboost>=2.0.0",
 ]
 all = [
     # Mirrors `tests + docs + models`. Kept explicit (rather than referencing
@@ -109,7 +109,7 @@ all = [
     "matplotlib>=3.5.0",
     "tqdm>=4.50.0",
     "attrs>=20.3.0",
-    "xgboost>=1.7.0",
+    "xgboost>=2.0.0",
 ]
 
 

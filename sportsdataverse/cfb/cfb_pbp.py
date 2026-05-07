@@ -50,9 +50,9 @@ from sportsdataverse.cfb.model_vars import (
 )
 from sportsdataverse.dl_utils import download
 
-ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.model")
-wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.model")
-qbr_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/qbr_model.model")
+ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
+wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
+qbr_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/qbr_model.ubj")
 
 ep_model = Booster({"nthread": 4})  # init model
 ep_model.load_model(ep_model_file)

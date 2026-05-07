@@ -55,9 +55,9 @@ from sportsdataverse.nfl.model_vars import (
 # "safety" : float(p[4]),
 # "opp_safety" : float(p[5]),
 # "no_score" : float(p[6])
-ep_model_file = _nfl_resource_filename("sportsdataverse", "nfl/models/ep_model.model")
-wp_spread_file = _nfl_resource_filename("sportsdataverse", "nfl/models/wp_spread.model")
-qbr_model_file = _nfl_resource_filename("sportsdataverse", "nfl/models/qbr_model.model")
+ep_model_file = _nfl_resource_filename("sportsdataverse", "nfl/models/ep_model.ubj")
+wp_spread_file = _nfl_resource_filename("sportsdataverse", "nfl/models/wp_spread.ubj")
+qbr_model_file = _nfl_resource_filename("sportsdataverse", "nfl/models/qbr_model.ubj")
 
 ep_model = Booster({"nthread": 4})  # init model
 ep_model.load_model(ep_model_file)

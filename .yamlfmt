@@ -1,3 +1,8 @@
 formatter:
   line_ending: lf
   eof_newline: true
+
+# Skip Jinja2-templated YAML — conda's recipe/meta.yaml uses {% set %} +
+# {{ name }} substitutions that aren't valid pre-substitution YAML.
+exclude:
+  - recipe/meta.yaml
