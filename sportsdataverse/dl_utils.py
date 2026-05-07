@@ -82,33 +82,63 @@ def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries
         .. _httpx: https://www.python-httpx.org
     """
     session, params, logger = init_request_settings(params, session, logger)
-    try:
-        response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
-        response = no_espn_data(response)
 
-    except Exception as e:
-        if num_retries == 0:
-            logger.error(f"Retry Limit Exceeded: {url} \nparams: {params}\n {e}")
+    # Iterative retry loop. Defensive `response = None` so the exception
+    # handler can log without UnboundLocalError when `session.get()` itself
+    # raises (timeout, connection reset, DNS, etc.) before binding
+    # `response`. We re-raise the most recent captured exception when the
+    # retry budget is exhausted instead of silently returning a stale or
+    # unbound `response`.
+    attempts = max(int(num_retries), 0) + 1
+    response = None
+    last_exc: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
+            response = no_espn_data(response)
+            return response
+        except Exception as e:  # noqa: BLE001
+            last_exc = e
+            remaining = attempts - attempt - 1
 
-        if hasattr(e, "code") and getattr(e, "code") == 404:
-            logger.error(f"404: {url} \nparams: {params}")
+            # Surface ESPN 404 explicitly; the wrapper layer keys on this.
+            if hasattr(e, "code") and getattr(e, "code") == 404:
+                logger.error(f"404: {url} \nparams: {params}")
 
-        if num_retries > 0:
-            logger.warning("%s: %i - %s for url (%s)", e, response.status_code, response.reason, response.url)
+            if remaining <= 0:
+                logger.error(f"Retry Limit Exceeded: {url} \nparams: {params}\n {e}")
+                break
+
+            # Status / reason / final URL are only available when the
+            # exception fired AFTER a response started landing (e.g.
+            # `no_espn_data` raised on a 404). Otherwise — a connect /
+            # read timeout fired before any response was bound — log
+            # what we have.
+            if response is not None:
+                logger.warning(
+                    "%s: %s - %s for url (%s) [retry %d/%d]",
+                    e,
+                    getattr(response, "status_code", "?"),
+                    getattr(response, "reason", "?"),
+                    getattr(response, "url", url),
+                    attempt + 1,
+                    num_retries,
+                )
+            else:
+                logger.warning(
+                    "%s for url (%s) [retry %d/%d]",
+                    e,
+                    url,
+                    attempt + 1,
+                    num_retries,
+                )
             time.sleep(2)
-            return download(
-                url,
-                params=params,
-                proxy=proxy,
-                headers=headers,
-                timeout=timeout,
-                num_retries=num_retries - 1,
-                session=session,
-                logger=logger,
-            )
-        else:
-            logger.error(f"Download Error: {url} \nparams: {params}\n {e}")
 
+    # Retry budget exhausted. Re-raise the last captured exception so
+    # callers can react (and the test suite can assert on the failure
+    # mode) instead of receiving a stale or unbound `response`.
+    if last_exc is not None:
+        raise last_exc
     return response
 
 

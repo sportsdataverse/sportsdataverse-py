@@ -112,7 +112,20 @@ def no_espn_data(response):
     """
     if response.status_code == 404:
         raise NoESPNDataError(f"NoESPNDataError: No response for {response.url}")
-    elif response.json().get("code", None) == 404:
-        raise NoESPNDataError(f"NoESPNDataError: No data found for {response.url}, response: {response.json()}")
-    else:
+
+    # ESPN's "200-but-empty" envelope is `{"code": 404, ...}`. Other
+    # endpoints (e.g. jsonplaceholder.typicode.com/posts, stats.wnba.com
+    # paginated payloads) return JSON arrays at the top level, where
+    # ``.get("code")`` would raise AttributeError. Only probe for the
+    # ESPN envelope when the body is a dict; non-dict bodies pass
+    # through unchanged.
+    try:
+        body = response.json()
+    except ValueError:
+        # Non-JSON response (e.g. raw bytes, HTML error page). Treat as
+        # valid — the caller is responsible for parsing.
         return response
+
+    if isinstance(body, dict) and body.get("code") == 404:
+        raise NoESPNDataError(f"NoESPNDataError: No data found for {response.url}, response: {body}")
+    return response

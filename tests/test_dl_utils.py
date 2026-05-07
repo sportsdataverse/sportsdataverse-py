@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 import requests
 
@@ -34,13 +36,21 @@ class TestDownload:
 
     # Tests that the function can download a valid URL with a very short timeout
     def test_download_valid_url_with_short_timeout(self):
+        # `num_retries=0` so the test deterministically asserts the
+        # exception propagates instead of waiting on the default
+        # 16-attempt retry loop where a warmed connection pool can let
+        # one of the retries succeed and the test fails with "DID NOT
+        # RAISE".
         url = "https://jsonplaceholder.typicode.com/posts"
         timeout = 0.001
         with pytest.raises(requests.exceptions.Timeout):
-            download(url, timeout=timeout)
+            download(url, timeout=timeout, num_retries=0)
 
     # Tests that the function handles an invalid URL
     def test_download_invalid_url(self):
+        # Same `num_retries=0` rationale as above — DNS failures are
+        # already immediate, but we want the test to assert the
+        # exception bubbles up regardless of retry budget.
         url = "https://thisisnotavalidurl.com"
         with pytest.raises(requests.exceptions.RequestException):
-            download(url)
+            download(url, num_retries=0)

@@ -291,8 +291,13 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
             awayTeamMascot=pl.lit(init["awayTeamMascot"]),
             awayTeamAbbrev=pl.lit(init["awayTeamAbbrev"]),
             awayTeamNameAlt=pl.lit(init["awayTeamNameAlt"]),
-            gameSpread=pl.lit(init["gameSpread"]).abs(),
-            homeFavorite=pl.lit(init["homeFavorite"]),
+            # Defensive cast: ESPN sometimes returns this as a python float (no
+            # .astype()), sometimes as a numpy array. Same shape fix as the
+            # cfb_pbp / nfl_pbp versions. `.first()` collapses the resulting
+            # Series-of-length-1 to a scalar so polars 1.x doesn't refuse to
+            # broadcast it across the per-play DataFrame.
+            gameSpread=pl.lit(float(np.asarray(init["gameSpread"]).reshape(-1)[0])).abs().first(),
+            homeFavorite=pl.lit(bool(np.asarray(init["homeFavorite"]).reshape(-1)[0])).first(),
             gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
         )
         .with_columns(
@@ -304,7 +309,12 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
             pl.col("period.number").cast(pl.Int32).alias("period.number"),
             pl.col("period.number").cast(pl.Int32).alias("half"),
             pl.col("clock.displayValue").alias("time"),
-            pl.col("clock.displayValue").str.split(":").list.to_struct(n_field_strategy="max_width").alias("clock.mm"),
+            # polars 1.x deprecated `n_field_strategy=` and now requires
+            # `upper_bound=` (or an explicit `fields=` sequence). MM:SS
+            # game clocks always split into exactly 2 fields, so
+            # `upper_bound=2` is correct + tighter than the legacy
+            # heuristic.
+            pl.col("clock.displayValue").str.split(":").list.to_struct(upper_bound=2).alias("clock.mm"),
         )
         .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
         .unnest("clock.mm")
@@ -391,7 +401,7 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
         .to_list()
     )
 
-    pbp_txt["plays"] = pbp_txt["plays"].with_row_count("game_play_number", 1)
+    pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", offset=1)
 
     pbp_txt["plays"] = pbp_txt["plays"].with_columns(
         pl.when((pl.col("game_play_number") == 1).or_((pl.col("lag_period") == 1).and_(pl.col("period.number") == 2)))

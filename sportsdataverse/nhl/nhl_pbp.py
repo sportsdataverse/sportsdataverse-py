@@ -257,8 +257,13 @@ def helper_nhl_pbp_features(game_id, pbp_txt, init):
             awayTeamMascot=pl.lit(init["awayTeamMascot"]),
             awayTeamAbbrev=pl.lit(init["awayTeamAbbrev"]),
             awayTeamNameAlt=pl.lit(init["awayTeamNameAlt"]),
-            gameSpread=pl.lit(init["gameSpread"]).abs(),
-            homeFavorite=pl.lit(init["homeFavorite"]),
+            # Defensive cast: ESPN sometimes returns these as python floats
+            # / bools (no .astype()), sometimes as numpy arrays. `.first()`
+            # collapses the resulting Series-of-length-1 to a scalar so
+            # polars 1.x doesn't refuse to broadcast it across the
+            # per-play DataFrame. Same shape fix as cfb_pbp / nfl_pbp.
+            gameSpread=pl.lit(float(np.asarray(init["gameSpread"]).reshape(-1)[0])).abs().first(),
+            homeFavorite=pl.lit(bool(np.asarray(init["homeFavorite"]).reshape(-1)[0])).first(),
             gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
         )
         .with_columns(
@@ -278,7 +283,10 @@ def helper_nhl_pbp_features(game_id, pbp_txt, init):
             pl.col("clock.displayValue").alias("time"),
             pl.col("clock.displayValue")
             .str.split(":")
-            .list.to_struct(n_field_strategy="first_non_null")
+            # polars 1.x deprecated `n_field_strategy=` and now requires
+            # `upper_bound=` (or `fields=`). MM:SS game clocks always
+            # split into exactly 2 fields.
+            .list.to_struct(upper_bound=2)
             .alias("clock.mm"),
         )
         .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
@@ -308,7 +316,7 @@ def helper_nhl_pbp_features(game_id, pbp_txt, init):
         )
     )
 
-    pbp_txt["plays"] = pbp_txt["plays"].with_row_count("game_play_number", 1)
+    pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", offset=1)
 
     pbp_txt["plays"] = pbp_txt["plays"].with_columns(
         pl.when(pl.col("game_play_number") == 1)
