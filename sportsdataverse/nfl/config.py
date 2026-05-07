@@ -24,9 +24,9 @@ Programmatic example::
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
 CacheMode = Literal["memory", "filesystem", "off"]
 
@@ -57,11 +57,24 @@ class NflConfig:
     """
 
     cache_mode: CacheMode = "memory"
-    cache_dir: Path = field(default_factory=lambda: Path.home() / ".cache" / "sportsdataverse" / "nfl")
+    # Default is computed in __post_init__ as
+    # `Path.home() / ".cache" / "sportsdataverse" / "nfl"`. We avoid
+    # ``field(default_factory=...)`` here on purpose: dataclass renders
+    # such fields as ``cache_dir: Path = <factory>`` in the generated
+    # ``__repr__`` and Sphinx auto-doc signature, which Docusaurus's MDX
+    # parser then mistakes for a JSX tag (`Expected corresponding JSX
+    # closing tag for <factory>`) and the docs build dies. Using
+    # ``None`` + ``__post_init__`` produces a clean
+    # ``cache_dir: Path | None = None`` signature instead.
+    cache_dir: Optional[Path] = None
     cache_duration: int = 86400  # seconds (24h)
     verbose: bool = True
     timeout: int = 30
     user_agent: str = "sportsdataverse-py-nfl"
+
+    def __post_init__(self) -> None:
+        if self.cache_dir is None:
+            self.cache_dir = Path.home() / ".cache" / "sportsdataverse" / "nfl"
 
 
 def _from_env() -> NflConfig:

@@ -10,10 +10,10 @@
     - [sportsdataverse.nfl.cache.clear_cache() → None](#sportsdataversenflcacheclear_cache-%E2%86%92-none)
     - [Example](#example-1)
   - [sportsdataverse.nfl.config module](#sportsdataversenflconfig-module)
-    - [*class* sportsdataverse.nfl.config.NflConfig(cache_mode: Literal['memory', 'filesystem', 'off']='memory', cache_dir: Path = <factory>, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl')](#class-sportsdataversenflconfignflconfigcache_mode-literalmemory-filesystem-offmemory-cache_dir-path--factory-cache_duration-int--86400-verbose-bool--true-timeout-int--30-user_agent-str--sportsdataverse-py-nfl)
+    - [*class* sportsdataverse.nfl.config.NflConfig(cache_mode: Literal['memory', 'filesystem', 'off'] = 'memory', cache_dir: Path | None = None, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl')](#class-sportsdataversenflconfignflconfigcache_mode-literalmemory-filesystem-off--memory-cache_dir-path--none--none-cache_duration-int--86400-verbose-bool--true-timeout-int--30-user_agent-str--sportsdataverse-py-nfl)
     - [Example](#example-2)
-      - [\_\_init_\_(cache_mode: Literal['memory', 'filesystem', 'off']='memory', cache_dir: Path = <factory>, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl') → None](#%5C_%5C_init_%5C_cache_mode-literalmemory-filesystem-offmemory-cache_dir-path--factory-cache_duration-int--86400-verbose-bool--true-timeout-int--30-user_agent-str--sportsdataverse-py-nfl-%E2%86%92-none)
-      - [cache_dir *: Path*](#cache_dir--path)
+      - [\_\_init_\_(cache_mode: Literal['memory', 'filesystem', 'off'] = 'memory', cache_dir: Path | None = None, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl') → None](#%5C_%5C_init_%5C_cache_mode-literalmemory-filesystem-off--memory-cache_dir-path--none--none-cache_duration-int--86400-verbose-bool--true-timeout-int--30-user_agent-str--sportsdataverse-py-nfl-%E2%86%92-none)
+      - [cache_dir *: Path | None* *= None*](#cache_dir--path--none--none)
       - [cache_duration *: int* *= 86400*](#cache_duration--int--86400)
       - [cache_mode *: Literal['memory', 'filesystem', 'off']* *= 'memory'*](#cache_mode--literalmemory-filesystem-off--memory)
       - [timeout *: int* *= 30*](#timeout--int--30)
@@ -307,7 +307,7 @@ update_config(cache_mode="filesystem", cache_duration=3600)
 config = get_config()
 ```
 
-### *class* sportsdataverse.nfl.config.NflConfig(cache_mode: Literal['memory', 'filesystem', 'off']='memory', cache_dir: Path = <factory>, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl')
+### *class* sportsdataverse.nfl.config.NflConfig(cache_mode: Literal['memory', 'filesystem', 'off'] = 'memory', cache_dir: Path | None = None, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl')
 
 Bases: `object`
 
@@ -338,9 +338,9 @@ from sportsdataverse.nfl import NflConfig
 cfg = NflConfig(cache_mode="off", timeout=10)
 ```
 
-#### \_\_init_\_(cache_mode: Literal['memory', 'filesystem', 'off']='memory', cache_dir: Path = <factory>, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl') → None
+#### \_\_init_\_(cache_mode: Literal['memory', 'filesystem', 'off'] = 'memory', cache_dir: Path | None = None, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl') → None
 
-#### cache_dir *: Path*
+#### cache_dir *: Path | None* *= None*
 
 #### cache_duration *: int* *= 86400*
 
