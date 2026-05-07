@@ -1,0 +1,56 @@
+# Verifies that the conda recipe at recipe/meta.yaml still builds + smoke-tests
+# the package. Runs on PRs that touch the recipe or pyproject.toml, and on
+# every release. Does NOT upload to anaconda.org — conda-forge feedstock
+# automation handles publishing.
+
+name: Conda Build
+
+on:
+  pull_request:
+    paths:
+      - "recipe/**"
+      - "pyproject.toml"
+      - ".github/workflows/conda-build.yml"
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Miniforge (mamba)
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-version: latest
+          activate-environment: sdv-conda-build
+          python-version: "3.11"
+          auto-update-conda: false
+          channels: conda-forge
+
+      - name: Install conda-build + conda-verify
+        run: |
+          mamba install -y conda-build conda-verify
+
+      - name: Build sportsdataverse conda package
+        run: |
+          conda build recipe/ --no-anaconda-upload --output-folder dist_conda
+
+      - name: Install + smoke-import built package
+        run: |
+          mamba install -y -c ./dist_conda sportsdataverse
+          python -c "import sportsdataverse; import sportsdataverse.cfb; import sportsdataverse.nfl; import sportsdataverse.wbb; import sportsdataverse.wnba; print('conda install + import OK')"
+
+      - name: Upload built package as workflow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sportsdataverse-conda
+          path: dist_conda/noarch/*.conda
+          if-no-files-found: warn
+          retention-days: 14

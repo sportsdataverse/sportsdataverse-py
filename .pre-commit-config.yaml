@@ -20,6 +20,7 @@ repos:
       - id: check-json
       - id: check-xml
       - id: check-yaml
+        exclude: ^recipe/meta\.yaml$  # Jinja2-templated; not valid YAML pre-substitution
       - id: check-symlinks
       - id: check-vcs-permalinks
       - id: end-of-file-fixer
