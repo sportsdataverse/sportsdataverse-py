@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Conda recipe — `sportsdataverse-py`](#conda-recipe--sportsdataverse-py)
+  - [Local build (development)](#local-build-development)
+  - [Build from a published PyPI release](#build-from-a-published-pypi-release)
+  - [Submitting to conda-forge](#submitting-to-conda-forge)
+  - [Why `noarch: python`?](#why-noarch-python)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Conda recipe — `sportsdataverse-py`
 
 This directory contains the [conda-build](https://docs.conda.io/projects/conda-build/)
@@ -12,7 +24,7 @@ Build a `noarch: python` package from the current working tree:
 
 ```sh
 # One-time tooling install:
-conda install -n base conda-build conda-verify
+conda install -n base conda-build
 
 # From the repo root (NOT inside recipe/):
 conda build recipe/

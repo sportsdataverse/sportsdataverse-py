@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Contributing to sportsdataverse-py](#contributing-to-sportsdataverse-py)
+  - [Development setup](#development-setup)
+  - [Python version support](#python-version-support)
+  - [Code standards for new modules](#code-standards-for-new-modules)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Contributing to sportsdataverse-py
 
 `sportsdataverse-py` is the Python sister to the SportsDataverse R packages
@@ -65,7 +76,7 @@ pip install -e ".[tests]"
 locally from the recipe in `recipe/`:
 
 ```sh
-conda install -n base conda-build conda-verify
+conda install -n base conda-build
 conda build recipe/
 conda install --use-local sportsdataverse
 ```

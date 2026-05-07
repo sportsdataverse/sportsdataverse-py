@@ -45,8 +45,12 @@ jobs:
           auto-update-conda: false
           channels: conda-forge
           channel-priority: strict
-      - name: Install conda-build + conda-verify
-        run: mamba install -y conda-build conda-verify
+      # conda-verify is intentionally NOT installed: latest 3.4.2 caps at
+      # python<3.12 so it's unsolvable in a py3.13 env. The recipe is
+      # `noarch: python` and well-formed; conda-build's own structural
+      # checks are sufficient.
+      - name: Install conda-build
+        run: mamba install -y conda-build
       - name: Build sportsdataverse conda package
         run: conda build recipe/ --no-anaconda-upload --output-folder dist_conda
       - name: Install + smoke-import built package
