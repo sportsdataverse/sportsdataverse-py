@@ -1,0 +1,62 @@
+name: Data quality issue
+description: A loader returns incorrect or unexpected values for known game/season state.
+title: "[data] "
+labels: ["data-quality", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for cases where the data is "wrong" — e.g., a play is missing
+        a player, a yardage value is off, a score doesn't match ESPN's
+        published box. We track these separately from code bugs because
+        they often indicate upstream-source drift rather than our parser logic.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Discrepancy
+      description: What does the loader return and what does the upstream source show?
+      placeholder: |
+        load_wbb_pbp(2024) returns play_id 401628334101849902 with
+        sack_player_name2 = NULL, but ESPN shows the play as a split sack
+        between Yasir Abdullah and YaYa Diaby.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Reproducer
+      render: python
+      placeholder: |
+        import sportsdataverse as sdv
+        df = sdv.wbb.load_wbb_pbp([2024]).filter(pl.col("play_id") == 401628334101849902)
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Upstream-source link
+      description: |
+        Direct link to the ESPN game page, nflverse-data release, or wherever
+        the canonical value lives.
+    validations:
+      required: true
+
+  - type: input
+    id: sdv_version
+    attributes:
+      label: sportsdataverse-py version
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I've checked the upstream source directly (ESPN page, nflverse release, etc.).
+          required: true
+        - label: I've searched existing issues for this discrepancy.
+          required: true

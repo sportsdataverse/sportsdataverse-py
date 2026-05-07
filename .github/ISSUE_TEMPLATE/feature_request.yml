@@ -1,0 +1,73 @@
+name: Feature request
+description: Suggest a new endpoint, loader, or capability.
+title: "[feat] "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion! For data-source additions, please confirm the
+        upstream is publicly accessible (no auth wall, no scraping anti-bot
+        wall) and link the canonical reference.
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem does this solve? Who benefits?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API
+      description: |
+        Show what calling the new feature would look like in Python. If it's
+        a new loader, follow the existing `load_<league>_<dataset>(seasons, ...)` shape.
+      render: python
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Upstream source
+      description: |
+        Where does the data live? Endpoint URL, release tag, parquet path,
+        documentation link.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Sport / league
+      multiple: true
+      options:
+        - CFB (college football)
+        - NFL
+        - MLB
+        - NBA
+        - NHL
+        - MBB (men's college basketball)
+        - WBB (women's college basketball)
+        - WNBA
+        - Cross-cutting (caching, config, packaging, etc.)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any existing workarounds or partial solutions?
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I've searched [existing issues](https://github.com/sportsdataverse/sportsdataverse-py/issues) and discussions to confirm this isn't already proposed.
+          required: true

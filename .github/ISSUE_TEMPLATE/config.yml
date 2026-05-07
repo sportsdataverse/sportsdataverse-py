@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussions
+    url: https://github.com/sportsdataverse/sportsdataverse-py/discussions
+    about: Ask a question, share a use case, or discuss API design.
+  - name: SportsDataverse Discord
+    url: https://discord.com/invite/5Er2FBnnQa
+    about: Real-time chat with the maintainers and other users.
+  - name: nflreadpy compatibility
+    url: https://github.com/nflverse/nflreadpy
+    about: For NFL data questions, also check the canonical nflreadpy R/Python parity reference.
