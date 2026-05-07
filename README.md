@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>](#sportsdataverse-py-a-hrefhttpspysportsdataverseorgimg-srchttpsrawgithubusercontentcomsportsdataversesportsdataverse-pymastersdv-py-logopng-alignright--width20%25-min-width100px-a)
+  - [Installation](#installation)
+    - [Standard install (pip)](#standard-install-pip)
+    - [Modern install (uv — recommended)](#modern-install-uv--recommended)
+    - [Conda install](#conda-install)
+    - [Development install](#development-install)
+    - [Notes](#notes)
+  - [Examples and tutorials](#examples-and-tutorials)
+  - [Companion packages](#companion-packages)
+- [**Our Authors**](#our-authors)
+  - [**Citations**](#citations)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>
 <!-- badges: start -->
 
@@ -17,22 +35,136 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 
 ## Installation
 
-sportsdataverse-py can be installed via pip:
+The package metadata lives entirely in [`pyproject.toml`](pyproject.toml)
+(PEP 621 `[project]` table). There is no `setup.py` source-of-truth.
+
+### Standard install (pip)
 
 ```bash
 pip install sportsdataverse
-
-# with full dependencies
-pip install sportsdataverse[all]
 ```
 
-or from the repo (which may at times be more up to date):
+With optional extras (defined in `[project.optional-dependencies]` in
+`pyproject.toml`):
 
 ```bash
-git clone https://github.com/sportsdataverse/sportsdataverse-py
-cd sportsdataverse-py
-pip install -e .[all]
+pip install "sportsdataverse[all]"      # everything below
+pip install "sportsdataverse[models]"   # extra deps for the EPA / WP model code
+pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
+pip install "sportsdataverse[docs]"     # adds sphinx + sphinx-markdown-builder for the doc build
 ```
+
+### Modern install (uv — recommended)
+
+[uv](https://docs.astral.sh/uv/) is the fast, drop-in package manager we use day to day.
+
+```bash
+# Add to a uv-managed project:
+uv add sportsdataverse
+
+# With extras:
+uv add "sportsdataverse[all]"
+
+# Or install the latest dev snapshot from GitHub:
+uv add "sportsdataverse @ git+https://github.com/sportsdataverse/sportsdataverse-py"
+```
+
+### Conda install
+
+Once the conda-forge feedstock is published the package is also available via:
+
+```bash
+conda install -c conda-forge sportsdataverse
+# or
+mamba install -c conda-forge sportsdataverse
+```
+
+Until then, conda users can build a local package from this repo:
+
+```bash
+conda install conda-build conda-verify
+conda build recipe/
+conda install --use-local sportsdataverse
+```
+
+See [`recipe/README.md`](recipe/README.md) for the full conda workflow.
+
+### Development install
+
+For contributing or running the test suite:
+
+```bash
+git clone https://github.com/sportsdataverse/sportsdataverse-py.git
+cd sportsdataverse-py
+
+# uv (recommended) — fully resolved editable install with every extra:
+uv pip install -e ".[all]"
+
+# Plain pip works too if uv isn't available:
+pip install -e ".[all]"
+```
+
+> Note: once we add a PEP 735 `[dependency-groups]` block (currently the
+> repo only ships PEP 621 `[project.optional-dependencies]`),
+> `uv sync --all-extras --all-groups` will become the one-shot dev incantation.
+> Until then, `uv pip install -e ".[all]"` is the equivalent path.
+
+Run the test suite:
+
+```bash
+uv run pytest                       # offline tests only
+SDV_PY_LIVE_TESTS=1 uv run pytest   # include live API tests (slower; hits ESPN / nflverse)
+```
+
+For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Notes
+
+- **Python target:** 3.9–3.14.
+- **DataFrame engine:** polars 1.x. Most loaders accept `return_as_pandas=True`
+  if you prefer pandas.
+- **NFL caching:** loaders cache to memory by default. Set
+  `SDV_PY_NFL_CACHE=filesystem` for cross-session reuse, or
+  `SDV_PY_NFL_CACHE=off` to disable. See
+  `sportsdataverse.nfl.config.update_config()` for runtime control.
+
+## Examples and tutorials
+
+Every public function ships a runnable `Example:` block in its docstring
+showing a quick-start call, common parameter combinations, and a one-line
+pipeline next-step. Render the API reference locally with
+`bash create_docs.sh` or browse the live docs at
+[py.sportsdataverse.org](https://py.sportsdataverse.org).
+
+For longer-form walkthroughs, see the intro/intermediate Jupyter notebooks
+under [`examples/notebooks/`](examples/notebooks):
+
+| Notebook | Covers |
+|---|---|
+| `01_quickstart.ipynb` | Cross-sport intro — package layout, polars vs pandas, the `download()` retry layer |
+| `02_cfb_intro.ipynb` | College football PBP, schedule, teams, `espn_cfb_play_participants` |
+| `03_nfl_intro.ipynb` | NFL — nflreadpy parity surface, caching layer, current-season helpers |
+| `04_nba_intro.ipynb` | NBA — PBP, schedule, teams, game rosters, shot distribution |
+| `05_wbb_wnba_intro.ipynb` | Women's basketball — NCAA + WNBA parallels, multi-table stats |
+| `06_mbb_intro.ipynb` | Men's college basketball — PBP, schedule, conference standings |
+| `07_nhl_intro.ipynb` | NHL — PBP, schedule, teams, shot-event filter |
+
+## Companion packages
+
+`sportsdataverse-py` is one corner of the broader [SportsDataverse](https://www.sportsdataverse.org)
+ecosystem. The R sister packages cover the same data sources with deeper
+sport-specific coverage:
+
+- [wehoop](https://wehoop.sportsdataverse.org) — women's basketball (WNBA + NCAA)
+- [hoopR](https://hoopR.sportsdataverse.org) — men's basketball (NBA + NCAA)
+- [cfbfastR](https://cfbfastR.sportsdataverse.org) — college football
+- [baseballr](https://baseballr.sportsdataverse.org) — baseball (MLB + MiLB + NCAA)
+- [fastRhockey](https://fastRhockey.sportsdataverse.org) — hockey (NHL + WHL)
+
+The NFL submodule is a near drop-in replacement for [nflreadpy](https://github.com/nflverse/nflreadpy);
+the broader [nflverse](https://nflverse.nflverse.com) ecosystem is the
+upstream data source for many of those loaders.
 
 # **Our Authors**
 
@@ -46,6 +178,7 @@ pip install -e .[all]
 To cite the [**`sportsdataverse-py`**](https://py.sportsdataverse.org) Python package in publications, use:
 
 BibTex Citation
+
 ```bibtex
 @misc{gilani_sdvpy_2021,
   author = {Gilani, Saiem},
