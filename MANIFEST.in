@@ -1,11 +1,17 @@
-include MANIFEST.in
-include pavement.py
-include *.cfg
-include *.ini
-include *.txt
-include *.model
-recursive-include *.model
-recursive-include bin           *.py *.cmd *.zip
-recursive-include docs          *.py *.rst *.css Makefile
-recursive-include features      *.feature *.py
-recursive-include paver_ext     *.py
+include README.md
+include CHANGELOG.md
+include LICENSE
+include pyproject.toml
+
+# Bundled XGBoost models / pickled artifacts shipped under sportsdataverse/.
+recursive-include sportsdataverse/cfb/models *
+recursive-include sportsdataverse/nfl/models *
+
+# Sphinx + docs sources are NOT shipped in the wheel — only the .md outputs
+# in docs/ are kept by [tool.setuptools.packages.find] excludes.
+prune Sphinx-docs
+prune docs
+prune examples
+prune archive
+prune tests
+prune dist_check
