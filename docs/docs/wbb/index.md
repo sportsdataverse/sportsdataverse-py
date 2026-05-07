@@ -121,7 +121,7 @@ Pull the officials assigned to a women’s-college-basketball game.
 * **Return type:**
   Polars (or pandas) DataFrame with one row per official
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after retries.
 
 ### Example
@@ -543,7 +543,7 @@ Pull ESPN season stats for a women’s-college-basketball athlete.
 
   If `raw=True`, returns the raw response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after
         retries.
 
@@ -766,7 +766,7 @@ Pull ESPN women’s-college-basketball standings for a season.
 
   If `raw=True`, returns the raw response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after
         retries.
 
@@ -852,7 +852,7 @@ Pull the current ESPN team roster for a women’s-college-basketball team.
 * **Return type:**
   Polars (or pandas) DataFrame with one row per athlete
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after retries.
 
 ### Example
@@ -961,7 +961,7 @@ Pull ESPN team season stats for a women’s-college-basketball team.
 
   If `raw=True`, returns the raw response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after
         retries.
 

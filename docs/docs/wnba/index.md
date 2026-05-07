@@ -130,7 +130,7 @@ Pull ESPN WNBA draft picks for a season.
 
   If `raw=True`, returns the raw response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after
         retries.
 
@@ -200,7 +200,7 @@ semantics.
   `sportsdataverse.wbb.espn_wbb_event_officials()`. If
   `raw=True`, returns the raw response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after retries.
 
 ### Example
@@ -575,7 +575,7 @@ set, and the `"Other"` fallback bucket.
   column / key documentation. If `raw=True`, returns the raw
   response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after
         retries.
 
@@ -762,7 +762,7 @@ documentation of the column set. The WNBA endpoint does not take a
   `sportsdataverse.wbb.espn_wbb_standings()` for the full
   column list. If `raw=True`, returns the raw response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after
         retries.
 
@@ -827,7 +827,7 @@ only and does not alter the request URL.
   `sportsdataverse.wbb.espn_wbb_team_roster()`. If `raw=True`,
   returns the raw response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after retries.
 
 ### Example
@@ -896,7 +896,7 @@ set, and the `"Other"` fallback bucket.
   column / key documentation. If `raw=True`, returns the raw
   response dict.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after
         retries.
 

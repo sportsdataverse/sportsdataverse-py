@@ -44,17 +44,19 @@ SPORT_PAGES = sorted(DOCS.glob("*/index.md"))
 ANGLE_LITERAL = re.compile(r"<(factory|lambda|function|method)>")
 
 # 2. Sphinx-apidoc emits cross-refs to the parent package page as
-#    ``[sportsdataverse](sportsdataverse.md)``. We don't ship that page
-#    under docs/docs/, so the link 404s and Docusaurus warns. Repoint
-#    to the in-site API landing page (the per-sport index pages link
-#    among themselves via these relative paths).
-PARENT_LINK = re.compile(r"\(sportsdataverse\.md\)")
+#    ``[text](sportsdataverse.md)`` and ``[text](sportsdataverse.md#anchor)``.
+#    We don't ship that page under docs/docs/, so Docusaurus's broken-link
+#    checker fails the build with `Docusaurus found broken links`. Strip
+#    the link wrapper but keep the link text — the text is always the
+#    fully-qualified dotted symbol (e.g. ``sportsdataverse.dl_utils.download()``)
+#    which reads fine as inline code.
+PARENT_LINK = re.compile(r"\[([^\]]+)\]\(sportsdataverse\.md(?:#[^)]*)?\)")
 
 scrubs = 0
 for page in SPORT_PAGES:
     text = page.read_text(encoding="utf-8")
     new = ANGLE_LITERAL.sub(lambda m: f"&lt;{m.group(1)}&gt;", text)
-    new = PARENT_LINK.sub("(/docs/intro)", new)
+    new = PARENT_LINK.sub(r"\1", new)
     if new != text:
         page.write_text(new, encoding="utf-8")
         scrubs += 1

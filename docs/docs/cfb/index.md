@@ -147,7 +147,7 @@ to the canonical athlete detail row.
 * **Parameters:**
   * **teams_rosters** (*pl.DataFrame*) – Output of [`helper_cfb_roster_items()`](#sportsdataverse.cfb.cfb_game_rosters.helper_cfb_roster_items)
     (must contain an `athlete_href` column).
-  * **\*\*kwargs** – Forwarded to [`sportsdataverse.dl_utils.download()`](sportsdataverse.md#sportsdataverse.dl_utils.download).
+  * **\*\*kwargs** – Forwarded to `sportsdataverse.dl_utils.download()`.
 * **Returns:**
   One row per resolved athlete.
 * **Return type:**
@@ -191,7 +191,7 @@ Internal helper that fetches the roster entries for every team in a game.
   * **items** (*pl.DataFrame*) – Output of [`helper_cfb_game_items()`](#sportsdataverse.cfb.cfb_game_rosters.helper_cfb_game_items).
   * **summary_url** (*str*) – Base ESPN summary URL used to derive each team’s
     roster endpoint.
-  * **\*\*kwargs** – Forwarded to [`sportsdataverse.dl_utils.download()`](sportsdataverse.md#sportsdataverse.dl_utils.download).
+  * **\*\*kwargs** – Forwarded to `sportsdataverse.dl_utils.download()`.
 * **Returns:**
   One row per game-roster entry across both teams.
 * **Return type:**
@@ -213,7 +213,7 @@ the competitors summary and returns them as a flat polars DataFrame.
 
 * **Parameters:**
   * **items** (*pl.DataFrame*) – Output of [`helper_cfb_game_items()`](#sportsdataverse.cfb.cfb_game_rosters.helper_cfb_game_items).
-  * **\*\*kwargs** – Forwarded to [`sportsdataverse.dl_utils.download()`](sportsdataverse.md#sportsdataverse.dl_utils.download).
+  * **\*\*kwargs** – Forwarded to `sportsdataverse.dl_utils.download()`.
 * **Returns:**
   Team detail rows with logo URLs flattened out.
 * **Return type:**
@@ -831,7 +831,7 @@ Pull ESPN per-play participants for a college-football game.
 
   If `raw=True`, returns the parsed JSON list of play dicts.
 * **Raises:**
-  * [**sportsdataverse.errors.NoESPNDataError**](sportsdataverse.md#sportsdataverse.errors.NoESPNDataError) – ESPN returned 404.
+  * **sportsdataverse.errors.NoESPNDataError** – ESPN returned 404.
   * **requests.exceptions.RequestException** – Other network failures after retries.
 
 ### Example
