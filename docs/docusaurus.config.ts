@@ -1,8 +1,8 @@
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+import {themes as prismThemes} from 'prism-react-renderer';
+import type {Config} from '@docusaurus/types';
+import type * as Preset from '@docusaurus/preset-classic';
 
-/** @type {import('@docusaurus/types').DocusaurusConfig} */
-module.exports = {
+const config: Config = {
   title: 'sdv-py',
   tagline: "The SportsDataverse's Python Package for Sports Data.",
   url: 'https://sportsdataverse-py.sportsdataverse.org',
@@ -17,8 +17,57 @@ module.exports = {
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'SportsDataverse', // Usually your GitHub org/user name.
-  projectName: 'Sportsdataverse', // Usually your repo name.
+  organizationName: 'SportsDataverse',
+  projectName: 'Sportsdataverse',
+  // Docusaurus 3 requires i18n declared explicitly.
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en'],
+  },
+  // Detect MDX vs CommonMark per-file. Sphinx-emitted pages stay on
+  // CommonMark (`.md`) so MDX 3's stricter parser doesn't trip on
+  // bare braces in API signatures; hand-authored MDX files
+  // (`.mdx`) keep the full MDX feature set.
+  markdown: {
+    format: 'detect',
+  },
+  scripts: [
+    {
+      src: 'https://plausible.io/js/script.js',
+      defer: true,
+      'data-domain': 'py.sportsdataverse.org',
+    },
+  ],
+  presets: [
+    [
+      'classic',
+      {
+        docs: {
+          sidebarPath: './sidebars.ts',
+          editUrl:
+            'https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/',
+          // Versioning: the unversioned tree under docs/docs/ is the
+          // "next" / unreleased dev surface; frozen snapshots live
+          // under versioned_docs/version-X.Y.Z. lastVersion controls
+          // which version visitors see at the root URL.
+          lastVersion: '0.0.50',
+          versions: {
+            current: {
+              label: 'Next 🚧',
+              path: 'next',
+            },
+            '0.0.50': {
+              label: '0.0.50',
+              path: '',
+            },
+          },
+        },
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+      } satisfies Preset.Options,
+    ],
+  ],
   themeConfig: {
     docs: {
       sidebar: {
@@ -51,18 +100,34 @@ module.exports = {
           position: 'left',
         },
         {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownActiveClassDisabled: true,
+        },
+        // SportsDataverse package directory. Sourced from
+        //   https://sportsdataverse.org/packages
+        //   https://github.com/sportsdataverse/.github/blob/main/profile/README.md
+        // Keep this dropdown in sync with those two pages.
+        // The `sdv-packages-dropdown` className triggers the multi-column
+        // mega-menu layout in custom.css; without it the 30+ package list
+        // overflows the viewport vertically on a typical laptop.
+        {
           label: 'SDV',
           position: 'left',
+          className: 'sdv-packages-dropdown',
           items: [
             {
               href: 'https://sportsdataverse.org',
               label: 'SportsDataverse',
               target: '_self',
+              className: 'sdv-section-header',
             },
+            // -- Python --
             {
               label: 'Python Packages',
               href: 'https://py.sportsdataverse.org/',
               target: '_self',
+              className: 'sdv-section-header',
             },
             {
               label: 'sportsdataverse-py',
@@ -89,9 +154,11 @@ module.exports = {
               href: 'https://github.com/sportsdataverse/recruitR-py/',
               target: '_self',
             },
+            // -- R --
             {
               label: 'R Packages',
               href: 'https://r.sportsdataverse.org/',
+              className: 'sdv-section-header',
             },
             {
               label: 'sportsdataverse-R',
@@ -119,48 +186,38 @@ module.exports = {
               target: '_self',
             },
             {
-              label: 'worldfootballR',
-              href: 'https://jaseziv.github.io/worldfootballR/',
-              target: '_self',
-            },
-            {
-              label: 'chessR',
-              href: 'https://jaseziv.github.io/chessR/',
-              target: '_self',
-            },
-            {
               label: 'baseballr',
               href: 'https://BillPetti.github.io/baseballr/',
               target: '_self',
             },
             {
-              label: 'cfbplotR',
-              href: 'https://cfbplotR.sportsdataverse.org/',
+              label: 'worldfootballR',
+              href: 'https://jaseziv.github.io/worldfootballR/',
               target: '_self',
             },
             {
-              label: 'mlbplotR',
-              href: 'https://camdenk.github.io/mlbplotR/',
+              label: 'sportyR',
+              href: 'https://sportyR.sportsdataverse.org/',
               target: '_self',
             },
             {
-              label: 'softballR',
-              href: 'https://github.com/sportsdataverse/softballR/',
+              label: 'ggshakeR',
+              href: 'https://abhiamishra.github.io/ggshakeR/',
               target: '_self',
             },
             {
-              label: 'cfb4th',
-              href: 'https://cfb4th.sportsdataverse.org/',
+              label: 'soccerAnimate',
+              href: 'https://github.com/Dato-Futbol/soccerAnimate',
               target: '_self',
             },
             {
-              label: 'nwslR',
-              href: 'https://github.com/nwslR/nwslR/',
+              label: 'oddsapiR',
+              href: 'https://oddsapiR.sportsdataverse.org/',
               target: '_self',
             },
             {
-              label: 'recruitR',
-              href: 'https://recruitR.sportsdataverse.org/',
+              label: 'hockeyR',
+              href: 'https://hockeyR.netlify.app/',
               target: '_self',
             },
             {
@@ -169,13 +226,55 @@ module.exports = {
               target: '_self',
             },
             {
+              label: 'mlbplotR',
+              href: 'https://camdenk.github.io/mlbplotR/',
+              target: '_self',
+            },
+            {
+              label: 'cfbplotR',
+              href: 'https://cfbplotR.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'cfb4th',
+              href: 'https://cfb4th.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'softballR',
+              href: 'https://github.com/sportsdataverse/softballR/',
+              target: '_self',
+            },
+            {
+              label: 'nwslR',
+              href: 'https://github.com/nwslR/nwslR/',
+              target: '_self',
+            },
+            {
+              label: 'usfootballR',
+              href: 'https://usfootballR.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
+              label: 'recruitR',
+              href: 'https://recruitR.sportsdataverse.org/',
+              target: '_self',
+            },
+            {
               label: 'puntr',
               href: 'https://puntalytics.github.io/puntr/',
               target: '_self',
             },
             {
+              label: 'chessR',
+              href: 'https://jaseziv.github.io/chessR/',
+              target: '_self',
+            },
+            // -- Node.js --
+            {
               label: 'Node.js Packages',
               href: 'https://js.sportsdataverse.org/',
+              className: 'sdv-section-header',
             },
             {
               label: 'sportsdataverse.js',
@@ -187,7 +286,7 @@ module.exports = {
               href: 'https://github.com/nntrn/nfl-nerd/',
               target: '_self',
             },
-          ]
+          ],
         },
         {
           label: 'GitHub',
@@ -234,25 +333,10 @@ module.exports = {
       copyright: `Copyright © ${new Date().getFullYear()} <strong>sportsdataverse-py</strong>, developed by <a href='https://twitter.com/saiemgilani'>Saiem Gilani</a>, part of the <a href='https://sportsdataverse.org'>SportsDataverse</a>.`,
     },
     prism: {
-      theme: lightCodeTheme,
-      darkTheme: darkCodeTheme,
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
     },
-  },
-  scripts: [{src: 'https://plausible.io/js/script.js', defer: true, 'data-domain': 'py.sportsdataverse.org'}],
-  presets: [
-    [
-      '@docusaurus/preset-classic',
-      {
-        docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/sportsdataverse/sportsdataverse-py/edit/master/docs/',
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      },
-    ],
-  ],
+  } satisfies Preset.ThemeConfig,
 };
+
+export default config;

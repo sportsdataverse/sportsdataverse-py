@@ -291,3 +291,59 @@ html[data-theme='dark'] {
 .grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
 .gap-2 { gap: 0.5rem; }
 .col-auto { grid-column: auto; }
+
+/*
+ * SDV packages dropdown — multi-column mega-menu.
+ *
+ * The full SportsDataverse package directory is ~30 entries (5 Python
+ * + 22 R + 2 Node.js + section headers). A single tall column overflows
+ * the viewport on a typical laptop and feels unwieldy. column-count
+ * keeps the dropdown compact without swizzling theme components.
+ *
+ * `sdv-packages-dropdown` is set on the dropdown navbar item in
+ * docusaurus.config.ts; `sdv-section-header` marks the
+ * "Python Packages" / "R Packages" / "Node.js Packages" / top-level
+ * "SportsDataverse" entries so they read as section dividers.
+ *
+ * On the mobile sidebar (≤ 996px) Docusaurus flattens the dropdown
+ * into the slide-in nav, so we collapse back to a single column there.
+ */
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu {
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(80vh, 640px);
+  overflow-y: auto;
+  column-count: 3;
+  column-gap: 0.5rem;
+  padding: 0.5rem 0.25rem;
+}
+
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu > li {
+  break-inside: avoid;
+  display: block;
+}
+
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__link.sdv-section-header {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  color: var(--ifm-color-primary);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu > li:first-child .dropdown__link.sdv-section-header {
+  margin-top: 0;
+  padding-top: 0.25rem;
+  border-top: none;
+}
+
+@media (max-width: 996px) {
+  .navbar__item.dropdown.sdv-packages-dropdown .dropdown__menu {
+    width: auto;
+    max-height: none;
+    column-count: 1;
+    overflow-y: visible;
+  }
+}

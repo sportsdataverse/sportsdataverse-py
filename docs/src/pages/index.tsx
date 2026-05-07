@@ -1,4 +1,4 @@
-import React from 'react';
+import type {ReactNode} from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
@@ -6,10 +6,15 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
-const FeatureList = [
+type FeatureItem = {
+  title: string;
+  imageUrl?: string;
+  description: ReactNode;
+};
+
+const FeatureList: FeatureItem[] = [
   {
     title: "Men's College Basketball",
-    // Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
         It provides users with the capability to access the ESPN API’s
@@ -19,8 +24,7 @@ const FeatureList = [
     ),
   },
   {
-    title: "College Football",
-    // Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'College Football',
     description: (
       <>
         It provides users with the capability to access the ESPN API’s
@@ -31,7 +35,6 @@ const FeatureList = [
   },
   {
     title: 'EPA and WPA',
-    // Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
         It provides users with the capability to access the cfbfastR team's
@@ -41,7 +44,6 @@ const FeatureList = [
   },
   {
     title: 'NFL',
-    // Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
         It provides users with the capability to access the nflfastR team's
@@ -53,7 +55,6 @@ const FeatureList = [
   },
   {
     title: 'NHL',
-    // Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
         It provides users with the capability to access ESPN's NHL endpoints for
@@ -63,7 +64,7 @@ const FeatureList = [
   },
 ];
 
-function Feature({ imageUrl, title, description }) {
+function Feature({imageUrl, title, description}: FeatureItem): ReactNode {
   const imgUrl = useBaseUrl(imageUrl);
   return (
     <div className={clsx('col col--4', styles.feature)}>
@@ -78,7 +79,7 @@ function Feature({ imageUrl, title, description }) {
   );
 }
 
-function HomepageHeader() {
+function HomepageHeader(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
@@ -97,11 +98,11 @@ function HomepageHeader() {
   );
 }
 
-export default function Home() {
+export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`${siteConfig.title}`}
+      title={siteConfig.title}
       description="The SportsDataverse's Python Package for Sports Data.">
       <HomepageHeader />
       <main>
