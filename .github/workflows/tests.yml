@@ -1,6 +1,8 @@
-# Run the offline test subset on every PR and push to main, plus on
-# workflow_dispatch. Live tests (gated by SDV_PY_LIVE_TESTS=1) stay off in CI
-# to avoid hitting third-party APIs from PR forks.
+# Run the full test suite (live API tests included) on every PR, push to
+# main, and workflow_dispatch. Live tests are gated by SDV_PY_LIVE_TESTS=1
+# and run by default; the workflow_dispatch input can flip them off
+# (live_tests: "false") for runs where third-party API churn would
+# produce false-negative failures.
 #
 # Uses `uv sync --all-extras --all-groups` against the committed uv.lock for
 # reproducible installs, then `uv run --frozen pytest` for execution. See
@@ -15,7 +17,7 @@ on:
       live_tests:
         description: "Set SDV_PY_LIVE_TESTS=1 to include live API tests"
         required: false
-        default: "false"
+        default: "true"
 # Cancel in-flight runs on the same ref when a new push comes in.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -80,8 +82,10 @@ jobs:
       # the lockfile.
       - name: Install project + extras + dep groups
         run: uv sync --all-extras --all-groups --frozen --python ${{ matrix.python-version }}
-      - name: Run offline tests
+      - name: Run tests (live API tests included)
         env:
-          # Off by default; the workflow_dispatch input flips it on.
-          SDV_PY_LIVE_TESTS: ${{ github.event.inputs.live_tests == 'true' && '1' || '' }}
+          # On by default for every trigger (push, PR, workflow_dispatch).
+          # The workflow_dispatch input can override with live_tests: "false"
+          # to skip live tests for a one-off run when upstream APIs are flaky.
+          SDV_PY_LIVE_TESTS: ${{ github.event.inputs.live_tests != 'false' && '1' || '' }}
         run: uv run --frozen pytest --maxfail=10
