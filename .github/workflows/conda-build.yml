@@ -40,8 +40,17 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           miniforge-version: latest
-          activate-environment: sdv-conda-build
-          python-version: ${{ matrix.python-version }}
+          # Activate `base` instead of a sub-env. conda 26.x switched to a
+          # plugin-based architecture: `conda build` is registered via
+          # Python entry points on the conda interpreter (which lives in
+          # base). If conda-build is installed into a sub-env but `conda`
+          # is invoked from base, the build subcommand isn't discovered
+          # and the run fails with `argument COMMAND: invalid choice:
+          # 'build'`. Putting conda-build directly into base side-steps
+          # that — conda-build creates its own ephemeral build env per
+          # recipe anyway, so we don't gain anything from a sub-env here.
+          activate-environment: base
+          auto-activate-base: true
           auto-update-conda: false
           channels: conda-forge
           channel-priority: strict
@@ -49,8 +58,8 @@ jobs:
       # python<3.12 so it's unsolvable in a py3.13 env. The recipe is
       # `noarch: python` and well-formed; conda-build's own structural
       # checks are sufficient.
-      - name: Install conda-build
-        run: mamba install -y conda-build
+      - name: Install conda-build into base
+        run: mamba install -n base -y conda-build
       - name: Build sportsdataverse conda package
         run: conda build recipe/ --no-anaconda-upload --output-folder dist_conda
       - name: Install + smoke-import built package
