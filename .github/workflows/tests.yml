@@ -1,27 +1,61 @@
-# Run the offline test subset on every PR and on workflow_dispatch. Live tests
-# (gated by SDV_PY_LIVE_TESTS=1) stay off in CI to avoid hitting third-party
-# APIs from PR forks.
-
-name: Test Python Package
-on: [pull_request, workflow_dispatch]
-
+# Run the offline test subset on every PR and push to main, plus on
+# workflow_dispatch. Live tests (gated by SDV_PY_LIVE_TESTS=1) stay off in CI
+# to avoid hitting third-party APIs from PR forks.
+#
+# Uses uv for dep install + test execution — see CONTRIBUTING.md.
+name: tests
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      live_tests:
+        description: "Set SDV_PY_LIVE_TESTS=1 to include live API tests"
+        required: false
+        default: "false"
+# Cancel in-flight runs on the same ref when a new push comes in.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    name: pytest (${{ matrix.os }} / py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.11"]
+        # CONTRIBUTING.md promises CI runs against the floor (3.9) and the
+        # canonical version (3.13.2). 3.14 is intentionally NOT included
+        # yet — pyarrow / polars wheels for cp314 are still landing across
+        # the index.
+        os: [ubuntu-latest]
+        python-version: ["3.9", "3.13.2"]
+        include:
+          # Sanity-check the canonical interpreter on macOS + Windows so
+          # platform-specific regressions surface in CI rather than at
+          # release time. The matrix stays small (3 ubuntu-runs cost
+          # nothing; macos / windows runners are billed at higher rates).
+          - os: macos-latest
+            python-version: "3.13.2"
+          - os: windows-latest
+            python-version: "3.13.2"
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install package + test extras (PEP 517 build via pyproject.toml)
-      run: |
-        python -m pip install --upgrade pip
-        pip install ".[tests]"
-    - name: Run offline tests
-      run: |
-        pytest ./tests/cfb
-        pytest ./tests/mbb
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+      - name: Install package + test extras
+        run: uv pip install --python "${{ matrix.python-version }}" --system ".[tests]"
+      - name: Run offline tests
+        env:
+          # Off by default; the workflow_dispatch input flips it on.
+          SDV_PY_LIVE_TESTS: ${{ github.event.inputs.live_tests == 'true' && '1' || '' }}
+        run: uv run --python "${{ matrix.python-version }}" --with-editable . pytest --maxfail=10
