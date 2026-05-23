@@ -479,3 +479,39 @@ def test_return_parsed_false_keeps_raw_dict():
     # Confirm raw shape preserved
     assert "sports" in raw, f"raw payload missing 'sports' key — got {list(raw)[:3]}"
 
+
+# ===========================================================================
+# 13. NHL EDGE parser layer
+# ===========================================================================
+
+
+def test_parse_edge_top10_handles_live_leaderboard():
+    import polars as pl
+
+    from sportsdataverse.nhl.nhl_edge import nhl_edge_skater_shot_speed_top_10
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_top10
+
+    raw = nhl_edge_skater_shot_speed_top_10(positions="all", sort_by="maxSpeed")
+    df = parse_edge_top10(raw)
+    assert isinstance(df, pl.DataFrame), (
+        f"expected polars DataFrame, got {type(df)}"
+    )
+    # Off-season may return empty; in-season expect rows.
+    if any(isinstance(v, list) and v for v in (raw or {}).values()):
+        assert df.height > 0, "non-empty raw payload but parse_edge_top10 returned 0 rows"
+
+
+def test_parser_for_edge_falls_back_to_generic():
+    from sportsdataverse.nhl.nhl_edge_parsers import (
+        parse_edge_detail,
+        parse_edge_payload,
+        parse_edge_top10,
+        parser_for_edge,
+    )
+
+    # Registered: top-10 → parse_edge_top10
+    assert parser_for_edge("nhl_edge_skater_shot_speed_top_10") is parse_edge_top10
+    # Registered: detail → parse_edge_detail
+    assert parser_for_edge("nhl_edge_skater_detail") is parse_edge_detail
+    # Unknown name → generic fallback
+    assert parser_for_edge("nhl_edge_does_not_exist") is parse_edge_payload
