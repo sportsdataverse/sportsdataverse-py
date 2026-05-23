@@ -30,7 +30,7 @@ post-release docstring fix needs to ship to the published version), pass
 `--version`:
 
 ```bash
-bash create_docs.sh --version 0.0.50
+bash create_docs.sh --version 0.0.51
 ```
 
 If you add a new module to `sportsdataverse/`, also add it to the manual

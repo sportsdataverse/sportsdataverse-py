@@ -51,14 +51,14 @@ from a released sdist (this is also the mode conda-forge expects):
 ```yaml
 source:
   # path: ..
-  url: https://pypi.io/packages/source/s/sportsdataverse/sportsdataverse-0.0.50.tar.gz
+  url: https://pypi.io/packages/source/s/sportsdataverse/sportsdataverse-0.0.51.tar.gz
   sha256: <sha256 of the sdist>
 ```
 
 Compute the `sha256`:
 
 ```sh
-curl -sL https://pypi.io/packages/source/s/sportsdataverse/sportsdataverse-0.0.50.tar.gz | sha256sum
+curl -sL https://pypi.io/packages/source/s/sportsdataverse/sportsdataverse-0.0.51.tar.gz | sha256sum
 ```
 
 ## Submitting to conda-forge
