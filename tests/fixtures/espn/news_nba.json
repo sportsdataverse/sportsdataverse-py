@@ -1,0 +1,1545 @@
+{
+  "header": "NBA News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/nba/",
+    "text": "All NBA News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 45539787,
+      "nowId": "1-45539787",
+      "contentKey": "45539787-1-6-1",
+      "dataSourceIdentifier": "e2b0f84a79caa",
+      "type": "Story",
+      "headline": "NBA championship and Finals MVP odds: Thunder favorites, Knicks' odds shorten",
+      "description": "The Knicks saw their title odds shorten after taking a 2-0 series lead, but the Thunder remain the favorite to win it all.",
+      "lastModified": "2026-05-23T18:31:02Z",
+      "published": "2026-05-23T18:31:02Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "5da571f580c00",
+          "id": 48846663,
+          "type": "header",
+          "name": "Jalen Brunson [608x342]",
+          "caption": "The Knicks saw their championship odds shorten after taking a 2-0 series lead over the Cavs.",
+          "alt": "Jalen Brunson",
+          "credit": "Nathaniel S. Butler/NBAE via Getty Images",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0522/r1662134_608x342_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "b0210dc536f3c",
+          "id": 48835288,
+          "type": "header",
+          "name": "Shai Gilgeous-Alexander  [1296x729]",
+          "caption": "Shai Gilgeous-Alexander how has even odds to win the Finals MVP.",
+          "alt": "Oklahoma City Thunder guard Shai Gilgeous-Alexander (2) takes a shot as San Antonio Spurs guard Stephon Castle (5) defends during the first quarter during game two of the western conference finals for the 2026 NBA playoffs at Paycom Center.",
+          "credit": "Alonzo Adams-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0521/r1661478_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "7ad6cd9d0dc7b",
+          "id": 48817396,
+          "type": "header",
+          "name": "Victor Wembanyama, Jalen Williams [608x342] - Copy",
+          "caption": "VIctor Wembanyama poured in 41 points and grabbed 24 boards in the Spurs' thrilling Game 1 win.",
+          "alt": "VIctor Wembanyama",
+          "credit": "Adam Pantozzi/NBAE via Getty Images",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0518/r1659720_608x342_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "9b31eeb847563",
+          "id": 48807135,
+          "type": "header",
+          "name": "Shai Gilgeous-Alexander [1296x729]",
+          "caption": "The Thunder enter the Western Conference Finals as the odds-on favorite to win the NBA championship.",
+          "alt": "Oklahoma City Thunder guard Shai Gilgeous-Alexander (2) looks for an outlet against San Antonio Spurs guard Stephon Castle (5) during the first half of an NBA basketball game, Tuesday, Jan. 13, 2026, in Oklahoma City.",
+          "credit": "AP Photo/Nate Billings",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0518/r1659986_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "9f1797b9f808a",
+          "id": 48770564,
+          "type": "header",
+          "name": "Cade Cunningham [1296x729]",
+          "caption": "Cade Cunningham and the Pistons are favored heading into Game 7.",
+          "alt": "Detroit Pistons guard Cade Cunningham (2) shoots over Cleveland Cavaliers guard Sam Merrill (5) in the second half during game five of the second round of the 2026 NBA Playoffs at Little Caesars Arena.",
+          "credit": "Rick Osentoski-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0514/r1658200_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "9888e27f11fcb",
+          "id": 48751164,
+          "type": "header",
+          "name": "De'Aaron Fox [1296x729]",
+          "caption": "The Spurs took care of business with a big Game 5 win at home against the Timberwolves.",
+          "alt": "De'Aaron Fox #4 & Dylan Harper #2 of the San Antonio Spurs high five during the game against the Minnesota Timberwolves during Round Two Game One of the 2026 NBA Playoffs on May 4, 2026 at the Frost Bank Center in San Antonio, Texas.",
+          "credit": "Joe Murphy/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0512/r1657210_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "158c287783532",
+          "id": 48742125,
+          "type": "header",
+          "name": "Jalen Brunson [1296x729]",
+          "caption": "The Knicks advanced Sunday with another blowout victory over the 76ers.",
+          "alt": "Jalen Brunson #11 of the New York Knicks celebrates during the game against the Philadelphia 76ers during Round Two Game Four of the 2026 NBA Playoffs on May 10, 2026 at the Wells Fargo Center in Philadelphia, Pennsylvania.",
+          "credit": "Jesse D. Garrabrant/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0511/r1656767_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "da4f4056c2b0a",
+          "id": 48686362,
+          "type": "header",
+          "name": "Anthony Edwards [1296x729]",
+          "caption": "Anthony Edwards returned to the court and helped lead Minnesota to the improbable Game 1 victory.\n",
+          "alt": "Anthony Edwards #5 of the Minnesota Timberwolves drives around Stephon Castle #5 of the San Antonio Spurs during the second half of a game in Game One of the Second Round of the NBA Western Conference Playoffs at Frost Bank Center on May 04, 2026 in San A",
+          "credit": "Ronald Cortes/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0505/r1653913_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "da0b9febe958a",
+          "id": 48713533,
+          "type": "header",
+          "name": "Cade Cunningham [1296x729]",
+          "caption": "Cade Cunningham and the Pistons have raced out to a 2-0 series advantage over the Cavs.",
+          "alt": "Detroit Pistons guard Cade Cunningham (2) drives against Cleveland Cavaliers forward Dean Wade, left, during the second half in Game 2 of a second-round NBA playoffs basketball series Thursday, May 7, 2026, in Detroit.",
+          "credit": "AP Photo/Duane Burleson",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0508/r1655414_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "5edf1cf6b57ce",
+          "id": 48695234,
+          "type": "header",
+          "name": "LeBron James  [1296x729]",
+          "caption": "LeBron James and the Lakers are big underdogs against the defending champion Thunder, and Game 1 only lengthened their odds.",
+          "alt": "LeBron James #23 of the Los Angeles Lakers works against Luguentz Dort #5 of the Oklahoma City Thunder during the second quarter in Game One of the Second Round of the NBA Western Conference Playoffs at Paycom Center on May 05, 2026 in Oklahoma City, Okla",
+          "credit": "Joshua Gateley/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0506/r1654426_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "c58ab0d30c0ee",
+          "id": 48675508,
+          "type": "header",
+          "name": "Jalen Brunson [1296x729]",
+          "caption": "The Knicks have surged to +850 to win the NBA Finals following the first-round exit by the Boston Celtics.",
+          "alt": "Josh Hart #3 and Jalen Brunson #11 of the New York Knicks high five during the game against the Atlanta Hawks during Round One Game Three of the 2026 NBA Playoffs on April 23, 2026 at State Farm Arena in Atlanta, Georgia.",
+          "credit": "Adam Hagy/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0504/r1653330_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "19aa6f528d1c1",
+          "id": 48666154,
+          "type": "header",
+          "name": "Joel Embiid [1296x729]",
+          "caption": "The 76ers' odds to win the NBA Finals have marginally shortened after beating the Celtics in seven games.",
+          "alt": "Joel Embiid #21 of the Philadelphia 76ers shoots the ball during the game against the Boston Celtics during Round One Game Seven of the 2026 NBA Playoffs on May 2, 2026 at TD Garden in Boston, Massachusetts.",
+          "credit": "Brian Babineau/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0503/r1652848_2_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "5709d497938f9",
+          "id": 48647878,
+          "type": "header",
+          "name": "Jalen Brunson [1296x729]",
+          "caption": "After entering the playoffs 18-1 to win the NBA championship, the Knicks enter the conference semifinals at 19-1.",
+          "alt": "Jalen Brunson #11 of the New York Knicks drives to the basket during the game against the Atlanta Hawks during Round One Game Six of the 2026 NBA Playoffs on April 30, 2026 at State Farm Arena in Atlanta, Georgia.",
+          "credit": "Adam Hagy/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0501/r1651931_2_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "b44040310c927",
+          "id": 48638613,
+          "type": "header",
+          "name": "Alperen Sengun [1296x729]",
+          "caption": "Even after pulling out the win over the Lakers on Wednesday night, the Rockets remain big long shots to win the NBA championship.",
+          "alt": "Alperen Sengun #28 of the Houston Rockets handles the ball during the game against the Los Angeles Lakers during Round One Game Five on April 29, 2026 at Crypto.Com Arena in Los Angeles, California.",
+          "credit": "Juan Ocampo/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0430/r1651502_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "1abc337a6083f",
+          "id": 48628904,
+          "type": "header",
+          "name": "Victor Wembanyama [1296x729]",
+          "caption": "The Spurs saw their title odds move from +450 to +500 after the series-clinching win over Portland.",
+          "alt": "Victor Wembanyama #1 of the San Antonio Spurs reacts after making a basket against the Portland Trail Blazers during the second quarter in Game Five of the First Round of the NBA Western Conference Playoffs at Frost Bank Center on April 28, 2026 in San An",
+          "credit": "Ronald Cortes/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0429/r1651026_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "531c047bb7ff3",
+          "id": 48619500,
+          "type": "header",
+          "name": "Cade Cunningham [1296x729]",
+          "caption": "Cade Cunningham and the Pistons have their backs against the wall after losing Game 4.",
+          "alt": "Cade Cunningham #2 of the Detroit Pistons shoots a fade away jumper over Franz Wagner #22 of the Orlando Magic during the first half of game four of the first round of the Eastern Conference Playoffs at the Kia Center on April 27, 2026 in Orlando, Florida",
+          "credit": "Don Juan Moore/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0428/r1650451_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "b73a28619a9c6",
+          "id": 48601243,
+          "type": "header",
+          "name": "Anthony Edwards [608x342]",
+          "caption": "The loss of Anthony Edwards put a damper on the Timberwolves' championship odds.",
+          "alt": "Anthony Edwards",
+          "credit": "AP Photo/Abbie Parr",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0426/r1649552_608x342_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "a3d8bc4329b73",
+          "id": 48581904,
+          "type": "header",
+          "name": "Karl-Anthony Towns [1296x729]",
+          "caption": "The Knicks have dropped from 18-1 to win the NBA championship to 30-1.",
+          "alt": "New York Knicks center Karl-Anthony Towns (32) handles the ball against the Atlanta Hawks in the first quarter during game three of the first round of the 2026 NBA Playoffs at State Farm Arena.",
+          "credit": "Brett Davis-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0424/r1648593_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "cc367c832697f",
+          "id": 48560968,
+          "type": "header",
+          "name": "LeBron James for Odds file (260422) [1296x729]",
+          "caption": "LeBron James and the Los Angeles Lakers were 150-1 long shots to win the title entering their first-round series against the Houston Rockets.",
+          "alt": "Los Angeles Lakers forward LeBron James (23) and forward Rui Hachimura (28) on the court in the first half of game two of the first round of the 2026 NBA Playoffs against the Houston Rockets at Crypto.com Arena.",
+          "credit": "Jayne Kamin-Oncea-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0422/r1647505_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "c359601026722",
+          "id": 48551557,
+          "type": "header",
+          "name": "Jalen Brunson [1296x729]",
+          "caption": "The Knicks fell to 22-1 to win the NBA championship following Monday's Game 2 loss.",
+          "alt": "Jalen Brunson #11 of the New York Knicks drives to the basket during the game against the Atlanta Hawks during Round One Game Two of the 2026 NBA Playoffs on April 20, 2026 at Madison Square Garden in New York City, New York.",
+          "credit": "David L. Nemec/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0421/r1647015_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "33b8591c7a13d",
+          "id": 48544122,
+          "type": "header",
+          "name": "Cade Cunningham [1296x729]",
+          "caption": "Though Cade Cunningham scored 39 points, Orlando's defense was a problem for the Pistons in Game 1.",
+          "alt": "Orlando Magic center Wendell Carter Jr., right, defends against a shot by Detroit Pistons guard Cade Cunningham (2) during the second half in Game 1 of a first-round NBA basketball playoffs series Sunday, April 19, 2026, in Detroit.",
+          "credit": "AP Photo/Duane Burleson",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0420/r1646653_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "aa561aa0fa613",
+          "id": 48522150,
+          "type": "header",
+          "name": "OKC Thunder [1296x729]",
+          "caption": "The Thunder enter the playoffs as the favorites to win the NBA Finals.",
+          "alt": "Oklahoma City Thunder guard Shai Gilgeous-Alexander (2) celebrates with Oklahoma City Thunder guard Jalen Williams (8) after scoring against the Utah Jazz during the first quarter at Paycom Center.",
+          "credit": "Alonzo Adams-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0418/r1645474_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "1a67f12e47ec6",
+          "id": 48504182,
+          "type": "header",
+          "name": "Shai Gilgeous-Alexander [1296x729]",
+          "caption": "Shai Gilgeous-Alexander and the Thunder enter the playoffs as the favorites to win it all.",
+          "alt": "Shai Gilgeous-Alexander #2 and Chet Holmgren #7 of the Oklahoma City Thunder celebrate during the second half against the Utah Jazz at Paycom Center on April 5, 2026 in Oklahoma City, Oklahoma.",
+          "credit": "Joshua Gateley/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0416/r1644533_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "c074b52e1791b",
+          "id": 48478598,
+          "type": "header",
+          "name": "Jayson Tatum [1296x729]",
+          "caption": "Jayson Tatum averaged 21.8 PPG in 16 regular-season games leading up to the playoffs.",
+          "alt": "Jayson Tatum #0 of the Boston Celtics dribbles the ball during the game against the New York Knicks on April 9, 2026 at Madison Square Garden in New York City, New York.",
+          "credit": "Nathaniel S. Butler/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0413/r1643069_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "fa296758e2ec6",
+          "id": 48432601,
+          "type": "header",
+          "name": "Austin Reaves [1296x729]",
+          "caption": "The Lakers miss the perimeter shooting that Austin Reaves provides.",
+          "alt": "Los Angeles Lakers guard Austin Reaves (15) shoots over Minnesota Timberwolves center Naz Reid (11) during game 5 of the first round of the NBA Western Conference Playoffs between the Minnesota Timberwolves and the Los Angeles Lakers on April 30, 2025.",
+          "credit": "Jevone Moore/Icon Sportswire",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0408/r1640598_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "f1f12ac676b8d",
+          "id": 48369755,
+          "type": "header",
+          "name": "Luka Doncic [1296x729]",
+          "caption": "The Lakers' championship odds are on the move again after Luka Doncic's injury.",
+          "alt": "Luka Doncic #77 of the Los Angeles Lakers handles the ball during the game against the Miami Heat on March 19, 2026 at Kaseya Center in Miami, Florida.",
+          "credit": "Issac Baldizon/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0401/r1637203_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "bbb4548215da7",
+          "id": 48306183,
+          "type": "header",
+          "name": "LeBron James  [1296x729]",
+          "caption": "LeBron James and the Lakers are on a roll as March winds down.",
+          "alt": "Los Angeles Lakers forward LeBron James (23) scores on a breakaway dunk during the first half of an NBA basketball game against the Orlando Magic, Saturday, March 21, 2026, in Orlando, Fla.",
+          "credit": "AP Photo/Phelan M. Ebenhack",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0325/r1633804_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "215d25ef2a1b6",
+          "id": 48243944,
+          "type": "header",
+          "name": "Victor Wembanyama [1296x729]",
+          "caption": "Victor Wembanyama and the Spurs continue to see their championship odds shift.",
+          "alt": "Victor Wembanyama #1 of the San Antonio Spurs handles the ball during the game against the Detroit Pistons on March 5, 2026 at the Frost Bank Center in San Antonio, Texas.",
+          "credit": "Michael Gonzales/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0318/r1630444_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "9e334ef4722ad",
+          "id": 48178100,
+          "type": "header",
+          "name": "Jayson Tatum [1296x729]",
+          "caption": "The Celtics' title odds have shortened since Jayson Tatum's return last week.",
+          "alt": "Jayson Tatum #0 of the Boston Celtics celebrates after scoring against the Dallas Mavericks during the second quarter at TD Garden on March 06, 2026 in Boston, Massachusetts.",
+          "credit": "Maddie Meyer/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0311/r1627037_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "5deaeae4d2653",
+          "id": 48100694,
+          "type": "header",
+          "name": "Victor Wembanyama [1296x729]",
+          "caption": "Led by Victor Wembanyama, the Spurs continue to see their NBA championship odds shorten.",
+          "alt": "Victor Wembanyama #1 and Devin Vassell #24 of the San Antonio Spurs looks on during the game against the New Orleans Pelicans on January 25, 2026 at the Frost Bank Center in San Antonio, Texas.",
+          "credit": "Michael Gonzales/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0304/r1623142_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "35ef9f05a7788",
+          "id": 48034284,
+          "type": "header",
+          "name": "Cade Cunningham [1296x729]",
+          "alt": "Cade Cunningham #2 of the Detroit Pistons handles the ball during the game against the Denver Nuggets on February 3, 2026 at Little Caesars Arena in Detroit, Michigan.",
+          "credit": "Brian Sevald/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0225/r1619944_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "30372d1b368c7",
+          "id": 47543963,
+          "type": "header",
+          "name": "Shai Gilgeous-Alexander [1296x729]",
+          "caption": "Even after a rough stretch of games, the Thunder remain the heavy favorites to win the NBA championship.",
+          "alt": "Oklahoma City Thunder guard Shai Gilgeous-Alexander (2) against the Phoenix Suns in the first half at Mortgage Matchup Center.",
+          "credit": "Mark J. Rebilas-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0108/r1597858_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "276843ec63e24",
+          "id": 47829303,
+          "type": "header",
+          "name": "Donovan Mitchell [1296x729]",
+          "caption": "Adding James Harden to a talented roster with the likes of Donovan Mitchell gives the Cavs a higher upside this season.",
+          "alt": "Cleveland Cavaliers guard Donovan Mitchell (45) against the Phoenix Suns in the first half at Mortgage Matchup Center.",
+          "credit": "Mark J. Rebilas-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0204/r1610437_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "023833b137dc1",
+          "id": 47755986,
+          "type": "header",
+          "name": "Jaylen Brown [1296x729]",
+          "caption": "The Celtics now have shorter odds to win the NBA title than the Spurs, Rockets, Knicks and Pistons.",
+          "alt": "Jaylen Brown #7 of the Boston Celtics shoots against the Portland Trail Blazers at TD Garden on January 26, 2026 in Boston, Massachusetts.",
+          "credit": "Adam Glanzman/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0128/r1606856_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "ec51444fa8091",
+          "id": 47682923,
+          "type": "header",
+          "name": "Jamal Murray  [1296x729]",
+          "caption": "Jamal Murray has led the Nuggets while Nikola Jokic recovers from injury.",
+          "alt": "Jamal Murray #27 of the Denver Nuggets dribbles the ball during the game against the Dallas Mavericks on January 14, 2026 at American Airlines Center in Dallas, Texas.",
+          "credit": "Tim Heitman/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0121/r1603674_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "a7b6afd71566e",
+          "id": 47460988,
+          "type": "header",
+          "name": "Victor Wembanyama [1296x729]",
+          "caption": "Victor Wembanyama and the Spurs have seen their odds to win the NBA championship shorten in the past week.",
+          "alt": "Victor Wembanyama #1 of the San Antonio Spurs looks on during the game against the Cleveland Cavaliers on December 29, 2025 at the Frost Bank Center in San Antonio, Texas.",
+          "credit": "Michael Gonzales/NBAE via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2025/1231/r1595259_1296x729_16-9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 611584,
+          "type": "league",
+          "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49",
+          "description": "Sports Betting",
+          "sportId": 22000,
+          "leagueId": 22000,
+          "league": {
+            "id": 22000,
+            "description": "Sports Betting"
+          }
+        },
+        {
+          "id": 137817,
+          "type": "topic",
+          "guid": "14f579db-79ec-a898-9405-8fec63e16063",
+          "description": "news \u2013 sports betting",
+          "sportId": 0,
+          "topicId": 179
+        },
+        {
+          "id": 129403,
+          "type": "topic",
+          "guid": "35ca0660-5953-cf5d-cd90-758abb379355",
+          "description": "news - nba",
+          "sportId": 0,
+          "topicId": 122
+        },
+        {
+          "id": 9577,
+          "type": "league",
+          "uid": "s:40~l:46",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+          "description": "NBA",
+          "sportId": 46,
+          "leagueId": 46,
+          "league": {
+            "id": 46,
+            "description": "NBA",
+            "abbreviation": "NBA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4695,
+          "type": "team",
+          "uid": "s:40~l:46~t:25",
+          "guid": "bd458c44-2d33-47eb-cebc-35d3d4ac595c",
+          "description": "Oklahoma City Thunder",
+          "sportId": 46,
+          "teamId": 25,
+          "team": {
+            "id": 25,
+            "description": "Oklahoma City Thunder",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/okc/oklahoma-city-thunder"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/okc/oklahoma-city-thunder"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4293,
+          "type": "team",
+          "uid": "s:40~l:46~t:18",
+          "guid": "61719eb2-11c3-4e3d-90c3-0a1319fd850b",
+          "description": "New York Knicks",
+          "sportId": 46,
+          "teamId": 18,
+          "team": {
+            "id": 18,
+            "description": "New York Knicks",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/ny/new-york-knicks"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/ny/new-york-knicks"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4408,
+          "type": "team",
+          "uid": "s:40~l:46~t:5",
+          "guid": "ec79ad1f-e6d2-7762-a2db-7fe97d35126b",
+          "description": "Cleveland Cavaliers",
+          "sportId": 46,
+          "teamId": 5,
+          "team": {
+            "id": 5,
+            "description": "Cleveland Cavaliers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/cle/cleveland-cavaliers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/cle/cleveland-cavaliers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4548,
+          "type": "team",
+          "uid": "s:40~l:46~t:24",
+          "guid": "8aef8547-32f5-0943-a1de-e734567674cc",
+          "description": "San Antonio Spurs",
+          "sportId": 46,
+          "teamId": 24,
+          "team": {
+            "id": 24,
+            "description": "San Antonio Spurs",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 696244,
+          "type": "contributor",
+          "guid": "b4b4279f-6f4d-329a-a5c2-1eeceea9f2bb",
+          "description": "Doug Greenberg",
+          "slug": "doug-greenberg",
+          "contributor": {
+            "id": 4050,
+            "description": "Doug Greenberg"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49"
+        },
+        {
+          "type": "guid",
+          "guid": "14f579db-79ec-a898-9405-8fec63e16063"
+        },
+        {
+          "type": "guid",
+          "guid": "35ca0660-5953-cf5d-cd90-758abb379355"
+        },
+        {
+          "type": "guid",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154"
+        },
+        {
+          "type": "guid",
+          "guid": "bd458c44-2d33-47eb-cebc-35d3d4ac595c"
+        },
+        {
+          "type": "guid",
+          "guid": "61719eb2-11c3-4e3d-90c3-0a1319fd850b"
+        },
+        {
+          "type": "guid",
+          "guid": "ec79ad1f-e6d2-7762-a2db-7fe97d35126b"
+        },
+        {
+          "type": "guid",
+          "guid": "8aef8547-32f5-0943-a1de-e734567674cc"
+        },
+        {
+          "type": "guid",
+          "guid": "b4b4279f-6f4d-329a-a5c2-1eeceea9f2bb"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/espn/betting/story/_/id/45539787/2026-nba-finals-odds-mvp-2025-26-championship-betting"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/wireless/story?storyId=45539787"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/45539787"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=45539787"
+          }
+        }
+      },
+      "byline": "Doug Greenberg"
+    },
+    {
+      "id": 48817317,
+      "nowId": "1-48817317",
+      "contentKey": "48817317-1-6-1",
+      "dataSourceIdentifier": "b8ef9ddf507b1",
+      "type": "Story",
+      "headline": "Saturday's NBA betting tips, DFS picks: Will Donovan Mitchell get Cavs back in series?",
+      "description": "Jim McCormick breaks down Game 3 of Knicks-Cavs in the Eastern Conference Finals and offers his favorite bets and DFS plays.",
+      "lastModified": "2026-05-23T16:10:47Z",
+      "published": "2026-05-23T16:10:47Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "f2ea0d7ea04c2",
+          "id": 48852408,
+          "type": "header",
+          "name": "Donovan Mitchell [608x342]",
+          "caption": "Donovan Mitchell should see plenty of scoring opportunities playing at home in Game 3.",
+          "alt": "Donovan Mitchell",
+          "credit": "Vincent Carchietta/Imagn Images",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0523/r1662373_608x342_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Brian Windhorst\u2019s takeaways from Cavs-Knicks Game 2: \u2018A certified powerhouse team!\u2019",
+          "caption": "On Get Up, Brian Windhorst, Alan Hahn, Jay Williams and Joe Fortenbaugh react to the New York Knicks going up 2-0 in the series after a 109-93 win over the Cleveland Cavaliers.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0522/ss_20260522_082154676_3537276566/ss_20260522_082154676_3537276566.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9577,
+          "type": "league",
+          "uid": "s:40~l:46",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+          "description": "NBA",
+          "sportId": 46,
+          "leagueId": 46,
+          "league": {
+            "id": 46,
+            "description": "NBA",
+            "abbreviation": "NBA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 129403,
+          "type": "topic",
+          "guid": "35ca0660-5953-cf5d-cd90-758abb379355",
+          "description": "news - nba",
+          "sportId": 0,
+          "topicId": 122
+        },
+        {
+          "id": 611584,
+          "type": "league",
+          "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49",
+          "description": "Sports Betting",
+          "sportId": 22000,
+          "leagueId": 22000,
+          "league": {
+            "id": 22000,
+            "description": "Sports Betting"
+          }
+        },
+        {
+          "id": 137817,
+          "type": "topic",
+          "guid": "14f579db-79ec-a898-9405-8fec63e16063",
+          "description": "news \u2013 sports betting",
+          "sportId": 0,
+          "topicId": 179
+        },
+        {
+          "id": 4293,
+          "type": "team",
+          "uid": "s:40~l:46~t:18",
+          "guid": "61719eb2-11c3-4e3d-90c3-0a1319fd850b",
+          "description": "New York Knicks",
+          "sportId": 46,
+          "teamId": 18,
+          "team": {
+            "id": 18,
+            "description": "New York Knicks",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/ny/new-york-knicks"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/ny/new-york-knicks"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4408,
+          "type": "team",
+          "uid": "s:40~l:46~t:5",
+          "guid": "ec79ad1f-e6d2-7762-a2db-7fe97d35126b",
+          "description": "Cleveland Cavaliers",
+          "sportId": 46,
+          "teamId": 5,
+          "team": {
+            "id": 5,
+            "description": "Cleveland Cavaliers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/cle/cleveland-cavaliers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/cle/cleveland-cavaliers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 187348,
+          "type": "athlete",
+          "uid": "s:40~l:46~a:3934672",
+          "guid": "89519c75-cf8a-38e7-1151-b6247a2d4535",
+          "description": "Jalen Brunson",
+          "sportId": 46,
+          "athleteId": 3934672,
+          "athlete": {
+            "id": 3934672,
+            "description": "Jalen Brunson",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/3934672/jalen-brunson"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/3934672/jalen-brunson"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 168848,
+          "type": "athlete",
+          "uid": "s:40~l:46~a:3908809",
+          "guid": "6482ece5-f903-92e2-ffdd-13901fdd3a49",
+          "description": "Donovan Mitchell",
+          "sportId": 46,
+          "athleteId": 3908809,
+          "athlete": {
+            "id": 3908809,
+            "description": "Donovan Mitchell",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/3908809/donovan-mitchell"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/3908809/donovan-mitchell"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 168989,
+          "type": "athlete",
+          "uid": "s:40~l:46~a:3062679",
+          "guid": "4384c489-e5e6-695a-1c5f-b3e66edcb897",
+          "description": "Josh Hart",
+          "sportId": 46,
+          "athleteId": 3062679,
+          "athlete": {
+            "id": 3062679,
+            "description": "Josh Hart",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/3062679/josh-hart"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/3062679/josh-hart"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 388962,
+          "type": "athlete",
+          "uid": "s:40~l:46~a:4065778",
+          "guid": "ac438cf4-ae0c-8aec-7efc-a048bfe3df5b",
+          "description": "Max Strus",
+          "sportId": 46,
+          "athleteId": 4065778,
+          "athlete": {
+            "id": 4065778,
+            "description": "Max Strus",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/4065778/max-strus"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/4065778/max-strus"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 701343,
+          "type": "contributor",
+          "guid": "85cd03e0-50b4-387e-9711-d7faa737259f",
+          "description": "Jim McCormick",
+          "slug": "jim-mccormick",
+          "contributor": {
+            "id": 1749,
+            "description": "Jim McCormick"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154"
+        },
+        {
+          "type": "guid",
+          "guid": "35ca0660-5953-cf5d-cd90-758abb379355"
+        },
+        {
+          "type": "guid",
+          "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49"
+        },
+        {
+          "type": "guid",
+          "guid": "14f579db-79ec-a898-9405-8fec63e16063"
+        },
+        {
+          "type": "guid",
+          "guid": "61719eb2-11c3-4e3d-90c3-0a1319fd850b"
+        },
+        {
+          "type": "guid",
+          "guid": "ec79ad1f-e6d2-7762-a2db-7fe97d35126b"
+        },
+        {
+          "type": "guid",
+          "guid": "89519c75-cf8a-38e7-1151-b6247a2d4535"
+        },
+        {
+          "type": "guid",
+          "guid": "6482ece5-f903-92e2-ffdd-13901fdd3a49"
+        },
+        {
+          "type": "guid",
+          "guid": "4384c489-e5e6-695a-1c5f-b3e66edcb897"
+        },
+        {
+          "type": "guid",
+          "guid": "ac438cf4-ae0c-8aec-7efc-a048bfe3df5b"
+        },
+        {
+          "type": "guid",
+          "guid": "85cd03e0-50b4-387e-9711-d7faa737259f"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/fantasy/basketball/story/_/id/48817317/daily-fantasy-basketball-tips-nba-betting-odds-picks-dfs-playoffs-saturday-5-23-2026"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/wireless/story?storyId=48817317"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48817317"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48817317"
+          }
+        }
+      },
+      "byline": "Jim McCormick"
+    },
+    {
+      "id": 48848352,
+      "nowId": "1-48848352",
+      "contentKey": "48848352-1-6-1",
+      "dataSourceIdentifier": "9a56431212cc9",
+      "type": "Story",
+      "headline": "Down 0-2? Donovan Mitchell and the Cavaliers have been here before",
+      "description": "Through a roller-coaster season, the Cavaliers have turned to one man in times of trouble.",
+      "lastModified": "2026-05-23T17:37:07Z",
+      "published": "2026-05-23T17:37:07Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "1c9b1ffb0adb6",
+          "id": 48848484,
+          "type": "header",
+          "name": "d mitch [608x342]",
+          "credit": "Photo by Brian Babineau/NBAE via Getty Images",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0523/r1662251_608x342_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Josh Hart leads Knicks to Game 2 win with playoff career high",
+          "caption": "Josh Hart drops 26 points to lead the Knicks to a 2-0 series lead in the Eastern Conference finals. ",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0521/c89c0083c2e24025821dbbeb04dfcb901368/c89c0083c2e24025821dbbeb04dfcb901368.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9577,
+          "type": "league",
+          "uid": "s:40~l:46",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+          "description": "NBA",
+          "sportId": 46,
+          "leagueId": 46,
+          "league": {
+            "id": 46,
+            "description": "NBA",
+            "abbreviation": "NBA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4408,
+          "type": "team",
+          "uid": "s:40~l:46~t:5",
+          "guid": "ec79ad1f-e6d2-7762-a2db-7fe97d35126b",
+          "description": "Cleveland Cavaliers",
+          "sportId": 46,
+          "teamId": 5,
+          "team": {
+            "id": 5,
+            "description": "Cleveland Cavaliers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/cle/cleveland-cavaliers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/cle/cleveland-cavaliers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 696270,
+          "type": "contributor",
+          "guid": "4a6cc67f-ee21-3b0c-a8e6-67c4b3703876",
+          "description": "Jamal Collier",
+          "slug": "jamal-collier",
+          "contributor": {
+            "id": 3897,
+            "description": "Jamal Collier"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154"
+        },
+        {
+          "type": "guid",
+          "guid": "ec79ad1f-e6d2-7762-a2db-7fe97d35126b"
+        },
+        {
+          "type": "guid",
+          "guid": "4a6cc67f-ee21-3b0c-a8e6-67c4b3703876"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nba/story/_/id/48848352/down-0-2-donovan-mitchell-cleveland-cavaliers-here-before"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nba/story?storyId=48848352"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48848352"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48848352"
+          }
+        }
+      },
+      "byline": "Jamal Collier"
+    },
+    {
+      "id": 48850043,
+      "nowId": "1-48850043",
+      "contentKey": "48850043-1-5-1",
+      "dataSourceIdentifier": "3f2bca63d6acf",
+      "type": "HeadlineNews",
+      "headline": "Wembanyama on Spurs' Game 3 loss: Got to be better 'team player'",
+      "description": "Victor Wembanyama had a team-high 26 points but acknowledged he needs to be \"more of a team player\" after the Spurs lost 123-108 in Game 3 and trail the Thunder 2-1 in the Western Conference finals.",
+      "lastModified": "2026-05-23T15:19:55Z",
+      "published": "2026-05-23T15:19:55Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "ee65e875b7ba5",
+          "id": 48849845,
+          "type": "header",
+          "name": "Victor Wembanyama [600x400]",
+          "caption": "Victor Wembanyama, right, led the Spurs with 26 points but said he needs to be \"more of a team player\" after Friday's Game 3 loss put San Antonio in a 2-1 series hole.",
+          "credit": "Jesse D. Garrabrant/NBAE via Getty Images",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2026/0523/r1662291_600x400_3-2.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9577,
+          "type": "league",
+          "uid": "s:40~l:46",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+          "description": "NBA",
+          "sportId": 46,
+          "leagueId": 46,
+          "league": {
+            "id": 46,
+            "description": "NBA",
+            "abbreviation": "NBA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4548,
+          "type": "team",
+          "uid": "s:40~l:46~t:24",
+          "guid": "8aef8547-32f5-0943-a1de-e734567674cc",
+          "description": "San Antonio Spurs",
+          "sportId": 46,
+          "teamId": 24,
+          "team": {
+            "id": 24,
+            "description": "San Antonio Spurs",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 603357,
+          "type": "athlete",
+          "uid": "s:40~l:46~a:5104157",
+          "guid": "0e8844b2-d923-3926-82d2-f19a29d69490",
+          "description": "Victor Wembanyama",
+          "sportId": 46,
+          "athleteId": 5104157,
+          "athlete": {
+            "id": 5104157,
+            "description": "Victor Wembanyama",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/5104157/victor-wembanyama"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nba/player/_/id/5104157/victor-wembanyama"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4695,
+          "type": "team",
+          "uid": "s:40~l:46~t:25",
+          "guid": "bd458c44-2d33-47eb-cebc-35d3d4ac595c",
+          "description": "Oklahoma City Thunder",
+          "sportId": 46,
+          "teamId": 25,
+          "team": {
+            "id": 25,
+            "description": "Oklahoma City Thunder",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/okc/oklahoma-city-thunder"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/okc/oklahoma-city-thunder"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 701625,
+          "type": "contributor",
+          "guid": "59e56689-5313-381e-bc03-00fcae3aa714",
+          "description": "Michael C. Wright",
+          "slug": "michael-c.-wright",
+          "contributor": {
+            "id": 2126,
+            "description": "Michael C. Wright"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154"
+        },
+        {
+          "type": "guid",
+          "guid": "8aef8547-32f5-0943-a1de-e734567674cc"
+        },
+        {
+          "type": "guid",
+          "guid": "0e8844b2-d923-3926-82d2-f19a29d69490"
+        },
+        {
+          "type": "guid",
+          "guid": "bd458c44-2d33-47eb-cebc-35d3d4ac595c"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "59e56689-5313-381e-bc03-00fcae3aa714"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nba/story/_/id/48850043/got-better-team-player"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nba/story?storyId=48850043"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48850043"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48850043"
+          }
+        }
+      },
+      "byline": "Michael C. Wright"
+    },
+    {
+      "id": 48850012,
+      "nowId": "1-48850012",
+      "contentKey": "48850012-1-22-1",
+      "dataSourceIdentifier": "e22c41ff9b522",
+      "type": "Preview",
+      "headline": "Oklahoma City visits San Antonio with 2-1 series lead",
+      "description": "Oklahoma City Thunder (64-18, first in the Western Conference) vs. San Antonio Spurs (62-20, second in the Western Conference)",
+      "lastModified": "2026-05-23T06:04:01Z",
+      "published": "2026-05-23T06:04:01Z",
+      "images": [
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.awayhome.1",
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.applewatch.awayhome.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.homeaway.1",
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.applewatch.homeaway.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.awayhome.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.homeaway.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.awayhome.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.homeaway.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.awayhome.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.homeaway.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.awayhome.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.homeaway.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.awayhome.5x2.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/basketball/nba/events/401873200.png?templateId=espn.all.homeaway.5x2.2"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9577,
+          "type": "league",
+          "uid": "s:40~l:46",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154",
+          "description": "NBA",
+          "sportId": 46,
+          "leagueId": 46,
+          "league": {
+            "id": 46,
+            "description": "NBA",
+            "abbreviation": "NBA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nba/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4548,
+          "type": "team",
+          "uid": "s:40~l:46~t:24",
+          "guid": "8aef8547-32f5-0943-a1de-e734567674cc",
+          "description": "San Antonio Spurs",
+          "sportId": 46,
+          "teamId": 24,
+          "team": {
+            "id": 24,
+            "description": "San Antonio Spurs",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4695,
+          "type": "team",
+          "uid": "s:40~l:46~t:25",
+          "guid": "bd458c44-2d33-47eb-cebc-35d3d4ac595c",
+          "description": "Oklahoma City Thunder",
+          "sportId": 46,
+          "teamId": 25,
+          "team": {
+            "id": 25,
+            "description": "Oklahoma City Thunder",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/okc/oklahoma-city-thunder"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/okc/oklahoma-city-thunder"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "event",
+          "uid": "s:40~l:46~e:401873200",
+          "guid": "c1615c2f-33be-3988-a87d-435c17720ee5",
+          "description": "Oklahoma City Thunder @ San Antonio Spurs",
+          "eventId": 401873200,
+          "event": {
+            "id": 401873200,
+            "sport": "basketball",
+            "league": "nba",
+            "description": "Oklahoma City Thunder @ San Antonio Spurs"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "7b3729c9-7f69-308a-bf8a-ee15a6aba154"
+        },
+        {
+          "type": "guid",
+          "guid": "8aef8547-32f5-0943-a1de-e734567674cc"
+        },
+        {
+          "type": "guid",
+          "guid": "bd458c44-2d33-47eb-cebc-35d3d4ac595c"
+        },
+        {
+          "type": "guid",
+          "guid": "c1615c2f-33be-3988-a87d-435c17720ee5"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "http://www.espn.com/nba/preview?gameId=401873200"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nba/story?storyId=48850012"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48850012"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48850012"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "$meta": {
+    "parameters": {
+      "season": [
+        "2026"
+      ],
+      "seasontypes": [
+        "3"
+      ],
+      "dates": [
+        "20260523"
+      ]
+    }
+  },
+  "count": 1,
+  "pageIndex": 1,
+  "pageSize": 3,
+  "pageCount": 1,
+  "items": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401873343?lang=en&region=us"
+    }
+  ]
+}

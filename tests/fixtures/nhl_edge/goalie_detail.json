@@ -1,0 +1,268 @@
+{
+  "player": {
+    "id": 8480313,
+    "firstName": {
+      "default": "Logan"
+    },
+    "lastName": {
+      "default": "Thompson"
+    },
+    "birthDate": "1997-02-25",
+    "shootsCatches": "R",
+    "sweaterNumber": 48,
+    "slug": "logan-thompson-8480313",
+    "headshot": "https://assets.nhle.com/mugs/nhl/20242025/WSH/8480313.png",
+    "wins": 31,
+    "losses": 6,
+    "overtimeLosses": 6,
+    "goalsAgainstAvg": 2.48506,
+    "savePctg": 0.91041,
+    "gamesPlayed": 43,
+    "team": {
+      "commonName": {
+        "default": "Capitals"
+      },
+      "placeNameWithPreposition": {
+        "default": "Washington",
+        "fr": "de Washington"
+      },
+      "abbrev": "WSH",
+      "teamLogo": {
+        "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+        "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+      }
+    }
+  },
+  "seasonsWithEdgeStats": [
+    {
+      "id": 20212022,
+      "gameTypes": [
+        2
+      ]
+    },
+    {
+      "id": 20222023,
+      "gameTypes": [
+        2
+      ]
+    },
+    {
+      "id": 20232024,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20242025,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20252026,
+      "gameTypes": [
+        2
+      ]
+    }
+  ],
+  "stats": {
+    "goalsAgainstAvg": {
+      "value": 2.48506,
+      "percentile": 0.8824,
+      "leagueAvg": 2.929
+    },
+    "gamesAbove900": {
+      "value": 0.5952,
+      "percentile": 0.8431,
+      "leagueAvg": 0.5164
+    },
+    "goalDifferentialPer60": {
+      "value": 1.4437,
+      "percentile": 1.0,
+      "leagueAvg": 0.1159
+    },
+    "goalSupportAvg": {
+      "value": 3.92876,
+      "percentile": 1.0,
+      "leagueAvg": 2.929
+    },
+    "pointPctg": {
+      "value": 0.7907,
+      "percentile": 1.0,
+      "leagueAvg": 0.4438
+    }
+  },
+  "shotLocationSummary": [
+    {
+      "locationCode": "all",
+      "goalsAgainst": 105,
+      "goalsAgainstPercentile": 0.6078,
+      "goalsAgainstLeagueAvg": 71.4272,
+      "saves": 1067,
+      "savesPercentile": 0.4706,
+      "savesLeagueAvg": 643.835,
+      "savePctg": 0.91041,
+      "savePctgPercentile": 0.8431,
+      "savePctgLeagueAvg": 0.900138
+    },
+    {
+      "locationCode": "high",
+      "goalsAgainst": 52,
+      "goalsAgainstPercentile": 0.6471,
+      "goalsAgainstLeagueAvg": 36.6117,
+      "saves": 247,
+      "savesPercentile": 0.4706,
+      "savesLeagueAvg": 150.8932,
+      "savePctg": 0.826087,
+      "savePctgPercentile": 0.7647,
+      "savePctgLeagueAvg": 0.804743
+    },
+    {
+      "locationCode": "long",
+      "goalsAgainst": 11,
+      "goalsAgainstPercentile": 0.1765,
+      "goalsAgainstLeagueAvg": 4.7864,
+      "saves": 239,
+      "savesPercentile": 0.4902,
+      "savesLeagueAvg": 151.9417,
+      "savePctg": 0.956,
+      "savePctgPercentile": 0.1765,
+      "savePctgLeagueAvg": 0.96946
+    },
+    {
+      "locationCode": "mid",
+      "goalsAgainst": 28,
+      "goalsAgainstPercentile": 0.7647,
+      "goalsAgainstLeagueAvg": 22.7961,
+      "saves": 298,
+      "savesPercentile": 0.4902,
+      "savesLeagueAvg": 180.3204,
+      "savePctg": 0.91411,
+      "savePctgPercentile": 0.8824,
+      "savePctgLeagueAvg": 0.887768
+    }
+  ],
+  "shotLocationDetails": [
+    {
+      "area": "Behind the Net",
+      "saves": 7,
+      "savesPercentile": 0.7059,
+      "savePctg": 0.875,
+      "savePctgPercentile": 0.1923
+    },
+    {
+      "area": "Beyond Red Line",
+      "saves": 33,
+      "savesPercentile": 0.7157,
+      "savePctg": 1.0,
+      "savePctgPercentile": 0.0385
+    },
+    {
+      "area": "Center Point",
+      "saves": 82,
+      "savesPercentile": 0.7255,
+      "savePctg": 0.901099,
+      "savePctgPercentile": 0.0385
+    },
+    {
+      "area": "Crease",
+      "saves": 30,
+      "savesPercentile": 0.7549,
+      "savePctg": 0.789474,
+      "savePctgPercentile": 0.7308
+    },
+    {
+      "area": "High Slot",
+      "saves": 93,
+      "savesPercentile": 0.7451,
+      "savePctg": 0.939394,
+      "savePctgPercentile": 1.0
+    },
+    {
+      "area": "L Circle",
+      "saves": 111,
+      "savesPercentile": 0.7745,
+      "savePctg": 0.932773,
+      "savePctgPercentile": 0.8077
+    },
+    {
+      "area": "L Corner",
+      "saves": 2,
+      "savesPercentile": 0.6765,
+      "savePctg": 0.666667,
+      "savePctgPercentile": 0.2308
+    },
+    {
+      "area": "L Net Side",
+      "saves": 30,
+      "savesPercentile": 0.7843,
+      "savePctg": 0.967742,
+      "savePctgPercentile": 0.9038
+    },
+    {
+      "area": "L Point",
+      "saves": 81,
+      "savesPercentile": 0.7157,
+      "savePctg": 0.987805,
+      "savePctgPercentile": 0.6923
+    },
+    {
+      "area": "Low Slot",
+      "saves": 217,
+      "savesPercentile": 0.7255,
+      "savePctg": 0.831418,
+      "savePctgPercentile": 0.7885
+    },
+    {
+      "area": "Offensive Neutral Zone",
+      "saves": 22,
+      "savesPercentile": 0.6275,
+      "savePctg": 1.0,
+      "savePctgPercentile": 0.0192
+    },
+    {
+      "area": "Outside L",
+      "saves": 69,
+      "savesPercentile": 0.7451,
+      "savePctg": 0.945205,
+      "savePctgPercentile": 0.1731
+    },
+    {
+      "area": "Outside R",
+      "saves": 74,
+      "savesPercentile": 0.8431,
+      "savePctg": 0.973684,
+      "savePctgPercentile": 0.6923
+    },
+    {
+      "area": "R Circle",
+      "saves": 94,
+      "savesPercentile": 0.7255,
+      "savePctg": 0.87037,
+      "savePctgPercentile": 0.1154
+    },
+    {
+      "area": "R Corner",
+      "saves": 3,
+      "savesPercentile": 0.8333,
+      "savePctg": 1.0,
+      "savePctgPercentile": 0.2115
+    },
+    {
+      "area": "R Net Side",
+      "saves": 43,
+      "savesPercentile": 0.9314,
+      "savePctg": 0.895833,
+      "savePctgPercentile": 0.2885
+    },
+    {
+      "area": "R Point",
+      "saves": 76,
+      "savesPercentile": 0.7059,
+      "savePctg": 0.987013,
+      "savePctgPercentile": 0.7308
+    }
+  ]
+}

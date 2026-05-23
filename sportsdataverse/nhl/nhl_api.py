@@ -1,5 +1,23 @@
+"""sportsdataverse.nhl.nhl_api — **DEPRECATED**.
+
+These functions target ``statsapi.web.nhl.com/api/v1/``, which the NHL
+**retired in September 2023**. Calls return HTTP 404 in production.
+
+Migration: use :mod:`sportsdataverse.nhl.nhl_api_web` instead.
+
+| Deprecated here            | Replacement in :mod:`nhl_api_web` |
+|----------------------------|------------------------------------|
+| :func:`nhl_api_pbp`        | :func:`nhl_web_pbp`                |
+| :func:`nhl_api_schedule`   | :func:`nhl_web_schedule`           |
+
+The endpoint paths, return shapes, and game-id semantics all differ between
+the old Stats API and the new ``api-web.nhle.com/v1/`` surface. See the
+``nhl_api_web`` module docstring for the conventions.
+"""
+
 from __future__ import annotations
 
+import warnings
 from typing import Dict
 
 import pandas as pd
@@ -8,8 +26,27 @@ import polars as pl
 from sportsdataverse.dl_utils import download
 
 
+def _warn_deprecated_statsapi(replacement: str) -> None:
+    """Emit a DeprecationWarning pointing to the modern replacement."""
+    warnings.warn(
+        f"sportsdataverse.nhl.nhl_api targets the deprecated "
+        f"`statsapi.web.nhl.com/api/v1/` host (retired Sep 2023, returns 404 "
+        f"in production). Use `sportsdataverse.nhl.{replacement}` instead.",
+        DeprecationWarning,
+        stacklevel=3,
+    )
+
+
 def nhl_api_pbp(game_id: int, **kwargs) -> Dict:
-    """nhl_api_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
+    """nhl_api_pbp() - **DEPRECATED** — pull a game from ``statsapi.web.nhl.com``.
+
+    .. deprecated::
+       This function targets the NHL Stats API endpoint that was retired in
+       September 2023. Use :func:`sportsdataverse.nhl.nhl_web_pbp` instead,
+       which hits the current ``api-web.nhle.com/v1/gamecenter/{gid}/play-by-play``
+       endpoint.
+
+       Original docstring follows for archival reference.
 
     Args:
         game_id (int): Unique game_id, can be obtained from nhl_schedule().
@@ -38,6 +75,7 @@ def nhl_api_pbp(game_id: int, **kwargs) -> Dict:
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
         .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
+    _warn_deprecated_statsapi("nhl_web_pbp")
     # summary endpoint for pickcenter array
     summary_url = f"https://statsapi.web.nhl.com/api/v1/game/{game_id}/feed/live?site=en_nhl"
     summary_resp = download(summary_url, **kwargs)
@@ -54,7 +92,15 @@ def nhl_api_pbp(game_id: int, **kwargs) -> Dict:
 
 
 def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False, **kwargs) -> pl.DataFrame:
-    """nhl_api_schedule() - Pull the schedule by start and end date. Data from API endpoints - `nhl/schedule`
+    """nhl_api_schedule() - **DEPRECATED** — pull the schedule from ``statsapi.web.nhl.com``.
+
+    .. deprecated::
+       This function targets the retired NHL Stats API. Use
+       :func:`sportsdataverse.nhl.nhl_web_schedule` instead — which hits
+       ``api-web.nhle.com/v1/schedule/{date}`` and returns a week-of-games
+       payload (the modern API uses 7-day rolls rather than open ranges).
+
+       Original docstring follows.
 
     Args:
         start_date (str): Start date to pull the NHL API schedule.
@@ -86,6 +132,7 @@ def nhl_api_schedule(start_date: str, end_date: str, return_as_pandas=False, **k
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
         .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
+    _warn_deprecated_statsapi("nhl_web_schedule")
     # summary endpoint for pickcenter array
     summary_url = "https://statsapi.web.nhl.com/api/v1/schedule"
     params = {"site": "en_nhl", "startDate": start_date, "endDate": end_date}

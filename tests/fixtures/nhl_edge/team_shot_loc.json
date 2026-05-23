@@ -1,0 +1,315 @@
+{
+  "shotLocationDetails": [
+    {
+      "area": "Behind the Net",
+      "sog": 20,
+      "sogRank": 5,
+      "goals": 0,
+      "goalsRank": 25,
+      "shootingPctg": 0.0,
+      "shootingPctgRank": 25
+    },
+    {
+      "area": "Beyond Red Line",
+      "sog": 63,
+      "sogRank": 25,
+      "goals": 3,
+      "goalsRank": 23,
+      "shootingPctg": 0.0476,
+      "shootingPctgRank": 23
+    },
+    {
+      "area": "Center Point",
+      "sog": 223,
+      "sogRank": 1,
+      "goals": 6,
+      "goalsRank": 24,
+      "shootingPctg": 0.0269,
+      "shootingPctgRank": 29
+    },
+    {
+      "area": "Crease",
+      "sog": 111,
+      "sogRank": 1,
+      "goals": 26,
+      "goalsRank": 1,
+      "shootingPctg": 0.2342,
+      "shootingPctgRank": 24
+    },
+    {
+      "area": "High Slot",
+      "sog": 215,
+      "sogRank": 14,
+      "goals": 31,
+      "goalsRank": 19,
+      "shootingPctg": 0.1442,
+      "shootingPctgRank": 20
+    },
+    {
+      "area": "L Circle",
+      "sog": 215,
+      "sogRank": 22,
+      "goals": 19,
+      "goalsRank": 24,
+      "shootingPctg": 0.0884,
+      "shootingPctgRank": 24
+    },
+    {
+      "area": "L Corner",
+      "sog": 3,
+      "sogRank": 13,
+      "goals": 0,
+      "goalsRank": 8,
+      "shootingPctg": 0.0,
+      "shootingPctgRank": 8
+    },
+    {
+      "area": "L Net Side",
+      "sog": 87,
+      "sogRank": 2,
+      "goals": 6,
+      "goalsRank": 13,
+      "shootingPctg": 0.069,
+      "shootingPctgRank": 23
+    },
+    {
+      "area": "L Point",
+      "sog": 202,
+      "sogRank": 5,
+      "goals": 5,
+      "goalsRank": 12,
+      "shootingPctg": 0.0248,
+      "shootingPctgRank": 21
+    },
+    {
+      "area": "Low Slot",
+      "sog": 603,
+      "sogRank": 3,
+      "goals": 115,
+      "goalsRank": 5,
+      "shootingPctg": 0.1907,
+      "shootingPctgRank": 17
+    },
+    {
+      "area": "Offensive Neutral Zone",
+      "sog": 69,
+      "sogRank": 5,
+      "goals": 2,
+      "goalsRank": 13,
+      "shootingPctg": 0.029,
+      "shootingPctgRank": 21
+    },
+    {
+      "area": "Outside L",
+      "sog": 136,
+      "sogRank": 21,
+      "goals": 5,
+      "goalsRank": 19,
+      "shootingPctg": 0.0368,
+      "shootingPctgRank": 19
+    },
+    {
+      "area": "Outside R",
+      "sog": 129,
+      "sogRank": 17,
+      "goals": 7,
+      "goalsRank": 11,
+      "shootingPctg": 0.0543,
+      "shootingPctgRank": 8
+    },
+    {
+      "area": "R Circle",
+      "sog": 246,
+      "sogRank": 5,
+      "goals": 17,
+      "goalsRank": 25,
+      "shootingPctg": 0.0691,
+      "shootingPctgRank": 31
+    },
+    {
+      "area": "R Corner",
+      "sog": 3,
+      "sogRank": 18,
+      "goals": 0,
+      "goalsRank": 4,
+      "shootingPctg": 0.0,
+      "shootingPctgRank": 4
+    },
+    {
+      "area": "R Net Side",
+      "sog": 106,
+      "sogRank": 2,
+      "goals": 11,
+      "goalsRank": 1,
+      "shootingPctg": 0.1038,
+      "shootingPctgRank": 12
+    },
+    {
+      "area": "R Point",
+      "sog": 191,
+      "sogRank": 5,
+      "goals": 6,
+      "goalsRank": 5,
+      "shootingPctg": 0.0314,
+      "shootingPctgRank": 12
+    }
+  ],
+  "shotLocationTotals": [
+    {
+      "locationCode": "all",
+      "position": "all",
+      "sog": 2622,
+      "sogRank": 1,
+      "sogLeagueAvg": 2318.5,
+      "goals": 259,
+      "goalsRank": 11,
+      "goalsLeagueAvg": 246.9063,
+      "shootingPctg": 0.0988,
+      "shootingPctgRank": 26,
+      "shootingPctgLeagueAvg": 0.1065
+    },
+    {
+      "locationCode": "high",
+      "position": "all",
+      "sog": 714,
+      "sogRank": 1,
+      "sogLeagueAvg": 606.2813,
+      "goals": 141,
+      "goalsRank": 4,
+      "goalsLeagueAvg": 121.0938,
+      "shootingPctg": 0.1975,
+      "shootingPctgRank": 16,
+      "shootingPctgLeagueAvg": 0.1997
+    },
+    {
+      "locationCode": "long",
+      "position": "all",
+      "sog": 616,
+      "sogRank": 1,
+      "sogLeagueAvg": 506.8125,
+      "goals": 17,
+      "goalsRank": 16,
+      "goalsLeagueAvg": 17.7813,
+      "shootingPctg": 0.0276,
+      "shootingPctgRank": 27,
+      "shootingPctgLeagueAvg": 0.0351
+    },
+    {
+      "locationCode": "mid",
+      "position": "all",
+      "sog": 676,
+      "sogRank": 11,
+      "sogLeagueAvg": 656.7813,
+      "goals": 67,
+      "goalsRank": 25,
+      "goalsLeagueAvg": 76.4375,
+      "shootingPctg": 0.0991,
+      "shootingPctgRank": 26,
+      "shootingPctgLeagueAvg": 0.1164
+    },
+    {
+      "locationCode": "all",
+      "position": "F",
+      "sog": 1726,
+      "sogRank": 8,
+      "sogLeagueAvg": 1666.0313,
+      "goals": 217,
+      "goalsRank": 11,
+      "goalsLeagueAvg": 211.25,
+      "shootingPctg": 0.1257,
+      "shootingPctgRank": 18,
+      "shootingPctgLeagueAvg": 0.1268
+    },
+    {
+      "locationCode": "high",
+      "position": "F",
+      "sog": 669,
+      "sogRank": 2,
+      "sogLeagueAvg": 570.4688,
+      "goals": 132,
+      "goalsRank": 5,
+      "goalsLeagueAvg": 114.9688,
+      "shootingPctg": 0.1973,
+      "shootingPctgRank": 17,
+      "shootingPctgLeagueAvg": 0.2015
+    },
+    {
+      "locationCode": "long",
+      "position": "F",
+      "sog": 119,
+      "sogRank": 31,
+      "sogLeagueAvg": 164.2813,
+      "goals": 4,
+      "goalsRank": 22,
+      "goalsLeagueAvg": 6.25,
+      "shootingPctg": 0.0336,
+      "shootingPctgRank": 19,
+      "shootingPctgLeagueAvg": 0.038
+    },
+    {
+      "locationCode": "mid",
+      "position": "F",
+      "sog": 510,
+      "sogRank": 20,
+      "sogLeagueAvg": 531.9063,
+      "goals": 52,
+      "goalsRank": 26,
+      "goalsLeagueAvg": 62.9688,
+      "shootingPctg": 0.102,
+      "shootingPctgRank": 25,
+      "shootingPctgLeagueAvg": 0.1184
+    },
+    {
+      "locationCode": "all",
+      "position": "D",
+      "sog": 896,
+      "sogRank": 1,
+      "sogLeagueAvg": 652.0625,
+      "goals": 42,
+      "goalsRank": 5,
+      "goalsLeagueAvg": 35.5625,
+      "shootingPctg": 0.0469,
+      "shootingPctgRank": 27,
+      "shootingPctgLeagueAvg": 0.0545
+    },
+    {
+      "locationCode": "high",
+      "position": "D",
+      "sog": 45,
+      "sogRank": 9,
+      "sogLeagueAvg": 35.8125,
+      "goals": 9,
+      "goalsRank": 5,
+      "goalsLeagueAvg": 6.125,
+      "shootingPctg": 0.2,
+      "shootingPctgRank": 8,
+      "shootingPctgLeagueAvg": 0.171
+    },
+    {
+      "locationCode": "long",
+      "position": "D",
+      "sog": 497,
+      "sogRank": 1,
+      "sogLeagueAvg": 342.5313,
+      "goals": 13,
+      "goalsRank": 12,
+      "goalsLeagueAvg": 11.5313,
+      "shootingPctg": 0.0262,
+      "shootingPctgRank": 24,
+      "shootingPctgLeagueAvg": 0.0337
+    },
+    {
+      "locationCode": "mid",
+      "position": "D",
+      "sog": 166,
+      "sogRank": 2,
+      "sogLeagueAvg": 124.875,
+      "goals": 15,
+      "goalsRank": 9,
+      "goalsLeagueAvg": 13.4688,
+      "shootingPctg": 0.0904,
+      "shootingPctgRank": 22,
+      "shootingPctgLeagueAvg": 0.1079
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "zoneTimeDetails": [
+    {
+      "strengthCode": "all",
+      "offensiveZonePctg": 0.49282734,
+      "offensiveZonePercentile": 0.9950617283951,
+      "offensiveZoneLeagueAvg": 0.4234038,
+      "neutralZonePctg": 0.17138219,
+      "neutralZonePercentile": 0.1111111111111,
+      "neutralZoneLeagueAvg": 0.17830407,
+      "defensiveZonePctg": 0.33579046,
+      "defensiveZonePercentile": 0.9901234567901,
+      "defensiveZoneLeagueAvg": 0.39829213
+    },
+    {
+      "strengthCode": "es",
+      "offensiveZonePctg": 0.46624967,
+      "offensiveZonePercentile": 0.9802469135802,
+      "offensiveZoneLeagueAvg": 0.41293798,
+      "neutralZonePctg": 0.17802124,
+      "neutralZonePercentile": 0.0913580246914,
+      "neutralZoneLeagueAvg": 0.18482812,
+      "defensiveZonePctg": 0.35572909,
+      "defensiveZonePercentile": 0.9703703703704,
+      "defensiveZoneLeagueAvg": 0.4022339
+    },
+    {
+      "strengthCode": "pp",
+      "offensiveZonePctg": 0.64560148,
+      "offensiveZonePercentile": 0.9672131147541,
+      "offensiveZoneLeagueAvg": 0.58389297,
+      "neutralZonePctg": 0.13237486,
+      "neutralZonePercentile": 0.1967213114754,
+      "neutralZoneLeagueAvg": 0.13950939,
+      "defensiveZonePctg": 0.22202366,
+      "defensiveZonePercentile": 0.983606557377,
+      "defensiveZoneLeagueAvg": 0.27659764
+    },
+    {
+      "strengthCode": "pk",
+      "offensiveZonePctg": 0.63499221,
+      "offensiveZonePercentile": 1.0,
+      "offensiveZoneLeagueAvg": 0.29693378,
+      "neutralZonePctg": 0.16931436,
+      "neutralZonePercentile": 0.9419642857143,
+      "neutralZoneLeagueAvg": 0.14010362,
+      "defensiveZonePctg": 0.19569343,
+      "defensiveZonePercentile": 1.0,
+      "defensiveZoneLeagueAvg": 0.5629626
+    }
+  ],
+  "zoneStarts": {
+    "offensiveZoneStartsPctg": 0.4609,
+    "offensiveZoneStartsPctgPercentile": 0.9831,
+    "neutralZoneStartsPctg": 0.3063,
+    "neutralZoneStartsPctgPercentile": 0.1414,
+    "defensiveZoneStartsPctg": 0.2329,
+    "defensiveZoneStartsPctgPercentile": 0.9705
+  }
+}

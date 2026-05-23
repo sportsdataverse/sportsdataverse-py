@@ -1,0 +1,23 @@
+{
+  "count": 646,
+  "pageIndex": 1,
+  "pageSize": 5,
+  "pageCount": 130,
+  "items": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/14?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/20?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/26?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/45?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/64?lang=en&region=us"
+    }
+  ]
+}
