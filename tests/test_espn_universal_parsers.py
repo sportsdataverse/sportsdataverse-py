@@ -200,6 +200,103 @@ def test_return_parsed_kwarg_is_wired_for_new_short_names():
         )
 
 
+def test_summary_parsers_handle_real_nba_summary_payload():
+    """Live-captured Site v2 summary for the 2024 NBA Finals G5 (event
+    401585607). Verifies all 5 sub-parsers + the dispatcher against a
+    real ~700KB payload."""
+    from sportsdataverse._common_espn_parsers import (
+        parse_summary,
+        parse_summary_boxscore_player,
+        parse_summary_boxscore_team,
+        parse_summary_leaders,
+        parse_summary_plays,
+        parse_summary_winprobability,
+    )
+
+    payload = _load("summary_nba")
+
+    # ---- boxscore_player ----
+    df = parse_summary_boxscore_player(payload)
+    assert df.height >= 20, f"expected >=20 athletes, got {df.height}"
+    for col in ("team_id", "team_abbreviation", "athlete_id",
+                "athlete_display_name", "starter", "active"):
+        assert col in df.columns, f"missing column {col!r}"
+
+    # ---- boxscore_team ----
+    df = parse_summary_boxscore_team(payload)
+    # 2 teams x ~23 stats each ~ 46 rows
+    assert df.height >= 20, f"expected >=20 team-stat rows, got {df.height}"
+    for col in ("team_id", "stat_name", "stat_label", "stat_display_value"):
+        assert col in df.columns
+
+    # ---- plays ----
+    df = parse_summary_plays(payload)
+    assert df.height >= 100, f"expected >=100 plays, got {df.height}"
+    for col in ("id", "sequence_number", "text", "home_score", "away_score"):
+        assert col in df.columns
+
+    # ---- winprobability ----
+    df = parse_summary_winprobability(payload)
+    assert df.height >= 100, f"expected >=100 wp ticks, got {df.height}"
+    for col in ("home_win_percentage", "tie_percentage", "play_id"):
+        assert col in df.columns
+
+    # ---- leaders ----
+    df = parse_summary_leaders(payload)
+    assert df.height >= 4, f"expected >=4 (team x category) leader rows, got {df.height}"
+    for col in ("team_id", "category_name", "athlete_id", "value"):
+        assert col in df.columns
+
+    # ---- dispatcher: section=None returns dict of all 5 ----
+    out = parse_summary(payload)
+    assert set(out) == {
+        "boxscore_player", "boxscore_team",
+        "plays", "winprobability", "leaders",
+    }
+    for name, frame in out.items():
+        assert frame.height > 0, f"dispatcher returned empty frame for {name}"
+
+    # ---- dispatcher: section="plays" returns just that frame ----
+    single = parse_summary(payload, section="plays")
+    assert single.height >= 100
+
+
+def test_summary_dispatcher_returns_zero_row_dict_on_empty_payload():
+    from sportsdataverse._common_espn_parsers import parse_summary
+
+    out = parse_summary({})
+    assert isinstance(out, dict)
+    for name, frame in out.items():
+        assert frame.height == 0, f"{name}: expected 0 rows on empty payload"
+
+
+def test_summary_dispatcher_raises_on_unknown_section():
+    from sportsdataverse._common_espn_parsers import parse_summary
+
+    with pytest.raises(ValueError, match="Unknown summary section"):
+        parse_summary({}, section="not_a_section")
+
+
+def test_summary_section_returns_pandas_when_requested():
+    import pandas as pd
+
+    from sportsdataverse._common_espn_parsers import parse_summary
+
+    df = parse_summary(_load("summary_nba"), section="plays",
+                       return_as_pandas=True)
+    assert isinstance(df, pd.DataFrame)
+    assert len(df) >= 100
+
+
+def test_summary_parser_routes_via_endpoint_parsers_registry():
+    """``summary`` is registered in ENDPOINT_PARSERS so the
+    return_parsed shim should route through parse_summary."""
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parse_summary
+
+    assert "summary" in ENDPOINT_PARSERS
+    assert ENDPOINT_PARSERS["summary"] is parse_summary
+
+
 def test_return_parsed_shim_dispatches_through_new_parser_for_team_roster():
     """The wrapper closure for espn_nba_team_roster should route through
     parse_team_roster when return_parsed=True. Verify offline by

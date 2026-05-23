@@ -12,6 +12,7 @@ against the NBA league. Used by `tests/test_espn_universal_parsers.py`.
 | `venues_core_nba.json`       | Core v2 `venues?limit=5`                       | 5 `$ref`-only items |
 | `events_core_nba.json`       | Core v2 `events?limit=3`                       | 1 `$ref` item (off-season) |
 | `athlete_statslog_lbj.json`  | Core v2 `athletes/1966/statisticslog`          | LeBron, 23 `entries` |
+| `summary_nba.json`           | Site v2 `summary?event=401585607`              | 2024 NBA Finals G5 BOS@DAL; ~700KB, 19 top-level sections |
 
 Endpoints are league-agnostic so capturing against NBA is sufficient — the
 parsers run identically against MLB, NFL, NHL, WNBA, MBB, WBB, CFB payloads

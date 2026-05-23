@@ -68,6 +68,12 @@ df  = parse_team_roster(raw, return_as_pandas=True)
 | `parse_news` | `*_news`, `*_team_news`, `*_athlete_news` | One row per article |
 | `parse_injuries` | `*_injuries`, `*_team_injuries`, `*_athlete_injuries` | One row per team with injuries |
 | `parse_items` | Generic — Core v2 paginated `{items: [...]}` + Core v2 `{entries: [...]}` (athlete_statisticslog, etc.) | One row per item |
+| `parse_summary` | Site v2 `summary` (dispatcher) | Dict of 5 sub-frames |
+| `parse_summary_boxscore_player` | summary section: per-athlete boxscore | One row per (team × athlete) |
+| `parse_summary_boxscore_team` | summary section: per-team boxscore | One row per (team × stat) |
+| `parse_summary_plays` | summary section: play-by-play | One row per play |
+| `parse_summary_winprobability` | summary section: win-prob over time | One row per probability tick |
+| `parse_summary_leaders` | summary section: per-game stat leaders | One row per (team × category × leader) |
 
 ## Contract guarantees
 
