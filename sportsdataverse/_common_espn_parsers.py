@@ -1134,6 +1134,211 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
 
 
 # ===========================================================================
+# Generic Core v2 paginated items
+# ===========================================================================
+
+
+# Keys that hold the row list in ESPN paginated / list payloads. Tried
+# in priority order — the first one that resolves to a non-empty list
+# is the row source.
+_LIST_PAYLOAD_KEYS = (
+    "items",     # Core v2 paginated default
+    "entries",   # Core v2 athlete statisticslog
+    "events",    # site v2 schedules, scoreboards as fallback
+    "athletes",  # team rosters as fallback
+)
+
+
+def parse_items(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse an ESPN paginated / list response into a tidy frame.
+
+    Walks ``payload`` for the first non-empty list under one of the
+    well-known row keys (``items`` → ``entries`` → ``events`` →
+    ``athletes``), flattens with :func:`pandas.json_normalize`, and
+    snake-cases the columns.
+
+    Many Core v2 ``items`` are just ``{"$ref": "<url>"}`` pointers — this
+    parser does NOT auto-resolve them; it returns one row per item, so
+    ``$ref``-only items yield a frame with a single ``_ref`` column.
+
+    Args:
+        payload: Raw JSON dict from any Core v2 paginated list endpoint
+            (``venues``, ``franchises``, ``events``, ``awards``,
+            ``athletes_index``, ``athlete_statisticslog``, …).
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per item. Zero rows
+        when no list key resolves.
+    """
+    if not payload or not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    rows = None
+    for key in _LIST_PAYLOAD_KEYS:
+        candidate = payload.get(key)
+        if isinstance(candidate, list) and candidate:
+            rows = candidate
+            break
+    if rows is None:
+        return _empty_frame(return_as_pandas)
+    try:
+        df = pd.json_normalize(rows, sep="_")
+    except Exception:
+        return _empty_frame(return_as_pandas)
+    df = _snake_columns(df)
+    return _to_output(df, return_as_pandas)
+
+
+# ===========================================================================
+# Team-scoped Site v2 payloads
+# ===========================================================================
+
+
+def parse_team_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a Site v2 ``team/{id}/schedule`` response into a tidy frame.
+
+    Input: raw payload with shape::
+
+        {"events": [...], "season": {...}, "team": {...},
+         "requestedSeason": {...}, "byeWeek": ...}
+
+    One row per event with columns covering ``event_id``, ``date``,
+    ``name``, ``short_name``, ``season_*``, ``competitions_*``.
+
+    Args:
+        payload: Raw JSON dict from ``espn_{league}_team_schedule()``.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per scheduled event.
+    """
+    if not payload or not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    events = payload.get("events")
+    if not isinstance(events, list) or not events:
+        return _empty_frame(return_as_pandas)
+    try:
+        df = pd.json_normalize(events, sep="_")
+    except Exception:
+        return _empty_frame(return_as_pandas)
+    df = _snake_columns(df)
+    return _to_output(df, return_as_pandas)
+
+
+def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a Site v2 ``team/{id}/roster`` response into a tidy frame.
+
+    Input: raw payload with shape::
+
+        {"athletes": [...], "coach": [...], "team": {...}, "season": {...}}
+
+    One row per athlete with columns flattened from the athlete sub-
+    object (``id``, ``firstName``, ``lastName``, ``position``,
+    ``experience``, ``jersey``, ``height``, ``weight``, …).  Coaches are
+    available via ``payload["coach"]``; this parser intentionally only
+    surfaces the athlete rows.
+
+    Args:
+        payload: Raw JSON dict from ``espn_{league}_team_roster()``.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per athlete on the
+        roster.
+    """
+    if not payload or not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    athletes = payload.get("athletes")
+    if not isinstance(athletes, list) or not athletes:
+        return _empty_frame(return_as_pandas)
+    try:
+        df = pd.json_normalize(athletes, sep="_")
+    except Exception:
+        return _empty_frame(return_as_pandas)
+    df = _snake_columns(df)
+    return _to_output(df, return_as_pandas)
+
+
+# ===========================================================================
+# News / injuries (Site v2 league-wide + team / athlete scoped)
+# ===========================================================================
+
+
+def parse_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a Site v2 ``news`` response into a tidy frame.
+
+    Input: raw payload from any of ``espn_{league}_news()``,
+    ``espn_{league}_team_news()``, or ``espn_{league}_athlete_news()`` —
+    shape::
+
+        {"header": "<title>", "link": {...}, "articles": [...]}
+
+    One row per article with columns flattened from the article object
+    (``id``, ``headline``, ``description``, ``published``, ``type``,
+    ``byline``, ``links_*``, …).
+
+    Args:
+        payload: Raw JSON dict from any news wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per article.
+    """
+    if not payload or not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    articles = payload.get("articles")
+    if not isinstance(articles, list) or not articles:
+        return _empty_frame(return_as_pandas)
+    try:
+        df = pd.json_normalize(articles, sep="_")
+    except Exception:
+        return _empty_frame(return_as_pandas)
+    df = _snake_columns(df)
+    return _to_output(df, return_as_pandas)
+
+
+def parse_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a Site v2 ``injuries`` response into a tidy frame.
+
+    Input: raw payload with shape::
+
+        {"injuries": [{"id": "<team-id>",
+                       "displayName": "<team-name>",
+                       "injuries": [<per-player injury>...]}],
+         "season": {...}}
+
+    The **outer** ``injuries`` list is per-team; each team carries a
+    nested ``injuries`` sub-list of per-player records. This parser
+    returns the **outer** rows (one per team) with the nested list left
+    as a list-typed column — call ``df.explode("injuries")`` on the
+    pandas frame to drill in.
+
+    Args:
+        payload: Raw JSON dict from any injuries wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per team that has
+        injuries reported.
+    """
+    if not payload or not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    teams = payload.get("injuries")
+    if not isinstance(teams, list) or not teams:
+        return _empty_frame(return_as_pandas)
+    try:
+        df = pd.json_normalize(teams, sep="_")
+    except Exception:
+        return _empty_frame(return_as_pandas)
+    # Keep the per-player nested list column as a string so polars can ingest.
+    for col in df.columns:
+        if df[col].apply(lambda v: isinstance(v, list)).any():
+            df[col] = df[col].apply(lambda v: str(v) if isinstance(v, list) else v)
+    df = _snake_columns(df)
+    return _to_output(df, return_as_pandas)
+
+
+# ===========================================================================
 # Endpoint -> parser registry
 # ===========================================================================
 #
@@ -1150,10 +1355,10 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
 # ``sportsdataverse._common_espn._bind``.
 
 ENDPOINT_PARSERS = {
-    # Site v2
+    # Site v2 (rich nested)
     "scoreboard": parse_scoreboard,
     "teams_site": parse_teams,
-    # Site v2 alt + Core v2
+    # Site v2 alt + Core v2 standings
     "standings": parse_standings,
     "standings_core": parse_standings,
     # Groups / conferences
@@ -1164,7 +1369,7 @@ ENDPOINT_PARSERS = {
     "athlete_gamelog": parse_athlete_gamelog,
     "athlete_splits": parse_athlete_splits,
     "leaders": parse_leaders,
-    # Core v2 catalog
+    # Core v2 catalog (one-shot)
     "teams_core": parse_teams,
     "coaches": parse_coaches,
     "season_coaches": parse_coaches,
@@ -1174,6 +1379,51 @@ ENDPOINT_PARSERS = {
     "event_competitor_statistics": parse_event_competitor_statistics,
     "event_competitor_linescores": parse_event_competitor_linescores,
     "event_plays": parse_event_plays,
+    # Team-scoped Site v2
+    "team_schedule": parse_team_schedule,
+    "team_roster": parse_team_roster,
+    # News (league-wide + team + athlete scoped)
+    "news": parse_news,
+    "team_news": parse_news,
+    "athlete_news": parse_news,
+    # Injuries (league-wide + team + athlete scoped)
+    "injuries": parse_injuries,
+    "team_injuries": parse_injuries,
+    "athlete_injuries": parse_injuries,
+    # Core v2 paginated list endpoints — parse_items returns a frame of
+    # raw items (often $ref-only on Core v2). The generic shape covers
+    # ~30 short names; only the well-known ones are registered here.
+    "venues": parse_items,
+    "franchises": parse_items,
+    "events": parse_items,
+    "athletes_index": parse_items,
+    "seasons": parse_items,
+    "season_types": parse_items,
+    "season_groups": parse_items,
+    "season_group_teams": parse_items,
+    "season_teams": parse_items,
+    "season_athletes": parse_items,
+    "season_weeks": parse_items,
+    "season_week_events": parse_items,
+    "season_awards": parse_items,
+    "season_recruits": parse_items,
+    "season_futures": parse_items,
+    "season_freeagents": parse_items,
+    "season_draft_round_picks": parse_items,
+    "awards": parse_items,
+    "tournaments": parse_items,
+    "positions": parse_items,
+    "transactions": parse_items,
+    "team_transactions": parse_items,
+    "team_record": parse_items,
+    "team_history": parse_items,
+    "athlete_career_stats": parse_items,
+    "athlete_statisticslog": parse_items,
+    "athlete_eventlog": parse_items,
+    "athlete_contracts": parse_items,
+    "athlete_awards": parse_items,
+    "athlete_seasons": parse_items,
+    "athlete_records": parse_items,
 }
 
 
