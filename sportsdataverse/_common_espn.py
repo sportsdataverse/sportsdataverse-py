@@ -1273,6 +1273,27 @@ def _core_v2_leaders(sport: str, league: str, **kwargs) -> Dict:
     return _get(f"{_CORE_V2}/{sport}/leagues/{league}/leaders", **kwargs)
 
 
+def _core_v2_league_notes(sport: str, league: str, **kwargs) -> Dict:
+    """GET /notes — league-level editorial notes (sparse; NFL crawler discovery)."""
+    return _get(f"{_CORE_V2}/{sport}/leagues/{league}/notes", **kwargs)
+
+
+def _core_v2_talentpicks(sport: str, league: str, **kwargs) -> Dict:
+    """GET /talentpicks — ESPN editorial talent picks (sparse; NFL crawler discovery)."""
+    return _get(f"{_CORE_V2}/{sport}/leagues/{league}/talentpicks", **kwargs)
+
+
+def _core_v2_athlete_hotzones(sport: str, league: str, athlete_id: Union[int, str], **kwargs) -> Dict:
+    """GET /athletes/{id}/hotzones — pitch-zone heat map (**MLB-only**).
+
+    Returns the 9-cell (or 25-cell new-zones) strike-zone grid with hit
+    metrics per zone. Two flavors: hitter hot zones (BA/SLG/HR per zone)
+    and pitcher hot zones (BAA/whiff% per zone).
+    """
+    return _get(f"{_CORE_V2}/{sport}/leagues/{league}/athletes/{athlete_id}/hotzones",
+                **kwargs)
+
+
 # ===========================================================================
 #                       PER-LEAGUE WRAPPER GENERATION
 # ===========================================================================
@@ -1407,6 +1428,14 @@ _UNIVERSAL_WRAPPERS = [
     ("award", _core_v2_award),
     ("standings_core", _core_v2_standings),
     ("leaders_core", _core_v2_leaders),
+    # league-level editorial / picks (sparse — NFL crawler-discovered)
+    ("league_notes", _core_v2_league_notes),
+    ("talentpicks", _core_v2_talentpicks),
+]
+
+# MLB-only wrappers
+_MLB_WRAPPERS = [
+    ("athlete_hotzones", _core_v2_athlete_hotzones),
 ]
 
 # NCAA-only wrappers (poll rankings + recruiting)
@@ -1447,16 +1476,19 @@ def make_league_module(
     namespace: dict,
     include_ncaa: bool = False,
     include_football: bool = False,
+    include_mlb: bool = False,
 ) -> List[str]:
     """Register all common ESPN wrappers in ``namespace``, named
     ``espn_{prefix}_{short_name}``. Universal wrappers always register;
-    NCAA + football extras opt in via flags. Returns the list of full
-    wrapper names registered (useful for __all__ population)."""
+    NCAA / football / MLB extras opt in via flags. Returns the list of
+    full wrapper names registered (useful for __all__ population)."""
     wrappers = list(_UNIVERSAL_WRAPPERS)
     if include_ncaa:
         wrappers.extend(_NCAA_WRAPPERS)
     if include_football:
         wrappers.extend(_FOOTBALL_WRAPPERS)
+    if include_mlb:
+        wrappers.extend(_MLB_WRAPPERS)
     registered = []
     for short, core in wrappers:
         full = f"espn_{prefix}_{short}"

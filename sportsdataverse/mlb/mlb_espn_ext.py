@@ -13,4 +13,7 @@ from __future__ import annotations
 
 from sportsdataverse._common_espn import make_league_module
 
-__all__ = make_league_module("baseball", "mlb", "mlb", globals(), include_ncaa=False, include_football=False)
+__all__ = make_league_module(
+    "baseball", "mlb", "mlb", globals(),
+    include_ncaa=False, include_football=False, include_mlb=True,
+)
