@@ -13,19 +13,32 @@ Parser families
 ---------------
 
 The 35 EDGE endpoints in :mod:`sportsdataverse.nhl.nhl_edge` cluster into
-four shape families that share a parser:
+four primary shape families plus a sub-frame family for unrolling nested
+lists inside detail payloads:
 
 * **Leaderboards** (``*_top_10``) — list of player/team rows with shared
-  schema. Parser: :func:`parse_edge_top10`.
+  schema. Parser: :func:`parse_edge_top10`. *(Note: all ``*_top_10``
+  URL paths return 404 as of 2026-05-23 — the parser is kept for
+  forward-compat if NHL restores the surface.)*
 * **Detail pages** (``*_detail``, ``*_5v5_detail``, ``*_comparison``) —
   multi-section single-entity payload. Parser: :func:`parse_edge_detail`.
 * **Shot-location** (``*_shot_location_*``) — strike-zone–style heat map
-  with one cell per zone. Parser: :func:`parse_edge_shot_location`.
+  with one cell per zone (17-cell grid + 4-12 row aggregate).
+  Parser: :func:`parse_edge_shot_location`.
 * **Zone-time** (``*_zone_time_*``) — possession share by zone (offensive,
-  defensive, neutral, plus split blocks). Parser:
-  :func:`parse_edge_zone_time`.
+  defensive, neutral; with strength-state splits where available).
+  Parser: :func:`parse_edge_zone_time`.
+* **Sub-frame parsers** for the nested lists that ``parse_edge_detail``
+  deliberately stringifies (to keep the output one row per call):
 
-Endpoints not in those four families pass through as raw ``Dict``; call
+  - :func:`parse_edge_sog_details` — 17-cell SOG / save grid from
+    skater-detail, team-detail, goalie-detail, ``*-shot-location-detail``.
+  - :func:`parse_edge_sog_summary` — 4-row location-code aggregate from
+    the same endpoints.
+  - :func:`parse_edge_hardest_shots` — 10-row hardest-shots list from
+    ``skater-shot-speed-detail``.
+
+Endpoints not in those families pass through as raw ``Dict``; call
 :func:`parse_edge_payload` for a best-effort flatten.
 
 Usage
@@ -188,13 +201,29 @@ def parse_edge_detail(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
 # ---------------------------------------------------------------------------
 
 
-# Keys that commonly host the per-zone grid.
+# Keys that host the per-zone heat-map grid in live EDGE payloads.
+#
+# Empirically verified 2026-05-23 against ``api-web.nhle.com/v1/edge/*``:
+#
+# * ``shotLocationDetails`` — 17-cell granular grid (``area`` key per row).
+#   Appears in team-shot-location-detail, goalie-shot-location-detail,
+#   goalie-detail.
+# * ``sogDetails`` — 17-cell granular grid for skaters / teams.
+#   Appears in skater-detail, team-detail.
+# * ``shotLocationTotals`` — 4-12 row aggregate by location code.
+#   Appears in team-shot-location-detail, goalie-shot-location-detail.
+# * ``shotLocationSummary`` — 4-row aggregate (``locationCode`` key per row).
+#   Appears in goalie-detail.
+# * ``sogSummary`` — 4-row aggregate for skater-detail, team-detail.
+#
+# Keys are tried in priority order: most granular (17-cell) first, then
+# the 4-12 row aggregates as a fallback when only the summary is shipped.
 _SHOT_LOCATION_KEYS = (
-    "shotLocation",
-    "shotLocations",
-    "zones",
-    "buckets",
-    "grid",
+    "shotLocationDetails",
+    "sogDetails",
+    "shotLocationTotals",
+    "shotLocationSummary",
+    "sogSummary",
 )
 
 
@@ -203,15 +232,21 @@ def parse_edge_shot_location(
 ) -> pl.DataFrame:
     """Parse an EDGE shot-location heat map into long-form rows.
 
-    Walks the payload for a list of zone records (each typically with
-    coordinates, shot/goal totals, and a percentage). Each zone becomes
-    one row in the output frame; if the payload has multiple top-level
-    locations (e.g. per-position breakdown), each location's zones are
-    unrolled with a leading ``section`` column identifying the parent.
+    Picks the most granular zone list available in the payload, in the
+    priority order ``shotLocationDetails`` → ``sogDetails`` →
+    ``shotLocationTotals`` → ``shotLocationSummary`` → ``sogSummary``.
+    Each zone becomes one row in the output frame.
+
+    Skater / team detail payloads carry **both** a granular 17-cell grid
+    (``sogDetails`` / ``shotLocationDetails``) and a 4-row aggregate
+    (``sogSummary`` / ``shotLocationSummary``). When both are present,
+    only the granular grid is returned — call :func:`parse_edge_sog_summary`
+    for the aggregate view.
 
     Args:
         payload: Raw JSON dict from any ``nhl_edge_*_shot_location_*``
-            wrapper.
+            wrapper, or from any ``*_detail`` wrapper that ships a
+            shot-location grid inline.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -259,11 +294,22 @@ def parse_edge_shot_location(
 # ---------------------------------------------------------------------------
 
 
-# Zone-time payloads typically have one record per zone (offensive,
-# defensive, neutral) plus optional strength splits.
+# Zone-time payloads contain one of:
+#   - ``zoneTimeDetails`` list[N] keyed by ``strengthCode`` (live shape on
+#     ``/edge/skater-zone-time/{id}/{season}/{gameType}``; 4 rows per skater).
+#   - ``zoneTimeDetails`` dict (live shape on ``/edge/skater-detail`` and
+#     ``/edge/team-detail``; flat percentages, no strength split).
+#   - ``zoneStarts`` dict (live shape on ``/edge/skater-zone-time``;
+#     flat offensive/neutral/defensive start percentages).
+#
+# Keys are tried in priority order: list-valued zoneTimeDetails first (multi
+# strength splits — richer), then dict-valued zoneTimeDetails (flatten to one
+# row), then zoneStarts.
 _ZONE_TIME_KEYS = (
+    "zoneTimeDetails",
     "zoneTime",
     "zoneTimes",
+    "zoneStarts",
     "zones",
     "byZone",
     "byStrength",
@@ -293,6 +339,8 @@ def parse_edge_zone_time(
     for key in _ZONE_TIME_KEYS:
         candidate = payload.get(key)
         if isinstance(candidate, list) and candidate:
+            # Multi-row case: strength-state splits (e.g. zoneTimeDetails on
+            # skater-zone-time returns 4 rows keyed by ``strengthCode``).
             try:
                 df = pd.json_normalize(candidate, sep="_")
                 df = _snake_columns(df)
@@ -300,22 +348,122 @@ def parse_edge_zone_time(
             except Exception:
                 continue
         if isinstance(candidate, dict) and candidate:
-            # dict-of-zone keyed by zone name
-            rows = []
-            for zone, payload_inner in candidate.items():
-                row = {"zone": zone}
-                if isinstance(payload_inner, dict):
-                    row.update(payload_inner)
-                else:
-                    row["value"] = payload_inner
-                rows.append(row)
-            if rows:
-                df = pd.json_normalize(rows, sep="_")
+            # Single-row case: flat metric dict (e.g. zoneTimeDetails on
+            # skater-detail is a flat dict of offensiveZonePctg,
+            # offensiveZonePercentile, offensiveZoneLeagueAvg, etc.;
+            # zoneStarts on skater-zone-time is the same shape).
+            try:
+                df = pd.json_normalize(candidate, sep="_")
                 df = _snake_columns(df)
                 return _to_output(df, return_as_pandas)
+            except Exception:
+                continue
 
     # No zone-shaped key found — fall back to a single-row flatten.
     return parse_edge_detail(payload, return_as_pandas=return_as_pandas)
+
+
+# ---------------------------------------------------------------------------
+# Family 5 — sub-frame parsers for detail-page nested lists
+# ---------------------------------------------------------------------------
+#
+# Detail endpoints (``*-detail``) ship rich nested lists *alongside* the
+# single-row entity summary. ``parse_edge_detail`` deliberately stringifies
+# those lists to keep the output one row per call; these dedicated parsers
+# unroll them into long-form frames.
+
+
+def parse_edge_sog_details(
+    payload: Dict, return_as_pandas: bool = False
+) -> pl.DataFrame:
+    """Extract the 17-cell shots-on-goal heat map from a detail payload.
+
+    Looks for ``sogDetails`` (skater-detail, team-detail) or
+    ``shotLocationDetails`` (goalie-detail, *-shot-location-detail).
+    Returns one row per zone cell with the ``area`` column plus shot /
+    goal / save metrics depending on the entity type.
+
+    Args:
+        payload: Raw JSON dict from any ``*_detail`` wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas), zero-row if the payload lacks both
+        ``sogDetails`` and ``shotLocationDetails``.
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    for key in ("sogDetails", "shotLocationDetails"):
+        rows = payload.get(key)
+        if isinstance(rows, list) and rows:
+            try:
+                df = pd.json_normalize(rows, sep="_")
+                df = _snake_columns(df)
+                return _to_output(df, return_as_pandas)
+            except Exception:
+                return _empty_frame(return_as_pandas)
+    return _empty_frame(return_as_pandas)
+
+
+def parse_edge_sog_summary(
+    payload: Dict, return_as_pandas: bool = False
+) -> pl.DataFrame:
+    """Extract the 4-row shots-on-goal location aggregate from a detail payload.
+
+    Looks for ``sogSummary`` (skater-detail, team-detail),
+    ``shotLocationSummary`` (goalie-detail), or ``shotLocationTotals``
+    (team-shot-location-detail, goalie-shot-location-detail). Returns
+    one row per location code with shot / goal / save metrics.
+
+    Args:
+        payload: Raw JSON dict from any ``*_detail`` wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas), zero-row if no aggregate is found.
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    for key in ("sogSummary", "shotLocationSummary", "shotLocationTotals"):
+        rows = payload.get(key)
+        if isinstance(rows, list) and rows:
+            try:
+                df = pd.json_normalize(rows, sep="_")
+                df = _snake_columns(df)
+                return _to_output(df, return_as_pandas)
+            except Exception:
+                return _empty_frame(return_as_pandas)
+    return _empty_frame(return_as_pandas)
+
+
+def parse_edge_hardest_shots(
+    payload: Dict, return_as_pandas: bool = False
+) -> pl.DataFrame:
+    """Extract the hardest-shots list from ``skater-shot-speed-detail``.
+
+    The endpoint ships ``hardestShots: list[10]`` with per-shot metadata
+    (``gameDate``, ``shotSpeed``, ``timeInPeriod``, etc.). This parser
+    returns those 10 rows as a tidy frame.
+
+    Args:
+        payload: Raw JSON dict from ``nhl_edge_skater_shot_speed_detail``.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per hardest shot; zero
+        rows when ``hardestShots`` is missing or empty.
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    shots = payload.get("hardestShots")
+    if not isinstance(shots, list) or not shots:
+        return _empty_frame(return_as_pandas)
+    try:
+        df = pd.json_normalize(shots, sep="_")
+    except Exception:
+        return _empty_frame(return_as_pandas)
+    df = _snake_columns(df)
+    return _to_output(df, return_as_pandas)
 
 
 # ---------------------------------------------------------------------------
@@ -369,8 +517,17 @@ def parse_edge_payload(payload: Dict, return_as_pandas: bool = False) -> pl.Data
 # Maps an NHL EDGE wrapper name to the parser family it belongs to.
 # ``parser_for_edge(fn_name)`` returns the registered parser or
 # :func:`parse_edge_payload` (the generic fallback).
+#
+# Live status (verified 2026-05-23 against ``api-web.nhle.com/v1/edge/*``):
+#
+# * **Detail / shot-location / zone-time endpoints** all return 200 with
+#   stable schemas — registered with their tightened family parser.
+# * **``*_top_10`` endpoints all 404** — the URL pattern in the OpenAPI
+#   spec at ``fastRhockey/data-raw/nhl_api_web_openapi.yaml`` is dead.
+#   Their parser still defaults to :func:`parse_edge_top10` so if NHL
+#   restores the surface in the future the registry stays correct.
 EDGE_ENDPOINT_PARSERS = {
-    # ---- Leaderboards ----
+    # ---- Leaderboards (paths confirmed 404 live; kept for forward-compat) ----
     "nhl_edge_skater_shot_location_top_10":       parse_edge_top10,
     "nhl_edge_skater_shot_speed_top_10":          parse_edge_top10,
     "nhl_edge_skater_speed_top_10":               parse_edge_top10,
@@ -384,7 +541,7 @@ EDGE_ENDPOINT_PARSERS = {
     "nhl_edge_team_skating_speed_top_10":         parse_edge_top10,
     "nhl_edge_team_zone_time_top_10":             parse_edge_top10,
 
-    # ---- Single-entity detail / comparison ----
+    # ---- Single-entity detail / comparison (all confirmed live) ----
     "nhl_edge_skater_detail":                     parse_edge_detail,
     "nhl_edge_skater_comparison":                 parse_edge_detail,
     "nhl_edge_skater_shot_speed_detail":          parse_edge_detail,
@@ -402,7 +559,7 @@ EDGE_ENDPOINT_PARSERS = {
     "nhl_edge_cat_skater_detail":                 parse_edge_detail,
     "nhl_edge_cat_goalie_detail":                 parse_edge_detail,
 
-    # ---- Shot-location heat maps ----
+    # ---- Shot-location heat maps (17-cell grids) ----
     "nhl_edge_skater_shot_location_detail":       parse_edge_shot_location,
     "nhl_edge_goalie_shot_location_detail":       parse_edge_shot_location,
     "nhl_edge_team_shot_location_detail":         parse_edge_shot_location,
@@ -410,6 +567,30 @@ EDGE_ENDPOINT_PARSERS = {
     # ---- Zone-time breakdowns ----
     "nhl_edge_skater_zone_time":                  parse_edge_zone_time,
     "nhl_edge_team_zone_time_details":            parse_edge_zone_time,
+}
+
+
+# Sub-frame parser hints: which detail-payload wrappers ship rich nested
+# lists that the long-form sub-frame parsers (parse_edge_sog_details /
+# parse_edge_sog_summary / parse_edge_hardest_shots) can unroll.
+#
+# Use these as a quick reference for "what else can I pull out of the
+# raw payload" — they're not part of parser_for_edge() (which is one
+# wrapper → one parser).
+EDGE_SUBFRAME_PARSERS = {
+    # Both skater-detail and team-detail ship sogDetails (17 rows) and
+    # sogSummary (4 rows).
+    "nhl_edge_skater_detail":           (parse_edge_sog_details, parse_edge_sog_summary),
+    "nhl_edge_team_detail":             (parse_edge_sog_details, parse_edge_sog_summary),
+    # goalie-detail ships shotLocationDetails (17 rows) and shotLocationSummary (4 rows).
+    "nhl_edge_goalie_detail":           (parse_edge_sog_details, parse_edge_sog_summary),
+    # shot-location-detail endpoints ship shotLocationDetails (17 rows) and
+    # shotLocationTotals (4-12 rows).
+    "nhl_edge_skater_shot_location_detail": (parse_edge_sog_details, parse_edge_sog_summary),
+    "nhl_edge_team_shot_location_detail":   (parse_edge_sog_details, parse_edge_sog_summary),
+    "nhl_edge_goalie_shot_location_detail": (parse_edge_sog_details, parse_edge_sog_summary),
+    # shot-speed-detail ships hardestShots (10 rows).
+    "nhl_edge_skater_shot_speed_detail": (parse_edge_hardest_shots,),
 }
 
 

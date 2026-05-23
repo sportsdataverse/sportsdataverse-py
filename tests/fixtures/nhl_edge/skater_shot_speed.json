@@ -1,0 +1,534 @@
+{
+  "hardestShots": [
+    {
+      "gameCenterLink": "/gamecenter/sjs-vs-edm/2025/04/11/2024021263",
+      "gameDate": "2025-04-11",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 88.0,
+        "metric": 141.62
+      },
+      "timeInPeriod": "10:27",
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Sharks"
+        },
+        "placeNameWithPreposition": {
+          "default": "San Jose",
+          "fr": "de San Jose"
+        },
+        "abbrev": "SJS",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/SJS_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg"
+        },
+        "slug": "san-jose-sharks-28"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/sjs-vs-edm/2025/04/11/2024021263",
+      "gameDate": "2025-04-11",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 85.41,
+        "metric": 137.45
+      },
+      "timeInPeriod": "01:44",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Sharks"
+        },
+        "placeNameWithPreposition": {
+          "default": "San Jose",
+          "fr": "de San Jose"
+        },
+        "abbrev": "SJS",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/SJS_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg"
+        },
+        "slug": "san-jose-sharks-28"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-wpg/2025/04/13/2024021282",
+      "gameDate": "2025-04-13",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 84.61,
+        "metric": 136.17
+      },
+      "timeInPeriod": "12:22",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Jets"
+        },
+        "placeNameWithPreposition": {
+          "default": "Winnipeg",
+          "fr": "de Winnipeg"
+        },
+        "abbrev": "WPG",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+        },
+        "slug": "winnipeg-jets-52"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-pit/2025/01/09/2024020658",
+      "gameDate": "2025-01-09",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 84.29,
+        "metric": 135.65
+      },
+      "timeInPeriod": "05:00",
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Penguins"
+        },
+        "placeNameWithPreposition": {
+          "default": "Pittsburgh",
+          "fr": "de Pittsburgh"
+        },
+        "abbrev": "PIT",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/PIT_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg"
+        },
+        "slug": "pittsburgh-penguins-5"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/chi-vs-edm/2024/10/12/2024020036",
+      "gameDate": "2024-10-12",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 83.12,
+        "metric": 133.77
+      },
+      "timeInPeriod": "04:14",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Blackhawks"
+        },
+        "placeNameWithPreposition": {
+          "default": "Chicago",
+          "fr": "de Chicago"
+        },
+        "abbrev": "CHI",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_dark.svg"
+        },
+        "slug": "chicago-blackhawks-16"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/lak-vs-edm/2025/01/13/2024020691",
+      "gameDate": "2025-01-13",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 80.94,
+        "metric": 130.26
+      },
+      "timeInPeriod": "01:45",
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Kings"
+        },
+        "placeNameWithPreposition": {
+          "default": "Los Angeles",
+          "fr": "de Los Angeles"
+        },
+        "abbrev": "LAK",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/LAK_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg"
+        },
+        "slug": "los-angeles-kings-26"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/ott-vs-edm/2024/12/22/2024020544",
+      "gameDate": "2024-12-22",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 80.21,
+        "metric": 129.09
+      },
+      "timeInPeriod": "02:42",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Senators",
+          "fr": "S\u00e9nateurs"
+        },
+        "placeNameWithPreposition": {
+          "default": "Ottawa",
+          "fr": "d'Ottawa"
+        },
+        "abbrev": "OTT",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/OTT_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg"
+        },
+        "slug": "ottawa-senators-9"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/sea-vs-edm/2025/01/27/2024020797",
+      "gameDate": "2025-01-27",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 79.83,
+        "metric": 128.47
+      },
+      "timeInPeriod": "05:13",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Kraken"
+        },
+        "placeNameWithPreposition": {
+          "default": "Seattle",
+          "fr": "de Seattle"
+        },
+        "abbrev": "SEA",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg"
+        },
+        "slug": "seattle-kraken-55"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/car-vs-edm/2024/10/22/2024020103",
+      "gameDate": "2024-10-22",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 79.78,
+        "metric": 128.39
+      },
+      "timeInPeriod": "03:34",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Hurricanes"
+        },
+        "placeNameWithPreposition": {
+          "default": "Carolina",
+          "fr": "de la Caroline"
+        },
+        "abbrev": "CAR",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg"
+        },
+        "slug": "carolina-hurricanes-12"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/ana-vs-edm/2025/03/04/2024020981",
+      "gameDate": "2025-03-04",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 79.28,
+        "metric": 127.59
+      },
+      "timeInPeriod": "00:16",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Ducks"
+        },
+        "placeNameWithPreposition": {
+          "default": "Anaheim",
+          "fr": "d'Anaheim"
+        },
+        "abbrev": "ANA",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg"
+        },
+        "slug": "anaheim-ducks-24"
+      }
+    }
+  ],
+  "shotSpeedDetails": {
+    "topShotSpeed": {
+      "imperial": 88.0,
+      "metric": 141.6223,
+      "percentile": 0.6633,
+      "leagueAvg": {
+        "imperial": 83.9219,
+        "metric": 135.0592
+      },
+      "overlay": {
+        "player": {
+          "firstName": {
+            "default": "Connor"
+          },
+          "lastName": {
+            "default": "McDavid"
+          }
+        },
+        "gameDate": "2025-04-11",
+        "awayTeam": {
+          "abbrev": "SJS",
+          "score": 2
+        },
+        "homeTeam": {
+          "abbrev": "EDM",
+          "score": 4
+        },
+        "gameOutcome": {
+          "lastPeriodType": "REG"
+        },
+        "periodDescriptor": {
+          "maxRegulationPeriods": 3,
+          "number": 3,
+          "periodType": "REG"
+        },
+        "timeInPeriod": "10:27",
+        "gameType": 2
+      }
+    },
+    "avgShotSpeed": {
+      "imperial": 53.6149,
+      "metric": 86.2848,
+      "percentile": 0.3148,
+      "leagueAvg": {
+        "imperial": 56.8527,
+        "metric": 91.4956
+      }
+    },
+    "shotAttemptsOver100": {
+      "value": 0,
+      "percentile": 0.0,
+      "leagueAvg": 0.0084
+    },
+    "shotAttempts90To100": {
+      "value": 0,
+      "percentile": 0.0,
+      "leagueAvg": 0.6387
+    },
+    "shotAttempts80To90": {
+      "value": 7,
+      "percentile": 0.5926,
+      "leagueAvg": 9.3664
+    },
+    "shotAttempts70To80": {
+      "value": 70,
+      "percentile": 0.8923,
+      "leagueAvg": 28.7092
+    }
+  }
+}
