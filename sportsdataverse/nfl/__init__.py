@@ -33,6 +33,7 @@ from sportsdataverse.nfl.datasets import (
     team_abbr_mapping,
     team_abbr_mapping_norelocate,
 )
+from sportsdataverse.nfl.nfl_espn_ext import *
 from sportsdataverse.nfl.nfl_game_rosters import *
 from sportsdataverse.nfl.nfl_games import *
 
