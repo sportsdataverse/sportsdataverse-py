@@ -1131,3 +1131,61 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     df = pd.DataFrame(rows)
     df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
+
+
+# ===========================================================================
+# Endpoint -> parser registry
+# ===========================================================================
+#
+# Maps the *short name* used in sportsdataverse._common_espn's wrapper
+# tables (_UNIVERSAL_WRAPPERS, _NCAA_WRAPPERS, _FOOTBALL_WRAPPERS,
+# _MLB_WRAPPERS) to the parser that turns its raw payload into a tidy
+# polars DataFrame.
+#
+# Keys here MUST match the first element of the tuples in those tables.
+# Helpers without a registered parser pass through as raw Dict.
+#
+# This registry is the dispatch table for the ``return_parsed=True`` kwarg
+# wired into every bound wrapper by ``make_league_module()`` -- see
+# ``sportsdataverse._common_espn._bind``.
+
+ENDPOINT_PARSERS = {
+    # Site v2
+    "scoreboard": parse_scoreboard,
+    "teams_site": parse_teams,
+    # Site v2 alt + Core v2
+    "standings": parse_standings,
+    "standings_core": parse_standings,
+    # Groups / conferences
+    "conferences": parse_groups,
+    # Web v3 athlete deep dives
+    "athlete_overview": parse_athlete_overview,
+    "athlete_stats": parse_athlete_stats,
+    "athlete_gamelog": parse_athlete_gamelog,
+    "athlete_splits": parse_athlete_splits,
+    "leaders": parse_leaders,
+    # Core v2 catalog
+    "teams_core": parse_teams,
+    "coaches": parse_coaches,
+    "season_coaches": parse_coaches,
+    "season_draft": parse_draft,
+    # Event-competitor surface
+    "event_competitor_roster": parse_event_competitor_roster,
+    "event_competitor_statistics": parse_event_competitor_statistics,
+    "event_competitor_linescores": parse_event_competitor_linescores,
+    "event_plays": parse_event_plays,
+}
+
+
+def parser_for(short_name):
+    """Return the registered parser for an endpoint short name, or None.
+
+    Args:
+        short_name: First element of the tuple in any ``_*_WRAPPERS`` table
+            (e.g. ``"scoreboard"``, ``"teams_site"``, ``"athlete_overview"``).
+
+    Returns:
+        The parser callable, or ``None`` if the endpoint has no registered
+        parser yet.
+    """
+    return ENDPOINT_PARSERS.get(short_name)

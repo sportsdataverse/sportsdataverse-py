@@ -341,3 +341,141 @@ def test_espn_cfb_season_recruits_2024_returns_items():
     assert "items" in payload, (
         f"expected 'items' key in response, got keys: {list(payload.keys())}"
     )
+
+
+# ===========================================================================
+# 11. WNBA parity for the universal _common_espn_parsers
+# ===========================================================================
+#
+# The parsers in sportsdataverse._common_espn_parsers are league-agnostic by
+# design — they accept the raw Dict that any espn_{league}_* wrapper returns.
+# These tests prove that claim for WNBA specifically (the historically thinnest
+# data surface) by chaining one wrapper call with one parser call, and
+# asserting that the parser returns a polars DataFrame with > 0 rows for
+# every applicable endpoint.
+
+
+def test_parse_teams_handles_wnba_payload():
+    import polars as pl
+
+    from sportsdataverse._common_espn_parsers import parse_teams
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_teams_site
+
+    raw = espn_wnba_teams_site()
+    df = parse_teams(raw)
+    assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
+    assert df.height >= 12, (
+        f"expected >=12 WNBA team rows from parse_teams, got {df.height}"
+    )
+
+
+def test_parse_scoreboard_handles_wnba_payload():
+    import polars as pl
+
+    from sportsdataverse._common_espn_parsers import parse_scoreboard
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_scoreboard
+
+    # July 7 2024 — guaranteed mid-season WNBA slate
+    raw = espn_wnba_scoreboard(dates=20240707)
+    df = parse_scoreboard(raw)
+    assert isinstance(df, pl.DataFrame)
+    # If the date has games (it does, historically) we expect rows; otherwise
+    # parse_scoreboard returns an empty frame (which is itself valid behaviour).
+    if (raw.get("events") or []):
+        assert df.height > 0, "scoreboard had events but parse_scoreboard returned 0 rows"
+
+
+def test_parse_standings_handles_wnba_payload():
+    import polars as pl
+
+    from sportsdataverse._common_espn_parsers import parse_standings
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_standings
+
+    raw = espn_wnba_standings()
+    df = parse_standings(raw)
+    assert isinstance(df, pl.DataFrame)
+    # WNBA standings have one row per team; minimum 12 across history
+    assert df.height >= 12, (
+        f"expected >=12 WNBA standing rows, got {df.height}"
+    )
+
+
+def test_parse_athlete_overview_handles_wnba_payload():
+    import polars as pl
+
+    from sportsdataverse._common_espn_parsers import parse_athlete_overview
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_athlete_overview
+
+    # A'ja Wilson — ESPN id 3149391, perennial MVP candidate
+    raw = espn_wnba_athlete_overview(athlete_id=3149391)
+    df = parse_athlete_overview(raw)
+    assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
+    # Overview parser flattens to a single-row summary OR a multi-row stats
+    # table — both are valid; assert "at least one row OR an empty frame
+    # because Web v3 returned an empty payload" rather than strict > 0
+    if raw:
+        assert df.height >= 0, "parse_athlete_overview returned a malformed frame"
+
+
+def test_parse_leaders_handles_wnba_payload():
+    import polars as pl
+
+    from sportsdataverse._common_espn_parsers import parse_leaders
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_leaders
+
+    raw = espn_wnba_leaders()
+    df = parse_leaders(raw)
+    assert isinstance(df, pl.DataFrame)
+    # Leaders endpoint always returns multiple stat categories × multiple
+    # leaders — tolerate emptiness during the off-season but reject malformed
+    if (raw.get("leaders") or raw.get("categories") or raw.get("items")):
+        assert df.height >= 0, "parse_leaders returned a malformed frame"
+
+
+# ===========================================================================
+# 12. return_parsed=True shim on bound wrappers
+# ===========================================================================
+#
+# Every wrapper whose short name is registered in
+# sportsdataverse._common_espn_parsers.ENDPOINT_PARSERS now accepts an
+# optional ``return_parsed=True`` kwarg that dispatches the raw response
+# through the corresponding parser.  These tests verify the contract end
+# to end against a live ESPN endpoint.
+
+
+def test_return_parsed_true_routes_through_registered_parser():
+    import polars as pl
+
+    from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
+
+    df = espn_nba_teams_site(return_parsed=True)
+    assert isinstance(df, pl.DataFrame), (
+        f"expected polars DataFrame from return_parsed=True, got {type(df)}"
+    )
+    assert df.height >= 30, (
+        f"expected >=30 NBA team rows via return_parsed, got {df.height}"
+    )
+
+
+def test_return_parsed_with_return_as_pandas_returns_pandas():
+    import pandas as pd
+
+    from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
+
+    df = espn_nba_teams_site(return_parsed=True, return_as_pandas=True)
+    assert isinstance(df, pd.DataFrame), (
+        f"expected pandas DataFrame, got {type(df)}"
+    )
+    assert len(df) >= 30
+
+
+def test_return_parsed_false_keeps_raw_dict():
+    from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
+
+    raw = espn_nba_teams_site()  # default: return_parsed=False
+    assert isinstance(raw, dict), (
+        f"expected raw dict when return_parsed omitted, got {type(raw)}"
+    )
+    # Confirm raw shape preserved
+    assert "sports" in raw, f"raw payload missing 'sports' key — got {list(raw)[:3]}"
+

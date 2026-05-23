@@ -1452,21 +1452,58 @@ _FOOTBALL_WRAPPERS = [
 ]
 
 
-def _bind(core_fn, sport: str, league: str, full_name: str):
-    """Return a partial of ``core_fn`` bound to (sport, league), with proper
-    ``__name__`` / ``__qualname__`` / ``__doc__`` so help() and IDE
-    introspection still work."""
+def _bind(core_fn, sport: str, league: str, full_name: str, parser=None):
+    """Return a callable bound to ``(sport, league)`` with proper
+    ``__name__`` / ``__qualname__`` / ``__doc__`` so ``help()`` and IDE
+    introspection still work.
+
+    When ``parser`` is ``None``, the returned object is a plain
+    ``functools.partial`` that forwards every kwarg straight to ``core_fn``
+    and returns the raw ``Dict``.
+
+    When ``parser`` is provided, the returned object is a wrapper closure
+    that adds two optional kwargs:
+
+    * ``return_parsed`` (default ``False``) — when ``True``, dispatch the
+      raw payload through the registered parser and return a polars
+      DataFrame.
+    * ``return_as_pandas`` (default ``False``) — forwarded to the parser
+      when ``return_parsed=True``; ignored otherwise (the raw-Dict path
+      cannot be coerced into pandas).
+    """
     from functools import partial
 
-    p = partial(core_fn, sport, league)
-    p.__name__ = full_name  # type: ignore[attr-defined]
-    p.__qualname__ = full_name  # type: ignore[attr-defined]
-    base = (core_fn.__doc__ or "").rstrip()
-    p.__doc__ = (  # type: ignore[attr-defined]
-        f"{base}\n\nBound to ``sport={sport!r}``, ``league={league!r}``. "
+    bound = partial(core_fn, sport, league)
+    base_doc = (core_fn.__doc__ or "").rstrip()
+    binding_note = (
+        f"Bound to ``sport={sport!r}``, ``league={league!r}``. "
         f"Core implementation: :func:`sportsdataverse._common_espn.{core_fn.__name__}`."
     )
-    return p
+
+    if parser is None:
+        bound.__name__ = full_name  # type: ignore[attr-defined]
+        bound.__qualname__ = full_name  # type: ignore[attr-defined]
+        bound.__doc__ = f"{base_doc}\n\n{binding_note}"  # type: ignore[attr-defined]
+        return bound
+
+    parser_name = getattr(parser, "__name__", "parser")
+
+    def wrapper(*args, return_parsed: bool = False,
+                return_as_pandas: bool = False, **kwargs):
+        result = bound(*args, **kwargs)
+        if return_parsed:
+            return parser(result, return_as_pandas=return_as_pandas)
+        return result
+
+    wrapper.__name__ = full_name
+    wrapper.__qualname__ = full_name
+    wrapper.__doc__ = (
+        f"{base_doc}\n\n{binding_note}\n\n"
+        f"Pass ``return_parsed=True`` to dispatch the raw response through "
+        f":func:`sportsdataverse._common_espn_parsers.{parser_name}` and "
+        f"return a polars DataFrame (or pandas via ``return_as_pandas=True``)."
+    )
+    return wrapper
 
 
 def make_league_module(
@@ -1481,7 +1518,20 @@ def make_league_module(
     """Register all common ESPN wrappers in ``namespace``, named
     ``espn_{prefix}_{short_name}``. Universal wrappers always register;
     NCAA / football / MLB extras opt in via flags. Returns the list of
-    full wrapper names registered (useful for __all__ population)."""
+    full wrapper names registered (useful for __all__ population).
+
+    Wrappers whose ``short`` name appears in
+    :data:`sportsdataverse._common_espn_parsers.ENDPOINT_PARSERS` are bound
+    with a ``return_parsed=True`` shim that dispatches the raw payload
+    through the registered parser. All other wrappers return raw ``Dict``.
+    """
+    # Lazy import to keep the parser module optional at install time.
+    try:
+        from sportsdataverse._common_espn_parsers import parser_for
+    except Exception:  # pragma: no cover — parsers module unavailable
+        def parser_for(_short):  # type: ignore[no-redef]
+            return None
+
     wrappers = list(_UNIVERSAL_WRAPPERS)
     if include_ncaa:
         wrappers.extend(_NCAA_WRAPPERS)
@@ -1492,6 +1542,6 @@ def make_league_module(
     registered = []
     for short, core in wrappers:
         full = f"espn_{prefix}_{short}"
-        namespace[full] = _bind(core, sport, league, full)
+        namespace[full] = _bind(core, sport, league, full, parser=parser_for(short))
         registered.append(full)
     return registered
