@@ -1,0 +1,121 @@
+---
+title: The parser layer
+sidebar_label: Parsers
+sidebar_position: 1
+---
+
+# The parser layer
+
+Every league wrapper returns raw `Dict` by default. The parser layer in
+[`sportsdataverse._common_espn_parsers`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/sportsdataverse/_common_espn_parsers.py)
+turns those payloads into tidy polars (or pandas) DataFrames. Parsers
+are league-agnostic: the same parser handles MLB, NFL, NBA, WBB, etc.
+because ESPN's payload shapes are identical across leagues.
+
+## Two ways to invoke a parser
+
+### 1. The `return_parsed=True` shim (recommended)
+
+Wrappers whose short name is in `ENDPOINT_PARSERS` accept an optional
+`return_parsed=True` kwarg:
+
+```python
+from sportsdataverse.nba import espn_nba_team_roster
+
+df = espn_nba_team_roster(team_id=13, return_parsed=True)        # → polars
+df = espn_nba_team_roster(team_id=13, return_parsed=True,
+                          return_as_pandas=True)                 # → pandas
+raw = espn_nba_team_roster(team_id=13)                            # → raw Dict (default)
+```
+
+This is the shortest path and the right default for most callers.
+
+### 2. Direct parser call (works for any payload)
+
+You can always parse a previously-fetched payload — useful when chaining
+calls or operating on cached responses:
+
+```python
+from sportsdataverse._common_espn_parsers import parse_team_roster
+from sportsdataverse.nba import espn_nba_team_roster
+
+raw = espn_nba_team_roster(team_id=13)
+df  = parse_team_roster(raw)
+df  = parse_team_roster(raw, return_as_pandas=True)
+```
+
+## The 18 parsers
+
+| Parser | Endpoint family | Output shape |
+|---|---|---|
+| `parse_scoreboard` | `*_scoreboard` | One row per event |
+| `parse_teams` | `*_teams_site`, `*_teams_core` | One row per team |
+| `parse_standings` | `*_standings`, `*_standings_core` | One row per team standing |
+| `parse_groups` | `*_conferences` | One row per group, flattened depth |
+| `parse_athlete_overview` | `*_athlete_overview` (Web v3) | Single-entity summary |
+| `parse_athlete_stats` | `*_athlete_stats` | One row per stat category |
+| `parse_athlete_gamelog` | `*_athlete_gamelog` | One row per game |
+| `parse_athlete_splits` | `*_athlete_splits` | One row per split |
+| `parse_leaders` | `*_leaders` | One row per (category × leader) |
+| `parse_coaches` | `*_coaches`, `*_season_coaches` | One row per coach |
+| `parse_draft` | `*_season_draft` | One row per pick |
+| `parse_event_competitor_roster` | `*_event_competitor_roster` | One row per athlete |
+| `parse_event_competitor_statistics` | `*_event_competitor_statistics` | One row per stat |
+| `parse_event_competitor_linescores` | `*_event_competitor_linescores` | One row per period |
+| `parse_event_plays` | `*_event_plays` | One row per play |
+| `parse_team_schedule` | `*_team_schedule` | One row per event |
+| `parse_team_roster` | `*_team_roster` | One row per athlete |
+| `parse_news` | `*_news`, `*_team_news`, `*_athlete_news` | One row per article |
+| `parse_injuries` | `*_injuries`, `*_team_injuries`, `*_athlete_injuries` | One row per team with injuries |
+| `parse_items` | Generic — Core v2 paginated `{items: [...]}` + Core v2 `{entries: [...]}` (athlete_statisticslog, etc.) | One row per item |
+
+## Contract guarantees
+
+Every parser obeys these rules:
+
+1. **Returns polars by default**; `pandas.DataFrame` via
+   `return_as_pandas=True`.
+2. **Empty / malformed payloads return a zero-row frame** rather than
+   raising — callers guard the `height == 0` case.
+3. **Output columns are snake-cased** via
+   [`sportsdataverse.dl_utils.underscore`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/sportsdataverse/dl_utils.py)
+   (e.g. `displayName` → `display_name`, `shotsOnGoal` → `shots_on_goal`).
+4. **Uses `pandas.json_normalize` for flattening** then converts to
+   polars at the end. Mixed-type object columns are stringified to
+   keep polars ingestion clean.
+
+## ENDPOINT_PARSERS registry
+
+The registry maps the *short name* in `_common_espn`'s wrapper tables
+to its parser. **57 short names** are currently registered — every
+covered wrapper across all 8 leagues gains the `return_parsed=True`
+shim automatically.
+
+```python
+>>> from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parser_for
+>>> parser_for("scoreboard").__name__
+'parse_scoreboard'
+>>> parser_for("league_notes")  # not registered
+None
+>>> len(ENDPOINT_PARSERS)
+57
+```
+
+## Adding a new parser
+
+1. Write the parser in `sportsdataverse/_common_espn_parsers.py`
+   following the existing pattern (empty-payload guard,
+   `pd.json_normalize`, `_snake_columns`, `_to_output`).
+2. Add an entry to `ENDPOINT_PARSERS` mapping the short name to the
+   parser.
+3. The `return_parsed=True` shim picks it up automatically on next
+   import — no extension-module changes needed.
+4. Drop a captured fixture in `tests/fixtures/espn/` and a test in
+   `tests/test_espn_universal_parsers.py`.
+
+## See also
+
+- [NHL EDGE parsers](../nhl/edge-parsers) — defensive family parsers
+  for the EDGE Statcast surface.
+- [ESPN cross-league architecture](../architecture/espn-cross-league) —
+  how `make_league_module()` registers each wrapper with its parser.

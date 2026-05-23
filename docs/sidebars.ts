@@ -8,6 +8,16 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'intro', label: 'Getting Started'},
     {
       type: 'category',
+      label: 'Architecture',
+      items: ['architecture/espn-cross-league'],
+    },
+    {
+      type: 'category',
+      label: 'Parsers',
+      items: ['parsers/index'],
+    },
+    {
+      type: 'category',
       label: 'CFB',
       items: ['cfb/index'],
     },
@@ -15,6 +25,11 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'MBB',
       items: ['mbb/index'],
+    },
+    {
+      type: 'category',
+      label: 'MLB',
+      items: ['mlb/index'],
     },
     {
       type: 'category',
@@ -29,7 +44,13 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'NHL',
-      items: ['nhl/index'],
+      items: [
+        'nhl/index',
+        'nhl/edge',
+        'nhl/edge-parsers',
+        'nhl/stats-rest',
+        'nhl/records',
+      ],
     },
     {
       type: 'category',

@@ -2,6 +2,16 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.51 (unreleased)](#0051-unreleased)
+  - [New: MLB module (greenfield)](#new-mlb-module-greenfield)
+  - [New: NHL — `api-web.nhle.com` migration + EDGE / Stats REST / Records](#new-nhl---api-webnhlecom-migration--edge--stats-rest--records)
+  - [New: ESPN cross-league port](#new-espn-cross-league-port)
+  - [New: NCAA bracketology](#new-ncaa-bracketology)
+  - [New: `_common_espn_parsers.py` (polars / pandas parser layer)](#new-_common_espn_parserspy-polars--pandas-parser-layer)
+  - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
+  - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
+  - [Test infrastructure](#test-infrastructure)
+  - [Documentation](#documentation)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
   - [Packaging modernization](#packaging-modernization)
   - [Conda installability](#conda-installability)
@@ -33,6 +43,188 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.51 (unreleased)
+
+A second big release on top of `0.0.50`. The headline items:
+
+- **New `sportsdataverse.mlb` module** (greenfield) — 175 functions
+  spanning three data surfaces:
+  - 113 ESPN cross-league wrappers + 5 ESPN originals
+  - 40 official MLB Stats API wrappers (`statsapi.mlb.com`)
+  - 17 Baseball Savant / Statcast wrappers including auto-chunked
+    25,000-row truncation handling on `/statcast_search/csv`
+- **NHL migrated to `api-web.nhle.com/v1/`** — the deprecated
+  `statsapi.web.nhl.com` host is gone; replaced with 26 modern
+  `nhl_web_*` wrappers grounded in the OpenAPI spec at
+  `fastRhockey/data-raw/nhl_api_web_openapi.yaml`.
+- **Cross-league ESPN port from hoopR / wehoop / cfbfastR** — 804 new
+  wrappers across 8 leagues (NBA, MBB, WNBA, WBB, CFB, NFL, MLB, NHL)
+  via a single ~80-function core (`_common_espn.py`) parameterized on
+  the `(sport, league)` slug.  Each per-league extension module is a
+  5-line file calling `make_league_module()` to mass-register the
+  wrappers with proper `__name__` / `__qualname__` / `__doc__` for IDE
+  discoverability.
+- **3 new NHL modules** for the historical / Statcast surfaces:
+  - `nhl_edge` — 35 wrappers for the NHL EDGE player-tracking system
+    (`api-web.nhle.com/v1/edge/*`)
+  - `nhl_stats_rest` — 21 wrappers for the official stats REST API
+    (`api.nhle.com/stats/rest/`) with verbatim Cayenne filter expression
+    support
+  - `nhl_records` — 50 wrappers for the records site
+    (`records.nhl.com/site/api/`) covering awards, coaches, franchises,
+    HOF, draft, all-star, GMs
+- **NCAA bracketology** — `espn_mbb_bracketology()` and
+  `espn_wbb_bracketology()` for the non-league
+  `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology`
+  endpoint (live during the projection window, Jan-Mar).
+- **20 polars/pandas parsers** in `_common_espn_parsers.py` covering
+  the most-used ESPN payload shapes (scoreboard, teams, standings,
+  groups, athlete overview/stats/gamelog/splits, leaders, coaches,
+  draft, event-competitor surface, team schedule/roster, news,
+  injuries, generic Core v2 paginated lists).
+- **4 NHL EDGE family parsers** + 3 sub-frame parsers in
+  `nhl_edge_parsers.py`, schema-grounded against live captures from
+  2026-05-23.
+- **`return_parsed=True` dispatch shim** — every wrapper whose short
+  name has a registered parser (**57** keys currently in
+  `ENDPOINT_PARSERS`) gains an optional `return_parsed=True` kwarg that
+  routes the raw response through the parser and returns a polars
+  DataFrame (pandas via `return_as_pandas=True`).  The raw-Dict path is
+  unchanged — the shim is backwards-compatible and strictly additive.
+- **80 offline parser tests** (NHL EDGE 32 + universal ESPN 16 + the
+  cross-league shim suite) + **32 live-gated integration tests** under
+  `SDV_PY_LIVE_TESTS=1` so default test runs never hit live endpoints.
+
+### New: MLB module (greenfield)
+
+- New top-level `sportsdataverse.mlb` package with 8 submodules.
+- `mlb_api.py` (40 functions) wraps the official MLB Stats API.
+  IDs to know: `sportId=1` is MLB, `leagueId` `103`=AL / `104`=NL,
+  `gameType` slugs `R`/`F`/`D`/`L`/`W`/`S`/`A`/`E`/`PO`.  Player IDs
+  (`personId` / `batter` / `pitcher`) are the same MLBAM id space
+  shared with Baseball Savant.
+- `mlb_statcast.py` (17 functions) wraps Baseball Savant.  The
+  unofficial CSV search at `/statcast_search/csv` truncates at exactly
+  25,000 rows with no pagination; `statcast_search` raises
+  `RuntimeError` when the response hits that cap (default,
+  `raise_on_truncation=True`).  Use `statcast_search_chunked` for
+  multi-week ranges — it auto-chunks the date range and stitches
+  client-side.
+- `mlb_espn_ext.py` registers 113 cross-league ESPN wrappers via
+  `make_league_module(..., include_mlb=True)`, which adds the MLB-only
+  `espn_mlb_athlete_hotzones` to the universal surface.
+
+### New: NHL — `api-web.nhle.com` migration + EDGE / Stats REST / Records
+
+- The deprecated `statsapi.web.nhl.com` is gone.  `nhl_api.py` keeps a
+  small set of backward-compatible aliases that warn and delegate to
+  `nhl_api_web`.
+- `nhl_api_web.py` (26 functions) covers the modern game-feed API at
+  `https://api-web.nhle.com/v1/`.
+- `nhl_edge.py` (35 functions) wraps the NHL EDGE player-tracking
+  surface — skater / goalie / team detail, shot-location, shot-speed,
+  skating distance, zone time, plus 12 `*_top_10` leaderboards.
+
+  **Note:** all 12 `*_top_10` URL paths return 404 as of 2026-05-23 —
+  the OpenAPI spec lists them but they're not live.  The wrappers and
+  `parse_edge_top10` are kept for forward-compatibility.
+- `nhl_stats_rest.py` (21 functions) wraps the official Stats REST
+  API at `api.nhle.com/stats/rest/`.  Verbatim Cayenne filter
+  expression support via `cayenneExp` / `factCayenneExp` kwargs.
+- `nhl_records.py` (50 functions) wraps the records site at
+  `records.nhl.com/site/api/` — awards, coaches, franchises, skaters,
+  goalies, draft, all-star, HOF, GMs, attendance, fastest goals, team
+  records.
+
+### New: ESPN cross-league port
+
+- `_common_espn.py` exposes ~80 core functions parameterized on
+  `(sport, league)`.
+- `make_league_module(sport, league, prefix, globals(), include_ncaa=,
+  include_football=, include_mlb=)` mass-registers wrappers in the
+  caller's namespace.  Each per-league extension file is a 5-line wrapper.
+- Wrappers use `functools.partial` with explicit
+  `__name__`/`__qualname__`/`__doc__` so they behave like real functions
+  for `help()`, IDE auto-complete, and `inspect.signature()`.
+- The `_NCAA_WRAPPERS` table adds `rankings`, `season_recruits`,
+  `season_week_rankings` for `mbb`, `wbb`, `cfb`.
+- The `_FOOTBALL_WRAPPERS` table adds `season_qbr`, `season_qbr_week`
+  for `nfl`, `cfb`.
+- The new `_MLB_WRAPPERS` table adds `athlete_hotzones` for `mlb`.
+
+### New: NCAA bracketology
+
+- `espn_mbb_bracketology(season, iteration=None)` / `espn_wbb_bracketology(...)`
+  at `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology`.
+- The endpoint is **seasonal** — live during the projection window
+  (roughly January through March each year) and 404s the rest of the
+  year.  Integration tests handle this with `pytest.xfail` so off-season
+  CI runs don't fail.
+
+### New: `_common_espn_parsers.py` (polars / pandas parser layer)
+
+- 20 parsers covering the highest-traffic ESPN payload shapes.  All
+  parsers are **league-agnostic** — the same parser handles MLB, NFL,
+  NBA, etc. because ESPN's payload shapes are identical across leagues.
+- Every parser returns polars by default; `return_as_pandas=True` yields
+  pandas.  Empty / malformed payloads return zero-row frames rather
+  than raising.
+- Output columns snake-cased via `sportsdataverse.dl_utils.underscore`.
+- `ENDPOINT_PARSERS` registry has 57 short-name keys mapped to 20
+  unique parsers; covers the universal table plus NCAA / football /
+  MLB extras.
+- `parser_for(short_name)` lookup helper.
+
+### New: `return_parsed=True` dispatch shim
+
+- `_bind()` in `_common_espn.py` was extended with an optional
+  `parser=` argument.  When present, the bound wrapper is a closure
+  that adds `return_parsed=False` and `return_as_pandas=False` kwargs;
+  when `return_parsed=True`, the closure dispatches the raw response
+  through the parser and returns a DataFrame.
+- `make_league_module()` looks up the parser via `parser_for(short)`
+  on each wrapper registration.  The lookup is lazy-imported so a
+  missing parsers module doesn't break the package.
+- API contract: every existing caller continues to get raw `Dict` —
+  the shim is opt-in via the new kwargs.
+
+### New: `nhl_edge_parsers.py`
+
+- 4 family parsers (`parse_edge_top10`, `parse_edge_detail`,
+  `parse_edge_shot_location`, `parse_edge_zone_time`) + generic
+  fallback (`parse_edge_payload`).
+- 3 sub-frame parsers (`parse_edge_sog_details`,
+  `parse_edge_sog_summary`, `parse_edge_hardest_shots`) for unrolling
+  the rich nested lists inside detail payloads that
+  `parse_edge_detail` deliberately stringifies.
+- `EDGE_ENDPOINT_PARSERS` registers 33 of the 35 EDGE wrappers (the
+  remaining 2 fall through to the generic parser via
+  `parser_for_edge`).
+- `EDGE_SUBFRAME_PARSERS` maps each detail wrapper to the tuple of
+  sub-frame parsers that apply.
+
+### Test infrastructure
+
+- New `tests/test_espn_universal_parsers.py` (16 tests) and
+  `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
+  captured fixtures.
+- New `tests/test_espn_live.py` (32 live tests) gated by
+  `SDV_PY_LIVE_TESTS=1` for live integration verification.
+- Captured fixtures live under `tests/fixtures/espn/` (7 captures) and
+  `tests/fixtures/nhl_edge/` (7 captures), each with a README
+  documenting provenance.
+
+### Documentation
+
+- New documentation pages:
+  - `docs/architecture/espn-cross-league.md` — the factory + shim
+    architecture.
+  - `docs/parsers/index.md` — the parser layer + `ENDPOINT_PARSERS`.
+  - `docs/mlb/index.md` — MLB module overview (ESPN + Stats API +
+    Statcast).
+  - `docs/nhl/edge.md`, `edge-parsers.md`, `stats-rest.md`,
+    `records.md` — the new NHL surface.
 
 ## 0.0.50 Release: May 7, 2026
 
