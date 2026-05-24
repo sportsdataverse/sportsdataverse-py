@@ -10,6 +10,9 @@
   - [New: `_common_espn_parsers.py` (polars / pandas parser layer)](#new-_common_espn_parserspy-polars--pandas-parser-layer)
   - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
   - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
+  - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
+  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
+  - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
@@ -204,16 +207,111 @@ A second big release on top of `0.0.50`. The headline items:
 - `EDGE_SUBFRAME_PARSERS` maps each detail wrapper to the tuple of
   sub-frame parsers that apply.
 
+### New: Site v2 summary dispatcher (20 sub-parsers)
+
+The Site v2 `summary` endpoint
+(`espn_{league}_summary(event_id=...)`) ships ~19-22 top-level sections
+per game (~700 KB to 1.8 MB per call). Rather than collapse that into
+one parser, the summary surface now has 20 targeted sub-parsers plus a
+dispatcher:
+
+- `parse_summary_boxscore_player` — one row per (team × athlete) with
+  the parallel `keys`/`stats` arrays zipped (e.g. NBA produces 27 rows
+  with `min`, `fg`, `3pt`, `ft`, `reb`, `ast`, columns).
+- `parse_summary_boxscore_team` — one row per (team × stat) with
+  `stat_name`, `stat_label`, `stat_display_value`.
+- `parse_summary_plays` — one row per play (~450 rows per NBA game).
+- `parse_summary_winprobability` — one row per win-prob tick (joinable
+  to plays via `play_id`).
+- `parse_summary_leaders` — one row per (team × category × leader)
+  from the 3-level `leaders[]` nesting.
+- `parse_summary_game_info`, `parse_summary_officials`,
+  `parse_summary_header`, `parse_summary_season_series`,
+  `parse_summary_against_the_spread`, `parse_summary_standings`,
+  `parse_summary_broadcasts`, `parse_summary_format`,
+  `parse_summary_pickcenter`, `parse_summary_odds`,
+  `parse_summary_article`, `parse_summary_injuries`,
+  `parse_summary_news` — one row per (or one row total for) the
+  corresponding summary section.
+- `parse_summary_drives`, `parse_summary_scoring_plays` — NFL / CFB
+  specific (NFL summary ships `drives.previous[]` + `scoringPlays`
+  instead of top-level `plays`). Return zero-row frames for non-football
+  leagues.
+- `parse_summary(payload, section=None)` — dispatcher. With
+  `section=None` returns a dict of all 20 sub-frames keyed by section
+  name; with `section="<name>"` returns just that frame. Empty payload
+  returns a dict of 20 zero-row frames.
+- `SUMMARY_SECTION_PARSERS` — public registry mapping section name to
+  parser.
+
+Cross-league parity tests verify the dispatcher works against captured
+fixtures for NBA / MLB / NFL / NHL / WNBA — same code path handles
+every league's summary endpoint.
+
+### New: 100% ENDPOINT_PARSERS coverage (121/121)
+
+Every wrapper short name across all 4 wrapper tables
+(`_UNIVERSAL_WRAPPERS`, `_NCAA_WRAPPERS`, `_FOOTBALL_WRAPPERS`,
+`_MLB_WRAPPERS`) is now registered in `ENDPOINT_PARSERS`. Every
+factory-bound wrapper plus the hand-bound NCAA bracketology helpers
+accepts `return_parsed=True` and `return_as_pandas=True`.
+
+Two new generic fall-through parsers cover the long tail:
+
+- `parse_single_entity` — flattens any single-resource Core v2 payload
+  (team, venue, franchise, coach, award, position, season_info,
+  athlete_core, event_competitor, etc.) to a one-row frame.
+- `parse_items` was already generic for `{items: [...]}` Core v2 lists
+  and Core v2 `{entries: [...]}` (athlete_statisticslog); this release
+  expands its registration to ~30 more list-shape endpoints (calendar
+  variants, event lists, season_powerindex, talentpicks, etc.).
+
+`register_ncaa_bracketology` was upgraded to wrap the bracketology
+helpers in the same `return_parsed=True` shim used by `make_league_module`
+— previously they were hand-bound without the shim.
+
+Three regression tests lock in the invariant:
+
+- `test_every_wrapper_short_name_has_a_registered_parser`
+- `test_no_stale_entries_in_endpoint_parsers_registry`
+- `test_return_parsed_shim_active_on_every_wrapper_across_all_leagues`
+  (walks the `__all__` of every league extension module and verifies
+  819+ wrappers carry the shim).
+
+### New: weekly cron live-test drift detector
+
+`.github/workflows/live-tests-cron.yml` runs the full live test suite
+(`tests/test_espn_live.py` and any other `SDV_PY_LIVE_TESTS=1` gated
+tests) every Monday 13:00 UTC and on `workflow_dispatch`. On failure,
+the workflow uses `actions/github-script` to find or create a tracking
+issue labeled `live-tests:drift`:
+
+- First failure opens a new issue with the last 4 KB of pytest output
+  plus a run URL.
+- Subsequent failures comment on the existing open issue instead of
+  duplicating.
+- Closing the issue resets state.
+
+Catches upstream API drift (ESPN schema changes, NHL EDGE 404s, MLB
+Stats API URL moves) on a regular cadence even when the repo is
+otherwise quiet between releases.
+
 ### Test infrastructure
 
-- New `tests/test_espn_universal_parsers.py` (16 tests) and
+- New `tests/test_espn_universal_parsers.py` (65 tests) and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
 - New `tests/test_espn_live.py` (32 live tests) gated by
   `SDV_PY_LIVE_TESTS=1` for live integration verification.
-- Captured fixtures live under `tests/fixtures/espn/` (7 captures) and
-  `tests/fixtures/nhl_edge/` (7 captures), each with a README
+- Captured fixtures live under `tests/fixtures/espn/` (12 captures —
+  the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA)
+  and `tests/fixtures/nhl_edge/` (7 captures), each with a README
   documenting provenance.
+- Parametrized cross-league parity tests in
+  `test_espn_universal_parsers.py` exercise the summary dispatcher
+  against all 5 captured leagues and assert the full 20-section
+  dispatch contract for each (boxscore_player + boxscore_team + plays
+  + winprobability + leaders + 13 metadata sections + 2 football-only).
 
 ### Documentation
 
