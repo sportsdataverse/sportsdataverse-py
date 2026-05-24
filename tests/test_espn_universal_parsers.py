@@ -509,6 +509,116 @@ def test_summary_winprobability_empty_for_nhl():
     assert df.height == 0
 
 
+# ===========================================================================
+# Full-coverage regression: every wrapper short name has a parser
+# ===========================================================================
+#
+# These tests lock in the 100%-coverage state achieved by registering
+# parse_single_entity / parse_items for the long tail of single-entity
+# and list-shape Core v2 endpoints. They catch any future regression
+# where a new wrapper is added to _UNIVERSAL_WRAPPERS / _NCAA_WRAPPERS /
+# _FOOTBALL_WRAPPERS / _MLB_WRAPPERS without an ENDPOINT_PARSERS entry.
+
+
+def test_every_wrapper_short_name_has_a_registered_parser():
+    """Every short name across all 4 wrapper tables must be in
+    ENDPOINT_PARSERS so the return_parsed shim activates on it."""
+    from sportsdataverse._common_espn import (
+        _FOOTBALL_WRAPPERS,
+        _MLB_WRAPPERS,
+        _NCAA_WRAPPERS,
+        _UNIVERSAL_WRAPPERS,
+    )
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+
+    all_short = set(
+        [s for s, _ in _UNIVERSAL_WRAPPERS]
+        + [s for s, _ in _NCAA_WRAPPERS]
+        + [s for s, _ in _FOOTBALL_WRAPPERS]
+        + [s for s, _ in _MLB_WRAPPERS]
+    )
+    registered = set(ENDPOINT_PARSERS)
+    missing = all_short - registered
+    assert not missing, (
+        f"ENDPOINT_PARSERS missing {len(missing)} wrapper short names: "
+        f"{sorted(missing)}"
+    )
+
+
+def test_no_stale_entries_in_endpoint_parsers_registry():
+    """Every key in ENDPOINT_PARSERS must correspond to a real wrapper
+    short name in one of the 4 wrapper tables."""
+    from sportsdataverse._common_espn import (
+        _FOOTBALL_WRAPPERS,
+        _MLB_WRAPPERS,
+        _NCAA_WRAPPERS,
+        _UNIVERSAL_WRAPPERS,
+    )
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+
+    all_short = set(
+        [s for s, _ in _UNIVERSAL_WRAPPERS]
+        + [s for s, _ in _NCAA_WRAPPERS]
+        + [s for s, _ in _FOOTBALL_WRAPPERS]
+        + [s for s, _ in _MLB_WRAPPERS]
+    )
+    stale = set(ENDPOINT_PARSERS) - all_short
+    assert not stale, (
+        f"ENDPOINT_PARSERS has {len(stale)} stale entries with no "
+        f"corresponding wrapper: {sorted(stale)}"
+    )
+
+
+def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
+    """The return_parsed kwarg must appear in the signature of every
+    bound wrapper across all 7 league extension modules."""
+    import inspect
+
+    from sportsdataverse.cfb.cfb_espn_ext import __all__ as cfb_all
+    from sportsdataverse.mbb.mbb_espn_ext import __all__ as mbb_all
+    from sportsdataverse.mlb.mlb_espn_ext import __all__ as mlb_all
+    from sportsdataverse.nba.nba_espn_ext import __all__ as nba_all
+    from sportsdataverse.nfl.nfl_espn_ext import __all__ as nfl_all
+    from sportsdataverse.wbb.wbb_espn_ext import __all__ as wbb_all
+    from sportsdataverse.wnba.wnba_espn_ext import __all__ as wnba_all
+
+    import sportsdataverse.cfb.cfb_espn_ext as cfb_mod
+    import sportsdataverse.mbb.mbb_espn_ext as mbb_mod
+    import sportsdataverse.mlb.mlb_espn_ext as mlb_mod
+    import sportsdataverse.nba.nba_espn_ext as nba_mod
+    import sportsdataverse.nfl.nfl_espn_ext as nfl_mod
+    import sportsdataverse.wbb.wbb_espn_ext as wbb_mod
+    import sportsdataverse.wnba.wnba_espn_ext as wnba_mod
+
+    leagues = [
+        ("nba",  nba_all,  nba_mod),
+        ("wnba", wnba_all, wnba_mod),
+        ("mbb",  mbb_all,  mbb_mod),
+        ("wbb",  wbb_all,  wbb_mod),
+        ("cfb",  cfb_all,  cfb_mod),
+        ("nfl",  nfl_all,  nfl_mod),
+        ("mlb",  mlb_all,  mlb_mod),
+    ]
+    missing = []
+    total = 0
+    for league, names, mod in leagues:
+        for name in names:
+            fn = getattr(mod, name, None)
+            if fn is None or not callable(fn):
+                continue
+            total += 1
+            sig = inspect.signature(fn)
+            if "return_parsed" not in sig.parameters:
+                missing.append(f"{league}.{name}")
+    assert total >= 800, (
+        f"sanity check: expected >=800 wrappers across 7 leagues, got {total}"
+    )
+    assert not missing, (
+        f"{len(missing)} wrappers missing the return_parsed shim: "
+        f"{missing[:10]}..."
+    )
+
+
 def test_summary_section_parsers_registry_consistent():
     """SUMMARY_SECTION_PARSERS keys must exactly match the dispatcher's
     output dict keys."""

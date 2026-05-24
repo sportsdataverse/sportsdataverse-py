@@ -106,19 +106,32 @@ Every parser obeys these rules:
 ## ENDPOINT_PARSERS registry
 
 The registry maps the *short name* in `_common_espn`'s wrapper tables
-to its parser. **57 short names** are currently registered — every
-covered wrapper across all 8 leagues gains the `return_parsed=True`
-shim automatically.
+to its parser. **All 121 wrapper short names are registered** — every
+factory-bound wrapper across all 8 leagues plus the hand-bound NCAA
+bracketology helpers gains the `return_parsed=True` shim automatically.
 
 ```python
 >>> from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parser_for
 >>> parser_for("scoreboard").__name__
 'parse_scoreboard'
->>> parser_for("league_notes")  # not registered
-None
+>>> parser_for("venue").__name__
+'parse_single_entity'
 >>> len(ENDPOINT_PARSERS)
-57
+121
 ```
+
+The registry uses three generic parsers as fall-throughs for
+endpoint families that share a shape:
+
+- **`parse_single_entity`** — for any Core v2 single-resource payload
+  (`team`, `venue`, `franchise`, `coach`, `award`, `position`,
+  `season_info`, `athlete_core`, `event_competitor`, etc.). Returns a
+  one-row frame flattened via `pandas.json_normalize`.
+- **`parse_items`** — for any Core v2 paginated `{items: [...]}` or
+  Core v2 `{entries: [...]}` payload (athlete_statisticslog, calendar
+  variants, draft, event lists, season_powerindex, talentpicks, etc.).
+- **`parse_summary`** — for the rich Site v2 summary dispatcher
+  (returns a dict of 20 sub-frames).
 
 ## Adding a new parser
 

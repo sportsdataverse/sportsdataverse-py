@@ -1869,6 +1869,37 @@ def parse_summary_news(
     return _row_per_item(news.get("articles"), return_as_pandas)
 
 
+def parse_single_entity(
+    payload: Dict, return_as_pandas: bool = False
+) -> pl.DataFrame:
+    """Generic single-row flattener for any ESPN single-entity payload.
+
+    ESPN's Core v2 ships ~30 endpoints that return a single resource —
+    one team, one venue, one franchise, one event, one athlete, one
+    coach, one award, one position — as a flat dict (or a dict with a
+    couple of nested sub-dicts).  This parser flattens the payload one
+    level deep with :func:`pandas.json_normalize`, stringifies any
+    list-valued cells, snake-cases the columns, and returns a single-row
+    frame.
+
+    Mirrors :func:`parse_summary_header` and friends but is exposed as a
+    generic so any of the dozens of Core v2 single-entity short names
+    (``team``, ``team_core``, ``venue``, ``franchise``, ``coach``,
+    ``award``, ``position``, ``season_info``, ``athlete_core``, etc.)
+    can register against it.
+
+    Args:
+        payload: Raw JSON dict from any ESPN single-entity wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row of the flattened
+        payload. Zero-row frame on empty / non-dict input.
+    """
+    return _single_row(payload if isinstance(payload, dict) else None,
+                       return_as_pandas)
+
+
 def parse_summary_drives(
     payload: Dict, return_as_pandas: bool = False
 ) -> pl.DataFrame:
@@ -2067,6 +2098,74 @@ ENDPOINT_PARSERS = {
     "athlete_awards": parse_items,
     "athlete_seasons": parse_items,
     "athlete_records": parse_items,
+    # ---- Site v2 list payloads (calendar variants, NCAA / football extras) ----
+    "calendar": parse_items,
+    "calendar_offseason": parse_items,
+    "calendar_regular_season": parse_items,
+    "calendar_postseason": parse_items,
+    "calendar_ondays": parse_items,
+    "draft": parse_items,
+    "statistics_league": parse_items,
+    "team_depthcharts": parse_items,
+    "team_leaders": parse_items,
+    "rankings": parse_items,
+    "season_qbr": parse_items,
+    "season_qbr_week": parse_items,
+    "athlete_notes": parse_items,
+    "league_notes": parse_items,
+    "talentpicks": parse_items,
+    # ---- Core v2 list payloads (more) ----
+    "leaders_core": parse_items,
+    "season_powerindex": parse_items,
+    "season_powerindex_leaders": parse_items,
+    "season_type_corrections": parse_items,
+    "season_type_leaders": parse_items,
+    "season_week_rankings": parse_items,
+    "season_group_children": parse_items,
+    # ---- Event-scoped list payloads ----
+    "event_broadcasts": parse_items,
+    "event_competitors": parse_items,
+    "event_competitor_leaders": parse_items,
+    "event_leaders": parse_items,
+    "event_odds": parse_items,
+    "event_officials": parse_items,
+    "event_play_personnel": parse_items,
+    "event_probabilities": parse_items,
+    "event_propbets": parse_items,
+    "event_scoringplays": parse_items,
+    # ---- Core v2 single-entity payloads (one row per call) ----
+    "team": parse_single_entity,
+    "team_core": parse_single_entity,
+    "venue": parse_single_entity,
+    "franchise": parse_single_entity,
+    "coach": parse_single_entity,
+    "coach_record": parse_single_entity,
+    "coach_season": parse_single_entity,
+    "position": parse_single_entity,
+    "award": parse_single_entity,
+    "league_root": parse_single_entity,
+    "athlete_core": parse_single_entity,
+    "athlete_info": parse_single_entity,
+    "athlete_bio": parse_single_entity,
+    "athlete_vs_athlete": parse_single_entity,
+    "athlete_hotzones": parse_single_entity,
+    "season_pointer": parse_single_entity,
+    "season_info": parse_single_entity,
+    "season_type": parse_single_entity,
+    "season_group": parse_single_entity,
+    "season_week": parse_single_entity,
+    "season_team": parse_single_entity,
+    # ---- Event-scoped single-entity payloads ----
+    "event": parse_single_entity,
+    "event_competition": parse_single_entity,
+    "event_competitor": parse_single_entity,
+    "event_competitor_record": parse_single_entity,
+    "event_play": parse_single_entity,
+    "event_situation": parse_single_entity,
+    "event_status": parse_single_entity,
+    "event_predictor": parse_single_entity,
+    "event_powerindex": parse_single_entity,
+    "event_official_detail": parse_single_entity,
 }
 
 

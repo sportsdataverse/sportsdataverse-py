@@ -18,7 +18,6 @@ Per-iteration snapshots are at ``/bracketology/{iteration}``.
 
 from __future__ import annotations
 
-from functools import partial
 from typing import Dict, Optional, Union
 
 from sportsdataverse._common_espn import _get
@@ -64,9 +63,40 @@ def register_ncaa_bracketology(league_short: str, namespace: dict) -> None:
     Called by the NCAA basketball extension modules to expose bracketology
     alongside the universal wrappers (which live under ``espn_mbb_*`` /
     ``espn_wbb_*`` via :func:`sportsdataverse._common_espn.make_league_module`).
+
+    The exposed function carries the same ``return_parsed=True`` /
+    ``return_as_pandas=True`` shim as every factory-bound wrapper — calling
+    ``espn_mbb_bracketology(season, return_parsed=True)`` returns a polars
+    DataFrame of the bracket entries via :func:`parse_items`. The raw-Dict
+    path is unchanged when the shim kwargs are omitted.
     """
     fn = _NCAA_BRACKETOLOGY_WRAPPERS.get(league_short)
     if fn is None:
         return
     name = f"espn_{league_short}_bracketology"
-    namespace[name] = fn
+
+    # Lazy import to keep the parsers module optional at install time.
+    try:
+        from sportsdataverse._common_espn_parsers import parse_items
+    except Exception:  # pragma: no cover — parsers module unavailable
+        namespace[name] = fn
+        return
+
+    def wrapper(*args, return_parsed: bool = False,
+                return_as_pandas: bool = False, **kwargs):
+        result = fn(*args, **kwargs)
+        if return_parsed:
+            return parse_items(result, return_as_pandas=return_as_pandas)
+        return result
+
+    wrapper.__name__ = name
+    wrapper.__qualname__ = name
+    base = (fn.__doc__ or "").rstrip()
+    wrapper.__doc__ = (
+        f"{base}\n\nPass ``return_parsed=True`` to dispatch the raw "
+        f"response through "
+        f":func:`sportsdataverse._common_espn_parsers.parse_items` and "
+        f"return a polars DataFrame (or pandas via "
+        f"``return_as_pandas=True``)."
+    )
+    namespace[name] = wrapper
