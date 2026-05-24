@@ -1,0 +1,145 @@
+# Weekly drift detector for the live-API tests in tests/test_espn_live.py
+# (and any other test gated by SDV_PY_LIVE_TESTS=1).
+#
+# The main tests.yml already runs the live suite on every PR + push to
+# main + workflow_dispatch. This workflow adds the *schedule* leg so
+# upstream API drift surfaces even when the repo is quiet — e.g. ESPN
+# silently renames a column, NHL EDGE goes 404, MLB Stats API moves an
+# endpoint. On failure, the workflow opens (or updates) a single
+# tracking issue labeled `live-tests:drift`, instead of opening a new
+# issue every week.
+#
+# Triggers:
+#   * schedule  — every Monday 13:00 UTC (08:00 ET) so a Mon-AM regression
+#                 is visible before downstream users hit it.
+#   * workflow_dispatch — manual trigger when you want to verify drift
+#                         outside the schedule cadence.
+name: live-tests-cron
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"   # Every Monday at 13:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write  # required to open / update the drift tracking issue
+
+concurrency:
+  group: live-tests-cron
+  cancel-in-progress: false
+
+jobs:
+  live:
+    name: pytest --live (ubuntu / py3.13.2)
+    runs-on: ubuntu-latest
+    outputs:
+      pytest_status: ${{ steps.run-pytest.outcome }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python 3.13.2
+        run: uv python install 3.13.2
+      # Same system-deps gating as tests.yml — pyreadr sdist needs
+      # libbz2 + liblzma; xgboost on macOS needs libomp (not relevant
+      # here since this leg is ubuntu-only).
+      - name: Install Linux build deps for pyreadr sdist fallback
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libbz2-dev liblzma-dev
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Run live tests
+        id: run-pytest
+        env:
+          SDV_PY_LIVE_TESTS: "1"
+        # --maxfail=10 keeps the report focused on the first cluster of
+        # failures rather than running through 30+ flaky timeouts.
+        # tee the output so the next step can grep it for the failure
+        # summary that lands in the tracking issue.
+        run: |
+          set -o pipefail
+          uv run --frozen pytest --maxfail=10 -rN 2>&1 | tee pytest-live.log
+      - name: Upload pytest log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-live-log
+          path: pytest-live.log
+          if-no-files-found: warn
+          retention-days: 30
+      # Open or update the drift tracking issue on failure. One issue
+      # per drift event — subsequent failures comment on the same issue
+      # so we don't fan out into a stream of duplicates. Closing the
+      # issue (e.g. after fixing the regression) resets state.
+      - name: Open / update drift tracking issue
+        if: failure() && steps.run-pytest.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let logTail = '';
+            try {
+              const log = fs.readFileSync('pytest-live.log', 'utf8');
+              // Last 4 KB of the log -- usually contains the summary lines
+              // plus enough context to identify which assertions failed.
+              logTail = log.slice(-4000);
+            } catch (e) {
+              logTail = `(could not read pytest-live.log: ${e.message})`;
+            }
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const today = new Date().toISOString().slice(0, 10);
+            const body = [
+              `Scheduled live-tests run on **${today}** failed.`,
+              ``,
+              `Run: ${runUrl}`,
+              ``,
+              `<details><summary>Last 4KB of pytest output</summary>`,
+              ``,
+              '```',
+              logTail,
+              '```',
+              ``,
+              `</details>`,
+              ``,
+              `Likely causes:`,
+              `- An upstream API renamed / removed a field a parser depends on.`,
+              `- ESPN, MLB Stats API, NHL api-web, or Baseball Savant changed a URL pattern.`,
+              `- A live-only assertion bound to a date / season ID needs updating.`,
+              ``,
+              `**Resolve by**: fixing the parser / wrapper, then closing this issue. The next cron run that goes green will leave the issue closed.`,
+            ].join('\n');
+
+            // Find an open drift issue. The label name is the dedup key.
+            const label = 'live-tests:drift';
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              state: 'open',
+              labels: label,
+              per_page: 5,
+            });
+            if (open.data.length > 0) {
+              const issue = open.data[0];
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                issue_number: issue.number,
+                body: `Re-occurred on ${today}.\n\n${body}`,
+              });
+              core.info(`Commented on existing drift issue #${issue.number}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                title: `Live-tests drift detected (${today})`,
+                body:  body,
+                labels: [label],
+              });
+              core.info(`Opened new drift issue #${created.data.number}`);
+            }
