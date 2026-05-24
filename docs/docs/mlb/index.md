@@ -32,7 +32,9 @@ for the factory mechanics. MLB-specific additions:
 
 Wraps the official MLB Stats API at `statsapi.mlb.com`. 40 functions
 across schedule, standings, teams, players, boxscores, live feed,
-leaders, and meta enums.
+leaders, and meta enums. Pair with the parser layer at
+[`sportsdataverse.mlb.mlb_api_parsers`](#mlb-stats-api-parser-layer)
+for tidy polars DataFrame output.
 
 | Function | Wraps |
 |---|---|
@@ -61,6 +63,43 @@ leaders, and meta enums.
 Nearly everything is `/api/v1/`. The only `v1.1` endpoint we wrap is
 `/api/v1.1/game/{gamePk}/feed/live` (the live-feed endpoint). There
 is no `v2`.
+
+## MLB Stats API parser layer
+
+Schemas captured 2026-05-24 against `statsapi.mlb.com`. Mirrors the
+ESPN parser layer design: every parser returns polars by default,
+pandas via `return_as_pandas=True`, zero-row frames on empty payloads,
+snake-cased columns.
+
+| Parser | Endpoint(s) | Output shape |
+|---|---|---|
+| `parse_mlb_api_schedule` | `mlb_api_schedule`, `mlb_api_schedule_postseason` | One row per game (unrolls `dates[].games[]`, prefixes `schedule_date`) |
+| `parse_mlb_api_teams` | `mlb_api_teams` | One row per team |
+| `parse_mlb_api_team_roster` | `mlb_api_team_roster` | One row per player |
+| `parse_mlb_api_standings` | `mlb_api_standings` | One row per (division × team) with namespaced `standings_*` division context |
+| `parse_mlb_api_person_stats` | `mlb_api_person_stats`, `mlb_api_team_stats` | One row per stats split (unrolls `stats[].splits[]`) |
+| `parse_mlb_api_list` | Generic for `venues`, `sports`, `leagues`, `divisions`, `seasons`, `awards`, `umpires`, `draft`, `draft_prospects`, `attendance`, `team_leaders`, `team_alumni`, `team_affiliates`, `stats`, `stats_leaders`, `stats_streaks` | One row per item |
+
+`MLB_API_ENDPOINT_PARSERS` registry has 26 entries; `parser_for_mlb_api(fn_name)`
+returns the registered parser (falls back to `parse_mlb_api_list`,
+never returns `None`).
+
+Example chaining a wrapper with its parser:
+
+```python
+from sportsdataverse.mlb import (
+    mlb_api_standings,
+    parse_mlb_api_standings,
+)
+
+# 30-row standings frame (6 divisions × 5 teams) with full division
+# context columns + the per-team record stats (wins, losses, pct,
+# gamesBack, streak, divisionRank, etc.).
+raw = mlb_api_standings(season=2024)
+df  = parse_mlb_api_standings(raw)
+df.select(["standings_division_name", "team_id", "wins",
+           "losses", "winning_percentage", "games_back"]).head()
+```
 
 ## Baseball Savant — Statcast (`mlb_statcast`)
 

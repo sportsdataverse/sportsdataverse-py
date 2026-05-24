@@ -1,0 +1,76 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "stats": [
+    {
+      "type": {
+        "displayName": "season"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "exemptions": [],
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "age": 32,
+            "gamesPlayed": 158,
+            "groundOuts": 82,
+            "airOuts": 128,
+            "runs": 122,
+            "doubles": 36,
+            "triples": 1,
+            "homeRuns": 58,
+            "strikeOuts": 171,
+            "baseOnBalls": 133,
+            "intentionalWalks": 20,
+            "hits": 180,
+            "hitByPitch": 9,
+            "avg": ".322",
+            "atBats": 559,
+            "obp": ".458",
+            "slg": ".701",
+            "ops": "1.159",
+            "caughtStealing": 0,
+            "stolenBases": 10,
+            "stolenBasePercentage": "1.000",
+            "caughtStealingPercentage": ".000",
+            "groundIntoDoublePlay": 22,
+            "numberOfPitches": 2885,
+            "plateAppearances": 704,
+            "totalBases": 392,
+            "rbi": 144,
+            "leftOnBase": 238,
+            "sacBunts": 0,
+            "sacFlies": 2,
+            "babip": ".367",
+            "groundOutsToAirouts": "0.64",
+            "catchersInterference": 1,
+            "atBatsPerHomeRun": "9.64"
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "player": {
+            "id": 592450,
+            "fullName": "Aaron Judge",
+            "link": "/api/v1/people/592450"
+          },
+          "league": {
+            "id": 103,
+            "name": "American League",
+            "link": "/api/v1/league/103"
+          },
+          "sport": {
+            "id": 1,
+            "link": "/api/v1/sports/1",
+            "abbreviation": "MLB"
+          },
+          "gameType": "R"
+        }
+      ]
+    }
+  ]
+}

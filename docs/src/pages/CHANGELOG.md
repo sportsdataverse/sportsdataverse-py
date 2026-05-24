@@ -13,6 +13,7 @@
   - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
   - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
+  - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
@@ -296,16 +297,66 @@ Catches upstream API drift (ESPN schema changes, NHL EDGE 404s, MLB
 Stats API URL moves) on a regular cadence even when the repo is
 otherwise quiet between releases.
 
+### New: MLB Stats API parser layer
+
+`sportsdataverse.mlb.mlb_api_parsers` turns the 40 raw-Dict
+`mlb_api_*` wrappers into tidy polars / pandas DataFrames. Mirrors
+the design of `_common_espn_parsers`:
+
+- Every parser returns polars by default; pandas via
+  `return_as_pandas=True`.
+- Empty / malformed payloads return zero-row frames.
+- Output columns snake-cased via
+  `sportsdataverse.dl_utils.underscore`.
+- Most parsers use `pandas.json_normalize` for one-pass flattening.
+
+Five dedicated parsers handle the high-traffic endpoints with their
+own unrolling logic:
+
+- `parse_mlb_api_schedule` — walks `dates[].games[]` and prefixes the
+  schedule date onto each game row (one row per game with
+  `teams.home.*` / `teams.away.*` / `venue.*` / `status.*` flattened).
+- `parse_mlb_api_teams` — one row per team from `teams[]`.
+- `parse_mlb_api_team_roster` — one row per player from `roster[]`
+  with `person`, `position`, `status` sub-dicts flattened.
+- `parse_mlb_api_standings` — walks `records[].teamRecords[]`,
+  prefixes division identifiers (namespaced `standings_*` to avoid
+  column collisions with team-record fields like `lastUpdated`), and
+  produces one row per (division × team).
+- `parse_mlb_api_person_stats` — walks `stats[].splits[]` (also
+  handles `mlb_api_team_stats` with the same shape), prefixes
+  `stats_type` / `stats_group` from the parent block, and flattens
+  the inner `stat` block to wide stat columns.
+
+A generic `parse_mlb_api_list` fallback handles every list-shape
+endpoint that doesn't need extra unrolling (venues, sports, leagues,
+divisions, seasons, awards, umpires, draft, draft_prospects,
+attendance, team_leaders, team_alumni, team_affiliates, stats,
+stats_leaders, stats_streaks, people, sport_players).
+
+`MLB_API_ENDPOINT_PARSERS` registry has 26 entries (7 dedicated + 19
+generic). `parser_for_mlb_api(fn_name)` returns the registered
+parser; unknown names fall back to `parse_mlb_api_list` so the
+caller always gets a DataFrame-returning callable.
+
+Test fixtures captured 2026-05-24 from `statsapi.mlb.com` (8 captures
+in `tests/fixtures/mlb_api/`). 17 offline tests in
+`tests/test_mlb_api_parsers.py` exercise each dedicated parser plus
+the generic fallback against the live fixtures.
+
 ### Test infrastructure
 
-- New `tests/test_espn_universal_parsers.py` (65 tests) and
+- New `tests/test_espn_universal_parsers.py` (65 tests),
+  `tests/test_mlb_api_parsers.py` (17 tests), and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
 - New `tests/test_espn_live.py` (32 live tests) gated by
   `SDV_PY_LIVE_TESTS=1` for live integration verification.
 - Captured fixtures live under `tests/fixtures/espn/` (12 captures —
-  the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA)
-  and `tests/fixtures/nhl_edge/` (7 captures), each with a README
+  the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA),
+  `tests/fixtures/mlb_api/` (8 captures: schedule, teams, roster,
+  standings, person_stats, venues, sports, divisions), and
+  `tests/fixtures/nhl_edge/` (7 captures), each with a README
   documenting provenance.
 - Parametrized cross-league parity tests in
   `test_espn_universal_parsers.py` exercise the summary dispatcher

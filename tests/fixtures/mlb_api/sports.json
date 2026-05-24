@@ -1,0 +1,185 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "sports": [
+    {
+      "id": 1,
+      "code": "mlb",
+      "link": "/api/v1/sports/1",
+      "name": "Major League Baseball",
+      "abbreviation": "MLB",
+      "sortOrder": 11,
+      "activeStatus": true
+    },
+    {
+      "id": 11,
+      "code": "aaa",
+      "link": "/api/v1/sports/11",
+      "name": "Triple-A",
+      "abbreviation": "AAA",
+      "sortOrder": 101,
+      "activeStatus": true
+    },
+    {
+      "id": 12,
+      "code": "aax",
+      "link": "/api/v1/sports/12",
+      "name": "Double-A",
+      "abbreviation": "AA",
+      "sortOrder": 201,
+      "activeStatus": true
+    },
+    {
+      "id": 13,
+      "code": "afa",
+      "link": "/api/v1/sports/13",
+      "name": "High-A",
+      "abbreviation": "A+",
+      "sortOrder": 301,
+      "activeStatus": true
+    },
+    {
+      "id": 14,
+      "code": "afx",
+      "link": "/api/v1/sports/14",
+      "name": "Single-A",
+      "abbreviation": "A",
+      "sortOrder": 401,
+      "activeStatus": true
+    },
+    {
+      "id": 16,
+      "code": "rok",
+      "link": "/api/v1/sports/16",
+      "name": "Rookie",
+      "abbreviation": "ROK",
+      "sortOrder": 701,
+      "activeStatus": true
+    },
+    {
+      "id": 17,
+      "code": "win",
+      "link": "/api/v1/sports/17",
+      "name": "Winter Leagues",
+      "abbreviation": "WIN",
+      "sortOrder": 1301,
+      "activeStatus": true
+    },
+    {
+      "id": 21,
+      "code": "min",
+      "link": "/api/v1/sports/21",
+      "name": "Minor League Baseball",
+      "abbreviation": "Minors",
+      "sortOrder": 1402,
+      "activeStatus": true
+    },
+    {
+      "id": 23,
+      "code": "ind",
+      "link": "/api/v1/sports/23",
+      "name": "Independent Leagues",
+      "abbreviation": "IND",
+      "sortOrder": 2101,
+      "activeStatus": true
+    },
+    {
+      "id": 61,
+      "code": "nlb",
+      "link": "/api/v1/sports/61",
+      "name": "Negro League Baseball",
+      "abbreviation": "NLB",
+      "sortOrder": 2401,
+      "activeStatus": true
+    },
+    {
+      "id": 32,
+      "code": "kor",
+      "link": "/api/v1/sports/32",
+      "name": "Korean Baseball Organization",
+      "abbreviation": "KOR",
+      "sortOrder": 2601,
+      "activeStatus": true
+    },
+    {
+      "id": 31,
+      "code": "jml",
+      "link": "/api/v1/sports/31",
+      "name": "Nippon Professional Baseball",
+      "abbreviation": "NPB",
+      "sortOrder": 2701,
+      "activeStatus": true
+    },
+    {
+      "id": 51,
+      "code": "int",
+      "link": "/api/v1/sports/51",
+      "name": "International Baseball",
+      "abbreviation": "INT",
+      "sortOrder": 3501,
+      "activeStatus": true
+    },
+    {
+      "id": 509,
+      "code": "nae",
+      "link": "/api/v1/sports/509",
+      "name": "International Baseball (18U)",
+      "abbreviation": "18U",
+      "sortOrder": 3503,
+      "activeStatus": true
+    },
+    {
+      "id": 510,
+      "code": "nas",
+      "link": "/api/v1/sports/510",
+      "name": "International Baseball (16 and under)",
+      "abbreviation": "16U",
+      "sortOrder": 3505,
+      "activeStatus": true
+    },
+    {
+      "id": 6005,
+      "code": "ame",
+      "link": "/api/v1/sports/6005",
+      "name": "International Baseball (amateur)",
+      "abbreviation": "AME",
+      "sortOrder": 3509,
+      "activeStatus": true
+    },
+    {
+      "id": 52,
+      "code": "oly",
+      "link": "/api/v1/sports/52",
+      "name": "Olympic Baseball",
+      "abbreviation": "OLY",
+      "sortOrder": 3511,
+      "activeStatus": true
+    },
+    {
+      "id": 22,
+      "code": "bbc",
+      "link": "/api/v1/sports/22",
+      "name": "College Baseball",
+      "abbreviation": "College",
+      "sortOrder": 5101,
+      "activeStatus": true
+    },
+    {
+      "id": 586,
+      "code": "hsb",
+      "link": "/api/v1/sports/586",
+      "name": "High School Baseball",
+      "abbreviation": "H.S.",
+      "sortOrder": 6201,
+      "activeStatus": true
+    },
+    {
+      "id": 576,
+      "code": "wps",
+      "link": "/api/v1/sports/576",
+      "name": "Women's Professional Softball",
+      "abbreviation": "WPS",
+      "sortOrder": 7001,
+      "activeStatus": true
+    }
+  ]
+}

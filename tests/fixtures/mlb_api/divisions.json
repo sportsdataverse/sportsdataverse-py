@@ -1,0 +1,1205 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "divisions": [
+    {
+      "id": 6007,
+      "name": "North Region",
+      "season": "2026",
+      "nameShort": "North",
+      "link": "/api/v1/divisions/6007",
+      "abbreviation": "ASL-N",
+      "league": {
+        "id": 6006,
+        "link": "/api/v1/league/6006"
+      },
+      "sport": {
+        "id": 6005,
+        "link": "/api/v1/sports/6005"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3602,
+      "active": true
+    },
+    {
+      "id": 6011,
+      "name": "Cape Cod East Division",
+      "season": "2026",
+      "nameShort": "CCBL East",
+      "link": "/api/v1/divisions/6011",
+      "abbreviation": "CCE",
+      "league": {
+        "id": 565,
+        "link": "/api/v1/league/565"
+      },
+      "sport": {
+        "id": 22,
+        "link": "/api/v1/sports/22"
+      },
+      "hasWildcard": true,
+      "sortOrder": 2312,
+      "numPlayoffTeams": 4,
+      "active": true
+    },
+    {
+      "id": 236,
+      "name": "Pioneer League South",
+      "season": "2026",
+      "nameShort": "PIO South",
+      "link": "/api/v1/divisions/236",
+      "abbreviation": "PIOS",
+      "league": {
+        "id": 128,
+        "link": "/api/v1/league/128"
+      },
+      "sport": {
+        "id": 23,
+        "link": "/api/v1/sports/23"
+      },
+      "hasWildcard": false,
+      "sortOrder": 2135,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 205,
+      "name": "National League Central",
+      "season": "2026",
+      "nameShort": "NL Central",
+      "link": "/api/v1/divisions/205",
+      "abbreviation": "NLC",
+      "league": {
+        "id": 104,
+        "link": "/api/v1/league/104"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+      },
+      "hasWildcard": false,
+      "sortOrder": 33,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 200,
+      "name": "American League West",
+      "season": "2026",
+      "nameShort": "AL West",
+      "link": "/api/v1/divisions/200",
+      "abbreviation": "ALW",
+      "league": {
+        "id": 103,
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+      },
+      "hasWildcard": false,
+      "sortOrder": 24,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 233,
+      "name": "Pacific Coast League East",
+      "season": "2026",
+      "nameShort": "PCL East",
+      "link": "/api/v1/divisions/233",
+      "abbreviation": "PCLE",
+      "league": {
+        "id": 112,
+        "link": "/api/v1/league/112"
+      },
+      "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+      },
+      "hasWildcard": false,
+      "sortOrder": 122,
+      "active": true
+    },
+    {
+      "id": 212,
+      "name": "Eastern League Northeast",
+      "season": "2026",
+      "nameShort": "EAS Northeast",
+      "link": "/api/v1/divisions/212",
+      "abbreviation": "EASNE",
+      "league": {
+        "id": 113,
+        "link": "/api/v1/league/113"
+      },
+      "sport": {
+        "id": 12,
+        "link": "/api/v1/sports/12"
+      },
+      "hasWildcard": false,
+      "sortOrder": 213,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 6008,
+      "name": "East Region",
+      "season": "2026",
+      "nameShort": "East",
+      "link": "/api/v1/divisions/6008",
+      "abbreviation": "ASL-E",
+      "league": {
+        "id": 6006,
+        "link": "/api/v1/league/6006"
+      },
+      "sport": {
+        "id": 6005,
+        "link": "/api/v1/sports/6005"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3603,
+      "active": true
+    },
+    {
+      "id": 6012,
+      "name": "Cape Cod West Division",
+      "season": "2026",
+      "nameShort": "CCBL West",
+      "link": "/api/v1/divisions/6012",
+      "abbreviation": "CCW",
+      "league": {
+        "id": 565,
+        "link": "/api/v1/league/565"
+      },
+      "sport": {
+        "id": 22,
+        "link": "/api/v1/sports/22"
+      },
+      "hasWildcard": true,
+      "sortOrder": 2313,
+      "numPlayoffTeams": 4,
+      "active": true
+    },
+    {
+      "id": 201,
+      "name": "American League East",
+      "season": "2026",
+      "nameShort": "AL East",
+      "link": "/api/v1/divisions/201",
+      "abbreviation": "ALE",
+      "league": {
+        "id": 103,
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+      },
+      "hasWildcard": false,
+      "sortOrder": 22,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 204,
+      "name": "National League East",
+      "season": "2026",
+      "nameShort": "NL East",
+      "link": "/api/v1/divisions/204",
+      "abbreviation": "NLE",
+      "league": {
+        "id": 104,
+        "link": "/api/v1/league/104"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+      },
+      "hasWildcard": false,
+      "sortOrder": 32,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 202,
+      "name": "American League Central",
+      "season": "2026",
+      "nameShort": "AL Central",
+      "link": "/api/v1/divisions/202",
+      "abbreviation": "ALC",
+      "league": {
+        "id": 103,
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+      },
+      "hasWildcard": false,
+      "sortOrder": 23,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 241,
+      "name": "Texas League North",
+      "season": "2026",
+      "nameShort": "TEX North",
+      "link": "/api/v1/divisions/241",
+      "abbreviation": "TEXN",
+      "league": {
+        "id": 109,
+        "link": "/api/v1/league/109"
+      },
+      "sport": {
+        "id": 12,
+        "link": "/api/v1/sports/12"
+      },
+      "hasWildcard": false,
+      "sortOrder": 233,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 239,
+      "name": "Southern League North",
+      "season": "2026",
+      "nameShort": "SOU North",
+      "link": "/api/v1/divisions/239",
+      "abbreviation": "SOUN",
+      "league": {
+        "id": 111,
+        "link": "/api/v1/league/111"
+      },
+      "sport": {
+        "id": 12,
+        "link": "/api/v1/sports/12"
+      },
+      "hasWildcard": false,
+      "sortOrder": 223,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 235,
+      "name": "Pioneer League North",
+      "season": "2026",
+      "nameShort": "PIO North",
+      "link": "/api/v1/divisions/235",
+      "abbreviation": "PION",
+      "league": {
+        "id": 128,
+        "link": "/api/v1/league/128"
+      },
+      "sport": {
+        "id": 23,
+        "link": "/api/v1/sports/23"
+      },
+      "hasWildcard": false,
+      "sortOrder": 2133,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 6009,
+      "name": "South Region",
+      "season": "2026",
+      "nameShort": "South",
+      "link": "/api/v1/divisions/6009",
+      "abbreviation": "ASL-S",
+      "league": {
+        "id": 6006,
+        "link": "/api/v1/league/6006"
+      },
+      "sport": {
+        "id": 6005,
+        "link": "/api/v1/sports/6005"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3604,
+      "active": true
+    },
+    {
+      "id": 232,
+      "name": "Pacific Coast League American Northern",
+      "season": "2020",
+      "nameShort": "PCL Amer. Northern",
+      "link": "/api/v1/divisions/232",
+      "abbreviation": "PCLAN",
+      "league": {
+        "id": 112,
+        "link": "/api/v1/league/112"
+      },
+      "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+      },
+      "hasWildcard": false,
+      "sortOrder": 127,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 203,
+      "name": "National League West",
+      "season": "2026",
+      "nameShort": "NL West",
+      "link": "/api/v1/divisions/203",
+      "abbreviation": "NLW",
+      "league": {
+        "id": 104,
+        "link": "/api/v1/league/104"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+      },
+      "hasWildcard": false,
+      "sortOrder": 34,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 219,
+      "name": "International League East",
+      "season": "2026",
+      "nameShort": "INT East",
+      "link": "/api/v1/divisions/219",
+      "abbreviation": "INTE",
+      "league": {
+        "id": 117,
+        "link": "/api/v1/league/117"
+      },
+      "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+      },
+      "hasWildcard": false,
+      "sortOrder": 112,
+      "active": true
+    },
+    {
+      "id": 222,
+      "name": "Mexican League Norte",
+      "season": "2026",
+      "nameShort": "MEX Norte",
+      "link": "/api/v1/divisions/222",
+      "abbreviation": "MEXN",
+      "league": {
+        "id": 125,
+        "link": "/api/v1/league/125"
+      },
+      "sport": {
+        "id": 23,
+        "link": "/api/v1/sports/23"
+      },
+      "hasWildcard": false,
+      "sortOrder": 2127,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 223,
+      "name": "Mexican League Sur",
+      "season": "2026",
+      "nameShort": "MEX Sur",
+      "link": "/api/v1/divisions/223",
+      "abbreviation": "MEXS",
+      "league": {
+        "id": 125,
+        "link": "/api/v1/league/125"
+      },
+      "sport": {
+        "id": 23,
+        "link": "/api/v1/sports/23"
+      },
+      "hasWildcard": false,
+      "sortOrder": 2128,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 221,
+      "name": "International League West",
+      "season": "2026",
+      "nameShort": "INT West",
+      "link": "/api/v1/divisions/221",
+      "abbreviation": "INTW",
+      "league": {
+        "id": 117,
+        "link": "/api/v1/league/117"
+      },
+      "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+      },
+      "hasWildcard": false,
+      "sortOrder": 114,
+      "active": true
+    },
+    {
+      "id": 231,
+      "name": "Pacific Coast League West",
+      "season": "2026",
+      "nameShort": "PCL West",
+      "link": "/api/v1/divisions/231",
+      "abbreviation": "PCLW",
+      "league": {
+        "id": 112,
+        "link": "/api/v1/league/112"
+      },
+      "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+      },
+      "hasWildcard": false,
+      "sortOrder": 123,
+      "active": true
+    },
+    {
+      "id": 213,
+      "name": "Eastern League Southwest",
+      "season": "2026",
+      "nameShort": "EAS Southwest",
+      "link": "/api/v1/divisions/213",
+      "abbreviation": "EASSW",
+      "league": {
+        "id": 113,
+        "link": "/api/v1/league/113"
+      },
+      "sport": {
+        "id": 12,
+        "link": "/api/v1/sports/12"
+      },
+      "hasWildcard": false,
+      "sortOrder": 215,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 240,
+      "name": "Southern League South",
+      "season": "2026",
+      "nameShort": "SOU South",
+      "link": "/api/v1/divisions/240",
+      "abbreviation": "SOUS",
+      "league": {
+        "id": 111,
+        "link": "/api/v1/league/111"
+      },
+      "sport": {
+        "id": 12,
+        "link": "/api/v1/sports/12"
+      },
+      "hasWildcard": false,
+      "sortOrder": 225,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 242,
+      "name": "Texas League South",
+      "season": "2026",
+      "nameShort": "TEX South",
+      "link": "/api/v1/divisions/242",
+      "abbreviation": "TEXS",
+      "league": {
+        "id": 109,
+        "link": "/api/v1/league/109"
+      },
+      "sport": {
+        "id": 12,
+        "link": "/api/v1/sports/12"
+      },
+      "hasWildcard": false,
+      "sortOrder": 235,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 208,
+      "name": "California League North",
+      "season": "2026",
+      "nameShort": "CAL North",
+      "link": "/api/v1/divisions/208",
+      "abbreviation": "CALN",
+      "league": {
+        "id": 110,
+        "link": "/api/v1/league/110"
+      },
+      "sport": {
+        "id": 14,
+        "link": "/api/v1/sports/14"
+      },
+      "hasWildcard": false,
+      "sortOrder": 433,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 224,
+      "name": "Midwest League East",
+      "season": "2026",
+      "nameShort": "MID East",
+      "link": "/api/v1/divisions/224",
+      "abbreviation": "MIDE",
+      "league": {
+        "id": 118,
+        "link": "/api/v1/league/118"
+      },
+      "sport": {
+        "id": 13,
+        "link": "/api/v1/sports/13"
+      },
+      "hasWildcard": false,
+      "sortOrder": 323,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 237,
+      "name": "South Atlantic League North",
+      "season": "2026",
+      "nameShort": "SAL North",
+      "link": "/api/v1/divisions/237",
+      "abbreviation": "SALN",
+      "league": {
+        "id": 116,
+        "link": "/api/v1/league/116"
+      },
+      "sport": {
+        "id": 13,
+        "link": "/api/v1/sports/13"
+      },
+      "hasWildcard": false,
+      "sortOrder": 313,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 214,
+      "name": "Florida State League East",
+      "season": "2026",
+      "nameShort": "FSL East",
+      "link": "/api/v1/divisions/214",
+      "abbreviation": "FSLE",
+      "league": {
+        "id": 123,
+        "link": "/api/v1/league/123"
+      },
+      "sport": {
+        "id": 14,
+        "link": "/api/v1/sports/14"
+      },
+      "hasWildcard": false,
+      "sortOrder": 423,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 209,
+      "name": "California League South",
+      "season": "2026",
+      "nameShort": "CAL South",
+      "link": "/api/v1/divisions/209",
+      "abbreviation": "CALS",
+      "league": {
+        "id": 110,
+        "link": "/api/v1/league/110"
+      },
+      "sport": {
+        "id": 14,
+        "link": "/api/v1/sports/14"
+      },
+      "hasWildcard": false,
+      "sortOrder": 435,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 215,
+      "name": "Florida State League West",
+      "season": "2026",
+      "nameShort": "FSL West",
+      "link": "/api/v1/divisions/215",
+      "abbreviation": "FSLW",
+      "league": {
+        "id": 123,
+        "link": "/api/v1/league/123"
+      },
+      "sport": {
+        "id": 14,
+        "link": "/api/v1/sports/14"
+      },
+      "hasWildcard": false,
+      "sortOrder": 425,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 225,
+      "name": "Midwest League West",
+      "season": "2026",
+      "nameShort": "MID West",
+      "link": "/api/v1/divisions/225",
+      "abbreviation": "MIDW",
+      "league": {
+        "id": 118,
+        "link": "/api/v1/league/118"
+      },
+      "sport": {
+        "id": 13,
+        "link": "/api/v1/sports/13"
+      },
+      "hasWildcard": true,
+      "sortOrder": 325,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 238,
+      "name": "South Atlantic League South",
+      "season": "2026",
+      "nameShort": "SAL South",
+      "link": "/api/v1/divisions/238",
+      "abbreviation": "SALS",
+      "league": {
+        "id": 116,
+        "link": "/api/v1/league/116"
+      },
+      "sport": {
+        "id": 13,
+        "link": "/api/v1/sports/13"
+      },
+      "hasWildcard": false,
+      "sortOrder": 315,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 210,
+      "name": "Carolina League North",
+      "season": "2026",
+      "nameShort": "CAR North",
+      "link": "/api/v1/divisions/210",
+      "abbreviation": "CARN",
+      "league": {
+        "id": 122,
+        "link": "/api/v1/league/122"
+      },
+      "sport": {
+        "id": 14,
+        "link": "/api/v1/sports/14"
+      },
+      "hasWildcard": false,
+      "sortOrder": 413,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 247,
+      "name": "Dominican Summer League Central",
+      "season": "2026",
+      "nameShort": "DSL Central",
+      "link": "/api/v1/divisions/247",
+      "abbreviation": "DSLC",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 732,
+      "active": true
+    },
+    {
+      "id": 211,
+      "name": "Carolina League South",
+      "season": "2026",
+      "nameShort": "CAR South",
+      "link": "/api/v1/divisions/211",
+      "abbreviation": "CARS",
+      "league": {
+        "id": 122,
+        "link": "/api/v1/league/122"
+      },
+      "sport": {
+        "id": 14,
+        "link": "/api/v1/sports/14"
+      },
+      "hasWildcard": false,
+      "sortOrder": 417,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 316,
+      "name": "WBC Qualifier 1 - Taipei",
+      "season": "2025",
+      "nameShort": "WBCQ - Taipei",
+      "link": "/api/v1/divisions/316",
+      "abbreviation": "Taipei",
+      "league": {
+        "id": 159,
+        "link": "/api/v1/league/159"
+      },
+      "sport": {
+        "id": 51,
+        "link": "/api/v1/sports/51"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3619,
+      "active": true
+    },
+    {
+      "id": 317,
+      "name": "WBC Qualifier 2 - Tucson",
+      "season": "2025",
+      "nameShort": "WBCQ - Tucson",
+      "link": "/api/v1/divisions/317",
+      "abbreviation": "Tucson",
+      "league": {
+        "id": 159,
+        "link": "/api/v1/league/159"
+      },
+      "sport": {
+        "id": 51,
+        "link": "/api/v1/sports/51"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3620,
+      "active": true
+    },
+    {
+      "id": 310,
+      "name": "Pool A",
+      "season": "2026",
+      "nameShort": "Pool A",
+      "link": "/api/v1/divisions/310",
+      "abbreviation": "Pool A",
+      "league": {
+        "id": 160,
+        "link": "/api/v1/league/160"
+      },
+      "sport": {
+        "id": 51,
+        "link": "/api/v1/sports/51"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3612,
+      "active": true
+    },
+    {
+      "id": 311,
+      "name": "Pool B",
+      "season": "2026",
+      "nameShort": "Pool B",
+      "link": "/api/v1/divisions/311",
+      "abbreviation": "Pool B",
+      "league": {
+        "id": 160,
+        "link": "/api/v1/league/160"
+      },
+      "sport": {
+        "id": 51,
+        "link": "/api/v1/sports/51"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3613,
+      "active": true
+    },
+    {
+      "id": 312,
+      "name": "Pool C",
+      "season": "2026",
+      "nameShort": "Pool C",
+      "link": "/api/v1/divisions/312",
+      "abbreviation": "Pool C",
+      "league": {
+        "id": 160,
+        "link": "/api/v1/league/160"
+      },
+      "sport": {
+        "id": 51,
+        "link": "/api/v1/sports/51"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3614,
+      "active": true
+    },
+    {
+      "id": 313,
+      "name": "Pool D",
+      "season": "2026",
+      "nameShort": "Pool D",
+      "link": "/api/v1/divisions/313",
+      "abbreviation": "Pool D",
+      "league": {
+        "id": 160,
+        "link": "/api/v1/league/160"
+      },
+      "sport": {
+        "id": 51,
+        "link": "/api/v1/sports/51"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3615,
+      "active": true
+    },
+    {
+      "id": 245,
+      "name": "Dominican Summer League North",
+      "season": "2026",
+      "nameShort": "DSL North",
+      "link": "/api/v1/divisions/245",
+      "abbreviation": "DSLN",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 743,
+      "active": true
+    },
+    {
+      "id": 470,
+      "name": "Dominican Summer League Southwest",
+      "season": "2026",
+      "nameShort": "DSL Southwest",
+      "link": "/api/v1/divisions/470",
+      "abbreviation": "DSLSW",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 742,
+      "active": true
+    },
+    {
+      "id": 217,
+      "name": "Florida Complex League North",
+      "season": "2026",
+      "nameShort": "FCL North",
+      "link": "/api/v1/divisions/217",
+      "abbreviation": "FCLN",
+      "league": {
+        "id": 124,
+        "link": "/api/v1/league/124"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 725,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 248,
+      "name": "Dominican Summer League East",
+      "season": "2026",
+      "nameShort": "DSL East",
+      "link": "/api/v1/divisions/248",
+      "abbreviation": "DSLE",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 733,
+      "active": true
+    },
+    {
+      "id": 216,
+      "name": "Florida Complex League East",
+      "season": "2026",
+      "nameShort": "FCL East",
+      "link": "/api/v1/divisions/216",
+      "abbreviation": "FCLE",
+      "league": {
+        "id": 124,
+        "link": "/api/v1/league/124"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 723,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 249,
+      "name": "Dominican Summer League Northwest",
+      "season": "2026",
+      "nameShort": "DSL Northwest",
+      "link": "/api/v1/divisions/249",
+      "abbreviation": "DSLNW",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 735,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 218,
+      "name": "Florida Complex League South",
+      "season": "2026",
+      "nameShort": "FCL South",
+      "link": "/api/v1/divisions/218",
+      "abbreviation": "FCLS",
+      "league": {
+        "id": 124,
+        "link": "/api/v1/league/124"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 729,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 250,
+      "name": "Dominican Summer League West",
+      "season": "2026",
+      "nameShort": "DSL West",
+      "link": "/api/v1/divisions/250",
+      "abbreviation": "DSLW",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 736,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 246,
+      "name": "Dominican Summer League South",
+      "season": "2026",
+      "nameShort": "DSL South",
+      "link": "/api/v1/divisions/246",
+      "abbreviation": "DSLS",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 737,
+      "active": true
+    },
+    {
+      "id": 401,
+      "name": "Dominican Summer League Southeast",
+      "season": "2026",
+      "nameShort": "DSL Southeast",
+      "link": "/api/v1/divisions/401",
+      "abbreviation": "DSLSE",
+      "league": {
+        "id": 130,
+        "link": "/api/v1/league/130"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 734,
+      "active": true
+    },
+    {
+      "id": 251,
+      "name": "Arizona Fall League East",
+      "season": "2021",
+      "nameShort": "AFL East",
+      "link": "/api/v1/divisions/251",
+      "abbreviation": "AFLE",
+      "league": {
+        "id": 119,
+        "link": "/api/v1/league/119"
+      },
+      "sport": {
+        "id": 17,
+        "link": "/api/v1/sports/17"
+      },
+      "hasWildcard": false,
+      "sortOrder": 1312,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 252,
+      "name": "Arizona Fall League West",
+      "season": "2021",
+      "nameShort": "AFL West",
+      "link": "/api/v1/divisions/252",
+      "abbreviation": "AFLW",
+      "league": {
+        "id": 119,
+        "link": "/api/v1/league/119"
+      },
+      "sport": {
+        "id": 17,
+        "link": "/api/v1/sports/17"
+      },
+      "hasWildcard": false,
+      "sortOrder": 1313,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 560,
+      "name": "Arizona Complex League East",
+      "season": "2026",
+      "nameShort": "ACL East",
+      "link": "/api/v1/divisions/560",
+      "abbreviation": "ACLE",
+      "league": {
+        "id": 121,
+        "link": "/api/v1/league/121"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 713,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 561,
+      "name": "Arizona Complex League West",
+      "season": "2026",
+      "nameShort": "ACL West",
+      "link": "/api/v1/divisions/561",
+      "abbreviation": "ACLW",
+      "league": {
+        "id": 121,
+        "link": "/api/v1/league/121"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 717,
+      "numPlayoffTeams": 1,
+      "active": true
+    },
+    {
+      "id": 410,
+      "name": "LVBP Central Division",
+      "season": "2020",
+      "nameShort": "LVBP Oriental",
+      "link": "/api/v1/divisions/410",
+      "abbreviation": "ORI",
+      "league": {
+        "id": 135,
+        "link": "/api/v1/league/135"
+      },
+      "sport": {
+        "id": 17,
+        "link": "/api/v1/sports/17"
+      },
+      "hasWildcard": false,
+      "sortOrder": 1336,
+      "numPlayoffTeams": 2,
+      "active": true
+    },
+    {
+      "id": 411,
+      "name": "LVBP Occidental Division",
+      "season": "2020",
+      "nameShort": "LVBP Occidental",
+      "link": "/api/v1/divisions/411",
+      "abbreviation": "OCC",
+      "league": {
+        "id": 135,
+        "link": "/api/v1/league/135"
+      },
+      "sport": {
+        "id": 17,
+        "link": "/api/v1/sports/17"
+      },
+      "hasWildcard": false,
+      "sortOrder": 1339,
+      "numPlayoffTeams": 2,
+      "active": true
+    },
+    {
+      "id": 6010,
+      "name": "Centro Region",
+      "season": "2026",
+      "nameShort": "Centro",
+      "link": "/api/v1/divisions/6010",
+      "abbreviation": "ASL-C",
+      "league": {
+        "id": 6006,
+        "link": "/api/v1/league/6006"
+      },
+      "sport": {
+        "id": 6005,
+        "link": "/api/v1/sports/6005"
+      },
+      "hasWildcard": false,
+      "sortOrder": 3605,
+      "active": true
+    },
+    {
+      "id": 570,
+      "name": "Arizona Complex League Central",
+      "season": "2026",
+      "nameShort": "ACL Central",
+      "link": "/api/v1/divisions/570",
+      "abbreviation": "ACLC",
+      "league": {
+        "id": 121,
+        "link": "/api/v1/league/121"
+      },
+      "sport": {
+        "id": 16,
+        "link": "/api/v1/sports/16"
+      },
+      "hasWildcard": false,
+      "sortOrder": 715,
+      "numPlayoffTeams": 1,
+      "active": true
+    }
+  ]
+}
