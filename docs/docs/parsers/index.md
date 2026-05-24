@@ -68,12 +68,25 @@ df  = parse_team_roster(raw, return_as_pandas=True)
 | `parse_news` | `*_news`, `*_team_news`, `*_athlete_news` | One row per article |
 | `parse_injuries` | `*_injuries`, `*_team_injuries`, `*_athlete_injuries` | One row per team with injuries |
 | `parse_items` | Generic — Core v2 paginated `{items: [...]}` + Core v2 `{entries: [...]}` (athlete_statisticslog, etc.) | One row per item |
-| `parse_summary` | Site v2 `summary` (dispatcher) | Dict of 5 sub-frames |
+| `parse_summary` | Site v2 `summary` (dispatcher) | Dict of 18 sub-frames |
 | `parse_summary_boxscore_player` | summary section: per-athlete boxscore | One row per (team × athlete) |
 | `parse_summary_boxscore_team` | summary section: per-team boxscore | One row per (team × stat) |
 | `parse_summary_plays` | summary section: play-by-play | One row per play |
 | `parse_summary_winprobability` | summary section: win-prob over time | One row per probability tick |
 | `parse_summary_leaders` | summary section: per-game stat leaders | One row per (team × category × leader) |
+| `parse_summary_game_info` | summary section: venue + attendance | Single row |
+| `parse_summary_officials` | summary section: refs / umpires | One row per official |
+| `parse_summary_header` | summary section: event header + competition shell | Single row |
+| `parse_summary_season_series` | summary section: head-to-head series | One row per series entry |
+| `parse_summary_against_the_spread` | summary section: per-team ATS records | One row per (team × record) |
+| `parse_summary_standings` | summary section: league standings snapshot | One row per team standing |
+| `parse_summary_broadcasts` | summary section: TV broadcasts | One row per broadcast (sparse on past games) |
+| `parse_summary_format` | summary section: game format (regulation + OT) | Single row |
+| `parse_summary_pickcenter` | summary section: pre-game odds / picks | One row per provider (sparse) |
+| `parse_summary_odds` | summary section: odds providers / markets | One row per entry (sparse) |
+| `parse_summary_article` | summary section: recap article metadata | Single row |
+| `parse_summary_injuries` | summary section: per-team injury lists | One row per team |
+| `parse_summary_news` | summary section: embedded news feed | One row per article |
 
 ## Contract guarantees
 

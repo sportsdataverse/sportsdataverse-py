@@ -18,7 +18,6 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-
 FIXTURE_DIR = Path(__file__).parent / "fixtures" / "espn"
 
 
@@ -247,18 +246,118 @@ def test_summary_parsers_handle_real_nba_summary_payload():
     for col in ("team_id", "category_name", "athlete_id", "value"):
         assert col in df.columns
 
-    # ---- dispatcher: section=None returns dict of all 5 ----
+    # ---- dispatcher: section=None returns dict of all 18 sections ----
     out = parse_summary(payload)
-    assert set(out) == {
-        "boxscore_player", "boxscore_team",
-        "plays", "winprobability", "leaders",
+    # The 5 original sub-parsers should all return non-empty frames for
+    # the NBA Finals fixture; the new sections may legitimately be empty
+    # (e.g. broadcasts, pickcenter, odds, against_the_spread are sparse
+    # for past games — assert presence in the dict, not non-emptiness).
+    must_be_present = {
+        "boxscore_player", "boxscore_team", "plays", "winprobability",
+        "leaders", "game_info", "officials", "header", "season_series",
+        "against_the_spread", "standings", "broadcasts", "format",
+        "pickcenter", "odds", "article", "injuries", "news",
     }
-    for name, frame in out.items():
-        assert frame.height > 0, f"dispatcher returned empty frame for {name}"
+    assert set(out) == must_be_present, (
+        f"dispatcher returned unexpected section set: "
+        f"missing={must_be_present - set(out)}, extra={set(out) - must_be_present}"
+    )
+    # The original 5 sub-parsers + the always-present-on-real-games
+    # sections must be non-empty for this fixture
+    for name in ("boxscore_player", "boxscore_team", "plays",
+                 "winprobability", "leaders", "game_info", "officials",
+                 "header", "standings", "format", "article", "injuries",
+                 "news"):
+        assert out[name].height > 0, (
+            f"dispatcher returned empty frame for {name!r} on the NBA "
+            f"Finals fixture (expected non-empty)"
+        )
 
     # ---- dispatcher: section="plays" returns just that frame ----
     single = parse_summary(payload, section="plays")
     assert single.height >= 100
+
+
+def test_summary_section_parsers_individually():
+    """Spot-check each of the 13 NEW summary section parsers against the
+    captured 2024 NBA Finals payload."""
+    from sportsdataverse._common_espn_parsers import (
+        parse_summary_against_the_spread,
+        parse_summary_article,
+        parse_summary_broadcasts,
+        parse_summary_format,
+        parse_summary_game_info,
+        parse_summary_header,
+        parse_summary_injuries,
+        parse_summary_news,
+        parse_summary_odds,
+        parse_summary_officials,
+        parse_summary_pickcenter,
+        parse_summary_season_series,
+        parse_summary_standings,
+    )
+
+    payload = _load("summary_nba")
+
+    # Single-row parsers
+    assert parse_summary_game_info(payload).height == 1
+    assert "venue_id" in parse_summary_game_info(payload).columns
+    assert parse_summary_header(payload).height == 1
+    assert "id" in parse_summary_header(payload).columns
+    assert parse_summary_format(payload).height == 1
+    assert any("regulation" in c for c in parse_summary_format(payload).columns)
+    assert parse_summary_article(payload).height == 1
+    assert "headline" in parse_summary_article(payload).columns
+
+    # Multi-row parsers
+    officials = parse_summary_officials(payload)
+    assert officials.height >= 3, "expected >=3 officials per NBA game"
+    assert "full_name" in officials.columns
+
+    standings = parse_summary_standings(payload)
+    assert standings.height >= 5, "expected >=5 teams in the conference standings"
+    assert "team_id" in standings.columns
+    assert "group_header" in standings.columns
+
+    injuries = parse_summary_injuries(payload)
+    assert injuries.height >= 1
+    assert "id" in injuries.columns or "team_id" in injuries.columns
+
+    news = parse_summary_news(payload)
+    # news.articles is a list; sparse on some fixtures, present here
+    assert news.height >= 1
+    assert "headline" in news.columns
+
+    season_series = parse_summary_season_series(payload)
+    assert season_series.height >= 1
+    assert "title" in season_series.columns
+
+    # Sparse sections — should return zero-row frames without raising
+    assert parse_summary_against_the_spread(payload).height == 0
+    assert parse_summary_broadcasts(payload).height == 0
+    assert parse_summary_pickcenter(payload).height == 0
+    assert parse_summary_odds(payload).height == 0
+
+
+def test_summary_section_parsers_registry_consistent():
+    """SUMMARY_SECTION_PARSERS keys must exactly match the dispatcher's
+    output dict keys."""
+    from sportsdataverse._common_espn_parsers import (
+        SUMMARY_SECTION_PARSERS,
+        parse_summary,
+    )
+
+    expected_keys = set(SUMMARY_SECTION_PARSERS)
+    payload = _load("summary_nba")
+    actual_keys = set(parse_summary(payload))
+    assert expected_keys == actual_keys, (
+        f"registry / dispatcher mismatch: only-in-registry="
+        f"{expected_keys - actual_keys}, only-in-output="
+        f"{actual_keys - expected_keys}"
+    )
+    # Every registered parser must be callable
+    for name, fn in SUMMARY_SECTION_PARSERS.items():
+        assert callable(fn), f"{name} -> {fn!r} not callable"
 
 
 def test_summary_dispatcher_returns_zero_row_dict_on_empty_payload():
