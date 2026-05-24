@@ -14,6 +14,7 @@
   - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
+  - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
@@ -344,10 +345,46 @@ in `tests/fixtures/mlb_api/`). 17 offline tests in
 `tests/test_mlb_api_parsers.py` exercise each dedicated parser plus
 the generic fallback against the live fixtures.
 
+### New: NHL Stats REST + Records parser layers
+
+`sportsdataverse.nhl.nhl_stats_rest_parsers.parse_nhl_stats_rest` and
+`sportsdataverse.nhl.nhl_records_parsers.parse_nhl_records` turn every
+wrapper in their respective surfaces into a tidy polars / pandas
+DataFrame.
+
+Both APIs ship the **identical** `{data: [...], total: N}` envelope on
+every endpoint, so a single parser handles every wrapper:
+
+- `parse_nhl_stats_rest` covers the 21 wrappers in
+  `sportsdataverse.nhl.nhl_stats_rest` (api.nhle.com/stats/rest/en/*).
+- `parse_nhl_records` covers the 50 wrappers in
+  `sportsdataverse.nhl.nhl_records` (records.nhl.com/site/api/*).
+
+The meta Stats REST endpoints (`config`, `componentSeason`, `ping`) ship
+non-`data`-keyed payloads — both parsers return zero-row frames for
+those instead of raising.
+
+Registries: `NHL_STATS_REST_ENDPOINT_PARSERS` has 17 entries (excluding
+the meta endpoints).  `parser_for_nhl_stats_rest` and
+`parser_for_nhl_records` always return a callable (fall back to the
+generic parser — never return `None`).
+
+Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
+6 from `records.nhl.com/site/api/`). 21 offline tests in
+`tests/test_nhl_aux_parsers.py` verify parsing across:
+
+- 7 Stats REST data endpoints (season, franchise, country, glossary,
+  skater_summary, goalie_summary, team_summary).
+- 6 Records endpoints (franchise, franchise_team_totals, coach, draft,
+  player, attendance).
+- Empty-payload contract, pandas opt-in, registry consistency, and the
+  config-as-meta zero-row case.
+
 ### Test infrastructure
 
 - New `tests/test_espn_universal_parsers.py` (65 tests),
-  `tests/test_mlb_api_parsers.py` (17 tests), and
+  `tests/test_mlb_api_parsers.py` (17 tests),
+  `tests/test_nhl_aux_parsers.py` (21 tests), and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
 - New `tests/test_espn_live.py` (32 live tests) gated by
@@ -355,9 +392,13 @@ the generic fallback against the live fixtures.
 - Captured fixtures live under `tests/fixtures/espn/` (12 captures —
   the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA),
   `tests/fixtures/mlb_api/` (8 captures: schedule, teams, roster,
-  standings, person_stats, venues, sports, divisions), and
-  `tests/fixtures/nhl_edge/` (7 captures), each with a README
-  documenting provenance.
+  standings, person_stats, venues, sports, divisions),
+  `tests/fixtures/nhl_stats_rest/` (8 captures: season, franchise,
+  country, glossary, config, skater_summary, goalie_summary,
+  team_summary), `tests/fixtures/nhl_records/` (6 captures:
+  franchise, franchise_team_totals, coach, draft, player,
+  attendance), and `tests/fixtures/nhl_edge/` (7 captures), each with
+  a README documenting provenance.
 - Parametrized cross-league parity tests in
   `test_espn_universal_parsers.py` exercise the summary dispatcher
   against all 5 captured leagues and assert the full 20-section

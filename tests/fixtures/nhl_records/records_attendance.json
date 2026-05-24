@@ -1,0 +1,565 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "playoffAttendance": 1606364,
+      "regularAttendance": 21545024,
+      "seasonId": 20162017,
+      "totalAttendance": 23151388
+    },
+    {
+      "id": 2,
+      "playoffAttendance": 1684638,
+      "regularAttendance": 21615397,
+      "seasonId": 20152016,
+      "totalAttendance": 23300035
+    },
+    {
+      "id": 3,
+      "playoffAttendance": 1701336,
+      "regularAttendance": 21533419,
+      "seasonId": 20142015,
+      "totalAttendance": 23234755
+    },
+    {
+      "id": 4,
+      "playoffAttendance": 1775557,
+      "regularAttendance": 21758902,
+      "seasonId": 20132014,
+      "totalAttendance": 23534459
+    },
+    {
+      "id": 5,
+      "playoffAttendance": 1631683,
+      "regularAttendance": 12792723,
+      "seasonId": 20122013,
+      "totalAttendance": 14424406
+    },
+    {
+      "id": 6,
+      "playoffAttendance": 1592270,
+      "regularAttendance": 21468141,
+      "seasonId": 20112012,
+      "totalAttendance": 23060411
+    },
+    {
+      "id": 7,
+      "playoffAttendance": 1667624,
+      "regularAttendance": 21113926,
+      "seasonId": 20102011,
+      "totalAttendance": 22781550
+    },
+    {
+      "id": 8,
+      "playoffAttendance": 1702371,
+      "regularAttendance": 20996455,
+      "seasonId": 20092010,
+      "totalAttendance": 22698826
+    },
+    {
+      "id": 9,
+      "playoffAttendance": 1639602,
+      "regularAttendance": 21475223,
+      "seasonId": 20082009,
+      "totalAttendance": 23114825
+    },
+    {
+      "id": 10,
+      "playoffAttendance": 1587054,
+      "regularAttendance": 21236255,
+      "seasonId": 20072008,
+      "totalAttendance": 22823309
+    },
+    {
+      "id": 11,
+      "playoffAttendance": 1496501,
+      "regularAttendance": 20861787,
+      "seasonId": 20062007,
+      "totalAttendance": 22358288
+    },
+    {
+      "id": 12,
+      "playoffAttendance": 1530405,
+      "regularAttendance": 20854169,
+      "seasonId": 20052006,
+      "totalAttendance": 22384574
+    },
+    {
+      "id": 13,
+      "playoffAttendance": null,
+      "regularAttendance": null,
+      "seasonId": 20042005,
+      "totalAttendance": null
+    },
+    {
+      "id": 14,
+      "playoffAttendance": 1708691,
+      "regularAttendance": 20356199,
+      "seasonId": 20032004,
+      "totalAttendance": 22064890
+    },
+    {
+      "id": 15,
+      "playoffAttendance": 1636120,
+      "regularAttendance": 20408704,
+      "seasonId": 20022003,
+      "totalAttendance": 22044824
+    },
+    {
+      "id": 16,
+      "playoffAttendance": 1691174,
+      "regularAttendance": 20614613,
+      "seasonId": 20012002,
+      "totalAttendance": 22305787
+    },
+    {
+      "id": 17,
+      "playoffAttendance": 1584011,
+      "regularAttendance": 20373379,
+      "seasonId": 20002001,
+      "totalAttendance": 21957390
+    },
+    {
+      "id": 18,
+      "playoffAttendance": 1524629,
+      "regularAttendance": 18800139,
+      "seasonId": 19992000,
+      "totalAttendance": 20324768
+    },
+    {
+      "id": 19,
+      "playoffAttendance": 1509411,
+      "regularAttendance": 18001741,
+      "seasonId": 19981999,
+      "totalAttendance": 19511152
+    },
+    {
+      "id": 20,
+      "playoffAttendance": 1507416,
+      "regularAttendance": 17264678,
+      "seasonId": 19971998,
+      "totalAttendance": 18772094
+    },
+    {
+      "id": 21,
+      "playoffAttendance": 1494878,
+      "regularAttendance": 17640529,
+      "seasonId": 19961997,
+      "totalAttendance": 19135407
+    },
+    {
+      "id": 22,
+      "playoffAttendance": 1540140,
+      "regularAttendance": 17041614,
+      "seasonId": 19951996,
+      "totalAttendance": 18581754
+    },
+    {
+      "id": 23,
+      "playoffAttendance": 1329130,
+      "regularAttendance": 9233884,
+      "seasonId": 19941995,
+      "totalAttendance": 10563014
+    },
+    {
+      "id": 24,
+      "playoffAttendance": 1440095,
+      "regularAttendance": 16105604,
+      "seasonId": 19931994,
+      "totalAttendance": 17545699
+    },
+    {
+      "id": 25,
+      "playoffAttendance": 1346034,
+      "regularAttendance": 14158177,
+      "seasonId": 19921993,
+      "totalAttendance": 15504211
+    },
+    {
+      "id": 26,
+      "playoffAttendance": 1327920,
+      "regularAttendance": 12769676,
+      "seasonId": 19911992,
+      "totalAttendance": 14097596
+    },
+    {
+      "id": 27,
+      "playoffAttendance": 1442203,
+      "regularAttendance": 12343897,
+      "seasonId": 19901991,
+      "totalAttendance": 13786100
+    },
+    {
+      "id": 28,
+      "playoffAttendance": 1355593,
+      "regularAttendance": 12579651,
+      "seasonId": 19891990,
+      "totalAttendance": 13935244
+    },
+    {
+      "id": 29,
+      "playoffAttendance": 1327214,
+      "regularAttendance": 12417969,
+      "seasonId": 19881989,
+      "totalAttendance": 13745183
+    },
+    {
+      "id": 30,
+      "playoffAttendance": 1336901,
+      "regularAttendance": 12117512,
+      "seasonId": 19871988,
+      "totalAttendance": 13454413
+    },
+    {
+      "id": 31,
+      "playoffAttendance": 1383967,
+      "regularAttendance": 11855880,
+      "seasonId": 19861987,
+      "totalAttendance": 13239847
+    },
+    {
+      "id": 32,
+      "playoffAttendance": 1152503,
+      "regularAttendance": 11621000,
+      "seasonId": 19851986,
+      "totalAttendance": 12773503
+    },
+    {
+      "id": 33,
+      "playoffAttendance": 1107500,
+      "regularAttendance": 11633730,
+      "seasonId": 19841985,
+      "totalAttendance": 12741230
+    },
+    {
+      "id": 34,
+      "playoffAttendance": 1107400,
+      "regularAttendance": 11359386,
+      "seasonId": 19831984,
+      "totalAttendance": 12466786
+    },
+    {
+      "id": 35,
+      "playoffAttendance": 1088222,
+      "regularAttendance": 10940610,
+      "seasonId": 19821983,
+      "totalAttendance": 12028832
+    },
+    {
+      "id": 36,
+      "playoffAttendance": 1058948,
+      "regularAttendance": 10710894,
+      "seasonId": 19811982,
+      "totalAttendance": 11769842
+    },
+    {
+      "id": 37,
+      "playoffAttendance": 966390,
+      "regularAttendance": 10726198,
+      "seasonId": 19801981,
+      "totalAttendance": 11692588
+    },
+    {
+      "id": 38,
+      "playoffAttendance": 976699,
+      "regularAttendance": 10533623,
+      "seasonId": 19791980,
+      "totalAttendance": 11510322
+    },
+    {
+      "id": 39,
+      "playoffAttendance": 694521,
+      "regularAttendance": 7758053,
+      "seasonId": 19781979,
+      "totalAttendance": 8452574
+    },
+    {
+      "id": 40,
+      "playoffAttendance": 686634,
+      "regularAttendance": 8526564,
+      "seasonId": 19771978,
+      "totalAttendance": 9213198
+    },
+    {
+      "id": 41,
+      "playoffAttendance": 646279,
+      "regularAttendance": 8563890,
+      "seasonId": 19761977,
+      "totalAttendance": 9210169
+    },
+    {
+      "id": 42,
+      "playoffAttendance": 726279,
+      "regularAttendance": 9103761,
+      "seasonId": 19751976,
+      "totalAttendance": 9830040
+    },
+    {
+      "id": 43,
+      "playoffAttendance": 1517965,
+      "regularAttendance": 22174362,
+      "seasonId": 20172018,
+      "totalAttendance": 23692327
+    },
+    {
+      "id": 45,
+      "playoffAttendance": 1574688,
+      "regularAttendance": 22186851,
+      "seasonId": 20182019,
+      "totalAttendance": 23761539
+    },
+    {
+      "id": 47,
+      "playoffAttendance": 0,
+      "regularAttendance": 18835275,
+      "seasonId": 20192020,
+      "totalAttendance": 18835275
+    },
+    {
+      "id": 48,
+      "playoffAttendance": 769226,
+      "regularAttendance": 1004925,
+      "seasonId": 20202021,
+      "totalAttendance": 1774151
+    },
+    {
+      "id": 49,
+      "playoffAttendance": 1655687,
+      "regularAttendance": 20784346,
+      "seasonId": 20212022,
+      "totalAttendance": 22440033
+    },
+    {
+      "id": 50,
+      "playoffAttendance": 784181,
+      "regularAttendance": 9521536,
+      "seasonId": 19741975,
+      "totalAttendance": 10305717
+    },
+    {
+      "id": 51,
+      "playoffAttendance": 600442,
+      "regularAttendance": 8640978,
+      "seasonId": 19731974,
+      "totalAttendance": 9241420
+    },
+    {
+      "id": 52,
+      "playoffAttendance": 624637,
+      "regularAttendance": 8575651,
+      "seasonId": 19721973,
+      "totalAttendance": 9200288
+    },
+    {
+      "id": 53,
+      "playoffAttendance": 582666,
+      "regularAttendance": 7609368,
+      "seasonId": 19711972,
+      "totalAttendance": 8192034
+    },
+    {
+      "id": 54,
+      "playoffAttendance": 707633,
+      "regularAttendance": 7257677,
+      "seasonId": 19701971,
+      "totalAttendance": 7965310
+    },
+    {
+      "id": 55,
+      "playoffAttendance": 461694,
+      "regularAttendance": 5992065,
+      "seasonId": 19691970,
+      "totalAttendance": 6453759
+    },
+    {
+      "id": 56,
+      "playoffAttendance": 431739,
+      "regularAttendance": 5550613,
+      "seasonId": 19681969,
+      "totalAttendance": 5982352
+    },
+    {
+      "id": 57,
+      "playoffAttendance": 495089,
+      "regularAttendance": 4938043,
+      "seasonId": 19671968,
+      "totalAttendance": 5433132
+    },
+    {
+      "id": 58,
+      "playoffAttendance": 248336,
+      "regularAttendance": 3084759,
+      "seasonId": 19661967,
+      "totalAttendance": 3333095
+    },
+    {
+      "id": 59,
+      "playoffAttendance": 249020,
+      "regularAttendance": 2941164,
+      "seasonId": 19651966,
+      "totalAttendance": 3190184
+    },
+    {
+      "id": 60,
+      "playoffAttendance": 303959,
+      "regularAttendance": 2822635,
+      "seasonId": 19641965,
+      "totalAttendance": 3126594
+    },
+    {
+      "id": 61,
+      "playoffAttendance": 309149,
+      "regularAttendance": 2732642,
+      "seasonId": 19631964,
+      "totalAttendance": 3041791
+    },
+    {
+      "id": 62,
+      "playoffAttendance": 220906,
+      "regularAttendance": 2590574,
+      "seasonId": 19621963,
+      "totalAttendance": 2811480
+    },
+    {
+      "id": 63,
+      "playoffAttendance": 277000,
+      "regularAttendance": 2435424,
+      "seasonId": 19611962,
+      "totalAttendance": 2712424
+    },
+    {
+      "id": 64,
+      "playoffAttendance": 242000,
+      "regularAttendance": 2317142,
+      "seasonId": 19601961,
+      "totalAttendance": 2559142
+    },
+    {
+      "id": 65,
+      "playoffAttendance": 187000,
+      "regularAttendance": 2386970,
+      "seasonId": 19591960,
+      "totalAttendance": 2573970
+    },
+    {
+      "id": 66,
+      "playoffAttendance": 254832,
+      "regularAttendance": 2314533,
+      "seasonId": 19581959,
+      "totalAttendance": 2569365
+    },
+    {
+      "id": 67,
+      "playoffAttendance": 228046,
+      "regularAttendance": 2216237,
+      "seasonId": 19571958,
+      "totalAttendance": 2444283
+    },
+    {
+      "id": 68,
+      "playoffAttendance": 216102,
+      "regularAttendance": 2187785,
+      "seasonId": 19561957,
+      "totalAttendance": 2403887
+    },
+    {
+      "id": 69,
+      "playoffAttendance": 211670,
+      "regularAttendance": 2127843,
+      "seasonId": 19551956,
+      "totalAttendance": 2339513
+    },
+    {
+      "id": 70,
+      "playoffAttendance": 218172,
+      "regularAttendance": 1910152,
+      "seasonId": 19541955,
+      "totalAttendance": 2128324
+    },
+    {
+      "id": 71,
+      "playoffAttendance": 223635,
+      "regularAttendance": 1950146,
+      "seasonId": 19531954,
+      "totalAttendance": 2173781
+    },
+    {
+      "id": 72,
+      "playoffAttendance": 256130,
+      "regularAttendance": 2044972,
+      "seasonId": 19521953,
+      "totalAttendance": 2301102
+    },
+    {
+      "id": 73,
+      "playoffAttendance": 210185,
+      "regularAttendance": 1908032,
+      "seasonId": 19511952,
+      "totalAttendance": 2118217
+    },
+    {
+      "id": 74,
+      "playoffAttendance": 236213,
+      "regularAttendance": 2029225,
+      "seasonId": 19501951,
+      "totalAttendance": 2265438
+    },
+    {
+      "id": 75,
+      "playoffAttendance": 264033,
+      "regularAttendance": 2361059,
+      "seasonId": 19491950,
+      "totalAttendance": 2625092
+    },
+    {
+      "id": 76,
+      "playoffAttendance": 216342,
+      "regularAttendance": 2296101,
+      "seasonId": 19481949,
+      "totalAttendance": 2512443
+    },
+    {
+      "id": 77,
+      "playoffAttendance": 210476,
+      "regularAttendance": 2398475,
+      "seasonId": 19471948,
+      "totalAttendance": 2608951
+    },
+    {
+      "id": 78,
+      "playoffAttendance": 214772,
+      "regularAttendance": 2403110,
+      "seasonId": 19461947,
+      "totalAttendance": 2617882
+    },
+    {
+      "id": 79,
+      "playoffAttendance": 1615636,
+      "regularAttendance": 22436532,
+      "seasonId": 20222023,
+      "totalAttendance": 24052168
+    },
+    {
+      "id": 80,
+      "playoffAttendance": 1626399,
+      "regularAttendance": 22873142,
+      "seasonId": 20232024,
+      "totalAttendance": 24499541
+    },
+    {
+      "id": 81,
+      "playoffAttendance": 1592353,
+      "regularAttendance": 23014458,
+      "seasonId": 20242025,
+      "totalAttendance": 24606811
+    },
+    {
+      "id": 82,
+      "playoffAttendance": 0,
+      "regularAttendance": 23158522,
+      "seasonId": 20252026,
+      "totalAttendance": 23158522
+    }
+  ],
+  "total": 80
+}

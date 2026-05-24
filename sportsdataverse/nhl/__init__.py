@@ -16,7 +16,16 @@ from sportsdataverse.nhl.nhl_edge_parsers import (
     parse_edge_zone_time,
     parser_for_edge,
 )
+from sportsdataverse.nhl.nhl_records_parsers import (
+    parse_nhl_records,
+    parser_for_nhl_records,
+)
 from sportsdataverse.nhl.nhl_stats_rest import *
+from sportsdataverse.nhl.nhl_stats_rest_parsers import (
+    NHL_STATS_REST_ENDPOINT_PARSERS,
+    parse_nhl_stats_rest,
+    parser_for_nhl_stats_rest,
+)
 from sportsdataverse.nhl.nhl_game_rosters import *
 from sportsdataverse.nhl.nhl_loaders import *
 from sportsdataverse.nhl.nhl_pbp import *

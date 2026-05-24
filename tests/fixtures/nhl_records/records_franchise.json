@@ -1,0 +1,405 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "firstSeasonId": 19171918,
+      "fullName": "Montr\u00e9al Canadiens",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 8,
+      "teamAbbrev": "MTL",
+      "teamCommonName": "Canadiens",
+      "teamPlaceName": "Montr\u00e9al"
+    },
+    {
+      "id": 2,
+      "firstSeasonId": 19171918,
+      "fullName": "Montreal Wanderers",
+      "lastSeasonId": 19171918,
+      "mostRecentTeamId": 41,
+      "teamAbbrev": "MWN",
+      "teamCommonName": "Wanderers",
+      "teamPlaceName": "Montreal"
+    },
+    {
+      "id": 3,
+      "firstSeasonId": 19171918,
+      "fullName": "St. Louis Eagles",
+      "lastSeasonId": 19341935,
+      "mostRecentTeamId": 45,
+      "teamAbbrev": "SLE",
+      "teamCommonName": "Eagles",
+      "teamPlaceName": "St. Louis"
+    },
+    {
+      "id": 4,
+      "firstSeasonId": 19191920,
+      "fullName": "Hamilton Tigers",
+      "lastSeasonId": 19241925,
+      "mostRecentTeamId": 37,
+      "teamAbbrev": "HAM",
+      "teamCommonName": "Tigers",
+      "teamPlaceName": "Hamilton"
+    },
+    {
+      "id": 5,
+      "firstSeasonId": 19171918,
+      "fullName": "Toronto Maple Leafs",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 10,
+      "teamAbbrev": "TOR",
+      "teamCommonName": "Maple Leafs",
+      "teamPlaceName": "Toronto"
+    },
+    {
+      "id": 6,
+      "firstSeasonId": 19241925,
+      "fullName": "Boston Bruins",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 6,
+      "teamAbbrev": "BOS",
+      "teamCommonName": "Bruins",
+      "teamPlaceName": "Boston"
+    },
+    {
+      "id": 7,
+      "firstSeasonId": 19241925,
+      "fullName": "Montreal Maroons",
+      "lastSeasonId": 19371938,
+      "mostRecentTeamId": 43,
+      "teamAbbrev": "MMR",
+      "teamCommonName": "Maroons",
+      "teamPlaceName": "Montreal"
+    },
+    {
+      "id": 8,
+      "firstSeasonId": 19251926,
+      "fullName": "Brooklyn Americans",
+      "lastSeasonId": 19411942,
+      "mostRecentTeamId": 51,
+      "teamAbbrev": "BRK",
+      "teamCommonName": "Americans",
+      "teamPlaceName": "Brooklyn"
+    },
+    {
+      "id": 9,
+      "firstSeasonId": 19251926,
+      "fullName": "Philadelphia Quakers",
+      "lastSeasonId": 19301931,
+      "mostRecentTeamId": 39,
+      "teamAbbrev": "QUA",
+      "teamCommonName": "Quakers",
+      "teamPlaceName": "Philadelphia"
+    },
+    {
+      "id": 10,
+      "firstSeasonId": 19261927,
+      "fullName": "New York Rangers",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 3,
+      "teamAbbrev": "NYR",
+      "teamCommonName": "Rangers",
+      "teamPlaceName": "New York"
+    },
+    {
+      "id": 11,
+      "firstSeasonId": 19261927,
+      "fullName": "Chicago Blackhawks",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 16,
+      "teamAbbrev": "CHI",
+      "teamCommonName": "Blackhawks",
+      "teamPlaceName": "Chicago"
+    },
+    {
+      "id": 12,
+      "firstSeasonId": 19261927,
+      "fullName": "Detroit Red Wings",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 17,
+      "teamAbbrev": "DET",
+      "teamCommonName": "Red Wings",
+      "teamPlaceName": "Detroit"
+    },
+    {
+      "id": 13,
+      "firstSeasonId": 19671968,
+      "fullName": "Cleveland Barons",
+      "lastSeasonId": 19771978,
+      "mostRecentTeamId": 49,
+      "teamAbbrev": "CLE",
+      "teamCommonName": "Barons",
+      "teamPlaceName": "Cleveland"
+    },
+    {
+      "id": 14,
+      "firstSeasonId": 19671968,
+      "fullName": "Los Angeles Kings",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 26,
+      "teamAbbrev": "LAK",
+      "teamCommonName": "Kings",
+      "teamPlaceName": "Los Angeles"
+    },
+    {
+      "id": 15,
+      "firstSeasonId": 19671968,
+      "fullName": "Dallas Stars",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 25,
+      "teamAbbrev": "DAL",
+      "teamCommonName": "Stars",
+      "teamPlaceName": "Dallas"
+    },
+    {
+      "id": 16,
+      "firstSeasonId": 19671968,
+      "fullName": "Philadelphia Flyers",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 4,
+      "teamAbbrev": "PHI",
+      "teamCommonName": "Flyers",
+      "teamPlaceName": "Philadelphia"
+    },
+    {
+      "id": 17,
+      "firstSeasonId": 19671968,
+      "fullName": "Pittsburgh Penguins",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 5,
+      "teamAbbrev": "PIT",
+      "teamCommonName": "Penguins",
+      "teamPlaceName": "Pittsburgh"
+    },
+    {
+      "id": 18,
+      "firstSeasonId": 19671968,
+      "fullName": "St. Louis Blues",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 19,
+      "teamAbbrev": "STL",
+      "teamCommonName": "Blues",
+      "teamPlaceName": "St. Louis"
+    },
+    {
+      "id": 19,
+      "firstSeasonId": 19701971,
+      "fullName": "Buffalo Sabres",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 7,
+      "teamAbbrev": "BUF",
+      "teamCommonName": "Sabres",
+      "teamPlaceName": "Buffalo"
+    },
+    {
+      "id": 20,
+      "firstSeasonId": 19701971,
+      "fullName": "Vancouver Canucks",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 23,
+      "teamAbbrev": "VAN",
+      "teamCommonName": "Canucks",
+      "teamPlaceName": "Vancouver"
+    },
+    {
+      "id": 21,
+      "firstSeasonId": 19721973,
+      "fullName": "Calgary Flames",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 20,
+      "teamAbbrev": "CGY",
+      "teamCommonName": "Flames",
+      "teamPlaceName": "Calgary"
+    },
+    {
+      "id": 22,
+      "firstSeasonId": 19721973,
+      "fullName": "New York Islanders",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 2,
+      "teamAbbrev": "NYI",
+      "teamCommonName": "Islanders",
+      "teamPlaceName": "New York"
+    },
+    {
+      "id": 23,
+      "firstSeasonId": 19741975,
+      "fullName": "New Jersey Devils",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 1,
+      "teamAbbrev": "NJD",
+      "teamCommonName": "Devils",
+      "teamPlaceName": "New Jersey"
+    },
+    {
+      "id": 24,
+      "firstSeasonId": 19741975,
+      "fullName": "Washington Capitals",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 15,
+      "teamAbbrev": "WSH",
+      "teamCommonName": "Capitals",
+      "teamPlaceName": "Washington"
+    },
+    {
+      "id": 25,
+      "firstSeasonId": 19791980,
+      "fullName": "Edmonton Oilers",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 22,
+      "teamAbbrev": "EDM",
+      "teamCommonName": "Oilers",
+      "teamPlaceName": "Edmonton"
+    },
+    {
+      "id": 26,
+      "firstSeasonId": 19791980,
+      "fullName": "Carolina Hurricanes",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 12,
+      "teamAbbrev": "CAR",
+      "teamCommonName": "Hurricanes",
+      "teamPlaceName": "Carolina"
+    },
+    {
+      "id": 27,
+      "firstSeasonId": 19791980,
+      "fullName": "Colorado Avalanche",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 21,
+      "teamAbbrev": "COL",
+      "teamCommonName": "Avalanche",
+      "teamPlaceName": "Colorado"
+    },
+    {
+      "id": 28,
+      "firstSeasonId": 19791980,
+      "fullName": "Arizona Coyotes",
+      "lastSeasonId": 20232024,
+      "mostRecentTeamId": 53,
+      "teamAbbrev": "ARI",
+      "teamCommonName": "Coyotes",
+      "teamPlaceName": "Arizona"
+    },
+    {
+      "id": 29,
+      "firstSeasonId": 19911992,
+      "fullName": "San Jose Sharks",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 28,
+      "teamAbbrev": "SJS",
+      "teamCommonName": "Sharks",
+      "teamPlaceName": "San Jose"
+    },
+    {
+      "id": 30,
+      "firstSeasonId": 19921993,
+      "fullName": "Ottawa Senators",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 9,
+      "teamAbbrev": "OTT",
+      "teamCommonName": "Senators",
+      "teamPlaceName": "Ottawa"
+    },
+    {
+      "id": 31,
+      "firstSeasonId": 19921993,
+      "fullName": "Tampa Bay Lightning",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 14,
+      "teamAbbrev": "TBL",
+      "teamCommonName": "Lightning",
+      "teamPlaceName": "Tampa Bay"
+    },
+    {
+      "id": 32,
+      "firstSeasonId": 19931994,
+      "fullName": "Anaheim Ducks",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 24,
+      "teamAbbrev": "ANA",
+      "teamCommonName": "Ducks",
+      "teamPlaceName": "Anaheim"
+    },
+    {
+      "id": 33,
+      "firstSeasonId": 19931994,
+      "fullName": "Florida Panthers",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 13,
+      "teamAbbrev": "FLA",
+      "teamCommonName": "Panthers",
+      "teamPlaceName": "Florida"
+    },
+    {
+      "id": 34,
+      "firstSeasonId": 19981999,
+      "fullName": "Nashville Predators",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 18,
+      "teamAbbrev": "NSH",
+      "teamCommonName": "Predators",
+      "teamPlaceName": "Nashville"
+    },
+    {
+      "id": 35,
+      "firstSeasonId": 19992000,
+      "fullName": "Winnipeg Jets",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 52,
+      "teamAbbrev": "WPG",
+      "teamCommonName": "Jets",
+      "teamPlaceName": "Winnipeg"
+    },
+    {
+      "id": 36,
+      "firstSeasonId": 20002001,
+      "fullName": "Columbus Blue Jackets",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 29,
+      "teamAbbrev": "CBJ",
+      "teamCommonName": "Blue Jackets",
+      "teamPlaceName": "Columbus"
+    },
+    {
+      "id": 37,
+      "firstSeasonId": 20002001,
+      "fullName": "Minnesota Wild",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 30,
+      "teamAbbrev": "MIN",
+      "teamCommonName": "Wild",
+      "teamPlaceName": "Minnesota"
+    },
+    {
+      "id": 38,
+      "firstSeasonId": 20172018,
+      "fullName": "Vegas Golden Knights",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 54,
+      "teamAbbrev": "VGK",
+      "teamCommonName": "Golden Knights",
+      "teamPlaceName": "Vegas"
+    },
+    {
+      "id": 39,
+      "firstSeasonId": 20212022,
+      "fullName": "Seattle Kraken",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 55,
+      "teamAbbrev": "SEA",
+      "teamCommonName": "Kraken",
+      "teamPlaceName": "Seattle"
+    },
+    {
+      "id": 40,
+      "firstSeasonId": 20242025,
+      "fullName": "Utah Mammoth",
+      "lastSeasonId": null,
+      "mostRecentTeamId": 68,
+      "teamAbbrev": "UTA",
+      "teamCommonName": "Mammoth",
+      "teamPlaceName": "Utah"
+    }
+  ],
+  "total": 40
+}

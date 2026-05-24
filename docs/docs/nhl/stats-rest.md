@@ -73,6 +73,30 @@ print(raw["data"][0])
 Live ping confirmed working — `nhl_stats_rest_season()` returns 108 NHL
 seasons on the first call.
 
+## Parser layer
+
+Every Stats REST endpoint ships the same `{data: [...], total: N}`
+shape, so a single parser handles every wrapper:
+
+```python
+from sportsdataverse.nhl import (
+    nhl_stats_rest_season,
+    parse_nhl_stats_rest,
+)
+
+raw = nhl_stats_rest_season()
+df  = parse_nhl_stats_rest(raw)   # 108-row polars DataFrame
+df  = parse_nhl_stats_rest(raw, return_as_pandas=True)
+```
+
+The meta endpoints (`nhl_stats_rest_config`, `nhl_stats_rest_component_season`,
+`nhl_stats_rest_ping`) return non-`data`-keyed payloads — the parser
+returns a zero-row frame for those instead of raising.
+
+`NHL_STATS_REST_ENDPOINT_PARSERS` registry has 17 entries.
+`parser_for_nhl_stats_rest(fn_name)` always returns a callable (falls
+back to `parse_nhl_stats_rest`).
+
 ## See also
 
 - [NHL EDGE](./edge) — player tracking / Statcast surface.

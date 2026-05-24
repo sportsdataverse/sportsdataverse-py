@@ -69,6 +69,26 @@ for f in raw["data"][:5]:
 Live test: `nhl_records_franchise()` returned 40 franchises on the
 first call against `records.nhl.com/site/api/franchise`.
 
+## Parser layer
+
+Every Records endpoint ships the same `{data: [...], total: N}` shape
+(identical to NHL Stats REST), so a single parser handles every wrapper:
+
+```python
+from sportsdataverse.nhl import (
+    nhl_records_franchise,
+    nhl_records_coach,
+    parse_nhl_records,
+)
+
+franchises = parse_nhl_records(nhl_records_franchise())   # 40 rows
+coaches    = parse_nhl_records(nhl_records_coach(limit=10))  # 10 rows × 27 cols
+```
+
+`parser_for_nhl_records(fn_name)` always returns `parse_nhl_records`
+(every endpoint uses the same shape — the function exists for API
+symmetry with the Stats REST and MLB API parser layers).
+
 ## See also
 
 - [NHL EDGE](./edge) — player tracking / Statcast surface.

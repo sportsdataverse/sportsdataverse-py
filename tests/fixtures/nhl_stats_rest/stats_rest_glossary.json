@@ -1,0 +1,2894 @@
+{
+  "data": [
+    {
+      "id": 1046,
+      "abbreviation": "General concepts",
+      "definition": "Teams playing at full strength are generally playing at 5-on-5, meaning five skaters and a goalie versus five skaters and a goalie. Penalties frequently cause teams to play at less than full strength, leading to situations other than 5-on-5. Also note that late-game situations with the goalie pulled do not qualify as 5-on-5, e.g. turning 5-on-5 into 6-on-5 when a skater replaces the goalie on the ice. Many enhanced stats concentrate on 5-on-5 play to compare players under the manpower-neutral circumstances that make up the majority of time in a game.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "5-on-5 stats",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1047,
+      "abbreviation": "A",
+      "definition": "Assists can be awarded to a maximum of two players touching the puck before the goal scorer, provided the opposing team has not controlled the puck between the potential assists and the goal being scored. Unless otherwise specified, assist totals are for all situations (even strength, power play, shorthanded) combined. The last teammate to touch the puck before the goal scorer is awarded a primary assist. The preceding teammate to touch the puck before the first assisting player is awarded a secondary assist. Goals scored without teammates passing or otherwise touching the puck before it gets to the goal scorer are said to be unassisted and no assists are awarded. See primary assists and secondary assists.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:42:00"
+    },
+    {
+      "id": 1048,
+      "abbreviation": "A (5-on-5)",
+      "definition": "Player's own assists in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Assists (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1049,
+      "abbreviation": "A/60 (5-on-5)",
+      "definition": "Player's own assists per 60 minutes in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Assists per 60 minutes (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1050,
+      "abbreviation": "A/GP",
+      "definition": "In comparing the assist production of different players, assist totals can be divided by games played e.g. to account for players who have missed games due to injury or who have not spent the entire season in the NHL. However, this adjustment does not account for varying time on ice and varying special teams time. See assists.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Assists per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1051,
+      "abbreviation": "Bench",
+      "definition": "Bench minor penalties are minor penalties assessed to either the coaching staff or the entire team. They include penalties for abuse of officials, delay of game, deliberate illegal substitution, face-off violation, illegal substitution, improper starting lineup, interference from the players or penalty bench, interference with an official, leaving bench at end of period, refusing to start play, stepping onto ice during period (coach), throwing objects onto ice, too many men on the ice, unsportsmanlike conduct, and unsustained request for measurement. Since no specific player is penalized, the coach selects a player to serve the penalty in the penalty box.",
+      "firstSeasonForStat": null,
+      "fullName": "Bench penalties",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1052,
+      "abbreviation": "Ctry",
+      "definition": "A player's nationality may differ from his country of birth. The country listed is the current country that his birth city is in.",
+      "firstSeasonForStat": null,
+      "fullName": "Birth country",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1053,
+      "abbreviation": "BkS",
+      "definition": "A blocked shot occurs when an opponent's shot attempt is blocked by a skater, with his stick or body. From the shooter's perspective, attempts blocked count toward SAT but not toward USAT. The blocked shot statistic has been recorded by the NHL since 2002-03. See SAT; see USAT.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Blocked shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1054,
+      "abbreviation": "BkS/60",
+      "definition": "Player's average rate of blocked shots per 60 minutes of ice time",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Blocked shots per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1055,
+      "abbreviation": "BkS/GP",
+      "definition": "Blocked shots divided by games played",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Blocked shots per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1056,
+      "abbreviation": "Career GDG",
+      "definition": "Skater's career game-deciding shootout goals. It can be compared with shootout goals for the season (or another timeframe) on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Career shootout game-deciding goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1057,
+      "abbreviation": "Career SO GP",
+      "definition": "Number of skater's games played that went to a shootout, for his career. It can be compared with season totals (or another timeframe) on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Career shootout games played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1058,
+      "abbreviation": "Career SO G",
+      "definition": "Skater's career shootout goals. It can be compared with shootout goals for the season (or another timeframe) on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Career shootout goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1059,
+      "abbreviation": "Career SO S%",
+      "definition": "Skater's career shootout goals per shootout shot attempt. It can be compared with shootout shooting percentage for the season (or another timeframe) on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Career shootout shooting percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1060,
+      "abbreviation": "Career SO S",
+      "definition": "Skater's career shootout shot attempts (including missed shots and otherwise failed attempts). It can be compared with shootout shot attempts for the season (or another timeframe) on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Career shootout shot attempts",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1061,
+      "abbreviation": "General concepts",
+      "definition": "A close game is defined as a game within a single goal in the first two periods or tied in the third period or overtime. As teams playing from behind tend to take more shots while teams playing with lead tend to take fewer shots, restricting stats like SAT and USAT to close-game situations helps filter out situations that skew shot-based data. The limitation of looking at only close-game situations is a modest reduction in sample size. See SAT%; see USAT%; see USAT% close.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Close or close game",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:42:46"
+    },
+    {
+      "id": 1062,
+      "abbreviation": "CG%",
+      "definition": "Complete games divided by games started",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Complete game percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1063,
+      "abbreviation": "CG",
+      "definition": "Goalie's number of games started in games where no other goalie played in the game for the team, meaning the goalie played the complete game (including the shootout, if applicable).",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Complete games",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1064,
+      "abbreviation": "DOB",
+      "definition": "Date of birth",
+      "firstSeasonForStat": null,
+      "fullName": "Date of birth",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1065,
+      "abbreviation": "Days Btwn Games",
+      "definition": "For a team, the days between games. Number of days between games will be one more than for goalie's days of rest. For example, a team playing on consecutive days will have 1 day between games, and a goalie playing in both games will have 0 days of rest.",
+      "firstSeasonForStat": null,
+      "fullName": "Days between games",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1066,
+      "abbreviation": "DZ FOL",
+      "definition": "Number of defensive zone face-off losses",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Defensive zone face-off losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1067,
+      "abbreviation": "DZ FOW%",
+      "definition": "Defensive zone face-off win percentage is calculated as defensive zone face-off wins divided by defensive zone face-off draws taken by a player, DZ FOW/DZ FO or DZ FOW/(DZ FOW + DZ FOL). DZ FOW% is available since 2009-10.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Defensive zone face-off win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1068,
+      "abbreviation": "DZ FOW",
+      "definition": "Number of defensive zone face-off wins",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Defensive zone face-off wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1069,
+      "abbreviation": "DZ FO",
+      "definition": "Number of defensive zone face-off draws taken by the player",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Defensive zone face-offs",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1070,
+      "abbreviation": "Round",
+      "definition": "The round the player was selected in the NHL Entry Draft. Currently, there are seven rounds (since 2005), but the Draft has included as many as 25 rounds (in 1974). A blank indicates an undrafted player.",
+      "firstSeasonForStat": 19621963,
+      "fullName": "Draft round",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1071,
+      "abbreviation": "Draft Yr",
+      "definition": "The year the player was selected in the NHL Entry Draft. This may differ from the first year the player was eligible for the Draft. A blank indicates an undrafted player.",
+      "firstSeasonForStat": 19621963,
+      "fullName": "Draft year",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1072,
+      "abbreviation": "ENA",
+      "definition": "When trailing late in the third period, teams commonly pull their goalie in favor of an extra skater, increasing their chances of scoring while running a significantly higher risk of an opposition goal. Empty net assists are counted towards a player's overall totals.",
+      "firstSeasonForStat": null,
+      "fullName": "Empty net assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1073,
+      "abbreviation": "ENG",
+      "definition": "When trailing late in the third period, teams commonly pull their goalie in favor of an extra skater, increasing their chances of scoring while running a significantly higher risk of an opposition goal. Empty net goals are counted towards a player's overall totals.",
+      "firstSeasonForStat": null,
+      "fullName": "Empty net goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1074,
+      "abbreviation": "ENP",
+      "definition": "When trailing late in the third period, teams commonly pull their goalie in favor of an extra skater, increasing their chances of scoring while running a significantly higher risk of an opposition goal. Empty net points are counted towards a player's overall totals.",
+      "firstSeasonForStat": null,
+      "fullName": "Empty net points",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1075,
+      "abbreviation": "General concepts",
+      "definition": "Enhanced statistics, also known as advanced statistics and hockey analytics, are statistics that go beyond traditional hockey box scores and game reports. Enhanced stats were introduced on NHL.com in 2015, and were further updated in 2019. The majority of enhanced stats are available starting in the 2009-10 season.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Enhanced statistics",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:46:19"
+    },
+    {
+      "id": 1076,
+      "abbreviation": "EV FOL",
+      "definition": "Number of even-strength face-off losses",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength face-off losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1077,
+      "abbreviation": "EV FOW%",
+      "definition": "Even-strength face-off win percentage is calculated as even-strength face-off wins divided by even-strength face-off draws taken by a player, EV FOW/EV FO or EV FOW/(EV FOW + EV FOL). EV FOW% is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength face-off win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1078,
+      "abbreviation": "EV FOW",
+      "definition": "Number of even-strength face-off wins",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength face-off wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1079,
+      "abbreviation": "EV FO",
+      "definition": "Number of even-strength face-off draws taken by the player",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength face-offs",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1080,
+      "abbreviation": "EV GD",
+      "definition": "Even-strength goal differential is even-strength goals for minus even-strength goals against. See even-strength goals against; see even-strength goals for; see even-strength stats.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Even-strength goal differential",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1081,
+      "abbreviation": "EVG",
+      "definition": "Player's own even-strength goals. See even-strength stats.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Even-strength goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1082,
+      "abbreviation": "EV GA",
+      "definition": "For a team, EV GA are the total goals against while at even strength. For a player, EV GA are the even-strength goals against by their opponent while he is on the ice. See even-strength stats.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Even-strength goals against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1083,
+      "abbreviation": "EV GF",
+      "definition": "For a team, EV GF are the total goals scored while at even strength. For a player, EV GF are the even-strength goals scored while he is on the ice, regardless of whether he receives a goal or assist, or not.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Even-strength goals for",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1084,
+      "abbreviation": "EV GF%",
+      "definition": "Even-strength goals for percentage is EV GF / (EV GF + EV GA). The calculation is akin to SAT% and USAT%, and can therefore be compared with the two, while keeping in mind that the sample size for goal-based stats builds up much more slowly than the sample size of shot-based metrics. See even-strength goals against; see even-strength goals for; see even-strength stats; see sample size; see SAT%; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Even-strength goals for percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1085,
+      "abbreviation": "EVP",
+      "definition": "Player's own even-strength points. See even-strength stats.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Even-strength points",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1086,
+      "abbreviation": "EV Sv%",
+      "definition": "As goalies face an unequal number of power play shots against, where save percentage is generally lower than with overall save percentage, even-strength save percentage can provide an alternative to overall Sv%. However, the modestly smaller sample size of EV Sv% supports looking at overall Sv% side by side with EV Sv%. EV Sv% is available since 1997-98. See even-strength stats; see save percentage.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength save percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1087,
+      "abbreviation": "EV Svs",
+      "definition": "Saves by a goalie or a team, at even strength. See even-strength stats.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength saves",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1088,
+      "abbreviation": "EV SA",
+      "definition": "Shots against are the number of shots on goal against a goalie or a team, at even strength. Attempts blocked and missed shots are not included. See even-strength stats.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength shots against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1089,
+      "abbreviation": "General concepts",
+      "definition": "An even-strength situation is when both teams have equal numbers of players on the ice, either because no one is in the penalty box or both teams have been penalized equally regarding manpower. The majority of play occurs at even strength, which includes 5-on-5, 4-on-4, and 3-on-3 situations. Comparing players at even strength (or 5-on-5) means that totals and rates will not be skewed by differing amounts of special teams (particularly power play) time. See 5-on-5 stats.",
+      "firstSeasonForStat": null,
+      "fullName": "Even-strength stats",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1090,
+      "abbreviation": "EV TOI",
+      "definition": "Even-strength time on ice is a measure of the ice time a player averages per game in even strength situations. As not all players get significant shifts on special teams, even-strength time on ice allows comparison of players usage in normal situations. EV TOI is available since 1997-98. See Even strength situations and stats.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Even-strength time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1091,
+      "abbreviation": "EV TOI/GP",
+      "definition": "A player's even-strength time on ice divided by games played",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Even-strength time on ice per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1092,
+      "abbreviation": "FOL",
+      "definition": "Number of face-off losses - all situations",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Face-off losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1093,
+      "abbreviation": "FOW%",
+      "definition": "Face-off win percentage is calculated as face-off wins divided by total face-off draws taken by a player or team, FOW/FO or FOW/(FOW+FOL). FOW% is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Face-off win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1094,
+      "abbreviation": "FOW",
+      "definition": "Number of face-off wins - all situations",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Face-off wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1095,
+      "abbreviation": "FO",
+      "definition": "Number of face-off draws taken by the player",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Face-offs",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1096,
+      "abbreviation": "1g",
+      "definition": "First goals is a count of how many times the player scored the first goal of a game for either team.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "First goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:04:51"
+    },
+    {
+      "id": 1097,
+      "abbreviation": "G Msct",
+      "definition": "Game misconduct penalties can be imposed for severe cases of abuse of officials, stick infractions, physical fouls, and other infractions. The offending player is ejected from the game. For statistical purposes, 10 penalty minutes are added to the players PIM total.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Game misconduct penalties",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1098,
+      "abbreviation": "GWG",
+      "definition": "The game-winning goal is the goal that gives the winning team one more goal than the opponent's eventual final score, regardless of when it occurs in a game or what the score is at the time.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Game-winning goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1099,
+      "abbreviation": "GP",
+      "definition": "Games played are games where the player had at least one shift on the ice (or participated in the shootout). Players included on the active roster but scratched from the game day lineup do not register a game played. Backup goalies (or rarely, skaters) in the lineup who do not receive playing time do not register a game played. However, goalie (or skater) who appears only in the shootout also earns a game played despite zero minutes of ice time.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Games played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1100,
+      "abbreviation": "GR",
+      "definition": "Goalie's games played where another goalie started the game for the team, calculated as games played minus games started. If a goalie started the game, was relieved, and returned later in the game, that counts as one game started and zero games relieved.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1101,
+      "abbreviation": "GS",
+      "definition": "Goalie's games played where he started the game for the team. If a goalie started the game, was relieved, and returned later in the game, that counts as one game started and zero games relieved.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1102,
+      "abbreviation": "GvA",
+      "definition": "A giveaway is a form of turnover where the player makes an unforced error that results in giving the puck up to the opposition. Giveaways are available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Giveaways",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1103,
+      "abbreviation": "GvA/60",
+      "definition": "Player's average rate of giveaways per 60 minutes of ice time",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Giveaways per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1104,
+      "abbreviation": "GD (or DIFF)",
+      "definition": "Goal differential is the number of goals a team scores minus the number of goals conceded, or GF - GA = GD. Shown as DIFF on Standings. See goals against; see goals for.",
+      "firstSeasonForStat": null,
+      "fullName": "Goal differential",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1105,
+      "abbreviation": "G",
+      "definition": "The last player to touch the puck before it fully crosses the opponent's goal line is awarded a goal scored. In rare cases where an opposing team's skater directs the puck into his own goal, the player of the attacking side who last touched the puck shall be credited with the goal. Unless specified, goal totals are for all situations (even strength, power play, shorthanded) combined.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:49:28"
+    },
+    {
+      "id": 1106,
+      "abbreviation": "G Back",
+      "definition": "Player's or team's goals on backhands",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals - backhand",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1107,
+      "abbreviation": "G Deflect",
+      "definition": "Player's or team's goals on deflections. A deflection is a shot deflected off the player's body, not his stick.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals - deflection",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1108,
+      "abbreviation": "G Slap",
+      "definition": "Player's or team's goals on slap shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals - slap shot",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1109,
+      "abbreviation": "G Snap",
+      "definition": "Player's or team's goals on snap shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals - snap shot",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1110,
+      "abbreviation": "G Tip",
+      "definition": "Player's or team's goals on tip-ins. A tip-in is a shot deflected off of the player's stick, not his body.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals - tip-in",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1111,
+      "abbreviation": "G Wrap",
+      "definition": "Player's or team's goals on wraparounds",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals - wraparound",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1112,
+      "abbreviation": "G Wrist",
+      "definition": "Player's or team's goals on wrist shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals - wrist shot",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1113,
+      "abbreviation": "G (5-on-5)",
+      "definition": "Goals scored by the player  in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1114,
+      "abbreviation": "GA",
+      "definition": "Goals against can refer to the total goals allowed by a team or by a goaltender. In the case of a team, goals against is compared with goals for to show a team's goal differential. See goal differential; see goals for.",
+      "firstSeasonForStat": null,
+      "fullName": "Goals against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1115,
+      "abbreviation": "GR GA",
+      "definition": "Goals against, only in goalie's games relieved",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Goals against in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1116,
+      "abbreviation": "GS GA",
+      "definition": "Goals against, only in goalie's games started",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Goals against in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1117,
+      "abbreviation": "GA/GP",
+      "definition": "For a team, goals against per game played is a top-level indication of the team's defense. On the Stats report, it includes empty net goals against but not shootout game-deciding goals against.",
+      "firstSeasonForStat": null,
+      "fullName": "Goals against per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:50:39"
+    },
+    {
+      "id": 1118,
+      "abbreviation": "GA/ROL",
+      "definition": "For a goalie, the average number of goals allowed per game lost in regulation and overtime (i.e. per non-shootout loss). A goalie with a relatively low GA/ROL and an above-average Sv% could be considered to have gotten poor Win-Loss results despite generally good performances.",
+      "firstSeasonForStat": null,
+      "fullName": "Goals against per regulation and overtime loss",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:52:20"
+    },
+    {
+      "id": 1119,
+      "abbreviation": "GF",
+      "definition": "Goals scored by a goalie's team while the goalie is on the ice. Akin to \"run support\" in baseball, it can give context to the number of wins and losses by the goalie.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Goals for (goalie)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1120,
+      "abbreviation": "GF",
+      "definition": "Goals for is the total goals scored by a team, that can be compared with goals against to show a team's goal differential. Note that on the Standings page, GF and GA for a team include shootout game-winning goals for and against. Therefore, for teams that have been involved in shootouts, GF and GA will be slightly different than GF and GA shown on the Stats pages. See goals against; see goal differential.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Goals for (team)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1121,
+      "abbreviation": "GF/GP",
+      "definition": "For a team, goals for per game played is a top-level indication of the team's offense. On the Stats report, it includes empty net goals but not shootout game-deciding goals.",
+      "firstSeasonForStat": null,
+      "fullName": "Goals for per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1122,
+      "abbreviation": "Goals %",
+      "definition": "Goals for percentage can be calculated similarly to SAT% and USAT% but using goals. For a team, it is calculated as GF/(GF + GA). For a skater, it is calculated as GF/(GF + GA) while player is on ice, generally at 5-on-5. Goals % can be compared with SAT% and USAT%. See sample size; see SAT%; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals for percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1123,
+      "abbreviation": "G/60 (5-on-5)",
+      "definition": "Goals scored by the player per 60 minutes in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Goals per 60 minutes (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1124,
+      "abbreviation": "G/GP",
+      "definition": "In comparing the goal production of different players, goal totals can be divided by games played e.g. to account for players who have missed games due to injury or who have not spent the entire season in the NHL. However, this adjustment does not account for varying time on ice and varying special teams time. See even-strength stats; see goals.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Goals per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1125,
+      "abbreviation": "GAA",
+      "definition": "Goals-against average is the average number of goals that a goaltender gives up per game, measured in 60-minute increments, calculated GAA = GA*60/time on ice.   See even-strength save percentage; see save percentage.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Goals-against average",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:53:08"
+    },
+    {
+      "id": 1126,
+      "abbreviation": "GFA",
+      "definition": "Goals scored by a goalie's team while the goalie is on the ice, per 60 minutes. The calculation is the same as goals-against average (GAA) but using goals for, GF. Akin to \"run support\" in baseball, it can give context to the number of wins and losses by the goalie.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Goals-for average",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1127,
+      "abbreviation": "HOF",
+      "definition": "Is the player currently in the Hall of Fame? Yes or no.",
+      "firstSeasonForStat": null,
+      "fullName": "Hall of Fame",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1128,
+      "abbreviation": "Ht",
+      "definition": "Player's height in inches",
+      "firstSeasonForStat": null,
+      "fullName": "Height",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1129,
+      "abbreviation": "Hits",
+      "definition": "Hits is the number of body checks delivered by a player on the opposing team's puck carrier. Hits is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Hits",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1130,
+      "abbreviation": "Hits/60",
+      "definition": "Player's average rate of hits per 60 minutes of ice time",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Hits per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1131,
+      "abbreviation": "Hits/GP",
+      "definition": "Hits divided by games played",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Hits per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1132,
+      "abbreviation": "IG",
+      "definition": "Goalie's number of games started in games where another goalie later played in the game for the team (even if only in the shootout). The game may be incomplete due to coach's decision or injury.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Incomplete games",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1133,
+      "abbreviation": "iSAT/60",
+      "definition": "Player's own shot attempts (missed shots, attempts blocked, and shots on goal) per 60 minutes of ice time on ice. On a 5-on-5 report like Puck Possession, where all of the stats are 5-on-5, iSAT/60 is the player's own shot attempts for 60 minutes of 5-on-5 ice time.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Individual shot attempts per 60 minutes (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1134,
+      "abbreviation": "GR L",
+      "definition": "Losses, only in goalie's games relieved",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Losses in in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1135,
+      "abbreviation": "GS L",
+      "definition": "Losses, only in goalie's games started",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Losses in in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1136,
+      "abbreviation": "Major",
+      "definition": "A major penalty is a more severe penalty imposed for boarding, butt-ending, charging, checking from behind, clipping, cross-checking, elbowing, head-butting, hooking, interference, kneeing, slashing, or spearing, infractions which can also be called as minor penalties. If deemed a major, the offending player is penalized for 5 minutes, remaining in the penalty box regardless of the number of opponent goals scored. In addition, certain major penalties carry automatic game misconduct penalties. Fighting also results in a major penalty; however, since two players are almost always assessed coincidental fighting majors, there is typically no change in manpower for either team.",
+      "firstSeasonForStat": null,
+      "fullName": "Major penalties",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1137,
+      "abbreviation": "Match",
+      "definition": "A match penalty is imposed for injuring or attempting to injure an opponent due actions such as boarding, butt-ending, charging, checking from behind, clipping, cross-checking, elbowing, goalkeeper who uses his blocking glove to the head or face of an opponent, head-butting, high-sticking, punching an unsuspecting opponent, or spearing. The offending player is ejected from the game. The offender's team must select another player to serve a 5-minute penalty, akin to a major penalty. Further, the offending player is suspended indefinitely, pending review. 10 penalty minutes are added to the players PIM total.",
+      "firstSeasonForStat": null,
+      "fullName": "Match penalties",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:54:03"
+    },
+    {
+      "id": 1138,
+      "abbreviation": "Minor",
+      "definition": "If not deemed a serious offense, a minor penalty can be assessed for boarding, butt-ending, charging, checking from behind, clipping, cross-checking, elbowing, head-butting, hooking, interference, kneeing, slashing, or spearing. In the case of serious infractions, a major penalty can be assessed. Minor penalties can also be assessed for broken stick, closing hand on puck, concealing puck with hand, delay of game, goalkeeper interference, high-sticking, holding, holding the stick, illegal check to the head, illegal equipment, illegal stick, instigator, leaving the penalty box too early, leaving the crease (goalkeeper), participating in the play beyond the center red line (goalkeeper), roughing, throwing the puck towards opponents goal, throwing stick, tripping, use of hand on face-off, and unsportsmanlike conduct. Minor penalties result in the offending player being sent to the penalty box for two minutes (or a substitute player, if the goalie has been penalized), or until a goal is scored by their opponent (except in the case of coincidental minors). Double-minor penalties, resulting in two consecutive 2-minute penalties for the offender, can be assessed for more severe butt-ending, head-butting, high-sticking, or spearing infractions. See also Bench penalties.",
+      "firstSeasonForStat": null,
+      "fullName": "Minor penalties",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1139,
+      "abbreviation": "Msct",
+      "definition": "A misconduct penalty typically occurs for abuse of officials, continued or excessively unruly conduct, or instigating a fight. The offending player serves 10 minutes in the penalty box without a loss of manpower on the ice typically in addition to other penalties.",
+      "firstSeasonForStat": null,
+      "fullName": "Misconduct penalties",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1140,
+      "abbreviation": "MsS",
+      "definition": "Missed shots are the number of off-target shot attempts taken by a player or team that are unblocked but do not require a goalie save. They include shot attempts that are wide of the net (MsS Wide), over the net (MsS Over), that hit the goalpost (MsS Post) or crossbar (MsS Cross), that fail to reach the net (MsS Short), or that are the result of failed bank attempts that do not hit the goalie (MsS Bank). Missed shots are a component of both SAT and USAT, as they indicate an offensive presence and attempt to score off of implied puck possession. MsS is available since 1997-98. See SAT; see USAT.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Missed shots",
+      "languageCode": "en",
+      "lastUpdated": "2026-02-26T07:03:07"
+    },
+    {
+      "id": 1141,
+      "abbreviation": "Natnlty",
+      "definition": "The nationality listed is the one for which a player played on a national team, like in World Juniors or the Olympics; otherwise, it defaults to the same as his birth country. Some players have dual nationalities. See country.",
+      "firstSeasonForStat": null,
+      "fullName": "Nationality",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1142,
+      "abbreviation": "Net Minors/60",
+      "definition": "A player's minor penalties drawn minus minor penalties taken, per 60 minutes of 5-on-5 ice time. Forwards tend to have more positive scores than defensemen.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Net minor penalties per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1143,
+      "abbreviation": "Net Pen",
+      "definition": "Penalties drawn minus penalties taken. All penalty types, all situations. Forwards tend to have more positive scores than defensemen.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Net penalties",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1144,
+      "abbreviation": "Net Pen/60",
+      "definition": "A player's penalties drawn minus penalties taken, per 60 minutes of ice time. All penalty types, all situations. Forwards tend to have more positive scores than defensemen.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Net penalties per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1145,
+      "abbreviation": "Net PK%",
+      "definition": "Net PK% is one minus a team's power play goals against (PP GA) minus its shorthanded goals for (SH GF) divided by its times shorthanded (TS). 0% means that every opponent power-play opportunity was successful and that no shorthanded goals were scored. It is possible for Net PK% to be greater than 100% if the team scores more shorthanded goals for than the power-play goals against that it allows.",
+      "firstSeasonForStat": null,
+      "fullName": "Net penalty killing percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:59:32"
+    },
+    {
+      "id": 1146,
+      "abbreviation": "Net PP%",
+      "definition": "Net PP% is a team's power play goals for (PP GF) minus its shorthanded goals against (SH GA) divided by its power play opportunities (PP Opp). 100% means that every power play opportunity was successful and that no shorthanded goals were scored against. It is possible for Net PP% to be negative if the team scores less power play goals than the shorthanded goals against that it allows.",
+      "firstSeasonForStat": null,
+      "fullName": "Net power play percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1147,
+      "abbreviation": "NZ FOL",
+      "definition": "Number of neutral zone face-off losses",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Neutral zone face-off losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1148,
+      "abbreviation": "NZ FOW%",
+      "definition": "Neutral zone face-off win percentage is calculated as neutral zone face-off wins divided by neutral zone face-off draws taken by a player, NZ FOW/NZ FO or NZ FOW/(NZ FOW + NZ FOL). NZ FOW% is available since 2009-10.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Neutral zone face-off win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1149,
+      "abbreviation": "NZ FOW",
+      "definition": "Number of neutral zone face-off wins",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Neutral zone face-off wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1150,
+      "abbreviation": "NZ FO",
+      "definition": "Number of neutral zone face-off draws taken by the player",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Neutral zone face-offs",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1151,
+      "abbreviation": "OZ FOL",
+      "definition": "Number of offensive zone face-off losses",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Offensive zone face-off losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1152,
+      "abbreviation": "OZ Ratio",
+      "definition": "Offensive zone face-off ratio (OZ Ratio) is closely related to offensive zone start percentage, and can be applied similarly. It is calculated at 5-on-5 and is an indication of a player's role at even strength. OZ Ratio is the percentage of non-neutral zone face-offs that occur in the offensive zone while the player is on the ice. In other words, OZ Ratio equals the number of offensive zone face-offs taken by his team while he is on the ice divided by the number of offensive zone plus defensive zone face-offs taken while he is on the ice. Players with OZ Ratio well above 50% are being deployed offensively, and should expect a slight increase in stats like SAT% and points compared to a similar player at 50%. Conversely, players with a OZ Ratio well under 50% are being deployed defensively, and should expect a slight decrease in stats like SAT% and points. OZ Ratio is available since 2009-10.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Offensive zone face-off ratio (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2025-11-20T06:06:21"
+    },
+    {
+      "id": 1153,
+      "abbreviation": "OZ FOW%",
+      "definition": "Offensive zone face-off win percentage is calculated as offensive zone face-off wins divided by offensive zone face-off draws taken by a player, OZ FOW/OZ FO or OZ FOW/(OZ FOW + OZ FOL). OZ FOW% is available since 2009-10.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Offensive zone face-off win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1154,
+      "abbreviation": "OZ FOW",
+      "definition": "Number of offensive zone face-off wins",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Offensive zone face-off wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1155,
+      "abbreviation": "OZ FO",
+      "definition": "Number of offensive zone face-off draws taken by the player",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Offensive zone face-offs",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1156,
+      "abbreviation": "On-ice Sv%",
+      "definition": "5-on-5 on-ice save percentage is one of the two components of on-ice shooting percentage plus save percentage, S%+Sv%. On-ice Sv% is a measure of how well his team's goalies are performing while a skater is on the ice, a factor that is largely out of his control. It can be a partial explanation for unexpectedly good or poor plus-minus ratings. On-ice Sv% is available since 2009-10. See regression to the mean; see shooting percentage plus save percentage.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "On-ice save percentage (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1157,
+      "abbreviation": "On-ice S%",
+      "definition": "5-on-5 on-ice shooting percentage is one of the two components of on-ice shooting percentage plus save percentage, S%+Sv%. On-ice S% is a measure of how well a player's teammates are capitalizing on turning shots into goals while he is on the ice, a factor that is largely out of his control. It can be a partial explanation for unexpectedly good or poor assist totals and plus-minus ratings. On-ice S% is available since 2009-10. See regression to the mean; see shooting percentage plus save percentage.",
+      "firstSeasonForStat": null,
+      "fullName": "On-ice shooting percentage (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1158,
+      "abbreviation": "On-ice S%+Sv%",
+      "definition": "On-ice S%+Sv% is the sum of the team's on-ice shooting percentage and on-ice save percentage in 5-on-5 situations while the player is on the ice. Its purpose is to estimate a player's good or bad fortune, often called \"puck luck\", during 5-on-5 play. A low value frequently portends future improvement in conventional stats, and vice versa. Only a handful of the NHL's most elite players have consistently had an on-ice S%+Sv% well over 100.0. Created by Tim Barnes, it is also known as PDO. See 5-on-5 shooting percentage; see plus-minus; see regression to the mean.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "On-ice shooting percentage plus save percentage (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1159,
+      "abbreviation": "Overall",
+      "definition": "The overall pick number the player was selected in the NHL Entry Draft. Between 2006-2019, the Draft has included between 210-217 picks. A blank indicates an undrafted player.",
+      "firstSeasonForStat": 19621963,
+      "fullName": "Overall pick number",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1160,
+      "abbreviation": "OTG",
+      "definition": "Goals scored by the player in overtime. From 2005-06 to 2014-15, regular season overtime was 4-on-4. Starting in 2015-16, regular season overtime was 3-on-3.",
+      "firstSeasonForStat": null,
+      "fullName": "Overtime goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1161,
+      "abbreviation": "GR OT",
+      "definition": "Overtime losses, only in goalie's games relieved",
+      "firstSeasonForStat": null,
+      "fullName": "Overtime losses in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1162,
+      "abbreviation": "GS OT",
+      "definition": "Overtime losses, only in goalie's games started",
+      "firstSeasonForStat": null,
+      "fullName": "Overtime losses in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1163,
+      "abbreviation": "OT TOI",
+      "definition": "Player's time on ice during overtime",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Overtime time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1164,
+      "abbreviation": "OT TOI/OT GP",
+      "definition": "Player's time on ice during overtime, per overtime game his team participated in. From 2005-06 to 2014-15, regular season overtime was 4-on-4. Starting in 2015-16, regular season overtime was 3-on-3.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Overtime time on ice per overtime game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1165,
+      "abbreviation": "Pen Drawn",
+      "definition": "Number of penalties drawn by the player. All penalty types, all situations.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Penalties drawn",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1166,
+      "abbreviation": "Pen Drawn/60",
+      "definition": "Penalties drawn per 60 minutes of ice time by the player",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Penalties drawn per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1167,
+      "abbreviation": "Pen Taken",
+      "definition": "Number of penalties taken by the player. All penalty types, all situations.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Penalties taken",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1168,
+      "abbreviation": "Pen Taken/60",
+      "definition": "Penalties taken per 60 minutes of ice time by the player",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Penalties taken per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1169,
+      "abbreviation": "PK%",
+      "definition": "PK% is one minus a team's power play goals against (PP GA) divided by its times shorthanded (TS), where 100% is best and 0% is worst.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty killing percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1170,
+      "abbreviation": "PIM",
+      "definition": "Penalty minutes are a total of all penalty minutes, whether those penalties caused an opposition power play or not. See penalties drawn; see penalties taken; see net penalties.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Penalty minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1171,
+      "abbreviation": "PIM/GP",
+      "definition": "Penalty minutes divided by games played",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Penalty minutes per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1172,
+      "abbreviation": "PIM/TOI",
+      "definition": "Player's penalty minutes compared to his time on ice. Shown as a percent, it can exceed 100%.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Penalty minutes per time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1173,
+      "abbreviation": "PS Att",
+      "definition": "A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. The penalty shot attempt takes the place of a power play, and no time elapses off the game clock.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shot attempts",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1174,
+      "abbreviation": "PS SA",
+      "definition": "For a goalie, penalty shot attempts against. A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. The penalty shot attempt takes the place of a power play, and no time elapses off the game clock.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shot attempts against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1175,
+      "abbreviation": "PS G",
+      "definition": "A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. Compare penalty shot goals to the total number of penalty shot attempts.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Penalty shot goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1176,
+      "abbreviation": "PS GA",
+      "definition": "For a team, how many goals against were scored by penalty shots. For a goalie, penalty shot goals against. A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. Compare penalty shot goals against to the total number of penalty shot attempts against.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shot goals against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1177,
+      "abbreviation": "PS GF",
+      "definition": "For a team, how many goals for were scored by penalty shots",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shot goals for",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1178,
+      "abbreviation": "PS Sv%",
+      "definition": "A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. Penalty shot save percentage differs from conventional shooting percentage in that all failures to score count as attempts, not just shots on goal. In other words, PS Sv% = PS Svs/PS SA.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shot save percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:07:20"
+    },
+    {
+      "id": 1179,
+      "abbreviation": "PS S%",
+      "definition": "A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. Penalty shot shooting percentage differs from conventional shooting percentage in that all failures to score count as attempts, not just shots on goal. In other words, PS S% = PS G/PS Att.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shot shooting percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1180,
+      "abbreviation": "PS F",
+      "definition": "A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. Penalty shots failed includes any non-goal results such as shots that miss the net.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shots failed",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1181,
+      "abbreviation": "PS Svs",
+      "definition": "For a goalie, penalty shot attempts against that do not result in a goal. A penalty shot is awarded when a player in possession and control of the puck is fouled from behind, with no opposing skater between him and the opposing goalkeeper. If the opposing goalie has been pulled, leaving an empty net, a goal is automatically awarded instead. Penalty saves include any non-goal results such as shots that miss the net.",
+      "firstSeasonForStat": null,
+      "fullName": "Penalty shots saves",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1182,
+      "abbreviation": "1st Season",
+      "definition": "The first season the player recorded one NHL game played of that season type (regular season or playoffs). See games played.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Player's first season in the NHL",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1183,
+      "abbreviation": "PP TOI%",
+      "definition": "Percentage of the team's overall power play time played by the player",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Player's percentage of team power play time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1184,
+      "abbreviation": "SH TOI%",
+      "definition": "Percentage of the team's overall shorthanded time played by the player",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Player's percentage of team shorthanded time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1185,
+      "abbreviation": "+/-",
+      "definition": "In a sense, plus-minus was hockey's first enhanced stat, becoming an official NHL statistic in 1959-60. Plus-minus is a team's goal differential while a particular player is on the ice, excluding power play goals for and against but including empty net situations. All the skaters on the ice receive a plus or minus when an even-strength goal or shorthanded goal is scored depending on which team scored; plus-minus is not tracked for goalies.",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Plus-minus",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:55:06"
+    },
+    {
+      "id": 1186,
+      "abbreviation": "P",
+      "definition": "Goals plus assists equals points. Unless otherwise specified, point totals are for all situations (even strength, power play, shorthanded) combined. Since only one point can be awarded on a goal to a player (either a goal or an assist), the goal scorer cannot get an assist as well, even if he was involved in passing the puck before scoring the goal. See assists; see goals.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Points",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1187,
+      "abbreviation": "P (5-on-5)",
+      "definition": "Player's own points in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Points (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1188,
+      "abbreviation": "P (Standings)",
+      "definition": "Standings points for a team (or goalie): two points for a win (in regulation, in overtime, or in the shootout), one point for an overtime or shootout loss (since 2005-06), one point for a tie (prior to 2005-06), and zero points for a loss.",
+      "firstSeasonForStat": null,
+      "fullName": "Points (in the Standings)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1189,
+      "abbreviation": "P/60 (5-on-5)",
+      "definition": "Player's own points per 60 minutes in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Points per 60 minutes (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1190,
+      "abbreviation": "P/GP",
+      "definition": "In comparing the point production of different players, point totals can be divided by games played (e.g. to account for players who have missed games due to injury or who have not spent the entire season in the NHL). However, this adjustment does not account for varying time on ice and varying special teams time. See points; see even-strength points per 60.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Points per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1191,
+      "abbreviation": "P%",
+      "definition": "For a team, the percentage of points per game played. For a goalie, the percentage of points per game played where he was involved in the decision. P% can be between .000 and 2.000 (0% to 200%).",
+      "firstSeasonForStat": null,
+      "fullName": "Points percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1192,
+      "abbreviation": "Pos",
+      "definition": "Current position of player",
+      "firstSeasonForStat": null,
+      "fullName": "Position",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:55:37"
+    },
+    {
+      "id": 1193,
+      "abbreviation": "PPA",
+      "definition": "Player's own assists on the power play. See assists.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Power play assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1194,
+      "abbreviation": "PPA/60",
+      "definition": "Player's own power play assists per 60 minutes of power play ice time. See assists.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play assists per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1195,
+      "abbreviation": "PP FOL",
+      "definition": "Number of power play face-off losses",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play face-off losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1196,
+      "abbreviation": "PP FOW%",
+      "definition": "Power play face-off win percentage is calculated as power play face-off wins divided by power play face-off draws taken by a player, PP FOW/PP FO or PP FOW/(PP FOW + PP FOL). PP FOW% is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play face-off win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1197,
+      "abbreviation": "PP FOW",
+      "definition": "Number of power play face-off wins",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play face-off wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1198,
+      "abbreviation": "PP FO",
+      "definition": "Number of power play face-off draws taken by the player",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play face-offs",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1199,
+      "abbreviation": "PP GD",
+      "definition": "Power play goal differential equals power play goals for minus shorthanded goals against, crediting a team or on-ice player for minimizing shorthanded goals against in addition to scoring power play goals for. This stat is expected to be positive except in exceptional cases.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goal differential",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1200,
+      "abbreviation": "PP GD/GP",
+      "definition": "Power play goal differential per game played. See power play goal differential.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goal differential per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1201,
+      "abbreviation": "PPG",
+      "definition": "Player's own power play goals. See goals.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Power play goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1202,
+      "abbreviation": "PP GA",
+      "definition": "For a team, goals against while the opponent is on the power play. For a skater, goals against while the opponent is on the power play and the skater is on the ice.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goals against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1203,
+      "abbreviation": "PP GA/60",
+      "definition": "PP GA/60 measures a player's penalty killing effectiveness, by giving the average number of opponent power play goals that were scored per 60 minutes of his shorthanded time on ice. As power play goals against are heavily influenced by teammates and goalie save percentage, this metric should be used cautiously, noting uncertainties caused by sample size. See sample size.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goals against per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1204,
+      "abbreviation": "PP GA/GP",
+      "definition": "Power play goals against per game played. See power play goals against.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goals against per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1205,
+      "abbreviation": "PP GF",
+      "definition": "For a team, goals for while on the power play. For a skater, goals for while on the power play and the skater is on the ice.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goals for",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1206,
+      "abbreviation": "PP GF/60",
+      "definition": "PP GF/60 measures a player's impact on the power play, by giving the average number of power play goals scored per 60 minutes of his power play time on ice. As power play goals against are heavily influenced by teammates and opponent's save percentage, this metric should be used cautiously, noting uncertainties caused by sample size. See sample size.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goals for per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1207,
+      "abbreviation": "PP GF/GP",
+      "definition": "Power play goals for per game played. See power play goals for.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play goals for per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1208,
+      "abbreviation": "PPG/60",
+      "definition": "Player's own power play goals per 60 minutes of power play time on ice",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Power play goals per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1209,
+      "abbreviation": "PP iSAT",
+      "definition": "Player's own shot attempts (missed shots, attempts blocked, and shots on goal) while on the power play",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Power play individual shot attempts",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1210,
+      "abbreviation": "PP iSAT/60",
+      "definition": "Player's own shot attempts (missed shots, attempts blocked, and shots on goal) per 60 minutes of power play time on ice",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Power play individual shot attempts per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1211,
+      "abbreviation": "PP Opp",
+      "definition": "Number of chances a team has to score on the power play. It is used as a component of power play percentage, PP%, and net power play percentage, Net PP%.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play opportunities",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1212,
+      "abbreviation": "PP Opp/GP",
+      "definition": "Number of chances a team has to score on the power play, divided by games played, to give the per-game average",
+      "firstSeasonForStat": null,
+      "fullName": "Power play opportunities per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1213,
+      "abbreviation": "PP%",
+      "definition": "PP% is a team's power play goals for (PP GF) divided by its power play opportunities (PP Opp), where 100% is best and 0% is worst.",
+      "firstSeasonForStat": null,
+      "fullName": "Power play percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1214,
+      "abbreviation": "PPP",
+      "definition": "Player's own power play points. See points.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Power play points",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1215,
+      "abbreviation": "PPP/60",
+      "definition": "Player's own power play points per 60 minutes of power play time on ice",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Power play points per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1216,
+      "abbreviation": "PPA1",
+      "definition": "Player's own primary assists on the power play. See primary assists.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play primary assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1217,
+      "abbreviation": "PPA1/60",
+      "definition": "Player's own power play primary assists per 60 minutes of power play time on ice. See primary assists.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Power play primary assists per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1218,
+      "abbreviation": "PP Sv%",
+      "definition": "Power play save percentage is a goalie's save percentage while the opposing team is on the power play (and his team is shorthanded). PP Sv% tends to be much lower than EV Sv% (and overall Sv%), given the higher quality shots that can be taken during the opponent's power play. Further, a goalie's PP Sv% tends to be volatile from season to season due to small sample size. PP Sv% is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play save percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1219,
+      "abbreviation": "PP Svs",
+      "definition": "Saves by a goalie or a team, while their opponent is on the power play",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play saves",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1220,
+      "abbreviation": "PPA2",
+      "definition": "Player's own secondary assists on the power play. See secondary assists.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play secondary assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1221,
+      "abbreviation": "PPA2/60",
+      "definition": "Player's own power play secondary assists scored per 60 minutes of power play time on ice. See secondary assists.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Power play secondary assists per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1222,
+      "abbreviation": "PP S%",
+      "definition": "Player's own shooting percentage while on the power play",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play shooting percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1223,
+      "abbreviation": "PP Shots",
+      "definition": "Player's own power play shots",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1224,
+      "abbreviation": "PP SA",
+      "definition": "Shots against are the number of shots on goal against a goalie or a team, while their opponent is on the power play. Attempts blocked and missed shots are not included.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play shots against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1225,
+      "abbreviation": "PP S/60",
+      "definition": "Player's own power play shots per 60 minutes of power play time on ice",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play shots per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1226,
+      "abbreviation": "PP TOI",
+      "definition": "Power play time on ice is the time on ice that a player spends in power play situations, when his team has a man advantage on the opposing team. PP TOI is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1227,
+      "abbreviation": "PP TOI/GP",
+      "definition": "A player's power play time on ice divided by games played",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Power play time on ice per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1228,
+      "abbreviation": "A1",
+      "definition": "A primary assist (or first assist) is awarded to the teammate who touched the puck directly before the goal scorer. Primary assists are differentiated from secondary assists. The sum of goals and primary assists is often called primary points. See assists; see goals.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Primary assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:07:57"
+    },
+    {
+      "id": 1229,
+      "abbreviation": "A1 (5-on-5)",
+      "definition": "Player's own primary assists in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Primary assists (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1230,
+      "abbreviation": "A1/60 (5-on-5)",
+      "definition": "Player's own primary assists per 60 minutes in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Primary assists per 60 minutes (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1231,
+      "abbreviation": "A1/GP",
+      "definition": "Primary assists divided by games played. See assists; see assists per games played; see primary assists.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Primary assists per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1232,
+      "abbreviation": "General concepts",
+      "definition": "Puck possession is a term that has been used to describe how well a team or player directs play at the opposition net, using the assumption that a team possessing the puck more would also get a higher percentage of shots, shot attempts, or unblocked shot attempts than their opponents. Technically speaking, shot-based metrics such as SAT and USAT are puck possession proxies, shot-based estimates of puck possession, rather than actual puck possession. In any case, both literal and figurative puck possession have a high correlation with winning and predicting future performance. See SAT; see USAT.",
+      "firstSeasonForStat": null,
+      "fullName": "Puck possession",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1233,
+      "abbreviation": "General concepts",
+      "definition": "Regression to the mean is a term that refers to the phenomenon of statistical measures tending to return to their average value over time. For example, if Player A's career shooting percentage is 8.0% but he shot 11.0% last season, he will likely regress closer to 8.0% the following season. Though more frequently used negatively, the term can have a positive connotation if a player is expected to improve back to a career or recent average. See plus-minus, see sample size; see shooting percentage plus save percentage.",
+      "firstSeasonForStat": null,
+      "fullName": "Regression to the mean",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1234,
+      "abbreviation": "ROL",
+      "definition": "For a goalie, the number of regulation and overtime losses. In other words, the goalie's losses not including shootout losses.",
+      "firstSeasonForStat": null,
+      "fullName": "Regulation and overtime losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1235,
+      "abbreviation": "ROW",
+      "definition": "Regulation plus overtime wins are a teams wins, not counting shootout wins. ROW is used as one of the tiebreakers in the Standings (e.g. for determining playoff teams and seeding).",
+      "firstSeasonForStat": null,
+      "fullName": "Regulation plus overtime wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1236,
+      "abbreviation": "SAT% Relative",
+      "definition": "Relative SAT percentage is a player's SAT% minus the team's SAT% while the player was not on the ice. A positive value indicates a player who performed better than the team average and a negative value indicates a player who performed worse than the team average. See SAT; see SAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Relative shot attempts percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1237,
+      "abbreviation": "USAT% Relative",
+      "definition": "Relative USAT percentage is a player's USAT% minus the team's USAT% while the player was not on the ice. A positive value indicates a player who performed better than the team average and a negative value indicates a player who performed worse than the team average. See USAT; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Relative unblocked shot attempts percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1238,
+      "abbreviation": "General concepts",
+      "definition": "1917-18: All players are rookies.  1918-19 - 1967-68 (inclusive): A player cannot have played more than 20 games in any single preceding season nor six or more games in each of any two preceding seasons.  1968-69 - 1972-73 (inclusive): A player cannot have played more than 25 games in any single preceding season nor six or more games in each of any two preceding seasons.  1973-74 - 1986-87 (inclusive): A player cannot have played more than 25 games in any single preceding season nor six or more games in each of any two preceding seasons in any major professional league (NHL or WHA).  1987-88 - 1989-90 (inclusive): A player cannot have played more than 25 games in any single preceding season nor six or more games in each of any two preceding seasons in any major professional league (NHL or WHA).  1990-91 - present (inclusive): A player cannot have played more than 25 games in any single preceding season nor six or more games in each of any two preceding seasons in any major professional league (NHL or WHA) and also must not have attained his twenty-sixth birthday by September 15th of the season in which he is eligible.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Rookie",
+      "languageCode": "en",
+      "lastUpdated": "2019-12-06T16:47:08"
+    },
+    {
+      "id": 1239,
+      "abbreviation": "General concepts",
+      "definition": "Sample size is a statistical term referring to the amount of data on which an analysis is based. When a stat is based on a small sample size, the implication is that the stat or result may not be indicative of the player's or team's actual skill level due to a statistically short stretch of good or bad fortune. With a large enough sample size, cold and hot streaks tend to even out, making stats indicative of actual skill level. See plus/minus; see regression to the mean; see shooting percentage plus save percentage; see SAT; see USAT.",
+      "firstSeasonForStat": null,
+      "fullName": "Sample size",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1240,
+      "abbreviation": "Sv%",
+      "definition": "Save percentage is the percentage of shots on goal that a goalie prevents from going in his team's net, calculated by Sv% = SV / SA. Only shots on goal are considered, as a goaltender does not need to defend against attempts that are blocked by his teammates or attempts that miss the goal frame. Hitting the post or the crossbar of the goal does not count as a shot on goal, but as a missed shot (MsS). The NHL began officially tracking save percentage in 1955-56. See shooting percentage.",
+      "firstSeasonForStat": 19551956,
+      "fullName": "Save percentage",
+      "languageCode": "en",
+      "lastUpdated": "2024-10-11T16:00:58"
+    },
+    {
+      "id": 1241,
+      "abbreviation": "0 Days Sv%",
+      "definition": "Goalie's save percentage in games played on 0 Days of Rest (i.e. games played are in back-to-back days).",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Save percentage in games played on 0 Days Rest",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1242,
+      "abbreviation": "1 Day Sv%",
+      "definition": "Goalie's save percentage in games played on 1 day of rest (i.e. there is one day in between games played)",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Save percentage in games played on 1 Day Rest",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1243,
+      "abbreviation": "2 Days Sv%",
+      "definition": "Goalie's save percentage in games played on 2 days of rest (i.e. there are two days in between games played)",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Save percentage in games played on 2 Days Rest",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1244,
+      "abbreviation": "3 Days Sv%",
+      "definition": "Goalie's save percentage in games played on 3 days of rest (i.e. there are three days in between games played)",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Save percentage in games played on 3 Days Rest",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1245,
+      "abbreviation": "4+ Days Sv%",
+      "definition": "Goalie's save percentage in games played on 4 or more days of rest (i.e. there are four or more days in between games played)",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Save percentage in games played on 4+ Days Rest",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1246,
+      "abbreviation": "GR Sv%",
+      "definition": "Save percentage, only in goalie's games relieved",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Save percentage in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1247,
+      "abbreviation": "GS Sv%",
+      "definition": "Save percentage, only in goalie's games started",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Save percentage in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1248,
+      "abbreviation": "Sv",
+      "definition": "Saves are the number of shots against (SA) that are stopped by a goalie. Opponent shots minus saves equals goals against, or SA - SV = GA.",
+      "firstSeasonForStat": 19551956,
+      "fullName": "Saves",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1249,
+      "abbreviation": "GR Sv",
+      "definition": "Saves, only in goalie's games relieved",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Saves in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1250,
+      "abbreviation": "GS Sv",
+      "definition": "Saves, only in goalie's games started",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Saves in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1251,
+      "abbreviation": "General concepts",
+      "definition": "The tendency of teams to play to the score of the game in the context of the time remaining in the game is called score effects. Teams playing from behind tend to take more shots but are less likely to score, while teams playing with the lead tend to take fewer shots but are more likely to score. An example of score effects would be when a team plays more defensively and cautiously while leading late in a game, primarily looking for low-risk/high-reward offense off of opportunistic counterattacks. Consequently, score effects should be recognized and/or adjusted for when looking at shot-based metrics like SAT% and USAT%. See Close or close game; see SAT%; see USAT%; see USAT% close.",
+      "firstSeasonForStat": null,
+      "fullName": "Score effects",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:56:28"
+    },
+    {
+      "id": 1252,
+      "abbreviation": "A2",
+      "definition": "A secondary assist (or second assist) is awarded to the player who touched the puck two players before the goal scorer. Secondary assists are differentiated from primary assists. See assists; see goals.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Secondary assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:09:12"
+    },
+    {
+      "id": 1253,
+      "abbreviation": "A2 (5-on-5)",
+      "definition": "Player's own secondary assists in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Secondary assists (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1254,
+      "abbreviation": "A2/60 (5-on-5)",
+      "definition": "Player's own secondary assists per 60 minutes in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Secondary assists per 60 minutes (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1255,
+      "abbreviation": "A2/GP",
+      "definition": "Secondary assists divided by games played. See assists; see assists per games played; see secondary assists.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Secondary assists per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1256,
+      "abbreviation": "S%",
+      "definition": "The percentage of shots on goal (by a team or player) that go in the net, calculated as goals divided by shots. Shooting percentage does not take missed shots or blocked shots into consideration, only shots that were saved by the goalie or scored a goal. The NHL began officially tracking shooting percentage in the 1959-60 season. See save percentage.",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Shooting percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1257,
+      "abbreviation": "S% (5-on-5)",
+      "definition": "Player's own shooting percentage in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1258,
+      "abbreviation": "S% Back",
+      "definition": "Player's or team's shooting percentage on backhands",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage on backhand shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1259,
+      "abbreviation": "S% Deflect",
+      "definition": "Player's or team's shooting percentage on deflections. A deflection is a shot deflected off the player's body, not his stick.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage on deflections",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1260,
+      "abbreviation": "S% Slap",
+      "definition": "Player's or team's shooting percentage on slap shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage on slap shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1261,
+      "abbreviation": "S% Snap",
+      "definition": "Player's or team's shooting percentage on snap shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage on snap shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1262,
+      "abbreviation": "S% Tip",
+      "definition": "Player's or team's shooting percentage on tip-ins. A tip-in is a shot deflected off of the player's stick, not his body.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage on tip-ins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1263,
+      "abbreviation": "S% Wrap",
+      "definition": "Player's or team's shooting percentage on wraparounds",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage on wraparounds",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1264,
+      "abbreviation": "S% Wrist",
+      "definition": "Player's or team's shooting percentage on wrist shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shooting percentage on wrist shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1265,
+      "abbreviation": "SO S/A",
+      "definition": "For a goalie or team, shootout attempts against",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout attempts against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1266,
+      "abbreviation": "GDG",
+      "definition": "Player's game-deciding shootout goals. It can be compared with shootout goals for his career on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Shootout game-deciding goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1268,
+      "abbreviation": "S/O GP",
+      "definition": "For a goalie or skater, the number of games played where his team went to the shootout. For a skater, it can be compared to shootout shot attempts to see how often he was utilized in the shootout (keeping in mind that the third-announced shooter does not shoot if the shootout ends 2-0 after two rounds).",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout games played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1269,
+      "abbreviation": "SO G",
+      "definition": "Player's shootout goals. It can be compared with shootout goals for his career on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Shootout goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1270,
+      "abbreviation": "S/O GA",
+      "definition": "For a goalie or team, shootout goals against",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout goals against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1271,
+      "abbreviation": "S/O Sv%",
+      "definition": "Shootout save percentage differs from conventional save percentage in that all failures to score count as attempts, not just shots on goal. Shootout save percentage equals shootout saves divided by shootout attempts against.",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout save percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1273,
+      "abbreviation": "S/O S%",
+      "definition": "Shootout shooting percentage differs from conventional shooting percentage in that all failures to score count as attempts, not just shots on goal. In other words, shootout shooting percentage equals shootout goals divided by shootout attempts.",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout shooting percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1274,
+      "abbreviation": "S/O S%+Sv%",
+      "definition": "A team with a shootout shooting percentage plus shootout save percentage over 100.0% has performed above average on a per-attempt level.",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout shooting percentage plus save percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1275,
+      "abbreviation": "SO S",
+      "definition": "Player's shootout shot attempts (including missed shots and otherwise failed attempts). It can be compared with shootout shot attempts for his career on the same report.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Shootout shot attempts",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1276,
+      "abbreviation": "General concepts",
+      "definition": "Skater and goalie shootout reports provide both shootout stats for the current time period selected (the default is the current season) and for the player's career. Because of the small sample size of shootout attempts in a season, particularly for skaters, it is useful to compare season stats with career stats, side by side. See sample size.",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout stats, career",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1277,
+      "abbreviation": "S/O W%",
+      "definition": "For a goalie, the percentage of shootout games won by his team in games where he participated in the shootout.",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1278,
+      "abbreviation": "S/O Win",
+      "definition": "Number of team wins via the shootout.",
+      "firstSeasonForStat": 20052006,
+      "fullName": "Shootout wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1279,
+      "abbreviation": "S/O Saves",
+      "definition": "For a goalie or team, shootout saves.",
+      "firstSeasonForStat": null,
+      "fullName": "Shootout saves",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:10:41"
+    },
+    {
+      "id": 1280,
+      "abbreviation": "S/C",
+      "definition": "Shoots/catches indicates which side a skater shoots from or which side a goalie's catching glove is on. In both cases, there are more skaters that shoot from the left and goalies that catch on the left. S/C is not an indication of conventional left or right handedness.",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Shoots/catches",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1281,
+      "abbreviation": "SHA",
+      "definition": "Player's own assists while shorthanded. See assists.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Shorthanded assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1282,
+      "abbreviation": "SHA/60",
+      "definition": "Player's own shorthanded assists per 60 minutes of shorthanded ice time. See assists.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded assists per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1283,
+      "abbreviation": "SH FOL",
+      "definition": "Number of shorthanded face-off losses",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded face-off losses",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1284,
+      "abbreviation": "SH FOW%",
+      "definition": "Shorthanded face-off win percentage is calculated as shorthanded face-off wins divided by shorthanded face-off draws taken by a player, SH FOW/SH FO or SH FOW/(SH FOW + SH FOL). SH FOW% is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded face-off win percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1285,
+      "abbreviation": "SH FOW",
+      "definition": "Number of shorthanded face-off wins",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded face-off wins",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1286,
+      "abbreviation": "SH FO",
+      "definition": "Number of shorthanded face-off draws taken by the player",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded face-offs",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1287,
+      "abbreviation": "SH GD",
+      "definition": "Shorthanded goal differential equals shorthanded goals for minus power play goals against, crediting a team or on-ice player for shorthanded goals for in mitigating the number of power play goals against. This stat is expected to be negative except in exceptional cases.",
+      "firstSeasonForStat": null,
+      "fullName": "Shorthanded goal differential",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1288,
+      "abbreviation": "SH GD/GP",
+      "definition": "Shorthanded goal differential per game played. See shorthanded goal differential.",
+      "firstSeasonForStat": null,
+      "fullName": "Shorthanded goal differential per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1289,
+      "abbreviation": "SHG",
+      "definition": "Player's own shorthanded goals. See goals.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Shorthanded goals",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1290,
+      "abbreviation": "SH GA",
+      "definition": "For a team, goals against while the opponent is shorthanded. For a skater, goals against while the opponent is shorthanded and the skater is on the ice.",
+      "firstSeasonForStat": null,
+      "fullName": "Shorthanded goals against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1291,
+      "abbreviation": "SH GA/GP",
+      "definition": "Shorthanded goals against per game played. See shorthanded goals against.",
+      "firstSeasonForStat": null,
+      "fullName": "Shorthanded goals against per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1292,
+      "abbreviation": "SH GF",
+      "definition": "For a team, goals for while shorthanded. For a skater, goals for while shorthanded and the skater is on the ice.",
+      "firstSeasonForStat": null,
+      "fullName": "Shorthanded goals for",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:57:29"
+    },
+    {
+      "id": 1293,
+      "abbreviation": "SH GF/GP",
+      "definition": "Shorthanded goals for per game played. See shorthanded goals for.",
+      "firstSeasonForStat": null,
+      "fullName": "Shorthanded goals for per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1294,
+      "abbreviation": "SHG/60",
+      "definition": "Player's own shorthanded goals per 60 minutes of shorthanded time on ice",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shorthanded goals per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1295,
+      "abbreviation": "SH iSAT",
+      "definition": "Player's own shot attempts (missed shots, attempts blocked, and shots on goal) while shorthanded",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shorthanded individual shot attempts",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1296,
+      "abbreviation": "SH iSAT/60",
+      "definition": "Player's own shot attempts (missed shots, attempts blocked, and shots on goal) per 60 minutes of shorthanded time on ice",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shorthanded individual shot attempts per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1297,
+      "abbreviation": "SHP",
+      "definition": "Player's own shorthanded points. See points.",
+      "firstSeasonForStat": 19331934,
+      "fullName": "Shorthanded points",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1298,
+      "abbreviation": "SHP/60",
+      "definition": "Player's own shorthanded points per 60 minutes of shorthanded time on ice",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shorthanded points per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1299,
+      "abbreviation": "SHA1",
+      "definition": "Player's own primary assists while shorthanded. See primary assists.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded primary assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1300,
+      "abbreviation": "SHA1/60",
+      "definition": "Player's own shorthanded primary assists per 60 minutes of shorthanded time on ice. See primary assists.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shorthanded primary assists per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1301,
+      "abbreviation": "SH Sv%",
+      "definition": "Shorthanded save percentage is a goalie's save percentage while the opposing team is shorthanded (and his team is on the power play). Due to the very small number of shorthanded shots a goalie faces during a season, often on breakaways and odd-man rushes, SH Sv% is very volatile. SH Sv% is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded save percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1302,
+      "abbreviation": "SH Svs",
+      "definition": "Saves by a goalie or a team, while their opponent is shorthanded",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded saves",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1303,
+      "abbreviation": "SHA2",
+      "definition": "Player's own secondary assists while shorthanded. See secondary assists.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded secondary assists",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1304,
+      "abbreviation": "SHA2/60",
+      "definition": "Player's own shorthanded secondary assists scored per 60 minutes of shorthanded time on ice. See secondary assists.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shorthanded secondary assists per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1305,
+      "abbreviation": "SH S%",
+      "definition": "Player's own shooting percentage while shorthanded",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded shooting percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1306,
+      "abbreviation": "SH Shots",
+      "definition": "Player's own shorthanded shots",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1307,
+      "abbreviation": "SH SA",
+      "definition": "Shots against are the number of shots on goal against a goalie or a team, while their opponent is shorthanded. Attempts blocked and missed shots are not included.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded shots against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1308,
+      "abbreviation": "SH S/60",
+      "definition": "Player's own shorthanded shots per 60 minutes of shorthanded time on ice",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded shots per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1309,
+      "abbreviation": "SH TOI",
+      "definition": "Shorthanded time on ice is the time on ice that a player spends in shorthanded, or penalty killing, situations. SHTOI is available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1310,
+      "abbreviation": "SH TOI/GP",
+      "definition": "A player's shorthanded time on ice divided by games played",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Shorthanded time on ice per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1311,
+      "abbreviation": "SAT",
+      "definition": "SAT, also known as Corsi, is a plus-minus statistic that measures shot attempts instead of goals. While he is on the ice, a player receives a plus for any shot attempt (on goal, missed, or blocked) that his team directs toward the opponents goal, and a minus for any shot attempt (on goal, missed, or blocked) toward his goal. Only 5-on-5 shot attempts are currently counted. The reason for looking at SAT (or alternatively, USAT, which excludes blocked shots) instead of plus-minus is to take advantage of the much larger sample size of shot attempts than goals, and to remove the influence of varying goaltending performance from a measure of skater performance. SAT can be represented by a differential, like plus-minus, where a positive number is above average (which is how SAT is displayed on nhl.com), or as a percentage, where over 50% is above average (shown by SAT% on nhl.com). Though SAT is a common proxy for puck possession, it does not measure actual puck possession time. SAT (and USAT) are also calculated when the player's team is ahead or behind in the score, or tied, or when the score is close. SAT is available since 2009-10. See blocked shots; see close or close game; see missed shots; see puck possession; see score effects; see SAT%; see shots; see USAT.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempt differential",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1312,
+      "abbreviation": "SAT Agst",
+      "definition": "For a team, SAT Agst is the number of shot attempts against a team. For a player, SAT Agst is the number of shot attempts against the team while he is on the ice. SAT Agst is commonly paired with SAT For, to show a team's shot attempt differential, or SAT. SAT is available since 2009-10; it is calculated for 5-on-5 situations. See SAT; see SAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1313,
+      "abbreviation": "SAT For",
+      "definition": "For a team, SAT For is the number of shot attempts by a team. For a player, SAT For is the number of shot attempts by the team while he is on the ice. SAT For is commonly paired with SAT Agst, to show a team's shot attempt differential, or SAT. SAT is available since 2009-10; it is calculated for 5-on-5 situations. See SAT; see SAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts for",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1314,
+      "abbreviation": "SAT%",
+      "definition": "For a team, SAT% is the percentage of shot attempts that the team takes out of total shot attempts. In other words, SAT% = SAT For/(SAT For + SAT Against). For a player, it is the percentage of shots attempts the team takes, out of total shot attempts, while the player is on the ice. SAT% is also known as Corsi for percentage, or CF%. Only 5-on-5 shot attempts are currently counted. SAT% is available since 2009-10. See goals for percentage; see puck possession; see Relative SAT percentage; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1315,
+      "abbreviation": "SAT% Close",
+      "definition": "A close game is defined as a game within a single goal in the first two periods or tied in the third period or overtime. SAT% close is available since 2009-10. See close or close game; see SAT%; see USAT% close.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts percentage in close game situations",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1316,
+      "abbreviation": "SAT% Ahead",
+      "definition": "SAT% Ahead only counts SAT% for a team or player while the team is ahead in the score. It can be compared against SAT% or SAT% under different score situations. SAT% is available since 2009-10. See score effects; see SAT; see SAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts percentage while ahead",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1317,
+      "abbreviation": "SAT% Behind",
+      "definition": "SAT% Behind only counts SAT% for a team or player while the team is behind in the score. It can be compared against SAT% or SAT% under different score situations. SAT% is available since 2009-10. See score effects; see SAT; see SAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts percentage while behind",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1318,
+      "abbreviation": "SAT% Tied",
+      "definition": "SAT% Tied only counts SAT% for a team or player while the team is tied in the score. It can be compared against SAT% or SAT% under different score situations. SAT% is available since 2009-10. See score effects; see SAT; see SAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts percentage while tied",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1319,
+      "abbreviation": "SAT Ahead",
+      "definition": "SAT Ahead equals SAT for minus SAT against, while the team or the on-ice skater's team is ahead in the score. SAT is available since 2009-10; it is calculated for 5-on-5 situations. See score effects; see SAT.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts while ahead",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1320,
+      "abbreviation": "SAT Behind",
+      "definition": "SAT Behind equals SAT for minus SAT against, while the team or the on-ice skater's team is behind in the score. SAT is available since 2009-10; it is calculated for 5-on-5 situations. See score effects; see SAT.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts while behind",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1321,
+      "abbreviation": "SAT Tied",
+      "definition": "SAT Tied equals SAT for minus SAT against, while the team or the on-ice skater's team is tied in the score. SAT is available since 2009-10; it is calculated for 5-on-5 situations. See score effects; see SAT.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shot attempts while tied",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1322,
+      "abbreviation": "SD/GP",
+      "definition": "For a team, shot differential per game played, calculated by shots per game played (Shots/GP) minus by shots against per game played (SA/GP).",
+      "firstSeasonForStat": null,
+      "fullName": "Shot differential per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T17:58:35"
+    },
+    {
+      "id": 1323,
+      "abbreviation": "S",
+      "definition": "Shots are the number of shots on goal taken by a player or team. Attempts blocked and missed shots are not included. Shots are also called shots on goal, or SOG. Shots are officially tracked for teams since 1955-56 and for skaters since 1959-60. See blocked shots; see missed shots; see SAT; see USAT.",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Shots",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1324,
+      "abbreviation": "S Back",
+      "definition": "Player's or team's shots on backhands",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots - backhand",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1325,
+      "abbreviation": "S Deflect",
+      "definition": "Player's or team's shots on deflections. A deflection is a shot deflected off the player's body, not his stick.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots - deflection",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1326,
+      "abbreviation": "S Slap",
+      "definition": "Player's or team's shots on slap shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots - slap shot",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1327,
+      "abbreviation": "S Snap",
+      "definition": "Player's or team's shots on snap shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots - snap shot",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1328,
+      "abbreviation": "S Tip",
+      "definition": "Player's or team's shots on tip-ins. A tip-in is a shot deflected off of the player's stick, not his body.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots - tip-in",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1329,
+      "abbreviation": "S Wrap",
+      "definition": "Player's or team's shots on wraparounds",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots - wraparound",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1330,
+      "abbreviation": "S Wrist",
+      "definition": "Player's or team's shots on wrist shots",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots - wrist shot",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:02:10"
+    },
+    {
+      "id": 1331,
+      "abbreviation": "SA",
+      "definition": "Shots against are the number of shots on goal against a goalie or a team. Attempts blocked and missed shots are not included. Shots against are officially tracked for teams since 1955-56 and for skaters since 1959-60. See blocked shots; see goals against; see missed shots; see saves.",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Shots against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1332,
+      "abbreviation": "GR SA",
+      "definition": "Shots against, only in goalie's games relieved",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Shots against in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1333,
+      "abbreviation": "GS SA",
+      "definition": "Shots against, only in goalie's games started",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Shots against in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1334,
+      "abbreviation": "SA/60 goalie",
+      "definition": "Goalie's number of shots against per 60 minutes. As a goalie's most direct contribution to team success is stopping shots (e.g. maintaining a high Sv%), SA/60 is a general indication of the workload placed on him by his defense. For example, a goalie facing 40 SA must maintain a .950 Sv% to allow 2 GA, while a goalie facing 20 SA must only maintain a .900 Sv% to allow 2 GA.",
+      "firstSeasonForStat": null,
+      "fullName": "Shots against per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-12-16T10:09:57"
+    },
+    {
+      "id": 1335,
+      "abbreviation": "SA/GP",
+      "definition": "For a team, shots against per game played",
+      "firstSeasonForStat": null,
+      "fullName": "Shots against per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1336,
+      "abbreviation": "S/60",
+      "definition": "Player's own shots per 60 minutes of ice time. On a 5v5 report like Puck Possession, where all of the stats are 5-on-5, S/60 is the player's own shots for 60 minutes of 5-on-5 ice time.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Shots per 60 minutes (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1337,
+      "abbreviation": "S/GP",
+      "definition": "A player's or team's shots divided by games played",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Shots per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1339,
+      "abbreviation": "SO shutout",
+      "definition": "Games where the opposing team has zero goals scored prior to the shootout.",
+      "firstSeasonForStat": null,
+      "fullName": "Shutouts",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1340,
+      "abbreviation": "Starts over .900",
+      "definition": "Number of games started where the goalie has a .900 save percentage or higher. Similar to Quality Starts, created by Rob Vollman.",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Starts over .900",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1341,
+      "abbreviation": "Starts over .900 %",
+      "definition": "Percentage of a goalie's games started where the goalie has a .900 save percentage or higher. Similar to Quality Starts percentage, created by Rob Vollman.",
+      "firstSeasonForStat": 19591960,
+      "fullName": "Starts over .900 percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1342,
+      "abbreviation": "S/P",
+      "definition": "The U.S. state or Canadian province where the player was born.",
+      "firstSeasonForStat": null,
+      "fullName": "State or province",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-14T15:12:24"
+    },
+    {
+      "id": 1343,
+      "abbreviation": "TkA",
+      "definition": "A takeaway is a form of turnover in which the player takes the puck from the opposition, rather than gaining possession through an opposition error. Takeaways are available since 1997-98.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Takeaways",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1344,
+      "abbreviation": "TkA/60",
+      "definition": "Player's average rate of takeaways per 60 minutes of ice time",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Takeaways per 60 minutes",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1345,
+      "abbreviation": "GR T",
+      "definition": "Ties, only in goalie's games relieved",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Ties in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1346,
+      "abbreviation": "GS T",
+      "definition": "Ties, only in goalie's games started",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Ties in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1347,
+      "abbreviation": "TOI",
+      "definition": "Time on ice is a player's playing time in all situations (even strength, power play, shorthanded). Consequently, TOI = EV TOI + PP TOI + SH TOI. See even-strength time on ice; see power play time on ice; see shorthanded time on ice.",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Time on ice",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1348,
+      "abbreviation": "TOI/GP",
+      "definition": "A player's total time on ice divided by games played",
+      "firstSeasonForStat": 19971998,
+      "fullName": "Time on ice per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1349,
+      "abbreviation": "TOI/GP (5-on-5)",
+      "definition": "Player's time on ice in 5-on-5 situations",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Time on ice per game played (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1350,
+      "abbreviation": "TS",
+      "definition": "Number of chances a team's opponent has to score on the power play. It is used as a component of penalty killing percentage, PK%, and net penalty killing percentage, Net PK%.",
+      "firstSeasonForStat": null,
+      "fullName": "Times shorthanded",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1351,
+      "abbreviation": "TS/GP",
+      "definition": "Number of chances a team's opponent has to score on the power play, divided by games played, to give the per-game average",
+      "firstSeasonForStat": null,
+      "fullName": "Times shorthanded per game played",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1352,
+      "abbreviation": "USAT",
+      "definition": "USAT, also known as Fenwick, is a plus-minus statistic that measures unblocked shot attempts instead of goals. While he is on the ice, a player receives a plus for any unblocked shot attempt (on goal or missed) that his team directs toward the opponents goal, and a minus for any unblocked shot attempt (on goal or missed) toward his own goal. Only 5-on-5 shot attempts are currently counted. The reason for looking at USAT (or alternatively, SAT, which includes blocked shots) instead of plus-minus is to take advantage of the much larger sample size of unblocked shot attempts than goals, and to remove the influence of varying goaltending performance from a measure of skater performance. With the removal of blocked shot attempts from consideration, the sample size of USAT is slightly smaller than that of SAT; however, USAT takes team and player shot blocking performance into account, while SAT does not. USAT can be represented by a differential, like plus-minus, where a positive number is above average (which is how USAT is displayed on nhl.com), or as a percentage, where over 50% is above average (shown by USAT% on nhl.com). Though USAT is a common proxy for puck possession, it does not measure actual puck possession time. USAT (and SAT) are also calculated when the player's team is ahead or behind in the score, or tied, or when the score is close. USAT is available since 2009-10. See blocked shots; see close or close game; see missed shots; see puck possession; see score effects; see SAT; see SAT%; see shots; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempt differential",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1353,
+      "abbreviation": "USAT Agst",
+      "definition": "For a team, USAT Agst is the number of shot attempts against a team. For a player, USAT Agst is the number of shot attempts against the team while he is on the ice. USAT Agst is commonly paired with USAT For, to show a team's shot attempt differential, or USAT. USAT is available since 2009-10; it is calculated for 5-on-5 situations. See USAT; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts against",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1354,
+      "abbreviation": "USAT For",
+      "definition": "For a team, USAT For is the number of shot attempts by a team. For a player, USAT For is the number of shot attempts by the team while he is on the ice. USAT For is commonly paired with USAT Agst, to show a team's shot attempt differential, or USAT. USAT is available since 2009-10; it is calculated for 5-on-5 situations. See USAT; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts for",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1355,
+      "abbreviation": "USAT%",
+      "definition": "For a team, USAT% is the percentage of unblocked shot attempts that the team takes out of total unblocked shot attempts. In other words, USAT% = USAT For/(USAT For + USAT Against). For a player, it is the percentage of unblocked shots attempts the team takes, out of total unblocked shot attempts, while the player is on the ice. USAT% is also known as Fenwick for percentage, or FF%. USAT% is available since 2009-10. See goals for percentage; puck possession; see SAT%; see USAT% close.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts percentage",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1356,
+      "abbreviation": "USAT% Close",
+      "definition": "A close game is defined as a game within a single goal in the first two periods or tied in the third period or overtime. Close-game USAT%, also known as Fenwick Close, is considered a strong indicator of team possession ability, and therefore, a good predictor of future success. USAT% close is available since 2009-10. See close or close game; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts percentage in close game situations",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1357,
+      "abbreviation": "USAT% Ahead",
+      "definition": "USAT% Ahead only counts USAT% for a team or player while the team is ahead in the score. It can be compared against USAT% or USAT% under different score situations. USAT% is available since 2009-10. See score effects; see USAT; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts percentage while ahead",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1358,
+      "abbreviation": "USAT% Behind",
+      "definition": "USAT% Behind only counts USAT% for a team or player while the team is behind in the score. It can be compared against USAT% or USAT% under different score situations. USAT% is available since 2009-10. See score effects; see USAT; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts percentage while behind",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1359,
+      "abbreviation": "USAT% Tied",
+      "definition": "USAT% Tied only counts USAT% for a team or player while the team is tied in the score. It can be compared against USAT% or USAT% under different score situations. USAT% is available since 2009-10. See score effects; see USAT; see USAT%.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts percentage while tied",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1360,
+      "abbreviation": "USAT Ahead",
+      "definition": "USAT Ahead equals USAT for minus USAT against, while the team or the on-ice skater's team is ahead in the score. USAT is available since 2009-10; it is calculated for 5-on-5 situations. See score effects; see USAT.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts while ahead",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1361,
+      "abbreviation": "USAT Behind",
+      "definition": "USAT Behind equals USAT for minus USAT against, while the team or the on-ice skater's team is behind in the score. USAT is available since 2009-10; it is calculated for 5-on-5 situations. See score effects; see USAT.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts while behind",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1362,
+      "abbreviation": "USAT Tied",
+      "definition": "USAT Tied equals USAT for minus USAT against, while the team or the on-ice skater's team is tied in the score. USAT is available since 2009-10; it is calculated for 5-on-5 situations. See score effects; see USAT.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Unblocked shot attempts while tied",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1363,
+      "abbreviation": "Wt",
+      "definition": "Player's weight in pounds",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Weight",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1364,
+      "abbreviation": "GR W",
+      "definition": "Wins, only in goalie's games relieved",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Wins in games relieved",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 1365,
+      "abbreviation": "GS W",
+      "definition": "Wins, only in goalie's games started",
+      "firstSeasonForStat": 19171918,
+      "fullName": "Wins in games started",
+      "languageCode": "en",
+      "lastUpdated": "2019-11-11T13:33:12"
+    },
+    {
+      "id": 5120,
+      "abbreviation": "XA GF",
+      "definition": "Teams pull their goalie in favor of an extra attacker when trailing late in games or in delayed penalty situations, increasing their chances of scoring.  Extra attacker goals are counted toward a player's overall totals.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Extra attacker goals for",
+      "languageCode": "en",
+      "lastUpdated": "2025-04-17T15:05:50"
+    },
+    {
+      "id": 5128,
+      "abbreviation": "OZ Start%",
+      "definition": "Offensive zone start percentage (OZ Start %) is closely related to offensive zone face-off ratio, and can be applied similarly. It is calculated at 5-on-5 and is an indication of a player's role at even strength. OZ Start % is the percentage of face-offs that occur in the offensive zone while the player is on the ice. In other words, OZ Start % equals the number of offensive zone face-offs taken by his team while he is on the ice divided by the number of offensive zone plus neutral zone plus defensive zone face-offs taken while he is on the ice. Players with higher OZ Start % values are being deployed offensively, and should expect a slight increase in stats like SAT% and points compared players with lower values. OZ Start % is available since 2009-10.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Offensive Zone Start Percentage (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2025-11-20T06:06:21"
+    },
+    {
+      "id": 5129,
+      "abbreviation": "NZ Start%",
+      "definition": "Neutral zone start percentage (NZ Start %) is calculated at 5-on-5 and is an indication of a player's role at even strength. NZ Start % is the percentage of face-offs that occur in the neutral zone while the player is on the ice. In other words, NZ Start % equals the number of neutral zone face-offs taken by his team while he is on the ice divided by the number of offensive zone plus neutral zone plus defensive zone face-offs taken while he is on the ice. NZ Start % is available since 2009-10.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Neutral Zone Start Percentage (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2025-11-20T06:06:21"
+    },
+    {
+      "id": 5130,
+      "abbreviation": "DZ Start%",
+      "definition": "Defensive zone start percentage (OZ Start %) is calculated at 5-on-5 and is an indication of a player's role at even strength. DZ Start % is the percentage of face-offs that occur in the defensive zone while the player is on the ice. In other words, DZ Start % equals the number of defensive zone face-offs taken by his team while he is on the ice divided by the number of offensive zone plus neutral zone plus defensive zone face-offs taken while he is on the ice. Players with higher DZ Start % values are being deployed defensively, and should expect a slight decrease in stats like SAT% and points compared players with lower values. DZ Start % is available since 2009-10.",
+      "firstSeasonForStat": 20092010,
+      "fullName": "Defensive Zone Start Percentage (5-on-5)",
+      "languageCode": "en",
+      "lastUpdated": "2025-11-20T06:06:21"
+    }
+  ],
+  "total": 321
+}
