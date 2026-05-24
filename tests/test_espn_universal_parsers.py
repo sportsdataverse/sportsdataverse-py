@@ -257,6 +257,8 @@ def test_summary_parsers_handle_real_nba_summary_payload():
         "leaders", "game_info", "officials", "header", "season_series",
         "against_the_spread", "standings", "broadcasts", "format",
         "pickcenter", "odds", "article", "injuries", "news",
+        # NFL / CFB only — return empty frames for NBA but still present
+        "drives", "scoring_plays",
     }
     assert set(out) == must_be_present, (
         f"dispatcher returned unexpected section set: "
@@ -337,6 +339,174 @@ def test_summary_section_parsers_individually():
     assert parse_summary_broadcasts(payload).height == 0
     assert parse_summary_pickcenter(payload).height == 0
     assert parse_summary_odds(payload).height == 0
+
+
+# ===========================================================================
+# Cross-league summary parity
+# ===========================================================================
+#
+# The summary endpoint shape is mostly identical across ESPN sports, but
+# there are real per-sport variations (NFL uses drives.previous[] instead
+# of top-level plays; NHL doesn't ship per-play win-prob; MLB ships
+# different stat keys in boxscore). These tests prove the parsers
+# survive every documented variation by running the dispatcher against
+# captured fixtures for 5 leagues (NBA / MLB / NFL / NHL / WNBA) and
+# asserting the per-sport contract.
+
+
+SUMMARY_FIXTURES = ["summary_nba", "summary_mlb", "summary_nfl",
+                    "summary_nhl", "summary_wnba"]
+
+
+@pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
+def test_summary_dispatcher_returns_full_section_dict_for_every_league(fixture):
+    """Each league's summary fixture must produce a complete dict of
+    sub-frames from the dispatcher — no missing keys, no exceptions."""
+    import polars as pl
+
+    from sportsdataverse._common_espn_parsers import (
+        SUMMARY_SECTION_PARSERS,
+        parse_summary,
+    )
+
+    payload = _load(fixture)
+    out = parse_summary(payload)
+    assert isinstance(out, dict)
+    assert set(out) == set(SUMMARY_SECTION_PARSERS), (
+        f"{fixture}: dispatcher returned different sections than registry"
+    )
+    for name, frame in out.items():
+        assert isinstance(frame, pl.DataFrame), (
+            f"{fixture}: section {name!r} returned {type(frame)}"
+        )
+
+
+@pytest.mark.parametrize("fixture,min_athletes", [
+    ("summary_nba",  20),  # 2 NBA rosters, ~24-27 active
+    ("summary_mlb",  20),  # 2 MLB rosters, ~26-32 with starters + bullpen
+    ("summary_nfl",  50),  # 2 NFL rosters, ~70-90 with full game-day squad
+    ("summary_nhl",  20),  # 2 NHL rosters, skaters + goalies
+    ("summary_wnba", 15),  # 2 WNBA rosters, ~12-15 each
+])
+def test_summary_boxscore_player_works_across_leagues(fixture, min_athletes):
+    from sportsdataverse._common_espn_parsers import parse_summary_boxscore_player
+
+    df = parse_summary_boxscore_player(_load(fixture))
+    assert df.height >= min_athletes, (
+        f"{fixture}: expected >={min_athletes} athletes, got {df.height}"
+    )
+    for col in ("team_id", "team_abbreviation", "athlete_id",
+                "athlete_display_name"):
+        assert col in df.columns, f"{fixture}: missing {col!r}"
+
+
+@pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
+def test_summary_boxscore_team_works_across_leagues(fixture):
+    """Every league ships per-team statistics. Row counts vary by sport
+    (NBA ~23 stats × 2 teams, MLB ~4 × 2 = 8, NHL ~14 × 2 = 28)."""
+    from sportsdataverse._common_espn_parsers import parse_summary_boxscore_team
+
+    df = parse_summary_boxscore_team(_load(fixture))
+    assert df.height > 0, f"{fixture}: expected per-team stats, got 0 rows"
+    for col in ("team_id", "stat_name", "stat_label"):
+        assert col in df.columns
+
+
+@pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
+def test_summary_game_info_works_across_leagues(fixture):
+    from sportsdataverse._common_espn_parsers import parse_summary_game_info
+
+    df = parse_summary_game_info(_load(fixture))
+    assert df.height == 1, f"{fixture}: game_info should be 1 row"
+    assert any(c.startswith("venue_") for c in df.columns), (
+        f"{fixture}: no venue_* columns"
+    )
+
+
+@pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
+def test_summary_officials_works_across_leagues(fixture):
+    from sportsdataverse._common_espn_parsers import parse_summary_officials
+
+    df = parse_summary_officials(_load(fixture))
+    # NBA=3, NHL=6, MLB=6, NFL=7, WNBA=4
+    assert df.height >= 3, f"{fixture}: expected >=3 officials, got {df.height}"
+    assert "full_name" in df.columns or "display_name" in df.columns
+
+
+@pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
+def test_summary_header_works_across_leagues(fixture):
+    from sportsdataverse._common_espn_parsers import parse_summary_header
+
+    df = parse_summary_header(_load(fixture))
+    assert df.height == 1
+    assert "id" in df.columns
+
+
+@pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
+def test_summary_standings_works_across_leagues(fixture):
+    """Standings appear in every league summary; row counts reflect
+    conference / division structure."""
+    from sportsdataverse._common_espn_parsers import parse_summary_standings
+
+    df = parse_summary_standings(_load(fixture))
+    assert df.height >= 5, (
+        f"{fixture}: expected >=5 teams in standings, got {df.height}"
+    )
+    assert "team_id" in df.columns
+
+
+def test_summary_plays_works_for_non_football_leagues():
+    """NBA / MLB / WNBA / NHL ship plays at the top level. NFL ships
+    drives.previous[] instead, which is exercised separately."""
+    from sportsdataverse._common_espn_parsers import parse_summary_plays
+
+    for fixture in ("summary_nba", "summary_mlb", "summary_nhl", "summary_wnba"):
+        df = parse_summary_plays(_load(fixture))
+        assert df.height >= 100, (
+            f"{fixture}: expected >=100 plays, got {df.height}"
+        )
+
+
+def test_summary_drives_works_for_nfl():
+    """NFL summary ships drives.previous[] in lieu of top-level plays."""
+    from sportsdataverse._common_espn_parsers import (
+        parse_summary_drives,
+        parse_summary_plays,
+        parse_summary_scoring_plays,
+    )
+
+    payload = _load("summary_nfl")
+    drives = parse_summary_drives(payload)
+    assert drives.height >= 10, f"expected >=10 drives, got {drives.height}"
+    assert parse_summary_plays(payload).height == 0
+    scoring = parse_summary_scoring_plays(payload)
+    assert scoring.height >= 1, "NFL summary should have scoringPlays"
+
+
+def test_summary_drives_and_scoring_plays_empty_for_non_football():
+    """drives + scoringPlays return zero-row frames for non-football
+    leagues without raising."""
+    from sportsdataverse._common_espn_parsers import (
+        parse_summary_drives,
+        parse_summary_scoring_plays,
+    )
+
+    for fixture in ("summary_nba", "summary_mlb", "summary_nhl", "summary_wnba"):
+        assert parse_summary_drives(_load(fixture)).height == 0, (
+            f"{fixture}: non-football should have 0 drives"
+        )
+        assert parse_summary_scoring_plays(_load(fixture)).height == 0, (
+            f"{fixture}: non-football should have 0 scoringPlays"
+        )
+
+
+def test_summary_winprobability_empty_for_nhl():
+    """NHL doesn't ship per-play win probability; the parser must
+    return an empty frame, not raise."""
+    from sportsdataverse._common_espn_parsers import parse_summary_winprobability
+
+    df = parse_summary_winprobability(_load("summary_nhl"))
+    assert df.height == 0
 
 
 def test_summary_section_parsers_registry_consistent():

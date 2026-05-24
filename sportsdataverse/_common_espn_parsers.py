@@ -1869,6 +1869,51 @@ def parse_summary_news(
     return _row_per_item(news.get("articles"), return_as_pandas)
 
 
+def parse_summary_drives(
+    payload: Dict, return_as_pandas: bool = False
+) -> pl.DataFrame:
+    """Extract per-drive context from ``payload["drives"]`` (NFL / CFB).
+
+    Football summary payloads don't expose a top-level ``plays`` list —
+    they expose ``drives: {previous: [...drives...]}`` instead, with
+    each drive carrying its own ``plays`` sub-list, ``team``, ``start``,
+    ``end``, ``timeElapsed``, ``displayResult``, ``isScore``.
+
+    This parser walks ``drives.previous[]`` and returns one row per
+    drive with the high-level metadata flattened (the per-drive
+    ``plays`` sub-lists are stringified to keep the frame one row per
+    drive; pass each drive's payload through :func:`parse_event_plays`
+    to drill into the plays).
+
+    Args:
+        payload: Raw JSON dict from any football ``espn_{league}_summary()``
+            wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per drive; zero rows
+        for non-football summary payloads that lack ``drives.previous``.
+    """
+    drives = (payload or {}).get("drives") or {}
+    previous = drives.get("previous") if isinstance(drives, dict) else None
+    return _row_per_item(previous, return_as_pandas)
+
+
+def parse_summary_scoring_plays(
+    payload: Dict, return_as_pandas: bool = False
+) -> pl.DataFrame:
+    """Extract the scoring-plays summary from ``payload["scoringPlays"]``.
+
+    NFL / CFB summary payloads ship a dedicated ``scoringPlays`` list
+    (one row per scoring play) alongside the per-drive PBP.  Non-football
+    sports either don't have this section or return empty.
+
+    Returns one row per scoring play; zero rows when the section is
+    absent or empty.
+    """
+    return _row_per_item((payload or {}).get("scoringPlays"), return_as_pandas)
+
+
 def parse_summary(payload: Dict, section: str = None,
                   return_as_pandas: bool = False):
     """Dispatcher: parse one section of a Site v2 summary payload.
@@ -1928,6 +1973,9 @@ SUMMARY_SECTION_PARSERS = {
     "article":              parse_summary_article,
     "injuries":             parse_summary_injuries,
     "news":                 parse_summary_news,
+    # NFL / CFB only — return zero-row frames for other sports
+    "drives":               parse_summary_drives,
+    "scoring_plays":        parse_summary_scoring_plays,
 }
 
 
