@@ -87,6 +87,9 @@ df  = parse_team_roster(raw, return_as_pandas=True)
 | `parse_summary_article` | summary section: recap article metadata | Single row |
 | `parse_summary_injuries` | summary section: per-team injury lists | One row per team |
 | `parse_summary_news` | summary section: embedded news feed | One row per article |
+| `parse_summary_drives` | summary section: NFL/CFB drives (`drives.previous[]`) | One row per drive |
+| `parse_summary_drive_plays` | summary section: NFL/CFB plays nested under drives | One row per play across every drive, with `drive_id` + `drive_sequence` for joinability |
+| `parse_summary_scoring_plays` | summary section: NFL/CFB scoring summary | One row per scoring play |
 
 ## Contract guarantees
 

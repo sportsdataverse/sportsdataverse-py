@@ -458,17 +458,39 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
 
 - `parse_team_roster` now handles **both** ESPN roster shapes. The
   flat shape (`athletes[]` = list of athlete dicts; used by NBA /
-  WNBA / MBB / WBB / CFB) continues to work unchanged. The newly-
+  WNBA / MBB / WBB) continues to work unchanged. The newly-
   handled position-grouped shape (`athletes[i] = {position, items}`;
-  used by MLB / NFL / NHL) is auto-detected by inspecting the first
-  element — each player from a group's `items[]` is tagged with a
-  `position_group` column carried over from the parent group. Without
-  the fix, MLB / NFL / NHL rosters were collapsing to 5-6 group rows
-  instead of unrolling to the full per-player list.
+  used by MLB / NFL / NHL / CFB) is auto-detected by inspecting the
+  first element — each player from a group's `items[]` is tagged
+  with a `position_group` column carried over from the parent group.
+  Without the fix, MLB / NFL / NHL / CFB rosters were collapsing to
+  ~5-6 group rows instead of unrolling to the full per-player list
+  (e.g. Alabama CFB went from 6 group rows to 100 player rows).
+
+### New: NFL drive-plays parser (true PBP parity)
+
+`parse_summary_drive_plays` rounds out the football PBP story. NFL
+and CFB summary payloads don't ship a top-level `plays[]` array (the
+NBA / MLB / NHL / WNBA convention); they nest plays inside each
+drive at `drives.previous[i].plays[]`. The existing
+`parse_summary_drives` returns one row per drive with the plays
+stringified. This new parser unrolls those nested plays into a true
+one-row-per-play frame with `drive_id` + `drive_sequence` columns
+carried over from the parent drive — letting callers join back to
+the drives frame for drive-level context.
+
+Verified against Super Bowl LIX: 26 drives + 186 plays unrolled
+into a 186-row × 43-column polars frame. Returns zero rows for
+NBA / MLB / NHL / WNBA fixtures (those leagues use top-level
+`plays[]`, exercised by `parse_summary_plays`).
+
+`SUMMARY_SECTION_PARSERS` registry grows from 20 to 21 entries.
+The summary dispatcher's output dict now includes the `drive_plays`
+section alongside `drives` and `scoring_plays`.
 
 ### Test infrastructure
 
-- New `tests/test_espn_universal_parsers.py` (85 tests),
+- New `tests/test_espn_universal_parsers.py` (98 tests),
   `tests/test_mlb_api_parsers.py` (17 tests),
   `tests/test_nhl_aux_parsers.py` (21 tests),
   `tests/test_nhl_api_web_parsers.py` (37 tests), and
@@ -476,11 +498,11 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
   captured fixtures.
 - New `tests/test_espn_live.py` (32 live tests) gated by
   `SDV_PY_LIVE_TESTS=1` for live integration verification.
-- Captured fixtures live under `tests/fixtures/espn/` (28 captures —
+- Captured fixtures live under `tests/fixtures/espn/` (40 captures —
   the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA
-  plus the 16-fixture cross-league parity set covering
-  `team_roster` / `team_schedule` / `news` / `injuries` for
-  MLB / NFL / NHL / WNBA),
+  plus the 28-fixture cross-league parity set covering
+  `team_roster` / `team_schedule` / `news` / `injuries` for **all 7 ESPN
+  leagues** — NBA + WNBA + MBB + WBB + CFB + MLB + NFL + NHL),
   `tests/fixtures/mlb_api/` (8 captures: schedule, teams, roster,
   standings, person_stats, venues, sports, divisions),
   `tests/fixtures/nhl_stats_rest/` (8 captures: season, franchise,
@@ -515,9 +537,11 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
     architecture.
   - `docs/parsers/index.md` — the parser layer + `ENDPOINT_PARSERS`.
   - `docs/mlb/index.md` — MLB module overview (ESPN + Stats API +
-    Statcast); now includes a "MLB Stats API parser layer" section
-    covering the dedicated parsers + the `MLB_API_ENDPOINT_PARSERS`
-    registry.
+    Statcast); brief pointer to the new dedicated parsers page.
+  - `docs/mlb/parsers.md` — dedicated MLB Stats API parsers page
+    (split out from `index.md`) with the full parser table, registry
+    + `parser_for_mlb_api`, four chaining examples, and a fixture
+    inventory. Linked from `docs/mlb/index.md` and from the sidebar.
   - `docs/nhl/api-web.md` — the modern game-feed surface
     (`api-web.nhle.com/v1/`) with the full endpoint table and a parser
     layer section covering all 16 dedicated parsers + 2 dispatchers

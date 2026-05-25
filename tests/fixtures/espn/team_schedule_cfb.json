@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-05-25T01:54:30Z",
+  "status": "success",
+  "season": {
+    "year": 2026,
+    "type": 1,
+    "name": "Preseason",
+    "displayName": "2026",
+    "half": 1
+  },
+  "team": {
+    "id": "333",
+    "abbreviation": "ALA",
+    "location": "Alabama",
+    "name": "Crimson Tide",
+    "displayName": "Alabama Crimson Tide",
+    "clubhouse": "https://www.espn.com/college-football/team/_/id/333/alabama-crimson-tide",
+    "color": "9e1b32",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
+    "seasonSummary": "2026",
+    "groups": {
+      "id": "8",
+      "parent": {
+        "id": "80"
+      },
+      "isConference": true
+    }
+  },
+  "events": []
+}

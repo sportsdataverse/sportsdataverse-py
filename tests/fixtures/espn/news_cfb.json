@@ -1,0 +1,1668 @@
+{
+  "header": "NCAAF News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/college-football/",
+    "text": "All NCAAF News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 48865369,
+      "nowId": "1-48865369",
+      "contentKey": "48865369-1-6-1",
+      "dataSourceIdentifier": "6283fb18118d5",
+      "type": "Story",
+      "headline": "Curt Cignetti drives honorary pace car at 2026 Indy 500",
+      "description": "The Indiana Hoosiers' national champion coach led the field of competitors around the famed Indianapolis Motor Speedway track ahead of Sunday's race.",
+      "lastModified": "2026-05-24T23:07:08Z",
+      "published": "2026-05-24T23:07:08Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "27320274534fd",
+          "id": 48865271,
+          "type": "header",
+          "name": "cignetti honorary pace car [608x342]",
+          "caption": "Curt Cignetti served as the honorary pace car driver at the 2026 Indy 500 on Sunday.",
+          "credit": "IndyCar/X",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0524/r1663089_608x342_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Why Rittenberg has Indiana ranked No. 1 in the offseason",
+          "caption": "Adam Rittenberg breaks down why he has Indiana ranked first in his offseason rankings.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0504/dm_260504_indiana_offseason_ranking/dm_260504_indiana_offseason_ranking.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 1080,
+          "type": "team",
+          "uid": "s:20~l:23~t:84",
+          "guid": "bd06efe1-3050-2356-37c1-4b3fef1c29be",
+          "description": "Indiana Hoosiers",
+          "sportId": 23,
+          "teamId": 84,
+          "team": {
+            "id": 84,
+            "description": "Indiana Hoosiers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/84/indiana-hoosiers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/84/indiana-hoosiers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 84,
+          "type": "team",
+          "guid": "792ba7c6-9f41-3563-a1a4-fdef86947037",
+          "description": "Indiana University",
+          "sportId": 3170,
+          "teamId": 84,
+          "team": {
+            "id": 84,
+            "description": "Indiana University"
+          }
+        },
+        {
+          "id": 3205,
+          "type": "team",
+          "uid": "s:40~l:41~t:84",
+          "guid": "e2d16cd8-2b1d-9683-9351-ea8ccc3892cb",
+          "description": "Indiana Hoosiers",
+          "sportId": 41,
+          "teamId": 84,
+          "team": {
+            "id": 84,
+            "description": "Indiana Hoosiers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/84/indiana-hoosiers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/84/indiana-hoosiers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4778,
+          "type": "team",
+          "uid": "s:40~l:54~t:84",
+          "guid": "3790dfa0-5341-3438-d2dc-983f831a045c",
+          "description": "Indiana Hoosiers",
+          "sportId": 54,
+          "teamId": 84,
+          "team": {
+            "id": 84,
+            "description": "Indiana Hoosiers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/84/indiana-hoosiers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/84/indiana-hoosiers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2942,
+          "type": "team",
+          "uid": "s:20~l:28~t:11",
+          "guid": "582d14eb-da61-e505-cc40-d972a1b60ed1",
+          "description": "Indianapolis Colts",
+          "sportId": 28,
+          "teamId": 11,
+          "team": {
+            "id": 11,
+            "description": "Indianapolis Colts",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/ind/indianapolis-colts"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/ind/indianapolis-colts"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4438,
+          "type": "team",
+          "uid": "s:40~l:46~t:11",
+          "guid": "547fc042-3e02-4795-9637-9ab84322b625",
+          "description": "Indiana Pacers",
+          "sportId": 46,
+          "teamId": 11,
+          "team": {
+            "id": 11,
+            "description": "Indiana Pacers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/ind/indiana-pacers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nba/team/_/name/ind/indiana-pacers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 5840,
+          "type": "team",
+          "uid": "s:40~l:59~t:5",
+          "guid": "bfef1bdd-c2d1-310d-dd9f-645b90575da9",
+          "description": "Indiana Fever",
+          "sportId": 59,
+          "teamId": 5,
+          "team": {
+            "id": 5,
+            "description": "Indiana Fever",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/wnba/team/_/name/ind/indiana-fever"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/wnba/team/_/name/ind/indiana-fever"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        },
+        {
+          "type": "guid",
+          "guid": "bd06efe1-3050-2356-37c1-4b3fef1c29be"
+        },
+        {
+          "type": "guid",
+          "guid": "2bba3706-6f29-3e68-8b28-583a0d4a9caa"
+        },
+        {
+          "type": "guid",
+          "guid": "792ba7c6-9f41-3563-a1a4-fdef86947037"
+        },
+        {
+          "type": "guid",
+          "guid": "e2d16cd8-2b1d-9683-9351-ea8ccc3892cb"
+        },
+        {
+          "type": "guid",
+          "guid": "2a530fde-e79b-3772-90a9-df2c1e75cc5e"
+        },
+        {
+          "type": "guid",
+          "guid": "3790dfa0-5341-3438-d2dc-983f831a045c"
+        },
+        {
+          "type": "guid",
+          "guid": "582d14eb-da61-e505-cc40-d972a1b60ed1"
+        },
+        {
+          "type": "guid",
+          "guid": "547fc042-3e02-4795-9637-9ab84322b625"
+        },
+        {
+          "type": "guid",
+          "guid": "bfef1bdd-c2d1-310d-dd9f-645b90575da9"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-football/story/_/id/48865369/curt-cignetti-indiana-hoosiers-2026-indy-500"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncf/story?storyId=48865369"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48865369"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48865369"
+          }
+        }
+      },
+      "byline": "J.J. Post"
+    },
+    {
+      "id": 48847276,
+      "nowId": "1-48847276",
+      "contentKey": "48847276-1-5-1",
+      "dataSourceIdentifier": "505db0c56d509",
+      "type": "HeadlineNews",
+      "headline": "NCAA discusses implementation of age-based eligibility model",
+      "description": "The NCAA's Division I cabinet discussed possible implementation of an age-based eligibility model should it be approved and signaled it would consider voting on it at its meeting next month.",
+      "lastModified": "2026-05-23T11:14:42Z",
+      "published": "2026-05-23T11:14:42Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "9b3b15a655ad8",
+          "id": 46928305,
+          "type": "header",
+          "name": "NCAA flag [600x400]",
+          "credit": "Kirby Lee-Imagn Images",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2025/1111/r1574065_600x400_3-2.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 14486,
+          "type": "league",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602",
+          "description": "NCAA - Other sports",
+          "sportId": 0,
+          "leagueId": 3170,
+          "league": {
+            "id": 3170,
+            "description": "NCAA - Other sports"
+          }
+        },
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602"
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-sports/story/_/id/48847276/ncaa-discusses-implementation-age-based-eligibility-model-vote-next-month"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/extra/ncaa/story?storyId=48847276"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48847276"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48847276"
+          }
+        }
+      }
+    },
+    {
+      "id": 48845782,
+      "nowId": "1-48845782",
+      "contentKey": "48845782-1-5-1",
+      "dataSourceIdentifier": "36e80fffae195",
+      "type": "HeadlineNews",
+      "headline": "NCAA opened Ole Miss tampering probe after Clemson complaint",
+      "description": "The NCAA enforcement staff opened an investigation of the Ole Miss football program the same day that Clemson coach Dabo Swinney accused Rebels coach Pete Golding of tampering with linebacker Luke Ferrelli.",
+      "lastModified": "2026-05-22T19:54:06Z",
+      "published": "2026-05-22T19:54:06Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "4db865441179c",
+          "id": 45790626,
+          "type": "header",
+          "name": "Ole Miss football generic [600x400]",
+          "credit": "Getty Images",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2025/0721/r1521894_600x400_3-2.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Dabo Swinney rips Ole Miss for 'blatant' tampering",
+          "caption": "Dabo Swinney calls out Ole Miss for \"blatant\" tampering after school allegedly tried to lure a Clemson player into the transfer portal.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0124/3ae7a319-a69d-4693-8d00-691018f18656/3ae7a319-a69d-4693-8d00-691018f18656.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 1099,
+          "type": "team",
+          "uid": "s:20~l:23~t:145",
+          "guid": "f6196074-c394-4821-7b0b-c4271d9467de",
+          "description": "Ole Miss Rebels",
+          "sportId": 23,
+          "teamId": 145,
+          "team": {
+            "id": 145,
+            "description": "Ole Miss Rebels",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/145/ole-miss-rebels"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/145/ole-miss-rebels"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 145,
+          "type": "team",
+          "guid": "858e51f9-aa4c-36c9-8f15-ff77c703ad51",
+          "description": "University of Mississippi",
+          "sportId": 3170,
+          "teamId": 145,
+          "team": {
+            "id": 145,
+            "description": "University of Mississippi"
+          }
+        },
+        {
+          "id": 1065,
+          "type": "team",
+          "uid": "s:20~l:23~t:228",
+          "guid": "02382072-a5a3-24ff-6bd1-422a029bd33c",
+          "description": "Clemson Tigers",
+          "sportId": 23,
+          "teamId": 228,
+          "team": {
+            "id": 228,
+            "description": "Clemson Tigers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/228/clemson-tigers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/228/clemson-tigers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 228,
+          "type": "team",
+          "guid": "babdc0ea-f349-3077-9d84-b02f8cdc09e5",
+          "description": "Clemson University",
+          "sportId": 3170,
+          "teamId": 228,
+          "team": {
+            "id": 228,
+            "description": "Clemson University"
+          }
+        },
+        {
+          "id": 669605,
+          "type": "athlete",
+          "uid": "s:20~l:23~a:5139216",
+          "guid": "5dfc0d35-c718-30e5-a86a-d295c2d2e11b",
+          "description": "Luke Ferrelli",
+          "sportId": 23,
+          "athleteId": 5139216,
+          "athlete": {
+            "id": 5139216,
+            "description": "Luke Ferrelli",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/college-football/player/_/id/5139216/luke-ferrelli"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/college-football/player/_/id/5139216/luke-ferrelli"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        },
+        {
+          "type": "guid",
+          "guid": "f6196074-c394-4821-7b0b-c4271d9467de"
+        },
+        {
+          "type": "guid",
+          "guid": "2845c2f1-d2ef-3f34-aaa2-469687c28cec"
+        },
+        {
+          "type": "guid",
+          "guid": "858e51f9-aa4c-36c9-8f15-ff77c703ad51"
+        },
+        {
+          "type": "guid",
+          "guid": "02382072-a5a3-24ff-6bd1-422a029bd33c"
+        },
+        {
+          "type": "guid",
+          "guid": "2e36fa17-1467-30cc-ab7a-6f84ea400a49"
+        },
+        {
+          "type": "guid",
+          "guid": "babdc0ea-f349-3077-9d84-b02f8cdc09e5"
+        },
+        {
+          "type": "guid",
+          "guid": "5dfc0d35-c718-30e5-a86a-d295c2d2e11b"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-football/story/_/id/48845782/ncaa-opened-ole-miss-tampering-probe-clemson-accusation"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncf/story?storyId=48845782"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48845782"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48845782"
+          }
+        }
+      },
+      "byline": "David Hale and Mark Schlabach"
+    },
+    {
+      "id": 48845360,
+      "nowId": "1-48845360",
+      "contentKey": "48845360-1-293-1",
+      "dataSourceIdentifier": "5726036a04227",
+      "type": "Media",
+      "headline": "Jared Curtis not feeling pressure playing in hometown for Vanderbilt",
+      "description": "Jared Curtis joins \"The Pat McAfee Show\" to discuss his excitement to play for Vanderbilt.",
+      "lastModified": "2026-05-22T17:39:49Z",
+      "published": "2026-05-22T17:39:49Z",
+      "images": [
+        {
+          "name": "Jared Curtis not feeling pressure playing in hometown for Vanderbilt",
+          "caption": "Jared Curtis joins \"The Pat McAfee Show\" to discuss his excitement to play for Vanderbilt.",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0522/ss_20260522_133528969_3537547/ss_20260522_133528969_3537547.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 711826,
+          "type": "editorialindicator",
+          "guid": "122acb1b-7e9e-31cf-88a1-d2dc784385cf",
+          "description": "2 Star Rating"
+        },
+        {
+          "id": 1093,
+          "type": "team",
+          "uid": "s:20~l:23~t:238",
+          "guid": "f2c5bf52-4c7d-78ea-ce4d-6a91faee67c8",
+          "description": "Vanderbilt Commodores",
+          "sportId": 23,
+          "teamId": 238,
+          "team": {
+            "id": 238,
+            "description": "Vanderbilt Commodores",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/238/vanderbilt-commodores"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/238/vanderbilt-commodores"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 238,
+          "type": "team",
+          "guid": "16289c7a-8f0e-33d7-8027-833c67cb0482",
+          "description": "Vanderbilt University",
+          "sportId": 3170,
+          "teamId": 238,
+          "team": {
+            "id": 238,
+            "description": "Vanderbilt University"
+          }
+        },
+        {
+          "id": 757961,
+          "type": "athlete",
+          "uid": "s:20~l:23~a:5158948",
+          "guid": "2e257b80-24b3-3ef9-a45a-c78ca3bfb652",
+          "description": "Jared Curtis",
+          "sportId": 23,
+          "athleteId": 5158948,
+          "athlete": {
+            "id": 5158948,
+            "description": "Jared Curtis",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/college-football/player/_/id/5158948/jared-curtis"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/college-football/player/_/id/5158948/jared-curtis"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 64593,
+          "type": "athlete",
+          "uid": "s:20~l:28~a:12689",
+          "guid": "e6a2c378-1b93-76ef-9d05-f5fe54d6ac79",
+          "description": "Pat McAfee",
+          "sportId": 28,
+          "athleteId": 12689,
+          "athlete": {
+            "id": 12689,
+            "description": "Pat McAfee",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/12689/pat-mcafee"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/12689/pat-mcafee"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 756052,
+          "type": "series",
+          "guid": "5d759e0a-c80d-4dec-96a5-8b6bce747ad1",
+          "description": "The Pat McAfee Show",
+          "series": {
+            "description": "The Pat McAfee Show"
+          }
+        },
+        {
+          "id": 730035,
+          "type": "editorialindicator",
+          "guid": "765b3968-7a2d-3d80-bded-8ba8b1e1cc03",
+          "description": "Verts - Exclude Content"
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        },
+        {
+          "type": "guid",
+          "guid": "122acb1b-7e9e-31cf-88a1-d2dc784385cf"
+        },
+        {
+          "type": "guid",
+          "guid": "f2c5bf52-4c7d-78ea-ce4d-6a91faee67c8"
+        },
+        {
+          "type": "guid",
+          "guid": "2845c2f1-d2ef-3f34-aaa2-469687c28cec"
+        },
+        {
+          "type": "guid",
+          "guid": "16289c7a-8f0e-33d7-8027-833c67cb0482"
+        },
+        {
+          "type": "guid",
+          "guid": "2e257b80-24b3-3ef9-a45a-c78ca3bfb652"
+        },
+        {
+          "type": "guid",
+          "guid": "e6a2c378-1b93-76ef-9d05-f5fe54d6ac79"
+        },
+        {
+          "type": "guid",
+          "guid": "5d759e0a-c80d-4dec-96a5-8b6bce747ad1"
+        },
+        {
+          "type": "guid",
+          "guid": "765b3968-7a2d-3d80-bded-8ba8b1e1cc03"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48845360/jared-curtis-not-feeling-pressure-playing-hometown-vanderbilt",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48845360/jared-curtis-not-feeling-pressure-playing-hometown-vanderbilt",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=5726036a04227"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48845360"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/78075942-febe-4db4-8f80-b08dcde9db9d"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48845360&videoDSI=5726036a04227"
+        }
+      }
+    },
+    {
+      "id": 48503376,
+      "nowId": "1-48503376",
+      "contentKey": "48503376-1-6-1",
+      "dataSourceIdentifier": "77115414e209a",
+      "type": "Story",
+      "headline": "2027 college football recruiting class rankings: Top 15 schools",
+      "description": "These schools are setting the early pace as the recruiting race starts to heat up.",
+      "lastModified": "2026-05-22T10:08:39Z",
+      "published": "2026-05-22T10:08:39Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "7b922aef73b8e",
+          "id": 47139906,
+          "type": "header",
+          "name": "Mike Elko [608x342]",
+          "caption": "Mike Elko is relying on his defensive roots in building at strong class at Texas A&M.",
+          "credit": "Alex Slitz/Getty Images",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2025/1129/r1582390_608x342_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "aac1392584235",
+          "id": 48506640,
+          "type": "header",
+          "name": "Brent Venables [608x342]",
+          "caption": "Brent Venables is off to a good start in assembling Oklahoma's recruiting class for 2027.",
+          "credit": "David Jensen/Getty Images",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0416/r1644717_608x342_16-9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 33309,
+          "type": "league",
+          "guid": "ecda0f44-47cb-4ab9-a1aa-574c35ee6891",
+          "description": "Football Recruiting",
+          "sportId": 0,
+          "leagueId": 3540,
+          "league": {
+            "id": 3540,
+            "description": "Football Recruiting"
+          }
+        },
+        {
+          "id": 1074,
+          "type": "team",
+          "uid": "s:20~l:23~t:201",
+          "guid": "67d60bca-1b6b-8d78-81ae-6889e883bb96",
+          "description": "Oklahoma Sooners",
+          "sportId": 23,
+          "teamId": 201,
+          "team": {
+            "id": 201,
+            "description": "Oklahoma Sooners",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/201/oklahoma-sooners"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/201/oklahoma-sooners"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 201,
+          "type": "team",
+          "guid": "5c89e0cf-7ac7-3621-a83e-48a835ee34d1",
+          "description": "University of Oklahoma",
+          "sportId": 3170,
+          "teamId": 201,
+          "team": {
+            "id": 201,
+            "description": "University of Oklahoma"
+          }
+        },
+        {
+          "id": 1164,
+          "type": "team",
+          "uid": "s:20~l:23~t:87",
+          "guid": "ebc2999c-2ff4-8435-ca46-9641e9f9ea10",
+          "description": "Notre Dame Fighting Irish",
+          "sportId": 23,
+          "teamId": 87,
+          "team": {
+            "id": 87,
+            "description": "Notre Dame Fighting Irish",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/87/notre-dame-fighting-irish"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/87/notre-dame-fighting-irish"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 87,
+          "type": "team",
+          "guid": "5eaf1e0a-424d-31cf-bf66-e61bc6ebbefe",
+          "description": "University of Notre Dame",
+          "sportId": 3170,
+          "teamId": 87,
+          "team": {
+            "id": 87,
+            "description": "University of Notre Dame"
+          }
+        },
+        {
+          "id": 1109,
+          "type": "team",
+          "uid": "s:20~l:23~t:264",
+          "guid": "0c6752e3-aae3-f2c1-32c6-79b79425f9cc",
+          "description": "Washington Huskies",
+          "sportId": 23,
+          "teamId": 264,
+          "team": {
+            "id": 264,
+            "description": "Washington Huskies",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/264/washington-huskies"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/264/washington-huskies"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 264,
+          "type": "team",
+          "guid": "4de4cba9-6b03-38bf-9d40-78ee1fefc0ec",
+          "description": "University of Washington",
+          "sportId": 3170,
+          "teamId": 264,
+          "team": {
+            "id": 264,
+            "description": "University of Washington"
+          }
+        },
+        {
+          "id": 1078,
+          "type": "team",
+          "uid": "s:20~l:23~t:2641",
+          "guid": "4350bc91-1a0d-8292-bf66-9687147703f0",
+          "description": "Texas Tech Red Raiders",
+          "sportId": 23,
+          "teamId": 2641,
+          "team": {
+            "id": 2641,
+            "description": "Texas Tech Red Raiders",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/2641/texas-tech-red-raiders"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/2641/texas-tech-red-raiders"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2641,
+          "type": "team",
+          "guid": "b4c590f6-e36e-3d79-a357-d73bced5f9a6",
+          "description": "Texas Tech University",
+          "sportId": 3170,
+          "teamId": 2641,
+          "team": {
+            "id": 2641,
+            "description": "Texas Tech University"
+          }
+        },
+        {
+          "id": 1076,
+          "type": "team",
+          "uid": "s:20~l:23~t:245",
+          "guid": "014788cd-231c-e33e-32c3-7e8d9a1e530f",
+          "description": "Texas A&M Aggies",
+          "sportId": 23,
+          "teamId": 245,
+          "team": {
+            "id": 245,
+            "description": "Texas A&M Aggies",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/245/texas-am-aggies"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/245/texas-am-aggies"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 245,
+          "type": "team",
+          "guid": "fab49ca5-ec9f-3e99-8936-6f532466cf1a",
+          "description": "Texas A&M University",
+          "sportId": 3170,
+          "teamId": 245,
+          "team": {
+            "id": 245,
+            "description": "Texas A&M University"
+          }
+        },
+        {
+          "id": 1084,
+          "type": "team",
+          "uid": "s:20~l:23~t:194",
+          "guid": "2fc3b71f-8247-22a5-f6da-df3902cbb438",
+          "description": "Ohio State Buckeyes",
+          "sportId": 23,
+          "teamId": 194,
+          "team": {
+            "id": 194,
+            "description": "Ohio State Buckeyes",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/194/ohio-state-buckeyes"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/194/ohio-state-buckeyes"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 194,
+          "type": "team",
+          "guid": "c77eaccb-ebc0-380b-9315-41a307e47e91",
+          "description": "The Ohio State University",
+          "sportId": 3170,
+          "teamId": 194,
+          "team": {
+            "id": 194,
+            "description": "The Ohio State University"
+          }
+        },
+        {
+          "id": 1107,
+          "type": "team",
+          "uid": "s:20~l:23~t:30",
+          "guid": "63d7a1b4-ee19-f0ae-33c5-42a14e000fb8",
+          "description": "USC Trojans",
+          "sportId": 23,
+          "teamId": 30,
+          "team": {
+            "id": 30,
+            "description": "USC Trojans",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/30/usc-trojans"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/30/usc-trojans"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 30,
+          "type": "team",
+          "guid": "d3f426a4-56b8-3f15-8186-370c3af7daf8",
+          "description": "University of Southern California",
+          "sportId": 3170,
+          "teamId": 30,
+          "team": {
+            "id": 30,
+            "description": "University of Southern California"
+          }
+        },
+        {
+          "id": 1119,
+          "type": "team",
+          "uid": "s:20~l:23~t:2390",
+          "guid": "2b3657a5-caae-31a2-899a-0d09df0f7bed",
+          "description": "Miami Hurricanes",
+          "sportId": 23,
+          "teamId": 2390,
+          "team": {
+            "id": 2390,
+            "description": "Miami Hurricanes",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/2390/miami-hurricanes"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/2390/miami-hurricanes"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2390,
+          "type": "team",
+          "guid": "6a9f5d5f-db5f-3a43-94b0-da8376403a1b",
+          "description": "University of Miami",
+          "sportId": 3170,
+          "teamId": 2390,
+          "team": {
+            "id": 2390,
+            "description": "University of Miami"
+          }
+        },
+        {
+          "id": 1111,
+          "type": "team",
+          "uid": "s:20~l:23~t:2483",
+          "guid": "116d333f-cf1a-0c67-d450-36a834af56de",
+          "description": "Oregon Ducks",
+          "sportId": 23,
+          "teamId": 2483,
+          "team": {
+            "id": 2483,
+            "description": "Oregon Ducks",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/2483/oregon-ducks"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/2483/oregon-ducks"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2483,
+          "type": "team",
+          "guid": "94cc8326-138d-3d76-8f6e-65e8744e6d92",
+          "description": "University of Oregon",
+          "sportId": 3170,
+          "teamId": 2483,
+          "team": {
+            "id": 2483,
+            "description": "University of Oregon"
+          }
+        },
+        {
+          "id": 1090,
+          "type": "team",
+          "uid": "s:20~l:23~t:57",
+          "guid": "fe74bfd9-c15e-7b3a-ab25-ff4e5636282e",
+          "description": "Florida Gators",
+          "sportId": 23,
+          "teamId": 57,
+          "team": {
+            "id": 57,
+            "description": "Florida Gators",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/57/florida-gators"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/57/florida-gators"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 57,
+          "type": "team",
+          "guid": "97faef39-d222-37b0-94fc-9944321184e4",
+          "description": "University of Florida",
+          "sportId": 3170,
+          "teamId": 57,
+          "team": {
+            "id": 57,
+            "description": "University of Florida"
+          }
+        },
+        {
+          "id": 1077,
+          "type": "team",
+          "uid": "s:20~l:23~t:251",
+          "guid": "013a8bab-0dd5-f6a0-45e6-1128a124f34b",
+          "description": "Texas Longhorns",
+          "sportId": 23,
+          "teamId": 251,
+          "team": {
+            "id": 251,
+            "description": "Texas Longhorns",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/251/texas-longhorns"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/251/texas-longhorns"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 251,
+          "type": "team",
+          "guid": "a5881f63-e491-3e48-9064-916de4a4849a",
+          "description": "University of Texas",
+          "sportId": 3170,
+          "teamId": 251,
+          "team": {
+            "id": 251,
+            "description": "University of Texas"
+          }
+        },
+        {
+          "id": 1092,
+          "type": "team",
+          "uid": "s:20~l:23~t:96",
+          "guid": "d5ec1329-3c7b-93e8-6f57-982c4f33ea75",
+          "description": "Kentucky Wildcats",
+          "sportId": 23,
+          "teamId": 96,
+          "team": {
+            "id": 96,
+            "description": "Kentucky Wildcats",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/96/kentucky-wildcats"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/96/kentucky-wildcats"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 96,
+          "type": "team",
+          "guid": "c343d2aa-1f76-3d14-8a74-4a12bb54f2ba",
+          "description": "University of Kentucky",
+          "sportId": 3170,
+          "teamId": 96,
+          "team": {
+            "id": 96,
+            "description": "University of Kentucky"
+          }
+        },
+        {
+          "id": 1106,
+          "type": "team",
+          "uid": "s:20~l:23~t:26",
+          "guid": "426a47d7-bf9e-2d90-af84-6533b43957e0",
+          "description": "UCLA Bruins",
+          "sportId": 23,
+          "teamId": 26,
+          "team": {
+            "id": 26,
+            "description": "UCLA Bruins",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/26/ucla-bruins"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/26/ucla-bruins"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 26,
+          "type": "team",
+          "guid": "5da8e04c-d85c-376d-b336-9342e0bfdd7c",
+          "description": "University of California at Los Angeles",
+          "sportId": 3170,
+          "teamId": 26,
+          "team": {
+            "id": 26,
+            "description": "University of California at Los Angeles"
+          }
+        },
+        {
+          "id": 1082,
+          "type": "team",
+          "uid": "s:20~l:23~t:130",
+          "guid": "ea1660a4-aeb8-b9da-7d9f-fcd70d3a0162",
+          "description": "Michigan Wolverines",
+          "sportId": 23,
+          "teamId": 130,
+          "team": {
+            "id": 130,
+            "description": "Michigan Wolverines",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/130/michigan-wolverines"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/130/michigan-wolverines"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 130,
+          "type": "team",
+          "guid": "5c4e2c41-bfad-3161-87a1-3825f0ed3a72",
+          "description": "University of Michigan",
+          "sportId": 3170,
+          "teamId": 130,
+          "team": {
+            "id": 130,
+            "description": "University of Michigan"
+          }
+        },
+        {
+          "id": 1085,
+          "type": "team",
+          "uid": "s:20~l:23~t:213",
+          "guid": "899b6845-67a4-16b2-c4a6-2406312be7fc",
+          "description": "Penn State Nittany Lions",
+          "sportId": 23,
+          "teamId": 213,
+          "team": {
+            "id": 213,
+            "description": "Penn State Nittany Lions",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/213/penn-state-nittany-lions"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/college-football/team/_/id/213/penn-state-nittany-lions"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 213,
+          "type": "team",
+          "guid": "b3155a8a-f3e2-376b-ba0b-0d763de49166",
+          "description": "Penn State University",
+          "sportId": 3170,
+          "teamId": 213,
+          "team": {
+            "id": 213,
+            "description": "Penn State University"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        },
+        {
+          "type": "guid",
+          "guid": "ecda0f44-47cb-4ab9-a1aa-574c35ee6891"
+        },
+        {
+          "type": "guid",
+          "guid": "67d60bca-1b6b-8d78-81ae-6889e883bb96"
+        },
+        {
+          "type": "guid",
+          "guid": "2845c2f1-d2ef-3f34-aaa2-469687c28cec"
+        },
+        {
+          "type": "guid",
+          "guid": "5c89e0cf-7ac7-3621-a83e-48a835ee34d1"
+        },
+        {
+          "type": "guid",
+          "guid": "ebc2999c-2ff4-8435-ca46-9641e9f9ea10"
+        },
+        {
+          "type": "guid",
+          "guid": "081713e8-6afc-3055-8617-5a93c88f3e51"
+        },
+        {
+          "type": "guid",
+          "guid": "5eaf1e0a-424d-31cf-bf66-e61bc6ebbefe"
+        },
+        {
+          "type": "guid",
+          "guid": "0c6752e3-aae3-f2c1-32c6-79b79425f9cc"
+        },
+        {
+          "type": "guid",
+          "guid": "2bba3706-6f29-3e68-8b28-583a0d4a9caa"
+        },
+        {
+          "type": "guid",
+          "guid": "4de4cba9-6b03-38bf-9d40-78ee1fefc0ec"
+        },
+        {
+          "type": "guid",
+          "guid": "4350bc91-1a0d-8292-bf66-9687147703f0"
+        },
+        {
+          "type": "guid",
+          "guid": "057d08ff-5067-3b91-946b-d941c8aecde5"
+        },
+        {
+          "type": "guid",
+          "guid": "b4c590f6-e36e-3d79-a357-d73bced5f9a6"
+        },
+        {
+          "type": "guid",
+          "guid": "014788cd-231c-e33e-32c3-7e8d9a1e530f"
+        },
+        {
+          "type": "guid",
+          "guid": "fab49ca5-ec9f-3e99-8936-6f532466cf1a"
+        },
+        {
+          "type": "guid",
+          "guid": "2fc3b71f-8247-22a5-f6da-df3902cbb438"
+        },
+        {
+          "type": "guid",
+          "guid": "c77eaccb-ebc0-380b-9315-41a307e47e91"
+        },
+        {
+          "type": "guid",
+          "guid": "63d7a1b4-ee19-f0ae-33c5-42a14e000fb8"
+        },
+        {
+          "type": "guid",
+          "guid": "d3f426a4-56b8-3f15-8186-370c3af7daf8"
+        },
+        {
+          "type": "guid",
+          "guid": "2b3657a5-caae-31a2-899a-0d09df0f7bed"
+        },
+        {
+          "type": "guid",
+          "guid": "2e36fa17-1467-30cc-ab7a-6f84ea400a49"
+        },
+        {
+          "type": "guid",
+          "guid": "6a9f5d5f-db5f-3a43-94b0-da8376403a1b"
+        },
+        {
+          "type": "guid",
+          "guid": "116d333f-cf1a-0c67-d450-36a834af56de"
+        },
+        {
+          "type": "guid",
+          "guid": "94cc8326-138d-3d76-8f6e-65e8744e6d92"
+        },
+        {
+          "type": "guid",
+          "guid": "fe74bfd9-c15e-7b3a-ab25-ff4e5636282e"
+        },
+        {
+          "type": "guid",
+          "guid": "97faef39-d222-37b0-94fc-9944321184e4"
+        },
+        {
+          "type": "guid",
+          "guid": "013a8bab-0dd5-f6a0-45e6-1128a124f34b"
+        },
+        {
+          "type": "guid",
+          "guid": "a5881f63-e491-3e48-9064-916de4a4849a"
+        },
+        {
+          "type": "guid",
+          "guid": "d5ec1329-3c7b-93e8-6f57-982c4f33ea75"
+        },
+        {
+          "type": "guid",
+          "guid": "c343d2aa-1f76-3d14-8a74-4a12bb54f2ba"
+        },
+        {
+          "type": "guid",
+          "guid": "426a47d7-bf9e-2d90-af84-6533b43957e0"
+        },
+        {
+          "type": "guid",
+          "guid": "5da8e04c-d85c-376d-b336-9342e0bfdd7c"
+        },
+        {
+          "type": "guid",
+          "guid": "ea1660a4-aeb8-b9da-7d9f-fcd70d3a0162"
+        },
+        {
+          "type": "guid",
+          "guid": "5c4e2c41-bfad-3161-87a1-3825f0ed3a72"
+        },
+        {
+          "type": "guid",
+          "guid": "899b6845-67a4-16b2-c4a6-2406312be7fc"
+        },
+        {
+          "type": "guid",
+          "guid": "b3155a8a-f3e2-376b-ba0b-0d763de49166"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-football/recruiting/story/_/id/48503376/2027-college-football-recruiting-class-rankings-top-teams-schools"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncf/story?storyId=48503376"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48503376"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48503376"
+          }
+        }
+      },
+      "byline": "Craig Haubert"
+    }
+  ]
+}

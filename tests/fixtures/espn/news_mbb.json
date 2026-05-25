@@ -1,0 +1,819 @@
+{
+  "header": "Men's College Basketball News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/mens-college-basketball/",
+    "text": "All NCAAM News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 48847276,
+      "nowId": "1-48847276",
+      "contentKey": "48847276-1-5-1",
+      "dataSourceIdentifier": "505db0c56d509",
+      "type": "HeadlineNews",
+      "headline": "NCAA discusses implementation of age-based eligibility model",
+      "description": "The NCAA's Division I cabinet discussed possible implementation of an age-based eligibility model should it be approved and signaled it would consider voting on it at its meeting next month.",
+      "lastModified": "2026-05-23T11:14:42Z",
+      "published": "2026-05-23T11:14:42Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "9b3b15a655ad8",
+          "id": 46928305,
+          "type": "header",
+          "name": "NCAA flag [600x400]",
+          "credit": "Kirby Lee-Imagn Images",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2025/1111/r1574065_600x400_3-2.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 14486,
+          "type": "league",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602",
+          "description": "NCAA - Other sports",
+          "sportId": 0,
+          "leagueId": 3170,
+          "league": {
+            "id": 3170,
+            "description": "NCAA - Other sports"
+          }
+        },
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602"
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-sports/story/_/id/48847276/ncaa-discusses-implementation-age-based-eligibility-model-vote-next-month"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/extra/ncaa/story?storyId=48847276"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48847276"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48847276"
+          }
+        }
+      }
+    },
+    {
+      "id": 48846604,
+      "nowId": "1-48846604",
+      "contentKey": "48846604-1-5-1",
+      "dataSourceIdentifier": "c11e7f9b3bdc4",
+      "type": "HeadlineNews",
+      "headline": "Ex-Wisconsin guard John Blackwell withdraws from NBA draft, heads to Duke",
+      "description": "Former Wisconsin guard John Blackwell is withdrawing from the NBA draft and will play at Duke next season.",
+      "lastModified": "2026-05-22T20:56:53Z",
+      "published": "2026-05-22T20:56:53Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "0ba4018b5f251",
+          "id": 46106679,
+          "type": "header",
+          "name": "John Blackwell [600x400]",
+          "credit": "Isaiah J. Downing-Imagn Images",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2025/0829/r1538505_600x400_3-2.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 3211,
+          "type": "team",
+          "uid": "s:40~l:41~t:275",
+          "guid": "3f4a343d-73be-addb-846c-86b280f1a9c6",
+          "description": "Wisconsin Badgers",
+          "sportId": 41,
+          "teamId": 275,
+          "team": {
+            "id": 275,
+            "description": "Wisconsin Badgers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/275/wisconsin-badgers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/275/wisconsin-badgers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 275,
+          "type": "team",
+          "guid": "bf9dd7b3-8074-3ed4-8e25-21e5aa6f41ed",
+          "description": "University of Wisconsin",
+          "sportId": 3170,
+          "teamId": 275,
+          "team": {
+            "id": 275,
+            "description": "University of Wisconsin"
+          }
+        },
+        {
+          "id": 633259,
+          "type": "athlete",
+          "uid": "s:40~l:41~a:5103630",
+          "guid": "83249d70-826a-3623-b234-edbe58b0c573",
+          "description": "John Blackwell",
+          "sportId": 41,
+          "athleteId": 5103630,
+          "athlete": {
+            "id": 5103630,
+            "description": "John Blackwell",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/mens-college-basketball/player/_/id/5103630/john-blackwell"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/mens-college-basketball/player/_/id/5103630/john-blackwell"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 3155,
+          "type": "team",
+          "uid": "s:40~l:41~t:150",
+          "guid": "c4430c6c-5998-47d5-7c45-1cdb7ca0befc",
+          "description": "Duke Blue Devils",
+          "sportId": 41,
+          "teamId": 150,
+          "team": {
+            "id": 150,
+            "description": "Duke Blue Devils",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/150/duke-blue-devils"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/150/duke-blue-devils"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 150,
+          "type": "team",
+          "guid": "961248a4-28a8-365b-bb8c-fa7341c5ced0",
+          "description": "Duke University",
+          "sportId": 3170,
+          "teamId": 150,
+          "team": {
+            "id": 150,
+            "description": "Duke University"
+          }
+        },
+        {
+          "id": 30935,
+          "type": "league",
+          "guid": "fb228df5-8327-43d2-8397-22138f9bbf47",
+          "description": "NBA Draft",
+          "sportId": 0,
+          "leagueId": 3380,
+          "league": {
+            "id": 3380,
+            "description": "NBA Draft"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        },
+        {
+          "type": "guid",
+          "guid": "3f4a343d-73be-addb-846c-86b280f1a9c6"
+        },
+        {
+          "type": "guid",
+          "guid": "2a530fde-e79b-3772-90a9-df2c1e75cc5e"
+        },
+        {
+          "type": "guid",
+          "guid": "bf9dd7b3-8074-3ed4-8e25-21e5aa6f41ed"
+        },
+        {
+          "type": "guid",
+          "guid": "83249d70-826a-3623-b234-edbe58b0c573"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "c4430c6c-5998-47d5-7c45-1cdb7ca0befc"
+        },
+        {
+          "type": "guid",
+          "guid": "1b1b66a7-672b-3451-9bb6-4086e6f00e5d"
+        },
+        {
+          "type": "guid",
+          "guid": "961248a4-28a8-365b-bb8c-fa7341c5ced0"
+        },
+        {
+          "type": "guid",
+          "guid": "fb228df5-8327-43d2-8397-22138f9bbf47"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/mens-college-basketball/story/_/id/48846604/ex-wisconsin-guard-john-blackwell-withdraws-nba-draft-heads-duke"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncb/story?storyId=48846604"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48846604"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48846604"
+          }
+        }
+      }
+    },
+    {
+      "id": 48837934,
+      "nowId": "1-48837934",
+      "contentKey": "48837934-1-5-1",
+      "dataSourceIdentifier": "519e607b91a3b",
+      "type": "HeadlineNews",
+      "headline": "CEO of NIL enforcement reminds schools: These are your rules",
+      "description": "Bryan Seeley, the CEO of the 11-month-old College Sports Commission, has a simple reminder to schools frustrated by NIL: These are the rules you wrote.",
+      "lastModified": "2026-05-21T20:35:11Z",
+      "published": "2026-05-21T20:35:11Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "2baec0d5db4f1",
+          "id": 45468259,
+          "type": "header",
+          "name": "Bryan Seeley [600x600]",
+          "credit": "Courtesy of College Sports Commission",
+          "height": 600,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2025/0607/r1503645_600x600_1-1.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9578,
+          "type": "league",
+          "uid": "s:40~l:54",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733",
+          "description": "NCAA Women's Basketball",
+          "sportId": 54,
+          "leagueId": 54,
+          "league": {
+            "id": 54,
+            "description": "NCAA Women's Basketball",
+            "abbreviation": "NCAAW",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 129415,
+          "type": "topic",
+          "guid": "7a5b16d5-0ca2-669f-f607-df1d378dc57b",
+          "description": "news - college sports",
+          "sportId": 0,
+          "topicId": 134
+        },
+        {
+          "id": 14486,
+          "type": "league",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602",
+          "description": "NCAA - Other sports",
+          "sportId": 0,
+          "leagueId": 3170,
+          "league": {
+            "id": 3170,
+            "description": "NCAA - Other sports"
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        },
+        {
+          "type": "guid",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733"
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        },
+        {
+          "type": "guid",
+          "guid": "7a5b16d5-0ca2-669f-f607-df1d378dc57b"
+        },
+        {
+          "type": "guid",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-football/story/_/id/48837934/ceo-nil-enforcement-reminds-schools-your-rules"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncf/story?storyId=48837934"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48837934"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48837934"
+          }
+        }
+      }
+    },
+    {
+      "id": 48837262,
+      "nowId": "1-48837262",
+      "contentKey": "48837262-1-5-1",
+      "dataSourceIdentifier": "1c3694478bc0e",
+      "type": "HeadlineNews",
+      "headline": "Top-10 sophomore Mercer picks Cincinnati, to reclassify to 2027",
+      "description": "Top-10 high school sophomore Kam Mercer has committed to Cincinnati, he told ESPN, while also planning to reclassify into the 2027 class.",
+      "lastModified": "2026-05-21T19:53:26Z",
+      "published": "2026-05-21T19:53:26Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "3e596c2af2e08",
+          "id": 46946381,
+          "type": "header",
+          "name": "Basketball Generic 2 [600x400] - Copy",
+          "credit": "Photo by David Dow/NBAE via Getty Images",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2020/0901/r739090_600x400_3-2.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Kam Mercer announces commitment to Cincinnati",
+          "caption": "Kam Mercer, No. 7 on the ESPN 2028 SCNext 25 player rankings, joins \u201cSportsCenter\u201d to announce his commitment to Cincinnati.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0521/ss_20260521_143153958_3536424875/ss_20260521_143153958_3536424875.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 3252,
+          "type": "team",
+          "uid": "s:40~l:41~t:2132",
+          "guid": "dac9d004-a23d-3929-3e89-42569af3f16c",
+          "description": "Cincinnati Bearcats",
+          "sportId": 41,
+          "teamId": 2132,
+          "team": {
+            "id": 2132,
+            "description": "Cincinnati Bearcats",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/2132/cincinnati-bearcats"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mens-college-basketball/team/_/id/2132/cincinnati-bearcats"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2132,
+          "type": "team",
+          "guid": "2a9e6a6d-aa16-3525-a5f4-2aee8a1a77e6",
+          "description": "University of Cincinnati",
+          "sportId": 3170,
+          "teamId": 2132,
+          "team": {
+            "id": 2132,
+            "description": "University of Cincinnati"
+          }
+        },
+        {
+          "id": 33310,
+          "type": "league",
+          "guid": "5c9cc754-4b13-4ba3-976a-96d82d772cb3",
+          "description": "Men's Basketball Recruiting",
+          "sportId": 0,
+          "leagueId": 3550,
+          "league": {
+            "id": 3550,
+            "description": "Men's Basketball Recruiting"
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 701833,
+          "type": "contributor",
+          "guid": "21d6b480-a77e-3151-9e69-227ad7836c9a",
+          "description": "Jeff Borzello",
+          "slug": "jeff-borzello",
+          "contributor": {
+            "id": 2392,
+            "description": "Jeff Borzello"
+          }
+        },
+        {
+          "id": 697675,
+          "type": "contributor",
+          "guid": "7e0f578c-78c8-3c03-a810-e49c91dfd314",
+          "description": "Paul Biancardi",
+          "slug": "paul-biancardi",
+          "contributor": {
+            "id": 1259,
+            "description": "Paul Biancardi"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        },
+        {
+          "type": "guid",
+          "guid": "dac9d004-a23d-3929-3e89-42569af3f16c"
+        },
+        {
+          "type": "guid",
+          "guid": "d83140d8-5eea-3ad9-8b11-ecd39a25a078"
+        },
+        {
+          "type": "guid",
+          "guid": "2a9e6a6d-aa16-3525-a5f4-2aee8a1a77e6"
+        },
+        {
+          "type": "guid",
+          "guid": "5c9cc754-4b13-4ba3-976a-96d82d772cb3"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "21d6b480-a77e-3151-9e69-227ad7836c9a"
+        },
+        {
+          "type": "guid",
+          "guid": "7e0f578c-78c8-3c03-a810-e49c91dfd314"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/mens-college-basketball/story/_/id/48837262/top-10-sophomore-mercer-picks-cincinnati-reclassify-2027"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncb/story?storyId=48837262"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48837262"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48837262"
+          }
+        }
+      },
+      "byline": "Jeff Borzello and Paul Biancardi"
+    },
+    {
+      "id": 48837203,
+      "nowId": "1-48837203",
+      "contentKey": "48837203-1-293-1",
+      "dataSourceIdentifier": "2b9dff5fe7072",
+      "type": "Media",
+      "headline": "Kam Mercer announces commitment to Cincinnati",
+      "description": "Kam Mercer, No. 7 on the ESPN 2028 SCNext 25 player rankings, joins \u201cSportsCenter\u201d to announce his commitment to Cincinnati.",
+      "lastModified": "2026-05-21T18:46:25Z",
+      "published": "2026-05-21T18:46:25Z",
+      "images": [
+        {
+          "name": "Kam Mercer announces commitment to Cincinnati",
+          "caption": "Kam Mercer, No. 7 on the ESPN 2028 SCNext 25 player rankings, joins \u201cSportsCenter\u201d to announce his commitment to Cincinnati.",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0521/ss_20260521_143153958_3536424875/ss_20260521_143153958_3536424875.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48837203/kam-mercer-announces-commitment-cincinnati",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48837203/kam-mercer-announces-commitment-cincinnati",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=2b9dff5fe7072"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48837203"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/e3c60229-edbc-40d5-a278-3fc608380ab2"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48837203&videoDSI=2b9dff5fe7072"
+        }
+      }
+    }
+  ]
+}

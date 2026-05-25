@@ -258,7 +258,7 @@ def test_summary_parsers_handle_real_nba_summary_payload():
         "against_the_spread", "standings", "broadcasts", "format",
         "pickcenter", "odds", "article", "injuries", "news",
         # NFL / CFB only — return empty frames for NBA but still present
-        "drives", "scoring_plays",
+        "drives", "drive_plays", "scoring_plays",
     }
     assert set(out) == must_be_present, (
         f"dispatcher returned unexpected section set: "
@@ -363,10 +363,13 @@ def test_summary_section_parsers_individually():
     # Flat shape (no position_group column)
     ("nba",   12, False),
     ("wnba",  10, False),
+    ("mbb",   10, False),   # NCAA M basketball — flat (~14 players)
+    ("wbb",   10, False),   # NCAA W basketball — flat (~12 players)
     # Position-grouped shape (rows include position_group column)
-    ("mlb",   20, True),   # 4 groups × ~6 players
-    ("nfl",   50, True),   # 3 groups × full roster
-    ("nhl",   18, True),   # 5 groups × ~5 players
+    ("mlb",   20, True),    # 4 groups × ~6 players
+    ("nfl",   50, True),    # 3 groups × full roster
+    ("nhl",   18, True),    # 5 groups × ~5 players
+    ("cfb",   60, True),    # CFB: offense + defense + specialTeam (~100 players)
 ])
 def test_parse_team_roster_handles_both_shapes_across_leagues(
     league, expected_min_rows, grouped,
@@ -403,6 +406,9 @@ def test_parse_team_roster_handles_both_shapes_across_leagues(
     ("nfl",   15),   # 17 regular + playoffs
     # NHL skipped: off-season capture returned an empty schedule
     ("wnba",  30),   # 40+ regular-season games
+    ("mbb",   25),   # NCAA M basketball season (~30-35 games + tournaments)
+    ("wbb",   25),   # NCAA W basketball season similar size
+    # CFB skipped: off-season capture (college football is fall-only)
 ])
 def test_parse_team_schedule_works_across_leagues(league, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_team_schedule
@@ -415,12 +421,15 @@ def test_parse_team_schedule_works_across_leagues(league, expected_min_rows):
         assert col in df.columns
 
 
-def test_parse_team_schedule_handles_empty_offseason_payload():
-    """NHL team_schedule capture in the off-season returns no events —
-    the parser must return a zero-row frame, not raise."""
+@pytest.mark.parametrize("league", ["nhl", "cfb"])
+def test_parse_team_schedule_handles_empty_offseason_payload(league):
+    """``team_schedule`` captures for sports in their off-season return
+    no events — the parser must return a zero-row frame, not raise.
+    NHL was off-season for the May 2026 capture; CFB likewise (fall sport
+    captured mid-summer)."""
     from sportsdataverse._common_espn_parsers import parse_team_schedule
 
-    df = parse_team_schedule(_load("team_schedule_nhl"))
+    df = parse_team_schedule(_load(f"team_schedule_{league}"))
     assert isinstance(df, pl.DataFrame)
     assert df.height == 0
 
@@ -431,6 +440,9 @@ def test_parse_team_schedule_handles_empty_offseason_payload():
     ("nfl",  3),
     ("nhl",  3),
     ("wnba", 3),
+    ("mbb",  3),
+    ("wbb",  3),
+    ("cfb",  3),
 ])
 def test_parse_news_works_across_leagues(league, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_news
@@ -443,13 +455,30 @@ def test_parse_news_works_across_leagues(league, expected_min_rows):
         assert col in df.columns
 
 
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_parse_injuries_empty_for_ncaa_basketball(league):
+    """ESPN's league-wide injuries endpoint isn't published for NCAA
+    M/W basketball — the payload is `{}` (empty). The parser must
+    return a zero-row frame instead of raising."""
+    from sportsdataverse._common_espn_parsers import parse_injuries
+
+    df = parse_injuries(_load(f"injuries_{league}"))
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 0
+
+
 @pytest.mark.parametrize("league,expected_min_rows", [
-    # All 5 leagues consistently have >= 10 teams reporting injuries
+    # All 5 pro / WNBA leagues consistently have >= 5 teams reporting
     ("nba",  10),
     ("mlb",  10),
     ("nfl",  10),
     ("nhl",  10),
     ("wnba",  5),   # smaller league, lower floor
+    ("cfb",  10),   # CFB has consistent injury reporting
+    # MBB / WBB intentionally omitted — ESPN does not surface NCAA
+    # basketball injury reports as a league-wide endpoint; both fixtures
+    # return empty payloads. Verified separately in
+    # test_parse_injuries_empty_for_ncaa_basketball below.
 ])
 def test_parse_injuries_works_across_leagues(league, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_injuries
@@ -604,10 +633,52 @@ def test_summary_drives_works_for_nfl():
     assert scoring.height >= 1, "NFL summary should have scoringPlays"
 
 
-def test_summary_drives_and_scoring_plays_empty_for_non_football():
-    """drives + scoringPlays return zero-row frames for non-football
-    leagues without raising."""
+def test_summary_drive_plays_unrolls_plays_across_all_drives_for_nfl():
+    """parse_summary_drive_plays explodes drives.previous[i].plays[]
+    into a long-form frame with drive_id + drive_sequence carried over
+    from the parent drive. The output row count equals the sum of plays
+    across every drive (~180-200 plays per NFL game), giving NFL true
+    PBP parity with NBA / MLB / NHL / WNBA's top-level plays array."""
     from sportsdataverse._common_espn_parsers import (
+        parse_summary_drive_plays,
+        parse_summary_drives,
+    )
+
+    payload = _load("summary_nfl")
+    dp = parse_summary_drive_plays(payload)
+    drives = parse_summary_drives(payload)
+
+    # Super Bowl LIX has 26 drives + ~186 plays in the capture
+    assert drives.height >= 10
+    assert dp.height >= 100, (
+        f"expected >=100 unrolled plays, got {dp.height}"
+    )
+    # Join keys for drive ↔ play
+    assert "drive_id" in dp.columns
+    assert "drive_sequence" in dp.columns
+    # Standard play columns (parallel to parse_summary_plays output).
+    # Note: ``type``/``clock``/``period`` ship as nested dicts in NFL
+    # payloads, so json_normalize expands them to ``type_id`` /
+    # ``clock_display_value`` / ``period_number`` etc. — check the
+    # bare fields that are always scalar.
+    for col in ("id", "sequence_number", "text", "away_score",
+                "home_score", "scoring_play"):
+        assert col in dp.columns, f"missing play column {col!r}"
+    # Verify the nested fields did flatten (any prefix-match counts)
+    assert any(c.startswith("type") for c in dp.columns), (
+        f"expected type_* columns from flattened play.type, got {dp.columns[:10]}"
+    )
+    # drive_sequence is 1-indexed and bounded by the drive count
+    seqs = set(dp["drive_sequence"].to_list())
+    assert min(seqs) == 1
+    assert max(seqs) == drives.height
+
+
+def test_summary_drives_and_scoring_plays_empty_for_non_football():
+    """drives + drive_plays + scoringPlays all return zero-row frames
+    for non-football leagues without raising."""
+    from sportsdataverse._common_espn_parsers import (
+        parse_summary_drive_plays,
         parse_summary_drives,
         parse_summary_scoring_plays,
     )
@@ -615,6 +686,9 @@ def test_summary_drives_and_scoring_plays_empty_for_non_football():
     for fixture in ("summary_nba", "summary_mlb", "summary_nhl", "summary_wnba"):
         assert parse_summary_drives(_load(fixture)).height == 0, (
             f"{fixture}: non-football should have 0 drives"
+        )
+        assert parse_summary_drive_plays(_load(fixture)).height == 0, (
+            f"{fixture}: non-football should have 0 drive_plays"
         )
         assert parse_summary_scoring_plays(_load(fixture)).height == 0, (
             f"{fixture}: non-football should have 0 scoringPlays"

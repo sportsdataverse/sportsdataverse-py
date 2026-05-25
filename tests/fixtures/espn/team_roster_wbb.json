@@ -1,0 +1,1738 @@
+{
+  "timestamp": "2026-05-25T00:46:25Z",
+  "status": "success",
+  "season": {
+    "year": 2026,
+    "displayName": "2025-26",
+    "type": 4,
+    "name": "Off Season"
+  },
+  "athletes": [
+    {
+      "id": "5174491",
+      "uid": "s:40~l:54~a:5174491",
+      "guid": "1bd4ae3c-e981-30a2-ad1b-27a6fad7ecf6",
+      "alternateIds": {
+        "sdr": "5174491"
+      },
+      "firstName": "KK",
+      "lastName": "Arnold",
+      "fullName": "KK Arnold",
+      "displayName": "KK Arnold",
+      "shortName": "K. Arnold",
+      "height": 69.0,
+      "displayHeight": "5' 9\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5174491/kk-arnold",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5174491/kk-arnold",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5174491/kk-arnold",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5174491/kk-arnold",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5174491/kk-arnold",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5174491/kk-arnold",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Germantown",
+        "state": "WI",
+        "country": "USA",
+        "displayText": "Germantown, WI"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "kk-arnold",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5174491.png",
+        "alt": "KK Arnold"
+      },
+      "jersey": "2",
+      "hand": {
+        "type": "RIGHT",
+        "abbreviation": "R",
+        "displayValue": "Right"
+      },
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 3,
+        "displayValue": "Junior",
+        "abbreviation": "JR"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5106202",
+      "uid": "s:40~l:54~a:5106202",
+      "guid": "b12b4249-11c7-39d2-ab81-a99aa333f2df",
+      "alternateIds": {
+        "sdr": "5106202"
+      },
+      "firstName": "Ice",
+      "lastName": "Brady",
+      "fullName": "Ice Brady",
+      "displayName": "Ice Brady",
+      "shortName": "I. Brady",
+      "height": 75.0,
+      "displayHeight": "6' 3\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5106202/ice-brady",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5106202/ice-brady",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5106202/ice-brady",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5106202/ice-brady",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5106202/ice-brady",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5106202/ice-brady",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "San Diego",
+        "state": "CA",
+        "country": "USA",
+        "displayText": "San Diego, CA"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "ice-brady",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5106202.png",
+        "alt": "Ice Brady"
+      },
+      "jersey": "25",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "2",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 3,
+        "displayValue": "Junior",
+        "abbreviation": "JR"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5239593",
+      "uid": "s:40~l:54~a:5239593",
+      "guid": "23ae7224-e014-3519-bedb-6d5ea2fa3557",
+      "alternateIds": {
+        "sdr": "5239593"
+      },
+      "firstName": "Morgan",
+      "lastName": "Cheli",
+      "fullName": "Morgan Cheli",
+      "displayName": "Morgan Cheli",
+      "shortName": "M. Cheli",
+      "height": 74.0,
+      "displayHeight": "6' 2\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239593/morgan-cheli",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5239593/morgan-cheli",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5239593/morgan-cheli",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5239593/morgan-cheli",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5239593/morgan-cheli",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239593/morgan-cheli",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Los Altos",
+        "state": "CA",
+        "country": "USA",
+        "displayText": "Los Altos, CA"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "morgan-cheli",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5239593.png",
+        "alt": "Morgan Cheli"
+      },
+      "jersey": "23",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 2,
+        "displayValue": "Sophomore",
+        "abbreviation": "SO"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5125264",
+      "uid": "s:40~l:54~a:5125264",
+      "guid": "d5ff9c09-a332-3df0-8234-4820f092ada5",
+      "alternateIds": {
+        "sdr": "5125264"
+      },
+      "firstName": "Jana",
+      "lastName": "El Alfy",
+      "fullName": "Jana El Alfy",
+      "displayName": "Jana El Alfy",
+      "shortName": "J. El Alfy",
+      "height": 77.0,
+      "displayHeight": "6' 5\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5125264/jana-el-alfy",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5125264/jana-el-alfy",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5125264/jana-el-alfy",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5125264/jana-el-alfy",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5125264/jana-el-alfy",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5125264/jana-el-alfy",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Cairo",
+        "country": "Egypt",
+        "displayText": "Cairo, Egypt"
+      },
+      "birthCountry": {
+        "alternateId": "602",
+        "abbreviation": "EGY"
+      },
+      "slug": "jana-el-alfy",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5125264.png",
+        "alt": "Jana El Alfy"
+      },
+      "jersey": "8",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/egy.png",
+        "alt": "Egypt",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "1",
+        "name": "Center",
+        "displayName": "Center",
+        "abbreviation": "C",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 2,
+        "displayValue": "Sophomore",
+        "abbreviation": "SO"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5312307",
+      "uid": "s:40~l:54~a:5312307",
+      "guid": "5d8c1aa1-b8ff-34a7-b7ed-189671ba944d",
+      "alternateIds": {
+        "sdr": "5312307"
+      },
+      "firstName": "Kelis",
+      "lastName": "Fisher",
+      "fullName": "Kelis Fisher",
+      "displayName": "Kelis Fisher",
+      "shortName": "K. Fisher",
+      "height": 69.0,
+      "displayHeight": "5' 9\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5312307/kelis-fisher",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5312307/kelis-fisher",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5312307/kelis-fisher",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5312307/kelis-fisher",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5312307/kelis-fisher",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5312307/kelis-fisher",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Baltimore",
+        "state": "MD",
+        "country": "USA",
+        "displayText": "Baltimore, MD"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "kelis-fisher",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5312307.png",
+        "alt": "Kelis Fisher"
+      },
+      "jersey": "7",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 1,
+        "displayValue": "Freshman",
+        "abbreviation": "FR"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5239664",
+      "uid": "s:40~l:54~a:5239664",
+      "guid": "d95e6c3d-9390-34f1-97a1-4249d4765fc3",
+      "alternateIds": {
+        "sdr": "5239664"
+      },
+      "firstName": "Kayleigh",
+      "lastName": "Heckel",
+      "fullName": "Kayleigh Heckel",
+      "displayName": "Kayleigh Heckel",
+      "shortName": "K. Heckel",
+      "height": 69.0,
+      "displayHeight": "5' 9\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239664/kayleigh-heckel",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5239664/kayleigh-heckel",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5239664/kayleigh-heckel",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5239664/kayleigh-heckel",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5239664/kayleigh-heckel",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239664/kayleigh-heckel",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Port Chester",
+        "state": "NY",
+        "country": "USA",
+        "displayText": "Port Chester, NY"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "kayleigh-heckel",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5239664.png",
+        "alt": "Kayleigh Heckel"
+      },
+      "jersey": "9",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 2,
+        "displayValue": "Sophomore",
+        "abbreviation": "SO"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5312308",
+      "uid": "s:40~l:54~a:5312308",
+      "guid": "0c1a99ed-4ec6-38b9-9591-212c1d74d00f",
+      "alternateIds": {
+        "sdr": "5312308"
+      },
+      "firstName": "Gandy",
+      "lastName": "Malou-Mamel",
+      "fullName": "Gandy Malou-Mamel",
+      "displayName": "Gandy Malou-Mamel",
+      "shortName": "G. Malou-Mamel",
+      "height": 77.0,
+      "displayHeight": "6' 5\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5312308/gandy-malou-mamel",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5312308/gandy-malou-mamel",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5312308/gandy-malou-mamel",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5312308/gandy-malou-mamel",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5312308/gandy-malou-mamel",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5312308/gandy-malou-mamel",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Limerick",
+        "country": "Ireland",
+        "displayText": "Limerick, Ireland"
+      },
+      "birthCountry": {
+        "alternateId": "160",
+        "abbreviation": "IRL"
+      },
+      "slug": "gandy-malou-mamel",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5312308.png",
+        "alt": "Gandy Malou-Mamel"
+      },
+      "jersey": "42",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/irl.png",
+        "alt": "Ireland",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "1",
+        "name": "Center",
+        "displayName": "Center",
+        "abbreviation": "C",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 1,
+        "displayValue": "Freshman",
+        "abbreviation": "FR"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5106203",
+      "uid": "s:40~l:54~a:5106203",
+      "guid": "1950d238-f8b4-3a39-bf97-887e6b2b48dd",
+      "alternateIds": {
+        "sdr": "5106203"
+      },
+      "firstName": "Ayanna",
+      "lastName": "Patterson",
+      "fullName": "Ayanna Patterson",
+      "displayName": "Ayanna Patterson",
+      "shortName": "A. Patterson",
+      "height": 74.0,
+      "displayHeight": "6' 2\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5106203/ayanna-patterson",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5106203/ayanna-patterson",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5106203/ayanna-patterson",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5106203/ayanna-patterson",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5106203/ayanna-patterson",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5106203/ayanna-patterson",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Fort Wayne",
+        "state": "IN",
+        "country": "USA",
+        "displayText": "Fort Wayne, IN"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "ayanna-patterson",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5106203.png",
+        "alt": "Ayanna Patterson"
+      },
+      "jersey": "34",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "2",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 2,
+        "displayValue": "Sophomore",
+        "abbreviation": "SO"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5312306",
+      "uid": "s:40~l:54~a:5312306",
+      "guid": "f49f34ae-a27a-311e-9250-d5d05212fa28",
+      "alternateIds": {
+        "sdr": "5312306"
+      },
+      "firstName": "Blanca",
+      "lastName": "Qui\u00f1onez",
+      "fullName": "Blanca Qui\u00f1onez",
+      "displayName": "Blanca Qui\u00f1onez",
+      "shortName": "B. Qui\u00f1onez",
+      "height": 74.0,
+      "displayHeight": "6' 2\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5312306/blanca-quinonez",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5312306/blanca-quinonez",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5312306/blanca-quinonez",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5312306/blanca-quinonez",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5312306/blanca-quinonez",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5312306/blanca-quinonez",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Milagro",
+        "country": "Ecuador",
+        "displayText": "Milagro, Ecuador"
+      },
+      "birthCountry": {
+        "alternateId": "154",
+        "abbreviation": "ECU"
+      },
+      "slug": "blanca-quinonez",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5312306.png",
+        "alt": "Blanca Qui\u00f1onez"
+      },
+      "jersey": "4",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/ecu.png",
+        "alt": "Ecuador",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "2",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 1,
+        "displayValue": "Freshman",
+        "abbreviation": "FR"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5174493",
+      "uid": "s:40~l:54~a:5174493",
+      "guid": "ccf77db2-3769-3c2d-84b8-a909da5a37bb",
+      "alternateIds": {
+        "sdr": "5174493"
+      },
+      "firstName": "Ashlynn",
+      "lastName": "Shade",
+      "fullName": "Ashlynn Shade",
+      "displayName": "Ashlynn Shade",
+      "shortName": "A. Shade",
+      "height": 70.0,
+      "displayHeight": "5' 10\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5174493/ashlynn-shade",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5174493/ashlynn-shade",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5174493/ashlynn-shade",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5174493/ashlynn-shade",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5174493/ashlynn-shade",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5174493/ashlynn-shade",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Noblesville",
+        "state": "IN",
+        "country": "USA",
+        "displayText": "Noblesville, IN"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "ashlynn-shade",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5174493.png",
+        "alt": "Ashlynn Shade"
+      },
+      "jersey": "12",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 3,
+        "displayValue": "Junior",
+        "abbreviation": "JR"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5239592",
+      "uid": "s:40~l:54~a:5239592",
+      "guid": "fd94de8d-1c86-30b9-9218-b2449577013c",
+      "alternateIds": {
+        "sdr": "5239592"
+      },
+      "firstName": "Sarah",
+      "lastName": "Strong",
+      "fullName": "Sarah Strong",
+      "displayName": "Sarah Strong",
+      "shortName": "S. Strong",
+      "height": 74.0,
+      "displayHeight": "6' 2\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239592/sarah-strong",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5239592/sarah-strong",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5239592/sarah-strong",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5239592/sarah-strong",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5239592/sarah-strong",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239592/sarah-strong",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Durham",
+        "state": "NC",
+        "country": "USA",
+        "displayText": "Durham, NC"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "sarah-strong",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5239592.png",
+        "alt": "Sarah Strong"
+      },
+      "jersey": "21",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "2",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 2,
+        "displayValue": "Sophomore",
+        "abbreviation": "SO"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5239591",
+      "uid": "s:40~l:54~a:5239591",
+      "guid": "7884d540-bfb0-32f0-bff6-279cbfd1810b",
+      "alternateIds": {
+        "sdr": "5239591"
+      },
+      "firstName": "Allie",
+      "lastName": "Ziebell",
+      "fullName": "Allie Ziebell",
+      "displayName": "Allie Ziebell",
+      "shortName": "A. Ziebell",
+      "height": 72.0,
+      "displayHeight": "6' 0\"",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239591/allie-ziebell",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/stats/_/id/5239591/allie-ziebell",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/gamelog/_/id/5239591/allie-ziebell",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/news/_/id/5239591/allie-ziebell",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/bio/_/id/5239591/allie-ziebell",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/womens-college-basketball/player/_/id/5239591/allie-ziebell",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Neenah",
+        "state": "WI",
+        "country": "USA",
+        "displayText": "Neenah, WI"
+      },
+      "birthCountry": {
+        "alternateId": "1",
+        "abbreviation": "USA"
+      },
+      "slug": "allie-ziebell",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/womens-college-basketball/players/full/5239591.png",
+        "alt": "Allie Ziebell"
+      },
+      "jersey": "11",
+      "flag": {
+        "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+        "alt": "USA",
+        "rel": [
+          "country-flag"
+        ]
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/womens-college-basketball/seasons/2026/teams/41?lang=en&region=us"
+        }
+      ],
+      "experience": {
+        "years": 2,
+        "displayValue": "Sophomore",
+        "abbreviation": "SO"
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    }
+  ],
+  "coach": [
+    {
+      "id": "18923",
+      "firstName": "Geno",
+      "lastName": "Auriemma",
+      "experience": 40
+    }
+  ],
+  "team": {
+    "id": "41",
+    "abbreviation": "CONN",
+    "location": "UConn",
+    "name": "Huskies",
+    "displayName": "UConn Huskies",
+    "clubhouse": "https://www.espn.com/womens-college-basketball/team/_/id/41/uconn-huskies",
+    "color": "0c2340",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png",
+    "recordSummary": "38-1",
+    "standingSummary": "1st in Big East"
+  }
+}

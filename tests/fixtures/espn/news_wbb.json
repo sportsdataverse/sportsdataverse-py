@@ -1,0 +1,885 @@
+{
+  "header": "Women's College Basketball News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/womens-college-basketball/",
+    "text": "All NCAAW News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 48837934,
+      "nowId": "1-48837934",
+      "contentKey": "48837934-1-5-1",
+      "dataSourceIdentifier": "519e607b91a3b",
+      "type": "HeadlineNews",
+      "headline": "CEO of NIL enforcement reminds schools: These are your rules",
+      "description": "Bryan Seeley, the CEO of the 11-month-old College Sports Commission, has a simple reminder to schools frustrated by NIL: These are the rules you wrote.",
+      "lastModified": "2026-05-21T20:35:11Z",
+      "published": "2026-05-21T20:35:11Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "2baec0d5db4f1",
+          "id": 45468259,
+          "type": "header",
+          "name": "Bryan Seeley [600x600]",
+          "credit": "Courtesy of College Sports Commission",
+          "height": 600,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2025/0607/r1503645_600x600_1-1.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9578,
+          "type": "league",
+          "uid": "s:40~l:54",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733",
+          "description": "NCAA Women's Basketball",
+          "sportId": 54,
+          "leagueId": 54,
+          "league": {
+            "id": 54,
+            "description": "NCAA Women's Basketball",
+            "abbreviation": "NCAAW",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 129415,
+          "type": "topic",
+          "guid": "7a5b16d5-0ca2-669f-f607-df1d378dc57b",
+          "description": "news - college sports",
+          "sportId": 0,
+          "topicId": 134
+        },
+        {
+          "id": 14486,
+          "type": "league",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602",
+          "description": "NCAA - Other sports",
+          "sportId": 0,
+          "leagueId": 3170,
+          "league": {
+            "id": 3170,
+            "description": "NCAA - Other sports"
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        },
+        {
+          "type": "guid",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733"
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        },
+        {
+          "type": "guid",
+          "guid": "7a5b16d5-0ca2-669f-f607-df1d378dc57b"
+        },
+        {
+          "type": "guid",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-football/story/_/id/48837934/ceo-nil-enforcement-reminds-schools-your-rules"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncf/story?storyId=48837934"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48837934"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48837934"
+          }
+        }
+      }
+    },
+    {
+      "id": 48835955,
+      "nowId": "1-48835955",
+      "contentKey": "48835955-1-5-1",
+      "dataSourceIdentifier": "283605db4bb92",
+      "type": "HeadlineNews",
+      "headline": "Iowa State promotes former star Emily Ryan to assistant coach",
+      "description": "Emily Ryan, one of the most productive point guards in women's college basketball history when she played for Iowa State, has been hired as an assistant at her alma mater.",
+      "lastModified": "2026-05-21T16:14:19Z",
+      "published": "2026-05-21T16:14:19Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "623f922bc4fbd",
+          "id": 39528233,
+          "type": "header",
+          "name": "Emily Ryan [1296x729]",
+          "alt": "Emily Ryan",
+          "credit": "Nirmalendu Majumdar/Ames Tribune",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2024/0215/r1291383_1296x729_16-9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9578,
+          "type": "league",
+          "uid": "s:40~l:54",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733",
+          "description": "NCAA Women's Basketball",
+          "sportId": 54,
+          "leagueId": 54,
+          "league": {
+            "id": 54,
+            "description": "NCAA Women's Basketball",
+            "abbreviation": "NCAAW",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 4789,
+          "type": "team",
+          "uid": "s:40~l:54~t:66",
+          "guid": "eb44e2d5-8ec6-a4ff-87e6-0d0e65bb113e",
+          "description": "Iowa State Cyclones",
+          "sportId": 54,
+          "teamId": 66,
+          "team": {
+            "id": 66,
+            "description": "Iowa State Cyclones",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/66/iowa-state-cyclones"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/66/iowa-state-cyclones"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 66,
+          "type": "team",
+          "guid": "6bd40006-f5c1-31a9-b3c7-32f835d43c70",
+          "description": "Iowa State University",
+          "sportId": 3170,
+          "teamId": 66,
+          "team": {
+            "id": 66,
+            "description": "Iowa State University"
+          }
+        },
+        {
+          "id": 116550,
+          "type": "topic",
+          "guid": "fe879255-6324-4784-385f-a1a18c22b5cc",
+          "description": "espnw",
+          "sportId": 0,
+          "topicId": 5
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "type": "guid",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733"
+        },
+        {
+          "type": "guid",
+          "guid": "eb44e2d5-8ec6-a4ff-87e6-0d0e65bb113e"
+        },
+        {
+          "type": "guid",
+          "guid": "6bd40006-f5c1-31a9-b3c7-32f835d43c70"
+        },
+        {
+          "type": "guid",
+          "guid": "fe879255-6324-4784-385f-a1a18c22b5cc"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/womens-college-basketball/story/_/id/48835955/iowa-state-promotes-former-star-emily-ryan-assistant-coach"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncw/story?storyId=48835955"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48835955"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48835955"
+          }
+        }
+      }
+    },
+    {
+      "id": 48827253,
+      "nowId": "1-48827253",
+      "contentKey": "48827253-1-6-1",
+      "dataSourceIdentifier": "42e7574995ec9",
+      "type": "Story",
+      "headline": "How top 2027 women's basketball commits fit at their schools",
+      "description": "Projecting the impact of top 2027 recruits Caroline Bradley (LSU), Eve Long (Notre Dame) and Ogechi Okeke (Baylor).",
+      "lastModified": "2026-05-20T20:10:33Z",
+      "published": "2026-05-20T20:10:33Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "dd8559c4fdb9f",
+          "id": 48827501,
+          "type": "header",
+          "name": "Eve Long [1296x729]",
+          "caption": "Five-star forward Eve Long has committed to Notre Dame.",
+          "credit": "Courtesy of Eve Long",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0520/r1661027_1296x729_16-9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9578,
+          "type": "league",
+          "uid": "s:40~l:54",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733",
+          "description": "NCAA Women's Basketball",
+          "sportId": 54,
+          "leagueId": 54,
+          "league": {
+            "id": 54,
+            "description": "NCAA Women's Basketball",
+            "abbreviation": "NCAAW",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 17051,
+          "type": "team",
+          "uid": "s:40~l:54~t:99",
+          "guid": "ac200a77-5d39-7ad9-fee8-1d683819d6cf",
+          "description": "LSU Tigers",
+          "sportId": 54,
+          "teamId": 99,
+          "team": {
+            "id": 99,
+            "description": "LSU Tigers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/99/lsu-tigers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/99/lsu-tigers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 99,
+          "type": "team",
+          "guid": "bb1fe57d-d53d-3f5d-a207-281ead34f543",
+          "description": "Louisiana State University",
+          "sportId": 3170,
+          "teamId": 99,
+          "team": {
+            "id": 99,
+            "description": "Louisiana State University"
+          }
+        },
+        {
+          "id": 4748,
+          "type": "team",
+          "uid": "s:40~l:54~t:87",
+          "guid": "9c673bdd-f47a-6f63-d65a-b117e3b75b81",
+          "description": "Notre Dame Fighting Irish",
+          "sportId": 54,
+          "teamId": 87,
+          "team": {
+            "id": 87,
+            "description": "Notre Dame Fighting Irish",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/87/notre-dame-fighting-irish"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/87/notre-dame-fighting-irish"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 87,
+          "type": "team",
+          "guid": "5eaf1e0a-424d-31cf-bf66-e61bc6ebbefe",
+          "description": "University of Notre Dame",
+          "sportId": 3170,
+          "teamId": 87,
+          "team": {
+            "id": 87,
+            "description": "University of Notre Dame"
+          }
+        },
+        {
+          "id": 17054,
+          "type": "team",
+          "uid": "s:40~l:54~t:239",
+          "guid": "6473cb69-12d6-f6ca-3050-315274b5e1e4",
+          "description": "Baylor Bears",
+          "sportId": 54,
+          "teamId": 239,
+          "team": {
+            "id": 239,
+            "description": "Baylor Bears",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/239/baylor-bears"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/239/baylor-bears"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 239,
+          "type": "team",
+          "guid": "8f0deb82-f6b1-34ef-b835-d95f4f6689ec",
+          "description": "Baylor University",
+          "sportId": 3170,
+          "teamId": 239,
+          "team": {
+            "id": 239,
+            "description": "Baylor University"
+          }
+        },
+        {
+          "id": 409226,
+          "type": "topic",
+          "guid": "89bfd037-10c0-2ae7-21ac-01778e7d545f",
+          "description": "list",
+          "sportId": 0,
+          "topicId": 783
+        },
+        {
+          "id": 409222,
+          "type": "topic",
+          "guid": "b66e959d-b64e-9bd6-7d5c-1bcb0d53c0cb",
+          "description": "daily",
+          "sportId": 0,
+          "topicId": 779
+        },
+        {
+          "type": "guid",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733"
+        },
+        {
+          "type": "guid",
+          "guid": "ac200a77-5d39-7ad9-fee8-1d683819d6cf"
+        },
+        {
+          "type": "guid",
+          "guid": "bb1fe57d-d53d-3f5d-a207-281ead34f543"
+        },
+        {
+          "type": "guid",
+          "guid": "9c673bdd-f47a-6f63-d65a-b117e3b75b81"
+        },
+        {
+          "type": "guid",
+          "guid": "5eaf1e0a-424d-31cf-bf66-e61bc6ebbefe"
+        },
+        {
+          "type": "guid",
+          "guid": "6473cb69-12d6-f6ca-3050-315274b5e1e4"
+        },
+        {
+          "type": "guid",
+          "guid": "8f0deb82-f6b1-34ef-b835-d95f4f6689ec"
+        },
+        {
+          "type": "guid",
+          "guid": "89bfd037-10c0-2ae7-21ac-01778e7d545f"
+        },
+        {
+          "type": "guid",
+          "guid": "b66e959d-b64e-9bd6-7d5c-1bcb0d53c0cb"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/womens-college-basketball/story/_/id/48827253/womens-college-basketball-five-star-commits-sc-next-class-2027-fit-new-school"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncw/story?storyId=48827253"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48827253"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48827253"
+          }
+        }
+      },
+      "byline": "Shane Laflin"
+    },
+    {
+      "id": 48826796,
+      "nowId": "1-48826796",
+      "contentKey": "48826796-1-5-1",
+      "dataSourceIdentifier": "ebb217cfa57c6",
+      "type": "HeadlineNews",
+      "headline": "Eve Long, No. 5 recruit, commits to Notre Dame women's basketball",
+      "description": "Eve Long, the No. 5 recruit and the top forward in the 2027 SC Next Super 60, committed to Notre Dame on Wednesday.",
+      "lastModified": "2026-05-20T17:04:59Z",
+      "published": "2026-05-20T17:04:59Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "89a0e2eb9bb95",
+          "id": 47023983,
+          "type": "header",
+          "name": "Andscape Niele Ivey [1296x729]",
+          "credit": "(Photo by Michael Miller/ISI Photos/Getty Images)",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2025/1119/r1577753_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Notre Dame falls to UConn in Elite Eight",
+          "caption": "UConn advanced to the Final Four after a win against Notre Dame in the Elite Eight.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0329/24613b9f-cad4-46da-9c35-2c36c4f91d41/24613b9f-cad4-46da-9c35-2c36c4f91d41.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 4748,
+          "type": "team",
+          "uid": "s:40~l:54~t:87",
+          "guid": "9c673bdd-f47a-6f63-d65a-b117e3b75b81",
+          "description": "Notre Dame Fighting Irish",
+          "sportId": 54,
+          "teamId": 87,
+          "team": {
+            "id": 87,
+            "description": "Notre Dame Fighting Irish",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/87/notre-dame-fighting-irish"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/womens-college-basketball/team/_/id/87/notre-dame-fighting-irish"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 87,
+          "type": "team",
+          "guid": "5eaf1e0a-424d-31cf-bf66-e61bc6ebbefe",
+          "description": "University of Notre Dame",
+          "sportId": 3170,
+          "teamId": 87,
+          "team": {
+            "id": 87,
+            "description": "University of Notre Dame"
+          }
+        },
+        {
+          "id": 9578,
+          "type": "league",
+          "uid": "s:40~l:54",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733",
+          "description": "NCAA Women's Basketball",
+          "sportId": 54,
+          "leagueId": 54,
+          "league": {
+            "id": 54,
+            "description": "NCAA Women's Basketball",
+            "abbreviation": "NCAAW",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 116550,
+          "type": "topic",
+          "guid": "fe879255-6324-4784-385f-a1a18c22b5cc",
+          "description": "espnw",
+          "sportId": 0,
+          "topicId": 5
+        },
+        {
+          "type": "guid",
+          "guid": "9c673bdd-f47a-6f63-d65a-b117e3b75b81"
+        },
+        {
+          "type": "guid",
+          "guid": "5eaf1e0a-424d-31cf-bf66-e61bc6ebbefe"
+        },
+        {
+          "type": "guid",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "fe879255-6324-4784-385f-a1a18c22b5cc"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/womens-college-basketball/story/_/id/48826796/eve-long-no-5-recruit-commits-notre-dame-women-basketball"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/ncw/story?storyId=48826796"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48826796"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48826796"
+          }
+        }
+      },
+      "byline": "Shane Laflin"
+    },
+    {
+      "id": 48817262,
+      "nowId": "1-48817262",
+      "contentKey": "48817262-1-5-1",
+      "dataSourceIdentifier": "ee696f1b1108f",
+      "type": "HeadlineNews",
+      "headline": "NAACP urging athletes, fans to boycott over voting rights",
+      "description": "The NAACP on Tuesday launched the \"Out of Bounds\" campaign to urge Black athletes and fans to boycott some public universities over voting restrictions.",
+      "lastModified": "2026-05-19T16:14:28Z",
+      "published": "2026-05-19T16:14:28Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "0c4396c06d240",
+          "id": 34430771,
+          "type": "header",
+          "name": "Southeastern Conference [600x400]",
+          "credit": "Icon Sportswire",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2022/0820/r1050749_600x400_3-2.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 9571,
+          "type": "league",
+          "uid": "s:20~l:23",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e",
+          "description": "NCAA Football",
+          "sportId": 23,
+          "leagueId": 23,
+          "league": {
+            "id": 23,
+            "description": "NCAA Football",
+            "abbreviation": "NCAAF",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/college-football/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9576,
+          "type": "league",
+          "uid": "s:40~l:41",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3",
+          "description": "NCAA Men's Basketball",
+          "sportId": 41,
+          "leagueId": 41,
+          "league": {
+            "id": 41,
+            "description": "NCAA Men's Basketball",
+            "abbreviation": "NCAAM",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9578,
+          "type": "league",
+          "uid": "s:40~l:54",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733",
+          "description": "NCAA Women's Basketball",
+          "sportId": 54,
+          "leagueId": 54,
+          "league": {
+            "id": 54,
+            "description": "NCAA Women's Basketball",
+            "abbreviation": "NCAAW",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/womens-college-basketball/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 14486,
+          "type": "league",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602",
+          "description": "NCAA - Other sports",
+          "sportId": 0,
+          "leagueId": 3170,
+          "league": {
+            "id": 3170,
+            "description": "NCAA - Other sports"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "0f8e3d42-fa27-3f60-9e8d-276e4892f50e"
+        },
+        {
+          "type": "guid",
+          "guid": "11965179-4504-3b99-983e-83ea0e36d5f3"
+        },
+        {
+          "type": "guid",
+          "guid": "45cd175c-f9f2-338b-83b9-6d7d64001733"
+        },
+        {
+          "type": "guid",
+          "guid": "d765930d-4c8c-47ed-8b85-8f1955d4a602"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/college-sports/story/_/id/48817262/naacp-calls-boycott-southern-states-voting-rights"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/extra/ncaa/story?storyId=48817262"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48817262"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48817262"
+          }
+        }
+      }
+    }
+  ]
+}

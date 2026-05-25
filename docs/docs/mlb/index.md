@@ -66,39 +66,23 @@ is no `v2`.
 
 ## MLB Stats API parser layer
 
-Schemas captured 2026-05-24 against `statsapi.mlb.com`. Mirrors the
-ESPN parser layer design: every parser returns polars by default,
-pandas via `return_as_pandas=True`, zero-row frames on empty payloads,
-snake-cased columns.
+The 40 `mlb_api_*` wrappers all return raw `Dict`. The parser layer in
+[`sportsdataverse.mlb.mlb_api_parsers`](./parsers) turns those payloads
+into tidy polars / pandas DataFrames — 5 dedicated parsers for the
+high-traffic endpoints (`schedule`, `teams`, `team_roster`,
+`standings`, `person_stats`) plus a generic `parse_mlb_api_list`
+fallback for the 20+ list-shape endpoints (venues, divisions, awards,
+umpires, draft, etc.).
 
-| Parser | Endpoint(s) | Output shape |
-|---|---|---|
-| `parse_mlb_api_schedule` | `mlb_api_schedule`, `mlb_api_schedule_postseason` | One row per game (unrolls `dates[].games[]`, prefixes `schedule_date`) |
-| `parse_mlb_api_teams` | `mlb_api_teams` | One row per team |
-| `parse_mlb_api_team_roster` | `mlb_api_team_roster` | One row per player |
-| `parse_mlb_api_standings` | `mlb_api_standings` | One row per (division × team) with namespaced `standings_*` division context |
-| `parse_mlb_api_person_stats` | `mlb_api_person_stats`, `mlb_api_team_stats` | One row per stats split (unrolls `stats[].splits[]`) |
-| `parse_mlb_api_list` | Generic for `venues`, `sports`, `leagues`, `divisions`, `seasons`, `awards`, `umpires`, `draft`, `draft_prospects`, `attendance`, `team_leaders`, `team_alumni`, `team_affiliates`, `stats`, `stats_leaders`, `stats_streaks` | One row per item |
-
-`MLB_API_ENDPOINT_PARSERS` registry has 26 entries; `parser_for_mlb_api(fn_name)`
-returns the registered parser (falls back to `parse_mlb_api_list`,
-never returns `None`).
-
-Example chaining a wrapper with its parser:
+See the dedicated **[MLB Stats API parsers page](./parsers)** for the
+full table, registry, and chaining examples.
 
 ```python
-from sportsdataverse.mlb import (
-    mlb_api_standings,
-    parse_mlb_api_standings,
-)
+from sportsdataverse.mlb import mlb_api_standings, parse_mlb_api_standings
 
 # 30-row standings frame (6 divisions × 5 teams) with full division
-# context columns + the per-team record stats (wins, losses, pct,
-# gamesBack, streak, divisionRank, etc.).
-raw = mlb_api_standings(season=2024)
-df  = parse_mlb_api_standings(raw)
-df.select(["standings_division_name", "team_id", "wins",
-           "losses", "winning_percentage", "games_back"]).head()
+# context columns + per-team record stats
+df = parse_mlb_api_standings(mlb_api_standings(season=2024))
 ```
 
 ## Baseball Savant — Statcast (`mlb_statcast`)

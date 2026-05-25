@@ -1984,6 +1984,52 @@ def parse_summary_scoring_plays(
     return _row_per_item((payload or {}).get("scoringPlays"), return_as_pandas)
 
 
+def parse_summary_drive_plays(
+    payload: Dict, return_as_pandas: bool = False
+) -> pl.DataFrame:
+    """Explode NFL / CFB ``drives.previous[].plays[]`` into long-form rows.
+
+    Football summary payloads don't ship a top-level ``plays[]`` array
+    (that's the NBA / MLB / NHL / WNBA convention). Instead, every play
+    is nested under a parent drive in ``drives.previous[i].plays[]``.
+    :func:`parse_summary_drives` returns one row per drive with the
+    plays sub-list stringified to keep the output single-row-per-drive;
+    this parser unrolls those plays into a true one-row-per-play frame
+    with a ``drive_id`` column carried over from the parent drive so
+    callers can join back.
+
+    Args:
+        payload: Raw JSON dict from any football ``espn_{league}_summary()``
+            wrapper.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per play across every
+        drive. Includes ``drive_id``, ``drive_sequence`` (1-based index
+        into ``drives.previous``), plus the full play schema (id,
+        sequenceNumber, type, text, scores, period, clock,
+        scoringPlay, ...). Zero rows for non-football summary payloads
+        that lack ``drives.previous``.
+    """
+    drives = (payload or {}).get("drives") or {}
+    previous = drives.get("previous") if isinstance(drives, dict) else None
+    if not isinstance(previous, list) or not previous:
+        return _empty_frame(return_as_pandas)
+    rows = []
+    for drive_seq, drive in enumerate(previous, start=1):
+        if not isinstance(drive, dict):
+            continue
+        drive_id = drive.get("id")
+        for play in drive.get("plays") or []:
+            if not isinstance(play, dict):
+                continue
+            row = {"drive_id": drive_id, "drive_sequence": drive_seq}
+            for k, v in play.items():
+                row[k] = v
+            rows.append(row)
+    return _row_per_item(rows, return_as_pandas)
+
+
 def parse_summary(payload: Dict, section: str = None,
                   return_as_pandas: bool = False):
     """Dispatcher: parse one section of a Site v2 summary payload.
@@ -2045,6 +2091,7 @@ SUMMARY_SECTION_PARSERS = {
     "news":                 parse_summary_news,
     # NFL / CFB only — return zero-row frames for other sports
     "drives":               parse_summary_drives,
+    "drive_plays":          parse_summary_drive_plays,
     "scoring_plays":        parse_summary_scoring_plays,
 }
 
