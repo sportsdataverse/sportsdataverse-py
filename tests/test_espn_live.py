@@ -622,3 +622,76 @@ def test_espn_wbb_team_schedule_live():
     assert df.height == 0 or df.height >= 10, (
         f"expected 0 or >=10 WBB schedule rows, got {df.height}"
     )
+
+
+# ===========================================================================
+# 15. NCAA summary endpoint live tests
+# ===========================================================================
+#
+# The NBA/MLB/NFL/NHL/WNBA fixtures already exercise parse_summary
+# offline; this section adds *live* coverage for the 3 NCAA leagues
+# using the championship events that won't disappear from ESPN's cache.
+# Tests use well-archived past games to stay stable year-round.
+
+
+def test_espn_mbb_summary_live_full_dispatch():
+    """2024 NCAA M Championship Purdue @ UConn — verify the full
+    parse_summary dispatcher produces all 21 sub-frames from a live
+    fetch, with the football-only sections empty as expected."""
+    from sportsdataverse._common_espn_parsers import (
+        SUMMARY_SECTION_PARSERS,
+        parse_summary,
+    )
+    from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_summary
+
+    raw = espn_mbb_summary(event_id=401638645)
+    assert isinstance(raw, dict), f"expected dict, got {type(raw)}"
+    out = parse_summary(raw)
+    assert set(out) == set(SUMMARY_SECTION_PARSERS), (
+        "dispatcher returned different sections than registry"
+    )
+    # Non-football leagues should have populated boxscore_player + plays
+    assert out["boxscore_player"].height >= 20, (
+        f"expected >=20 athletes, got {out['boxscore_player'].height}"
+    )
+    assert out["plays"].height >= 100, (
+        f"expected >=100 plays, got {out['plays'].height}"
+    )
+    # Basketball doesn't use the football-only sections
+    assert out["drives"].height == 0
+    assert out["drive_plays"].height == 0
+
+
+def test_espn_wbb_summary_live_works_via_return_parsed_shim():
+    """2024 NCAA W Championship Iowa @ SC — exercise the
+    return_parsed=True shim end to end (espn_wbb_summary with the
+    kwarg should route through parse_summary)."""
+    from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_summary
+
+    out = espn_wbb_summary(event_id=401637613, return_parsed=True)
+    # parse_summary returns a dict of sub-frames (not a single frame)
+    assert isinstance(out, dict)
+    # Boxscore + plays should always have data for a championship game
+    assert out["boxscore_player"].height >= 20
+    assert out["plays"].height >= 100
+
+
+def test_espn_cfb_summary_live_uses_football_pattern():
+    """2025 CFB National Championship OSU @ ND — verify CFB uses the
+    same drives.previous[]/scoringPlays football pattern as NFL, not
+    the top-level plays[] pattern of basketball/hockey/baseball."""
+    from sportsdataverse._common_espn_parsers import parse_summary
+    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_summary
+
+    out = parse_summary(espn_cfb_summary(event_id=401677192))
+    # CFB football: top-level plays[] is empty, drives.previous[] populated
+    assert out["plays"].height == 0
+    assert out["drives"].height >= 10, (
+        f"expected >=10 drives, got {out['drives'].height}"
+    )
+    # drive_plays unrolls drives[i].plays[] for true PBP parity
+    assert out["drive_plays"].height >= 50
+    # scoringPlays present for football
+    assert out["scoring_plays"].height >= 1
+    # CFB rosters are huge (~70-80 game-day squad per team)
+    assert out["boxscore_player"].height >= 50

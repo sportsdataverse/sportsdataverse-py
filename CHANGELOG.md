@@ -503,12 +503,18 @@ section alongside `drives` and `scoring_plays`.
   `tests/test_nhl_api_web_parsers.py` (37 tests), and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
-- New `tests/test_espn_live.py` (**41 live tests**, +9 NCAA-side
+- New `tests/test_espn_live.py` (**44 live tests**, +12 NCAA-side
   coverage: CFB + MBB + WBB live tests for `team_roster` (with the
-  CFB position-group assertion), `news`, and `team_schedule`. The
-  schedule tests tolerate off-season empty payloads so the cron runs
-  green year-round) gated by `SDV_PY_LIVE_TESTS=1` for live
-  integration verification.
+  CFB position-group assertion), `news`, `team_schedule`, plus 3
+  `parse_summary` live tests against the 2024 NCAA championships
+  (Purdue@UConn MBB, Iowa@SC WBB, OSU@ND CFB). The summary live
+  tests verify the full 21-section dispatcher contract end-to-end:
+  basketball produces top-level plays, CFB produces drives +
+  drive_plays + scoringPlays via the football pattern, and the
+  `return_parsed=True` shim on `espn_wbb_summary` routes through
+  parse_summary as expected. Schedule tests tolerate off-season
+  empty payloads so the cron runs green year-round.) gated by
+  `SDV_PY_LIVE_TESTS=1` for live integration verification.
 - Captured fixtures live under `tests/fixtures/espn/` (43 captures —
   the original 7 plus summary captures for **all 8 ESPN leagues**
   (NBA / MLB / NFL / NHL / WNBA + the new NCAA captures: MBB final
@@ -571,6 +577,22 @@ section alongside `drives` and `scoring_plays`.
     endpoint mapping table per directory, the championship-game
     event IDs used for the cross-league summary captures, and a
     maintenance section explaining how to refresh a fixture.
+  - `docs/architecture/building-blocks.md` — meta-documentation
+    page enumerating the five low-level patterns reused across
+    every parser module: `_bind` shim factory, `make_league_module`
+    factory call, `_row_per_item` / `_single_row` json_normalize
+    helpers, the `ENDPOINT_PARSERS` registry + `parser_for_*`
+    lookup, and the dispatcher pattern (used by `parse_summary`,
+    `parse_nhl_web_right_rail`, `parse_nhl_web_club_stats`). Closes
+    with a step-by-step "Adding a new parser" checklist. Sidebar
+    entry added under the Architecture category.
+  - `docs/nhl/api-web.md` gains a "Parser deep-dive" section
+    between the registry and the full example: documents the
+    `parse_nhl_web_boxscore` 6-bucket unrolling pattern, both
+    dispatchers (`right_rail` 6-section + `club_stats` 2-section
+    breakdowns with example invocations), the roster
+    merge-with-tag pattern, and the leaders category-keyed
+    payload unrolling.
 - `docs/docs/intro.md` gains a "Quickstart" section directly under
   the goal paragraph showing three one-liners across NBA / MLB /
   NHL covering the three primary usage modes (return_parsed shim,

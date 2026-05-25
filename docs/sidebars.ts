@@ -9,7 +9,8 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Architecture',
-      items: ['architecture/espn-cross-league'],
+      items: ['architecture/espn-cross-league',
+              'architecture/building-blocks'],
     },
     {
       type: 'category',

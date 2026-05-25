@@ -180,6 +180,122 @@ callable (or `None` for the 3 idiosyncratic endpoints whose payloads
 don't fit a reusable pattern: `playoff_series`, `player_spotlight`,
 `draft_rankings*`).
 
+## Parser deep-dive
+
+### Boxscore unrolling pattern
+
+`parse_nhl_web_boxscore` is the most non-trivial parser — boxscore
+ships **six independent buckets** (away/home × forwards/defense/
+goalies) at `playerByGameStats.{awayTeam,homeTeam}.{forwards,defense,
+goalies}`. The parser merges all six into one long-form frame and
+tags each row with `home_away` ("home" / "away") and
+`position_group` ("forwards" / "defense" / "goalies") so callers can
+filter without re-walking the original nested dict:
+
+```python
+import polars as pl
+from sportsdataverse.nhl import nhl_web_boxscore, parse_nhl_web_boxscore
+
+df = parse_nhl_web_boxscore(nhl_web_boxscore(2023030417))
+
+# Both teams' starting goalies
+df.filter(pl.col("position_group") == "goalies").select(
+    ["home_away", "name", "shots_against", "saves",
+     "goals_against", "save_pctg"]
+)
+
+# Top 5 scorers across both teams
+df.filter(pl.col("position_group") != "goalies") \
+  .sort("points", descending=True).head(5)
+```
+
+### Dispatchers in detail
+
+#### `parse_nhl_web_right_rail` — 6 sub-frames in one call
+
+Right rail bundles 6 unrelated context views (season series, shot
+trends, team comparisons, officials, period scoring, series wins).
+With `section=None` (the default) the dispatcher returns a dict; with
+`section="<name>"` it returns just that one frame, mirroring the
+[`parse_summary`](../parsers/index) pattern for Site v2 ESPN summary
+payloads.
+
+```python
+from sportsdataverse.nhl import nhl_web_right_rail, parse_nhl_web_right_rail
+
+raw = nhl_web_right_rail(2023030417)
+out = parse_nhl_web_right_rail(raw)        # dict of 6 sub-frames
+
+# Per-category team-vs-team comparison from the game
+out["team_game_stats"].select(["category", "away_value", "home_value"])
+
+# Per-period shot totals
+out["shots_by_period"]                      # 3 rows × {period, away, home}
+
+# Where the two teams stood entering this game
+out["season_series_wins"]                   # 1 row × wins / needed_to_win
+```
+
+The dispatcher's section name → schema mapping:
+
+| `section=` | Source key in payload | Typical shape |
+|---|---|---|
+| `"season_series"` | `seasonSeries` | One row per head-to-head game |
+| `"shots_by_period"` | `shotsByPeriod` | 3 rows (one per period; 4 for OT) |
+| `"team_game_stats"` | `teamGameStats` | One row per stat category |
+| `"game_info"` | `gameInfo` | Single-row dict (referees, linesmen, team dicts) |
+| `"linescore_by_period"` | `linescore.byPeriod` | Per-period score breakdown |
+| `"season_series_wins"` | `seasonSeriesWins` | Single-row series win aggregate |
+
+#### `parse_nhl_web_club_stats` — skaters + goalies split
+
+A simpler 2-section dispatcher. Both sub-frames carry per-player
+season totals; goalies have a different stat schema than skaters so
+the natural split is to keep them as separate frames rather than
+forcing a `position_group` column with mixed schemas.
+
+```python
+from sportsdataverse.nhl import nhl_web_club_stats, parse_nhl_web_club_stats
+
+out = parse_nhl_web_club_stats(nhl_web_club_stats("EDM", season=2024, game_type=2))
+out["skaters"]   # 27 skaters × 20 cols (G, A, P, +/-, TOI, …)
+out["goalies"]   #  3 goalies × 20 cols (W, L, OTL, GAA, SV%, SO, …)
+```
+
+### Roster merging pattern
+
+`parse_nhl_web_roster` follows the same merge-with-tag idea as
+`parse_nhl_web_boxscore` but for the static roster endpoint —
+forwards / defensemen / goalies arrive as three separate arrays
+and the parser merges them into one frame with a `position_group`
+column:
+
+```python
+from sportsdataverse.nhl import nhl_web_roster, parse_nhl_web_roster
+
+df = parse_nhl_web_roster(nhl_web_roster("EDM", season=2024))
+df["position_group"].value_counts()
+# forwards=11, defensemen=9, goalies=4
+```
+
+### Leaders category-keyed payload
+
+The leaders endpoints return a **category-keyed** dict at the top
+level (`{points: [...], goals: [...], assists: [...]}` for skaters;
+`{wins: [...], savePctg: [...], shutouts: [...]}` for goalies).
+`parse_nhl_web_leaders` walks every top-level list-valued key, tags
+each row with the category it came from, and concatenates:
+
+```python
+from sportsdataverse.nhl import nhl_web_skater_leaders, parse_nhl_web_leaders
+
+# Request multiple categories at once via the URL — parser handles
+# the resulting multi-category payload transparently
+df = parse_nhl_web_leaders(nhl_web_skater_leaders())
+df["category"].unique()    # ['points', 'goals', 'assists', ...]
+df.filter(pl.col("category") == "points").head(10)
+```
+
 ## Full game-center example
 
 ```python
