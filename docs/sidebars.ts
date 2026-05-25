@@ -46,6 +46,7 @@ const sidebars: SidebarsConfig = {
       label: 'NHL',
       items: [
         'nhl/index',
+        'nhl/api-web',
         'nhl/edge',
         'nhl/edge-parsers',
         'nhl/stats-rest',

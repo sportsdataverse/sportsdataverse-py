@@ -91,6 +91,7 @@ symmetry with the Stats REST and MLB API parser layers).
 
 ## See also
 
+- [NHL api-web](./api-web) — modern game-feed surface.
 - [NHL EDGE](./edge) — player tracking / Statcast surface.
 - [NHL Stats REST](./stats-rest) — historical aggregates with Cayenne
   filter expressions.

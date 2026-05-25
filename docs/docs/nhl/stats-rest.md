@@ -99,5 +99,7 @@ back to `parse_nhl_stats_rest`).
 
 ## See also
 
+- [NHL api-web](./api-web) — modern game-feed surface (live and
+  recent games, schedule, scoreboard, rosters, standings).
 - [NHL EDGE](./edge) — player tracking / Statcast surface.
 - [NHL Records](./records) — awards, coaches, HOF, attendance.

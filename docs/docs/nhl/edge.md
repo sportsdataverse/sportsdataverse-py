@@ -122,6 +122,8 @@ heatmap = parse_edge_sog_details(raw)           # 17-cell SOG grid
 
 ## See also
 
+- [NHL api-web](./api-web) — modern game-feed surface (game-center,
+  schedule, scoreboard, standings, rosters, leaders, draft).
 - [NHL EDGE parsers](./edge-parsers) — schema-grounded parsers for the
   EDGE payload shapes.
 - [NHL Stats REST](./stats-rest) — historical aggregates with Cayenne

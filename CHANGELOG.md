@@ -491,9 +491,17 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
     architecture.
   - `docs/parsers/index.md` — the parser layer + `ENDPOINT_PARSERS`.
   - `docs/mlb/index.md` — MLB module overview (ESPN + Stats API +
-    Statcast).
+    Statcast); now includes a "MLB Stats API parser layer" section
+    covering the dedicated parsers + the `MLB_API_ENDPOINT_PARSERS`
+    registry.
+  - `docs/nhl/api-web.md` — the modern game-feed surface
+    (`api-web.nhle.com/v1/`) with the full endpoint table and a parser
+    layer section covering all 16 dedicated parsers + 2 dispatchers
+    (`right_rail`, `club_stats`).
   - `docs/nhl/edge.md`, `edge-parsers.md`, `stats-rest.md`,
-    `records.md` — the new NHL surface.
+    `records.md` — the NHL surface (EDGE, Stats REST, Records). Each
+    now includes cross-links to the other three NHL docs pages and a
+    "Parser layer" section.
 
 ## 0.0.50 Release: May 7, 2026
 
