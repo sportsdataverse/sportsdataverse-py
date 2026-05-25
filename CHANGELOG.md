@@ -490,14 +490,22 @@ section alongside `drives` and `scoring_plays`.
 
 ### Test infrastructure
 
-- New `tests/test_espn_universal_parsers.py` (98 tests),
+- New `tests/test_espn_universal_parsers.py` (106 tests, +8 sparse-
+  section parser tests covering `broadcasts` (present for MLB / NHL,
+  empty for NBA / NFL / WNBA in past-game captures) and the
+  universally-sparse `against_the_spread` / `pickcenter` / `odds`
+  sections),
   `tests/test_mlb_api_parsers.py` (17 tests),
   `tests/test_nhl_aux_parsers.py` (21 tests),
   `tests/test_nhl_api_web_parsers.py` (37 tests), and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
-- New `tests/test_espn_live.py` (32 live tests) gated by
-  `SDV_PY_LIVE_TESTS=1` for live integration verification.
+- New `tests/test_espn_live.py` (**41 live tests**, +9 NCAA-side
+  coverage: CFB + MBB + WBB live tests for `team_roster` (with the
+  CFB position-group assertion), `news`, and `team_schedule`. The
+  schedule tests tolerate off-season empty payloads so the cron runs
+  green year-round) gated by `SDV_PY_LIVE_TESTS=1` for live
+  integration verification.
 - Captured fixtures live under `tests/fixtures/espn/` (40 captures —
   the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA
   plus the 28-fixture cross-league parity set covering
@@ -537,11 +545,20 @@ section alongside `drives` and `scoring_plays`.
     architecture.
   - `docs/parsers/index.md` — the parser layer + `ENDPOINT_PARSERS`.
   - `docs/mlb/index.md` — MLB module overview (ESPN + Stats API +
-    Statcast); brief pointer to the new dedicated parsers page.
+    Statcast); brief pointers to the new dedicated `parsers` and
+    `statcast` pages.
   - `docs/mlb/parsers.md` — dedicated MLB Stats API parsers page
     (split out from `index.md`) with the full parser table, registry
     + `parser_for_mlb_api`, four chaining examples, and a fixture
-    inventory. Linked from `docs/mlb/index.md` and from the sidebar.
+    inventory.
+  - `docs/mlb/statcast.md` — dedicated Baseball Savant / Statcast
+    page (split out from `index.md`) covering the 17 `statcast_*`
+    wrappers, the 25,000-row truncation handling + the
+    `statcast_search_chunked` auto-chunked variant, Statcast
+    coverage windows by metric, MLBAM ID-space chaining with the
+    Stats API, and two end-to-end examples (catcher pop times +
+    World Series pitch-by-pitch). Both new pages are wired into
+    the MLB category in `docs/sidebars.ts`.
   - `docs/nhl/api-web.md` — the modern game-feed surface
     (`api-web.nhle.com/v1/`) with the full endpoint table and a parser
     layer section covering all 16 dedicated parsers + 2 dispatchers

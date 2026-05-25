@@ -705,6 +705,65 @@ def test_summary_winprobability_empty_for_nhl():
 
 
 # ===========================================================================
+# Sparse-section parsers across leagues
+# ===========================================================================
+#
+# Four summary sections are sparse for past games (broadcasts /
+# againstTheSpread / pickcenter / odds — ESPN typically only populates
+# these for live or upcoming games). We capture the cross-league
+# behaviour explicitly so a future regression that breaks any of these
+# parsers shows up immediately.
+
+
+@pytest.mark.parametrize("league", ["mlb", "nhl"])
+def test_summary_broadcasts_present_for_mlb_and_nhl(league):
+    """MLB and NHL captures both include a single-row broadcasts entry
+    (TV partner info attached even for past games). NBA / NFL / WNBA
+    captures consistently ship empty broadcasts arrays for past games."""
+    from sportsdataverse._common_espn_parsers import parse_summary_broadcasts
+
+    df = parse_summary_broadcasts(_load(f"summary_{league}"))
+    assert df.height >= 1, (
+        f"{league}: expected broadcasts data, got {df.height} rows"
+    )
+
+
+@pytest.mark.parametrize("league", ["nba", "nfl", "wnba"])
+def test_summary_broadcasts_empty_for_other_leagues_in_capture(league):
+    """The captured past-game summaries for NBA / NFL / WNBA ship
+    empty broadcasts arrays. Test that the parser handles that without
+    raising; this also documents the cross-league shape divergence."""
+    from sportsdataverse._common_espn_parsers import parse_summary_broadcasts
+
+    df = parse_summary_broadcasts(_load(f"summary_{league}"))
+    assert df.height == 0
+
+
+@pytest.mark.parametrize("section_parser_name", [
+    "parse_summary_against_the_spread",
+    "parse_summary_pickcenter",
+    "parse_summary_odds",
+])
+def test_universally_sparse_summary_sections_return_zero_rows(section_parser_name):
+    """``againstTheSpread`` / ``pickcenter`` / ``odds`` ship empty
+    arrays for ALL 5 past-game captures (NBA finals, MLB WS, Super
+    Bowl, SCF, WNBA finals). The parsers must return zero-row frames
+    for every league without raising. If a future capture happens to
+    have one populated, this test will flag the change for review."""
+    from sportsdataverse import _common_espn_parsers as parsers
+
+    parser = getattr(parsers, section_parser_name)
+    for league in ("nba", "mlb", "nfl", "nhl", "wnba"):
+        df = parser(_load(f"summary_{league}"))
+        assert isinstance(df, pl.DataFrame)
+        assert df.height == 0, (
+            f"{section_parser_name}({league}): expected empty frame, "
+            f"got {df.height} rows. ESPN may have started populating "
+            f"this section in past games — update the assertion if so."
+        )
+
+
+# ===========================================================================
 # Full-coverage regression: every wrapper short name has a parser
 # ===========================================================================
 #

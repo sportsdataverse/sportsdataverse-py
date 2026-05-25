@@ -87,46 +87,30 @@ df = parse_mlb_api_standings(mlb_api_standings(season=2024))
 
 ## Baseball Savant — Statcast (`mlb_statcast`)
 
-Wraps the unofficial Baseball Savant API at `baseballsavant.mlb.com`.
+The 17 `statcast_*` wrappers cover Baseball Savant at
+`baseballsavant.mlb.com` — pitch-by-pitch search (with auto-chunking
+to handle the 25,000-row cap), 9 Statcast leaderboards (xStats,
+sprint speed, OAA, catch probability, arm strength, bat tracking,
+pop time, pitch arsenal), the per-game feed, and the scraped player
+page.
 
-| Function | Wraps |
-|---|---|
-| `statcast_search(start_date, end_date, ...)` | `/statcast_search/csv` (pitch-by-pitch) |
-| `statcast_search_chunked(start_date, end_date, ...)` | Auto-chunked variant for multi-week ranges |
-| `statcast_leaderboard_*` | 9 leaderboards (xStats, sprint speed, OAA, catch prob, arm strength, bat tracking, pop time, pitch arsenal) |
-| `statcast_gamefeed(game_pk, ...)` | `/gf?game_pk=...` (live game feed) |
-| `statcast_player_page(player_id, ...)` | Savant player HTML page (scraped) |
+Most Savant endpoints return CSV that's parsed into a polars
+DataFrame **inline** — the wrapper layer IS the parser layer, no
+separate `parse_*` function needed.
 
-### The 25,000-row truncation
-
-`/statcast_search/csv` caps results at **25,000 rows per response with
-no pagination**. The wrapper handles this automatically:
+See the dedicated **[Statcast page](./statcast)** for the full
+function table, the 25,000-row truncation handling
+(`raise_on_truncation` + `statcast_search_chunked`), coverage
+windows by metric, the MLBAM ID space shared with the Stats API,
+and chaining examples.
 
 ```python
-from sportsdataverse.mlb import statcast_search, statcast_search_chunked
+from sportsdataverse.mlb import statcast_search_chunked
 
-# Will raise RuntimeError if the query hits exactly 25,000 rows
-df = statcast_search(start_date="2024-04-01", end_date="2024-04-30",
-                     player_type="batter")
-
-# Same query, auto-chunked into 5-day windows and stitched
-df_full = statcast_search_chunked(start_date="2024-04-01", end_date="2024-09-30",
-                                   chunk_days=5)
+# Full 2024 regular season — auto-chunked into 5-day windows
+df = statcast_search_chunked(start_date="2024-03-28",
+                              end_date="2024-09-29")
 ```
-
-Pass `raise_on_truncation=False` to opt out of the guard (you'll get a
-partial frame silently — usually a bug, sometimes intentional for
-quick previews).
-
-### Statcast coverage windows
-
-| Metric | Available from |
-|---|---|
-| Pitch F/X velocities (adjusted to out-of-hand) | 2008–2016 |
-| Statcast velocities (native out-of-hand) | 2017+ |
-| Exit velocity / launch angle | 2015+ |
-| Hawk-Eye optical tracking | 2020+ |
-| Bat tracking (swing speed, attack angle) | 2024+ |
 
 ## Example: chain ESPN + Stats API + Statcast
 

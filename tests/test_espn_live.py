@@ -515,3 +515,110 @@ def test_parser_for_edge_falls_back_to_generic():
     assert parser_for_edge("nhl_edge_skater_detail") is parse_edge_detail
     # Unknown name → generic fallback
     assert parser_for_edge("nhl_edge_does_not_exist") is parse_edge_payload
+
+
+# ===========================================================================
+# 14. NCAA basketball + CFB live coverage
+# ===========================================================================
+#
+# The existing 13 sections cover live integration for NBA / WNBA / NFL /
+# NHL / MLB. This section adds equivalent coverage for the 3 NCAA-side
+# leagues (CFB / MBB / WBB) so the live-test suite is symmetric across
+# all 8 ESPN leagues. Tests are intentionally loose on row counts
+# because NCAA season schedules vary by sport (CFB is fall-only,
+# basketball is winter-only).
+
+
+def test_espn_cfb_team_roster_live():
+    """CFB rosters use the position-grouped shape (offense / defense /
+    specialTeam). The return_parsed shim should produce a multi-row
+    frame with the position_group column."""
+    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_team_roster
+
+    df = espn_cfb_team_roster(team_id=333, return_parsed=True)  # Alabama
+    assert df.height >= 50, (
+        f"expected >=50 CFB roster rows (typical full team), got {df.height}"
+    )
+    assert "position_group" in df.columns, (
+        "CFB roster should be position-grouped (offense/defense/specialTeam)"
+    )
+
+
+def test_espn_mbb_team_roster_live():
+    """NCAA M basketball roster uses the flat shape (no position
+    groups), matching NBA / WNBA convention."""
+    from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_team_roster
+
+    df = espn_mbb_team_roster(team_id=150, return_parsed=True)  # Duke
+    assert df.height >= 10, (
+        f"expected >=10 MBB roster rows, got {df.height}"
+    )
+    assert "first_name" in df.columns or "last_name" in df.columns
+
+
+def test_espn_wbb_team_roster_live():
+    from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_roster
+
+    df = espn_wbb_team_roster(team_id=41, return_parsed=True)  # UConn
+    assert df.height >= 8, (
+        f"expected >=8 WBB roster rows, got {df.height}"
+    )
+
+
+def test_espn_cfb_news_live():
+    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_news
+
+    df = espn_cfb_news(limit=5, return_parsed=True)
+    assert df.height >= 1, f"expected >=1 CFB article, got {df.height}"
+    assert "headline" in df.columns
+
+
+def test_espn_mbb_news_live():
+    from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_news
+
+    df = espn_mbb_news(limit=5, return_parsed=True)
+    assert df.height >= 1, f"expected >=1 MBB article, got {df.height}"
+
+
+def test_espn_wbb_news_live():
+    from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_news
+
+    df = espn_wbb_news(limit=5, return_parsed=True)
+    assert df.height >= 1, f"expected >=1 WBB article, got {df.height}"
+
+
+def test_espn_cfb_team_schedule_live():
+    """CFB team schedule may be off-season at test time (college
+    football is fall-only). Tolerate the empty case but require a
+    non-empty raw payload structure either way."""
+    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_team_schedule
+
+    raw = espn_cfb_team_schedule(team_id=333)  # Alabama
+    assert isinstance(raw, dict), f"expected dict, got {type(raw)}"
+    # Raw payload always has 'team' identifier and 'requestedSeason' even
+    # when the schedule is empty
+    assert "team" in raw or "events" in raw, (
+        f"unexpected schedule shape — top keys: {list(raw)[:5]}"
+    )
+
+
+def test_espn_mbb_team_schedule_live():
+    """NCAA M basketball team schedule should have ~30 games during the
+    season (Nov-Mar). Captures outside that window may return empty —
+    accept either the populated or the empty case."""
+    from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_team_schedule
+
+    df = espn_mbb_team_schedule(team_id=150, return_parsed=True)
+    # If we're in-season we expect >=10 games; if off-season, df is empty.
+    assert df.height == 0 or df.height >= 10, (
+        f"expected 0 or >=10 MBB schedule rows, got {df.height}"
+    )
+
+
+def test_espn_wbb_team_schedule_live():
+    from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_schedule
+
+    df = espn_wbb_team_schedule(team_id=41, return_parsed=True)
+    assert df.height == 0 or df.height >= 10, (
+        f"expected 0 or >=10 WBB schedule rows, got {df.height}"
+    )

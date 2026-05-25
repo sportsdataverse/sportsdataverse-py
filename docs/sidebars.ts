@@ -29,7 +29,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'MLB',
-      items: ['mlb/index', 'mlb/parsers'],
+      items: ['mlb/index', 'mlb/parsers', 'mlb/statcast'],
     },
     {
       type: 'category',
