@@ -75,6 +75,19 @@ repos:
     hooks:
       - id: markdownlint-cli2
         args: ["--config", ".markdownlint-cli2.yaml"]
+  # Sync the docusaurus CHANGELOG copy from the repo-root master copy
+  # whenever CHANGELOG.md is touched. Until 0.0.51 this sync was done
+  # manually (`cp CHANGELOG.md docs/src/pages/CHANGELOG.md`); the hook
+  # makes drift impossible. The hook stages the synced file
+  # automatically so `git commit` sees both copies in the same commit.
+  - repo: local
+    hooks:
+      - id: sync-docs-changelog
+        name: sync-docs-changelog
+        entry: python -c "import shutil, subprocess, sys; shutil.copy('CHANGELOG.md', 'docs/src/pages/CHANGELOG.md'); subprocess.run(['git', 'add', 'docs/src/pages/CHANGELOG.md'])"
+        language: system
+        files: ^CHANGELOG\.md$
+        pass_filenames: false
 # - repo: https://github.com/nbQA-dev/nbQA
 #   rev: 1.9.1
 #   hooks:

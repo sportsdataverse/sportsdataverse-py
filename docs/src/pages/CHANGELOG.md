@@ -596,6 +596,22 @@ section alongside `drives` and `scoring_plays`.
   `if type(seasons) is int:` replaced with `isinstance(seasons, int)`
   to clear pre-existing `E721` ruff warnings (no behaviour change —
   both forms accept the same input).
+- `tests/conftest.py` is now the single source of truth for the
+  `SDV_PY_LIVE_TESTS=1` gating mechanism. `tests/test_espn_live.py`
+  was previously redefining `LIVE` + its own `pytestmark.skipif`
+  marker; it now imports the shared `skip_if_no_live` from
+  `conftest` and assigns it directly to `pytestmark`. Behaviour is
+  identical (no env var → 56 tests skip; env var set → 56 tests
+  run) but the duplication is gone and the conftest docstring now
+  documents both the per-test decorator and module-level marker
+  patterns for future `test_*_live.py` files.
+- New `local` pre-commit hook `sync-docs-changelog` (in
+  `.pre-commit-config.yaml`): when staging changes to `CHANGELOG.md`,
+  automatically re-copies the file to `docs/src/pages/CHANGELOG.md`
+  (the docusaurus-rendered copy) and stages the synced file so both
+  copies land in the same commit. Replaces the manual
+  `cp CHANGELOG.md docs/src/pages/CHANGELOG.md` step that contributors
+  used to remember by hand.
 - Module docstrings on every parser + wrapper module now carry a
   `Documentation:` block linking to the matching docs page so
   `help()` / `pydoc` users land on the right reference without

@@ -6,19 +6,21 @@ every test in this module is skipped so CI never hammers live endpoints.
 Run live::
 
     SDV_PY_LIVE_TESTS=1 pytest tests/test_espn_live.py -v
+
+The live-gating mechanism is shared with the rest of the test suite —
+``skip_if_no_live`` is defined once in :mod:`tests.conftest` and applied
+as the module-level ``pytestmark`` here so every test in this file
+inherits the skip-if-no-live behaviour.
 """
 
 from __future__ import annotations
 
-import os
-
 import pytest
 
-LIVE: bool = os.environ.get("SDV_PY_LIVE_TESTS") == "1"
-pytestmark = pytest.mark.skipif(
-    not LIVE,
-    reason="Set SDV_PY_LIVE_TESTS=1 to run live ESPN / NHL / MLB tests",
-)
+from tests.conftest import skip_if_no_live
+
+# Apply the shared skip marker to every test in this module.
+pytestmark = skip_if_no_live
 
 
 # ===========================================================================
