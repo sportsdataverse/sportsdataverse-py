@@ -486,6 +486,15 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
 
 ### Documentation
 
+- README.md and docs/docs/intro.md both gain two new sections:
+  - "Supported leagues and data sources" — a per-league table showing
+    every module + the data surfaces it covers + wrapper counts
+    (NBA=118, WNBA=124, MBB=121, WBB=126, CFB=123, NFL=119, MLB=175,
+    NHL=132, total ~1,030).
+  - "Polars / pandas parser layer" — quick overview of the
+    `return_parsed=True` shim for ESPN wrappers + the
+    compose-wrapper-with-parser pattern for the NHL / MLB sibling
+    APIs. Links to the architecture + parsers docs pages.
 - New documentation pages:
   - `docs/architecture/espn-cross-league.md` — the factory + shim
     architecture.

@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>](#sportsdataverse-py-a-hrefhttpspysportsdataverseorgimg-srchttpsrawgithubusercontentcomsportsdataversesportsdataverse-pymastersdv-py-logopng-alignright--width20%25-min-width100px-a)
+  - [Supported leagues and data sources](#supported-leagues-and-data-sources)
+  - [Polars / pandas parser layer](#polars--pandas-parser-layer)
   - [Installation](#installation)
     - [Standard install (pip)](#standard-install-pip)
     - [Modern install (uv — recommended)](#modern-install-uv--recommended)
@@ -32,6 +34,51 @@ Follow](https://img.shields.io/twitter/follow/sportsdataverse?color=blue&label=%
 See [CHANGELOG.md](https://py.sportsdataverse.org/CHANGELOG) for details.
 
 The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide the community with a python package for working with sports data as a companion to the [cfbfastR](https://cfbfastR.sportsdataverse.org/), [hoopR](https://hoopR.sportsdataverse.org/), and [wehoop](https://wehoop.sportsdataverse.org/) R packages. Beyond data aggregation and tidying ease, one of the multitude of services that [sportsdataverse-py](https://py.sportsdataverse.org) provides is for benchmarking open-source expected points and win probability metrics for American Football.
+
+## Supported leagues and data sources
+
+| League | Module | Surfaces covered |
+|---|---|---|
+| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) — 118 wrappers |
+| WNBA | `sportsdataverse.wnba` | ESPN — 124 wrappers |
+| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (bracketology, rankings, recruits) — 121 wrappers |
+| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only — 126 wrappers |
+| CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) — 123 wrappers |
+| NFL | `sportsdataverse.nfl` | ESPN + football-only (QBR) — 119 wrappers |
+| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast — **175 wrappers** |
+| NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site — **132 wrappers** |
+| **Total** | | **~1,030 wrappers** |
+
+## Polars / pandas parser layer
+
+Every wrapper returns raw `Dict` by default. A parser layer turns
+those payloads into tidy polars (or pandas) DataFrames.
+
+For ESPN cross-league wrappers, pass `return_parsed=True` to get a
+DataFrame directly — the raw-Dict contract is unchanged when the
+kwarg is omitted, so existing callers are unaffected:
+
+```python
+from sportsdataverse.nba import espn_nba_team_roster
+
+raw = espn_nba_team_roster(team_id=13)                          # → Dict (default)
+df  = espn_nba_team_roster(team_id=13, return_parsed=True)      # → polars
+pdf = espn_nba_team_roster(team_id=13,
+                            return_parsed=True,
+                            return_as_pandas=True)              # → pandas
+```
+
+For the NHL and MLB sibling-API wrappers, compose the wrapper with
+its parser:
+
+```python
+from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
+df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331-row polars frame
+```
+
+See [py.sportsdataverse.org/docs/architecture/espn-cross-league](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
+and [py.sportsdataverse.org/docs/parsers/index](https://py.sportsdataverse.org/docs/parsers/index)
+for the full architecture + parser registry.
 
 ## Installation
 
