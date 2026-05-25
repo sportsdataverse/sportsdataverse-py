@@ -1,0 +1,4821 @@
+{
+  "timestamp": "2026-05-25T00:55:15Z",
+  "status": "success",
+  "season": {
+    "year": 2026,
+    "displayName": "2025-26",
+    "type": 3,
+    "name": "Postseason"
+  },
+  "athletes": [
+    {
+      "position": "Centers",
+      "items": [
+        {
+          "id": "4697579",
+          "uid": "s:70~l:90~a:4697579",
+          "guid": "acc6308b-6554-3476-9d96-b5a889c1d1cb",
+          "alternateIds": {
+            "sdr": "4697579"
+          },
+          "alternateId": "4697579",
+          "firstName": "Nils",
+          "lastName": "Aman",
+          "fullName": "Nils Aman",
+          "displayName": "Nils Aman",
+          "shortName": "N. Aman",
+          "weight": 179.0,
+          "displayWeight": "179 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 26,
+          "dateOfBirth": "2000-02-07T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4697579",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4697579/nils-aman",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4697579/nils-aman",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4697579/nils-aman",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4697579/nils-aman",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4697579/nils-aman",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4697579/nils-aman",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Avesta",
+            "country": "SWE",
+            "displayText": "Avesta, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "nils-aman",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4697579.png",
+            "alt": "Nils Aman"
+          },
+          "jersey": "88",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 4
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "3024916",
+          "uid": "s:70~l:90~a:3024916",
+          "guid": "3acaf1a1-0423-dfae-1fb3-34906c9d6b1f",
+          "alternateIds": {
+            "sdr": "3024916"
+          },
+          "alternateId": "3024916",
+          "firstName": "Teddy",
+          "lastName": "Blueger",
+          "fullName": "Teddy Blueger",
+          "displayName": "Teddy Blueger",
+          "shortName": "T. Blueger",
+          "weight": 185.0,
+          "displayWeight": "185 lbs",
+          "height": 72.0,
+          "displayHeight": "6' 0\"",
+          "age": 31,
+          "dateOfBirth": "1994-08-15T07:00Z",
+          "debutYear": 2019,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3024916",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/3024916/teddy-blueger",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/3024916/teddy-blueger",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/3024916/teddy-blueger",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/3024916/teddy-blueger",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/3024916/teddy-blueger",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3024916/teddy-blueger",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Riga",
+            "country": "LAT",
+            "displayText": "Riga, LAT"
+          },
+          "birthCountry": {
+            "abbreviation": "LAT"
+          },
+          "college": {
+            "id": "2817",
+            "guid": "14dbf32b-40ac-3d8c-b93c-f512aa8591a2",
+            "mascot": "Dragons",
+            "name": "Minnesota State Moorhead",
+            "shortName": "Minnesota State Moor",
+            "abbrev": "MINNE",
+            "logos": [
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2817.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "lastUpdated": "2025-10-03T14:48Z"
+              },
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2817.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "lastUpdated": "2025-10-03T14:47Z"
+              }
+            ]
+          },
+          "slug": "teddy-blueger",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/3024916.png",
+            "alt": "Teddy Blueger"
+          },
+          "jersey": "53",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 8
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4233643",
+          "uid": "s:70~l:90~a:4233643",
+          "guid": "83181c1d-fdf9-c173-fbcb-ff2ef274cd73",
+          "alternateIds": {
+            "sdr": "4233643"
+          },
+          "alternateId": "4233643",
+          "firstName": "Filip",
+          "lastName": "Chytil",
+          "fullName": "Filip Chytil",
+          "displayName": "Filip Chytil",
+          "shortName": "F. Chytil",
+          "weight": 210.0,
+          "displayWeight": "210 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 26,
+          "dateOfBirth": "1999-09-05T07:00Z",
+          "debutYear": 2017,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4233643",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4233643/filip-chytil",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4233643/filip-chytil",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4233643/filip-chytil",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4233643/filip-chytil",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4233643/filip-chytil",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4233643/filip-chytil",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Kromerlz",
+            "country": "CZE",
+            "displayText": "Kromerlz, CZE"
+          },
+          "birthCountry": {
+            "abbreviation": "CZE"
+          },
+          "slug": "filip-chytil",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4233643.png",
+            "alt": "Filip Chytil"
+          },
+          "jersey": "72",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [
+            {
+              "status": "Injured Reserve",
+              "date": "2026-02-26T00:15Z"
+            }
+          ],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 8
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5291951",
+          "uid": "s:70~l:90~a:5291951",
+          "guid": "23796cdd-3a7c-3fae-9d84-3d99090e3d89",
+          "alternateIds": {
+            "sdr": "5291951"
+          },
+          "alternateId": "5291951",
+          "firstName": "Braeden",
+          "lastName": "Cootes",
+          "fullName": "Braeden Cootes",
+          "displayName": "Braeden Cootes",
+          "shortName": "B. Cootes",
+          "weight": 183.0,
+          "displayWeight": "183 lbs",
+          "height": 72.0,
+          "displayHeight": "6' 0\"",
+          "age": 19,
+          "dateOfBirth": "2007-02-09T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5291951",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5291951/braeden-cootes",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5291951/braeden-cootes",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5291951/braeden-cootes",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5291951/braeden-cootes",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5291951/braeden-cootes",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5291951/braeden-cootes",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Sherwood Park",
+            "state": "AB",
+            "country": "CAN",
+            "displayText": "Sherwood Park, CAN"
+          },
+          "birthCountry": {
+            "abbreviation": "CAN"
+          },
+          "slug": "braeden-cootes",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5291951.png",
+            "alt": "Braeden Cootes"
+          },
+          "jersey": "80",
+          "hand": {
+            "type": "RIGHT",
+            "abbreviation": "R",
+            "displayValue": "Right"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 0
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4331586",
+          "uid": "s:70~l:90~a:4331586",
+          "guid": "81fb2624-914c-c829-069c-f71d88d4d886",
+          "alternateIds": {
+            "sdr": "4331586"
+          },
+          "alternateId": "4331586",
+          "firstName": "Curtis",
+          "lastName": "Douglas",
+          "fullName": "Curtis Douglas",
+          "displayName": "Curtis Douglas",
+          "shortName": "C. Douglas",
+          "weight": 201.0,
+          "displayWeight": "201 lbs",
+          "height": 80.0,
+          "displayHeight": "6' 8\"",
+          "age": 26,
+          "dateOfBirth": "2000-03-06T08:00Z",
+          "debutYear": 2018,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4331586",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4331586/curtis-douglas",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4331586/curtis-douglas",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4331586/curtis-douglas",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4331586/curtis-douglas",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4331586/curtis-douglas",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4331586/curtis-douglas",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Oakville",
+            "state": "ON",
+            "country": "CAN",
+            "displayText": "Oakville, CAN"
+          },
+          "birthCountry": {
+            "abbreviation": "CAN"
+          },
+          "slug": "curtis-douglas",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4331586.png",
+            "alt": "Curtis Douglas"
+          },
+          "jersey": "42",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/20?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 0
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4587713",
+          "uid": "s:70~l:90~a:4587713",
+          "guid": "da56caf7-564a-f801-f1b2-081927c8f497",
+          "alternateIds": {
+            "sdr": "4587713"
+          },
+          "alternateId": "4587713",
+          "firstName": "Linus",
+          "lastName": "Karlsson",
+          "fullName": "Linus Karlsson",
+          "displayName": "Linus Karlsson",
+          "shortName": "L. Karlsson",
+          "weight": 178.0,
+          "displayWeight": "178 lbs",
+          "height": 73.0,
+          "displayHeight": "6' 1\"",
+          "age": 26,
+          "dateOfBirth": "1999-11-16T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4587713",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4587713/linus-karlsson",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4587713/linus-karlsson",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4587713/linus-karlsson",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4587713/linus-karlsson",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4587713/linus-karlsson",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4587713/linus-karlsson",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Eksjo",
+            "country": "SWE",
+            "displayText": "Eksjo, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "linus-karlsson",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4587713.png",
+            "alt": "Linus Karlsson"
+          },
+          "jersey": "94",
+          "hand": {
+            "type": "RIGHT",
+            "abbreviation": "R",
+            "displayValue": "Right"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 2
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4233566",
+          "uid": "s:70~l:90~a:4233566",
+          "guid": "07712c18-6d03-981b-bde7-9ff9fd90b2a9",
+          "alternateIds": {
+            "sdr": "4233566"
+          },
+          "alternateId": "4233566",
+          "firstName": "Elias",
+          "lastName": "Pettersson",
+          "fullName": "Elias Pettersson",
+          "displayName": "Elias Pettersson",
+          "shortName": "E. Pettersson",
+          "weight": 176.0,
+          "displayWeight": "176 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 27,
+          "dateOfBirth": "1998-11-12T08:00Z",
+          "debutYear": 2018,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4233566",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4233566/elias-pettersson",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4233566/elias-pettersson",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4233566/elias-pettersson",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4233566/elias-pettersson",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4233566/elias-pettersson",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4233566/elias-pettersson",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Sundsvall",
+            "country": "SWE",
+            "displayText": "Sundsvall, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "elias-pettersson",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4233566.png",
+            "alt": "Elias Pettersson"
+          },
+          "jersey": "40",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 8
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4874912",
+          "uid": "s:70~l:90~a:4874912",
+          "guid": "b37cd14b-ceb4-3aef-b7b1-b02ae6173810",
+          "alternateIds": {
+            "sdr": "4874912"
+          },
+          "alternateId": "4874912",
+          "firstName": "Aatu",
+          "lastName": "Raty",
+          "fullName": "Aatu Raty",
+          "displayName": "Aatu Raty",
+          "shortName": "A. Raty",
+          "weight": 190.0,
+          "displayWeight": "190 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 23,
+          "dateOfBirth": "2002-11-14T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4874912",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4874912/aatu-raty",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4874912/aatu-raty",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4874912/aatu-raty",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4874912/aatu-raty",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4874912/aatu-raty",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4874912/aatu-raty",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Oulunsalo",
+            "country": "FIN",
+            "displayText": "Oulunsalo, FIN"
+          },
+          "birthCountry": {
+            "abbreviation": "FIN"
+          },
+          "slug": "aatu-raty",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4874912.png",
+            "alt": "Aatu Raty"
+          },
+          "jersey": "54",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 3
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4697391",
+          "uid": "s:70~l:90~a:4697391",
+          "guid": "b8254a8e-9590-3171-acae-66fbef51f0b5",
+          "alternateIds": {
+            "sdr": "4697391"
+          },
+          "alternateId": "4697391",
+          "firstName": "Marco",
+          "lastName": "Rossi",
+          "fullName": "Marco Rossi",
+          "displayName": "Marco Rossi",
+          "shortName": "M. Rossi",
+          "weight": 185.0,
+          "displayWeight": "185 lbs",
+          "height": 69.0,
+          "displayHeight": "5' 9\"",
+          "age": 24,
+          "dateOfBirth": "2001-09-23T07:00Z",
+          "debutYear": 2020,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4697391",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4697391/marco-rossi",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4697391/marco-rossi",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4697391/marco-rossi",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4697391/marco-rossi",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4697391/marco-rossi",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4697391/marco-rossi",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Feldkirch",
+            "country": "AUT",
+            "displayText": "Feldkirch, AUT"
+          },
+          "birthCountry": {
+            "abbreviation": "AUT"
+          },
+          "slug": "marco-rossi",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4697391.png",
+            "alt": "Marco Rossi"
+          },
+          "jersey": "93",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/30?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 4
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4996099",
+          "uid": "s:70~l:90~a:4996099",
+          "guid": "32319907-fa60-3b2d-b6fa-e14b7cb0a259",
+          "alternateIds": {
+            "sdr": "4996099"
+          },
+          "alternateId": "4996099",
+          "firstName": "Max",
+          "lastName": "Sasson",
+          "fullName": "Max Sasson",
+          "displayName": "Max Sasson",
+          "shortName": "M. Sasson",
+          "weight": 185.0,
+          "displayWeight": "185 lbs",
+          "height": 73.0,
+          "displayHeight": "6' 1\"",
+          "age": 25,
+          "dateOfBirth": "2000-09-05T07:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4996099",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4996099/max-sasson",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4996099/max-sasson",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4996099/max-sasson",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4996099/max-sasson",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4996099/max-sasson",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4996099/max-sasson",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Birmingham",
+            "state": "MI",
+            "country": "USA",
+            "displayText": "Birmingham, MI"
+          },
+          "birthCountry": {
+            "abbreviation": "USA"
+          },
+          "college": {
+            "id": "2711",
+            "guid": "f96429e4-de05-3168-930b-390084bf89a1",
+            "mascot": "WESTERN MICHIGAN BRONCOS",
+            "name": "Western Michigan",
+            "shortName": "W Michigan",
+            "abbrev": "WMU",
+            "logos": [
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2711.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "lastUpdated": "2025-12-24T20:19Z"
+              },
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2711.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "lastUpdated": "2025-12-24T20:19Z"
+              }
+            ]
+          },
+          "slug": "max-sasson",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4996099.png",
+            "alt": "Max Sasson"
+          },
+          "jersey": "63",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "1",
+            "name": "Center",
+            "displayName": "Center",
+            "abbreviation": "C",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 2
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        }
+      ]
+    },
+    {
+      "position": "Left Wings",
+      "items": [
+        {
+          "id": "3900240",
+          "uid": "s:70~l:90~a:3900240",
+          "guid": "0cd8e09b-a937-18bb-f972-53b54c857596",
+          "alternateIds": {
+            "sdr": "3900240"
+          },
+          "alternateId": "3900240",
+          "firstName": "Jake",
+          "lastName": "DeBrusk",
+          "fullName": "Jake DeBrusk",
+          "displayName": "Jake DeBrusk",
+          "shortName": "J. DeBrusk",
+          "weight": 198.0,
+          "displayWeight": "198 lbs",
+          "height": 73.0,
+          "displayHeight": "6' 1\"",
+          "age": 29,
+          "dateOfBirth": "1996-10-17T07:00Z",
+          "debutYear": 2017,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3900240",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/3900240/jake-debrusk",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/3900240/jake-debrusk",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/3900240/jake-debrusk",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/3900240/jake-debrusk",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/3900240/jake-debrusk",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3900240/jake-debrusk",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Edmonton",
+            "state": "AB",
+            "country": "CAN",
+            "displayText": "Edmonton, CAN"
+          },
+          "birthCountry": {
+            "abbreviation": "CAN"
+          },
+          "slug": "jake-debrusk",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/3900240.png",
+            "alt": "Jake DeBrusk"
+          },
+          "jersey": "74",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "2",
+            "name": "Left Wing",
+            "displayName": "Left Wing",
+            "abbreviation": "LW",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 9
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4565263",
+          "uid": "s:70~l:90~a:4565263",
+          "guid": "d01005d0-88b0-23ff-6b3c-c5bf3ddfa77e",
+          "alternateIds": {
+            "sdr": "4565263"
+          },
+          "alternateId": "4565263",
+          "firstName": "Nils",
+          "lastName": "Hoglander",
+          "fullName": "Nils Hoglander",
+          "displayName": "Nils Hoglander",
+          "shortName": "N. Hoglander",
+          "weight": 185.0,
+          "displayWeight": "185 lbs",
+          "height": 69.0,
+          "displayHeight": "5' 9\"",
+          "age": 25,
+          "dateOfBirth": "2000-12-20T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4565263",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4565263/nils-hoglander",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4565263/nils-hoglander",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4565263/nils-hoglander",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4565263/nils-hoglander",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4565263/nils-hoglander",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4565263/nils-hoglander",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Lulea",
+            "country": "SWE",
+            "displayText": "Lulea, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "nils-hoglander",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4565263.png",
+            "alt": "Nils Hoglander"
+          },
+          "jersey": "21",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "2",
+            "name": "Left Wing",
+            "displayName": "Left Wing",
+            "abbreviation": "LW",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [
+            {
+              "status": "Out",
+              "date": "2026-05-06T13:48Z"
+            }
+          ],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 6
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5251",
+          "uid": "s:70~l:90~a:5251",
+          "guid": "0b808572-ceef-0654-536f-94f4d378edd0",
+          "alternateIds": {
+            "sdr": "2479255"
+          },
+          "alternateId": "2479255",
+          "firstName": "Evander",
+          "lastName": "Kane",
+          "fullName": "Evander Kane",
+          "displayName": "Evander Kane",
+          "shortName": "E. Kane",
+          "weight": 218.0,
+          "displayWeight": "218 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 34,
+          "dateOfBirth": "1991-08-02T07:00Z",
+          "debutYear": 2009,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5251",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5251/evander-kane",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5251/evander-kane",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5251/evander-kane",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5251/evander-kane",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5251/evander-kane",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5251/evander-kane",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Vancouver",
+            "state": "BC",
+            "country": "CAN",
+            "displayText": "Vancouver, CAN"
+          },
+          "birthCountry": {
+            "abbreviation": "CAN"
+          },
+          "slug": "evander-kane",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5251.png",
+            "alt": "Evander Kane"
+          },
+          "jersey": "91",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "2",
+            "name": "Left Wing",
+            "displayName": "Left Wing",
+            "abbreviation": "LW",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [
+            {
+              "status": "Out",
+              "date": "2026-04-14T18:30Z"
+            }
+          ],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 16
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4712146",
+          "uid": "s:70~l:90~a:4712146",
+          "guid": "075c3af3-fc33-34c1-bf5f-d545cdaa147e",
+          "alternateIds": {
+            "sdr": "4712146"
+          },
+          "alternateId": "4712146",
+          "firstName": "Drew",
+          "lastName": "O'Connor",
+          "fullName": "Drew O'Connor",
+          "displayName": "Drew O'Connor",
+          "shortName": "D. O'Connor",
+          "weight": 209.0,
+          "displayWeight": "209 lbs",
+          "height": 76.0,
+          "displayHeight": "6' 4\"",
+          "age": 27,
+          "dateOfBirth": "1998-06-09T07:00Z",
+          "debutYear": 2020,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4712146",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4712146/drew-oconnor",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4712146/drew-oconnor",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4712146/drew-oconnor",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4712146/drew-oconnor",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4712146/drew-oconnor",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4712146/drew-oconnor",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Chatham",
+            "state": "NJ",
+            "country": "USA",
+            "displayText": "Chatham, NJ"
+          },
+          "birthCountry": {
+            "abbreviation": "USA"
+          },
+          "slug": "drew-oconnor",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4712146.png",
+            "alt": "Drew O'Connor"
+          },
+          "jersey": "18",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "2",
+            "name": "Left Wing",
+            "displayName": "Left Wing",
+            "abbreviation": "LW",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 6
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5080163",
+          "uid": "s:70~l:90~a:5080163",
+          "guid": "ca7fc330-c629-3e7b-8ca9-e579aeea123f",
+          "alternateIds": {
+            "sdr": "5080163"
+          },
+          "alternateId": "5080163",
+          "firstName": "Liam",
+          "lastName": "Ohgren",
+          "fullName": "Liam Ohgren",
+          "displayName": "Liam Ohgren",
+          "shortName": "L. Ohgren",
+          "weight": 202.0,
+          "displayWeight": "202 lbs",
+          "height": 72.0,
+          "displayHeight": "6' 0\"",
+          "age": 22,
+          "dateOfBirth": "2004-01-28T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5080163",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5080163/liam-ohgren",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5080163/liam-ohgren",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5080163/liam-ohgren",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5080163/liam-ohgren",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5080163/liam-ohgren",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5080163/liam-ohgren",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Stockholm",
+            "country": "SWE",
+            "displayText": "Stockholm, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "liam-ohgren",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5080163.png",
+            "alt": "Liam Ohgren"
+          },
+          "jersey": "92",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "2",
+            "name": "Left Wing",
+            "displayName": "Left Wing",
+            "abbreviation": "LW",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/30?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 2
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        }
+      ]
+    },
+    {
+      "position": "Right Wings",
+      "items": [
+        {
+          "id": "3899979",
+          "uid": "s:70~l:90~a:3899979",
+          "guid": "e09df7bd-def5-a6ba-5dc5-b39bde8404ec",
+          "alternateIds": {
+            "sdr": "3899979"
+          },
+          "alternateId": "3899979",
+          "firstName": "Brock",
+          "lastName": "Boeser",
+          "fullName": "Brock Boeser",
+          "displayName": "Brock Boeser",
+          "shortName": "B. Boeser",
+          "weight": 208.0,
+          "displayWeight": "208 lbs",
+          "height": 73.0,
+          "displayHeight": "6' 1\"",
+          "age": 29,
+          "dateOfBirth": "1997-02-25T08:00Z",
+          "debutYear": 2017,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3899979",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/3899979/brock-boeser",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/3899979/brock-boeser",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/3899979/brock-boeser",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/3899979/brock-boeser",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/3899979/brock-boeser",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3899979/brock-boeser",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Burnsville",
+            "state": "MN",
+            "country": "USA",
+            "displayText": "Burnsville, MN"
+          },
+          "birthCountry": {
+            "abbreviation": "USA"
+          },
+          "college": {
+            "id": "155",
+            "guid": "c171f05c-bf4b-31e7-93ea-55437ce94419",
+            "mascot": "Fighting Hawks",
+            "name": "North Dakota",
+            "shortName": "North Dakota",
+            "abbrev": "UND",
+            "logos": [
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/155.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "lastUpdated": "2023-01-20T22:36Z"
+              },
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/155.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "lastUpdated": "2023-01-20T22:35Z"
+              }
+            ]
+          },
+          "slug": "brock-boeser",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/3899979.png",
+            "alt": "Brock Boeser"
+          },
+          "jersey": "6",
+          "hand": {
+            "type": "RIGHT",
+            "abbreviation": "R",
+            "displayValue": "Right"
+          },
+          "position": {
+            "id": "3",
+            "name": "Right Wing",
+            "displayName": "Right Wing",
+            "abbreviation": "RW",
+            "leaf": true,
+            "parent": {
+              "id": "20",
+              "name": "Forward",
+              "displayName": "Forward",
+              "abbreviation": "F",
+              "leaf": true
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 9
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        }
+      ]
+    },
+    {
+      "position": "Defense",
+      "items": [
+        {
+          "id": "5206642",
+          "uid": "s:70~l:90~a:5206642",
+          "guid": "3d33c89c-e334-3e09-9538-63f8788e6502",
+          "alternateIds": {
+            "sdr": "5206642"
+          },
+          "alternateId": "5206642",
+          "firstName": "Zeev",
+          "lastName": "Buium",
+          "fullName": "Zeev Buium",
+          "displayName": "Zeev Buium",
+          "shortName": "Z. Buium",
+          "weight": 192.0,
+          "displayWeight": "192 lbs",
+          "height": 72.0,
+          "displayHeight": "6' 0\"",
+          "age": 20,
+          "dateOfBirth": "2005-12-07T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5206642",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5206642/zeev-buium",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5206642/zeev-buium",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5206642/zeev-buium",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5206642/zeev-buium",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5206642/zeev-buium",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5206642/zeev-buium",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "San Diego",
+            "state": "CA",
+            "country": "USA",
+            "displayText": "San Diego, CA"
+          },
+          "birthCountry": {
+            "abbreviation": "USA"
+          },
+          "college": {
+            "id": "2172",
+            "guid": "c5f4c9fd-3d9e-34e7-bb87-392c280683ea",
+            "mascot": "Pioneers",
+            "name": "Denver",
+            "shortName": "Denver",
+            "abbrev": "DEN",
+            "logos": [
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2172.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "lastUpdated": "2023-03-01T14:17Z"
+              },
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2172.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "lastUpdated": "2023-03-01T14:18Z"
+              }
+            ]
+          },
+          "slug": "zeev-buium",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5206642.png",
+            "alt": "Zeev Buium"
+          },
+          "jersey": "24",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/30?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 0
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5829",
+          "uid": "s:70~l:90~a:5829",
+          "guid": "601f77ab-70fa-e6ca-f229-6ea8db4144a5",
+          "alternateIds": {
+            "sdr": "2529249"
+          },
+          "alternateId": "2529249",
+          "firstName": "Derek",
+          "lastName": "Forbort",
+          "fullName": "Derek Forbort",
+          "displayName": "Derek Forbort",
+          "shortName": "D. Forbort",
+          "weight": 216.0,
+          "displayWeight": "216 lbs",
+          "height": 76.0,
+          "displayHeight": "6' 4\"",
+          "age": 34,
+          "dateOfBirth": "1992-03-04T08:00Z",
+          "debutYear": 2015,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5829",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5829/derek-forbort",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5829/derek-forbort",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5829/derek-forbort",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5829/derek-forbort",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5829/derek-forbort",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5829/derek-forbort",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Duluth",
+            "state": "MN",
+            "country": "USA",
+            "displayText": "Duluth, MN"
+          },
+          "birthCountry": {
+            "abbreviation": "USA"
+          },
+          "college": {
+            "id": "155",
+            "guid": "c171f05c-bf4b-31e7-93ea-55437ce94419",
+            "mascot": "Fighting Hawks",
+            "name": "North Dakota",
+            "shortName": "North Dakota",
+            "abbrev": "UND",
+            "logos": [
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/155.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "lastUpdated": "2023-01-20T22:36Z"
+              },
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/155.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "lastUpdated": "2023-01-20T22:35Z"
+              }
+            ]
+          },
+          "slug": "derek-forbort",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5829.png",
+            "alt": "Derek Forbort"
+          },
+          "jersey": "27",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [
+            {
+              "status": "Injured Reserve",
+              "date": "2025-10-28T17:30Z"
+            }
+          ],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 11
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4063607",
+          "uid": "s:70~l:90~a:4063607",
+          "guid": "4cd7a0eb-c3b8-b138-072b-ff83215d5ac1",
+          "alternateIds": {
+            "sdr": "4063607"
+          },
+          "alternateId": "4063607",
+          "firstName": "Filip",
+          "lastName": "Hronek",
+          "fullName": "Filip Hronek",
+          "displayName": "Filip Hronek",
+          "shortName": "F. Hronek",
+          "weight": 190.0,
+          "displayWeight": "190 lbs",
+          "height": 72.0,
+          "displayHeight": "6' 0\"",
+          "age": 28,
+          "dateOfBirth": "1997-11-02T08:00Z",
+          "debutYear": 2018,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4063607",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4063607/filip-hronek",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4063607/filip-hronek",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4063607/filip-hronek",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4063607/filip-hronek",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4063607/filip-hronek",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4063607/filip-hronek",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Hradec Kralove",
+            "country": "CZE",
+            "displayText": "Hradec Kralove, CZE"
+          },
+          "birthCountry": {
+            "abbreviation": "CZE"
+          },
+          "slug": "filip-hronek",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4063607.png",
+            "alt": "Filip Hronek"
+          },
+          "jersey": "17",
+          "hand": {
+            "type": "RIGHT",
+            "abbreviation": "R",
+            "displayValue": "Right"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 8
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4233653",
+          "uid": "s:70~l:90~a:4233653",
+          "guid": "4f88eaeb-c163-d95e-8842-527d86071718",
+          "alternateIds": {
+            "sdr": "4233653"
+          },
+          "alternateId": "4233653",
+          "firstName": "Pierre-Olivier",
+          "lastName": "Joseph",
+          "fullName": "Pierre-Olivier Joseph",
+          "displayName": "Pierre-Olivier Joseph",
+          "shortName": "P. Joseph",
+          "weight": 185.0,
+          "displayWeight": "185 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 26,
+          "dateOfBirth": "1999-07-01T07:00Z",
+          "debutYear": 2017,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4233653",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4233653/pierre-olivier-joseph",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4233653/pierre-olivier-joseph",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4233653/pierre-olivier-joseph",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4233653/pierre-olivier-joseph",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4233653/pierre-olivier-joseph",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4233653/pierre-olivier-joseph",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Chambly",
+            "state": "QC",
+            "country": "CAN",
+            "displayText": "Chambly, CAN"
+          },
+          "birthCountry": {
+            "abbreviation": "CAN"
+          },
+          "slug": "pierre-olivier-joseph",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4233653.png",
+            "alt": "Pierre-Olivier Joseph"
+          },
+          "jersey": "7",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 5
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5188334",
+          "uid": "s:70~l:90~a:5188334",
+          "guid": "e3125738-0b70-3c13-9f5c-edcb92213965",
+          "alternateIds": {
+            "sdr": "5188334"
+          },
+          "alternateId": "5188334",
+          "firstName": "Victor",
+          "lastName": "Mancini",
+          "fullName": "Victor Mancini",
+          "displayName": "Victor Mancini",
+          "shortName": "V. Mancini",
+          "weight": 229.0,
+          "displayWeight": "229 lbs",
+          "height": 75.0,
+          "displayHeight": "6' 3\"",
+          "age": 23,
+          "dateOfBirth": "2002-05-26T07:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5188334",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5188334/victor-mancini",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5188334/victor-mancini",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5188334/victor-mancini",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5188334/victor-mancini",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5188334/victor-mancini",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5188334/victor-mancini",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Hancock",
+            "state": "MI",
+            "country": "USA",
+            "displayText": "Hancock, MI"
+          },
+          "birthCountry": {
+            "abbreviation": "USA"
+          },
+          "slug": "victor-mancini",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5188334.png",
+            "alt": "Victor Mancini"
+          },
+          "jersey": "90",
+          "hand": {
+            "type": "RIGHT",
+            "abbreviation": "R",
+            "displayValue": "Right"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 2
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5238086",
+          "uid": "s:70~l:90~a:5238086",
+          "guid": "590a2e4b-1063-34fa-8fba-8d27cbe6b163",
+          "alternateIds": {
+            "sdr": "5238086"
+          },
+          "alternateId": "5238086",
+          "firstName": "Elias N.",
+          "lastName": "Pettersson",
+          "fullName": "Elias N. Pettersson",
+          "displayName": "Elias N. Pettersson",
+          "shortName": "Elias N. Pettersson",
+          "weight": 185.0,
+          "displayWeight": "185 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 22,
+          "dateOfBirth": "2004-02-16T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5238086",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5238086/elias-n-pettersson",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5238086/elias-n-pettersson",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5238086/elias-n-pettersson",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5238086/elias-n-pettersson",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5238086/elias-n-pettersson",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5238086/elias-n-pettersson",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Vasteras",
+            "country": "SWE",
+            "displayText": "Vasteras, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "elias-n-pettersson",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5238086.png",
+            "alt": "Elias N. Pettersson"
+          },
+          "jersey": "25",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 2
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "3114995",
+          "uid": "s:70~l:90~a:3114995",
+          "guid": "c6a969df-5a39-12b6-748e-703272bffd31",
+          "alternateIds": {
+            "sdr": "3114995"
+          },
+          "alternateId": "3114995",
+          "firstName": "Marcus",
+          "lastName": "Pettersson",
+          "fullName": "Marcus Pettersson",
+          "displayName": "Marcus Pettersson",
+          "shortName": "M. Pettersson",
+          "weight": 174.0,
+          "displayWeight": "174 lbs",
+          "height": 77.0,
+          "displayHeight": "6' 5\"",
+          "age": 30,
+          "dateOfBirth": "1996-05-08T07:00Z",
+          "debutYear": 2018,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3114995",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/3114995/marcus-pettersson",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/3114995/marcus-pettersson",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/3114995/marcus-pettersson",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/3114995/marcus-pettersson",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/3114995/marcus-pettersson",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3114995/marcus-pettersson",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Skelleftea",
+            "country": "SWE",
+            "displayText": "Skelleftea, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "marcus-pettersson",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/3114995.png",
+            "alt": "Marcus Pettersson"
+          },
+          "jersey": "29",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 9
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5149180",
+          "uid": "s:70~l:90~a:5149180",
+          "guid": "5c947290-6e04-310a-ba99-6a31468dae22",
+          "alternateIds": {
+            "sdr": "5149180"
+          },
+          "alternateId": "5149180",
+          "firstName": "Tom",
+          "lastName": "Willander",
+          "fullName": "Tom Willander",
+          "displayName": "Tom Willander",
+          "shortName": "T. Willander",
+          "weight": 180.0,
+          "displayWeight": "180 lbs",
+          "height": 73.0,
+          "displayHeight": "6' 1\"",
+          "age": 21,
+          "dateOfBirth": "2005-02-09T08:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5149180",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5149180/tom-willander",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5149180/tom-willander",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5149180/tom-willander",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5149180/tom-willander",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5149180/tom-willander",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5149180/tom-willander",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Stockholm",
+            "country": "SWE",
+            "displayText": "Stockholm, SWE"
+          },
+          "birthCountry": {
+            "abbreviation": "SWE"
+          },
+          "slug": "tom-willander",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5149180.png",
+            "alt": "Tom Willander"
+          },
+          "jersey": "5",
+          "hand": {
+            "type": "RIGHT",
+            "abbreviation": "R",
+            "displayValue": "Right"
+          },
+          "position": {
+            "id": "4",
+            "name": "Defense",
+            "displayName": "Defense",
+            "abbreviation": "D",
+            "leaf": true,
+            "parent": {
+              "id": "27",
+              "name": "Skater",
+              "displayName": "Skater",
+              "abbreviation": "S",
+              "leaf": false
+            }
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 0
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        }
+      ]
+    },
+    {
+      "position": "Goalies",
+      "items": [
+        {
+          "id": "3096217",
+          "uid": "s:70~l:90~a:3096217",
+          "guid": "33864125-f79f-41e9-54e9-1f896d81c371",
+          "alternateIds": {
+            "sdr": "3096217"
+          },
+          "alternateId": "3096217",
+          "firstName": "Thatcher",
+          "lastName": "Demko",
+          "fullName": "Thatcher Demko",
+          "displayName": "Thatcher Demko",
+          "shortName": "T. Demko",
+          "weight": 192.0,
+          "displayWeight": "192 lbs",
+          "height": 76.0,
+          "displayHeight": "6' 4\"",
+          "age": 30,
+          "dateOfBirth": "1995-12-08T08:00Z",
+          "debutYear": 2018,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3096217",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/3096217/thatcher-demko",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/3096217/thatcher-demko",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/3096217/thatcher-demko",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/3096217/thatcher-demko",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/3096217/thatcher-demko",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/3096217/thatcher-demko",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "San Diego",
+            "state": "CA",
+            "country": "USA",
+            "displayText": "San Diego, CA"
+          },
+          "birthCountry": {
+            "abbreviation": "USA"
+          },
+          "college": {
+            "id": "103",
+            "guid": "2e1479e2-3f29-3596-b876-0956aec99d04",
+            "mascot": "Eagles",
+            "name": "Boston College",
+            "shortName": "Boston College",
+            "abbrev": "BC",
+            "logos": [
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/103.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "lastUpdated": "2025-12-19T22:33Z"
+              },
+              {
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/103.png",
+                "width": 500,
+                "height": 500,
+                "alt": "",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "lastUpdated": "2025-12-19T22:35Z"
+              }
+            ]
+          },
+          "slug": "thatcher-demko",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/3096217.png",
+            "alt": "Thatcher Demko"
+          },
+          "jersey": "35",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "5",
+            "name": "Goaltender",
+            "displayName": "Goaltender",
+            "abbreviation": "G",
+            "leaf": false
+          },
+          "injuries": [
+            {
+              "status": "Injured Reserve",
+              "date": "2026-03-03T21:33Z"
+            }
+          ],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 7
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4341584",
+          "uid": "s:70~l:90~a:4341584",
+          "guid": "025edf14-dff2-4f5e-8587-b4e3cc0779c9",
+          "alternateIds": {
+            "sdr": "4341584"
+          },
+          "alternateId": "4341584",
+          "firstName": "Kevin",
+          "lastName": "Lankinen",
+          "fullName": "Kevin Lankinen",
+          "displayName": "Kevin Lankinen",
+          "shortName": "K. Lankinen",
+          "weight": 190.0,
+          "displayWeight": "190 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 31,
+          "dateOfBirth": "1995-04-28T07:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4341584",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4341584/kevin-lankinen",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4341584/kevin-lankinen",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4341584/kevin-lankinen",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4341584/kevin-lankinen",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4341584/kevin-lankinen",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4341584/kevin-lankinen",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Helsinki",
+            "country": "FIN",
+            "displayText": "Helsinki, FIN"
+          },
+          "birthCountry": {
+            "abbreviation": "FIN"
+          },
+          "slug": "kevin-lankinen",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4341584.png",
+            "alt": "Kevin Lankinen"
+          },
+          "jersey": "32",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "5",
+            "name": "Goaltender",
+            "displayName": "Goaltender",
+            "abbreviation": "G",
+            "leaf": false
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 6
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "4271212",
+          "uid": "s:70~l:90~a:4271212",
+          "guid": "85dbc7c8-a2b4-6e4e-322c-11e7f0457a3a",
+          "alternateIds": {
+            "sdr": "4271212"
+          },
+          "alternateId": "4271212",
+          "firstName": "Jiri",
+          "lastName": "Patera",
+          "fullName": "Jiri Patera",
+          "displayName": "Jiri Patera",
+          "shortName": "J. Patera",
+          "weight": 209.0,
+          "displayWeight": "209 lbs",
+          "height": 74.0,
+          "displayHeight": "6' 2\"",
+          "age": 27,
+          "dateOfBirth": "1999-02-24T08:00Z",
+          "debutYear": 2017,
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4271212",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/4271212/jiri-patera",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/4271212/jiri-patera",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/4271212/jiri-patera",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/4271212/jiri-patera",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/4271212/jiri-patera",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/4271212/jiri-patera",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Prague",
+            "country": "CZE",
+            "displayText": "Prague, CZE"
+          },
+          "birthCountry": {
+            "abbreviation": "CZE"
+          },
+          "slug": "jiri-patera",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/4271212.png",
+            "alt": "Jiri Patera"
+          },
+          "jersey": "30",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "5",
+            "name": "Goaltender",
+            "displayName": "Goaltender",
+            "abbreviation": "G",
+            "leaf": false
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 0
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        },
+        {
+          "id": "5188534",
+          "uid": "s:70~l:90~a:5188534",
+          "guid": "b4420dcd-b3c4-301d-b443-293137abc0b9",
+          "alternateIds": {
+            "sdr": "5188534"
+          },
+          "alternateId": "5188534",
+          "firstName": "Nikita",
+          "lastName": "Tolopilo",
+          "fullName": "Nikita Tolopilo",
+          "displayName": "Nikita Tolopilo",
+          "shortName": "N. Tolopilo",
+          "weight": 229.0,
+          "displayWeight": "229 lbs",
+          "height": 78.0,
+          "displayHeight": "6' 6\"",
+          "age": 26,
+          "dateOfBirth": "2000-04-06T07:00Z",
+          "links": [
+            {
+              "language": "en-US",
+              "rel": [
+                "playercard",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5188534",
+              "text": "Player Card",
+              "shortText": "Player Card",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "stats",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/stats/_/id/5188534/nikita-tolopilo",
+              "text": "Stats",
+              "shortText": "Stats",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "splits",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/splits/_/id/5188534/nikita-tolopilo",
+              "text": "Splits",
+              "shortText": "Splits",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "gamelog",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/gamelog/_/id/5188534/nikita-tolopilo",
+              "text": "Game Log",
+              "shortText": "Game Log",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "news",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/news/_/id/5188534/nikita-tolopilo",
+              "text": "News",
+              "shortText": "News",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "bio",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/bio/_/id/5188534/nikita-tolopilo",
+              "text": "Bio",
+              "shortText": "Bio",
+              "isExternal": false,
+              "isPremium": false
+            },
+            {
+              "language": "en-US",
+              "rel": [
+                "overview",
+                "desktop",
+                "athlete"
+              ],
+              "href": "https://www.espn.com/nhl/player/_/id/5188534/nikita-tolopilo",
+              "text": "Overview",
+              "shortText": "Overview",
+              "isExternal": false,
+              "isPremium": false
+            }
+          ],
+          "birthPlace": {
+            "city": "Minsk",
+            "country": "BLR",
+            "displayText": "Minsk, BLR"
+          },
+          "birthCountry": {
+            "abbreviation": "BLR"
+          },
+          "slug": "nikita-tolopilo",
+          "headshot": {
+            "href": "https://a.espncdn.com/i/headshots/nhl/players/full/5188534.png",
+            "alt": "Nikita Tolopilo"
+          },
+          "jersey": "60",
+          "hand": {
+            "type": "LEFT",
+            "abbreviation": "L",
+            "displayValue": "Left"
+          },
+          "position": {
+            "id": "5",
+            "name": "Goaltender",
+            "displayName": "Goaltender",
+            "abbreviation": "G",
+            "leaf": false
+          },
+          "injuries": [],
+          "teams": [
+            {
+              "$ref": "http://sports.core.api.espn.pvt/v2/sports/hockey/leagues/nhl/seasons/2026/teams/22?lang=en&region=us"
+            }
+          ],
+          "contracts": [],
+          "experience": {
+            "years": 0
+          },
+          "status": {
+            "id": "1",
+            "name": "Active",
+            "type": "active",
+            "abbreviation": "Active"
+          }
+        }
+      ]
+    }
+  ],
+  "coach": [
+    {
+      "id": "946",
+      "firstName": "Rick",
+      "lastName": "Tocchet"
+    }
+  ],
+  "team": {
+    "id": "22",
+    "abbreviation": "VAN",
+    "location": "Vancouver",
+    "name": "Canucks",
+    "displayName": "Vancouver Canucks",
+    "clubhouse": "https://www.espn.com/nhl/team/_/name/van/vancouver-canucks",
+    "color": "003e7e",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/van.png",
+    "recordSummary": "25-49-8",
+    "seasonSummary": "2025-26",
+    "standingSummary": "8th in Pacific Division"
+  }
+}

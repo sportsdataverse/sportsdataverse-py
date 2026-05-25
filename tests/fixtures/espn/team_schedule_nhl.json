@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-05-25T00:50:01Z",
+  "status": "success",
+  "season": {
+    "year": 2026,
+    "type": 3,
+    "name": "Postseason",
+    "displayName": "2025-26",
+    "half": 1
+  },
+  "team": {
+    "id": "22",
+    "abbreviation": "VAN",
+    "location": "Vancouver",
+    "name": "Canucks",
+    "displayName": "Vancouver Canucks",
+    "clubhouse": "https://www.espn.com/nhl/team/_/name/van/vancouver-canucks",
+    "color": "003e7e",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/van.png",
+    "recordSummary": "25-49-8",
+    "seasonSummary": "2025-26",
+    "standingSummary": "8th in Pacific Division",
+    "groups": {
+      "id": "30",
+      "parent": {
+        "id": "8"
+      },
+      "isConference": false
+    }
+  },
+  "events": []
+}

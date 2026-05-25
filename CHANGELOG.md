@@ -454,9 +454,21 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
 - Empty-payload contract, pandas opt-in, registry consistency, and the
   config-as-meta zero-row case.
 
+### Bug fixes
+
+- `parse_team_roster` now handles **both** ESPN roster shapes. The
+  flat shape (`athletes[]` = list of athlete dicts; used by NBA /
+  WNBA / MBB / WBB / CFB) continues to work unchanged. The newly-
+  handled position-grouped shape (`athletes[i] = {position, items}`;
+  used by MLB / NFL / NHL) is auto-detected by inspecting the first
+  element — each player from a group's `items[]` is tagged with a
+  `position_group` column carried over from the parent group. Without
+  the fix, MLB / NFL / NHL rosters were collapsing to 5-6 group rows
+  instead of unrolling to the full per-player list.
+
 ### Test infrastructure
 
-- New `tests/test_espn_universal_parsers.py` (65 tests),
+- New `tests/test_espn_universal_parsers.py` (85 tests),
   `tests/test_mlb_api_parsers.py` (17 tests),
   `tests/test_nhl_aux_parsers.py` (21 tests),
   `tests/test_nhl_api_web_parsers.py` (37 tests), and
@@ -464,8 +476,11 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
   captured fixtures.
 - New `tests/test_espn_live.py` (32 live tests) gated by
   `SDV_PY_LIVE_TESTS=1` for live integration verification.
-- Captured fixtures live under `tests/fixtures/espn/` (12 captures —
-  the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA),
+- Captured fixtures live under `tests/fixtures/espn/` (28 captures —
+  the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA
+  plus the 16-fixture cross-league parity set covering
+  `team_roster` / `team_schedule` / `news` / `injuries` for
+  MLB / NFL / NHL / WNBA),
   `tests/fixtures/mlb_api/` (8 captures: schedule, teams, roster,
   standings, person_stats, venues, sports, divisions),
   `tests/fixtures/nhl_stats_rest/` (8 captures: season, franchise,

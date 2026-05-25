@@ -1228,13 +1228,19 @@ def parse_team_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
 def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``team/{id}/roster`` response into a tidy frame.
 
-    Input: raw payload with shape::
+    ESPN ships **two roster shapes**:
 
-        {"athletes": [...], "coach": [...], "team": {...}, "season": {...}}
+    * **Flat** (NBA, WNBA, MBB, WBB, CFB): ``athletes`` is a list of
+      athlete dicts directly. This parser flattens them as-is.
+    * **Position-grouped** (MLB, NFL, NHL): ``athletes`` is a list of
+      ``{position: "<group name>", items: [<athletes>...]}`` dicts. This
+      parser unrolls each group's ``items[]`` and tags every resulting
+      player row with a ``position_group`` column ("Pitchers",
+      "offense", "Centers", etc.) carried over from the parent group.
 
-    One row per athlete with columns flattened from the athlete sub-
-    object (``id``, ``firstName``, ``lastName``, ``position``,
-    ``experience``, ``jersey``, ``height``, ``weight``, …).  Coaches are
+    The shape is detected automatically by inspecting the first element
+    of ``athletes`` — if it has both ``position`` and ``items`` keys (and
+    ``items`` is a list), the grouped shape is assumed. Coaches are
     available via ``payload["coach"]``; this parser intentionally only
     surfaces the athlete rows.
 
@@ -1244,17 +1250,50 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
 
     Returns:
         ``pl.DataFrame`` (or pandas) with one row per athlete on the
-        roster.
+        roster. For the grouped shape, includes a ``position_group``
+        column.
     """
     if not payload or not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
     athletes = payload.get("athletes")
     if not isinstance(athletes, list) or not athletes:
         return _empty_frame(return_as_pandas)
-    try:
-        df = pd.json_normalize(athletes, sep="_")
-    except Exception:
-        return _empty_frame(return_as_pandas)
+
+    # Detect grouped shape: first element has ``position`` + ``items``
+    # keys, and ``items`` is a list. MLB / NFL / NHL use this shape;
+    # NBA / WNBA / MBB / WBB / CFB use the flat shape.
+    first = athletes[0] if athletes else {}
+    is_grouped = (
+        isinstance(first, dict)
+        and "position" in first
+        and isinstance(first.get("items"), list)
+    )
+
+    if is_grouped:
+        rows = []
+        for group in athletes:
+            if not isinstance(group, dict):
+                continue
+            group_name = group.get("position")
+            for player in group.get("items") or []:
+                if not isinstance(player, dict):
+                    continue
+                row = {"position_group": group_name}
+                for k, v in player.items():
+                    row[k] = v
+                rows.append(row)
+        if not rows:
+            return _empty_frame(return_as_pandas)
+        try:
+            df = pd.json_normalize(rows, sep="_")
+        except Exception:
+            return _empty_frame(return_as_pandas)
+    else:
+        try:
+            df = pd.json_normalize(athletes, sep="_")
+        except Exception:
+            return _empty_frame(return_as_pandas)
+
     df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
 

@@ -1,0 +1,1229 @@
+{
+  "header": "NHL News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/nhl/",
+    "text": "All NHL News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 48866504,
+      "nowId": "1-48866504",
+      "contentKey": "48866504-1-5-1",
+      "dataSourceIdentifier": "1a4943fb1fde1",
+      "type": "HeadlineNews",
+      "headline": "Canada tops Slovakia at worlds, pushes total to 17 points",
+      "description": "Captain Macklin Celebrini scored, and Sidney Crosby added his seventh assist of the tournament on Sunday, as Team Canada defeated Slovakia 5-1, boosted by a four-goal spark in the final period at the ice hockey world championship in Fribourg, Switzerland.",
+      "lastModified": "2026-05-25T00:26:05Z",
+      "published": "2026-05-25T00:26:05Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "0afb19a1398cc",
+          "id": 48866437,
+          "type": "header",
+          "name": "Macklin Celebrini Sidney Crosby [600x600]",
+          "credit": "Getty Images",
+          "height": 600,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2026/0524/r1663170_600x600_1-1.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 9580,
+          "type": "league",
+          "uid": "s:70~l:90",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666",
+          "description": "NHL",
+          "sportId": 90,
+          "leagueId": 90,
+          "league": {
+            "id": 90,
+            "description": "NHL",
+            "abbreviation": "NHL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6083,
+          "type": "team",
+          "uid": "s:70~l:90~t:16",
+          "guid": "472f7324-d0ab-e645-bce6-a3cd3dcb110d",
+          "description": "Pittsburgh Penguins",
+          "sportId": 90,
+          "teamId": 16,
+          "team": {
+            "id": 16,
+            "description": "Pittsburgh Penguins",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/pit/pittsburgh-penguins"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/pit/pittsburgh-penguins"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6422,
+          "type": "team",
+          "uid": "s:70~l:90~t:18",
+          "guid": "8c0b5061-09c3-2e5c-529b-274a22d1b6bb",
+          "description": "San Jose Sharks",
+          "sportId": 90,
+          "teamId": 18,
+          "team": {
+            "id": 18,
+            "description": "San Jose Sharks",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/sj/san-jose-sharks"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/sj/san-jose-sharks"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 667402,
+          "type": "athlete",
+          "uid": "s:70~l:90~a:5206628",
+          "guid": "39b94cbf-c622-3ef0-b459-b4730c1fdf84",
+          "description": "Macklin Celebrini",
+          "sportId": 90,
+          "athleteId": 5206628,
+          "athlete": {
+            "id": 5206628,
+            "description": "Macklin Celebrini",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/5206628"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/5206628"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 18503,
+          "type": "athlete",
+          "uid": "s:70~l:90~a:3114",
+          "guid": "706fa356-342c-1e1e-dce4-1bdd4d70a33f",
+          "description": "Sidney Crosby",
+          "sportId": 90,
+          "athleteId": 3114,
+          "athlete": {
+            "id": 3114,
+            "description": "Sidney Crosby",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/3114"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/3114"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 47714,
+          "type": "league",
+          "guid": "324bfb0e-398c-4946-9a22-7c61691b51f5",
+          "description": "Olympics",
+          "sportId": 3700,
+          "leagueId": 3700,
+          "league": {
+            "id": 3700,
+            "description": "Olympics"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666"
+        },
+        {
+          "type": "guid",
+          "guid": "472f7324-d0ab-e645-bce6-a3cd3dcb110d"
+        },
+        {
+          "type": "guid",
+          "guid": "8c0b5061-09c3-2e5c-529b-274a22d1b6bb"
+        },
+        {
+          "type": "guid",
+          "guid": "39b94cbf-c622-3ef0-b459-b4730c1fdf84"
+        },
+        {
+          "type": "guid",
+          "guid": "706fa356-342c-1e1e-dce4-1bdd4d70a33f"
+        },
+        {
+          "type": "guid",
+          "guid": "324bfb0e-398c-4946-9a22-7c61691b51f5"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nhl/story/_/id/48866504/canada-tops-slovakia-worlds-pushes-total-17-points"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nhl/story?storyId=48866504"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48866504"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48866504"
+          }
+        }
+      }
+    },
+    {
+      "id": 48865942,
+      "nowId": "1-48865942",
+      "contentKey": "48865942-1-5-1",
+      "dataSourceIdentifier": "d1dc41028307e",
+      "type": "HeadlineNews",
+      "headline": "Avs star Cale Makar, Knights' Mark Stone return for Game 3",
+      "description": "The Avalanche got star defenseman Cale Makar back for Game 3 of the Western Conference finals while the Golden Knights had captain Mark Stone back on the ice.",
+      "lastModified": "2026-05-25T00:33:17Z",
+      "published": "2026-05-25T00:33:17Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "a89528af4f653",
+          "id": 48074704,
+          "type": "header",
+          "name": "Mark Stone (March 1, 2026) [600x400]",
+          "credit": "Justin Berl/Getty Images",
+          "height": 400,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2026/0301/r1621764_600x400_3-2.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9580,
+          "type": "league",
+          "uid": "s:70~l:90",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666",
+          "description": "NHL",
+          "sportId": 90,
+          "leagueId": 90,
+          "league": {
+            "id": 90,
+            "description": "NHL",
+            "abbreviation": "NHL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 168810,
+          "type": "team",
+          "uid": "s:70~l:90~t:37",
+          "guid": "dd8e7d92-918d-4ec1-4e50-c328fc09467a",
+          "description": "Vegas Golden Knights",
+          "sportId": 90,
+          "teamId": 37,
+          "team": {
+            "id": 37,
+            "description": "Vegas Golden Knights",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/vgk/vegas-golden-knights"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/vgk/vegas-golden-knights"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 78061,
+          "type": "athlete",
+          "uid": "s:70~l:90~a:5545",
+          "guid": "a47542b4-b6b4-2a7c-b394-a080931ee7ac",
+          "description": "Mark Stone",
+          "sportId": 90,
+          "athleteId": 5545,
+          "athlete": {
+            "id": 5545,
+            "description": "Mark Stone",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/5545"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/5545"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6550,
+          "type": "team",
+          "uid": "s:70~l:90~t:17",
+          "guid": "65489e39-7ab7-70da-94bc-adcc6f0aa1c6",
+          "description": "Colorado Avalanche",
+          "sportId": 90,
+          "teamId": 17,
+          "team": {
+            "id": 17,
+            "description": "Colorado Avalanche",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/col/colorado-avalanche"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/col/colorado-avalanche"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 169144,
+          "type": "athlete",
+          "uid": "s:70~l:90~a:4233563",
+          "guid": "b9a7136d-88d5-b885-9743-4b4fd4eb53d1",
+          "description": "Cale Makar",
+          "sportId": 90,
+          "athleteId": 4233563,
+          "athlete": {
+            "id": 4233563,
+            "description": "Cale Makar",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/4233563"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nhl/player/_/id/4233563"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "type": "guid",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666"
+        },
+        {
+          "type": "guid",
+          "guid": "dd8e7d92-918d-4ec1-4e50-c328fc09467a"
+        },
+        {
+          "type": "guid",
+          "guid": "a47542b4-b6b4-2a7c-b394-a080931ee7ac"
+        },
+        {
+          "type": "guid",
+          "guid": "65489e39-7ab7-70da-94bc-adcc6f0aa1c6"
+        },
+        {
+          "type": "guid",
+          "guid": "b9a7136d-88d5-b885-9743-4b4fd4eb53d1"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nhl/story/_/id/48865942/golden-knights-captain-mark-stone-returns-game-3-vs-avs"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nhl/story?storyId=48865942"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48865942"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48865942"
+          }
+        }
+      }
+    },
+    {
+      "id": 44686270,
+      "nowId": "1-44686270",
+      "contentKey": "44686270-1-6-1",
+      "dataSourceIdentifier": "25ce825f3281f",
+      "type": "Story",
+      "headline": "Stanley Cup odds: Golden Knights rocket up odds boards as Avs fade; Canes the favorite",
+      "description": "The Hurricanes are the Stanley Cup favorites, with the Golden Knights just behind on the odds board.",
+      "lastModified": "2026-05-24T18:31:43Z",
+      "published": "2026-05-24T18:31:43Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "3c8bc52cb1aa0",
+          "id": 48852981,
+          "type": "header",
+          "name": "Mitch Marner [608x342]",
+          "caption": "Mitch Marner and the Golden Knights took the first two games against the Avs and have subsequently moved up the Stanley Cup odds board.",
+          "alt": "Mitch Marner",
+          "credit": "Ron Chenoy/Imagn Images",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0523/r1662407_608x342_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "36f5d7465189e",
+          "id": 48666250,
+          "type": "header",
+          "name": "Carolina Hurricanes [1296x729]",
+          "caption": "The Carolina Hurricanes are the current favorites to win the Eastern Conference.",
+          "alt": "Mark Jankowski #77 of the Carolina Hurricanes faces off against Luke Glendening #41 of the Philadelphia Flyers in Game One of the Second Round of the 2026 Stanley Cup Playoffs at Lenovo Center on May 02, 2026 in Raleigh, North Carolina.",
+          "credit": "Josh Lavallee/NHLI via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0503/r1652863_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "7e64ccc7806d6",
+          "id": 48742579,
+          "type": "header",
+          "name": "Lane Hutson [1296x729]",
+          "caption": "Lane Hutson and the Montreal Canadiens advanced to the Eastern Conference Finals.",
+          "alt": "Montreal Canadiens defenseman Lane Hutson (48) plays the puck against the Buffalo Sabres during the third period in game three of the second round of the 2026 Stanley Cup Playoffs at the Bell Centre.",
+          "credit": "Eric Bolte-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0511/r1656786_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "0988c82059697",
+          "id": 48797473,
+          "type": "header",
+          "name": "Sabres [1296x729]",
+          "caption": "The Sabres kept their series alive by forcing Game 7, and shortened their Stanley Cup odds.",
+          "alt": "Buffalo Sabres' Jack Quinn (22) is congratulated on his goal over the Montreal Canadiens by teammates Tage Thompson (72), Josh Doan (91) and Zach Benson (6) during Game 6 in a second-round NHL hockey Stanley Cup playoff series in Montreal, Saturday, May 1",
+          "credit": "Christinne Muschi/The Canadian Press via AP",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0517/r1659471_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "5fb1007f3a672",
+          "id": 48778972,
+          "type": "header",
+          "name": "Mitch Marner [1296x729]",
+          "caption": "Mitch Marner is a key reason the Vegas Golden Knights are in the Western Conference Finals.",
+          "credit": "Kiyoshi Mio-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0515/r1658642_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "3cd61bbaaa2a5",
+          "id": 46477067,
+          "type": "header",
+          "name": "Nathan MacKinnon Cale Makar [576x324]",
+          "caption": "Nathan MacKinnon (left) Cale Makar (right) of the current Stanley Cup-favorite Colorado Avalanche.",
+          "credit": "James Guillory-Imagn Images",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/photo/2025/1003/r1554998_576x324_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "80744a4f62a5e",
+          "id": 48648058,
+          "type": "header",
+          "name": "Shea Theodore [1296x729]",
+          "caption": "Shea Theodore of the Vegas Golden Knights has a two-game goal streak.",
+          "credit": "Eli Rehmer/NHLI via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0501/r1651961_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "1476acf3623d3",
+          "id": 48590892,
+          "type": "header",
+          "name": "Montreal Canadiens [1296x729]",
+          "caption": "The Canadiens have taken a lead in their series against the Lightning, which has shortened Montreal's odds to lift the Stanley Cup to 18-1.",
+          "alt": "Jacob Fowler #32 celebrates the overtime winner with Jakub Dobes #75 of the Montreal Canadiens in Game Three of the First Round of the 2026 Stanley Cup Playoffs between the Montreal Canadiens and the Tampa Bay Lightning at the Bell Centre on April 24, 202",
+          "credit": "Matt Garies/NHLI via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0425/r1649012_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Vegas Golden Knights vs. Colorado Avalanche: Game Highlights",
+          "caption": "Vegas Golden Knights vs. Colorado Avalanche: Game Highlights",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0522/ss_20260522_231952962_35382301412/ss_20260522_231952962_35382301412.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 611584,
+          "type": "league",
+          "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49",
+          "description": "Sports Betting",
+          "sportId": 22000,
+          "leagueId": 22000,
+          "league": {
+            "id": 22000,
+            "description": "Sports Betting"
+          }
+        },
+        {
+          "id": 137817,
+          "type": "topic",
+          "guid": "14f579db-79ec-a898-9405-8fec63e16063",
+          "description": "news \u2013 sports betting",
+          "sportId": 0,
+          "topicId": 179
+        },
+        {
+          "id": 129405,
+          "type": "topic",
+          "guid": "843d8f57-b096-e35b-eb98-c2442ec35a29",
+          "description": "news - nhl",
+          "sportId": 0,
+          "topicId": 124
+        },
+        {
+          "id": 9580,
+          "type": "league",
+          "uid": "s:70~l:90",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666",
+          "description": "NHL",
+          "sportId": 90,
+          "leagueId": 90,
+          "league": {
+            "id": 90,
+            "description": "NHL",
+            "abbreviation": "NHL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6550,
+          "type": "team",
+          "uid": "s:70~l:90~t:17",
+          "guid": "65489e39-7ab7-70da-94bc-adcc6f0aa1c6",
+          "description": "Colorado Avalanche",
+          "sportId": 90,
+          "teamId": 17,
+          "team": {
+            "id": 17,
+            "description": "Colorado Avalanche",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/col/colorado-avalanche"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/col/colorado-avalanche"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6110,
+          "type": "team",
+          "uid": "s:70~l:90~t:7",
+          "guid": "b7b7b58e-e579-b39d-fb2d-70213dd93502",
+          "description": "Carolina Hurricanes",
+          "sportId": 90,
+          "teamId": 7,
+          "team": {
+            "id": 7,
+            "description": "Carolina Hurricanes",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/car/carolina-hurricanes"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/car/carolina-hurricanes"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 168810,
+          "type": "team",
+          "uid": "s:70~l:90~t:37",
+          "guid": "dd8e7d92-918d-4ec1-4e50-c328fc09467a",
+          "description": "Vegas Golden Knights",
+          "sportId": 90,
+          "teamId": 37,
+          "team": {
+            "id": 37,
+            "description": "Vegas Golden Knights",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/vgk/vegas-golden-knights"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/vgk/vegas-golden-knights"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 5906,
+          "type": "team",
+          "uid": "s:70~l:90~t:10",
+          "guid": "4110452f-e35d-14fe-8fbb-cdb21e269149",
+          "description": "Montreal Canadiens",
+          "sportId": 90,
+          "teamId": 10,
+          "team": {
+            "id": 10,
+            "description": "Montreal Canadiens",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/mtl/montreal-canadiens"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/mtl/montreal-canadiens"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 696244,
+          "type": "contributor",
+          "guid": "b4b4279f-6f4d-329a-a5c2-1eeceea9f2bb",
+          "description": "Doug Greenberg",
+          "slug": "doug-greenberg",
+          "contributor": {
+            "id": 4050,
+            "description": "Doug Greenberg"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "550a1e9e-377e-3019-bf5e-19c027d50a49"
+        },
+        {
+          "type": "guid",
+          "guid": "14f579db-79ec-a898-9405-8fec63e16063"
+        },
+        {
+          "type": "guid",
+          "guid": "843d8f57-b096-e35b-eb98-c2442ec35a29"
+        },
+        {
+          "type": "guid",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666"
+        },
+        {
+          "type": "guid",
+          "guid": "65489e39-7ab7-70da-94bc-adcc6f0aa1c6"
+        },
+        {
+          "type": "guid",
+          "guid": "b7b7b58e-e579-b39d-fb2d-70213dd93502"
+        },
+        {
+          "type": "guid",
+          "guid": "dd8e7d92-918d-4ec1-4e50-c328fc09467a"
+        },
+        {
+          "type": "guid",
+          "guid": "4110452f-e35d-14fe-8fbb-cdb21e269149"
+        },
+        {
+          "type": "guid",
+          "guid": "b4b4279f-6f4d-329a-a5c2-1eeceea9f2bb"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/espn/betting/story/_/id/44686270/2026-nhl-stanley-cup-playoffs-championship-odds"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/wireless/story?storyId=44686270"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/44686270"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=44686270"
+          }
+        }
+      },
+      "byline": "Doug Greenberg"
+    },
+    {
+      "id": 48526483,
+      "nowId": "1-48526483",
+      "contentKey": "48526483-1-6-1",
+      "dataSourceIdentifier": "5a57b51ba7e63",
+      "type": "Story",
+      "headline": "Stanley Cup playoffs daily: Previews, stats, schedule, bracket",
+      "description": "Colorado faces an 0-2 deficit to Vegas. Plus, highlights from Hurricanes-Canadiens Game 2 and updated playoff stats.",
+      "lastModified": "2026-05-24T12:56:24Z",
+      "published": "2026-05-24T12:56:24Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "66aee43ff6a28",
+          "id": 48854955,
+          "type": "header",
+          "name": "VGK-COL for SCPD [1296x729]",
+          "credit": "Timothy Hurst/MediaNews Group/The Denver Post via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0523/r1662517_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "2de5ddaf41203",
+          "id": 48811380,
+          "type": "header",
+          "name": "Canadiens win2 [1296x729]",
+          "alt": "Canadiens win2",
+          "credit": "ESPN",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0518/Canadiens_win16x9_1296x729.png"
+        },
+        {
+          "type": "Media",
+          "name": "Ivan Barbashev's empty-netter seals Game 2 for Golden Knights",
+          "caption": "Ivan Barbashev lights the lamp",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0522/48e02f2de41e4306866fee161f5171721376/48e02f2de41e4306866fee161f5171721376.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9580,
+          "type": "league",
+          "uid": "s:70~l:90",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666",
+          "description": "NHL",
+          "sportId": 90,
+          "leagueId": 90,
+          "league": {
+            "id": 90,
+            "description": "NHL",
+            "abbreviation": "NHL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6110,
+          "type": "team",
+          "uid": "s:70~l:90~t:7",
+          "guid": "b7b7b58e-e579-b39d-fb2d-70213dd93502",
+          "description": "Carolina Hurricanes",
+          "sportId": 90,
+          "teamId": 7,
+          "team": {
+            "id": 7,
+            "description": "Carolina Hurricanes",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/car/carolina-hurricanes"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/car/carolina-hurricanes"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6550,
+          "type": "team",
+          "uid": "s:70~l:90~t:17",
+          "guid": "65489e39-7ab7-70da-94bc-adcc6f0aa1c6",
+          "description": "Colorado Avalanche",
+          "sportId": 90,
+          "teamId": 17,
+          "team": {
+            "id": 17,
+            "description": "Colorado Avalanche",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/col/colorado-avalanche"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/col/colorado-avalanche"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 5906,
+          "type": "team",
+          "uid": "s:70~l:90~t:10",
+          "guid": "4110452f-e35d-14fe-8fbb-cdb21e269149",
+          "description": "Montreal Canadiens",
+          "sportId": 90,
+          "teamId": 10,
+          "team": {
+            "id": 10,
+            "description": "Montreal Canadiens",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/mtl/montreal-canadiens"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/mtl/montreal-canadiens"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 168810,
+          "type": "team",
+          "uid": "s:70~l:90~t:37",
+          "guid": "dd8e7d92-918d-4ec1-4e50-c328fc09467a",
+          "description": "Vegas Golden Knights",
+          "sportId": 90,
+          "teamId": 37,
+          "team": {
+            "id": 37,
+            "description": "Vegas Golden Knights",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/vgk/vegas-golden-knights"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/vgk/vegas-golden-knights"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 701887,
+          "type": "contributor",
+          "guid": "3139123a-2bc7-3127-b40d-448cdb859378",
+          "description": "ESPN Staff Profile",
+          "slug": "espn-staff-profile",
+          "contributor": {
+            "id": 2462,
+            "description": "ESPN Staff Profile"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666"
+        },
+        {
+          "type": "guid",
+          "guid": "b7b7b58e-e579-b39d-fb2d-70213dd93502"
+        },
+        {
+          "type": "guid",
+          "guid": "65489e39-7ab7-70da-94bc-adcc6f0aa1c6"
+        },
+        {
+          "type": "guid",
+          "guid": "4110452f-e35d-14fe-8fbb-cdb21e269149"
+        },
+        {
+          "type": "guid",
+          "guid": "dd8e7d92-918d-4ec1-4e50-c328fc09467a"
+        },
+        {
+          "type": "guid",
+          "guid": "3139123a-2bc7-3127-b40d-448cdb859378"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nhl/story/_/id/48526483/2026-nhl-playoffs-stanley-cup-preview-stats-schedule-top-players-bracket-matchups"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nhl/story?storyId=48526483"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48526483"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48526483"
+          }
+        }
+      },
+      "byline": "ESPN Staff"
+    },
+    {
+      "id": 48859586,
+      "nowId": "1-48859586",
+      "contentKey": "48859586-1-22-1",
+      "dataSourceIdentifier": "95373ca041039",
+      "type": "Preview",
+      "headline": "Hurricanes, Canadiens take 1-1 series in the Eastern Conference Final to Canada for Monday's Game 3",
+      "description": "\u2014 Rod Brind'Amour didn't see a need to juggle his lineup or massively adjust the scheme after an ugly first period cost the Carolina Hurricanes any chance to win their Eastern Conference Final opener.",
+      "lastModified": "2026-05-24T19:36:01Z",
+      "published": "2026-05-24T19:36:01Z",
+      "images": [
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.awayhome.1",
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.applewatch.awayhome.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.homeaway.1",
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.applewatch.homeaway.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.awayhome.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.homeaway.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.awayhome.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.homeaway.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.awayhome.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.homeaway.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.awayhome.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.homeaway.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.awayhome.5x2.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/hockey/nhl/events/401873385.png?templateId=espn.all.homeaway.5x2.2"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9580,
+          "type": "league",
+          "uid": "s:70~l:90",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666",
+          "description": "NHL",
+          "sportId": 90,
+          "leagueId": 90,
+          "league": {
+            "id": 90,
+            "description": "NHL",
+            "abbreviation": "NHL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nhl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 5906,
+          "type": "team",
+          "uid": "s:70~l:90~t:10",
+          "guid": "4110452f-e35d-14fe-8fbb-cdb21e269149",
+          "description": "Montreal Canadiens",
+          "sportId": 90,
+          "teamId": 10,
+          "team": {
+            "id": 10,
+            "description": "Montreal Canadiens",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/mtl/montreal-canadiens"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/mtl/montreal-canadiens"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 6110,
+          "type": "team",
+          "uid": "s:70~l:90~t:7",
+          "guid": "b7b7b58e-e579-b39d-fb2d-70213dd93502",
+          "description": "Carolina Hurricanes",
+          "sportId": 90,
+          "teamId": 7,
+          "team": {
+            "id": 7,
+            "description": "Carolina Hurricanes",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/car/carolina-hurricanes"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nhl/team/_/name/car/carolina-hurricanes"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "event",
+          "uid": "s:70~l:90~e:401873385",
+          "guid": "edc1a204-0567-316a-85f2-0945279e0a69",
+          "description": "Carolina Hurricanes @ Montreal Canadiens",
+          "eventId": 401873385,
+          "event": {
+            "id": 401873385,
+            "sport": "hockey",
+            "league": "nhl",
+            "description": "Carolina Hurricanes @ Montreal Canadiens"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "1a5f0227-a13e-396c-8cea-8961bc288666"
+        },
+        {
+          "type": "guid",
+          "guid": "4110452f-e35d-14fe-8fbb-cdb21e269149"
+        },
+        {
+          "type": "guid",
+          "guid": "b7b7b58e-e579-b39d-fb2d-70213dd93502"
+        },
+        {
+          "type": "guid",
+          "guid": "edc1a204-0567-316a-85f2-0945279e0a69"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "http://www.espn.com/nhl/preview?gameId=401873385"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nhl/story?storyId=48859586"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48859586"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48859586"
+          }
+        }
+      }
+    }
+  ]
+}

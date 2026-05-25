@@ -1,0 +1,1371 @@
+{
+  "header": "MLB News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/mlb/",
+    "text": "All MLB News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 48867070,
+      "nowId": "1-48867070",
+      "contentKey": "48867070-1-21-1",
+      "dataSourceIdentifier": "a5f4cb3417fb3",
+      "type": "Recap",
+      "headline": "Griffin, Nationals beat Braves 2-1 to give Atlanta its first home series loss of the season",
+      "description": "\u2014 Foster Griffin allowed only three hits in six scoreless innings, Nasim Nu\u00f1ez singled in a run in the fifth and the Washington Nationals survived Atlanta's ninth-inning comeback attempt for a...",
+      "lastModified": "2026-05-25T00:50:03Z",
+      "published": "2026-05-25T00:50:03Z",
+      "images": [
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.awayhome.1",
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.applewatch.awayhome.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.homeaway.1",
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.applewatch.homeaway.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.awayhome.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.homeaway.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.awayhome.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.homeaway.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.awayhome.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.homeaway.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.awayhome.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.homeaway.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.awayhome.5x2.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815478.png?templateId=espn.all.homeaway.5x2.2"
+        },
+        {
+          "type": "Media",
+          "name": "Luis Garcia Jr. hits RBI single",
+          "caption": "Luis Garcia Jr. hits RBI single",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0525/e50983fd-bf86-485d-a09c-5e53a81abff8/e50983fd-bf86-485d-a09c-5e53a81abff8.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 80311,
+          "type": "league",
+          "uid": "s:1~l:10",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10",
+          "description": "MLB",
+          "sportId": 10,
+          "leagueId": 10,
+          "league": {
+            "id": 10,
+            "description": "MLB",
+            "abbreviation": "MLB",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 395,
+          "type": "team",
+          "uid": "s:1~l:10~t:15",
+          "guid": "122673a3-bf06-4432-6950-b8a32e52ac2e",
+          "description": "Atlanta Braves",
+          "sportId": 10,
+          "teamId": 15,
+          "team": {
+            "id": 15,
+            "description": "Atlanta Braves",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/atl/atlanta-braves"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/atl/atlanta-braves"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 16320,
+          "type": "team",
+          "uid": "s:1~l:10~t:20",
+          "guid": "a73e1046-e9aa-ef6b-4e0d-2a7c808cb284",
+          "description": "Washington Nationals",
+          "sportId": 10,
+          "teamId": 20,
+          "team": {
+            "id": 20,
+            "description": "Washington Nationals",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/wsh/washington-nationals"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/wsh/washington-nationals"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "event",
+          "uid": "s:1~l:10~e:401815478",
+          "guid": "b9f40699-e2f3-3525-a4cf-3cebd86fec6f",
+          "description": "Washington Nationals @ Atlanta Braves",
+          "eventId": 401815478,
+          "event": {
+            "id": 401815478,
+            "sport": "baseball",
+            "league": "mlb",
+            "description": "Washington Nationals @ Atlanta Braves",
+            "links": {
+              "web": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815478"
+                }
+              },
+              "mobile": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815478"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10"
+        },
+        {
+          "type": "guid",
+          "guid": "122673a3-bf06-4432-6950-b8a32e52ac2e"
+        },
+        {
+          "type": "guid",
+          "guid": "a73e1046-e9aa-ef6b-4e0d-2a7c808cb284"
+        },
+        {
+          "type": "guid",
+          "guid": "b9f40699-e2f3-3525-a4cf-3cebd86fec6f"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "http://www.espn.com/mlb/recap?gameId=401815478"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/mlb/story?storyId=48867070"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48867070"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48867070"
+          }
+        }
+      }
+    },
+    {
+      "id": 48866405,
+      "nowId": "1-48866405",
+      "contentKey": "48866405-1-21-1",
+      "dataSourceIdentifier": "5f4bc375c40aa",
+      "type": "Recap",
+      "headline": "Cortes homers, Kurtz reaches base for 47th straight game as A's beat Padres 5-2",
+      "description": "\u2014 Carlos Cortes hit a leadoff home run and Nick Kurtz extended his on-base streak to 47 games as the AL West-leading Athletics beat the San Diego Padres 5-2 Sunday to avoid a three-game sweep.",
+      "lastModified": "2026-05-24T23:29:04Z",
+      "published": "2026-05-24T23:29:04Z",
+      "images": [
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.awayhome.1",
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.applewatch.awayhome.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.homeaway.1",
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.applewatch.homeaway.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.awayhome.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.homeaway.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.awayhome.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.homeaway.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.awayhome.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.homeaway.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.awayhome.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.homeaway.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.awayhome.5x2.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815482.png?templateId=espn.all.homeaway.5x2.2"
+        },
+        {
+          "type": "Media",
+          "name": "Tyler Soderstrom hits RBI single",
+          "caption": "Tyler Soderstrom hits RBI single",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0524/e2ebc9e8-c2e9-4559-a221-36b484cc9366/e2ebc9e8-c2e9-4559-a221-36b484cc9366.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 80311,
+          "type": "league",
+          "uid": "s:1~l:10",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10",
+          "description": "MLB",
+          "sportId": 10,
+          "leagueId": 10,
+          "league": {
+            "id": 10,
+            "description": "MLB",
+            "abbreviation": "MLB",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 724,
+          "type": "team",
+          "uid": "s:1~l:10~t:25",
+          "guid": "4dec648c-3eb9-055c-aebc-2711f30975a0",
+          "description": "San Diego Padres",
+          "sportId": 10,
+          "teamId": 25,
+          "team": {
+            "id": 25,
+            "description": "San Diego Padres",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/sd/san-diego-padres"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/sd/san-diego-padres"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 316,
+          "type": "team",
+          "uid": "s:1~l:10~t:11",
+          "guid": "1d8ed3a9-4c7d-0941-3677-bb6defe67c7a",
+          "description": "Athletics",
+          "sportId": 10,
+          "teamId": 11,
+          "team": {
+            "id": 11,
+            "description": "Athletics",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/ath/athletics"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/ath/athletics"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "event",
+          "uid": "s:1~l:10~e:401815482",
+          "guid": "19e4912e-757d-3e24-987c-79923ab95d31",
+          "description": "Athletics Athletics @ San Diego Padres",
+          "eventId": 401815482,
+          "event": {
+            "id": 401815482,
+            "sport": "baseball",
+            "league": "mlb",
+            "description": "Athletics Athletics @ San Diego Padres",
+            "links": {
+              "web": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815482"
+                }
+              },
+              "mobile": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815482"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10"
+        },
+        {
+          "type": "guid",
+          "guid": "4dec648c-3eb9-055c-aebc-2711f30975a0"
+        },
+        {
+          "type": "guid",
+          "guid": "1d8ed3a9-4c7d-0941-3677-bb6defe67c7a"
+        },
+        {
+          "type": "guid",
+          "guid": "19e4912e-757d-3e24-987c-79923ab95d31"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "http://www.espn.com/mlb/recap?gameId=401815482"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/mlb/story?storyId=48866405"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48866405"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48866405"
+          }
+        }
+      }
+    },
+    {
+      "id": 48866396,
+      "nowId": "1-48866396",
+      "contentKey": "48866396-1-293-1",
+      "dataSourceIdentifier": "664e6a5042f65",
+      "type": "Media",
+      "headline": "Colorado Rockies vs. Arizona Diamondbacks: Game Highlights",
+      "description": "Colorado Rockies vs. Arizona Diamondbacks: Game Highlights",
+      "lastModified": "2026-05-24T23:30:04Z",
+      "published": "2026-05-24T23:30:04Z",
+      "images": [
+        {
+          "name": "Colorado Rockies vs. Arizona Diamondbacks: Game Highlights",
+          "caption": "Colorado Rockies vs. Arizona Diamondbacks: Game Highlights",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0524/2ded1067-5c89-40a0-93bf-2de1460bdc0c/2ded1067-5c89-40a0-93bf-2de1460bdc0c.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 80311,
+          "type": "league",
+          "uid": "s:1~l:10",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10",
+          "description": "MLB",
+          "sportId": 10,
+          "leagueId": 10,
+          "league": {
+            "id": 10,
+            "description": "MLB",
+            "abbreviation": "MLB",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 807,
+          "type": "team",
+          "uid": "s:1~l:10~t:29",
+          "guid": "43e14a76-ff66-49ed-24fc-2835932f99dd",
+          "description": "Arizona Diamondbacks",
+          "sportId": 10,
+          "teamId": 29,
+          "team": {
+            "id": 29,
+            "description": "Arizona Diamondbacks",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/ari/arizona-diamondbacks"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/ari/arizona-diamondbacks"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 778,
+          "type": "team",
+          "uid": "s:1~l:10~t:27",
+          "guid": "f3f1ba71-05f1-a49a-0363-3b1d8e0db4cf",
+          "description": "Colorado Rockies",
+          "sportId": 10,
+          "teamId": 27,
+          "team": {
+            "id": 27,
+            "description": "Colorado Rockies",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/col/colorado-rockies"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/col/colorado-rockies"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 669174,
+          "type": "athlete",
+          "uid": "s:1~l:10~a:5129344",
+          "guid": "276c78b6-28bb-364e-9483-05378edc2283",
+          "description": "Ryan Waldschmidt",
+          "sportId": 10,
+          "athleteId": 5129344,
+          "athlete": {
+            "id": 5129344,
+            "description": "Ryan Waldschmidt",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/5129344"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/5129344"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 757286,
+          "type": "league",
+          "uid": "s:1",
+          "guid": "e364bfcd-493d-3bfb-ac83-bd27d66fedd0",
+          "description": "Baseball",
+          "sportId": 1,
+          "leagueId": 1,
+          "league": {
+            "id": 1,
+            "description": "Baseball"
+          }
+        },
+        {
+          "id": 429659,
+          "type": "athlete",
+          "uid": "s:1~l:10~a:42404",
+          "guid": "e87f6474-dacb-3666-a7de-bb59438a830d",
+          "description": "Corbin Carroll",
+          "sportId": 10,
+          "athleteId": 42404,
+          "athlete": {
+            "id": 42404,
+            "description": "Corbin Carroll",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/42404"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/42404"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 102236,
+          "type": "athlete",
+          "uid": "s:1~l:10~a:32512",
+          "guid": "7883628b-bd4f-c62e-015d-78c4c73ac3de",
+          "description": "Ketel Marte",
+          "sportId": 10,
+          "athleteId": 32512,
+          "athlete": {
+            "id": 32512,
+            "description": "Ketel Marte",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/32512"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/32512"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 12023,
+          "type": "league",
+          "guid": "486b53e9-9924-4652-82e3-1542a5849276",
+          "description": "Fantasy MLB",
+          "sportId": 0,
+          "leagueId": 3070,
+          "league": {
+            "id": 3070,
+            "description": "Fantasy MLB"
+          }
+        },
+        {
+          "id": 711821,
+          "type": "editorialindicator",
+          "guid": "f3e05446-8d07-3064-a239-c10c32884ea2",
+          "description": "SC4U - Full Highlight"
+        },
+        {
+          "id": 711824,
+          "type": "editorialindicator",
+          "guid": "d348c764-47d9-3e31-bd75-d39dfde52c26",
+          "description": "SC4U  - Eligible"
+        },
+        {
+          "type": "event",
+          "uid": "s:1~l:10~e:401815484",
+          "guid": "4e56816c-66fd-335f-abbb-e933d7e43ea9",
+          "description": "Colorado Rockies @ Arizona Diamondbacks",
+          "eventId": 401815484,
+          "event": {
+            "id": 401815484,
+            "sport": "baseball",
+            "league": "mlb",
+            "description": "Colorado Rockies @ Arizona Diamondbacks",
+            "links": {
+              "web": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815484"
+                }
+              },
+              "mobile": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815484"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10"
+        },
+        {
+          "type": "guid",
+          "guid": "43e14a76-ff66-49ed-24fc-2835932f99dd"
+        },
+        {
+          "type": "guid",
+          "guid": "f3f1ba71-05f1-a49a-0363-3b1d8e0db4cf"
+        },
+        {
+          "type": "guid",
+          "guid": "276c78b6-28bb-364e-9483-05378edc2283"
+        },
+        {
+          "type": "guid",
+          "guid": "e364bfcd-493d-3bfb-ac83-bd27d66fedd0"
+        },
+        {
+          "type": "guid",
+          "guid": "e87f6474-dacb-3666-a7de-bb59438a830d"
+        },
+        {
+          "type": "guid",
+          "guid": "7883628b-bd4f-c62e-015d-78c4c73ac3de"
+        },
+        {
+          "type": "guid",
+          "guid": "486b53e9-9924-4652-82e3-1542a5849276"
+        },
+        {
+          "type": "guid",
+          "guid": "f3e05446-8d07-3064-a239-c10c32884ea2"
+        },
+        {
+          "type": "guid",
+          "guid": "d348c764-47d9-3e31-bd75-d39dfde52c26"
+        },
+        {
+          "type": "guid",
+          "guid": "4e56816c-66fd-335f-abbb-e933d7e43ea9"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48866396/game-highlights",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48866396/game-highlights",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=664e6a5042f65"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48866396"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/93cb6559-1ac2-462c-adf9-94a9a0179c73"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48866396&videoDSI=664e6a5042f65"
+        }
+      }
+    },
+    {
+      "id": 48866388,
+      "nowId": "1-48866388",
+      "contentKey": "48866388-1-293-1",
+      "dataSourceIdentifier": "65ef34f8959ed",
+      "type": "Media",
+      "headline": "Athletics vs. San Diego Padres: Game Highlights",
+      "description": "Athletics vs. San Diego Padres: Game Highlights",
+      "lastModified": "2026-05-24T23:27:02Z",
+      "published": "2026-05-24T23:27:02Z",
+      "images": [
+        {
+          "name": "Athletics vs. San Diego Padres: Game Highlights",
+          "caption": "Athletics vs. San Diego Padres: Game Highlights",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0524/69147e60-b10e-43db-bc07-d72a71868b29/69147e60-b10e-43db-bc07-d72a71868b29.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 147059,
+          "type": "athlete",
+          "uid": "s:1~l:10~a:35591",
+          "guid": "53b65b61-99f4-b102-24c1-7138251ddd24",
+          "description": "Ty France",
+          "sportId": 10,
+          "athleteId": 35591,
+          "athlete": {
+            "id": 35591,
+            "description": "Ty France",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/35591"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/35591"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 724,
+          "type": "team",
+          "uid": "s:1~l:10~t:25",
+          "guid": "4dec648c-3eb9-055c-aebc-2711f30975a0",
+          "description": "San Diego Padres",
+          "sportId": 10,
+          "teamId": 25,
+          "team": {
+            "id": 25,
+            "description": "San Diego Padres",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/sd/san-diego-padres"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/sd/san-diego-padres"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 522275,
+          "type": "athlete",
+          "uid": "s:1~l:10~a:4917919",
+          "guid": "507645e1-1fa0-3e50-b541-3d37c9f4f43a",
+          "description": "Lawrence Butler",
+          "sportId": 10,
+          "athleteId": 4917919,
+          "athlete": {
+            "id": 4917919,
+            "description": "Lawrence Butler",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/4917919"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/4917919"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 80311,
+          "type": "league",
+          "uid": "s:1~l:10",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10",
+          "description": "MLB",
+          "sportId": 10,
+          "leagueId": 10,
+          "league": {
+            "id": 10,
+            "description": "MLB",
+            "abbreviation": "MLB",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 390476,
+          "type": "athlete",
+          "uid": "s:1~l:10~a:41595",
+          "guid": "721366e3-a21d-8e33-46ec-a364c53dd753",
+          "description": "Carlos Cortes",
+          "sportId": 10,
+          "athleteId": 41595,
+          "athlete": {
+            "id": 41595,
+            "description": "Carlos Cortes",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/41595"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/mlb/player/_/id/41595"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 316,
+          "type": "team",
+          "uid": "s:1~l:10~t:11",
+          "guid": "1d8ed3a9-4c7d-0941-3677-bb6defe67c7a",
+          "description": "Athletics",
+          "sportId": 10,
+          "teamId": 11,
+          "team": {
+            "id": 11,
+            "description": "Athletics",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/ath/athletics"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/ath/athletics"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 757286,
+          "type": "league",
+          "uid": "s:1",
+          "guid": "e364bfcd-493d-3bfb-ac83-bd27d66fedd0",
+          "description": "Baseball",
+          "sportId": 1,
+          "leagueId": 1,
+          "league": {
+            "id": 1,
+            "description": "Baseball"
+          }
+        },
+        {
+          "id": 12023,
+          "type": "league",
+          "guid": "486b53e9-9924-4652-82e3-1542a5849276",
+          "description": "Fantasy MLB",
+          "sportId": 0,
+          "leagueId": 3070,
+          "league": {
+            "id": 3070,
+            "description": "Fantasy MLB"
+          }
+        },
+        {
+          "id": 711824,
+          "type": "editorialindicator",
+          "guid": "d348c764-47d9-3e31-bd75-d39dfde52c26",
+          "description": "SC4U  - Eligible"
+        },
+        {
+          "id": 711821,
+          "type": "editorialindicator",
+          "guid": "f3e05446-8d07-3064-a239-c10c32884ea2",
+          "description": "SC4U - Full Highlight"
+        },
+        {
+          "type": "event",
+          "uid": "s:1~l:10~e:401815482",
+          "guid": "19e4912e-757d-3e24-987c-79923ab95d31",
+          "description": "Athletics Athletics @ San Diego Padres",
+          "eventId": 401815482,
+          "event": {
+            "id": 401815482,
+            "sport": "baseball",
+            "league": "mlb",
+            "description": "Athletics Athletics @ San Diego Padres",
+            "links": {
+              "web": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815482"
+                }
+              },
+              "mobile": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815482"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "53b65b61-99f4-b102-24c1-7138251ddd24"
+        },
+        {
+          "type": "guid",
+          "guid": "4dec648c-3eb9-055c-aebc-2711f30975a0"
+        },
+        {
+          "type": "guid",
+          "guid": "507645e1-1fa0-3e50-b541-3d37c9f4f43a"
+        },
+        {
+          "type": "guid",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10"
+        },
+        {
+          "type": "guid",
+          "guid": "721366e3-a21d-8e33-46ec-a364c53dd753"
+        },
+        {
+          "type": "guid",
+          "guid": "1d8ed3a9-4c7d-0941-3677-bb6defe67c7a"
+        },
+        {
+          "type": "guid",
+          "guid": "e364bfcd-493d-3bfb-ac83-bd27d66fedd0"
+        },
+        {
+          "type": "guid",
+          "guid": "486b53e9-9924-4652-82e3-1542a5849276"
+        },
+        {
+          "type": "guid",
+          "guid": "d348c764-47d9-3e31-bd75-d39dfde52c26"
+        },
+        {
+          "type": "guid",
+          "guid": "f3e05446-8d07-3064-a239-c10c32884ea2"
+        },
+        {
+          "type": "guid",
+          "guid": "19e4912e-757d-3e24-987c-79923ab95d31"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48866388/game-highlights",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48866388/game-highlights",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=65ef34f8959ed"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48866388"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/9f0b8f24-b461-4d7f-8ba3-3eb4ac7dc8ae"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48866388&videoDSI=65ef34f8959ed"
+        }
+      }
+    },
+    {
+      "id": 48866384,
+      "nowId": "1-48866384",
+      "contentKey": "48866384-1-21-1",
+      "dataSourceIdentifier": "567d2f45edd13",
+      "type": "Recap",
+      "headline": "Devers hits Giants 3rd grand slam in 7 days during 8-5 win over White Sox",
+      "description": "\u2014 Rafael Devers hit San Francisco's third grand slam in a seven-day span, a tiebreaking, fifth-inning drive that led the Giants over the Chicago White Sox 8-5 on Sunday.",
+      "lastModified": "2026-05-24T23:25:02Z",
+      "published": "2026-05-24T23:25:02Z",
+      "images": [
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.awayhome.1",
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.applewatch.awayhome.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.applewatch.homeaway.1",
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.applewatch.homeaway.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.awayhome.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.1",
+          "ratio": "16x9",
+          "height": 173,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.homeaway.16x9.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.awayhome.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.1x1.1",
+          "ratio": "1x1",
+          "height": 308,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.homeaway.1x1.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.awayhome.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.1",
+          "ratio": "5x2",
+          "height": 124,
+          "width": 308,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.homeaway.5x2.1"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.awayhome.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.16x9.2",
+          "ratio": "16x9",
+          "height": 353,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.homeaway.16x9.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.awayhome.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.awayhome.5x2.2"
+        },
+        {
+          "type": "stitcher",
+          "name": "espn.all.homeaway.5x2.2",
+          "ratio": "5x2",
+          "height": 251,
+          "width": 628,
+          "url": "https://s.espncdn.com/stitcher/sports/baseball/mlb/events/401815483.png?templateId=espn.all.homeaway.5x2.2"
+        },
+        {
+          "type": "Media",
+          "name": "Giants take the series with 8-5 win over the White Sox",
+          "caption": "Giants take the series with 8-5 win over the White Sox",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0524/d88bf528-e395-4009-a251-9756e983bc83/d88bf528-e395-4009-a251-9756e983bc83.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 80311,
+          "type": "league",
+          "uid": "s:1~l:10",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10",
+          "description": "MLB",
+          "sportId": 10,
+          "leagueId": 10,
+          "league": {
+            "id": 10,
+            "description": "MLB",
+            "abbreviation": "MLB",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mlb/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 751,
+          "type": "team",
+          "uid": "s:1~l:10~t:26",
+          "guid": "e072b79c-4fa1-3a55-bdcd-4d7d9734d79b",
+          "description": "San Francisco Giants",
+          "sportId": 10,
+          "teamId": 26,
+          "team": {
+            "id": 26,
+            "description": "San Francisco Giants",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/sf/san-francisco-giants"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/sf/san-francisco-giants"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 141,
+          "type": "team",
+          "uid": "s:1~l:10~t:4",
+          "guid": "8f4800c6-3c05-b3d5-8186-9750cd72a3c2",
+          "description": "Chicago White Sox",
+          "sportId": 10,
+          "teamId": 4,
+          "team": {
+            "id": 4,
+            "description": "Chicago White Sox",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/chw/chicago-white-sox"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/mlb/team/_/name/chw/chicago-white-sox"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "event",
+          "uid": "s:1~l:10~e:401815483",
+          "guid": "9d6b2171-0681-3447-841c-f6d001ba838e",
+          "description": "Chicago White Sox @ San Francisco Giants",
+          "eventId": 401815483,
+          "event": {
+            "id": 401815483,
+            "sport": "baseball",
+            "league": "mlb",
+            "description": "Chicago White Sox @ San Francisco Giants",
+            "links": {
+              "web": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815483"
+                }
+              },
+              "mobile": {
+                "event": {
+                  "href": "https://www.espn.com/mlb/game/_/gameId/401815483"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "b38f959b-7865-31ac-8841-b88355519e10"
+        },
+        {
+          "type": "guid",
+          "guid": "e072b79c-4fa1-3a55-bdcd-4d7d9734d79b"
+        },
+        {
+          "type": "guid",
+          "guid": "8f4800c6-3c05-b3d5-8186-9750cd72a3c2"
+        },
+        {
+          "type": "guid",
+          "guid": "9d6b2171-0681-3447-841c-f6d001ba838e"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "http://www.espn.com/mlb/recap?gameId=401815483"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/mlb/story?storyId=48866384"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48866384"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48866384"
+          }
+        }
+      }
+    }
+  ]
+}

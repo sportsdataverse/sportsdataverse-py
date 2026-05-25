@@ -17,6 +17,10 @@ against the NBA league. Used by `tests/test_espn_universal_parsers.py`.
 | `summary_nfl.json`           | Site v2 `summary?event=401671889`              | Super Bowl LIX KC@PHI; ~950KB, 19 sections (uses drives.previous[]) |
 | `summary_nhl.json`           | Site v2 `summary?event=401675111`              | 2024 Stanley Cup Final G7 EDM@FLA; ~880KB, 19 sections (no winprob) |
 | `summary_wnba.json`          | Site v2 `summary?event=401726992`              | 2024 WNBA Finals G5 MIN@NY; ~760KB, 19 sections |
+| `team_roster_{mlb,nfl,nhl,wnba}.json` | Site v2 `teams/{id}/roster` | Cross-league parity captures for `parse_team_roster` (MLB=NYY id 10, NFL=KC id 12, NHL=EDM id 22, WNBA=NYL id 20) |
+| `team_schedule_{mlb,nfl,nhl,wnba}.json` | Site v2 `teams/{id}/schedule` | Cross-league captures for `parse_team_schedule` |
+| `news_{mlb,nfl,nhl,wnba}.json` | Site v2 `news?limit=5` | Cross-league captures for `parse_news` |
+| `injuries_{mlb,nfl,nhl,wnba}.json` | Site v2 `injuries` | Cross-league captures for `parse_injuries`; NFL is the largest (~15 MB) |
 
 Endpoints are league-agnostic so capturing against NBA is sufficient — the
 parsers run identically against MLB, NFL, NHL, WNBA, MBB, WBB, CFB payloads

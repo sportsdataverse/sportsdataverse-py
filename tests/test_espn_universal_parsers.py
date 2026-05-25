@@ -342,6 +342,127 @@ def test_summary_section_parsers_individually():
 
 
 # ===========================================================================
+# Cross-league parity for the team-scoped + league-wide universal parsers
+# ===========================================================================
+#
+# Captures from MLB / NFL / NHL / WNBA (the original NBA captures cover
+# the NBA case in the dedicated tests above). Proves that the universal
+# parsers handle every league's payload shape — same code path, no
+# league-specific tweaks.
+#
+# Discovered shape divergence (handled by parse_team_roster):
+#   NBA / WNBA / MBB / WBB / CFB ship ``athletes[]`` as a flat list of
+#   player dicts. MLB / NFL / NHL wrap players in position groups —
+#   ``athletes[i].position = "Pitchers"`` / ``"offense"`` /
+#   ``"Centers"`` etc., with the players in ``athletes[i].items[]``.
+#   parse_team_roster auto-detects and unrolls the grouped shape,
+#   tagging each player with a ``position_group`` column.
+
+
+@pytest.mark.parametrize("league,expected_min_rows,grouped", [
+    # Flat shape (no position_group column)
+    ("nba",   12, False),
+    ("wnba",  10, False),
+    # Position-grouped shape (rows include position_group column)
+    ("mlb",   20, True),   # 4 groups × ~6 players
+    ("nfl",   50, True),   # 3 groups × full roster
+    ("nhl",   18, True),   # 5 groups × ~5 players
+])
+def test_parse_team_roster_handles_both_shapes_across_leagues(
+    league, expected_min_rows, grouped,
+):
+    from sportsdataverse._common_espn_parsers import parse_team_roster
+
+    df = parse_team_roster(_load(f"team_roster_{league}"))
+    assert isinstance(df, pl.DataFrame)
+    assert df.height >= expected_min_rows, (
+        f"{league}: expected >= {expected_min_rows} players, got {df.height}"
+    )
+    # Universal columns from the athlete sub-dict
+    for col in ("id", "first_name", "last_name", "full_name"):
+        assert col in df.columns, f"{league}: missing {col!r}"
+    # Position-grouped leagues add a column the flat-shape ones don't
+    if grouped:
+        assert "position_group" in df.columns, (
+            f"{league}: expected position_group column for grouped shape"
+        )
+        # All values should be non-null strings
+        groups = set(df["position_group"].to_list())
+        assert all(isinstance(g, str) and g for g in groups), (
+            f"{league}: position_group has null/empty values: {groups}"
+        )
+    else:
+        # Flat-shape leagues should NOT have a stray position_group col
+        # (would indicate accidental column from one of the player records)
+        assert "position_group" not in df.columns
+
+
+@pytest.mark.parametrize("league,expected_min_rows", [
+    ("nba",   10),
+    ("mlb",  100),   # full MLB season = 162 games
+    ("nfl",   15),   # 17 regular + playoffs
+    # NHL skipped: off-season capture returned an empty schedule
+    ("wnba",  30),   # 40+ regular-season games
+])
+def test_parse_team_schedule_works_across_leagues(league, expected_min_rows):
+    from sportsdataverse._common_espn_parsers import parse_team_schedule
+
+    df = parse_team_schedule(_load(f"team_schedule_{league}"))
+    assert df.height >= expected_min_rows, (
+        f"{league}: expected >= {expected_min_rows} events, got {df.height}"
+    )
+    for col in ("id", "date", "name", "season_year"):
+        assert col in df.columns
+
+
+def test_parse_team_schedule_handles_empty_offseason_payload():
+    """NHL team_schedule capture in the off-season returns no events —
+    the parser must return a zero-row frame, not raise."""
+    from sportsdataverse._common_espn_parsers import parse_team_schedule
+
+    df = parse_team_schedule(_load("team_schedule_nhl"))
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 0
+
+
+@pytest.mark.parametrize("league,expected_min_rows", [
+    ("nba",  3),
+    ("mlb",  3),
+    ("nfl",  3),
+    ("nhl",  3),
+    ("wnba", 3),
+])
+def test_parse_news_works_across_leagues(league, expected_min_rows):
+    from sportsdataverse._common_espn_parsers import parse_news
+
+    df = parse_news(_load(f"news_{league}"))
+    assert df.height >= expected_min_rows, (
+        f"{league}: expected >= {expected_min_rows} articles, got {df.height}"
+    )
+    for col in ("id", "headline", "type"):
+        assert col in df.columns
+
+
+@pytest.mark.parametrize("league,expected_min_rows", [
+    # All 5 leagues consistently have >= 10 teams reporting injuries
+    ("nba",  10),
+    ("mlb",  10),
+    ("nfl",  10),
+    ("nhl",  10),
+    ("wnba",  5),   # smaller league, lower floor
+])
+def test_parse_injuries_works_across_leagues(league, expected_min_rows):
+    from sportsdataverse._common_espn_parsers import parse_injuries
+
+    df = parse_injuries(_load(f"injuries_{league}"))
+    assert df.height >= expected_min_rows, (
+        f"{league}: expected >= {expected_min_rows} teams w/ injuries, got {df.height}"
+    )
+    for col in ("id", "display_name", "injuries"):
+        assert col in df.columns
+
+
+# ===========================================================================
 # Cross-league summary parity
 # ===========================================================================
 #
@@ -574,14 +695,6 @@ def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
     bound wrapper across all 7 league extension modules."""
     import inspect
 
-    from sportsdataverse.cfb.cfb_espn_ext import __all__ as cfb_all
-    from sportsdataverse.mbb.mbb_espn_ext import __all__ as mbb_all
-    from sportsdataverse.mlb.mlb_espn_ext import __all__ as mlb_all
-    from sportsdataverse.nba.nba_espn_ext import __all__ as nba_all
-    from sportsdataverse.nfl.nfl_espn_ext import __all__ as nfl_all
-    from sportsdataverse.wbb.wbb_espn_ext import __all__ as wbb_all
-    from sportsdataverse.wnba.wnba_espn_ext import __all__ as wnba_all
-
     import sportsdataverse.cfb.cfb_espn_ext as cfb_mod
     import sportsdataverse.mbb.mbb_espn_ext as mbb_mod
     import sportsdataverse.mlb.mlb_espn_ext as mlb_mod
@@ -589,6 +702,13 @@ def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
     import sportsdataverse.nfl.nfl_espn_ext as nfl_mod
     import sportsdataverse.wbb.wbb_espn_ext as wbb_mod
     import sportsdataverse.wnba.wnba_espn_ext as wnba_mod
+    from sportsdataverse.cfb.cfb_espn_ext import __all__ as cfb_all
+    from sportsdataverse.mbb.mbb_espn_ext import __all__ as mbb_all
+    from sportsdataverse.mlb.mlb_espn_ext import __all__ as mlb_all
+    from sportsdataverse.nba.nba_espn_ext import __all__ as nba_all
+    from sportsdataverse.nfl.nfl_espn_ext import __all__ as nfl_all
+    from sportsdataverse.wbb.wbb_espn_ext import __all__ as wbb_all
+    from sportsdataverse.wnba.wnba_espn_ext import __all__ as wnba_all
 
     leagues = [
         ("nba",  nba_all,  nba_mod),

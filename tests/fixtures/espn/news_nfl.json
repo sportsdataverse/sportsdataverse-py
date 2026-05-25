@@ -1,0 +1,754 @@
+{
+  "header": "NFL News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/nfl/",
+    "text": "All NFL News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 48711830,
+      "nowId": "1-48711830",
+      "contentKey": "48711830-1-6-1",
+      "dataSourceIdentifier": "3005ea806b142",
+      "type": "Story",
+      "headline": "Field Yates' fantasy football PPR rankings: Top 160 for 2026",
+      "description": "Field provides his latest rankings for the upcoming season, which will be updated throughout the offseason.",
+      "lastModified": "2026-05-24T21:34:02Z",
+      "published": "2026-05-24T21:34:02Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "4d699881bf031",
+          "id": 48711904,
+          "type": "header",
+          "name": "Christian McCaffrey [1296x729]",
+          "caption": "Christian McCaffrey is coming off a season in which he was easily the top scorer in fantasy and also tied his career high for touches with 413.",
+          "alt": "Christian McCaffrey, San Francisco 49ers running back",
+          "credit": "AP Photo/Matt Rourke",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0112/r1599486_1296x729_16-9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 12024,
+          "type": "league",
+          "uid": "s:20~l:3080",
+          "guid": "a472a0eb-d630-3568-bf2a-59572429de6c",
+          "description": "Fantasy NFL",
+          "sportId": 3080,
+          "leagueId": 3080,
+          "league": {
+            "id": 3080,
+            "description": "Fantasy NFL",
+            "abbreviation": "NFLFD"
+          }
+        },
+        {
+          "id": 141870,
+          "type": "topic",
+          "guid": "ca127063-3a37-f49a-a3fc-0eeb89492361",
+          "description": "news - fantasy",
+          "sportId": 0,
+          "topicId": 240
+        },
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "a472a0eb-d630-3568-bf2a-59572429de6c"
+        },
+        {
+          "type": "guid",
+          "guid": "ca127063-3a37-f49a-a3fc-0eeb89492361"
+        },
+        {
+          "type": "guid",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/fantasy/football/story/_/id/48711830/2026-fantasy-football-rankings-ppr-field-yates"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/wireless/story?storyId=48711830"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48711830"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48711830"
+          }
+        }
+      },
+      "byline": "Field Yates"
+    },
+    {
+      "id": 48845391,
+      "nowId": "1-48845391",
+      "contentKey": "48845391-1-6-1",
+      "dataSourceIdentifier": "7816e27bbd6c0",
+      "type": "Story",
+      "headline": "'I Scored a Touchdown': Antwaan Randle El to Hines Ward 'special'",
+      "description": "The Steelers teammates share with ESPN the details of the TD -- and the celebration -- from Super Bowl XL.",
+      "lastModified": "2026-05-24T10:33:11Z",
+      "published": "2026-05-24T10:33:11Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "ff8ca42aa9a11",
+          "id": 47781138,
+          "type": "header",
+          "name": "Antwaan Randle El  [608x342]",
+          "caption": "Antwaan Randle El was the Big Ten MVP as Indiana's QB in 2001, but the most important pass he ever threw was as a wide receiver to Hines Ward in Super Bowl XL.",
+          "credit": "Allen Kee/NFLPhotoLibrary",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0130/r1608129_2_608x342_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Santonio Holmes' 'I Scored a Touchdown' story: SB XLIII",
+          "caption": "This \"I Scored a Touchdown\" story focuses on Santonio Holmes' game-winning touchdown for the Steelers in Super Bowl XLIII.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/wsc/2026/0417/34783925-e008-4b8c-a9a3-a3b239878970/34783925-e008-4b8c-a9a3-a3b239878970.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2776,
+          "type": "team",
+          "uid": "s:20~l:28~t:23",
+          "guid": "debcd592-8d53-71f1-fc15-5c8b8ef9df6e",
+          "description": "Pittsburgh Steelers",
+          "sportId": 28,
+          "teamId": 23,
+          "team": {
+            "id": 23,
+            "description": "Pittsburgh Steelers",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/pit/pittsburgh-steelers"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/pit/pittsburgh-steelers"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2796,
+          "type": "athlete",
+          "uid": "s:20~l:28~a:1494",
+          "guid": "6d4ba136-4815-07ef-f75d-049fb8b4da49",
+          "description": "Hines Ward",
+          "sportId": 28,
+          "athleteId": 1494,
+          "athlete": {
+            "id": 1494,
+            "description": "Hines Ward",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/1494/hines-ward"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/1494/hines-ward"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 19459,
+          "type": "athlete",
+          "uid": "s:20~l:28~a:3590",
+          "guid": "a07f005e-832e-3e1e-7bf9-250d6bb97498",
+          "description": "Antwaan Randle El",
+          "sportId": 28,
+          "athleteId": 3590,
+          "athlete": {
+            "id": 3590,
+            "description": "Antwaan Randle El",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/3590/antwaan-randle-el"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/3590/antwaan-randle-el"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+        },
+        {
+          "type": "guid",
+          "guid": "debcd592-8d53-71f1-fc15-5c8b8ef9df6e"
+        },
+        {
+          "type": "guid",
+          "guid": "6d4ba136-4815-07ef-f75d-049fb8b4da49"
+        },
+        {
+          "type": "guid",
+          "guid": "a07f005e-832e-3e1e-7bf9-250d6bb97498"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nfl/story/_/id/48845391/espn-scored-touchdown-super-bowl-pittsburgh-steelers-antwaan-randle-el-hines-ward-special-moment"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nfl/story?storyId=48845391"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48845391"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48845391"
+          }
+        }
+      },
+      "byline": "Brooke Pryor"
+    },
+    {
+      "id": 48844557,
+      "nowId": "1-48844557",
+      "contentKey": "48844557-1-6-1",
+      "dataSourceIdentifier": "2d1e5e451796f",
+      "type": "Story",
+      "headline": "Answering five questions ahead of OTAs for the Jets",
+      "description": "Looking at some of the biggest storylines as New York starts its organized team activities Wednesday.",
+      "lastModified": "2026-05-24T10:00:07Z",
+      "published": "2026-05-24T10:00:07Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "c74daebbb283b",
+          "id": 48847485,
+          "type": "header",
+          "name": "AG OTAs [608x342]",
+          "caption": "New York Jets coach Aaron Glenn speaks to the media earlier this month.",
+          "credit": "Frank Franklin II/AP",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0522/r1662190_608x342_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Were the Jets right to move on from Aaron Rodgers?",
+          "caption": "Rich Cimini assesses the Jets organization since moving on from QB Aaron Rodgers.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0518/dm_260518_NFL_InstantAnalysis_Jets_IA/dm_260518_NFL_InstantAnalysis_Jets_IA.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2378,
+          "type": "team",
+          "uid": "s:20~l:28~t:20",
+          "guid": "732d3caf-b350-1e34-48c6-b7cebb4a0d88",
+          "description": "New York Jets",
+          "sportId": 28,
+          "teamId": 20,
+          "team": {
+            "id": 20,
+            "description": "New York Jets",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/nyj/new-york-jets"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/nyj/new-york-jets"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 696437,
+          "type": "contributor",
+          "guid": "2f2acd9c-9576-37d0-bec4-acb019376e84",
+          "description": "Rich Cimini",
+          "slug": "rich-cimini",
+          "contributor": {
+            "id": 1872,
+            "description": "Rich Cimini"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+        },
+        {
+          "type": "guid",
+          "guid": "732d3caf-b350-1e34-48c6-b7cebb4a0d88"
+        },
+        {
+          "type": "guid",
+          "guid": "2f2acd9c-9576-37d0-bec4-acb019376e84"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nfl/story/_/id/48844557/new-york-jets-five-questions-otas-aaron-glenn-geno-smith"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nfl/story?storyId=48844557"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48844557"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48844557"
+          }
+        }
+      },
+      "byline": "Rich Cimini"
+    },
+    {
+      "id": 48845555,
+      "nowId": "1-48845555",
+      "contentKey": "48845555-1-6-1",
+      "dataSourceIdentifier": "29ce5a3f3c6ef",
+      "type": "Story",
+      "headline": "Will Pats QB Drake Maye improve in second year with McDaniels?",
+      "description": "The New England quarterback is entering a vital second season with his offensive coordinator.",
+      "lastModified": "2026-05-24T10:00:05Z",
+      "published": "2026-05-24T10:00:05Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "5a5fd5ea07068",
+          "id": 48845625,
+          "type": "header",
+          "name": "Drake Maye [608x342]",
+          "caption": "Phase 3 of the NFL's offseason program begins this week for Drake Maye and the Patriots.",
+          "credit": "AP Photo/Charles Krupa",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/0522/r1662079_608x342_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Patriots WR Kyle Williams making key offseason changes",
+          "caption": "Mike Reiss discusses the changes Kyle Williams has made this offseason as the wide receiver looks to take his game to the next level.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0520/dm_260520_Watchfolder_Patriots_16/dm_260520_Watchfolder_Patriots_16.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2321,
+          "type": "team",
+          "uid": "s:20~l:28~t:17",
+          "guid": "0078f353-fe3e-67ed-a42c-43cca0568e21",
+          "description": "New England Patriots",
+          "sportId": 28,
+          "teamId": 17,
+          "team": {
+            "id": 17,
+            "description": "New England Patriots",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/ne/new-england-patriots"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/ne/new-england-patriots"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 490129,
+          "type": "athlete",
+          "uid": "s:20~l:28~a:4431452",
+          "guid": "2fbd2f9e-624d-3e63-9bb5-9bb965782b68",
+          "description": "Drake Maye",
+          "sportId": 28,
+          "athleteId": 4431452,
+          "athlete": {
+            "id": 4431452,
+            "description": "Drake Maye",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/4431452/drake-maye"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/4431452/drake-maye"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 450014,
+          "type": "athlete",
+          "uid": "s:20~l:28~a:4613202",
+          "guid": "2944cdd5-757b-3462-ab34-9d15aa8ef0cf",
+          "description": "Kyle Williams",
+          "sportId": 28,
+          "athleteId": 4613202,
+          "athlete": {
+            "id": 4613202,
+            "description": "Kyle Williams",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/4613202/kyle-williams"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/4613202/kyle-williams"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 696440,
+          "type": "contributor",
+          "guid": "bdee10fe-a1a2-3ced-87dd-43089bf47931",
+          "description": "Mike Reiss",
+          "slug": "mike-reiss",
+          "contributor": {
+            "id": 1800,
+            "description": "Mike Reiss"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+        },
+        {
+          "type": "guid",
+          "guid": "0078f353-fe3e-67ed-a42c-43cca0568e21"
+        },
+        {
+          "type": "guid",
+          "guid": "2fbd2f9e-624d-3e63-9bb5-9bb965782b68"
+        },
+        {
+          "type": "guid",
+          "guid": "2944cdd5-757b-3462-ab34-9d15aa8ef0cf"
+        },
+        {
+          "type": "guid",
+          "guid": "bdee10fe-a1a2-3ced-87dd-43089bf47931"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/nfl/story/_/id/48845555/new-england-patriots-qb-drake-maye-josh-mcdaniels-system-2026-season"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nfl/story?storyId=48845555"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48845555"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48845555"
+          }
+        }
+      },
+      "byline": "Mike Reiss"
+    },
+    {
+      "id": 48859493,
+      "nowId": "1-48859493",
+      "contentKey": "48859493-1-5-1",
+      "dataSourceIdentifier": "61a2e0c683bf6",
+      "type": "HeadlineNews",
+      "headline": "Johnny Manziel dominates in MMA debut, says he won't fight again",
+      "description": "Former NFL quarterback Johnny Manziel flashed some skills as a fighter in his MMA debut, stopping social media influencer Bob Menery in the first round before saying one fight was \"good enough.\"",
+      "lastModified": "2026-05-24T17:38:47Z",
+      "published": "2026-05-24T17:38:47Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "2e5337d6bf553",
+          "id": 48700078,
+          "type": "header",
+          "name": "Johnny Manziel [600x600]",
+          "credit": "Steve Roberts-Imagn Images",
+          "height": 600,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2026/0507/r1654707_600x600_1-1.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 32201,
+          "type": "league",
+          "uid": "s:3301",
+          "guid": "d90f1251-c770-4548-a685-808319e21728",
+          "description": "MMA",
+          "sportId": 3301,
+          "leagueId": 3301,
+          "league": {
+            "id": 3301,
+            "description": "MMA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/mma/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/mma/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 126376,
+          "type": "athlete",
+          "uid": "s:20~l:28~a:16736",
+          "guid": "bc593af0-c251-6c02-09ee-c0ecbd65a3fb",
+          "description": "Johnny Manziel",
+          "sportId": 28,
+          "athleteId": 16736,
+          "athlete": {
+            "id": 16736,
+            "description": "Johnny Manziel",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/16736/johnny-manziel"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/nfl/player/_/id/16736/johnny-manziel"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "type": "guid",
+          "guid": "d90f1251-c770-4548-a685-808319e21728"
+        },
+        {
+          "type": "guid",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+        },
+        {
+          "type": "guid",
+          "guid": "bc593af0-c251-6c02-09ee-c0ecbd65a3fb"
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/mma/story/_/id/48859493/johnny-manziel-dominates-mma-debut-says-fight-again"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/extra/mma/story?storyId=48859493"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48859493"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48859493"
+          }
+        }
+      }
+    }
+  ]
+}

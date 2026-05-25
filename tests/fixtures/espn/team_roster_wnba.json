@@ -1,0 +1,1894 @@
+{
+  "timestamp": "2026-05-25T00:56:15Z",
+  "status": "success",
+  "season": {
+    "year": 2026,
+    "displayName": "2026",
+    "type": 2,
+    "name": "Regular Season"
+  },
+  "athletes": [
+    {
+      "id": "5208983",
+      "uid": "s:40~l:59~a:5208983",
+      "guid": "c3bdc5c0-306d-3749-90c4-fced7e62b5b0",
+      "alternateIds": {
+        "sdr": "5208983"
+      },
+      "firstName": "Isobel",
+      "lastName": "Borlase",
+      "fullName": "Isobel Borlase",
+      "displayName": "Isobel Borlase",
+      "shortName": "I. Borlase",
+      "height": 71.0,
+      "displayHeight": "5' 11\"",
+      "age": 21,
+      "dateOfBirth": "2004-09-12T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5208983/isobel-borlase",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/5208983/isobel-borlase",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/5208983/isobel-borlase",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/5208983/isobel-borlase",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/5208983/isobel-borlase",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5208983/isobel-borlase",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Melbourne",
+        "state": "VIC",
+        "country": "Australia"
+      },
+      "slug": "isobel-borlase",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/5208983.png",
+        "alt": "Isobel Borlase"
+      },
+      "jersey": "20",
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 0
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "3142250",
+      "uid": "s:40~l:59~a:3142250",
+      "guid": "6e517eae-e6cc-f3bb-5761-4b2f27775272",
+      "alternateIds": {
+        "sdr": "3142250"
+      },
+      "firstName": "Jordin",
+      "lastName": "Canada",
+      "fullName": "Jordin Canada",
+      "displayName": "Jordin Canada",
+      "shortName": "J. Canada",
+      "weight": 135.0,
+      "displayWeight": "135 lbs",
+      "height": 66.0,
+      "displayHeight": "5' 6\"",
+      "age": 30,
+      "dateOfBirth": "1995-08-11T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/3142250/jordin-canada",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/3142250/jordin-canada",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/3142250/jordin-canada",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/3142250/jordin-canada",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/3142250/jordin-canada",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/3142250/jordin-canada",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Los Angeles",
+        "state": "CA",
+        "country": "USA"
+      },
+      "college": {
+        "id": "26",
+        "guid": "5da8e04c-d85c-376d-b336-9342e0bfdd7c",
+        "mascot": "Bruins",
+        "name": "UCLA",
+        "shortName": "UCLA",
+        "abbrev": "UCLA",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-23T01:44Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/26.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-23T01:44Z"
+          }
+        ]
+      },
+      "slug": "jordin-canada",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/3142250.png",
+        "alt": "Jordin Canada"
+      },
+      "jersey": "3",
+      "hand": {
+        "type": "BOTH",
+        "abbreviation": "B",
+        "displayValue": "Both"
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 8
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "3058901",
+      "uid": "s:40~l:59~a:3058901",
+      "guid": "42ac782c-1f52-80e6-59ee-eebe51e6c1ec",
+      "alternateIds": {
+        "sdr": "3058901"
+      },
+      "firstName": "Allisha",
+      "lastName": "Gray",
+      "fullName": "Allisha Gray",
+      "displayName": "Allisha Gray",
+      "shortName": "A. Gray",
+      "weight": 167.0,
+      "displayWeight": "167 lbs",
+      "height": 72.0,
+      "displayHeight": "6' 0\"",
+      "age": 31,
+      "dateOfBirth": "1995-01-12T08:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/3058901/allisha-gray",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/3058901/allisha-gray",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/3058901/allisha-gray",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/3058901/allisha-gray",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/3058901/allisha-gray",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/3058901/allisha-gray",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Greenwood",
+        "state": "SC",
+        "country": "USA"
+      },
+      "college": {
+        "id": "2579",
+        "guid": "9a4406c8-9b7f-35b3-858d-2041019203a8",
+        "mascot": "Gamecocks",
+        "name": "South Carolina",
+        "shortName": "South Carolina",
+        "abbrev": "SC",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2579.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-19T23:48Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2579.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-19T23:47Z"
+          }
+        ]
+      },
+      "slug": "allisha-gray",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/3058901.png",
+        "alt": "Allisha Gray"
+      },
+      "jersey": "15",
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 9
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "4398915",
+      "uid": "s:40~l:59~a:4398915",
+      "guid": "55b8c3a3-d957-b4d9-c706-2e25909a1324",
+      "alternateIds": {
+        "sdr": "4398915"
+      },
+      "firstName": "Naz",
+      "lastName": "Hillmon",
+      "fullName": "Naz Hillmon",
+      "displayName": "Naz Hillmon",
+      "shortName": "N. Hillmon",
+      "weight": 190.0,
+      "displayWeight": "190 lbs",
+      "height": 74.0,
+      "displayHeight": "6' 2\"",
+      "age": 26,
+      "dateOfBirth": "2000-04-05T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4398915/naz-hillmon",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/4398915/naz-hillmon",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/4398915/naz-hillmon",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/4398915/naz-hillmon",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/4398915/naz-hillmon",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4398915/naz-hillmon",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Cleveland",
+        "state": "OH",
+        "country": "USA"
+      },
+      "college": {
+        "id": "130",
+        "guid": "5c4e2c41-bfad-3161-87a1-3825f0ed3a72",
+        "mascot": "Wolverines",
+        "name": "Michigan",
+        "shortName": "Michigan",
+        "abbrev": "MICH",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2026-01-08T23:30Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/130.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-23T01:44Z"
+          }
+        ]
+      },
+      "slug": "naz-hillmon",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/4398915.png",
+        "alt": "Naz Hillmon"
+      },
+      "jersey": "00",
+      "position": {
+        "id": "7",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 4
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "4398674",
+      "uid": "s:40~l:59~a:4398674",
+      "guid": "940914f8-5293-4fb8-0f4c-7c5436f2c5bd",
+      "alternateIds": {
+        "sdr": "4398674"
+      },
+      "firstName": "Rhyne",
+      "lastName": "Howard",
+      "fullName": "Rhyne Howard",
+      "displayName": "Rhyne Howard",
+      "shortName": "R. Howard",
+      "weight": 175.0,
+      "displayWeight": "175 lbs",
+      "height": 74.0,
+      "displayHeight": "6' 2\"",
+      "age": 26,
+      "dateOfBirth": "2000-04-29T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4398674/rhyne-howard",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/4398674/rhyne-howard",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/4398674/rhyne-howard",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/4398674/rhyne-howard",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/4398674/rhyne-howard",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4398674/rhyne-howard",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Chattanooga",
+        "state": "TN",
+        "country": "USA"
+      },
+      "college": {
+        "id": "96",
+        "guid": "c343d2aa-1f76-3d14-8a74-4a12bb54f2ba",
+        "mascot": "Wildcats",
+        "name": "Kentucky",
+        "shortName": "Kentucky",
+        "abbrev": "UK",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-19T23:48Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/96.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-19T23:47Z"
+          }
+        ]
+      },
+      "slug": "rhyne-howard",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/4398674.png",
+        "alt": "Rhyne Howard"
+      },
+      "jersey": "10",
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 4
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "3058895",
+      "uid": "s:40~l:59~a:3058895",
+      "guid": "1d62bb30-f780-da28-7d86-3cc9b29d7ae7",
+      "alternateIds": {
+        "sdr": "3058895"
+      },
+      "firstName": "Brionna",
+      "lastName": "Jones",
+      "fullName": "Brionna Jones",
+      "displayName": "Brionna Jones",
+      "shortName": "B. Jones",
+      "weight": 215.0,
+      "displayWeight": "215 lbs",
+      "height": 75.0,
+      "displayHeight": "6' 3\"",
+      "age": 30,
+      "dateOfBirth": "1995-12-18T08:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/3058895/brionna-jones",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/3058895/brionna-jones",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/3058895/brionna-jones",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/3058895/brionna-jones",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/3058895/brionna-jones",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/3058895/brionna-jones",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Havre De Grace",
+        "state": "MD",
+        "country": "USA"
+      },
+      "college": {
+        "id": "120",
+        "guid": "c5c06820-0c0a-31d7-80c2-10826db8fd7e",
+        "mascot": "Terrapins",
+        "name": "Maryland",
+        "shortName": "Maryland",
+        "abbrev": "MD",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-23T01:44Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/120.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-23T01:44Z"
+          }
+        ]
+      },
+      "slug": "brionna-jones",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/3058895.png",
+        "alt": "Brionna Jones"
+      },
+      "jersey": "42",
+      "position": {
+        "id": "7",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [
+        {
+          "status": "Out",
+          "date": "2026-05-23T21:05Z"
+        }
+      ],
+      "contracts": [],
+      "experience": {
+        "years": 9
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5017721",
+      "uid": "s:40~l:59~a:5017721",
+      "guid": "52f3ae67-8df5-39f9-aa55-aa6bdae30f53",
+      "alternateIds": {
+        "sdr": "5017721"
+      },
+      "firstName": "Sika",
+      "lastName": "Kone",
+      "fullName": "Sika Kone",
+      "displayName": "Sika Kone",
+      "shortName": "S. Kone",
+      "weight": 180.0,
+      "displayWeight": "180 lbs",
+      "height": 75.0,
+      "displayHeight": "6' 3\"",
+      "age": 23,
+      "dateOfBirth": "2002-07-13T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5017721/sika-kone",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/5017721/sika-kone",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/5017721/sika-kone",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/5017721/sika-kone",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/5017721/sika-kone",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5017721/sika-kone",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {},
+      "citizenship": "Mali",
+      "slug": "sika-kone",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/5017721.png",
+        "alt": "Sika Kone"
+      },
+      "jersey": "23",
+      "position": {
+        "id": "7",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 3
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5105740",
+      "uid": "s:40~l:59~a:5105740",
+      "guid": "8406506b-e9bf-3a2e-bc94-754c91b4f1c3",
+      "alternateIds": {
+        "sdr": "5105740"
+      },
+      "firstName": "Indya",
+      "lastName": "Nivar",
+      "fullName": "Indya Nivar",
+      "displayName": "Indya Nivar",
+      "shortName": "I. Nivar",
+      "height": 70.0,
+      "displayHeight": "5' 10\"",
+      "age": 22,
+      "dateOfBirth": "2004-01-16T08:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5105740/indya-nivar",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/5105740/indya-nivar",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/5105740/indya-nivar",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/5105740/indya-nivar",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/5105740/indya-nivar",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5105740/indya-nivar",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Apex",
+        "state": "NC",
+        "country": "USA"
+      },
+      "college": {
+        "id": "153",
+        "guid": "4c4185a8-3d7d-32bf-bbfc-001d46ba6bbf",
+        "mascot": "Tar Heels",
+        "name": "North Carolina",
+        "shortName": "North Carolina",
+        "abbrev": "UNC",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-19T22:33Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/153.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2026-01-05T20:06Z"
+          }
+        ]
+      },
+      "slug": "indya-nivar",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/5105740.png",
+        "alt": "Indya Nivar"
+      },
+      "jersey": "21",
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 0
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "4597509",
+      "uid": "s:40~l:59~a:4597509",
+      "guid": "d21a1e7d-c02e-3dc6-9ba5-d3e450b4c3b5",
+      "alternateIds": {
+        "sdr": "4597509"
+      },
+      "firstName": "Aaliyah",
+      "lastName": "Nye",
+      "fullName": "Aaliyah Nye",
+      "displayName": "Aaliyah Nye",
+      "shortName": "A. Nye",
+      "height": 72.0,
+      "displayHeight": "6' 0\"",
+      "age": 23,
+      "dateOfBirth": "2002-08-14T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4597509/aaliyah-nye",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/4597509/aaliyah-nye",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/4597509/aaliyah-nye",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/4597509/aaliyah-nye",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/4597509/aaliyah-nye",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4597509/aaliyah-nye",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "East Lansing",
+        "state": "MI",
+        "country": "USA"
+      },
+      "college": {
+        "id": "333",
+        "guid": "284484f2-b714-35bc-9162-4dc652590b02",
+        "mascot": "Crimson Tide",
+        "name": "Alabama",
+        "shortName": "Alabama",
+        "abbrev": "ALA",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-19T23:48Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/333.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-19T23:47Z"
+          }
+        ]
+      },
+      "slug": "aaliyah-nye",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/4597509.png",
+        "alt": "Aaliyah Nye"
+      },
+      "jersey": "32",
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "teams": [
+        {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/basketball/leagues/wnba/seasons/2026/teams/20?lang=en&region=us"
+        }
+      ],
+      "contracts": [],
+      "experience": {
+        "years": 1
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "5108587",
+      "uid": "s:40~l:59~a:5108587",
+      "guid": "65d1a858-06e1-3642-bea2-83d7e8b17653",
+      "alternateIds": {
+        "sdr": "5108587"
+      },
+      "firstName": "Madina",
+      "lastName": "Okot",
+      "fullName": "Madina Okot",
+      "displayName": "Madina Okot",
+      "shortName": "M. Okot",
+      "height": 78.0,
+      "displayHeight": "6' 6\"",
+      "age": 21,
+      "dateOfBirth": "2004-08-23T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5108587/madina-okot",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/5108587/madina-okot",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/5108587/madina-okot",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/5108587/madina-okot",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/5108587/madina-okot",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/5108587/madina-okot",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Mumias",
+        "country": "Kenya"
+      },
+      "college": {
+        "id": "2579",
+        "guid": "9a4406c8-9b7f-35b3-858d-2041019203a8",
+        "mascot": "Gamecocks",
+        "name": "South Carolina",
+        "shortName": "South Carolina",
+        "abbrev": "SC",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2579.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-19T23:48Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2579.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-19T23:47Z"
+          }
+        ]
+      },
+      "slug": "madina-okot",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/5108587.png",
+        "alt": "Madina Okot"
+      },
+      "jersey": "11",
+      "position": {
+        "id": "9",
+        "name": "Center",
+        "displayName": "Center",
+        "abbreviation": "C",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 0
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "4433431",
+      "uid": "s:40~l:59~a:4433431",
+      "guid": "7ebfa5fa-40e4-3bb5-a3a3-91984fc47b8a",
+      "alternateIds": {
+        "sdr": "4433431"
+      },
+      "firstName": "Te-Hina",
+      "lastName": "Paopao",
+      "fullName": "Te-Hina Paopao",
+      "displayName": "Te-Hina Paopao",
+      "shortName": "T. Paopao",
+      "height": 69.0,
+      "displayHeight": "5' 9\"",
+      "age": 23,
+      "dateOfBirth": "2002-08-21T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4433431/te-hina-paopao",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/4433431/te-hina-paopao",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/4433431/te-hina-paopao",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/4433431/te-hina-paopao",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/4433431/te-hina-paopao",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4433431/te-hina-paopao",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Oceanside",
+        "state": "CA",
+        "country": "USA"
+      },
+      "college": {
+        "id": "2579",
+        "guid": "9a4406c8-9b7f-35b3-858d-2041019203a8",
+        "mascot": "Gamecocks",
+        "name": "South Carolina",
+        "shortName": "South Carolina",
+        "abbrev": "SC",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2579.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-19T23:48Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2579.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-19T23:47Z"
+          }
+        ]
+      },
+      "slug": "te-hina-paopao",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/4433431.png",
+        "alt": "Te-Hina Paopao"
+      },
+      "jersey": "2",
+      "hand": {
+        "type": "RIGHT",
+        "abbreviation": "R",
+        "displayValue": "Right"
+      },
+      "position": {
+        "id": "3",
+        "name": "Guard",
+        "displayName": "Guard",
+        "abbreviation": "G",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 1
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    },
+    {
+      "id": "4433402",
+      "uid": "s:40~l:59~a:4433402",
+      "guid": "198d799e-9709-3062-8402-34f309bf151e",
+      "alternateIds": {
+        "sdr": "4433402"
+      },
+      "firstName": "Angel",
+      "lastName": "Reese",
+      "fullName": "Angel Reese",
+      "displayName": "Angel Reese",
+      "shortName": "A. Reese",
+      "weight": 165.0,
+      "displayWeight": "165 lbs",
+      "height": 76.0,
+      "displayHeight": "6' 4\"",
+      "age": 24,
+      "dateOfBirth": "2002-05-06T07:00Z",
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "playercard",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4433402/angel-reese",
+          "text": "Player Card",
+          "shortText": "Player Card",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/stats/_/id/4433402/angel-reese",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "gamelog",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/gamelog/_/id/4433402/angel-reese",
+          "text": "Game Log",
+          "shortText": "Game Log",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "news",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/news/_/id/4433402/angel-reese",
+          "text": "News",
+          "shortText": "News",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "bio",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/bio/_/id/4433402/angel-reese",
+          "text": "Bio",
+          "shortText": "Bio",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "overview",
+            "desktop",
+            "athlete"
+          ],
+          "href": "https://www.espn.com/wnba/player/_/id/4433402/angel-reese",
+          "text": "Overview",
+          "shortText": "Overview",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "birthPlace": {
+        "city": "Baltimore",
+        "state": "MD",
+        "country": "USA"
+      },
+      "college": {
+        "id": "99",
+        "guid": "bb1fe57d-d53d-3f5d-a207-281ead34f543",
+        "mascot": "LSU TIGERS",
+        "name": "LSU",
+        "shortName": "LSU",
+        "abbrev": "LSU",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/99.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2025-12-19T23:48Z"
+          },
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/99.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2025-12-19T23:47Z"
+          }
+        ]
+      },
+      "slug": "angel-reese",
+      "headshot": {
+        "href": "https://a.espncdn.com/i/headshots/wnba/players/full/4433402.png",
+        "alt": "Angel Reese"
+      },
+      "jersey": "5",
+      "position": {
+        "id": "7",
+        "name": "Forward",
+        "displayName": "Forward",
+        "abbreviation": "F",
+        "leaf": false
+      },
+      "injuries": [],
+      "contracts": [],
+      "experience": {
+        "years": 2
+      },
+      "status": {
+        "id": "1",
+        "name": "Active",
+        "type": "active",
+        "abbreviation": "Active"
+      }
+    }
+  ],
+  "coach": [
+    {
+      "id": "2497107",
+      "firstName": "Karl",
+      "lastName": "Smesko"
+    }
+  ],
+  "team": {
+    "id": "20",
+    "abbreviation": "ATL",
+    "location": "Atlanta",
+    "name": "Dream",
+    "displayName": "Atlanta Dream",
+    "clubhouse": "https://www.espn.com/wnba/team/_/name/atl/atlanta-dream",
+    "color": "e31837",
+    "logo": "https://a.espncdn.com/i/teamlogos/wnba/500/atl.png",
+    "recordSummary": "4-1",
+    "seasonSummary": "2026",
+    "standingSummary": "1st in Eastern Conference Division"
+  }
+}
