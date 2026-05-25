@@ -765,3 +765,105 @@ def test_statcast_search_raises_runtime_error_on_truncation():
             start_date="2024-07-08",
             end_date="2024-07-14",
         )
+
+
+# ===========================================================================
+# 17. NCAA return_parsed shim contract — raw Dict ↔ polars frame round-trip
+# ===========================================================================
+#
+# Section 14 already verifies that NCAA wrappers (CFB/MBB/WBB × roster/
+# news/schedule) work with return_parsed=True. This section additionally
+# proves the contract that's central to the parser layer: the same
+# wrapper call with vs. without return_parsed=True returns equivalent
+# data — raw Dict on omission, polars frame on opt-in, pandas on
+# return_as_pandas=True. Catches any regression where the shim either
+# returns a partial frame OR fails to route through the parser at all.
+
+
+@pytest.mark.parametrize("league,team_id,parser_name", [
+    ("cfb", 333, "parse_team_roster"),   # Alabama (position-grouped)
+    ("mbb", 150, "parse_team_roster"),   # Duke (flat)
+    ("wbb",  41, "parse_team_roster"),   # UConn (flat)
+])
+def test_ncaa_team_roster_return_parsed_round_trip(league, team_id, parser_name):
+    """Verify the three calling modes (raw / polars / pandas) all return
+    consistent data. The raw payload's athletes[] should produce the
+    same number of player rows as the parsed frame."""
+    import pandas as pd
+    import polars as pl
+
+    from sportsdataverse._common_espn_parsers import (
+        ENDPOINT_PARSERS,
+        parse_team_roster,
+    )
+
+    # Resolve the wrapper from the league extension module
+    module = __import__(
+        f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"]
+    )
+    wrapper = getattr(module, f"espn_{league}_team_roster")
+
+    # Three calling modes
+    raw   = wrapper(team_id=team_id)
+    df_pl = wrapper(team_id=team_id, return_parsed=True)
+    df_pd = wrapper(team_id=team_id, return_parsed=True, return_as_pandas=True)
+
+    assert isinstance(raw, dict), f"raw should be Dict, got {type(raw)}"
+    assert isinstance(df_pl, pl.DataFrame), f"polars expected, got {type(df_pl)}"
+    assert isinstance(df_pd, pd.DataFrame), f"pandas expected, got {type(df_pd)}"
+    # Both DataFrame variants should agree on row count
+    assert df_pl.height == len(df_pd), (
+        f"polars/pandas row count mismatch: {df_pl.height} vs {len(df_pd)}"
+    )
+    # And the registry should route to parse_team_roster
+    assert ENDPOINT_PARSERS["team_roster"] is parse_team_roster
+    # Re-running the parser on the raw payload should produce the same shape
+    df_again = parse_team_roster(raw)
+    assert df_again.shape == df_pl.shape, (
+        f"direct vs shim shape mismatch: {df_again.shape} vs {df_pl.shape}"
+    )
+
+
+@pytest.mark.parametrize("league,team_id", [
+    ("cfb", 333),
+    ("mbb", 150),
+    ("wbb",  41),
+])
+def test_ncaa_team_schedule_return_parsed_handles_offseason(league, team_id):
+    """Schedule wrappers must produce a zero-row frame (not raise) when
+    the team is in their off-season. CFB is off-season in May/Jun;
+    MBB/WBB are off-season in summer. The shim should route through
+    parse_team_schedule transparently in either case."""
+    import polars as pl
+
+    module = __import__(
+        f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"]
+    )
+    wrapper = getattr(module, f"espn_{league}_team_schedule")
+
+    df = wrapper(team_id=team_id, return_parsed=True)
+    assert isinstance(df, pl.DataFrame)
+    # Either in-season (>= 10 games) or off-season (0 rows) — never an exception
+    assert df.height == 0 or df.height >= 10, (
+        f"{league}: expected 0 or >=10 schedule rows, got {df.height}"
+    )
+
+
+@pytest.mark.parametrize("league", ["cfb", "mbb", "wbb"])
+def test_ncaa_news_return_parsed_matches_direct_parse_news(league):
+    """The return_parsed=True shim on the news wrapper must produce the
+    same DataFrame as calling parse_news directly on the raw payload —
+    i.e. the shim isn't dropping or mangling rows."""
+    from sportsdataverse._common_espn_parsers import parse_news
+
+    module = __import__(
+        f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"]
+    )
+    wrapper = getattr(module, f"espn_{league}_news")
+
+    raw   = wrapper(limit=5)
+    df_a  = parse_news(raw)
+    df_b  = wrapper(limit=5, return_parsed=True)
+    assert df_a.shape == df_b.shape, (
+        f"{league}: shim vs direct shape mismatch: {df_a.shape} vs {df_b.shape}"
+    )

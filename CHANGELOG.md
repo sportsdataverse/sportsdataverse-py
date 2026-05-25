@@ -503,15 +503,17 @@ section alongside `drives` and `scoring_plays`.
   `tests/test_nhl_api_web_parsers.py` (37 tests), and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
-- New `tests/test_espn_live.py` (**47 live tests**, +15 since last
+- New `tests/test_espn_live.py` (**56 live tests**, +24 since last
   roll-up: 9 NCAA-side wrapper tests (CFB/MBB/WBB × team_roster/
-  news/team_schedule), 3 NCAA summary dispatcher tests (championship
-  events), and 3 MLB Statcast tests covering the pitch-by-pitch
-  search variants — small-range happy path, multi-week chunked
-  stitch, and the raise-on-truncation guard for an unfiltered week
-  that exceeds the 25,000-row cap). Schedule tests tolerate off-
-  season empty payloads so the cron runs green year-round. Gated
-  by `SDV_PY_LIVE_TESTS=1` for live integration verification.
+  news/team_schedule), 3 NCAA summary dispatcher tests, 3 MLB
+  Statcast pitch-search tests (small-range happy path / multi-week
+  chunked stitch / raise-on-truncation guard), plus 9 parametrized
+  `return_parsed=True` shim-parity tests confirming the raw-Dict /
+  polars / pandas round-trip is internally consistent for the NCAA
+  surface — same wrapper invocation with vs without the kwarg must
+  produce equivalent data, and `return_as_pandas=True` row count
+  must match the polars row count). Gated by `SDV_PY_LIVE_TESTS=1`
+  for live integration verification.
 - Captured fixtures live under `tests/fixtures/espn/` (43 captures —
   the original 7 plus summary captures for **all 8 ESPN leagues**
   (NBA / MLB / NFL / NHL / WNBA + the new NCAA captures: MBB final
@@ -583,6 +585,17 @@ section alongside `drives` and `scoring_plays`.
     `parse_nhl_web_right_rail`, `parse_nhl_web_club_stats`). Closes
     with a step-by-step "Adding a new parser" checklist. Sidebar
     entry added under the Architecture category.
+- `docs/sidebars.ts` regrouped by sport family — leagues now cluster
+  by basketball (NBA / WNBA / MBB / WBB) / football (NFL / CFB) /
+  baseball (MLB) / hockey (NHL) instead of alphabetical, surfacing
+  the cross-league helper relationships (e.g. NCAA basketball pair
+  with NBA via the same ESPN factory). Architecture + Parsers
+  categories now default to expanded (`collapsed: false`) so
+  newcomers see the package-wide overview first.
+- `nhl/nhl_loaders.py` lint cleanup: 4 sites of
+  `if type(seasons) is int:` replaced with `isinstance(seasons, int)`
+  to clear pre-existing `E721` ruff warnings (no behaviour change —
+  both forms accept the same input).
 - Module docstrings on every parser + wrapper module now carry a
   `Documentation:` block linking to the matching docs page so
   `help()` / `pydoc` users land on the right reference without

@@ -55,7 +55,7 @@ def load_nhl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     data = pl.DataFrame()
-    if type(seasons) is int:
+    if isinstance(seasons, int):
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2011:
@@ -103,7 +103,7 @@ def load_nhl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
         .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     data = pl.DataFrame()
-    if type(seasons) is int:
+    if isinstance(seasons, int):
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2002:
@@ -152,7 +152,7 @@ def load_nhl_team_boxscore(seasons: List[int], return_as_pandas=False) -> pl.Dat
         .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     data = pl.DataFrame()
-    if type(seasons) is int:
+    if isinstance(seasons, int):
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2011:
@@ -203,7 +203,7 @@ def load_nhl_player_boxscore(seasons: List[int], return_as_pandas=False) -> pl.D
         .. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
     """
     data = pl.DataFrame()
-    if type(seasons) is int:
+    if isinstance(seasons, int):
         seasons = [seasons]
     for i in tqdm(seasons):
         if int(i) < 2011:
