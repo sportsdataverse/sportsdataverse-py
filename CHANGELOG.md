@@ -490,11 +490,14 @@ section alongside `drives` and `scoring_plays`.
 
 ### Test infrastructure
 
-- New `tests/test_espn_universal_parsers.py` (106 tests, +8 sparse-
-  section parser tests covering `broadcasts` (present for MLB / NHL,
-  empty for NBA / NFL / WNBA in past-game captures) and the
-  universally-sparse `against_the_spread` / `pickcenter` / `odds`
-  sections),
+- New `tests/test_espn_universal_parsers.py` (128 tests, +22 since
+  last roll-up: 8 sparse-section tests covering `broadcasts`
+  (present for MLB / NHL, empty for NBA / NFL / WNBA in past-game
+  captures) and the universally-sparse `against_the_spread` /
+  `pickcenter` / `odds`; 3 MBB/WBB/CFB NCAA summary fixture additions
+  to the cross-league parametrized tests, expanding the dispatcher
+  + boxscore_player + plays + drives + officials assertions from
+  5 leagues to all 8 ESPN leagues),
   `tests/test_mlb_api_parsers.py` (17 tests),
   `tests/test_nhl_aux_parsers.py` (21 tests),
   `tests/test_nhl_api_web_parsers.py` (37 tests), and
@@ -506,11 +509,13 @@ section alongside `drives` and `scoring_plays`.
   schedule tests tolerate off-season empty payloads so the cron runs
   green year-round) gated by `SDV_PY_LIVE_TESTS=1` for live
   integration verification.
-- Captured fixtures live under `tests/fixtures/espn/` (40 captures —
-  the original 7 plus summary captures for NBA / MLB / NFL / NHL / WNBA
+- Captured fixtures live under `tests/fixtures/espn/` (43 captures —
+  the original 7 plus summary captures for **all 8 ESPN leagues**
+  (NBA / MLB / NFL / NHL / WNBA + the new NCAA captures: MBB final
+  Purdue@UConn, WBB final Iowa@SC, CFB national championship OSU@ND)
   plus the 28-fixture cross-league parity set covering
-  `team_roster` / `team_schedule` / `news` / `injuries` for **all 7 ESPN
-  leagues** — NBA + WNBA + MBB + WBB + CFB + MLB + NFL + NHL),
+  `team_roster` / `team_schedule` / `news` / `injuries` for each
+  league),
   `tests/fixtures/mlb_api/` (8 captures: schedule, teams, roster,
   standings, person_stats, venues, sports, divisions),
   `tests/fixtures/nhl_stats_rest/` (8 captures: season, franchise,
@@ -559,6 +564,25 @@ section alongside `drives` and `scoring_plays`.
     Stats API, and two end-to-end examples (catcher pop times +
     World Series pitch-by-pitch). Both new pages are wired into
     the MLB category in `docs/sidebars.ts`.
+  - `docs/parsers/fixtures.md` — comprehensive index of all 89
+    captured live payloads across the 6 fixture directories
+    (`espn/`, `mlb_api/`, `nhl_api_web/`, `nhl_edge/`,
+    `nhl_stats_rest/`, `nhl_records/`). Includes the full
+    endpoint mapping table per directory, the championship-game
+    event IDs used for the cross-league summary captures, and a
+    maintenance section explaining how to refresh a fixture.
+- `docs/docs/intro.md` gains a "Quickstart" section directly under
+  the goal paragraph showing three one-liners across NBA / MLB /
+  NHL covering the three primary usage modes (return_parsed shim,
+  Stats API compose-with-parser, NHL EDGE compose-with-parser).
+- `CLAUDE.md` gains two new top-level sections ("ESPN Cross-League
+  Architecture (0.0.51+)" and "Parser Layer (0.0.51+)") that
+  document the factory pattern, `make_league_module`,
+  `_bind`+shim, ENDPOINT_PARSERS invariant, summary dispatcher
+  contract, cross-league shape divergences captured by tests, the
+  fixture inventory, and the test-file structure. ~210 lines added
+  to keep future AI assistants and contributors aligned on the
+  parser-layer conventions.
   - `docs/nhl/api-web.md` — the modern game-feed surface
     (`api-web.nhle.com/v1/`) with the full endpoint table and a parser
     layer section covering all 16 dedicated parsers + 2 dispatchers

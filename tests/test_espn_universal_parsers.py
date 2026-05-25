@@ -505,7 +505,8 @@ def test_parse_injuries_works_across_leagues(league, expected_min_rows):
 
 
 SUMMARY_FIXTURES = ["summary_nba", "summary_mlb", "summary_nfl",
-                    "summary_nhl", "summary_wnba"]
+                    "summary_nhl", "summary_wnba",
+                    "summary_mbb", "summary_wbb", "summary_cfb"]
 
 
 @pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
@@ -537,6 +538,9 @@ def test_summary_dispatcher_returns_full_section_dict_for_every_league(fixture):
     ("summary_nfl",  50),  # 2 NFL rosters, ~70-90 with full game-day squad
     ("summary_nhl",  20),  # 2 NHL rosters, skaters + goalies
     ("summary_wnba", 15),  # 2 WNBA rosters, ~12-15 each
+    ("summary_mbb",  20),  # 2 NCAA M basketball rosters, ~25-35 combined
+    ("summary_wbb",  20),  # 2 NCAA W basketball rosters
+    ("summary_cfb",  50),  # 2 CFB rosters, ~70+ each (huge squads)
 ])
 def test_summary_boxscore_player_works_across_leagues(fixture, min_athletes):
     from sportsdataverse._common_espn_parsers import parse_summary_boxscore_player
@@ -573,14 +577,28 @@ def test_summary_game_info_works_across_leagues(fixture):
     )
 
 
-@pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
-def test_summary_officials_works_across_leagues(fixture):
+@pytest.mark.parametrize("fixture,min_officials", [
+    # NBA=3, NHL=6, MLB=6, NFL=7, WNBA=4 — pro leagues consistently >=3
+    ("summary_nba",  3),
+    ("summary_mlb",  3),
+    ("summary_nfl",  3),
+    ("summary_nhl",  3),
+    ("summary_wnba", 3),
+    ("summary_mbb",  3),   # MBB final has 3 officials
+    # NCAA-side leagues sometimes ship fewer or zero officials:
+    # WBB final = 2; CFB national championship = 0 in capture.
+    ("summary_wbb",  0),   # accept any (parser must not raise)
+    ("summary_cfb",  0),
+])
+def test_summary_officials_works_across_leagues(fixture, min_officials):
     from sportsdataverse._common_espn_parsers import parse_summary_officials
 
     df = parse_summary_officials(_load(fixture))
-    # NBA=3, NHL=6, MLB=6, NFL=7, WNBA=4
-    assert df.height >= 3, f"{fixture}: expected >=3 officials, got {df.height}"
-    assert "full_name" in df.columns or "display_name" in df.columns
+    assert df.height >= min_officials, (
+        f"{fixture}: expected >={min_officials} officials, got {df.height}"
+    )
+    if df.height > 0:
+        assert "full_name" in df.columns or "display_name" in df.columns
 
 
 @pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
@@ -606,31 +624,43 @@ def test_summary_standings_works_across_leagues(fixture):
 
 
 def test_summary_plays_works_for_non_football_leagues():
-    """NBA / MLB / WNBA / NHL ship plays at the top level. NFL ships
-    drives.previous[] instead, which is exercised separately."""
+    """NBA / MLB / WNBA / NHL / MBB / WBB ship plays at the top level.
+    NFL + CFB use drives.previous[] instead, which is exercised
+    separately."""
     from sportsdataverse._common_espn_parsers import parse_summary_plays
 
-    for fixture in ("summary_nba", "summary_mlb", "summary_nhl", "summary_wnba"):
+    for fixture in ("summary_nba", "summary_mlb", "summary_nhl",
+                    "summary_wnba", "summary_mbb", "summary_wbb"):
         df = parse_summary_plays(_load(fixture))
         assert df.height >= 100, (
             f"{fixture}: expected >=100 plays, got {df.height}"
         )
 
 
-def test_summary_drives_works_for_nfl():
-    """NFL summary ships drives.previous[] in lieu of top-level plays."""
+@pytest.mark.parametrize("fixture,min_drives,min_scoring", [
+    ("summary_nfl", 10, 1),   # Super Bowl LIX: 26 drives + 11 scoring
+    ("summary_cfb", 10, 1),   # OSU vs ND nat'l championship: 17 drives + 9 scoring
+])
+def test_summary_drives_works_for_football_leagues(fixture, min_drives, min_scoring):
+    """NFL + CFB summaries ship drives.previous[] in lieu of top-level
+    plays, plus a dedicated scoringPlays list."""
     from sportsdataverse._common_espn_parsers import (
         parse_summary_drives,
         parse_summary_plays,
         parse_summary_scoring_plays,
     )
 
-    payload = _load("summary_nfl")
+    payload = _load(fixture)
     drives = parse_summary_drives(payload)
-    assert drives.height >= 10, f"expected >=10 drives, got {drives.height}"
+    assert drives.height >= min_drives, (
+        f"{fixture}: expected >={min_drives} drives, got {drives.height}"
+    )
+    # Football leagues lack the top-level plays[] array
     assert parse_summary_plays(payload).height == 0
     scoring = parse_summary_scoring_plays(payload)
-    assert scoring.height >= 1, "NFL summary should have scoringPlays"
+    assert scoring.height >= min_scoring, (
+        f"{fixture}: expected >={min_scoring} scoring plays, got {scoring.height}"
+    )
 
 
 def test_summary_drive_plays_unrolls_plays_across_all_drives_for_nfl():
@@ -683,7 +713,8 @@ def test_summary_drives_and_scoring_plays_empty_for_non_football():
         parse_summary_scoring_plays,
     )
 
-    for fixture in ("summary_nba", "summary_mlb", "summary_nhl", "summary_wnba"):
+    for fixture in ("summary_nba", "summary_mlb", "summary_nhl",
+                    "summary_wnba", "summary_mbb", "summary_wbb"):
         assert parse_summary_drives(_load(fixture)).height == 0, (
             f"{fixture}: non-football should have 0 drives"
         )

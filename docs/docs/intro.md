@@ -28,6 +28,38 @@ aggregation and tidying ease, one of the multitude of services that
 benchmarking open-source expected points and win probability metrics
 for American Football.
 
+## Quickstart
+
+```bash
+pip install sportsdataverse
+```
+
+```python
+# Today's NBA scoreboard as a polars DataFrame
+from sportsdataverse.nba import espn_nba_scoreboard
+df = espn_nba_scoreboard(return_parsed=True)
+print(df.select(["event_id", "home_name", "away_name",
+                 "home_score", "away_score"]).head())
+
+# Aaron Judge's 2024 season stats from the official MLB API
+from sportsdataverse.mlb import mlb_api_person_stats, parse_mlb_api_person_stats
+judge = parse_mlb_api_person_stats(
+    mlb_api_person_stats(person_id=592450, stats="season", season=2024)
+)
+print(judge.select(["stats_group", "stat_home_runs", "stat_avg"]))
+
+# Connor McDavid's 2024-25 EDGE skating speed profile
+from sportsdataverse.nhl import nhl_edge_skater_detail, parse_edge_detail
+mcdavid = parse_edge_detail(nhl_edge_skater_detail(8478402))
+print(mcdavid.select(["player_first_name_default", "top_shot_speed_metric"]))
+```
+
+Every wrapper returns a raw `Dict` by default; pass
+`return_parsed=True` (ESPN cross-league wrappers) or compose with the
+matching `parse_*` function (NHL / MLB sibling APIs) to get a polars
+DataFrame. See [Polars / pandas parser layer](#polars--pandas-parser-layer)
+below.
+
 ## Supported leagues and data sources
 
 | League | Module | Surfaces covered |

@@ -14,7 +14,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Parsers',
-      items: ['parsers/index'],
+      items: ['parsers/index', 'parsers/fixtures'],
     },
     {
       type: 'category',

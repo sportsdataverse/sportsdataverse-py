@@ -152,6 +152,171 @@ uv.lock                     # Committed
 CONTRIBUTING.md             # uv workflow + new-module standards
 ```
 
+## ESPN Cross-League Architecture (0.0.51+)
+
+The cross-league ESPN wrapper surface lives in
+`sportsdataverse/_common_espn.py`. The pattern is **one core +
+N thin extensions**:
+
+* `_common_espn.py` — ~80 core functions parameterized on
+  `(sport, league)` slugs. Every ESPN URL family is wrapped once
+  (Site v2 / Site v2 alt / Web v3 / Core v2 / Core v3 / CDN).
+* `_UNIVERSAL_WRAPPERS` — list of `(short_name, core_fn)` tuples
+  that map to wrapper functions on every league.
+* `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` / `_MLB_WRAPPERS` —
+  opt-in extras gated by `include_ncaa=` / `include_football=` /
+  `include_mlb=` flags on `make_league_module()`.
+* `_bind(core_fn, sport, league, full_name, parser=None)` — wraps
+  each core function with a `functools.partial` (when no parser
+  registered) or a closure (when a parser is registered) that adds
+  `__name__` / `__qualname__` / `__doc__` for IDE introspection
+  and optionally accepts `return_parsed=True` / `return_as_pandas=True`
+  kwargs.
+* `make_league_module(sport, league, prefix, namespace, ...)` —
+  iterates the wrapper tables and registers each one in `namespace`
+  with the canonical `espn_{prefix}_{short}` name.
+
+Per-league extension modules (`sportsdataverse/{league}/{league}_espn_ext.py`)
+are 4-line files: import `make_league_module`, call it with the
+appropriate (sport, league, prefix) tuple + extras flags, assign
+the return value to `__all__`. Examples:
+
+```python
+# sportsdataverse/nba/nba_espn_ext.py
+__all__ = make_league_module("basketball", "nba", "nba", globals())
+
+# sportsdataverse/cfb/cfb_espn_ext.py — both NCAA + football extras
+__all__ = make_league_module(
+    "football", "college-football", "cfb", globals(),
+    include_ncaa=True, include_football=True,
+)
+```
+
+Total cross-league surface: **121 short names** registered across 8
+leagues = **819 wrappers + 2 NCAA bracketology helpers** in
+`_common_ncaa.py`. The `_NCAA_BRACKETOLOGY_WRAPPERS` table is bound
+separately via `register_ncaa_bracketology()` because bracketology
+lives at the non-league `sports.core.api.espn.com/v2/tournament/...`
+path that doesn't fit the per-sport URL pattern.
+
+## Parser Layer (0.0.51+)
+
+Every wrapper returns raw `Dict` by default. The parser layer turns
+those payloads into tidy polars / pandas DataFrames. **Five parser
+modules**, one per data surface:
+
+| Module | Surface | Parsers |
+|---|---|---|
+| `_common_espn_parsers.py` | ESPN cross-league (Site v2 + Core v2 + Web v3) | 30+ dedicated + 3 generic + 21-section summary dispatcher |
+| `nhl/nhl_api_web_parsers.py` | `api-web.nhle.com/v1/` modern game-feed | 16 dedicated + 2 dispatchers (right_rail, club_stats) |
+| `nhl/nhl_edge_parsers.py` | `api-web.nhle.com/v1/edge/*` player tracking | 4 family + 3 sub-frame + 1 fallback |
+| `nhl/nhl_stats_rest_parsers.py` + `nhl_records_parsers.py` | `api.nhle.com/stats/rest` + `records.nhl.com` | 1 generic each (shared `{data: [...]}` shape) |
+| `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API | 5 dedicated + 1 generic |
+
+**Parser contract (universal across all 5 modules):**
+
+* Return `polars.DataFrame` by default; pandas via
+  `return_as_pandas=True`.
+* Empty / malformed payloads return a zero-row frame instead of
+  raising — callers can chain without null-checks.
+* Output columns are snake-cased via
+  `sportsdataverse.dl_utils.underscore`.
+* Use `pandas.json_normalize` for nested flattening, then convert
+  to polars at the end. List-valued cells are stringified so polars
+  accepts the frame.
+
+### `return_parsed=True` dispatch shim
+
+ESPN cross-league wrappers whose `short` name is registered in
+`ENDPOINT_PARSERS` accept an optional `return_parsed=True` kwarg
+that routes the raw payload through the registered parser:
+
+```python
+from sportsdataverse.nba import espn_nba_team_roster
+
+raw = espn_nba_team_roster(team_id=13)                          # → Dict
+df  = espn_nba_team_roster(team_id=13, return_parsed=True)      # → polars
+pdf = espn_nba_team_roster(team_id=13, return_parsed=True,
+                            return_as_pandas=True)              # → pandas
+```
+
+The shim is **strictly additive** — every existing caller continues
+to get raw `Dict` when the kwarg is omitted. NHL / MLB sibling-API
+wrappers compose with their parser explicitly:
+
+```python
+from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
+df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331 plays
+```
+
+**`ENDPOINT_PARSERS` invariant**: every wrapper short name across
+`_UNIVERSAL_WRAPPERS` + `_NCAA_WRAPPERS` + `_FOOTBALL_WRAPPERS` +
+`_MLB_WRAPPERS` is in the registry. Three generic fall-throughs
+cover the long tail:
+
+* `parse_single_entity` — Core v2 single-resource payloads
+  (`team`, `venue`, `franchise`, `coach`, etc.).
+* `parse_items` — Core v2 paginated `{items: [...]}` and the
+  Core v2 `{entries: [...]}` variant (athlete_statisticslog).
+* `parse_summary` — Site v2 `summary` dispatcher (21 sub-frames
+  per game).
+
+Three regression tests in `tests/test_espn_universal_parsers.py`
+lock in the 121/121 coverage invariant + the shim invariant. Any
+new wrapper short name added without a matching `ENDPOINT_PARSERS`
+entry fails CI.
+
+### Summary dispatcher (21 sub-frames)
+
+`parse_summary(payload, section=None)` is the dispatcher for the
+rich Site v2 summary payload (~700KB–1.8MB per game). With
+`section=None` returns a dict of all 21 sub-frames keyed by section
+name; with `section="<name>"` returns just that one frame.
+
+Section list (current 21): `boxscore_player`, `boxscore_team`,
+`plays`, `winprobability`, `leaders`, `game_info`, `officials`,
+`header`, `season_series`, `against_the_spread`, `standings`,
+`broadcasts`, `format`, `pickcenter`, `odds`, `article`, `injuries`,
+`news`, `drives`, `drive_plays`, `scoring_plays`.
+
+Cross-league shape divergences captured by tests:
+
+* NFL + CFB ship `drives.previous[]` + `scoringPlays` instead of
+  top-level `plays[]`. `parse_summary_drive_plays` unrolls drive
+  plays into a long-form frame with `drive_id` + `drive_sequence`
+  join keys for football PBP parity.
+* NHL doesn't publish per-play `winprobability`.
+* `pickcenter` / `odds` / `against_the_spread` are sparse in
+  past-game captures (live games typically populate them).
+* NCAA W basketball `officials` sometimes ships < 3 rows; CFB
+  national championship shipped 0 officials.
+
+### Test fixtures (89 captures across 6 directories)
+
+Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
+nhl_edge,nhl_stats_rest,nhl_records}/`. Each directory has a
+`README.md` documenting provenance (URL + capture date). See
+`docs/docs/parsers/fixtures.md` for the full inventory.
+
+Adding a new parser → drop a fixture in the right directory + add
+a test in the matching `test_*_parsers.py` file. The parser tests
+are payload-agnostic so re-captured fixtures continue to work as
+long as the schema doesn't drift; when it does, the weekly cron
+drift detector (`.github/workflows/live-tests-cron.yml`) catches it
+and opens a tracking issue labeled `live-tests:drift`.
+
+### Test infrastructure summary
+
+| Test file | Count | Surface |
+|---|---:|---|
+| `tests/test_espn_universal_parsers.py` | 128 | ESPN cross-league + summary dispatcher |
+| `tests/test_nhl_api_web_parsers.py` | 37 | NHL api-web modern game-feed |
+| `tests/test_nhl_edge_parsers.py` | 32 | NHL EDGE player-tracking |
+| `tests/test_nhl_aux_parsers.py` | 21 | NHL Stats REST + Records |
+| `tests/test_mlb_api_parsers.py` | 17 | MLB Stats API |
+| **Offline parser tests total** | **235** | |
+| `tests/test_espn_live.py` | 41 | Live API integration (gated by `SDV_PY_LIVE_TESTS=1`) |
+
 ## Key Coding Conventions
 
 ### Module pattern (NEW modules)
