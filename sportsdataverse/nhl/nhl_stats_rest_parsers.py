@@ -1,6 +1,11 @@
 """sportsdataverse.nhl.nhl_stats_rest_parsers — polars parsers for the
 NHL Stats REST API at ``api.nhle.com/stats/rest/``.
 
+**Documentation**:
+
+* NHL Stats REST endpoint reference: https://py.sportsdataverse.org/docs/nhl/stats-rest
+* Parsers overview: https://py.sportsdataverse.org/docs/parsers/
+
 Every Stats REST endpoint ships its rows under the same top-level
 ``{data: [...], total: N}`` shape, so a single generic parser
 :func:`parse_nhl_stats_rest` handles all 21 wrappers in

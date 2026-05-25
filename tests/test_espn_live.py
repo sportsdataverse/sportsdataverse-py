@@ -695,3 +695,73 @@ def test_espn_cfb_summary_live_uses_football_pattern():
     assert out["scoring_plays"].height >= 1
     # CFB rosters are huge (~70-80 game-day squad per team)
     assert out["boxscore_player"].height >= 50
+
+
+# ===========================================================================
+# 16. MLB Statcast pitch-search + chunking + truncation guard
+# ===========================================================================
+#
+# The existing test_statcast_leaderboard_expected_statistics_2024_nonempty
+# covers one of the 9 statcast_leaderboard_* endpoints. This section
+# adds coverage for the pitch-by-pitch search surface itself — the
+# raise-on-truncation guard, the auto-chunked variant that handles
+# multi-week ranges, and the small-range happy path.
+
+
+def test_statcast_search_returns_polars_frame_for_small_date_range():
+    """A 2-day mid-season slice fits well under the 25k cap and should
+    return a polars DataFrame with the expected ~90-column wide schema."""
+    from sportsdataverse.mlb import statcast_search
+
+    df = statcast_search(start_date="2024-06-15", end_date="2024-06-16")
+    # The exact row count varies by query day, but a full slate of MLB
+    # games typically ships >=4,000 pitches per day league-wide.
+    try:
+        import polars as pl
+        assert isinstance(df, pl.DataFrame), f"expected polars, got {type(df)}"
+        assert df.height > 1000, (
+            f"expected >1000 pitches over 2 days, got {df.height}"
+        )
+    except ImportError:
+        # Fallback for pandas-only environments
+        assert len(df) > 1000
+
+
+def test_statcast_search_chunked_stitches_multi_week_range():
+    """A 3-week range will exceed the 25k cap in a single response so
+    the chunked variant must auto-chunk and stitch client-side without
+    triggering a truncation error."""
+    from sportsdataverse.mlb import statcast_search_chunked
+
+    df = statcast_search_chunked(
+        start_date="2024-06-01",
+        end_date="2024-06-21",
+        chunk_days=7,
+    )
+    try:
+        import polars as pl
+        assert isinstance(df, pl.DataFrame)
+        # 3 weeks at ~4,000-5,000 pitches/day = ~80,000-100,000 pitches
+        assert df.height > 25_000, (
+            f"expected chunked total >25k pitches (proves stitching), "
+            f"got {df.height}"
+        )
+    except ImportError:
+        assert len(df) > 25_000
+
+
+def test_statcast_search_raises_runtime_error_on_truncation():
+    """An unfiltered 7-day range typically blows past the 25k cap.
+    With raise_on_truncation=True (default), the wrapper must raise
+    RuntimeError rather than silently shipping a partial frame."""
+    import pytest as _pytest
+
+    from sportsdataverse.mlb import statcast_search
+
+    # Use a known full week from the 2024 regular season — should hit
+    # exactly 25,000 rows when the response is truncated.
+    with _pytest.raises(RuntimeError, match=r"25,?000"):
+        statcast_search(
+            start_date="2024-07-08",
+            end_date="2024-07-14",
+        )

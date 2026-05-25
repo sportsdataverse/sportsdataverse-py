@@ -1,5 +1,10 @@
 """sportsdataverse.nhl.nhl_edge — wrappers for NHL EDGE Statcast endpoints.
 
+**Documentation**:
+
+* NHL EDGE endpoint reference: https://py.sportsdataverse.org/docs/nhl/edge
+* NHL EDGE parser deep-dive: https://py.sportsdataverse.org/docs/nhl/edge-parsers
+
 NHL EDGE is the league's Statcast-equivalent tracking system, exposing puck
 and player positional data, shot speed, skating distance/speed, shot-location
 heat maps, and zone-time metrics.  Endpoints live under two path families:

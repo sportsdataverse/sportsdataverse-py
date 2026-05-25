@@ -15,8 +15,30 @@ from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 def espn_nhl_pbp(game_id: int, raw=False, **kwargs) -> Dict:
     """espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
 
+    .. note::
+
+        This is the **ESPN** NHL play-by-play, not the modern NHL
+        api-web one. The two surfaces have different ID spaces and
+        different schemas — they are NOT interchangeable:
+
+        - ``espn_nhl_pbp(game_id)`` uses **ESPN event IDs** (e.g.
+          ``401559395``). Returns a Dict of ~17 sub-frames matching
+          the ESPN Site v2 summary shape (boxscore / plays / leaders /
+          standings / etc.). Useful for historical alignment with the
+          hoopR / wehoop R-package data stack.
+        - ``nhl_web_pbp(game_id)`` + ``parse_nhl_web_pbp(payload)``
+          uses **NHL native game IDs** (e.g. ``2023030417``). Returns
+          the modern api-web.nhle.com PBP shape (``plays[]`` with
+          ``eventId``, ``typeCode``, ``typeDescKey``,
+          ``periodDescriptor``, nested ``details``). Use this for live
+          games + modern NHL.com source-of-truth data.
+
+        Pick the surface that matches your ID space + downstream join
+        keys. The two cannot be cross-referenced by ``game_id``.
+
     Args:
-        game_id (int): Unique game_id, can be obtained from nhl_schedule().
+        game_id (int): Unique ESPN event id (NOT the NHL native game
+            id), can be obtained from nhl_schedule().
 
     Returns:
         Dict: Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts",

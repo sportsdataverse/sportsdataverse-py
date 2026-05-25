@@ -1,5 +1,11 @@
 """sportsdataverse.nhl.nhl_edge_parsers — polars parsers for NHL EDGE payloads.
 
+**Documentation**:
+
+* NHL EDGE parser deep-dive: https://py.sportsdataverse.org/docs/nhl/edge-parsers
+* NHL EDGE endpoint reference: https://py.sportsdataverse.org/docs/nhl/edge
+* Parsers overview: https://py.sportsdataverse.org/docs/parsers/
+
 NHL EDGE returns position-tracking / shot-speed / zone-time data via
 ``api-web.nhle.com/v1/edge/*``. The OpenAPI spec
 (``fastRhockey/data-raw/nhl_api_web_openapi.yaml``) declares every response

@@ -1,6 +1,11 @@
 """sportsdataverse.nhl.nhl_records_parsers — polars parsers for the
 NHL Records site API at ``records.nhl.com/site/api/``.
 
+**Documentation**:
+
+* NHL Records endpoint reference: https://py.sportsdataverse.org/docs/nhl/records
+* Parsers overview: https://py.sportsdataverse.org/docs/parsers/
+
 Every Records endpoint ships its rows under the same top-level
 ``{data: [...], total: N}`` shape (identical to NHL Stats REST), so
 a single generic parser :func:`parse_nhl_records` handles all 50

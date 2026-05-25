@@ -1,5 +1,10 @@
 """sportsdataverse.nhl.nhl_records — wrappers for ``records.nhl.com/site/api/``.
 
+**Documentation**:
+
+* NHL Records endpoint reference: https://py.sportsdataverse.org/docs/nhl/records
+* Parser module: :mod:`sportsdataverse.nhl.nhl_records_parsers`
+
 Covers the most useful ~35 endpoints across awards, coaches, skaters,
 goaltenders, franchises, draft, all-star, milestones, and other historical
 records.  All queries support the standard NHL Records API filter kwargs:
@@ -26,7 +31,7 @@ Conventions
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Union
+from typing import Dict, Optional
 
 from sportsdataverse.dl_utils import download
 

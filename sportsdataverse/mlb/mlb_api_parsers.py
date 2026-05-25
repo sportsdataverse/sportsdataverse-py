@@ -1,6 +1,12 @@
 """sportsdataverse.mlb.mlb_api_parsers — polars parsers for the official
 MLB Stats API at ``statsapi.mlb.com/api/v1/``.
 
+**Documentation**:
+
+* MLB Stats API parser deep-dive: https://py.sportsdataverse.org/docs/mlb/parsers
+* MLB module overview: https://py.sportsdataverse.org/docs/mlb/
+* Parsers overview: https://py.sportsdataverse.org/docs/parsers/
+
 The wrappers in :mod:`sportsdataverse.mlb.mlb_api` all return ``Dict``;
 this module turns those payloads into tidy polars (or pandas)
 DataFrames. Mirrors the design of

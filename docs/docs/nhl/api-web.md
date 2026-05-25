@@ -28,6 +28,25 @@ see [NHL Stats REST](./stats-rest); for player-tracking Statcast-style
 data see [NHL EDGE](./edge); for records / awards / HOF see
 [NHL Records](./records).
 
+:::caution Two different NHL PBP surfaces — don't confuse them
+
+The package also exposes `espn_nhl_pbp(game_id)` (in
+`sportsdataverse.nhl.nhl_pbp`) which pulls **ESPN's** NHL play-by-play.
+The two have different ID spaces and different schemas:
+
+| | `nhl_web_pbp(game_id)` (this page) | `espn_nhl_pbp(game_id)` |
+|---|---|---|
+| Source | `api-web.nhle.com/v1/` | ESPN Site v2 |
+| ID example | `2023030417` (NHL native) | `401559395` (ESPN event id) |
+| Parser | `parse_nhl_web_pbp()` | Returns parsed Dict directly |
+| Use when | Modern NHL.com source of truth + live games | Aligning with hoopR / wehoop R-package data |
+
+The two cannot be cross-referenced by `game_id` — they are two
+parallel data sources, not interchangeable wrappers around the same
+endpoint.
+
+:::
+
 ## Endpoint families
 
 ### Game-center (4 wrappers)

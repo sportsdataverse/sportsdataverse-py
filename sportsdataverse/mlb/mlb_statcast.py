@@ -1,5 +1,10 @@
 """sportsdataverse.mlb.mlb_statcast — wrappers for the Baseball Savant / Statcast surface.
 
+**Documentation**:
+
+* Statcast endpoint + 25,000-row truncation guide: https://py.sportsdataverse.org/docs/mlb/statcast
+* MLB module overview: https://py.sportsdataverse.org/docs/mlb/
+
 Host: ``baseballsavant.mlb.com``. Spec: ``sdv-internal-refs/mlb/statcast-api.openapi.yaml``.
 Sister module for the MLB Stats API at ``statsapi.mlb.com``:
 :mod:`sportsdataverse.mlb.mlb_api`.

@@ -503,18 +503,15 @@ section alongside `drives` and `scoring_plays`.
   `tests/test_nhl_api_web_parsers.py` (37 tests), and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
-- New `tests/test_espn_live.py` (**44 live tests**, +12 NCAA-side
-  coverage: CFB + MBB + WBB live tests for `team_roster` (with the
-  CFB position-group assertion), `news`, `team_schedule`, plus 3
-  `parse_summary` live tests against the 2024 NCAA championships
-  (Purdue@UConn MBB, Iowa@SC WBB, OSU@ND CFB). The summary live
-  tests verify the full 21-section dispatcher contract end-to-end:
-  basketball produces top-level plays, CFB produces drives +
-  drive_plays + scoringPlays via the football pattern, and the
-  `return_parsed=True` shim on `espn_wbb_summary` routes through
-  parse_summary as expected. Schedule tests tolerate off-season
-  empty payloads so the cron runs green year-round.) gated by
-  `SDV_PY_LIVE_TESTS=1` for live integration verification.
+- New `tests/test_espn_live.py` (**47 live tests**, +15 since last
+  roll-up: 9 NCAA-side wrapper tests (CFB/MBB/WBB × team_roster/
+  news/team_schedule), 3 NCAA summary dispatcher tests (championship
+  events), and 3 MLB Statcast tests covering the pitch-by-pitch
+  search variants — small-range happy path, multi-week chunked
+  stitch, and the raise-on-truncation guard for an unfiltered week
+  that exceeds the 25,000-row cap). Schedule tests tolerate off-
+  season empty payloads so the cron runs green year-round. Gated
+  by `SDV_PY_LIVE_TESTS=1` for live integration verification.
 - Captured fixtures live under `tests/fixtures/espn/` (43 captures —
   the original 7 plus summary captures for **all 8 ESPN leagues**
   (NBA / MLB / NFL / NHL / WNBA + the new NCAA captures: MBB final
@@ -586,6 +583,23 @@ section alongside `drives` and `scoring_plays`.
     `parse_nhl_web_right_rail`, `parse_nhl_web_club_stats`). Closes
     with a step-by-step "Adding a new parser" checklist. Sidebar
     entry added under the Architecture category.
+- Module docstrings on every parser + wrapper module now carry a
+  `Documentation:` block linking to the matching docs page so
+  `help()` / `pydoc` users land on the right reference without
+  hunting. Updated modules:
+  `_common_espn.py`, `_common_espn_parsers.py`,
+  `nhl/nhl_api_web.py`, `nhl/nhl_api_web_parsers.py`,
+  `nhl/nhl_edge.py`, `nhl/nhl_edge_parsers.py`,
+  `nhl/nhl_stats_rest.py`, `nhl/nhl_stats_rest_parsers.py`,
+  `nhl/nhl_records.py`, `nhl/nhl_records_parsers.py`,
+  `mlb/mlb_api.py`, `mlb/mlb_api_parsers.py`,
+  `mlb/mlb_statcast.py`.
+- `nhl/nhl_pbp.py::espn_nhl_pbp` docstring gains a prominent
+  cross-reference + comparison table distinguishing it from the
+  modern `nhl_web_pbp` / `parse_nhl_web_pbp` surface (different ID
+  spaces, different schemas, not interchangeable). A matching
+  `:::caution:::` admonition added to `docs/nhl/api-web.md` so
+  users coming from either direction find the cross-reference.
   - `docs/nhl/api-web.md` gains a "Parser deep-dive" section
     between the registry and the full example: documents the
     `parse_nhl_web_boxscore` 6-bucket unrolling pattern, both

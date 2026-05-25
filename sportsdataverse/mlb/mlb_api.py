@@ -1,5 +1,10 @@
 """sportsdataverse.mlb.mlb_api — wrappers for the MLB Stats API.
 
+**Documentation**:
+
+* MLB module overview: https://py.sportsdataverse.org/docs/mlb/
+* MLB Stats API parser layer: https://py.sportsdataverse.org/docs/mlb/parsers
+
 Host: ``statsapi.mlb.com``. Spec: ``sdv-internal-refs/mlb/mlb-stats-api.openapi.yaml``.
 Sister module for the per-pitch Statcast surface at ``baseballsavant.mlb.com``:
 :mod:`sportsdataverse.mlb.mlb_statcast`.

@@ -1,5 +1,12 @@
 """sportsdataverse._common_espn_parsers — polars DataFrame parsers for ESPN endpoints.
 
+**Documentation**:
+
+* Overview + parser table: https://py.sportsdataverse.org/docs/parsers/
+* Test fixture inventory: https://py.sportsdataverse.org/docs/parsers/fixtures
+* Architecture (factory + shim): https://py.sportsdataverse.org/docs/architecture/espn-cross-league
+* Reusable patterns: https://py.sportsdataverse.org/docs/architecture/building-blocks
+
 Each parser accepts the raw ``Dict`` returned by the corresponding
 ``_common_espn`` helper (or any per-league wrapper that delegates to it)
 and returns a tidy ``polars.DataFrame``.

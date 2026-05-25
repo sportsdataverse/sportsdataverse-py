@@ -1,6 +1,12 @@
 """sportsdataverse.nhl.nhl_api_web_parsers — polars parsers for the modern
 NHL game-feed API at ``api-web.nhle.com/v1/``.
 
+**Documentation**:
+
+* NHL api-web parser deep-dive: https://py.sportsdataverse.org/docs/nhl/api-web
+* Parsers overview: https://py.sportsdataverse.org/docs/parsers/
+* Reusable patterns: https://py.sportsdataverse.org/docs/architecture/building-blocks
+
 Each ``nhl_web_*`` wrapper in :mod:`sportsdataverse.nhl.nhl_api_web` ships
 a different payload shape — game-center deep dives carry per-team player
 arrays, schedules nest day → games, leaderboards key by stat-category, and
@@ -39,7 +45,6 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-
 
 # ---------------------------------------------------------------------------
 # Helpers (mirror _common_espn_parsers / mlb_api_parsers conventions)

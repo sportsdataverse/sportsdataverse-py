@@ -1,5 +1,11 @@
 """sportsdataverse._common_espn — cross-league ESPN endpoint helpers.
 
+**Documentation**:
+
+* Architecture (factory + return_parsed shim): https://py.sportsdataverse.org/docs/architecture/espn-cross-league
+* Reusable patterns (_bind, make_league_module, ...): https://py.sportsdataverse.org/docs/architecture/building-blocks
+* Parsers + ENDPOINT_PARSERS registry: https://py.sportsdataverse.org/docs/parsers/
+
 ESPN's Site v2 / Web v3 / Core v2 endpoint shapes are **identical across every
 sport** with only the ``sport``/``league`` slug differing. This module provides
 one implementation per endpoint family, parameterized on those two slugs, and

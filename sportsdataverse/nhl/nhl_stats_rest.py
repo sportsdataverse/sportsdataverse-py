@@ -1,5 +1,10 @@
 """sportsdataverse.nhl.nhl_stats_rest — wrappers for ``api.nhle.com/stats/rest/``.
 
+**Documentation**:
+
+* NHL Stats REST endpoint reference: https://py.sportsdataverse.org/docs/nhl/stats-rest
+* Parser module: :mod:`sportsdataverse.nhl.nhl_stats_rest_parsers`
+
 This module covers the NHL Stats REST API, which serves historical and
 aggregate player/team/game statistics with Cayenne filter expressions.  It is
 a **different surface** from the modern game-feed API in

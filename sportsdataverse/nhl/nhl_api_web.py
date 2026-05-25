@@ -1,5 +1,10 @@
 """sportsdataverse.nhl.nhl_api_web — wrappers for ``api-web.nhle.com/v1/``.
 
+**Documentation**:
+
+* NHL api-web endpoint reference: https://py.sportsdataverse.org/docs/nhl/api-web
+* NHL api-web parser layer: https://py.sportsdataverse.org/docs/nhl/api-web#parser-layer
+
 This is the **modern replacement** for the NHL's deprecated public Stats API
 (``statsapi.web.nhl.com/api/v1/``, retired Sep 2023). The functions in
 :mod:`sportsdataverse.nhl.nhl_api` that target ``statsapi.web.nhl.com`` are
