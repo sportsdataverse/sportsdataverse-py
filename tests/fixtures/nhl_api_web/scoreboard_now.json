@@ -1,0 +1,1182 @@
+{
+  "focusedDate": "2026-05-24",
+  "focusedDateCount": 11,
+  "gamesByDate": [
+    {
+      "date": "2026-05-21",
+      "games": [
+        {
+          "id": 2025030311,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-21",
+          "gameCenterLink": "/gamecenter/mtl-vs-car/2026/05/21/2025030311",
+          "venue": {
+            "default": "Lenovo Center"
+          },
+          "startTimeUTC": "2026-05-22T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-04:00",
+          "tvBroadcasts": [
+            {
+              "id": 385,
+              "market": "N",
+              "countryCode": "US",
+              "network": "TNT",
+              "sequenceNumber": 11
+            },
+            {
+              "id": 501,
+              "market": "N",
+              "countryCode": "US",
+              "network": "truTV",
+              "sequenceNumber": 14
+            },
+            {
+              "id": 578,
+              "market": "N",
+              "countryCode": "US",
+              "network": "HBO MAX",
+              "sequenceNumber": 19
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "OFF",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 8,
+            "name": {
+              "default": "Montr\u00e9al Canadiens",
+              "fr": "Canadiens de Montr\u00e9al"
+            },
+            "commonName": {
+              "default": "Canadiens"
+            },
+            "placeNameWithPreposition": {
+              "default": "Montr\u00e9al",
+              "fr": "de Montr\u00e9al"
+            },
+            "abbrev": "MTL",
+            "score": 6,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+          },
+          "homeTeam": {
+            "id": 12,
+            "name": {
+              "default": "Carolina Hurricanes",
+              "fr": "Hurricanes de la Caroline"
+            },
+            "commonName": {
+              "default": "Hurricanes"
+            },
+            "placeNameWithPreposition": {
+              "default": "Carolina",
+              "fr": "de la Caroline"
+            },
+            "abbrev": "CAR",
+            "score": 2,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+          },
+          "ticketsLink": "https://www.ticketmaster.com/event/2D00646AAE9DEFF7?brand=nhl&wt.mc_id=NHL_LEAGUE_CAR_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_CAR&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1",
+          "ticketsLinkFr": "https://www.ticketmaster.com/event/2D00646AAE9DEFF7?brand=nhl&wt.mc_id=NHL_LEAGUE_CAR_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_CAR&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1",
+          "period": 3,
+          "periodDescriptor": {
+            "number": 3,
+            "periodType": "REG",
+            "maxRegulationPeriods": 3
+          },
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "ECF",
+            "game": 1,
+            "topSeedTeamAbbrev": "CAR",
+            "topSeedWins": 0,
+            "bottomSeedTeamAbbrev": "MTL",
+            "bottomSeedWins": 1
+          },
+          "threeMinRecap": "/video/mtl-at-car-recap-6396321344112",
+          "threeMinRecapFr": "/fr/video/mtl-vs-car-21-05-2026-resume-6396319586112"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-22",
+      "games": [
+        {
+          "id": 2025030322,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-22",
+          "gameCenterLink": "/gamecenter/vgk-vs-col/2026/05/22/2025030322",
+          "venue": {
+            "default": "Ball Arena"
+          },
+          "startTimeUTC": "2026-05-23T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-06:00",
+          "tvBroadcasts": [
+            {
+              "id": 309,
+              "market": "N",
+              "countryCode": "US",
+              "network": "ESPN",
+              "sequenceNumber": 10
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "OFF",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 54,
+            "name": {
+              "default": "Vegas Golden Knights",
+              "fr": "Golden Knights de Vegas"
+            },
+            "commonName": {
+              "default": "Golden Knights"
+            },
+            "placeNameWithPreposition": {
+              "default": "Vegas",
+              "fr": "de Vegas"
+            },
+            "abbrev": "VGK",
+            "score": 3,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+          },
+          "homeTeam": {
+            "id": 21,
+            "name": {
+              "default": "Colorado Avalanche",
+              "fr": "Avalanche du Colorado"
+            },
+            "commonName": {
+              "default": "Avalanche"
+            },
+            "placeNameWithPreposition": {
+              "default": "Colorado",
+              "fr": "du Colorado"
+            },
+            "abbrev": "COL",
+            "score": 1,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+          },
+          "ticketsLink": "https://avs.social/26_LG_SCOREBOARD_PO_RD3GM2",
+          "ticketsLinkFr": "https://avs.social/26_LG_SCOREBOARD_PO_RD3GM2",
+          "period": 3,
+          "periodDescriptor": {
+            "number": 3,
+            "periodType": "REG",
+            "maxRegulationPeriods": 3
+          },
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "WCF",
+            "game": 2,
+            "topSeedTeamAbbrev": "COL",
+            "topSeedWins": 0,
+            "bottomSeedTeamAbbrev": "VGK",
+            "bottomSeedWins": 2
+          },
+          "threeMinRecap": "/video/vgk-at-col-recap-6396408368112",
+          "threeMinRecapFr": "/fr/video/vgk-vs-col-22-05-2026-resume-6396410040112"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-23",
+      "games": [
+        {
+          "id": 2025030312,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-23",
+          "gameCenterLink": "/gamecenter/mtl-vs-car/2026/05/23/2025030312",
+          "venue": {
+            "default": "Lenovo Center"
+          },
+          "startTimeUTC": "2026-05-23T23:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-04:00",
+          "tvBroadcasts": [
+            {
+              "id": 385,
+              "market": "N",
+              "countryCode": "US",
+              "network": "TNT",
+              "sequenceNumber": 11
+            },
+            {
+              "id": 501,
+              "market": "N",
+              "countryCode": "US",
+              "network": "truTV",
+              "sequenceNumber": 14
+            },
+            {
+              "id": 578,
+              "market": "N",
+              "countryCode": "US",
+              "network": "HBO MAX",
+              "sequenceNumber": 19
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "OFF",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 8,
+            "name": {
+              "default": "Montr\u00e9al Canadiens",
+              "fr": "Canadiens de Montr\u00e9al"
+            },
+            "commonName": {
+              "default": "Canadiens"
+            },
+            "placeNameWithPreposition": {
+              "default": "Montr\u00e9al",
+              "fr": "de Montr\u00e9al"
+            },
+            "abbrev": "MTL",
+            "score": 2,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+          },
+          "homeTeam": {
+            "id": 12,
+            "name": {
+              "default": "Carolina Hurricanes",
+              "fr": "Hurricanes de la Caroline"
+            },
+            "commonName": {
+              "default": "Hurricanes"
+            },
+            "placeNameWithPreposition": {
+              "default": "Carolina",
+              "fr": "de la Caroline"
+            },
+            "abbrev": "CAR",
+            "score": 3,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+          },
+          "ticketsLink": "https://www.ticketmaster.com/event/2D00646AAEA4EFFF?brand=nhl&wt.mc_id=NHL_LEAGUE_CAR_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_CAR&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2",
+          "ticketsLinkFr": "https://www.ticketmaster.com/event/2D00646AAEA4EFFF?brand=nhl&wt.mc_id=NHL_LEAGUE_CAR_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_CAR&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2",
+          "period": 4,
+          "periodDescriptor": {
+            "number": 4,
+            "periodType": "OT",
+            "maxRegulationPeriods": 3
+          },
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "ECF",
+            "game": 2,
+            "topSeedTeamAbbrev": "CAR",
+            "topSeedWins": 1,
+            "bottomSeedTeamAbbrev": "MTL",
+            "bottomSeedWins": 1
+          },
+          "threeMinRecap": "/video/mtl-at-car-recap-6396475143112",
+          "threeMinRecapFr": "/fr/video/mtl-vs-car-23-05-2026-resume-6396475050112"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "games": [
+        {
+          "id": 2025030323,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-24",
+          "gameCenterLink": "/gamecenter/col-vs-vgk/2026/05/24/2025030323",
+          "venue": {
+            "default": "T-Mobile Arena"
+          },
+          "startTimeUTC": "2026-05-25T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-07:00",
+          "tvBroadcasts": [
+            {
+              "id": 309,
+              "market": "N",
+              "countryCode": "US",
+              "network": "ESPN",
+              "sequenceNumber": 10
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "LIVE",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 21,
+            "name": {
+              "default": "Colorado Avalanche",
+              "fr": "Avalanche du Colorado"
+            },
+            "commonName": {
+              "default": "Avalanche"
+            },
+            "placeNameWithPreposition": {
+              "default": "Colorado",
+              "fr": "du Colorado"
+            },
+            "abbrev": "COL",
+            "score": 2,
+            "sog": 10,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+          },
+          "homeTeam": {
+            "id": 54,
+            "name": {
+              "default": "Vegas Golden Knights",
+              "fr": "Golden Knights de Vegas"
+            },
+            "commonName": {
+              "default": "Golden Knights"
+            },
+            "placeNameWithPreposition": {
+              "default": "Vegas",
+              "fr": "de Vegas"
+            },
+            "abbrev": "VGK",
+            "score": 0,
+            "sog": 3,
+            "logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+          },
+          "ticketsLink": "",
+          "ticketsLinkFr": "",
+          "period": 1,
+          "periodDescriptor": {
+            "number": 1,
+            "periodType": "REG",
+            "maxRegulationPeriods": 3
+          },
+          "clock": {
+            "timeRemaining": "08:25",
+            "secondsRemaining": 505,
+            "running": false,
+            "inIntermission": false
+          },
+          "situation": {
+            "homeTeam": {
+              "abbrev": "VGK",
+              "situationDescriptions": [
+                "PP"
+              ],
+              "strength": 5
+            },
+            "awayTeam": {
+              "abbrev": "COL",
+              "strength": 4
+            },
+            "situationCode": "1451",
+            "timeRemaining": "01:53",
+            "secondsRemaining": 113
+          },
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "WCF",
+            "game": 3,
+            "topSeedTeamAbbrev": "COL",
+            "topSeedWins": 0,
+            "bottomSeedTeamAbbrev": "VGK",
+            "bottomSeedWins": 2
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "games": [
+        {
+          "id": 2025030313,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-25",
+          "gameCenterLink": "/gamecenter/car-vs-mtl/2026/05/25/2025030313",
+          "venue": {
+            "default": "Centre Bell"
+          },
+          "startTimeUTC": "2026-05-26T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-04:00",
+          "tvBroadcasts": [
+            {
+              "id": 385,
+              "market": "N",
+              "countryCode": "US",
+              "network": "TNT",
+              "sequenceNumber": 11
+            },
+            {
+              "id": 501,
+              "market": "N",
+              "countryCode": "US",
+              "network": "truTV",
+              "sequenceNumber": 14
+            },
+            {
+              "id": 578,
+              "market": "N",
+              "countryCode": "US",
+              "network": "HBO MAX",
+              "sequenceNumber": 19
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "FUT",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 12,
+            "name": {
+              "default": "Carolina Hurricanes",
+              "fr": "Hurricanes de la Caroline"
+            },
+            "commonName": {
+              "default": "Hurricanes"
+            },
+            "placeNameWithPreposition": {
+              "default": "Carolina",
+              "fr": "de la Caroline"
+            },
+            "abbrev": "CAR",
+            "record": "9-1",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+          },
+          "homeTeam": {
+            "id": 8,
+            "name": {
+              "default": "Montr\u00e9al Canadiens",
+              "fr": "Canadiens de Montr\u00e9al"
+            },
+            "commonName": {
+              "default": "Canadiens"
+            },
+            "placeNameWithPreposition": {
+              "default": "Montr\u00e9al",
+              "fr": "de Montr\u00e9al"
+            },
+            "abbrev": "MTL",
+            "record": "9-7",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+          },
+          "ticketsLink": "https://www.ticketmaster.ca/event/3100648AD705A00A?lang=en-ca&brand=nhl&wt.mc_id=NHL_LEAGUE_MTL_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_MTL&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1",
+          "ticketsLinkFr": "https://www.ticketmaster.ca/event/3100648AD705A00A?lang=fr-ca&brand=nhl&wt.mc_id=NHL_LEAGUE_MTL_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_MTL&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM1",
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "ECF",
+            "game": 3,
+            "topSeedTeamAbbrev": "CAR",
+            "topSeedWins": 1,
+            "bottomSeedTeamAbbrev": "MTL",
+            "bottomSeedWins": 1
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-05-26",
+      "games": [
+        {
+          "id": 2025030324,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-26",
+          "gameCenterLink": "/gamecenter/col-vs-vgk/2026/05/26/2025030324",
+          "venue": {
+            "default": "T-Mobile Arena"
+          },
+          "startTimeUTC": "2026-05-27T01:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-07:00",
+          "tvBroadcasts": [
+            {
+              "id": 309,
+              "market": "N",
+              "countryCode": "US",
+              "network": "ESPN",
+              "sequenceNumber": 10
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "FUT",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 21,
+            "name": {
+              "default": "Colorado Avalanche",
+              "fr": "Avalanche du Colorado"
+            },
+            "commonName": {
+              "default": "Avalanche"
+            },
+            "placeNameWithPreposition": {
+              "default": "Colorado",
+              "fr": "du Colorado"
+            },
+            "abbrev": "COL",
+            "record": "8-3",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+          },
+          "homeTeam": {
+            "id": 54,
+            "name": {
+              "default": "Vegas Golden Knights",
+              "fr": "Golden Knights de Vegas"
+            },
+            "commonName": {
+              "default": "Golden Knights"
+            },
+            "placeNameWithPreposition": {
+              "default": "Vegas",
+              "fr": "de Vegas"
+            },
+            "abbrev": "VGK",
+            "record": "10-4",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+          },
+          "ticketsLink": "",
+          "ticketsLinkFr": "",
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "WCF",
+            "game": 4,
+            "topSeedTeamAbbrev": "COL",
+            "topSeedWins": 0,
+            "bottomSeedTeamAbbrev": "VGK",
+            "bottomSeedWins": 2
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-05-27",
+      "games": [
+        {
+          "id": 2025030314,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-27",
+          "gameCenterLink": "/gamecenter/car-vs-mtl/2026/05/27/2025030314",
+          "venue": {
+            "default": "Centre Bell"
+          },
+          "startTimeUTC": "2026-05-28T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-04:00",
+          "tvBroadcasts": [
+            {
+              "id": 385,
+              "market": "N",
+              "countryCode": "US",
+              "network": "TNT",
+              "sequenceNumber": 11
+            },
+            {
+              "id": 501,
+              "market": "N",
+              "countryCode": "US",
+              "network": "truTV",
+              "sequenceNumber": 14
+            },
+            {
+              "id": 578,
+              "market": "N",
+              "countryCode": "US",
+              "network": "HBO MAX",
+              "sequenceNumber": 19
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "FUT",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 12,
+            "name": {
+              "default": "Carolina Hurricanes",
+              "fr": "Hurricanes de la Caroline"
+            },
+            "commonName": {
+              "default": "Hurricanes"
+            },
+            "placeNameWithPreposition": {
+              "default": "Carolina",
+              "fr": "de la Caroline"
+            },
+            "abbrev": "CAR",
+            "record": "9-1",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+          },
+          "homeTeam": {
+            "id": 8,
+            "name": {
+              "default": "Montr\u00e9al Canadiens",
+              "fr": "Canadiens de Montr\u00e9al"
+            },
+            "commonName": {
+              "default": "Canadiens"
+            },
+            "placeNameWithPreposition": {
+              "default": "Montr\u00e9al",
+              "fr": "de Montr\u00e9al"
+            },
+            "abbrev": "MTL",
+            "record": "9-7",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+          },
+          "ticketsLink": "https://www.ticketmaster.ca/event/3100648AD708A00E?lang=en-ca&brand=nhl&wt.mc_id=NHL_LEAGUE_MTL_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_MTL&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2",
+          "ticketsLinkFr": "https://www.ticketmaster.ca/event/3100648AD708A00E?lang=fr-ca&brand=nhl&wt.mc_id=NHL_LEAGUE_MTL_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_MTL&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM2",
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "ECF",
+            "game": 4,
+            "topSeedTeamAbbrev": "CAR",
+            "topSeedWins": 1,
+            "bottomSeedTeamAbbrev": "MTL",
+            "bottomSeedWins": 1
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-05-28",
+      "games": [
+        {
+          "id": 2025030325,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-28",
+          "gameCenterLink": "/gamecenter/vgk-vs-col/2026/05/28/2025030325",
+          "venue": {
+            "default": "Ball Arena"
+          },
+          "startTimeUTC": "2026-05-29T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-06:00",
+          "tvBroadcasts": [
+            {
+              "id": 309,
+              "market": "N",
+              "countryCode": "US",
+              "network": "ESPN",
+              "sequenceNumber": 10
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "FUT",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 54,
+            "name": {
+              "default": "Vegas Golden Knights",
+              "fr": "Golden Knights de Vegas"
+            },
+            "commonName": {
+              "default": "Golden Knights"
+            },
+            "placeNameWithPreposition": {
+              "default": "Vegas",
+              "fr": "de Vegas"
+            },
+            "abbrev": "VGK",
+            "record": "10-4",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+          },
+          "homeTeam": {
+            "id": 21,
+            "name": {
+              "default": "Colorado Avalanche",
+              "fr": "Avalanche du Colorado"
+            },
+            "commonName": {
+              "default": "Avalanche"
+            },
+            "placeNameWithPreposition": {
+              "default": "Colorado",
+              "fr": "du Colorado"
+            },
+            "abbrev": "COL",
+            "record": "8-3",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+          },
+          "ticketsLink": "https://avs.social/26_LG_SCOREBOARD_PO_RD3GM3",
+          "ticketsLinkFr": "https://avs.social/26_LG_SCOREBOARD_PO_RD3GM3",
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "WCF",
+            "game": 5,
+            "topSeedTeamAbbrev": "COL",
+            "topSeedWins": 0,
+            "bottomSeedTeamAbbrev": "VGK",
+            "bottomSeedWins": 2
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-05-29",
+      "games": [
+        {
+          "id": 2025030315,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-29",
+          "gameCenterLink": "/gamecenter/mtl-vs-car/2026/05/29/2025030315",
+          "venue": {
+            "default": "Lenovo Center"
+          },
+          "startTimeUTC": "2026-05-30T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-04:00",
+          "tvBroadcasts": [
+            {
+              "id": 385,
+              "market": "N",
+              "countryCode": "US",
+              "network": "TNT",
+              "sequenceNumber": 11
+            },
+            {
+              "id": 501,
+              "market": "N",
+              "countryCode": "US",
+              "network": "truTV",
+              "sequenceNumber": 14
+            },
+            {
+              "id": 578,
+              "market": "N",
+              "countryCode": "US",
+              "network": "HBO MAX",
+              "sequenceNumber": 19
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "FUT",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 8,
+            "name": {
+              "default": "Montr\u00e9al Canadiens",
+              "fr": "Canadiens de Montr\u00e9al"
+            },
+            "commonName": {
+              "default": "Canadiens"
+            },
+            "placeNameWithPreposition": {
+              "default": "Montr\u00e9al",
+              "fr": "de Montr\u00e9al"
+            },
+            "abbrev": "MTL",
+            "record": "9-7",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+          },
+          "homeTeam": {
+            "id": 12,
+            "name": {
+              "default": "Carolina Hurricanes",
+              "fr": "Hurricanes de la Caroline"
+            },
+            "commonName": {
+              "default": "Hurricanes"
+            },
+            "placeNameWithPreposition": {
+              "default": "Carolina",
+              "fr": "de la Caroline"
+            },
+            "abbrev": "CAR",
+            "record": "9-1",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+          },
+          "ticketsLink": "https://www.ticketmaster.com/event/2D00646AAEABF009?brand=nhl&wt.mc_id=NHL_LEAGUE_CAR_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_CAR&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3",
+          "ticketsLinkFr": "https://www.ticketmaster.com/event/2D00646AAEABF009?brand=nhl&wt.mc_id=NHL_LEAGUE_CAR_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_CAR&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3",
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "ECF",
+            "game": 5,
+            "topSeedTeamAbbrev": "CAR",
+            "topSeedWins": 1,
+            "bottomSeedTeamAbbrev": "MTL",
+            "bottomSeedWins": 1
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-05-30",
+      "games": [
+        {
+          "id": 2025030326,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-30",
+          "gameCenterLink": "/gamecenter/col-vs-vgk/2026/05/30/2025030326",
+          "venue": {
+            "default": "T-Mobile Arena"
+          },
+          "startTimeUTC": "2026-05-31T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-07:00",
+          "tvBroadcasts": [
+            {
+              "id": 384,
+              "market": "N",
+              "countryCode": "US",
+              "network": "ABC",
+              "sequenceNumber": 1
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "FUT",
+          "gameScheduleState": "OK",
+          "awayTeam": {
+            "id": 21,
+            "name": {
+              "default": "Colorado Avalanche",
+              "fr": "Avalanche du Colorado"
+            },
+            "commonName": {
+              "default": "Avalanche"
+            },
+            "placeNameWithPreposition": {
+              "default": "Colorado",
+              "fr": "du Colorado"
+            },
+            "abbrev": "COL",
+            "record": "8-3",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+          },
+          "homeTeam": {
+            "id": 54,
+            "name": {
+              "default": "Vegas Golden Knights",
+              "fr": "Golden Knights de Vegas"
+            },
+            "commonName": {
+              "default": "Golden Knights"
+            },
+            "placeNameWithPreposition": {
+              "default": "Vegas",
+              "fr": "de Vegas"
+            },
+            "abbrev": "VGK",
+            "record": "10-4",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg"
+          },
+          "ticketsLink": "",
+          "ticketsLinkFr": "",
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "WCF",
+            "game": 6,
+            "topSeedTeamAbbrev": "COL",
+            "topSeedWins": 0,
+            "bottomSeedTeamAbbrev": "VGK",
+            "bottomSeedWins": 2
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-05-31",
+      "games": [
+        {
+          "id": 2025030316,
+          "season": 20252026,
+          "gameType": 3,
+          "gameDate": "2026-05-31",
+          "gameCenterLink": "/gamecenter/car-vs-mtl/2026/05/31/2025030316",
+          "venue": {
+            "default": "Centre Bell"
+          },
+          "startTimeUTC": "2026-05-31T16:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-04:00",
+          "tvBroadcasts": [
+            {
+              "id": 385,
+              "market": "N",
+              "countryCode": "US",
+              "network": "TNT",
+              "sequenceNumber": 11
+            },
+            {
+              "id": 501,
+              "market": "N",
+              "countryCode": "US",
+              "network": "truTV",
+              "sequenceNumber": 14
+            },
+            {
+              "id": 578,
+              "market": "N",
+              "countryCode": "US",
+              "network": "HBO MAX",
+              "sequenceNumber": 19
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "gameState": "FUT",
+          "gameScheduleState": "TBD",
+          "awayTeam": {
+            "id": 12,
+            "name": {
+              "default": "Carolina Hurricanes",
+              "fr": "Hurricanes de la Caroline"
+            },
+            "commonName": {
+              "default": "Hurricanes"
+            },
+            "placeNameWithPreposition": {
+              "default": "Carolina",
+              "fr": "de la Caroline"
+            },
+            "abbrev": "CAR",
+            "record": "9-1",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+          },
+          "homeTeam": {
+            "id": 8,
+            "name": {
+              "default": "Montr\u00e9al Canadiens",
+              "fr": "Canadiens de Montr\u00e9al"
+            },
+            "commonName": {
+              "default": "Canadiens"
+            },
+            "placeNameWithPreposition": {
+              "default": "Montr\u00e9al",
+              "fr": "de Montr\u00e9al"
+            },
+            "abbrev": "MTL",
+            "record": "9-7",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+          },
+          "ticketsLink": "https://www.ticketmaster.ca/event/3100648AD70CA019?lang=en-ca&brand=nhl&wt.mc_id=NHL_LEAGUE_MTL_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_MTL&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3",
+          "ticketsLinkFr": "https://www.ticketmaster.ca/event/3100648AD70CA019?lang=fr-ca&brand=nhl&wt.mc_id=NHL_LEAGUE_MTL_HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3&utm_source=NHL.com&utm_medium=client&utm_campaign=NHL_LEAGUE_MTL&utm_content=HORIZONTAL_SCOREBOARD_PLAYOFFS_RD3_GM3",
+          "seriesStatus": {
+            "round": 3,
+            "seriesAbbrev": "ECF",
+            "game": 6,
+            "topSeedTeamAbbrev": "CAR",
+            "topSeedWins": 1,
+            "bottomSeedTeamAbbrev": "MTL",
+            "bottomSeedWins": 1
+          }
+        }
+      ]
+    }
+  ]
+}

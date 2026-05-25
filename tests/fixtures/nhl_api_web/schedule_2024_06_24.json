@@ -1,0 +1,194 @@
+{
+  "nextStartDate": "2024-09-16",
+  "previousStartDate": "2024-06-17",
+  "gameWeek": [
+    {
+      "date": "2024-06-24",
+      "dayAbbrev": "MON",
+      "numberOfGames": 1,
+      "datePromo": [],
+      "games": [
+        {
+          "id": 2023030417,
+          "season": 20232024,
+          "gameType": 3,
+          "venue": {
+            "default": "Amerant Bank Arena"
+          },
+          "neutralSite": false,
+          "startTimeUTC": "2024-06-25T00:00:00Z",
+          "easternUTCOffset": "-04:00",
+          "venueUTCOffset": "-04:00",
+          "venueTimezone": "US/Eastern",
+          "gameState": "OFF",
+          "gameScheduleState": "OK",
+          "tvBroadcasts": [
+            {
+              "id": 384,
+              "market": "N",
+              "countryCode": "US",
+              "network": "ABC",
+              "sequenceNumber": 1
+            },
+            {
+              "id": 329,
+              "market": "N",
+              "countryCode": "US",
+              "network": "ESPN+",
+              "sequenceNumber": 16
+            },
+            {
+              "id": 4,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "CBC",
+              "sequenceNumber": 101
+            },
+            {
+              "id": 282,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "SN",
+              "sequenceNumber": 107
+            },
+            {
+              "id": 281,
+              "market": "N",
+              "countryCode": "CA",
+              "network": "TVAS",
+              "sequenceNumber": 120
+            }
+          ],
+          "awayTeam": {
+            "id": 22,
+            "commonName": {
+              "default": "Oilers"
+            },
+            "placeName": {
+              "default": "Edmonton"
+            },
+            "placeNameWithPreposition": {
+              "default": "Edmonton",
+              "fr": "d'Edmonton"
+            },
+            "abbrev": "EDM",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+            "darkLogo": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+            "awaySplitSquad": false,
+            "score": 1
+          },
+          "homeTeam": {
+            "id": 13,
+            "commonName": {
+              "default": "Panthers"
+            },
+            "placeName": {
+              "default": "Florida",
+              "fr": "Floride"
+            },
+            "placeNameWithPreposition": {
+              "default": "Florida",
+              "fr": "de la Floride"
+            },
+            "abbrev": "FLA",
+            "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+            "darkLogo": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+            "homeSplitSquad": false,
+            "score": 2
+          },
+          "periodDescriptor": {
+            "number": 3,
+            "periodType": "REG",
+            "maxRegulationPeriods": 3
+          },
+          "gameOutcome": {
+            "lastPeriodType": "REG"
+          },
+          "winningGoalie": {
+            "playerId": 8475683,
+            "firstInitial": {
+              "default": "S."
+            },
+            "lastName": {
+              "default": "Bobrovsky",
+              "cs": "Bobrovskij",
+              "fi": "Bobrovski",
+              "sk": "Bobrovskij"
+            }
+          },
+          "winningGoalScorer": {
+            "playerId": 8477933,
+            "firstInitial": {
+              "default": "S."
+            },
+            "lastName": {
+              "default": "Reinhart"
+            }
+          },
+          "seriesStatus": {
+            "round": 4,
+            "seriesAbbrev": "SCF",
+            "seriesTitle": "Stanley Cup Final",
+            "seriesLetter": "O",
+            "neededToWin": 4,
+            "topSeedTeamAbbrev": "FLA",
+            "topSeedWins": 4,
+            "bottomSeedTeamAbbrev": "EDM",
+            "bottomSeedWins": 3,
+            "gameNumberOfSeries": 7
+          },
+          "seriesUrl": "/schedule/playoff-series/2024/series-o/panthers-vs-oilers",
+          "threeMinRecap": "/video/recap-oilers-at-panthers-6-24-24-6355637309112",
+          "gameCenterLink": "/gamecenter/edm-vs-fla/2024/06/24/2023030417"
+        }
+      ]
+    },
+    {
+      "date": "2024-06-25",
+      "dayAbbrev": "TUE",
+      "numberOfGames": 0,
+      "datePromo": [],
+      "games": []
+    },
+    {
+      "date": "2024-06-26",
+      "dayAbbrev": "WED",
+      "numberOfGames": 0,
+      "datePromo": [],
+      "games": []
+    },
+    {
+      "date": "2024-06-27",
+      "dayAbbrev": "THU",
+      "numberOfGames": 0,
+      "datePromo": [],
+      "games": []
+    },
+    {
+      "date": "2024-06-28",
+      "dayAbbrev": "FRI",
+      "numberOfGames": 0,
+      "datePromo": [],
+      "games": []
+    },
+    {
+      "date": "2024-06-29",
+      "dayAbbrev": "SAT",
+      "numberOfGames": 0,
+      "datePromo": [],
+      "games": []
+    },
+    {
+      "date": "2024-06-30",
+      "dayAbbrev": "SUN",
+      "numberOfGames": 0,
+      "datePromo": [],
+      "games": []
+    }
+  ],
+  "preSeasonStartDate": "2023-09-23",
+  "regularSeasonStartDate": "2023-10-10",
+  "regularSeasonEndDate": "2024-04-18",
+  "playoffEndDate": "2024-06-24",
+  "numberOfGames": 1
+}

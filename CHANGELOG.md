@@ -15,6 +15,7 @@
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
+  - [New: NHL api-web parser layer](#new-nhl-api-web-parser-layer)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
@@ -369,6 +370,79 @@ the meta endpoints).  `parser_for_nhl_stats_rest` and
 `parser_for_nhl_records` always return a callable (fall back to the
 generic parser — never return `None`).
 
+### New: NHL api-web parser layer
+
+`sportsdataverse.nhl.nhl_api_web_parsers` covers the modern game-feed
+API at `api-web.nhle.com/v1/` — 16 dedicated parsers + 2 dispatchers
+covering all 26 `nhl_web_*` wrappers across game-center, schedule,
+score, scoreboard, standings, team, player, leaders, and draft
+families.
+
+Game-center parsers:
+
+- `parse_nhl_web_pbp` — one row per play (~330 plays per game) with
+  `eventId`, `typeCode`, `typeDescKey`, `periodDescriptor`, `details`
+  flattened.
+- `parse_nhl_web_boxscore` — unrolls the 6-bucket
+  `playerByGameStats: {away,home}Team.{forwards,defense,goalies}`
+  structure into one long-form frame, tagging each row with
+  `home_away` and `position_group`.
+- `parse_nhl_web_landing` — single-row game profile with venue,
+  teams, periodDescriptor, gameState, summary stringified.
+- `parse_nhl_web_right_rail` — **dispatcher** returning 6 sub-frames:
+  `season_series`, `shots_by_period`, `team_game_stats`, `game_info`,
+  `linescore_by_period`, `season_series_wins`. With `section="..."`
+  returns just one frame.
+
+Schedule / score parsers:
+
+- `parse_nhl_web_schedule` — walks `gameWeek[].games[]`, prefixes the
+  day's date onto each game row.
+- `parse_nhl_web_score` — flattens `games[]` for a single date.
+- `parse_nhl_web_scoreboard` — walks `gamesByDate[].games[]`,
+  prefixes `scoreboard_date` (multi-day scoreboard).
+- `parse_nhl_web_club_schedule` — flattens `games[]` with
+  `club_timezone` / `club_current_season` / `club_previous_season` /
+  `club_next_season` context columns from the parent payload.
+
+Standings + team / player parsers:
+
+- `parse_nhl_web_standings` — one row per team (84 stat columns
+  covering full win/loss/OT/SO/ROW/L10/streak/home/away breakdowns).
+- `parse_nhl_web_standings_season` — one row per season
+  (108 NHL seasons since 1917-18).
+- `parse_nhl_web_club_stats` — **dispatcher** returning
+  `{skaters, goalies}` as separate frames.
+- `parse_nhl_web_roster` — merges `forwards`, `defensemen`, `goalies`
+  into one long-form frame with a `position_group` column.
+- `parse_nhl_web_player_landing` — single-row player profile
+  (~130 columns for a player like McDavid with full career totals,
+  features, recent games).
+- `parse_nhl_web_player_game_log` — one row per game from `gameLog[]`.
+
+Leaders + draft:
+
+- `parse_nhl_web_leaders` — walks the category-keyed leaders payload
+  (`{points: [...], goals: [...]}` for skaters; `{wins: [...],
+  savePctg: [...]}` for goalies), tags each row with the category
+  it came from, concatenates.
+- `parse_nhl_web_draft_picks` — one row per pick.
+
+Registry: `NHL_API_WEB_ENDPOINT_PARSERS` has 24 entries covering all
+the data endpoints. `parser_for_nhl_api_web(fn_name)` returns the
+registered parser or `None` for the 2 idiosyncratic endpoints
+(`playoff_series`, `player_spotlight`, `draft_rankings`,
+`draft_rankings_now`) whose payloads are too idiosyncratic for a
+useful generic fallback — callers null-check.
+
+Test fixtures captured 2026-05-24 (17 captures from
+`api-web.nhle.com/v1/`). 37 offline tests in
+`tests/test_nhl_api_web_parsers.py` verify each parser against the
+captured fixtures plus dispatcher contracts, empty payload contract,
+pandas opt-in, and registry consistency.
+
+---
+
 Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
 6 from `records.nhl.com/site/api/`). 21 offline tests in
 `tests/test_nhl_aux_parsers.py` verify parsing across:
@@ -384,7 +458,8 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
 
 - New `tests/test_espn_universal_parsers.py` (65 tests),
   `tests/test_mlb_api_parsers.py` (17 tests),
-  `tests/test_nhl_aux_parsers.py` (21 tests), and
+  `tests/test_nhl_aux_parsers.py` (21 tests),
+  `tests/test_nhl_api_web_parsers.py` (37 tests), and
   `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
   captured fixtures.
 - New `tests/test_espn_live.py` (32 live tests) gated by
@@ -397,8 +472,12 @@ Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
   country, glossary, config, skater_summary, goalie_summary,
   team_summary), `tests/fixtures/nhl_records/` (6 captures:
   franchise, franchise_team_totals, coach, draft, player,
-  attendance), and `tests/fixtures/nhl_edge/` (7 captures), each with
-  a README documenting provenance.
+  attendance), `tests/fixtures/nhl_api_web/` (17 captures: pbp,
+  boxscore, landing, right_rail, schedule, score, scoreboard,
+  standings, standings_season, club_schedule, club_stats, roster,
+  player_landing, player_gamelog, skater_leaders, goalie_leaders,
+  draft_picks), and `tests/fixtures/nhl_edge/` (7 captures), each
+  with a README documenting provenance.
 - Parametrized cross-league parity tests in
   `test_espn_universal_parsers.py` exercise the summary dispatcher
   against all 5 captured leagues and assert the full 20-section

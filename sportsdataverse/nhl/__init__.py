@@ -2,6 +2,26 @@ from __future__ import annotations
 
 from sportsdataverse.nhl.nhl_api import *
 from sportsdataverse.nhl.nhl_api_web import *
+from sportsdataverse.nhl.nhl_api_web_parsers import (
+    NHL_API_WEB_ENDPOINT_PARSERS,
+    parse_nhl_web_boxscore,
+    parse_nhl_web_club_schedule,
+    parse_nhl_web_club_stats,
+    parse_nhl_web_draft_picks,
+    parse_nhl_web_landing,
+    parse_nhl_web_leaders,
+    parse_nhl_web_pbp,
+    parse_nhl_web_player_game_log,
+    parse_nhl_web_player_landing,
+    parse_nhl_web_right_rail,
+    parse_nhl_web_roster,
+    parse_nhl_web_schedule,
+    parse_nhl_web_score,
+    parse_nhl_web_scoreboard,
+    parse_nhl_web_standings,
+    parse_nhl_web_standings_season,
+    parser_for_nhl_api_web,
+)
 from sportsdataverse.nhl.nhl_edge import *
 from sportsdataverse.nhl.nhl_edge_parsers import (
     EDGE_ENDPOINT_PARSERS,

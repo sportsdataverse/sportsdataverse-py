@@ -1,0 +1,1221 @@
+{
+  "broadcastStartTimeUTC": "2024-06-28T23:00:00Z",
+  "draftYear": 2024,
+  "draftYears": [
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "selectableRounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "state": "over",
+  "picks": [
+    {
+      "round": 1,
+      "pickInRound": 1,
+      "overallPick": 1,
+      "teamId": 28,
+      "teamAbbrev": "SJS",
+      "teamName": {
+        "default": "San Jose Sharks",
+        "fr": "Sharks de San Jose"
+      },
+      "teamCommonName": {
+        "default": "Sharks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "San Jose",
+        "fr": "de San Jose"
+      },
+      "displayAbbrev": {
+        "default": "SJS"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/SJS_20082009-20232024_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/SJS_20082009-20232024_dark.svg",
+      "teamPickHistory": "SJS",
+      "firstName": {
+        "default": "Macklin"
+      },
+      "lastName": {
+        "default": "Celebrini"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 72,
+      "weight": 197,
+      "amateurLeague": "H-EAST",
+      "amateurClubName": "Boston University"
+    },
+    {
+      "round": 1,
+      "pickInRound": 2,
+      "overallPick": 2,
+      "teamId": 16,
+      "teamAbbrev": "CHI",
+      "teamName": {
+        "default": "Chicago Blackhawks",
+        "fr": "Blackhawks de Chicago"
+      },
+      "teamCommonName": {
+        "default": "Blackhawks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Chicago",
+        "fr": "de Chicago"
+      },
+      "displayAbbrev": {
+        "default": "CHI"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_dark.svg",
+      "teamPickHistory": "CHI",
+      "firstName": {
+        "default": "Artyom"
+      },
+      "lastName": {
+        "default": "Levshunov"
+      },
+      "positionCode": "D",
+      "countryCode": "BLR",
+      "height": 74,
+      "weight": 205,
+      "amateurLeague": "BIG10",
+      "amateurClubName": "Michigan State U."
+    },
+    {
+      "round": 1,
+      "pickInRound": 3,
+      "overallPick": 3,
+      "teamId": 24,
+      "teamAbbrev": "ANA",
+      "teamName": {
+        "default": "Anaheim Ducks",
+        "fr": "Ducks d'Anaheim"
+      },
+      "teamCommonName": {
+        "default": "Ducks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Anaheim",
+        "fr": "d'Anaheim"
+      },
+      "displayAbbrev": {
+        "default": "ANA"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/ANA_20132014-20232024_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/ANA_20132014-20232024_dark.svg",
+      "teamPickHistory": "ANA",
+      "firstName": {
+        "default": "Beckett"
+      },
+      "lastName": {
+        "default": "Sennecke"
+      },
+      "positionCode": "RW",
+      "countryCode": "CAN",
+      "height": 75,
+      "weight": 182,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Oshawa"
+    },
+    {
+      "round": 1,
+      "pickInRound": 4,
+      "overallPick": 4,
+      "teamId": 29,
+      "teamAbbrev": "CBJ",
+      "teamName": {
+        "default": "Columbus Blue Jackets",
+        "fr": "Blue Jackets de Columbus"
+      },
+      "teamCommonName": {
+        "default": "Blue Jackets"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Columbus",
+        "fr": "de Columbus"
+      },
+      "displayAbbrev": {
+        "default": "CBJ"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CBJ_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+      "teamPickHistory": "CBJ",
+      "firstName": {
+        "default": "Cayden"
+      },
+      "lastName": {
+        "default": "Lindstrom"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 75,
+      "weight": 213,
+      "amateurLeague": "WHL",
+      "amateurClubName": "Medicine Hat"
+    },
+    {
+      "round": 1,
+      "pickInRound": 5,
+      "overallPick": 5,
+      "teamId": 8,
+      "teamAbbrev": "MTL",
+      "teamName": {
+        "default": "Montr\u00e9al Canadiens",
+        "fr": "Canadiens de Montr\u00e9al"
+      },
+      "teamCommonName": {
+        "default": "Canadiens"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Montr\u00e9al",
+        "fr": "de Montr\u00e9al"
+      },
+      "displayAbbrev": {
+        "default": "MTL"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+      "teamPickHistory": "MTL",
+      "firstName": {
+        "default": "Ivan"
+      },
+      "lastName": {
+        "default": "Demidov"
+      },
+      "positionCode": "RW",
+      "countryCode": "RUS",
+      "height": 73,
+      "weight": 192,
+      "amateurLeague": "RUSSIA-JR.",
+      "amateurClubName": "SKA Saint Petersburg Jr."
+    },
+    {
+      "round": 1,
+      "pickInRound": 6,
+      "overallPick": 6,
+      "teamId": 59,
+      "teamAbbrev": "UTA",
+      "teamName": {
+        "default": "Utah Hockey Club",
+        "fr": "Club de hockey de l'Utah"
+      },
+      "teamCommonName": {
+        "default": "Utah Hockey Club",
+        "fr": "Club de hockey de l'Utah"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Utah",
+        "fr": "de l'Utah"
+      },
+      "displayAbbrev": {
+        "default": "UTA"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_dark.svg",
+      "teamPickHistory": "UTA",
+      "firstName": {
+        "default": "Tij"
+      },
+      "lastName": {
+        "default": "Iginla"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 72,
+      "weight": 191,
+      "amateurLeague": "WHL",
+      "amateurClubName": "Kelowna"
+    },
+    {
+      "round": 1,
+      "pickInRound": 7,
+      "overallPick": 7,
+      "teamId": 9,
+      "teamAbbrev": "OTT",
+      "teamName": {
+        "default": "Ottawa Senators",
+        "fr": "S\u00e9nateurs d'Ottawa"
+      },
+      "teamCommonName": {
+        "default": "Senators",
+        "fr": "S\u00e9nateurs"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Ottawa",
+        "fr": "d'Ottawa"
+      },
+      "displayAbbrev": {
+        "default": "OTT"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/OTT_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+      "teamPickHistory": "OTT",
+      "firstName": {
+        "default": "Carter"
+      },
+      "lastName": {
+        "default": "Yakemchuk"
+      },
+      "positionCode": "D",
+      "countryCode": "CAN",
+      "height": 75,
+      "weight": 202,
+      "amateurLeague": "WHL",
+      "amateurClubName": "Calgary"
+    },
+    {
+      "round": 1,
+      "pickInRound": 8,
+      "overallPick": 8,
+      "teamId": 55,
+      "teamAbbrev": "SEA",
+      "teamName": {
+        "default": "Seattle Kraken",
+        "fr": "Kraken de Seattle"
+      },
+      "teamCommonName": {
+        "default": "Kraken"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Seattle",
+        "fr": "de Seattle"
+      },
+      "displayAbbrev": {
+        "default": "SEA"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+      "teamPickHistory": "SEA",
+      "firstName": {
+        "default": "Berkly"
+      },
+      "lastName": {
+        "default": "Catton"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 71,
+      "weight": 175,
+      "amateurLeague": "WHL",
+      "amateurClubName": "Spokane"
+    },
+    {
+      "round": 1,
+      "pickInRound": 9,
+      "overallPick": 9,
+      "teamId": 20,
+      "teamAbbrev": "CGY",
+      "teamName": {
+        "default": "Calgary Flames",
+        "fr": "Flames de Calgary"
+      },
+      "teamCommonName": {
+        "default": "Flames"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Calgary",
+        "fr": "de Calgary"
+      },
+      "displayAbbrev": {
+        "default": "CGY"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CGY_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+      "teamPickHistory": "CGY",
+      "firstName": {
+        "default": "Zayne"
+      },
+      "lastName": {
+        "default": "Parekh"
+      },
+      "positionCode": "D",
+      "countryCode": "CAN",
+      "height": 73,
+      "weight": 178,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Saginaw"
+    },
+    {
+      "round": 1,
+      "pickInRound": 10,
+      "overallPick": 10,
+      "teamId": 1,
+      "teamAbbrev": "NJD",
+      "teamName": {
+        "default": "New Jersey Devils",
+        "fr": "Devils du New Jersey"
+      },
+      "teamCommonName": {
+        "default": "Devils"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "New Jersey",
+        "fr": "du New Jersey"
+      },
+      "displayAbbrev": {
+        "default": "NJD"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NJD_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+      "teamPickHistory": "NJD",
+      "firstName": {
+        "default": "Anton"
+      },
+      "lastName": {
+        "default": "Silayev"
+      },
+      "positionCode": "D",
+      "countryCode": "RUS",
+      "height": 79,
+      "weight": 211,
+      "amateurLeague": "RUSSIA",
+      "amateurClubName": "Nizhny Novgorod"
+    },
+    {
+      "round": 1,
+      "pickInRound": 11,
+      "overallPick": 11,
+      "teamId": 28,
+      "teamAbbrev": "SJS",
+      "teamName": {
+        "default": "San Jose Sharks",
+        "fr": "Sharks de San Jose"
+      },
+      "teamCommonName": {
+        "default": "Sharks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "San Jose",
+        "fr": "de San Jose"
+      },
+      "displayAbbrev": {
+        "default": "SJS"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/SJS_20082009-20232024_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/SJS_20082009-20232024_dark.svg",
+      "teamPickHistory": "BUF-SJS",
+      "firstName": {
+        "default": "Sam"
+      },
+      "lastName": {
+        "default": "Dickinson"
+      },
+      "positionCode": "D",
+      "countryCode": "CAN",
+      "height": 75,
+      "weight": 203,
+      "amateurLeague": "OHL",
+      "amateurClubName": "London"
+    },
+    {
+      "round": 1,
+      "pickInRound": 12,
+      "overallPick": 12,
+      "teamId": 30,
+      "teamAbbrev": "MIN",
+      "teamName": {
+        "default": "Minnesota Wild",
+        "fr": "Wild du Minnesota"
+      },
+      "teamCommonName": {
+        "default": "Wild"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Minnesota",
+        "fr": "du Minnesota"
+      },
+      "displayAbbrev": {
+        "default": "MIN"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+      "teamPickHistory": "PHI-MIN",
+      "firstName": {
+        "default": "Zeev"
+      },
+      "lastName": {
+        "default": "Buium"
+      },
+      "positionCode": "D",
+      "countryCode": "USA",
+      "height": 72,
+      "weight": 186,
+      "amateurLeague": "NCHC",
+      "amateurClubName": "Denver"
+    },
+    {
+      "round": 1,
+      "pickInRound": 13,
+      "overallPick": 13,
+      "teamId": 4,
+      "teamAbbrev": "PHI",
+      "teamName": {
+        "default": "Philadelphia Flyers",
+        "fr": "Flyers de Philadelphie"
+      },
+      "teamCommonName": {
+        "default": "Flyers"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Philadelphia",
+        "fr": "de Philadelphie"
+      },
+      "displayAbbrev": {
+        "default": "PHI"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+      "teamPickHistory": "MIN-PHI",
+      "firstName": {
+        "default": "Jett"
+      },
+      "lastName": {
+        "default": "Luchanko"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 71,
+      "weight": 187,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Guelph"
+    },
+    {
+      "round": 1,
+      "pickInRound": 14,
+      "overallPick": 14,
+      "teamId": 7,
+      "teamAbbrev": "BUF",
+      "teamName": {
+        "default": "Buffalo Sabres",
+        "fr": "Sabres de Buffalo"
+      },
+      "teamCommonName": {
+        "default": "Sabres"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Buffalo",
+        "fr": "de Buffalo"
+      },
+      "displayAbbrev": {
+        "default": "BUF"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+      "teamPickHistory": "PIT-SJS-BUF",
+      "firstName": {
+        "default": "Konsta"
+      },
+      "lastName": {
+        "default": "Helenius"
+      },
+      "positionCode": "C",
+      "countryCode": "FIN",
+      "height": 71,
+      "weight": 189,
+      "amateurLeague": "FINLAND",
+      "amateurClubName": "Jukurit"
+    },
+    {
+      "round": 1,
+      "pickInRound": 15,
+      "overallPick": 15,
+      "teamId": 17,
+      "teamAbbrev": "DET",
+      "teamName": {
+        "default": "Detroit Red Wings",
+        "fr": "Red Wings de Detroit"
+      },
+      "teamCommonName": {
+        "default": "Red Wings"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Detroit",
+        "fr": "de Detroit"
+      },
+      "displayAbbrev": {
+        "default": "DET"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/DET_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+      "teamPickHistory": "DET",
+      "firstName": {
+        "default": "Michael"
+      },
+      "lastName": {
+        "default": "Brandsegg-Nyg\u00e5rd"
+      },
+      "positionCode": "RW",
+      "countryCode": "NOR",
+      "height": 73,
+      "weight": 207,
+      "amateurLeague": "SWEDEN-2",
+      "amateurClubName": "Mora"
+    },
+    {
+      "round": 1,
+      "pickInRound": 16,
+      "overallPick": 16,
+      "teamId": 19,
+      "teamAbbrev": "STL",
+      "teamName": {
+        "default": "St. Louis Blues",
+        "fr": "Blues de St. Louis"
+      },
+      "teamCommonName": {
+        "default": "Blues"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "St. Louis",
+        "fr": "de St. Louis"
+      },
+      "displayAbbrev": {
+        "default": "STL"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_dark.svg",
+      "teamPickHistory": "STL",
+      "firstName": {
+        "default": "Adam"
+      },
+      "lastName": {
+        "default": "Jiricek"
+      },
+      "positionCode": "D",
+      "countryCode": "CZE",
+      "height": 75,
+      "weight": 167,
+      "amateurLeague": "CZECHIA",
+      "amateurClubName": "Plzen"
+    },
+    {
+      "round": 1,
+      "pickInRound": 17,
+      "overallPick": 17,
+      "teamId": 15,
+      "teamAbbrev": "WSH",
+      "teamName": {
+        "default": "Washington Capitals",
+        "fr": "Capitals de Washington"
+      },
+      "teamCommonName": {
+        "default": "Capitals"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Washington",
+        "fr": "de Washington"
+      },
+      "displayAbbrev": {
+        "default": "WSH"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg",
+      "teamPickHistory": "WSH",
+      "firstName": {
+        "default": "Terik"
+      },
+      "lastName": {
+        "default": "Parascak"
+      },
+      "positionCode": "RW",
+      "countryCode": "CAN",
+      "height": 72,
+      "weight": 179,
+      "amateurLeague": "WHL",
+      "amateurClubName": "Prince George"
+    },
+    {
+      "round": 1,
+      "pickInRound": 18,
+      "overallPick": 18,
+      "teamId": 16,
+      "teamAbbrev": "CHI",
+      "teamName": {
+        "default": "Chicago Blackhawks",
+        "fr": "Blackhawks de Chicago"
+      },
+      "teamCommonName": {
+        "default": "Blackhawks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Chicago",
+        "fr": "de Chicago"
+      },
+      "displayAbbrev": {
+        "default": "CHI"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_dark.svg",
+      "teamPickHistory": "NYI-CHI",
+      "firstName": {
+        "default": "Sacha"
+      },
+      "lastName": {
+        "default": "Boisvert"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 74,
+      "weight": 183,
+      "amateurLeague": "USHL",
+      "amateurClubName": "Muskegon"
+    },
+    {
+      "round": 1,
+      "pickInRound": 19,
+      "overallPick": 19,
+      "teamId": 54,
+      "teamAbbrev": "VGK",
+      "teamName": {
+        "default": "Vegas Golden Knights",
+        "fr": "Golden Knights de Vegas"
+      },
+      "teamCommonName": {
+        "default": "Golden Knights"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Vegas",
+        "fr": "de Vegas"
+      },
+      "displayAbbrev": {
+        "default": "VGK"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+      "teamPickHistory": "VGK",
+      "firstName": {
+        "default": "Trevor"
+      },
+      "lastName": {
+        "default": "Connelly"
+      },
+      "positionCode": "LW",
+      "countryCode": "USA",
+      "height": 73,
+      "weight": 160,
+      "amateurLeague": "USHL",
+      "amateurClubName": "Tri-City"
+    },
+    {
+      "round": 1,
+      "pickInRound": 20,
+      "overallPick": 20,
+      "teamId": 2,
+      "teamAbbrev": "NYI",
+      "teamName": {
+        "default": "New York Islanders",
+        "fr": "Islanders de New York"
+      },
+      "teamCommonName": {
+        "default": "Islanders"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "New York",
+        "fr": "de New York"
+      },
+      "displayAbbrev": {
+        "default": "NYI"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NYI_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+      "teamPickHistory": "TBL-CHI-NYI",
+      "firstName": {
+        "default": "Cole"
+      },
+      "lastName": {
+        "default": "Eiserman"
+      },
+      "positionCode": "LW",
+      "countryCode": "USA",
+      "height": 72,
+      "weight": 197,
+      "amateurLeague": "NTDP - USHL",
+      "amateurClubName": "USA U-18"
+    },
+    {
+      "round": 1,
+      "pickInRound": 21,
+      "overallPick": 21,
+      "teamId": 8,
+      "teamAbbrev": "MTL",
+      "teamName": {
+        "default": "Montr\u00e9al Canadiens",
+        "fr": "Canadiens de Montr\u00e9al"
+      },
+      "teamCommonName": {
+        "default": "Canadiens"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Montr\u00e9al",
+        "fr": "de Montr\u00e9al"
+      },
+      "displayAbbrev": {
+        "default": "MTL"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+      "teamPickHistory": "LAK-MTL",
+      "firstName": {
+        "default": "Michael"
+      },
+      "lastName": {
+        "default": "Hage"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 73,
+      "weight": 188,
+      "amateurLeague": "USHL",
+      "amateurClubName": "Chicago"
+    },
+    {
+      "round": 1,
+      "pickInRound": 22,
+      "overallPick": 22,
+      "teamId": 18,
+      "teamAbbrev": "NSH",
+      "teamName": {
+        "default": "Nashville Predators",
+        "fr": "Predators de Nashville"
+      },
+      "teamCommonName": {
+        "default": "Predators"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Nashville",
+        "fr": "de Nashville"
+      },
+      "displayAbbrev": {
+        "default": "NSH"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+      "teamPickHistory": "NSH",
+      "firstName": {
+        "default": "Egor"
+      },
+      "lastName": {
+        "default": "Surin"
+      },
+      "positionCode": "C",
+      "countryCode": "RUS",
+      "height": 73,
+      "weight": 197,
+      "amateurLeague": "RUSSIA-JR.",
+      "amateurClubName": "Yaroslavl Jr."
+    },
+    {
+      "round": 1,
+      "pickInRound": 23,
+      "overallPick": 23,
+      "teamId": 24,
+      "teamAbbrev": "ANA",
+      "teamName": {
+        "default": "Anaheim Ducks",
+        "fr": "Ducks d'Anaheim"
+      },
+      "teamCommonName": {
+        "default": "Ducks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Anaheim",
+        "fr": "d'Anaheim"
+      },
+      "displayAbbrev": {
+        "default": "ANA"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/ANA_20132014-20232024_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/ANA_20132014-20232024_dark.svg",
+      "teamPickHistory": "TOR-ANA",
+      "firstName": {
+        "default": "Stian"
+      },
+      "lastName": {
+        "default": "Solberg"
+      },
+      "positionCode": "D",
+      "countryCode": "NOR",
+      "height": 74,
+      "weight": 205,
+      "amateurLeague": "NORWAY",
+      "amateurClubName": "Valerenga"
+    },
+    {
+      "round": 1,
+      "pickInRound": 24,
+      "overallPick": 24,
+      "teamId": 59,
+      "teamAbbrev": "UTA",
+      "teamName": {
+        "default": "Utah Hockey Club",
+        "fr": "Club de hockey de l'Utah"
+      },
+      "teamCommonName": {
+        "default": "Utah Hockey Club",
+        "fr": "Club de hockey de l'Utah"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Utah",
+        "fr": "de l'Utah"
+      },
+      "displayAbbrev": {
+        "default": "UTA"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_dark.svg",
+      "teamPickHistory": "COL-UTA",
+      "firstName": {
+        "default": "Cole"
+      },
+      "lastName": {
+        "default": "Beaudoin"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 74,
+      "weight": 210,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Barrie"
+    },
+    {
+      "round": 1,
+      "pickInRound": 25,
+      "overallPick": 25,
+      "teamId": 6,
+      "teamAbbrev": "BOS",
+      "teamName": {
+        "default": "Boston Bruins",
+        "fr": "Bruins de Boston"
+      },
+      "teamCommonName": {
+        "default": "Bruins"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Boston",
+        "fr": "de Boston"
+      },
+      "displayAbbrev": {
+        "default": "BOS"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/BOS_20232024_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/BOS_20232024_dark.svg",
+      "teamPickHistory": "BOS-DET-OTT-BOS",
+      "firstName": {
+        "default": "Dean"
+      },
+      "lastName": {
+        "default": "Letourneau"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 79,
+      "weight": 214,
+      "amateurLeague": "HIGH-ON",
+      "amateurClubName": "St. Andrews College"
+    },
+    {
+      "round": 1,
+      "pickInRound": 26,
+      "overallPick": 26,
+      "teamId": 26,
+      "teamAbbrev": "LAK",
+      "teamName": {
+        "default": "Los Angeles Kings",
+        "fr": "Kings de Los Angeles"
+      },
+      "teamCommonName": {
+        "default": "Kings"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Los Angeles",
+        "fr": "de Los Angeles"
+      },
+      "displayAbbrev": {
+        "default": "LAK"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/LAK_20192020-20232024_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/LAK_20192020-20232024_dark.svg",
+      "teamPickHistory": "WPG-MTL-LAK",
+      "firstName": {
+        "default": "Liam"
+      },
+      "lastName": {
+        "default": "Greentree"
+      },
+      "positionCode": "RW",
+      "countryCode": "CAN",
+      "height": 75,
+      "weight": 215,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Windsor"
+    },
+    {
+      "round": 1,
+      "pickInRound": 27,
+      "overallPick": 27,
+      "teamId": 16,
+      "teamAbbrev": "CHI",
+      "teamName": {
+        "default": "Chicago Blackhawks",
+        "fr": "Blackhawks de Chicago"
+      },
+      "teamCommonName": {
+        "default": "Blackhawks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Chicago",
+        "fr": "de Chicago"
+      },
+      "displayAbbrev": {
+        "default": "CHI"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_dark.svg",
+      "teamPickHistory": "CAR-CHI",
+      "firstName": {
+        "default": "Marek"
+      },
+      "lastName": {
+        "default": "Vanacker"
+      },
+      "positionCode": "LW",
+      "countryCode": "CAN",
+      "height": 73,
+      "weight": 178,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Brantford"
+    },
+    {
+      "round": 1,
+      "pickInRound": 28,
+      "overallPick": 28,
+      "teamId": 20,
+      "teamAbbrev": "CGY",
+      "teamName": {
+        "default": "Calgary Flames",
+        "fr": "Flames de Calgary"
+      },
+      "teamCommonName": {
+        "default": "Flames"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Calgary",
+        "fr": "de Calgary"
+      },
+      "displayAbbrev": {
+        "default": "CGY"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CGY_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+      "teamPickHistory": "VAN-CGY",
+      "firstName": {
+        "default": "Matvei"
+      },
+      "lastName": {
+        "default": "Gridin"
+      },
+      "positionCode": "RW",
+      "countryCode": "RUS",
+      "height": 74,
+      "weight": 189,
+      "amateurLeague": "USHL",
+      "amateurClubName": "Muskegon"
+    },
+    {
+      "round": 1,
+      "pickInRound": 29,
+      "overallPick": 29,
+      "teamId": 25,
+      "teamAbbrev": "DAL",
+      "teamName": {
+        "default": "Dallas Stars",
+        "fr": "Stars de Dallas"
+      },
+      "teamCommonName": {
+        "default": "Stars"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Dallas",
+        "fr": "de Dallas"
+      },
+      "displayAbbrev": {
+        "default": "DAL"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/DAL_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+      "teamPickHistory": "DAL",
+      "firstName": {
+        "default": "Emil"
+      },
+      "lastName": {
+        "default": "Hemming"
+      },
+      "positionCode": "RW",
+      "countryCode": "FIN",
+      "height": 74,
+      "weight": 205,
+      "amateurLeague": "FINLAND",
+      "amateurClubName": "TPS"
+    },
+    {
+      "round": 1,
+      "pickInRound": 30,
+      "overallPick": 30,
+      "teamId": 3,
+      "teamAbbrev": "NYR",
+      "teamName": {
+        "default": "New York Rangers",
+        "fr": "Rangers de New York"
+      },
+      "teamCommonName": {
+        "default": "Rangers"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "New York",
+        "fr": "de New York"
+      },
+      "displayAbbrev": {
+        "default": "NYR"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NYR_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+      "teamPickHistory": "NYR",
+      "firstName": {
+        "default": "EJ"
+      },
+      "lastName": {
+        "default": "Emery"
+      },
+      "positionCode": "D",
+      "countryCode": "CAN",
+      "height": 76,
+      "weight": 183,
+      "amateurLeague": "NTDP - USHL",
+      "amateurClubName": "USA U-18"
+    },
+    {
+      "round": 1,
+      "pickInRound": 31,
+      "overallPick": 31,
+      "teamId": 10,
+      "teamAbbrev": "TOR",
+      "teamName": {
+        "default": "Toronto Maple Leafs",
+        "fr": "Maple Leafs de Toronto"
+      },
+      "teamCommonName": {
+        "default": "Maple Leafs"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Toronto",
+        "fr": "de Toronto"
+      },
+      "displayAbbrev": {
+        "default": "TOR"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+      "teamPickHistory": "EDM-ANA-TOR",
+      "firstName": {
+        "default": "Ben"
+      },
+      "lastName": {
+        "default": "Danford"
+      },
+      "positionCode": "D",
+      "countryCode": "CAN",
+      "height": 74,
+      "weight": 191,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Oshawa"
+    },
+    {
+      "round": 1,
+      "pickInRound": 32,
+      "overallPick": 32,
+      "teamId": 22,
+      "teamAbbrev": "EDM",
+      "teamName": {
+        "default": "Edmonton Oilers",
+        "fr": "Oilers d'Edmonton"
+      },
+      "teamCommonName": {
+        "default": "Oilers"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Edmonton",
+        "fr": "d'Edmonton"
+      },
+      "displayAbbrev": {
+        "default": "EDM"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+      "teamPickHistory": "FLA-PHI-EDM",
+      "firstName": {
+        "default": "Sam"
+      },
+      "lastName": {
+        "default": "O'Reilly"
+      },
+      "positionCode": "RW",
+      "countryCode": "CAN",
+      "height": 74,
+      "weight": 184,
+      "amateurLeague": "OHL",
+      "amateurClubName": "London"
+    }
+  ]
+}

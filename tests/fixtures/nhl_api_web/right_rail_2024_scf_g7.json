@@ -1,0 +1,676 @@
+{
+  "seasonSeries": [
+    {
+      "id": 2023030411,
+      "season": 20232024,
+      "gameType": 3,
+      "gameDate": "2024-06-08",
+      "startTimeUTC": "2024-06-09T00:00:00Z",
+      "easternUTCOffset": "-04:00",
+      "venueUTCOffset": "-04:00",
+      "gameState": "OFF",
+      "gameScheduleState": "OK",
+      "awayTeam": {
+        "id": 22,
+        "abbrev": "EDM",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+        "score": 0
+      },
+      "homeTeam": {
+        "id": 13,
+        "abbrev": "FLA",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+        "score": 3
+      },
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "gameCenterLink": "/gamecenter/fla-vs-edm/2024/06/08/2023030411",
+      "gameOutcome": {
+        "lastPeriodType": "REG"
+      }
+    },
+    {
+      "id": 2023030412,
+      "season": 20232024,
+      "gameType": 3,
+      "gameDate": "2024-06-10",
+      "startTimeUTC": "2024-06-11T00:00:00Z",
+      "easternUTCOffset": "-04:00",
+      "venueUTCOffset": "-04:00",
+      "gameState": "OFF",
+      "gameScheduleState": "OK",
+      "awayTeam": {
+        "id": 22,
+        "abbrev": "EDM",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+        "score": 1
+      },
+      "homeTeam": {
+        "id": 13,
+        "abbrev": "FLA",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+        "score": 4
+      },
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "gameCenterLink": "/gamecenter/fla-vs-edm/2024/06/10/2023030412",
+      "gameOutcome": {
+        "lastPeriodType": "REG"
+      }
+    },
+    {
+      "id": 2023030413,
+      "season": 20232024,
+      "gameType": 3,
+      "gameDate": "2024-06-13",
+      "startTimeUTC": "2024-06-14T00:00:00Z",
+      "easternUTCOffset": "-04:00",
+      "venueUTCOffset": "-06:00",
+      "gameState": "OFF",
+      "gameScheduleState": "OK",
+      "awayTeam": {
+        "id": 13,
+        "abbrev": "FLA",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+        "score": 4
+      },
+      "homeTeam": {
+        "id": 22,
+        "abbrev": "EDM",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+        "score": 3
+      },
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-fla/2024/06/13/2023030413",
+      "gameOutcome": {
+        "lastPeriodType": "REG"
+      }
+    },
+    {
+      "id": 2023030414,
+      "season": 20232024,
+      "gameType": 3,
+      "gameDate": "2024-06-15",
+      "startTimeUTC": "2024-06-16T00:00:00Z",
+      "easternUTCOffset": "-04:00",
+      "venueUTCOffset": "-06:00",
+      "gameState": "OFF",
+      "gameScheduleState": "OK",
+      "awayTeam": {
+        "id": 13,
+        "abbrev": "FLA",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+        "score": 1
+      },
+      "homeTeam": {
+        "id": 22,
+        "abbrev": "EDM",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+        "score": 8
+      },
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-fla/2024/06/15/2023030414",
+      "gameOutcome": {
+        "lastPeriodType": "REG"
+      }
+    },
+    {
+      "id": 2023030415,
+      "season": 20232024,
+      "gameType": 3,
+      "gameDate": "2024-06-18",
+      "startTimeUTC": "2024-06-19T00:00:00Z",
+      "easternUTCOffset": "-04:00",
+      "venueUTCOffset": "-04:00",
+      "gameState": "OFF",
+      "gameScheduleState": "OK",
+      "awayTeam": {
+        "id": 22,
+        "abbrev": "EDM",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+        "score": 5
+      },
+      "homeTeam": {
+        "id": 13,
+        "abbrev": "FLA",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+        "score": 3
+      },
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "gameCenterLink": "/gamecenter/fla-vs-edm/2024/06/18/2023030415",
+      "gameOutcome": {
+        "lastPeriodType": "REG"
+      }
+    },
+    {
+      "id": 2023030416,
+      "season": 20232024,
+      "gameType": 3,
+      "gameDate": "2024-06-21",
+      "startTimeUTC": "2024-06-22T00:00:00Z",
+      "easternUTCOffset": "-04:00",
+      "venueUTCOffset": "-06:00",
+      "gameState": "OFF",
+      "gameScheduleState": "OK",
+      "awayTeam": {
+        "id": 13,
+        "abbrev": "FLA",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+        "score": 1
+      },
+      "homeTeam": {
+        "id": 22,
+        "abbrev": "EDM",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+        "score": 5
+      },
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-fla/2024/06/21/2023030416",
+      "gameOutcome": {
+        "lastPeriodType": "REG"
+      }
+    },
+    {
+      "id": 2023030417,
+      "season": 20232024,
+      "gameType": 3,
+      "gameDate": "2024-06-24",
+      "startTimeUTC": "2024-06-25T00:00:00Z",
+      "easternUTCOffset": "-04:00",
+      "venueUTCOffset": "-04:00",
+      "gameState": "OFF",
+      "gameScheduleState": "OK",
+      "awayTeam": {
+        "id": 22,
+        "abbrev": "EDM",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+        "score": 1
+      },
+      "homeTeam": {
+        "id": 13,
+        "abbrev": "FLA",
+        "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+        "score": 2
+      },
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "gameCenterLink": "/gamecenter/fla-vs-edm/2024/06/24/2023030417",
+      "gameOutcome": {
+        "lastPeriodType": "REG"
+      }
+    }
+  ],
+  "seasonSeriesWins": {
+    "awayTeamWins": 3,
+    "homeTeamWins": 4,
+    "neededToWin": 4
+  },
+  "gameInfo": {
+    "referees": [
+      {
+        "default": "Dan O'Rourke"
+      },
+      {
+        "default": "Steve Kozari"
+      }
+    ],
+    "linesmen": [
+      {
+        "default": "Matt MacPherson"
+      },
+      {
+        "default": "Jonny Murray"
+      }
+    ],
+    "awayTeam": {
+      "headCoach": {
+        "default": "Kris Knoblauch"
+      },
+      "scratches": [
+        {
+          "id": 8474040,
+          "firstName": {
+            "default": "Sam"
+          },
+          "lastName": {
+            "default": "Gagner"
+          }
+        },
+        {
+          "id": 8475169,
+          "firstName": {
+            "default": "Evander"
+          },
+          "lastName": {
+            "default": "Kane"
+          }
+        },
+        {
+          "id": 8475789,
+          "firstName": {
+            "default": "Jack"
+          },
+          "lastName": {
+            "default": "Campbell"
+          }
+        },
+        {
+          "id": 8475842,
+          "firstName": {
+            "default": "Sam"
+          },
+          "lastName": {
+            "default": "Carrick"
+          }
+        },
+        {
+          "id": 8477454,
+          "firstName": {
+            "default": "Adam"
+          },
+          "lastName": {
+            "default": "Erne"
+          }
+        },
+        {
+          "id": 8478967,
+          "firstName": {
+            "default": "Lane"
+          },
+          "lastName": {
+            "default": "Pederson"
+          }
+        },
+        {
+          "id": 8479341,
+          "firstName": {
+            "default": "Cam"
+          },
+          "lastName": {
+            "default": "Dineen"
+          }
+        },
+        {
+          "id": 8479416,
+          "firstName": {
+            "default": "Ben"
+          },
+          "lastName": {
+            "default": "Gleason"
+          }
+        },
+        {
+          "id": 8479442,
+          "firstName": {
+            "default": "Troy"
+          },
+          "lastName": {
+            "default": "Stecher"
+          }
+        },
+        {
+          "id": 8479576,
+          "firstName": {
+            "default": "Vincent"
+          },
+          "lastName": {
+            "default": "Desharnais"
+          }
+        },
+        {
+          "id": 8480274,
+          "firstName": {
+            "default": "Philip"
+          },
+          "lastName": {
+            "default": "Kemp"
+          }
+        },
+        {
+          "id": 8480885,
+          "firstName": {
+            "default": "Olivier"
+          },
+          "lastName": {
+            "default": "Rodrigue"
+          }
+        },
+        {
+          "id": 8481534,
+          "firstName": {
+            "default": "Raphael"
+          },
+          "lastName": {
+            "default": "Lavoie"
+          }
+        },
+        {
+          "id": 8482673,
+          "firstName": {
+            "default": "Xavier"
+          },
+          "lastName": {
+            "default": "Bourgault"
+          }
+        }
+      ]
+    },
+    "homeTeam": {
+      "headCoach": {
+        "default": "Paul Maurice"
+      },
+      "scratches": [
+        {
+          "id": 8476393,
+          "firstName": {
+            "default": "Nick"
+          },
+          "lastName": {
+            "default": "Cousins"
+          }
+        },
+        {
+          "id": 8476433,
+          "firstName": {
+            "default": "Magnus"
+          },
+          "lastName": {
+            "default": "Hellberg"
+          }
+        },
+        {
+          "id": 8478904,
+          "firstName": {
+            "default": "Steven"
+          },
+          "lastName": {
+            "default": "Lorentz"
+          }
+        },
+        {
+          "id": 8479335,
+          "firstName": {
+            "default": "Rasmus"
+          },
+          "lastName": {
+            "default": "Asplund"
+          }
+        },
+        {
+          "id": 8479367,
+          "firstName": {
+            "default": "William"
+          },
+          "lastName": {
+            "default": "Lockwood"
+          }
+        },
+        {
+          "id": 8479372,
+          "firstName": {
+            "default": "Joshua",
+            "cs": "Josh",
+            "de": "Josh",
+            "es": "Josh",
+            "fi": "Josh",
+            "sk": "Josh",
+            "sv": "Josh"
+          },
+          "lastName": {
+            "default": "Mahura"
+          }
+        },
+        {
+          "id": 8479981,
+          "firstName": {
+            "default": "Jonah"
+          },
+          "lastName": {
+            "default": "Gadjovich"
+          }
+        },
+        {
+          "id": 8480825,
+          "firstName": {
+            "default": "Patrick"
+          },
+          "lastName": {
+            "default": "Giles"
+          }
+        },
+        {
+          "id": 8481519,
+          "firstName": {
+            "default": "Spencer"
+          },
+          "lastName": {
+            "default": "Knight"
+          }
+        },
+        {
+          "id": 8481600,
+          "firstName": {
+            "default": "Tobias"
+          },
+          "lastName": {
+            "default": "Bjornfot",
+            "cs": "Bj\u00f6rnfot",
+            "fi": "Bj\u00f6rnfot",
+            "sk": "Bj\u00f6rnfot"
+          }
+        },
+        {
+          "id": 8482088,
+          "firstName": {
+            "default": "Justin"
+          },
+          "lastName": {
+            "default": "Sourdif"
+          }
+        },
+        {
+          "id": 8482107,
+          "firstName": {
+            "default": "Mike"
+          },
+          "lastName": {
+            "default": "Benning"
+          }
+        },
+        {
+          "id": 8482641,
+          "firstName": {
+            "default": "Matt"
+          },
+          "lastName": {
+            "default": "Kiersted"
+          }
+        },
+        {
+          "id": 8482713,
+          "firstName": {
+            "default": "Mackie"
+          },
+          "lastName": {
+            "default": "Samoskevich"
+          }
+        },
+        {
+          "id": 8484304,
+          "firstName": {
+            "default": "Uvis"
+          },
+          "lastName": {
+            "default": "Balinskis"
+          }
+        }
+      ]
+    }
+  },
+  "seasonSeriesFullCoverageUrl": {
+    "cs": "https://www.nhl.com/cs/playoffs/2024/series-o-coverage",
+    "de": "https://www.nhl.com/de/playoffs/2024/series-o-coverage",
+    "fi": "https://www.nhl.com/fi/playoffs/2024/series-o-coverage",
+    "sv": "https://www.nhl.com/sv/playoffs/2024/series-o-coverage",
+    "sk": "https://www.nhl.com/sk/playoffs/2024/series-o-coverage",
+    "en": "https://www.nhl.com/playoffs/2024/series-o-coverage",
+    "fr": "https://www.nhl.com/fr/playoffs/2024/series-o-coverage",
+    "es": "https://www.nhl.com/es/playoffs/2024/series-o-coverage"
+  },
+  "gameVideo": {
+    "threeMinRecap": 6355637309112
+  },
+  "linescore": {
+    "byPeriod": [
+      {
+        "periodDescriptor": {
+          "number": 1,
+          "periodType": "REG",
+          "maxRegulationPeriods": 3
+        },
+        "away": 1,
+        "home": 1
+      },
+      {
+        "periodDescriptor": {
+          "number": 2,
+          "periodType": "REG",
+          "maxRegulationPeriods": 3
+        },
+        "away": 0,
+        "home": 1
+      },
+      {
+        "periodDescriptor": {
+          "number": 3,
+          "periodType": "REG",
+          "maxRegulationPeriods": 3
+        },
+        "away": 0,
+        "home": 0
+      }
+    ],
+    "totals": {
+      "away": 1,
+      "home": 2
+    }
+  },
+  "shotsByPeriod": [
+    {
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "away": 6,
+      "home": 7
+    },
+    {
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "away": 9,
+      "home": 10
+    },
+    {
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "away": 9,
+      "home": 4
+    }
+  ],
+  "teamGameStats": [
+    {
+      "category": "sog",
+      "awayValue": 24,
+      "homeValue": 21
+    },
+    {
+      "category": "faceoffWinningPctg",
+      "awayValue": 0.525424,
+      "homeValue": 0.474576
+    },
+    {
+      "category": "faceoffWins",
+      "awayValue": "31/59",
+      "homeValue": "28/59"
+    },
+    {
+      "category": "powerPlay",
+      "awayValue": "0/1",
+      "homeValue": "0/2"
+    },
+    {
+      "category": "powerPlayPctg",
+      "awayValue": 0.0,
+      "homeValue": 0.0
+    },
+    {
+      "category": "pim",
+      "awayValue": 4,
+      "homeValue": 2
+    },
+    {
+      "category": "hits",
+      "awayValue": 21,
+      "homeValue": 32
+    },
+    {
+      "category": "blockedShots",
+      "awayValue": 13,
+      "homeValue": 17
+    },
+    {
+      "category": "giveaways",
+      "awayValue": 9,
+      "homeValue": 13
+    },
+    {
+      "category": "takeaways",
+      "awayValue": 7,
+      "homeValue": 12
+    }
+  ],
+  "gameReports": {
+    "gameSummary": "https://www.nhl.com/scores/htmlreports/20232024/GS030417.HTM",
+    "eventSummary": "https://www.nhl.com/scores/htmlreports/20232024/ES030417.HTM",
+    "playByPlay": "https://www.nhl.com/scores/htmlreports/20232024/PL030417.HTM",
+    "faceoffSummary": "https://www.nhl.com/scores/htmlreports/20232024/FS030417.HTM",
+    "faceoffComparison": "https://www.nhl.com/scores/htmlreports/20232024/FC030417.HTM",
+    "rosters": "https://www.nhl.com/scores/htmlreports/20232024/RO030417.HTM",
+    "shotSummary": "https://www.nhl.com/scores/htmlreports/20232024/SS030417.HTM",
+    "shiftChart": "https://www.nhl.com/stats/shiftcharts?id=2023030417",
+    "toiAway": "https://www.nhl.com/scores/htmlreports/20232024/TV030417.HTM",
+    "toiHome": "https://www.nhl.com/scores/htmlreports/20232024/TH030417.HTM"
+  }
+}
