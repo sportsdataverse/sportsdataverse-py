@@ -605,6 +605,26 @@ section alongside `drives` and `scoring_plays`.
   run) but the duplication is gone and the conftest docstring now
   documents both the per-test decorator and module-level marker
   patterns for future `test_*_live.py` files.
+- `tests/conftest.py` also gains a shared `load_fixture(category,
+  stem)` helper that all 5 parser test modules now use instead of
+  each carrying their own copy of the same
+  `json.loads((FIXTURE_DIR / f"{stem}.json").read_text(...))`
+  boilerplate + per-file `FIXTURE_DIR` constant. The helper raises
+  `FileNotFoundError` with the expected path baked into the
+  message when a fixture is missing — easier debugging of typo'd
+  stems. Each test file still keeps its thin local `_load(stem)`
+  alias bound to its category, so call sites (`_load("summary_nba")`)
+  remain unchanged. `test_nhl_aux_parsers.py` keeps its 2-arg
+  `_load(directory, stem)` signature for its dual-category load
+  pattern but the underlying helper is now shared.
+- `pyproject.toml` `keywords` expanded from 6 to 21 entries
+  reflecting the 0.0.51 surface — full league set (nba, wnba, nfl,
+  college football, ncaa basketball, mlb, nhl), data sources (espn,
+  mlb stats api, statcast, baseball savant, nhl edge, nhl api-web),
+  and concepts (data, epa, statistics, win probability,
+  play-by-play, web scraping, polars, parser). Improves PyPI
+  search discoverability for users searching by individual league
+  or data source.
 - New `local` pre-commit hook `sync-docs-changelog` (in
   `.pre-commit-config.yaml`): when staging changes to `CHANGELOG.md`,
   automatically re-copies the file to `docs/src/pages/CHANGELOG.md`

@@ -15,19 +15,23 @@ provenance.
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import polars as pl
 import pytest
 
+from tests.conftest import load_fixture
 
-STATS_REST_DIR = Path(__file__).parent / "fixtures" / "nhl_stats_rest"
-RECORDS_DIR    = Path(__file__).parent / "fixtures" / "nhl_records"
+# Category constants — passed to the shared load_fixture helper.
+# This file loads from two directories, hence the 2-arg ``_load``
+# signature below.
+STATS_REST_DIR = "nhl_stats_rest"
+RECORDS_DIR    = "nhl_records"
 
 
-def _load(directory: Path, stem: str) -> dict:
-    return json.loads((directory / f"{stem}.json").read_text(encoding="utf-8"))
+def _load(directory: str, stem: str) -> dict:
+    """Local alias for :func:`tests.conftest.load_fixture` that keeps
+    the 2-arg ``_load(directory, stem)`` call sites in this file
+    working unchanged."""
+    return load_fixture(directory, stem)
 
 
 # ===========================================================================

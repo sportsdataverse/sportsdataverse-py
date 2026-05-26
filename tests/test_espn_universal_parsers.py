@@ -12,17 +12,16 @@ Live integration tests live in ``test_espn_live.py`` (gated by
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import polars as pl
 import pytest
 
-FIXTURE_DIR = Path(__file__).parent / "fixtures" / "espn"
+from tests.conftest import load_fixture
 
 
 def _load(stem: str) -> dict:
-    return json.loads((FIXTURE_DIR / f"{stem}.json").read_text(encoding="utf-8"))
+    """Local alias for :func:`tests.conftest.load_fixture` bound to
+    this module's fixture category ("espn")."""
+    return load_fixture("espn", stem)
 
 
 # ===========================================================================

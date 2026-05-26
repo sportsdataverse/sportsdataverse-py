@@ -11,18 +11,16 @@ this module covers the parser logic offline.
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import polars as pl
 import pytest
 
-
-FIXTURE_DIR = Path(__file__).parent / "fixtures" / "mlb_api"
+from tests.conftest import load_fixture
 
 
 def _load(stem: str) -> dict:
-    return json.loads((FIXTURE_DIR / f"{stem}.json").read_text(encoding="utf-8"))
+    """Local alias for the shared :func:`tests.conftest.load_fixture`
+    bound to this module's fixture category ("mlb_api")."""
+    return load_fixture("mlb_api", stem)
 
 
 # ===========================================================================

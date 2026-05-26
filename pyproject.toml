@@ -11,7 +11,32 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.9"
-keywords = ["nfl", "college football", "data", "epa", "statistics", "web scraping"]
+keywords = [
+    # Leagues + sports
+    "nba",
+    "wnba",
+    "nfl",
+    "college football",
+    "ncaa basketball",
+    "mlb",
+    "nhl",
+    # Data sources
+    "espn",
+    "mlb stats api",
+    "statcast",
+    "baseball savant",
+    "nhl edge",
+    "nhl api-web",
+    # Concepts
+    "data",
+    "epa",
+    "statistics",
+    "win probability",
+    "play-by-play",
+    "web scraping",
+    "polars",
+    "parser",
+]
 authors = [
     { name = "Saiem Gilani", email = "saiem.gilani@gmail.com" },
 ]

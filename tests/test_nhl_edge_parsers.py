@@ -11,20 +11,16 @@ Live integration tests (the ones that actually hit the API) live in
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import polars as pl
 import pytest
 
-
-FIXTURE_DIR = Path(__file__).parent / "fixtures" / "nhl_edge"
+from tests.conftest import load_fixture
 
 
 def _load(name: str) -> dict:
-    """Load a captured NHL EDGE JSON sample by stem."""
-    path = FIXTURE_DIR / f"{name}.json"
-    return json.loads(path.read_text(encoding="utf-8"))
+    """Local alias for :func:`tests.conftest.load_fixture` bound to
+    this module's fixture category ("nhl_edge")."""
+    return load_fixture("nhl_edge", name)
 
 
 # ===========================================================================
@@ -215,8 +211,7 @@ def test_edge_endpoint_parsers_registry_covers_all_wrappers():
     """Every nhl_edge_* wrapper should have a registered parser, or fall
     through to the generic ``parse_edge_payload`` via parser_for_edge.
     """
-    from sportsdataverse.nhl import EDGE_ENDPOINT_PARSERS, parse_edge_payload, parser_for_edge
-    from sportsdataverse.nhl import nhl_edge
+    from sportsdataverse.nhl import EDGE_ENDPOINT_PARSERS, nhl_edge, parse_edge_payload, parser_for_edge
 
     wrapper_names = [
         name for name in dir(nhl_edge)
@@ -235,8 +230,7 @@ def test_edge_endpoint_parsers_registry_covers_all_wrappers():
 
 def test_edge_subframe_parsers_registry_consistent():
     """EDGE_SUBFRAME_PARSERS keys must be a subset of registered wrappers."""
-    from sportsdataverse.nhl import EDGE_SUBFRAME_PARSERS
-    from sportsdataverse.nhl import nhl_edge
+    from sportsdataverse.nhl import EDGE_SUBFRAME_PARSERS, nhl_edge
 
     wrapper_names = {
         name for name in dir(nhl_edge)
