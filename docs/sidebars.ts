@@ -10,6 +10,7 @@ const sidebars: SidebarsConfig = {
   // Parsers) cover the package-wide patterns.
   docs: [
     {type: 'doc', id: 'intro', label: 'Getting Started'},
+    {type: 'doc', id: 'quality-of-life', label: 'Quality-of-life helpers'},
     {
       type: 'category',
       label: 'Architecture',

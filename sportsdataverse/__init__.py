@@ -39,10 +39,20 @@ from __future__ import annotations
 
 from sportsdataverse.cfb import *
 from sportsdataverse.mbb import *
+from sportsdataverse.mlb import *
 from sportsdataverse.nba import *
 from sportsdataverse.nfl import *
 from sportsdataverse.nhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
 
-# from sportsdataverse.mlb import *
+# Top-level QoL helpers (0.0.51+):
+#   * find_team / find_athlete / find_event — name-to-ID resolvers
+#   * list_functions / function_count       — searchable function index
+from sportsdataverse.discover import function_count, list_functions
+from sportsdataverse.find import (
+    clear_team_cache,
+    find_athlete,
+    find_event,
+    find_team,
+)

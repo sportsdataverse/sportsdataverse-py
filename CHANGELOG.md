@@ -52,6 +52,64 @@
 
 ## 0.0.51 (unreleased)
 
+### User-facing quality-of-life additions
+
+Three top-level helpers that significantly reduce friction for new
+users and notebook-driven exploration.
+
+**`sportsdataverse.parsed.*`** — DataFrame-by-default mirror of every
+league's wrappers. The standard `sportsdataverse.nba.espn_nba_scoreboard()`
+returns raw `Dict`; the new `sportsdataverse.parsed.nba.espn_nba_scoreboard()`
+returns a polars `DataFrame`. Both share the same underlying function
+and accept the same `return_parsed=False` / `return_as_pandas=True`
+overrides, but the default flips per import path. Available for all 8
+leagues (`parsed.nba`, `parsed.wnba`, `parsed.mbb`, `parsed.wbb`,
+`parsed.cfb`, `parsed.nfl`, `parsed.mlb`, `parsed.nhl`). Wrappers
+without a registered parser pass through unchanged.
+
+**`find_team` / `find_athlete` / `find_event`** — name-to-ID
+resolvers in `sportsdataverse.find` (also re-exported at the package
+top level). Eliminates the "what's the magic ID for X" friction:
+
+```python
+from sportsdataverse import find_team, find_event
+
+find_team("lakers", league="nba")["id"]                     # '13'
+find_event(date="2024-06-17", league="nba", home="Boston")  # NBA Finals G5
+```
+
+All three support `multi=True` for every match, case-insensitive
+substring matching against the relevant fields, and an in-process
+team-list cache (clearable via `clear_team_cache(league=None)`).
+
+**`list_functions` / `function_count`** — searchable function index
+in `sportsdataverse.discover` (also re-exported at the package top
+level). Replaces `dir()` + grep:
+
+```python
+from sportsdataverse import list_functions, function_count
+
+function_count()
+# {'cfb': 149, 'mbb': 146, 'mlb': 196, 'nba': 143, 'nfl': 208,
+#  'nhl': 199, 'wbb': 151, 'wnba': 148} — 1,340 callables total
+
+list_functions(search="pbp")          # cross-league PBP wrapper inventory
+list_functions(league="mlb", parsers_only=True)  # just the parsers
+list_functions(league="nhl", wrappers_only=True) # everything except parse_*
+```
+
+24 new offline tests in `tests/test_qol.py` cover all three QoL
+additions including the backwards-compatibility invariant (importing
+`parsed.*` must NOT mutate the raw module's default).
+
+New doc page `docs/quality-of-life.md` with a side-by-side comparison
+showing the four-line "before 0.0.51" equivalent vs the two-line
+"after" recipe (find_event → parsed.espn_nba_summary). Intro page
+Quickstart updated to show the parsed.* import path first.
+
+---
+
+
 A second big release on top of `0.0.50`. The headline items:
 
 - **New `sportsdataverse.mlb` module** (greenfield) — 175 functions

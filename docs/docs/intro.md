@@ -35,7 +35,11 @@ pip install sportsdataverse
 ```
 
 ```python
-# Today's NBA scoreboard as a polars DataFrame
+# Today's NBA scoreboard as a polars DataFrame — no kwargs needed via parsed.*
+from sportsdataverse.parsed.nba import espn_nba_scoreboard
+df = espn_nba_scoreboard()                              # → polars
+
+# Or via the original module with the return_parsed=True opt-in:
 from sportsdataverse.nba import espn_nba_scoreboard
 df = espn_nba_scoreboard(return_parsed=True)
 print(df.select(["event_id", "home_name", "away_name",
