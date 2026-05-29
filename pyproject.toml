@@ -145,6 +145,12 @@ Repository = "https://github.com/sportsdataverse/sportsdataverse-py"
 "Bug Tracker" = "https://github.com/sportsdataverse/sportsdataverse-py/issues"
 Changelog = "https://github.com/sportsdataverse/sportsdataverse-py/blob/main/CHANGELOG.md"
 
+# Console script — `sdv` CLI for find-team / find-athlete / find-event /
+# list-functions / function-count / cache subcommands. See
+# `sportsdataverse/cli.py` for the argparse-driven dispatch.
+[project.scripts]
+sdv = "sportsdataverse.cli:main"
+
 
 # PEP 735 dependency groups — dev-only deps that shouldn't ship as
 # user-facing extras. uv sync resolves these by name (`uv sync --group test`)

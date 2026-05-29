@@ -3,19 +3,22 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [0.0.51 (unreleased)](#0051-unreleased)
+  - [User-facing quality-of-life additions](#user-facing-quality-of-life-additions)
   - [New: MLB module (greenfield)](#new-mlb-module-greenfield)
-  - [New: NHL — `api-web.nhle.com` migration + EDGE / Stats REST / Records](#new-nhl---api-webnhlecom-migration--edge--stats-rest--records)
+  - [New: NHL — `api-web.nhle.com` migration + EDGE / Stats REST / Records](#new-nhl--api-webnhlecom-migration--edge--stats-rest--records)
   - [New: ESPN cross-league port](#new-espn-cross-league-port)
   - [New: NCAA bracketology](#new-ncaa-bracketology)
   - [New: `_common_espn_parsers.py` (polars / pandas parser layer)](#new-_common_espn_parserspy-polars--pandas-parser-layer)
   - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
   - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
   - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
-  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
+  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100%25-endpoint_parsers-coverage-121121)
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
   - [New: NHL api-web parser layer](#new-nhl-api-web-parser-layer)
+  - [Bug fixes](#bug-fixes)
+  - [New: NFL drive-plays parser (true PBP parity)](#new-nfl-drive-plays-parser-true-pbp-parity)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
@@ -35,7 +38,7 @@
   - [CFB — `cfb_play_participants` and `__add_player_cols` collapse](#cfb--cfb_play_participants-and-__add_player_cols-collapse)
   - [CFB — pandas → polars 1.x bug-fix reconciliation (`0.36-live` → `main`)](#cfb--pandas-%E2%86%92-polars-1x-bug-fix-reconciliation-036-live-%E2%86%92-main)
   - [Infrastructure and tooling](#infrastructure-and-tooling)
-  - [Bug fixes](#bug-fixes)
+  - [Bug fixes](#bug-fixes-1)
   - [Deprecations](#deprecations)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
@@ -106,6 +109,60 @@ New doc page `docs/quality-of-life.md` with a side-by-side comparison
 showing the four-line "before 0.0.51" equivalent vs the two-line
 "after" recipe (find_event → parsed.espn_nba_summary). Intro page
 Quickstart updated to show the parsed.* import path first.
+
+**Tiered TTL response cache** — new `sportsdataverse.cache` module
+adds a six-tier HTTP cache layer that `sportsdataverse.dl_utils.download`
+consults before hitting the network. Three modes (`off` (default),
+`memory`, `filesystem`) and six TTL tiers picked by URL inspection:
+
+```python
+import sportsdataverse as sdv
+
+sdv.set_cache_mode("filesystem")  # persists to ~/.cache/sportsdataverse/
+# IMMUTABLE (30d): completed-game PBP/boxscore, glossaries, NHL Records
+# REFERENCE  (7d): venues, franchises, divisions, seasons, draft picks
+# SLOW      (24h): team rosters, athlete /landing
+# MODERATE   (1h): default — leaders, season-to-date stats
+# FAST       (5m): news, injuries
+# LIVE         (0): /scoreboard/now, /standings/now — never cached
+```
+
+Scoreboard URLs with `dates=YYYYMMDD` get special handling: past dates
+become IMMUTABLE (game results don't change), future dates stay LIVE.
+Per-call `cache_ttl=` kwarg on `download()` overrides the tier picker,
+and `$SDV_PY_CACHE_DIR` overrides the on-disk location. Invalidation:
+`sdv.clear_cache()`, `sdv.clear_cache(pattern="*roster*")`,
+`sdv.clear_cache(url="https://...")`. 19 offline tests in
+`tests/test_cache.py`.
+
+**404 error messages with actionable next-action hints** —
+`NoESPNDataError` messages now include a tailored `Suggestion:` line
+inferred from the URL. A 404 on `/teams/9999/roster` suggests
+`find_team(name, league='nfl')`; an athlete 404 suggests
+`find_athlete(name, league='mlb', team=<team>)`; a summary 404 suggests
+`find_event(date, league='nba', home=..., away=...)`. League is
+extracted from both ESPN URL shapes (the flat `site.api/.../sports/<sport>/<league>/`
+form and the nested `sports.core.api/v2/sports/<sport>/leagues/<league>/`
+form). 14 offline tests in `tests/test_errors_suggest.py`.
+
+**`sdv` console script** — argparse-based CLI installed via
+`[project.scripts]` in `pyproject.toml`. Six subcommands wrap the
+top-level QoL helpers so users can poke at the package without
+spinning up a Python REPL:
+
+```sh
+sdv find-team lakers --league nba
+sdv find-event 2024-06-17 --league nba --home Boston
+sdv list-functions --league mlb --search statcast
+sdv function-count
+sdv cache mode --set filesystem
+sdv cache stats
+sdv cache clear --pattern "*roster*"
+```
+
+A `--json` flag on any command emits raw JSON for piping to `jq`; the
+default is a human-readable format. Exit codes: 0=success, 1=no match,
+2=runtime error. 19 offline tests in `tests/test_cli.py`.
 
 ---
 

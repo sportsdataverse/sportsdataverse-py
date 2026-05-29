@@ -16,7 +16,9 @@ logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
 
 
-def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries=15, session=None, logger=None):
+def download(
+    url, params=None, headers=None, proxy=None, timeout=30, num_retries=15, session=None, logger=None, cache_ttl=None,
+):
     """Download a URL with retries and ESPN-aware error handling.
 
     Canonical HTTP gateway used by every wrapper in the package. Wraps
@@ -83,6 +85,27 @@ def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries
     """
     session, params, logger = init_request_settings(params, session, logger)
 
+    # Cache lookup (mode=off → no-op; LIVE-tier URLs → no-op).
+    # On hit we return a CachedResponse shim that quacks like requests.Response
+    # (.json() / .status_code / .text / .url / .headers) so every wrapper
+    # downstream works unchanged.
+    from sportsdataverse.cache import (
+        CachedResponse,
+        cache_get,
+        cache_set,
+        get_cache_mode,
+    )
+
+    if get_cache_mode() != "off":
+        # Build a hashable params dict (drop None values + ignore the
+        # batters_lookup[] convention which is request-shaped)
+        _cache_params = {k: v for k, v in (params or {}).items() if v is not None}
+        cached = cache_get(url, _cache_params, ttl=cache_ttl)
+        if cached is not None:
+            return CachedResponse(cached, url=url, status_code=200, from_cache=True)
+    else:
+        _cache_params = None
+
     # Iterative retry loop. Defensive `response = None` so the exception
     # handler can log without UnboundLocalError when `session.get()` itself
     # raises (timeout, connection reset, DNS, etc.) before binding
@@ -96,6 +119,13 @@ def download(url, params=None, headers=None, proxy=None, timeout=30, num_retries
         try:
             response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
             response = no_espn_data(response)
+            # Persist successful responses to the cache. Catches any
+            # body-parse error so a cache write never breaks the call.
+            if get_cache_mode() != "off":
+                try:
+                    cache_set(url, _cache_params, response.json(), ttl=cache_ttl)
+                except Exception:  # noqa: BLE001
+                    pass
             return response
         except Exception as e:  # noqa: BLE001
             last_exc = e
