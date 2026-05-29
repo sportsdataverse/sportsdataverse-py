@@ -1,11 +1,16 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+#
+# Note: the standalone isort hook was removed in 0.0.51 because its
+# alphabetical re-sort broke the load-bearing import order in
+# ``sportsdataverse/__init__.py`` (see the ``# isort: off`` block there —
+# the league wildcards must run before the top-level QoL imports so
+# ``sportsdataverse.cache`` resolves to the top-level module rather than
+# ``sportsdataverse.nfl.cache``). Ruff-check is left in place; its
+# default rule set does not include I001, so import ordering is no
+# longer auto-enforced. The ``# isort: off`` markers will continue to
+# protect the __init__.py block if I001 is opted back in later.
 repos:
-  - repo: https://github.com/pycqa/isort
-    rev: "5.12.0"
-    hooks:
-      - id: isort
-        args: [--add-import, "from __future__ import annotations"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.14.14
