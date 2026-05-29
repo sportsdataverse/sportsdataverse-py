@@ -37,18 +37,27 @@ See Also:
 
 from __future__ import annotations
 
-# Re-expose the new top-level modules so ``sportsdataverse.cache`` and
-# ``sportsdataverse.find`` are introspectable even after the NFL wildcard
-# import would have shadowed them.
-import sportsdataverse.cache as cache  # noqa: E402  (ordering needed for shadow)
-import sportsdataverse.discover as discover  # noqa: E402
-import sportsdataverse.find as find  # noqa: E402
+# isort: off
+# IMPORT ORDER IS LOAD-BEARING — do not let isort/ruff re-sort this block.
+# League wildcards MUST run before the top-level QoL imports because:
+#   * sportsdataverse.nfl re-exports its submodule ``cache`` into the parent
+#     namespace via ``from . import *``, shadowing the top-level
+#     ``sportsdataverse.cache`` module we add below.
+#   * Likewise ``find`` / ``discover`` could collide with league submodules.
+# After the wildcards run we re-bind the package attributes to point at our
+# top-level modules, then star-import their public names. The trailing
+# ``import ... as ...`` aliases ensure ``sportsdataverse.cache`` /
+# ``.find`` / ``.discover`` resolve to the QoL modules in dotted access.
+from sportsdataverse.cfb import *
+from sportsdataverse.mbb import *
+from sportsdataverse.mlb import *
+from sportsdataverse.nba import *
+from sportsdataverse.nfl import *
+from sportsdataverse.nhl import *
+from sportsdataverse.wbb import *
+from sportsdataverse.wnba import *
 
-# Top-level QoL helpers (0.0.51+). Imported AFTER the league wildcards so
-# the bare name ``sportsdataverse.cache`` resolves to this module, not to
-# ``sportsdataverse.nfl.cache`` (which exposes only ``clear_cache`` and
-# stays available via the dotted path). Likewise ``sportsdataverse.find``
-# / ``sportsdataverse.discover`` shadow any same-named league submodule.
+# Top-level QoL helpers (0.0.51+).
 #   * find_team / find_athlete / find_event — name-to-ID resolvers
 #   * list_functions / function_count       — searchable function index
 #   * set_cache_mode + clear_cache + cache_stats — tiered TTL response cache
@@ -59,13 +68,19 @@ from sportsdataverse.cache import (
     set_cache_mode,
     set_default_ttl,
 )
-from sportsdataverse.cfb import *
 from sportsdataverse.discover import function_count, list_functions
-from sportsdataverse.find import clear_team_cache, find_athlete, find_event, find_team
-from sportsdataverse.mbb import *
-from sportsdataverse.mlb import *
-from sportsdataverse.nba import *
-from sportsdataverse.nfl import *
-from sportsdataverse.nhl import *
-from sportsdataverse.wbb import *
-from sportsdataverse.wnba import *
+from sportsdataverse.find import (
+    clear_team_cache,
+    find_athlete,
+    find_event,
+    find_team,
+)
+
+# Re-expose the QoL modules as package attributes AFTER all wildcards so
+# ``sportsdataverse.cache`` / ``.find`` / ``.discover`` resolve to OUR
+# top-level modules rather than any same-named league submodule. The dotted
+# names (e.g. ``sportsdataverse.nfl.cache``) remain reachable.
+import sportsdataverse.cache as cache  # noqa: F401, E402
+import sportsdataverse.discover as discover  # noqa: F401, E402
+import sportsdataverse.find as find  # noqa: F401, E402
+# isort: on
