@@ -175,9 +175,7 @@ def test_nhl_web_standings_returns_standings_list():
     payload = nhl_web_standings(date="2024-04-01")
     assert isinstance(payload, dict), "expected a dict response"
     standings = payload.get("standings") or []
-    assert len(standings) >= 32, (
-        f"expected >=32 team rows in standings, got {len(standings)}"
-    )
+    assert len(standings) >= 32, f"expected >=32 team rows in standings, got {len(standings)}"
 
 
 def test_nhl_web_schedule_returns_game_week():
@@ -203,9 +201,7 @@ def test_nhl_web_roster_toronto_2024():
     defense = payload.get("defensemen") or []
     goalies = payload.get("goalies") or []
     total = len(forwards) + len(defense) + len(goalies)
-    assert total >= 20, (
-        f"expected >=20 players on TOR 2024 roster, got {total}"
-    )
+    assert total >= 20, f"expected >=20 players on TOR 2024 roster, got {total}"
 
 
 # ===========================================================================
@@ -229,9 +225,7 @@ def test_mlb_api_schedule_opening_day_2024_returns_games():
     payload = mlb_api_schedule(date="2024-03-20", sport_id=1)
     dates = payload.get("dates") or []
     all_games = [g for d in dates for g in (d.get("games") or [])]
-    assert len(all_games) > 0, (
-        "expected MLB games on Opening Day 2024-03-20, got none"
-    )
+    assert len(all_games) > 0, "expected MLB games on Opening Day 2024-03-20, got none"
 
 
 # ===========================================================================
@@ -292,7 +286,7 @@ def test_espn_mbb_bracketology_current_season_smoke():
     except NoESPNDataError:
         pytest.xfail(
             "ESPN bracketology endpoint is offline outside tournament-projection "
-            "window — this is expected sparse-data behaviour, not a bug."
+            "window — this is expected sparse-data behaviour, not a bug.",
         )
         return  # unreachable, but keeps linters happy
 
@@ -335,14 +329,10 @@ def test_espn_cfb_season_recruits_2024_returns_items():
     assert isinstance(payload, dict), "expected a dict response"
     # Core v2 season_recruits wraps its list under 'items' (paginated response)
     items = payload.get("items") or []
-    assert isinstance(items, list), (
-        f"expected 'items' to be a list, got {type(items)}"
-    )
+    assert isinstance(items, list), f"expected 'items' to be a list, got {type(items)}"
     # If data is available there should be recruits; tolerate empty for off-season
     # by checking the key exists rather than enforcing > 0
-    assert "items" in payload, (
-        f"expected 'items' key in response, got keys: {list(payload.keys())}"
-    )
+    assert "items" in payload, f"expected 'items' key in response, got keys: {list(payload.keys())}"
 
 
 # ===========================================================================
@@ -366,9 +356,7 @@ def test_parse_teams_handles_wnba_payload():
     raw = espn_wnba_teams_site()
     df = parse_teams(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
-    assert df.height >= 12, (
-        f"expected >=12 WNBA team rows from parse_teams, got {df.height}"
-    )
+    assert df.height >= 12, f"expected >=12 WNBA team rows from parse_teams, got {df.height}"
 
 
 def test_parse_scoreboard_handles_wnba_payload():
@@ -383,7 +371,7 @@ def test_parse_scoreboard_handles_wnba_payload():
     assert isinstance(df, pl.DataFrame)
     # If the date has games (it does, historically) we expect rows; otherwise
     # parse_scoreboard returns an empty frame (which is itself valid behaviour).
-    if (raw.get("events") or []):
+    if raw.get("events") or []:
         assert df.height > 0, "scoreboard had events but parse_scoreboard returned 0 rows"
 
 
@@ -397,9 +385,7 @@ def test_parse_standings_handles_wnba_payload():
     df = parse_standings(raw)
     assert isinstance(df, pl.DataFrame)
     # WNBA standings have one row per team; minimum 12 across history
-    assert df.height >= 12, (
-        f"expected >=12 WNBA standing rows, got {df.height}"
-    )
+    assert df.height >= 12, f"expected >=12 WNBA standing rows, got {df.height}"
 
 
 def test_parse_athlete_overview_handles_wnba_payload():
@@ -430,7 +416,7 @@ def test_parse_leaders_handles_wnba_payload():
     assert isinstance(df, pl.DataFrame)
     # Leaders endpoint always returns multiple stat categories × multiple
     # leaders — tolerate emptiness during the off-season but reject malformed
-    if (raw.get("leaders") or raw.get("categories") or raw.get("items")):
+    if raw.get("leaders") or raw.get("categories") or raw.get("items"):
         assert df.height >= 0, "parse_leaders returned a malformed frame"
 
 
@@ -451,12 +437,8 @@ def test_return_parsed_true_routes_through_registered_parser():
     from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
 
     df = espn_nba_teams_site(return_parsed=True)
-    assert isinstance(df, pl.DataFrame), (
-        f"expected polars DataFrame from return_parsed=True, got {type(df)}"
-    )
-    assert df.height >= 30, (
-        f"expected >=30 NBA team rows via return_parsed, got {df.height}"
-    )
+    assert isinstance(df, pl.DataFrame), f"expected polars DataFrame from return_parsed=True, got {type(df)}"
+    assert df.height >= 30, f"expected >=30 NBA team rows via return_parsed, got {df.height}"
 
 
 def test_return_parsed_with_return_as_pandas_returns_pandas():
@@ -465,9 +447,7 @@ def test_return_parsed_with_return_as_pandas_returns_pandas():
     from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
 
     df = espn_nba_teams_site(return_parsed=True, return_as_pandas=True)
-    assert isinstance(df, pd.DataFrame), (
-        f"expected pandas DataFrame, got {type(df)}"
-    )
+    assert isinstance(df, pd.DataFrame), f"expected pandas DataFrame, got {type(df)}"
     assert len(df) >= 30
 
 
@@ -475,9 +455,7 @@ def test_return_parsed_false_keeps_raw_dict():
     from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
 
     raw = espn_nba_teams_site()  # default: return_parsed=False
-    assert isinstance(raw, dict), (
-        f"expected raw dict when return_parsed omitted, got {type(raw)}"
-    )
+    assert isinstance(raw, dict), f"expected raw dict when return_parsed omitted, got {type(raw)}"
     # Confirm raw shape preserved
     assert "sports" in raw, f"raw payload missing 'sports' key — got {list(raw)[:3]}"
 
@@ -487,6 +465,17 @@ def test_return_parsed_false_keeps_raw_dict():
 # ===========================================================================
 
 
+@pytest.mark.xfail(
+    reason=(
+        "NHL EDGE *_top_10 endpoints (skater_shot_speed_top_10 and 11 siblings) "
+        "return 404 upstream as of 2026-05-23. The OpenAPI spec lists them but "
+        "they're not live. The wrappers + parse_edge_top10 are kept for "
+        "forward-compatibility per CHANGELOG 0.0.51. Will XPASS (and this "
+        "marker can be removed) once the endpoint is restored."
+    ),
+    strict=False,
+    raises=Exception,
+)
 def test_parse_edge_top10_handles_live_leaderboard():
     import polars as pl
 
@@ -495,9 +484,7 @@ def test_parse_edge_top10_handles_live_leaderboard():
 
     raw = nhl_edge_skater_shot_speed_top_10(positions="all", sort_by="maxSpeed")
     df = parse_edge_top10(raw)
-    assert isinstance(df, pl.DataFrame), (
-        f"expected polars DataFrame, got {type(df)}"
-    )
+    assert isinstance(df, pl.DataFrame), f"expected polars DataFrame, got {type(df)}"
     # Off-season may return empty; in-season expect rows.
     if any(isinstance(v, list) and v for v in (raw or {}).values()):
         assert df.height > 0, "non-empty raw payload but parse_edge_top10 returned 0 rows"
@@ -538,12 +525,8 @@ def test_espn_cfb_team_roster_live():
     from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_team_roster
 
     df = espn_cfb_team_roster(team_id=333, return_parsed=True)  # Alabama
-    assert df.height >= 50, (
-        f"expected >=50 CFB roster rows (typical full team), got {df.height}"
-    )
-    assert "position_group" in df.columns, (
-        "CFB roster should be position-grouped (offense/defense/specialTeam)"
-    )
+    assert df.height >= 50, f"expected >=50 CFB roster rows (typical full team), got {df.height}"
+    assert "position_group" in df.columns, "CFB roster should be position-grouped (offense/defense/specialTeam)"
 
 
 def test_espn_mbb_team_roster_live():
@@ -552,9 +535,7 @@ def test_espn_mbb_team_roster_live():
     from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_team_roster
 
     df = espn_mbb_team_roster(team_id=150, return_parsed=True)  # Duke
-    assert df.height >= 10, (
-        f"expected >=10 MBB roster rows, got {df.height}"
-    )
+    assert df.height >= 10, f"expected >=10 MBB roster rows, got {df.height}"
     assert "first_name" in df.columns or "last_name" in df.columns
 
 
@@ -562,9 +543,7 @@ def test_espn_wbb_team_roster_live():
     from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_roster
 
     df = espn_wbb_team_roster(team_id=41, return_parsed=True)  # UConn
-    assert df.height >= 8, (
-        f"expected >=8 WBB roster rows, got {df.height}"
-    )
+    assert df.height >= 8, f"expected >=8 WBB roster rows, got {df.height}"
 
 
 def test_espn_cfb_news_live():
@@ -599,9 +578,7 @@ def test_espn_cfb_team_schedule_live():
     assert isinstance(raw, dict), f"expected dict, got {type(raw)}"
     # Raw payload always has 'team' identifier and 'requestedSeason' even
     # when the schedule is empty
-    assert "team" in raw or "events" in raw, (
-        f"unexpected schedule shape — top keys: {list(raw)[:5]}"
-    )
+    assert "team" in raw or "events" in raw, f"unexpected schedule shape — top keys: {list(raw)[:5]}"
 
 
 def test_espn_mbb_team_schedule_live():
@@ -612,18 +589,14 @@ def test_espn_mbb_team_schedule_live():
 
     df = espn_mbb_team_schedule(team_id=150, return_parsed=True)
     # If we're in-season we expect >=10 games; if off-season, df is empty.
-    assert df.height == 0 or df.height >= 10, (
-        f"expected 0 or >=10 MBB schedule rows, got {df.height}"
-    )
+    assert df.height == 0 or df.height >= 10, f"expected 0 or >=10 MBB schedule rows, got {df.height}"
 
 
 def test_espn_wbb_team_schedule_live():
     from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_schedule
 
     df = espn_wbb_team_schedule(team_id=41, return_parsed=True)
-    assert df.height == 0 or df.height >= 10, (
-        f"expected 0 or >=10 WBB schedule rows, got {df.height}"
-    )
+    assert df.height == 0 or df.height >= 10, f"expected 0 or >=10 WBB schedule rows, got {df.height}"
 
 
 # ===========================================================================
@@ -649,16 +622,10 @@ def test_espn_mbb_summary_live_full_dispatch():
     raw = espn_mbb_summary(event_id=401638645)
     assert isinstance(raw, dict), f"expected dict, got {type(raw)}"
     out = parse_summary(raw)
-    assert set(out) == set(SUMMARY_SECTION_PARSERS), (
-        "dispatcher returned different sections than registry"
-    )
+    assert set(out) == set(SUMMARY_SECTION_PARSERS), "dispatcher returned different sections than registry"
     # Non-football leagues should have populated boxscore_player + plays
-    assert out["boxscore_player"].height >= 20, (
-        f"expected >=20 athletes, got {out['boxscore_player'].height}"
-    )
-    assert out["plays"].height >= 100, (
-        f"expected >=100 plays, got {out['plays'].height}"
-    )
+    assert out["boxscore_player"].height >= 20, f"expected >=20 athletes, got {out['boxscore_player'].height}"
+    assert out["plays"].height >= 100, f"expected >=100 plays, got {out['plays'].height}"
     # Basketball doesn't use the football-only sections
     assert out["drives"].height == 0
     assert out["drive_plays"].height == 0
@@ -688,9 +655,7 @@ def test_espn_cfb_summary_live_uses_football_pattern():
     out = parse_summary(espn_cfb_summary(event_id=401677192))
     # CFB football: top-level plays[] is empty, drives.previous[] populated
     assert out["plays"].height == 0
-    assert out["drives"].height >= 10, (
-        f"expected >=10 drives, got {out['drives'].height}"
-    )
+    assert out["drives"].height >= 10, f"expected >=10 drives, got {out['drives'].height}"
     # drive_plays unrolls drives[i].plays[] for true PBP parity
     assert out["drive_plays"].height >= 50
     # scoringPlays present for football
@@ -720,10 +685,9 @@ def test_statcast_search_returns_polars_frame_for_small_date_range():
     # games typically ships >=4,000 pitches per day league-wide.
     try:
         import polars as pl
+
         assert isinstance(df, pl.DataFrame), f"expected polars, got {type(df)}"
-        assert df.height > 1000, (
-            f"expected >1000 pitches over 2 days, got {df.height}"
-        )
+        assert df.height > 1000, f"expected >1000 pitches over 2 days, got {df.height}"
     except ImportError:
         # Fallback for pandas-only environments
         assert len(df) > 1000
@@ -732,22 +696,28 @@ def test_statcast_search_returns_polars_frame_for_small_date_range():
 def test_statcast_search_chunked_stitches_multi_week_range():
     """A 3-week range will exceed the 25k cap in a single response so
     the chunked variant must auto-chunk and stitch client-side without
-    triggering a truncation error."""
+    triggering a truncation error.
+
+    ``chunk_days=3`` is intentional: a peak-season MLB week (~5k
+    pitches/day × 7 = 35k) blows past the 25k Savant cap on a single
+    7-day chunk, which would defeat the test's purpose of proving the
+    stitching path works. 3-day chunks (~12-15k pitches each) keep
+    every individual request safely under the cap while still requiring
+    ~7 chunks to cover the 21-day range — exercising the loop, the
+    stitch, and the cross-chunk concat."""
     from sportsdataverse.mlb import statcast_search_chunked
 
     df = statcast_search_chunked(
         start_date="2024-06-01",
         end_date="2024-06-21",
-        chunk_days=7,
+        chunk_days=3,
     )
     try:
         import polars as pl
+
         assert isinstance(df, pl.DataFrame)
         # 3 weeks at ~4,000-5,000 pitches/day = ~80,000-100,000 pitches
-        assert df.height > 25_000, (
-            f"expected chunked total >25k pitches (proves stitching), "
-            f"got {df.height}"
-        )
+        assert df.height > 25_000, f"expected chunked total >25k pitches (proves stitching), got {df.height}"
     except ImportError:
         assert len(df) > 25_000
 
@@ -782,11 +752,14 @@ def test_statcast_search_raises_runtime_error_on_truncation():
 # returns a partial frame OR fails to route through the parser at all.
 
 
-@pytest.mark.parametrize("league,team_id,parser_name", [
-    ("cfb", 333, "parse_team_roster"),   # Alabama (position-grouped)
-    ("mbb", 150, "parse_team_roster"),   # Duke (flat)
-    ("wbb",  41, "parse_team_roster"),   # UConn (flat)
-])
+@pytest.mark.parametrize(
+    "league,team_id,parser_name",
+    [
+        ("cfb", 333, "parse_team_roster"),  # Alabama (position-grouped)
+        ("mbb", 150, "parse_team_roster"),  # Duke (flat)
+        ("wbb", 41, "parse_team_roster"),  # UConn (flat)
+    ],
+)
 def test_ncaa_team_roster_return_parsed_round_trip(league, team_id, parser_name):
     """Verify the three calling modes (raw / polars / pandas) all return
     consistent data. The raw payload's athletes[] should produce the
@@ -800,13 +773,11 @@ def test_ncaa_team_roster_return_parsed_round_trip(league, team_id, parser_name)
     )
 
     # Resolve the wrapper from the league extension module
-    module = __import__(
-        f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"]
-    )
+    module = __import__(f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"])
     wrapper = getattr(module, f"espn_{league}_team_roster")
 
     # Three calling modes
-    raw   = wrapper(team_id=team_id)
+    raw = wrapper(team_id=team_id)
     df_pl = wrapper(team_id=team_id, return_parsed=True)
     df_pd = wrapper(team_id=team_id, return_parsed=True, return_as_pandas=True)
 
@@ -814,23 +785,22 @@ def test_ncaa_team_roster_return_parsed_round_trip(league, team_id, parser_name)
     assert isinstance(df_pl, pl.DataFrame), f"polars expected, got {type(df_pl)}"
     assert isinstance(df_pd, pd.DataFrame), f"pandas expected, got {type(df_pd)}"
     # Both DataFrame variants should agree on row count
-    assert df_pl.height == len(df_pd), (
-        f"polars/pandas row count mismatch: {df_pl.height} vs {len(df_pd)}"
-    )
+    assert df_pl.height == len(df_pd), f"polars/pandas row count mismatch: {df_pl.height} vs {len(df_pd)}"
     # And the registry should route to parse_team_roster
     assert ENDPOINT_PARSERS["team_roster"] is parse_team_roster
     # Re-running the parser on the raw payload should produce the same shape
     df_again = parse_team_roster(raw)
-    assert df_again.shape == df_pl.shape, (
-        f"direct vs shim shape mismatch: {df_again.shape} vs {df_pl.shape}"
-    )
+    assert df_again.shape == df_pl.shape, f"direct vs shim shape mismatch: {df_again.shape} vs {df_pl.shape}"
 
 
-@pytest.mark.parametrize("league,team_id", [
-    ("cfb", 333),
-    ("mbb", 150),
-    ("wbb",  41),
-])
+@pytest.mark.parametrize(
+    "league,team_id",
+    [
+        ("cfb", 333),
+        ("mbb", 150),
+        ("wbb", 41),
+    ],
+)
 def test_ncaa_team_schedule_return_parsed_handles_offseason(league, team_id):
     """Schedule wrappers must produce a zero-row frame (not raise) when
     the team is in their off-season. CFB is off-season in May/Jun;
@@ -838,17 +808,13 @@ def test_ncaa_team_schedule_return_parsed_handles_offseason(league, team_id):
     parse_team_schedule transparently in either case."""
     import polars as pl
 
-    module = __import__(
-        f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"]
-    )
+    module = __import__(f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"])
     wrapper = getattr(module, f"espn_{league}_team_schedule")
 
     df = wrapper(team_id=team_id, return_parsed=True)
     assert isinstance(df, pl.DataFrame)
     # Either in-season (>= 10 games) or off-season (0 rows) — never an exception
-    assert df.height == 0 or df.height >= 10, (
-        f"{league}: expected 0 or >=10 schedule rows, got {df.height}"
-    )
+    assert df.height == 0 or df.height >= 10, f"{league}: expected 0 or >=10 schedule rows, got {df.height}"
 
 
 @pytest.mark.parametrize("league", ["cfb", "mbb", "wbb"])
@@ -858,14 +824,10 @@ def test_ncaa_news_return_parsed_matches_direct_parse_news(league):
     i.e. the shim isn't dropping or mangling rows."""
     from sportsdataverse._common_espn_parsers import parse_news
 
-    module = __import__(
-        f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"]
-    )
+    module = __import__(f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"])
     wrapper = getattr(module, f"espn_{league}_news")
 
-    raw   = wrapper(limit=5)
-    df_a  = parse_news(raw)
-    df_b  = wrapper(limit=5, return_parsed=True)
-    assert df_a.shape == df_b.shape, (
-        f"{league}: shim vs direct shape mismatch: {df_a.shape} vs {df_b.shape}"
-    )
+    raw = wrapper(limit=5)
+    df_a = parse_news(raw)
+    df_b = wrapper(limit=5, return_parsed=True)
+    assert df_a.shape == df_b.shape, f"{league}: shim vs direct shape mismatch: {df_a.shape} vs {df_b.shape}"

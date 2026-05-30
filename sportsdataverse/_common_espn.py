@@ -335,7 +335,7 @@ def _espn_athlete_splits(
 def _espn_statistics_byathlete(
     sport: str,
     league: str,
-    category: str,
+    category: Optional[str] = None,
     season: Optional[Union[int, str]] = None,
     season_type: Optional[int] = None,
     limit: int = 50,
@@ -343,7 +343,13 @@ def _espn_statistics_byathlete(
     sort: Optional[str] = None,
     **kwargs,
 ) -> Dict:
-    """GET {WEB_V3}/.../statistics/byathlete — ranked leaderboard with glossary."""
+    """GET {WEB_V3}/.../statistics/byathlete — ranked leaderboard with glossary.
+
+    ``category`` is optional: when omitted the URL is built without
+    ``?category=...`` and ESPN returns the league-default leader set,
+    which is the shape the cross-league ``espn_<league>_leaders()``
+    callers (and ``parse_leaders``) expect.
+    """
     return _get(
         f"{_WEB_V3}/{sport}/{league}/statistics/byathlete",
         params={
@@ -1296,8 +1302,7 @@ def _core_v2_athlete_hotzones(sport: str, league: str, athlete_id: Union[int, st
     metrics per zone. Two flavors: hitter hot zones (BA/SLG/HR per zone)
     and pitcher hot zones (BAA/whiff% per zone).
     """
-    return _get(f"{_CORE_V2}/{sport}/leagues/{league}/athletes/{athlete_id}/hotzones",
-                **kwargs)
+    return _get(f"{_CORE_V2}/{sport}/leagues/{league}/athletes/{athlete_id}/hotzones", **kwargs)
 
 
 # ===========================================================================
@@ -1494,8 +1499,7 @@ def _bind(core_fn, sport: str, league: str, full_name: str, parser=None):
 
     parser_name = getattr(parser, "__name__", "parser")
 
-    def wrapper(*args, return_parsed: bool = False,
-                return_as_pandas: bool = False, **kwargs):
+    def wrapper(*args, return_parsed: bool = False, return_as_pandas: bool = False, **kwargs):
         result = bound(*args, **kwargs)
         if return_parsed:
             return parser(result, return_as_pandas=return_as_pandas)
@@ -1535,6 +1539,7 @@ def make_league_module(
     try:
         from sportsdataverse._common_espn_parsers import parser_for
     except Exception:  # pragma: no cover — parsers module unavailable
+
         def parser_for(_short):  # type: ignore[no-redef]
             return None
 
