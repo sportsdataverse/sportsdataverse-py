@@ -53,7 +53,11 @@ config:
     lines_below: 1
   MD023: true
   MD024:
-    siblings_only: false
+    # siblings_only: per-release CHANGELOG sections legitimately repeat
+    # subsection names like "Bug fixes" / "Deprecations" under different
+    # `## <version>` parents. Restrict the rule to true siblings so the
+    # changelog convention isn't flagged on every release.
+    siblings_only: true
   # MD025/single-title/single-h1
   MD025:
     front_matter_title: "^\\s*title\\s*[:=]"

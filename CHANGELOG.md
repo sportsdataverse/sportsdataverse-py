@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.0.51 (unreleased)](#0051-unreleased)
+- [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
   - [User-facing quality-of-life additions](#user-facing-quality-of-life-additions)
   - [New: MLB module (greenfield)](#new-mlb-module-greenfield)
   - [New: NHL — `api-web.nhle.com` migration + EDGE / Stats REST / Records](#new-nhl--api-webnhlecom-migration--edge--stats-rest--records)
@@ -53,7 +53,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.0.51 (unreleased)
+## 0.0.51 Release: May 30, 2026
 
 ### User-facing quality-of-life additions
 
@@ -610,8 +610,8 @@ section alongside `drives` and `scoring_plays`.
   (present for MLB / NHL, empty for NBA / NFL / WNBA in past-game
   captures) and the universally-sparse `against_the_spread` /
   `pickcenter` / `odds`; 3 MBB/WBB/CFB NCAA summary fixture additions
-  to the cross-league parametrized tests, expanding the dispatcher
-  + boxscore_player + plays + drives + officials assertions from
+  to the cross-league parametrized tests, expanding the dispatcher +
+  boxscore_player + plays + drives + officials assertions from
   5 leagues to all 8 ESPN leagues),
   `tests/test_mlb_api_parsers.py` (17 tests),
   `tests/test_nhl_aux_parsers.py` (21 tests),
@@ -651,8 +651,8 @@ section alongside `drives` and `scoring_plays`.
 - Parametrized cross-league parity tests in
   `test_espn_universal_parsers.py` exercise the summary dispatcher
   against all 5 captured leagues and assert the full 20-section
-  dispatch contract for each (boxscore_player + boxscore_team + plays
-  + winprobability + leaders + 13 metadata sections + 2 football-only).
+  dispatch contract for each (boxscore_player + boxscore_team + plays +
+  winprobability + leaders + 13 metadata sections + 2 football-only).
 
 ### Documentation
 
@@ -673,8 +673,8 @@ section alongside `drives` and `scoring_plays`.
     Statcast); brief pointers to the new dedicated `parsers` and
     `statcast` pages.
   - `docs/mlb/parsers.md` — dedicated MLB Stats API parsers page
-    (split out from `index.md`) with the full parser table, registry
-    + `parser_for_mlb_api`, four chaining examples, and a fixture
+    (split out from `index.md`) with the full parser table, registry +
+    `parser_for_mlb_api`, four chaining examples, and a fixture
     inventory.
   - `docs/mlb/statcast.md` — dedicated Baseball Savant / Statcast
     page (split out from `index.md`) covering the 17 `statcast_*`
