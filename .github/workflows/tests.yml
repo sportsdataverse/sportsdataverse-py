@@ -49,7 +49,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install uv
-        uses: astral-sh/setup-uv@v6
+        # setup-uv stopped publishing major/minor tags at v8 for supply-chain
+        # hardening (https://github.com/astral-sh/setup-uv/releases/tag/v8.0.0).
+        # Pin to an immutable patch tag; @v8 / @v8.0 no longer resolve.
+        uses: astral-sh/setup-uv@v8.1.0
         with:
           version: "latest"
           enable-cache: true
