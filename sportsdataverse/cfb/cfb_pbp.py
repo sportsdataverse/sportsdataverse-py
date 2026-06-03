@@ -66,6 +66,39 @@ qbr_model.load_model(qbr_model_file)
 logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
 
+# ---------------------------------------------------------------------------
+# Module-level pure-function helpers (no network, no class state)
+# ---------------------------------------------------------------------------
+
+_OVERTURNED_RE = re.compile(r"\(Original Play:.*?\)\s*$", re.IGNORECASE | re.DOTALL)
+
+
+def _strip_overturned_text(text):
+    """Drop the negated ``(Original Play: …)`` clause from reviewed/overturned plays.
+
+    ESPN appends the *reversed* play description in a trailing
+    ``(Original Play: …)`` parenthetical after ``CALL OVERTURNED``. Any
+    fumble/recovery parsing must run on the kept (ruled) portion only, or a
+    reversed fumble gets counted as a real turnover (spec finding #17).
+    """
+    if not text:
+        return text
+    return _OVERTURNED_RE.sub("", text).strip()
+
+
+_RECOVERY_ABBREV_RE = re.compile(r"recovered by\s+([A-Z&]{2,})\b")
+
+
+def _parse_recovery_abbrev(text):
+    """Return the uppercase team abbreviation that recovered the ball, or None.
+
+    Operates on text that has already had overturned clauses stripped.
+    """
+    if not text:
+        return None
+    m = _RECOVERY_ABBREV_RE.search(text)
+    return m.group(1).upper() if m else None
+
 
 class CFBPlayProcess(object):
     gameId = 0
