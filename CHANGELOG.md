@@ -4,6 +4,7 @@
 
 - [0.0.53 (unreleased)](#0053-unreleased)
   - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
+  - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
@@ -76,6 +77,48 @@
 Both are additive and degrade to `[]` when no events are attributable. The existing
 `pass`/`rush`/`receiver`/`team`/`situational`/`defensive`/`turnover`/`drives` sections are
 unchanged.
+
+### CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)
+
+A correctness pass on team/player attribution in the advanced box score, reconciled
+against ESPN's official box score for a 5-game fixture set (all turnover totals now match
+ESPN exactly). All output is additive — existing field names are preserved; previously
+wrong values are corrected and new fields/sections are added.
+
+- **Per-play attribution layer** (`__add_attribution_cols`): resolves the credited team for
+  every play from the play text + flags, aware that `pos_team`/`def_pos_team` swap roles by
+  play type (on a kickoff `pos_team` is the receiving team; on a punt it is the punting
+  team). Produces `kicking_team`, `return_team`, `fumbling_team`, `recovery_team`,
+  `recovery_team_2`, `penalized_team`, and per-side turnover flags.
+- **Special-teams turnovers are now counted.** Previously the turnover box filtered to
+  scrimmage plays, dropping muffed punts, kickoff-return fumbles, and blocked-kick
+  recoveries; these are now included. Muffs (`"muffed by …"`) are detected as fumbles, and
+  overturned plays (`"(Original Play: …)"` after a reversed review) are stripped before
+  parsing so a reversed fumble is not counted.
+- **Per-side turnover model.** A single play can register a turnover for **both** teams via
+  `is_pos_team_turnover` / `is_def_pos_team_turnover` and a 2-deep recovery chain — e.g. an
+  interception returned and fumbled back, or a sack-strip where the recovering defense
+  fumbles it back. Turnover margins/luck are keyed by team identity (fixing a prior
+  group-order bug that could swap or sign-flip them).
+- **Correct team attribution** for fumble recoveries (own recoveries credited to the
+  recovering team, not always the defense), punt returns (credited to the returning team,
+  not the punting team), and **penalty yards** (charged to the penalized team via
+  `penalty_yards`, with the legacy `total_pen_yards` retained).
+- **End-of-period play-drop fix.** A dedup heuristic was dropping the real play immediately
+  before an "End of period/half/game" marker (which inherits its start state) — losing
+  end-of-half turnovers such as a Hail Mary interception. Guarded so end markers never
+  trigger dedup of the preceding play.
+- **ESPN-sourced totals.** New **`espn_team`** and **`espn_players`** sections surface
+  ESPN's official box verbatim (turnovers, fumbles lost, interceptions, total/passing/
+  rushing yards, penalties, first downs, player stat lines) as the authoritative source for
+  countable totals. The `turnover` section sources `turnovers`/`Int`/`fumbles_lost` from the
+  ESPN box (`espn_sourced=True`), keeping the play-by-play derivation under `*_pbp` keys as
+  the fallback and as a validated cross-check.
+- **Clean player names.** `run_processing_pipeline()` joins ESPN's per-play participants
+  (`espn_cfb_play_participants`) to replace regex-extracted names (which carried team
+  prefixes, e.g. `"BYU Dayan Ghanwoloku"`) with clean display names, with graceful fallback
+  to the regex names when offline. Set `join_participants = False` to skip the fetch
+  (used by offline reprocessing and the offline test suite).
 
 ## 0.0.52 Release: June 3, 2026
 
