@@ -4773,6 +4773,61 @@ class CFBPlayProcess(object):
             )
         )
 
+        # --- defensive players (0.0.53): per-defender havoc events, attributed by player ---
+        def _player_event_box(name_col, out, team_col, yds_col=None):
+            """Count non-null occurrences of `name_col` per (team, player); sum `yds_col`."""
+            if name_col not in play_df.columns:
+                return None
+            f = play_df.filter(pl.col(name_col).is_not_null())
+            if f.height == 0:
+                return None
+            aggs = [pl.len().alias(out)]
+            if yds_col is not None and yds_col in play_df.columns:
+                aggs.append(pl.col(yds_col).sum().alias(f"{out}_yards"))
+            return f.group_by([team_col, name_col]).agg(aggs).rename({name_col: "player_name"})
+
+        def_parts = [
+            _player_event_box("sack_player_name", "sacks", "def_pos_team", "yds_sacked"),
+            _player_event_box("pass_breakup_player_name", "pass_breakups", "def_pos_team"),
+            _player_event_box("interception_player_name", "interceptions", "def_pos_team", "yds_int_return"),
+            _player_event_box("fumble_forced_player_name", "forced_fumbles", "def_pos_team"),
+            _player_event_box("fumble_recovered_player_name", "fumble_recoveries", "def_pos_team", "yds_fumble_return"),
+        ]
+        def_parts = [d for d in def_parts if d is not None]
+        if def_parts:
+            defensive_players = (
+                reduce(
+                    lambda left, right: left.join(right, on=["def_pos_team", "player_name"], how="full", coalesce=True),
+                    def_parts,
+                )
+                .fill_null(0)
+                .with_columns(def_pos_team=pl.col("def_pos_team").cast(pl.Int32))
+            )
+            defensive_players_json = json.loads(defensive_players.write_json())
+        else:
+            defensive_players_json = []
+
+        # --- specialists (0.0.53): kicking / punting / return players, attributed by player ---
+        spec_parts = [
+            _player_event_box("fg_kicker_player_name", "field_goals", "pos_team", "yds_fg"),
+            _player_event_box("punter_player_name", "punts", "pos_team", "yds_punted"),
+            _player_event_box("kickoff_return_player_name", "kick_returns", "pos_team", "yds_kickoff_return"),
+            _player_event_box("punt_return_player_name", "punt_returns", "pos_team", "yds_punt_return"),
+        ]
+        spec_parts = [s for s in spec_parts if s is not None]
+        if spec_parts:
+            specialists = (
+                reduce(
+                    lambda left, right: left.join(right, on=["pos_team", "player_name"], how="full", coalesce=True),
+                    spec_parts,
+                )
+                .fill_null(0)
+                .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            )
+            specialists_json = json.loads(specialists.write_json())
+        else:
+            specialists_json = []
+
         return {
             "pass": json.loads(passer_box.write_json()),
             "rush": json.loads(rusher_box.write_json()),
@@ -4780,6 +4835,8 @@ class CFBPlayProcess(object):
             "team": json.loads(team_box.write_json()),
             "situational": json.loads(situation_box.write_json()),
             "defensive": def_box_json,
+            "defensive_players": defensive_players_json,
+            "specialists": specialists_json,
             "turnover": turnover_box_json,
             "drives": json.loads(drives_data.write_json()),
         }

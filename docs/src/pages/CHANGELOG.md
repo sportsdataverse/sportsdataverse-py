@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.53 (unreleased)](#0053-unreleased)
+  - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
@@ -54,6 +56,26 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.53 (unreleased)
+
+### CFB — advanced box score expansion (`create_box_score`)
+
+`CFBPlayProcess.create_box_score()` (and therefore `run_processing_pipeline()`'s
+`advBoxScore`) now emits two additional per-player sections alongside the existing eight:
+
+- **`defensive_players`** — per-defender havoc events attributed by player and defensive
+  team: `sacks` (+`sacks_yards`), `pass_breakups`, `interceptions` (+`interceptions_yards`),
+  `forced_fumbles`, `fumble_recoveries` (+`fumble_recoveries_yards`). Keyed by
+  `def_pos_team` + `player_name`. Columns present vary per game (only populated stats appear);
+  all values derive from existing enriched play columns (no new tracking data).
+- **`specialists`** — per-player kicking/punting/return production keyed by `pos_team` +
+  `player_name`: `field_goals` (+`field_goals_yards`), `punts` (+`punts_yards`),
+  `kick_returns` (+`kick_returns_yards`), `punt_returns` (+`punt_returns_yards`).
+
+Both are additive and degrade to `[]` when no events are attributable. The existing
+`pass`/`rush`/`receiver`/`team`/`situational`/`defensive`/`turnover`/`drives` sections are
+unchanged.
 
 ## 0.0.52 Release: June 3, 2026
 
