@@ -1670,7 +1670,13 @@ class CFBPlayProcess(object):
                     .and_(pl.col("change_of_poss") == 1)
                     .and_(pl.col("td_play") == False)
                     .and_(pl.col("start.down") != 4)
-                    .and_(pl.col("type.text").is_in(defense_score_vec) == False),
+                    .and_(pl.col("type.text").is_in(defense_score_vec) == False)
+                    # Do not sweep interception-return-fumbles into "Fumble Recovery
+                    # (Opponent)": the interception already set change_of_poss=1, so the
+                    # strip-sack predicate matches a pick whose returner later fumbles.
+                    # ESPN's original int label is still present here (normalization to
+                    # "Interception Return" happens later in this method), so guard on it.
+                    .and_(pl.col("type.text").is_in(int_vec) == False),
                 )
                 .then(pl.lit("Fumble Recovery (Opponent)"))
                 .otherwise(pl.col("type.text"))
@@ -1681,7 +1687,10 @@ class CFBPlayProcess(object):
                     (pl.col("fumble_vec") == True)
                     .and_(pl.col("pass") == True)
                     .and_(pl.col("change_of_poss") == 1)
-                    .and_(pl.col("td_play") == True),
+                    .and_(pl.col("td_play") == True)
+                    # Same interception guard as the non-TD strip-sack rule above: a
+                    # pick-six is an "Interception Return Touchdown", not a fumble TD.
+                    .and_(pl.col("type.text").is_in(int_vec) == False),
                 )
                 .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
                 .otherwise(pl.col("type.text"))

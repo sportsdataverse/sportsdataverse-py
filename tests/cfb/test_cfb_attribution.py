@@ -349,3 +349,104 @@ def test_offensive_pass_interference_charged_to_offense():
 def test_defensive_pass_interference_charged_to_defense():
     out = _attr([_pi_row("#9 QB pass incomplete PENALTY DEF Defensive Pass Interference (#5 Y) 15 yards")])
     assert out.to_dicts()[0]["penalized_team"] == 200  # defense (PENALTY DEF)
+
+
+# --- __add_new_play_types: strip-sack interception guard -----------------------
+# The strip-sack rule reclassifies "fumble_vec & pass & change_of_poss" plays to
+# "Fumble Recovery (Opponent)". An interception sets change_of_poss=1 too, so a pick
+# whose returner later fumbles matched the predicate and had its interception erased.
+# The int_vec guard prevents that. These tests exercise the private reclassifier on
+# synthetic frames carrying every column the method reads.
+def _npt_base(**over):
+    row = {
+        "type.text": "Rush",
+        "fumble_vec": False,
+        "pass": False,
+        "rush": False,
+        "change_of_poss": 0,
+        "td_play": False,
+        "td_check": False,
+        "start.down": 1,
+        "kickoff_play": False,
+        "punt_play": False,
+        "statYardage": 3,
+        "start.yardsToEndzone": 50,
+        "text": "",
+        "scoringPlay": False,
+        "safety": False,
+        "kickoff_safety": False,
+        "punt_safety": False,
+        "penalty_safety": False,
+    }
+    row.update(over)
+    return row
+
+
+def _npt(rows: list[dict]) -> pl.DataFrame:
+    df = pl.DataFrame(rows)
+    proc = CFBPlayProcess(gameId=1)
+    return proc._CFBPlayProcess__add_new_play_types(df)
+
+
+def test_strip_sack_guard_keeps_interception_return():
+    # Pick whose returner fumbles: change_of_poss=1 from the INT itself would have tripped
+    # the strip-sack rule. The guard keeps it an interception (normalized to canonical form).
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "Pass Interception Return",
+                    "pass": True,
+                    "fumble_vec": True,
+                    "change_of_poss": 1,
+                    "td_play": False,
+                    "start.down": 2,
+                    "text": "#9 QB pass intercepted by #5 DB return 5 yards fumbled recovered by OFF #7",
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Interception Return"]
+
+
+def test_strip_sack_guard_keeps_interception_return_touchdown():
+    # TD variant: a pick-six is an "Interception Return Touchdown", never a fumble TD.
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "Pass Interception Return Touchdown",
+                    "pass": True,
+                    "fumble_vec": True,
+                    "change_of_poss": 1,
+                    "td_play": True,
+                    "td_check": True,
+                    "scoringPlay": True,
+                    "start.down": 2,
+                    "text": "#9 QB pass intercepted by #5 DB return 40 yards fumbled recovered by DEF #5",
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Pass Interception Return Touchdown"]
+
+
+def test_strip_sack_still_reclassifies_genuine_strip_sack():
+    # Control: a real strip-sack (ESPN "Sack", not an interception) must still become
+    # "Fumble Recovery (Opponent)" -- the int_vec guard must not block legitimate cases.
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "Sack",
+                    "pass": True,
+                    "fumble_vec": True,
+                    "change_of_poss": 1,
+                    "td_play": False,
+                    "start.down": 2,
+                    "text": "#1 QB sacked at OFF30 fumble recovered by DEF #5 X",
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Fumble Recovery (Opponent)"]

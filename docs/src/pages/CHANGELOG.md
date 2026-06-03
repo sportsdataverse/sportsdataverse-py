@@ -5,6 +5,7 @@
 - [0.0.53 (unreleased)](#0053-unreleased)
   - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
   - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
+  - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
@@ -121,6 +122,20 @@ wrong values are corrected and new fields/sections are added.
   prefixes, e.g. `"BYU Dayan Ghanwoloku"`) with clean display names, with graceful fallback
   to the regex names when offline. Set `join_participants = False` to skip the fetch
   (used by offline reprocessing and the offline test suite).
+
+### CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)
+
+- **Interceptions are no longer mislabeled as fumble recoveries.** The "strip-sack →
+  fumble" reclassification rules fire on `fumble_vec & pass & change_of_poss==1`. An
+  interception also sets `change_of_poss=1`, so a pick whose returner subsequently fumbled
+  matched the predicate and was relabeled `"Fumble Recovery (Opponent)"`, erasing the
+  interception (and, because the downstream `int` flag is derived from `type.text`, zeroing
+  it for EPA/WPA and the box score). Both pass strip-sack rules now additionally require
+  `type.text` not be an interception label (`int_vec`), so these plays keep their
+  interception classification (normalized to `"Interception Return"` later in the method).
+  Genuine strip-sacks — and the rush strip-sack rule, which cannot match an interception —
+  are unchanged. Verified across a 20-game / 3,439-play before/after diff: exactly one play
+  changed (`Fumble Recovery (Opponent)` → `Interception Return`), zero other plays affected.
 
 ## 0.0.52 Release: June 3, 2026
 

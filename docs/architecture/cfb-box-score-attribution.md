@@ -11,9 +11,10 @@
   - [4. Turnover detection — per-side possession chain](#4-turnover-detection--per-side-possession-chain)
   - [5. ESPN-sourced totals](#5-espn-sourced-totals)
   - [6. Player-name identity (`__join_participants`)](#6-player-name-identity-__join_participants)
-  - [7. Output schema notes (additive)](#7-output-schema-notes-additive)
-  - [8. Known limitations & empirical accuracy](#8-known-limitations--empirical-accuracy)
-  - [9. Testing & reconciliation](#9-testing--reconciliation)
+  - [7. Play-type reclassification (`__add_new_play_types`)](#7-play-type-reclassification-__add_new_play_types)
+  - [8. Output schema notes (additive)](#8-output-schema-notes-additive)
+  - [9. Known limitations & empirical accuracy](#9-known-limitations--empirical-accuracy)
+  - [10. Testing & reconciliation](#10-testing--reconciliation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -193,7 +194,67 @@ clean display names over the regex-extracted names (which carried team prefixes,
 - **Non-destructive:** touches only `*_player_name` columns (never team attribution); the shared
   `returner` role is cleanup-only (it does not introduce a name where the regex was silent).
 
-## 7. Output schema notes (additive)
+## 7. Play-type reclassification (`__add_new_play_types`)
+
+Before attribution runs, `__add_new_play_types` (pipeline **step 5**, well ahead of
+`__add_attribution_cols` at step 9) normalizes and corrects ESPN's `type.text`. ESPN's original
+value is preserved as `orig_play_type` (captured before any rule fires), so the two can be
+compared directly.
+
+**The layer is a conservative safety net, not a relabeler.** Across an 18-game / 3,145-play
+sample, only **~1%** of plays end with a `type.text` different from ESPN's original. ESPN already
+labels the common cases (`Pass Completion`, `Rushing Touchdown`, `Passing Touchdown`, …)
+correctly, so the ~50 rules are no-ops except on the rare plays ESPN labels *generically*
+(`"Pass"`, `"Kickoff"`) or *wrongly*. Of the plays that do change, ~84% are pure
+**interception-label normalization** (`Pass Interception Return` / `Interception` →
+`Interception Return`) — not "better" data than ESPN, but the single canonical token the
+`model_vars` vectors (`int_vec`, `defense_score_vec`, …) and the EPA/WPA/box layers key on.
+
+**Signal available here: `change_of_poss`, not `is_turnover`.** `is_turnover` (and
+`fumbling_team` / `recovery_team`) are built in `__add_attribution_cols` (step 9), so the
+reclassifier at step 5 can only use `change_of_poss` from `__add_team_score_variables` (step 4).
+The two signals are **not** interchangeable:
+
+- `change_of_poss` is `True` on **every** possession flip — punts, kickoffs, downs turnovers,
+  end-of-half — not just turnovers.
+- `is_turnover` is `True` only on an actual INT / fumble-lost (net of the 2-deep recovery chain).
+
+Measured over 20 games (3,439 plays) they agree 93.7% of the time. The disagreement is almost
+entirely the `change_of_poss=True / is_turnover=False` cell (215 plays) — structural flips that
+are not turnovers. On the turnover-relevant subset, `is_turnover` is consistently the correct
+football signal and `change_of_poss` generates false positives on (a) punt/kickoff returns where
+the receiving team fumbles and **recovers its own** ball, and (b) interception- or sack-return
+fumbles where the ball comes **back** to the original offense.
+
+**The interception-return-fumble guard (shipped).** The two pass "strip-sack → fumble" rules
+fire on `fumble_vec & pass & change_of_poss==1`. Because an interception *also* sets
+`change_of_poss=1`, a pick whose returner then fumbled matched the predicate and was relabeled
+`Fumble Recovery (Opponent)` — erasing the interception. And since the `int` flag is derived
+from `type.text` *downstream* (`__add_play_category_flags`, step 7), the corruption propagated to
+EPA/WPA and the box. Both pass rules now additionally require `type.text` ∉ `int_vec`, so these
+plays keep their interception label (normalized to `Interception Return`). The fix is applied at
+step 5 **at the source** — stopping the mislabel before any `type.text`-derived flag is computed
+— rather than as a post-attribution correction that would have to recompute `int`/`rush`/`pass`.
+A 20-game before/after diff changed exactly **one** play
+(`Fumble Recovery (Opponent)` → `Interception Return`); genuine strip-sacks were untouched.
+
+**`Kickoff Team Fumble Recovery` is correct, not coarse.** When a kickoff returner fumbles and
+the **kicking** team recovers, `change_of_poss==1` (the receiving team is `pos_team`), and the
+label means "fumble recovered *by* the kickoff team" — confirmed by `kickoff_turnovers` /
+`kickoff_vec` membership in `model_vars`. Renaming it would break those membership tests and
+EPA/WPA; it is intentionally left as is.
+
+**Residuals best served by `is_turnover` (not yet implemented).** Two label cases remain that the
+in-method `change_of_poss` signal cannot fix and that the `int_vec` guard does not cover: a
+sack-fumble the offense **recovers itself** (still labeled `Fumble Recovery (Opponent)` because
+`change_of_poss` is spuriously `1`), and a punt-return fumble the kicking team recovers (labeled
+`Punt Return` rather than `Punt Team Fumble Recovery`). Both are rare (≈1 play / 20 games each)
+and do **not** affect shipped countable totals (those are ESPN-sourced, §5). Fixing them
+correctly requires a **post-attribution** refinement keyed on `is_turnover` /
+`recovery_team` / `fumbling_team`, which must also recompute the `type.text`-derived flags it
+invalidates — deferred as higher-risk relative to its payoff.
+
+## 8. Output schema notes (additive)
 
 All pre-existing field names are preserved; corrections change values in place, and new fields
 are additive. Notable:
@@ -207,7 +268,7 @@ are additive. Notable:
   `penalty_first_downs_created` / `first_downs_created` (+ `*_rate`).
 - New sections `espn_team`, `espn_players`.
 
-## 8. Known limitations & empirical accuracy
+## 9. Known limitations & empirical accuracy
 
 Measured on an 18-game random sample of the 2024 season (pbp derivation vs ESPN's official
 box). The countable totals shipped in the output are **sourced from ESPN** (§5), so these are
@@ -237,7 +298,7 @@ the accuracy of the pbp cross-check / offline fallback, not of the shipped numbe
 - **Offensive pass interference** is correctly attributed via the `PENALTY {TEAM}` text token
   (`_parse_penalty_abbrev`), overriding the `penalty_detail` defensive-set heuristic.
 
-## 9. Testing & reconciliation
+## 10. Testing & reconciliation
 
 - **Unit** (`test_cfb_attribution.py`): the pure helpers and `__add_attribution_cols` on
   synthetic plays — every play type × event, including the nested double-direction fumble.
