@@ -99,7 +99,9 @@ wrong values are corrected and new fields/sections are added.
   `is_pos_team_turnover` / `is_def_pos_team_turnover` and a 2-deep recovery chain — e.g. an
   interception returned and fumbled back, or a sack-strip where the recovering defense
   fumbles it back. Turnover margins/luck are keyed by team identity (fixing a prior
-  group-order bug that could swap or sign-flip them).
+  group-order bug that could swap or sign-flip them). The `turnover` list is now ordered
+  `[home, away]` and every row carries `team_id` — consumers should key by `team_id`
+  rather than list position (the previous order came from an unordered group-by).
 - **Correct team attribution** for fumble recoveries (own recoveries credited to the
   recovering team, not always the defense), punt returns (credited to the returning team,
   not the punting team), and **penalty yards** (charged to the penalized team via

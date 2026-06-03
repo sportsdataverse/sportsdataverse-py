@@ -149,9 +149,11 @@ def _espn_num(value):
     if v.lstrip("-").isdigit():
         return int(v)
     try:
-        return float(v)
+        f = float(v)
     except ValueError:
         return value
+    # Reject non-finite floats ("inf"/"nan") so the box stays valid JSON.
+    return f if (f == f and f not in (float("inf"), float("-inf"))) else value
 
 
 def _parse_espn_team_box(boxscore):
