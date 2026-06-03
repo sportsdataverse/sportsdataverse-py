@@ -136,6 +136,21 @@ wrong values are corrected and new fields/sections are added.
   Genuine strip-sacks — and the rush strip-sack rule, which cannot match an interception —
   are unchanged. Verified across a 20-game / 3,439-play before/after diff: exactly one play
   changed (`Fumble Recovery (Opponent)` → `Interception Return`), zero other plays affected.
+- **Post-attribution play-type refinement (`__refine_play_types_post_attribution`).** A new
+  pipeline step (after `__add_attribution_cols`) corrects two labels that need the turnover
+  signal the step-5 reclassifier lacks (it can only see `change_of_poss`, which is `True` on
+  every possession flip, not just turnovers):
+  - A sack-fumble the offense **recovers itself** was relabeled `Fumble Recovery (Opponent)`
+    (spurious `change_of_poss`); `is_turnover == False` restores `Fumble Recovery (Own)`.
+  - A punt-return fumble the **punting team** recovers (`recovery_team == pos_team`) becomes
+    `Punt Team Fumble Recovery` instead of staying `Punt Return`.
+
+  Only the package's own first-pass relabels are undone (guarded on `orig_play_type`); the two
+  frozen `type.text`-derived columns EPA/WPA read (`downs_turnover`, `pos_score_diff_end`) are
+  recomputed so EPA stays consistent (e.g. a 4th-down self-recovery short of the sticks is now
+  correctly scored a turnover on downs). ESPN-sourced box turnover totals are unaffected.
+  Verified across a 20-game / 3,439-play before/after diff: exactly two plays changed (both
+  intended relabels), with EPA moving only on those two plays — no collateral drift.
 
 ## 0.0.52 Release: June 3, 2026
 

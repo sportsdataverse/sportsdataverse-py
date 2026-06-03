@@ -3434,6 +3434,98 @@ class CFBPlayProcess(object):
 
         return play_df
 
+    def __refine_play_types_post_attribution(self, play_df):
+        """Correct two play-type labels that need the post-attribution turnover signal.
+
+        ``__add_new_play_types`` runs *before* ``__add_attribution_cols``, so it can only
+        key on ``change_of_poss`` -- which is ``True`` on **every** possession flip, not
+        just turnovers. Two residual mislabels survive that the now-available
+        ``is_turnover`` / ``recovery_team`` flags resolve:
+
+        1. **Sack-strip the offense recovers itself.** ``change_of_poss`` is spuriously
+           ``1`` (a returner/fumble id artifact), so the strip-sack rule relabeled it
+           ``"Fumble Recovery (Opponent)"``. ``is_turnover`` is ``False`` (the ball never
+           left the offense) -> restore ``"Fumble Recovery (Own)"``.
+        2. **Punt-return fumble the punting team recovers.** The receiving team fumbled the
+           return and the punting team (``pos_team`` on a punt) recovered -- a real
+           special-teams turnover -- but the play stayed ``"Punt Return"`` because the
+           punt-fumble rule keyed on ``type.text == "Punt"`` -> relabel
+           ``"Punt Team Fumble Recovery"``.
+
+        Only this class's own first-pass relabels are undone (guarded on
+        ``orig_play_type``). The two frozen ``type.text``-derived columns read downstream
+        are then recomputed so EPA/WPA stay consistent: ``downs_turnover`` (``normalplay``
+        membership -- ``"Fumble Recovery (Own)"`` newly joins it) and ``pos_score_diff_end``
+        (``end_change_vec`` membership). The EPA/WPA turnover sign-flips read
+        ``type.text in end_change_vec`` *live*, so they self-heal; the box-score turnover
+        totals are ESPN-sourced and unaffected. The recompute mirrors
+        ``__add_play_category_flags`` (``downs_turnover`` and ``pos_score_diff_end``) and is
+        idempotent for unrelabeled rows.
+        """
+        opp = ["Fumble Recovery (Opponent)", "Fumble Recovery (Opponent) Touchdown"]
+        play_df = play_df.with_columns(
+            pl.when(
+                pl.col("type.text")
+                .is_in(opp)
+                .and_(pl.col("orig_play_type").is_in(opp) == False)
+                .and_(pl.col("is_turnover") == False)
+                .and_(pl.col("fumble_vec") == True),
+            )
+            .then(
+                pl.when(pl.col("td_play") == True)
+                .then(pl.lit("Fumble Recovery (Own) Touchdown"))
+                .otherwise(pl.lit("Fumble Recovery (Own)")),
+            )
+            .when(
+                (pl.col("punt") == True)
+                .and_(pl.col("is_turnover") == True)
+                .and_(pl.col("recovery_team") == pl.col("pos_team"))
+                .and_(pl.col("type.text").is_in(["Punt", "Punt Return"]))
+                .and_(pl.col("td_play") == False),
+            )
+            .then(pl.lit("Punt Team Fumble Recovery"))
+            .otherwise(pl.col("type.text"))
+            .alias("type.text"),
+        )
+        # Recompute the two frozen type.text-derived columns that EPA/WPA read.
+        # Source of truth: __add_play_category_flags (downs_turnover; pos_score_diff_end).
+        play_df = play_df.with_columns(
+            downs_turnover=pl.when(
+                (pl.col("type.text").is_in(normalplay))
+                .and_(pl.col("statYardage") < pl.col("start.distance"))
+                .and_(pl.col("start.down") == 4)
+                .and_(pl.col("penalty_1st_conv") == False),
+            )
+            .then(True)
+            .otherwise(False),
+        )
+        play_df = play_df.with_columns(
+            pos_score_diff_end=pl.when(
+                (
+                    (pl.col("type.text").is_in(end_change_vec)).and_(
+                        pl.col("start.pos_team.id") != pl.col("end.pos_team.id"),
+                    )
+                ).or_(pl.col("downs_turnover") == True),
+            )
+            .then(-1 * pl.col("pos_score_diff"))
+            .otherwise(pl.col("pos_score_diff")),
+        ).with_columns(
+            pos_score_diff_end=pl.when(
+                (pl.col("pos_score_pts").abs() >= 8)
+                .and_(pl.col("scoring_play") == False)
+                .and_(pl.col("change_of_pos_team") == False),
+            )
+            .then(pl.col("pos_score_diff_start"))
+            .when(
+                (pl.col("pos_score_pts").abs() >= 8)
+                .and_(pl.col("scoring_play") == False)
+                .and_(pl.col("change_of_pos_team") == True),
+            )
+            .then(-1 * pl.col("pos_score_diff_start"))
+            .otherwise(pl.col("pos_score_diff_end")),
+        )
+        return play_df
+
     def __after_cols(self, play_df):
         play_df = (
             play_df.with_columns(
@@ -5641,6 +5733,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_attribution_cols)
+                    .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__process_epa)

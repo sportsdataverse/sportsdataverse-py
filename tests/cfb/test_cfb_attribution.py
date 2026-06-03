@@ -450,3 +450,158 @@ def test_strip_sack_still_reclassifies_genuine_strip_sack():
         ],
     )
     assert out["type.text"].to_list() == ["Fumble Recovery (Opponent)"]
+
+
+# --- __refine_play_types_post_attribution: is_turnover-keyed label corrections ----
+# Runs after attribution, so it can use is_turnover/recovery_team (which the step-5
+# reclassifier cannot). Undoes two false relabels and recomputes the two frozen
+# derived columns (downs_turnover, pos_score_diff_end) that EPA/WPA read.
+def _refine_base(**over):
+    row = {
+        "type.text": "Rush",
+        "orig_play_type": "Rush",
+        "is_turnover": False,
+        "fumble_vec": False,
+        "td_play": False,
+        "punt": False,
+        "recovery_team": 0,
+        "pos_team": 100,
+        "statYardage": 5,
+        "start.distance": 10,
+        "start.down": 1,
+        "penalty_1st_conv": False,
+        "start.pos_team.id": 100,
+        "end.pos_team.id": 100,
+        "pos_score_diff": 0,
+        "pos_score_pts": 0,
+        "scoring_play": False,
+        "change_of_pos_team": False,
+        "pos_score_diff_start": 0,
+    }
+    row.update(over)
+    return row
+
+
+def _refine(rows: list[dict]) -> pl.DataFrame:
+    df = pl.DataFrame(rows)
+    proc = CFBPlayProcess(gameId=1)
+    return proc._CFBPlayProcess__refine_play_types_post_attribution(df)
+
+
+def test_refine_sack_self_recovery_to_own():
+    # Sack-strip the offense recovers itself: the step-5 rule (spurious change_of_poss)
+    # made it "Fumble Recovery (Opponent)"; is_turnover=False -> restore "(Own)".
+    out = _refine(
+        [
+            _refine_base(
+                **{
+                    "type.text": "Fumble Recovery (Opponent)",
+                    "orig_play_type": "Fumble Recovery (Own)",
+                    "is_turnover": False,
+                    "fumble_vec": True,
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Fumble Recovery (Own)"]
+
+
+def test_refine_keeps_genuine_opponent_recovery():
+    # Control: a real turnover (is_turnover=True) must stay "Fumble Recovery (Opponent)".
+    out = _refine(
+        [
+            _refine_base(
+                **{
+                    "type.text": "Fumble Recovery (Opponent)",
+                    "orig_play_type": "Sack",
+                    "is_turnover": True,
+                    "fumble_vec": True,
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Fumble Recovery (Opponent)"]
+
+
+def test_refine_does_not_undo_espn_native_opponent_recovery():
+    # Control: if ESPN itself labeled it "Fumble Recovery (Opponent)" (orig == final),
+    # do not second-guess it even when is_turnover is False.
+    out = _refine(
+        [
+            _refine_base(
+                **{
+                    "type.text": "Fumble Recovery (Opponent)",
+                    "orig_play_type": "Fumble Recovery (Opponent)",
+                    "is_turnover": False,
+                    "fumble_vec": True,
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Fumble Recovery (Opponent)"]
+
+
+def test_refine_punt_team_fumble_recovery():
+    # Punt: receiving team fumbles the return, punting team (pos_team=100) recovers ->
+    # a real ST turnover currently stuck as "Punt Return" -> "Punt Team Fumble Recovery".
+    out = _refine(
+        [
+            _refine_base(
+                **{
+                    "type.text": "Punt Return",
+                    "orig_play_type": "Punt Return",
+                    "punt": True,
+                    "is_turnover": True,
+                    "recovery_team": 100,  # punting team (pos_team) recovered
+                    "pos_team": 100,
+                    "td_play": False,
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Punt Team Fumble Recovery"]
+
+
+def test_refine_keeps_normal_punt_return():
+    # Control: an ordinary punt return (no turnover) stays "Punt Return".
+    out = _refine(
+        [
+            _refine_base(
+                **{
+                    "type.text": "Punt Return",
+                    "orig_play_type": "Punt Return",
+                    "punt": True,
+                    "is_turnover": False,
+                    "recovery_team": 0,
+                    "pos_team": 100,
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Punt Return"]
+
+
+def test_refine_recomputes_downs_turnover_and_pos_score_diff_end():
+    # A self-recovered fumble on 4th-and-long short of the sticks is a turnover on downs:
+    # "Fumble Recovery (Own)" joins normalplay, so downs_turnover must recompute to True
+    # and pos_score_diff_end must flip sign (-pos_score_diff).
+    out = _refine(
+        [
+            _refine_base(
+                **{
+                    "type.text": "Fumble Recovery (Opponent)",
+                    "orig_play_type": "Fumble Recovery (Own)",
+                    "is_turnover": False,
+                    "fumble_vec": True,
+                    "start.down": 4,
+                    "statYardage": 2,
+                    "start.distance": 10,
+                    "pos_score_diff": 3,
+                },
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["type.text"] == "Fumble Recovery (Own)"
+    assert r["downs_turnover"] is True
+    assert r["pos_score_diff_end"] == -3

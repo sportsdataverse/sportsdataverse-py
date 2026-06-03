@@ -244,15 +244,30 @@ label means "fumble recovered *by* the kickoff team" — confirmed by `kickoff_t
 `kickoff_vec` membership in `model_vars`. Renaming it would break those membership tests and
 EPA/WPA; it is intentionally left as is.
 
-**Residuals best served by `is_turnover` (not yet implemented).** Two label cases remain that the
-in-method `change_of_poss` signal cannot fix and that the `int_vec` guard does not cover: a
-sack-fumble the offense **recovers itself** (still labeled `Fumble Recovery (Opponent)` because
-`change_of_poss` is spuriously `1`), and a punt-return fumble the kicking team recovers (labeled
-`Punt Return` rather than `Punt Team Fumble Recovery`). Both are rare (≈1 play / 20 games each)
-and do **not** affect shipped countable totals (those are ESPN-sourced, §5). Fixing them
-correctly requires a **post-attribution** refinement keyed on `is_turnover` /
-`recovery_team` / `fumbling_team`, which must also recompute the `type.text`-derived flags it
-invalidates — deferred as higher-risk relative to its payoff.
+**Post-attribution refinement (`__refine_play_types_post_attribution`).** Two label cases that the
+in-method `change_of_poss` signal cannot fix — and that the `int_vec` guard does not cover — are
+corrected in a dedicated step that runs **after** `__add_attribution_cols`, where `is_turnover` /
+`recovery_team` are available:
+
+1. A sack-fumble the offense **recovers itself** was relabeled `Fumble Recovery (Opponent)`
+   because `change_of_poss` was spuriously `1`; `is_turnover == False` restores
+   `Fumble Recovery (Own)`.
+2. A punt-return fumble the **punting team** recovers stayed `Punt Return` (the punt-fumble rule
+   keyed on `type.text == "Punt"`); a real ST turnover with `recovery_team == pos_team` becomes
+   `Punt Team Fumble Recovery`.
+
+Only this module's own first-pass relabels are undone (guarded on `orig_play_type`, so an
+ESPN-native `Fumble Recovery (Opponent)` is never second-guessed). Because the step mutates
+`type.text` after the step-7 flag derivation, it recomputes the two frozen `type.text`-derived
+columns that EPA/WPA read — `downs_turnover` (`normalplay` membership: `Fumble Recovery (Own)`
+newly joins it, so a 4th-down self-recovery short of the sticks correctly becomes a turnover on
+downs) and `pos_score_diff_end` (`end_change_vec` membership). The EPA/WPA turnover sign-flips
+read `type.text ∈ end_change_vec` *live*, so they self-heal; ESPN-sourced box turnover totals are
+untouched. Verified across a 20-game / 3,439-play before/after diff: exactly **2** plays changed
+(both intended relabels), EPA moved only on those 2 plays (plus their team EPA roll-ups), and all
+ESPN-sourced turnover totals were unchanged. These cases are rare (≈1 play / 20 games each); the
+shipped countable totals are ESPN-sourced regardless (§5), so the refinement's value is label and
+EPA correctness, not turnover counts.
 
 ## 8. Output schema notes (additive)
 
