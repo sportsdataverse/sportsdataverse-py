@@ -263,39 +263,7 @@ def test_statcast_leaderboard_expected_statistics_2024_nonempty():
 
 
 # ===========================================================================
-# 8. Bracketology (1 test)
-# ===========================================================================
-
-
-def test_espn_mbb_bracketology_current_season_smoke():
-    """Bracketology is ephemeral — ESPN only publishes it during the projection
-    window (roughly Jan–Mar).  Outside that window the endpoint 404s and
-    ``download()`` raises ``NoESPNDataError`` after exhausting retries.
-
-    This test treats both outcomes as valid:
-      * If the endpoint returns a non-empty dict, the call succeeded.
-      * If ``NoESPNDataError`` is raised, the endpoint is offline (sparse data)
-        — we mark the test as xfail rather than failing loudly, so the pattern
-        is still verified to be structurally correct.
-    """
-    from sportsdataverse.errors import NoESPNDataError
-    from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_bracketology
-
-    try:
-        payload = espn_mbb_bracketology(season=2025)
-    except NoESPNDataError:
-        pytest.xfail(
-            "ESPN bracketology endpoint is offline outside tournament-projection "
-            "window — this is expected sparse-data behaviour, not a bug.",
-        )
-        return  # unreachable, but keeps linters happy
-
-    assert isinstance(payload, dict), "expected a dict response"
-    assert payload is not None, "bracketology returned None"
-
-
-# ===========================================================================
-# 9. Cross-league pattern: smoke-test the factory
+# 8. Cross-league pattern: smoke-test the factory
 # ===========================================================================
 
 

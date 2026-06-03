@@ -34,7 +34,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         return pl.from_pandas(df)
     except Exception:
         df2 = df.copy()
-        for col in df2.select_dtypes(include="object").columns:
+        for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
         return pl.from_pandas(df2)
 
@@ -44,9 +44,7 @@ def _empty_frame(return_as_pandas: bool = False):
     return df if return_as_pandas else pl.DataFrame()
 
 
-def parse_nhl_records(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_records(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse any NHL Records response into a tidy frame.
 
     Every Records endpoint ships ``{data: [{...}, ...], total: N}``.

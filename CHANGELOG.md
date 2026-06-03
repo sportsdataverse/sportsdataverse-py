@@ -7,6 +7,7 @@
   - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
   - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
   - [CFB — blocked-kick turnover flags + ESPN native-flag tripwires](#cfb--blocked-kick-turnover-flags--espn-native-flag-tripwires)
+  - [Removed — NCAA bracketology](#removed--ncaa-bracketology)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
@@ -180,6 +181,15 @@ wrong values are corrected and new fields/sections are added.
   into the giveaway signals; penalty tripwire 0 violations; `isTurnover`/`is_turnover` agreed 99.6%
   (residual disagreements are ESPN false positives — self-recovered fumbles — the stricter
   derivation correctly excludes).
+
+### Removed — NCAA bracketology
+
+- **`espn_mbb_bracketology()` / `espn_wbb_bracketology()` removed.** The non-league
+  `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology` wrappers added in
+  0.0.51 — along with the `_common_ncaa.py` module and the `register_ncaa_bracketology()`
+  registration machinery — have been removed. The endpoint is ephemeral (ESPN only publishes it
+  during the Jan–Mar projection window) and sat outside the per-league URL pattern, so it is no
+  longer carried. The universal `espn_mbb_*` / `espn_wbb_*` wrappers are unaffected.
 
 ## 0.0.52 Release: June 3, 2026
 

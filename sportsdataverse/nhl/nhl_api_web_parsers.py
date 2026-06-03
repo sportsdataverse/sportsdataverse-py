@@ -63,7 +63,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         return pl.from_pandas(df)
     except Exception:
         df2 = df.copy()
-        for col in df2.select_dtypes(include="object").columns:
+        for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
         return pl.from_pandas(df2)
 
@@ -121,9 +121,7 @@ def parse_nhl_web_pbp(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     return _flatten_rows(plays, return_as_pandas)
 
 
-def parse_nhl_web_boxscore(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_boxscore()`` into one row per (team × player).
 
     Boxscore ships ``playerByGameStats: {awayTeam: {forwards, defense,
@@ -149,9 +147,7 @@ def parse_nhl_web_boxscore(
     return _flatten_rows(rows, return_as_pandas)
 
 
-def parse_nhl_web_landing(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_landing(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_landing()`` into a single-row game profile.
 
     The landing endpoint ships the game header (id, date, venue, teams,
@@ -163,7 +159,8 @@ def parse_nhl_web_landing(
 
 
 def parse_nhl_web_right_rail(
-    payload: Dict, section: str = None,
+    payload: Dict,
+    section: str = None,
     return_as_pandas: bool = False,
 ):
     """Parse ``nhl_web_right_rail()`` — dispatcher with 6 sub-frames.
@@ -185,18 +182,12 @@ def parse_nhl_web_right_rail(
     one frame.
     """
     sub_parsers = {
-        "season_series":      lambda p: _flatten_rows(
-            p.get("seasonSeries"), return_as_pandas),
-        "shots_by_period":    lambda p: _flatten_rows(
-            p.get("shotsByPeriod"), return_as_pandas),
-        "team_game_stats":    lambda p: _flatten_rows(
-            p.get("teamGameStats"), return_as_pandas),
-        "game_info":          lambda p: _single_row(
-            p.get("gameInfo"), return_as_pandas),
-        "linescore_by_period": lambda p: _flatten_rows(
-            ((p.get("linescore") or {}).get("byPeriod")), return_as_pandas),
-        "season_series_wins": lambda p: _single_row(
-            p.get("seasonSeriesWins"), return_as_pandas),
+        "season_series": lambda p: _flatten_rows(p.get("seasonSeries"), return_as_pandas),
+        "shots_by_period": lambda p: _flatten_rows(p.get("shotsByPeriod"), return_as_pandas),
+        "team_game_stats": lambda p: _flatten_rows(p.get("teamGameStats"), return_as_pandas),
+        "game_info": lambda p: _single_row(p.get("gameInfo"), return_as_pandas),
+        "linescore_by_period": lambda p: _flatten_rows(((p.get("linescore") or {}).get("byPeriod")), return_as_pandas),
+        "season_series_wins": lambda p: _single_row(p.get("seasonSeriesWins"), return_as_pandas),
     }
     payload = payload if isinstance(payload, dict) else {}
     if section is not None:
@@ -215,9 +206,7 @@ def parse_nhl_web_right_rail(
 # ---------------------------------------------------------------------------
 
 
-def parse_nhl_web_schedule(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_schedule()`` into one row per scheduled game.
 
     Input: ``{gameWeek: [{date, dayAbbrev, numberOfGames, games: [...]},
@@ -238,9 +227,7 @@ def parse_nhl_web_schedule(
     return _flatten_rows(rows, return_as_pandas)
 
 
-def parse_nhl_web_score(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_score(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_score()`` into one row per game for the date.
 
     Shape: ``{currentDate, games: [...], gameWeek: [...]}``.
@@ -249,9 +236,7 @@ def parse_nhl_web_score(
     return _flatten_rows((payload or {}).get("games"), return_as_pandas)
 
 
-def parse_nhl_web_scoreboard(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_scoreboard()`` into one row per game across days.
 
     Shape: ``{focusedDate, gamesByDate: [{date, games: [...]}, ...]}``.
@@ -272,9 +257,7 @@ def parse_nhl_web_scoreboard(
     return _flatten_rows(rows, return_as_pandas)
 
 
-def parse_nhl_web_club_schedule(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_club_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_club_schedule_season()`` / ``_month`` / ``_week``
     into one row per game.
 
@@ -306,16 +289,12 @@ def parse_nhl_web_club_schedule(
 # ---------------------------------------------------------------------------
 
 
-def parse_nhl_web_standings(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_standings()`` into one row per team."""
     return _flatten_rows((payload or {}).get("standings"), return_as_pandas)
 
 
-def parse_nhl_web_standings_season(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_standings_season(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_standings_season()`` into one row per season."""
     return _flatten_rows((payload or {}).get("seasons"), return_as_pandas)
 
@@ -326,7 +305,8 @@ def parse_nhl_web_standings_season(
 
 
 def parse_nhl_web_club_stats(
-    payload: Dict, section: str = None,
+    payload: Dict,
+    section: str = None,
     return_as_pandas: bool = False,
 ):
     """Parse ``nhl_web_club_stats()`` — dispatcher with skaters + goalies.
@@ -337,8 +317,7 @@ def parse_nhl_web_club_stats(
     if not isinstance(payload, dict):
         if section is not None:
             return _empty_frame(return_as_pandas)
-        return {"skaters": _empty_frame(return_as_pandas),
-                "goalies": _empty_frame(return_as_pandas)}
+        return {"skaters": _empty_frame(return_as_pandas), "goalies": _empty_frame(return_as_pandas)}
     sub_parsers = {
         "skaters": lambda: _flatten_rows(payload.get("skaters"), return_as_pandas),
         "goalies": lambda: _flatten_rows(payload.get("goalies"), return_as_pandas),
@@ -346,16 +325,13 @@ def parse_nhl_web_club_stats(
     if section is not None:
         if section not in sub_parsers:
             raise ValueError(
-                f"Unknown club_stats section {section!r}. "
-                f"Choose 'skaters' or 'goalies' or pass section=None.",
+                f"Unknown club_stats section {section!r}. Choose 'skaters' or 'goalies' or pass section=None.",
             )
         return sub_parsers[section]()
     return {name: fn() for name, fn in sub_parsers.items()}
 
 
-def parse_nhl_web_roster(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_roster()`` into one row per player.
 
     Shape: ``{forwards: [...], defensemen: [...], goalies: [...]}``.
@@ -374,9 +350,7 @@ def parse_nhl_web_roster(
     return _flatten_rows(rows, return_as_pandas)
 
 
-def parse_nhl_web_player_landing(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_player_landing(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_player_landing()`` into a single-row player
     profile. Nested ``featuredStats`` / ``careerTotals`` / ``last5Games``
     sub-frames are stringified — call them out separately if needed.
@@ -384,9 +358,7 @@ def parse_nhl_web_player_landing(
     return _single_row(payload, return_as_pandas)
 
 
-def parse_nhl_web_player_game_log(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_player_game_log(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_player_game_log()`` into one row per game.
 
     Walks ``payload["gameLog"]`` (~76 games per season for a regular
@@ -400,9 +372,7 @@ def parse_nhl_web_player_game_log(
 # ---------------------------------------------------------------------------
 
 
-def parse_nhl_web_leaders(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_skater_leaders()`` / ``nhl_web_goalie_leaders()``
     into one row per (category × player).
 
@@ -428,9 +398,7 @@ def parse_nhl_web_leaders(
     return _flatten_rows(rows, return_as_pandas)
 
 
-def parse_nhl_web_draft_picks(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_web_draft_picks(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_draft_picks()`` into one row per pick."""
     return _flatten_rows((payload or {}).get("picks"), return_as_pandas)
 
@@ -445,34 +413,34 @@ def parse_nhl_web_draft_picks(
 # dict by default — callers wanting a single frame pass section=.
 NHL_API_WEB_ENDPOINT_PARSERS = {
     # Game-center
-    "nhl_web_pbp":                    parse_nhl_web_pbp,
-    "nhl_web_boxscore":               parse_nhl_web_boxscore,
-    "nhl_web_landing":                parse_nhl_web_landing,
-    "nhl_web_right_rail":             parse_nhl_web_right_rail,
+    "nhl_web_pbp": parse_nhl_web_pbp,
+    "nhl_web_boxscore": parse_nhl_web_boxscore,
+    "nhl_web_landing": parse_nhl_web_landing,
+    "nhl_web_right_rail": parse_nhl_web_right_rail,
     # Schedule / score / scoreboard
-    "nhl_web_schedule":               parse_nhl_web_schedule,
-    "nhl_web_score":                  parse_nhl_web_score,
-    "nhl_web_scoreboard":             parse_nhl_web_scoreboard,
-    "nhl_web_schedule_calendar":      parse_nhl_web_schedule,
-    "nhl_web_club_schedule_season":   parse_nhl_web_club_schedule,
-    "nhl_web_club_schedule_month":    parse_nhl_web_club_schedule,
-    "nhl_web_club_schedule_week":     parse_nhl_web_club_schedule,
+    "nhl_web_schedule": parse_nhl_web_schedule,
+    "nhl_web_score": parse_nhl_web_score,
+    "nhl_web_scoreboard": parse_nhl_web_scoreboard,
+    "nhl_web_schedule_calendar": parse_nhl_web_schedule,
+    "nhl_web_club_schedule_season": parse_nhl_web_club_schedule,
+    "nhl_web_club_schedule_month": parse_nhl_web_club_schedule,
+    "nhl_web_club_schedule_week": parse_nhl_web_club_schedule,
     # Standings
-    "nhl_web_standings":              parse_nhl_web_standings,
-    "nhl_web_standings_season":       parse_nhl_web_standings_season,
+    "nhl_web_standings": parse_nhl_web_standings,
+    "nhl_web_standings_season": parse_nhl_web_standings_season,
     # Team / player
-    "nhl_web_club_stats":             parse_nhl_web_club_stats,
-    "nhl_web_club_stats_season":      parse_nhl_web_club_stats,
-    "nhl_web_roster":                 parse_nhl_web_roster,
-    "nhl_web_roster_season":          parse_nhl_web_roster,
-    "nhl_web_player_landing":         parse_nhl_web_player_landing,
-    "nhl_web_player_game_log":        parse_nhl_web_player_game_log,
+    "nhl_web_club_stats": parse_nhl_web_club_stats,
+    "nhl_web_club_stats_season": parse_nhl_web_club_stats,
+    "nhl_web_roster": parse_nhl_web_roster,
+    "nhl_web_roster_season": parse_nhl_web_roster,
+    "nhl_web_player_landing": parse_nhl_web_player_landing,
+    "nhl_web_player_game_log": parse_nhl_web_player_game_log,
     # Leaders
-    "nhl_web_skater_leaders":         parse_nhl_web_leaders,
-    "nhl_web_goalie_leaders":         parse_nhl_web_leaders,
+    "nhl_web_skater_leaders": parse_nhl_web_leaders,
+    "nhl_web_goalie_leaders": parse_nhl_web_leaders,
     # Draft
-    "nhl_web_draft_picks":            parse_nhl_web_draft_picks,
-    "nhl_web_draft_picks_now":        parse_nhl_web_draft_picks,
+    "nhl_web_draft_picks": parse_nhl_web_draft_picks,
+    "nhl_web_draft_picks_now": parse_nhl_web_draft_picks,
     "nhl_web_draft_tracker_picks_now": parse_nhl_web_draft_picks,
 }
 

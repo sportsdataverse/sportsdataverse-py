@@ -9,7 +9,6 @@ extensions (rankings, recruits, weekly rankings).
 from __future__ import annotations
 
 from sportsdataverse._common_espn import make_league_module
-from sportsdataverse._common_ncaa import register_ncaa_bracketology
 
 __all__ = make_league_module(
     "basketball",
@@ -19,5 +18,3 @@ __all__ = make_league_module(
     include_ncaa=True,
     include_football=False,
 )
-register_ncaa_bracketology("wbb", globals())
-__all__ = list(__all__) + ["espn_wbb_bracketology"]

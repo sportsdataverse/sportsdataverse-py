@@ -110,8 +110,8 @@ Every parser obeys these rules:
 
 The registry maps the *short name* in `_common_espn`'s wrapper tables
 to its parser. **All 121 wrapper short names are registered** — every
-factory-bound wrapper across all 8 leagues plus the hand-bound NCAA
-bracketology helpers gains the `return_parsed=True` shim automatically.
+factory-bound wrapper across all 8 leagues gains the `return_parsed=True`
+shim automatically.
 
 ```python
 >>> from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parser_for

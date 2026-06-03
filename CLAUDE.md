@@ -227,11 +227,7 @@ __all__ = make_league_module(
 ```
 
 Total cross-league surface: **121 short names** registered across 8
-leagues = **819 wrappers + 2 NCAA bracketology helpers** in
-`_common_ncaa.py`. The `_NCAA_BRACKETOLOGY_WRAPPERS` table is bound
-separately via `register_ncaa_bracketology()` because bracketology
-lives at the non-league `sports.core.api.espn.com/v2/tournament/...`
-path that doesn't fit the per-sport URL pattern.
+leagues = **819 wrappers**.
 
 ## Parser Layer (0.0.51+)
 

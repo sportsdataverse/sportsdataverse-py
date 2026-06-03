@@ -38,7 +38,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         return pl.from_pandas(df)
     except Exception:
         df2 = df.copy()
-        for col in df2.select_dtypes(include="object").columns:
+        for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
         return pl.from_pandas(df2)
 
@@ -48,9 +48,7 @@ def _empty_frame(return_as_pandas: bool = False):
     return df if return_as_pandas else pl.DataFrame()
 
 
-def parse_nhl_stats_rest(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_nhl_stats_rest(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse any NHL Stats REST response into a tidy frame.
 
     Every Stats REST endpoint ships ``{data: [{...}, ...], total: N}``.
@@ -87,23 +85,23 @@ def parse_nhl_stats_rest(
 # ping / glossary) are intentionally excluded — they return raw Dict
 # even when callers use the parser layer.
 NHL_STATS_REST_ENDPOINT_PARSERS = {
-    "nhl_stats_rest_country":             parse_nhl_stats_rest,
-    "nhl_stats_rest_draft":               parse_nhl_stats_rest,
-    "nhl_stats_rest_franchise":           parse_nhl_stats_rest,
-    "nhl_stats_rest_game":                parse_nhl_stats_rest,
-    "nhl_stats_rest_glossary":            parse_nhl_stats_rest,
-    "nhl_stats_rest_goalie_report":       parse_nhl_stats_rest,
-    "nhl_stats_rest_leaders_goalies":     parse_nhl_stats_rest,
-    "nhl_stats_rest_leaders_skaters":     parse_nhl_stats_rest,
-    "nhl_stats_rest_milestones_goalies":  parse_nhl_stats_rest,
-    "nhl_stats_rest_milestones_skaters":  parse_nhl_stats_rest,
-    "nhl_stats_rest_players":             parse_nhl_stats_rest,
-    "nhl_stats_rest_season":              parse_nhl_stats_rest,
-    "nhl_stats_rest_shiftcharts":         parse_nhl_stats_rest,
-    "nhl_stats_rest_skater_report":       parse_nhl_stats_rest,
-    "nhl_stats_rest_team":                parse_nhl_stats_rest,
-    "nhl_stats_rest_team_by_id":          parse_nhl_stats_rest,
-    "nhl_stats_rest_team_report":         parse_nhl_stats_rest,
+    "nhl_stats_rest_country": parse_nhl_stats_rest,
+    "nhl_stats_rest_draft": parse_nhl_stats_rest,
+    "nhl_stats_rest_franchise": parse_nhl_stats_rest,
+    "nhl_stats_rest_game": parse_nhl_stats_rest,
+    "nhl_stats_rest_glossary": parse_nhl_stats_rest,
+    "nhl_stats_rest_goalie_report": parse_nhl_stats_rest,
+    "nhl_stats_rest_leaders_goalies": parse_nhl_stats_rest,
+    "nhl_stats_rest_leaders_skaters": parse_nhl_stats_rest,
+    "nhl_stats_rest_milestones_goalies": parse_nhl_stats_rest,
+    "nhl_stats_rest_milestones_skaters": parse_nhl_stats_rest,
+    "nhl_stats_rest_players": parse_nhl_stats_rest,
+    "nhl_stats_rest_season": parse_nhl_stats_rest,
+    "nhl_stats_rest_shiftcharts": parse_nhl_stats_rest,
+    "nhl_stats_rest_skater_report": parse_nhl_stats_rest,
+    "nhl_stats_rest_team": parse_nhl_stats_rest,
+    "nhl_stats_rest_team_by_id": parse_nhl_stats_rest,
+    "nhl_stats_rest_team_report": parse_nhl_stats_rest,
 }
 
 

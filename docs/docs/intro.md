@@ -70,7 +70,7 @@ below.
 |---|---|---|
 | NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) — 118 wrappers |
 | WNBA | `sportsdataverse.wnba` | ESPN — 124 wrappers |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (bracketology, rankings, recruits) — 121 wrappers |
+| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) — 121 wrappers |
 | WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only — 126 wrappers |
 | CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) — 123 wrappers |
 | NFL | `sportsdataverse.nfl` | ESPN + football-only (QBR) — 119 wrappers |
