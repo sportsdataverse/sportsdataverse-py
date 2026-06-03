@@ -4949,10 +4949,14 @@ class CFBPlayProcess(object):
             .rename({"turnover_team": "pos_team"})
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
+        # NOTE: grouped by recovery_team, which is the parsed fumble/muff recoverer.
+        # Interceptions have a null recovery_team (no "recovered by" clause), so this
+        # counts FUMBLE recoveries gained only -- hence the honest field name. ST
+        # turnovers always carry a parsed recoverer, so st_turnovers_gained is complete.
         to_gained = (
             play_df.filter(pl.col("is_turnover") == True)
             .group_by(["recovery_team"])
-            .agg(st_turnovers_gained=pl.col("is_st_turnover").sum(), takeaways=pl.len())
+            .agg(st_turnovers_gained=pl.col("is_st_turnover").sum(), fumble_recoveries_gained=pl.len())
             .rename({"recovery_team": "pos_team"})
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
@@ -4978,7 +4982,8 @@ class CFBPlayProcess(object):
         )
         turnover_box_json = json.loads(turnover_box.write_json())
 
-        # identity-keyed margins / luck (never list index)
+        # identity-keyed margins / luck (never list index).
+        # Int here is all-play (from to_lost); pass_breakups/total_fumbles are scrimmage-only (to_aux).
         by_id = {int(r["pos_team"]): r for r in turnover_box_json}
         for tid, r in by_id.items():
             r["Int"] = int(r.get("Int", 0))
@@ -4986,7 +4991,8 @@ class CFBPlayProcess(object):
                 0.22 * (r.get("pass_breakups", 0) + r.get("Int", 0))
             )
         for tid, r in by_id.items():
-            opp = by_id[[x for x in team_ids if x != tid][0]]
+            others = [x for x in team_ids if x != tid]
+            opp = by_id[others[0]] if others else r  # degenerate (home==away id): self as opponent
             r["expected_turnover_margin"] = opp["expected_turnovers"] - r["expected_turnovers"]
             r["turnover_margin"] = opp["turnovers"] - r["turnovers"]
             r["turnover_luck"] = 5.0 * (r["turnover_margin"] - r["expected_turnover_margin"])
