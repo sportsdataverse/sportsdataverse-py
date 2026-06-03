@@ -3062,18 +3062,46 @@ class CFBPlayProcess(object):
             .otherwise(pl.lit(None, dtype=pl.Int64)),
         )
 
-        # fumbling team:
-        #  - scrimmage: the offense (pos_team)
-        #  - ST: the return team (the muffing/returning side)
-        # NOTE: for sp plays that are neither kickoff/punt/fg_attempt (e.g. blocked-FG
-        # returns), return_team is null so fumbling_team is null; such plays rely on the
-        # possession-change fallback in the is_turnover logic.
+        # Special-teams RETURN detection (flag OR text). ESPN sometimes reclassifies a
+        # punt/kickoff return fumble to a "Fumble Recovery (...)" type and DROPS the
+        # punt/kickoff_play flags (so sp becomes False), so a text fallback is required to
+        # recover the special-teams nature and attribute the fumble to the returning team.
+        play_df = play_df.with_columns(
+            _is_kick_return=pl.when(
+                (pl.col("kickoff_play") == True)
+                | (pl.col("text").str.contains(r"(?i)kickoff") & pl.col("text").str.contains(r"(?i)return|muff")),
+            )
+            .then(True)
+            .otherwise(False),
+            _is_punt_return=pl.when(
+                (pl.col("punt") == True)
+                | (
+                    pl.col("text").str.contains(r"(?i)punt")
+                    & pl.col("text").str.contains(r"(?i)return|muff|fair catch")
+                ),
+            )
+            .then(True)
+            .otherwise(False),
+        )
+
+        # fumbling team (the team that HAD the ball when the fumble/muff occurred):
+        #  - kickoff return: receiving team == pos_team (kickoff pos_team=receiving)
+        #  - punt return:    receiving team == def_pos_team (punt pos_team=kicking team)
+        #  - other sp (e.g. blocked-FG return): return_team
+        #  - scrimmage:      the offense == pos_team
+        # The kick/punt cases use the text-or-flag detection above, so a reclassified
+        # return fumble (punt/kickoff flags dropped, pos_team flipped to the recovering
+        # team) still resolves the fumbling team to the side that was returning the kick.
         play_df = play_df.with_columns(
             fumbling_team=pl.when(pl.col("fumble_or_muff") == False)
             .then(pl.lit(None, dtype=pl.Int64))
-            .when(pl.col("sp") == False)
+            .when(pl.col("_is_kick_return") == True)
             .then(pl.col("pos_team"))
-            .otherwise(pl.col("return_team")),
+            .when(pl.col("_is_punt_return") == True)
+            .then(pl.col("def_pos_team"))
+            .when(pl.col("sp") == True)
+            .then(pl.col("return_team"))
+            .otherwise(pl.col("pos_team")),
         )
 
         # turnover: a fumble/muff where the recovering team differs from the
@@ -3090,9 +3118,13 @@ class CFBPlayProcess(object):
             )
             .then(True)
             .when(
+                # Last-resort possession-change fallback, only for true scrimmage plays
+                # (NOT special-teams returns, where possession columns are unreliable).
                 (pl.col("fumble_or_muff") == True)
                 & (pl.col("recovery_team").is_null())
                 & (pl.col("scrimmage_play") == True)
+                & (pl.col("_is_punt_return") == False)
+                & (pl.col("_is_kick_return") == False)
                 & (pl.col("end.pos_team.id") != pl.col("pos_team")),
             )
             .then(True)
@@ -3103,7 +3135,10 @@ class CFBPlayProcess(object):
             .when(pl.col("int") == True)
             .then(pl.col("pos_team"))
             .otherwise(pl.col("fumbling_team")),
-            is_st_turnover=pl.when((pl.col("is_turnover") == True) & (pl.col("sp") == True))
+            is_st_turnover=pl.when(
+                (pl.col("is_turnover") == True)
+                & ((pl.col("sp") == True) | (pl.col("_is_punt_return") == True) | (pl.col("_is_kick_return") == True)),
+            )
             .then(True)
             .otherwise(False),
         )
@@ -3132,7 +3167,7 @@ class CFBPlayProcess(object):
         )
 
         # FIX 1: drop temp columns that must not leak into the output frame
-        play_df = play_df.drop(["_clean_text", "_recovery_abbrev"])
+        play_df = play_df.drop(["_clean_text", "_recovery_abbrev", "_is_kick_return", "_is_punt_return"])
 
         # FIX 3: cast all team-id-derived columns to Int32 for join compatibility
         _team_id_cols = [

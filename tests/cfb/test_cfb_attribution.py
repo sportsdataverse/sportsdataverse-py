@@ -264,3 +264,31 @@ def test_penalized_team_null_on_non_penalty_play():
     )
     r = out.to_dicts()[0]
     assert r["penalized_team"] is None
+
+
+def test_reclassified_punt_return_fumble_is_st_turnover():
+    # ESPN reclassifies some punt-return fumbles to a "Fumble Recovery (...)" type and
+    # drops the punt/sp flags, flipping pos_team to the recovering (punting) team. The
+    # receiving team (def_pos_team) is the one that fumbled the return. Detection must
+    # fall back to the text so the turnover is charged to the returning team and flagged ST.
+    out = _attr(
+        [
+            _base(
+                pos_team=152,
+                def_pos_team=52,
+                punt=False,
+                sp=False,
+                scrimmage_play=True,
+                fumble_vec=True,
+                homeTeamAbbrev="NCSU",
+                awayTeamAbbrev="FSU",
+                homeTeamId=152,
+                awayTeamId=52,
+                text="punt 42 yards to the FSU14 #4 S.White return 2 yards fumbled by #4 S.White recovered by NCSU #4 T.Thomas",
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["is_turnover"] is True
+    assert r["turnover_team"] == 52  # FSU (returning/receiving team) lost it
+    assert r["is_st_turnover"] is True  # detected as ST via text even though sp=False
