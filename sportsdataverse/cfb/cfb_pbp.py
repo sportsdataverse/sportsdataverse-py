@@ -2986,6 +2986,36 @@ class CFBPlayProcess(object):
         )
         return play_df
 
+    def __add_attribution_cols(self, play_df):
+        """Resolve the credited team per play (spec section 5).
+
+        Pure/deterministic. Reads pos_team/def_pos_team + play-type flags +
+        text, writes kicking_team/return_team, fumble_or_muff, fumbling_team,
+        recovery_team, turnover_team, is_turnover, is_st_turnover,
+        penalized_team, penalty_yards_signed, and event-team columns.
+        """
+        play_df = play_df.with_columns(
+            # --- Special-teams team flip (verified): kickoff pos_team=receiving;
+            #     punt/FG pos_team=kicking. ---
+            kicking_team=pl.when(pl.col("kickoff_play") == True)
+            .then(pl.col("def_pos_team"))
+            .when((pl.col("punt") == True) | (pl.col("fg_attempt") == True))
+            .then(pl.col("pos_team"))
+            .otherwise(None),
+            return_team=pl.when(pl.col("kickoff_play") == True)
+            .then(pl.col("pos_team"))
+            .when((pl.col("punt") == True) | (pl.col("fg_attempt") == True))
+            .then(pl.col("def_pos_team"))
+            .otherwise(None),
+            # --- Widen fumble detection to include muffs (finding #14) ---
+            fumble_or_muff=pl.when(
+                (pl.col("fumble_vec") == True) | (pl.col("text").str.contains(r"(?i)muff")),
+            )
+            .then(True)
+            .otherwise(False),
+        )
+        return play_df
+
     def __after_cols(self, play_df):
         play_df = (
             play_df.with_columns(

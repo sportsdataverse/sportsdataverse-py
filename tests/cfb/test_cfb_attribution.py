@@ -45,3 +45,85 @@ def test_strip_overturned_empty_string():
 
 def test_strip_overturned_none_input():
     assert _strip_overturned_text(None) is None
+
+
+import polars as pl
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+
+def _attr(rows: list[dict]) -> pl.DataFrame:
+    df = pl.DataFrame(rows)
+    proc = CFBPlayProcess(gameId=1)
+    return proc._CFBPlayProcess__add_attribution_cols(df)
+
+
+def test_kicking_return_team_flip():
+    rows = [
+        {
+            "pos_team": 9,
+            "def_pos_team": 252,
+            "kickoff_play": True,
+            "punt": False,
+            "fg_attempt": False,
+            "sp": True,
+            "scrimmage_play": False,
+            "fumble_vec": False,
+            "int": False,
+            "text": "kickoff",
+            "homeTeamAbbrev": "BYU",
+            "awayTeamAbbrev": "ASU",
+            "homeTeamId": 252,
+            "awayTeamId": 9,
+            "penalty_detail": None,
+            "yds_penalty": None,
+            "end.pos_team.id": 9,
+        },
+        {
+            "pos_team": 252,
+            "def_pos_team": 9,
+            "kickoff_play": False,
+            "punt": True,
+            "fg_attempt": False,
+            "sp": True,
+            "scrimmage_play": False,
+            "fumble_vec": False,
+            "int": False,
+            "text": "punt",
+            "homeTeamAbbrev": "BYU",
+            "awayTeamAbbrev": "ASU",
+            "homeTeamId": 252,
+            "awayTeamId": 9,
+            "penalty_detail": None,
+            "yds_penalty": None,
+            "end.pos_team.id": 9,
+        },
+    ]
+    out = _attr(rows)
+    assert out["kicking_team"].to_list() == [252, 252]  # kickoff->def, punt->pos
+    assert out["return_team"].to_list() == [9, 9]  # kickoff->pos, punt->def
+
+
+def test_muff_detected():
+    rows = [
+        {
+            "pos_team": 252,
+            "def_pos_team": 9,
+            "kickoff_play": False,
+            "punt": True,
+            "fg_attempt": False,
+            "sp": True,
+            "scrimmage_play": False,
+            "fumble_vec": False,
+            "int": False,
+            "text": "punt 25 muffed by #24 K.Kirkland recovered by ASU #1 X",
+            "homeTeamAbbrev": "BYU",
+            "awayTeamAbbrev": "ASU",
+            "homeTeamId": 252,
+            "awayTeamId": 9,
+            "penalty_detail": None,
+            "yds_penalty": None,
+            "end.pos_team.id": 9,
+        },
+    ]
+    out = _attr(rows)
+    assert out["fumble_or_muff"].to_list() == [True]
