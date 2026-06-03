@@ -5380,7 +5380,13 @@ class CFBPlayProcess(object):
 
         Note: ``recoverer_player_name`` was not present in the verified participant frame for game 401135269;
         the mapping silently skips any participant column not found in the joined frame.
+
+        Set the instance attribute ``join_participants = False`` to skip the (network) fetch
+        entirely -- used by offline/disk reprocessing and the offline test suite so neither
+        hits ESPN. Defaults to enabled for the normal live path.
         """
+        if not getattr(self, "join_participants", True):
+            return play_df
         original_play_df = play_df
         try:
             from sportsdataverse.cfb.cfb_play_participants import espn_cfb_play_participants

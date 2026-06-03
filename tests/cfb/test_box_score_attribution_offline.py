@@ -32,6 +32,7 @@ def _box(monkeypatch, gid: int) -> dict:
 
     monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
     proc = CFBPlayProcess(gameId=gid)
+    proc.join_participants = False  # offline: do not fetch ESPN participants over the network
     proc.espn_cfb_pbp()
     out = proc.run_processing_pipeline()
     return out["advBoxScore"]
