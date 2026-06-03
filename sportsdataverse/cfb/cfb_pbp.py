@@ -3014,6 +3014,68 @@ class CFBPlayProcess(object):
             .then(True)
             .otherwise(False),
         )
+
+        # --- Cleaned text for fumble/recovery parsing (strip overturned) ---
+        play_df = play_df.with_columns(
+            _clean_text=pl.col("text").map_elements(_strip_overturned_text, return_dtype=pl.Utf8),
+        ).with_columns(
+            _recovery_abbrev=pl.col("_clean_text").map_elements(_parse_recovery_abbrev, return_dtype=pl.Utf8),
+        )
+
+        # abbrev -> team id using the per-play home/away abbreviations
+        play_df = play_df.with_columns(
+            recovery_team=pl.when(pl.col("_recovery_abbrev").is_null())
+            .then(pl.lit(None, dtype=pl.Int64))
+            .when(pl.col("_recovery_abbrev") == pl.col("homeTeamAbbrev").str.to_uppercase())
+            .then(pl.col("homeTeamId"))
+            .when(pl.col("_recovery_abbrev") == pl.col("awayTeamAbbrev").str.to_uppercase())
+            .then(pl.col("awayTeamId"))
+            .otherwise(pl.lit(None, dtype=pl.Int64)),
+        )
+
+        # fumbling team:
+        #  - scrimmage: the offense (pos_team)
+        #  - ST: the return team (the muffing/returning side)
+        play_df = play_df.with_columns(
+            fumbling_team=pl.when(pl.col("fumble_or_muff") == False)
+            .then(pl.lit(None, dtype=pl.Int64))
+            .when(pl.col("sp") == False)
+            .then(pl.col("pos_team"))
+            .otherwise(pl.col("return_team")),
+        )
+
+        # turnover: a fumble/muff where the recovering team differs from the
+        # fumbling team, OR an interception. Recovery team is authoritative;
+        # if unparseable, fall back to possession-change (last resort).
+        play_df = play_df.with_columns(
+            is_turnover=pl.when(pl.col("int") == True)
+            .then(True)
+            .when(
+                (pl.col("fumble_or_muff") == True)
+                & (pl.col("recovery_team").is_not_null())
+                & (pl.col("fumbling_team").is_not_null())
+                & (pl.col("recovery_team") != pl.col("fumbling_team")),
+            )
+            .then(True)
+            .when(
+                (pl.col("fumble_or_muff") == True)
+                & (pl.col("recovery_team").is_null())
+                & (pl.col("scrimmage_play") == True)
+                & (pl.col("end.pos_team.id") != pl.col("pos_team")),
+            )
+            .then(True)
+            .otherwise(False),
+        ).with_columns(
+            turnover_team=pl.when(pl.col("is_turnover") == False)
+            .then(pl.lit(None, dtype=pl.Int64))
+            .when(pl.col("int") == True)
+            .then(pl.col("pos_team"))
+            .otherwise(pl.col("fumbling_team")),
+            is_st_turnover=pl.when((pl.col("is_turnover") == True) & (pl.col("sp") == True))
+            .then(True)
+            .otherwise(False),
+        )
+
         return play_df
 
     def __after_cols(self, play_df):

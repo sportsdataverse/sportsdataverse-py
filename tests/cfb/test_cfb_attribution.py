@@ -48,6 +48,7 @@ def test_strip_overturned_none_input():
 
 
 import polars as pl
+
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
 
@@ -127,3 +128,72 @@ def test_muff_detected():
     ]
     out = _attr(rows)
     assert out["fumble_or_muff"].to_list() == [True]
+
+
+def _base(**over):
+    row = {
+        "pos_team": 252,
+        "def_pos_team": 9,
+        "kickoff_play": False,
+        "punt": False,
+        "fg_attempt": False,
+        "sp": False,
+        "scrimmage_play": True,
+        "fumble_vec": True,
+        "int": False,
+        "homeTeamAbbrev": "BYU",
+        "awayTeamAbbrev": "ASU",
+        "homeTeamId": 252,
+        "awayTeamId": 9,
+        "penalty_detail": None,
+        "yds_penalty": None,
+        "end.pos_team.id": 252,
+        "text": "",
+    }
+    row.update(over)
+    return row
+
+
+def test_scrimmage_fumble_lost_to_opponent():
+    # BYU (pos) fumbles, ASU recovers -> BYU turnover
+    out = _attr([_base(text="#11 QB sacked fumble by #11 QB recovered by ASU #40 X")])
+    r = out.to_dicts()[0]
+    assert r["is_turnover"] is True
+    assert r["turnover_team"] == 252  # BYU lost it
+    assert r["recovery_team"] == 9
+
+
+def test_own_recovery_not_turnover():
+    out = _attr([_base(text="#11 QB fumble by #11 QB recovered by BYU #55 Y")])
+    r = out.to_dicts()[0]
+    assert r["is_turnover"] is False
+    assert r["recovery_team"] == 252
+
+
+def test_punt_return_fumble_lost_st():
+    # punt: pos=BYU punting, def=ASU receiving; ASU returner fumbles, BYU recovers
+    out = _attr(
+        [
+            _base(
+                pos_team=252,
+                def_pos_team=9,
+                punt=True,
+                sp=True,
+                scrimmage_play=False,
+                text="punt 40 #2 R return 5 fumbled by #2 R recovered by BYU #98 P",
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["is_turnover"] is True
+    assert r["is_st_turnover"] is True
+    assert r["turnover_team"] == 9  # ASU (returner) lost it
+    assert r["recovery_team"] == 252
+
+
+def test_overturned_fumble_not_turnover():
+    out = _attr(
+        [_base(text="#11 QB sacked. CALL OVERTURNED. (Original Play: fumble by #11 QB recovered by ASU #40 X)")],
+    )
+    r = out.to_dicts()[0]
+    assert r["is_turnover"] is False
