@@ -4936,62 +4936,61 @@ class CFBPlayProcess(object):
         )
         def_box_json = json.loads(def_box.write_json())
 
-        turnover_box = (
+        # turnovers lost per team (scrimmage AND special teams), keyed by identity
+        to_lost = (
+            play_df.filter(pl.col("is_turnover") == True)
+            .group_by(["turnover_team"])
+            .agg(
+                turnovers=pl.len(),
+                st_turnovers_lost=pl.col("is_st_turnover").sum(),
+                Int=(pl.col("int") == True).sum(),
+                fumbles_lost=(pl.col("fumble_or_muff") == True).sum(),
+            )
+            .rename({"turnover_team": "pos_team"})
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+        to_gained = (
+            play_df.filter(pl.col("is_turnover") == True)
+            .group_by(["recovery_team"])
+            .agg(st_turnovers_gained=pl.col("is_st_turnover").sum(), takeaways=pl.len())
+            .rename({"recovery_team": "pos_team"})
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+        to_aux = (
             play_df.filter(pl.col("scrimmage_play") == True)
             .group_by(["pos_team"])
             .agg(
                 pass_breakups=pl.col("pass_breakup").sum(),
-                fumbles_lost=pl.col("fumble_lost").sum(),
-                fumbles_recovered=pl.col("fumble_recovered").sum(),
-                total_fumbles=pl.col("fumble_vec").sum(),
-                Int=pl.col("int").sum(),
+                total_fumbles=pl.col("fumble_or_muff").sum(),
+                fumbles_recovered=((pl.col("fumble_or_muff") == True) & (pl.col("is_turnover") == False)).sum(),
             )
-            .with_columns(pl.col(pl.Float32).round(2))
-            .with_columns(
-                pos_team=pl.col("pos_team").cast(pl.Int32),
-            )
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
 
+        team_ids = [int(self.homeTeamId), int(self.awayTeamId)]
+        turnover_box = (
+            pl.DataFrame({"pos_team": team_ids}, schema={"pos_team": pl.Int32})
+            .join(to_lost, on="pos_team", how="left")
+            .join(to_gained, on="pos_team", how="left")
+            .join(to_aux, on="pos_team", how="left")
+            .fill_null(0)
+            .with_columns(team_id=pl.col("pos_team"))
+        )
         turnover_box_json = json.loads(turnover_box.write_json())
-        if len(turnover_box_json) < 2:
-            for i in range(len(turnover_box_json), 2):
-                turnover_box_json.append({})
 
-        turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
-        turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
-
-        away_passes_def = turnover_box_json[0].get("pass_breakups", 0)
-        away_passes_int = turnover_box_json[0].get("Int", 0)
-        away_fumbles = turnover_box_json[0].get("total_fumbles", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles) + (0.22 * (away_passes_def + away_passes_int))
-
-        home_passes_def = turnover_box_json[1].get("pass_breakups", 0)
-        home_passes_int = turnover_box_json[1].get("Int", 0)
-        home_fumbles = turnover_box_json[1].get("total_fumbles", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles) + (0.22 * (home_passes_def + home_passes_int))
-
-        turnover_box_json[0]["expected_turnover_margin"] = (
-            turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
-        )
-        turnover_box_json[1]["expected_turnover_margin"] = (
-            turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]
-        )
-
-        away_to = turnover_box_json[0].get("fumbles_lost", 0) + turnover_box_json[0]["Int"]
-        home_to = turnover_box_json[1].get("fumbles_lost", 0) + turnover_box_json[1]["Int"]
-
-        turnover_box_json[0]["turnovers"] = away_to
-        turnover_box_json[1]["turnovers"] = home_to
-
-        turnover_box_json[0]["turnover_margin"] = home_to - away_to
-        turnover_box_json[1]["turnover_margin"] = away_to - home_to
-
-        turnover_box_json[0]["turnover_luck"] = 5.0 * (
-            turnover_box_json[0]["turnover_margin"] - turnover_box_json[0]["expected_turnover_margin"]
-        )
-        turnover_box_json[1]["turnover_luck"] = 5.0 * (
-            turnover_box_json[1]["turnover_margin"] - turnover_box_json[1]["expected_turnover_margin"]
-        )
+        # identity-keyed margins / luck (never list index)
+        by_id = {int(r["pos_team"]): r for r in turnover_box_json}
+        for tid, r in by_id.items():
+            r["Int"] = int(r.get("Int", 0))
+            r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + (
+                0.22 * (r.get("pass_breakups", 0) + r.get("Int", 0))
+            )
+        for tid, r in by_id.items():
+            opp = by_id[[x for x in team_ids if x != tid][0]]
+            r["expected_turnover_margin"] = opp["expected_turnovers"] - r["expected_turnovers"]
+            r["turnover_margin"] = opp["turnovers"] - r["turnovers"]
+            r["turnover_luck"] = 5.0 * (r["turnover_margin"] - r["expected_turnover_margin"])
+        turnover_box_json = [by_id[t] for t in team_ids]
 
         drives_data = (
             play_df.filter(pl.col("scrimmage_play") == True)

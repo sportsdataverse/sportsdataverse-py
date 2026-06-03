@@ -72,3 +72,37 @@ def test_attribution_cols_present(monkeypatch):
         "return_team",
     ]:
         assert col in df.columns, f"missing {col}"
+
+
+def test_turnovers_punt_muff_fsu(monkeypatch):
+    box = _box(monkeypatch, 401754598)
+    fsu = _team(box["turnover"], 52)
+    ncst = _team(box["turnover"], 152)
+    assert fsu["turnovers"] == 3  # 1 INT + muff + punt-return fumble (both ST)
+    assert ncst["turnovers"] == 0  # the only NCSU fumble was overturned on review
+    assert fsu["st_turnovers_lost"] == 2
+
+
+def test_turnovers_kickoff_fumble_asu(monkeypatch):
+    box = _box(monkeypatch, 401309854)
+    assert _team(box["turnover"], 9)["turnovers"] == 3  # ASU: KO fumble + 2 INT
+    assert _team(box["turnover"], 252)["turnovers"] == 2  # BYU: 2 INT
+
+
+def test_turnovers_kickoff_fumble_baylor(monkeypatch):
+    box = _box(monkeypatch, 401112081)
+    assert _team(box["turnover"], 239)["turnovers"] == 2  # Baylor: KO fumble + 1 INT
+    assert _team(box["turnover"], 2628)["turnovers"] == 3  # TCU: 3 INT
+
+
+def test_punt_own_recovery_not_a_turnover(monkeypatch):
+    box = _box(monkeypatch, 401032062)
+    assert _team(box["turnover"], 2711)["turnovers"] == 1  # WMU: INT only (no phantom from BYU own recovery)
+    assert _team(box["turnover"], 252)["turnovers"] == 1  # BYU: 1 scrimmage fumble
+
+
+def test_turnover_margin_antisymmetric_offline(monkeypatch):
+    box = _box(monkeypatch, 401754598)
+    margins = [r["turnover_margin"] for r in box["turnover"]]
+    assert margins[0] == -margins[1]
+    assert all("team_id" in r for r in box["turnover"])
