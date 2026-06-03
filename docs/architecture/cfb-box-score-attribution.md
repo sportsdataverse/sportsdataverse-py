@@ -1,0 +1,236 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [CFB Advanced Box Score — Attribution Architecture](#cfb-advanced-box-score--attribution-architecture)
+  - [1. Overview](#1-overview)
+  - [2. Data flow](#2-data-flow)
+  - [3. The attribution layer (`__add_attribution_cols`)](#3-the-attribution-layer-__add_attribution_cols)
+    - [3.1 Special-teams team resolution (verified)](#31-special-teams-team-resolution-verified)
+    - [3.2 Role → credited team](#32-role-%E2%86%92-credited-team)
+  - [4. Turnover detection — per-side possession chain](#4-turnover-detection--per-side-possession-chain)
+  - [5. ESPN-sourced totals](#5-espn-sourced-totals)
+  - [6. Player-name identity (`__join_participants`)](#6-player-name-identity-__join_participants)
+  - [7. Output schema notes (additive)](#7-output-schema-notes-additive)
+  - [8. Known limitations](#8-known-limitations)
+  - [9. Testing & reconciliation](#9-testing--reconciliation)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# CFB Advanced Box Score — Attribution Architecture
+
+Developer reference for how `CFBPlayProcess.create_box_score()` attributes plays to teams and
+players, how turnovers are detected, and how the output reconciles to ESPN's official box.
+
+- **Module:** `sportsdataverse/cfb/cfb_pbp.py`
+- **Entry points:** `CFBPlayProcess.run_processing_pipeline()` → `create_box_score()`
+- **Design history:** `docs/superpowers/specs/2026-06-03-cfb-boxscore-attribution-design.md`,
+  `docs/superpowers/plans/2026-06-03-cfb-boxscore-attribution.md`
+- **Tests:** `tests/cfb/test_cfb_attribution.py`,
+  `tests/cfb/test_box_score_attribution_offline.py`,
+  `tests/cfb/test_box_score_espn_reconcile.py`
+
+## 1. Overview
+
+`create_box_score()` turns a fully-processed play-by-play frame into an advanced box score:
+per-team and per-player aggregates including EPA, success rates, situational splits, havoc,
+turnovers, penalties, and drive summaries. It returns a dict of sections keyed by `pass`,
+`rush`, `receiver`, `team`, `situational`, `defensive`, `defensive_players`, `specialists`,
+`turnover`, `drives`, plus the ESPN-sourced `espn_team` and `espn_players`.
+
+The central problem the attribution layer solves: **`pos_team` and `def_pos_team` swap roles
+between play types**, so a stat's owning team depends on its *role* on the play, not on a fixed
+column. On a scrimmage play `pos_team` is the offense; on a kickoff `pos_team` is the
+*receiving* team; on a punt `pos_team` is the *punting* team. Aggregating blindly by `pos_team`
+mis-attributes special-teams stats and silently drops special-teams turnovers.
+
+Two principles drive the design:
+
+- **Derive, then reconcile.** The play-by-play derivation is the only source for the advanced
+  metrics ESPN doesn't publish (EPA, success rate, havoc, per-play team credit). Countable
+  totals (turnovers, fumbles, INTs, yards, penalties) are **sourced from ESPN's official box**
+  where available, with the pbp derivation kept as a validated cross-check and offline fallback.
+- **Attribute by resolved team, not by `pos_team`.** A pure per-play step resolves the credited
+  team for every event into explicit columns; aggregations group by those.
+
+## 2. Data flow
+
+```mermaid
+flowchart TD
+    A["espn_cfb_pbp() — raw ESPN summary + drives"] --> B["__helper_cfb_pbp_features<br/>(flatten drives, dedup, game_play_number)"]
+    B --> C["feature pipeline<br/>downs · play-type · rush/pass · team scores ·<br/>new play types · penalties · categories · yardage · players"]
+    C --> D["__add_attribution_cols<br/>(pure: resolve credited team per play)"]
+    D --> E["__join_participants<br/>(ESPN participants → clean player names;<br/>gated by join_participants, graceful fallback)"]
+    E --> F["__after_cols · EPA · WPA · drives · QBR"]
+    F --> G["create_box_score(play_df)"]
+    H["self.json['boxscore']<br/>(ESPN official team + player box)"] --> G
+    G --> I["advBoxScore dict<br/>pass/rush/receiver/team/situational/defensive/<br/>defensive_players/specialists/turnover/drives/<br/>espn_team/espn_players"]
+
+    style D fill:#e6f2ff,stroke:#4299e1
+    style H fill:#fff4e6,stroke:#dd9b3c
+    style G fill:#e9f7ef,stroke:#48bb78
+```
+
+`__add_attribution_cols` is pure/deterministic (no I/O); it reads existing flags and the play
+text and writes resolved-team columns. `__join_participants` is the only network step inside the
+pipeline and is fully guarded (see §6).
+
+## 3. The attribution layer (`__add_attribution_cols`)
+
+### 3.1 Special-teams team resolution (verified)
+
+| Play type | `kicking_team` | `return_team` |
+|---|---|---|
+| kickoff (`kickoff_play`) | `def_pos_team` | `pos_team` |
+| punt (`punt`) | `pos_team` | `def_pos_team` |
+| field goal (`fg_attempt`) | `pos_team` | `def_pos_team` |
+| scrimmage | — | — |
+
+Because ESPN sometimes reclassifies a punt/kickoff return fumble to a `Fumble Recovery (...)`
+type and drops the `punt`/`kickoff_play`/`sp` flags, the layer also derives `_is_punt_return` /
+`_is_kick_return` from the play text (flag **or** text), so reclassified return fumbles still
+resolve to the returning side.
+
+### 3.2 Role → credited team
+
+| Role / event | Credited team |
+|---|---|
+| passer, rusher, receiver, target, completion, pass/rush TD | `pos_team` |
+| sack, pass-breakup, interception (made), forced fumble | `def_pos_team` |
+| interception **thrown** | `pos_team` |
+| kicker (FG), punter | `kicking_team` |
+| kick / punt returner | `return_team` |
+| fumble recovery | parsed recovering team (`recovery_team`), else gaining/own team |
+| penalty | `penalized_team` (defensive fouls → `def_pos_team`, else `pos_team`) |
+
+Resolved columns written: `kicking_team`, `return_team`, `fumbling_team`, `recovery_team`,
+`recovery_team_2`, `penalized_team`, `penalty_yards_signed`, the per-side turnover flags
+(§4), and the per-event team columns consumed by the player boxes (`sack_team`,
+`fumble_recovery_team`, `punt_return_team`, …). All team-id columns are cast to `Int32` for
+join compatibility.
+
+## 4. Turnover detection — per-side possession chain
+
+A turnover is **per side**: a single play can be a turnover for *both* teams (an interception
+returned and fumbled back; a sack-strip the defense recovers and then fumbles back). The model
+emits two booleans per play — `is_pos_team_turnover` and `is_def_pos_team_turnover` — by walking
+the recovery chain `fumbling_team → recovery_team → recovery_team_2`, charging a fumble-lost each
+time possession changes. The parsed `recovered by {ABBR}` text is authoritative; possession
+columns are a last-resort fallback for scrimmage offense fumbles only.
+
+```mermaid
+flowchart TD
+    P["play"] --> INT{"int == True?"}
+    INT -->|yes| POS1["is_pos_team_turnover = True<br/>(offense threw the INT)"]
+    INT -->|no| FUM{"fumble_or_muff?<br/>(text has 'fumble' or 'muff')"}
+    POS1 --> CHAIN
+    FUM -->|no| NONE["no turnover"]
+    FUM -->|yes| CHAIN["resolve fumbling_team H0<br/>INT-return→def · kickoff→pos · punt→def ·<br/>other ST→return_team · scrimmage→pos"]
+    CHAIN --> R1{"recovery_team ≠ H0?"}
+    R1 -->|yes| L1["loser_1 = H0 (fumble lost)"]
+    R1 -->|"recovery null + scrimmage offense<br/>+ end.pos_team ≠ pos_team"| L1
+    R1 -->|no| L2
+    L1 --> L2{"recovery_team_2 ≠ recovery_team?"}
+    L2 -->|yes| L2Y["loser_2 = recovery_team (2nd fumble lost)"]
+    L2 -->|no| FLAGS
+    L2Y --> FLAGS["pos_fumble_lost = (loser ∈ {pos_team})<br/>def_fumble_lost = (loser ∈ {def_pos_team})"]
+    FLAGS --> OUT["is_pos_team_turnover = int OR pos_fumble_lost<br/>is_def_pos_team_turnover = def_fumble_lost<br/>is_st_turnover = fumble lost on a kick/punt"]
+
+    style POS1 fill:#e6f2ff,stroke:#4299e1
+    style OUT fill:#e9f7ef,stroke:#48bb78
+    style NONE fill:#f7fafc,stroke:#a0aec0
+```
+
+Worked examples (all verified against ESPN):
+
+- **Muffed punt** (`"… muffed by #24 K.Kirkland … recovered by NCSU …"`): `fumble_or_muff` via
+  "muff"; punt → `fumbling_team = def_pos_team` (receiving FSU); recovery = NCSU ⇒ FSU turnover,
+  `is_st_turnover`.
+- **INT returned & fumbled back** (ASU/BYU): `int_turnover` charges the passing team (BYU); the
+  return fumble charges the interceptor's team (ASU) ⇒ both teams +1.
+- **Overturned strip-sack**: the `(Original Play: …)` clause is stripped before parsing, so the
+  reversed fumble is not counted.
+
+## 5. ESPN-sourced totals
+
+ESPN's official box (`summary['boxscore']`) is the authoritative source for countable totals.
+Two helpers parse it: `_parse_espn_team_box` and `_parse_espn_player_box`.
+
+- **`espn_team`** section: ESPN team statistics verbatim (turnovers, fumblesLost, interceptions,
+  totalYards, netPassingYards, rushingYards, `penalties`/`penalty_yards` split from
+  `totalPenaltiesYards`, firstDowns, possessionTime, …).
+- **`espn_players`** section: one row per (team, category, athlete) with clean display names and
+  official stat lines (passing/rushing/receiving/defensive/fumbles/interceptions/returns/kicking/
+  punting).
+- **`turnover`** section: `turnovers` / `Int` / `fumbles_lost` are taken from `espn_team` when
+  present (`espn_sourced = True`); the play-by-play derivation is preserved under `turnovers_pbp`
+  / `Int_pbp` / `fumbles_lost_pbp` and is validated against ESPN by the reconciliation test.
+  Margins and luck are keyed by team identity (never list order).
+
+```mermaid
+flowchart LR
+    PBP["pbp derivation<br/>(per-side turnover model)"] --> T["turnover row"]
+    ESPN["espn_team (official)"] -->|"turnovers/Int/fumbles_lost<br/>(espn_sourced)"| T
+    PBP -->|"turnovers_pbp/Int_pbp/fumbles_lost_pbp<br/>(fallback + cross-check)"| T
+    ESPN --> ET["espn_team section"]
+    ESPN --> EP["espn_players section"]
+
+    style ESPN fill:#fff4e6,stroke:#dd9b3c
+    style T fill:#e9f7ef,stroke:#48bb78
+```
+
+## 6. Player-name identity (`__join_participants`)
+
+`run_processing_pipeline()` joins ESPN's per-play participants
+(`espn_cfb_play_participants(game_id)`) onto the processed frame (`id` ↔ `play_id`) and coalesces
+clean display names over the regex-extracted names (which carried team prefixes, e.g.
+`"BYU Dayan Ghanwoloku"` → `"Dayan Ghanwoloku"`). Properties:
+
+- **Total fault isolation:** the body is wrapped in `try/except Exception → return original frame`
+  — it can never raise into the pipeline.
+- **Gated:** skipped when `self.join_participants is False` (set by offline reprocessing and the
+  offline test suite, so neither touches the network).
+- **Non-destructive:** touches only `*_player_name` columns (never team attribution); the shared
+  `returner` role is cleanup-only (it does not introduce a name where the regex was silent).
+
+## 7. Output schema notes (additive)
+
+All pre-existing field names are preserved; corrections change values in place, and new fields
+are additive. Notable:
+
+- `turnover[]`: existing fields kept; added `team_id`, `st_turnovers_lost`,
+  `st_turnovers_gained`, `takeaways`, `fumble_recoveries_gained`, `*_pbp`, `espn_sourced`. The
+  list is ordered `[home, away]`; **consumers should key by `team_id`**, not list index (the
+  previous order came from an unordered group-by).
+- `team[]`: added correctly-attributed `penalty_yards` beside the legacy `total_pen_yards`;
+  first-down breakdown via `passing_first_downs_created` / `rushing_first_downs_created` /
+  `penalty_first_downs_created` / `first_downs_created` (+ `*_rate`).
+- New sections `espn_team`, `espn_players`.
+
+## 8. Known limitations
+
+- **Offensive pass interference** is mis-charged to the defense: `__setup_penalty_data` emits a
+  generic `"Pass Interference"` detail (the generic branch precedes the offensive/defensive
+  branches), which `_DEFENSIVE_PENALTIES` maps to the defense. Future work: parse the
+  `PENALTY {TEAM}` token from the text.
+- **First downs** are pbp-derived and ~1 low vs ESPN per team, because `first_down_created`
+  requires `end.down == 1` and so misses a touchdown play that also crossed the line to gain.
+  ESPN publishes only the **total** `firstDowns` (no by-type split) — so the passing/rushing/
+  penalty breakdown is approximate and the authoritative total lives in `espn_team.firstDowns`.
+- **Three-or-more fumbles on one play** are not fully modeled (the recovery chain is 2-deep);
+  realistic two-direction sequences are covered.
+- `_espn_num` will coerce the (never-observed) strings `"inf"`/`"nan"` to non-finite floats.
+
+## 9. Testing & reconciliation
+
+- **Unit** (`test_cfb_attribution.py`): the pure helpers and `__add_attribution_cols` on
+  synthetic plays — every play type × event, including the nested double-direction fumble.
+- **Golden offline** (`test_box_score_attribution_offline.py`): the box on 5 captured fixtures
+  with `download` mocked and `join_participants` disabled (no network).
+- **ESPN reconciliation** (`test_box_score_espn_reconcile.py`): the pbp derivation
+  (`*_pbp`) must equal ESPN's official box for all 5 fixtures; turnover margin antisymmetry and
+  `turnovers == Int + fumbles_lost`; `espn_team`/`espn_players` presence and self-consistency
+  (`totalYards == netPassing + rushing`).
+
+Fixtures: `tests/cfb/fixtures/summary_{401754598,401309854,401112081,401135269,401032062}.json`,
+captured via `tools/capture_cfb_fixtures.py`.
