@@ -88,6 +88,12 @@ def _strip_overturned_text(text):
 
 _RECOVERY_ABBREV_RE = re.compile(r"recovered by\s+([A-Z&]{2,})\b")
 
+# Penalty-detail labels that indicate a DEFENSIVE foul (charged to def_pos_team).
+# NOTE: "Pass Interference" is included because the upstream __setup_penalty_data
+# emits the generic "Pass Interference" label for BOTH offensive and defensive PI
+# (the generic branch fires before the offensive/defensive-specific branches), so
+# bare "Pass Interference" cannot be assumed offensive. A later task refines penalty
+# attribution by parsing the "PENALTY {TEAM_ABBR}" token from the play text.
 _DEFENSIVE_PENALTIES = frozenset(
     {
         "Defensive Holding",
@@ -3059,6 +3065,9 @@ class CFBPlayProcess(object):
         # fumbling team:
         #  - scrimmage: the offense (pos_team)
         #  - ST: the return team (the muffing/returning side)
+        # NOTE: for sp plays that are neither kickoff/punt/fg_attempt (e.g. blocked-FG
+        # returns), return_team is null so fumbling_team is null; such plays rely on the
+        # possession-change fallback in the is_turnover logic.
         play_df = play_df.with_columns(
             fumbling_team=pl.when(pl.col("fumble_or_muff") == False)
             .then(pl.lit(None, dtype=pl.Int64))
@@ -3110,15 +3119,40 @@ class CFBPlayProcess(object):
             kick_return_team=pl.col("return_team"),
             fg_team=pl.col("kicking_team"),
             punt_team=pl.col("kicking_team"),
-            penalized_team=pl.when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
+            penalized_team=pl.when(pl.col("penalty_detail").is_null())
+            .then(pl.lit(None, dtype=pl.Int32))
+            .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
             .then(pl.col("def_pos_team"))
             .otherwise(pl.col("pos_team")),
             penalty_yards_signed=pl.col("yds_penalty")
             .cast(pl.Utf8)
-            .str.extract(r"(\d+)")
+            .str.extract(r"(-?\d+)")
             .cast(pl.Int32, strict=False)
             .fill_null(0),
         )
+
+        # FIX 1: drop temp columns that must not leak into the output frame
+        play_df = play_df.drop(["_clean_text", "_recovery_abbrev"])
+
+        # FIX 3: cast all team-id-derived columns to Int32 for join compatibility
+        _team_id_cols = [
+            "kicking_team",
+            "return_team",
+            "recovery_team",
+            "fumbling_team",
+            "turnover_team",
+            "penalized_team",
+            "sack_team",
+            "interception_team",
+            "pass_breakup_team",
+            "forced_fumble_team",
+            "fumble_recovery_team",
+            "punt_return_team",
+            "kick_return_team",
+            "fg_team",
+            "punt_team",
+        ]
+        play_df = play_df.with_columns([pl.col(c).cast(pl.Int32) for c in _team_id_cols])
 
         return play_df
 

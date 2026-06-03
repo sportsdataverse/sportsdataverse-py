@@ -248,3 +248,19 @@ def test_penalized_team_offensive():
     )
     r = out.to_dicts()[0]
     assert r["penalized_team"] == 252  # offensive foul -> pos_team
+
+
+def test_penalized_team_null_on_non_penalty_play():
+    out = _attr(
+        [
+            _base(
+                scrimmage_play=True,
+                fumble_vec=False,
+                penalty_detail=None,
+                yds_penalty=None,
+                text="#22 J.Doe run for 4 yards",
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["penalized_team"] is None
