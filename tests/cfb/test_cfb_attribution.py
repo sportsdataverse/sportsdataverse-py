@@ -29,3 +29,19 @@ def test_parse_recovery_abbrev_muff():
 
 def test_parse_recovery_abbrev_none_when_absent():
     assert _parse_recovery_abbrev("#22 J.Doe run for 4 yards") is None
+
+
+def test_parse_recovery_abbrev_empty_string():
+    assert _parse_recovery_abbrev("") is None
+
+
+def test_parse_recovery_abbrev_none_input():
+    assert _parse_recovery_abbrev(None) is None
+
+
+def test_strip_overturned_empty_string():
+    assert _strip_overturned_text("") == ""
+
+
+def test_strip_overturned_none_input():
+    assert _strip_overturned_text(None) is None
