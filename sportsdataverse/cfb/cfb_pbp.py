@@ -1805,6 +1805,29 @@ class CFBPlayProcess(object):
                 .alias("type.text"),
             )
             .with_columns(
+                # -- Fix blocked field goals ESPN mislabels as "Extra Point Missed" ----
+                # A blocked FG returned by the defense is sometimes typed "Extra Point
+                # Missed" by ESPN, which routes it through PAT-scoring EPA logic. Relabel to
+                # the correct blocked-FG type (TD variant when returned for a score). Gate on
+                # text showing a blocked FIELD GOAL -- "blocked" plus an FG/field-goal token --
+                # so a genuine blocked/missed PAT (no FG token) is left untouched.
+                pl.when(
+                    (pl.col("type.text") == "Extra Point Missed")
+                    .and_(pl.col("text").str.contains("(?i)blocked"))
+                    .and_(pl.col("text").str.contains(r"(?i)\bfg\b|field goal"))
+                    .and_((pl.col("td_play") == True).or_(pl.col("text").str.contains("(?i)for a TD"))),
+                )
+                .then(pl.lit("Blocked Field Goal Touchdown"))
+                .when(
+                    (pl.col("type.text") == "Extra Point Missed")
+                    .and_(pl.col("text").str.contains("(?i)blocked"))
+                    .and_(pl.col("text").str.contains(r"(?i)\bfg\b|field goal")),
+                )
+                .then(pl.lit("Blocked Field Goal"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
                 # -- Fix duplicated TD play_type labels----
                 pl.col("type.text").str.replace(r"(?i)Touchdown Touchdown", "Touchdown").alias("type.text"),
             )
@@ -3363,6 +3386,16 @@ class CFBPlayProcess(object):
                 is_blocked_punt_turnover=pl.when(pl.col("type.text") == "Blocked Punt Touchdown")
                 .then(True)
                 .when((pl.col("type.text") == "Blocked Punt").and_(pl.col("change_of_poss") == True))
+                .then(True)
+                .otherwise(False),
+                # Blocked-FG possession loss -- same rationale as is_blocked_punt_turnover:
+                # the official box counts only giveaways, so this stays OUT of is_turnover /
+                # is_st_turnover. True on a Blocked Field Goal Touchdown (defense scored) or a
+                # non-TD Blocked Field Goal the defense recovered (change_of_poss). Keys on the
+                # already-corrected type.text from __add_new_play_types.
+                is_blocked_fg_turnover=pl.when(pl.col("type.text") == "Blocked Field Goal Touchdown")
+                .then(True)
+                .when((pl.col("type.text") == "Blocked Field Goal").and_(pl.col("change_of_poss") == True))
                 .then(True)
                 .otherwise(False),
             )

@@ -9,7 +9,7 @@
     - [3.1 Special-teams team resolution (verified)](#31-special-teams-team-resolution-verified)
     - [3.2 Role → credited team](#32-role-%E2%86%92-credited-team)
   - [4. Turnover detection — per-side possession chain](#4-turnover-detection--per-side-possession-chain)
-    - [4.1 Blocked-punt turnovers (`is_blocked_punt_turnover`)](#41-blocked-punt-turnovers-is_blocked_punt_turnover)
+    - [4.1 Blocked-kick turnovers (`is_blocked_punt_turnover` / `is_blocked_fg_turnover`)](#41-blocked-kick-turnovers-is_blocked_punt_turnover--is_blocked_fg_turnover)
     - [4.2 ESPN native flags as cross-check (`isTurnover` / `isPenalty`)](#42-espn-native-flags-as-cross-check-isturnover--ispenalty)
   - [5. ESPN-sourced totals](#5-espn-sourced-totals)
   - [6. Player-name identity (`__join_participants`)](#6-player-name-identity-__join_participants)
@@ -155,19 +155,27 @@ Worked examples (all verified against ESPN):
 - **Overturned strip-sack**: the `(Original Play: …)` clause is stripped before parsing, so the
   reversed fumble is not counted.
 
-### 4.1 Blocked-punt turnovers (`is_blocked_punt_turnover`)
+### 4.1 Blocked-kick turnovers (`is_blocked_punt_turnover` / `is_blocked_fg_turnover`)
 
 `is_turnover` deliberately models only **giveaways** (interceptions + fumbles lost), matching
 ESPN's official-box `turnovers` definition so the `*_pbp` cross-check (§5) stays exact. A blocked
-punt the defense recovers is a possession loss but **not** a giveaway — the official box does not
-count it (verified: on blocked-punt games the punting team's official `turnovers` equals its
+kick the defense recovers is a possession loss but **not** a giveaway — the official box does not
+count it (verified: on blocked-kick games the kicking team's official `turnovers` equals its
 INT+fumbles-lost, excluding the block). Folding it into `is_turnover` would make `turnovers_pbp`
 exceed the box and break reconciliation.
 
-It is therefore surfaced as a **standalone** flag, `is_blocked_punt_turnover`, kept out of
-`is_turnover` / `is_st_turnover`: `True` on a `Blocked Punt Touchdown` (always a turnover) or a
-non-TD `Blocked Punt` where `change_of_poss` is `True` (the defense, not the kicking team,
-recovered). This is the one possession-losing class ESPN's per-play `isTurnover` flag catches that
+Two **standalone** flags surface these, kept out of `is_turnover` / `is_st_turnover`:
+
+- `is_blocked_punt_turnover`: `True` on a `Blocked Punt Touchdown` (always a turnover) or a non-TD
+  `Blocked Punt` where `change_of_poss` is `True` (the defense, not the kicking team, recovered).
+- `is_blocked_fg_turnover`: `True` on a `Blocked Field Goal Touchdown` or a non-TD `Blocked Field
+  Goal` with `change_of_poss`. ESPN sometimes **mislabels** a blocked FG returned by the defense as
+  `Extra Point Missed` (routing it through PAT-scoring EPA logic); `__add_new_play_types` (§7)
+  relabels these to the correct `Blocked Field Goal[ Touchdown]` type — gated on `"blocked"` plus
+  an FG/`field goal` text token so a genuine blocked PAT is left untouched — which also fixes the
+  EPA. The turnover flag then keys off the corrected label.
+
+Together these cover the possession-losing classes ESPN's per-play `isTurnover` flag catches that
 the giveaway-based derivation does not.
 
 ### 4.2 ESPN native flags as cross-check (`isTurnover` / `isPenalty`)
@@ -178,16 +186,16 @@ of truth: `isTurnover` is coarser and silently drops ~16% of plain interceptions
 plays, and has no per-side / special-teams concept; `isPenalty` marks only the *primary*-penalty
 plays, whereas `penalty_flag` (penalty mentioned anywhere) also catches penalties tacked onto real
 plays. They are valuable as **regression tripwires** (see §10): `isTurnover ⇒ is_turnover OR
-is_blocked_punt_turnover`, and `isPenalty ⇒ penalty_flag`. The first invariant would have caught
-the interception-erasure bug.
+is_blocked_punt_turnover OR is_blocked_fg_turnover`, and `isPenalty ⇒ penalty_flag`. The first
+invariant would have caught the interception-erasure bug.
 
-Validated across **150 games / 24,876 plays**: `is_blocked_punt_turnover` captured all 16
-blocked-punt possession losses with **100% ESPN agreement and zero leakage** into
+Validated across **150 games / 24,876 plays**: the blocked-kick flags captured all blocked-punt
+**and** blocked-FG possession losses with **100% ESPN agreement and zero leakage** into
 `is_turnover` / `is_st_turnover`; the penalty tripwire had **0 violations**; overall
-`isTurnover` vs `is_turnover` agreement was **99.6%**. The handful of residual
-`isTurnover=True / derived=False` plays are *not* derivation gaps: 6 are ESPN **false positives**
-(the offense recovered its own fumble, so the stricter derivation is correct) and 1 is a blocked
-punt the kicking team retained. The only genuine uncovered class is blocked-FG returns (§9).
+`isTurnover` vs `is_turnover` agreement was **99.6%**. After the blocked-kick flags, the residual
+`isTurnover=True / derived=False` plays are *not* derivation gaps: they are ESPN **false positives**
+(the offense recovered its own fumble, so the stricter derivation is correct) plus the occasional
+blocked kick the kicking team retained.
 
 ## 5. ESPN-sourced totals
 
@@ -319,8 +327,8 @@ are additive. Notable:
   first-down breakdown via `passing_first_downs_created` / `rushing_first_downs_created` /
   `penalty_first_downs_created` / `first_downs_created` (+ `*_rate`).
 - New sections `espn_team`, `espn_players`.
-- Per-play frame: new `is_blocked_punt_turnover` flag (§4.1). ESPN's native `isTurnover` /
-  `isPenalty` booleans pass through unchanged (§4.2) for use as cross-checks.
+- Per-play frame: new `is_blocked_punt_turnover` / `is_blocked_fg_turnover` flags (§4.1). ESPN's
+  native `isTurnover` / `isPenalty` booleans pass through unchanged (§4.2) for use as cross-checks.
 
 ## 9. Known limitations & empirical accuracy
 
@@ -349,10 +357,6 @@ the accuracy of the pbp cross-check / offline fallback, not of the shipped numbe
   breakdown is best-effort. Only the declined/offsetting-penalty exclusion is a clean fix.
 - **Three-or-more fumbles on one play** are not fully modeled (the recovery chain is 2-deep);
   realistic two-direction sequences are covered.
-- **Blocked-FG returns** are not yet captured as turnovers. ESPN sometimes mislabels a blocked
-  field goal returned by the defense as `Extra Point Missed` (≈3 plays / 150 games, some of them
-  return TDs); these are real possession-changing special-teams plays outside both `is_turnover`
-  and `is_blocked_punt_turnover`. A candidate follow-up analogous to the blocked-punt flag.
 - **Offensive pass interference** is correctly attributed via the `PENALTY {TEAM}` text token
   (`_parse_penalty_abbrev`), overriding the `penalty_detail` defensive-set heuristic.
 
@@ -367,9 +371,10 @@ the accuracy of the pbp cross-check / offline fallback, not of the shipped numbe
   `turnovers == Int + fumbles_lost`; `espn_team`/`espn_players` presence and self-consistency
   (`totalYards == netPassing + rushing`).
 - **ESPN-flag tripwires** (`test_espn_flag_tripwires.py`): on the 5 fixtures, every play ESPN
-  flags `isTurnover=True` must be covered by `is_turnover` or `is_blocked_punt_turnover`, and
-  every `isPenalty=True` play must trip `penalty_flag` — regression guards against future
-  play-type/turnover mislabels (the first would have caught the interception-erasure bug).
+  flags `isTurnover=True` must be covered by `is_turnover`, `is_blocked_punt_turnover`, or
+  `is_blocked_fg_turnover`, and every `isPenalty=True` play must trip `penalty_flag` — regression
+  guards against future play-type/turnover mislabels (the first would have caught the
+  interception-erasure bug).
 
 Fixtures: `tests/cfb/fixtures/summary_{401754598,401309854,401112081,401135269,401032062}.json`,
 captured via `tools/capture_cfb_fixtures.py`.

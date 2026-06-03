@@ -53,7 +53,14 @@ def _play_df(monkeypatch, gid: int) -> pl.DataFrame:
 @pytest.mark.parametrize("gid", GIDS)
 def test_espn_native_flags_present(monkeypatch, gid):
     df = _play_df(monkeypatch, gid)
-    for col in ["isTurnover", "isPenalty", "is_turnover", "is_blocked_punt_turnover", "penalty_flag"]:
+    for col in [
+        "isTurnover",
+        "isPenalty",
+        "is_turnover",
+        "is_blocked_punt_turnover",
+        "is_blocked_fg_turnover",
+        "penalty_flag",
+    ]:
         assert col in df.columns, f"{gid}: missing column {col}"
     # Tripwires are only meaningful if the fixture actually exercises the flags.
     assert df.filter(pl.col("isTurnover") == True).height > 0, f"{gid}: no isTurnover plays to check"
@@ -62,14 +69,18 @@ def test_espn_native_flags_present(monkeypatch, gid):
 
 @pytest.mark.parametrize("gid", GIDS)
 def test_isturnover_implies_derived_turnover(monkeypatch, gid):
-    # Every ESPN-flagged turnover must be a giveaway OR a blocked-punt possession loss.
+    # Every ESPN-flagged turnover must be a giveaway (is_turnover) or a blocked-kick
+    # possession loss (is_blocked_punt_turnover / is_blocked_fg_turnover).
     df = _play_df(monkeypatch, gid)
     viol = df.filter(
-        (pl.col("isTurnover") == True) & (pl.col("is_turnover") != True) & (pl.col("is_blocked_punt_turnover") != True),
+        (pl.col("isTurnover") == True)
+        & (pl.col("is_turnover") != True)
+        & (pl.col("is_blocked_punt_turnover") != True)
+        & (pl.col("is_blocked_fg_turnover") != True),
     )
     assert viol.height == 0, (
         f"{gid}: {viol.height} play(s) ESPN flags isTurnover=True but the derivation does not "
-        f"account for (neither is_turnover nor is_blocked_punt_turnover): "
+        f"account for (none of is_turnover / is_blocked_punt_turnover / is_blocked_fg_turnover): "
         f"{viol.select(['type.text', 'text']).to_dicts()}"
     )
 

@@ -427,6 +427,67 @@ def test_blocked_punt_kicking_team_recovers_not_turnover():
 def test_normal_play_not_blocked_punt_turnover():
     out = _attr([_base(text="#22 J.Doe run for 4 yards", fumble_vec=False)])
     assert out.to_dicts()[0]["is_blocked_punt_turnover"] is False
+    assert out.to_dicts()[0]["is_blocked_fg_turnover"] is False
+
+
+def test_blocked_fg_touchdown_is_blocked_fg_turnover():
+    out = _attr(
+        [
+            _base(
+                **{
+                    "type.text": "Blocked Field Goal Touchdown",
+                    "change_of_poss": False,  # defensive-score plays can flip pos_team; TD still counts
+                    "fg_attempt": True,
+                    "sp": True,
+                    "scrimmage_play": False,
+                    "fumble_vec": False,
+                    "text": "#55 X 12 Yd Return of Blocked Field Goal",
+                },
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["is_blocked_fg_turnover"] is True
+    assert r["is_turnover"] is False  # excluded from giveaway-based turnover (box-reconciling)
+    assert r["is_st_turnover"] is False
+
+
+def test_blocked_fg_defense_recovers_is_blocked_fg_turnover():
+    out = _attr(
+        [
+            _base(
+                **{
+                    "type.text": "Blocked Field Goal",
+                    "change_of_poss": True,  # defense recovered the block
+                    "fg_attempt": True,
+                    "sp": True,
+                    "scrimmage_play": False,
+                    "fumble_vec": False,
+                    "text": "#9 K 41 yd FG BLOCKED, recovered by DEF #55 X",
+                },
+            ),
+        ],
+    )
+    assert out.to_dicts()[0]["is_blocked_fg_turnover"] is True
+
+
+def test_blocked_fg_kicking_team_recovers_not_turnover():
+    out = _attr(
+        [
+            _base(
+                **{
+                    "type.text": "Blocked Field Goal",
+                    "change_of_poss": False,  # kicking team retained
+                    "fg_attempt": True,
+                    "sp": True,
+                    "scrimmage_play": False,
+                    "fumble_vec": False,
+                    "text": "#9 K 41 yd FG BLOCKED, recovered by OFF #5 R",
+                },
+            ),
+        ],
+    )
+    assert out.to_dicts()[0]["is_blocked_fg_turnover"] is False
 
 
 # --- __add_new_play_types: strip-sack interception guard -----------------------
@@ -528,6 +589,60 @@ def test_strip_sack_still_reclassifies_genuine_strip_sack():
         ],
     )
     assert out["type.text"].to_list() == ["Fumble Recovery (Opponent)"]
+
+
+def test_blocked_fg_return_td_relabeled_from_extra_point_missed():
+    # ESPN mislabels a blocked-FG return TD as "Extra Point Missed"; relabel it.
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "Extra Point Missed",
+                    "td_play": True,
+                    "text": "Seth Morgan 32 yd FG BLOCKED blocked by Cam Hardy for a TD, "
+                    "Antonio Hall return for 74 yds for a TD",
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Blocked Field Goal Touchdown"]
+
+
+def test_blocked_fg_no_td_relabeled_from_extra_point_missed():
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "Extra Point Missed",
+                    "td_play": False,
+                    "text": "John Kicker 41 yd FG BLOCKED blocked by #55 X, recovered by DEF at 50",
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Blocked Field Goal"]
+
+
+def test_blocked_pat_not_relabeled_blocked_fg():
+    # Control: a genuine blocked PAT ("blocked" but no FG token) stays "Extra Point Missed".
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "Extra Point Missed",
+                    "td_play": False,
+                    "text": "PAT attempt by #9 K blocked by #55 X",
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Extra Point Missed"]
+
+
+def test_missed_pat_not_relabeled():
+    # Control: an ordinary missed PAT (no "blocked", no FG) stays "Extra Point Missed".
+    out = _npt([_npt_base(**{"type.text": "Extra Point Missed", "text": "#9 K extra point missed wide right"})])
+    assert out["type.text"].to_list() == ["Extra Point Missed"]
 
 
 # --- __refine_play_types_post_attribution: is_turnover-keyed label corrections ----
