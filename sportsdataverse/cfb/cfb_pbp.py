@@ -144,6 +144,8 @@ class CFBPlayProcess(object):
             "scoringPlays",
             "videos",
             "standings",
+            "injuries",
+            "gameNotes",
         ]
         dict_keys_expected = ["boxscore", "format", "gameInfo", "drives", "predictor", "header", "standings"]
         # array_keys_expected = [
