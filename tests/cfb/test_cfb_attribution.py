@@ -197,3 +197,54 @@ def test_overturned_fumble_not_turnover():
     )
     r = out.to_dicts()[0]
     assert r["is_turnover"] is False
+
+
+def test_fumble_recovery_team_is_recoverer():
+    # kickoff own recovery: receiving (pos=ASU=9) recovers own; credited to 9 not def
+    out = _attr(
+        [
+            _base(
+                pos_team=9,
+                def_pos_team=252,
+                kickoff_play=True,
+                sp=True,
+                scrimmage_play=False,
+                text="kickoff #2 R return fumbled by #2 R recovered by ASU #2 R",
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["fumble_recovery_team"] == 9
+
+
+def test_penalized_team_defensive():
+    out = _attr(
+        [
+            _base(
+                scrimmage_play=True,
+                fumble_vec=False,
+                penalty_detail="Defensive Holding",
+                yds_penalty="5",
+                text="PENALTY ASU Defensive Holding 5 yards",
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["penalized_team"] == 9  # defensive foul -> def_pos_team
+    assert r["penalty_yards_signed"] == 5
+
+
+def test_penalized_team_offensive():
+    out = _attr(
+        [
+            _base(
+                scrimmage_play=True,
+                fumble_vec=False,
+                penalty_detail="False Start",
+                yds_penalty="5",
+                text="PENALTY BYU False Start 5 yards",
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["penalized_team"] == 252  # offensive foul -> pos_team

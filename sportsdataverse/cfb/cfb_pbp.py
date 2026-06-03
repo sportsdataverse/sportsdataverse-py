@@ -88,6 +88,23 @@ def _strip_overturned_text(text):
 
 _RECOVERY_ABBREV_RE = re.compile(r"recovered by\s+([A-Z&]{2,})\b")
 
+_DEFENSIVE_PENALTIES = frozenset(
+    {
+        "Defensive Holding",
+        "Defensive Pass Interference",
+        "Defensive Offside",
+        "Roughing the Passer",
+        "Roughing the Kicker",
+        "Roughing the Holder",
+        "Roughing the Snapper",
+        "12 Men on the Field",
+        "Neutral Zone Infraction",
+        "Encroachment",
+        "Targeting",
+        "Pass Interference",
+    },
+)
+
 
 def _parse_recovery_abbrev(text):
     """Return the uppercase team abbreviation that recovered the ball, or None.
@@ -637,15 +654,17 @@ class CFBPlayProcess(object):
                     3
                     - pl.struct("id", "period.number").map_elements(
                         lambda x: (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] <= 2)
-                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
+                            (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] <= 2)
+                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
+                                )
                             )
-                        )
-                        | (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] > 2)
-                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
+                            | (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] > 2)
+                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
+                                )
                             )
                         ),
                         return_dtype=pl.Int64,
@@ -655,15 +674,17 @@ class CFBPlayProcess(object):
                     3
                     - pl.struct("id", "period.number").map_elements(
                         lambda x: (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] <= 2)
-                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
+                            (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] <= 2)
+                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
+                                )
                             )
-                        )
-                        | (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] > 2)
-                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
+                            | (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] > 2)
+                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
+                                )
                             )
                         ),
                         return_dtype=pl.Int64,
@@ -2779,11 +2800,13 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 punt_block_return_player=pl.struct("punt_block_player", "punt_block_return_player").map_elements(
-                    lambda cols: cols["punt_block_return_player"]
-                    .replace(r"(?i)(.+)blocked by", "")
-                    .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
-                    if cols["punt_block_return_player"] is not None
-                    else None,
+                    lambda cols: (
+                        cols["punt_block_return_player"]
+                        .replace(r"(?i)(.+)blocked by", "")
+                        .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
+                        if cols["punt_block_return_player"] is not None
+                        else None
+                    ),
                     return_dtype=pl.Utf8,
                 ),
             )
@@ -3074,6 +3097,27 @@ class CFBPlayProcess(object):
             is_st_turnover=pl.when((pl.col("is_turnover") == True) & (pl.col("sp") == True))
             .then(True)
             .otherwise(False),
+        )
+
+        # event -> credited team (spec 5.2)
+        play_df = play_df.with_columns(
+            sack_team=pl.col("def_pos_team"),
+            interception_team=pl.col("def_pos_team"),
+            pass_breakup_team=pl.col("def_pos_team"),
+            forced_fumble_team=pl.col("def_pos_team"),
+            fumble_recovery_team=pl.col("recovery_team"),
+            punt_return_team=pl.col("return_team"),
+            kick_return_team=pl.col("return_team"),
+            fg_team=pl.col("kicking_team"),
+            punt_team=pl.col("kicking_team"),
+            penalized_team=pl.when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
+            .then(pl.col("def_pos_team"))
+            .otherwise(pl.col("pos_team")),
+            penalty_yards_signed=pl.col("yds_penalty")
+            .cast(pl.Utf8)
+            .str.extract(r"(\d+)")
+            .cast(pl.Int32, strict=False)
+            .fill_null(0),
         )
 
         return play_df
