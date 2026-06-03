@@ -81,7 +81,12 @@ reprocess pipeline:
   - After: passing `odds_override={"gameSpread": ..., "overUnder": ..., "homeFavorite": ...,
     "gameSpreadAvailable": ...}` short-circuits resolution to use exactly those values, sets
     `odds_source="injected"`, and never touches the network or the defaults. With no
-    override supplied (the default), behavior is unchanged.
+    override supplied (the default), behavior is unchanged. The override is validated and
+    type-coerced at the constructor (a missing key or non-dict raises `ValueError` instead
+    of a later `KeyError`).
+- **`odds_source` is also written into the returned payload** (not just the instance
+  attribute), so dict consumers of `run_processing_pipeline()` / `run_cleaning_pipeline()`
+  retain odds provenance.
 
 ## 0.0.51 Release: May 30, 2026
 
