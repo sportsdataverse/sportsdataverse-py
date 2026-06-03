@@ -4479,6 +4479,23 @@ class CFBPlayProcess(object):
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
 
+        team_penalized_box = (
+            play_df.filter(
+                (pl.col("penalty_flag") == True)
+                & (pl.col("penalty_declined") == False)
+                & (pl.col("penalty_offset") == False)
+                & (pl.col("penalized_team").is_not_null()),
+            )
+            .group_by(["penalized_team"])
+            .agg(
+                penalties=pl.len(),
+                penalty_yards=pl.col("penalty_yards_signed").sum(),
+            )
+            .rename({"penalized_team": "pos_team"})
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+
         team_scrimmage_box = (
             play_df.filter(pl.col("scrimmage_play") == True)
             .group_by(["pos_team"])
@@ -4636,6 +4653,7 @@ class CFBPlayProcess(object):
         team_data_frames = [
             team_rush_opp_box,
             team_pen_box,
+            team_penalized_box,
             team_sp_box,
             team_scrimmage_box_rush,
             team_scrimmage_box_pass,

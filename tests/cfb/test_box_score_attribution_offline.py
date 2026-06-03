@@ -124,3 +124,17 @@ def test_punt_returns_not_credited_to_punting_team(monkeypatch):
     box = _box(monkeypatch, 401754598)
     bad = [s for s in box["specialists"] if s.get("punt_returns", 0) > 0 and s.get("pos_team") == 152]
     assert not bad, f"punt returns mis-credited to the punting team: {bad}"
+
+
+def test_penalty_yards_charged_to_penalized_team(monkeypatch):
+    # In 401754598 the defensive-pass-interference flags occur on NC State (152) pass
+    # plays but are FSU (52) fouls -> FSU must carry penalty_yards > 0.
+    box = _box(monkeypatch, 401754598)
+    fsu = _team(box["team"], 52)
+    assert fsu.get("penalty_yards", 0) > 0
+
+
+def test_penalty_box_has_both_teams(monkeypatch):
+    box = _box(monkeypatch, 401754598)
+    have_pen = {r["pos_team"]: r.get("penalty_yards") for r in box["team"]}
+    assert 52 in have_pen and 152 in have_pen
