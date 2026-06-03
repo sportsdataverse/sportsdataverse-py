@@ -76,7 +76,7 @@ class CFBPlayProcess(object):
     path_to_json = "/"
     return_keys = None
 
-    def __init__(self, gameId=0, raw=False, path_to_json="/", return_keys=None, **kwargs):
+    def __init__(self, gameId=0, raw=False, path_to_json="/", return_keys=None, odds_override=None, **kwargs):
         self.gameId = int(gameId)
         # self.logger = logger
         self.ran_pipeline = False
@@ -85,6 +85,7 @@ class CFBPlayProcess(object):
         self.path_to_json = path_to_json
         self.return_keys = return_keys
         self.odds_source = None
+        self.odds_override = odds_override
 
     def espn_cfb_pbp(self, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
@@ -847,6 +848,19 @@ class CFBPlayProcess(object):
 
     def __helper_cfb_pickcenter(self, pbp_txt):
         # Spread definition
+        if self.odds_override is not None:
+            o = self.odds_override
+            self.gameSpread = o["gameSpread"]
+            self.overUnder = o["overUnder"]
+            self.homeFavorite = o["homeFavorite"]
+            self.gameSpreadAvailable = o["gameSpreadAvailable"]
+            self.odds_source = "injected"
+            return {
+                "gameSpread": self.gameSpread,
+                "overUnder": self.overUnder,
+                "homeFavorite": self.homeFavorite,
+                "gameSpreadAvailable": self.gameSpreadAvailable,
+            }
         if len(pbp_txt.get("pickcenter", [])) > 1:
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])

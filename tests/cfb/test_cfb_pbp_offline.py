@@ -35,3 +35,19 @@ def test_odds_source_tag_summary_path():
     proc._CFBPlayProcess__helper_cfb_pickcenter(pbp_txt)
     assert proc.odds_source == "summary_pickcenter"
     assert proc.gameSpreadAvailable is True
+
+
+def test_injected_odds_bypasses_network():
+    proc = CFBPlayProcess(
+        gameId=401628455,
+        odds_override={"gameSpread": -10.5, "overUnder": 60.0, "homeFavorite": True, "gameSpreadAvailable": True},
+    )
+    # Empty pickcenter would normally cascade to the LIVE core-odds endpoint.
+    # With an override present, the helper must short-circuit and never look at pickcenter
+    # or hit the network.
+    proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert proc.gameSpread == -10.5
+    assert proc.overUnder == 60.0
+    assert proc.homeFavorite is True
+    assert proc.gameSpreadAvailable is True
+    assert proc.odds_source == "injected"
