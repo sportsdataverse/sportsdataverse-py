@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [sportsdataverse-py Copilot Instructions](#sportsdataverse-py-copilot-instructions)
+  - [Project Context](#project-context)
+  - [Repository Workflow](#repository-workflow)
+  - [Commit Convention](#commit-convention)
+  - [Code Style](#code-style)
+  - [DataFrame Engine — Polars 1.x](#dataframe-engine--polars-1x)
+  - [HTTP Layer](#http-layer)
+  - [Module Naming](#module-naming)
+  - [NFL — nflreadpy Parity](#nfl--nflreadpy-parity)
+    - [NFL Cache + Config](#nfl-cache--config)
+  - [CFB — `cfb_play_participants`](#cfb--cfb_play_participants)
+  - [CFB — offline reprocess (`CFBPlayProcess`, 0.0.52+)](#cfb--offline-reprocess-cfbplayprocess-0052)
+  - [Module Pattern (NEW modules)](#module-pattern-new-modules)
+  - [Test Conventions](#test-conventions)
+  - [Build & Development Commands](#build--development-commands)
+  - [Common Pitfalls](#common-pitfalls)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # sportsdataverse-py Copilot Instructions
 
 ## Project Context
@@ -51,11 +74,13 @@ is the sole attributable contributor.
   `.pre-commit-config.yaml` runs only to inject `from __future__ import
   annotations` at the top of every Python file via `--add-import`.
 - Lint, format, and type-check before committing:
+
   ```sh
   uv run ruff check --fix sportsdataverse/<your_module>.py
   uv run ruff format sportsdataverse/<your_module>.py
   uv run mypy sportsdataverse/<your_module>.py
   ```
+
 - New modules: full type hints required (params + returns); legacy modules
   remain un-typed for now. Per-module strict mypy overrides live in a
   single `[[tool.mypy.overrides]] module = [...]` list in `pyproject.toml`
@@ -184,6 +209,23 @@ Output is hybrid scalar + list: `{type}_player_name` (primary) AND
 `{type}_player_names` (full list) so multi-entry types like split sacks
 aren't silently collapsed. Don't add new regex extraction — extend the
 participants module instead.
+
+## CFB — offline reprocess (`CFBPlayProcess`, 0.0.52+)
+
+For rebuilding games from on-disk raw JSON without re-hitting ESPN:
+
+- `espn_cfb_pbp(raw=True)` keeps `injuries` + `gameNotes` in the allowlist
+  (`incoming_keys_expected`); default `[]` when absent.
+- `self.odds_source` (`summary_pickcenter` | `core_odds_api` | `default` |
+  `injected`) records spread provenance and is also written to the returned
+  payload (`pbp_txt["odds_source"]`).
+- `CFBPlayProcess(odds_override={gameSpread, overUnder, homeFavorite,
+  gameSpreadAvailable})` short-circuits odds resolution (no live core-odds call,
+  no default fallback) — the spread is an EPA/WPA *input*, so offline rebuilds
+  must inject the persisted odds. Validated + coerced in `__init__` (bad payload
+  → `ValueError`). Default `None` = unchanged. Pattern:
+  `CFBPlayProcess(gameId, path_to_json=raw_dir, odds_override=...).cfb_pbp_disk()`
+  then `.run_processing_pipeline()`.
 
 ## Module Pattern (NEW modules)
 

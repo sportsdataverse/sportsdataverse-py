@@ -76,7 +76,38 @@ class CFBPlayProcess(object):
     path_to_json = "/"
     return_keys = None
 
-    def __init__(self, gameId=0, raw=False, path_to_json="/", return_keys=None, **kwargs):
+    def __init__(self, gameId=0, raw=False, path_to_json="/", return_keys=None, odds_override=None, **kwargs):
+        """CFBPlayProcess.
+
+        Args:
+            gameId: ESPN game id.
+            raw: if True, espn_cfb_pbp() returns the (allowlisted) summary verbatim.
+            path_to_json: directory for cfb_pbp_disk() offline loads.
+            return_keys: optional subset of result keys to return.
+            odds_override: optional dict {gameSpread, overUnder, homeFavorite,
+                gameSpreadAvailable} that short-circuits odds resolution (sets
+                odds_source="injected") so offline rebuilds never hit the live
+                core-odds endpoint or fall back to defaults. Validated + coerced here.
+
+        Attributes:
+            odds_source: provenance of the resolved spread —
+                "summary_pickcenter" | "core_odds_api" | "default" | "injected".
+        """
+        if odds_override is not None:
+            if not isinstance(odds_override, dict):
+                raise ValueError(
+                    "odds_override must be a dict with keys {gameSpread, overUnder, homeFavorite, gameSpreadAvailable}",
+                )
+            required = {"gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable"}
+            missing = required.difference(odds_override)
+            if missing:
+                raise ValueError(f"odds_override is missing required keys: {sorted(missing)}")
+            odds_override = {
+                "gameSpread": float(odds_override["gameSpread"]),
+                "overUnder": float(odds_override["overUnder"]),
+                "homeFavorite": bool(odds_override["homeFavorite"]),
+                "gameSpreadAvailable": bool(odds_override["gameSpreadAvailable"]),
+            }
         self.gameId = int(gameId)
         # self.logger = logger
         self.ran_pipeline = False
@@ -84,6 +115,8 @@ class CFBPlayProcess(object):
         self.raw = raw
         self.path_to_json = path_to_json
         self.return_keys = return_keys
+        self.odds_source = None
+        self.odds_override = odds_override
 
     def espn_cfb_pbp(self, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
@@ -144,6 +177,8 @@ class CFBPlayProcess(object):
             "scoringPlays",
             "videos",
             "standings",
+            "injuries",
+            "gameNotes",
         ]
         dict_keys_expected = ["boxscore", "format", "gameInfo", "drives", "predictor", "header", "standings"]
         # array_keys_expected = [
@@ -844,6 +879,19 @@ class CFBPlayProcess(object):
 
     def __helper_cfb_pickcenter(self, pbp_txt):
         # Spread definition
+        if self.odds_override is not None:
+            o = self.odds_override
+            self.gameSpread = o["gameSpread"]
+            self.overUnder = o["overUnder"]
+            self.homeFavorite = o["homeFavorite"]
+            self.gameSpreadAvailable = o["gameSpreadAvailable"]
+            self.odds_source = "injected"
+            return {
+                "gameSpread": self.gameSpread,
+                "overUnder": self.overUnder,
+                "homeFavorite": self.homeFavorite,
+                "gameSpreadAvailable": self.gameSpreadAvailable,
+            }
         if len(pbp_txt.get("pickcenter", [])) > 1:
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])
@@ -863,6 +911,7 @@ class CFBPlayProcess(object):
                 else 55.0
             )
             gameSpreadAvailable = True
+            self.odds_source = "summary_pickcenter"
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
             # Cascade: legacy `pickcenter` array is empty (true for all 2024+
@@ -876,6 +925,7 @@ class CFBPlayProcess(object):
                 homeFavorite,
                 gameSpreadAvailable,
             ) = self.__helper__espn_cfb_odds_information__()
+            self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
         self.gameSpread = gameSpread
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite
@@ -902,6 +952,7 @@ class CFBPlayProcess(object):
             -1 * abs(init["gameSpread"]),
         )
         pbp_txt["overUnder"] = init["overUnder"]
+        pbp_txt["odds_source"] = self.odds_source
         # Home and Away identification variables
         if pbp_txt["header"]["competitions"][0]["competitors"][0]["homeAway"] == "home":
             pbp_txt["header"]["competitions"][0]["home"] = pbp_txt["header"]["competitions"][0]["competitors"][0][

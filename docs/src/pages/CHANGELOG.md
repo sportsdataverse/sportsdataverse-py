@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.52 (unreleased)](#0052-unreleased)
+  - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
   - [User-facing quality-of-life additions](#user-facing-quality-of-life-additions)
   - [New: MLB module (greenfield)](#new-mlb-module-greenfield)
@@ -52,6 +54,39 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.52 (unreleased)
+
+### CFB — offline reprocess support (`CFBPlayProcess`)
+
+Three additive, non-breaking changes that let college-football games be rebuilt from
+on-disk raw JSON without re-hitting ESPN, in support of the `cfbfastR-cfb-raw` scraper's
+reprocess pipeline:
+
+- **Raw summary allowlist now keeps `injuries` and `gameNotes`.**
+  - Before: `CFBPlayProcess(gameId=..., raw=True).espn_cfb_pbp()` filtered the ESPN summary
+    to 15 keys and dropped `injuries`/`gameNotes` even when ESPN returned them.
+  - After: both keys are retained (defaulting to `[]` when ESPN omits them). All previously
+    returned keys are unchanged — this is purely additive.
+- **New `CFBPlayProcess.odds_source` attribute.**
+  - Before: there was no way to tell where the resolved spread/total came from.
+  - After: `proc.odds_source` is set to one of `"summary_pickcenter"`, `"core_odds_api"`,
+    `"default"`, or `"injected"` during odds resolution.
+- **New `CFBPlayProcess(odds_override=...)` constructor argument.**
+  - Before: odds resolution always consulted the summary `pickcenter` and, for 2024+ games
+    with an empty `pickcenter`, cascaded to the live `sports.core.api.espn.com` odds
+    endpoint — falling back to hardcoded defaults `(2.5, 55.5, True, False)` on failure.
+    An offline rebuild could therefore silently hit the network or inherit wrong spread
+    inputs that corrupt every play's EPA/WPA.
+  - After: passing `odds_override={"gameSpread": ..., "overUnder": ..., "homeFavorite": ...,
+    "gameSpreadAvailable": ...}` short-circuits resolution to use exactly those values, sets
+    `odds_source="injected"`, and never touches the network or the defaults. With no
+    override supplied (the default), behavior is unchanged. The override is validated and
+    type-coerced at the constructor (a missing key or non-dict raises `ValueError` instead
+    of a later `KeyError`).
+- **`odds_source` is also written into the returned payload** (not just the instance
+  attribute), so dict consumers of `run_processing_pipeline()` / `run_cleaning_pipeline()`
+  retain odds provenance.
 
 ## 0.0.51 Release: May 30, 2026
 
