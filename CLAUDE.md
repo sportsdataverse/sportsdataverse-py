@@ -1,3 +1,37 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [CLAUDE.md — sportsdataverse-py Development Guide](#claudemd--sportsdataverse-py-development-guide)
+  - [Package Overview](#package-overview)
+  - [Commit Convention](#commit-convention)
+  - [Branches](#branches)
+  - [Packaging](#packaging)
+  - [Build & Development Commands](#build--development-commands)
+  - [Project Structure](#project-structure)
+  - [ESPN Cross-League Architecture (0.0.51+)](#espn-cross-league-architecture-0051)
+  - [Parser Layer (0.0.51+)](#parser-layer-0051)
+    - [`return_parsed=True` dispatch shim](#return_parsedtrue-dispatch-shim)
+    - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
+    - [Test fixtures (89 captures across 6 directories)](#test-fixtures-89-captures-across-6-directories)
+    - [Test infrastructure summary](#test-infrastructure-summary)
+  - [Key Coding Conventions](#key-coding-conventions)
+    - [Module pattern (NEW modules)](#module-pattern-new-modules)
+    - [NFL — nflreadpy parity](#nfl--nflreadpy-parity)
+    - [CFB — `cfb_play_participants` and the 0.36-live reconciliation](#cfb--cfb_play_participants-and-the-036-live-reconciliation)
+    - [CFB — offline reprocess (`odds_override`, raw allowlist, `odds_source`) (0.0.52+)](#cfb--offline-reprocess-odds_override-raw-allowlist-odds_source-0052)
+    - [HTTP / retry layer](#http--retry-layer)
+    - [Polars version](#polars-version)
+    - [Type hints](#type-hints)
+    - [Test gating](#test-gating)
+  - [Common Pitfalls](#common-pitfalls)
+  - [Documentation Maintenance](#documentation-maintenance)
+  - [Docstring conventions for new functions](#docstring-conventions-for-new-functions)
+  - [Example notebooks](#example-notebooks)
+  - [Sphinx + docs build toolchain](#sphinx--docs-build-toolchain)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # CLAUDE.md — sportsdataverse-py Development Guide
 
 ## Package Overview
@@ -158,21 +192,21 @@ The cross-league ESPN wrapper surface lives in
 `sportsdataverse/_common_espn.py`. The pattern is **one core +
 N thin extensions**:
 
-* `_common_espn.py` — ~80 core functions parameterized on
+- `_common_espn.py` — ~80 core functions parameterized on
   `(sport, league)` slugs. Every ESPN URL family is wrapped once
   (Site v2 / Site v2 alt / Web v3 / Core v2 / Core v3 / CDN).
-* `_UNIVERSAL_WRAPPERS` — list of `(short_name, core_fn)` tuples
+- `_UNIVERSAL_WRAPPERS` — list of `(short_name, core_fn)` tuples
   that map to wrapper functions on every league.
-* `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` / `_MLB_WRAPPERS` —
+- `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` / `_MLB_WRAPPERS` —
   opt-in extras gated by `include_ncaa=` / `include_football=` /
   `include_mlb=` flags on `make_league_module()`.
-* `_bind(core_fn, sport, league, full_name, parser=None)` — wraps
+- `_bind(core_fn, sport, league, full_name, parser=None)` — wraps
   each core function with a `functools.partial` (when no parser
   registered) or a closure (when a parser is registered) that adds
   `__name__` / `__qualname__` / `__doc__` for IDE introspection
   and optionally accepts `return_parsed=True` / `return_as_pandas=True`
   kwargs.
-* `make_league_module(sport, league, prefix, namespace, ...)` —
+- `make_league_module(sport, league, prefix, namespace, ...)` —
   iterates the wrapper tables and registers each one in `namespace`
   with the canonical `espn_{prefix}_{short}` name.
 
@@ -215,13 +249,13 @@ modules**, one per data surface:
 
 **Parser contract (universal across all 5 modules):**
 
-* Return `polars.DataFrame` by default; pandas via
+- Return `polars.DataFrame` by default; pandas via
   `return_as_pandas=True`.
-* Empty / malformed payloads return a zero-row frame instead of
+- Empty / malformed payloads return a zero-row frame instead of
   raising — callers can chain without null-checks.
-* Output columns are snake-cased via
+- Output columns are snake-cased via
   `sportsdataverse.dl_utils.underscore`.
-* Use `pandas.json_normalize` for nested flattening, then convert
+- Use `pandas.json_normalize` for nested flattening, then convert
   to polars at the end. List-valued cells are stringified so polars
   accepts the frame.
 
@@ -254,11 +288,11 @@ df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331 plays
 `_MLB_WRAPPERS` is in the registry. Three generic fall-throughs
 cover the long tail:
 
-* `parse_single_entity` — Core v2 single-resource payloads
+- `parse_single_entity` — Core v2 single-resource payloads
   (`team`, `venue`, `franchise`, `coach`, etc.).
-* `parse_items` — Core v2 paginated `{items: [...]}` and the
+- `parse_items` — Core v2 paginated `{items: [...]}` and the
   Core v2 `{entries: [...]}` variant (athlete_statisticslog).
-* `parse_summary` — Site v2 `summary` dispatcher (21 sub-frames
+- `parse_summary` — Site v2 `summary` dispatcher (21 sub-frames
   per game).
 
 Three regression tests in `tests/test_espn_universal_parsers.py`
@@ -281,14 +315,14 @@ Section list (current 21): `boxscore_player`, `boxscore_team`,
 
 Cross-league shape divergences captured by tests:
 
-* NFL + CFB ship `drives.previous[]` + `scoringPlays` instead of
+- NFL + CFB ship `drives.previous[]` + `scoringPlays` instead of
   top-level `plays[]`. `parse_summary_drive_plays` unrolls drive
   plays into a long-form frame with `drive_id` + `drive_sequence`
   join keys for football PBP parity.
-* NHL doesn't publish per-play `winprobability`.
-* `pickcenter` / `odds` / `against_the_spread` are sparse in
+- NHL doesn't publish per-play `winprobability`.
+- `pickcenter` / `odds` / `against_the_spread` are sparse in
   past-game captures (live games typically populate them).
-* NCAA W basketball `officials` sometimes ships < 3 rows; CFB
+- NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
 ### Test fixtures (89 captures across 6 directories)
@@ -456,6 +490,31 @@ collapsed to a single name.
 half-edge cases, end-of-game WP, penalty-assessed-on-kickoff, plus the
 full participants-module extraction described above.
 
+### CFB — offline reprocess (`odds_override`, raw allowlist, `odds_source`) (0.0.52+)
+
+`CFBPlayProcess` supports rebuilding a game's enriched output from on-disk raw JSON
+without re-hitting ESPN — the contract the `cfbfastR-cfb-raw` scraper's reprocess
+pipeline relies on. Three additive pieces:
+
+- **Raw allowlist keeps `injuries` + `gameNotes`.** `espn_cfb_pbp(raw=True)` filters the
+  summary to an allowlist (`incoming_keys_expected` in `cfb_pbp.py`); `injuries` and
+  `gameNotes` are retained (default `[]` when absent). When adding a summary key the
+  pipeline should preserve, add it to that list.
+- **`odds_source` provenance.** `__helper_cfb_pickcenter` tags `self.odds_source` as
+  `"summary_pickcenter"` | `"core_odds_api"` | `"default"` | `"injected"`, and the value
+  is written into the returned payload (`pbp_txt["odds_source"]`) — not just the instance
+  attribute — so dict consumers retain provenance.
+- **`odds_override` constructor arg.** The spread/OU/homeFavorite are EPA/WPA *inputs*, not
+  passthroughs. For 2024+ games the summary `pickcenter` is empty and the helper otherwise
+  cascades to the live `sports.core.api.espn.com` odds endpoint (defaulting to
+  `(2.5, 55.5, True, False)` on failure). Passing `CFBPlayProcess(odds_override={...})`
+  with keys `gameSpread`/`overUnder`/`homeFavorite`/`gameSpreadAvailable` short-circuits
+  resolution to those values (sets `odds_source="injected"`), so offline rebuilds never
+  touch the network or inherit defaults. The override is **validated + type-coerced in
+  `__init__`** (missing key / non-dict → `ValueError`). Default `None` = unchanged behavior.
+
+Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, odds_override=<persisted>).cfb_pbp_disk()` then `.run_processing_pipeline()`.
+
 ### HTTP / retry layer
 
 All HTTP goes through `sportsdataverse.dl_utils.download()`. As of May 2026
@@ -502,6 +561,7 @@ Use the modern API surface:
   for the captured names so lowercase narrative tails (`for`, `at`,
   `return`, `and`, etc.) cannot be folded into a captured proper noun.
   Example (extract a player name after "sacked by"):
+
   ```python
   pl.col("cleaned_text").str.extract(
       r"(?i)sacked by(?-i: ([A-Z][\w'\.\-]+(?:\s+[A-Z][\w'\.\-]+)?))", 1
@@ -655,17 +715,17 @@ Companion-package cross-link URLs:
 
 | Package | URL | Domain |
 |---|---|---|
-| wehoop | https://wehoop.sportsdataverse.org | Women's basketball (R) |
-| hoopR | https://hoopR.sportsdataverse.org | Men's basketball (R) |
-| cfbfastR | https://cfbfastR.sportsdataverse.org | College football (R) |
-| baseballr | https://baseballr.sportsdataverse.org | Baseball (R) |
-| fastRhockey | https://fastRhockey.sportsdataverse.org | Hockey (R) |
-| nflfastR | https://www.nflfastr.com | NFL (R) |
-| nflverse | https://nflverse.nflverse.com | NFL ecosystem |
-| nflreadpy | https://github.com/nflverse/nflreadpy | NFL (Python) |
-| nba_api | https://github.com/swar/nba_api | NBA/WNBA (Python) |
-| nhl-api-py | https://github.com/coreyjs/nhl-api-py | NHL (Python) |
-| recruitR | https://github.com/sportsdataverse/recruitR | CFB recruiting (R) |
+| wehoop | <https://wehoop.sportsdataverse.org> | Women's basketball (R) |
+| hoopR | <https://hoopR.sportsdataverse.org> | Men's basketball (R) |
+| cfbfastR | <https://cfbfastR.sportsdataverse.org> | College football (R) |
+| baseballr | <https://baseballr.sportsdataverse.org> | Baseball (R) |
+| fastRhockey | <https://fastRhockey.sportsdataverse.org> | Hockey (R) |
+| nflfastR | <https://www.nflfastr.com> | NFL (R) |
+| nflverse | <https://nflverse.nflverse.com> | NFL ecosystem |
+| nflreadpy | <https://github.com/nflverse/nflreadpy> | NFL (Python) |
+| nba_api | <https://github.com/swar/nba_api> | NBA/WNBA (Python) |
+| nhl-api-py | <https://github.com/coreyjs/nhl-api-py> | NHL (Python) |
+| recruitR | <https://github.com/sportsdataverse/recruitR> | CFB recruiting (R) |
 
 ## Example notebooks
 
