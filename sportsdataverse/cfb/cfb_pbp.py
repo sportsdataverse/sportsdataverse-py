@@ -196,7 +196,6 @@ class CFBPlayProcess(object):
                 pbp_txt[k] = {} if k in dict_keys_expected else []
         for k in ["news", "shop"]:
             pbp_txt.pop(f"{k}", None)
-        self.__helper_cfb_pickcenter(pbp_txt)
         self.json = pbp_txt
 
         return self.json
