@@ -84,6 +84,7 @@ class CFBPlayProcess(object):
         self.raw = raw
         self.path_to_json = path_to_json
         self.return_keys = return_keys
+        self.odds_source = None
 
     def espn_cfb_pbp(self, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
@@ -195,6 +196,7 @@ class CFBPlayProcess(object):
                 pbp_txt[k] = {} if k in dict_keys_expected else []
         for k in ["news", "shop"]:
             pbp_txt.pop(f"{k}", None)
+        self.__helper_cfb_pickcenter(pbp_txt)
         self.json = pbp_txt
 
         return self.json
@@ -865,6 +867,7 @@ class CFBPlayProcess(object):
                 else 55.0
             )
             gameSpreadAvailable = True
+            self.odds_source = "summary_pickcenter"
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
         else:
             # Cascade: legacy `pickcenter` array is empty (true for all 2024+
@@ -878,6 +881,7 @@ class CFBPlayProcess(object):
                 homeFavorite,
                 gameSpreadAvailable,
             ) = self.__helper__espn_cfb_odds_information__()
+            self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
         self.gameSpread = gameSpread
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite
