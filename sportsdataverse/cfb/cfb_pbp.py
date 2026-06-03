@@ -3351,6 +3351,20 @@ class CFBPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
+                # Blocked-punt possession loss. ESPN's OFFICIAL box counts only giveaways
+                # (INT + fumbles lost), so blocked punts are deliberately kept OUT of
+                # is_turnover / is_st_turnover to preserve the *_pbp == espn_team
+                # reconciliation. This standalone flag surfaces the one possession-losing
+                # class that ESPN's per-play `isTurnover` flag catches and the giveaway-based
+                # derivation does not: a blocked-punt TD is always a turnover; a non-TD
+                # blocked punt is one only when possession actually changed (the defense --
+                # not the kicking team -- recovered). (Blocked FGs already yield possession
+                # via the normal missed-FG path, so they are out of scope here.)
+                is_blocked_punt_turnover=pl.when(pl.col("type.text") == "Blocked Punt Touchdown")
+                .then(True)
+                .when((pl.col("type.text") == "Blocked Punt").and_(pl.col("change_of_poss") == True))
+                .then(True)
+                .otherwise(False),
             )
         )
 

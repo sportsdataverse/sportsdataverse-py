@@ -70,6 +70,8 @@ def test_kicking_return_team_flip():
             "scrimmage_play": False,
             "fumble_vec": False,
             "int": False,
+            "type.text": "Kickoff",
+            "change_of_poss": False,
             "text": "kickoff",
             "homeTeamAbbrev": "BYU",
             "awayTeamAbbrev": "ASU",
@@ -89,6 +91,8 @@ def test_kicking_return_team_flip():
             "scrimmage_play": False,
             "fumble_vec": False,
             "int": False,
+            "type.text": "Punt",
+            "change_of_poss": True,
             "text": "punt",
             "homeTeamAbbrev": "BYU",
             "awayTeamAbbrev": "ASU",
@@ -116,6 +120,8 @@ def test_muff_detected():
             "scrimmage_play": False,
             "fumble_vec": False,
             "int": False,
+            "type.text": "Punt",
+            "change_of_poss": True,
             "text": "punt 25 muffed by #24 K.Kirkland recovered by ASU #1 X",
             "homeTeamAbbrev": "BYU",
             "awayTeamAbbrev": "ASU",
@@ -141,6 +147,8 @@ def _base(**over):
         "scrimmage_play": True,
         "fumble_vec": True,
         "int": False,
+        "type.text": "Rush",
+        "change_of_poss": False,
         "homeTeamAbbrev": "BYU",
         "awayTeamAbbrev": "ASU",
         "homeTeamId": 252,
@@ -349,6 +357,76 @@ def test_offensive_pass_interference_charged_to_offense():
 def test_defensive_pass_interference_charged_to_defense():
     out = _attr([_pi_row("#9 QB pass incomplete PENALTY DEF Defensive Pass Interference (#5 Y) 15 yards")])
     assert out.to_dicts()[0]["penalized_team"] == 200  # defense (PENALTY DEF)
+
+
+# --- is_blocked_punt_turnover: standalone special-teams flag --------------------
+# ESPN's official box counts only giveaways, so blocked punts stay OUT of is_turnover
+# (preserving *_pbp == box reconciliation) and are surfaced via this distinct flag --
+# the one possession-losing class ESPN's per-play isTurnover catches that the
+# giveaway-based derivation does not.
+def test_blocked_punt_defense_recovers_is_blocked_punt_turnover():
+    out = _attr(
+        [
+            _base(
+                **{
+                    "type.text": "Blocked Punt",
+                    "change_of_poss": True,  # defense recovered -> possession changed
+                    "punt": True,
+                    "sp": True,
+                    "scrimmage_play": False,
+                    "fumble_vec": False,
+                    "text": "#5 R punt blocked by #9 X, recovered by ASU #9 X at BYU 20",
+                },
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["is_blocked_punt_turnover"] is True
+    assert r["is_turnover"] is False  # excluded from giveaway-based turnover (box-reconciling)
+    assert r["is_st_turnover"] is False
+
+
+def test_blocked_punt_touchdown_always_turnover():
+    out = _attr(
+        [
+            _base(
+                **{
+                    "type.text": "Blocked Punt Touchdown",
+                    "change_of_poss": False,  # defensive-score plays can flip pos_team; TD still counts
+                    "punt": True,
+                    "sp": True,
+                    "scrimmage_play": False,
+                    "fumble_vec": False,
+                    "text": "#9 X 12 Yd Return of Blocked Punt",
+                },
+            ),
+        ],
+    )
+    assert out.to_dicts()[0]["is_blocked_punt_turnover"] is True
+
+
+def test_blocked_punt_kicking_team_recovers_not_turnover():
+    out = _attr(
+        [
+            _base(
+                **{
+                    "type.text": "Blocked Punt",
+                    "change_of_poss": False,  # kicking team recovered -> no possession change
+                    "punt": True,
+                    "sp": True,
+                    "scrimmage_play": False,
+                    "fumble_vec": False,
+                    "text": "#5 R punt blocked, recovered by BYU #5 R",
+                },
+            ),
+        ],
+    )
+    assert out.to_dicts()[0]["is_blocked_punt_turnover"] is False
+
+
+def test_normal_play_not_blocked_punt_turnover():
+    out = _attr([_base(text="#22 J.Doe run for 4 yards", fumble_vec=False)])
+    assert out.to_dicts()[0]["is_blocked_punt_turnover"] is False
 
 
 # --- __add_new_play_types: strip-sack interception guard -----------------------

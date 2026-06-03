@@ -6,6 +6,7 @@
   - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
   - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
   - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
+  - [CFB — blocked-punt turnover flag + ESPN native-flag tripwires](#cfb--blocked-punt-turnover-flag--espn-native-flag-tripwires)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
@@ -151,6 +152,28 @@ wrong values are corrected and new fields/sections are added.
   correctly scored a turnover on downs). ESPN-sourced box turnover totals are unaffected.
   Verified across a 20-game / 3,439-play before/after diff: exactly two plays changed (both
   intended relabels), with EPA moving only on those two plays — no collateral drift.
+
+### CFB — blocked-punt turnover flag + ESPN native-flag tripwires
+
+- **New `is_blocked_punt_turnover` per-play flag (additive).** `is_turnover` models only
+  *giveaways* (INT + fumbles lost) to match ESPN's official-box `turnovers` definition (so the
+  `*_pbp` cross-check stays exact). A blocked punt the defense recovers is a possession loss but
+  **not** a giveaway — ESPN's official box does not count it (verified) — so it is surfaced as a
+  standalone flag kept out of `is_turnover` / `is_st_turnover`: `True` on a `Blocked Punt
+  Touchdown`, or a non-TD `Blocked Punt` with a possession change. This is the one
+  possession-losing class ESPN's per-play `isTurnover` flag catches that the giveaway-based
+  derivation does not. Purely additive — no existing column changes. Validated across 150 games
+  (24,876 plays): all 16 blocked-punt possession losses captured, 100% ESPN agreement, zero
+  leakage into `is_turnover` / `is_st_turnover`.
+- **ESPN native `isTurnover` / `isPenalty` are kept as cross-checks, not sources of truth.** They
+  pass through the flattener as columns (populated back to 2018). `isTurnover` is coarser (it
+  silently drops ~16% of plain interceptions on sparse-text plays and has no per-side/ST concept);
+  `isPenalty` flags only *primary*-penalty plays. New regression tripwires
+  (`test_espn_flag_tripwires.py`) assert `isTurnover ⇒ is_turnover OR is_blocked_punt_turnover`
+  and `isPenalty ⇒ penalty_flag` on the fixtures — the first would have caught the
+  interception-erasure bug above. Across 150 games the penalty tripwire had 0 violations and
+  `isTurnover`/`is_turnover` agreed 99.6%; the residual disagreements are ESPN false positives
+  (self-recovered fumbles) the stricter derivation correctly excludes.
 
 ## 0.0.52 Release: June 3, 2026
 
