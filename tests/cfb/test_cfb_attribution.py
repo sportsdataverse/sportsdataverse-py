@@ -292,3 +292,32 @@ def test_reclassified_punt_return_fumble_is_st_turnover():
     assert r["is_turnover"] is True
     assert r["turnover_team"] == 52  # FSU (returning/receiving team) lost it
     assert r["is_st_turnover"] is True  # detected as ST via text even though sp=False
+
+
+def test_nested_double_direction_fumble_charges_both_teams():
+    # Sack-strip: offense (100) fumbles, defense (200) recovers and returns, defense
+    # fumbles on the return, offense (100) recovers. The ball nets back to the offense,
+    # but BOTH teams lost a fumble -> a turnover is charged to each side (per-event,
+    # matching the official box). The possession-chain walks both "recovered by" clauses.
+    out = _attr(
+        [
+            _base(
+                pos_team=100,
+                def_pos_team=200,
+                homeTeamAbbrev="OFF",
+                awayTeamAbbrev="DEF",
+                homeTeamId=100,
+                awayTeamId=200,
+                scrimmage_play=True,
+                fumble_vec=True,
+                text=(
+                    "#1 QB sacked, fumbled by #1 QB, recovered by DEF #5 Smith, return 10 yards, "
+                    "fumbled by #5 Smith, recovered by OFF #7 Jones at OFF40"
+                ),
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["recovery_team_2"] == 100  # offense recovered the 2nd (defense's) fumble
+    assert r["is_pos_team_turnover"] is True  # offense lost the 1st fumble (to defense)
+    assert r["is_def_pos_team_turnover"] is True  # defense lost the 2nd fumble (back to offense)
