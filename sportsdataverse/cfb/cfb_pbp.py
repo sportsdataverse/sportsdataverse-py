@@ -3193,14 +3193,24 @@ class CFBPlayProcess(object):
             )
         )
 
-        # abbrev -> team id using the per-play home/away abbreviations (1st and 2nd recovery)
+        # abbrev -> team id using the per-play home/away abbreviations (1st and 2nd recovery).
+        # ESPN ships two abbreviation forms for some teams -- the play text uses one (e.g.
+        # "recovered by BUF") while homeTeamAbbrev/awayTeamAbbrev carry another ("BUFF"). Match
+        # prefix-tolerantly (either is a prefix of the other) so these variants still resolve.
+        # In a two-team game cross-opponent prefix collisions are effectively nonexistent.
+        _home_u = pl.col("homeTeamAbbrev").str.to_uppercase()
+        _away_u = pl.col("awayTeamAbbrev").str.to_uppercase()
+
+        def _abbr_compat(abbr_col, team_u):
+            return (abbr_col == team_u) | team_u.str.starts_with(abbr_col) | abbr_col.str.starts_with(team_u)
+
         def _abbrev_to_team_id(abbr_col):
             return (
                 pl.when(abbr_col.is_null())
                 .then(pl.lit(None, dtype=pl.Int64))
-                .when(abbr_col == pl.col("homeTeamAbbrev").str.to_uppercase())
+                .when(_abbr_compat(abbr_col, _home_u))
                 .then(pl.col("homeTeamId"))
-                .when(abbr_col == pl.col("awayTeamAbbrev").str.to_uppercase())
+                .when(_abbr_compat(abbr_col, _away_u))
                 .then(pl.col("awayTeamId"))
                 .otherwise(pl.lit(None, dtype=pl.Int64))
             )

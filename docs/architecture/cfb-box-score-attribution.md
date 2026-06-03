@@ -12,7 +12,7 @@
   - [5. ESPN-sourced totals](#5-espn-sourced-totals)
   - [6. Player-name identity (`__join_participants`)](#6-player-name-identity-__join_participants)
   - [7. Output schema notes (additive)](#7-output-schema-notes-additive)
-  - [8. Known limitations](#8-known-limitations)
+  - [8. Known limitations & empirical accuracy](#8-known-limitations--empirical-accuracy)
   - [9. Testing & reconciliation](#9-testing--reconciliation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -207,19 +207,35 @@ are additive. Notable:
   `penalty_first_downs_created` / `first_downs_created` (+ `*_rate`).
 - New sections `espn_team`, `espn_players`.
 
-## 8. Known limitations
+## 8. Known limitations & empirical accuracy
 
-- **Offensive pass interference** is mis-charged to the defense: `__setup_penalty_data` emits a
-  generic `"Pass Interference"` detail (the generic branch precedes the offensive/defensive
-  branches), which `_DEFENSIVE_PENALTIES` maps to the defense. Future work: parse the
-  `PENALTY {TEAM}` token from the text.
-- **First downs** are pbp-derived and ~1 low vs ESPN per team, because `first_down_created`
-  requires `end.down == 1` and so misses a touchdown play that also crossed the line to gain.
-  ESPN publishes only the **total** `firstDowns` (no by-type split) — so the passing/rushing/
-  penalty breakdown is approximate and the authoritative total lives in `espn_team.firstDowns`.
+Measured on an 18-game random sample of the 2024 season (pbp derivation vs ESPN's official
+box). The countable totals shipped in the output are **sourced from ESPN** (§5), so these are
+the accuracy of the pbp cross-check / offline fallback, not of the shipped numbers.
+
+- **Turnovers** — the pbp derivation matches ESPN **~85% (total) / ~94% (INT) / ~91% (fumbles
+  lost)** of team-rows. Every miss is an *undercount* (the pbp never invents a turnover ESPN
+  lacks). Root causes, in order: (1) **team-abbreviation parse failures** — the `recovered by
+  {ABBR}` token doesn't always match `homeTeamAbbrev`/`awayTeamAbbrev`, leaving
+  `recovery_team` null and forcing the imperfect possession-change fallback; (2)
+  **reclassified / multi-event fumbles** (`Fumble Return Touchdown`, recover-then-advance);
+  (3) **games with no pbp coverage**. The 5 frozen fixtures match ESPN 100% but are not
+  representative — random games run ~85-94%.
+- **First downs cannot be faithfully reproduced from the pbp.** Four definitions were tested
+  vs ESPN's `firstDowns`: `"1ST DOWN"` text marker (mean err −2.6), raw `end.down==1` (+0.7,
+  ±2.1), chain-movers + accepted penalties (−2.4), and chain-movers + dedup-penalty +
+  line-to-gain TDs (+2.2). None converge — ESPN's total is systematically ~2-2.6 higher than
+  **every** pbp signal, including ESPN's own in-text `"1ST DOWN"` markers, so its official
+  count draws on data not present in the pbp. Contributing factors that do *not* net out:
+  rush/pass first downs that also carry a penalty are **double-counted** (~1/team; DPI-on-
+  incompletion counted as both passing and penalty), touchdowns are partially missed, and
+  turnover/punt plays do **not** create first downs (verified: 1 turnover + 3 punt markers in
+  14 games). The authoritative total is `espn_team.firstDowns`; the passing/rushing/penalty
+  breakdown is best-effort. Only the declined/offsetting-penalty exclusion is a clean fix.
 - **Three-or-more fumbles on one play** are not fully modeled (the recovery chain is 2-deep);
   realistic two-direction sequences are covered.
-- `_espn_num` will coerce the (never-observed) strings `"inf"`/`"nan"` to non-finite floats.
+- **Offensive pass interference** is correctly attributed via the `PENALTY {TEAM}` text token
+  (`_parse_penalty_abbrev`), overriding the `penalty_detail` defensive-set heuristic.
 
 ## 9. Testing & reconciliation
 
