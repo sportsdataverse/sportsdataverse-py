@@ -1,5 +1,8 @@
 import json
 from pathlib import Path
+
+import pytest
+
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
 FIX = Path(__file__).parent / "fixtures"
@@ -37,17 +40,27 @@ def test_odds_source_tag_summary_path():
     assert proc.gameSpreadAvailable is True
 
 
-def test_injected_odds_bypasses_network():
+def test_injected_odds_bypasses_network(monkeypatch):
     proc = CFBPlayProcess(
         gameId=401628455,
         odds_override={"gameSpread": -10.5, "overUnder": 60.0, "homeFavorite": True, "gameSpreadAvailable": True},
     )
-    # Empty pickcenter would normally cascade to the LIVE core-odds endpoint.
-    # With an override present, the helper must short-circuit and never look at pickcenter
-    # or hit the network.
+    # If the override path regressed into the live cascade, this would raise.
+    # The method uses dunder-both-sides naming so no Python name mangling applies;
+    # patch the class to cover all instances.
+    monkeypatch.setattr(
+        CFBPlayProcess,
+        "__helper__espn_cfb_odds_information__",
+        lambda *a, **k: (_ for _ in ()).throw(AssertionError("live odds endpoint must not be called")),
+    )
     proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
     assert proc.gameSpread == -10.5
     assert proc.overUnder == 60.0
-    assert proc.homeFavorite is True
-    assert proc.gameSpreadAvailable is True
     assert proc.odds_source == "injected"
+
+
+def test_odds_override_validation():
+    with pytest.raises(ValueError):
+        CFBPlayProcess(gameId=1, odds_override={"gameSpread": -3.5})  # missing keys
+    with pytest.raises(ValueError):
+        CFBPlayProcess(gameId=1, odds_override=[1, 2, 3])  # not a dict

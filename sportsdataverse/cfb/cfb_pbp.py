@@ -77,6 +77,37 @@ class CFBPlayProcess(object):
     return_keys = None
 
     def __init__(self, gameId=0, raw=False, path_to_json="/", return_keys=None, odds_override=None, **kwargs):
+        """CFBPlayProcess.
+
+        Args:
+            gameId: ESPN game id.
+            raw: if True, espn_cfb_pbp() returns the (allowlisted) summary verbatim.
+            path_to_json: directory for cfb_pbp_disk() offline loads.
+            return_keys: optional subset of result keys to return.
+            odds_override: optional dict {gameSpread, overUnder, homeFavorite,
+                gameSpreadAvailable} that short-circuits odds resolution (sets
+                odds_source="injected") so offline rebuilds never hit the live
+                core-odds endpoint or fall back to defaults. Validated + coerced here.
+
+        Attributes:
+            odds_source: provenance of the resolved spread —
+                "summary_pickcenter" | "core_odds_api" | "default" | "injected".
+        """
+        if odds_override is not None:
+            if not isinstance(odds_override, dict):
+                raise ValueError(
+                    "odds_override must be a dict with keys {gameSpread, overUnder, homeFavorite, gameSpreadAvailable}",
+                )
+            required = {"gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable"}
+            missing = required.difference(odds_override)
+            if missing:
+                raise ValueError(f"odds_override is missing required keys: {sorted(missing)}")
+            odds_override = {
+                "gameSpread": float(odds_override["gameSpread"]),
+                "overUnder": float(odds_override["overUnder"]),
+                "homeFavorite": bool(odds_override["homeFavorite"]),
+                "gameSpreadAvailable": bool(odds_override["gameSpreadAvailable"]),
+            }
         self.gameId = int(gameId)
         # self.logger = logger
         self.ran_pipeline = False
@@ -921,6 +952,7 @@ class CFBPlayProcess(object):
             -1 * abs(init["gameSpread"]),
         )
         pbp_txt["overUnder"] = init["overUnder"]
+        pbp_txt["odds_source"] = self.odds_source
         # Home and Away identification variables
         if pbp_txt["header"]["competitions"][0]["competitors"][0]["homeAway"] == "home":
             pbp_txt["header"]["competitions"][0]["home"] = pbp_txt["header"]["competitions"][0]["competitors"][0][
