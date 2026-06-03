@@ -88,7 +88,10 @@ def test_turnovers_punt_muff_fsu(monkeypatch):
 
 def test_turnovers_kickoff_fumble_asu(monkeypatch):
     box = _box(monkeypatch, 401309854)
-    assert _team(box["turnover"], 9)["turnovers"] == 3  # ASU: KO fumble + 2 INT
+    # Matches ESPN (ASU=4): KO-return fumble + 2 INT thrown + 1 INT-return fumble
+    # (Robertson intercepted Hall, returned, then fumbled back to BYU -- a second,
+    # opposite-direction turnover on the same play, captured by the per-event model).
+    assert _team(box["turnover"], 9)["turnovers"] == 4
     assert _team(box["turnover"], 252)["turnovers"] == 2  # BYU: 2 INT
 
 

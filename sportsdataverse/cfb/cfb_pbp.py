@@ -3091,6 +3091,8 @@ class CFBPlayProcess(object):
         )
 
         # fumbling team (the team that HAD the ball when the fumble/muff occurred):
+        #  - interception return: the intercepting team == def_pos_team (an INT that is
+        #    returned and then fumbled is a SECOND, opposite-direction turnover)
         #  - kickoff return: receiving team == pos_team (kickoff pos_team=receiving)
         #  - punt return:    receiving team == def_pos_team (punt pos_team=kicking team)
         #  - other sp (e.g. blocked-FG return): return_team
@@ -3101,6 +3103,8 @@ class CFBPlayProcess(object):
         play_df = play_df.with_columns(
             fumbling_team=pl.when(pl.col("fumble_or_muff") == False)
             .then(pl.lit(None, dtype=pl.Int64))
+            .when(pl.col("int") == True)
+            .then(pl.col("def_pos_team"))
             .when(pl.col("_is_kick_return") == True)
             .then(pl.col("pos_team"))
             .when(pl.col("_is_punt_return") == True)
@@ -3110,43 +3114,64 @@ class CFBPlayProcess(object):
             .otherwise(pl.col("pos_team")),
         )
 
-        # turnover: a fumble/muff where the recovering team differs from the
-        # fumbling team, OR an interception. Recovery team is authoritative;
-        # if unparseable, fall back to possession-change (last resort).
-        play_df = play_df.with_columns(
-            is_turnover=pl.when(pl.col("int") == True)
-            .then(True)
-            .when(
-                (pl.col("fumble_or_muff") == True)
-                & (pl.col("recovery_team").is_not_null())
-                & (pl.col("fumbling_team").is_not_null())
-                & (pl.col("recovery_team") != pl.col("fumbling_team")),
+        # Per-event turnover model: a single play can produce up to TWO turnovers, one in
+        # each direction -- an interception (charged to the passing team) AND a fumble lost
+        # on the return (charged to the fumbling team). Count them independently so an
+        # INT-returned-then-fumbled play registers a turnover for BOTH teams, matching the
+        # official box score. Recovery team is authoritative; possession-change is a last
+        # resort for scrimmage offense fumbles only.
+        play_df = (
+            play_df.with_columns(
+                int_turnover=pl.col("int") == True,
+                fumble_turnover=pl.when(pl.col("fumble_or_muff") == False)
+                .then(False)
+                .when(
+                    (pl.col("recovery_team").is_not_null())
+                    & (pl.col("fumbling_team").is_not_null())
+                    & (pl.col("recovery_team") != pl.col("fumbling_team")),
+                )
+                .then(True)
+                .when(
+                    (pl.col("recovery_team").is_null())
+                    & (pl.col("scrimmage_play") == True)
+                    & (pl.col("int") == False)
+                    & (pl.col("_is_punt_return") == False)
+                    & (pl.col("_is_kick_return") == False)
+                    & (pl.col("fumbling_team") == pl.col("pos_team"))
+                    & (pl.col("end.pos_team.id") != pl.col("pos_team")),
+                )
+                .then(True)
+                .otherwise(False),
             )
-            .then(True)
-            .when(
-                # Last-resort possession-change fallback, only for true scrimmage plays
-                # (NOT special-teams returns, where possession columns are unreliable).
-                (pl.col("fumble_or_muff") == True)
-                & (pl.col("recovery_team").is_null())
-                & (pl.col("scrimmage_play") == True)
-                & (pl.col("_is_punt_return") == False)
-                & (pl.col("_is_kick_return") == False)
-                & (pl.col("end.pos_team.id") != pl.col("pos_team")),
+            .with_columns(
+                int_turnover_team=pl.when(pl.col("int_turnover") == True)
+                .then(pl.col("pos_team"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
+                fumble_turnover_team=pl.when(pl.col("fumble_turnover") == True)
+                .then(pl.col("fumbling_team"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
             )
-            .then(True)
-            .otherwise(False),
-        ).with_columns(
-            turnover_team=pl.when(pl.col("is_turnover") == False)
-            .then(pl.lit(None, dtype=pl.Int64))
-            .when(pl.col("int") == True)
-            .then(pl.col("pos_team"))
-            .otherwise(pl.col("fumbling_team")),
-            is_st_turnover=pl.when(
-                (pl.col("is_turnover") == True)
-                & ((pl.col("sp") == True) | (pl.col("_is_punt_return") == True) | (pl.col("_is_kick_return") == True)),
+            .with_columns(
+                # back-compat single-flag view: a play is a turnover if either event fired
+                is_turnover=(pl.col("int_turnover") == True) | (pl.col("fumble_turnover") == True),
+                # primary losing team (fumble side preferred when both fired on one play)
+                turnover_team=pl.when(pl.col("fumble_turnover") == True)
+                .then(pl.col("fumbling_team"))
+                .when(pl.col("int_turnover") == True)
+                .then(pl.col("pos_team"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
+                # special-teams turnover = a fumble lost on a kick/punt (INTs are never ST)
+                is_st_turnover=pl.when(
+                    (pl.col("fumble_turnover") == True)
+                    & (
+                        (pl.col("sp") == True)
+                        | (pl.col("_is_punt_return") == True)
+                        | (pl.col("_is_kick_return") == True)
+                    ),
+                )
+                .then(True)
+                .otherwise(False),
             )
-            .then(True)
-            .otherwise(False),
         )
 
         # event -> credited team (spec 5.2)
@@ -3197,6 +3222,8 @@ class CFBPlayProcess(object):
             "recovery_team",
             "fumbling_team",
             "turnover_team",
+            "int_turnover_team",
+            "fumble_turnover_team",
             "penalized_team",
             "sack_team",
             "interception_team",
@@ -4975,28 +5002,47 @@ class CFBPlayProcess(object):
         )
         def_box_json = json.loads(def_box.write_json())
 
-        # turnovers lost per team (scrimmage AND special teams), keyed by identity
+        # Per-event turnover frame: one row per turnover EVENT (a single play can yield
+        # two -- an INT charged to the passing team AND a return fumble charged to the
+        # fumbling team). This is what lets team turnovers match the official box score
+        # on plays like an interception that is returned and then fumbled back.
+        int_events = play_df.filter(pl.col("int_turnover") == True).select(
+            team=pl.col("int_turnover_team").cast(pl.Int32),
+            recovery=pl.col("def_pos_team").cast(pl.Int32),
+            is_st=pl.lit(False),
+            is_int=pl.lit(True),
+        )
+        fum_events = play_df.filter(pl.col("fumble_turnover") == True).select(
+            team=pl.col("fumble_turnover_team").cast(pl.Int32),
+            recovery=pl.col("recovery_team").cast(pl.Int32),
+            is_st=pl.col("is_st_turnover"),
+            is_int=pl.lit(False),
+        )
+        to_events = pl.concat([int_events, fum_events], how="vertical")
+
         to_lost = (
-            play_df.filter(pl.col("is_turnover") == True)
-            .group_by(["turnover_team"])
+            to_events.group_by(["team"])
             .agg(
                 turnovers=pl.len(),
-                st_turnovers_lost=pl.col("is_st_turnover").sum(),
-                Int=(pl.col("int") == True).sum(),
-                fumbles_lost=(pl.col("fumble_or_muff") == True).sum(),
+                st_turnovers_lost=pl.col("is_st").sum(),
+                Int=pl.col("is_int").sum(),
+                fumbles_lost=(pl.col("is_int") == False).sum(),
             )
-            .rename({"turnover_team": "pos_team"})
+            .rename({"team": "pos_team"})
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
-        # NOTE: grouped by recovery_team, which is the parsed fumble/muff recoverer.
-        # Interceptions have a null recovery_team (no "recovered by" clause), so this
-        # counts FUMBLE recoveries gained only -- hence the honest field name. ST
-        # turnovers always carry a parsed recoverer, so st_turnovers_gained is complete.
+        # Gained side, keyed by the recovering team. INT events credit the intercepting
+        # team (def_pos_team); fumble events credit the parsed recoverer. fumble events
+        # without a parsed recoverer are dropped from the *_gained tally only.
         to_gained = (
-            play_df.filter(pl.col("is_turnover") == True)
-            .group_by(["recovery_team"])
-            .agg(st_turnovers_gained=pl.col("is_st_turnover").sum(), fumble_recoveries_gained=pl.len())
-            .rename({"recovery_team": "pos_team"})
+            to_events.filter(pl.col("recovery").is_not_null())
+            .group_by(["recovery"])
+            .agg(
+                st_turnovers_gained=pl.col("is_st").sum(),
+                takeaways=pl.len(),
+                fumble_recoveries_gained=(pl.col("is_int") == False).sum(),
+            )
+            .rename({"recovery": "pos_team"})
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
         to_aux = (
