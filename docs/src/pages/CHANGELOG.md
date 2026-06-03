@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.0.52 (unreleased)](#0052-unreleased)
+- [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
   - [User-facing quality-of-life additions](#user-facing-quality-of-life-additions)
@@ -55,7 +55,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.0.52 (unreleased)
+## 0.0.52 Release: June 3, 2026
 
 ### CFB — offline reprocess support (`CFBPlayProcess`)
 
