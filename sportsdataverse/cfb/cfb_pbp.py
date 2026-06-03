@@ -137,6 +137,98 @@ def _parse_recovery_abbrevs(text):
     return [m.upper() for m in _RECOVERY_ABBREV_RE.findall(text)]
 
 
+def _espn_num(value):
+    """Best-effort numeric cast of an ESPN ``displayValue``.
+
+    Returns ``int`` for whole numbers, ``float`` for decimals, and the original value
+    unchanged when it is not purely numeric (e.g. ``'8-37'``, ``'31:24'``, ``'16/32'``).
+    """
+    if not isinstance(value, str):
+        return value
+    v = value.strip()
+    if v.lstrip("-").isdigit():
+        return int(v)
+    try:
+        return float(v)
+    except ValueError:
+        return value
+
+
+def _parse_espn_team_box(boxscore):
+    """Parse ESPN's official team box statistics into a per-team dict keyed by team id.
+
+    ESPN's team box (``summary['boxscore']['teams']``) is the authoritative source for
+    countable team totals -- turnovers, fumbles lost, interceptions, total/passing/rushing
+    yards, penalties, first downs, possession time, etc. It is surfaced verbatim (numbers
+    cast where clean) so downstream totals can come straight from ESPN rather than the
+    lossy play-by-play derivation. Hyphenated combos are also split into integer fields:
+    ``totalPenaltiesYards`` ('8-37') -> ``penalties``/``penalty_yards``; ``completionAttempts``
+    ('16-32') -> ``completions``/``pass_attempts``.
+    """
+    out = {}
+    for t in (boxscore or {}).get("teams", []) or []:
+        team = t.get("team", {}) or {}
+        tid = team.get("id")
+        if tid is None:
+            continue
+        rec = {
+            "team_id": int(tid),
+            "abbreviation": team.get("abbreviation"),
+            "display_name": team.get("displayName"),
+            "home_away": t.get("homeAway"),
+        }
+        for st in t.get("statistics", []) or []:
+            name = st.get("name")
+            dv = st.get("displayValue")
+            if not name:
+                continue
+            if name == "totalPenaltiesYards" and isinstance(dv, str) and "-" in dv:
+                p, _, y = dv.partition("-")
+                rec["penalties"] = _espn_num(p)
+                rec["penalty_yards"] = _espn_num(y)
+            elif name == "completionAttempts" and isinstance(dv, str) and "-" in dv:
+                c, _, a = dv.partition("-")
+                rec["completions"] = _espn_num(c)
+                rec["pass_attempts"] = _espn_num(a)
+            rec[name] = _espn_num(dv)
+        out[int(tid)] = rec
+    return out
+
+
+def _parse_espn_player_box(boxscore):
+    """Parse ESPN's official per-player box into a flat list of rows.
+
+    Each row carries ``team_id`` / ``team_abbreviation`` / ``category`` / ``athlete_id`` /
+    ``athlete`` plus the category's stat keys mapped to the athlete's values (e.g. passing
+    ``completions/passingAttempts``, ``passingYards``, ``interceptions``; defensive
+    ``sacks``, ``tacklesForLoss``, ``passesDefended``; ``fumbles`` / ``fumblesLost`` /
+    ``fumblesRecovered``; ``puntReturns`` / ``kickReturns`` ...). ESPN's authoritative
+    player stats with clean display names.
+    """
+    rows = []
+    for pg in (boxscore or {}).get("players", []) or []:
+        team = pg.get("team", {}) or {}
+        tid = team.get("id")
+        tab = team.get("abbreviation")
+        for cat in pg.get("statistics", []) or []:
+            cname = cat.get("name")
+            keys = cat.get("keys") or []
+            for a in cat.get("athletes", []) or []:
+                ath = a.get("athlete", {}) or {}
+                stats = a.get("stats") or []
+                row = {
+                    "team_id": int(tid) if tid is not None else None,
+                    "team_abbreviation": tab,
+                    "category": cname,
+                    "athlete_id": ath.get("id"),
+                    "athlete": ath.get("displayName"),
+                }
+                for k, v in zip(keys, stats):
+                    row[k] = _espn_num(v)
+                rows.append(row)
+    return rows
+
+
 class CFBPlayProcess(object):
     gameId = 0
     # logger = None
@@ -5110,6 +5202,28 @@ class CFBPlayProcess(object):
         # Gained-side fields are the opponent's lost-side fields (a 2-team game: every
         # turnover one team loses, the other gains).
         by_id = {int(r["pos_team"]): r for r in turnover_box_json}
+
+        # Source the countable turnover totals DIRECTLY from ESPN's official box where it
+        # is available (authoritative). The play-by-play derivation -- which we still
+        # compute and validate against ESPN -- is retained under ``*_pbp`` keys and is the
+        # fallback for games ESPN does not cover.
+        espn_box = self.json.get("boxscore", {}) if isinstance(self.json, dict) else {}
+        espn_team_box = _parse_espn_team_box(espn_box)
+        for tid, r in by_id.items():
+            r["turnovers_pbp"] = r.get("turnovers", 0)
+            r["Int_pbp"] = int(r.get("Int", 0))
+            r["fumbles_lost_pbp"] = r.get("fumbles_lost", 0)
+            e = espn_team_box.get(tid)
+            r["espn_sourced"] = bool(e)
+            if not e:
+                continue
+            if isinstance(e.get("turnovers"), int):
+                r["turnovers"] = e["turnovers"]
+            if isinstance(e.get("interceptions"), int):
+                r["Int"] = e["interceptions"]
+            if isinstance(e.get("fumblesLost"), int):
+                r["fumbles_lost"] = e["fumblesLost"]
+
         for tid, r in by_id.items():
             r["Int"] = int(r.get("Int", 0))
             r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + (
@@ -5221,6 +5335,13 @@ class CFBPlayProcess(object):
         else:
             specialists_json = []
 
+        # ESPN's official team + player box -- the authoritative source for countable
+        # totals (turnovers, fumbles, interceptions, total/passing/rushing yards,
+        # penalties, first downs, player stat lines). Surfaced as dedicated sections so
+        # downstream consumers can take totals straight from ESPN; the computed sections
+        # above retain the advanced/EPA metrics ESPN does not provide.
+        espn_players = _parse_espn_player_box(espn_box)
+
         return {
             "pass": json.loads(passer_box.write_json()),
             "rush": json.loads(rusher_box.write_json()),
@@ -5232,6 +5353,8 @@ class CFBPlayProcess(object):
             "specialists": specialists_json,
             "turnover": turnover_box_json,
             "drives": json.loads(drives_data.write_json()),
+            "espn_team": list(espn_team_box.values()),
+            "espn_players": espn_players,
         }
 
     def run_processing_pipeline(self):

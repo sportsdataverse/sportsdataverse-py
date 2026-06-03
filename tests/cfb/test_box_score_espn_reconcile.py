@@ -76,6 +76,7 @@ def test_turnovers_match_espn_official_box(monkeypatch, gid):
         )
         computed = matches[0]
 
+        # The output fields are sourced directly from ESPN's official box (espn_sourced).
         assert computed["turnovers"] == espn["turnovers"], (
             f"gid={gid}, team_id={team_id}: "
             f"computed turnovers={computed['turnovers']} != ESPN turnovers={espn['turnovers']}"
@@ -87,6 +88,21 @@ def test_turnovers_match_espn_official_box(monkeypatch, gid):
         assert computed["fumbles_lost"] == espn["fumblesLost"], (
             f"gid={gid}, team_id={team_id}: "
             f"computed fumbles_lost={computed['fumbles_lost']} != ESPN fumblesLost={espn['fumblesLost']}"
+        )
+        # The independent play-by-play DERIVATION must also match ESPN -- this is the real
+        # cross-check that the attribution logic is correct (the output above is sourced
+        # from ESPN, so it would pass trivially; *_pbp validates the computation).
+        assert computed["turnovers_pbp"] == espn["turnovers"], (
+            f"gid={gid}, team_id={team_id}: pbp-derived turnovers={computed['turnovers_pbp']} "
+            f"!= ESPN turnovers={espn['turnovers']}"
+        )
+        assert computed["Int_pbp"] == espn["interceptions"], (
+            f"gid={gid}, team_id={team_id}: pbp-derived Int={computed['Int_pbp']} "
+            f"!= ESPN interceptions={espn['interceptions']}"
+        )
+        assert computed["fumbles_lost_pbp"] == espn["fumblesLost"], (
+            f"gid={gid}, team_id={team_id}: pbp-derived fumbles_lost={computed['fumbles_lost_pbp']} "
+            f"!= ESPN fumblesLost={espn['fumblesLost']}"
         )
 
 
@@ -110,3 +126,38 @@ def test_turnovers_equal_int_plus_fumbles_lost(monkeypatch, gid):
             f"gid={gid}, team_id={team_id}: "
             f"turnovers={row['turnovers']} != Int({row['Int']}) + fumbles_lost({row['fumbles_lost']}) = {expected}"
         )
+
+
+@pytest.mark.parametrize("gid", GIDS)
+def test_espn_team_section_matches_official_box(monkeypatch, gid):
+    """The espn_team section surfaces ESPN's official team totals verbatim."""
+    summary = _load(gid)
+    espn_stats = _espn_team_stats(summary)
+    box = _box(monkeypatch, gid)
+    assert "espn_team" in box and len(box["espn_team"]) == 2, f"gid={gid}: espn_team section missing/incomplete"
+    by_id = {r["team_id"]: r for r in box["espn_team"]}
+    for team_id, espn in espn_stats.items():
+        row = by_id.get(team_id)
+        assert row is not None, f"gid={gid}: team {team_id} missing from espn_team"
+        assert row["turnovers"] == espn["turnovers"]
+        assert row["fumblesLost"] == espn["fumblesLost"]
+        assert row["interceptions"] == espn["interceptions"]
+        # authoritative yardage is present and self-consistent (total = passing + rushing)
+        assert row["totalYards"] == row["netPassingYards"] + row["rushingYards"]
+
+
+@pytest.mark.parametrize("gid", GIDS)
+def test_espn_players_section_present(monkeypatch, gid):
+    """The espn_players section is populated with ESPN's official player stat lines."""
+    box = _box(monkeypatch, gid)
+    players = box.get("espn_players")
+    assert players, f"gid={gid}: espn_players section empty"
+    cats = {r["category"] for r in players}
+    # offensive categories are always present; defensive/special-teams categories are
+    # included by ESPN inconsistently across games, so they are not required here.
+    assert {"passing", "rushing", "receiving"} <= cats, f"gid={gid}: missing categories, got {cats}"
+    # every row carries a team id (athlete may be null for ESPN's aggregate "Team" rows)
+    assert all(r.get("team_id") is not None for r in players)
+    # the vast majority of rows are real athletes (allow a few null-name "Team" rows)
+    named = [r for r in players if r.get("athlete")]
+    assert len(named) >= 0.8 * len(players), f"gid={gid}: too many unnamed player rows"
