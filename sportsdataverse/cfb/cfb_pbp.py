@@ -5357,6 +5357,141 @@ class CFBPlayProcess(object):
             "espn_players": espn_players,
         }
 
+    def __join_participants(self, play_df):
+        """Join ESPN play participants to overwrite regex-extracted player names with clean display names.
+
+        Fetches participant data from :func:`~sportsdataverse.cfb.cfb_play_participants.espn_cfb_play_participants`
+        and coalesces the ESPN-provided display names over the regex-extracted names wherever the participant
+        name is non-null. Falls back to the original ``play_df`` on any failure (network error, parse error,
+        empty result, missing join key) so offline/test paths are unaffected.
+
+        Mapping (pbp_regex_col <- participant_col):
+            - ``passer_player_name``           <- ``passer_player_name``
+            - ``rusher_player_name``           <- ``rusher_player_name``
+            - ``receiver_player_name``         <- ``receiver_player_name``
+            - ``punter_player_name``           <- ``punter_player_name``
+            - ``fg_kicker_player_name``        <- ``kicker_player_name``
+            - ``sack_player_name``             <- ``sacked_by_player_name``
+            - ``fumble_forced_player_name``    <- ``forced_by_player_name``
+            - ``fumble_recovered_player_name`` <- ``recoverer_player_name`` (skipped if absent)
+            - ``pass_breakup_player_name``     <- ``pass_defender_player_name``
+            - ``punt_return_player_name``      <- ``returner_player_name``
+            - ``kickoff_return_player_name``   <- ``returner_player_name``
+
+        Note: ``recoverer_player_name`` was not present in the verified participant frame for game 401135269;
+        the mapping silently skips any participant column not found in the joined frame.
+        """
+        original_play_df = play_df
+        try:
+            from sportsdataverse.cfb.cfb_play_participants import espn_cfb_play_participants
+
+            parts = espn_cfb_play_participants(self.gameId)
+
+            # Graceful fallback conditions
+            if parts is None or parts.height == 0 or "id" not in play_df.columns:
+                logging.debug(
+                    f"{self.gameId}: __join_participants skipped -- "
+                    f"parts={None if parts is None else parts.height} rows, id_in_df={'id' in play_df.columns}",
+                )
+                return play_df
+
+            # Select only the scalar _player_name columns (not _player_names list columns)
+            # plus the join key. We explicitly list the columns we want to avoid pulling in
+            # list-type columns (kicker_player_names, etc.) or _player_id columns.
+            participant_name_cols = [
+                "kicker_player_name",
+                "returner_player_name",
+                "passer_player_name",
+                "receiver_player_name",
+                "rusher_player_name",
+                "punter_player_name",
+                "pass_defender_player_name",
+                "sacked_by_player_name",
+                "forced_by_player_name",
+                # recoverer_player_name is NOT in verified participant frame; skip.
+            ]
+            # Only keep participant columns that actually exist in the frame
+            available_part_cols = [c for c in participant_name_cols if c in parts.columns]
+            parts_slim = parts.select(["play_id"] + available_part_cols)
+
+            # Both play_df["id"] and parts["play_id"] are Int64 -- join directly.
+            # Rename participant columns with a _part suffix before join to avoid collision
+            # with existing pbp columns that share names (passer_player_name, etc.).
+            rename_map = {c: f"{c}_part" for c in available_part_cols}
+            parts_slim = parts_slim.rename(rename_map)
+
+            play_df = play_df.join(
+                parts_slim,
+                how="left",
+                left_on="id",
+                right_on="play_id",
+            )
+
+            # Mapping: (pbp_regex_col, participant_col_after_rename, populate_if_null)
+            #
+            # populate_if_null=True:  participant name is authoritative; fill even when regex
+            #   found nothing (safe for roles where team attribution is derived from pos_team /
+            #   def_pos_team, which is always correct).
+            # populate_if_null=False: only CLEAN UP an existing non-null regex name; never
+            #   introduce a new player name where regex was silent.  Used for the shared
+            #   `returner_player_name` participant role because it maps to both punt-return and
+            #   kickoff-return columns whose team attribution (punt_return_team / pos_team) can
+            #   point to the KICKING team for certain play types, causing mis-attribution when
+            #   we populate a previously-null name.
+            coalesce_pairs = [
+                ("passer_player_name", "passer_player_name_part", True),
+                ("rusher_player_name", "rusher_player_name_part", True),
+                ("receiver_player_name", "receiver_player_name_part", True),
+                ("punter_player_name", "punter_player_name_part", True),
+                ("fg_kicker_player_name", "kicker_player_name_part", True),
+                ("sack_player_name", "sacked_by_player_name_part", True),
+                ("fumble_forced_player_name", "forced_by_player_name_part", True),
+                ("pass_breakup_player_name", "pass_defender_player_name_part", True),
+                # returner maps to two columns; use cleanup-only mode to avoid
+                # injecting a name onto plays where punt_return_team / return_team
+                # is set to the kicking team rather than the receiving team.
+                ("punt_return_player_name", "returner_player_name_part", False),
+                ("kickoff_return_player_name", "returner_player_name_part", False),
+            ]
+
+            coalesce_exprs = []
+            for pbp_col, part_col, populate_if_null in coalesce_pairs:
+                # Only coalesce if BOTH columns exist in the joined frame
+                if pbp_col in play_df.columns and part_col in play_df.columns:
+                    if populate_if_null:
+                        # Participant name wins when non-null; regex name is fallback.
+                        expr = pl.coalesce(
+                            pl.col(part_col).str.strip_chars(),
+                            pl.col(pbp_col),
+                        ).alias(pbp_col)
+                    else:
+                        # Only replace when the regex already extracted a name AND the
+                        # participant name is also non-null (clean up, never introduce).
+                        expr = (
+                            pl.when(pl.col(pbp_col).is_not_null() & pl.col(part_col).is_not_null())
+                            .then(pl.col(part_col).str.strip_chars())
+                            .otherwise(pl.col(pbp_col))
+                            .alias(pbp_col)
+                        )
+                    coalesce_exprs.append(expr)
+
+            if coalesce_exprs:
+                play_df = play_df.with_columns(coalesce_exprs)
+
+            # Drop all _part helper columns so they don't leak into downstream schema
+            part_cols_to_drop = [f"{c}_part" for c in available_part_cols]
+            play_df = play_df.drop([c for c in part_cols_to_drop if c in play_df.columns])
+
+            logging.debug(
+                f"{self.gameId}: __join_participants applied {len(coalesce_exprs)} name coalesces "
+                f"from {parts.height} participant rows",
+            )
+            return play_df
+
+        except Exception as exc:
+            logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
+            return original_play_df
+
     def run_processing_pipeline(self):
         """Run the full play-by-play processing pipeline.
 
@@ -5447,6 +5582,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_drive_data)
                     .pipe(self.__process_qbr)
                 )
+                self.plays_json = self.plays_json.pipe(self.__join_participants)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
                 self.plays_json = self.plays_json.to_dicts()
