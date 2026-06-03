@@ -321,3 +321,31 @@ def test_nested_double_direction_fumble_charges_both_teams():
     assert r["recovery_team_2"] == 100  # offense recovered the 2nd (defense's) fumble
     assert r["is_pos_team_turnover"] is True  # offense lost the 1st fumble (to defense)
     assert r["is_def_pos_team_turnover"] is True  # defense lost the 2nd fumble (back to offense)
+
+
+def _pi_row(text):
+    return _base(
+        pos_team=100,
+        def_pos_team=200,
+        homeTeamAbbrev="OFF",
+        awayTeamAbbrev="DEF",
+        homeTeamId=100,
+        awayTeamId=200,
+        scrimmage_play=True,
+        fumble_vec=False,
+        penalty_detail="Pass Interference",  # generic label (would map to defense by heuristic)
+        yds_penalty="15",
+        text=text,
+    )
+
+
+def test_offensive_pass_interference_charged_to_offense():
+    # OPI: penalty_detail is the generic "Pass Interference" (the heuristic would wrongly
+    # charge the defense). The authoritative "PENALTY {TEAM}" text token charges the offense.
+    out = _attr([_pi_row("#9 QB pass incomplete PENALTY OFF Offensive Pass Interference (#80 X) 15 yards")])
+    assert out.to_dicts()[0]["penalized_team"] == 100  # offense (PENALTY OFF)
+
+
+def test_defensive_pass_interference_charged_to_defense():
+    out = _attr([_pi_row("#9 QB pass incomplete PENALTY DEF Defensive Pass Interference (#5 Y) 15 yards")])
+    assert out.to_dicts()[0]["penalized_team"] == 200  # defense (PENALTY DEF)

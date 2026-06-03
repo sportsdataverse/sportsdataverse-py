@@ -137,6 +137,24 @@ def _parse_recovery_abbrevs(text):
     return [m.upper() for m in _RECOVERY_ABBREV_RE.findall(text)]
 
 
+_PENALTY_ABBREV_RE = re.compile(r"PENALTY\s+([A-Z&]{2,})\b")
+
+
+def _parse_penalty_abbrev(text):
+    """Return the uppercase team abbreviation of the PENALIZED team, or None.
+
+    ESPN writes ``PENALTY {TEAM_ABBR} {foul} …`` where ``{TEAM_ABBR}`` is the team that
+    committed the foul (e.g. ``"PENALTY FSU Pass Interference (#15 S.Arnoux)"``). This is the
+    authoritative penalized team and correctly distinguishes offensive vs defensive fouls
+    (e.g. offensive vs defensive pass interference), which the ``penalty_detail`` label alone
+    does not. Returns the first match; ``None`` when no ``PENALTY {ABBR}`` token is present.
+    """
+    if not text:
+        return None
+    m = _PENALTY_ABBREV_RE.search(text)
+    return m.group(1).upper() if m else None
+
+
 def _espn_num(value):
     """Best-effort numeric cast of an ESPN ``displayValue``.
 
@@ -3190,6 +3208,11 @@ class CFBPlayProcess(object):
         play_df = play_df.with_columns(
             recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
             recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
+            # Penalized team parsed from the authoritative "PENALTY {ABBR}" text token --
+            # correctly distinguishes offensive vs defensive fouls (incl. OPI vs DPI).
+            _penalty_team=_abbrev_to_team_id(
+                pl.col("text").map_elements(_parse_penalty_abbrev, return_dtype=pl.Utf8),
+            ),
         )
 
         # Special-teams RETURN detection (flag OR text). ESPN sometimes reclassifies a
@@ -3338,8 +3361,12 @@ class CFBPlayProcess(object):
             kick_return_team=pl.col("return_team"),
             fg_team=pl.col("kicking_team"),
             punt_team=pl.col("kicking_team"),
+            # Prefer the authoritative "PENALTY {ABBR}" team parsed from text; fall back to
+            # the offensive/defensive heuristic only when no team token was parseable.
             penalized_team=pl.when(pl.col("penalty_detail").is_null())
             .then(pl.lit(None, dtype=pl.Int32))
+            .when(pl.col("_penalty_team").is_not_null())
+            .then(pl.col("_penalty_team"))
             .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
             .then(pl.col("def_pos_team"))
             .otherwise(pl.col("pos_team")),
@@ -3357,6 +3384,7 @@ class CFBPlayProcess(object):
                 "_rec_abbrevs",
                 "_recovery_abbrev",
                 "_recovery_abbrev_2",
+                "_penalty_team",
                 "_is_kick_return",
                 "_is_punt_return",
                 "_loser_1",
@@ -4653,8 +4681,19 @@ class CFBPlayProcess(object):
             .agg(
                 total_pen_yards=pl.col("statYardage").sum(),
                 EPA_penalty=pl.col("EPA_penalty").sum(),
-                penalty_first_downs_created=pl.col("penalty_1st_conv").sum(),
-                penalty_first_downs_created_rate=pl.col("penalty_1st_conv").mean(),
+                # Only ACCEPTED penalties award a first down; a declined/offsetting penalty
+                # whose text mentions "1st down" earned it from the play (counted as a
+                # passing/rushing first down), so excluding them avoids double-counting.
+                penalty_first_downs_created=(
+                    (pl.col("penalty_1st_conv") == True)
+                    & (pl.col("penalty_declined") == False)
+                    & (pl.col("penalty_offset") == False)
+                ).sum(),
+                penalty_first_downs_created_rate=(
+                    (pl.col("penalty_1st_conv") == True)
+                    & (pl.col("penalty_declined") == False)
+                    & (pl.col("penalty_offset") == False)
+                ).mean(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
