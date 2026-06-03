@@ -493,7 +493,13 @@ class CFBPlayProcess(object):
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
                     .and_(pl.col("text").is_in(pl.col("lead_text").implode()))
-                    .and_(pl.col("type.text") != "Timeout"),
+                    .and_(pl.col("type.text") != "Timeout")
+                    # Guard: an "End of <period/half/game>" marker inherits the preceding
+                    # play's start state (team/down/distance/yardsToEndzone), so without
+                    # this the loose is_in(lead_text) match spuriously flags the real
+                    # play right before it (e.g. an end-of-half Hail Mary interception)
+                    # as a duplicate and drops it. Never dedupe against an end-marker lead.
+                    .and_(pl.col("lead_text").str.contains(r"(?i)end of|end period|end quarter") == False),
                 )
                 .then(pl.lit(True))
                 .otherwise(pl.lit(False)),

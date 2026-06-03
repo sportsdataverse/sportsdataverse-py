@@ -78,7 +78,10 @@ def test_turnovers_punt_muff_fsu(monkeypatch):
     box = _box(monkeypatch, 401754598)
     fsu = _team(box["turnover"], 52)
     ncst = _team(box["turnover"], 152)
-    assert fsu["turnovers"] == 3  # 1 INT + muff + punt-return fumble (both ST)
+    # Matches ESPN official box (FSU turnovers=4): 2 INT thrown + 2 fumbles lost
+    # (the muff + the punt-return fumble, both ST). The 2nd INT is the end-of-half
+    # Hail Mary that the pbp dedup used to drop -- now retained (see __helper_cfb_pbp_features).
+    assert fsu["turnovers"] == 4
     assert ncst["turnovers"] == 0  # the only NCSU fumble was overturned on review
     assert fsu["st_turnovers_lost"] == 2
 
