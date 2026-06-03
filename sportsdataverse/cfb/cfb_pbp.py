@@ -3149,7 +3149,22 @@ class CFBPlayProcess(object):
             interception_team=pl.col("def_pos_team"),
             pass_breakup_team=pl.col("def_pos_team"),
             forced_fumble_team=pl.col("def_pos_team"),
-            fumble_recovery_team=pl.col("recovery_team"),
+            # Team that recovered the fumble/muff. Prefer the parsed recovering-team
+            # abbreviation; when it does not parse, fall back to the gaining team (the
+            # side opposite the fumbling team) for turnovers, or the fumbling team for
+            # own recoveries -- so a recovery is never dropped just because the team
+            # abbreviation in the text could not be matched.
+            fumble_recovery_team=pl.when(pl.col("recovery_team").is_not_null())
+            .then(pl.col("recovery_team"))
+            .when(pl.col("fumble_or_muff") == False)
+            .then(pl.lit(None, dtype=pl.Int64))
+            .when(pl.col("is_turnover") == True)
+            .then(
+                pl.when(pl.col("fumbling_team") == pl.col("pos_team"))
+                .then(pl.col("def_pos_team"))
+                .otherwise(pl.col("pos_team")),
+            )
+            .otherwise(pl.col("fumbling_team")),
             punt_return_team=pl.col("return_team"),
             kick_return_team=pl.col("return_team"),
             fg_team=pl.col("kicking_team"),
@@ -5017,24 +5032,39 @@ class CFBPlayProcess(object):
         )
 
         # --- defensive players (0.0.53): per-defender havoc events, attributed by player ---
-        def _player_event_box(name_col, out, team_col, yds_col=None):
-            """Count non-null occurrences of `name_col` per (team, player); sum `yds_col`."""
-            if name_col not in play_df.columns:
+        def _player_event_box(name_col, out, team_col, yds_col=None, team_out=None):
+            """Count non-null occurrences of `name_col` per (team, player); sum `yds_col`.
+
+            `team_col` is the column to group by (the resolved credited-team). `team_out`
+            optionally renames it back to the section's canonical join key (e.g. group by
+            `fumble_recovery_team` but emit it as `def_pos_team` so the section reduce-join
+            still aligns).
+            """
+            if name_col not in play_df.columns or team_col not in play_df.columns:
                 return None
-            f = play_df.filter(pl.col(name_col).is_not_null())
+            f = play_df.filter(pl.col(name_col).is_not_null() & pl.col(team_col).is_not_null())
             if f.height == 0:
                 return None
             aggs = [pl.len().alias(out)]
             if yds_col is not None and yds_col in play_df.columns:
                 aggs.append(pl.col(yds_col).sum().alias(f"{out}_yards"))
-            return f.group_by([team_col, name_col]).agg(aggs).rename({name_col: "player_name"})
+            g = f.group_by([team_col, name_col]).agg(aggs).rename({name_col: "player_name"})
+            if team_out and team_out != team_col:
+                g = g.rename({team_col: team_out})
+            return g
 
         def_parts = [
             _player_event_box("sack_player_name", "sacks", "def_pos_team", "yds_sacked"),
             _player_event_box("pass_breakup_player_name", "pass_breakups", "def_pos_team"),
             _player_event_box("interception_player_name", "interceptions", "def_pos_team", "yds_int_return"),
             _player_event_box("fumble_forced_player_name", "forced_fumbles", "def_pos_team"),
-            _player_event_box("fumble_recovered_player_name", "fumble_recoveries", "def_pos_team", "yds_fumble_return"),
+            _player_event_box(
+                "fumble_recovered_player_name",
+                "fumble_recoveries",
+                "fumble_recovery_team",
+                "yds_fumble_return",
+                team_out="def_pos_team",
+            ),
         ]
         def_parts = [d for d in def_parts if d is not None]
         if def_parts:
@@ -5055,7 +5085,13 @@ class CFBPlayProcess(object):
             _player_event_box("fg_kicker_player_name", "field_goals", "pos_team", "yds_fg"),
             _player_event_box("punter_player_name", "punts", "pos_team", "yds_punted"),
             _player_event_box("kickoff_return_player_name", "kick_returns", "pos_team", "yds_kickoff_return"),
-            _player_event_box("punt_return_player_name", "punt_returns", "pos_team", "yds_punt_return"),
+            _player_event_box(
+                "punt_return_player_name",
+                "punt_returns",
+                "punt_return_team",
+                "yds_punt_return",
+                team_out="pos_team",
+            ),
         ]
         spec_parts = [s for s in spec_parts if s is not None]
         if spec_parts:

@@ -106,3 +106,21 @@ def test_turnover_margin_antisymmetric_offline(monkeypatch):
     margins = [r["turnover_margin"] for r in box["turnover"]]
     assert margins[0] == -margins[1]
     assert all("team_id" in r for r in box["turnover"])
+
+
+def test_kickoff_own_recovery_credits_receiving_team(monkeypatch):
+    # BYU (252) returner recovered his own kickoff fumble -> must be credited to BYU,
+    # NOT Hawaii (62, the kicking team). Previously grouped by def_pos_team => Hawaii.
+    box = _box(monkeypatch, 401135269)
+    byu_recs = [
+        d for d in box["defensive_players"] if d.get("def_pos_team") == 252 and d.get("fumble_recoveries", 0) > 0
+    ]
+    assert byu_recs, "BYU own kickoff-return recovery not credited to BYU (252)"
+
+
+def test_punt_returns_not_credited_to_punting_team(monkeypatch):
+    # NC State (152) punted to FSU (52). Any punt returns must be filed under the
+    # returning team, never the punting team (152).
+    box = _box(monkeypatch, 401754598)
+    bad = [s for s in box["specialists"] if s.get("punt_returns", 0) > 0 and s.get("pos_team") == 152]
+    assert not bad, f"punt returns mis-credited to the punting team: {bad}"
