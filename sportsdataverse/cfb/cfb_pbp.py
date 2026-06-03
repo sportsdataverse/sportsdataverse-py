@@ -5126,6 +5126,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
+                    .pipe(self.__add_attribution_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__process_epa)

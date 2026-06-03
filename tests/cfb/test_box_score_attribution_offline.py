@@ -46,3 +46,29 @@ def _team(box_section: list[dict], team_id: int) -> dict:
 def test_fixtures_produce_box(monkeypatch):
     box = _box(monkeypatch, 401754598)
     assert set(box) >= {"turnover", "team", "defensive_players", "specialists"}
+
+
+def test_attribution_cols_present(monkeypatch):
+    import polars as pl
+
+    summary = _load(401754598)
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
+    proc = CFBPlayProcess(gameId=401754598)
+    proc.espn_cfb_pbp()
+    proc.run_processing_pipeline()
+    df = pl.from_dicts(proc.plays_json, infer_schema_length=None)
+    for col in [
+        "turnover_team",
+        "is_turnover",
+        "is_st_turnover",
+        "fumble_recovery_team",
+        "penalized_team",
+        "kicking_team",
+        "return_team",
+    ]:
+        assert col in df.columns, f"missing {col}"
