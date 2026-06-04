@@ -82,9 +82,20 @@ fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ex
   byte-identical URL + query string to the function it replaced (verified by a
   URL+params parity gate across all scopes), but now exposes concrete parameter
   names, type hints, and docstrings instead of an opaque `*args, **kwargs` shim.
-- **No function renames.** All public names are retained, including
-  `espn_<league>_teams_site` (the raw site-v2 teams endpoint), which is kept
-  distinct from the parsed-DataFrame `espn_<league>_teams`.
+- **CFB names aligned to cfbfastR (20 renames).** The `espn_cfb_*` raw-endpoint
+  names now match their cfbfastR R-export taxonomy where a 1:1 twin exists
+  (behavior unchanged): `event_* -> game_*` (broadcasts, leaders, odds, play,
+  powerindex, predictor, probabilities, situation, status), `event_competitor_*
+  -> game_team_*` (leaders, linescores, roster), `athlete_* -> player_*` (gamelog,
+  overview, splits), and `season_*` cleanups (`futures`, `groups`, `recruits`,
+  `week_rankings`, `powerindex -> team_powerindex`). Driven by a committed,
+  collision-guarded `tools/codegen/espn_rename_map.yaml`; one→many splits (e.g.
+  `summary`) and the basketball packages are left for follow-up curation (see
+  `docs/superpowers/specs/espn-r-naming-worksheet.md`).
+- **Other names retained**, including `espn_<league>_teams_site` (the raw site-v2
+  teams endpoint), kept distinct from the parsed-DataFrame `espn_<league>_teams`,
+  and the `espn_cfb_season_{team,awards,coaches}` names (renames withheld — they
+  would collide with the generated catalog functions).
 - **`_get` / `_csv` single source.** The HTTP + coercion helpers now live in
   `sportsdataverse._codegen_runtime` (shared by all generated wrappers);
   `_common_espn` re-exports them. **Note for test authors:** mock

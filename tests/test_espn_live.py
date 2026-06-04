@@ -291,9 +291,9 @@ def test_espn_mlb_scoreboard_is_callable_with_correct_name():
 
 
 def test_espn_cfb_season_recruits_2024_returns_items():
-    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_season_recruits
+    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_recruits
 
-    payload = espn_cfb_season_recruits(season=2024, limit=10)
+    payload = espn_cfb_recruits(season=2024, limit=10)
     assert isinstance(payload, dict), "expected a dict response"
     # Core v2 season_recruits wraps its list under 'items' (paginated response)
     items = payload.get("items") or []

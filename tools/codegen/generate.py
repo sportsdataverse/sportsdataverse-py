@@ -215,26 +215,79 @@ def _ruff_format_dir(path: Path) -> None:
         pass
 
 
+_ESPN_RENAME_FILE = ROOT / "tools" / "codegen" / "espn_rename_map.yaml"
+_ESPN_RENAME_SKIPPED: dict[str, str] = {}  # old -> reason (collisions held back from the curated map)
+
+
+def _load_espn_renames() -> dict:
+    """Approved generated-name -> R-aligned-name map (espn_rename_map.yaml)."""
+    if not _ESPN_RENAME_FILE.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(_ESPN_RENAME_FILE.read_text(encoding="utf-8")).get("rename", {}) or {}
+
+
+def _handwritten_espn_names(prefix: str) -> set[str]:
+    """``espn_<prefix>_*`` public names NOT provided by the generated *_espn_ext module.
+
+    Resolves each public name on the package and keeps those whose ``__module__`` is
+    a sibling (or unknown, e.g. decorated/partial) -- robust to decorators that the
+    per-module ``vars()`` scan misses (e.g. cached ``espn_cfb_teams``)."""
+    import importlib
+
+    try:
+        pkg = importlib.import_module(f"sportsdataverse.{prefix}")
+    except Exception:
+        return set()
+    out: set[str] = set()
+    for n in dir(pkg):
+        if not n.startswith(f"espn_{prefix}_"):
+            continue
+        mod = getattr(getattr(pkg, n, None), "__module__", "") or ""
+        if not mod.endswith("_espn_ext"):
+            out.add(n)
+    return out
+
+
 def _league_module_source(league: spec.League, apis, hosts) -> str:
     """Render the (unformatted) module source; ruff formatting happens at write time."""
-    endpoints = []
-    parser_imports = set()
-    transforms = set()
+    renames = _load_espn_renames()
+    handwritten = _handwritten_espn_names(league.prefix)
+    # pass 1: collect endpoints + their base (pre-rename) names for this league
+    collected = []  # (ep, ep_host, base_name)
     for api in apis:
         host_url = hosts[api.host]
         for ep in api.endpoints:
-            if ep.scope not in league.scopes:
-                continue
-            if league.league in ep.exclude_leagues:
+            if ep.scope not in league.scopes or league.league in ep.exclude_leagues:
                 continue
             ep_host = hosts[ep.host] if ep.host else host_url
-            fn_name = api.name_pattern.format(prefix=league.prefix, short=ep.short)
-            if ep.parser:
-                parser_imports.add(ep.parser)
-            for p in (*ep.path_params, *ep.query_params):
-                if p.transform:
-                    transforms.add(p.transform)
-            endpoints.append(_EndpointView(ep, fn_name, ep_host, league))
+            base = api.name_pattern.format(prefix=league.prefix, short=ep.short)
+            collected.append((ep, ep_host, base))
+    base_names = {b for _, _, b in collected}
+
+    # pass 2: apply the R-alignment renames with a collision guard (skip + record any
+    # rename that would clash with an existing generated name, a hand-written sibling,
+    # or another already-assigned rename).
+    endpoints = []
+    parser_imports = set()
+    transforms = set()
+    used: set[str] = set()
+    for ep, ep_host, base in collected:
+        fn_name = base
+        new = renames.get(base)
+        if new and new != base:
+            if new in base_names or new in handwritten or new in used:
+                _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
+            else:
+                fn_name = new
+        used.add(fn_name)
+        if ep.parser:
+            parser_imports.add(ep.parser)
+        for p in (*ep.path_params, *ep.query_params):
+            if p.transform:
+                transforms.add(p.transform)
+        endpoints.append(_EndpointView(ep, fn_name, ep_host, league))
     runtime_imports = ["_get"] + sorted(transforms)
     template = render.ENV.get_template("espn_league_module.py.jinja")
     return template.render(

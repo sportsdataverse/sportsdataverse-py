@@ -1,0 +1,28 @@
+# Approved ESPN generated-name -> R-aligned-name renames (cfb, vs cfbfastR).
+# Applied per full-name by generate.py with a collision guard. Behavior is
+# unchanged (Plan 2 URL parity holds); only public names change. The (check)/
+# review rows and the teams_site/season_{team,awards,coaches} collisions from the
+# worksheet are intentionally NOT here (teams_site is the raw endpoint, distinct
+# from the parsed hand-written espn_*_teams; the season_* ones collide with the
+# generated catalog functions).
+rename:
+  espn_cfb_athlete_gamelog: espn_cfb_player_gamelog
+  espn_cfb_athlete_overview: espn_cfb_player_overview
+  espn_cfb_athlete_splits: espn_cfb_player_splits
+  espn_cfb_event_broadcasts: espn_cfb_game_broadcasts
+  espn_cfb_event_competitor_leaders: espn_cfb_game_team_leaders
+  espn_cfb_event_competitor_linescores: espn_cfb_game_team_linescores
+  espn_cfb_event_competitor_roster: espn_cfb_game_team_roster
+  espn_cfb_event_leaders: espn_cfb_game_leaders
+  espn_cfb_event_odds: espn_cfb_game_odds
+  espn_cfb_event_play: espn_cfb_game_play
+  espn_cfb_event_powerindex: espn_cfb_game_powerindex
+  espn_cfb_event_predictor: espn_cfb_game_predictor
+  espn_cfb_event_probabilities: espn_cfb_game_probabilities
+  espn_cfb_event_situation: espn_cfb_game_situation
+  espn_cfb_event_status: espn_cfb_game_status
+  espn_cfb_season_futures: espn_cfb_futures
+  espn_cfb_season_groups: espn_cfb_groups
+  espn_cfb_season_powerindex: espn_cfb_team_powerindex
+  espn_cfb_season_recruits: espn_cfb_recruits
+  espn_cfb_season_week_rankings: espn_cfb_week_rankings
