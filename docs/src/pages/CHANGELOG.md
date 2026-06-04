@@ -104,6 +104,17 @@ fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ex
   `/athletes/{id}/stats` endpoint becomes `espn_*_player_stats_v3`, so wnba/wbb keep
   their hand-written parsed `espn_*_player_stats` alongside the generated v3 wrapper
   (and `player_stats_v3` is consistent across all leagues + hoopR/wehoop/cfbfastR).
+- **Endpoint-parity reversal for `espn_wnba_player_stats` / `espn_wbb_player_stats`.**
+  The hand-written wrappers previously hit the *same* web-common-v3
+  `/athletes/{id}/stats` endpoint as the generated `*_player_stats_v3`, returning a
+  `dict` of category frames. They now hit the core-v2
+  `/seasons/{season}/types/{type}/athletes/{id}/statistics` season endpoint and return
+  **one wide, self-describing row** (athlete identity + season line as
+  `{category}_{stat}` columns + `team_*` identity), matching wehoop's
+  `espn_*_player_stats`. `player_stats` = season line (core-v2); `player_stats_v3` =
+  comprehensive (web-v3). New `season_type` (`"regular"`/`"postseason"`) and `total`
+  parameters mirror the wehoop signature. **BREAKING:** the return type changed from
+  `dict[str, DataFrame]` to a single `DataFrame`.
 - **`_get` / `_csv` single source.** The HTTP + coercion helpers now live in
   `sportsdataverse._codegen_runtime` (shared by all generated wrappers);
   `_common_espn` re-exports them. **Note for test authors:** mock

@@ -1,27 +1,32 @@
-"""ESPN women's-college-basketball athlete season stats scraper.
+"""ESPN women's-college-basketball athlete *season* stats scraper (core-v2).
 
-Single ESPN endpoint:
-    site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/{athlete_id}/stats?season={year}
+This wrapper mirrors the ``wehoop`` / ``hoopR`` ``espn_*_player_stats``
+convention: it pulls a player's **season** statistics from ESPN's
+``sports.core.api.espn.com`` (core-v2) graph and returns **one wide,
+rectangular row** that combines
 
-Unlike the team-roster endpoint, this one returns *multi-table* data — ESPN
-ships an array of stat categories (currently three: season averages, season
-totals, miscellaneous totals) and the wrapper returns one polars DataFrame
-per category, keyed by a canonical category name.
+1. athlete identity / biographical metadata,
+2. the season stat line, pivoted wide as ``{category}_{stat}`` columns
+   (e.g. ``offensive_points``, ``defensive_blocks``, ``general_minutes``),
+   and
+3. the player's team identity (``team_*`` columns).
 
-The canonical category keys (``"Averages"``, ``"Totals"``, ``"Misc"``) are
-always present in the return dict, even when ESPN omits one (the missing
-slot is filled with an empty frame carrying the documented schema). Any
-category whose ESPN ``displayName`` / ``name`` does not map onto one of
-those three is collected under an additional ``"Other"`` key — that key is
-only added when there is at least one un-mapped category, so callers
-shouldn't unconditionally index into it.
+Endpoint family (core-v2)::
 
-The canonical-key set was chosen to match ESPN's 2025-current shape
-(``averages`` / ``totals`` / ``miscellaneous``), not the legacy
-``General`` / ``Offensive`` / ``Defensive`` / ``Rebounding`` / ``Shooting``
-naming the original ESPN schema used. If ESPN reverts or expands the
-category set, the new names will surface under ``"Other"`` until the
-mapping table here is updated.
+    .../seasons/{season}/types/{type}/athletes/{id}/statistics/{totals}
+    .../seasons/{season}/athletes/{id}                 # athlete + team $ref
+    .../seasons/{season}/teams/{team_id}               # dereferenced team
+
+This is intentionally a *different* endpoint from
+:func:`sportsdataverse.wbb.espn_wbb_player_stats_v3`, which hits the
+web-common-v3 ``/athletes/{id}/stats`` surface and returns the richer
+multi-category payload. ``player_stats`` = season line (core-v2);
+``player_stats_v3`` = comprehensive (web-v3). The split matches wehoop.
+
+The statistics call is authoritative: a 404 there means no season line for
+that athlete/season and raises. The athlete + team dereferences are
+best-effort -- a hiccup leaves the corresponding ``*_`` columns null rather
+than failing the whole call.
 """
 
 from __future__ import annotations
@@ -31,42 +36,60 @@ from typing import Any, Literal, overload
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import download, underscore
 
 _LEAGUE_SLUG: str = "womens-college-basketball"
+_CORE_V2_BASE: str = "https://sports.core.api.espn.com/v2/sports/basketball/leagues"
 
-# Canonical category keys, in the order the docstring promises. ``Other`` is
-# appended dynamically only when ESPN ships a category that doesn't map onto
-# one of these three.
-_CANONICAL_CATEGORIES: tuple[str, ...] = (
-    "Averages",
-    "Totals",
-    "Misc",
+# Athlete-metadata fields lifted from the core-v2 ``/athletes/{id}`` node,
+# mapped to their snake_case output column. ``id``/``uid``/``guid``/``type``
+# are namespaced ``athlete_*`` to disambiguate from the team block.
+_ATHLETE_FIELD_MAP: dict[str, str] = {
+    "id": "athlete_id",
+    "uid": "athlete_uid",
+    "guid": "athlete_guid",
+    "type": "athlete_type",
+    "firstName": "first_name",
+    "lastName": "last_name",
+    "fullName": "full_name",
+    "displayName": "display_name",
+    "shortName": "short_name",
+    "weight": "weight",
+    "displayWeight": "display_weight",
+    "height": "height",
+    "displayHeight": "display_height",
+    "age": "age",
+    "dateOfBirth": "date_of_birth",
+    "jersey": "jersey",
+    "slug": "slug",
+    "active": "active",
+}
+
+# Team-metadata fields lifted from the dereferenced ``/teams/{id}`` node,
+# mapped to their ``team_``-prefixed output column.
+_TEAM_FIELD_MAP: dict[str, str] = {
+    "id": "team_id",
+    "uid": "team_uid",
+    "guid": "team_guid",
+    "slug": "team_slug",
+    "location": "team_location",
+    "name": "team_name",
+    "abbreviation": "team_abbreviation",
+    "displayName": "team_display_name",
+    "shortDisplayName": "team_short_display_name",
+    "color": "team_color",
+    "alternateColor": "team_alternate_color",
+    "isActive": "team_is_active",
+}
+
+# Columns coerced to integer when present and parseable.
+_INT_COLUMNS: tuple[str, ...] = (
+    "athlete_id",
+    "team_id",
+    "position_id",
+    "status_id",
+    "season",
 )
-
-# ESPN's ``name`` / ``displayName`` (lower-cased, trimmed; the trailing
-# qualifier such as " Averages" / " Totals" stripped) -> canonical key.
-# ESPN ships display names like "Regular Season Averages",
-# "Postseason Averages", "Season Totals", "Misc Totals", etc. so the lookup
-# matches on substring rather than exact equality (see ``_canonical_key``).
-_CATEGORY_NAME_MAP: dict[str, str] = {
-    "averages": "Averages",
-    "totals": "Totals",
-    "misc": "Misc",
-    "miscellaneous": "Misc",
-}
-
-# Per-category schema. Used to construct empty frames for missing categories
-# so callers always get a stable column set regardless of upstream omissions.
-_PER_CATEGORY_SCHEMA: dict[str, type[pl.DataType] | pl.DataType] = {
-    "stat_name": pl.Utf8,
-    "display_value": pl.Utf8,
-    "value": pl.Float64,
-    "description": pl.Utf8,
-    "category": pl.Utf8,
-    "athlete_id": pl.Int64,
-    "season": pl.Int32,
-}
 
 
 @overload
@@ -74,6 +97,8 @@ def espn_wbb_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = ...,
+    total: bool = ...,
     raw: Literal[True],
     return_as_pandas: bool = ...,
     **kwargs: Any,
@@ -83,107 +108,101 @@ def espn_wbb_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = ...,
+    total: bool = ...,
     raw: Literal[False] = ...,
     return_as_pandas: Literal[True],
     **kwargs: Any,
-) -> dict[str, pd.DataFrame]: ...
+) -> pd.DataFrame: ...
 @overload
 def espn_wbb_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = ...,
+    total: bool = ...,
     raw: Literal[False] = ...,
     return_as_pandas: Literal[False] = ...,
     **kwargs: Any,
-) -> dict[str, pl.DataFrame]: ...
+) -> pl.DataFrame: ...
 def espn_wbb_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = "regular",
+    total: bool = False,
     raw: bool = False,
     return_as_pandas: bool = False,
     **kwargs: Any,
-) -> dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]:
-    """Pull ESPN season stats for a women's-college-basketball athlete.
+) -> pl.DataFrame | pd.DataFrame | dict[str, Any]:
+    """Pull a women's-college-basketball athlete's ESPN **season** stat line.
+
+    Returns **one wide row** combining athlete identity, the season stat
+    line pivoted as ``{category}_{stat}`` columns, and team identity --
+    matching the ``wehoop`` / ``hoopR`` ``espn_*_player_stats`` convention.
+    For the richer multi-category web-v3 payload use
+    :func:`espn_wbb_player_stats_v3` instead.
 
     Args:
-        athlete_id: ESPN athlete identifier (e.g. ``4433985`` for Kylie
-            Feuerbach).
-        season: Season year, forwarded to ESPN as ``?season=YYYY``.
-        raw: If True, returns the parsed JSON dict before any flattening.
-        return_as_pandas: If True, returns a dict of pandas DataFrames;
-            otherwise polars.
-        **kwargs: Forwarded to ``sportsdataverse.dl_utils.download``.
+        athlete_id: ESPN athlete identifier (e.g. ``4433985``).
+        season: Season year, used in the core-v2 path
+            (``.../seasons/{season}/...``).
+        season_type: ``"regular"`` (type 2) or ``"postseason"`` (type 3).
+            Defaults to ``"regular"``.
+        total: When True, requests the ``/statistics/0`` totals variant;
+            ESPN currently returns the same payload either way, so this is
+            a forward-compat passthrough kept for wehoop signature parity.
+        raw: If True, returns the parsed core-v2 *statistics* JSON dict
+            before any flattening.
+        return_as_pandas: If True, returns a pandas DataFrame; otherwise
+            polars.
+        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        Dict with one DataFrame per stat category. The canonical keys
-        ``"Averages"``, ``"Totals"``, ``"Misc"`` are ALWAYS present;
-        missing categories come back as empty frames carrying the
-        documented schema. Any ESPN-shipped category whose name does not
-        match one of the three canonical keys is collected under an
-        additional ``"Other"`` key (only added if non-empty).
-
-        Per-category column set (one row per stat):
-
-        * ``stat_name`` (Utf8)
-        * ``display_value`` (Utf8)
-        * ``value`` (Float64)
-        * ``description`` (Utf8)
-        * ``category`` (Utf8, constant per frame)
-        * ``athlete_id`` (Int64, constant)
-        * ``season`` (Int32, constant)
-
-        If ``raw=True``, returns the raw response dict.
+        A single-row wide DataFrame (polars by default, pandas when
+        ``return_as_pandas=True``). Columns are, in order: identity / echo
+        columns (``season``, ``season_type``, ``total``), athlete metadata
+        (``athlete_id``, ``full_name``, ``position_*``, ...), the season
+        stat line as ``{category}_{stat}`` numeric columns (e.g.
+        ``offensive_points``, ``defensive_blocks``, ``general_minutes``),
+        and team metadata (``team_id``, ``team_display_name``, ...). When
+        ``raw=True`` returns the raw statistics JSON ``dict``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: ESPN returned 404.
+        ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
+        sportsdataverse.errors.NoESPNDataError: ESPN returned 404 for the
+            statistics node (no season line for that athlete/season).
         requests.exceptions.RequestException: Other network failures after
             retries.
 
     Example:
-        Quick start - canonical ``Averages`` / ``Totals`` / ``Misc`` keys::
+        Pull a player's 2025 season line as a single wide row::
 
             from sportsdataverse.wbb import espn_wbb_player_stats
-            frames = espn_wbb_player_stats(athlete_id=4433985, season=2025)
-            print(sorted(frames.keys()))
+            df = espn_wbb_player_stats(athlete_id=4433985, season=2025)
+            df.select(["full_name", "team_display_name", "offensive_points"])
 
-        Index into a specific table::
+        Postseason line, as pandas::
 
-            averages = frames["Averages"]
-            print(averages.shape)
-            averages.select(["stat_name", "display_value", "value"]).head()
-
-        Iterate over canonical categories::
-
-            for cat in ("Averages", "Totals", "Misc"):
-                print(cat, frames[cat].shape)
-
-        ``Other`` fallback bucket (only present when ESPN ships a category
-        that does not map onto one of the three canonical keys)::
-
-            if "Other" in frames:
-                frames["Other"].select(["category", "stat_name", "value"])
-
-        Pandas round-trip::
-
-            frames_pd = espn_wbb_player_stats(
-                athlete_id=4433985, season=2025, return_as_pandas=True
+            df = espn_wbb_player_stats(
+                athlete_id=4433985, season=2025,
+                season_type="postseason", return_as_pandas=True,
             )
-            frames_pd["Averages"].head()
 
         See Also:
-            * `wehoop`_ - R sister package
-            * `cfbfastR`_ - companion R package for college football
-            * `ESPN`_ - data origin
+            * :func:`espn_wbb_player_stats_v3` -- comprehensive web-v3 stats
+            * `wehoop`_ -- R sister package (``espn_wbb_player_stats``)
+            * `ESPN`_ -- data origin
 
         .. _wehoop: https://wehoop.sportsdataverse.org
-        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
         .. _ESPN: https://www.espn.com
     """
     return _espn_basketball_player_stats(
         league=_LEAGUE_SLUG,
         athlete_id=athlete_id,
         season=season,
+        season_type=season_type,
+        total=total,
         raw=raw,
         return_as_pandas=return_as_pandas,
         **kwargs,
@@ -195,209 +214,179 @@ def _espn_basketball_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = "regular",
+    total: bool = False,
     raw: bool = False,
     return_as_pandas: bool = False,
     **kwargs: Any,
-) -> dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]:
-    """Shared implementation for ``espn_wbb_player_stats`` / ``espn_wnba_player_stats``.
+) -> pl.DataFrame | pd.DataFrame | dict[str, Any]:
+    """Shared core-v2 season-stats implementation for wbb / wnba.
 
-    Builds the ESPN web-common-v3 athlete stats URL for the supplied
-    ``league`` slug, downloads, walks the ``categories`` array, normalizes
-    each category into a per-stat frame, and ensures all three canonical
-    category keys (``"Averages"``, ``"Totals"``, ``"Misc"``) exist in the
-    output.
+    Builds the core-v2 statistics URL for the supplied ``league`` slug,
+    fetches the season stat line, dereferences the athlete + team nodes,
+    and binds everything into a single wide row.
     """
-    url = (
-        "https://site.web.api.espn.com/apis/common/v3/sports/basketball/"
-        f"{league}/athletes/{athlete_id}/stats?season={season}"
-    )
-    resp = download(url, **kwargs)
-    payload: dict[str, Any] = resp.json()
+    st = season_type.strip().lower()
+    if st not in ("regular", "postseason"):
+        raise ValueError(f"season_type must be 'regular' or 'postseason', got {season_type!r}")
+    s_type = 3 if st == "postseason" else 2
+    totals = "0" if total else ""
+
+    base = f"{_CORE_V2_BASE}/{league}/seasons"
+    stats_url = f"{base}/{season}/types/{s_type}/athletes/{athlete_id}/statistics/{totals}"
+    athlete_url = f"{base}/{season}/athletes/{athlete_id}"
+
+    # Statistics node is authoritative: a 404 here raises (NoESPNDataError).
+    stats_payload: dict[str, Any] = download(stats_url, **kwargs).json()
 
     if raw:
-        return payload
+        return stats_payload
 
-    # ESPN has shipped both "categories" and "statCategories" historically;
-    # accept either to survive an upstream rename.
-    categories_raw = payload.get("categories")
-    if categories_raw is None:
-        categories_raw = payload.get("statCategories")
+    row: dict[str, Any] = {
+        "season": season,
+        "season_type": st,
+        "total": total,
+    }
 
-    parsed: dict[str, pl.DataFrame] = {}
+    # Athlete + team metadata are best-effort: failures degrade to nulls.
+    athlete_payload = _safe_json(athlete_url, **kwargs)
+    row.update(_extract_athlete_meta(athlete_payload))
 
-    if isinstance(categories_raw, list):
-        for idx, cat in enumerate(categories_raw):
-            if not isinstance(cat, dict):
-                continue
-            key, frame = _parse_category(cat, idx, athlete_id, season)
-            if frame.is_empty() and key in parsed and not parsed[key].is_empty():
-                # Don't overwrite an already-populated canonical slot with an
-                # empty follow-up. Shouldn't happen in practice because ESPN
-                # uses each category name once, but be defensive.
-                continue
-            parsed[key] = frame
+    team_ref = ((athlete_payload or {}).get("team") or {}).get("$ref")
+    team_payload = _safe_json(team_ref, **kwargs) if team_ref else None
+    team_meta = _extract_team_meta(team_payload)
 
-    # Guarantee the three canonical keys exist with stable empty schema.
-    empty = pl.DataFrame(schema=_PER_CATEGORY_SCHEMA)
-    out: dict[str, pl.DataFrame] = {}
-    for key in _CANONICAL_CATEGORIES:
-        out[key] = parsed.pop(key, empty)
+    # Wide stat columns sit between athlete identity and team identity so the
+    # frame reads athlete -> stats -> team (matching wehoop's bind order).
+    row.update(_wide_stats(stats_payload))
+    row.update(team_meta)
 
-    # Anything left in ``parsed`` did not match a canonical key. Fold it into
-    # a single "Other" frame (concat-on-rows) so downstream callers don't
-    # have to enumerate ESPN's exact category names. Only emit the key when
-    # there is actual data.
-    if parsed:
-        leftovers = [f for f in parsed.values() if not f.is_empty()]
-        if leftovers:
-            out["Other"] = pl.concat(leftovers, how="vertical")
+    # Ensure athlete_id is always populated even if the athlete deref failed.
+    row.setdefault("athlete_id", athlete_id)
+    if row.get("athlete_id") is None:
+        row["athlete_id"] = athlete_id
 
+    for col in _INT_COLUMNS:
+        if col in row:
+            row[col] = _coerce_int(row[col])
+
+    frame = pl.DataFrame({k: [v] for k, v in row.items()})
     if return_as_pandas:
-        return {k: v.to_pandas() for k, v in out.items()}
+        return frame.to_pandas()
+    return frame
+
+
+def _safe_json(url: str | None, **kwargs: Any) -> dict[str, Any] | None:
+    """Best-effort GET + ``.json()``; returns ``None`` on any failure."""
+    if not url:
+        return None
+    try:
+        return download(url, **kwargs).json()
+    except Exception:
+        return None
+
+
+def _extract_athlete_meta(payload: dict[str, Any] | None) -> dict[str, Any]:
+    """Lift curated athlete-identity fields into snake_case output columns."""
+    out: dict[str, Any] = {col: None for col in _ATHLETE_FIELD_MAP.values()}
+    out.update(
+        {
+            "position_id": None,
+            "position_name": None,
+            "position_display_name": None,
+            "position_abbreviation": None,
+            "college_name": None,
+            "status_id": None,
+            "status_name": None,
+        },
+    )
+    if not isinstance(payload, dict):
+        return out
+
+    for src, dest in _ATHLETE_FIELD_MAP.items():
+        if src in payload and not _is_ref_only(payload[src]):
+            out[dest] = payload[src]
+
+    position = payload.get("position")
+    if isinstance(position, dict):
+        out["position_id"] = position.get("id")
+        out["position_name"] = position.get("name")
+        out["position_display_name"] = position.get("displayName")
+        out["position_abbreviation"] = position.get("abbreviation")
+
+    college = payload.get("college")
+    if isinstance(college, dict):
+        out["college_name"] = college.get("name")
+
+    status = payload.get("status")
+    if isinstance(status, dict):
+        out["status_id"] = status.get("id")
+        out["status_name"] = status.get("name") or status.get("type")
+
     return out
 
 
-def _parse_category(
-    cat: dict[str, Any],
-    idx: int,
-    athlete_id: int,
-    season: int,
-) -> tuple[str, pl.DataFrame]:
-    """Turn one ESPN ``categories[i]`` dict into a per-stat polars frame.
+def _extract_team_meta(payload: dict[str, Any] | None) -> dict[str, Any]:
+    """Lift curated team-identity fields into ``team_``-prefixed columns."""
+    out: dict[str, Any] = {col: None for col in _TEAM_FIELD_MAP.values()}
+    out["team_logo_href"] = None
+    if not isinstance(payload, dict):
+        return out
 
-    Handles the two row shapes ESPN has been observed to ship:
+    for src, dest in _TEAM_FIELD_MAP.items():
+        if src in payload and not _is_ref_only(payload[src]):
+            out[dest] = payload[src]
 
-    1. Parallel arrays: ``labels[]``, ``names[]``, ``displayNames[]``,
-       ``descriptions[]``, ``totals[]`` (or ``stats[]``) all aligned by
-       index. This is the current shape.
-    2. Object array: ``stats[]`` containing dicts with ``displayName``,
-       ``displayValue``, ``value``, ``description``. This was the shape
-       described in older ESPN docs and is still the canonical R-side
-       parser path; we accept it for forward compatibility.
+    logos = payload.get("logos")
+    if isinstance(logos, list) and logos and isinstance(logos[0], dict):
+        out["team_logo_href"] = logos[0].get("href")
 
-    Returns the canonical-or-passthrough key and the resulting frame.
+    return out
+
+
+def _wide_stats(stats_payload: dict[str, Any]) -> dict[str, Any]:
+    """Pivot ``splits.categories[].stats[]`` into ``{category}_{stat}`` columns.
+
+    Each stat's numeric ``value`` becomes one column named
+    ``underscore(f"{category_name}_{stat_name}")``. Composite / non-numeric
+    values (rare here) fall back to their string ``displayValue``.
     """
-    raw_name = cat.get("displayName") or cat.get("name") or f"Category{idx}"
-    key = _CATEGORY_NAME_MAP.get(str(raw_name).strip().lower(), str(raw_name))
+    out: dict[str, Any] = {}
+    splits = stats_payload.get("splits")
+    if not isinstance(splits, dict):
+        return out
+    categories = splits.get("categories")
+    if not isinstance(categories, list):
+        return out
 
-    rows = _rows_from_parallel_arrays(cat)
-    if rows is None:
-        rows = _rows_from_stats_objects(cat)
-
-    if not rows:
-        return key, pl.DataFrame(schema=_PER_CATEGORY_SCHEMA)
-
-    # Build the frame column-wise so dtypes are pinned exactly to the
-    # documented schema. ``pl.Series(values=..., dtype=...)`` is 0.18-safe.
-    stat_names = [r["stat_name"] for r in rows]
-    display_values = [r["display_value"] for r in rows]
-    values = [r["value"] for r in rows]
-    descriptions = [r["description"] for r in rows]
-    n = len(rows)
-
-    frame = pl.DataFrame(
-        {
-            "stat_name": pl.Series("stat_name", stat_names, dtype=pl.Utf8),
-            "display_value": pl.Series("display_value", display_values, dtype=pl.Utf8),
-            "value": pl.Series("value", values, dtype=pl.Float64),
-            "description": pl.Series("description", descriptions, dtype=pl.Utf8),
-            "category": pl.Series("category", [key] * n, dtype=pl.Utf8),
-            "athlete_id": pl.Series("athlete_id", [athlete_id] * n, dtype=pl.Int64),
-            "season": pl.Series("season", [season] * n, dtype=pl.Int32),
-        },
-    )
-    return key, frame
-
-
-def _rows_from_parallel_arrays(cat: dict[str, Any]) -> list[dict[str, Any]] | None:
-    """Parse the parallel-arrays shape: labels[]/names[]/totals[] aligned by index.
-
-    Returns ``None`` if the parallel-arrays shape isn't present, signaling
-    the caller should fall through to the object-array path.
-    """
-    labels_raw = cat.get("labels")
-    if not isinstance(labels_raw, list) or not labels_raw:
-        return None
-    labels: list[Any] = labels_raw
-
-    display_names_raw = cat.get("displayNames")
-    display_names: list[Any] = display_names_raw if isinstance(display_names_raw, list) else []
-    names_raw = cat.get("names")
-    names: list[Any] = names_raw if isinstance(names_raw, list) else []
-    descriptions_raw = cat.get("descriptions")
-    descriptions: list[Any] = descriptions_raw if isinstance(descriptions_raw, list) else []
-    totals_raw = cat.get("totals")
-    if not isinstance(totals_raw, list):
-        totals_raw = cat.get("stats")
-    if not isinstance(totals_raw, list):
-        # No values at all — skip; caller treats this as an empty category.
-        return []
-    totals: list[Any] = totals_raw
-
-    n = max(len(labels), len(display_names), len(names), len(descriptions), len(totals))
-    rows: list[dict[str, Any]] = []
-    for i in range(n):
-        # Prefer the most-descriptive available name: displayNames > names > labels.
-        stat_name = _safe_index(display_names, i) or _safe_index(names, i) or _safe_index(labels, i) or f"stat_{i}"
-        display_value = _safe_index(totals, i)
-        value = _coerce_float(display_value)
-        description = _safe_index(descriptions, i) or ""
-        rows.append(
-            {
-                "stat_name": str(stat_name),
-                "display_value": None if display_value is None else str(display_value),
-                "value": value,
-                "description": str(description),
-            },
-        )
-    return rows
-
-
-def _rows_from_stats_objects(cat: dict[str, Any]) -> list[dict[str, Any]]:
-    """Parse the legacy stats-objects shape: stats[] of {displayName,...} dicts."""
-    stats_raw = cat.get("stats")
-    if not isinstance(stats_raw, list):
-        statistics_raw = cat.get("statistics")
-        stats_raw = statistics_raw if isinstance(statistics_raw, list) else []
-    stats: list[Any] = stats_raw
-    rows: list[dict[str, Any]] = []
-    for s in stats:
-        if not isinstance(s, dict):
+    for cat in categories:
+        if not isinstance(cat, dict):
             continue
-        stat_name = s.get("displayName") or s.get("name") or s.get("abbreviation") or ""
-        display_value = s.get("displayValue")
-        value = _coerce_float(s.get("value"))
-        description = s.get("description") or ""
-        rows.append(
-            {
-                "stat_name": str(stat_name),
-                "display_value": None if display_value is None else str(display_value),
-                "value": value,
-                "description": str(description),
-            },
-        )
-    return rows
+        cat_name = cat.get("name") or cat.get("displayName") or "category"
+        stats = cat.get("stats")
+        if not isinstance(stats, list):
+            continue
+        for stat in stats:
+            if not isinstance(stat, dict):
+                continue
+            stat_name = stat.get("name") or stat.get("abbreviation")
+            if not stat_name:
+                continue
+            col = underscore(f"{cat_name}_{stat_name}")
+            value = stat.get("value")
+            num = _coerce_float(value)
+            out[col] = num if num is not None else stat.get("displayValue")
+    return out
 
 
-def _safe_index(xs: list[Any], i: int) -> Any:
-    """Return ``xs[i]`` if in range, else ``None``."""
-    if 0 <= i < len(xs):
-        return xs[i]
-    return None
+def _is_ref_only(v: Any) -> bool:
+    """True if ``v`` is a bare ``{"$ref": ...}`` link with no inline payload."""
+    return isinstance(v, dict) and set(v.keys()) == {"$ref"}
 
 
 def _coerce_float(v: Any) -> float | None:
-    """Coerce ``v`` to ``float``, returning ``None`` if not convertible.
-
-    ESPN ships totals as strings like ``"267"``, ``"49.8"``, or composite
-    values like ``"7.8-15.7"`` (made-attempted). The composites cannot be
-    cast to a single float, so they correctly land as ``None`` in the
-    ``value`` column while ``display_value`` retains the original text.
-    """
-    if v is None:
-        return None
-    if isinstance(v, bool):
-        # bool is a subclass of int; reject explicitly to avoid 0.0/1.0 surprises.
+    """Coerce ``v`` to ``float``; ``None`` if not convertible (e.g. "7.8-15.7")."""
+    if v is None or isinstance(v, bool):
         return None
     if isinstance(v, (int, float)):
         return float(v)
@@ -409,4 +398,26 @@ def _coerce_float(v: Any) -> float | None:
             return float(s)
         except ValueError:
             return None
+    return None
+
+
+def _coerce_int(v: Any) -> int | None:
+    """Coerce ``v`` to ``int``; ``None`` if not convertible."""
+    if v is None or isinstance(v, bool):
+        return None
+    if isinstance(v, int):
+        return v
+    if isinstance(v, float):
+        return int(v)
+    if isinstance(v, str):
+        s = v.strip()
+        if not s:
+            return None
+        try:
+            return int(s)
+        except ValueError:
+            try:
+                return int(float(s))
+            except ValueError:
+                return None
     return None
