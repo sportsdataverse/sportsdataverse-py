@@ -65,17 +65,19 @@ def cli_warn(msg: str) -> None:
     warnings.warn(msg, stacklevel=2)
 
 
-def _read_release_parquet(url: str):
+def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
     """Read a release parquet; return ``None`` on 404 / missing asset (404-safe loaders).
 
     Re-raises anything that isn't a missing-asset error so genuine parse/schema bugs
-    aren't silently swallowed.
+    aren't silently swallowed. The token list is deliberately narrow: ``403/forbidden``
+    (rate-limit / auth) and generic ``could not`` (parse/type failures) are NOT treated
+    as missing assets, so they surface instead of being masked as "no data".
     """
     try:
         return pl.read_parquet(url, use_pyarrow=True)
     except Exception as e:  # noqa: BLE001 -- classify fetch/parse failures
         msg = str(e).lower()
-        if any(tok in msg for tok in ("404", "not found", "no such", "forbidden", "could not")):
+        if any(tok in msg for tok in ("404", "not found", "no such")):
             return None
         raise
 

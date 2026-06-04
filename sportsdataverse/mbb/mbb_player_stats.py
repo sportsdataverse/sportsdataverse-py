@@ -95,6 +95,10 @@ def espn_mbb_player_stats(
             from sportsdataverse.mbb import espn_mbb_player_stats
             df = espn_mbb_player_stats(athlete_id=4395624, season=2023)
             df.select(["full_name", "team_display_name", "offensive_points"])
+
+    See Also:
+        * :func:`espn_mbb_player_stats_v3` -- comprehensive web-v3 stat payload
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package (``espn_mbb_player_stats``)
     """
     return _espn_player_stats(
         sport=_SPORT_SLUG,

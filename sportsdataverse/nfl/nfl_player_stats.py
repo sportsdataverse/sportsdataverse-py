@@ -97,6 +97,11 @@ def espn_nfl_player_stats(
             from sportsdataverse.nfl import espn_nfl_player_stats
             df = espn_nfl_player_stats(athlete_id=3139477, season=2023)
             df.select(["full_name", "team_display_name", "passing_passing_yards"])
+
+    See Also:
+        * :func:`espn_nfl_player_stats_v3` -- comprehensive web-v3 stat payload
+        * `nflreadpy <https://github.com/nflverse/nflreadpy>`_ -- nflverse loaders (Python)
+        * `nflverse <https://nflverse.nflverse.com>`_ -- companion NFL data ecosystem
     """
     return _espn_player_stats(
         sport=_SPORT_SLUG,

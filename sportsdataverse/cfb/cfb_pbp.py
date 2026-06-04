@@ -4722,8 +4722,13 @@ class CFBPlayProcess(object):
                 flags already populated).
 
         Returns:
-            dict: Box-score sections keyed by ``"passing"``, ``"rushing"``,
-            ``"receiving"``, ``"defensive"``, ``"turnover"``, and ``"drives"``.
+            dict: Box-score sections, each a list of records — ``"pass"`` /
+            ``"rush"`` / ``"receiver"`` (per-player advanced + EPA lines),
+            ``"team"`` and ``"situational"`` (per-team), ``"defensive"`` and
+            ``"defensive_players"`` (team- and player-level havoc),
+            ``"specialists"`` (kicking / punting / return players),
+            ``"turnover"``, ``"drives"``, and the ESPN-sourced ``"espn_team"`` /
+            ``"espn_players"`` totals.
 
         Example:
             Quick start::

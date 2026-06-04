@@ -96,6 +96,10 @@ def espn_cfb_player_stats(
             from sportsdataverse.cfb import espn_cfb_player_stats
             df = espn_cfb_player_stats(athlete_id=4426338, season=2023)
             df.select(["full_name", "team_display_name", "passing_passing_yards"])
+
+    See Also:
+        * :func:`espn_cfb_player_stats_v3` -- comprehensive web-v3 stat payload
+        * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package (``espn_cfb_player_stats``)
     """
     return _espn_player_stats(
         sport=_SPORT_SLUG,

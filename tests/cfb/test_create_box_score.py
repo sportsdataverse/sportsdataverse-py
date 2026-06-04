@@ -1,13 +1,8 @@
-import os
-
-import pytest
-
 from sportsdataverse.cfb import CFBPlayProcess
+from tests.conftest import skip_if_no_live
 
-LIVE = os.environ.get("SDV_PY_LIVE_TESTS") == "1"
 
-
-@pytest.mark.skipif(not LIVE, reason="set SDV_PY_LIVE_TESTS=1 (hits ESPN + runs the pipeline)")
+@skip_if_no_live
 def test_create_box_score_adds_defensive_players_and_specialists():
     # 0.0.53: create_box_score now emits per-player defensive (havoc) and specialist
     # (kicking/punting/return) sections in addition to the existing 8.

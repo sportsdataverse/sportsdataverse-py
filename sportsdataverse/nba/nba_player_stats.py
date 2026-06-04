@@ -96,6 +96,11 @@ def espn_nba_player_stats(
             from sportsdataverse.nba import espn_nba_player_stats
             df = espn_nba_player_stats(athlete_id=1966, season=2023)
             df.select(["full_name", "team_display_name", "offensive_points"])
+
+    See Also:
+        * :func:`espn_nba_player_stats_v3` -- comprehensive web-v3 stat payload
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package (``espn_nba_player_stats``)
+        * `nba_api <https://github.com/swar/nba_api>`_ -- NBA Stats API (Python)
     """
     return _espn_player_stats(
         sport=_SPORT_SLUG,

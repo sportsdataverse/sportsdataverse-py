@@ -97,6 +97,11 @@ def espn_nhl_player_stats(
             from sportsdataverse.nhl import espn_nhl_player_stats
             df = espn_nhl_player_stats(athlete_id=3895074, season=2023)
             df.select(["full_name", "team_display_name", "offensive_goals"])
+
+    See Also:
+        * :func:`espn_nhl_player_stats_v3` -- comprehensive web-v3 stat payload
+        * `fastRhockey <https://fastRhockey.sportsdataverse.org>`_ -- R sister package for hockey
+        * `nhl-api-py <https://github.com/coreyjs/nhl-api-py>`_ -- NHL API client (Python)
     """
     return _espn_player_stats(
         sport=_SPORT_SLUG,

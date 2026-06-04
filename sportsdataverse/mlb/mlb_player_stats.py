@@ -97,6 +97,11 @@ def espn_mlb_player_stats(
             from sportsdataverse.mlb import espn_mlb_player_stats
             df = espn_mlb_player_stats(athlete_id=33192, season=2023)
             df.select(["full_name", "team_display_name", "batting_home_runs"])
+
+    See Also:
+        * :func:`espn_mlb_player_stats_v3` -- comprehensive web-v3 stat payload
+        * `baseballr <https://billpetti.github.io/baseballr/>`_ -- R sister package for MLB
+        * `pybaseball <https://github.com/jldbc/pybaseball>`_ -- MLB stats / Statcast (Python)
     """
     return _espn_player_stats(
         sport=_SPORT_SLUG,
