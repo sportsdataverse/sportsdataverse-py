@@ -87,20 +87,17 @@ def test_parse_injuries_returns_one_row_per_team():
 @pytest.mark.parametrize(
     "fixture,expected_min_rows",
     [
-        ("venues_core_nba",     1),  # 5-row capture, $ref-only items
-        ("events_core_nba",     1),  # 1-row capture, $ref-only items
+        ("venues_core_nba", 1),  # 5-row capture, $ref-only items
+        ("events_core_nba", 1),  # 1-row capture, $ref-only items
     ],
 )
 def test_parse_items_handles_items_key(fixture, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_items
 
     df = parse_items(_load(fixture))
-    assert df.height >= expected_min_rows, (
-        f"{fixture}: expected >= {expected_min_rows} rows, got {df.height}"
-    )
+    assert df.height >= expected_min_rows, f"{fixture}: expected >= {expected_min_rows} rows, got {df.height}"
     # Core v2 paginated items often contain just $ref pointers
-    assert any(c.endswith("ref") or c == "_ref" or c == "$ref"
-               for c in df.columns), f"no $ref column in {df.columns}"
+    assert any(c.endswith("ref") or c == "_ref" or c == "$ref" for c in df.columns), f"no $ref column in {df.columns}"
 
 
 def test_parse_items_handles_entries_key_for_statisticslog():
@@ -109,10 +106,7 @@ def test_parse_items_handles_entries_key_for_statisticslog():
     from sportsdataverse._common_espn_parsers import parse_items
 
     df = parse_items(_load("athlete_statslog_lbj"))
-    assert df.height >= 1, (
-        "parse_items must fall back to the 'entries' key for "
-        "athlete_statisticslog payloads"
-    )
+    assert df.height >= 1, "parse_items must fall back to the 'entries' key for athlete_statisticslog payloads"
 
 
 # ===========================================================================
@@ -163,16 +157,22 @@ def test_endpoint_parsers_registry_includes_new_short_names():
 
     # The five new families we just registered.
     expected_new = {
-        "team_schedule", "team_roster",
-        "news", "team_news", "athlete_news",
-        "injuries", "team_injuries", "athlete_injuries",
-        "venues", "franchises", "events", "athletes_index",
+        "team_schedule",
+        "team_roster",
+        "news",
+        "team_news",
+        "athlete_news",
+        "injuries",
+        "team_injuries",
+        "athlete_injuries",
+        "venues",
+        "franchises",
+        "events",
+        "athletes_index",
         "athlete_statisticslog",
     }
     missing = expected_new - set(ENDPOINT_PARSERS)
-    assert not missing, (
-        f"ENDPOINT_PARSERS missing newly-introduced entries: {sorted(missing)}"
-    )
+    assert not missing, f"ENDPOINT_PARSERS missing newly-introduced entries: {sorted(missing)}"
 
 
 def test_return_parsed_kwarg_is_wired_for_new_short_names():
@@ -187,15 +187,10 @@ def test_return_parsed_kwarg_is_wired_for_new_short_names():
         espn_nba_venues,
     )
 
-    for fn in (espn_nba_team_schedule, espn_nba_team_roster,
-               espn_nba_news, espn_nba_venues):
+    for fn in (espn_nba_team_schedule, espn_nba_team_roster, espn_nba_news, espn_nba_venues):
         sig = inspect.signature(fn)
-        assert "return_parsed" in sig.parameters, (
-            f"{fn.__name__} missing return_parsed kwarg"
-        )
-        assert "return_as_pandas" in sig.parameters, (
-            f"{fn.__name__} missing return_as_pandas kwarg"
-        )
+        assert "return_parsed" in sig.parameters, f"{fn.__name__} missing return_parsed kwarg"
+        assert "return_as_pandas" in sig.parameters, f"{fn.__name__} missing return_as_pandas kwarg"
 
 
 def test_summary_parsers_handle_real_nba_summary_payload():
@@ -216,8 +211,7 @@ def test_summary_parsers_handle_real_nba_summary_payload():
     # ---- boxscore_player ----
     df = parse_summary_boxscore_player(payload)
     assert df.height >= 20, f"expected >=20 athletes, got {df.height}"
-    for col in ("team_id", "team_abbreviation", "athlete_id",
-                "athlete_display_name", "starter", "active"):
+    for col in ("team_id", "team_abbreviation", "athlete_id", "athlete_display_name", "starter", "active"):
         assert col in df.columns, f"missing column {col!r}"
 
     # ---- boxscore_team ----
@@ -252,12 +246,28 @@ def test_summary_parsers_handle_real_nba_summary_payload():
     # (e.g. broadcasts, pickcenter, odds, against_the_spread are sparse
     # for past games — assert presence in the dict, not non-emptiness).
     must_be_present = {
-        "boxscore_player", "boxscore_team", "plays", "winprobability",
-        "leaders", "game_info", "officials", "header", "season_series",
-        "against_the_spread", "standings", "broadcasts", "format",
-        "pickcenter", "odds", "article", "injuries", "news",
+        "boxscore_player",
+        "boxscore_team",
+        "plays",
+        "winprobability",
+        "leaders",
+        "game_info",
+        "officials",
+        "header",
+        "season_series",
+        "against_the_spread",
+        "standings",
+        "broadcasts",
+        "format",
+        "pickcenter",
+        "odds",
+        "article",
+        "injuries",
+        "news",
         # NFL / CFB only — return empty frames for NBA but still present
-        "drives", "drive_plays", "scoring_plays",
+        "drives",
+        "drive_plays",
+        "scoring_plays",
     }
     assert set(out) == must_be_present, (
         f"dispatcher returned unexpected section set: "
@@ -265,13 +275,23 @@ def test_summary_parsers_handle_real_nba_summary_payload():
     )
     # The original 5 sub-parsers + the always-present-on-real-games
     # sections must be non-empty for this fixture
-    for name in ("boxscore_player", "boxscore_team", "plays",
-                 "winprobability", "leaders", "game_info", "officials",
-                 "header", "standings", "format", "article", "injuries",
-                 "news"):
+    for name in (
+        "boxscore_player",
+        "boxscore_team",
+        "plays",
+        "winprobability",
+        "leaders",
+        "game_info",
+        "officials",
+        "header",
+        "standings",
+        "format",
+        "article",
+        "injuries",
+        "news",
+    ):
         assert out[name].height > 0, (
-            f"dispatcher returned empty frame for {name!r} on the NBA "
-            f"Finals fixture (expected non-empty)"
+            f"dispatcher returned empty frame for {name!r} on the NBA Finals fixture (expected non-empty)"
         )
 
     # ---- dispatcher: section="plays" returns just that frame ----
@@ -358,36 +378,37 @@ def test_summary_section_parsers_individually():
 #   tagging each player with a ``position_group`` column.
 
 
-@pytest.mark.parametrize("league,expected_min_rows,grouped", [
-    # Flat shape (no position_group column)
-    ("nba",   12, False),
-    ("wnba",  10, False),
-    ("mbb",   10, False),   # NCAA M basketball — flat (~14 players)
-    ("wbb",   10, False),   # NCAA W basketball — flat (~12 players)
-    # Position-grouped shape (rows include position_group column)
-    ("mlb",   20, True),    # 4 groups × ~6 players
-    ("nfl",   50, True),    # 3 groups × full roster
-    ("nhl",   18, True),    # 5 groups × ~5 players
-    ("cfb",   60, True),    # CFB: offense + defense + specialTeam (~100 players)
-])
+@pytest.mark.parametrize(
+    "league,expected_min_rows,grouped",
+    [
+        # Flat shape (no position_group column)
+        ("nba", 12, False),
+        ("wnba", 10, False),
+        ("mbb", 10, False),  # NCAA M basketball — flat (~14 players)
+        ("wbb", 10, False),  # NCAA W basketball — flat (~12 players)
+        # Position-grouped shape (rows include position_group column)
+        ("mlb", 20, True),  # 4 groups × ~6 players
+        ("nfl", 50, True),  # 3 groups × full roster
+        ("nhl", 18, True),  # 5 groups × ~5 players
+        ("cfb", 60, True),  # CFB: offense + defense + specialTeam (~100 players)
+    ],
+)
 def test_parse_team_roster_handles_both_shapes_across_leagues(
-    league, expected_min_rows, grouped,
+    league,
+    expected_min_rows,
+    grouped,
 ):
     from sportsdataverse._common_espn_parsers import parse_team_roster
 
     df = parse_team_roster(_load(f"team_roster_{league}"))
     assert isinstance(df, pl.DataFrame)
-    assert df.height >= expected_min_rows, (
-        f"{league}: expected >= {expected_min_rows} players, got {df.height}"
-    )
+    assert df.height >= expected_min_rows, f"{league}: expected >= {expected_min_rows} players, got {df.height}"
     # Universal columns from the athlete sub-dict
     for col in ("id", "first_name", "last_name", "full_name"):
         assert col in df.columns, f"{league}: missing {col!r}"
     # Position-grouped leagues add a column the flat-shape ones don't
     if grouped:
-        assert "position_group" in df.columns, (
-            f"{league}: expected position_group column for grouped shape"
-        )
+        assert "position_group" in df.columns, f"{league}: expected position_group column for grouped shape"
         # All values should be non-null strings
         groups = set(df["position_group"].to_list())
         assert all(isinstance(g, str) and g for g in groups), (
@@ -399,23 +420,24 @@ def test_parse_team_roster_handles_both_shapes_across_leagues(
         assert "position_group" not in df.columns
 
 
-@pytest.mark.parametrize("league,expected_min_rows", [
-    ("nba",   10),
-    ("mlb",  100),   # full MLB season = 162 games
-    ("nfl",   15),   # 17 regular + playoffs
-    # NHL skipped: off-season capture returned an empty schedule
-    ("wnba",  30),   # 40+ regular-season games
-    ("mbb",   25),   # NCAA M basketball season (~30-35 games + tournaments)
-    ("wbb",   25),   # NCAA W basketball season similar size
-    # CFB skipped: off-season capture (college football is fall-only)
-])
+@pytest.mark.parametrize(
+    "league,expected_min_rows",
+    [
+        ("nba", 10),
+        ("mlb", 100),  # full MLB season = 162 games
+        ("nfl", 15),  # 17 regular + playoffs
+        # NHL skipped: off-season capture returned an empty schedule
+        ("wnba", 30),  # 40+ regular-season games
+        ("mbb", 25),  # NCAA M basketball season (~30-35 games + tournaments)
+        ("wbb", 25),  # NCAA W basketball season similar size
+        # CFB skipped: off-season capture (college football is fall-only)
+    ],
+)
 def test_parse_team_schedule_works_across_leagues(league, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_team_schedule
 
     df = parse_team_schedule(_load(f"team_schedule_{league}"))
-    assert df.height >= expected_min_rows, (
-        f"{league}: expected >= {expected_min_rows} events, got {df.height}"
-    )
+    assert df.height >= expected_min_rows, f"{league}: expected >= {expected_min_rows} events, got {df.height}"
     for col in ("id", "date", "name", "season_year"):
         assert col in df.columns
 
@@ -433,23 +455,24 @@ def test_parse_team_schedule_handles_empty_offseason_payload(league):
     assert df.height == 0
 
 
-@pytest.mark.parametrize("league,expected_min_rows", [
-    ("nba",  3),
-    ("mlb",  3),
-    ("nfl",  3),
-    ("nhl",  3),
-    ("wnba", 3),
-    ("mbb",  3),
-    ("wbb",  3),
-    ("cfb",  3),
-])
+@pytest.mark.parametrize(
+    "league,expected_min_rows",
+    [
+        ("nba", 3),
+        ("mlb", 3),
+        ("nfl", 3),
+        ("nhl", 3),
+        ("wnba", 3),
+        ("mbb", 3),
+        ("wbb", 3),
+        ("cfb", 3),
+    ],
+)
 def test_parse_news_works_across_leagues(league, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_news
 
     df = parse_news(_load(f"news_{league}"))
-    assert df.height >= expected_min_rows, (
-        f"{league}: expected >= {expected_min_rows} articles, got {df.height}"
-    )
+    assert df.height >= expected_min_rows, f"{league}: expected >= {expected_min_rows} articles, got {df.height}"
     for col in ("id", "headline", "type"):
         assert col in df.columns
 
@@ -466,19 +489,22 @@ def test_parse_injuries_empty_for_ncaa_basketball(league):
     assert df.height == 0
 
 
-@pytest.mark.parametrize("league,expected_min_rows", [
-    # All 5 pro / WNBA leagues consistently have >= 5 teams reporting
-    ("nba",  10),
-    ("mlb",  10),
-    ("nfl",  10),
-    ("nhl",  10),
-    ("wnba",  5),   # smaller league, lower floor
-    ("cfb",  10),   # CFB has consistent injury reporting
-    # MBB / WBB intentionally omitted — ESPN does not surface NCAA
-    # basketball injury reports as a league-wide endpoint; both fixtures
-    # return empty payloads. Verified separately in
-    # test_parse_injuries_empty_for_ncaa_basketball below.
-])
+@pytest.mark.parametrize(
+    "league,expected_min_rows",
+    [
+        # All 5 pro / WNBA leagues consistently have >= 5 teams reporting
+        ("nba", 10),
+        ("mlb", 10),
+        ("nfl", 10),
+        ("nhl", 10),
+        ("wnba", 5),  # smaller league, lower floor
+        ("cfb", 10),  # CFB has consistent injury reporting
+        # MBB / WBB intentionally omitted — ESPN does not surface NCAA
+        # basketball injury reports as a league-wide endpoint; both fixtures
+        # return empty payloads. Verified separately in
+        # test_parse_injuries_empty_for_ncaa_basketball below.
+    ],
+)
 def test_parse_injuries_works_across_leagues(league, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_injuries
 
@@ -503,9 +529,16 @@ def test_parse_injuries_works_across_leagues(league, expected_min_rows):
 # asserting the per-sport contract.
 
 
-SUMMARY_FIXTURES = ["summary_nba", "summary_mlb", "summary_nfl",
-                    "summary_nhl", "summary_wnba",
-                    "summary_mbb", "summary_wbb", "summary_cfb"]
+SUMMARY_FIXTURES = [
+    "summary_nba",
+    "summary_mlb",
+    "summary_nfl",
+    "summary_nhl",
+    "summary_wnba",
+    "summary_mbb",
+    "summary_wbb",
+    "summary_cfb",
+]
 
 
 @pytest.mark.parametrize("fixture", SUMMARY_FIXTURES)
@@ -522,34 +555,30 @@ def test_summary_dispatcher_returns_full_section_dict_for_every_league(fixture):
     payload = _load(fixture)
     out = parse_summary(payload)
     assert isinstance(out, dict)
-    assert set(out) == set(SUMMARY_SECTION_PARSERS), (
-        f"{fixture}: dispatcher returned different sections than registry"
-    )
+    assert set(out) == set(SUMMARY_SECTION_PARSERS), f"{fixture}: dispatcher returned different sections than registry"
     for name, frame in out.items():
-        assert isinstance(frame, pl.DataFrame), (
-            f"{fixture}: section {name!r} returned {type(frame)}"
-        )
+        assert isinstance(frame, pl.DataFrame), f"{fixture}: section {name!r} returned {type(frame)}"
 
 
-@pytest.mark.parametrize("fixture,min_athletes", [
-    ("summary_nba",  20),  # 2 NBA rosters, ~24-27 active
-    ("summary_mlb",  20),  # 2 MLB rosters, ~26-32 with starters + bullpen
-    ("summary_nfl",  50),  # 2 NFL rosters, ~70-90 with full game-day squad
-    ("summary_nhl",  20),  # 2 NHL rosters, skaters + goalies
-    ("summary_wnba", 15),  # 2 WNBA rosters, ~12-15 each
-    ("summary_mbb",  20),  # 2 NCAA M basketball rosters, ~25-35 combined
-    ("summary_wbb",  20),  # 2 NCAA W basketball rosters
-    ("summary_cfb",  50),  # 2 CFB rosters, ~70+ each (huge squads)
-])
+@pytest.mark.parametrize(
+    "fixture,min_athletes",
+    [
+        ("summary_nba", 20),  # 2 NBA rosters, ~24-27 active
+        ("summary_mlb", 20),  # 2 MLB rosters, ~26-32 with starters + bullpen
+        ("summary_nfl", 50),  # 2 NFL rosters, ~70-90 with full game-day squad
+        ("summary_nhl", 20),  # 2 NHL rosters, skaters + goalies
+        ("summary_wnba", 15),  # 2 WNBA rosters, ~12-15 each
+        ("summary_mbb", 20),  # 2 NCAA M basketball rosters, ~25-35 combined
+        ("summary_wbb", 20),  # 2 NCAA W basketball rosters
+        ("summary_cfb", 50),  # 2 CFB rosters, ~70+ each (huge squads)
+    ],
+)
 def test_summary_boxscore_player_works_across_leagues(fixture, min_athletes):
     from sportsdataverse._common_espn_parsers import parse_summary_boxscore_player
 
     df = parse_summary_boxscore_player(_load(fixture))
-    assert df.height >= min_athletes, (
-        f"{fixture}: expected >={min_athletes} athletes, got {df.height}"
-    )
-    for col in ("team_id", "team_abbreviation", "athlete_id",
-                "athlete_display_name"):
+    assert df.height >= min_athletes, f"{fixture}: expected >={min_athletes} athletes, got {df.height}"
+    for col in ("team_id", "team_abbreviation", "athlete_id", "athlete_display_name"):
         assert col in df.columns, f"{fixture}: missing {col!r}"
 
 
@@ -571,31 +600,30 @@ def test_summary_game_info_works_across_leagues(fixture):
 
     df = parse_summary_game_info(_load(fixture))
     assert df.height == 1, f"{fixture}: game_info should be 1 row"
-    assert any(c.startswith("venue_") for c in df.columns), (
-        f"{fixture}: no venue_* columns"
-    )
+    assert any(c.startswith("venue_") for c in df.columns), f"{fixture}: no venue_* columns"
 
 
-@pytest.mark.parametrize("fixture,min_officials", [
-    # NBA=3, NHL=6, MLB=6, NFL=7, WNBA=4 — pro leagues consistently >=3
-    ("summary_nba",  3),
-    ("summary_mlb",  3),
-    ("summary_nfl",  3),
-    ("summary_nhl",  3),
-    ("summary_wnba", 3),
-    ("summary_mbb",  3),   # MBB final has 3 officials
-    # NCAA-side leagues sometimes ship fewer or zero officials:
-    # WBB final = 2; CFB national championship = 0 in capture.
-    ("summary_wbb",  0),   # accept any (parser must not raise)
-    ("summary_cfb",  0),
-])
+@pytest.mark.parametrize(
+    "fixture,min_officials",
+    [
+        # NBA=3, NHL=6, MLB=6, NFL=7, WNBA=4 — pro leagues consistently >=3
+        ("summary_nba", 3),
+        ("summary_mlb", 3),
+        ("summary_nfl", 3),
+        ("summary_nhl", 3),
+        ("summary_wnba", 3),
+        ("summary_mbb", 3),  # MBB final has 3 officials
+        # NCAA-side leagues sometimes ship fewer or zero officials:
+        # WBB final = 2; CFB national championship = 0 in capture.
+        ("summary_wbb", 0),  # accept any (parser must not raise)
+        ("summary_cfb", 0),
+    ],
+)
 def test_summary_officials_works_across_leagues(fixture, min_officials):
     from sportsdataverse._common_espn_parsers import parse_summary_officials
 
     df = parse_summary_officials(_load(fixture))
-    assert df.height >= min_officials, (
-        f"{fixture}: expected >={min_officials} officials, got {df.height}"
-    )
+    assert df.height >= min_officials, f"{fixture}: expected >={min_officials} officials, got {df.height}"
     if df.height > 0:
         assert "full_name" in df.columns or "display_name" in df.columns
 
@@ -616,9 +644,7 @@ def test_summary_standings_works_across_leagues(fixture):
     from sportsdataverse._common_espn_parsers import parse_summary_standings
 
     df = parse_summary_standings(_load(fixture))
-    assert df.height >= 5, (
-        f"{fixture}: expected >=5 teams in standings, got {df.height}"
-    )
+    assert df.height >= 5, f"{fixture}: expected >=5 teams in standings, got {df.height}"
     assert "team_id" in df.columns
 
 
@@ -628,18 +654,18 @@ def test_summary_plays_works_for_non_football_leagues():
     separately."""
     from sportsdataverse._common_espn_parsers import parse_summary_plays
 
-    for fixture in ("summary_nba", "summary_mlb", "summary_nhl",
-                    "summary_wnba", "summary_mbb", "summary_wbb"):
+    for fixture in ("summary_nba", "summary_mlb", "summary_nhl", "summary_wnba", "summary_mbb", "summary_wbb"):
         df = parse_summary_plays(_load(fixture))
-        assert df.height >= 100, (
-            f"{fixture}: expected >=100 plays, got {df.height}"
-        )
+        assert df.height >= 100, f"{fixture}: expected >=100 plays, got {df.height}"
 
 
-@pytest.mark.parametrize("fixture,min_drives,min_scoring", [
-    ("summary_nfl", 10, 1),   # Super Bowl LIX: 26 drives + 11 scoring
-    ("summary_cfb", 10, 1),   # OSU vs ND nat'l championship: 17 drives + 9 scoring
-])
+@pytest.mark.parametrize(
+    "fixture,min_drives,min_scoring",
+    [
+        ("summary_nfl", 10, 1),  # Super Bowl LIX: 26 drives + 11 scoring
+        ("summary_cfb", 10, 1),  # OSU vs ND nat'l championship: 17 drives + 9 scoring
+    ],
+)
 def test_summary_drives_works_for_football_leagues(fixture, min_drives, min_scoring):
     """NFL + CFB summaries ship drives.previous[] in lieu of top-level
     plays, plus a dedicated scoringPlays list."""
@@ -651,15 +677,11 @@ def test_summary_drives_works_for_football_leagues(fixture, min_drives, min_scor
 
     payload = _load(fixture)
     drives = parse_summary_drives(payload)
-    assert drives.height >= min_drives, (
-        f"{fixture}: expected >={min_drives} drives, got {drives.height}"
-    )
+    assert drives.height >= min_drives, f"{fixture}: expected >={min_drives} drives, got {drives.height}"
     # Football leagues lack the top-level plays[] array
     assert parse_summary_plays(payload).height == 0
     scoring = parse_summary_scoring_plays(payload)
-    assert scoring.height >= min_scoring, (
-        f"{fixture}: expected >={min_scoring} scoring plays, got {scoring.height}"
-    )
+    assert scoring.height >= min_scoring, f"{fixture}: expected >={min_scoring} scoring plays, got {scoring.height}"
 
 
 def test_summary_drive_plays_unrolls_plays_across_all_drives_for_nfl():
@@ -679,9 +701,7 @@ def test_summary_drive_plays_unrolls_plays_across_all_drives_for_nfl():
 
     # Super Bowl LIX has 26 drives + ~186 plays in the capture
     assert drives.height >= 10
-    assert dp.height >= 100, (
-        f"expected >=100 unrolled plays, got {dp.height}"
-    )
+    assert dp.height >= 100, f"expected >=100 unrolled plays, got {dp.height}"
     # Join keys for drive ↔ play
     assert "drive_id" in dp.columns
     assert "drive_sequence" in dp.columns
@@ -690,8 +710,7 @@ def test_summary_drive_plays_unrolls_plays_across_all_drives_for_nfl():
     # payloads, so json_normalize expands them to ``type_id`` /
     # ``clock_display_value`` / ``period_number`` etc. — check the
     # bare fields that are always scalar.
-    for col in ("id", "sequence_number", "text", "away_score",
-                "home_score", "scoring_play"):
+    for col in ("id", "sequence_number", "text", "away_score", "home_score", "scoring_play"):
         assert col in dp.columns, f"missing play column {col!r}"
     # Verify the nested fields did flatten (any prefix-match counts)
     assert any(c.startswith("type") for c in dp.columns), (
@@ -712,11 +731,8 @@ def test_summary_drives_and_scoring_plays_empty_for_non_football():
         parse_summary_scoring_plays,
     )
 
-    for fixture in ("summary_nba", "summary_mlb", "summary_nhl",
-                    "summary_wnba", "summary_mbb", "summary_wbb"):
-        assert parse_summary_drives(_load(fixture)).height == 0, (
-            f"{fixture}: non-football should have 0 drives"
-        )
+    for fixture in ("summary_nba", "summary_mlb", "summary_nhl", "summary_wnba", "summary_mbb", "summary_wbb"):
+        assert parse_summary_drives(_load(fixture)).height == 0, f"{fixture}: non-football should have 0 drives"
         assert parse_summary_drive_plays(_load(fixture)).height == 0, (
             f"{fixture}: non-football should have 0 drive_plays"
         )
@@ -753,9 +769,7 @@ def test_summary_broadcasts_present_for_mlb_and_nhl(league):
     from sportsdataverse._common_espn_parsers import parse_summary_broadcasts
 
     df = parse_summary_broadcasts(_load(f"summary_{league}"))
-    assert df.height >= 1, (
-        f"{league}: expected broadcasts data, got {df.height} rows"
-    )
+    assert df.height >= 1, f"{league}: expected broadcasts data, got {df.height} rows"
 
 
 @pytest.mark.parametrize("league", ["nba", "nfl", "wnba"])
@@ -769,11 +783,14 @@ def test_summary_broadcasts_empty_for_other_leagues_in_capture(league):
     assert df.height == 0
 
 
-@pytest.mark.parametrize("section_parser_name", [
-    "parse_summary_against_the_spread",
-    "parse_summary_pickcenter",
-    "parse_summary_odds",
-])
+@pytest.mark.parametrize(
+    "section_parser_name",
+    [
+        "parse_summary_against_the_spread",
+        "parse_summary_pickcenter",
+        "parse_summary_odds",
+    ],
+)
 def test_universally_sparse_summary_sections_return_zero_rows(section_parser_name):
     """``againstTheSpread`` / ``pickcenter`` / ``odds`` ship empty
     arrays for ALL 5 past-game captures (NBA finals, MLB WS, Super
@@ -797,60 +814,60 @@ def test_universally_sparse_summary_sections_return_zero_rows(section_parser_nam
 # Full-coverage regression: every wrapper short name has a parser
 # ===========================================================================
 #
-# These tests lock in the 100%-coverage state achieved by registering
-# parse_single_entity / parse_items for the long tail of single-entity
-# and list-shape Core v2 endpoints. They catch any future regression
-# where a new wrapper is added to _UNIVERSAL_WRAPPERS / _NCAA_WRAPPERS /
-# _FOOTBALL_WRAPPERS / _MLB_WRAPPERS without an ENDPOINT_PARSERS entry.
+# These tests lock in catalog <-> parser-module consistency under the
+# declarative codegen pipeline: every endpoint's declared ``parser:`` (incl.
+# the long tail bound to parse_single_entity / parse_items) must resolve to a
+# real callable, and every parser a generated module imports must be defined.
+# They catch a new endpoint referencing a missing parser, or catalog/parser
+# drift -- the successors to the retired ``_*_WRAPPERS`` registry checks.
 
 
-def test_every_wrapper_short_name_has_a_registered_parser():
-    """Every short name across all 4 wrapper tables must be in
-    ENDPOINT_PARSERS so the return_parsed shim activates on it."""
-    from sportsdataverse._common_espn import (
-        _FOOTBALL_WRAPPERS,
-        _MLB_WRAPPERS,
-        _NCAA_WRAPPERS,
-        _UNIVERSAL_WRAPPERS,
-    )
-    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+def _catalog_parser_names() -> set[str]:
+    """Every ``parser:`` declared across the ESPN endpoint catalog."""
+    from tools.codegen import generate, spec
 
-    all_short = set(
-        [s for s, _ in _UNIVERSAL_WRAPPERS]
-        + [s for s, _ in _NCAA_WRAPPERS]
-        + [s for s, _ in _FOOTBALL_WRAPPERS]
-        + [s for s, _ in _MLB_WRAPPERS]
-    )
-    registered = set(ENDPOINT_PARSERS)
-    missing = all_short - registered
-    assert not missing, (
-        f"ENDPOINT_PARSERS missing {len(missing)} wrapper short names: "
-        f"{sorted(missing)}"
-    )
+    params = spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    apis = [spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
+    return {ep.parser for api in apis for ep in api.endpoints if ep.parser}
 
 
-def test_no_stale_entries_in_endpoint_parsers_registry():
-    """Every key in ENDPOINT_PARSERS must correspond to a real wrapper
-    short name in one of the 4 wrapper tables."""
-    from sportsdataverse._common_espn import (
-        _FOOTBALL_WRAPPERS,
-        _MLB_WRAPPERS,
-        _NCAA_WRAPPERS,
-        _UNIVERSAL_WRAPPERS,
-    )
-    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+def _generated_parser_imports() -> set[str]:
+    """Every ``parse_*`` name imported from ``_common_espn_parsers`` by any
+    generated ``*_espn_ext`` module."""
+    import ast
+    from pathlib import Path
 
-    all_short = set(
-        [s for s, _ in _UNIVERSAL_WRAPPERS]
-        + [s for s, _ in _NCAA_WRAPPERS]
-        + [s for s, _ in _FOOTBALL_WRAPPERS]
-        + [s for s, _ in _MLB_WRAPPERS]
-    )
-    stale = set(ENDPOINT_PARSERS) - all_short
-    assert not stale, (
-        f"ENDPOINT_PARSERS has {len(stale)} stale entries with no "
-        f"corresponding wrapper: {sorted(stale)}"
-    )
+    out: set[str] = set()
+    for path in Path("sportsdataverse").glob("*/*_espn_ext.py"):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module == "sportsdataverse._common_espn_parsers":
+                out.update(alias.name for alias in node.names if alias.name.startswith("parse_"))
+    return out
+
+
+def test_every_catalog_parser_is_defined():
+    """Every ``parser:`` referenced in the codegen catalog must resolve to a
+    real callable in ``_common_espn_parsers`` -- so a generated wrapper's
+    ``return_parsed`` path never dispatches to a missing parser.
+
+    (Replaces the retired ``_*_WRAPPERS``-table check: the declarative catalog
+    is now the single source of truth for endpoint -> parser bindings.)"""
+    import sportsdataverse._common_espn_parsers as parsers
+
+    missing = {p for p in _catalog_parser_names() if not callable(getattr(parsers, p, None))}
+    assert not missing, f"catalog references {len(missing)} undefined parsers: {sorted(missing)}"
+
+
+def test_generated_modules_import_only_defined_parsers():
+    """Every ``parse_*`` imported by a generated ``*_espn_ext`` module must be
+    defined in ``_common_espn_parsers`` (catches catalog/parser-module drift)."""
+    import sportsdataverse._common_espn_parsers as parsers
+
+    imported = _generated_parser_imports()
+    assert imported, "expected generated modules to import at least one parser"
+    undefined = {p for p in imported if not callable(getattr(parsers, p, None))}
+    assert not undefined, f"generated modules import {len(undefined)} undefined parsers: {sorted(undefined)}"
 
 
 def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
@@ -874,13 +891,13 @@ def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
     from sportsdataverse.wnba.wnba_espn_ext import __all__ as wnba_all
 
     leagues = [
-        ("nba",  nba_all,  nba_mod),
+        ("nba", nba_all, nba_mod),
         ("wnba", wnba_all, wnba_mod),
-        ("mbb",  mbb_all,  mbb_mod),
-        ("wbb",  wbb_all,  wbb_mod),
-        ("cfb",  cfb_all,  cfb_mod),
-        ("nfl",  nfl_all,  nfl_mod),
-        ("mlb",  mlb_all,  mlb_mod),
+        ("mbb", mbb_all, mbb_mod),
+        ("wbb", wbb_all, wbb_mod),
+        ("cfb", cfb_all, cfb_mod),
+        ("nfl", nfl_all, nfl_mod),
+        ("mlb", mlb_all, mlb_mod),
     ]
     missing = []
     total = 0
@@ -893,13 +910,8 @@ def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
             sig = inspect.signature(fn)
             if "return_parsed" not in sig.parameters:
                 missing.append(f"{league}.{name}")
-    assert total >= 800, (
-        f"sanity check: expected >=800 wrappers across 7 leagues, got {total}"
-    )
-    assert not missing, (
-        f"{len(missing)} wrappers missing the return_parsed shim: "
-        f"{missing[:10]}..."
-    )
+    assert total >= 800, f"sanity check: expected >=800 wrappers across 7 leagues, got {total}"
+    assert not missing, f"{len(missing)} wrappers missing the return_parsed shim: {missing[:10]}..."
 
 
 def test_summary_section_parsers_registry_consistent():
@@ -944,8 +956,7 @@ def test_summary_section_returns_pandas_when_requested():
 
     from sportsdataverse._common_espn_parsers import parse_summary
 
-    df = parse_summary(_load("summary_nba"), section="plays",
-                       return_as_pandas=True)
+    df = parse_summary(_load("summary_nba"), section="plays", return_as_pandas=True)
     assert isinstance(df, pd.DataFrame)
     assert len(df) >= 100
 
