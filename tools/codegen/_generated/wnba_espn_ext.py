@@ -80,10 +80,10 @@ __all__ = [
     "espn_wnba_season_type_corrections",
     "espn_wnba_season_weeks",
     "espn_wnba_season_week",
-    "espn_wnba_season_week_events",
+    "espn_wnba_season_week_games",
     "espn_wnba_season_teams",
     "espn_wnba_season_team",
-    "espn_wnba_season_athletes",
+    "espn_wnba_season_players",
     "espn_wnba_season_coaches",
     "espn_wnba_season_draft",
     "espn_wnba_season_draft_round_picks",
@@ -92,7 +92,7 @@ __all__ = [
     "espn_wnba_season_powerindex",
     "espn_wnba_season_powerindex_leaders",
     "espn_wnba_season_awards",
-    "espn_wnba_athletes_index",
+    "espn_wnba_players_index",
     "espn_wnba_player_core",
     "espn_wnba_player_career_stats",
     "espn_wnba_player_statisticslog",
@@ -103,10 +103,10 @@ __all__ = [
     "espn_wnba_player_records",
     "espn_wnba_player_injuries",
     "espn_wnba_player_notes",
-    "espn_wnba_player_vs_athlete",
-    "espn_wnba_events",
-    "espn_wnba_event",
+    "espn_wnba_player_vs_player",
+    "espn_wnba_games",
     "espn_wnba_game",
+    "espn_wnba_game_competition",
     "espn_wnba_game_teams",
     "espn_wnba_game_team",
     "espn_wnba_game_team_roster",
@@ -121,7 +121,6 @@ __all__ = [
     "espn_wnba_game_play_personnel",
     "espn_wnba_game_situation",
     "espn_wnba_game_status",
-    "espn_wnba_game_officials",
     "espn_wnba_game_broadcasts",
     "espn_wnba_game_predictor",
     "espn_wnba_game_powerindex",
@@ -1869,7 +1868,7 @@ def espn_wnba_season_week(
     return raw
 
 
-def espn_wnba_season_week_events(
+def espn_wnba_season_week_games(
     season: Union[int, str],
     season_type: Union[int, str],
     week: Union[int, str],
@@ -1898,7 +1897,7 @@ def espn_wnba_season_week_events(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_season_week_events(season=2024, season_type=2, week=1)
+        >>> espn_wnba_season_week_games(season=2024, season_type=2, week=1)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/weeks/{week}/events",
@@ -1988,7 +1987,7 @@ def espn_wnba_season_team(
     return raw
 
 
-def espn_wnba_season_athletes(
+def espn_wnba_season_players(
     season: Union[int, str],
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
@@ -2015,7 +2014,7 @@ def espn_wnba_season_athletes(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_season_athletes(season=2024)
+        >>> espn_wnba_season_players(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/athletes",
@@ -2320,7 +2319,7 @@ def espn_wnba_season_awards(
     return raw
 
 
-def espn_wnba_athletes_index(
+def espn_wnba_players_index(
     active: Optional[bool] = True,
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
@@ -2347,7 +2346,7 @@ def espn_wnba_athletes_index(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_athletes_index()
+        >>> espn_wnba_players_index()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes",
@@ -2719,7 +2718,7 @@ def espn_wnba_player_notes(
     return raw
 
 
-def espn_wnba_player_vs_athlete(
+def espn_wnba_player_vs_player(
     athlete_id: Union[int, str],
     opp_id: Union[int, str],
     *,
@@ -2744,7 +2743,7 @@ def espn_wnba_player_vs_athlete(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_player_vs_athlete(athlete_id='4239', opp_id='5')
+        >>> espn_wnba_player_vs_player(athlete_id='4239', opp_id='5')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/vsathlete/{opp_id}",
@@ -2756,7 +2755,7 @@ def espn_wnba_player_vs_athlete(
     return raw
 
 
-def espn_wnba_events(
+def espn_wnba_games(
     dates: Optional[Union[int, str]] = None,
     limit: Optional[int] = 500,
     *,
@@ -2781,7 +2780,7 @@ def espn_wnba_events(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_events()
+        >>> espn_wnba_games()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events",
@@ -2796,7 +2795,7 @@ def espn_wnba_events(
     return raw
 
 
-def espn_wnba_event(
+def espn_wnba_game(
     event_id: Union[int, str],
     *,
     return_parsed: bool = False,
@@ -2819,7 +2818,7 @@ def espn_wnba_event(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_event(event_id='401584793')
+        >>> espn_wnba_game(event_id='401584793')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}",
@@ -2831,7 +2830,7 @@ def espn_wnba_event(
     return raw
 
 
-def espn_wnba_game(
+def espn_wnba_game_competition(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
@@ -2856,7 +2855,7 @@ def espn_wnba_game(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_game(event_id='401584793')
+        >>> espn_wnba_game_competition(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}"
@@ -3441,45 +3440,6 @@ def espn_wnba_game_status(
     )
     if return_parsed:
         return parse_single_entity(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_wnba_game_officials(
-    event_id: Union[int, str],
-    cid: Optional[Union[int, str]] = None,
-    *,
-    return_parsed: bool = False,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='basketball', league='wnba'.
-
-    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials``
-    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
-
-    Args:
-        event_id: event_id path parameter.
-        cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
-
-    Example:
-        >>> espn_wnba_game_officials(event_id='401584793')
-    """
-    cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/officials"
-    raw = _get(
-        __url,
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

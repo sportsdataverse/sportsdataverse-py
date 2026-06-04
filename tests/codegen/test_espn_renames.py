@@ -32,15 +32,33 @@ def test_cfb_renames_applied():
 
 
 def test_convention_is_universal_across_leagues():
-    # the structural convention (event->game, athlete->player, event_competition->game)
-    # applies to every league, not just cfb
+    # the structural convention (event->game, athlete->player, competitor->game_team)
+    # applies to every league at the TOKEN level, not just cfb / not just prefixes
     for prefix in ("nba", "wnba", "nhl", "nfl"):
         d = _defs(prefix)
-        assert f"espn_{prefix}_game_broadcasts" in d
-        assert f"espn_{prefix}_player_overview" in d
-        assert f"espn_{prefix}_game" in d  # event_competition -> game
-        assert f"espn_{prefix}_event" in d  # bare event root kept (avoids collision)
-        assert f"espn_{prefix}_event_broadcasts" not in d  # renamed away
+        assert f"espn_{prefix}_game_broadcasts" in d  # event_broadcasts -> game_broadcasts
+        assert f"espn_{prefix}_player_overview" in d  # athlete_overview -> player_overview
+        assert f"espn_{prefix}_game" in d  # bare event -> game
+        assert f"espn_{prefix}_game_competition" in d  # event_competition -> game_competition
+        assert f"espn_{prefix}_game_team" in d  # event_competitor -> game_team
+        assert f"espn_{prefix}_players_index" in d  # athletes_index -> players_index (plural)
+        # no raw event_/athlete_ tokens survive as generated function names
+        leftover = [n for n in d if n.startswith((f"espn_{prefix}_event", f"espn_{prefix}_athlete"))]
+        assert not leftover, f"{prefix}: un-converted event/athlete names remain: {leftover}"
+
+
+def test_token_level_convention_handles_embedded_and_plural_forms():
+    # athlete/event convert in every underscore-token position, incl. plurals;
+    # compound tokens like 'eventlog' are preserved.
+    assert generate._convention_rename("athlete_vs_athlete") == "player_vs_player"
+    assert generate._convention_rename("athletes_index") == "players_index"
+    assert generate._convention_rename("season_athletes") == "season_players"
+    assert generate._convention_rename("season_week_events") == "season_week_games"
+    assert generate._convention_rename("event") == "game"
+    assert generate._convention_rename("events") == "games"
+    assert generate._convention_rename("event_competition") == "game_competition"
+    assert generate._convention_rename("event_competitor_leaders") == "game_team_leaders"
+    assert generate._convention_rename("athlete_eventlog") == "player_eventlog"
 
 
 def test_collision_prone_names_preserved():

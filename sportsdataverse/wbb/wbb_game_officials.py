@@ -12,8 +12,13 @@ without the official's ``id``, so this wrapper prefers the core-api path that
 the wehoop R helper uses too.
 
 The ``wbb`` and ``wnba`` public wrappers share a single internal helper
-(``_espn_basketball_event_officials``) parameterized by league slug, mirroring
+(``_espn_basketball_game_officials``) parameterized by league slug, mirroring
 the ``team_roster`` / ``player_stats`` shim pattern.
+
+This hand-written parsed wrapper is the canonical ``espn_*_game_officials``
+for wbb/wnba (the generated raw same-endpoint wrapper is dropped for these two
+leagues via ``espn_rename_map.yaml``): it uniquely surfaces each official's
+``id`` from the core-api path, which the site-v2 officials list omits.
 """
 
 from __future__ import annotations
@@ -46,7 +51,7 @@ _OUTPUT_COLUMNS: list[str] = [
 
 
 @overload
-def espn_wbb_event_officials(
+def espn_wbb_game_officials(
     game_id: int,
     season: int | None = ...,
     *,
@@ -55,7 +60,7 @@ def espn_wbb_event_officials(
     **kwargs: Any,
 ) -> dict[str, Any]: ...
 @overload
-def espn_wbb_event_officials(
+def espn_wbb_game_officials(
     game_id: int,
     season: int | None = ...,
     *,
@@ -64,7 +69,7 @@ def espn_wbb_event_officials(
     **kwargs: Any,
 ) -> pd.DataFrame: ...
 @overload
-def espn_wbb_event_officials(
+def espn_wbb_game_officials(
     game_id: int,
     season: int | None = ...,
     *,
@@ -72,7 +77,7 @@ def espn_wbb_event_officials(
     return_as_pandas: Literal[False] = ...,
     **kwargs: Any,
 ) -> pl.DataFrame: ...
-def espn_wbb_event_officials(
+def espn_wbb_game_officials(
     game_id: int,
     season: int | None = None,
     *,
@@ -111,21 +116,21 @@ def espn_wbb_event_officials(
     Example:
         Quick start (2024 NCAA W championship game)::
 
-            from sportsdataverse.wbb import espn_wbb_event_officials
-            officials = espn_wbb_event_officials(game_id=401587902, season=2024)
+            from sportsdataverse.wbb import espn_wbb_game_officials
+            officials = espn_wbb_game_officials(game_id=401587902, season=2024)
             print(officials.shape)
             officials.select(["full_name", "position_display_name", "order"]).head()
 
         Pandas round-trip::
 
-            officials_pd = espn_wbb_event_officials(
+            officials_pd = espn_wbb_game_officials(
                 game_id=401587902, season=2024, return_as_pandas=True
             )
             officials_pd.head()
 
         Raw payload (skip the cleaning pipeline)::
 
-            raw = espn_wbb_event_officials(
+            raw = espn_wbb_game_officials(
                 game_id=401587902, season=2024, raw=True
             )
             sorted(raw.keys())
@@ -139,7 +144,7 @@ def espn_wbb_event_officials(
         .. _cfbfastR: https://cfbfastR.sportsdataverse.org
         .. _ESPN: https://www.espn.com
     """
-    return _espn_basketball_event_officials(
+    return _espn_basketball_game_officials(
         league=_LEAGUE_SLUG,
         game_id=game_id,
         season=season,
@@ -149,7 +154,7 @@ def espn_wbb_event_officials(
     )
 
 
-def _espn_basketball_event_officials(
+def _espn_basketball_game_officials(
     league: str,
     game_id: int,
     season: int | None = None,
@@ -158,7 +163,7 @@ def _espn_basketball_event_officials(
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> pl.DataFrame | pd.DataFrame | dict[str, Any]:
-    """Shared implementation for ``espn_wbb_event_officials`` / ``espn_wnba_event_officials``.
+    """Shared implementation for ``espn_wbb_game_officials`` / ``espn_wnba_game_officials``.
 
     Builds the ESPN core-api officials URL for the supplied ``league`` slug,
     downloads, walks the ``items`` array, flattens the nested ``position``

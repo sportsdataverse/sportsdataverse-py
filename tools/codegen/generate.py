@@ -237,25 +237,44 @@ def _load_espn_drops() -> set:
     return set(yaml.safe_load(_ESPN_RENAME_FILE.read_text(encoding="utf-8")).get("drop", []) or [])
 
 
+_CONVENTION_TOKENS: dict[str, str] = {
+    "athlete": "player",
+    "athletes": "players",
+    "event": "game",
+    "events": "games",
+}
+
+
 def _convention_rename(short: str) -> str:
     """Universal ESPN-endpoint -> R-curated structural rename (all leagues).
 
     Aligns the raw ESPN endpoint taxonomy to the cfbfastR/hoopR/wehoop convention:
-    a competitor is a game's team, a competition is the game, an athlete is a player.
-    The bare ``event`` root is left alone (it would collide with
-    ``event_competition -> game``).
+    an athlete is a player, an event is a game, a competitor is a game's team, a
+    competition is a game competition. Applied to EVERY league.
+
+    Two combined (token-merging) mappings run first, because they can't be
+    expressed as a per-token swap:
+
+    * ``event_competitor[s][...]`` -> ``game_team[s][...]`` (a competitor is the
+      game's team)
+    * ``event_competition`` -> ``game_competition`` and ``event_competition_X``
+      -> ``game_X`` (the competition object / its flattened sub-resources)
+
+    Everything else is a per-underscore-token swap (``athlete``->``player``,
+    ``event``->``game``, plus plurals), so embedded / trailing / plural forms all
+    convert: ``athlete_vs_athlete`` -> ``player_vs_player``, ``athletes_index`` ->
+    ``players_index``, ``season_athletes`` -> ``season_players``, bare ``event`` ->
+    ``game``, ``events`` -> ``games``, ``season_week_events`` ->
+    ``season_week_games``. Compound tokens like ``eventlog`` are not bare tokens,
+    so they are preserved (``athlete_eventlog`` -> ``player_eventlog``).
     """
     if short.startswith("event_competitor"):
-        return "game_team" + short[len("event_competitor") :]
-    if short == "event_competition":
-        return "game"
-    if short.startswith("event_competition_"):
-        return "game_" + short[len("event_competition_") :]
-    if short.startswith("event_"):
-        return "game_" + short[len("event_") :]
-    if short.startswith("athlete_"):
-        return "player_" + short[len("athlete_") :]
-    return short
+        short = "game_team" + short[len("event_competitor") :]
+    elif short.startswith("event_competition_"):
+        short = "game_" + short[len("event_competition_") :]
+    elif short == "event_competition":
+        short = "game_competition"
+    return "_".join(_CONVENTION_TOKENS.get(tok, tok) for tok in short.split("_"))
 
 
 # Endpoints whose convention name should be version-qualified (rather than dropped)

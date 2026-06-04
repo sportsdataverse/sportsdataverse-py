@@ -1,8 +1,8 @@
 """ESPN WNBA game officials scraper.
 
-Mirror of :func:`sportsdataverse.wbb.espn_wbb_event_officials` for the WNBA
+Mirror of :func:`sportsdataverse.wbb.espn_wbb_game_officials` for the WNBA
 league slug. The actual fetch + parse logic lives in
-``sportsdataverse.wbb.wbb_event_officials._espn_basketball_event_officials``
+``sportsdataverse.wbb.wbb_game_officials._espn_basketball_game_officials``
 to keep the wbb / wnba pair DRY.
 """
 
@@ -13,13 +13,13 @@ from typing import Any, Literal, overload
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.wbb.wbb_event_officials import _espn_basketball_event_officials
+from sportsdataverse.wbb.wbb_game_officials import _espn_basketball_game_officials
 
 _LEAGUE_SLUG: str = "wnba"
 
 
 @overload
-def espn_wnba_event_officials(
+def espn_wnba_game_officials(
     game_id: int,
     season: int | None = ...,
     *,
@@ -28,7 +28,7 @@ def espn_wnba_event_officials(
     **kwargs: Any,
 ) -> dict[str, Any]: ...
 @overload
-def espn_wnba_event_officials(
+def espn_wnba_game_officials(
     game_id: int,
     season: int | None = ...,
     *,
@@ -37,7 +37,7 @@ def espn_wnba_event_officials(
     **kwargs: Any,
 ) -> pd.DataFrame: ...
 @overload
-def espn_wnba_event_officials(
+def espn_wnba_game_officials(
     game_id: int,
     season: int | None = ...,
     *,
@@ -45,7 +45,7 @@ def espn_wnba_event_officials(
     return_as_pandas: Literal[False] = ...,
     **kwargs: Any,
 ) -> pl.DataFrame: ...
-def espn_wnba_event_officials(
+def espn_wnba_game_officials(
     game_id: int,
     season: int | None = None,
     *,
@@ -55,7 +55,7 @@ def espn_wnba_event_officials(
 ) -> pl.DataFrame | pd.DataFrame | dict[str, Any]:
     """Pull the officials assigned to a WNBA game.
 
-    See :func:`sportsdataverse.wbb.espn_wbb_event_officials` for full
+    See :func:`sportsdataverse.wbb.espn_wbb_game_officials` for full
     documentation of the column set, the empty-frame fallback when ESPN
     ships no officials, and the ``raw`` / ``return_as_pandas`` flag
     semantics.
@@ -70,7 +70,7 @@ def espn_wnba_event_officials(
 
     Returns:
         Polars (or pandas) DataFrame with the same columns documented in
-        :func:`sportsdataverse.wbb.espn_wbb_event_officials`. If
+        :func:`sportsdataverse.wbb.espn_wbb_game_officials`. If
         ``raw=True``, returns the raw response dict.
 
     Raises:
@@ -80,21 +80,21 @@ def espn_wnba_event_officials(
     Example:
         Pull officials for the 2024 WNBA Finals Game 1::
 
-            from sportsdataverse.wnba import espn_wnba_event_officials
-            refs = espn_wnba_event_officials(game_id=401620238, season=2024)
+            from sportsdataverse.wnba import espn_wnba_game_officials
+            refs = espn_wnba_game_officials(game_id=401620238, season=2024)
             print(refs.shape)
             refs.select(["full_name", "position_name", "order"]).head()
 
         Pandas round-trip::
 
-            refs_pd = espn_wnba_event_officials(
+            refs_pd = espn_wnba_game_officials(
                 game_id=401620238, season=2024, return_as_pandas=True
             )
             refs_pd[["full_name", "position_name"]].head()
 
         Inspect the raw ESPN payload (e.g. for fields not flattened)::
 
-            payload = espn_wnba_event_officials(game_id=401620238, season=2024, raw=True)
+            payload = espn_wnba_game_officials(game_id=401620238, season=2024, raw=True)
             list(payload.keys())[:8]
 
         See Also:
@@ -106,7 +106,7 @@ def espn_wnba_event_officials(
         .. _nba_api: https://github.com/swar/nba_api
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    return _espn_basketball_event_officials(
+    return _espn_basketball_game_officials(
         league=_LEAGUE_SLUG,
         game_id=game_id,
         season=season,

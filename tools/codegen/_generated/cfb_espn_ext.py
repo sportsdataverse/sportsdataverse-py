@@ -81,10 +81,10 @@ __all__ = [
     "espn_cfb_season_type_corrections",
     "espn_cfb_season_weeks",
     "espn_cfb_season_week",
-    "espn_cfb_season_week_events",
+    "espn_cfb_season_week_games",
     "espn_cfb_season_teams",
     "espn_cfb_season_team",
-    "espn_cfb_season_athletes",
+    "espn_cfb_season_players",
     "espn_cfb_season_coaches",
     "espn_cfb_season_draft",
     "espn_cfb_season_draft_round_picks",
@@ -93,7 +93,7 @@ __all__ = [
     "espn_cfb_team_powerindex",
     "espn_cfb_season_powerindex_leaders",
     "espn_cfb_season_awards",
-    "espn_cfb_athletes_index",
+    "espn_cfb_players_index",
     "espn_cfb_player_core",
     "espn_cfb_player_career_stats",
     "espn_cfb_player_statisticslog",
@@ -104,10 +104,10 @@ __all__ = [
     "espn_cfb_player_records",
     "espn_cfb_player_injuries",
     "espn_cfb_player_notes",
-    "espn_cfb_player_vs_athlete",
-    "espn_cfb_events",
-    "espn_cfb_event",
+    "espn_cfb_player_vs_player",
+    "espn_cfb_games",
     "espn_cfb_game",
+    "espn_cfb_game_competition",
     "espn_cfb_game_teams",
     "espn_cfb_game_team",
     "espn_cfb_game_team_roster",
@@ -1907,7 +1907,7 @@ def espn_cfb_season_week(
     return raw
 
 
-def espn_cfb_season_week_events(
+def espn_cfb_season_week_games(
     season: Union[int, str],
     season_type: Union[int, str],
     week: Union[int, str],
@@ -1936,7 +1936,7 @@ def espn_cfb_season_week_events(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_season_week_events(season=2024, season_type=2, week=1)
+        >>> espn_cfb_season_week_games(season=2024, season_type=2, week=1)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/{season}/types/{season_type}/weeks/{week}/events",
@@ -2026,7 +2026,7 @@ def espn_cfb_season_team(
     return raw
 
 
-def espn_cfb_season_athletes(
+def espn_cfb_season_players(
     season: Union[int, str],
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
@@ -2053,7 +2053,7 @@ def espn_cfb_season_athletes(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_season_athletes(season=2024)
+        >>> espn_cfb_season_players(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/{season}/athletes",
@@ -2361,7 +2361,7 @@ def espn_cfb_season_awards(
     return raw
 
 
-def espn_cfb_athletes_index(
+def espn_cfb_players_index(
     active: Optional[bool] = True,
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
@@ -2388,7 +2388,7 @@ def espn_cfb_athletes_index(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_athletes_index()
+        >>> espn_cfb_players_index()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes",
@@ -2761,7 +2761,7 @@ def espn_cfb_player_notes(
     return raw
 
 
-def espn_cfb_player_vs_athlete(
+def espn_cfb_player_vs_player(
     athlete_id: Union[int, str],
     opp_id: Union[int, str],
     *,
@@ -2786,7 +2786,7 @@ def espn_cfb_player_vs_athlete(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_player_vs_athlete(athlete_id='4239', opp_id='5')
+        >>> espn_cfb_player_vs_player(athlete_id='4239', opp_id='5')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/{athlete_id}/vsathlete/{opp_id}",
@@ -2798,7 +2798,7 @@ def espn_cfb_player_vs_athlete(
     return raw
 
 
-def espn_cfb_events(
+def espn_cfb_games(
     dates: Optional[Union[int, str]] = None,
     limit: Optional[int] = 500,
     *,
@@ -2823,7 +2823,7 @@ def espn_cfb_events(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_events()
+        >>> espn_cfb_games()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events",
@@ -2838,7 +2838,7 @@ def espn_cfb_events(
     return raw
 
 
-def espn_cfb_event(
+def espn_cfb_game(
     event_id: Union[int, str],
     *,
     return_parsed: bool = False,
@@ -2861,7 +2861,7 @@ def espn_cfb_event(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_event(event_id='401584793')
+        >>> espn_cfb_game(event_id='401584793')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/{event_id}",
@@ -2873,7 +2873,7 @@ def espn_cfb_event(
     return raw
 
 
-def espn_cfb_game(
+def espn_cfb_game_competition(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
@@ -2898,7 +2898,7 @@ def espn_cfb_game(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_game(event_id='401584793')
+        >>> espn_cfb_game_competition(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/{event_id}/competitions/{cid}"

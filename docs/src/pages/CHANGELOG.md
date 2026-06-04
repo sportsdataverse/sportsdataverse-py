@@ -82,21 +82,29 @@ fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ex
   byte-identical URL + query string to the function it replaced (verified by a
   URL+params parity gate across all scopes), but now exposes concrete parameter
   names, type hints, and docstrings instead of an opaque `*args, **kwargs` shim.
-- **Names aligned to the R sister packages (universal convention).** Across all
-  eight leagues the generated `espn_*` names now follow the cfbfastR/hoopR/wehoop
-  taxonomy (behavior unchanged): `event_competitor* -> game_team*`,
-  `event_competition -> game`, `event_* -> game_*`, `athlete_* -> player_*`, and
-  `athlete_stats -> player_stats_v3` (~24 `game_*` + ~18 `player_*` per league).
-  The bare `event` root is kept (it
-  would otherwise collide with `event_competition -> game`). cfb additionally gets
-  `season_*` cleanups vs cfbfastR (`futures`/`groups`/`recruits`/`week_rankings`;
-  `powerindex -> team_powerindex`). Rule engine: `generate._convention_rename`;
-  cfb-specific exceptions: `tools/codegen/espn_rename_map.yaml`.
+- **Names aligned to the R sister packages (universal, token-level convention).**
+  Across all eight leagues the generated `espn_*` names follow the
+  cfbfastR/hoopR/wehoop taxonomy (behavior unchanged). The rename is applied at the
+  underscore-**token** level (not just prefixes), so `athlete`/`event` convert in
+  every position incl. plurals: `athlete -> player` (`athlete_vs_athlete ->
+  player_vs_player`, `athletes_index -> players_index`, `season_athletes ->
+  season_players`), `event -> game` (bare `event -> game`, `events -> games`,
+  `event_* -> game_*`, `season_week_events -> season_week_games`). Two combined
+  mappings run first: `event_competitor* -> game_team*` (a competitor is the game's
+  team) and `event_competition -> game_competition` / `event_competition_* ->
+  game_*`. Compound tokens like `eventlog` are preserved (`athlete_eventlog ->
+  player_eventlog`). cfb additionally gets `season_*` cleanups vs cfbfastR
+  (`futures`/`groups`/`recruits`/`week_rankings`; `powerindex -> team_powerindex`).
+  Rule engine: `generate._convention_rename`; cfb-specific exceptions:
+  `tools/codegen/espn_rename_map.yaml`.
 - **Collision-guarded.** Renames that would clash with a hand-written sibling or
   another generated name are skipped automatically: `teams_site` (raw endpoint, !=
   parsed `espn_*_teams`) and `espn_cfb_season_{team,awards,coaches}` (vs the
-  catalog). Renaming `event_officials -> game_officials` un-shadows the previously
-  hidden generated function. One->many splits (e.g. `summary`) remain for curation
+  catalog). SAME-endpoint duplicates are dropped: the generated raw
+  `espn_{wbb,wnba}_game_officials` is suppressed (via `espn_rename_map.yaml` `drop:`)
+  because the hand-written parsed `espn_{wbb,wnba}_game_officials` (renamed from
+  `event_officials`, core-api officials with ids) exposes the same endpoint. One->many
+  splits (e.g. `summary`) remain for curation
   (see `docs/superpowers/specs/espn-r-naming-worksheet.md`).
 - **Versioned collision rule (dynamic, "one stays bare").** When a generated name
   would collide with an existing function but they hit *different* endpoints, both are

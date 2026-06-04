@@ -23,3 +23,12 @@ rename:
   espn_cfb_season_powerindex: espn_cfb_team_powerindex
   espn_cfb_season_recruits: espn_cfb_recruits
   espn_cfb_season_week_rankings: espn_cfb_week_rankings
+
+# SAME-endpoint duplicates dropped (a hand-written parsed sibling exposes this
+# exact endpoint and takes the canonical name). The base (pre-rename) generated
+# name is listed; the rename target would have been espn_*_game_officials.
+# wbb/wnba ship a hand-written, parsed espn_*_game_officials (core-api officials
+# with official ids) -- the generated raw wrapper is redundant for those two.
+drop:
+  - espn_wbb_event_officials
+  - espn_wnba_event_officials

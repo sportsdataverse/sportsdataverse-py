@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from sportsdataverse.wbb.wbb_espn_ext import *
-from sportsdataverse.wbb.wbb_event_officials import *
+from sportsdataverse.wbb.wbb_game_officials import *
 from sportsdataverse.wbb.wbb_game_rosters import *
 from sportsdataverse.wbb.wbb_loaders import *
 from sportsdataverse.wbb.wbb_pbp import *

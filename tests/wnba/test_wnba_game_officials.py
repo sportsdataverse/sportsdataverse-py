@@ -1,10 +1,10 @@
-"""Smoke tests for sportsdataverse.wnba.wnba_event_officials."""
+"""Smoke tests for sportsdataverse.wnba.wnba_game_officials."""
 
 from __future__ import annotations
 
 import polars as pl
 
-from sportsdataverse.wnba import espn_wnba_event_officials
+from sportsdataverse.wnba import espn_wnba_game_officials
 from tests.conftest import skip_if_no_live
 
 # 2024 WNBA Finals Game 1 (Minnesota Lynx at New York Liberty).
@@ -23,8 +23,8 @@ CORE_COLUMNS: set[str] = {
 
 
 @skip_if_no_live
-def test_espn_wnba_event_officials_returns_polars_by_default():
-    df = espn_wnba_event_officials(game_id=GAME_ID, season=SEASON)
+def test_espn_wnba_game_officials_returns_polars_by_default():
+    df = espn_wnba_game_officials(game_id=GAME_ID, season=SEASON)
     assert isinstance(df, pl.DataFrame)
     missing = CORE_COLUMNS - set(df.columns)
     assert not missing, f"missing columns: {missing}"
@@ -34,18 +34,18 @@ def test_espn_wnba_event_officials_returns_polars_by_default():
 
 
 @skip_if_no_live
-def test_espn_wnba_event_officials_pandas_round_trip():
+def test_espn_wnba_game_officials_pandas_round_trip():
     import pandas as pd
 
-    df = espn_wnba_event_officials(game_id=GAME_ID, season=SEASON, return_as_pandas=True)
+    df = espn_wnba_game_officials(game_id=GAME_ID, season=SEASON, return_as_pandas=True)
     assert isinstance(df, pd.DataFrame)
     missing = CORE_COLUMNS - set(df.columns)
     assert not missing, f"missing columns: {missing}"
 
 
 @skip_if_no_live
-def test_espn_wnba_event_officials_raw_returns_dict():
-    raw = espn_wnba_event_officials(game_id=GAME_ID, season=SEASON, raw=True)
+def test_espn_wnba_game_officials_raw_returns_dict():
+    raw = espn_wnba_game_officials(game_id=GAME_ID, season=SEASON, raw=True)
     assert isinstance(raw, dict)
     # ESPN's core-api officials endpoint always wraps the list in ``items``.
     assert "items" in raw

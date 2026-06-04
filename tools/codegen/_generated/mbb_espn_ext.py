@@ -81,10 +81,10 @@ __all__ = [
     "espn_mbb_season_type_corrections",
     "espn_mbb_season_weeks",
     "espn_mbb_season_week",
-    "espn_mbb_season_week_events",
+    "espn_mbb_season_week_games",
     "espn_mbb_season_teams",
     "espn_mbb_season_team",
-    "espn_mbb_season_athletes",
+    "espn_mbb_season_players",
     "espn_mbb_season_coaches",
     "espn_mbb_season_draft",
     "espn_mbb_season_draft_round_picks",
@@ -93,7 +93,7 @@ __all__ = [
     "espn_mbb_season_powerindex",
     "espn_mbb_season_powerindex_leaders",
     "espn_mbb_season_awards",
-    "espn_mbb_athletes_index",
+    "espn_mbb_players_index",
     "espn_mbb_player_core",
     "espn_mbb_player_career_stats",
     "espn_mbb_player_statisticslog",
@@ -104,10 +104,10 @@ __all__ = [
     "espn_mbb_player_records",
     "espn_mbb_player_injuries",
     "espn_mbb_player_notes",
-    "espn_mbb_player_vs_athlete",
-    "espn_mbb_events",
-    "espn_mbb_event",
+    "espn_mbb_player_vs_player",
+    "espn_mbb_games",
     "espn_mbb_game",
+    "espn_mbb_game_competition",
     "espn_mbb_game_teams",
     "espn_mbb_game_team",
     "espn_mbb_game_team_roster",
@@ -1905,7 +1905,7 @@ def espn_mbb_season_week(
     return raw
 
 
-def espn_mbb_season_week_events(
+def espn_mbb_season_week_games(
     season: Union[int, str],
     season_type: Union[int, str],
     week: Union[int, str],
@@ -1934,7 +1934,7 @@ def espn_mbb_season_week_events(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mbb_season_week_events(season=2024, season_type=2, week=1)
+        >>> espn_mbb_season_week_games(season=2024, season_type=2, week=1)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/{season}/types/{season_type}/weeks/{week}/events",
@@ -2024,7 +2024,7 @@ def espn_mbb_season_team(
     return raw
 
 
-def espn_mbb_season_athletes(
+def espn_mbb_season_players(
     season: Union[int, str],
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
@@ -2051,7 +2051,7 @@ def espn_mbb_season_athletes(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mbb_season_athletes(season=2024)
+        >>> espn_mbb_season_players(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/{season}/athletes",
@@ -2359,7 +2359,7 @@ def espn_mbb_season_awards(
     return raw
 
 
-def espn_mbb_athletes_index(
+def espn_mbb_players_index(
     active: Optional[bool] = True,
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
@@ -2386,7 +2386,7 @@ def espn_mbb_athletes_index(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mbb_athletes_index()
+        >>> espn_mbb_players_index()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/athletes",
@@ -2759,7 +2759,7 @@ def espn_mbb_player_notes(
     return raw
 
 
-def espn_mbb_player_vs_athlete(
+def espn_mbb_player_vs_player(
     athlete_id: Union[int, str],
     opp_id: Union[int, str],
     *,
@@ -2784,7 +2784,7 @@ def espn_mbb_player_vs_athlete(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mbb_player_vs_athlete(athlete_id='4239', opp_id='5')
+        >>> espn_mbb_player_vs_player(athlete_id='4239', opp_id='5')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/athletes/{athlete_id}/vsathlete/{opp_id}",
@@ -2796,7 +2796,7 @@ def espn_mbb_player_vs_athlete(
     return raw
 
 
-def espn_mbb_events(
+def espn_mbb_games(
     dates: Optional[Union[int, str]] = None,
     limit: Optional[int] = 500,
     *,
@@ -2821,7 +2821,7 @@ def espn_mbb_events(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mbb_events()
+        >>> espn_mbb_games()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events",
@@ -2836,7 +2836,7 @@ def espn_mbb_events(
     return raw
 
 
-def espn_mbb_event(
+def espn_mbb_game(
     event_id: Union[int, str],
     *,
     return_parsed: bool = False,
@@ -2859,7 +2859,7 @@ def espn_mbb_event(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mbb_event(event_id='401584793')
+        >>> espn_mbb_game(event_id='401584793')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/{event_id}",
@@ -2871,7 +2871,7 @@ def espn_mbb_event(
     return raw
 
 
-def espn_mbb_game(
+def espn_mbb_game_competition(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
@@ -2896,7 +2896,7 @@ def espn_mbb_game(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mbb_game(event_id='401584793')
+        >>> espn_mbb_game_competition(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/{event_id}/competitions/{cid}"
