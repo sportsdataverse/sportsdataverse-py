@@ -1,0 +1,12 @@
+---
+title: Parameters
+sidebar_label: Parameters
+---
+# Parameter reference
+
+Shared query/path parameters resolved from `tools/codegen/endpoints/parameters.yaml`.
+
+| Python | API | Type | Default | Pattern | Nullable |
+|---|---|---|---|---|:---:|
+{% for p in params %}| `{{ p.python_name }}` | `{{ p.api }}` | {{ p.type|replace("|", "\\|") }} | {% if p.default is not none %}`{{ p.default }}`{% endif %} | {% if p.pattern %}`{{ p.pattern }}`{% endif %} | {% if not p.required %}`Y`{% endif %} |
+{% endfor %}

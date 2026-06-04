@@ -1,0 +1,39 @@
+{# Shared per-function reference block (8 sections). Rendered for every ESPN and
+   flat-API endpoint. Every attribute read here MUST be set on _EndpointView, because
+   the Jinja env runs under StrictUndefined. #}
+{% macro block(ep) -%}
+## `{{ ep.fn_name }}`
+
+{{ ep.summary or "ESPN endpoint." }}
+
+**Endpoint URL:** `GET {{ ep.endpoint_url }}`
+{% if ep.valid_url %}
+
+**Valid URL:** [{{ ep.valid_url }}]({{ ep.valid_url }})
+{% endif %}
+{% if ep.r_equivalent %}
+
+**R equivalent:** {% for pkg, fn in ep.r_equivalent.items() %}`{{ pkg }}::{{ fn }}()`{% if not loop.last %}, {% endif %}{% endfor %}
+{% endif %}
+
+| API Parameter | Python | Pattern | Required | Nullable |
+|---|---|:---:|:---:|:---:|
+{% for r in ep.param_rows %}| `{{ r.api }}` | `{{ r.python }}` | {% if r.pattern %}`{{ r.pattern }}`{% endif %} | {% if r.required %}`Y`{% endif %} | {% if r.nullable %}`Y`{% endif %} |
+{% endfor %}
+
+### Returns
+
+{% if ep.return_table %}{{ ep.return_table }}{% else %}{{ ep.returns_prose or "Raw JSON `Dict` (no parser registered)." }}
+{% endif %}
+
+### Example
+
+```python
+{{ ep.example_call }}
+```
+{% if ep.notebook %}
+> See the [{{ ep.notebook }} notebook](../../../examples/notebooks/{{ ep.notebook }}.ipynb) for a runnable walkthrough.
+{% endif %}
+
+_Last validated {{ ep.last_validated or "n/a" }}._
+{%- endmacro %}

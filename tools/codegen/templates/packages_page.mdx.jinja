@@ -1,0 +1,10 @@
+---
+title: SportsDataVerse Packages
+sidebar_label: Packages
+---
+# SportsDataVerse Packages
+
+| Package | Language | Link |
+|---|---|---|
+{% for p in packages %}| {{ p.name }} | {{ p.language }} | {% if p.url %}[{{ p.url }}]({{ p.url }}){% endif %} |
+{% endfor %}

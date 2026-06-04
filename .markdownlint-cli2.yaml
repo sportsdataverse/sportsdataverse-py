@@ -160,6 +160,7 @@ config:
 # fight the docs pipeline.
 ignores:
   - "Sphinx-docs/_build/**"
+  - "tools/codegen/_generated_docs/**" # codegen staging mirror — machine-generated reference pages (regen via `generate.py --docs`)
   - "docs/docs/**"
   - "docs/versioned_docs/**" # frozen snapshots of docs/docs/ — same auto-generated content
   - "docs/build/**"

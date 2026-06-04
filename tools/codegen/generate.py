@@ -102,6 +102,53 @@ def _build_docstring(
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
 
+def _param_rows(ep: spec.Endpoint) -> list[dict]:
+    """Merge path + query params into nba_api-style doc rows.
+
+    ``required`` mirrors the spec; ``nullable`` is its inverse (an optional param
+    may be omitted/``None``). Path params come first, matching the signature order
+    used by the generated wrapper.
+    """
+    rows: list[dict] = []
+    for p in (*ep.path_params, *ep.query_params):
+        rows.append(
+            {
+                "api": p.api,
+                "python": p.python_name,
+                "pattern": p.pattern,
+                "required": p.required,
+                "nullable": not p.required,
+            },
+        )
+    return rows
+
+
+@functools.lru_cache(maxsize=None)
+def _return_table(schema_name: str | None) -> str:
+    """Markdown ``@return`` table(s) for a ``returns_schema`` (schemas/{name}.yaml).
+
+    Handles both on-disk shapes: ``kind: dataframe`` (top-level ``columns``) renders
+    one table; ``kind: frames`` (``frames: [{section, columns}]``) renders one bolded
+    table per sub-frame. Empty string when no schema is registered/found.
+    """
+    if not schema_name:
+        return ""
+    import yaml
+
+    p = ROOT / "tools" / "codegen" / "schemas" / f"{schema_name}.yaml"
+    if not p.exists():
+        return ""
+    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+
+    def tbl(cols) -> str:
+        head = "| col_name | type | description |\n|---|---|---|\n"
+        return head + "".join(f"| `{c['name']}` | {c.get('type', '')} | {c.get('description', '')} |\n" for c in cols)
+
+    if d.get("kind") == "frames":
+        return "\n".join(f"**{blk['section']}**\n\n{tbl(blk['columns'])}" for blk in d.get("frames", []))
+    return tbl(d.get("columns", []))
+
+
 class _EndpointView:
     """Template-facing view of an Endpoint with computed render fields.
 
@@ -163,6 +210,18 @@ class _EndpointView:
             self.example_call,
             flat=flat,
         )
+
+        # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
+        # Every attribute below is read under StrictUndefined, so all must exist.
+        self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
+        self.valid_url = self.example_url
+        self.param_rows = _param_rows(ep)
+        self.return_table = _return_table(ep.returns_schema)
+        self.returns_prose = ep.summary
+        self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map
+        self.notebook: str | None = None
+        self.last_validated: str | None = None
+        self.api_name = ""  # set by _espn_league_views for per-API docs filtering
 
     @staticmethod
     def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League) -> str:
@@ -317,13 +376,23 @@ def _handwritten_espn_names(prefix: str) -> set[str]:
     return out
 
 
-def _league_module_source(league: spec.League, apis, hosts) -> str:
-    """Render the (unformatted) module source; ruff formatting happens at write time."""
+def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
+    """Resolve every in-scope ESPN endpoint for a league to its final wrapper name.
+
+    Single source of truth for the generated name of each endpoint, shared by the
+    module renderer (:func:`_league_module_source`) and the docs renderer
+    (:func:`render_reference_page`) so a doc page can never disagree with the emitted
+    wrapper. Each returned view is tagged with ``.api_name`` (the source API) for
+    per-API docs filtering.
+
+    Pass 1 collects in-scope endpoints + their base (pre-rename) names. Pass 2 applies
+    the R-alignment renames with a collision guard (version-qualify the newer endpoint
+    so one stays bare; record a skip only when even the versioned name is taken).
+    """
     renames = _load_espn_renames()
     drops = _load_espn_drops()
     handwritten = _handwritten_espn_names(league.prefix)
-    # pass 1: collect endpoints + their base (pre-rename) names for this league
-    collected = []  # (ep, ep_host, base_name)
+    collected = []  # (ep, ep_host, base, api_name)
     for api in apis:
         host_url = hosts[api.host]
         for ep in api.endpoints:
@@ -333,25 +402,17 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
             if base in drops:
                 continue  # a hand-written sibling already exposes this exact endpoint
             ep_host = hosts[ep.host] if ep.host else host_url
-            collected.append((ep, ep_host, base))
-    base_names = {b for _, _, b in collected}
+            collected.append((ep, ep_host, base, api.api))
+    base_names = {b for _, _, b, _ in collected}
 
-    # pass 2: apply the R-alignment renames with a collision guard (skip + record any
-    # rename that would clash with an existing generated name, a hand-written sibling,
-    # or another already-assigned rename).
-    endpoints = []
-    parser_imports = set()
-    transforms = set()
+    views: list[_EndpointView] = []
     used: set[str] = set()
-    for ep, ep_host, base in collected:
+    for ep, ep_host, base, api_name in collected:
         fn_name = base
         # static override wins; else the universal structural convention
         new = renames.get(base) or f"espn_{league.prefix}_{_convention_rename(ep.short)}"
         if new != base:
             if new in base_names or new in handwritten or new in used:
-                # Collision: keep BOTH by version-qualifying the larger/newer endpoint
-                # (one stays bare) instead of dropping the rename. Falls back to a
-                # recorded skip only when even the versioned name is unavailable.
                 versioned = _versioned_on_collision(ep.short, league.prefix)
                 if versioned and versioned not in base_names and versioned not in handwritten and versioned not in used:
                     fn_name = versioned
@@ -360,19 +421,28 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
             else:
                 fn_name = new
         used.add(fn_name)
-        if ep.parser:
-            parser_imports.add(ep.parser)
-        for p in (*ep.path_params, *ep.query_params):
+        view = _EndpointView(ep, fn_name, ep_host, league)
+        view.api_name = api_name
+        views.append(view)
+    return views
+
+
+def _league_module_source(league: spec.League, apis, hosts) -> str:
+    """Render the (unformatted) module source; ruff formatting happens at write time."""
+    views = _espn_league_views(league, apis, hosts)
+    parser_imports = {v.parser for v in views if v.parser}
+    transforms: set[str] = set()
+    for v in views:
+        for p in (*v.path_params, *v.query_params):
             if p.transform:
                 transforms.add(p.transform)
-        endpoints.append(_EndpointView(ep, fn_name, ep_host, league))
     runtime_imports = ["_get"] + sorted(transforms)
     template = render.ENV.get_template("espn_league_module.py.jinja")
     return template.render(
         prefix=league.prefix,
         sport=league.sport,
         league=league.league,
-        endpoints=endpoints,
+        endpoints=views,
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,
     )
@@ -415,30 +485,36 @@ def resolve_name(prefix: str, short: str, reserved: set, qualifier: str) -> str:
     return f"{prefix}_{qualifier}_{short}"
 
 
-def render_flat_module(api: spec.FlatApi) -> str:
-    """Render a flat (non-sport/league) API module (NHL api-web/edge/..., MLB stats).
+def _flat_views(api: spec.FlatApi) -> list[_EndpointView]:
+    """Resolve a flat API's endpoints to their final wrapper names + views.
 
-    When ``api.qualifier`` is set, each function gets a clean ``{prefix}_{short}``
-    name, qualified to ``{prefix}_{qualifier}_{short}`` only on collision with a
-    hand-written composite or another generated name in this module."""
+    Shared by the module renderer (:func:`render_flat_module`) and the docs renderer
+    (:func:`render_reference_page`). When ``api.qualifier`` is set, each function gets
+    a clean ``{prefix}_{short}`` name, qualified to ``{prefix}_{qualifier}_{short}``
+    only on collision with a hand-written composite or another generated name."""
     reserved = reserved_names(api.prefix, exclude_modules=(api.module,)) if api.qualifier else set()
     used: set[str] = set()
-    endpoints = []
-    parser_imports = set()
-    transforms = set()
+    views: list[_EndpointView] = []
     for ep in api.endpoints:
         if api.qualifier:
             fn_name = resolve_name(api.prefix, ep.short, reserved | used, api.qualifier)
         else:
             fn_name = api.name_pattern.format(short=ep.short)
         used.add(fn_name)
-        if ep.parser:
-            parser_imports.add(ep.parser)
-        for p in (*ep.path_params, *ep.query_params):
+        ep_host = ep.host or api.host
+        views.append(_EndpointView(ep, fn_name, ep_host, _FLAT_STUB_LEAGUE, flat=True))
+    return views
+
+
+def render_flat_module(api: spec.FlatApi) -> str:
+    """Render a flat (non-sport/league) API module (NHL api-web/edge/..., MLB stats)."""
+    views = _flat_views(api)
+    parser_imports = {v.parser for v in views if v.parser}
+    transforms: set[str] = set()
+    for v in views:
+        for p in (*v.path_params, *v.query_params):
             if p.transform:
                 transforms.add(p.transform)
-        ep_host = ep.host or api.host
-        endpoints.append(_EndpointView(ep, fn_name, ep_host, _FLAT_STUB_LEAGUE, flat=True))
     runtime_imports = list(dict.fromkeys([*api.runtime_imports, *sorted(transforms)]))
     template = render.ENV.get_template("api_module.py.jinja")
     return template.render(
@@ -446,7 +522,7 @@ def render_flat_module(api: spec.FlatApi) -> str:
         host=api.host,
         module=api.module,
         parser_module=api.parser_module,
-        endpoints=endpoints,
+        endpoints=views,
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,
         passthrough_query=api.passthrough_query,
@@ -907,6 +983,241 @@ def check() -> int:
     return 0
 
 
+# ===========================================================================
+# Docs generation (staging mirror -> tools/codegen/_generated_docs)
+#
+# Non-destructive: the generated reference tree is written into a tracked staging
+# dir parallel to ``_generated`` (the same drift-gated pattern as the Python
+# modules), NOT into the hand-maintained Docusaurus ``docs/docs/{league}`` tree.
+# Wiring the real tree + sidebar/navbar is the deferred (Node-dependent) slice.
+# ===========================================================================
+
+DOCS_OUT = ROOT / "tools" / "codegen" / "_generated_docs"
+
+# ESPN API -> (reference-file slug, human label) for the per-API doc pages.
+_ESPN_API_DOC = {
+    "espn_site_v2": ("site", "ESPN site API (v2)"),
+    "espn_web_v3": ("web", "ESPN web API (v3)"),
+    "espn_core_v2": ("core", "ESPN core API (v2)"),
+}
+
+
+def _loader_schema_table(fn: str) -> str:
+    """Markdown column table for a loader from the introspected footer schemas."""
+    cols = _loader_schemas().get(fn) or []
+    if not cols:
+        return ""
+    head = "| col_name | type |\n|---|---|\n"
+    return head + "".join(f"| `{c['name']}` | {c['type']} |\n" for c in cols)
+
+
+def _loader_doc_views(prefix: str) -> list[dict]:
+    """Template-facing loader dicts for ``loaders_page.md.jinja`` (one per league loader).
+
+    ``automation`` is normalized to always carry ``repo``/``workflow`` keys so the
+    StrictUndefined template can test ``ld.automation.repo`` safely."""
+    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    out: list[dict] = []
+    for ld in rel.loaders:
+        if ld.league != prefix:
+            continue
+        auto = ld.automation or {}
+        out.append(
+            {
+                "fn": ld.fn,
+                "tag": ld.tag,
+                "url": "" if ld.stub else f"{rel.bases[ld.base]}{ld.url}",
+                "automation": {"repo": auto.get("repo", ""), "workflow": auto.get("workflow", "")},
+                "return_table": _return_table(ld.returns_schema) if ld.returns_schema else _loader_schema_table(ld.fn),
+                "example_seasons": (ld.example_args or {}).get("seasons", 2024),
+            },
+        )
+    return out
+
+
+def _apis_for(prefix: str) -> list[dict]:
+    """API descriptors (``name``/``slug``/``label``/``base``/``count``/``kind``) that
+    have a reference page for ``prefix`` -- the in-scope ESPN APIs plus any flat API
+    whose prefix matches. ``name`` is what :func:`render_reference_page` dispatches on
+    (an ESPN API name, or a flat-API YAML stem)."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    out: list[dict] = []
+    league = next((lg for lg in cfg.leagues if lg.prefix == prefix), None)
+    if league is not None:
+        espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
+        views = _espn_league_views(league, espn_apis, cfg.hosts)
+        for api_obj, name in zip(espn_apis, ESPN_APIS):
+            count = sum(1 for v in views if v.api_name == name)
+            if count:
+                slug, label = _ESPN_API_DOC[name]
+                out.append(
+                    {
+                        "name": name,
+                        "slug": slug,
+                        "label": label,
+                        "base": cfg.hosts[api_obj.host],
+                        "count": count,
+                        "kind": "espn",
+                    },
+                )
+    for stem, fprefix in FLAT_APIS:
+        if fprefix != prefix:
+            continue
+        y = ENDPOINTS / f"{stem}.yaml"
+        if not y.exists():
+            continue
+        fa = spec.load_flat_api(y, params)
+        out.append(
+            {
+                "name": stem,
+                "slug": fa.module,
+                "label": fa.module.replace("_", " "),
+                "base": fa.host,
+                "count": len(fa.endpoints),
+                "kind": "flat",
+            },
+        )
+    return out
+
+
+def render_reference_page(prefix: str, api: str) -> str:
+    """Render the per-API reference page (8-section block per function) as markdown.
+
+    ``api`` is either an ESPN API name (``espn_site_v2``/``espn_web_v3``/
+    ``espn_core_v2``) or a flat-API YAML stem (``nhl_api_web``/``mlb_api``/...).
+    Names are resolved through the same view helpers the module codegen uses, so the
+    page documents exactly the wrapper names that get emitted."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    if api in ESPN_APIS:
+        cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+        league = next(lg for lg in cfg.leagues if lg.prefix == prefix)
+        espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
+        endpoints = [v for v in _espn_league_views(league, espn_apis, cfg.hosts) if v.api_name == api]
+        _slug, label = _ESPN_API_DOC[api]
+    else:
+        fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
+        endpoints = _flat_views(fa)
+        label = fa.module.replace("_", " ")
+    template = render.ENV.get_template("reference_page.md.jinja")
+    return template.render(
+        prefix=prefix,
+        title=f"{prefix.upper()} — {label}",
+        label=label,
+        count=len(endpoints),
+        endpoints=endpoints,
+    )
+
+
+def render_league_index(prefix: str) -> str:
+    """Render a league's ``index.md`` (reference table + optional loaders link)."""
+    loaders = _loader_doc_views(prefix)
+    template = render.ENV.get_template("league_index.md.jinja")
+    return template.render(
+        prefix=prefix,
+        api_rows=_apis_for(prefix),
+        has_loaders=bool(loaders),
+        loader_count=len(loaders),
+        notebooks=[],
+    )
+
+
+def render_loaders_page(prefix: str) -> str:
+    """Render a league's ``reference/loaders.md`` (diagram + automation table + blocks)."""
+    template = render.ENV.get_template("loaders_page.md.jinja")
+    return template.render(prefix=prefix, loaders=_loader_doc_views(prefix))
+
+
+def render_parameters_page() -> str:
+    """Render the shared ``reference/parameters.md`` from parameters.yaml."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    template = render.ENV.get_template("parameter_reference.md.jinja")
+    return template.render(params=list(params.values()))
+
+
+def render_category(label: str, position: int, collapsed: bool) -> str:
+    """Render a Docusaurus ``_category_.json`` sidebar descriptor."""
+    template = render.ENV.get_template("category_json.jinja")
+    return template.render(label=label, position=position, collapsed=collapsed)
+
+
+def render_packages_page() -> str | None:
+    """Render ``packages.mdx`` from the committed packages.json snapshot.
+
+    Returns None when no snapshot exists (run ``fetch_packages.py`` to create one);
+    the page is then simply omitted so the offline drift gate never needs the network."""
+    import json
+
+    p = ROOT / "tools" / "codegen" / "packages.json"
+    if not p.exists():
+        return None
+    template = render.ENV.get_template("packages_page.mdx.jinja")
+    return template.render(packages=json.loads(p.read_text(encoding="utf-8")))
+
+
+def _doc_leagues() -> list[str]:
+    """League prefixes to document: every ESPN league + any loader-only league (pwhl)."""
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    prefixes = [lg.prefix for lg in cfg.leagues]
+    extra = sorted({ld.league for ld in rel.loaders} - set(prefixes))
+    return prefixes + extra
+
+
+def _render_docs_all() -> dict[str, str]:
+    """{relpath: content} for the full generated docs staging tree."""
+    out: dict[str, str] = {}
+    for i, prefix in enumerate(_doc_leagues()):
+        apis = _apis_for(prefix)
+        loaders = _loader_doc_views(prefix)
+        out[f"{prefix}/index.md"] = render_league_index(prefix)
+        out[f"{prefix}/_category_.json"] = render_category(prefix.upper(), 10 + i, True)
+        for a in apis:
+            out[f"{prefix}/reference/{a['slug']}.md"] = render_reference_page(prefix, a["name"])
+        if loaders:
+            out[f"{prefix}/reference/loaders.md"] = render_loaders_page(prefix)
+        if apis or loaders:
+            out[f"{prefix}/reference/_category_.json"] = render_category("Reference", 1, True)
+    out["reference/parameters.md"] = render_parameters_page()
+    pkgs = render_packages_page()
+    if pkgs is not None:
+        out["packages.mdx"] = pkgs
+    # Normalize every file to exactly one trailing newline so the generic
+    # end-of-file-fixer / trailing-whitespace pre-commit hooks are a no-op and
+    # never fight this drift gate (template whitespace control leaves some pages
+    # with a double trailing newline).
+    return {rel: content.rstrip() + "\n" for rel, content in out.items()}
+
+
+def build_docs() -> list[Path]:
+    """Regenerate the staging docs tree (tools/codegen/_generated_docs). Non-destructive
+    to the live Docusaurus tree."""
+    if DOCS_OUT.exists():
+        shutil.rmtree(DOCS_OUT)
+    written = []
+    for rel, content in _render_docs_all().items():
+        dest = DOCS_OUT / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(content, encoding="utf-8", newline="\n")
+        written.append(dest)
+    return sorted(written)
+
+
+def _docs_stale() -> list[str]:
+    """Generated-docs staging files that differ from a fresh render (missing/changed/orphan)."""
+    rendered = _render_docs_all()
+    stale = []
+    for rel, content in rendered.items():
+        f = DOCS_OUT / rel
+        if not f.exists() or f.read_text(encoding="utf-8") != content:
+            stale.append(f"_generated_docs/{rel}")
+    if DOCS_OUT.exists():
+        for f in DOCS_OUT.rglob("*"):
+            if f.is_file() and f.relative_to(DOCS_OUT).as_posix() not in rendered:
+                stale.append(f"_generated_docs/{f.relative_to(DOCS_OUT).as_posix()} (orphan)")
+    return sorted(stale)
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="generate.py")
     ap.add_argument("--check", action="store_true", help="fail if any generated (staging or live) file is stale")
@@ -920,11 +1231,20 @@ def main(argv=None) -> int:
         action="store_true",
         help="re-introspect release parquet footers -> schemas/loader_schemas.yaml (network)",
     )
+    ap.add_argument(
+        "--docs",
+        action="store_true",
+        help="regenerate the staging docs tree (tools/codegen/_generated_docs) and exit",
+    )
     args = ap.parse_args(argv)
     if args.loader_schemas:
         return refresh_loader_schemas()
     if args.audit_releases:
         return audit_releases()
+    if args.docs:
+        d = len(build_docs())
+        print(f"codegen --docs: wrote {d} doc files to {DOCS_OUT}")
+        return 0
     if args.check:
         rc = check()
         live = _live_stale()
@@ -943,13 +1263,21 @@ def main(argv=None) -> int:
         if loaders:
             print("codegen --check: stale loader files:", ", ".join(sorted(loaders)), file=sys.stderr)
             rc = 1
+        docs = _docs_stale()
+        if docs:
+            print("codegen --check: stale doc files:", ", ".join(sorted(docs)), file=sys.stderr)
+            rc = 1
         return rc
     build()
     n = len(build_live())
     p = len(build_parsed_live())
     f = len(build_flat_live())
     ldr = len(build_loaders_live())
-    print(f"codegen: wrote {n} live + {p} parsed + {f} flat-API + {ldr} loader modules + refreshed staging at {OUT}")
+    d = len(build_docs())
+    print(
+        f"codegen: wrote {n} live + {p} parsed + {f} flat-API + {ldr} loader modules "
+        f"+ {d} doc files + refreshed staging at {OUT}",
+    )
     return 0
 
 
