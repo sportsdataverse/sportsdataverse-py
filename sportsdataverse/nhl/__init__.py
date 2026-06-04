@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from sportsdataverse.nhl.nhl_api import *
 from sportsdataverse.nhl.nhl_api_web import *
+from sportsdataverse.nhl.nhl_api_web_extra import *
 from sportsdataverse.nhl.nhl_api_web_parsers import (
     NHL_API_WEB_ENDPOINT_PARSERS,
     parse_nhl_web_boxscore,

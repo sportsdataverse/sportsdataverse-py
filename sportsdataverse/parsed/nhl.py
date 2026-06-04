@@ -124,6 +124,30 @@ from sportsdataverse.nhl import espn_nhl_tournaments as _raw_espn_nhl_tournament
 from sportsdataverse.nhl import espn_nhl_transactions as _raw_espn_nhl_transactions
 from sportsdataverse.nhl import espn_nhl_venue as _raw_espn_nhl_venue
 from sportsdataverse.nhl import espn_nhl_venues as _raw_espn_nhl_venues
+from sportsdataverse.nhl import nhl_boxscore as _raw_nhl_boxscore
+from sportsdataverse.nhl import nhl_club_schedule_month as _raw_nhl_club_schedule_month
+from sportsdataverse.nhl import nhl_club_schedule_season as _raw_nhl_club_schedule_season
+from sportsdataverse.nhl import nhl_club_schedule_week as _raw_nhl_club_schedule_week
+from sportsdataverse.nhl import nhl_club_stats as _raw_nhl_club_stats
+from sportsdataverse.nhl import nhl_club_stats_season as _raw_nhl_club_stats_season
+from sportsdataverse.nhl import nhl_draft_picks as _raw_nhl_draft_picks
+from sportsdataverse.nhl import nhl_draft_picks_now as _raw_nhl_draft_picks_now
+from sportsdataverse.nhl import nhl_draft_tracker_picks_now as _raw_nhl_draft_tracker_picks_now
+from sportsdataverse.nhl import nhl_goalie_leaders as _raw_nhl_goalie_leaders
+from sportsdataverse.nhl import nhl_landing as _raw_nhl_landing
+from sportsdataverse.nhl import nhl_player_game_log as _raw_nhl_player_game_log
+from sportsdataverse.nhl import nhl_player_landing as _raw_nhl_player_landing
+from sportsdataverse.nhl import nhl_right_rail as _raw_nhl_right_rail
+from sportsdataverse.nhl import nhl_roster as _raw_nhl_roster
+from sportsdataverse.nhl import nhl_roster_season as _raw_nhl_roster_season
+from sportsdataverse.nhl import nhl_schedule_calendar as _raw_nhl_schedule_calendar
+from sportsdataverse.nhl import nhl_score as _raw_nhl_score
+from sportsdataverse.nhl import nhl_scoreboard as _raw_nhl_scoreboard
+from sportsdataverse.nhl import nhl_skater_leaders as _raw_nhl_skater_leaders
+from sportsdataverse.nhl import nhl_standings as _raw_nhl_standings
+from sportsdataverse.nhl import nhl_standings_season as _raw_nhl_standings_season
+from sportsdataverse.nhl import nhl_web_pbp as _raw_nhl_web_pbp
+from sportsdataverse.nhl import nhl_web_schedule as _raw_nhl_web_schedule
 from sportsdataverse.nhl import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
 from sportsdataverse.nhl import download as download  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_game_rosters as espn_nhl_game_rosters  # noqa: F401
@@ -146,8 +170,8 @@ from sportsdataverse.nhl import load_nhl_player_boxscore as load_nhl_player_boxs
 from sportsdataverse.nhl import load_nhl_schedule as load_nhl_schedule  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore  # noqa: F401
 from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season  # noqa: F401
-from sportsdataverse.nhl import nhl_api_pbp as nhl_api_pbp  # noqa: F401
-from sportsdataverse.nhl import nhl_api_schedule as nhl_api_schedule  # noqa: F401
+from sportsdataverse.nhl import nhl_draft_rankings as nhl_draft_rankings  # noqa: F401
+from sportsdataverse.nhl import nhl_draft_rankings_now as nhl_draft_rankings_now  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_cat_goalie_detail as nhl_edge_cat_goalie_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_cat_skater_detail as nhl_edge_cat_skater_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_goalie_5v5_detail as nhl_edge_goalie_5v5_detail  # noqa: F401
@@ -184,6 +208,8 @@ from sportsdataverse.nhl import nhl_edge_team_skating_speed_top_10 as nhl_edge_t
 from sportsdataverse.nhl import nhl_edge_team_zone_time_details as nhl_edge_team_zone_time_details  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_zone_time_top_10 as nhl_edge_team_zone_time_top_10  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
+from sportsdataverse.nhl import nhl_player_spotlight as nhl_player_spotlight  # noqa: F401
+from sportsdataverse.nhl import nhl_playoff_series as nhl_playoff_series  # noqa: F401
 from sportsdataverse.nhl import nhl_records_all_time_record_vs_franchise as nhl_records_all_time_record_vs_franchise  # noqa: F401
 from sportsdataverse.nhl import nhl_records_allstar_coach_career as nhl_records_allstar_coach_career  # noqa: F401
 from sportsdataverse.nhl import nhl_records_allstar_goalie_career as nhl_records_allstar_goalie_career  # noqa: F401
@@ -257,34 +283,6 @@ from sportsdataverse.nhl import nhl_stats_rest_skater_report as nhl_stats_rest_s
 from sportsdataverse.nhl import nhl_stats_rest_team as nhl_stats_rest_team  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_team_by_id as nhl_stats_rest_team_by_id  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_team_report as nhl_stats_rest_team_report  # noqa: F401
-from sportsdataverse.nhl import nhl_web_boxscore as nhl_web_boxscore  # noqa: F401
-from sportsdataverse.nhl import nhl_web_club_schedule_month as nhl_web_club_schedule_month  # noqa: F401
-from sportsdataverse.nhl import nhl_web_club_schedule_season as nhl_web_club_schedule_season  # noqa: F401
-from sportsdataverse.nhl import nhl_web_club_schedule_week as nhl_web_club_schedule_week  # noqa: F401
-from sportsdataverse.nhl import nhl_web_club_stats as nhl_web_club_stats  # noqa: F401
-from sportsdataverse.nhl import nhl_web_club_stats_season as nhl_web_club_stats_season  # noqa: F401
-from sportsdataverse.nhl import nhl_web_draft_picks as nhl_web_draft_picks  # noqa: F401
-from sportsdataverse.nhl import nhl_web_draft_picks_now as nhl_web_draft_picks_now  # noqa: F401
-from sportsdataverse.nhl import nhl_web_draft_rankings as nhl_web_draft_rankings  # noqa: F401
-from sportsdataverse.nhl import nhl_web_draft_rankings_now as nhl_web_draft_rankings_now  # noqa: F401
-from sportsdataverse.nhl import nhl_web_draft_tracker_picks_now as nhl_web_draft_tracker_picks_now  # noqa: F401
-from sportsdataverse.nhl import nhl_web_goalie_leaders as nhl_web_goalie_leaders  # noqa: F401
-from sportsdataverse.nhl import nhl_web_landing as nhl_web_landing  # noqa: F401
-from sportsdataverse.nhl import nhl_web_pbp as nhl_web_pbp  # noqa: F401
-from sportsdataverse.nhl import nhl_web_player_game_log as nhl_web_player_game_log  # noqa: F401
-from sportsdataverse.nhl import nhl_web_player_landing as nhl_web_player_landing  # noqa: F401
-from sportsdataverse.nhl import nhl_web_player_spotlight as nhl_web_player_spotlight  # noqa: F401
-from sportsdataverse.nhl import nhl_web_playoff_series as nhl_web_playoff_series  # noqa: F401
-from sportsdataverse.nhl import nhl_web_right_rail as nhl_web_right_rail  # noqa: F401
-from sportsdataverse.nhl import nhl_web_roster as nhl_web_roster  # noqa: F401
-from sportsdataverse.nhl import nhl_web_roster_season as nhl_web_roster_season  # noqa: F401
-from sportsdataverse.nhl import nhl_web_schedule as nhl_web_schedule  # noqa: F401
-from sportsdataverse.nhl import nhl_web_schedule_calendar as nhl_web_schedule_calendar  # noqa: F401
-from sportsdataverse.nhl import nhl_web_score as nhl_web_score  # noqa: F401
-from sportsdataverse.nhl import nhl_web_scoreboard as nhl_web_scoreboard  # noqa: F401
-from sportsdataverse.nhl import nhl_web_skater_leaders as nhl_web_skater_leaders  # noqa: F401
-from sportsdataverse.nhl import nhl_web_standings as nhl_web_standings  # noqa: F401
-from sportsdataverse.nhl import nhl_web_standings_season as nhl_web_standings_season  # noqa: F401
 from sportsdataverse.nhl import parse_edge_detail as parse_edge_detail  # noqa: F401
 from sportsdataverse.nhl import parse_edge_hardest_shots as parse_edge_hardest_shots  # noqa: F401
 from sportsdataverse.nhl import parse_edge_payload as parse_edge_payload  # noqa: F401
@@ -457,8 +455,17 @@ __all__ = [
     "load_nhl_schedule",
     "load_nhl_team_boxscore",
     "most_recent_nhl_season",
-    "nhl_api_pbp",
-    "nhl_api_schedule",
+    "nhl_boxscore",
+    "nhl_club_schedule_month",
+    "nhl_club_schedule_season",
+    "nhl_club_schedule_week",
+    "nhl_club_stats",
+    "nhl_club_stats_season",
+    "nhl_draft_picks",
+    "nhl_draft_picks_now",
+    "nhl_draft_rankings",
+    "nhl_draft_rankings_now",
+    "nhl_draft_tracker_picks_now",
     "nhl_edge_cat_goalie_detail",
     "nhl_edge_cat_skater_detail",
     "nhl_edge_goalie_5v5_detail",
@@ -494,7 +501,13 @@ __all__ = [
     "nhl_edge_team_skating_speed_top_10",
     "nhl_edge_team_zone_time_details",
     "nhl_edge_team_zone_time_top_10",
+    "nhl_goalie_leaders",
+    "nhl_landing",
     "nhl_pbp_disk",
+    "nhl_player_game_log",
+    "nhl_player_landing",
+    "nhl_player_spotlight",
+    "nhl_playoff_series",
     "nhl_records_all_time_record_vs_franchise",
     "nhl_records_allstar_coach_career",
     "nhl_records_allstar_goalie_career",
@@ -545,6 +558,15 @@ __all__ = [
     "nhl_records_home_team_record",
     "nhl_records_skater_career_leaders",
     "nhl_records_skater_career_stats",
+    "nhl_right_rail",
+    "nhl_roster",
+    "nhl_roster_season",
+    "nhl_schedule_calendar",
+    "nhl_score",
+    "nhl_scoreboard",
+    "nhl_skater_leaders",
+    "nhl_standings",
+    "nhl_standings_season",
     "nhl_stats_rest_component_season",
     "nhl_stats_rest_config",
     "nhl_stats_rest_content_module",
@@ -566,34 +588,8 @@ __all__ = [
     "nhl_stats_rest_team",
     "nhl_stats_rest_team_by_id",
     "nhl_stats_rest_team_report",
-    "nhl_web_boxscore",
-    "nhl_web_club_schedule_month",
-    "nhl_web_club_schedule_season",
-    "nhl_web_club_schedule_week",
-    "nhl_web_club_stats",
-    "nhl_web_club_stats_season",
-    "nhl_web_draft_picks",
-    "nhl_web_draft_picks_now",
-    "nhl_web_draft_rankings",
-    "nhl_web_draft_rankings_now",
-    "nhl_web_draft_tracker_picks_now",
-    "nhl_web_goalie_leaders",
-    "nhl_web_landing",
     "nhl_web_pbp",
-    "nhl_web_player_game_log",
-    "nhl_web_player_landing",
-    "nhl_web_player_spotlight",
-    "nhl_web_playoff_series",
-    "nhl_web_right_rail",
-    "nhl_web_roster",
-    "nhl_web_roster_season",
     "nhl_web_schedule",
-    "nhl_web_schedule_calendar",
-    "nhl_web_score",
-    "nhl_web_scoreboard",
-    "nhl_web_skater_leaders",
-    "nhl_web_standings",
-    "nhl_web_standings_season",
     "parse_edge_detail",
     "parse_edge_hardest_shots",
     "parse_edge_payload",
@@ -1778,3 +1774,243 @@ def espn_nhl_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nhl_venues(*args, **kwargs)
+
+
+def nhl_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_boxscore``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_boxscore(*args, **kwargs)
+
+
+def nhl_club_schedule_month(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_club_schedule_month``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_club_schedule_month` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_club_schedule_month(*args, **kwargs)
+
+
+def nhl_club_schedule_season(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_club_schedule_season``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_club_schedule_season` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_club_schedule_season(*args, **kwargs)
+
+
+def nhl_club_schedule_week(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_club_schedule_week``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_club_schedule_week` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_club_schedule_week(*args, **kwargs)
+
+
+def nhl_club_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_club_stats``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_club_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_club_stats(*args, **kwargs)
+
+
+def nhl_club_stats_season(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_club_stats_season``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_club_stats_season` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_club_stats_season(*args, **kwargs)
+
+
+def nhl_draft_picks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_draft_picks``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_draft_picks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_draft_picks(*args, **kwargs)
+
+
+def nhl_draft_picks_now(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_draft_picks_now``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_draft_picks_now` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_draft_picks_now(*args, **kwargs)
+
+
+def nhl_draft_tracker_picks_now(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_draft_tracker_picks_now``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_draft_tracker_picks_now` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_draft_tracker_picks_now(*args, **kwargs)
+
+
+def nhl_goalie_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_goalie_leaders``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_goalie_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_goalie_leaders(*args, **kwargs)
+
+
+def nhl_landing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_landing``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_landing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_landing(*args, **kwargs)
+
+
+def nhl_player_game_log(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_player_game_log``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_player_game_log` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_player_game_log(*args, **kwargs)
+
+
+def nhl_player_landing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_player_landing``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_player_landing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_player_landing(*args, **kwargs)
+
+
+def nhl_right_rail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_right_rail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_right_rail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_right_rail(*args, **kwargs)
+
+
+def nhl_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_roster``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_roster(*args, **kwargs)
+
+
+def nhl_roster_season(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_roster_season``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_roster_season` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_roster_season(*args, **kwargs)
+
+
+def nhl_schedule_calendar(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_schedule_calendar``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_schedule_calendar` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_schedule_calendar(*args, **kwargs)
+
+
+def nhl_score(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_score``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_score` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_score(*args, **kwargs)
+
+
+def nhl_scoreboard(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_scoreboard``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_scoreboard` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_scoreboard(*args, **kwargs)
+
+
+def nhl_skater_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_skater_leaders``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_skater_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_skater_leaders(*args, **kwargs)
+
+
+def nhl_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_standings``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_standings(*args, **kwargs)
+
+
+def nhl_standings_season(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_standings_season``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_standings_season` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_standings_season(*args, **kwargs)
+
+
+def nhl_web_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_web_pbp``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_web_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_web_pbp(*args, **kwargs)
+
+
+def nhl_web_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_web_schedule``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_web_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_web_schedule(*args, **kwargs)

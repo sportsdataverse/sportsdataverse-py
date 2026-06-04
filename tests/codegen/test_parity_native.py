@@ -14,7 +14,9 @@ or they are curated by hand; the gate guards everything else.
 # Functions whose hand-written logic the URL-builder codegen cannot reproduce
 # faithfully (kept hand-written; see module docstring).
 _IRREGULAR = {
-    "sportsdataverse.nhl.nhl_api_web": {"nhl_web_scoreboard"},  # team/date/now 3-way branch
+    # nhl_api_web has been CUT OVER to generated clean names (nhl_pbp, nhl_boxscore,
+    # ...); its hand-written source is gone so it is no longer in _MODULES below.
+    # The irregular nhl_scoreboard stays hand-written in nhl_api_web_extra.py.
     "sportsdataverse.nhl.nhl_records": {
         "nhl_records_coach_milestone_wins",  # value embedded mid-segment (fewest-games-to-{n}-wins)
         "nhl_records_consecutive_goal_seasons",
@@ -56,14 +58,11 @@ from tools.codegen import extract_native as en
 from tools.codegen import generate, spec
 
 # (dotted module, fn prefix, base host, name_pattern, parser_module)
+# NOTE: nhl_api_web is intentionally absent -- it has been cut over to generated
+# clean names (its hand-written source no longer exists to diff against; its
+# faithfulness was locked in by this gate before the swap). The families below
+# are still hand-written and remain gated until each is cut over in turn.
 _MODULES = [
-    (
-        "sportsdataverse.nhl.nhl_api_web",
-        "nhl_web_",
-        "https://api-web.nhle.com",
-        "nhl_web_{short}",
-        "nhl.nhl_api_web_parsers",
-    ),
     (
         "sportsdataverse.nhl.nhl_edge",
         "nhl_edge_",

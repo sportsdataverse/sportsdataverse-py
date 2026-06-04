@@ -1,0 +1,311 @@
+api: nhl_api_web
+host: https://api-web.nhle.com
+name_pattern: nhl_{short}
+module: nhl_api_web
+parser_module: nhl.nhl_api_web_parsers
+qualifier: web
+runtime_imports:
+- _get
+- format_nhl_season
+endpoints:
+- short: pbp
+  summary: Pull the play-by-play feed for one NHL game.
+  path: /v1/gamecenter/{game_id}/play-by-play
+  path_params:
+  - name: game_id
+    type: int
+    required: true
+  example_args:
+    game_id: 2024020001
+  parser: parse_nhl_web_pbp
+- short: boxscore
+  summary: Pull the boxscore for one NHL game.
+  path: /v1/gamecenter/{game_id}/boxscore
+  path_params:
+  - name: game_id
+    type: int
+    required: true
+  example_args:
+    game_id: 2024020001
+  parser: parse_nhl_web_boxscore
+- short: landing
+  summary: Pull the gamecenter landing payload for one NHL game.
+  path: /v1/gamecenter/{game_id}/landing
+  path_params:
+  - name: game_id
+    type: int
+    required: true
+  example_args:
+    game_id: 2024020001
+  parser: parse_nhl_web_landing
+- short: right_rail
+  summary: Pull the gamecenter right-rail payload (in-game widgets).
+  path: /v1/gamecenter/{game_id}/right-rail
+  path_params:
+  - name: game_id
+    type: int
+    required: true
+  example_args:
+    game_id: 2024020001
+  parser: parse_nhl_web_right_rail
+- short: schedule
+  summary: Pull the week-of NHL schedule rooted at ``date``.
+  path: /v1/schedule/{date}
+  now_variant: /v1/schedule/now
+  now_toggle: date
+  path_params:
+  - name: date
+    type: str
+    required: false
+  parser: parse_nhl_web_schedule
+- short: score
+  summary: Pull the single-day scoreboard for ``date``.
+  path: /v1/score/{date}
+  now_variant: /v1/score/now
+  now_toggle: date
+  path_params:
+  - name: date
+    type: str
+    required: false
+  parser: parse_nhl_web_score
+- short: schedule_calendar
+  summary: Pull the calendar of game-days for the season.
+  path: /v1/schedule-calendar/{date}
+  now_variant: /v1/schedule-calendar/now
+  now_toggle: date
+  path_params:
+  - name: date
+    type: str
+    required: false
+  parser: parse_nhl_web_schedule
+- short: playoff_series
+  summary: Pull a single playoff series payload.
+  path: /v1/schedule/playoff-series/{season}/{series_letter}
+  path_params:
+  - name: season
+    type: int|str
+    required: true
+    transform: format_nhl_season
+  - name: series_letter
+    type: str
+    required: true
+  example_args:
+    season: 2025
+    series_letter: a
+- short: standings
+  summary: Pull the NHL standings.
+  path: /v1/standings/{date}
+  now_variant: /v1/standings/now
+  now_toggle: date
+  path_params:
+  - name: date
+    type: str
+    required: false
+  parser: parse_nhl_web_standings
+- short: standings_season
+  summary: Pull the per-season standings cutover dates.
+  path: /v1/standings-season
+  parser: parse_nhl_web_standings_season
+- short: club_schedule_season
+  summary: Pull a team's full-season schedule.
+  path: /v1/club-schedule-season/{team}/{season}
+  now_variant: /v1/club-schedule-season/{team}/now
+  now_toggle: season
+  path_params:
+  - name: team
+    type: str
+    required: true
+  - name: season
+    type: int|str
+    required: false
+    transform: format_nhl_season
+  example_args:
+    team: TOR
+  parser: parse_nhl_web_club_schedule
+- short: club_schedule_month
+  summary: Pull a team's schedule for one month.
+  path: /v1/club-schedule/{team}/month/{month}
+  now_variant: /v1/club-schedule/{team}/month/now
+  now_toggle: month
+  path_params:
+  - name: team
+    type: str
+    required: true
+  - name: month
+    type: str
+    required: false
+  example_args:
+    team: TOR
+  parser: parse_nhl_web_club_schedule
+- short: club_schedule_week
+  summary: Pull a team's schedule for one week.
+  path: /v1/club-schedule/{team}/week/{date}
+  now_variant: /v1/club-schedule/{team}/week/now
+  now_toggle: date
+  path_params:
+  - name: team
+    type: str
+    required: true
+  - name: date
+    type: str
+    required: false
+  example_args:
+    team: TOR
+  parser: parse_nhl_web_club_schedule
+- short: club_stats
+  summary: Pull a team's season stat block.
+  path: /v1/club-stats/{team}/{season}/{game_type}
+  now_variant: /v1/club-stats/{team}/now
+  now_toggle: season
+  path_params:
+  - name: team
+    type: str
+    required: true
+  - name: season
+    type: int|str
+    required: false
+    transform: format_nhl_season
+  - name: game_type
+    type: int
+    required: false
+    default: 2
+  example_args:
+    team: TOR
+  parser: parse_nhl_web_club_stats
+- short: club_stats_season
+  summary: Pull the seasons a team has stats for.
+  path: /v1/club-stats-season/{team}
+  path_params:
+  - name: team
+    type: str
+    required: true
+  example_args:
+    team: TOR
+  parser: parse_nhl_web_club_stats
+- short: roster
+  summary: Pull a team's roster.
+  path: /v1/roster/{team}/{season}
+  now_variant: /v1/roster/{team}/current
+  now_toggle: season
+  path_params:
+  - name: team
+    type: str
+    required: true
+  - name: season
+    type: int|str
+    required: false
+    transform: format_nhl_season
+  example_args:
+    team: TOR
+  parser: parse_nhl_web_roster
+- short: roster_season
+  summary: Pull every season a team has had on file.
+  path: /v1/roster-season/{team}
+  path_params:
+  - name: team
+    type: str
+    required: true
+  example_args:
+    team: TOR
+  parser: parse_nhl_web_roster
+- short: player_landing
+  summary: Pull the player profile / overview.
+  path: /v1/player/{player_id}/landing
+  path_params:
+  - name: player_id
+    type: int
+    required: true
+  example_args:
+    player_id: 8480801
+  parser: parse_nhl_web_player_landing
+- short: player_game_log
+  summary: Pull a player's game-by-game log.
+  path: /v1/player/{player_id}/game-log/{season}/{game_type}
+  now_variant: /v1/player/{player_id}/game-log/now
+  now_toggle: season
+  path_params:
+  - name: player_id
+    type: int
+    required: true
+  - name: season
+    type: int|str
+    required: false
+    transform: format_nhl_season
+  - name: game_type
+    type: int
+    required: false
+    default: 2
+  example_args:
+    player_id: 8480801
+  parser: parse_nhl_web_player_game_log
+- short: player_spotlight
+  summary: Pull the league's currently featured players.
+  path: /v1/player-spotlight
+- short: skater_leaders
+  summary: Pull skater stat leaders.
+  path: /v1/skater-stats-leaders/{season}/{game_type}
+  now_variant: /v1/skater-stats-leaders/current
+  now_toggle: season
+  path_params:
+  - name: season
+    type: int|str
+    required: false
+    transform: format_nhl_season
+  - name: game_type
+    type: int
+    required: false
+    default: 2
+  parser: parse_nhl_web_leaders
+- short: goalie_leaders
+  summary: Pull goalie stat leaders.
+  path: /v1/goalie-stats-leaders/{season}/{game_type}
+  now_variant: /v1/goalie-stats-leaders/current
+  now_toggle: season
+  path_params:
+  - name: season
+    type: int|str
+    required: false
+    transform: format_nhl_season
+  - name: game_type
+    type: int
+    required: false
+    default: 2
+  parser: parse_nhl_web_leaders
+- short: draft_picks
+  summary: Pull NHL draft picks for a year (and optionally one round).
+  path: /v1/draft/picks/{year}/{round_}
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: round_
+    type: int|str
+    required: false
+    default: all
+  example_args:
+    year: 2024
+  parser: parse_nhl_web_draft_picks
+- short: draft_rankings
+  summary: Pull NHL Central Scouting rankings for a draft year.
+  path: /v1/draft/rankings/{year}/{category}
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: category
+    type: int
+    required: false
+    default: 1
+  example_args:
+    year: 2024
+- short: draft_picks_now
+  summary: Pull the current / most recent draft pick set.
+  path: /v1/draft/picks/now
+  parser: parse_nhl_web_draft_picks
+- short: draft_rankings_now
+  summary: Pull the current Central Scouting rankings.
+  path: /v1/draft/rankings/now
+- short: draft_tracker_picks_now
+  summary: Pull the live draft-tracker pick list (during the draft itself).
+  path: /v1/draft-tracker/picks/now
+  parser: parse_nhl_web_draft_picks

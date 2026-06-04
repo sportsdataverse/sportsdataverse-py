@@ -1,1 +1,27 @@
-{}
+nhl_api_web:
+  nhl_web_boxscore: nhl_boxscore
+  nhl_web_club_schedule_month: nhl_club_schedule_month
+  nhl_web_club_schedule_season: nhl_club_schedule_season
+  nhl_web_club_schedule_week: nhl_club_schedule_week
+  nhl_web_club_stats: nhl_club_stats
+  nhl_web_club_stats_season: nhl_club_stats_season
+  nhl_web_draft_picks: nhl_draft_picks
+  nhl_web_draft_picks_now: nhl_draft_picks_now
+  nhl_web_draft_rankings: nhl_draft_rankings
+  nhl_web_draft_rankings_now: nhl_draft_rankings_now
+  nhl_web_draft_tracker_picks_now: nhl_draft_tracker_picks_now
+  nhl_web_goalie_leaders: nhl_goalie_leaders
+  nhl_web_landing: nhl_landing
+  nhl_web_player_game_log: nhl_player_game_log
+  nhl_web_player_landing: nhl_player_landing
+  nhl_web_player_spotlight: nhl_player_spotlight
+  nhl_web_playoff_series: nhl_playoff_series
+  nhl_web_right_rail: nhl_right_rail
+  nhl_web_roster: nhl_roster
+  nhl_web_roster_season: nhl_roster_season
+  nhl_web_schedule_calendar: nhl_schedule_calendar
+  nhl_web_score: nhl_score
+  nhl_web_scoreboard: nhl_scoreboard
+  nhl_web_skater_leaders: nhl_skater_leaders
+  nhl_web_standings: nhl_standings
+  nhl_web_standings_season: nhl_standings_season

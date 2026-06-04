@@ -4,6 +4,7 @@
 
 - [0.0.53 (unreleased)](#0053-unreleased)
   - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
+  - [NHL native — codegen cutover + clean names (api-web; in progress)](#nhl-native--codegen-cutover--clean-names-api-web-in-progress)
   - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
   - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
   - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
@@ -143,6 +144,27 @@ fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ex
 factory (`make_league_module` / `_bind` / the `_*_WRAPPERS` tables) or the private
 `_site_v2_*` / `_core_v2_*` core functions. Public `espn_<league>_*` wrappers are
 unchanged in name and behavior.
+
+### NHL native — codegen cutover + clean names (api-web; in progress)
+
+The hand-written NHL native modules are being regenerated from endpoint specs
+(via `tools/codegen/extract_native.py` -> flat-API YAML -> `generate.py`) with
+**clean, R-aligned names**, family by family. **First family: `nhl_api_web`.**
+
+- **BREAKING renames** (`nhl_web_* -> nhl_*` where the clean name is free; the
+  qualifier is kept only on collision with a hand-written composite, so
+  `nhl_web_pbp` and `nhl_web_schedule` are unchanged): e.g. `nhl_web_boxscore ->
+  nhl_boxscore`, `nhl_web_standings -> nhl_standings`, `nhl_web_roster ->
+  nhl_roster`, `nhl_web_scoreboard -> nhl_scoreboard` (26 functions; full map in
+  `tools/codegen/rename_map.yaml`). Behavior (URL + params + parser) is identical
+  -- faithfulness was verified by `test_parity_native` before the swap.
+- `nhl_scoreboard` (the 3-way team/date/now branch) stays hand-written in
+  `nhl_api_web_extra.py` -- the single-URL-builder codegen can't represent it.
+- **Removed** the deprecated `sportsdataverse.nhl.nhl_api` module (targeted the
+  retired `statsapi.web.nhl.com`); use `nhl_api_web` / `nhl_pbp` instead.
+- The codegen engine gained flat-API collision resolution (`FlatApi.qualifier` +
+  `resolve_name`) and a `build_flat`/`--check` path. Remaining families (`nhl_edge`,
+  `nhl_stats_rest`, `nhl_records`, `mlb_api`) are still hand-written and follow.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 
