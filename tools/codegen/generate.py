@@ -19,6 +19,7 @@ from tools.codegen import render, spec  # noqa: E402
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
 OUT = ROOT / "tools" / "codegen" / "_generated"
+LIVE = ROOT / "sportsdataverse"
 
 ESPN_APIS = ["espn_site_v2", "espn_web_v3", "espn_core_v2"]
 
@@ -246,6 +247,54 @@ def build() -> list[Path]:
     return sorted(OUT.glob("*_espn_ext.py"))
 
 
+def _ensure_init_import(prefix: str) -> None:
+    """Idempotently make ``sportsdataverse/{prefix}/__init__.py`` re-export the module."""
+    init = LIVE / prefix / "__init__.py"
+    text = init.read_text(encoding="utf-8")
+    if f"{prefix}_espn_ext import *" in text:
+        return
+    line = f"from sportsdataverse.{prefix}.{prefix}_espn_ext import *\n"
+    init.write_text(text.rstrip() + "\n" + line, encoding="utf-8")
+
+
+def build_live() -> list[Path]:
+    """Write the concrete generated modules into the live package + wire __init__."""
+    written = []
+    for name, src in _render_all().items():
+        prefix = name[: -len("_espn_ext.py")]
+        dest = LIVE / prefix / f"{prefix}_espn_ext.py"
+        dest.write_text(src, encoding="utf-8")
+        _ensure_init_import(prefix)
+        written.append(dest)
+    if written:
+        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+    return sorted(written)
+
+
+def _live_stale() -> list[str]:
+    """Live ``{prefix}_espn_ext.py`` files that differ from a fresh render."""
+    tmp = OUT / "_check_live_tmp"
+    if tmp.exists():
+        shutil.rmtree(tmp)
+    tmp.mkdir(parents=True, exist_ok=True)
+    try:
+        rendered = _render_all()
+        for name, src in rendered.items():
+            (tmp / name).write_text(src, encoding="utf-8")
+        _ruff_format_dir(tmp)
+        stale = []
+        for name in rendered:
+            prefix = name[: -len("_espn_ext.py")]
+            live_file = LIVE / prefix / f"{prefix}_espn_ext.py"
+            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
+                encoding="utf-8",
+            ):
+                stale.append(str(live_file.relative_to(ROOT)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return stale
+
+
 def check() -> int:
     # Render + format in a temp subdir *inside* OUT so ruff discovers the same repo
     # config, then compare byte-for-byte against the committed generated files.
@@ -275,12 +324,18 @@ def check() -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="generate.py")
-    ap.add_argument("--check", action="store_true", help="fail if any generated file is stale")
+    ap.add_argument("--check", action="store_true", help="fail if any generated (staging or live) file is stale")
     args = ap.parse_args(argv)
     if args.check:
-        return check()
+        rc = check()
+        live = _live_stale()
+        if live:
+            print("codegen --check: stale live files:", ", ".join(sorted(live)), file=sys.stderr)
+            rc = 1
+        return rc
     build()
-    print(f"codegen: wrote {len(list(OUT.glob('*_espn_ext.py')))} modules to {OUT}")
+    n = len(build_live())
+    print(f"codegen: wrote {n} live modules + refreshed staging at {OUT}")
     return 0
 
 

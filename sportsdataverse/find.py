@@ -30,17 +30,17 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
-# Map each league to its scoreboard + teams_site wrappers. Lazy-import
+# Map each league to its scoreboard + teams wrappers. Lazy-import
 # the league modules so users who don't call find() pay nothing.
 _LEAGUE_SLUG = {
-    "nba":  ("nba",  "espn_nba_teams_site",  "espn_nba_scoreboard"),
-    "wnba": ("wnba", "espn_wnba_teams_site", "espn_wnba_scoreboard"),
-    "mbb":  ("mbb",  "espn_mbb_teams_site",  "espn_mbb_scoreboard"),
-    "wbb":  ("wbb",  "espn_wbb_teams_site",  "espn_wbb_scoreboard"),
-    "cfb":  ("cfb",  "espn_cfb_teams_site",  "espn_cfb_scoreboard"),
-    "nfl":  ("nfl",  "espn_nfl_teams_site",  "espn_nfl_scoreboard"),
-    "mlb":  ("mlb",  "espn_mlb_teams_site",  "espn_mlb_scoreboard"),
-    "nhl":  ("nhl",  "espn_nhl_teams_site",  "espn_nhl_scoreboard"),
+    "nba": ("nba", "espn_nba_teams", "espn_nba_scoreboard"),
+    "wnba": ("wnba", "espn_wnba_teams", "espn_wnba_scoreboard"),
+    "mbb": ("mbb", "espn_mbb_teams", "espn_mbb_scoreboard"),
+    "wbb": ("wbb", "espn_wbb_teams", "espn_wbb_scoreboard"),
+    "cfb": ("cfb", "espn_cfb_teams", "espn_cfb_scoreboard"),
+    "nfl": ("nfl", "espn_nfl_teams", "espn_nfl_scoreboard"),
+    "mlb": ("mlb", "espn_mlb_teams", "espn_mlb_scoreboard"),
+    "nhl": ("nhl", "espn_nhl_teams", "espn_nhl_scoreboard"),
 }
 
 # Per-process team-list cache. Keyed by league name.
@@ -52,8 +52,7 @@ def _resolve_league_callable(league: str, fn_attr: str):
     league = league.lower()
     if league not in _LEAGUE_SLUG:
         raise ValueError(
-            f"Unknown league {league!r}. Choose one of "
-            f"{sorted(_LEAGUE_SLUG)}.",
+            f"Unknown league {league!r}. Choose one of {sorted(_LEAGUE_SLUG)}.",
         )
     league_attr, *_ = _LEAGUE_SLUG[league]
     import importlib
@@ -67,8 +66,7 @@ def _list_teams(league: str) -> List[Dict[str, Any]]:
     league = league.lower()
     if league not in _LEAGUE_SLUG:
         raise ValueError(
-            f"Unknown league {league!r}. Choose one of "
-            f"{sorted(_LEAGUE_SLUG)}.",
+            f"Unknown league {league!r}. Choose one of {sorted(_LEAGUE_SLUG)}.",
         )
     if league in _TEAM_CACHE:
         return _TEAM_CACHE[league]
@@ -76,10 +74,7 @@ def _list_teams(league: str) -> List[Dict[str, Any]]:
     _, teams_attr, _ = _LEAGUE_SLUG[league]
     teams_fn = _resolve_league_callable(league, teams_attr)
     payload = teams_fn()  # raw Dict
-    teams_raw = (
-        ((payload or {}).get("sports") or [{}])[0]
-        .get("leagues") or [{}]
-    )
+    teams_raw = ((payload or {}).get("sports") or [{}])[0].get("leagues") or [{}]
     teams_raw = (teams_raw[0] or {}).get("teams") or [] if teams_raw else []
     # Each entry is {"team": {id, displayName, abbreviation, location, ...}}
     flat = [(t or {}).get("team") or {} for t in teams_raw]
@@ -141,7 +136,8 @@ def find_team(
     """
     teams = _list_teams(league)
     matches = [
-        t for t in teams
+        t
+        for t in teams
         if _matches(
             name,
             t.get("displayName"),
@@ -239,8 +235,7 @@ def find_athlete(
                 ath.get("firstName"),
                 ath.get("lastName"),
             ):
-                ath_with_team = {**ath, "team_id": team_id,
-                                 "team_display_name": t.get("displayName")}
+                ath_with_team = {**ath, "team_id": team_id, "team_display_name": t.get("displayName")}
                 matches.append(ath_with_team)
                 if not multi:
                     return ath_with_team
@@ -295,12 +290,14 @@ def find_event(
     def _team_label(competitor: Dict[str, Any]) -> str:
         team = competitor.get("team") or {}
         return " ".join(
-            str(v) for v in (
+            str(v)
+            for v in (
                 team.get("displayName"),
                 team.get("location"),
                 team.get("abbreviation"),
                 team.get("name"),
-            ) if v
+            )
+            if v
         )
 
     matches: List[Dict[str, Any]] = []
