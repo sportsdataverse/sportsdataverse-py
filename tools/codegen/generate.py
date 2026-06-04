@@ -64,15 +64,18 @@ def _build_docstring(
     host_url: str,
     example_url: str,
     example_call: str,
+    flat: bool = False,
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
     Shared renderer (Python, not a Jinja macro) so every generated family emits the
-    same docstring contract without Jinja whitespace-control fragility.
+    same docstring contract without Jinja whitespace-control fragility. ``flat`` omits
+    the sport/league binding line for the non-sport/league NHL/MLB APIs.
     """
     lines = [f'"""{ep.summary}', ""]
-    lines.append(f"Bound to sport={sport!r}, league={league!r}.")
-    lines.append("")
+    if not flat:
+        lines.append(f"Bound to sport={sport!r}, league={league!r}.")
+        lines.append("")
     lines.append(f"Endpoint: ``GET {host_url}{ep.path}``")
     if example_url:
         lines.append(f"Example URL: {example_url}")
@@ -110,7 +113,7 @@ class _EndpointView:
       assign ``__url``, and ``url_literal`` is the bare name ``__url``.
     """
 
-    def __init__(self, ep: spec.Endpoint, fn_name: str, ep_host: str, league: spec.League):
+    def __init__(self, ep: spec.Endpoint, fn_name: str, ep_host: str, league: spec.League, flat: bool = False):
         self.fn_name = fn_name
         self.short = ep.short
         self.summary = ep.summary
@@ -150,7 +153,15 @@ class _EndpointView:
 
         self.example_url = _example_url(ep_host, ep, league.sport, league.league)
         self.example_call = _example_call(ep, fn_name)
-        self.docstring = _build_docstring(ep, league.sport, league.league, ep_host, self.example_url, self.example_call)
+        self.docstring = _build_docstring(
+            ep,
+            league.sport,
+            league.league,
+            ep_host,
+            self.example_url,
+            self.example_call,
+            flat=flat,
+        )
 
     @staticmethod
     def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League) -> str:
@@ -225,6 +236,36 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         prefix=league.prefix,
         sport=league.sport,
         league=league.league,
+        endpoints=endpoints,
+        parser_imports=sorted(parser_imports),
+        runtime_imports=runtime_imports,
+    )
+
+
+_FLAT_STUB_LEAGUE = spec.League(prefix="", sport="", league="", scopes=[])
+
+
+def render_flat_module(api: spec.FlatApi) -> str:
+    """Render a flat (non-sport/league) API module (NHL api-web/edge/..., MLB stats)."""
+    endpoints = []
+    parser_imports = set()
+    transforms = set()
+    for ep in api.endpoints:
+        fn_name = api.name_pattern.format(short=ep.short)
+        if ep.parser:
+            parser_imports.add(ep.parser)
+        for p in (*ep.path_params, *ep.query_params):
+            if p.transform:
+                transforms.add(p.transform)
+        ep_host = ep.host or api.host
+        endpoints.append(_EndpointView(ep, fn_name, ep_host, _FLAT_STUB_LEAGUE, flat=True))
+    runtime_imports = list(dict.fromkeys([*api.runtime_imports, *sorted(transforms)]))
+    template = render.ENV.get_template("api_module.py.jinja")
+    return template.render(
+        api=api.api,
+        host=api.host,
+        module=api.module,
+        parser_module=api.parser_module,
         endpoints=endpoints,
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,

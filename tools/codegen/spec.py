@@ -53,6 +53,20 @@ class EspnApi:
 
 
 @dataclass(frozen=True)
+class FlatApi:
+    """A non-sport/league API: a literal base host + endpoints (NHL api-web/edge/
+    stats-rest/records, MLB stats). ``name_pattern`` is e.g. ``"nhl_{short}"``."""
+
+    api: str
+    host: str
+    name_pattern: str
+    module: str  # destination module name, e.g. "nhl_api_web"
+    endpoints: List[Endpoint]
+    parser_module: Optional[str] = None  # dotted, e.g. "nhl.nhl_api_web_parsers"
+    runtime_imports: List[str] = field(default_factory=lambda: ["_get"])
+
+
+@dataclass(frozen=True)
 class League:
     prefix: str
     sport: str
@@ -104,58 +118,76 @@ def _resolve_param(name: str, registry: Dict[str, Param], src: Path) -> Param:
     return registry[name]
 
 
+def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint:
+    """Parse one endpoint dict (shared by ESPN + flat-API loaders)."""
+    qps = [_resolve_param(k, registry, path) for k in e.get("params", [])]
+    for extra in e.get("extra_params", []):
+        qps.append(
+            Param(
+                python_name=extra["name"],
+                api=extra.get("query_key", extra["name"]),
+                type=extra.get("type", "str"),
+                required=extra.get("required", False),
+                default=extra.get("default"),
+                transform=extra.get("transform"),
+            ),
+        )
+    pps = []
+    for pp in e.get("path_params", []):
+        pps.append(
+            Param(
+                python_name=pp["name"],
+                api=pp["name"],
+                type=pp.get("type", "str"),
+                required=pp.get("required", True),
+                default=pp.get("default"),
+                is_query=False,
+                optional_segment=pp.get("optional_segment", False),
+                default_from=pp.get("default_from"),
+                transform=pp.get("transform"),
+            ),
+        )
+    ep = Endpoint(
+        short=e["short"],
+        path=e["path"],
+        summary=e.get("summary", ""),
+        scope=e.get("scope", "universal"),
+        host=e.get("host"),
+        parser=e.get("parser"),
+        returns_schema=e.get("returns_schema"),
+        query_params=qps,
+        path_params=pps,
+        example_args=e.get("example_args", {}) or {},
+        now_variant=e.get("now_variant"),
+        exclude_leagues=list(e.get("exclude_leagues", [])),
+    )
+    # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
+    # strip optional-segment brackets first so "[/{token}]" tokens are seen.
+    bare_path = ep.path.replace("[", "").replace("]", "")
+    tokens = set(_PATH_TOKEN.findall(bare_path)) - {"sport", "league"}
+    known = {p.python_name for p in ep.path_params} | set(registry)
+    missing = tokens - known
+    if missing:
+        raise SpecError(f"{path}: endpoint {ep.short!r} path token(s) {missing} have no param")
+    return ep
+
+
 def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
     raw = _read_yaml(path)
-    endpoints: List[Endpoint] = []
-    for e in raw["endpoints"]:
-        qps = [_resolve_param(k, registry, path) for k in e.get("params", [])]
-        for extra in e.get("extra_params", []):
-            qps.append(
-                Param(
-                    python_name=extra["name"],
-                    api=extra.get("query_key", extra["name"]),
-                    type=extra.get("type", "str"),
-                    required=extra.get("required", False),
-                    default=extra.get("default"),
-                    transform=extra.get("transform"),
-                ),
-            )
-        pps = []
-        for pp in e.get("path_params", []):
-            pps.append(
-                Param(
-                    python_name=pp["name"],
-                    api=pp["name"],
-                    type=pp.get("type", "str"),
-                    required=pp.get("required", True),
-                    default=pp.get("default"),
-                    is_query=False,
-                    optional_segment=pp.get("optional_segment", False),
-                    default_from=pp.get("default_from"),
-                    transform=pp.get("transform"),
-                ),
-            )
-        ep = Endpoint(
-            short=e["short"],
-            path=e["path"],
-            summary=e.get("summary", ""),
-            scope=e.get("scope", "universal"),
-            host=e.get("host"),
-            parser=e.get("parser"),
-            returns_schema=e.get("returns_schema"),
-            query_params=qps,
-            path_params=pps,
-            example_args=e.get("example_args", {}) or {},
-            now_variant=e.get("now_variant"),
-            exclude_leagues=list(e.get("exclude_leagues", [])),
-        )
-        # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
-        # strip optional-segment brackets first so "[/{token}]" tokens are seen.
-        bare_path = ep.path.replace("[", "").replace("]", "")
-        tokens = set(_PATH_TOKEN.findall(bare_path)) - {"sport", "league"}
-        known = {p.python_name for p in ep.path_params} | set(registry)
-        missing = tokens - known
-        if missing:
-            raise SpecError(f"{path}: endpoint {ep.short!r} path token(s) {missing} have no param")
-        endpoints.append(ep)
+    endpoints = [_parse_endpoint(e, registry, path) for e in raw["endpoints"]]
     return EspnApi(api=raw["api"], host=raw["host"], name_pattern=raw["name_pattern"], endpoints=endpoints)
+
+
+def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
+    """Load a flat (non-sport/league) API spec: NHL api-web/edge/stats-rest/records, MLB stats."""
+    raw = _read_yaml(path)
+    endpoints = [_parse_endpoint(e, registry, path) for e in raw["endpoints"]]
+    return FlatApi(
+        api=raw["api"],
+        host=raw["host"],
+        name_pattern=raw["name_pattern"],
+        module=raw["module"],
+        endpoints=endpoints,
+        parser_module=raw.get("parser_module"),
+        runtime_imports=list(raw.get("runtime_imports", ["_get"])),
+    )

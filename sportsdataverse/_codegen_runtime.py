@@ -40,3 +40,19 @@ def bool_str(value: Any) -> Optional[str]:
     if value is None:
         return None
     return "true" if value else "false"
+
+
+def format_nhl_season(season: Any) -> Optional[str]:
+    """Normalize an NHL season to the 8-digit ``"20242025"`` form the api-web host wants.
+
+    Accepts a 4-digit end year (``2025`` -> ``"20242025"``) or an already-8-digit
+    string/int (``"20242025"`` -> ``"20242025"``). ``None`` passes through.
+    """
+    if season is None:
+        return None
+    s = str(season)
+    if len(s) == 8 and s.isdigit():
+        return s
+    if len(s) == 4 and s.isdigit():
+        return f"{int(s) - 1}{s}"
+    raise ValueError(f"Unrecognized NHL season {season!r}")
