@@ -285,12 +285,17 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   [ESPN cross-league architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
   page was realigned from the retired `make_league_module()` runtime factory to the
   current declarative-codegen reality.
-- **Docs default flipped to the overhauled tree**: `docusaurus.config.ts` now sets
-  `lastVersion: 'current'`, so the generated reference + conceptual docs serve at the
-  root `/docs/` (and auto-refresh on every deploy) instead of sitting at `/docs/next/`
-  behind the frozen 0.0.50 Sphinx dumps; the legacy docs are archived at
-  `/docs/0.0.50/`. The site builds on [Vercel](https://vercel.com) on push to `main`
-  (no in-repo deploy workflow — a GitHub Pages action would double-publish).
+- **Docs default flipped to the overhauled tree + per-release snapshot policy**:
+  `docusaurus.config.ts` sets `lastVersion: 'current'` (labelled `main`), so the
+  generated reference + conceptual docs are the live DEFAULT at the root `/docs/`
+  and auto-refresh on every deploy instead of sitting at `/docs/next/` behind the
+  frozen 0.0.50 Sphinx dumps; the legacy docs stay archived at `/docs/0.0.50/`. The
+  site builds on [Vercel](https://vercel.com) on push to `main` (no in-repo deploy
+  workflow — a GitHub Pages action would double-publish). At each release, freeze a
+  per-release archive with the new `cd docs && yarn version:docs <x.y.z>` helper
+  (keeping `current`/`main` the default) — so the live docs never drift from the
+  code (codegen `--check`-gated) yet every release still gets a frozen record. The
+  release step is documented in CLAUDE.md.
 - **Home page refreshed**: `docs/src/pages/index.tsx` was rewritten from the stale
   MBB/CFB/EPA cards to the full current surface — Basketball / Football / Baseball /
   Hockey (incl. native NHL & MLB APIs, loaders, the tidy-by-default parser layer) —

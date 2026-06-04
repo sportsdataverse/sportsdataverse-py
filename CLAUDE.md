@@ -760,6 +760,16 @@ the wrappers, via the codegen CLI:
   new endpoints surface with no sidebar edit. Verify with
   `cd docs && yarn build` (broken-link warnings are confined to the frozen
   `0.0.50` version + CHANGELOG doctoc fragments).
+- **Deploy & versioning:** the site builds on **Vercel** (auto-deploy on push to
+  `main`; no in-repo deploy workflow — a GitHub Pages action would double-publish).
+  The unversioned `docs/docs/` tree is the live DEFAULT at the root URL
+  (`lastVersion: 'current'`, labelled `main`), so the published docs always track
+  the code. At **each release**, freeze a per-release archive:
+  `cd docs && yarn version:docs <x.y.z>` (snapshots `docs/docs/` →
+  `versioned_docs/version-<x.y.z>/`), then commit. `current`/`main` stays the
+  default — only add a snapshot, never bump `lastVersion` away from `current` — so
+  the live docs never go stale and each release still gets a frozen record. The
+  legacy pre-codegen docs remain archived at `/docs/0.0.50/`.
 - The `--docs` output is markdown the prose linters skip (`docs/docs/**` is
   excluded from doctoc + markdownlint), so generated tables/fences don't fight the
   hooks. Docstrings still use Google-style sections (`Args:`/`Returns:`/`Raises:`/

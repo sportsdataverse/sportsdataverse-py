@@ -44,17 +44,20 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           editUrl:
             'https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/',
-          // Versioning: the unversioned tree under docs/docs/ (the codegen-
-          // generated reference + hand-authored conceptual pages) is served as
-          // the DEFAULT at the root URL (`lastVersion: 'current'`), so every push
-          // republishes the live docs via Vercel with no snapshot to go stale.
-          // The legacy 0.0.50 Sphinx-dump docs are archived at /docs/0.0.50/.
-          // To freeze a per-release snapshot at release time, run
-          // `yarn docusaurus docs:version <x.y.z>` and add it to `versions`.
+          // Versioning policy: the unversioned tree under docs/docs/ (the codegen-
+          // generated reference + hand-authored conceptual pages) is the live
+          // DEFAULT served at the root URL (`lastVersion: 'current'`), so every
+          // push republishes it via Vercel and it can never drift from the code
+          // (the codegen `--check` gate keeps the reference pages == the wrappers).
+          // It is labelled `main` — a rolling, collision-proof label — so that the
+          // per-release snapshots cut at release time (`yarn version:docs x.y.z`,
+          // which freezes a copy under versioned_docs/version-x.y.z) get the exact
+          // release numbers without ever clashing with `current`'s label. The
+          // legacy pre-codegen Sphinx docs stay archived at /docs/0.0.50/.
           lastVersion: 'current',
           versions: {
             current: {
-              label: '0.0.53',
+              label: 'main',
               path: '',
               banner: 'none',
             },
