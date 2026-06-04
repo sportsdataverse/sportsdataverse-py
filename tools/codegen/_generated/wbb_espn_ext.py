@@ -63,7 +63,7 @@ __all__ = [
     "espn_wbb_standings",
     "espn_wbb_rankings",
     "espn_wbb_player_overview",
-    "espn_wbb_athlete_stats",
+    "espn_wbb_player_stats_v3",
     "espn_wbb_player_gamelog",
     "espn_wbb_player_splits",
     "espn_wbb_leaders",
@@ -1218,7 +1218,7 @@ def espn_wbb_player_overview(
     return raw
 
 
-def espn_wbb_athlete_stats(
+def espn_wbb_player_stats_v3(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
@@ -1243,7 +1243,7 @@ def espn_wbb_athlete_stats(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wbb_athlete_stats(athlete_id='4239')
+        >>> espn_wbb_player_stats_v3(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/{athlete_id}/stats",

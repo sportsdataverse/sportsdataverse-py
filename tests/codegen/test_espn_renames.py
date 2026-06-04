@@ -53,6 +53,21 @@ def test_collision_prone_names_preserved():
     assert "espn_cfb_teams_site" in cfb
 
 
+def test_athlete_stats_becomes_player_stats_v3():
+    # web-v3 /athletes/{id}/stats -> player_stats_v3 (the comprehensive "v3" stats),
+    # versioned so it sits alongside (not on top of) a core/hand-written player_stats.
+    import importlib
+
+    for prefix in ("nba", "wnba", "wbb", "cfb", "nhl"):
+        d = _defs(prefix)
+        assert f"espn_{prefix}_player_stats_v3" in d, f"{prefix}: missing player_stats_v3"
+        assert f"espn_{prefix}_athlete_stats" not in d, f"{prefix}: old athlete_stats should be gone"
+    # wnba/wbb keep their hand-written player_stats (web-v3 parsed) alongside the v3 wrapper
+    for prefix in ("wnba", "wbb"):
+        pkg = importlib.import_module(f"sportsdataverse.{prefix}")
+        assert hasattr(pkg, f"espn_{prefix}_player_stats"), f"{prefix}: hand-written player_stats lost"
+
+
 def test_generator_collision_guard_skips_clashes():
     # a rename whose target already exists in the module is held back by the guard
     generate._ESPN_RENAME_SKIPPED.clear()

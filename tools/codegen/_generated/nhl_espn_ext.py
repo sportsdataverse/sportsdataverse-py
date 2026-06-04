@@ -62,7 +62,7 @@ __all__ = [
     "espn_nhl_player_news",
     "espn_nhl_standings",
     "espn_nhl_player_overview",
-    "espn_nhl_player_stats",
+    "espn_nhl_player_stats_v3",
     "espn_nhl_player_gamelog",
     "espn_nhl_player_splits",
     "espn_nhl_leaders",
@@ -1182,7 +1182,7 @@ def espn_nhl_player_overview(
     return raw
 
 
-def espn_nhl_player_stats(
+def espn_nhl_player_stats_v3(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
@@ -1207,7 +1207,7 @@ def espn_nhl_player_stats(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_nhl_player_stats(athlete_id='4239')
+        >>> espn_nhl_player_stats_v3(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/hockey/nhl/athletes/{athlete_id}/stats",

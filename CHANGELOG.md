@@ -85,19 +85,25 @@ fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ex
 - **Names aligned to the R sister packages (universal convention).** Across all
   eight leagues the generated `espn_*` names now follow the cfbfastR/hoopR/wehoop
   taxonomy (behavior unchanged): `event_competitor* -> game_team*`,
-  `event_competition -> game`, `event_* -> game_*`, `athlete_* -> player_*`
-  (~24 `game_*` + ~18 `player_*` per league). The bare `event` root is kept (it
+  `event_competition -> game`, `event_* -> game_*`, `athlete_* -> player_*`, and
+  `athlete_stats -> player_stats_v3` (~24 `game_*` + ~18 `player_*` per league).
+  The bare `event` root is kept (it
   would otherwise collide with `event_competition -> game`). cfb additionally gets
   `season_*` cleanups vs cfbfastR (`futures`/`groups`/`recruits`/`week_rankings`;
   `powerindex -> team_powerindex`). Rule engine: `generate._convention_rename`;
   cfb-specific exceptions: `tools/codegen/espn_rename_map.yaml`.
 - **Collision-guarded.** Renames that would clash with a hand-written sibling or
   another generated name are skipped automatically: `teams_site` (raw endpoint, !=
-  parsed `espn_*_teams`), `wnba`/`wbb` `athlete_stats` (vs hand-written
-  `player_stats`), and `espn_cfb_season_{team,awards,coaches}` (vs the catalog).
-  Renaming `event_officials -> game_officials` un-shadows the previously hidden
-  generated function. One->many splits (e.g. `summary`) remain for curation (see
-  `docs/superpowers/specs/espn-r-naming-worksheet.md`).
+  parsed `espn_*_teams`) and `espn_cfb_season_{team,awards,coaches}` (vs the
+  catalog). Renaming `event_officials -> game_officials` un-shadows the previously
+  hidden generated function. One->many splits (e.g. `summary`) remain for curation
+  (see `docs/superpowers/specs/espn-r-naming-worksheet.md`).
+- **Versioned collision rule.** When a generated name would collide with an
+  existing function but they hit *different* endpoints, both are kept and the
+  larger/newer one is version-qualified rather than dropped. The web-common-v3
+  `/athletes/{id}/stats` endpoint becomes `espn_*_player_stats_v3`, so wnba/wbb keep
+  their hand-written parsed `espn_*_player_stats` alongside the generated v3 wrapper
+  (and `player_stats_v3` is consistent across all leagues + hoopR/wehoop/cfbfastR).
 - **`_get` / `_csv` single source.** The HTTP + coercion helpers now live in
   `sportsdataverse._codegen_runtime` (shared by all generated wrappers);
   `_common_espn` re-exports them. **Note for test authors:** mock

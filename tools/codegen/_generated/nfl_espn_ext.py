@@ -62,7 +62,7 @@ __all__ = [
     "espn_nfl_player_news",
     "espn_nfl_standings",
     "espn_nfl_player_overview",
-    "espn_nfl_player_stats",
+    "espn_nfl_player_stats_v3",
     "espn_nfl_player_gamelog",
     "espn_nfl_player_splits",
     "espn_nfl_leaders",
@@ -1184,7 +1184,7 @@ def espn_nfl_player_overview(
     return raw
 
 
-def espn_nfl_player_stats(
+def espn_nfl_player_stats_v3(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
@@ -1209,7 +1209,7 @@ def espn_nfl_player_stats(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_nfl_player_stats(athlete_id='4239')
+        >>> espn_nfl_player_stats_v3(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{athlete_id}/stats",

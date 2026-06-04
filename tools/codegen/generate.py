@@ -228,6 +228,15 @@ def _load_espn_renames() -> dict:
     return yaml.safe_load(_ESPN_RENAME_FILE.read_text(encoding="utf-8")).get("rename", {}) or {}
 
 
+def _load_espn_drops() -> set:
+    """Generated full names NOT to emit (a hand-written sibling exposes the same endpoint)."""
+    if not _ESPN_RENAME_FILE.exists():
+        return set()
+    import yaml
+
+    return set(yaml.safe_load(_ESPN_RENAME_FILE.read_text(encoding="utf-8")).get("drop", []) or [])
+
+
 def _convention_rename(short: str) -> str:
     """Universal ESPN-endpoint -> R-curated structural rename (all leagues).
 
@@ -244,6 +253,10 @@ def _convention_rename(short: str) -> str:
         return "game_" + short[len("event_competition_") :]
     if short.startswith("event_"):
         return "game_" + short[len("event_") :]
+    # the web-common-v3 /athletes/{id}/stats is the comprehensive "v3" stats payload;
+    # name it player_stats_v3 so it sits alongside (not on top of) a core-v2 player_stats.
+    if short == "athlete_stats":
+        return "player_stats_v3"
     if short.startswith("athlete_"):
         return "player_" + short[len("athlete_") :]
     return short
@@ -274,6 +287,7 @@ def _handwritten_espn_names(prefix: str) -> set[str]:
 def _league_module_source(league: spec.League, apis, hosts) -> str:
     """Render the (unformatted) module source; ruff formatting happens at write time."""
     renames = _load_espn_renames()
+    drops = _load_espn_drops()
     handwritten = _handwritten_espn_names(league.prefix)
     # pass 1: collect endpoints + their base (pre-rename) names for this league
     collected = []  # (ep, ep_host, base_name)
@@ -282,8 +296,10 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         for ep in api.endpoints:
             if ep.scope not in league.scopes or league.league in ep.exclude_leagues:
                 continue
-            ep_host = hosts[ep.host] if ep.host else host_url
             base = api.name_pattern.format(prefix=league.prefix, short=ep.short)
+            if base in drops:
+                continue  # a hand-written sibling already exposes this exact endpoint
+            ep_host = hosts[ep.host] if ep.host else host_url
             collected.append((ep, ep_host, base))
     base_names = {b for _, _, b in collected}
 

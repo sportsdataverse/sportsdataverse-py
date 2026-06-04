@@ -62,7 +62,7 @@ __all__ = [
     "espn_wnba_player_news",
     "espn_wnba_standings",
     "espn_wnba_player_overview",
-    "espn_wnba_athlete_stats",
+    "espn_wnba_player_stats_v3",
     "espn_wnba_player_gamelog",
     "espn_wnba_player_splits",
     "espn_wnba_leaders",
@@ -1182,7 +1182,7 @@ def espn_wnba_player_overview(
     return raw
 
 
-def espn_wnba_athlete_stats(
+def espn_wnba_player_stats_v3(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
@@ -1207,7 +1207,7 @@ def espn_wnba_athlete_stats(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_athlete_stats(athlete_id='4239')
+        >>> espn_wnba_player_stats_v3(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/{athlete_id}/stats",
