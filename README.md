@@ -98,7 +98,6 @@ With optional extras (defined in `[project.optional-dependencies]` in
 pip install "sportsdataverse[all]"      # everything below
 pip install "sportsdataverse[models]"   # extra deps for the EPA / WP model code
 pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
-pip install "sportsdataverse[docs]"     # adds sphinx + sphinx-markdown-builder for the doc build
 ```
 
 ### Modern install (uv — recommended)
