@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import functools
 import re
 import shutil
 import subprocess
@@ -452,8 +453,24 @@ def render_flat_module(api: spec.FlatApi) -> str:
     )
 
 
+@functools.lru_cache(maxsize=1)
+def _loader_schemas() -> dict:
+    """``{fn: [{name, type}, ...]}`` introspected from the release parquet footers
+    (tools/codegen/schemas/loader_schemas.yaml). Empty dict if absent."""
+    p = ENDPOINTS.parent / "schemas" / "loader_schemas.yaml"
+    if not p.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+
+
 def _build_loader_docstring(ld: spec.Loader) -> str:
-    """4-space-indented docstring block for a generated dataset loader."""
+    """4-space-indented docstring block for a generated dataset loader.
+
+    Renders an ``@return``-style column table (name + polars dtype) when a
+    schema was introspected for ``ld.fn``, so the generated docstrings carry the
+    same column documentation the hand-written loaders lacked."""
     lines = [f'"""Load {ld.tag} (sportsdataverse-data release).', ""]
     lines.append(f"Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{ld.tag}")
     lines.append("")
@@ -465,6 +482,15 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     lines.append("Returns:")
     lines.append("    A polars (or pandas) DataFrame; seasons with no published asset are")
     lines.append("    skipped with a warning rather than raising (404-safe).")
+    cols = _loader_schemas().get(ld.fn) or []
+    if cols:
+        width = max([len("col_name")] + [len(c["name"]) for c in cols])
+        twidth = max([len("type")] + [len(c["type"]) for c in cols])
+        lines.append("")
+        lines.append(f"    |{'col_name'.ljust(width)} |{'type'.ljust(twidth)} |")
+        lines.append(f"    |:{'-' * width}|:{'-' * twidth}|")
+        for c in cols:
+            lines.append(f"    |{c['name'].ljust(width)} |{c['type'].ljust(twidth)} |")
     lines.append("")
     lines.append("Example:")
     lines.append(f"    >>> {ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})")
@@ -514,6 +540,39 @@ def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: i
     return sorted({line.split("\t")[0].strip() for line in out.splitlines() if line.strip()})
 
 
+def refresh_loader_schemas() -> int:
+    """Re-introspect every non-stub loader's release parquet footer and rewrite
+    tools/codegen/schemas/loader_schemas.yaml (network; reads metadata only)."""
+    import polars as pl
+    import yaml
+
+    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    out: dict = {}
+    failed = []
+    for ld in rel.loaders:
+        if ld.stub:
+            continue
+        seasons = [ld.min_season or 2024, 2023, 2024, 2022, 2021]
+        got = None
+        for s in dict.fromkeys(seasons):
+            try:
+                sch = pl.read_parquet_schema(f"{rel.bases[ld.base]}{ld.url}".replace("{season}", str(s)))
+                got = [{"name": k, "type": str(v)} for k, v in sch.items()]
+                break
+            except Exception:  # noqa: BLE001
+                continue
+        if got is None:
+            failed.append(ld.fn)
+        else:
+            out[ld.fn] = got
+    dest = ENDPOINTS.parent / "schemas" / "loader_schemas.yaml"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(yaml.safe_dump(out, sort_keys=True, width=120), encoding="utf-8")
+    _loader_schemas.cache_clear()
+    print(f"loader schemas: {len(out)} introspected" + (f"; {len(failed)} failed: {failed}" if failed else ""))
+    return 0
+
+
 def audit_releases() -> int:
     """Compare the releases.yaml manifest against the LIVE sportsdataverse-data
     release list (network, via ``gh``). Reports release tags with no loader
@@ -529,7 +588,9 @@ def audit_releases() -> int:
     missing = sorted(live - manifest)
     orphan = sorted(manifest - live)
     if missing or orphan:
-        print(f"release manifest drift: {len(missing)} tag(s) without a loader, {len(orphan)} orphan(s)", file=sys.stderr)
+        print(
+            f"release manifest drift: {len(missing)} tag(s) without a loader, {len(orphan)} orphan(s)", file=sys.stderr
+        )
         if missing:
             print("  missing loaders for:", ", ".join(missing), file=sys.stderr)
         if orphan:
@@ -789,7 +850,14 @@ def main(argv=None) -> int:
         action="store_true",
         help="compare releases.yaml against the live sportsdataverse-data release list (network)",
     )
+    ap.add_argument(
+        "--loader-schemas",
+        action="store_true",
+        help="re-introspect release parquet footers -> schemas/loader_schemas.yaml (network)",
+    )
     args = ap.parse_args(argv)
+    if args.loader_schemas:
+        return refresh_loader_schemas()
     if args.audit_releases:
         return audit_releases()
     if args.check:
