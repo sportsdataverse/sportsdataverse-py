@@ -248,7 +248,6 @@ from sportsdataverse.nhl import nhl_stats_rest_team_by_id as _raw_nhl_stats_rest
 from sportsdataverse.nhl import nhl_stats_rest_team_report as _raw_nhl_stats_rest_team_report
 from sportsdataverse.nhl import nhl_web_pbp as _raw_nhl_web_pbp
 from sportsdataverse.nhl import nhl_web_schedule as _raw_nhl_web_schedule
-from sportsdataverse.nhl import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
 from sportsdataverse.nhl import download as download  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_game_rosters as espn_nhl_game_rosters  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_pbp as espn_nhl_pbp  # noqa: F401
@@ -265,10 +264,29 @@ from sportsdataverse.nhl import helper_nhl_pickcenter as helper_nhl_pickcenter  
 from sportsdataverse.nhl import helper_nhl_roster_items as helper_nhl_roster_items  # noqa: F401
 from sportsdataverse.nhl import helper_nhl_team_items as helper_nhl_team_items  # noqa: F401
 from sportsdataverse.nhl import key_check as key_check  # noqa: F401
+from sportsdataverse.nhl import load_nhl_game_info as load_nhl_game_info  # noqa: F401
+from sportsdataverse.nhl import load_nhl_game_rosters as load_nhl_game_rosters  # noqa: F401
+from sportsdataverse.nhl import load_nhl_goalie_boxscores as load_nhl_goalie_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_linescore as load_nhl_linescore  # noqa: F401
+from sportsdataverse.nhl import load_nhl_officials as load_nhl_officials  # noqa: F401
 from sportsdataverse.nhl import load_nhl_pbp as load_nhl_pbp  # noqa: F401
+from sportsdataverse.nhl import load_nhl_pbp_full as load_nhl_pbp_full  # noqa: F401
+from sportsdataverse.nhl import load_nhl_pbp_lite as load_nhl_pbp_lite  # noqa: F401
+from sportsdataverse.nhl import load_nhl_penalties as load_nhl_penalties  # noqa: F401
 from sportsdataverse.nhl import load_nhl_player_boxscore as load_nhl_player_boxscore  # noqa: F401
+from sportsdataverse.nhl import load_nhl_player_boxscores as load_nhl_player_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_rosters as load_nhl_rosters  # noqa: F401
 from sportsdataverse.nhl import load_nhl_schedule as load_nhl_schedule  # noqa: F401
+from sportsdataverse.nhl import load_nhl_schedules as load_nhl_schedules  # noqa: F401
+from sportsdataverse.nhl import load_nhl_scoring as load_nhl_scoring  # noqa: F401
+from sportsdataverse.nhl import load_nhl_scratches as load_nhl_scratches  # noqa: F401
+from sportsdataverse.nhl import load_nhl_shifts as load_nhl_shifts  # noqa: F401
+from sportsdataverse.nhl import load_nhl_shootout as load_nhl_shootout  # noqa: F401
+from sportsdataverse.nhl import load_nhl_shots_by_period as load_nhl_shots_by_period  # noqa: F401
+from sportsdataverse.nhl import load_nhl_skater_boxscores as load_nhl_skater_boxscores  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore  # noqa: F401
+from sportsdataverse.nhl import load_nhl_team_boxscores as load_nhl_team_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_three_stars as load_nhl_three_stars  # noqa: F401
 from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season  # noqa: F401
 from sportsdataverse.nhl import nhl_draft_rankings as nhl_draft_rankings  # noqa: F401
 from sportsdataverse.nhl import nhl_draft_rankings_now as nhl_draft_rankings_now  # noqa: F401
@@ -322,7 +340,6 @@ from sportsdataverse.nhl import underscore as underscore  # noqa: F401
 from sportsdataverse.nhl import year_to_season as year_to_season  # noqa: F401
 
 __all__ = [
-    "SeasonNotFoundError",
     "download",
     "espn_nhl_award",
     "espn_nhl_awards",
@@ -454,10 +471,29 @@ __all__ = [
     "helper_nhl_roster_items",
     "helper_nhl_team_items",
     "key_check",
+    "load_nhl_game_info",
+    "load_nhl_game_rosters",
+    "load_nhl_goalie_boxscores",
+    "load_nhl_linescore",
+    "load_nhl_officials",
     "load_nhl_pbp",
+    "load_nhl_pbp_full",
+    "load_nhl_pbp_lite",
+    "load_nhl_penalties",
     "load_nhl_player_boxscore",
+    "load_nhl_player_boxscores",
+    "load_nhl_rosters",
     "load_nhl_schedule",
+    "load_nhl_schedules",
+    "load_nhl_scoring",
+    "load_nhl_scratches",
+    "load_nhl_shifts",
+    "load_nhl_shootout",
+    "load_nhl_shots_by_period",
+    "load_nhl_skater_boxscores",
     "load_nhl_team_boxscore",
+    "load_nhl_team_boxscores",
+    "load_nhl_three_stars",
     "most_recent_nhl_season",
     "nhl_boxscore",
     "nhl_club_schedule_month",

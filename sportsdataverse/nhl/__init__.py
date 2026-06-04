@@ -48,6 +48,7 @@ from sportsdataverse.nhl.nhl_stats_rest_parsers import (
 )
 from sportsdataverse.nhl.nhl_game_rosters import *
 from sportsdataverse.nhl.nhl_loaders import *
+from sportsdataverse.nhl.nhl_loaders_extra import *
 from sportsdataverse.nhl.nhl_pbp import *
 from sportsdataverse.nhl.nhl_records import *
 from sportsdataverse.nhl.nhl_records_extra import *

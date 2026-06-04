@@ -146,6 +146,7 @@ from sportsdataverse.mbb import helper_mbb_team_items as helper_mbb_team_items  
 from sportsdataverse.mbb import load_mbb_pbp as load_mbb_pbp  # noqa: F401
 from sportsdataverse.mbb import load_mbb_player_boxscore as load_mbb_player_boxscore  # noqa: F401
 from sportsdataverse.mbb import load_mbb_schedule as load_mbb_schedule  # noqa: F401
+from sportsdataverse.mbb import load_mbb_shots as load_mbb_shots  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
@@ -290,6 +291,7 @@ __all__ = [
     "load_mbb_pbp",
     "load_mbb_player_boxscore",
     "load_mbb_schedule",
+    "load_mbb_shots",
     "load_mbb_team_boxscore",
     "mbb_pbp_disk",
     "most_recent_mbb_season",

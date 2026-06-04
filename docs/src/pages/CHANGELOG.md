@@ -203,14 +203,18 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   introspected into `tools/codegen/schemas/loader_schemas.yaml` (92 datasets) and
   rendered as a `|col_name|type|` table in the generated loader docstrings
   (reproducible via `generate.py --loader-schemas`).
-- **New `sportsdataverse.pwhl` league** (Task 5, first cutover slice): the 15 PWHL
-  loaders are generated from the manifest into `pwhl/pwhl_loaders.py` (verified to
-  fetch real parquet, e.g. `load_pwhl_pbp(2024)` -> 10,456 rows) and exposed at the
-  top level. The codegen `build`/`--check` now covers generated loader modules
-  (`_GENERATED_LOADER_LEAGUES`). Cutting the existing hand-written loader modules
-  (cfb/nhl/nba/mbb/wbb/wnba) over to generated -- preserving season-less loaders +
-  helpers (`load_cfb_betting_lines`, `get_cfb_teams`, `nhl_teams`) in
-  `*_loaders_extra.py` residuals -- is the remaining follow-up.
+- **All loader modules are now generated** (Task 5 complete). The new
+  `sportsdataverse.pwhl` league (15 loaders) plus the six existing leagues
+  (`cfb`/`mbb`/`nba`/`nhl`/`wbb`/`wnba`) are rendered from the manifest into
+  `{league}/{league}_loaders.py` -- expanding from 4 hand-written loaders per league
+  to the full release-backed set (nhl 24, wnba 25, wbb 11, nba 9, pwhl 15, ...),
+  each with `@return` column tables. **Zero loss** (verified before/after): the
+  season-less / helper functions the loop template can't express are preserved
+  hand-written in `{league}_loaders_extra.py` residuals -- `cfb`:
+  `load_cfb_betting_lines` + `get_cfb_teams`; `nhl`: `nhl_teams`. The codegen
+  `build`/`--check` drift gate covers all generated loader modules
+  (`_GENERATED_LOADER_LEAGUES`). Verified live: `load_pwhl_pbp(2024)` -> 10,456 rows,
+  `load_nhl_pbp_lite(2010)` -> 400,512, `load_wnba_shots(2024)` -> 45,480.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

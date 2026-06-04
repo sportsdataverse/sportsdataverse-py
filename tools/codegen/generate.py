@@ -519,11 +519,11 @@ def render_loader_module(league: str, loaders, bases: dict) -> str:
     return template.render(league=league, loaders=views)
 
 
-# Leagues whose {league}_loaders.py is GENERATED from releases.yaml. Starts with the
-# new PWHL league (no hand-written module to preserve). The existing hand-written
-# loader modules (cfb/nhl/nba/mbb/wbb/wnba) are cut over deliberately, family by
-# family, preserving season-less loaders + helpers in *_loaders_extra.py residuals.
-_GENERATED_LOADER_LEAGUES = {"pwhl"}
+# Leagues whose {league}_loaders.py is GENERATED from releases.yaml. All season-loop
+# loaders are generated; season-less loaders + module helpers that the loader template
+# can't express are preserved hand-written in {league}_loaders_extra.py residuals
+# (cfb: load_cfb_betting_lines + get_cfb_teams; nhl: nhl_teams).
+_GENERATED_LOADER_LEAGUES = {"cfb", "mbb", "nba", "nhl", "pwhl", "wbb", "wnba"}
 
 
 def _render_loaders_all() -> dict[str, str]:

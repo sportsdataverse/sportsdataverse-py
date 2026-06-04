@@ -123,7 +123,6 @@ from sportsdataverse.nba import espn_nba_tournaments as _raw_espn_nba_tournament
 from sportsdataverse.nba import espn_nba_transactions as _raw_espn_nba_transactions
 from sportsdataverse.nba import espn_nba_venue as _raw_espn_nba_venue
 from sportsdataverse.nba import espn_nba_venues as _raw_espn_nba_venues
-from sportsdataverse.nba import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
 from sportsdataverse.nba import espn_nba_calendar as espn_nba_calendar  # noqa: F401
 from sportsdataverse.nba import espn_nba_game_rosters as espn_nba_game_rosters  # noqa: F401
@@ -140,9 +139,14 @@ from sportsdataverse.nba import helper_nba_pbp_features as helper_nba_pbp_featur
 from sportsdataverse.nba import helper_nba_pickcenter as helper_nba_pickcenter  # noqa: F401
 from sportsdataverse.nba import helper_nba_roster_items as helper_nba_roster_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_items as helper_nba_team_items  # noqa: F401
+from sportsdataverse.nba import load_nba_game_rosters as load_nba_game_rosters  # noqa: F401
+from sportsdataverse.nba import load_nba_officials as load_nba_officials  # noqa: F401
 from sportsdataverse.nba import load_nba_pbp as load_nba_pbp  # noqa: F401
 from sportsdataverse.nba import load_nba_player_boxscore as load_nba_player_boxscore  # noqa: F401
 from sportsdataverse.nba import load_nba_schedule as load_nba_schedule  # noqa: F401
+from sportsdataverse.nba import load_nba_shots as load_nba_shots  # noqa: F401
+from sportsdataverse.nba import load_nba_standings as load_nba_standings  # noqa: F401
+from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_schedules  # noqa: F401
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
 from sportsdataverse.nba import most_recent_nba_season as most_recent_nba_season  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
@@ -151,7 +155,6 @@ from sportsdataverse.nba import underscore as underscore  # noqa: F401
 from sportsdataverse.nba import year_to_season as year_to_season  # noqa: F401
 
 __all__ = [
-    "SeasonNotFoundError",
     "download",
     "espn_nba_award",
     "espn_nba_awards",
@@ -282,9 +285,14 @@ __all__ = [
     "helper_nba_pickcenter",
     "helper_nba_roster_items",
     "helper_nba_team_items",
+    "load_nba_game_rosters",
+    "load_nba_officials",
     "load_nba_pbp",
     "load_nba_player_boxscore",
     "load_nba_schedule",
+    "load_nba_shots",
+    "load_nba_standings",
+    "load_nba_stats_schedules",
     "load_nba_team_boxscore",
     "most_recent_nba_season",
     "nba_pbp_disk",

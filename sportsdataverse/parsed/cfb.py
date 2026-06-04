@@ -129,7 +129,6 @@ from sportsdataverse.cfb import espn_cfb_venue as _raw_espn_cfb_venue
 from sportsdataverse.cfb import espn_cfb_venues as _raw_espn_cfb_venues
 from sportsdataverse.cfb import espn_cfb_week_rankings as _raw_espn_cfb_week_rankings
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
-from sportsdataverse.cfb import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
 from sportsdataverse.cfb import download as download  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_calendar as espn_cfb_calendar  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_game_rosters as espn_cfb_game_rosters  # noqa: F401
@@ -153,7 +152,6 @@ from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 
 __all__ = [
     "CFBPlayProcess",
-    "SeasonNotFoundError",
     "download",
     "espn_cfb_award",
     "espn_cfb_awards",

@@ -144,10 +144,17 @@ from sportsdataverse.wbb import helper_wbb_pbp_features as helper_wbb_pbp_featur
 from sportsdataverse.wbb import helper_wbb_pickcenter as helper_wbb_pickcenter  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_roster_items as helper_wbb_roster_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import load_wbb_game_rosters as load_wbb_game_rosters  # noqa: F401
+from sportsdataverse.wbb import load_wbb_officials as load_wbb_officials  # noqa: F401
 from sportsdataverse.wbb import load_wbb_pbp as load_wbb_pbp  # noqa: F401
 from sportsdataverse.wbb import load_wbb_player_boxscore as load_wbb_player_boxscore  # noqa: F401
+from sportsdataverse.wbb import load_wbb_player_season_stats as load_wbb_player_season_stats  # noqa: F401
+from sportsdataverse.wbb import load_wbb_rosters as load_wbb_rosters  # noqa: F401
 from sportsdataverse.wbb import load_wbb_schedule as load_wbb_schedule  # noqa: F401
+from sportsdataverse.wbb import load_wbb_shots as load_wbb_shots  # noqa: F401
+from sportsdataverse.wbb import load_wbb_standings as load_wbb_standings  # noqa: F401
 from sportsdataverse.wbb import load_wbb_team_boxscore as load_wbb_team_boxscore  # noqa: F401
+from sportsdataverse.wbb import load_wbb_team_season_stats as load_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import most_recent_wbb_season as most_recent_wbb_season  # noqa: F401
 from sportsdataverse.wbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.wbb import underscore as underscore  # noqa: F401
@@ -289,10 +296,17 @@ __all__ = [
     "helper_wbb_pickcenter",
     "helper_wbb_roster_items",
     "helper_wbb_team_items",
+    "load_wbb_game_rosters",
+    "load_wbb_officials",
     "load_wbb_pbp",
     "load_wbb_player_boxscore",
+    "load_wbb_player_season_stats",
+    "load_wbb_rosters",
     "load_wbb_schedule",
+    "load_wbb_shots",
+    "load_wbb_standings",
     "load_wbb_team_boxscore",
+    "load_wbb_team_season_stats",
     "most_recent_wbb_season",
     "scoreboard_event_parsing",
     "underscore",
