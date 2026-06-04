@@ -469,6 +469,96 @@ def render_loader_module(league: str, loaders, bases: dict) -> str:
     return template.render(league=league, loaders=views)
 
 
+_PARSED_LEAGUES = ("nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl")
+
+
+def _league_public_callables(league: str):
+    """Public sdv callables exported by ``sportsdataverse.{league}``.
+
+    Skips re-exported third-party names (pandas/polars/typing) by requiring
+    ``__module__`` to live under ``sportsdataverse``."""
+    import importlib
+
+    mod = importlib.import_module(f"sportsdataverse.{league}")
+    out = []
+    for name in sorted(dir(mod)):
+        if name.startswith("_"):
+            continue
+        attr = getattr(mod, name)
+        if not callable(attr):
+            continue
+        if not getattr(attr, "__module__", "").startswith("sportsdataverse"):
+            continue
+        out.append((name, attr))
+    return out
+
+
+def render_parsed_module(league: str) -> str:
+    """Render the concrete ``sportsdataverse/parsed/{league}.py`` mirror.
+
+    Functions whose signature accepts ``return_parsed`` get a thin wrapper that
+    defaults it to True; every other public callable passes through unchanged.
+    Replaces the runtime ``types.ModuleType`` builder with a real file."""
+    import inspect
+
+    parser_fns, passthrough_fns = [], []
+    for name, fn in _league_public_callables(league):
+        try:
+            has_rp = "return_parsed" in inspect.signature(fn).parameters
+        except (TypeError, ValueError):
+            has_rp = False
+        (parser_fns if has_rp else passthrough_fns).append(name)
+    parser_fns.sort()
+    passthrough_fns.sort()
+    template = render.ENV.get_template("parsed_module.py.jinja")
+    return template.render(
+        league=league,
+        parser_fns=parser_fns,
+        passthrough_fns=passthrough_fns,
+        all_fns=sorted(parser_fns + passthrough_fns),
+    )
+
+
+def _render_parsed_all() -> dict[str, str]:
+    return {f"{lg}.py": render_parsed_module(lg) for lg in _PARSED_LEAGUES}
+
+
+def build_parsed_live() -> list[Path]:
+    """Write the 8 concrete ``parsed/{league}.py`` modules into the live package."""
+    written = []
+    pdir = LIVE / "parsed"
+    for name, src in _render_parsed_all().items():
+        dest = pdir / name
+        dest.write_text(src, encoding="utf-8")
+        written.append(dest)
+    if written:
+        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+    return sorted(written)
+
+
+def _parsed_stale() -> list[str]:
+    """Live ``parsed/{league}.py`` files that differ from a fresh render."""
+    tmp = OUT / "_check_parsed_tmp"
+    if tmp.exists():
+        shutil.rmtree(tmp)
+    tmp.mkdir(parents=True, exist_ok=True)
+    try:
+        rendered = _render_parsed_all()
+        for name, src in rendered.items():
+            (tmp / name).write_text(src, encoding="utf-8")
+        _ruff_format_dir(tmp)
+        stale = []
+        for name in rendered:
+            live_file = LIVE / "parsed" / name
+            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
+                encoding="utf-8",
+            ):
+                stale.append(str(live_file.relative_to(ROOT)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return stale
+
+
 def _render_all() -> dict[str, str]:
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
@@ -570,10 +660,15 @@ def main(argv=None) -> int:
         if live:
             print("codegen --check: stale live files:", ", ".join(sorted(live)), file=sys.stderr)
             rc = 1
+        parsed = _parsed_stale()
+        if parsed:
+            print("codegen --check: stale parsed files:", ", ".join(sorted(parsed)), file=sys.stderr)
+            rc = 1
         return rc
     build()
     n = len(build_live())
-    print(f"codegen: wrote {n} live modules + refreshed staging at {OUT}")
+    p = len(build_parsed_live())
+    print(f"codegen: wrote {n} live modules + {p} parsed modules + refreshed staging at {OUT}")
     return 0
 
 
