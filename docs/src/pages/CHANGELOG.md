@@ -257,8 +257,16 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   (`create_docs.sh` + `Sphinx-docs/`) is **deleted**. `yarn build` passes with a
   link-clean `/docs/next/` surface (remaining broken-anchor warnings are confined
   to the frozen `0.0.50` version + the CHANGELOG doctoc fragments).
-- Still a follow-up (needs network / live endpoints): a data-driven SDV navbar
-  dropdown from `projects.json` and CI-executed example notebooks.
+- **Example notebooks are CI-executed** (`nbmake`): the example notebooks were
+  audited against the post-rename API — only `02_cfb_intro` broke (the standalone
+  `espn_cfb_pbp(game_id=...)` is gone), and its PBP cells were rewritten to the
+  `CFBPlayProcess(gameId=...).espn_cfb_pbp()` + `.run_processing_pipeline()` flow
+  (verified live). `nbmake` was added to the `test` dependency group, and the
+  weekly `live-tests-cron` workflow now runs `pytest --nbmake examples/notebooks/`
+  as an informational (non-blocking) leg so notebook breakage surfaces as drift.
+- Declined follow-up: a data-driven SDV navbar dropdown — `projects.json` carries
+  no canonical doc URLs, so the curated navbar in `docusaurus.config.ts` (which
+  has them) stays authoritative.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

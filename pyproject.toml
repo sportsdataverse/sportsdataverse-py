@@ -164,6 +164,10 @@ test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
     "pytest-xdist>=3.0",
+    # Executes examples/notebooks/*.ipynb as pytest items (`pytest --nbmake`).
+    # Opt-in via the flag, so the normal suite is unaffected; the live-tests-cron
+    # workflow runs it against the real APIs.
+    "nbmake>=1.5",
 ]
 lint = [
     "mypy>=1.0",
