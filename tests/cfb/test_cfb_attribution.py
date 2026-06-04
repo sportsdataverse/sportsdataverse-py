@@ -506,6 +506,7 @@ def _npt_base(**over):
         "td_play": False,
         "td_check": False,
         "start.down": 1,
+        "start.distance": 10,
         "kickoff_play": False,
         "punt_play": False,
         "statYardage": 3,
@@ -643,6 +644,95 @@ def test_missed_pat_not_relabeled():
     # Control: an ordinary missed PAT (no "blocked", no FG) stays "Extra Point Missed".
     out = _npt([_npt_base(**{"type.text": "Extra Point Missed", "text": "#9 K extra point missed wide right"})])
     assert out["type.text"].to_list() == ["Extra Point Missed"]
+
+
+# --- __add_new_play_types: pre-2014 legacy ESPN label normalization -------------
+def test_2pt_conversion_good_normalized():
+    # ESPN's pre-2014 successful two-point label "2pt Conversion" -> "Two-Point Conversion Good".
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "2pt Conversion",
+                    "scoringPlay": True,
+                    "text": "Two-point conversion attempt, QB pass to WR GOOD.",
+                },
+            ),
+        ],
+    )
+    assert out["type.text"].to_list() == ["Two-Point Conversion Good"]
+
+
+def test_2pt_conversion_missed_normalized():
+    out = _npt(
+        [_npt_base(**{"type.text": "2pt Conversion", "scoringPlay": False, "text": "Two-point attempt failed."})],
+    )
+    assert out["type.text"].to_list() == ["Two-Point Conversion Missed"]
+
+
+def test_unknown_period_marker_to_end_period():
+    out = _npt([_npt_base(**{"type.text": "Unknown", "text": "Start of the 2nd quarter."})])
+    assert out["type.text"].to_list() == ["End Period"]
+
+
+def test_unknown_end_of_game_to_end_period():
+    out = _npt([_npt_base(**{"type.text": "Unknown", "text": "End of the game."})])
+    assert out["type.text"].to_list() == ["End Period"]
+
+
+def test_unknown_missed_field_goal_reclassified():
+    out = _npt(
+        [_npt_base(**{"type.text": "Unknown", "text": "35 yard field goal by Ryan Killeen (USC) is no good."})],
+    )
+    assert out["type.text"].to_list() == ["Field Goal Missed"]
+
+
+def test_unknown_missed_extra_point_reclassified():
+    out = _npt(
+        [_npt_base(**{"type.text": "Unknown", "text": "Extra point by Bryan Borreson (UTAH) is no good."})],
+    )
+    assert out["type.text"].to_list() == ["Extra Point Missed"]
+
+
+def test_kickoff_return_defense_normalized_to_kickoff():
+    out = _npt(
+        [_npt_base(**{"type.text": "Kickoff Return (Defense)", "text": "Onside kick recovered by Spiders."})],
+    )
+    assert out["type.text"].to_list() == ["Kickoff"]
+
+
+def test_unrecognized_unknown_left_alone():
+    # Control: an "Unknown" with no recognizable text stays "Unknown" (graceful, not guessed).
+    out = _npt([_npt_base(**{"type.text": "Unknown", "text": "some unparseable legacy text"})])
+    assert out["type.text"].to_list() == ["Unknown"]
+
+
+def test_extra_point_row_down_sentinel_normalized():
+    # Pre-2005 extra-point rows can carry a real down/distance; force the -1 sentinel.
+    out = _npt(
+        [
+            _npt_base(
+                **{
+                    "type.text": "Extra Point Good",
+                    "scoringPlay": True,
+                    "start.down": 0,
+                    "start.distance": 0,
+                    "text": "Extra point by #9 K is good.",
+                },
+            ),
+        ],
+    )
+    r = out.to_dicts()[0]
+    assert r["start.down"] == -1
+    assert r["start.distance"] == -1
+
+
+def test_normal_play_down_not_touched_by_pat_norm():
+    # Control: a regular rush keeps its real down/distance.
+    out = _npt([_npt_base(**{"type.text": "Rush", "start.down": 2, "start.distance": 7})])
+    r = out.to_dicts()[0]
+    assert r["start.down"] == 2
+    assert r["start.distance"] == 7
 
 
 # --- __refine_play_types_post_attribution: is_turnover-keyed label corrections ----

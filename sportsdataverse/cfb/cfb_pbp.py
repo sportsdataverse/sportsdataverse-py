@@ -1661,6 +1661,60 @@ class CFBPlayProcess(object):
             * Fix play types
         """
         # --------------------------------------------------
+        # --- Legacy / pre-2014 ESPN label normalization ----
+        # These raw labels appear only in older seasons (verified 2004-2013); every
+        # rule is gated on the raw label, so it is a no-op on modern data.
+        play_df = play_df.with_columns(
+            # ESPN's pre-2014 *successful* two-point label is the bare "2pt Conversion"
+            # (failed ones are already "Two-Point Conversion Missed"). Resolve good/missed
+            # via scoringPlay so the play routes through the two-point EPA/scoring path
+            # instead of being treated as a generic scrimmage play.
+            pl.when((pl.col("type.text") == "2pt Conversion").and_(pl.col("scoringPlay") == True))
+            .then(pl.lit("Two-Point Conversion Good"))
+            .when(pl.col("type.text") == "2pt Conversion")
+            .then(pl.lit("Two-Point Conversion Missed"))
+            # 2004 "Unknown" is a grab-bag of period/game markers and a few misclassified
+            # kicks. Relabel the recognizable ones from the text so the non-plays are
+            # excluded (End Period) and the real kicks get a proper type + EPA, instead of
+            # being scored as generic plays (which produced garbage EPA on non-plays).
+            .when(
+                (pl.col("type.text") == "Unknown").and_(
+                    pl.col("text").str.contains(r"(?i)(start|end) of (the )?.*(quarter|half|game|overtime|regulation)"),
+                ),
+            )
+            .then(pl.lit("End Period"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)field goal"))
+                .and_(pl.col("text").str.contains(r"(?i)no good|missed|blocked")),
+            )
+            .then(pl.lit("Field Goal Missed"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)field goal"))
+                .and_(pl.col("text").str.contains(r"(?i)is good")),
+            )
+            .then(pl.lit("Field Goal Good"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)extra point"))
+                .and_(pl.col("text").str.contains(r"(?i)no good|missed|blocked")),
+            )
+            .then(pl.lit("Extra Point Missed"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)extra point"))
+                .and_(pl.col("text").str.contains(r"(?i)is good")),
+            )
+            .then(pl.lit("Extra Point Good"))
+            # Pre-2014 onside-kick-recovered rows ("Onside kick recovered by ...") carry the
+            # label "Kickoff Return (Defense)"; normalize to the generic kickoff label so
+            # they fall in kickoff_vec and get consistent kickoff handling.
+            .when(pl.col("type.text") == "Kickoff Return (Defense)")
+            .then(pl.lit("Kickoff"))
+            .otherwise(pl.col("type.text"))
+            .alias("type.text"),
+        )
         play_df = (
             play_df.with_columns(
                 # --- Fix Strip Sacks to Fumbles ----
@@ -2026,6 +2080,25 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
+        )
+
+        # --- Normalize separate extra-point rows to the no-down sentinel ----
+        # Pre-2005 games sometimes carry a real down/distance on the separate
+        # extra-point rows (2005+ already use -1, and two-point rows already use -1
+        # in every era). Force the sentinel so these no-down scoring plays stay out
+        # of down-based logic consistently. Extra-point rows are scrimmage_play=False,
+        # so this never touches scrimmage aggregates; and modern games have no
+        # separate extra-point rows, so this is a strictly pre-2005 normalization.
+        _pat_set = ["Extra Point Good", "Extra Point Missed"]
+        play_df = play_df.with_columns(
+            pl.when(pl.col("type.text").is_in(_pat_set).and_(pl.col("start.down") >= 0))
+            .then(pl.lit(-1))
+            .otherwise(pl.col("start.down"))
+            .alias("start.down"),
+            pl.when(pl.col("type.text").is_in(_pat_set).and_(pl.col("start.distance") >= 0))
+            .then(pl.lit(-1))
+            .otherwise(pl.col("start.distance"))
+            .alias("start.distance"),
         )
 
         return play_df

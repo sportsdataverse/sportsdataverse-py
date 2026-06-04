@@ -7,6 +7,7 @@
   - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
   - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
   - [CFB — blocked-kick turnover flags + ESPN native-flag tripwires](#cfb--blocked-kick-turnover-flags--espn-native-flag-tripwires)
+  - [CFB — pre-2014 era support (`CFBPlayProcess`)](#cfb--pre-2014-era-support-cfbplayprocess)
   - [Removed — NCAA bracketology](#removed--ncaa-bracketology)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
@@ -181,6 +182,30 @@ wrong values are corrected and new fields/sections are added.
   into the giveaway signals; penalty tripwire 0 violations; `isTurnover`/`is_turnover` agreed 99.6%
   (residual disagreements are ESPN false positives — self-recovered fumbles — the stricter
   derivation correctly excludes).
+
+### CFB — pre-2014 era support (`CFBPlayProcess`)
+
+Validated across a 240-game sweep (15 games × 2004-2019): every game that has play-by-play
+produces valid EPA/WPA and a full advanced box score in every era (209/209 of the sampled
+games-with-plays; games without PBP exit early gracefully). Legacy ESPN labels that only appear in
+older seasons are now normalized in `__add_new_play_types` (each rule is gated on the raw label, so
+it is a no-op on modern data):
+
+- **`2pt Conversion`** — ESPN's pre-2014 *successful* two-point label — is resolved via
+  `scoringPlay` to `Two-Point Conversion Good` / `Two-Point Conversion Missed`, so it routes
+  through the two-point EPA/scoring path instead of being scored as a generic play.
+- **2004 `Unknown` rows** are relabeled from their text: period/game markers → `End Period` (so
+  these non-plays are excluded from aggregates instead of producing garbage EPA), and the handful
+  of misclassified kicks → `Field Goal Missed` / `Extra Point Missed` / `… Good`.
+- **`Kickoff Return (Defense)`** (pre-2014 onside-kick-recovered) → `Kickoff`.
+- **Separate extra-point rows** are normalized to the no-down sentinel (`down`/`distance = -1`) for
+  the few pre-2005 games that ship a real down on them (2005+ and two-point rows already use it).
+
+Era notes (documented in the architecture reference): pre-2014 player attribution is
+text-extraction only (the participants endpoint returns nothing before 2014; `__join_participants`
+already falls back to regex names); ESPN's own win-probability array is empty before ~2016 but
+`wpa` is computed in-house in every era; and PBP coverage is sparse before 2008 (~47% of 2004
+games have no PBP), handled by the existing early-exit.
 
 ### Removed — NCAA bracketology
 

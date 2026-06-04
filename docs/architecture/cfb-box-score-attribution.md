@@ -17,6 +17,7 @@
   - [8. Output schema notes (additive)](#8-output-schema-notes-additive)
   - [9. Known limitations & empirical accuracy](#9-known-limitations--empirical-accuracy)
   - [10. Testing & reconciliation](#10-testing--reconciliation)
+  - [11. Era coverage (2004-2019+)](#11-era-coverage-2004-2019)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -378,3 +379,35 @@ the accuracy of the pbp cross-check / offline fallback, not of the shipped numbe
 
 Fixtures: `tests/cfb/fixtures/summary_{401754598,401309854,401112081,401135269,401032062}.json`,
 captured via `tools/capture_cfb_fixtures.py`.
+
+## 11. Era coverage (2004-2019+)
+
+Validated on a 240-game sweep (15 games × 2004-2019). **The pipeline runs end-to-end in every
+era**: of the 209 sampled games that had play-by-play, **209 produced valid EPA, WPA, and a full
+advanced box score** (zero failures). The remaining games returned 0 plays and exit early
+gracefully (no box, no error). `wpa` is always computed in-house, so it is present in every era
+regardless of ESPN's own win-probability array.
+
+Three era boundaries and how each is handled:
+
+- **2014 — separate extra-point rows + participants.** Before 2014, made/missed PATs are their
+  own play rows (`Extra Point Good` / `Extra Point Missed`, ~6-8/game) and the
+  `espn_cfb_play_participants` endpoint returns nothing; from 2014 on, PATs are embedded and
+  participants are populated. Pre-2014 player attribution therefore comes from **text extraction
+  only** (no athlete IDs); `__join_participants` already falls back to regex names. Separate PAT
+  rows carry the no-down sentinel (`down = -1`, normalized in `__add_new_play_types` for the few
+  pre-2005 games that ship a real down) and a flat PAT EPA, and score correctly (TD row → 6, PAT
+  row → +1).
+- **2016 — ESPN win-probability array** begins; irrelevant functionally (we compute `wpa`).
+- **Pre-2008 — sparse PBP.** Availability falls to ~80% (2005-07) and ~47% (2004); missing games
+  exit early. Pass plays in ≤2013 use `Pass Completion`/`Pass Incompletion` (2014+ uses
+  `Pass Reception`); both are mapped by the reclassifier.
+
+**Legacy label normalization** (`__add_new_play_types`, gated on the raw label so it is a no-op on
+modern data): pre-2014 `2pt Conversion` (ESPN's *successful* two-point label) →
+`Two-Point Conversion Good`/`Missed` via `scoringPlay`; 2004 `Unknown` rows → `End Period` for
+period/game markers (so non-plays are excluded instead of scoring garbage EPA) and →
+`Field Goal Missed`/`Extra Point Missed`/`...Good` for the handful of misclassified kicks;
+`Kickoff Return (Defense)` (pre-2014 onside-kick-recovered) → `Kickoff`. Residual unrecognizable
+`Unknown` rows are left as-is (graceful, not guessed) and a relabeled `End Period` marker still
+carries a cosmetic per-play EPA value but is excluded from all aggregates (`play=False`).
