@@ -6539,7 +6539,7 @@ dev = [
     { name = "pytest-cov", specifier = ">=4.0" },
     { name = "pytest-xdist", specifier = ">=3.0" },
     { name = "pyyaml", specifier = ">=6.0" },
-    { name = "ruff", specifier = ">=0.6" },
+    { name = "ruff", specifier = "==0.15.12" },
     { name = "sphinx", specifier = ">=7.0" },
     { name = "sphinx-markdown-builder", specifier = ">=0.6" },
     { name = "sphinx-material", specifier = ">=0.0.35" },
@@ -6552,7 +6552,7 @@ docs = [
 ]
 lint = [
     { name = "mypy", specifier = ">=1.0" },
-    { name = "ruff", specifier = ">=0.6" },
+    { name = "ruff", specifier = "==0.15.12" },
 ]
 test = [
     { name = "pytest", specifier = ">=7.0" },

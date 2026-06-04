@@ -167,7 +167,10 @@ test = [
 ]
 lint = [
     "mypy>=1.0",
-    "ruff>=0.6",
+    # Pinned to match the pre-commit ruff hook (.pre-commit-config.yaml). The codegen
+    # generator formats its output with this ruff, so build/--check and the commit hook
+    # must agree byte-for-byte; a floating version reintroduces format drift.
+    "ruff==0.15.12",
 ]
 docs = [
     "sphinx>=7.0",
