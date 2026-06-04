@@ -51,10 +51,8 @@ repos:
       - id: python-check-mock-methods
       - id: python-check-blanket-noqa
       - id: python-check-blanket-type-ignore
-  - repo: https://github.com/asottile/add-trailing-comma
-    rev: v4.0.0
-    hooks:
-      - id: add-trailing-comma
+  # NOTE: add-trailing-comma was removed — ruff-format (skip-magic-trailing-comma=false)
+  # already manages trailing commas, so the extra hook only caused re-commit churn.
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
     rev: v0.0.3
     hooks:
@@ -68,10 +66,9 @@ repos:
     rev: v1.7.10
     hooks:
       - id: actionlint
-  - repo: https://github.com/google/yamlfmt
-    rev: v0.19.0
-    hooks:
-      - id: yamlfmt
+  # NOTE: yamlfmt was removed — it reformatted the codegen-generated endpoint YAML
+  # (tools/codegen/endpoints/*.yaml) on every commit, fighting extract.py's output
+  # and forcing a re-add/re-commit cycle. check-yaml still validates YAML syntax.
   - repo: https://github.com/thlorenz/doctoc
     rev: "v2.2.0" # substitute a tagged version
     hooks:
