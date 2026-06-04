@@ -95,13 +95,16 @@ repos:
         language: system
         files: ^CHANGELOG\.md$
         pass_filenames: false
-      # Regenerate the API wrappers whenever a codegen input (endpoint YAML, schema,
-      # or template) changes, so the committed tools/codegen/_generated/ output can never
-      # drift from the metadata by neglect. A stale regen leaves modified files staged for
-      # review (commit fails), the same ergonomics as ruff-format. No-op when inputs unchanged.
+      # Gate: the committed generated wrappers must stay in sync with the codegen
+      # metadata (endpoint YAML / schema / template). Runs `--check` (re-render to a
+      # temp dir + byte-diff) rather than write-mode, so it fails clearly on drift
+      # without rewriting files mid-commit (the write-mode hook reported spurious
+      # "files were modified" on byte-identical regens). Regenerate manually with
+      # `python tools/codegen/generate.py` when this fails. Same gate runs in CI
+      # (.github/workflows/codegen.yml).
       - id: sdv-codegen
-        name: regenerate API wrappers from endpoint metadata
-        entry: python tools/codegen/generate.py
+        name: codegen drift check (generated wrappers in sync with metadata)
+        entry: python tools/codegen/generate.py --check
         language: system
         files: ^tools/codegen/(endpoints|schemas|templates)/.*$
         pass_filenames: false
