@@ -1,0 +1,46 @@
+schema: teams
+kind: dataframe
+description: One row per team (site v2 /teams).
+columns:
+- name: team_abbreviation
+  type: character
+  description: Short team abbreviation (e.g. "BOS").
+- name: team_alternate_color
+  type: character
+  description: Secondary team color as a hex string (no leading '#').
+- name: team_color
+  type: character
+  description: Primary team color as a hex string (no leading '#').
+- name: team_display_name
+  type: character
+  description: Full team display name (location + nickname).
+- name: team_id
+  type: character
+  description: ESPN team id (stable join key across ESPN endpoints).
+- name: team_is_active
+  type: logical
+  description: Whether the team is currently active.
+- name: team_is_all_star
+  type: logical
+  description: Whether the entry is an all-star squad rather than a franchise.
+- name: team_location
+  type: character
+  description: Team location / city (e.g. "Boston").
+- name: team_logos
+  type: character
+  description: Pipe-delimited logo image URLs.
+- name: team_name
+  type: character
+  description: Team nickname/mascot (e.g. "Celtics").
+- name: team_nickname
+  type: character
+  description: Team nickname as ESPN labels it (often equals team_name).
+- name: team_short_display_name
+  type: character
+  description: Abbreviated display name for compact UIs.
+- name: team_slug
+  type: character
+  description: URL slug used in ESPN web paths.
+- name: team_uid
+  type: character
+  description: ESPN global UID (encodes sport/league/team).

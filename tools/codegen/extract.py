@@ -335,6 +335,8 @@ def extract_all() -> Dict:
                 ]
             if info["parser"]:
                 ep["parser"] = info["parser"]
+                if info["parser"] in _SCHEMA_FOR_PARSER:
+                    ep["returns_schema"] = _SCHEMA_FOR_PARSER[info["parser"]]
             # example args for required path params
             ex = {pp["name"]: _EXAMPLE.get(pp["name"], "1") for pp in info["path_params"] if pp.get("required")}
             if ep["short"] == "scoreboard":
@@ -343,6 +345,50 @@ def extract_all() -> Dict:
                 ep["example_args"] = ex
             apis[api].append(ep)
     return apis
+
+
+# parser -> schema key (drives schemas/<key>.yaml + endpoint returns_schema linkage)
+_SCHEMA_FOR_PARSER = {
+    "parse_scoreboard": "scoreboard",
+    "parse_teams": "teams",
+    "parse_standings": "standings",
+    "parse_team_roster": "team_roster",
+    "parse_leaders": "leaders",
+    "parse_summary": "summary",
+}
+
+# polars dtype repr -> friendly (R-roxygen-style) type label, matching scoreboard.yaml
+_PL_TYPE = {
+    "Int64": "integer",
+    "Int32": "integer",
+    "Float64": "double",
+    "Float32": "double",
+    "Utf8": "character",
+    "String": "character",
+    "Boolean": "logical",
+}
+
+
+def _friendly_type(dtype) -> str:
+    return _PL_TYPE.get(str(dtype), str(dtype).lower())
+
+
+def _humanize(col: str) -> str:
+    return col.replace("_", " ").strip().capitalize() + "."
+
+
+def schema_from_parser(parser_name: str, payload: dict, description: str = "") -> dict:
+    """Run a registered parser on a payload and emit a {name,type,description} schema."""
+    import sportsdataverse._common_espn_parsers as parsers
+
+    df = getattr(parsers, parser_name)(payload)
+    cols = [{"name": c, "type": _friendly_type(df.schema[c]), "description": _humanize(c)} for c in df.columns]
+    return {
+        "schema": _SCHEMA_FOR_PARSER.get(parser_name, parser_name),
+        "kind": "dataframe",
+        "description": description,
+        "columns": cols,
+    }
 
 
 def write_yaml(obj, path: Path) -> None:

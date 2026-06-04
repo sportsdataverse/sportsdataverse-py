@@ -1,0 +1,106 @@
+schema: leaders
+kind: dataframe
+description: One row per athlete on the statistical leaderboard (web v3 byathlete).
+columns:
+- name: athletes
+  type: character
+  description: Athletes.
+- name: glossary
+  type: character
+  description: Glossary.
+- name: categories
+  type: character
+  description: Categories.
+- name: pagination_count
+  type: integer
+  description: Pagination count.
+- name: pagination_limit
+  type: integer
+  description: Pagination limit.
+- name: pagination_page
+  type: integer
+  description: Pagination page.
+- name: pagination_pages
+  type: integer
+  description: Pagination pages.
+- name: pagination_first
+  type: character
+  description: Pagination first.
+- name: pagination_next
+  type: character
+  description: Pagination next.
+- name: pagination_last
+  type: character
+  description: Pagination last.
+- name: league_id
+  type: character
+  description: League id.
+- name: league_uid
+  type: character
+  description: League uid.
+- name: league_name
+  type: character
+  description: League name.
+- name: league_abbreviation
+  type: character
+  description: League abbreviation.
+- name: league_slug
+  type: character
+  description: League slug.
+- name: league_short_name
+  type: character
+  description: League short name.
+- name: current_season_year
+  type: integer
+  description: Current season year.
+- name: current_season_display_name
+  type: character
+  description: Current season display name.
+- name: current_season_start_date
+  type: character
+  description: Current season start date.
+- name: current_season_end_date
+  type: character
+  description: Current season end date.
+- name: current_season_type_id
+  type: character
+  description: Current season type id.
+- name: current_season_type_type
+  type: integer
+  description: Current season type type.
+- name: current_season_type_name
+  type: character
+  description: Current season type name.
+- name: current_season_type_start_date
+  type: character
+  description: Current season type start date.
+- name: current_season_type_end_date
+  type: character
+  description: Current season type end date.
+- name: requested_season_year
+  type: integer
+  description: Requested season year.
+- name: requested_season_display_name
+  type: character
+  description: Requested season display name.
+- name: requested_season_start_date
+  type: character
+  description: Requested season start date.
+- name: requested_season_end_date
+  type: character
+  description: Requested season end date.
+- name: requested_season_type_id
+  type: character
+  description: Requested season type id.
+- name: requested_season_type_type
+  type: integer
+  description: Requested season type type.
+- name: requested_season_type_name
+  type: character
+  description: Requested season type name.
+- name: requested_season_type_start_date
+  type: character
+  description: Requested season type start date.
+- name: requested_season_type_end_date
+  type: character
+  description: Requested season type end date.

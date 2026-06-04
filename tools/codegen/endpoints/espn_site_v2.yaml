@@ -2,250 +2,255 @@ api: espn_site_v2
 host: site_v2
 name_pattern: espn_{prefix}_{short}
 endpoints:
-  - short: scoreboard
-    scope: universal
-    path: /{sport}/{league}/scoreboard
-    extra_params:
-      - name: dates
-        query_key: dates
-        type: int|str
-      - name: week
-        query_key: week
-        type: int
-      - name: season_type
-        query_key: seasontype
-        type: int
-      - name: groups
-        query_key: groups
-        type: int|str
-      - name: limit
-        query_key: limit
-        type: int
-        default: 500
-    parser: parse_scoreboard
-    example_args:
-      dates: '20240115'
-  - short: summary
-    scope: universal
-    path: /{sport}/{league}/summary
-    extra_params:
-      - name: event_id
-        query_key: event
-        type: int|str
-    parser: parse_summary
-  - short: calendar
-    scope: universal
-    path: /{sport}/{league}/calendar
-    parser: parse_items
-  - short: calendar_offseason
-    scope: universal
-    path: /{sport}/{league}/calendar/offseason
-    parser: parse_items
-  - short: calendar_regular_season
-    scope: universal
-    path: /{sport}/{league}/calendar/regular-season
-    parser: parse_items
-  - short: calendar_postseason
-    scope: universal
-    path: /{sport}/{league}/calendar/postseason
-    parser: parse_items
-  - short: calendar_ondays
-    scope: universal
-    path: /{sport}/{league}/calendar/ondays
-    parser: parse_items
-  - short: news
-    scope: universal
-    path: /{sport}/{league}/news
-    extra_params:
-      - name: limit
-        query_key: limit
-        type: int
-        default: 50
-    parser: parse_news
-  - short: injuries
-    scope: universal
-    path: /{sport}/{league}/injuries
-    parser: parse_injuries
-  - short: transactions
-    scope: universal
-    path: /{sport}/{league}/transactions
-    parser: parse_items
-  - short: conferences
-    scope: universal
-    path: /{sport}/{league}/groups
-    parser: parse_groups
-  - short: statistics_league
-    scope: universal
-    path: /{sport}/{league}/statistics
-    parser: parse_items
-  - short: draft
-    scope: universal
-    path: /{sport}/{league}/draft
-    parser: parse_items
-  - short: teams
-    scope: universal
-    path: /{sport}/{league}/teams
-    extra_params:
-      - name: limit
-        query_key: limit
-        type: int
-        default: 1000
-    parser: parse_teams
-  - short: team
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_single_entity
-    example_args:
-      team_id: '4'
-  - short: team_roster
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/roster
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_team_roster
-    example_args:
-      team_id: '4'
-  - short: team_schedule
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/schedule
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    extra_params:
-      - name: season
-        query_key: season
-        type: int|str
-    parser: parse_team_schedule
-    example_args:
-      team_id: '4'
-  - short: team_record
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/record
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_items
-    example_args:
-      team_id: '4'
-  - short: team_depthcharts
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/depthcharts
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_items
-    example_args:
-      team_id: '4'
-  - short: team_injuries
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/injuries
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_injuries
-    example_args:
-      team_id: '4'
-  - short: team_transactions
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/transactions
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_items
-    example_args:
-      team_id: '4'
-  - short: team_history
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/history
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_items
-    example_args:
-      team_id: '4'
-  - short: team_news
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/news
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    extra_params:
-      - name: limit
-        query_key: limit
-        type: int
-        default: 50
-    parser: parse_news
-    example_args:
-      team_id: '4'
-  - short: team_leaders
-    scope: universal
-    path: /{sport}/{league}/teams/{team_id}/leaders
-    path_params:
-      - name: team_id
-        type: int|str
-        required: true
-    parser: parse_items
-    example_args:
-      team_id: '4'
-  - short: athlete_info
-    scope: universal
-    path: /{sport}/{league}/athletes/{athlete_id}
-    path_params:
-      - name: athlete_id
-        type: int|str
-        required: true
-    parser: parse_single_entity
-    example_args:
-      athlete_id: '4239'
-  - short: athlete_bio
-    scope: universal
-    path: /{sport}/{league}/athletes/{athlete_id}/bio
-    path_params:
-      - name: athlete_id
-        type: int|str
-        required: true
-    parser: parse_single_entity
-    example_args:
-      athlete_id: '4239'
-  - short: athlete_news
-    scope: universal
-    path: /{sport}/{league}/athletes/{athlete_id}/news
-    path_params:
-      - name: athlete_id
-        type: int|str
-        required: true
-    parser: parse_news
-    example_args:
-      athlete_id: '4239'
-  - short: standings
-    scope: universal
-    path: /{sport}/{league}/standings
-    host: site_v2_alt
-    extra_params:
-      - name: season
-        query_key: season
-        type: int|str
-      - name: group
-        query_key: group
-        type: int|str
-      - name: standings_type
-        query_key: type
-        type: str
-    parser: parse_standings
-  - short: rankings
-    scope: ncaa
-    path: /{sport}/{league}/rankings
-    parser: parse_items
+- short: scoreboard
+  scope: universal
+  path: /{sport}/{league}/scoreboard
+  extra_params:
+  - name: dates
+    query_key: dates
+    type: int|str
+  - name: week
+    query_key: week
+    type: int
+  - name: season_type
+    query_key: seasontype
+    type: int
+  - name: groups
+    query_key: groups
+    type: int|str
+  - name: limit
+    query_key: limit
+    type: int
+    default: 500
+  parser: parse_scoreboard
+  returns_schema: scoreboard
+  example_args:
+    dates: '20240115'
+- short: summary
+  scope: universal
+  path: /{sport}/{league}/summary
+  extra_params:
+  - name: event_id
+    query_key: event
+    type: int|str
+  parser: parse_summary
+  returns_schema: summary
+- short: calendar
+  scope: universal
+  path: /{sport}/{league}/calendar
+  parser: parse_items
+- short: calendar_offseason
+  scope: universal
+  path: /{sport}/{league}/calendar/offseason
+  parser: parse_items
+- short: calendar_regular_season
+  scope: universal
+  path: /{sport}/{league}/calendar/regular-season
+  parser: parse_items
+- short: calendar_postseason
+  scope: universal
+  path: /{sport}/{league}/calendar/postseason
+  parser: parse_items
+- short: calendar_ondays
+  scope: universal
+  path: /{sport}/{league}/calendar/ondays
+  parser: parse_items
+- short: news
+  scope: universal
+  path: /{sport}/{league}/news
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 50
+  parser: parse_news
+- short: injuries
+  scope: universal
+  path: /{sport}/{league}/injuries
+  parser: parse_injuries
+- short: transactions
+  scope: universal
+  path: /{sport}/{league}/transactions
+  parser: parse_items
+- short: conferences
+  scope: universal
+  path: /{sport}/{league}/groups
+  parser: parse_groups
+- short: statistics_league
+  scope: universal
+  path: /{sport}/{league}/statistics
+  parser: parse_items
+- short: draft
+  scope: universal
+  path: /{sport}/{league}/draft
+  parser: parse_items
+- short: teams
+  scope: universal
+  path: /{sport}/{league}/teams
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 1000
+  parser: parse_teams
+  returns_schema: teams
+- short: team
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_single_entity
+  example_args:
+    team_id: '4'
+- short: team_roster
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/roster
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_team_roster
+  returns_schema: team_roster
+  example_args:
+    team_id: '4'
+- short: team_schedule
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/schedule
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  parser: parse_team_schedule
+  example_args:
+    team_id: '4'
+- short: team_record
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/record
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_items
+  example_args:
+    team_id: '4'
+- short: team_depthcharts
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/depthcharts
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_items
+  example_args:
+    team_id: '4'
+- short: team_injuries
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/injuries
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_injuries
+  example_args:
+    team_id: '4'
+- short: team_transactions
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/transactions
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_items
+  example_args:
+    team_id: '4'
+- short: team_history
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/history
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_items
+  example_args:
+    team_id: '4'
+- short: team_news
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/news
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 50
+  parser: parse_news
+  example_args:
+    team_id: '4'
+- short: team_leaders
+  scope: universal
+  path: /{sport}/{league}/teams/{team_id}/leaders
+  path_params:
+  - name: team_id
+    type: int|str
+    required: true
+  parser: parse_items
+  example_args:
+    team_id: '4'
+- short: athlete_info
+  scope: universal
+  path: /{sport}/{league}/athletes/{athlete_id}
+  path_params:
+  - name: athlete_id
+    type: int|str
+    required: true
+  parser: parse_single_entity
+  example_args:
+    athlete_id: '4239'
+- short: athlete_bio
+  scope: universal
+  path: /{sport}/{league}/athletes/{athlete_id}/bio
+  path_params:
+  - name: athlete_id
+    type: int|str
+    required: true
+  parser: parse_single_entity
+  example_args:
+    athlete_id: '4239'
+- short: athlete_news
+  scope: universal
+  path: /{sport}/{league}/athletes/{athlete_id}/news
+  path_params:
+  - name: athlete_id
+    type: int|str
+    required: true
+  parser: parse_news
+  example_args:
+    athlete_id: '4239'
+- short: standings
+  scope: universal
+  path: /{sport}/{league}/standings
+  host: site_v2_alt
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: group
+    query_key: group
+    type: int|str
+  - name: standings_type
+    query_key: type
+    type: str
+  parser: parse_standings
+  returns_schema: standings
+- short: rankings
+  scope: ncaa
+  path: /{sport}/{league}/rankings
+  parser: parse_items

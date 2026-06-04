@@ -45,6 +45,24 @@ def test_generated_function_builds_correct_url_and_strips_none():
     assert called["params"] == {"dates": "20240115", "limit": 500}  # None week/seasontype/groups stripped
 
 
+def test_returns_schema_resolves_for_authored_endpoints():
+    from tools.codegen import spec
+
+    for name in ("scoreboard", "teams", "standings", "leaders", "team_roster"):
+        d = spec._read_yaml(Path(f"tools/codegen/schemas/{name}.yaml"))
+        assert d["columns"], f"{name} schema has no columns"
+        assert all(c["description"] for c in d["columns"]), f"{name} has blank descriptions"
+
+
+def test_summary_schema_has_frames():
+    from tools.codegen import spec
+
+    d = spec._read_yaml(Path("tools/codegen/schemas/summary.yaml"))
+    assert d["kind"] == "frames"
+    assert any(f["section"] == "boxscore_player" for f in d["frames"])
+    assert all(f["columns"] for f in d["frames"] if f["section"] in ("header", "game_info"))
+
+
 def test_standings_uses_alt_host():
     generate.build()
     mod = _load(OUT / "nba_espn_ext.py", "_gen_nba3")
