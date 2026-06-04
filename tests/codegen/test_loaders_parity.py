@@ -19,8 +19,19 @@ def test_manifest_covers_historical_loaders():
 
 
 def _existing_url(fn_name: str, league: str):
-    """Capture the URL the existing hand-written loader fetches for season 2024."""
-    mod = importlib.import_module(f"sportsdataverse.{league}.{league}_loaders")
+    """Capture the URL the existing hand-written loader fetches for season 2024.
+
+    Returns ``None`` when there is nothing to compare against -- a release-seeded
+    dataset with no hand-written twin, or a new league (e.g. ``pwhl``) that has no
+    ``{league}_loaders.py`` module yet. Those loaders' URLs are verified directly
+    against their release assets at seed time, not here.
+    """
+    try:
+        mod = importlib.import_module(f"sportsdataverse.{league}.{league}_loaders")
+    except ModuleNotFoundError:
+        return None
+    if not hasattr(mod, fn_name) or not hasattr(mod, "pl"):
+        return None
     box = {}
 
     def fake(url, *a, **k):

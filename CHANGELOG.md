@@ -184,6 +184,23 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   `build_flat`/`--check` drift gate. `test_parity_native` locked in each family's
   faithfulness before its swap.
 
+### Dataset loaders — release manifest + drift audit
+
+- **`releases.yaml` manifest expanded 24 -> 92 loaders**, seeded from the live
+  sportsdataverse-data release list: every release tag shipping season-partitioned
+  `*.parquet` assets gets a 404-safe loader entry whose URL is derived from the
+  actual asset names (verified to resolve). New coverage: WNBA (espn_wnba_* +
+  wnba_stats_*), **PWHL** (15 datasets, a new league), NHL (full `nhl_*` family
+  incl. EDGE/lite/boxscores), WBB, NBA, MBB.
+- **`generate.py --audit-releases`** compares the manifest against the live release
+  list (gh CLI) and reports tags with no loader (gaps) + orphans -- a CI-oriented
+  drift gate (separate from the offline `--check`). `tests/codegen/fixtures/release_tags.txt`
+  snapshots the live tags for offline coverage tests.
+- Release tags that don't yet ship parquet (empty / csv-only / season-less -- e.g.
+  several `espn_cfb_*` advanced-box tags, `nba_stats_*` boxscores) are intentionally
+  absent and surfaced by the audit until parquet lands. Generating the loader
+  modules into the live package + per-dataset `@return` schemas remain follow-ups.
+
 ### CFB — advanced box score expansion (`create_box_score`)
 
 `CFBPlayProcess.create_box_score()` (and therefore `run_processing_pipeline()`'s
