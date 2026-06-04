@@ -1,0 +1,196 @@
+bases:
+  sdv_releases: https://github.com/sportsdataverse/sportsdataverse-data/releases/download/
+  raw_data: https://raw.githubusercontent.com/sportsdataverse/
+loaders:
+- fn: load_cfb_pbp
+  league: cfb
+  base: raw_data
+  url: cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet
+  tag: cfbfastR-data
+  min_season: 2003
+  example_args:
+    seasons: 2024
+- fn: load_cfb_rosters
+  league: cfb
+  base: raw_data
+  url: cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet
+  tag: cfbfastR-data
+  min_season: 2003
+  example_args:
+    seasons: 2024
+- fn: load_cfb_schedule
+  league: cfb
+  base: raw_data
+  url: cfbfastR-data/main/schedules/parquet/cfb_schedules_{season}.parquet
+  tag: cfbfastR-data
+  min_season: 2003
+  example_args:
+    seasons: 2024
+- fn: load_cfb_team_info
+  league: cfb
+  base: raw_data
+  url: cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet
+  tag: cfbfastR-data
+  min_season: 2003
+  example_args:
+    seasons: 2024
+- fn: load_mbb_pbp
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_pbp/play_by_play_{season}.parquet
+  tag: espn_mens_college_basketball_pbp
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_mbb_player_boxscore
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet
+  tag: espn_mens_college_basketball_player_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_mbb_schedule
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_schedules/mbb_schedule_{season}.parquet
+  tag: espn_mens_college_basketball_schedules
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_mbb_team_boxscore
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet
+  tag: espn_mens_college_basketball_team_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_nba_pbp
+  league: nba
+  base: sdv_releases
+  url: espn_nba_pbp/play_by_play_{season}.parquet
+  tag: espn_nba_pbp
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_nba_player_boxscore
+  league: nba
+  base: sdv_releases
+  url: espn_nba_player_boxscores/player_box_{season}.parquet
+  tag: espn_nba_player_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_nba_schedule
+  league: nba
+  base: sdv_releases
+  url: espn_nba_schedules/nba_schedule_{season}.parquet
+  tag: espn_nba_schedules
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_nba_team_boxscore
+  league: nba
+  base: sdv_releases
+  url: espn_nba_team_boxscores/team_box_{season}.parquet
+  tag: espn_nba_team_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_nhl_pbp
+  league: nhl
+  base: raw_data
+  url: fastRhockey-data/main/nhl/pbp/parquet/play_by_play_{season}.parquet
+  tag: fastRhockey-data
+  min_season: 2011
+  example_args:
+    seasons: 2024
+- fn: load_nhl_player_boxscore
+  league: nhl
+  base: raw_data
+  url: fastRhockey-data/main/nhl/player_box/parquet/player_box_{season}.parquet
+  tag: fastRhockey-data
+  min_season: 2011
+  example_args:
+    seasons: 2024
+- fn: load_nhl_schedule
+  league: nhl
+  base: raw_data
+  url: fastRhockey-data/main/nhl/schedules/parquet/nhl_schedule_{season}.parquet
+  tag: fastRhockey-data
+  min_season: 2011
+  example_args:
+    seasons: 2024
+- fn: load_nhl_team_boxscore
+  league: nhl
+  base: raw_data
+  url: fastRhockey-data/main/nhl/team_box/parquet/team_box_{season}.parquet
+  tag: fastRhockey-data
+  min_season: 2011
+  example_args:
+    seasons: 2024
+- fn: load_wbb_pbp
+  league: wbb
+  base: sdv_releases
+  url: espn_womens_college_basketball_pbp/play_by_play_{season}.parquet
+  tag: espn_womens_college_basketball_pbp
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_wbb_player_boxscore
+  league: wbb
+  base: sdv_releases
+  url: espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet
+  tag: espn_womens_college_basketball_player_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_wbb_schedule
+  league: wbb
+  base: sdv_releases
+  url: espn_womens_college_basketball_schedules/wbb_schedule_{season}.parquet
+  tag: espn_womens_college_basketball_schedules
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_wbb_team_boxscore
+  league: wbb
+  base: sdv_releases
+  url: espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet
+  tag: espn_womens_college_basketball_team_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_wnba_pbp
+  league: wnba
+  base: sdv_releases
+  url: espn_wnba_pbp/play_by_play_{season}.parquet
+  tag: espn_wnba_pbp
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_wnba_player_boxscore
+  league: wnba
+  base: sdv_releases
+  url: espn_wnba_player_boxscores/player_box_{season}.parquet
+  tag: espn_wnba_player_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_wnba_schedule
+  league: wnba
+  base: sdv_releases
+  url: espn_wnba_schedules/wnba_schedule_{season}.parquet
+  tag: espn_wnba_schedules
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_wnba_team_boxscore
+  league: wnba
+  base: sdv_releases
+  url: espn_wnba_team_boxscores/team_box_{season}.parquet
+  tag: espn_wnba_team_boxscores
+  min_season: 2002
+  example_args:
+    seasons: 2024
