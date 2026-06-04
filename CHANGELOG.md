@@ -168,9 +168,13 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   arbitrary `**filters` power feature (cayenneExp/sort/limit/...) is preserved via
   a new `passthrough_query` engine mode that forwards None-filtered `**kwargs` as
   query params; `return_parsed` is additionally wired where a parser exists.
+- **`nhl_records`** (family 4) is generated too -- kept `nhl_records_*` (distinct
+  records.nhl.com product), **non-breaking** (50 functions: 44 generated +
+  `passthrough_query`, 6 value-embedded/scope-conditional ones preserved
+  hand-written in `nhl_records_extra.py`).
 - The codegen engine gained flat-API collision resolution (`FlatApi.qualifier` +
   `resolve_name`), `passthrough_query`, and a `build_flat`/`--check` path.
-  Remaining families (`nhl_records`, `mlb_api`) are still hand-written and follow.
+  Remaining: `mlb_api` (family 5, hydrate/fields/metaType + 16 irregular residual).
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

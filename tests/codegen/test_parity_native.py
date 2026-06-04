@@ -14,17 +14,11 @@ or they are curated by hand; the gate guards everything else.
 # Functions whose hand-written logic the URL-builder codegen cannot reproduce
 # faithfully (kept hand-written; see module docstring).
 _IRREGULAR = {
-    # nhl_api_web has been CUT OVER to generated clean names (nhl_pbp, nhl_boxscore,
-    # ...); its hand-written source is gone so it is no longer in _MODULES below.
-    # The irregular nhl_scoreboard stays hand-written in nhl_api_web_extra.py.
-    "sportsdataverse.nhl.nhl_records": {
-        "nhl_records_coach_milestone_wins",  # value embedded mid-segment (fewest-games-to-{n}-wins)
-        "nhl_records_consecutive_goal_seasons",
-        "nhl_records_games_played_streak_skaters",
-        "nhl_records_fastest_goals",
-        "nhl_records_fastest_goals_both_teams",
-        "nhl_records_comeback_wins",  # scope-conditional path
-    },
+    # nhl_api_web, nhl_edge, nhl_stats_rest, and nhl_records have all been CUT OVER
+    # to generated modules; their hand-written source is gone so they are no longer
+    # in _MODULES below. Each family's un-generatable functions were preserved
+    # hand-written in a *_extra.py residual (nhl_api_web_extra: nhl_scoreboard;
+    # nhl_records_extra: the 6 value-embedded / scope-conditional records below).
     "sportsdataverse.mlb.mlb_api": {  # conditional _csv query inclusion / multi-param shaping
         "mlb_api_schedule",
         "mlb_api_pbp_live",
@@ -64,13 +58,6 @@ from tools.codegen import generate, spec
 # each swap). The families below are still hand-written and remain gated until
 # each is cut over.
 _MODULES = [
-    (
-        "sportsdataverse.nhl.nhl_records",
-        "nhl_records_",
-        "https://records.nhl.com/site/api",
-        "nhl_records_{short}",
-        "nhl.nhl_records_parsers",
-    ),
     ("sportsdataverse.mlb.mlb_api", "mlb_api_", "https://statsapi.mlb.com", "mlb_api_{short}", "mlb.mlb_api_parsers"),
 ]
 
