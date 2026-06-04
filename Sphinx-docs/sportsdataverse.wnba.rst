@@ -12,6 +12,14 @@ sportsdataverse.wnba.wnba\_draft module
    :show-inheritance:
    :undoc-members:
 
+sportsdataverse.wnba.wnba\_espn\_ext module
+-------------------------------------------
+
+.. automodule:: sportsdataverse.wnba.wnba_espn_ext
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 sportsdataverse.wnba.wnba\_event\_officials module
 --------------------------------------------------
 

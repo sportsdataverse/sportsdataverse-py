@@ -1,83 +1,971 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [sportsdataverse.wbb package](#sportsdataversewbb-package)
-  - [Submodules](#submodules)
-  - [sportsdataverse.wbb.wbb_event_officials module](#sportsdataversewbbwbb_event_officials-module)
-    - [sportsdataverse.wbb.wbb_event_officials.espn_wbb_event_officials(game_id: int, season: int | None = None, *, raw: Literal[True], return_as_pandas: bool = False, \*\*kwargs: Any) → dict[str, Any]](#sportsdataversewbbwbb_event_officialsespn_wbb_event_officialsgame_id-int-season-int--none--none--raw-literaltrue-return_as_pandas-bool--false-%5C%5Ckwargs-any-%E2%86%92-dictstr-any)
-    - [sportsdataverse.wbb.wbb_event_officials.espn_wbb_event_officials(game_id: int, season: int | None = None, *, raw: Literal[False] = False, return_as_pandas: Literal[True], \*\*kwargs: Any) → DataFrame](#sportsdataversewbbwbb_event_officialsespn_wbb_event_officialsgame_id-int-season-int--none--none--raw-literalfalse--false-return_as_pandas-literaltrue-%5C%5Ckwargs-any-%E2%86%92-dataframe)
-    - [sportsdataverse.wbb.wbb_event_officials.espn_wbb_event_officials(game_id: int, season: int | None = None, *, raw: Literal[False] = False, return_as_pandas: Literal[False] = False, \*\*kwargs: Any) → DataFrame](#sportsdataversewbbwbb_event_officialsespn_wbb_event_officialsgame_id-int-season-int--none--none--raw-literalfalse--false-return_as_pandas-literalfalse--false-%5C%5Ckwargs-any-%E2%86%92-dataframe)
-    - [Example](#example)
-  - [sportsdataverse.wbb.wbb_game_rosters module](#sportsdataversewbbwbb_game_rosters-module)
-    - [sportsdataverse.wbb.wbb_game_rosters.espn_wbb_game_rosters(game_id: int, raw=False, return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversewbbwbb_game_rostersespn_wbb_game_rostersgame_id-int-rawfalse-return_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-1)
-    - [sportsdataverse.wbb.wbb_game_rosters.helper_wbb_athlete_items(teams_rosters, \*\*kwargs)](#sportsdataversewbbwbb_game_rostershelper_wbb_athlete_itemsteams_rosters-%5C%5Ckwargs)
-    - [sportsdataverse.wbb.wbb_game_rosters.helper_wbb_game_items(summary)](#sportsdataversewbbwbb_game_rostershelper_wbb_game_itemssummary)
-    - [sportsdataverse.wbb.wbb_game_rosters.helper_wbb_roster_items(items, summary_url, \*\*kwargs)](#sportsdataversewbbwbb_game_rostershelper_wbb_roster_itemsitems-summary_url-%5C%5Ckwargs)
-    - [sportsdataverse.wbb.wbb_game_rosters.helper_wbb_team_items(items, \*\*kwargs)](#sportsdataversewbbwbb_game_rostershelper_wbb_team_itemsitems-%5C%5Ckwargs)
-  - [sportsdataverse.wbb.wbb_loaders module](#sportsdataversewbbwbb_loaders-module)
-    - [sportsdataverse.wbb.wbb_loaders.load_wbb_pbp(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversewbbwbb_loadersload_wbb_pbpseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-2)
-    - [sportsdataverse.wbb.wbb_loaders.load_wbb_player_boxscore(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversewbbwbb_loadersload_wbb_player_boxscoreseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-3)
-    - [sportsdataverse.wbb.wbb_loaders.load_wbb_schedule(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversewbbwbb_loadersload_wbb_scheduleseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-4)
-    - [sportsdataverse.wbb.wbb_loaders.load_wbb_team_boxscore(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversewbbwbb_loadersload_wbb_team_boxscoreseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-5)
-  - [sportsdataverse.wbb.wbb_pbp module](#sportsdataversewbbwbb_pbp-module)
-    - [sportsdataverse.wbb.wbb_pbp.espn_wbb_pbp(game_id: int, raw=False, \*\*kwargs) → Dict](#sportsdataversewbbwbb_pbpespn_wbb_pbpgame_id-int-rawfalse-%5C%5Ckwargs-%E2%86%92-dict)
-    - [Example](#example-6)
-    - [sportsdataverse.wbb.wbb_pbp.helper_wbb_game_data(pbp_txt, init)](#sportsdataversewbbwbb_pbphelper_wbb_game_datapbp_txt-init)
-    - [sportsdataverse.wbb.wbb_pbp.helper_wbb_pbp(game_id, pbp_txt)](#sportsdataversewbbwbb_pbphelper_wbb_pbpgame_id-pbp_txt)
-    - [sportsdataverse.wbb.wbb_pbp.helper_wbb_pbp_features(game_id, pbp_txt, init)](#sportsdataversewbbwbb_pbphelper_wbb_pbp_featuresgame_id-pbp_txt-init)
-    - [sportsdataverse.wbb.wbb_pbp.helper_wbb_pickcenter(pbp_txt)](#sportsdataversewbbwbb_pbphelper_wbb_pickcenterpbp_txt)
-    - [sportsdataverse.wbb.wbb_pbp.wbb_pbp_disk(game_id, path_to_json)](#sportsdataversewbbwbb_pbpwbb_pbp_diskgame_id-path_to_json)
-  - [sportsdataverse.wbb.wbb_player_stats module](#sportsdataversewbbwbb_player_stats-module)
-    - [sportsdataverse.wbb.wbb_player_stats.espn_wbb_player_stats(athlete_id: int, season: int, *, raw: Literal[True], return_as_pandas: bool = False, \*\*kwargs: Any) → dict[str, Any]](#sportsdataversewbbwbb_player_statsespn_wbb_player_statsathlete_id-int-season-int--raw-literaltrue-return_as_pandas-bool--false-%5C%5Ckwargs-any-%E2%86%92-dictstr-any)
-    - [sportsdataverse.wbb.wbb_player_stats.espn_wbb_player_stats(athlete_id: int, season: int, *, raw: Literal[False] = False, return_as_pandas: Literal[True], \*\*kwargs: Any) → dict[str, DataFrame]](#sportsdataversewbbwbb_player_statsespn_wbb_player_statsathlete_id-int-season-int--raw-literalfalse--false-return_as_pandas-literaltrue-%5C%5Ckwargs-any-%E2%86%92-dictstr-dataframe)
-    - [sportsdataverse.wbb.wbb_player_stats.espn_wbb_player_stats(athlete_id: int, season: int, *, raw: Literal[False] = False, return_as_pandas: Literal[False] = False, \*\*kwargs: Any) → dict[str, DataFrame]](#sportsdataversewbbwbb_player_statsespn_wbb_player_statsathlete_id-int-season-int--raw-literalfalse--false-return_as_pandas-literalfalse--false-%5C%5Ckwargs-any-%E2%86%92-dictstr-dataframe)
-    - [Example](#example-7)
-  - [sportsdataverse.wbb.wbb_schedule module](#sportsdataversewbbwbb_schedule-module)
-    - [sportsdataverse.wbb.wbb_schedule.espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversewbbwbb_scheduleespn_wbb_calendarseasonnone-ondaysnone-return_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-8)
-    - [sportsdataverse.wbb.wbb_schedule.espn_wbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversewbbwbb_scheduleespn_wbb_scheduledatesnone-groups50-season_typenone-limit500-return_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-9)
-    - [sportsdataverse.wbb.wbb_schedule.most_recent_wbb_season()](#sportsdataversewbbwbb_schedulemost_recent_wbb_season)
-    - [Example](#example-10)
-    - [sportsdataverse.wbb.wbb_schedule.scoreboard_event_parsing(event)](#sportsdataversewbbwbb_schedulescoreboard_event_parsingevent)
-  - [sportsdataverse.wbb.wbb_standings module](#sportsdataversewbbwbb_standings-module)
-    - [sportsdataverse.wbb.wbb_standings.espn_wbb_standings(season: int, group: int = 50, *, raw: Literal[True], return_as_pandas: bool = False, \*\*kwargs: Any) → dict[str, Any]](#sportsdataversewbbwbb_standingsespn_wbb_standingsseason-int-group-int--50--raw-literaltrue-return_as_pandas-bool--false-%5C%5Ckwargs-any-%E2%86%92-dictstr-any)
-    - [sportsdataverse.wbb.wbb_standings.espn_wbb_standings(season: int, group: int = 50, *, raw: Literal[False] = False, return_as_pandas: Literal[True], \*\*kwargs: Any) → DataFrame](#sportsdataversewbbwbb_standingsespn_wbb_standingsseason-int-group-int--50--raw-literalfalse--false-return_as_pandas-literaltrue-%5C%5Ckwargs-any-%E2%86%92-dataframe)
-    - [sportsdataverse.wbb.wbb_standings.espn_wbb_standings(season: int, group: int = 50, *, raw: Literal[False] = False, return_as_pandas: Literal[False] = False, \*\*kwargs: Any) → DataFrame](#sportsdataversewbbwbb_standingsespn_wbb_standingsseason-int-group-int--50--raw-literalfalse--false-return_as_pandas-literalfalse--false-%5C%5Ckwargs-any-%E2%86%92-dataframe)
-    - [Example](#example-11)
-  - [sportsdataverse.wbb.wbb_team_roster module](#sportsdataversewbbwbb_team_roster-module)
-    - [sportsdataverse.wbb.wbb_team_roster.espn_wbb_team_roster(team_id: int, season: int | None = None, *, raw: Literal[True], return_as_pandas: bool = False, \*\*kwargs: Any) → dict[str, Any]](#sportsdataversewbbwbb_team_rosterespn_wbb_team_rosterteam_id-int-season-int--none--none--raw-literaltrue-return_as_pandas-bool--false-%5C%5Ckwargs-any-%E2%86%92-dictstr-any)
-    - [sportsdataverse.wbb.wbb_team_roster.espn_wbb_team_roster(team_id: int, season: int | None = None, *, raw: Literal[False] = False, return_as_pandas: Literal[True], \*\*kwargs: Any) → DataFrame](#sportsdataversewbbwbb_team_rosterespn_wbb_team_rosterteam_id-int-season-int--none--none--raw-literalfalse--false-return_as_pandas-literaltrue-%5C%5Ckwargs-any-%E2%86%92-dataframe)
-    - [sportsdataverse.wbb.wbb_team_roster.espn_wbb_team_roster(team_id: int, season: int | None = None, *, raw: Literal[False] = False, return_as_pandas: Literal[False] = False, \*\*kwargs: Any) → DataFrame](#sportsdataversewbbwbb_team_rosterespn_wbb_team_rosterteam_id-int-season-int--none--none--raw-literalfalse--false-return_as_pandas-literalfalse--false-%5C%5Ckwargs-any-%E2%86%92-dataframe)
-    - [Example](#example-12)
-  - [sportsdataverse.wbb.wbb_team_stats module](#sportsdataversewbbwbb_team_stats-module)
-    - [sportsdataverse.wbb.wbb_team_stats.espn_wbb_team_stats(team_id: int, season: int, *, raw: Literal[True], return_as_pandas: bool = False, \*\*kwargs: Any) → dict[str, Any]](#sportsdataversewbbwbb_team_statsespn_wbb_team_statsteam_id-int-season-int--raw-literaltrue-return_as_pandas-bool--false-%5C%5Ckwargs-any-%E2%86%92-dictstr-any)
-    - [sportsdataverse.wbb.wbb_team_stats.espn_wbb_team_stats(team_id: int, season: int, *, raw: Literal[False] = False, return_as_pandas: Literal[True], \*\*kwargs: Any) → dict[str, DataFrame]](#sportsdataversewbbwbb_team_statsespn_wbb_team_statsteam_id-int-season-int--raw-literalfalse--false-return_as_pandas-literaltrue-%5C%5Ckwargs-any-%E2%86%92-dictstr-dataframe)
-    - [sportsdataverse.wbb.wbb_team_stats.espn_wbb_team_stats(team_id: int, season: int, *, raw: Literal[False] = False, return_as_pandas: Literal[False] = False, \*\*kwargs: Any) → dict[str, DataFrame]](#sportsdataversewbbwbb_team_statsespn_wbb_team_statsteam_id-int-season-int--raw-literalfalse--false-return_as_pandas-literalfalse--false-%5C%5Ckwargs-any-%E2%86%92-dictstr-dataframe)
-    - [Example](#example-13)
-  - [sportsdataverse.wbb.wbb_teams module](#sportsdataversewbbwbb_teams-module)
-    - [sportsdataverse.wbb.wbb_teams.espn_wbb_teams(groups=None, return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversewbbwbb_teamsespn_wbb_teamsgroupsnone-return_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-14)
-  - [Module contents](#module-contents)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # sportsdataverse.wbb package
 
 ## Submodules
+
+## sportsdataverse.wbb.wbb_espn_ext module
+
+sportsdataverse.wbb.wbb_espn_ext — ESPN endpoint wrappers ported from wehoop.
+
+Registers `espn_wbb_*` wrappers via `sportsdataverse._common_espn.make_league_module()`.
+~108 functions cover Site v2, Site v2 alt standings, Web v3 athlete + leaders,
+Core v2 (league, seasons, athletes, events, catalog), plus NCAA-only
+extensions (rankings, recruits, weekly rankings).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_awards(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/awards — awards won by the athlete.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_awards()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_bio(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/bio — athlete bio.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_athlete_bio()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_career_stats(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/statistics[/\{type\}]. `type` ∈ \{0=reg, 1=post, 2=career\}.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_statistics()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_contracts(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/contracts — contract info.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_contracts()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\} — enriched athlete profile (core v2).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_eventlog(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/eventlog — event participation log.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_eventlog()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_gamelog(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/athletes/\{id\}/gamelog?season=\{y\}. **404 for NHL.**
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_gamelog()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_gamelog()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_info(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\} — athlete profile (site v2 lite shape).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_athlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_injuries(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/injuries — per-athlete injuries.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_injuries()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_injuries()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_news(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/news — athlete-scoped news.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_athlete_news()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_news()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_notes(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/notes — analyst notes.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_notes()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_overview(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/\{sport\}/\{league\}/athletes/\{id\}/overview — rich snapshot.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_overview()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_overview()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_records(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/records — career records.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_records()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_seasons(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/seasons — seasons played.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_seasons()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_splits(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/athletes/\{id\}/splits?season=\{y\} — situational splits.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_splits()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_splits()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_statisticslog(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/statisticslog — game-by-game log (NHL gamelog replacement).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_statisticslog()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_stats(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/athletes/\{id\}/stats?season=\{y\} — parallel-array stats.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_stats()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_stats()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athlete_vs_athlete(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/vsathlete/\{oid\} — head-to-head.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_vsathlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_athletes_index(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes?active=\{bool\}&limit=\{n\}&page=\{p\} — paginated athletes index.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_athletes_index()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_award(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /awards/\{id\} — single award detail.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_award()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_awards(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /awards — league award catalog.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_awards()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_calendar(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar — full season calendar.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_calendar_offseason(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/offseason.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_offseason()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_calendar_ondays(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/ondays — dates with games.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_ondays()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_calendar_postseason(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/postseason.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_postseason()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_calendar_regular_season(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/regular-season — week-by-week regular season ranges.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_regular_season()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_coach(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches/\{id\} — single coach.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_coach()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_coach_record(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches/\{id\}/record/\{type\} — coaching record.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_coach_record()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_coach_season(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches/\{id\}/seasons/\{y\} — coach’s per-season record.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_coach_season()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_coaches(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches — coaches index. **Often 404s — prefer /seasons/\{y\}/coaches.**
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_coaches()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_coaches()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_conferences(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /groups — conferences and divisions.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_groups()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_groups()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_draft(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /draft — draft board (varies per sport).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_draft()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\} — event root.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_broadcasts(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/broadcasts — TV/streaming broadcasters.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_broadcasts()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competition(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\} — competition (cid defaults to event_id).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competition()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competitor(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/competitors/\{tid\} — single competitor.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competitor_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/leaders — per-team game leaders.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competitor_linescores(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/linescores — per-period scores.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_linescores()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_competitor_linescores()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competitor_record(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/record — competitor record at game-time.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_record()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competitor_roster(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/roster — competitor roster for one game.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_roster()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_competitor_roster()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competitor_statistics(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/statistics — team game statistics.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_statistics()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_competitor_statistics()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_competitors(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/competitors — both teams’ refs.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitors()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/leaders — per-game leaders.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_odds(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/odds — game odds.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_odds()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_official_detail(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/officials/\{oid\} — single official detail.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_official_detail()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_officials(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/officials — referees/umpires.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_officials()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_play(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/plays/\{pid\} — single play detail.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_play()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_play_personnel(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/plays/\{pid\}/personnel — personnel on the play.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_play_personnel()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_plays(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/plays — raw plays for one game.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_plays()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_plays()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_powerindex(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/powerindex — power index for the game.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_powerindex()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_predictor(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/predictor — ESPN game predictor.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_predictor()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_probabilities(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/probabilities — per-play WP timeline.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_probabilities()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_propbets(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/propbets — prop bet markets.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_propbets()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_scoringplays(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/scoringplays — scoring summary.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_scoringplays()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_situation(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/situation — current in-game state.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_situation()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_event_status(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/status — current event status.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_status()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_events(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events?dates=\{d\} — paginated events index.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_events()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_franchise(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /franchises/\{id\} — single franchise.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_franchise()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_franchises(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /franchises — franchise list.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_franchises()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_injuries(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /injuries — league-wide injury report.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_injuries()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_injuries()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/statistics/byathlete — ranked leaderboard with glossary.
+
+`category` is optional: when omitted the URL is built without
+`?category=...` and ESPN returns the league-default leader set,
+which is the shape the cross-league `espn_<league>_leaders()`
+callers (and `parse_leaders`) expect.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._espn_statistics_byathlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_leaders()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_leaders_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leaders — league-wide statistical leaders (core v2).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_league_notes(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /notes — league-level editorial notes (sparse; NFL crawler discovery).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_league_notes()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_league_root(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leagues/\{league\} — league root.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_league_root()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_news(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /news — league-wide news.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_news()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_news()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_position(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /positions/\{id\} — single position.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_position()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_positions(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /positions — position definitions.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_positions()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_rankings(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /rankings — poll rankings (NCAA leagues only).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_rankings()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_scoreboard(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /scoreboard. `dates`: YYYYMMDD or YYYYMMDD-YYYYMMDD or season year.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_scoreboard()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_scoreboard()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_athletes(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/athletes — athletes active in a season.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_athletes()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_awards(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/awards — awards given in a season.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_awards()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_coaches(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/coaches — coaches active in a season.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_coaches()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_coaches()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_draft(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/draft — draft board for a year.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_draft()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_draft()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_draft_round_picks(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/draft/rounds/\{r\}/picks — per-round picks.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_draft_round_picks()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_freeagents(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/freeagents — UFA/RFA list (where applicable).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_freeagents()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_futures(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/futures — futures odds.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_futures()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_group(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups/\{g\} — single group within season-type.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_group()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_group_children(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups/\{g\}/children — sub-groups (divisions inside conf).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_group_children()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_group_teams(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups/\{g\}/teams — teams in a group.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_group_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_groups(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups — conferences/divisions within season-type.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_groups()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_info(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\} — single-season root.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_pointer(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leagues/\{league\}/season — current-season pointer.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_pointer()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_powerindex(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/powerindex[/\{teamId\}] — BPI/FPI/SP+. Per-team when `team_id`.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_powerindex()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_powerindex_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/powerindex/leaders — power-index leaderboard.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_powerindex_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_recruits(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/recruits — NCAA recruiting (CFB / MBB / WBB).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_recruits()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_team(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/teams/\{id\} — team-in-a-season profile.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_team()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_teams(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/teams — teams active in a season.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_type(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\} — season-type root.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_type_corrections(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/corrections — stat-correction audit trail.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_corrections()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_type_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/leaders — per-season-type leaders.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_types(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types — season-type list (1=pre, 2=reg, 3=post, 4=off/all-star).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_types()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_week(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks/\{w\} — single-week root.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_week()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_week_events(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks/\{w\}/events — week-scoped events.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_week_events()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_week_rankings(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks/\{w\}/rankings — weekly polls (NCAA/CFB).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_week_rankings()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_season_weeks(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks — weeks within a season-type (NFL/CFB).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_weeks()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_seasons(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leagues/\{league\}/seasons — paginated season list.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_seasons()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_standings(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /apis/v2/sports/\{sport\}/\{league\}/standings — full standings (not the stub).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_alt_standings()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_standings()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_standings_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /standings — league standings (core v2 form).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_standings()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_standings()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_statistics_league(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /statistics — league statistical leaders (site-v2 variant).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_statistics()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_summary(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /summary?event=\{id\} — comprehensive game summary (boxscore + plays + leaders).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_summary()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_summary()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_talentpicks(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /talentpicks — ESPN editorial talent picks (sparse; NFL crawler discovery).
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_talentpicks()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\} — single team detail.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\} — enriched team.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_team()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_depthcharts(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/depthcharts — depth chart by position.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_depthcharts()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_history(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/history — franchise historical record.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_history()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_injuries(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/injuries — team injury report.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_injuries()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_injuries()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/leaders — team statistical leaders.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_news(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/news — team-scoped news.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_news()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_news()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_record(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/record — team win/loss record.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_record()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_roster(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/roster — team roster.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_roster()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_team_roster()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_schedule(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/schedule — team schedule for a season.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_schedule()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_team_schedule()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_team_transactions(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/transactions — recent team transactions.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_transactions()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_teams_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams — paginated teams catalog.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_teams()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_teams_site(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams — all teams.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_teams()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_tournaments(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /tournaments — tournament list.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_tournaments()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_transactions(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /transactions — league-wide transactions.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._site_v2_transactions()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_venue(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /venues/\{id\} — single venue detail.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_venue()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.wbb.wbb_espn_ext.espn_wbb_venues(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /venues — stadiums/arenas.
+
+Bound to `sport='basketball'`, `league='womens-college-basketball'`. Core implementation: `sportsdataverse._common_espn._core_v2_venues()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
 
 ## sportsdataverse.wbb.wbb_event_officials module
 
 ESPN women’s-college-basketball game officials scraper.
 
 Single ESPN endpoint:
-: sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/{event_id}/competitions/{event_id}/officials
+: sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/\{event_id\}/competitions/\{event_id\}/officials
 
 Returns one row per official assigned to a game (referee, umpires, etc.). The
 `items[]` array carries each official’s identity (`id`, `fullName`,
@@ -486,7 +1374,7 @@ See Also:
 ESPN women’s-college-basketball athlete season stats scraper.
 
 Single ESPN endpoint:
-: site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/{athlete_id}/stats?season={year}
+: site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/\{athlete_id\}/stats?season=\{year\}
 
 Unlike the team-roster endpoint, this one returns *multi-table* data — ESPN
 ships an array of stat categories (currently three: season averages, season
@@ -727,7 +1615,7 @@ See Also:
 ESPN women’s-college-basketball standings scraper.
 
 Single ESPN endpoint:
-: site.api.espn.com/apis/v2/sports/basketball/womens-college-basketball/standings?season={year}&group={group}
+: site.api.espn.com/apis/v2/sports/basketball/womens-college-basketball/standings?season=\{year\}&group=\{group\}
 
 ESPN ships standings as a tree: the top-level payload has `children[]`
 (one entry per conference under the requested group; `group=50` is NCAA
@@ -816,7 +1704,7 @@ See Also:
 ESPN women’s-college-basketball team-level season roster scraper.
 
 Single ESPN endpoint:
-: site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/{team_id}/roster
+: site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/\{team_id\}/roster
 
 Returns one row per athlete on the team’s CURRENT roster. ESPN’s roster
 endpoint ignores `?season=YYYY`; the `season` argument is recorded on the
@@ -902,7 +1790,7 @@ See Also:
 ESPN women’s-college-basketball team season-stats scraper.
 
 Single ESPN endpoint:
-: site.web.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/{team_id}/statistics?season={year}
+: site.web.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/\{team_id\}/statistics?season=\{year\}
 
 ESPN ships team season stats as a multi-table payload — the `categories`
 array under `results.stats.categories` carries one bucket per stat family

@@ -64,14 +64,34 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+echo "create_docs.sh: NOTE — this Sphinx-apidoc pipeline is being superseded by" >&2
+echo "  the codegen reference generator (tools/codegen/generate.py --docs), which" >&2
+echo "  emits per-API reference pages + curated overviews. Curated index.md pages" >&2
+echo "  (YAML frontmatter) are skipped below and never clobbered." >&2
+
 sphinx-apidoc -o "$SPHINX_SRC" "$ROOT/sportsdataverse" -f
 (
     cd "$SPHINX_SRC"
     make markdown
 )
 
-for sport in cfb mbb nba nfl nhl wbb wnba; do
-    cp "$SPHINX_SRC/_build/markdown/sportsdataverse.$sport.md" "$DOCS_DST/$sport/index.md"
+# NOTE: index.md pages that carry YAML frontmatter (`---` on line 1) are
+# *curated* overviews (e.g. mlb/index.md) and/or are owned by the codegen
+# reference generator (tools/codegen/generate.py --docs). Never clobber them.
+# `mlb` is included in the loop now, but it is skipped while its page stays
+# curated — the guard keeps it (and any future curated page) safe.
+for sport in cfb mbb nba nfl nhl wbb wnba mlb; do
+    src="$SPHINX_SRC/_build/markdown/sportsdataverse.$sport.md"
+    dst="$DOCS_DST/$sport/index.md"
+    if [[ ! -f "$src" ]]; then
+        echo "create_docs.sh: skip $sport (no Sphinx page generated)"
+        continue
+    fi
+    if [[ -f "$dst" ]] && IFS= read -r first < "$dst" && [[ "$first" == "---" ]]; then
+        echo "create_docs.sh: skip $sport (curated index.md with frontmatter — not clobbering)"
+        continue
+    fi
+    cp "$src" "$dst"
 done
 cp "$ROOT/CHANGELOG.md" "$CHANGELOG_DST"
 

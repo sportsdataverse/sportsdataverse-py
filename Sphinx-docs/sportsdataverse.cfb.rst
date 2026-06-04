@@ -4,6 +4,14 @@ sportsdataverse.cfb package
 Submodules
 ----------
 
+sportsdataverse.cfb.cfb\_espn\_ext module
+-----------------------------------------
+
+.. automodule:: sportsdataverse.cfb.cfb_espn_ext
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 sportsdataverse.cfb.cfb\_game\_rosters module
 ---------------------------------------------
 

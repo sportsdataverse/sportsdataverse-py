@@ -9,14 +9,32 @@ Subpackages
 
    sportsdataverse.cfb
    sportsdataverse.mbb
+   sportsdataverse.mlb
    sportsdataverse.nba
    sportsdataverse.nfl
    sportsdataverse.nhl
+   sportsdataverse.parsed
    sportsdataverse.wbb
    sportsdataverse.wnba
 
 Submodules
 ----------
+
+sportsdataverse.cache module
+----------------------------
+
+.. automodule:: sportsdataverse.cache
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+sportsdataverse.cli module
+--------------------------
+
+.. automodule:: sportsdataverse.cli
+   :members:
+   :show-inheritance:
+   :undoc-members:
 
 sportsdataverse.config module
 -----------------------------
@@ -34,6 +52,14 @@ sportsdataverse.decorators module
    :show-inheritance:
    :undoc-members:
 
+sportsdataverse.discover module
+-------------------------------
+
+.. automodule:: sportsdataverse.discover
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 sportsdataverse.dl\_utils module
 --------------------------------
 
@@ -46,6 +72,14 @@ sportsdataverse.errors module
 -----------------------------
 
 .. automodule:: sportsdataverse.errors
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+sportsdataverse.find module
+---------------------------
+
+.. automodule:: sportsdataverse.find
    :members:
    :show-inheritance:
    :undoc-members:

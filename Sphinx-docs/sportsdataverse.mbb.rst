@@ -4,6 +4,14 @@ sportsdataverse.mbb package
 Submodules
 ----------
 
+sportsdataverse.mbb.mbb\_espn\_ext module
+-----------------------------------------
+
+.. automodule:: sportsdataverse.mbb.mbb_espn_ext
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 sportsdataverse.mbb.mbb\_game\_rosters module
 ---------------------------------------------
 

@@ -1,174 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [sportsdataverse.nfl package](#sportsdataversenfl-package)
-  - [Submodules](#submodules)
-  - [sportsdataverse.nfl.cache module](#sportsdataversenflcache-module)
-    - [sportsdataverse.nfl.cache.cached_loader(func: F) → F](#sportsdataversenflcachecached_loaderfunc-f-%E2%86%92-f)
-    - [Example](#example)
-    - [sportsdataverse.nfl.cache.clear_cache() → None](#sportsdataversenflcacheclear_cache-%E2%86%92-none)
-    - [Example](#example-1)
-  - [sportsdataverse.nfl.config module](#sportsdataversenflconfig-module)
-    - [*class* sportsdataverse.nfl.config.NflConfig(cache_mode: Literal['memory', 'filesystem', 'off'] = 'memory', cache_dir: Path | None = None, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl')](#class-sportsdataversenflconfignflconfigcache_mode-literalmemory-filesystem-off--memory-cache_dir-path--none--none-cache_duration-int--86400-verbose-bool--true-timeout-int--30-user_agent-str--sportsdataverse-py-nfl)
-    - [Example](#example-2)
-      - [\_\_init_\_(cache_mode: Literal['memory', 'filesystem', 'off'] = 'memory', cache_dir: Path | None = None, cache_duration: int = 86400, verbose: bool = True, timeout: int = 30, user_agent: str = 'sportsdataverse-py-nfl') → None](#%5C_%5C_init_%5C_cache_mode-literalmemory-filesystem-off--memory-cache_dir-path--none--none-cache_duration-int--86400-verbose-bool--true-timeout-int--30-user_agent-str--sportsdataverse-py-nfl-%E2%86%92-none)
-      - [cache_dir *: Path | None* *= None*](#cache_dir--path--none--none)
-      - [cache_duration *: int* *= 86400*](#cache_duration--int--86400)
-      - [cache_mode *: Literal['memory', 'filesystem', 'off']* *= 'memory'*](#cache_mode--literalmemory-filesystem-off--memory)
-      - [timeout *: int* *= 30*](#timeout--int--30)
-      - [user_agent *: str* *= 'sportsdataverse-py-nfl'*](#user_agent--str--sportsdataverse-py-nfl)
-      - [verbose *: bool* *= True*](#verbose--bool--true)
-    - [sportsdataverse.nfl.config.get_config() → NflConfig](#sportsdataversenflconfigget_config-%E2%86%92-nflconfig)
-    - [Example](#example-3)
-    - [sportsdataverse.nfl.config.reset_config() → NflConfig](#sportsdataversenflconfigreset_config-%E2%86%92-nflconfig)
-    - [Example](#example-4)
-    - [sportsdataverse.nfl.config.update_config(\*\*kwargs: object) → NflConfig](#sportsdataversenflconfigupdate_config%5C%5Ckwargs-object-%E2%86%92-nflconfig)
-    - [Example](#example-5)
-  - [sportsdataverse.nfl.datasets module](#sportsdataversenfldatasets-module)
-    - [Example](#example-6)
-      - [SEE ALSO](#see-also)
-  - [sportsdataverse.nfl.model_vars module](#sportsdataversenflmodel_vars-module)
-  - [sportsdataverse.nfl.nfl_game_rosters module](#sportsdataversenflnfl_game_rosters-module)
-    - [sportsdataverse.nfl.nfl_game_rosters.espn_nfl_game_rosters(game_id: int, raw=False, return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversenflnfl_game_rostersespn_nfl_game_rostersgame_id-int-rawfalse-return_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-7)
-    - [sportsdataverse.nfl.nfl_game_rosters.helper_nfl_athlete_items(teams_rosters, \*\*kwargs)](#sportsdataversenflnfl_game_rostershelper_nfl_athlete_itemsteams_rosters-%5C%5Ckwargs)
-    - [Example](#example-8)
-    - [sportsdataverse.nfl.nfl_game_rosters.helper_nfl_game_items(summary)](#sportsdataversenflnfl_game_rostershelper_nfl_game_itemssummary)
-    - [Example](#example-9)
-    - [sportsdataverse.nfl.nfl_game_rosters.helper_nfl_roster_items(items, summary_url, \*\*kwargs)](#sportsdataversenflnfl_game_rostershelper_nfl_roster_itemsitems-summary_url-%5C%5Ckwargs)
-    - [Example](#example-10)
-    - [sportsdataverse.nfl.nfl_game_rosters.helper_nfl_team_items(items, \*\*kwargs)](#sportsdataversenflnfl_game_rostershelper_nfl_team_itemsitems-%5C%5Ckwargs)
-    - [Example](#example-11)
-  - [sportsdataverse.nfl.nfl_games module](#sportsdataversenflnfl_games-module)
-    - [sportsdataverse.nfl.nfl_games.nfl_game_details(game_id=None, headers=None, raw=False) → Dict](#sportsdataversenflnfl_gamesnfl_game_detailsgame_idnone-headersnone-rawfalse-%E2%86%92-dict)
-    - [Example](#example-12)
-    - [sportsdataverse.nfl.nfl_games.nfl_game_schedule(season=2021, season_type='REG', week=1, headers=None, raw=False) → Dict](#sportsdataversenflnfl_gamesnfl_game_scheduleseason2021-season_typereg-week1-headersnone-rawfalse-%E2%86%92-dict)
-    - [Example](#example-13)
-    - [sportsdataverse.nfl.nfl_games.nfl_headers_gen()](#sportsdataversenflnfl_gamesnfl_headers_gen)
-    - [Example](#example-14)
-    - [sportsdataverse.nfl.nfl_games.nfl_token_gen()](#sportsdataversenflnfl_gamesnfl_token_gen)
-    - [Example](#example-15)
-  - [sportsdataverse.nfl.nfl_loaders module](#sportsdataversenflnfl_loaders-module)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_combine(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_combinereturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-16)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_contracts(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_contractsreturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-17)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_depth_chartsseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-18)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_draft_picks(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_draft_picksreturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-19)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_ff_opportunity(seasons: List[int], stat_type: str = 'weekly', model_version: str = 'latest', return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_ff_opportunityseasons-listint-stat_type-str--weekly-model_version-str--latest-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-20)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_ff_playerids(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_ff_playeridsreturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-21)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_ff_rankings(type: str = 'draft', kind: str = None, return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_ff_rankingstype-str--draft-kind-str--none-return_as_pandasfalse-%E2%86%92-dataframe)
-      - [NOTE](#note)
-    - [Example](#example-22)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_ftn_charting(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_ftn_chartingseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-23)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_injuries(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_injuriesseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-24)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_nextgen_stats(seasons: List[int], stat_type: str = 'passing', return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_nextgen_statsseasons-listint-stat_type-str--passing-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-25)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_passing(seasons: List[int] = None, return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_ngs_passingseasons-listint--none-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-26)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_receiving(seasons: List[int] = None, return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_ngs_receivingseasons-listint--none-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-27)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_ngs_rushing(seasons: List[int] = None, return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_ngs_rushingseasons-listint--none-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-28)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_officials(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_officialsreturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-29)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pbp(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pbpseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-30)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pbp_participationseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-31)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_advstats(seasons: List[int], stat_type: str = 'pass', summary_level: str = 'week', return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_advstatsseasons-listint-stat_type-str--pass-summary_level-str--week-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-32)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_def(return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_defreturn_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-33)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_pass(return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_passreturn_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-34)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rec(return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_recreturn_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-35)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_rush(return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_rushreturn_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-36)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_weekly_defseasons-listint-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-37)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_weekly_passseasons-listint-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-38)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_weekly_recseasons-listint-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-39)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas: bool = False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_pfr_weekly_rushseasons-listint-return_as_pandas-bool--false-%E2%86%92-dataframe)
-    - [Example](#example-40)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_player_stats(kicking=False, return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_player_statskickingfalse-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-41)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_players(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_playersreturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-42)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_rosters(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_rostersseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-43)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_schedule(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_scheduleseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-44)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_snap_countsseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-45)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_team_stats(seasons: List[int], summary_level: str = 'week', return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_team_statsseasons-listint-summary_level-str--week-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-46)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_teams(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_teamsreturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-47)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_trades(return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_tradesreturn_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-48)
-    - [sportsdataverse.nfl.nfl_loaders.load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) → DataFrame](#sportsdataversenflnfl_loadersload_nfl_weekly_rostersseasons-listint-return_as_pandasfalse-%E2%86%92-dataframe)
-    - [Example](#example-49)
-  - [sportsdataverse.nfl.nfl_pbp module](#sportsdataversenflnfl_pbp-module)
-    - [*class* sportsdataverse.nfl.nfl_pbp.NFLPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, \*\*kwargs)](#class-sportsdataversenflnfl_pbpnflplayprocessgameid0-rawfalse-path_to_json-return_keysnone-%5C%5Ckwargs)
-    - [Example](#example-50)
-      - [\_\_helper_\_espn_nfl_odds_information_\_()](#%5C_%5C_helper_%5C_espn_nfl_odds_information_%5C_)
-      - [\_\_init_\_(gameId=0, raw=False, path_to_json='/', return_keys=None, \*\*kwargs)](#%5C_%5C_init_%5C_gameid0-rawfalse-path_to_json-return_keysnone-%5C%5Ckwargs)
-      - [corrupt_pbp_check()](#corrupt_pbp_check)
-    - [Example](#example-51)
-      - [create_box_score(play_df)](#create_box_scoreplay_df)
-    - [Example](#example-52)
-      - [espn_nfl_pbp(\*\*kwargs)](#espn_nfl_pbp%5C%5Ckwargs)
-    - [Example](#example-53)
-      - [gameId *= 0*](#gameid--0)
-      - [nfl_pbp_disk()](#nfl_pbp_disk)
-    - [Example](#example-54)
-      - [nfl_pbp_json(\*\*kwargs)](#nfl_pbp_json%5C%5Ckwargs)
-    - [Example](#example-55)
-      - [path_to_json *= '/'*](#path_to_json--)
-      - [ran_cleaning_pipeline *= False*](#ran_cleaning_pipeline--false)
-      - [ran_pipeline *= False*](#ran_pipeline--false)
-      - [raw *= False*](#raw--false)
-      - [return_keys *= None*](#return_keys--none)
-      - [run_cleaning_pipeline()](#run_cleaning_pipeline)
-    - [Example](#example-56)
-      - [run_processing_pipeline()](#run_processing_pipeline)
-    - [Example](#example-57)
-  - [sportsdataverse.nfl.nfl_schedule module](#sportsdataversenflnfl_schedule-module)
-    - [sportsdataverse.nfl.nfl_schedule.espn_nfl_calendar(season=None, ondays=None, return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversenflnfl_scheduleespn_nfl_calendarseasonnone-ondaysnone-return_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-58)
-    - [sportsdataverse.nfl.nfl_schedule.espn_nfl_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversenflnfl_scheduleespn_nfl_scheduledatesnone-weeknone-season_typenone-groupsnone-limit500-return_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-59)
-    - [sportsdataverse.nfl.nfl_schedule.get_current_week()](#sportsdataversenflnfl_scheduleget_current_week)
-    - [Example](#example-60)
-    - [sportsdataverse.nfl.nfl_schedule.most_recent_nfl_season()](#sportsdataversenflnfl_schedulemost_recent_nfl_season)
-    - [Example](#example-61)
-    - [sportsdataverse.nfl.nfl_schedule.scoreboard_event_parsing(event)](#sportsdataversenflnfl_schedulescoreboard_event_parsingevent)
-    - [Example](#example-62)
-  - [sportsdataverse.nfl.nfl_teams module](#sportsdataversenflnfl_teams-module)
-    - [sportsdataverse.nfl.nfl_teams.espn_nfl_teams(return_as_pandas=False, \*\*kwargs) → DataFrame](#sportsdataversenflnfl_teamsespn_nfl_teamsreturn_as_pandasfalse-%5C%5Ckwargs-%E2%86%92-dataframe)
-    - [Example](#example-63)
-  - [sportsdataverse.nfl.utils_date module](#sportsdataversenflutils_date-module)
-    - [sportsdataverse.nfl.utils_date.get_current_nfl_season(roster: bool = False) → int](#sportsdataversenflutils_dateget_current_nfl_seasonroster-bool--false-%E2%86%92-int)
-    - [Example](#example-64)
-    - [sportsdataverse.nfl.utils_date.get_current_nfl_week(use_date: bool = True, roster: bool = False) → int](#sportsdataversenflutils_dateget_current_nfl_weekuse_date-bool--true-roster-bool--false-%E2%86%92-int)
-    - [Example](#example-65)
-    - [sportsdataverse.nfl.utils_date.most_recent_nfl_season(roster: bool = False) → int](#sportsdataversenflutils_datemost_recent_nfl_seasonroster-bool--false-%E2%86%92-int)
-    - [Example](#example-66)
-  - [Module contents](#module-contents)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # sportsdataverse.nfl package
 
 ## Submodules
@@ -536,6 +365,960 @@ pbp = (
 * [nflreadpy](https://github.com/nflverse/nflreadpy) – direct nflverse Python bindings (mirrors these dicts)
 
 ## sportsdataverse.nfl.model_vars module
+
+## sportsdataverse.nfl.nfl_espn_ext module
+
+sportsdataverse.nfl.nfl_espn_ext — ESPN endpoint wrappers.
+
+Registers `espn_nfl_*` wrappers via `sportsdataverse._common_espn.make_league_module()`.
+~107 functions cover Site v2, Site v2 alt standings, Web v3 athlete + leaders,
+Core v2 (league, seasons, athletes, events, catalog), and football extensions
+(QBR by season and by week).
+
+R-package parity note: there is no R “nflfastR ESPN” companion; the closest
+analog is cfbfastR’s espn_cfb_\* family, which this NFL module mirrors at the
+sport=football level.
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_awards(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/awards — awards won by the athlete.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_awards()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_bio(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/bio — athlete bio.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_athlete_bio()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_career_stats(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/statistics[/\{type\}]. `type` ∈ \{0=reg, 1=post, 2=career\}.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_statistics()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_contracts(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/contracts — contract info.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_contracts()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\} — enriched athlete profile (core v2).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_eventlog(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/eventlog — event participation log.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_eventlog()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_gamelog(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/athletes/\{id\}/gamelog?season=\{y\}. **404 for NHL.**
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_gamelog()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_gamelog()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_info(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\} — athlete profile (site v2 lite shape).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_athlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_injuries(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/injuries — per-athlete injuries.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_injuries()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_injuries()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_news(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/news — athlete-scoped news.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_athlete_news()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_news()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_notes(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/notes — analyst notes.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_notes()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_overview(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/\{sport\}/\{league\}/athletes/\{id\}/overview — rich snapshot.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_overview()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_overview()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_records(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/records — career records.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_records()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_seasons(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/seasons — seasons played.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_seasons()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_splits(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/athletes/\{id\}/splits?season=\{y\} — situational splits.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_splits()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_splits()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_statisticslog(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/statisticslog — game-by-game log (NHL gamelog replacement).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_statisticslog()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_stats(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/athletes/\{id\}/stats?season=\{y\} — parallel-array stats.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._espn_athlete_stats()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_athlete_stats()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athlete_vs_athlete(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes/\{id\}/vsathlete/\{oid\} — head-to-head.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athlete_vsathlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_athletes_index(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /athletes?active=\{bool\}&limit=\{n\}&page=\{p\} — paginated athletes index.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_athletes_index()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_award(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /awards/\{id\} — single award detail.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_award()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_awards(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /awards — league award catalog.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_awards()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_calendar(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar — full season calendar.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_calendar_offseason(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/offseason.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_offseason()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_calendar_ondays(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/ondays — dates with games.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_ondays()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_calendar_postseason(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/postseason.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_postseason()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_calendar_regular_season(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /calendar/regular-season — week-by-week regular season ranges.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_calendar_regular_season()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_coach(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches/\{id\} — single coach.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_coach()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_coach_record(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches/\{id\}/record/\{type\} — coaching record.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_coach_record()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_coach_season(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches/\{id\}/seasons/\{y\} — coach’s per-season record.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_coach_season()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_coaches(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /coaches — coaches index. **Often 404s — prefer /seasons/\{y\}/coaches.**
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_coaches()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_coaches()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_conferences(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /groups — conferences and divisions.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_groups()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_groups()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_draft(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /draft — draft board (varies per sport).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_draft()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\} — event root.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_broadcasts(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/broadcasts — TV/streaming broadcasters.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_broadcasts()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competition(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\} — competition (cid defaults to event_id).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competition()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competitor(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/competitors/\{tid\} — single competitor.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competitor_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/leaders — per-team game leaders.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competitor_linescores(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/linescores — per-period scores.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_linescores()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_competitor_linescores()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competitor_record(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/record — competitor record at game-time.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_record()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competitor_roster(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/roster — competitor roster for one game.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_roster()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_competitor_roster()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competitor_statistics(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/competitors/\{tid\}/statistics — team game statistics.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitor_statistics()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_competitor_statistics()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_competitors(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/competitors — both teams’ refs.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_competitors()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/leaders — per-game leaders.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_odds(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/odds — game odds.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_odds()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_official_detail(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/officials/\{oid\} — single official detail.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_official_detail()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_officials(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/officials — referees/umpires.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_officials()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_play(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/plays/\{pid\} — single play detail.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_play()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_play_personnel(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/plays/\{pid\}/personnel — personnel on the play.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_play_personnel()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_plays(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/plays — raw plays for one game.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_plays()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_event_plays()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_powerindex(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/powerindex — power index for the game.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_powerindex()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_predictor(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/predictor — ESPN game predictor.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_predictor()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_probabilities(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/competitions/\{cid\}/probabilities — per-play WP timeline.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_probabilities()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_propbets(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/propbets — prop bet markets.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_propbets()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_scoringplays(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/scoringplays — scoring summary.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_scoringplays()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_situation(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/situation — current in-game state.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_situation()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_event_status(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events/\{id\}/…/status — current event status.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_event_status()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_events(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /events?dates=\{d\} — paginated events index.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_events()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_franchise(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /franchises/\{id\} — single franchise.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_franchise()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_franchises(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /franchises — franchise list.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_franchises()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_injuries(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /injuries — league-wide injury report.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_injuries()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_injuries()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET \{WEB_V3\}/…/statistics/byathlete — ranked leaderboard with glossary.
+
+`category` is optional: when omitted the URL is built without
+`?category=...` and ESPN returns the league-default leader set,
+which is the shape the cross-league `espn_<league>_leaders()`
+callers (and `parse_leaders`) expect.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._espn_statistics_byathlete()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_leaders()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_leaders_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leaders — league-wide statistical leaders (core v2).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_league_notes(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /notes — league-level editorial notes (sparse; NFL crawler discovery).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_league_notes()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_league_root(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leagues/\{league\} — league root.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_league_root()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_news(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /news — league-wide news.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_news()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_news()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_position(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /positions/\{id\} — single position.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_position()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_positions(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /positions — position definitions.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_positions()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_scoreboard(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /scoreboard. `dates`: YYYYMMDD or YYYYMMDD-YYYYMMDD or season year.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_scoreboard()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_scoreboard()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_athletes(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/athletes — athletes active in a season.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_athletes()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_awards(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/awards — awards given in a season.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_awards()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_coaches(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/coaches — coaches active in a season.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_coaches()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_coaches()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_draft(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/draft — draft board for a year.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_draft()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_draft()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_draft_round_picks(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/draft/rounds/\{r\}/picks — per-round picks.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_draft_round_picks()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_freeagents(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/freeagents — UFA/RFA list (where applicable).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_freeagents()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_futures(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/futures — futures odds.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_futures()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_group(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups/\{g\} — single group within season-type.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_group()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_group_children(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups/\{g\}/children — sub-groups (divisions inside conf).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_group_children()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_group_teams(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups/\{g\}/teams — teams in a group.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_group_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_groups(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups — conferences/divisions within season-type.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_groups()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_info(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\} — single-season root.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_pointer(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leagues/\{league\}/season — current-season pointer.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_pointer()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_powerindex(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/powerindex[/\{teamId\}] — BPI/FPI/SP+. Per-team when `team_id`.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_powerindex()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_powerindex_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/powerindex/leaders — power-index leaderboard.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_powerindex_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_qbr(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/groups/\{g\}/qbr/\{split\} — Total QBR (NFL/CFB).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_qbr()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_qbr_week(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks/\{w\}/qbr/\{split\} — per-week QBR.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_qbr_week()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_team(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/teams/\{id\} — team-in-a-season profile.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_team()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_teams(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/teams — teams active in a season.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_type(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\} — season-type root.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_type_corrections(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/corrections — stat-correction audit trail.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_corrections()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_type_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/leaders — per-season-type leaders.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_types(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types — season-type list (1=pre, 2=reg, 3=post, 4=off/all-star).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_types()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_week(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks/\{w\} — single-week root.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_week()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_week_events(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks/\{w\}/events — week-scoped events.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_week_events()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_season_weeks(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /seasons/\{y\}/types/\{t\}/weeks — weeks within a season-type (NFL/CFB).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_season_type_weeks()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_seasons(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /leagues/\{league\}/seasons — paginated season list.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_seasons()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_standings(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /apis/v2/sports/\{sport\}/\{league\}/standings — full standings (not the stub).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_alt_standings()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_standings()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_standings_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /standings — league standings (core v2 form).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_standings()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_standings()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_statistics_league(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /statistics — league statistical leaders (site-v2 variant).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_statistics()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_summary(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /summary?event=\{id\} — comprehensive game summary (boxscore + plays + leaders).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_summary()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_summary()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_talentpicks(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /talentpicks — ESPN editorial talent picks (sparse; NFL crawler discovery).
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_talentpicks()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\} — single team detail.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\} — enriched team.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_team()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_depthcharts(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/depthcharts — depth chart by position.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_depthcharts()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_history(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/history — franchise historical record.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_history()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_injuries(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/injuries — team injury report.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_injuries()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_injuries()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_leaders(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/leaders — team statistical leaders.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_leaders()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_news(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/news — team-scoped news.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_news()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_news()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_record(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/record — team win/loss record.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_record()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_roster(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/roster — team roster.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_roster()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_team_roster()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_schedule(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/schedule — team schedule for a season.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_schedule()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_team_schedule()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_team_transactions(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams/\{id\}/transactions — recent team transactions.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_team_transactions()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_teams_core(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams — paginated teams catalog.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_teams()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_teams_site(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /teams — all teams.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_teams()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_teams()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_tournaments(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /tournaments — tournament list.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_tournaments()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_transactions(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /transactions — league-wide transactions.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._site_v2_transactions()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_venue(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /venues/\{id\} — single venue detail.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_venue()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_single_entity()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
+
+### sportsdataverse.nfl.nfl_espn_ext.espn_nfl_venues(\*args, return_parsed: bool = False, return_as_pandas: bool = False, \*\*kwargs)
+
+GET /venues — stadiums/arenas.
+
+Bound to `sport='football'`, `league='nfl'`. Core implementation: `sportsdataverse._common_espn._core_v2_venues()`.
+
+Pass `return_parsed=True` to dispatch the raw response through `sportsdataverse._common_espn_parsers.parse_items()` and return a polars DataFrame (or pandas via `return_as_pandas=True`).
 
 ## sportsdataverse.nfl.nfl_game_rosters module
 

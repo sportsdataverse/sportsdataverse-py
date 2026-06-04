@@ -4,6 +4,14 @@ sportsdataverse.wbb package
 Submodules
 ----------
 
+sportsdataverse.wbb.wbb\_espn\_ext module
+-----------------------------------------
+
+.. automodule:: sportsdataverse.wbb.wbb_espn_ext
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 sportsdataverse.wbb.wbb\_event\_officials module
 ------------------------------------------------
 
