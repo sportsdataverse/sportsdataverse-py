@@ -188,7 +188,12 @@ class _EndpointView:
                 url_expr += f' + f"{tail_f}"'
             lines.append(f"__url = {url_expr}")
         elif ep.now_variant:
-            toggle = ep.path_params[-1].python_name
+            # toggle = explicit now_toggle, else the first None-default path param,
+            # else the last path param (back-compat).
+            toggle = ep.now_toggle
+            if toggle is None:
+                none_default = [p.python_name for p in ep.path_params if not p.required and p.default is None]
+                toggle = none_default[0] if none_default else ep.path_params[-1].python_name
             now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
             full_f = ep_host + _sub_slugs(ep.path, sport, lg)
             lines.append(f'__url = f"{now_f}" if {toggle} is None else f"{full_f}"')

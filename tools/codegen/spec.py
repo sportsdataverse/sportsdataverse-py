@@ -40,7 +40,8 @@ class Endpoint:
     query_params: List[Param] = field(default_factory=list)
     path_params: List[Param] = field(default_factory=list)
     example_args: Dict[str, object] = field(default_factory=dict)
-    now_variant: Optional[str] = None  # alternate path when trailing optional path param is None
+    now_variant: Optional[str] = None  # alternate path when the now_toggle param is None
+    now_toggle: Optional[str] = None  # the path param whose None selects now_variant
     exclude_leagues: List[str] = field(default_factory=list)
 
 
@@ -159,6 +160,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         path_params=pps,
         example_args=e.get("example_args", {}) or {},
         now_variant=e.get("now_variant"),
+        now_toggle=e.get("now_toggle"),
         exclude_leagues=list(e.get("exclude_leagues", [])),
     )
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
