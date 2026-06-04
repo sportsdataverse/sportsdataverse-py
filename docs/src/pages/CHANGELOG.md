@@ -274,7 +274,14 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   plus oddsapiR / recruitR / sportyR / sportypy / sportsdataverse.js), and how the
   package relates to nflverse (the NFL module mirrors nflreadpy) and the wider
   PySport ecosystem. `intro.md` and all seven example notebooks now open with a
-  consistent philosophy/naming blurb and link to it. The
+  consistent philosophy/naming blurb and link to it. The page also documents the
+  companion **data repositories** (sportsdataverse-data releases, cfbfastR-data,
+  fastRhockey-data, nflverse-data) behind the `load_*` family and links each
+  league's generated *Automation status* loader table, and includes a **1:1
+  function map** — a table whose `sportsdataverse-py` functions deep-link to their
+  reference pages and whose R-sister functions link to the matching
+  hoopR/wehoop/cfbfastR/fastRhockey/baseballr pkgdown docs (verified against each
+  package's NAMESPACE). The
   [ESPN cross-league architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
   page was realigned from the retired `make_league_module()` runtime factory to the
   current declarative-codegen reality.
