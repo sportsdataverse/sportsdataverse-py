@@ -34,6 +34,19 @@ def test_load_flat_api_and_render(tmp_path):
     assert "Bound to sport=" not in src
 
 
+def test_reserved_composite_forces_qualifier():
+    # nhl_pbp / nhl_teams are reserved (hand-written submodules in sportsdataverse.nhl);
+    # the api-web endpoints must qualify to nhl_web_pbp / nhl_web_teams.
+    reserved = generate.reserved_names("nhl")
+    assert "nhl_pbp" in reserved
+    assert generate.resolve_name("nhl", "pbp", reserved, qualifier="web") == "nhl_web_pbp"
+    # a free short stays clean
+    assert generate.resolve_name("nhl", "skater_milestones", reserved, qualifier="web") == "nhl_skater_milestones"
+    # explicit synthetic reserved set
+    assert generate.resolve_name("nhl", "teams", {"nhl_teams"}, qualifier="web") == "nhl_web_teams"
+    assert generate.resolve_name("nhl", "pbp", set(), qualifier="web") == "nhl_pbp"
+
+
 def test_flat_module_runtime_urls(tmp_path):
     import importlib.util
     from unittest.mock import patch

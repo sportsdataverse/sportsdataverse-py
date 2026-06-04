@@ -245,6 +245,27 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
 _FLAT_STUB_LEAGUE = spec.League(prefix="", sport="", league="", scopes=[])
 
 
+def reserved_names(prefix: str) -> set[str]:
+    """Public names already defined in ``sportsdataverse.{prefix}`` (hand-written
+    composites, loaders, and submodule attributes) that a generated flat-API
+    function must not shadow. Returns an empty set if the package can't import."""
+    import importlib
+
+    try:
+        mod = importlib.import_module(f"sportsdataverse.{prefix}")
+    except Exception:
+        return set()
+    return {n for n in dir(mod) if not n.startswith("_")}
+
+
+def resolve_name(prefix: str, short: str, reserved: set, qualifier: str) -> str:
+    """Clean ``{prefix}_{short}`` unless reserved, else ``{prefix}_{qualifier}_{short}``."""
+    clean = f"{prefix}_{short}"
+    if clean not in reserved:
+        return clean
+    return f"{prefix}_{qualifier}_{short}"
+
+
 def render_flat_module(api: spec.FlatApi) -> str:
     """Render a flat (non-sport/league) API module (NHL api-web/edge/..., MLB stats)."""
     endpoints = []
