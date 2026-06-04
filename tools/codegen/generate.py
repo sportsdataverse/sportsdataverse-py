@@ -720,7 +720,12 @@ def audit_releases() -> int:
     (gaps) and manifest tags no longer published (orphans). Informational drift
     gate -- meant for a CI job, not the offline ``--check``."""
     rel = spec.load_releases(ENDPOINTS / "releases.yaml")
-    manifest = {ld.tag for ld in rel.loaders}
+    # Only loaders that pull from the sportsdataverse-data *releases* host are
+    # comparable to the live release list. ``raw_data``-based loaders (e.g. cfb/nhl
+    # read raw.githubusercontent.com/sportsdataverse/<repo>) carry the source repo
+    # name as their "tag" (cfbfastR-data, fastRhockey-data), not a release tag, so
+    # they must be excluded from both sides of the comparison to avoid bogus orphans.
+    manifest = {ld.tag for ld in rel.loaders if ld.base == "sdv_releases"}
     try:
         live = {t for t in gh_release_tags() if _is_loader_tag(t)}
     except Exception as e:  # noqa: BLE001
