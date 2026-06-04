@@ -87,6 +87,7 @@ from sportsdataverse.nfl.nfl_loaders import (
     load_nfl_weekly_rosters as load_rosters_weekly,
 )
 from sportsdataverse.nfl.nfl_pbp import *
+from sportsdataverse.nfl.nfl_player_stats import *
 from sportsdataverse.nfl.nfl_schedule import *
 from sportsdataverse.nfl.nfl_teams import *
 from sportsdataverse.nfl.utils_date import *

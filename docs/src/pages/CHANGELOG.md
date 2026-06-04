@@ -98,23 +98,30 @@ fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ex
   catalog). Renaming `event_officials -> game_officials` un-shadows the previously
   hidden generated function. One->many splits (e.g. `summary`) remain for curation
   (see `docs/superpowers/specs/espn-r-naming-worksheet.md`).
-- **Versioned collision rule.** When a generated name would collide with an
-  existing function but they hit *different* endpoints, both are kept and the
-  larger/newer one is version-qualified rather than dropped. The web-common-v3
-  `/athletes/{id}/stats` endpoint becomes `espn_*_player_stats_v3`, so wnba/wbb keep
-  their hand-written parsed `espn_*_player_stats` alongside the generated v3 wrapper
-  (and `player_stats_v3` is consistent across all leagues + hoopR/wehoop/cfbfastR).
-- **Endpoint-parity reversal for `espn_wnba_player_stats` / `espn_wbb_player_stats`.**
-  The hand-written wrappers previously hit the *same* web-common-v3
-  `/athletes/{id}/stats` endpoint as the generated `*_player_stats_v3`, returning a
-  `dict` of category frames. They now hit the core-v2
-  `/seasons/{season}/types/{type}/athletes/{id}/statistics` season endpoint and return
+- **Versioned collision rule (dynamic, "one stays bare").** When a generated name
+  would collide with an existing function but they hit *different* endpoints, both are
+  kept: ONE keeps the bare name and the larger/newer one is version-qualified. This is
+  now decided dynamically by the generator (`_league_module_source` pass 2 +
+  `_versioned_on_collision`), not hard-coded. The web-common-v3 `/athletes/{id}/stats`
+  endpoint wants the bare `player_stats`; it is version-qualified to
+  `espn_*_player_stats_v3` *only* when a hand-written bare `player_stats` already claims
+  the name — a league without that sibling would get the bare name automatically (no
+  orphaned `*_v3`).
+- **Cross-league `player_stats` parity (core-v2 season) for ALL eight ESPN leagues.**
+  Every league now exposes a bare `espn_<league>_player_stats` (core-v2
+  `/seasons/{season}/types/{type}/athletes/{id}/statistics` season line) returning
   **one wide, self-describing row** (athlete identity + season line as
-  `{category}_{stat}` columns + `team_*` identity), matching wehoop's
-  `espn_*_player_stats`. `player_stats` = season line (core-v2); `player_stats_v3` =
-  comprehensive (web-v3). New `season_type` (`"regular"`/`"postseason"`) and `total`
-  parameters mirror the wehoop signature. **BREAKING:** the return type changed from
-  `dict[str, DataFrame]` to a single `DataFrame`.
+  `{category}_{stat}` columns + `team_*` identity), plus the generated
+  `espn_<league>_player_stats_v3` (web-v3 comprehensive) — matching the
+  hoopR/wehoop/cfbfastR convention exactly. nba, mbb, nfl, nhl, mlb, and cfb gain new
+  hand-written wrappers; wnba/wbb were already converted. A single sport-aware core
+  (`sportsdataverse._common_espn_player_stats._espn_player_stats`) backs all eight
+  (basketball/football/baseball/hockey share the core-v2 `splits.categories[].stats[]`
+  shape and athlete/team `$ref` graph). New `season_type` (`"regular"`/`"postseason"`)
+  and `total` params mirror the wehoop signature. **BREAKING:** `espn_wnba_player_stats`
+  / `espn_wbb_player_stats` previously hit web-v3 and returned a `dict` of category
+  frames; they now return a single core-v2 season `DataFrame` (the web-v3 payload moved
+  to `*_player_stats_v3`).
 - **`_get` / `_csv` single source.** The HTTP + coercion helpers now live in
   `sportsdataverse._codegen_runtime` (shared by all generated wrappers);
   `_common_espn` re-exports them. **Note for test authors:** mock

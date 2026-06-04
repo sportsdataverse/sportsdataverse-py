@@ -253,13 +253,26 @@ def _convention_rename(short: str) -> str:
         return "game_" + short[len("event_competition_") :]
     if short.startswith("event_"):
         return "game_" + short[len("event_") :]
-    # the web-common-v3 /athletes/{id}/stats is the comprehensive "v3" stats payload;
-    # name it player_stats_v3 so it sits alongside (not on top of) a core-v2 player_stats.
-    if short == "athlete_stats":
-        return "player_stats_v3"
     if short.startswith("athlete_"):
         return "player_" + short[len("athlete_") :]
     return short
+
+
+# Endpoints whose convention name should be version-qualified (rather than dropped)
+# when it collides with an existing/hand-written bare sibling. The web-common-v3
+# /athletes/{id}/stats is the comprehensive "v3" payload, so it sits as
+# ``player_stats_v3`` alongside a bare ``player_stats`` -- but only WHEN that bare
+# name is taken. When no bare sibling exists (most leagues) it keeps the bare
+# ``player_stats`` name, so a lone endpoint is never left orphaned as ``*_v3``.
+_ESPN_COLLISION_VERSIONED: dict[str, str] = {
+    "athlete_stats": "player_stats_v3",
+}
+
+
+def _versioned_on_collision(short: str, prefix: str) -> str | None:
+    """Version-qualified ``espn_<prefix>_*`` name for ``short`` on collision, else None."""
+    suffix = _ESPN_COLLISION_VERSIONED.get(short)
+    return f"espn_{prefix}_{suffix}" if suffix else None
 
 
 def _handwritten_espn_names(prefix: str) -> set[str]:
@@ -316,7 +329,14 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         new = renames.get(base) or f"espn_{league.prefix}_{_convention_rename(ep.short)}"
         if new != base:
             if new in base_names or new in handwritten or new in used:
-                _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
+                # Collision: keep BOTH by version-qualifying the larger/newer endpoint
+                # (one stays bare) instead of dropping the rename. Falls back to a
+                # recorded skip only when even the versioned name is unavailable.
+                versioned = _versioned_on_collision(ep.short, league.prefix)
+                if versioned and versioned not in base_names and versioned not in handwritten and versioned not in used:
+                    fn_name = versioned
+                else:
+                    _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
             else:
                 fn_name = new
         used.add(fn_name)

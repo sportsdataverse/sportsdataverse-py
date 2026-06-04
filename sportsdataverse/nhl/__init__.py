@@ -53,3 +53,4 @@ from sportsdataverse.nhl.nhl_records import *
 from sportsdataverse.nhl.nhl_schedule import *
 from sportsdataverse.nhl.nhl_teams import *
 from sportsdataverse.nhl.nhl_espn_ext import *
+from sportsdataverse.nhl.nhl_player_stats import *

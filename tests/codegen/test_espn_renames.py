@@ -53,19 +53,29 @@ def test_collision_prone_names_preserved():
     assert "espn_cfb_teams_site" in cfb
 
 
-def test_athlete_stats_becomes_player_stats_v3():
-    # web-v3 /athletes/{id}/stats -> player_stats_v3 (the comprehensive "v3" stats),
-    # versioned so it sits alongside (not on top of) a core/hand-written player_stats.
+def test_athlete_stats_versions_only_when_bare_player_stats_exists():
+    # _convention_rename gives the web-v3 /athletes/{id}/stats endpoint the BARE
+    # player_stats name; the pass-2 collision guard version-qualifies it to
+    # player_stats_v3 ONLY when a bare player_stats sibling already exists. Every
+    # league now ships a hand-written core-v2 season player_stats, so the bare name
+    # is always taken and every generated wrapper is player_stats_v3 (one bare named).
     import importlib
 
-    for prefix in ("nba", "wnba", "wbb", "cfb", "nhl"):
+    # the structural rule yields the bare name; the collision target is the versioned one
+    assert generate._convention_rename("athlete_stats") == "player_stats"
+    assert generate._versioned_on_collision("athlete_stats", "nba") == "espn_nba_player_stats_v3"
+    assert generate._versioned_on_collision("athlete_overview", "nba") is None  # no versioned target
+
+    for prefix in ("nba", "mbb", "nfl", "nhl", "mlb", "cfb", "wnba", "wbb"):
         d = _defs(prefix)
         assert f"espn_{prefix}_player_stats_v3" in d, f"{prefix}: missing player_stats_v3"
         assert f"espn_{prefix}_athlete_stats" not in d, f"{prefix}: old athlete_stats should be gone"
-    # wnba/wbb keep their hand-written player_stats (web-v3 parsed) alongside the v3 wrapper
-    for prefix in ("wnba", "wbb"):
+        # the bare player_stats is hand-written (core-v2 season), NOT generated
+        assert f"espn_{prefix}_player_stats" not in d, f"{prefix}: bare player_stats must be hand-written"
         pkg = importlib.import_module(f"sportsdataverse.{prefix}")
-        assert hasattr(pkg, f"espn_{prefix}_player_stats"), f"{prefix}: hand-written player_stats lost"
+        fn = getattr(pkg, f"espn_{prefix}_player_stats", None)
+        assert fn is not None, f"{prefix}: hand-written bare player_stats missing"
+        assert fn.__module__.endswith("_player_stats"), f"{prefix}: bare player_stats should be hand-written"
 
 
 def test_generator_collision_guard_skips_clashes():

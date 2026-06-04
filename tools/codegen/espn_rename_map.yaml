@@ -6,11 +6,15 @@
 # non-structural, league-specific overrides that the rules can't express.
 #
 # Collision rule of thumb: when a generated name would collide with an existing
-# function but they hit DIFFERENT endpoints, keep both and version/qualify the
-# larger-or-newer one (e.g. the web-common-v3 /athletes/{id}/stats -> player_stats_v3,
-# handled in generate._convention_rename). Only a SAME-endpoint duplicate is dropped
-# (currently none). athlete_stats -> player_stats_v3 lets wnba/wbb keep their
-# hand-written player_stats alongside the generated v3 wrapper.
+# function but they hit DIFFERENT endpoints, keep both -- ONE stays bare and the
+# larger-or-newer one is version-qualified. This is dynamic (generate._league_module_source
+# pass 2 + generate._versioned_on_collision), not hard-coded: the web-common-v3
+# /athletes/{id}/stats wants the BARE name player_stats, and is version-qualified to
+# player_stats_v3 ONLY when a hand-written core-v2 season player_stats already claims
+# the bare name. Every league now ships a hand-written player_stats, so every generated
+# wrapper is player_stats_v3 -- but a league without the hand-written sibling would get
+# the bare player_stats automatically (no orphaned *_v3). Only a SAME-endpoint duplicate
+# is dropped (currently none).
 
 # cfb season_* cleanups (URL-matched to cfbfastR; cfb-scoped):
 rename:

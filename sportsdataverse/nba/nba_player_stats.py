@@ -1,12 +1,11 @@
-"""ESPN WNBA athlete *season* stats scraper (core-v2).
+"""ESPN NBA athlete *season* stats scraper (core-v2).
 
 Thin league wrapper over
 :func:`sportsdataverse._common_espn_player_stats._espn_player_stats`. Returns
-**one wide row** (athlete identity + season stat line as
-``{category}_{stat}`` columns + ``team_*`` identity) from ESPN's core-v2
-``/athletes/{id}/statistics`` graph -- matching the wehoop / hoopR
-``espn_*_player_stats`` convention. For the richer web-v3 payload use
-:func:`sportsdataverse.wnba.espn_wnba_player_stats_v3`.
+**one wide row** (athlete identity + season stat line as ``{category}_{stat}``
+columns + ``team_*`` identity) from ESPN's core-v2 ``/athletes/{id}/statistics``
+graph -- matching the hoopR ``espn_nba_player_stats`` convention. For the
+richer web-v3 payload use :func:`sportsdataverse.nba.espn_nba_player_stats_v3`.
 """
 
 from __future__ import annotations
@@ -19,11 +18,11 @@ import polars as pl
 from sportsdataverse._common_espn_player_stats import _espn_player_stats
 
 _SPORT_SLUG: str = "basketball"
-_LEAGUE_SLUG: str = "wnba"
+_LEAGUE_SLUG: str = "nba"
 
 
 @overload
-def espn_wnba_player_stats(
+def espn_nba_player_stats(
     athlete_id: int,
     season: int,
     *,
@@ -34,7 +33,7 @@ def espn_wnba_player_stats(
     **kwargs: Any,
 ) -> dict[str, Any]: ...
 @overload
-def espn_wnba_player_stats(
+def espn_nba_player_stats(
     athlete_id: int,
     season: int,
     *,
@@ -45,7 +44,7 @@ def espn_wnba_player_stats(
     **kwargs: Any,
 ) -> pd.DataFrame: ...
 @overload
-def espn_wnba_player_stats(
+def espn_nba_player_stats(
     athlete_id: int,
     season: int,
     *,
@@ -55,7 +54,7 @@ def espn_wnba_player_stats(
     return_as_pandas: Literal[False] = ...,
     **kwargs: Any,
 ) -> pl.DataFrame: ...
-def espn_wnba_player_stats(
+def espn_nba_player_stats(
     athlete_id: int,
     season: int,
     *,
@@ -65,16 +64,17 @@ def espn_wnba_player_stats(
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> pl.DataFrame | pd.DataFrame | dict[str, Any]:
-    """Pull a WNBA athlete's ESPN **season** stat line.
+    """Pull an NBA athlete's ESPN **season** stat line as one wide row.
 
     See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-    documentation of the wide return shape, the ``{category}_{stat}``
-    stat columns, the athlete / team metadata blocks, and the
-    ``season_type`` / ``total`` parameters.
+    documentation of the wide return shape, the ``{category}_{stat}`` stat
+    columns, the athlete / team metadata blocks, and the ``season_type`` /
+    ``total`` parameters. For the richer multi-category web-v3 payload use
+    :func:`sportsdataverse.nba.espn_nba_player_stats_v3`.
 
     Args:
-        athlete_id: ESPN WNBA athlete identifier (e.g. ``3149391`` for A'ja
-            Wilson).
+        athlete_id: ESPN NBA athlete identifier (e.g. ``1966`` for LeBron
+            James).
         season: Season year, used in the core-v2 path.
         season_type: ``"regular"`` (type 2) or ``"postseason"`` (type 3).
         total: Forward-compat totals passthrough.
@@ -84,26 +84,18 @@ def espn_wnba_player_stats(
 
     Returns:
         A single-row wide DataFrame (polars by default). When ``raw=True``
-        returns the raw statistics JSON ``dict``. See
-        :func:`sportsdataverse.wbb.espn_wbb_player_stats` for the column
-        layout.
+        returns the raw statistics JSON ``dict``.
 
     Raises:
         ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
         sportsdataverse.errors.NoESPNDataError: ESPN returned 404.
 
     Example:
-        Pull A'ja Wilson's 2024 season line as a single wide row::
+        Pull LeBron James' 2023 season line as a single wide row::
 
-            from sportsdataverse.wnba import espn_wnba_player_stats
-            df = espn_wnba_player_stats(athlete_id=3149391, season=2024)
+            from sportsdataverse.nba import espn_nba_player_stats
+            df = espn_nba_player_stats(athlete_id=1966, season=2023)
             df.select(["full_name", "team_display_name", "offensive_points"])
-
-        See Also:
-            * :func:`sportsdataverse.wnba.espn_wnba_player_stats_v3` -- web-v3 stats
-            * `wehoop`_ -- R sister package; mirrors this surface
-
-        .. _wehoop: https://wehoop.sportsdataverse.org
     """
     return _espn_player_stats(
         sport=_SPORT_SLUG,
