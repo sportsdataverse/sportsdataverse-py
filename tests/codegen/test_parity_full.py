@@ -17,7 +17,13 @@ import yaml
 
 from sportsdataverse import _common_espn as ce
 
-from tools.codegen import extract, generate
+# Pre-retirement migration gate: these compare the generated surface against the
+# legacy factory core fns, which have been retired. Skip cleanly unless the factory
+# is present (e.g. when run against a pre-retirement git ref).
+if not hasattr(ce, "_UNIVERSAL_WRAPPERS"):
+    pytest.skip("ESPN factory retired; parity is a pre-retirement migration gate", allow_module_level=True)
+
+from tools.codegen import extract, generate  # noqa: E402
 
 OUT = Path("tools/codegen/_generated")
 _ALL_SHORTS = set(extract._table().keys())

@@ -12,9 +12,16 @@ import importlib.util
 import inspect
 from pathlib import Path
 
+import pytest
+
 from sportsdataverse import _common_espn as ce
 
-from tools.codegen import generate
+# Pre-retirement migration gate (see test_parity_full): the factory core fns it
+# compares against have been retired. Skips cleanly unless they're present.
+if not hasattr(ce, "_site_v2_scoreboard"):
+    pytest.skip("ESPN factory retired; parity is a pre-retirement migration gate", allow_module_level=True)
+
+from tools.codegen import generate  # noqa: E402
 
 OUT = Path("tools/codegen/_generated")
 

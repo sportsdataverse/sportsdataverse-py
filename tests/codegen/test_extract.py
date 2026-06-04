@@ -1,6 +1,19 @@
-"""extract.py runtime-capture extractor (build-time tool; needs the live factory)."""
+"""extract.py runtime-capture extractor (build-time tool; needs the live factory).
 
-from tools.codegen import extract
+These are *pre-retirement migration gates*: extract.py reverse-engineers the legacy
+``_common_espn`` factory, which has since been retired. They skip cleanly unless the
+factory is present (e.g. when run against a pre-retirement git ref), in which case
+they still validate the extractor end-to-end.
+"""
+
+import pytest
+
+from sportsdataverse import _common_espn as ce
+
+if not hasattr(ce, "_UNIVERSAL_WRAPPERS"):
+    pytest.skip("ESPN factory retired; extract.py is a pre-retirement tool", allow_module_level=True)
+
+from tools.codegen import extract  # noqa: E402
 
 
 def test_describe_core_fn_recovers_url_params_parser():
