@@ -1,0 +1,27 @@
+api: espn_site_v2
+host: site_v2
+name_pattern: "espn_{prefix}_{short}"
+endpoints:
+  - short: scoreboard
+    scope: universal
+    summary: "GET /scoreboard. `dates`: YYYYMMDD, YYYYMMDD-YYYYMMDD, or a season year."
+    path: "/{sport}/{league}/scoreboard"
+    params: [dates, week, season_type, groups, limit]
+    parser: parse_scoreboard
+    returns_schema: scoreboard
+    example_args: {dates: "20240115"}
+  - short: teams
+    scope: universal
+    summary: "GET /teams — all teams."
+    path: "/{sport}/{league}/teams"
+    params: [limit]
+    parser: parse_teams
+    example_args: {}
+  - short: standings
+    scope: universal
+    host: site_v2_alt
+    summary: "GET /standings — full standings (not the site-v2 stub)."
+    path: "/{sport}/{league}/standings"
+    params: [season, group, standings_type]
+    parser: parse_standings
+    example_args: {season: 2024}

@@ -1,0 +1,9 @@
+params:
+  dates: {api: dates, type: "int|str"}
+  week: {api: week, type: int}
+  season_type: {api: seasontype, type: int}
+  groups: {api: groups, type: "int|str"}
+  limit: {api: limit, type: int, default: 500}
+  season: {api: season, type: "int|str"}
+  group: {api: group, type: "int|str"}
+  standings_type: {api: type, type: str}
