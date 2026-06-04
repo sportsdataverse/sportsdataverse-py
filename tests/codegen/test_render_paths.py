@@ -67,6 +67,25 @@ def test_now_variant_toggles_path():
     assert "now" in v.path_build_expr
 
 
+def test_mid_path_optional_segment_renders_head_seg_tail():
+    lg = spec.League("nfl", "football", "nfl", ["football"])
+    ep = spec.Endpoint(
+        short="season_qbr",
+        path="/{sport}/leagues/{league}/seasons/{season}/types/{season_type}[/groups/{group_id}]/qbr/{split}",
+        path_params=[
+            spec.Param("season", "season", "int|str", required=True, is_query=False),
+            spec.Param("season_type", "season_type", "int|str", required=False, default=2, is_query=False),
+            spec.Param("group_id", "group_id", "int|str", required=False, is_query=False, optional_segment=True),
+            spec.Param("split", "split", "int", required=False, default=0, is_query=False),
+        ],
+    )
+    v = _view(ep, lg)
+    assert v.has_dynamic_path is True
+    # the tail (/qbr/{split}) survives after the optional [/groups/{group_id}] segment
+    assert "/qbr/" in v.path_build_expr
+    assert "group_id" in v.path_build_expr
+
+
 def test_simple_endpoint_keeps_plain_url_literal():
     lg = spec.League("x", "basketball", "nba", ["universal"])
     ep = spec.Endpoint(short="scoreboard", path="/{sport}/{league}/scoreboard")

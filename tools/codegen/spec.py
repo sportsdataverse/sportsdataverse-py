@@ -117,6 +117,7 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
                     type=extra.get("type", "str"),
                     required=extra.get("required", False),
                     default=extra.get("default"),
+                    transform=extra.get("transform"),
                 ),
             )
         pps = []

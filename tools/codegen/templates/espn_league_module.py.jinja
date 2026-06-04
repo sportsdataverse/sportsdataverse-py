@@ -44,7 +44,11 @@ def {{ ep.fn_name }}(
 {% endif %}
         params={
 {% for p in ep.query_params %}
+{% if p.transform %}
+            "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
+{% else %}
             "{{ p.api }}": {{ p.python_name }},
+{% endif %}
 {% endfor %}
         },
         **kwargs,

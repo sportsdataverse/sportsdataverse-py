@@ -6,13 +6,148 @@ from __future__ import annotations
 
 from typing import Dict, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get
-from sportsdataverse._common_espn_parsers import parse_scoreboard, parse_standings, parse_teams
+from sportsdataverse._codegen_runtime import _get, bool_str
+from sportsdataverse._common_espn_parsers import (
+    parse_athlete_gamelog,
+    parse_athlete_overview,
+    parse_athlete_splits,
+    parse_athlete_stats,
+    parse_coaches,
+    parse_draft,
+    parse_event_competitor_linescores,
+    parse_event_competitor_roster,
+    parse_event_competitor_statistics,
+    parse_event_plays,
+    parse_groups,
+    parse_injuries,
+    parse_items,
+    parse_leaders,
+    parse_news,
+    parse_scoreboard,
+    parse_single_entity,
+    parse_standings,
+    parse_summary,
+    parse_team_roster,
+    parse_team_schedule,
+    parse_teams,
+)
 
 __all__ = [
     "espn_wnba_scoreboard",
+    "espn_wnba_summary",
+    "espn_wnba_calendar",
+    "espn_wnba_calendar_offseason",
+    "espn_wnba_calendar_regular_season",
+    "espn_wnba_calendar_postseason",
+    "espn_wnba_calendar_ondays",
+    "espn_wnba_news",
+    "espn_wnba_injuries",
+    "espn_wnba_transactions",
+    "espn_wnba_conferences",
+    "espn_wnba_statistics_league",
+    "espn_wnba_draft",
     "espn_wnba_teams",
+    "espn_wnba_team",
+    "espn_wnba_team_roster",
+    "espn_wnba_team_schedule",
+    "espn_wnba_team_record",
+    "espn_wnba_team_depthcharts",
+    "espn_wnba_team_injuries",
+    "espn_wnba_team_transactions",
+    "espn_wnba_team_history",
+    "espn_wnba_team_news",
+    "espn_wnba_team_leaders",
+    "espn_wnba_athlete_info",
+    "espn_wnba_athlete_bio",
+    "espn_wnba_athlete_news",
     "espn_wnba_standings",
+    "espn_wnba_athlete_overview",
+    "espn_wnba_athlete_stats",
+    "espn_wnba_athlete_gamelog",
+    "espn_wnba_athlete_splits",
+    "espn_wnba_leaders",
+    "espn_wnba_league_root",
+    "espn_wnba_season_pointer",
+    "espn_wnba_seasons",
+    "espn_wnba_season_info",
+    "espn_wnba_season_types",
+    "espn_wnba_season_type",
+    "espn_wnba_season_group",
+    "espn_wnba_season_groups",
+    "espn_wnba_season_group_teams",
+    "espn_wnba_season_group_children",
+    "espn_wnba_season_type_leaders",
+    "espn_wnba_season_type_corrections",
+    "espn_wnba_season_weeks",
+    "espn_wnba_season_week",
+    "espn_wnba_season_week_events",
+    "espn_wnba_season_teams",
+    "espn_wnba_season_team",
+    "espn_wnba_season_athletes",
+    "espn_wnba_season_coaches",
+    "espn_wnba_season_draft",
+    "espn_wnba_season_draft_round_picks",
+    "espn_wnba_season_futures",
+    "espn_wnba_season_freeagents",
+    "espn_wnba_season_powerindex",
+    "espn_wnba_season_powerindex_leaders",
+    "espn_wnba_season_awards",
+    "espn_wnba_athletes_index",
+    "espn_wnba_athlete_core",
+    "espn_wnba_athlete_career_stats",
+    "espn_wnba_athlete_statisticslog",
+    "espn_wnba_athlete_eventlog",
+    "espn_wnba_athlete_contracts",
+    "espn_wnba_athlete_awards",
+    "espn_wnba_athlete_seasons",
+    "espn_wnba_athlete_records",
+    "espn_wnba_athlete_injuries",
+    "espn_wnba_athlete_notes",
+    "espn_wnba_athlete_vs_athlete",
+    "espn_wnba_events",
+    "espn_wnba_event",
+    "espn_wnba_event_competition",
+    "espn_wnba_event_competitors",
+    "espn_wnba_event_competitor",
+    "espn_wnba_event_competitor_roster",
+    "espn_wnba_event_competitor_linescores",
+    "espn_wnba_event_competitor_statistics",
+    "espn_wnba_event_competitor_record",
+    "espn_wnba_event_competitor_leaders",
+    "espn_wnba_event_odds",
+    "espn_wnba_event_probabilities",
+    "espn_wnba_event_plays",
+    "espn_wnba_event_play",
+    "espn_wnba_event_play_personnel",
+    "espn_wnba_event_situation",
+    "espn_wnba_event_status",
+    "espn_wnba_event_officials",
+    "espn_wnba_event_broadcasts",
+    "espn_wnba_event_predictor",
+    "espn_wnba_event_powerindex",
+    "espn_wnba_event_propbets",
+    "espn_wnba_event_leaders",
+    "espn_wnba_event_scoringplays",
+    "espn_wnba_event_official_detail",
+    "espn_wnba_teams_core",
+    "espn_wnba_team_core",
+    "espn_wnba_venues",
+    "espn_wnba_venue",
+    "espn_wnba_franchises",
+    "espn_wnba_franchise",
+    "espn_wnba_coaches",
+    "espn_wnba_coach",
+    "espn_wnba_coach_record",
+    "espn_wnba_coach_season",
+    "espn_wnba_positions",
+    "espn_wnba_position",
+    "espn_wnba_tournaments",
+    "espn_wnba_awards",
+    "espn_wnba_award",
+    "espn_wnba_standings_core",
+    "espn_wnba_leaders_core",
+    "espn_wnba_league_notes",
+    "espn_wnba_talentpicks",
 ]
 
 
@@ -27,7 +162,7 @@ def espn_wnba_scoreboard(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
-    """GET /scoreboard. `dates`: YYYYMMDD, YYYYMMDD-YYYYMMDD, or a season year.
+    """
 
     Bound to sport='basketball', league='wnba'.
 
@@ -65,14 +200,418 @@ def espn_wnba_scoreboard(
     return raw
 
 
-def espn_wnba_teams(
-    limit: Optional[int] = 500,
+def espn_wnba_summary(
+    event_id: Optional[Union[int, str]] = None,
     *,
     return_parsed: bool = False,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
-    """GET /teams — all teams.
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/summary``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/summary
+
+    Args:
+        event_id: event query parameter.
+        return_parsed: dispatch the raw payload through parse_summary -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_summary()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/summary",
+        params={
+            "event": event_id,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_summary(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_calendar(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_calendar()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_calendar_offseason(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/offseason``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/offseason
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_calendar_offseason()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/offseason",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_calendar_regular_season(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/regular-season``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/regular-season
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_calendar_regular_season()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/regular-season",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_calendar_postseason(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/postseason``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/postseason
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_calendar_postseason()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/postseason",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_calendar_ondays(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/ondays``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/ondays
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_calendar_ondays()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/ondays",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_news(
+    limit: Optional[int] = 50,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/news``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/news
+
+    Args:
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_news -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_news()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/news",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_news(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_injuries(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/injuries``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/injuries
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_injuries -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_injuries()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/injuries",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_injuries(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_transactions(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/transactions``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/transactions
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_transactions()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/transactions",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_conferences(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/groups``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/groups
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_groups -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_conferences()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/groups",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_groups(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_statistics_league(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/statistics``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/statistics
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_statistics_league()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/statistics",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_draft(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/draft``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/draft
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_draft()
+    """
+    raw = _get(
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/draft",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_teams(
+    limit: Optional[int] = 1000,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
 
     Bound to sport='basketball', league='wnba'.
 
@@ -102,6 +641,469 @@ def espn_wnba_teams(
     return raw
 
 
+def espn_wnba_team(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_roster(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/roster``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/roster
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_team_roster -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_roster(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/roster",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_team_roster(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_schedule(
+    team_id: Union[int, str],
+    season: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/schedule``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/schedule
+
+    Args:
+        team_id: team_id path parameter.
+        season: season query parameter.
+        return_parsed: dispatch the raw payload through parse_team_schedule -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_schedule(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/schedule",
+        params={
+            "season": season,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_team_schedule(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_record(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/record``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/record
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_record(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/record",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_depthcharts(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/depthcharts``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/depthcharts
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_depthcharts(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/depthcharts",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_injuries(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/injuries``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/injuries
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_injuries -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_injuries(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/injuries",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_injuries(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_transactions(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/transactions``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/transactions
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_transactions(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/transactions",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_history(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/history``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/history
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_history(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/history",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_news(
+    team_id: Union[int, str],
+    limit: Optional[int] = 50,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/news``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/news
+
+    Args:
+        team_id: team_id path parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_news -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_news(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/news",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_news(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_leaders(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/leaders``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/leaders
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_leaders(team_id='4')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/leaders",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_info(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/athletes/{athlete_id}``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes/4239
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_info(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes/{athlete_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_bio(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/athletes/{athlete_id}/bio``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes/4239/bio
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_bio(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes/{athlete_id}/bio",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_news(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/athletes/{athlete_id}/news``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes/4239/news
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_news -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_news(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/athletes/{athlete_id}/news",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_news(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def espn_wnba_standings(
     season: Optional[Union[int, str]] = None,
     group: Optional[Union[int, str]] = None,
@@ -111,12 +1113,12 @@ def espn_wnba_standings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
-    """GET /standings — full standings (not the site-v2 stub).
+    """
 
     Bound to sport='basketball', league='wnba'.
 
     Endpoint: ``GET https://site.api.espn.com/apis/v2/sports/{sport}/{league}/standings``
-    Example URL: https://site.api.espn.com/apis/v2/sports/basketball/wnba/standings?season=2024
+    Example URL: https://site.api.espn.com/apis/v2/sports/basketball/wnba/standings
 
     Args:
         season: season query parameter.
@@ -129,7 +1131,7 @@ def espn_wnba_standings(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_standings(season=2024)
+        >>> espn_wnba_standings()
     """
     raw = _get(
         "https://site.api.espn.com/apis/v2/sports/basketball/wnba/standings",
@@ -142,4 +1144,3278 @@ def espn_wnba_standings(
     )
     if return_parsed:
         return parse_standings(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_overview(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{athlete_id}/overview``
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/4239/overview
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_athlete_overview -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_overview(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/{athlete_id}/overview",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_athlete_overview(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_stats(
+    athlete_id: Union[int, str],
+    season: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{athlete_id}/stats``
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/4239/stats
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        season: season query parameter.
+        return_parsed: dispatch the raw payload through parse_athlete_stats -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_stats(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/{athlete_id}/stats",
+        params={
+            "season": season,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_athlete_stats(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_gamelog(
+    athlete_id: Union[int, str],
+    season: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{athlete_id}/gamelog``
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/4239/gamelog
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        season: season query parameter.
+        return_parsed: dispatch the raw payload through parse_athlete_gamelog -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_gamelog(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/{athlete_id}/gamelog",
+        params={
+            "season": season,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_athlete_gamelog(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_splits(
+    athlete_id: Union[int, str],
+    season: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{athlete_id}/splits``
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/4239/splits
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        season: season query parameter.
+        return_parsed: dispatch the raw payload through parse_athlete_splits -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_splits(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/athletes/{athlete_id}/splits",
+        params={
+            "season": season,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_athlete_splits(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_leaders(
+    category: Optional[str] = None,
+    season: Optional[Union[int, str]] = None,
+    season_type: Optional[int] = None,
+    limit: Optional[int] = 50,
+    page: Optional[int] = 1,
+    sort: Optional[str] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/statistics/byathlete``
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/statistics/byathlete
+
+    Args:
+        category: category query parameter.
+        season: season query parameter.
+        season_type: seasontype query parameter.
+        limit: limit query parameter.
+        page: page query parameter.
+        sort: sort query parameter.
+        return_parsed: dispatch the raw payload through parse_leaders -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_leaders()
+    """
+    raw = _get(
+        "https://site.web.api.espn.com/apis/common/v3/sports/basketball/wnba/statistics/byathlete",
+        params={
+            "category": category,
+            "season": season,
+            "seasontype": season_type,
+            "limit": limit,
+            "page": page,
+            "sort": sort,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_leaders(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_league_root(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_league_root()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_pointer(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/season``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/season
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_pointer()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/season",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_seasons(
+    limit: Optional[int] = 200,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons
+
+    Args:
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_seasons()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_info(
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024
+
+    Args:
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_info(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_types(
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types
+
+    Args:
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_types(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_type(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_type(season=2024, season_type=2)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_group(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/groups/80
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_group(season=2024, season_type=2, group_id=80)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/groups/{group_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_groups(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/groups
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_groups(season=2024, season_type=2)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/groups",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_group_teams(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/groups/80/teams
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_group_teams(season=2024, season_type=2, group_id=80)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_group_children(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/groups/80/children
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_group_children(season=2024, season_type=2, group_id=80)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/groups/{group_id}/children",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_type_leaders(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/leaders``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/leaders
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_type_leaders(season=2024, season_type=2)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/leaders",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_type_corrections(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/corrections``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/corrections
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_type_corrections(season=2024, season_type=2)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/corrections",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_weeks(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/weeks
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_weeks(season=2024, season_type=2)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/weeks",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_week(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    week: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/weeks/1
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        week: week path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_week(season=2024, season_type=2, week=1)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/weeks/{week}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_week_events(
+    season: Union[int, str],
+    season_type: Union[int, str],
+    week: Union[int, str],
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/types/2/weeks/1/events
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        week: week path parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_week_events(season=2024, season_type=2, week=1)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/{season_type}/weeks/{week}/events",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_teams(
+    season: Union[int, str],
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/teams
+
+    Args:
+        season: season path parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_teams(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/teams",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_team(
+    season: Union[int, str],
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams/{team_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/teams/4
+
+    Args:
+        season: season path parameter.
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_team(season=2024, team_id='4')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/teams/{team_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_athletes(
+    season: Union[int, str],
+    limit: Optional[int] = 100,
+    page: Optional[int] = 1,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/athletes``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/athletes
+
+    Args:
+        season: season path parameter.
+        limit: limit query parameter.
+        page: page query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_athletes(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/athletes",
+        params={
+            "limit": limit,
+            "page": page,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_coaches(
+    season: Union[int, str],
+    limit: Optional[int] = 200,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/coaches``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/coaches
+
+    Args:
+        season: season path parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_coaches -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_coaches(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/coaches",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_coaches(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_draft(
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/draft``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/draft
+
+    Args:
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_draft -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_draft(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/draft",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_draft(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_draft_round_picks(
+    season: Union[int, str],
+    round_num: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/draft/rounds/{round_num}/picks``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/draft/rounds/1/picks
+
+    Args:
+        season: season path parameter.
+        round_num: round_num path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_draft_round_picks(season=2024, round_num='1')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/draft/rounds/{round_num}/picks",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_futures(
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/futures``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/futures
+
+    Args:
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_futures(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/futures",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_freeagents(
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/freeagents``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/freeagents
+
+    Args:
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_freeagents(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/freeagents",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_powerindex(
+    season: Union[int, str],
+    team_id: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/powerindex[/{team_id}]``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/powerindex
+
+    Args:
+        season: season path parameter.
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_powerindex(season=2024)
+    """
+    __seg = f"/{team_id}" if team_id is not None else ""
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/powerindex" + __seg
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_powerindex_leaders(
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/powerindex/leaders``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/powerindex/leaders
+
+    Args:
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_powerindex_leaders(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/powerindex/leaders",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_season_awards(
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/awards``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/awards
+
+    Args:
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_season_awards(season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/awards",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athletes_index(
+    active: Optional[bool] = True,
+    limit: Optional[int] = 100,
+    page: Optional[int] = 1,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes
+
+    Args:
+        active: active query parameter.
+        limit: limit query parameter.
+        page: page query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athletes_index()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes",
+        params={
+            "active": bool_str(active),
+            "limit": limit,
+            "page": page,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_core(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_core(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_career_stats(
+    athlete_id: Union[int, str],
+    stat_type: Optional[int] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/statistics
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        stat_type: stat_type path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_career_stats(athlete_id='4239')
+    """
+    __seg = f"/{stat_type}" if stat_type is not None else ""
+    __url = (
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/statistics" + __seg
+    )
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_statisticslog(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/statisticslog
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_statisticslog(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/statisticslog",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_eventlog(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/eventlog
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_eventlog(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/eventlog",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_contracts(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/contracts``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/contracts
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_contracts(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/contracts",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_awards(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/awards``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/awards
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_awards(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/awards",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_seasons(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/seasons``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/seasons
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_seasons(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/seasons",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_records(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/records``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/records
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_records(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/records",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_injuries(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/injuries``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/injuries
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_injuries -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_injuries(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/injuries",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_injuries(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_notes(
+    athlete_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/notes``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/notes
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_notes(athlete_id='4239')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/notes",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_athlete_vs_athlete(
+    athlete_id: Union[int, str],
+    opp_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/4239/vsathlete/5
+
+    Args:
+        athlete_id: athlete_id path parameter.
+        opp_id: opp_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_athlete_vs_athlete(athlete_id='4239', opp_id='5')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/athletes/{athlete_id}/vsathlete/{opp_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_events(
+    dates: Optional[Union[int, str]] = None,
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events
+
+    Args:
+        dates: dates query parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_events()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events",
+        params={
+            "dates": dates,
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event(
+    event_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793
+
+    Args:
+        event_id: event_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event(event_id='401584793')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competition(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competition(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competitors(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competitors(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/competitors"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competitor(
+    event_id: Union[int, str],
+    team_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        team_id: team_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competitor(event_id='401584793', team_id='4')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/competitors/{team_id}"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competitor_roster(
+    event_id: Union[int, str],
+    team_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        team_id: team_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_event_competitor_roster -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competitor_roster(event_id='401584793', team_id='4')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_event_competitor_roster(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competitor_linescores(
+    event_id: Union[int, str],
+    team_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        team_id: team_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_event_competitor_linescores -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competitor_linescores(event_id='401584793', team_id='4')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_event_competitor_linescores(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competitor_statistics(
+    event_id: Union[int, str],
+    team_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        team_id: team_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_event_competitor_statistics -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competitor_statistics(event_id='401584793', team_id='4')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_event_competitor_statistics(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competitor_record(
+    event_id: Union[int, str],
+    team_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        team_id: team_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competitor_record(event_id='401584793', team_id='4')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_competitor_leaders(
+    event_id: Union[int, str],
+    team_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        team_id: team_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_competitor_leaders(event_id='401584793', team_id='4')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_odds(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_odds(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = (
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/odds"
+    )
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_probabilities(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    limit: Optional[int] = 300,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_probabilities(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/probabilities"
+    raw = _get(
+        __url,
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_plays(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    limit: Optional[int] = 1000,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_event_plays -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_plays(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = (
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/plays"
+    )
+    raw = _get(
+        __url,
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_event_plays(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_play(
+    event_id: Union[int, str],
+    play_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        play_id: play_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_play(event_id='401584793', play_id='1')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/plays/{play_id}"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_play_personnel(
+    event_id: Union[int, str],
+    play_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        play_id: play_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_play_personnel(event_id='401584793', play_id='1')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_situation(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_situation(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/situation"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_status(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_status(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/status"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_officials(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_officials(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/officials"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_broadcasts(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_broadcasts(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/broadcasts"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_predictor(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_predictor(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/predictor"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_powerindex(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_powerindex(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/powerindex"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_propbets(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_propbets(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/propbets"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_leaders(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_leaders(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/leaders"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_scoringplays(
+    event_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_scoringplays(event_id='401584793')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/scoringplays"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_event_official_detail(
+    event_id: Union[int, str],
+    official_id: Union[int, str],
+    cid: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401584793/competitions
+
+    Args:
+        event_id: event_id path parameter.
+        official_id: official_id path parameter.
+        cid: cid path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_event_official_detail(event_id='401584793', official_id='1')
+    """
+    cid = cid if cid is not None else event_id
+    __url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{event_id}/competitions/{cid}/officials/{official_id}"
+    raw = _get(
+        __url,
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_teams_core(
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/teams
+
+    Args:
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_teams -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_teams_core()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/teams",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_teams(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_team_core(
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams/{team_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/teams/4
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_team_core(team_id='4')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/teams/{team_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_venues(
+    limit: Optional[int] = 200,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/venues``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/venues
+
+    Args:
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_venues()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/venues",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_venue(
+    venue_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/venues/{venue_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/venues/3663
+
+    Args:
+        venue_id: venue_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_venue(venue_id='3663')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/venues/{venue_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_franchises(
+    limit: Optional[int] = 200,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/franchises``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/franchises
+
+    Args:
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_franchises()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/franchises",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_franchise(
+    franchise_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/franchises/{franchise_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/franchises/2
+
+    Args:
+        franchise_id: franchise_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_franchise(franchise_id='2')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/franchises/{franchise_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_coaches(
+    limit: Optional[int] = 200,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches
+
+    Args:
+        limit: limit query parameter.
+        return_parsed: dispatch the raw payload through parse_coaches -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_coaches()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_coaches(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_coach(
+    coach_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches/{coach_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches/1
+
+    Args:
+        coach_id: coach_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_coach(coach_id='1')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches/{coach_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_coach_record(
+    coach_id: Union[int, str],
+    record_type: Optional[Union[int, str]] = 0,
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches/{coach_id}/record/{record_type}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches/1/record
+
+    Args:
+        coach_id: coach_id path parameter.
+        record_type: record_type path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_coach_record(coach_id='1')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches/{coach_id}/record/{record_type}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_coach_season(
+    coach_id: Union[int, str],
+    season: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches/{coach_id}/seasons/{season}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches/1/seasons/2024
+
+    Args:
+        coach_id: coach_id path parameter.
+        season: season path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_coach_season(coach_id='1', season=2024)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches/{coach_id}/seasons/{season}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_positions(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/positions``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/positions
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_positions()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/positions",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_position(
+    position_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/positions/{position_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/positions/1
+
+    Args:
+        position_id: position_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_position(position_id='1')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/positions/{position_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_tournaments(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/tournaments``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/tournaments
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_tournaments()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/tournaments",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_awards(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/awards``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/awards
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_awards()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/awards",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_award(
+    award_id: Union[int, str],
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/awards/{award_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/awards/1
+
+    Args:
+        award_id: award_id path parameter.
+        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_award(award_id='1')
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/awards/{award_id}",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_standings_core(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/standings``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/standings
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_standings -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_standings_core()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/standings",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_standings(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_leaders_core(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/leaders``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/leaders
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_leaders_core()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/leaders",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_league_notes(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/notes``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/notes
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_league_notes()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/notes",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wnba_talentpicks(
+    *,
+    return_parsed: bool = False,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='wnba'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/talentpicks``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/talentpicks
+
+    Args:
+        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+
+    Example:
+        >>> espn_wnba_talentpicks()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/talentpicks",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
     return raw

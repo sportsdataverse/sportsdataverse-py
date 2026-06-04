@@ -30,3 +30,13 @@ def _csv(values: Any) -> Optional[str]:
     if isinstance(values, (list, tuple, set)):
         return ",".join(str(v) for v in values)
     return str(values)
+
+
+def bool_str(value: Any) -> Optional[str]:
+    """Coerce a truthy/falsey value to the lowercase ``"true"``/``"false"`` ESPN expects.
+
+    Passes ``None`` through unchanged so ``_get`` still strips it.
+    """
+    if value is None:
+        return None
+    return "true" if value else "false"

@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
 OUT = ROOT / "tools" / "codegen" / "_generated"
 
-ESPN_APIS = ["espn_site_v2"]  # extended in later plans
+ESPN_APIS = ["espn_site_v2", "espn_web_v3", "espn_core_v2"]
 
 _PATH_TOKEN = re.compile(r"\{(\w+)\}")
 
@@ -164,12 +164,17 @@ class _EndpointView:
             if p.transform:
                 lines.append(f"{p.python_name} = {p.transform}({p.python_name})")
         if "[" in ep.path:
-            head, tail = ep.path.split("[", 1)
-            tail = tail.rstrip("]")  # e.g. "/{stat_type}"
-            seg_param = _path_token_first(tail)
+            head, rest = ep.path.split("[", 1)
+            seg, tail = rest.split("]", 1)  # seg e.g. "/{stat_type}" or "/groups/{group_id}"; tail may be ""
+            seg_param = _path_token_first(seg)
             head_f = _sub_slugs(head, sport, lg)
-            lines.append(f'__suffix = f"{tail}" if {seg_param} is not None else ""')
-            lines.append(f'__url = f"{ep_host}{head_f}" + __suffix')
+            seg_f = _sub_slugs(seg, sport, lg)
+            tail_f = _sub_slugs(tail, sport, lg)
+            lines.append(f'__seg = f"{seg_f}" if {seg_param} is not None else ""')
+            url_expr = f'f"{ep_host}{head_f}" + __seg'
+            if tail_f:
+                url_expr += f' + f"{tail_f}"'
+            lines.append(f"__url = {url_expr}")
         elif ep.now_variant:
             toggle = ep.path_params[-1].python_name
             now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
@@ -209,7 +214,7 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
             fn_name = api.name_pattern.format(prefix=league.prefix, short=ep.short)
             if ep.parser:
                 parser_imports.add(ep.parser)
-            for p in ep.path_params:
+            for p in (*ep.path_params, *ep.query_params):
                 if p.transform:
                     transforms.add(p.transform)
             endpoints.append(_EndpointView(ep, fn_name, ep_host, league))

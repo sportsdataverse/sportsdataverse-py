@@ -1,6 +1,8 @@
 hosts:
   site_v2: "https://site.api.espn.com/apis/site/v2/sports"
   site_v2_alt: "https://site.api.espn.com/apis/v2/sports"
+  web_v3: "https://site.web.api.espn.com/apis/common/v3/sports"
+  core_v2: "https://sports.core.api.espn.com/v2/sports"
 leagues:
   - {prefix: nba, sport: basketball, league: nba, scopes: [universal]}
   - {prefix: wnba, sport: basketball, league: wnba, scopes: [universal]}
