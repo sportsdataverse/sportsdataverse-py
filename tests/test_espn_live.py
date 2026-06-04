@@ -124,11 +124,11 @@ def test_espn_mlb_scoreboard_returns_events_for_known_date():
 # ===========================================================================
 
 
-def test_espn_nba_athlete_overview_lebron():
-    from sportsdataverse.nba.nba_espn_ext import espn_nba_athlete_overview
+def test_espn_nba_player_overview_lebron():
+    from sportsdataverse.nba.nba_espn_ext import espn_nba_player_overview
 
     # LeBron James ESPN id = 1966
-    payload = espn_nba_athlete_overview(athlete_id=1966)
+    payload = espn_nba_player_overview(athlete_id=1966)
     assert isinstance(payload, dict), "expected a dict response"
     assert len(payload) > 0, "payload is empty for LeBron James (id=1966)"
     # Web v3 overview always includes athlete and statsSummary (or similar)
@@ -136,11 +136,11 @@ def test_espn_nba_athlete_overview_lebron():
     assert top_keys, "payload has no top-level keys"
 
 
-def test_espn_mlb_athlete_overview_aaron_judge():
-    from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_athlete_overview
+def test_espn_mlb_player_overview_aaron_judge():
+    from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_player_overview
 
     # Aaron Judge ESPN id = 33192
-    payload = espn_mlb_athlete_overview(athlete_id=33192)
+    payload = espn_mlb_player_overview(athlete_id=33192)
     assert isinstance(payload, dict), "expected a dict response"
     assert len(payload) > 0, "payload is empty for Aaron Judge (id=33192)"
     top_keys = set(payload.keys())
@@ -360,10 +360,10 @@ def test_parse_athlete_overview_handles_wnba_payload():
     import polars as pl
 
     from sportsdataverse._common_espn_parsers import parse_athlete_overview
-    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_athlete_overview
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_player_overview
 
     # A'ja Wilson — ESPN id 3149391, perennial MVP candidate
-    raw = espn_wnba_athlete_overview(athlete_id=3149391)
+    raw = espn_wnba_player_overview(athlete_id=3149391)
     df = parse_athlete_overview(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
     # Overview parser flattens to a single-row summary OR a multi-row stats

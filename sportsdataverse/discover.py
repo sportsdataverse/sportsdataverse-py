@@ -16,7 +16,7 @@ view.
 
     # One league
     >>> list_functions(league='nba')
-    ['espn_nba_athlete_overview', 'espn_nba_boxscore', ...]
+    ['espn_nba_player_overview', 'espn_nba_boxscore', ...]
 
     # Search by substring (case-insensitive)
     >>> list_functions(search='roster')

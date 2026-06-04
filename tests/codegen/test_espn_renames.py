@@ -31,11 +31,16 @@ def test_cfb_renames_applied():
         assert old not in cfb, f"old name still present: {old}"
 
 
-def test_renames_are_cfb_scoped_only():
-    # the map is keyed on cfb full-names; nba keeps the raw endpoint names
-    nba = _defs("nba")
-    assert "espn_nba_event_broadcasts" in nba
-    assert "espn_nba_athlete_overview" in nba
+def test_convention_is_universal_across_leagues():
+    # the structural convention (event->game, athlete->player, event_competition->game)
+    # applies to every league, not just cfb
+    for prefix in ("nba", "wnba", "nhl", "nfl"):
+        d = _defs(prefix)
+        assert f"espn_{prefix}_game_broadcasts" in d
+        assert f"espn_{prefix}_player_overview" in d
+        assert f"espn_{prefix}_game" in d  # event_competition -> game
+        assert f"espn_{prefix}_event" in d  # bare event root kept (avoids collision)
+        assert f"espn_{prefix}_event_broadcasts" not in d  # renamed away
 
 
 def test_collision_prone_names_preserved():

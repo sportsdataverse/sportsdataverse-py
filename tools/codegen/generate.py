@@ -220,12 +220,33 @@ _ESPN_RENAME_SKIPPED: dict[str, str] = {}  # old -> reason (collisions held back
 
 
 def _load_espn_renames() -> dict:
-    """Approved generated-name -> R-aligned-name map (espn_rename_map.yaml)."""
+    """Approved generated-name -> R-aligned-name overrides (espn_rename_map.yaml)."""
     if not _ESPN_RENAME_FILE.exists():
         return {}
     import yaml
 
     return yaml.safe_load(_ESPN_RENAME_FILE.read_text(encoding="utf-8")).get("rename", {}) or {}
+
+
+def _convention_rename(short: str) -> str:
+    """Universal ESPN-endpoint -> R-curated structural rename (all leagues).
+
+    Aligns the raw ESPN endpoint taxonomy to the cfbfastR/hoopR/wehoop convention:
+    a competitor is a game's team, a competition is the game, an athlete is a player.
+    The bare ``event`` root is left alone (it would collide with
+    ``event_competition -> game``).
+    """
+    if short.startswith("event_competitor"):
+        return "game_team" + short[len("event_competitor") :]
+    if short == "event_competition":
+        return "game"
+    if short.startswith("event_competition_"):
+        return "game_" + short[len("event_competition_") :]
+    if short.startswith("event_"):
+        return "game_" + short[len("event_") :]
+    if short.startswith("athlete_"):
+        return "player_" + short[len("athlete_") :]
+    return short
 
 
 def _handwritten_espn_names(prefix: str) -> set[str]:
@@ -275,8 +296,9 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
     used: set[str] = set()
     for ep, ep_host, base in collected:
         fn_name = base
-        new = renames.get(base)
-        if new and new != base:
+        # static override wins; else the universal structural convention
+        new = renames.get(base) or f"espn_{league.prefix}_{_convention_rename(ep.short)}"
+        if new != base:
             if new in base_names or new in handwritten or new in used:
                 _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
             else:
