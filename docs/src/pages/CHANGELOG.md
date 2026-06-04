@@ -285,6 +285,16 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   [ESPN cross-league architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
   page was realigned from the retired `make_league_module()` runtime factory to the
   current declarative-codegen reality.
+- **Docs default flipped to the overhauled tree**: `docusaurus.config.ts` now sets
+  `lastVersion: 'current'`, so the generated reference + conceptual docs serve at the
+  root `/docs/` (and auto-refresh on every deploy) instead of sitting at `/docs/next/`
+  behind the frozen 0.0.50 Sphinx dumps; the legacy docs are archived at
+  `/docs/0.0.50/`. The site builds on [Vercel](https://vercel.com) on push to `main`
+  (no in-repo deploy workflow — a GitHub Pages action would double-publish).
+- **Home page refreshed**: `docs/src/pages/index.tsx` was rewritten from the stale
+  MBB/CFB/EPA cards to the full current surface — Basketball / Football / Baseball /
+  Hockey (incl. native NHL & MLB APIs, loaders, the tidy-by-default parser layer) —
+  each card naming its R sister, with an "Ecosystem & philosophy" call-to-action.
 - Declined follow-up: a data-driven SDV navbar dropdown — `projects.json` carries
   no canonical doc URLs, so the curated navbar in `docusaurus.config.ts` (which
   has them) stays authoritative.
