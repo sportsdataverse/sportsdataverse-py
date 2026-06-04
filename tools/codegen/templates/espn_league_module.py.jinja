@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Dict, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get
+from sportsdataverse._codegen_runtime import {{ runtime_imports|join(", ") }}
 {% if parser_imports %}
 from sportsdataverse._common_espn_parsers import {{ parser_imports|join(", ") }}
 {% endif %}
@@ -19,19 +19,29 @@ __all__ = [
 
 
 def {{ ep.fn_name }}(
-{% for p in ep.query_params %}
+{% for p in ep.signature_params %}
+{% if p.required and p.default_from is none %}
+    {{ p.python_name }}: {{ p.type|type_hint }},
+{% else %}
     {{ p.python_name }}: Optional[{{ p.type|type_hint }}] = {{ p.default|py_repr }},
+{% endif %}
 {% endfor %}
-    *,
 {% if ep.parser %}
+    *,
     return_parsed: bool = False,
     return_as_pandas: bool = False,
 {% endif %}
     **kwargs,
 ) -> Dict:
 {{ ep.docstring }}
+{% if ep.has_dynamic_path %}
+    {{ ep.path_build_expr }}
     raw = _get(
-        "{{ ep.full_url }}",
+        __url,
+{% else %}
+    raw = _get(
+        {{ ep.url_literal }},
+{% endif %}
         params={
 {% for p in ep.query_params %}
             "{{ p.api }}": {{ p.python_name }},

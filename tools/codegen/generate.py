@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import subprocess
 import sys
@@ -21,9 +22,31 @@ OUT = ROOT / "tools" / "codegen" / "_generated"
 
 ESPN_APIS = ["espn_site_v2"]  # extended in later plans
 
+_PATH_TOKEN = re.compile(r"\{(\w+)\}")
+
+
+def _path_token_first(s: str) -> str:
+    m = _PATH_TOKEN.search(s)
+    return m.group(1) if m else ""
+
+
+def _sub_slugs(path: str, sport: str, league: str) -> str:
+    """Substitute only the {sport}/{league} slugs, leaving path-param tokens intact.
+
+    (``str.format`` would raise KeyError on the remaining ``{athlete_id}`` etc.)
+    """
+    return path.replace("{sport}", sport).replace("{league}", league)
+
 
 def _example_url(host_url: str, ep: spec.Endpoint, sport: str, league: str) -> str:
-    path = ep.path.format(sport=sport, league=league)
+    path = _sub_slugs(ep.path.replace("[", "").replace("]", ""), sport, league)
+    for p in ep.path_params:
+        val = ep.example_args.get(p.python_name)
+        if val is not None:
+            path = path.replace("{" + p.python_name + "}", str(val))
+    # drop any unfilled (optional, trailing) path tokens from the example
+    if "{" in path:
+        path = path[: path.index("{")].rstrip("/")
     qs = {p.api: ep.example_args[p.python_name] for p in ep.query_params if p.python_name in ep.example_args}
     return f"{host_url}{path}" + (f"?{urlencode(qs)}" if qs else "")
 
@@ -54,6 +77,8 @@ def _build_docstring(
         lines.append(f"Example URL: {example_url}")
     lines.append("")
     lines.append("Args:")
+    for p in ep.path_params:
+        lines.append(f"    {p.python_name}: {p.api} path parameter.")
     for p in ep.query_params:
         lines.append(f"    {p.python_name}: {p.api} query parameter.")
     if ep.parser:
@@ -73,19 +98,87 @@ def _build_docstring(
 
 
 class _EndpointView:
-    """Template-facing view of an Endpoint with computed render fields."""
+    """Template-facing view of an Endpoint with computed render fields.
+
+    Path handling has three shapes:
+    - **No path params**: ``url_literal`` is a plain ``"https://..."`` string literal.
+    - **Simple path params** (just ``{token}`` substitution): ``url_literal`` is an
+      ``f"https://...{token}"`` literal; ``has_dynamic_path`` stays False.
+    - **Dynamic** (``optional_segment`` / ``now_variant`` / ``default_from`` / ``transform``):
+      ``has_dynamic_path`` is True, ``path_build_expr`` holds multi-line statements that
+      assign ``__url``, and ``url_literal`` is the bare name ``__url``.
+    """
 
     def __init__(self, ep: spec.Endpoint, fn_name: str, ep_host: str, league: spec.League):
         self.fn_name = fn_name
+        self.short = ep.short
         self.summary = ep.summary
         self.query_params = ep.query_params
+        self.path_params = ep.path_params
         self.parser = ep.parser
         self.path = ep.path
         self.host_url = ep_host
-        self.full_url = f"{ep_host}{ep.path.format(sport=league.sport, league=league.league)}"
+        self.example_args = ep.example_args
+
+        # signature order: required path (no default_from) -> required query ->
+        # optional path -> optional query.
+        req_path = [p for p in ep.path_params if p.required and p.default_from is None]
+        opt_path = [p for p in ep.path_params if not p.required or p.default_from is not None]
+        req_q = [p for p in ep.query_params if p.required]
+        opt_q = [p for p in ep.query_params if not p.required]
+        self.signature_params = req_path + req_q + opt_path + opt_q
+
+        bare = ep.path.replace("[", "").replace("]", "")
+        url = f"{ep_host}{_sub_slugs(bare, league.sport, league.league)}"
+        self.url_fstring = url
+        self.full_url = url  # back-compat alias
+
+        needs_build = (
+            ep.now_variant is not None
+            or any(p.optional_segment for p in ep.path_params)
+            or any(p.default_from for p in ep.path_params)
+            or any(p.transform for p in ep.path_params)
+        )
+        self.has_dynamic_path = needs_build
+        if needs_build:
+            self.path_build_expr = self._build_path_expr(ep, ep_host, league)
+            self.url_literal = "__url"
+        else:
+            self.path_build_expr = ""
+            self.url_literal = ('f"' + url + '"') if ep.path_params else ('"' + url + '"')
+
         self.example_url = _example_url(ep_host, ep, league.sport, league.league)
         self.example_call = _example_call(ep, fn_name)
         self.docstring = _build_docstring(ep, league.sport, league.league, ep_host, self.example_url, self.example_call)
+
+    @staticmethod
+    def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League) -> str:
+        """Emit Python statements (newline+4-space joined) that assign ``__url``."""
+        sport, lg = league.sport, league.league
+        lines: list[str] = []
+        for p in ep.path_params:
+            if p.default_from:
+                lines.append(
+                    f"{p.python_name} = {p.python_name} if {p.python_name} is not None else {p.default_from}",
+                )
+            if p.transform:
+                lines.append(f"{p.python_name} = {p.transform}({p.python_name})")
+        if "[" in ep.path:
+            head, tail = ep.path.split("[", 1)
+            tail = tail.rstrip("]")  # e.g. "/{stat_type}"
+            seg_param = _path_token_first(tail)
+            head_f = _sub_slugs(head, sport, lg)
+            lines.append(f'__suffix = f"{tail}" if {seg_param} is not None else ""')
+            lines.append(f'__url = f"{ep_host}{head_f}" + __suffix')
+        elif ep.now_variant:
+            toggle = ep.path_params[-1].python_name
+            now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
+            full_f = ep_host + _sub_slugs(ep.path, sport, lg)
+            lines.append(f'__url = f"{now_f}" if {toggle} is None else f"{full_f}"')
+        else:
+            full_f = _sub_slugs(ep.path, sport, lg)
+            lines.append(f'__url = f"{ep_host}{full_f}"')
+        return "\n    ".join(lines)
 
 
 def _ruff_format_dir(path: Path) -> None:
@@ -104,16 +197,23 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
     """Render the (unformatted) module source; ruff formatting happens at write time."""
     endpoints = []
     parser_imports = set()
+    transforms = set()
     for api in apis:
         host_url = hosts[api.host]
         for ep in api.endpoints:
             if ep.scope not in league.scopes:
                 continue
+            if league.league in ep.exclude_leagues:
+                continue
             ep_host = hosts[ep.host] if ep.host else host_url
             fn_name = api.name_pattern.format(prefix=league.prefix, short=ep.short)
             if ep.parser:
                 parser_imports.add(ep.parser)
+            for p in ep.path_params:
+                if p.transform:
+                    transforms.add(p.transform)
             endpoints.append(_EndpointView(ep, fn_name, ep_host, league))
+    runtime_imports = ["_get"] + sorted(transforms)
     template = render.ENV.get_template("espn_league_module.py.jinja")
     return template.render(
         prefix=league.prefix,
@@ -121,6 +221,7 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         league=league.league,
         endpoints=endpoints,
         parser_imports=sorted(parser_imports),
+        runtime_imports=runtime_imports,
     )
 
 
