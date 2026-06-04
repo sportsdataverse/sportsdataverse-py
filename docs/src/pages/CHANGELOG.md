@@ -162,9 +162,27 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   `nhl_api_web_extra.py` -- the single-URL-builder codegen can't represent it.
 - **Removed** the deprecated `sportsdataverse.nhl.nhl_api` module (targeted the
   retired `statsapi.web.nhl.com`); use `nhl_api_web` / `nhl_pbp` instead.
-- The codegen engine gained flat-API collision resolution (`FlatApi.qualifier` +
-  `resolve_name`) and a `build_flat`/`--check` path. Remaining families (`nhl_edge`,
-  `nhl_stats_rest`, `nhl_records`, `mlb_api`) are still hand-written and follow.
+- **`nhl_edge`** (family 2) and **`nhl_stats_rest`** (family 3) are now generated
+  too. Both keep their meaningful API namespaces (`nhl_edge_*`, `nhl_stats_rest_*`)
+  so they are **non-breaking** codegen-ifications (35 + 21 functions). stats_rest's
+  arbitrary `**filters` power feature (cayenneExp/sort/limit/...) is preserved via
+  a new `passthrough_query` engine mode that forwards None-filtered `**kwargs` as
+  query params; `return_parsed` is additionally wired where a parser exists.
+- **`nhl_records`** (family 4) is generated too -- kept `nhl_records_*` (distinct
+  records.nhl.com product), **non-breaking** (50 functions: 44 generated +
+  `passthrough_query`, 6 value-embedded/scope-conditional ones preserved
+  hand-written in `nhl_records_extra.py`).
+- **`mlb_api`** (family 5, final) is generated too -- kept `mlb_api_*` (the raw MLB
+  Stats API namespace, distinct from the curated `mlb_*` composites),
+  **non-breaking** (41 names: 26 generated + `passthrough_query` for hydrate/fields,
+  15 conditional-`_csv` / multi-param / `/api/v1.1/`-host functions preserved
+  hand-written in `mlb_api_extra.py`).
+- **All five native families are now codegen-generated.** Only `nhl_api_web` was a
+  breaking rename (its `web` qualifier was host-noise); the other four kept their
+  meaningful API namespaces. The codegen engine gained flat-API collision
+  resolution (`FlatApi.qualifier` + `resolve_name`), `passthrough_query`, and a
+  `build_flat`/`--check` drift gate. `test_parity_native` locked in each family's
+  faithfulness before its swap.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

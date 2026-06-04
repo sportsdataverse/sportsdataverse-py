@@ -1,14 +1,17 @@
-"""Faithful-extraction parity: generated NHL/MLB flat modules reproduce the
-hand-written functions' exact request (URL + non-None params), for minimal
-(required-only) and maximal (all-args) calls.
+"""Faithful-extraction parity gate for the NHL/MLB native flat modules.
 
-This is a *readiness gate* proving the extract-from-hand-written regeneration is
-behavior-preserving for the regular majority (152/175 functions). A small set of
-genuinely-irregular functions are documented in ``_IRREGULAR`` and excluded -- they
-use shapes the single-URL-builder codegen can't represent faithfully (3-way
-mutually-exclusive branches, a record value embedded mid-segment, MLB conditional
-``_csv`` query inclusion). Those stay hand-written until the codegen grows support
-or they are curated by hand; the gate guards everything else.
+For each *hand-written* family this gate proved the generated module reproduced
+every function's exact request (URL + non-None params) for minimal + maximal
+calls, excluding a small set of genuinely-irregular functions (``_IRREGULAR``:
+3-way branches, mid-segment-embedded record values, conditional ``_csv``/host
+shaping) that stay hand-written.
+
+All five families (nhl_api_web, nhl_edge, nhl_stats_rest, nhl_records, mlb_api)
+have now been CUT OVER: each was verified by this gate *before* its swap, then
+removed from ``_MODULES`` (a generated module has no hand-written twin to diff).
+The irregulars were preserved hand-written in ``*_extra.py`` residuals.
+``_MODULES`` is empty now and ``test_all_native_families_cut_over`` asserts the
+end state; the gate stays in place to guard the next hand-written family added.
 """
 
 import importlib
