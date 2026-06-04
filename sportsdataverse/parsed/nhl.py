@@ -179,6 +179,23 @@ from sportsdataverse.nhl import nhl_scoreboard as _raw_nhl_scoreboard
 from sportsdataverse.nhl import nhl_skater_leaders as _raw_nhl_skater_leaders
 from sportsdataverse.nhl import nhl_standings as _raw_nhl_standings
 from sportsdataverse.nhl import nhl_standings_season as _raw_nhl_standings_season
+from sportsdataverse.nhl import nhl_stats_rest_country as _raw_nhl_stats_rest_country
+from sportsdataverse.nhl import nhl_stats_rest_draft as _raw_nhl_stats_rest_draft
+from sportsdataverse.nhl import nhl_stats_rest_franchise as _raw_nhl_stats_rest_franchise
+from sportsdataverse.nhl import nhl_stats_rest_game as _raw_nhl_stats_rest_game
+from sportsdataverse.nhl import nhl_stats_rest_glossary as _raw_nhl_stats_rest_glossary
+from sportsdataverse.nhl import nhl_stats_rest_goalie_report as _raw_nhl_stats_rest_goalie_report
+from sportsdataverse.nhl import nhl_stats_rest_leaders_goalies as _raw_nhl_stats_rest_leaders_goalies
+from sportsdataverse.nhl import nhl_stats_rest_leaders_skaters as _raw_nhl_stats_rest_leaders_skaters
+from sportsdataverse.nhl import nhl_stats_rest_milestones_goalies as _raw_nhl_stats_rest_milestones_goalies
+from sportsdataverse.nhl import nhl_stats_rest_milestones_skaters as _raw_nhl_stats_rest_milestones_skaters
+from sportsdataverse.nhl import nhl_stats_rest_players as _raw_nhl_stats_rest_players
+from sportsdataverse.nhl import nhl_stats_rest_season as _raw_nhl_stats_rest_season
+from sportsdataverse.nhl import nhl_stats_rest_shiftcharts as _raw_nhl_stats_rest_shiftcharts
+from sportsdataverse.nhl import nhl_stats_rest_skater_report as _raw_nhl_stats_rest_skater_report
+from sportsdataverse.nhl import nhl_stats_rest_team as _raw_nhl_stats_rest_team
+from sportsdataverse.nhl import nhl_stats_rest_team_by_id as _raw_nhl_stats_rest_team_by_id
+from sportsdataverse.nhl import nhl_stats_rest_team_report as _raw_nhl_stats_rest_team_report
 from sportsdataverse.nhl import nhl_web_pbp as _raw_nhl_web_pbp
 from sportsdataverse.nhl import nhl_web_schedule as _raw_nhl_web_schedule
 from sportsdataverse.nhl import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
@@ -265,24 +282,7 @@ from sportsdataverse.nhl import nhl_records_skater_career_stats as nhl_records_s
 from sportsdataverse.nhl import nhl_stats_rest_component_season as nhl_stats_rest_component_season  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_config as nhl_stats_rest_config  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_content_module as nhl_stats_rest_content_module  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_country as nhl_stats_rest_country  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_draft as nhl_stats_rest_draft  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_franchise as nhl_stats_rest_franchise  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_game as nhl_stats_rest_game  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_glossary as nhl_stats_rest_glossary  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_goalie_report as nhl_stats_rest_goalie_report  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_leaders_goalies as nhl_stats_rest_leaders_goalies  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_leaders_skaters as nhl_stats_rest_leaders_skaters  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_milestones_goalies as nhl_stats_rest_milestones_goalies  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_milestones_skaters as nhl_stats_rest_milestones_skaters  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_ping as nhl_stats_rest_ping  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_players as nhl_stats_rest_players  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_season as nhl_stats_rest_season  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_shiftcharts as nhl_stats_rest_shiftcharts  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_skater_report as nhl_stats_rest_skater_report  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_team as nhl_stats_rest_team  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_team_by_id as nhl_stats_rest_team_by_id  # noqa: F401
-from sportsdataverse.nhl import nhl_stats_rest_team_report as nhl_stats_rest_team_report  # noqa: F401
 from sportsdataverse.nhl import parse_edge_detail as parse_edge_detail  # noqa: F401
 from sportsdataverse.nhl import parse_edge_hardest_shots as parse_edge_hardest_shots  # noqa: F401
 from sportsdataverse.nhl import parse_edge_payload as parse_edge_payload  # noqa: F401
@@ -2324,6 +2324,176 @@ def nhl_standings_season(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_nhl_standings_season(*args, **kwargs)
+
+
+def nhl_stats_rest_country(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_country``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_country` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_country(*args, **kwargs)
+
+
+def nhl_stats_rest_draft(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_draft``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_draft` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_draft(*args, **kwargs)
+
+
+def nhl_stats_rest_franchise(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_franchise``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_franchise` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_franchise(*args, **kwargs)
+
+
+def nhl_stats_rest_game(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_game``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_game` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_game(*args, **kwargs)
+
+
+def nhl_stats_rest_glossary(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_glossary``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_glossary` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_glossary(*args, **kwargs)
+
+
+def nhl_stats_rest_goalie_report(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_goalie_report``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_goalie_report` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_goalie_report(*args, **kwargs)
+
+
+def nhl_stats_rest_leaders_goalies(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_leaders_goalies``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_leaders_goalies` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_leaders_goalies(*args, **kwargs)
+
+
+def nhl_stats_rest_leaders_skaters(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_leaders_skaters``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_leaders_skaters` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_leaders_skaters(*args, **kwargs)
+
+
+def nhl_stats_rest_milestones_goalies(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_milestones_goalies``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_milestones_goalies` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_milestones_goalies(*args, **kwargs)
+
+
+def nhl_stats_rest_milestones_skaters(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_milestones_skaters``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_milestones_skaters` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_milestones_skaters(*args, **kwargs)
+
+
+def nhl_stats_rest_players(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_players``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_players` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_players(*args, **kwargs)
+
+
+def nhl_stats_rest_season(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_season``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_season` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_season(*args, **kwargs)
+
+
+def nhl_stats_rest_shiftcharts(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_shiftcharts``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_shiftcharts` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_shiftcharts(*args, **kwargs)
+
+
+def nhl_stats_rest_skater_report(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_skater_report``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_skater_report` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_skater_report(*args, **kwargs)
+
+
+def nhl_stats_rest_team(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_team``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_team` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_team(*args, **kwargs)
+
+
+def nhl_stats_rest_team_by_id(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_team_by_id``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_team_by_id` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_team_by_id(*args, **kwargs)
+
+
+def nhl_stats_rest_team_report(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_stats_rest_team_report``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_stats_rest_team_report` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_stats_rest_team_report(*args, **kwargs)
 
 
 def nhl_web_pbp(*args, **kwargs):

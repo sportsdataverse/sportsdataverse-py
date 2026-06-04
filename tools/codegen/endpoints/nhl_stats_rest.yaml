@@ -1,0 +1,226 @@
+api: nhl_stats_rest
+host: https://api.nhle.com/stats/rest
+name_pattern: nhl_stats_rest_{short}
+module: nhl_stats_rest
+parser_module: nhl.nhl_stats_rest_parsers
+qualifier: ''
+passthrough_query: true
+runtime_imports:
+- _get
+- format_nhl_season
+endpoints:
+- short: ping
+  summary: Ping the NHL Stats REST API database.
+  path: /ping
+- short: component_season
+  summary: Retrieve the component-season configuration.
+  path: /{lang}/componentSeason
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+- short: config
+  summary: Retrieve the Stats REST API configuration payload.
+  path: /{lang}/config
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+- short: content_module
+  summary: Retrieve a content module by template key.
+  path: /{lang}/content/module/{template_key}
+  path_params:
+  - name: template_key
+    type: str
+    required: true
+  - name: lang
+    type: str
+    required: false
+    default: en
+  example_args:
+    template_key: X
+- short: country
+  summary: Retrieve the list of countries used in NHL data.
+  path: /{lang}/country
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: draft
+  summary: Retrieve draft data, optionally filtered with Cayenne expressions.
+  path: /{lang}/draft
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: franchise
+  summary: Retrieve franchise data.
+  path: /{lang}/franchise
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: game
+  summary: Retrieve game-level data.
+  path: /{lang}/game
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: glossary
+  summary: Retrieve the NHL Stats glossary of stat definitions.
+  path: /{lang}/glossary
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: goalie_report
+  summary: Retrieve a goalie statistical report.
+  path: /{lang}/goalie/{report}
+  path_params:
+  - name: report
+    type: str
+    required: true
+  - name: lang
+    type: str
+    required: false
+    default: en
+  example_args:
+    report: summary
+  parser: parse_nhl_stats_rest
+- short: leaders_goalies
+  summary: Retrieve league leaders for a goalie statistical attribute.
+  path: /{lang}/leaders/goalies/{attribute}
+  path_params:
+  - name: attribute
+    type: str
+    required: true
+  - name: lang
+    type: str
+    required: false
+    default: en
+  example_args:
+    attribute: X
+  parser: parse_nhl_stats_rest
+- short: leaders_skaters
+  summary: Retrieve league leaders for a skater statistical attribute.
+  path: /{lang}/leaders/skaters/{attribute}
+  path_params:
+  - name: attribute
+    type: str
+    required: true
+  - name: lang
+    type: str
+    required: false
+    default: en
+  example_args:
+    attribute: X
+  parser: parse_nhl_stats_rest
+- short: milestones_goalies
+  summary: Retrieve milestone data for goalies.
+  path: /{lang}/milestones/goalies
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: milestones_skaters
+  summary: Retrieve milestone data for skaters.
+  path: /{lang}/milestones/skaters
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: players
+  summary: Retrieve the NHL player registry.
+  path: /{lang}/players
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: season
+  summary: Retrieve the list of all NHL seasons.
+  path: /{lang}/season
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: shiftcharts
+  summary: Retrieve shift-chart data.
+  path: /{lang}/shiftcharts
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: skater_report
+  summary: Retrieve a skater statistical report.
+  path: /{lang}/skater/{report}
+  path_params:
+  - name: report
+    type: str
+    required: true
+  - name: lang
+    type: str
+    required: false
+    default: en
+  example_args:
+    report: summary
+  parser: parse_nhl_stats_rest
+- short: team
+  summary: Retrieve the list of all NHL teams.
+  path: /{lang}/team
+  path_params:
+  - name: lang
+    type: str
+    required: false
+    default: en
+  parser: parse_nhl_stats_rest
+- short: team_by_id
+  summary: Retrieve a single team by its numeric ID.
+  path: /{lang}/team/id/{team_id}
+  path_params:
+  - name: team_id
+    type: int
+    required: true
+  - name: lang
+    type: str
+    required: false
+    default: en
+  example_args:
+    team_id: 10
+  parser: parse_nhl_stats_rest
+- short: team_report
+  summary: Retrieve a team statistical report.
+  path: /{lang}/team/{report}
+  path_params:
+  - name: report
+    type: str
+    required: true
+  - name: lang
+    type: str
+    required: false
+    default: en
+  example_args:
+    report: summary
+  parser: parse_nhl_stats_rest

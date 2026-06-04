@@ -66,6 +66,11 @@ class FlatApi:
     parser_module: Optional[str] = None  # dotted, e.g. "nhl.nhl_api_web_parsers"
     runtime_imports: List[str] = field(default_factory=lambda: ["_get"])
     qualifier: str = ""  # collision qualifier, e.g. "web"/"edge"/"stats_rest"/"records"/"api"
+    # When True, the catch-all ``**kwargs`` is forwarded as (None-filtered) QUERY
+    # params rather than to the HTTP layer -- reproduces the hand-written
+    # ``**filters`` power feature of the NHL stats-REST / records / MLB families
+    # (cayenneExp/sort/hydrate/fields/...).
+    passthrough_query: bool = False
 
     @property
     def prefix(self) -> str:
@@ -246,4 +251,5 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         parser_module=raw.get("parser_module"),
         runtime_imports=list(raw.get("runtime_imports", ["_get"])),
         qualifier=raw.get("qualifier", ""),
+        passthrough_query=bool(raw.get("passthrough_query", False)),
     )

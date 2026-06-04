@@ -448,6 +448,7 @@ def render_flat_module(api: spec.FlatApi) -> str:
         endpoints=endpoints,
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,
+        passthrough_query=api.passthrough_query,
     )
 
 

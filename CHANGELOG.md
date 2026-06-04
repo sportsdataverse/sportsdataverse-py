@@ -162,13 +162,15 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   `nhl_api_web_extra.py` -- the single-URL-builder codegen can't represent it.
 - **Removed** the deprecated `sportsdataverse.nhl.nhl_api` module (targeted the
   retired `statsapi.web.nhl.com`); use `nhl_api_web` / `nhl_pbp` instead.
-- **`nhl_edge`** (family 2) is now generated too. EDGE is a meaningful product
-  namespace (matching fastRhockey's `nhl_edge_*`), so its names are unchanged --
-  this family is **non-breaking**, a pure codegen-ification (35 functions,
-  parity-verified before the swap).
+- **`nhl_edge`** (family 2) and **`nhl_stats_rest`** (family 3) are now generated
+  too. Both keep their meaningful API namespaces (`nhl_edge_*`, `nhl_stats_rest_*`)
+  so they are **non-breaking** codegen-ifications (35 + 21 functions). stats_rest's
+  arbitrary `**filters` power feature (cayenneExp/sort/limit/...) is preserved via
+  a new `passthrough_query` engine mode that forwards None-filtered `**kwargs` as
+  query params; `return_parsed` is additionally wired where a parser exists.
 - The codegen engine gained flat-API collision resolution (`FlatApi.qualifier` +
-  `resolve_name`) and a `build_flat`/`--check` path. Remaining families
-  (`nhl_stats_rest`, `nhl_records`, `mlb_api`) are still hand-written and follow.
+  `resolve_name`), `passthrough_query`, and a `build_flat`/`--check` path.
+  Remaining families (`nhl_records`, `mlb_api`) are still hand-written and follow.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

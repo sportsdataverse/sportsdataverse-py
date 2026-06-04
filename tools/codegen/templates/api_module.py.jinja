@@ -50,8 +50,13 @@ def {{ ep.fn_name }}(
             "{{ p.api }}": {{ p.python_name }},
 {% endif %}
 {% endfor %}
+{% if passthrough_query %}
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+{% endif %}
         },
+{% if not passthrough_query %}
         **kwargs,
+{% endif %}
     )
 {% if ep.parser %}
     if return_parsed:

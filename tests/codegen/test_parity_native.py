@@ -58,18 +58,12 @@ from tools.codegen import extract_native as en
 from tools.codegen import generate, spec
 
 # (dotted module, fn prefix, base host, name_pattern, parser_module)
-# NOTE: nhl_api_web and nhl_edge are intentionally absent -- they have been cut
-# over to generated modules (their hand-written source no longer exists to diff
-# against; faithfulness was locked in by this gate before each swap). The
-# families below are still hand-written and remain gated until each is cut over.
+# NOTE: nhl_api_web, nhl_edge, and nhl_stats_rest are intentionally absent --
+# they have been cut over to generated modules (their hand-written source no
+# longer exists to diff against; faithfulness was locked in by this gate before
+# each swap). The families below are still hand-written and remain gated until
+# each is cut over.
 _MODULES = [
-    (
-        "sportsdataverse.nhl.nhl_stats_rest",
-        "nhl_stats_rest_",
-        "https://api.nhle.com/stats/rest",
-        "nhl_stats_rest_{short}",
-        "nhl.nhl_stats_rest_parsers",
-    ),
     (
         "sportsdataverse.nhl.nhl_records",
         "nhl_records_",
