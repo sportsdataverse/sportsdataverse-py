@@ -198,8 +198,19 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   snapshots the live tags for offline coverage tests.
 - Release tags that don't yet ship parquet (empty / csv-only / season-less -- e.g.
   several `espn_cfb_*` advanced-box tags, `nba_stats_*` boxscores) are intentionally
-  absent and surfaced by the audit until parquet lands. Generating the loader
-  modules into the live package + per-dataset `@return` schemas remain follow-ups.
+  absent and surfaced by the audit until parquet lands.
+- **`@return` column tables** (Task 4): every non-stub loader's parquet footer is
+  introspected into `tools/codegen/schemas/loader_schemas.yaml` (92 datasets) and
+  rendered as a `|col_name|type|` table in the generated loader docstrings
+  (reproducible via `generate.py --loader-schemas`).
+- **New `sportsdataverse.pwhl` league** (Task 5, first cutover slice): the 15 PWHL
+  loaders are generated from the manifest into `pwhl/pwhl_loaders.py` (verified to
+  fetch real parquet, e.g. `load_pwhl_pbp(2024)` -> 10,456 rows) and exposed at the
+  top level. The codegen `build`/`--check` now covers generated loader modules
+  (`_GENERATED_LOADER_LEAGUES`). Cutting the existing hand-written loader modules
+  (cfb/nhl/nba/mbb/wbb/wnba) over to generated -- preserving season-less loaders +
+  helpers (`load_cfb_betting_lines`, `get_cfb_teams`, `nhl_teams`) in
+  `*_loaders_extra.py` residuals -- is the remaining follow-up.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

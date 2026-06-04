@@ -519,6 +519,71 @@ def render_loader_module(league: str, loaders, bases: dict) -> str:
     return template.render(league=league, loaders=views)
 
 
+# Leagues whose {league}_loaders.py is GENERATED from releases.yaml. Starts with the
+# new PWHL league (no hand-written module to preserve). The existing hand-written
+# loader modules (cfb/nhl/nba/mbb/wbb/wnba) are cut over deliberately, family by
+# family, preserving season-less loaders + helpers in *_loaders_extra.py residuals.
+_GENERATED_LOADER_LEAGUES = {"pwhl"}
+
+
+def _render_loaders_all() -> dict[str, str]:
+    """{league: src} for each generated-loader league with manifest entries."""
+    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    out: dict[str, str] = {}
+    for lg in sorted(_GENERATED_LOADER_LEAGUES):
+        loaders = [ld for ld in rel.loaders if ld.league == lg]
+        if loaders:
+            out[lg] = render_loader_module(lg, loaders, rel.bases)
+    return out
+
+
+def build_loaders_live() -> list[Path]:
+    """Write generated {league}_loaders.py modules + wire each league __init__."""
+    written = []
+    for lg, src in _render_loaders_all().items():
+        pkg = LIVE / lg
+        pkg.mkdir(parents=True, exist_ok=True)
+        dest = pkg / f"{lg}_loaders.py"
+        dest.write_text(src, encoding="utf-8")
+        init = pkg / "__init__.py"
+        line = f"from sportsdataverse.{lg}.{lg}_loaders import *\n"
+        if not init.exists():
+            init.write_text(
+                f'"""sportsdataverse.{lg} -- {lg.upper()} data loaders."""\n\nfrom __future__ import annotations\n\n'
+                + line,
+                encoding="utf-8",
+            )
+        elif line not in init.read_text(encoding="utf-8"):
+            init.write_text(init.read_text(encoding="utf-8").rstrip() + "\n" + line, encoding="utf-8")
+        written.append(dest)
+    if written:
+        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+    return sorted(written)
+
+
+def _loaders_stale() -> list[str]:
+    """Live generated {league}_loaders.py files that differ from a fresh render."""
+    tmp = OUT / "_check_loaders_tmp"
+    if tmp.exists():
+        shutil.rmtree(tmp)
+    tmp.mkdir(parents=True, exist_ok=True)
+    try:
+        rendered = _render_loaders_all()
+        for lg, src in rendered.items():
+            (tmp / f"{lg}_loaders.py").write_text(src, encoding="utf-8")
+        _ruff_format_dir(tmp)
+        stale = []
+        for lg in rendered:
+            live_file = LIVE / lg / f"{lg}_loaders.py"
+            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / f"{lg}_loaders.py").read_text(
+                encoding="utf-8",
+            ):
+                stale.append(str(live_file.relative_to(ROOT)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return stale
+
+
 # Legacy / display-name release tags that are not data-loader datasets (old ESPN
 # display tags carry spaces; cfbfastR_cfb_pbp is the pre-cutover CFB pbp tag).
 def _is_loader_tag(tag: str) -> bool:
@@ -874,12 +939,17 @@ def main(argv=None) -> int:
         if flat:
             print("codegen --check: stale flat-API files:", ", ".join(sorted(flat)), file=sys.stderr)
             rc = 1
+        loaders = _loaders_stale()
+        if loaders:
+            print("codegen --check: stale loader files:", ", ".join(sorted(loaders)), file=sys.stderr)
+            rc = 1
         return rc
     build()
     n = len(build_live())
     p = len(build_parsed_live())
     f = len(build_flat_live())
-    print(f"codegen: wrote {n} live + {p} parsed + {f} flat-API modules + refreshed staging at {OUT}")
+    ldr = len(build_loaders_live())
+    print(f"codegen: wrote {n} live + {p} parsed + {f} flat-API + {ldr} loader modules + refreshed staging at {OUT}")
     return 0
 
 
