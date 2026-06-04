@@ -9,7 +9,11 @@ import sys
 from pathlib import Path
 from urllib.parse import urlencode
 
-from tools.codegen import render, spec
+# Make ``tools`` importable when run as a script (`python tools/codegen/generate.py`),
+# where sys.path[0] is this file's dir rather than the repo root.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from tools.codegen import render, spec  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
