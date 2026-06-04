@@ -380,17 +380,30 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
 _FLAT_STUB_LEAGUE = spec.League(prefix="", sport="", league="", scopes=[])
 
 
-def reserved_names(prefix: str) -> set[str]:
+def reserved_names(prefix: str, exclude_modules: tuple[str, ...] = ()) -> set[str]:
     """Public names already defined in ``sportsdataverse.{prefix}`` (hand-written
     composites, loaders, and submodule attributes) that a generated flat-API
-    function must not shadow. Returns an empty set if the package can't import."""
+    function must not shadow. Returns an empty set if the package can't import.
+
+    ``exclude_modules`` drops names whose ``__module__`` ends with one of the
+    given module names -- used so a flat module being regenerated does not treat
+    its own (about-to-be-replaced) names as reserved (the bootstrapping case)."""
     import importlib
 
     try:
         mod = importlib.import_module(f"sportsdataverse.{prefix}")
     except Exception:
         return set()
-    return {n for n in dir(mod) if not n.startswith("_")}
+    out: set[str] = set()
+    for n in dir(mod):
+        if n.startswith("_"):
+            continue
+        if exclude_modules:
+            m = getattr(getattr(mod, n, None), "__module__", "") or ""
+            if any(m.endswith(ex) for ex in exclude_modules):
+                continue
+        out.add(n)
+    return out
 
 
 def resolve_name(prefix: str, short: str, reserved: set, qualifier: str) -> str:
@@ -402,12 +415,22 @@ def resolve_name(prefix: str, short: str, reserved: set, qualifier: str) -> str:
 
 
 def render_flat_module(api: spec.FlatApi) -> str:
-    """Render a flat (non-sport/league) API module (NHL api-web/edge/..., MLB stats)."""
+    """Render a flat (non-sport/league) API module (NHL api-web/edge/..., MLB stats).
+
+    When ``api.qualifier`` is set, each function gets a clean ``{prefix}_{short}``
+    name, qualified to ``{prefix}_{qualifier}_{short}`` only on collision with a
+    hand-written composite or another generated name in this module."""
+    reserved = reserved_names(api.prefix, exclude_modules=(api.module,)) if api.qualifier else set()
+    used: set[str] = set()
     endpoints = []
     parser_imports = set()
     transforms = set()
     for ep in api.endpoints:
-        fn_name = api.name_pattern.format(short=ep.short)
+        if api.qualifier:
+            fn_name = resolve_name(api.prefix, ep.short, reserved | used, api.qualifier)
+        else:
+            fn_name = api.name_pattern.format(short=ep.short)
+        used.add(fn_name)
         if ep.parser:
             parser_imports.add(ep.parser)
         for p in (*ep.path_params, *ep.query_params):

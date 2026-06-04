@@ -65,6 +65,12 @@ class FlatApi:
     endpoints: List[Endpoint]
     parser_module: Optional[str] = None  # dotted, e.g. "nhl.nhl_api_web_parsers"
     runtime_imports: List[str] = field(default_factory=lambda: ["_get"])
+    qualifier: str = ""  # collision qualifier, e.g. "web"/"edge"/"stats_rest"/"records"/"api"
+
+    @property
+    def prefix(self) -> str:
+        """League prefix from ``name_pattern`` (``"nhl_{short}"`` -> ``"nhl"``)."""
+        return self.name_pattern.split("_{", 1)[0]
 
 
 @dataclass(frozen=True)
@@ -239,4 +245,5 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         endpoints=endpoints,
         parser_module=raw.get("parser_module"),
         runtime_imports=list(raw.get("runtime_imports", ["_get"])),
+        qualifier=raw.get("qualifier", ""),
     )
