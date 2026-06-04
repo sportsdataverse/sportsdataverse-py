@@ -133,6 +133,39 @@ from sportsdataverse.nhl import nhl_club_stats_season as _raw_nhl_club_stats_sea
 from sportsdataverse.nhl import nhl_draft_picks as _raw_nhl_draft_picks
 from sportsdataverse.nhl import nhl_draft_picks_now as _raw_nhl_draft_picks_now
 from sportsdataverse.nhl import nhl_draft_tracker_picks_now as _raw_nhl_draft_tracker_picks_now
+from sportsdataverse.nhl import nhl_edge_cat_goalie_detail as _raw_nhl_edge_cat_goalie_detail
+from sportsdataverse.nhl import nhl_edge_cat_skater_detail as _raw_nhl_edge_cat_skater_detail
+from sportsdataverse.nhl import nhl_edge_goalie_5v5_detail as _raw_nhl_edge_goalie_5v5_detail
+from sportsdataverse.nhl import nhl_edge_goalie_5v5_top_10 as _raw_nhl_edge_goalie_5v5_top_10
+from sportsdataverse.nhl import nhl_edge_goalie_comparison as _raw_nhl_edge_goalie_comparison
+from sportsdataverse.nhl import nhl_edge_goalie_detail as _raw_nhl_edge_goalie_detail
+from sportsdataverse.nhl import nhl_edge_goalie_edge_save_pctg_top_10 as _raw_nhl_edge_goalie_edge_save_pctg_top_10
+from sportsdataverse.nhl import nhl_edge_goalie_landing as _raw_nhl_edge_goalie_landing
+from sportsdataverse.nhl import nhl_edge_goalie_save_percentage_detail as _raw_nhl_edge_goalie_save_percentage_detail
+from sportsdataverse.nhl import nhl_edge_goalie_shot_location_detail as _raw_nhl_edge_goalie_shot_location_detail
+from sportsdataverse.nhl import nhl_edge_goalie_shot_location_top_10 as _raw_nhl_edge_goalie_shot_location_top_10
+from sportsdataverse.nhl import nhl_edge_skater_comparison as _raw_nhl_edge_skater_comparison
+from sportsdataverse.nhl import nhl_edge_skater_detail as _raw_nhl_edge_skater_detail
+from sportsdataverse.nhl import nhl_edge_skater_distance_top_10 as _raw_nhl_edge_skater_distance_top_10
+from sportsdataverse.nhl import nhl_edge_skater_landing as _raw_nhl_edge_skater_landing
+from sportsdataverse.nhl import nhl_edge_skater_shot_location_detail as _raw_nhl_edge_skater_shot_location_detail
+from sportsdataverse.nhl import nhl_edge_skater_shot_location_top_10 as _raw_nhl_edge_skater_shot_location_top_10
+from sportsdataverse.nhl import nhl_edge_skater_shot_speed_detail as _raw_nhl_edge_skater_shot_speed_detail
+from sportsdataverse.nhl import nhl_edge_skater_shot_speed_top_10 as _raw_nhl_edge_skater_shot_speed_top_10
+from sportsdataverse.nhl import nhl_edge_skater_skating_distance_detail as _raw_nhl_edge_skater_skating_distance_detail
+from sportsdataverse.nhl import nhl_edge_skater_skating_speed_detail as _raw_nhl_edge_skater_skating_speed_detail
+from sportsdataverse.nhl import nhl_edge_skater_speed_top_10 as _raw_nhl_edge_skater_speed_top_10
+from sportsdataverse.nhl import nhl_edge_skater_zone_time as _raw_nhl_edge_skater_zone_time
+from sportsdataverse.nhl import nhl_edge_skater_zone_time_top_10 as _raw_nhl_edge_skater_zone_time_top_10
+from sportsdataverse.nhl import nhl_edge_team_detail as _raw_nhl_edge_team_detail
+from sportsdataverse.nhl import nhl_edge_team_landing as _raw_nhl_edge_team_landing
+from sportsdataverse.nhl import nhl_edge_team_shot_location_detail as _raw_nhl_edge_team_shot_location_detail
+from sportsdataverse.nhl import nhl_edge_team_shot_location_top_10 as _raw_nhl_edge_team_shot_location_top_10
+from sportsdataverse.nhl import nhl_edge_team_shot_speed_detail as _raw_nhl_edge_team_shot_speed_detail
+from sportsdataverse.nhl import nhl_edge_team_skating_distance_top_10 as _raw_nhl_edge_team_skating_distance_top_10
+from sportsdataverse.nhl import nhl_edge_team_skating_speed_top_10 as _raw_nhl_edge_team_skating_speed_top_10
+from sportsdataverse.nhl import nhl_edge_team_zone_time_details as _raw_nhl_edge_team_zone_time_details
+from sportsdataverse.nhl import nhl_edge_team_zone_time_top_10 as _raw_nhl_edge_team_zone_time_top_10
 from sportsdataverse.nhl import nhl_goalie_leaders as _raw_nhl_goalie_leaders
 from sportsdataverse.nhl import nhl_landing as _raw_nhl_landing
 from sportsdataverse.nhl import nhl_player_game_log as _raw_nhl_player_game_log
@@ -172,41 +205,8 @@ from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore
 from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season  # noqa: F401
 from sportsdataverse.nhl import nhl_draft_rankings as nhl_draft_rankings  # noqa: F401
 from sportsdataverse.nhl import nhl_draft_rankings_now as nhl_draft_rankings_now  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_cat_goalie_detail as nhl_edge_cat_goalie_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_cat_skater_detail as nhl_edge_cat_skater_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_5v5_detail as nhl_edge_goalie_5v5_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_5v5_top_10 as nhl_edge_goalie_5v5_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_comparison as nhl_edge_goalie_comparison  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_detail as nhl_edge_goalie_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_edge_save_pctg_top_10 as nhl_edge_goalie_edge_save_pctg_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_landing as nhl_edge_goalie_landing  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_save_percentage_detail as nhl_edge_goalie_save_percentage_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_shot_location_detail as nhl_edge_goalie_shot_location_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_goalie_shot_location_top_10 as nhl_edge_goalie_shot_location_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_comparison as nhl_edge_skater_comparison  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_detail as nhl_edge_skater_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_distance_top_10 as nhl_edge_skater_distance_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_landing as nhl_edge_skater_landing  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_shot_location_detail as nhl_edge_skater_shot_location_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_shot_location_top_10 as nhl_edge_skater_shot_location_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_shot_speed_detail as nhl_edge_skater_shot_speed_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_shot_speed_top_10 as nhl_edge_skater_shot_speed_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_skating_distance_detail as nhl_edge_skater_skating_distance_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_skating_speed_detail as nhl_edge_skater_skating_speed_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_speed_top_10 as nhl_edge_skater_speed_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_zone_time as nhl_edge_skater_zone_time  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_skater_zone_time_top_10 as nhl_edge_skater_zone_time_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_detail as nhl_edge_team_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_landing as nhl_edge_team_landing  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_shot_location_detail as nhl_edge_team_shot_location_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_shot_location_top_10 as nhl_edge_team_shot_location_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_shot_speed_detail as nhl_edge_team_shot_speed_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_distance_detail as nhl_edge_team_skating_distance_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_skating_distance_top_10 as nhl_edge_team_skating_distance_top_10  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_speed_detail as nhl_edge_team_skating_speed_detail  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_skating_speed_top_10 as nhl_edge_team_skating_speed_top_10  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_zone_time_details as nhl_edge_team_zone_time_details  # noqa: F401
-from sportsdataverse.nhl import nhl_edge_team_zone_time_top_10 as nhl_edge_team_zone_time_top_10  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
 from sportsdataverse.nhl import nhl_player_spotlight as nhl_player_spotlight  # noqa: F401
 from sportsdataverse.nhl import nhl_playoff_series as nhl_playoff_series  # noqa: F401
@@ -1864,6 +1864,336 @@ def nhl_draft_tracker_picks_now(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_nhl_draft_tracker_picks_now(*args, **kwargs)
+
+
+def nhl_edge_cat_goalie_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_cat_goalie_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_cat_goalie_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_cat_goalie_detail(*args, **kwargs)
+
+
+def nhl_edge_cat_skater_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_cat_skater_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_cat_skater_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_cat_skater_detail(*args, **kwargs)
+
+
+def nhl_edge_goalie_5v5_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_5v5_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_5v5_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_5v5_detail(*args, **kwargs)
+
+
+def nhl_edge_goalie_5v5_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_5v5_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_5v5_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_5v5_top_10(*args, **kwargs)
+
+
+def nhl_edge_goalie_comparison(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_comparison``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_comparison` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_comparison(*args, **kwargs)
+
+
+def nhl_edge_goalie_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_detail(*args, **kwargs)
+
+
+def nhl_edge_goalie_edge_save_pctg_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_edge_save_pctg_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_edge_save_pctg_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_edge_save_pctg_top_10(*args, **kwargs)
+
+
+def nhl_edge_goalie_landing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_landing``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_landing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_landing(*args, **kwargs)
+
+
+def nhl_edge_goalie_save_percentage_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_save_percentage_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_save_percentage_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_save_percentage_detail(*args, **kwargs)
+
+
+def nhl_edge_goalie_shot_location_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_shot_location_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_shot_location_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_shot_location_detail(*args, **kwargs)
+
+
+def nhl_edge_goalie_shot_location_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_goalie_shot_location_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_goalie_shot_location_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_goalie_shot_location_top_10(*args, **kwargs)
+
+
+def nhl_edge_skater_comparison(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_comparison``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_comparison` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_comparison(*args, **kwargs)
+
+
+def nhl_edge_skater_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_detail(*args, **kwargs)
+
+
+def nhl_edge_skater_distance_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_distance_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_distance_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_distance_top_10(*args, **kwargs)
+
+
+def nhl_edge_skater_landing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_landing``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_landing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_landing(*args, **kwargs)
+
+
+def nhl_edge_skater_shot_location_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_shot_location_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_shot_location_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_shot_location_detail(*args, **kwargs)
+
+
+def nhl_edge_skater_shot_location_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_shot_location_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_shot_location_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_shot_location_top_10(*args, **kwargs)
+
+
+def nhl_edge_skater_shot_speed_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_shot_speed_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_shot_speed_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_shot_speed_detail(*args, **kwargs)
+
+
+def nhl_edge_skater_shot_speed_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_shot_speed_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_shot_speed_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_shot_speed_top_10(*args, **kwargs)
+
+
+def nhl_edge_skater_skating_distance_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_skating_distance_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_skating_distance_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_skating_distance_detail(*args, **kwargs)
+
+
+def nhl_edge_skater_skating_speed_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_skating_speed_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_skating_speed_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_skating_speed_detail(*args, **kwargs)
+
+
+def nhl_edge_skater_speed_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_speed_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_speed_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_speed_top_10(*args, **kwargs)
+
+
+def nhl_edge_skater_zone_time(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_zone_time``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_zone_time` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_zone_time(*args, **kwargs)
+
+
+def nhl_edge_skater_zone_time_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_skater_zone_time_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_skater_zone_time_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_skater_zone_time_top_10(*args, **kwargs)
+
+
+def nhl_edge_team_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_detail(*args, **kwargs)
+
+
+def nhl_edge_team_landing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_landing``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_landing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_landing(*args, **kwargs)
+
+
+def nhl_edge_team_shot_location_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_shot_location_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_shot_location_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_shot_location_detail(*args, **kwargs)
+
+
+def nhl_edge_team_shot_location_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_shot_location_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_shot_location_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_shot_location_top_10(*args, **kwargs)
+
+
+def nhl_edge_team_shot_speed_detail(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_shot_speed_detail``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_shot_speed_detail` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_shot_speed_detail(*args, **kwargs)
+
+
+def nhl_edge_team_skating_distance_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_skating_distance_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_skating_distance_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_skating_distance_top_10(*args, **kwargs)
+
+
+def nhl_edge_team_skating_speed_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_skating_speed_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_skating_speed_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_skating_speed_top_10(*args, **kwargs)
+
+
+def nhl_edge_team_zone_time_details(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_zone_time_details``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_zone_time_details` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_zone_time_details(*args, **kwargs)
+
+
+def nhl_edge_team_zone_time_top_10(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_edge_team_zone_time_top_10``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_edge_team_zone_time_top_10` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_edge_team_zone_time_top_10(*args, **kwargs)
 
 
 def nhl_goalie_leaders(*args, **kwargs):
