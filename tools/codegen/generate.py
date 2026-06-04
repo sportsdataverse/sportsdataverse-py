@@ -493,6 +493,52 @@ def render_loader_module(league: str, loaders, bases: dict) -> str:
     return template.render(league=league, loaders=views)
 
 
+# Legacy / display-name release tags that are not data-loader datasets (old ESPN
+# display tags carry spaces; cfbfastR_cfb_pbp is the pre-cutover CFB pbp tag).
+def _is_loader_tag(tag: str) -> bool:
+    return " " not in tag and tag != "cfbfastR_cfb_pbp" and not tag.startswith("ESPN ")
+
+
+def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: int = 400) -> list[str]:
+    """Live release tags for ``repo`` via the ``gh`` CLI (network).
+
+    Defined here (not in the legacy runtime-capture ``extract.py``, which is
+    import-broken post-factory-retirement) so the audit has no dead dependency.
+    Raises ``subprocess.CalledProcessError`` if ``gh`` is missing/unauthenticated."""
+    out = subprocess.run(
+        ["gh", "release", "list", "-R", repo, "--limit", str(limit)],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    return sorted({line.split("\t")[0].strip() for line in out.splitlines() if line.strip()})
+
+
+def audit_releases() -> int:
+    """Compare the releases.yaml manifest against the LIVE sportsdataverse-data
+    release list (network, via ``gh``). Reports release tags with no loader
+    (gaps) and manifest tags no longer published (orphans). Informational drift
+    gate -- meant for a CI job, not the offline ``--check``."""
+    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    manifest = {ld.tag for ld in rel.loaders}
+    try:
+        live = {t for t in gh_release_tags() if _is_loader_tag(t)}
+    except Exception as e:  # noqa: BLE001
+        print(f"--audit-releases: could not query gh release list ({e})", file=sys.stderr)
+        return 2
+    missing = sorted(live - manifest)
+    orphan = sorted(manifest - live)
+    if missing or orphan:
+        print(f"release manifest drift: {len(missing)} tag(s) without a loader, {len(orphan)} orphan(s)", file=sys.stderr)
+        if missing:
+            print("  missing loaders for:", ", ".join(missing), file=sys.stderr)
+        if orphan:
+            print("  orphan manifest tags:", ", ".join(orphan), file=sys.stderr)
+        return 1
+    print(f"release manifest matches live release list ({len(manifest)} tags)")
+    return 0
+
+
 _PARSED_LEAGUES = ("nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl")
 
 
@@ -738,7 +784,14 @@ def check() -> int:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="generate.py")
     ap.add_argument("--check", action="store_true", help="fail if any generated (staging or live) file is stale")
+    ap.add_argument(
+        "--audit-releases",
+        action="store_true",
+        help="compare releases.yaml against the live sportsdataverse-data release list (network)",
+    )
     args = ap.parse_args(argv)
+    if args.audit_releases:
+        return audit_releases()
     if args.check:
         rc = check()
         live = _live_stale()
