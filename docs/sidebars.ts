@@ -26,6 +26,7 @@ const sidebars: SidebarsConfig = {
   // (Architecture + Parsers + Parameter reference) cover package-wide patterns.
   docs: [
     {type: 'doc', id: 'intro', label: 'Getting Started'},
+    {type: 'doc', id: 'ecosystem', label: 'Ecosystem & philosophy'},
     {type: 'doc', id: 'quality-of-life', label: 'Quality-of-life helpers'},
     {
       type: 'category',

@@ -266,6 +266,18 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   (verified live). `nbmake` was added to the `test` dependency group, and the
   weekly `live-tests-cron` workflow now runs `pytest --nbmake examples/notebooks/`
   as an informational (non-blocking) leg so notebook breakage surfaces as drift.
+- **Cohesive intro docs**: a new [Ecosystem & philosophy](https://py.sportsdataverse.org/docs/ecosystem)
+  page ties the docs together — the design philosophy, the full function-naming
+  paradigm (`espn_<league>_*`, native `<league>_*`, `load_<league>_*`, `parse_*`,
+  plus the R-aligned athlete→player / event→game conventions and collision rules),
+  the Python ↔ R sister mapping (hoopR / wehoop / cfbfastR / baseballr / fastRhockey,
+  plus oddsapiR / recruitR / sportyR / sportypy / sportsdataverse.js), and how the
+  package relates to nflverse (the NFL module mirrors nflreadpy) and the wider
+  PySport ecosystem. `intro.md` and all seven example notebooks now open with a
+  consistent philosophy/naming blurb and link to it. The
+  [ESPN cross-league architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
+  page was realigned from the retired `make_league_module()` runtime factory to the
+  current declarative-codegen reality.
 - Declined follow-up: a data-driven SDV navbar dropdown — `projects.json` carries
   no canonical doc URLs, so the curated navbar in `docusaurus.config.ts` (which
   has them) stays authoritative.
