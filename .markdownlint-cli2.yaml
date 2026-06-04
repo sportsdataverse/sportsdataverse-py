@@ -169,3 +169,5 @@ ignores:
   - ".venv/**"
   - "dev/**"
   - "archive/**"
+  - "docs/superpowers/**" # internal agentic spec/plan artifacts; contain nested code fences (templates
+  # that display code) that the prose linter can't sensibly handle — not part of the published site
