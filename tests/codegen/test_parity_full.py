@@ -13,6 +13,7 @@ import inspect
 from pathlib import Path
 
 import pytest
+import yaml
 
 from sportsdataverse import _common_espn as ce
 
@@ -20,6 +21,9 @@ from tools.codegen import extract, generate
 
 OUT = Path("tools/codegen/_generated")
 _ALL_SHORTS = set(extract._table().keys())
+_RENAME = yaml.safe_load((Path("tools/codegen/rename_map.yaml")).read_text(encoding="utf-8")) or {}
+# nhl is additive (new espn_nhl_* surface); the other 7 must reproduce the factory exactly
+_EXISTING_PREFIXES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb"]
 
 # (prefix, sport, league, [tables...]) — tables whose shorts apply to this league
 _LEAGUES = [
@@ -111,3 +115,18 @@ def test_generated_requests_match_core(prefix, sport, league, scopes):
                         f"{short} (max={maximal}) PARAMS: gen={got.get('params')} core={want.get('params')}",
                     )
     assert not mismatches, f"{len(mismatches)} parity mismatch(es) for {prefix}:\n" + "\n".join(mismatches[:40])
+
+
+@pytest.mark.parametrize("prefix", _EXISTING_PREFIXES)
+def test_no_factory_name_lost(prefix):
+    """Every live *factory* espn_<prefix>_* name maps (via rename_map) to a generated fn.
+
+    Scoped to the ``{prefix}_espn_ext`` module (the factory surface) so hand-written
+    league functions in sibling modules (e.g. espn_mlb_pbp) aren't falsely counted.
+    """
+    gen = _load(OUT / f"{prefix}_espn_ext.py", f"_inv_{prefix}")
+    live_ext = __import__(f"sportsdataverse.{prefix}.{prefix}_espn_ext", fromlist=["x"])
+    live_names = [n for n in getattr(live_ext, "__all__", []) if n.startswith(f"espn_{prefix}_")]
+    assert live_names, f"no factory names found on sportsdataverse.{prefix}.{prefix}_espn_ext"
+    missing = [f"{n} -> {_RENAME.get(n, n)}" for n in live_names if not hasattr(gen, _RENAME.get(n, n))]
+    assert not missing, f"{prefix}: {len(missing)} factory name(s) absent from generated: {missing[:15]}"
