@@ -1,0 +1,27 @@
+{% macro docstring(ep, sport, league) -%}
+    """{{ ep.summary }}
+
+    Bound to sport={{ sport!r }}, league={{ league!r }}.
+
+    Endpoint: ``GET {{ ep.host_url }}{{ ep.path }}``
+{% if ep.example_url %}
+    Example URL: {{ ep.example_url }}
+{% endif %}
+
+    Args:
+{% for p in ep.query_params %}
+        {{ p.python_name }}: {{ p.api }} query parameter.
+{% endfor %}
+{% if ep.parser %}
+        return_parsed: dispatch the raw payload through {{ ep.parser }} -> polars DataFrame.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+{% endif %}
+
+    Returns:
+        {% if ep.parser %}polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.{% else %}The raw JSON ``Dict``.{% endif %}
+
+
+    Example:
+        >>> {{ ep.example_call }}
+    """
+{%- endmacro %}
