@@ -559,6 +559,67 @@ def build_parsed_live() -> list[Path]:
     return sorted(written)
 
 
+# Flat (non-sport/league) API families: (yaml_stem, league_prefix). Only those
+# whose YAML exists under tools/codegen/endpoints/ are generated, so the NHL/MLB
+# native cutover can land family-by-family.
+FLAT_APIS = [
+    ("nhl_api_web", "nhl"),
+    ("nhl_edge", "nhl"),
+    ("nhl_stats_rest", "nhl"),
+    ("nhl_records", "nhl"),
+    ("mlb_api", "mlb"),
+]
+
+
+def _render_flat_all() -> dict[str, tuple[str, str]]:
+    """{module_name: (league_prefix, src)} for each flat-API YAML that exists."""
+    out: dict[str, tuple[str, str]] = {}
+    for stem, prefix in FLAT_APIS:
+        y = ENDPOINTS / f"{stem}.yaml"
+        if not y.exists():
+            continue
+        api = spec.load_flat_api(y, {})
+        out[api.module] = (prefix, render_flat_module(api))
+    return out
+
+
+def build_flat_live() -> list[Path]:
+    """Write generated flat-API modules (NHL native, MLB stats) into the live package."""
+    written = []
+    for module, (prefix, src) in _render_flat_all().items():
+        dest = LIVE / prefix / f"{module}.py"
+        dest.write_text(src, encoding="utf-8")
+        written.append(dest)
+    if written:
+        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+    return sorted(written)
+
+
+def _flat_stale() -> list[str]:
+    """Live flat-API modules that differ from a fresh render."""
+    tmp = OUT / "_check_flat_tmp"
+    if tmp.exists():
+        shutil.rmtree(tmp)
+    tmp.mkdir(parents=True, exist_ok=True)
+    try:
+        rendered = _render_flat_all()
+        prefixes = {}
+        for module, (prefix, src) in rendered.items():
+            (tmp / f"{module}.py").write_text(src, encoding="utf-8")
+            prefixes[module] = prefix
+        _ruff_format_dir(tmp)
+        stale = []
+        for module, prefix in prefixes.items():
+            live_file = LIVE / prefix / f"{module}.py"
+            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / f"{module}.py").read_text(
+                encoding="utf-8",
+            ):
+                stale.append(str(live_file.relative_to(ROOT)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return stale
+
+
 def _parsed_stale() -> list[str]:
     """Live ``parsed/{league}.py`` files that differ from a fresh render."""
     tmp = OUT / "_check_parsed_tmp"
@@ -687,11 +748,16 @@ def main(argv=None) -> int:
         if parsed:
             print("codegen --check: stale parsed files:", ", ".join(sorted(parsed)), file=sys.stderr)
             rc = 1
+        flat = _flat_stale()
+        if flat:
+            print("codegen --check: stale flat-API files:", ", ".join(sorted(flat)), file=sys.stderr)
+            rc = 1
         return rc
     build()
     n = len(build_live())
     p = len(build_parsed_live())
-    print(f"codegen: wrote {n} live modules + {p} parsed modules + refreshed staging at {OUT}")
+    f = len(build_flat_live())
+    print(f"codegen: wrote {n} live + {p} parsed + {f} flat-API modules + refreshed staging at {OUT}")
     return 0
 
 
