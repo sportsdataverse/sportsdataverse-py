@@ -68,6 +68,30 @@ class FlatApi:
 
 
 @dataclass(frozen=True)
+class Loader:
+    """A 404-safe dataset loader over a sportsdataverse-data release asset."""
+
+    fn: str
+    league: str
+    base: str  # key into ReleasesConfig.bases
+    url: str  # asset path with a {season} token, relative to base
+    tag: str  # release tag (provenance + audit key)
+    min_season: Optional[int] = None
+    returns_schema: Optional[str] = None
+    example_args: Dict[str, object] = field(default_factory=dict)
+    automation: Dict[str, str] = field(default_factory=dict)
+    notebook: Optional[str] = None
+    stub: bool = False
+    stub_message: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class ReleasesConfig:
+    bases: Dict[str, str]
+    loaders: List[Loader]
+
+
+@dataclass(frozen=True)
 class League:
     prefix: str
     sport: str
@@ -178,6 +202,29 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
     raw = _read_yaml(path)
     endpoints = [_parse_endpoint(e, registry, path) for e in raw["endpoints"]]
     return EspnApi(api=raw["api"], host=raw["host"], name_pattern=raw["name_pattern"], endpoints=endpoints)
+
+
+def load_releases(path: Path) -> ReleasesConfig:
+    """Load the dataset-loader manifest (releases.yaml)."""
+    raw = _read_yaml(path)
+    loaders = [
+        Loader(
+            fn=ld["fn"],
+            league=ld["league"],
+            base=ld["base"],
+            url=ld["url"],
+            tag=ld["tag"],
+            min_season=ld.get("min_season"),
+            returns_schema=ld.get("returns_schema"),
+            example_args=ld.get("example_args", {}) or {},
+            automation=ld.get("automation", {}) or {},
+            notebook=ld.get("notebook"),
+            stub=ld.get("stub", False),
+            stub_message=ld.get("stub_message"),
+        )
+        for ld in raw["loaders"]
+    ]
+    return ReleasesConfig(bases=dict(raw["bases"]), loaders=loaders)
 
 
 def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:

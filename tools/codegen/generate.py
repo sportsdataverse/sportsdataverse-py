@@ -298,6 +298,47 @@ def render_flat_module(api: spec.FlatApi) -> str:
     )
 
 
+def _build_loader_docstring(ld: spec.Loader) -> str:
+    """4-space-indented docstring block for a generated dataset loader."""
+    lines = [f'"""Load {ld.tag} (sportsdataverse-data release).', ""]
+    lines.append(f"Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{ld.tag}")
+    lines.append("")
+    lines.append("Args:")
+    rng = f" (>= {ld.min_season})" if ld.min_season else ""
+    lines.append(f"    seasons: an int or iterable of seasons{rng}.")
+    lines.append("    return_as_pandas: return a pandas DataFrame instead of polars.")
+    lines.append("")
+    lines.append("Returns:")
+    lines.append("    A polars (or pandas) DataFrame; seasons with no published asset are")
+    lines.append("    skipped with a warning rather than raising (404-safe).")
+    lines.append("")
+    lines.append("Example:")
+    lines.append(f"    >>> {ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})")
+    lines.append('"""')
+    return "\n".join(("    " + ln) if ln else "" for ln in lines)
+
+
+class _LoaderView:
+    """Template-facing view of a Loader (absolute URL + docstring)."""
+
+    def __init__(self, ld: spec.Loader, bases: dict):
+        self.fn = ld.fn
+        self.tag = ld.tag
+        self.min_season = ld.min_season
+        self.example_args = ld.example_args
+        self.stub = ld.stub
+        self.stub_message = ld.stub_message
+        self.abs_url = "" if ld.stub else f"{bases[ld.base]}{ld.url}"
+        self.docstring = _build_loader_docstring(ld)
+
+
+def render_loader_module(league: str, loaders, bases: dict) -> str:
+    """Render a league's 404-safe dataset-loader module."""
+    views = [_LoaderView(ld, bases) for ld in loaders]
+    template = render.ENV.get_template("load_module.py.jinja")
+    return template.render(league=league, loaders=views)
+
+
 def _render_all() -> dict[str, str]:
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
