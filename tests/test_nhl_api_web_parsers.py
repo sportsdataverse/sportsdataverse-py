@@ -308,10 +308,15 @@ def test_parse_nhl_web_pbp_returns_pandas_when_requested():
 
 
 def test_nhl_api_web_endpoint_parsers_registry_references_real_wrappers():
-    from sportsdataverse.nhl import NHL_API_WEB_ENDPOINT_PARSERS, nhl_api_web
+    # Check the nhl PACKAGE namespace: post-cutover the api-web wrappers are
+    # generated (clean names) in nhl_api_web, while the irregular nhl_scoreboard
+    # lives in nhl_api_web_extra -- both are imported into sportsdataverse.nhl.
+    import sportsdataverse.nhl as nhl
+
+    from sportsdataverse.nhl import NHL_API_WEB_ENDPOINT_PARSERS
 
     for fn_name in NHL_API_WEB_ENDPOINT_PARSERS:
-        assert hasattr(nhl_api_web, fn_name), (
+        assert hasattr(nhl, fn_name), (
             f"NHL_API_WEB_ENDPOINT_PARSERS references missing wrapper {fn_name!r}"
         )
 

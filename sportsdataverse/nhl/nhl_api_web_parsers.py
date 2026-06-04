@@ -414,34 +414,34 @@ def parse_nhl_web_draft_picks(payload: Dict, return_as_pandas: bool = False) -> 
 NHL_API_WEB_ENDPOINT_PARSERS = {
     # Game-center
     "nhl_web_pbp": parse_nhl_web_pbp,
-    "nhl_web_boxscore": parse_nhl_web_boxscore,
-    "nhl_web_landing": parse_nhl_web_landing,
-    "nhl_web_right_rail": parse_nhl_web_right_rail,
+    "nhl_boxscore": parse_nhl_web_boxscore,
+    "nhl_landing": parse_nhl_web_landing,
+    "nhl_right_rail": parse_nhl_web_right_rail,
     # Schedule / score / scoreboard
     "nhl_web_schedule": parse_nhl_web_schedule,
-    "nhl_web_score": parse_nhl_web_score,
-    "nhl_web_scoreboard": parse_nhl_web_scoreboard,
-    "nhl_web_schedule_calendar": parse_nhl_web_schedule,
-    "nhl_web_club_schedule_season": parse_nhl_web_club_schedule,
-    "nhl_web_club_schedule_month": parse_nhl_web_club_schedule,
-    "nhl_web_club_schedule_week": parse_nhl_web_club_schedule,
+    "nhl_score": parse_nhl_web_score,
+    "nhl_scoreboard": parse_nhl_web_scoreboard,
+    "nhl_schedule_calendar": parse_nhl_web_schedule,
+    "nhl_club_schedule_season": parse_nhl_web_club_schedule,
+    "nhl_club_schedule_month": parse_nhl_web_club_schedule,
+    "nhl_club_schedule_week": parse_nhl_web_club_schedule,
     # Standings
-    "nhl_web_standings": parse_nhl_web_standings,
-    "nhl_web_standings_season": parse_nhl_web_standings_season,
+    "nhl_standings": parse_nhl_web_standings,
+    "nhl_standings_season": parse_nhl_web_standings_season,
     # Team / player
-    "nhl_web_club_stats": parse_nhl_web_club_stats,
-    "nhl_web_club_stats_season": parse_nhl_web_club_stats,
-    "nhl_web_roster": parse_nhl_web_roster,
-    "nhl_web_roster_season": parse_nhl_web_roster,
-    "nhl_web_player_landing": parse_nhl_web_player_landing,
-    "nhl_web_player_game_log": parse_nhl_web_player_game_log,
+    "nhl_club_stats": parse_nhl_web_club_stats,
+    "nhl_club_stats_season": parse_nhl_web_club_stats,
+    "nhl_roster": parse_nhl_web_roster,
+    "nhl_roster_season": parse_nhl_web_roster,
+    "nhl_player_landing": parse_nhl_web_player_landing,
+    "nhl_player_game_log": parse_nhl_web_player_game_log,
     # Leaders
-    "nhl_web_skater_leaders": parse_nhl_web_leaders,
-    "nhl_web_goalie_leaders": parse_nhl_web_leaders,
+    "nhl_skater_leaders": parse_nhl_web_leaders,
+    "nhl_goalie_leaders": parse_nhl_web_leaders,
     # Draft
-    "nhl_web_draft_picks": parse_nhl_web_draft_picks,
-    "nhl_web_draft_picks_now": parse_nhl_web_draft_picks,
-    "nhl_web_draft_tracker_picks_now": parse_nhl_web_draft_picks,
+    "nhl_draft_picks": parse_nhl_web_draft_picks,
+    "nhl_draft_picks_now": parse_nhl_web_draft_picks,
+    "nhl_draft_tracker_picks_now": parse_nhl_web_draft_picks,
 }
 
 

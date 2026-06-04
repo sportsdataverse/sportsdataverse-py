@@ -168,12 +168,16 @@ def test_parser_for_mlb_api_always_returns_callable():
 
 
 def test_mlb_api_endpoint_parsers_registry_references_real_wrappers():
-    """Every key in MLB_API_ENDPOINT_PARSERS must correspond to an
-    actual function in mlb_api."""
-    from sportsdataverse.mlb import MLB_API_ENDPOINT_PARSERS, mlb_api
+    """Every key in MLB_API_ENDPOINT_PARSERS must correspond to an actual function
+    in the mlb PACKAGE -- post-cutover the regular wrappers are generated in mlb_api
+    and the irregular ones live in mlb_api_extra, both imported into
+    sportsdataverse.mlb."""
+    import sportsdataverse.mlb as mlb
+
+    from sportsdataverse.mlb import MLB_API_ENDPOINT_PARSERS
 
     for fn_name in MLB_API_ENDPOINT_PARSERS:
-        assert hasattr(mlb_api, fn_name), (
+        assert hasattr(mlb, fn_name), (
             f"MLB_API_ENDPOINT_PARSERS references missing wrapper {fn_name!r}"
         )
-        assert callable(getattr(mlb_api, fn_name))
+        assert callable(getattr(mlb, fn_name))
