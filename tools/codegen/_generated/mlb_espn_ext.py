@@ -46,7 +46,7 @@ __all__ = [
     "espn_mlb_conferences",
     "espn_mlb_statistics_league",
     "espn_mlb_draft",
-    "espn_mlb_teams",
+    "espn_mlb_teams_site",
     "espn_mlb_team",
     "espn_mlb_team_roster",
     "espn_mlb_team_schedule",
@@ -605,7 +605,7 @@ def espn_mlb_draft(
     return raw
 
 
-def espn_mlb_teams(
+def espn_mlb_teams_site(
     limit: Optional[int] = 1000,
     *,
     return_parsed: bool = False,
@@ -628,7 +628,7 @@ def espn_mlb_teams(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_mlb_teams()
+        >>> espn_mlb_teams_site()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams",

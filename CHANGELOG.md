@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [0.0.53 (unreleased)](#0053-unreleased)
+  - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
   - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
   - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
   - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
@@ -63,6 +64,40 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 0.0.53 (unreleased)
+
+### ESPN — declarative codegen + factory retirement
+
+The runtime "magic" that mass-registered each league's `espn_<league>_*` ESPN
+wrappers at import time (`_common_espn.make_league_module` / `_bind` + the
+`_UNIVERSAL_WRAPPERS` / `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` / `_MLB_WRAPPERS`
+tables + ~127 private `_site_v2_*` / `_espn_*` / `_core_v2_*` core functions) has
+been replaced by a **declarative codegen pipeline** (`tools/codegen/`). Endpoint
+metadata lives in `tools/codegen/endpoints/*.yaml`; `generate.py` renders concrete,
+fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ext.py`.
+
+- **New `espn_nhl_*` surface (115 functions).** NHL previously had no ESPN
+  cross-league wrappers; it now gets the full Site v2 / Web v3 / Core v2 surface,
+  and `find()` works for NHL for free.
+- **Identical behavior, real signatures.** Every generated function builds a
+  byte-identical URL + query string to the function it replaced (verified by a
+  URL+params parity gate across all scopes), but now exposes concrete parameter
+  names, type hints, and docstrings instead of an opaque `*args, **kwargs` shim.
+- **No function renames.** All public names are retained, including
+  `espn_<league>_teams_site` (the raw site-v2 teams endpoint), which is kept
+  distinct from the parsed-DataFrame `espn_<league>_teams`.
+- **`_get` / `_csv` single source.** The HTTP + coercion helpers now live in
+  `sportsdataverse._codegen_runtime` (shared by all generated wrappers);
+  `_common_espn` re-exports them. **Note for test authors:** mock
+  `sportsdataverse._codegen_runtime.download` (not `_common_espn._get`) to
+  intercept the generated wrappers.
+- **Drift guard.** `python tools/codegen/generate.py --check` (and the
+  `sdv-codegen` pre-commit hook) fail if the committed wrappers fall out of sync
+  with the endpoint metadata.
+
+**BREAKING (internal):** `sportsdataverse._common_espn` no longer exposes the
+factory (`make_league_module` / `_bind` / the `_*_WRAPPERS` tables) or the private
+`_site_v2_*` / `_core_v2_*` core functions. Public `espn_<league>_*` wrappers are
+unchanged in name and behavior.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

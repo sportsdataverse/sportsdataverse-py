@@ -28,7 +28,7 @@ OUT = Path("tools/codegen/_generated")
 # generated fn name -> the core fn it should reproduce
 CORE = {
     "espn_nba_scoreboard": ce._site_v2_scoreboard,
-    "espn_nba_teams": ce._site_v2_teams,
+    "espn_nba_teams_site": ce._site_v2_teams,
     "espn_nba_standings": ce._site_v2_alt_standings,
 }
 

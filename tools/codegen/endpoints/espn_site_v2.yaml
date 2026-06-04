@@ -84,7 +84,7 @@ endpoints:
   scope: universal
   path: /{sport}/{league}/draft
   parser: parse_items
-- short: teams
+- short: teams_site
   scope: universal
   path: /{sport}/{league}/teams
   extra_params:

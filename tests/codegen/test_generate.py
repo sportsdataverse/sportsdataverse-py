@@ -24,7 +24,7 @@ def test_generated_nba_module_imports_and_exposes_functions():
     generate.build()
     mod = _load(OUT / "nba_espn_ext.py", "_gen_nba")
     assert hasattr(mod, "espn_nba_scoreboard")
-    assert hasattr(mod, "espn_nba_teams")
+    assert hasattr(mod, "espn_nba_teams_site")
     assert hasattr(mod, "espn_nba_standings")
     assert "espn_nba_scoreboard" in mod.__all__
 

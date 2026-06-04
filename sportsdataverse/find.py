@@ -30,17 +30,19 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
-# Map each league to its scoreboard + teams wrappers. Lazy-import
+# Map each league to its raw site-v2 teams + scoreboard wrappers. We use the
+# raw-Dict ``espn_<league>_teams_site`` endpoint (not the parsed-DataFrame
+# ``espn_<league>_teams``) because this resolver walks the raw JSON. Lazy-import
 # the league modules so users who don't call find() pay nothing.
 _LEAGUE_SLUG = {
-    "nba": ("nba", "espn_nba_teams", "espn_nba_scoreboard"),
-    "wnba": ("wnba", "espn_wnba_teams", "espn_wnba_scoreboard"),
-    "mbb": ("mbb", "espn_mbb_teams", "espn_mbb_scoreboard"),
-    "wbb": ("wbb", "espn_wbb_teams", "espn_wbb_scoreboard"),
-    "cfb": ("cfb", "espn_cfb_teams", "espn_cfb_scoreboard"),
-    "nfl": ("nfl", "espn_nfl_teams", "espn_nfl_scoreboard"),
-    "mlb": ("mlb", "espn_mlb_teams", "espn_mlb_scoreboard"),
-    "nhl": ("nhl", "espn_nhl_teams", "espn_nhl_scoreboard"),
+    "nba": ("nba", "espn_nba_teams_site", "espn_nba_scoreboard"),
+    "wnba": ("wnba", "espn_wnba_teams_site", "espn_wnba_scoreboard"),
+    "mbb": ("mbb", "espn_mbb_teams_site", "espn_mbb_scoreboard"),
+    "wbb": ("wbb", "espn_wbb_teams_site", "espn_wbb_scoreboard"),
+    "cfb": ("cfb", "espn_cfb_teams_site", "espn_cfb_scoreboard"),
+    "nfl": ("nfl", "espn_nfl_teams_site", "espn_nfl_scoreboard"),
+    "mlb": ("mlb", "espn_mlb_teams_site", "espn_mlb_scoreboard"),
+    "nhl": ("nhl", "espn_nhl_teams_site", "espn_nhl_scoreboard"),
 }
 
 # Per-process team-list cache. Keyed by league name.

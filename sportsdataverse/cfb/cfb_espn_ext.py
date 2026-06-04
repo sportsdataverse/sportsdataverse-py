@@ -46,7 +46,7 @@ __all__ = [
     "espn_cfb_conferences",
     "espn_cfb_statistics_league",
     "espn_cfb_draft",
-    "espn_cfb_teams",
+    "espn_cfb_teams_site",
     "espn_cfb_team",
     "espn_cfb_team_roster",
     "espn_cfb_team_schedule",
@@ -609,7 +609,7 @@ def espn_cfb_draft(
     return raw
 
 
-def espn_cfb_teams(
+def espn_cfb_teams_site(
     limit: Optional[int] = 1000,
     *,
     return_parsed: bool = False,
@@ -632,7 +632,7 @@ def espn_cfb_teams(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_cfb_teams()
+        >>> espn_cfb_teams_site()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams",

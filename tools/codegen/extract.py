@@ -64,6 +64,22 @@ _TABLES = [
 # ``_core`` is kept (it disambiguates from the site/web variant).
 _DROP_SUFFIX = ("_site", "_alt")
 
+# Hand-written ``espn_<league>_<base>`` functions that live in sibling modules and
+# WIN the __init__ wildcard import (imported after *_espn_ext). A generated short
+# must NOT clean to one of these bases, or it would silently shadow/collide.
+# (This is why ``teams_site`` cannot become ``teams`` -- ``espn_<league>_teams`` is
+# the hand-written parsed-DataFrame function.)
+_RESERVED_BASE = {
+    "teams",
+    "schedule",
+    "calendar",
+    "pbp",
+    "game_rosters",
+    "player_stats",
+    "play_participants",
+    "event_officials",
+}
+
 _SENT = "@@{}@@"  # sentinel marker; reverse-mapped to {name}
 
 # representative ids so example URLs render and the parity test has live-ish args
@@ -292,7 +308,7 @@ def _clean_name(short: str, all_shorts: set) -> str:
     for suf in _DROP_SUFFIX:
         if short.endswith(suf):
             base = short[: -len(suf)]
-            if base not in all_shorts:
+            if base not in all_shorts and base not in _RESERVED_BASE:
                 return base
     return short
 

@@ -46,7 +46,7 @@ __all__ = [
     "espn_wnba_conferences",
     "espn_wnba_statistics_league",
     "espn_wnba_draft",
-    "espn_wnba_teams",
+    "espn_wnba_teams_site",
     "espn_wnba_team",
     "espn_wnba_team_roster",
     "espn_wnba_team_schedule",
@@ -604,7 +604,7 @@ def espn_wnba_draft(
     return raw
 
 
-def espn_wnba_teams(
+def espn_wnba_teams_site(
     limit: Optional[int] = 1000,
     *,
     return_parsed: bool = False,
@@ -627,7 +627,7 @@ def espn_wnba_teams(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_wnba_teams()
+        >>> espn_wnba_teams_site()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams",

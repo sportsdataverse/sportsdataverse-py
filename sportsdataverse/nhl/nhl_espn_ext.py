@@ -46,7 +46,7 @@ __all__ = [
     "espn_nhl_conferences",
     "espn_nhl_statistics_league",
     "espn_nhl_draft",
-    "espn_nhl_teams",
+    "espn_nhl_teams_site",
     "espn_nhl_team",
     "espn_nhl_team_roster",
     "espn_nhl_team_schedule",
@@ -604,7 +604,7 @@ def espn_nhl_draft(
     return raw
 
 
-def espn_nhl_teams(
+def espn_nhl_teams_site(
     limit: Optional[int] = 1000,
     *,
     return_parsed: bool = False,
@@ -627,7 +627,7 @@ def espn_nhl_teams(
         polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
 
     Example:
-        >>> espn_nhl_teams()
+        >>> espn_nhl_teams_site()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams",

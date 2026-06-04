@@ -110,9 +110,7 @@ def test_list_functions_parsers_only_and_wrappers_only_are_mutex(capsys):
 
 @pytest.fixture
 def fake_nba_lookup(monkeypatch):
-    """Replace ESPN download path with deterministic team + scoreboard data."""
-    import sportsdataverse._common_espn as ce
-
+    """Replace the generated wrappers' HTTP sink with deterministic data."""
     teams_site = {
         "sports": [
             {
@@ -152,21 +150,32 @@ def fake_nba_lookup(monkeypatch):
         ],
     }
 
-    def fake_get(url, **kw):
+    def fake_get(url):
         if "/teams" in url and "/roster" not in url:
             return teams_site
         if "/scoreboard" in url:
             return scoreboard
         return {}
 
-    original = ce._get
-    ce._get = fake_get
-    # Reset find's per-process team cache
+    class _Resp:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+    def fake_download(url, params=None, **kw):
+        return _Resp(fake_get(url))
+
+    # find.py calls the generated espn_*_teams_site / _scoreboard wrappers, which
+    # import _get from _codegen_runtime -> patch _codegen_runtime.download.
+    import sportsdataverse._codegen_runtime as rt
+
+    monkeypatch.setattr(rt, "download", fake_download)
     from sportsdataverse.find import clear_team_cache
 
     clear_team_cache()
     yield
-    ce._get = original
     clear_team_cache()
 
 

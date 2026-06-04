@@ -53,7 +53,9 @@ def test_describe_detects_bool_transform():
     assert ai["query_params"]["active"].get("transform") == "bool_str"
 
 
-def test_rename_map_cleans_teams_site_keeps_core():
+def test_rename_map_is_empty_due_to_reserved_base_collision():
+    # teams_site is the only suffix-drop candidate, but ``teams`` is a reserved
+    # hand-written base (espn_<league>_teams), so it is NOT cleaned -> no renames.
     rm = extract.build_rename_map()
-    assert rm.get("espn_nba_teams_site") == "espn_nba_teams"
-    assert "espn_nba_teams_core" not in rm  # _core qualifier retained, no rename
+    assert rm == {}
+    assert "teams" in extract._RESERVED_BASE
