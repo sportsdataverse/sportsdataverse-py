@@ -32,9 +32,8 @@ R-package parity: this module is the convergence point for porting the
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union
 
-from sportsdataverse.dl_utils import download
 
 # ---------------------------------------------------------------------------
 # Hosts
@@ -51,26 +50,10 @@ _CORE_V3 = "https://sports.core.api.espn.com/v3/sports"
 # Internal helpers
 # ---------------------------------------------------------------------------
 
-
-def _get(url: str, params: Optional[dict] = None, **kwargs) -> Dict:
-    """GET ``url`` as JSON. Returns ``{}`` on failure. Strips ``None`` params."""
-    clean = {k: v for k, v in (params or {}).items() if v is not None}
-    resp = download(url=url, params=clean, **kwargs)
-    if resp is None:
-        return {}
-    try:
-        return resp.json()
-    except Exception:
-        return {}
-
-
-def _csv(values: Any) -> Optional[str]:
-    """Join an iterable into a comma-separated string; pass scalar / None through."""
-    if values is None:
-        return None
-    if isinstance(values, (list, tuple, set)):
-        return ",".join(str(v) for v in values)
-    return str(values)
+# Single source of truth: the HTTP + value-coercion helpers live in
+# ``_codegen_runtime`` (shared with the ~1,000 generated wrappers). Re-exported
+# here so the legacy core fns below keep calling the bare ``_get`` / ``_csv`` names.
+from sportsdataverse._codegen_runtime import _csv, _get  # noqa: E402,F401
 
 
 # ===========================================================================
