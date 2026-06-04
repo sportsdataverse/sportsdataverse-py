@@ -733,16 +733,21 @@ def audit_releases() -> int:
         return 2
     missing = sorted(live - manifest)
     orphan = sorted(manifest - live)
-    if missing or orphan:
+    # "missing" (a published release with no loader yet) is purely informational --
+    # adding a loader is a deliberate choice, and many tags intentionally never get
+    # one (no season-partitioned parquet). "orphan" (a manifest tag no longer
+    # published) is real drift: a loader now points at a dead release. Only the
+    # latter is treated as a failure; the former is reported for awareness.
+    if missing:
+        print(f"release manifest: {len(missing)} published tag(s) without a loader (informational):", file=sys.stderr)
+        print("  " + ", ".join(missing), file=sys.stderr)
+    if orphan:
         print(
-            f"release manifest drift: {len(missing)} tag(s) without a loader, {len(orphan)} orphan(s)", file=sys.stderr
+            f"release manifest drift: {len(orphan)} orphan manifest tag(s) (loader -> dead release):", file=sys.stderr
         )
-        if missing:
-            print("  missing loaders for:", ", ".join(missing), file=sys.stderr)
-        if orphan:
-            print("  orphan manifest tags:", ", ".join(orphan), file=sys.stderr)
+        print("  " + ", ".join(orphan), file=sys.stderr)
         return 1
-    print(f"release manifest matches live release list ({len(manifest)} tags)")
+    print(f"release manifest OK ({len(manifest)} loader tags; {len(missing)} unmapped published tags, no orphans)")
     return 0
 
 
