@@ -47,3 +47,36 @@ def test_validate_rejects_unknown_param_key(tmp_path):
         raise AssertionError("expected SpecError")
     except spec.SpecError as e:
         assert "does_not_exist" in str(e)
+
+
+def test_endpoint_parses_path_params_optional_segment_default_from_now_variant(tmp_path):
+    y = tmp_path / "api.yaml"
+    y.write_text(
+        "api: espn_core_v2\nhost: core_v2\nname_pattern: 'espn_{prefix}_{short}'\n"
+        "endpoints:\n"
+        "  - short: athlete_career_stats\n"
+        "    path: '/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]'\n"
+        "    path_params:\n"
+        "      - { name: athlete_id, type: 'int|str', required: true }\n"
+        "      - { name: stat_type, type: int, required: false, optional_segment: true }\n"
+        "  - short: event_competition\n"
+        "    path: '/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}'\n"
+        "    path_params:\n"
+        "      - { name: event_id, type: 'int|str', required: true }\n"
+        "      - { name: cid, type: 'int|str', required: false, default_from: event_id }\n"
+        "  - short: club_schedule\n"
+        "    path: '/x/{team}/{season}'\n"
+        "    now_variant: '/x/{team}/now'\n"
+        "    path_params:\n"
+        "      - { name: team, type: str, required: true }\n"
+        "      - { name: season, type: 'int|str', required: false }\n",
+        encoding="utf-8",
+    )
+    api = spec.load_espn_api(y, {})
+    a = api.endpoints[0]
+    assert [p.python_name for p in a.path_params] == ["athlete_id", "stat_type"]
+    assert a.path_params[1].optional_segment is True
+    b = api.endpoints[1]
+    assert b.path_params[1].default_from == "event_id"
+    c = api.endpoints[2]
+    assert c.now_variant == "/x/{team}/now"

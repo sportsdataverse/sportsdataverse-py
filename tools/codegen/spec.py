@@ -23,6 +23,9 @@ class Param:
     default: object = None
     pattern: Optional[str] = None  # regex for docs/validation
     is_query: bool = True  # query vs path
+    optional_segment: bool = False  # pairs with [/{token}] in path
+    default_from: Optional[str] = None  # use another arg's value when None
+    transform: Optional[str] = None  # named runtime transform (e.g. format_nhl_season, _csv)
 
 
 @dataclass(frozen=True)
@@ -37,6 +40,8 @@ class Endpoint:
     query_params: List[Param] = field(default_factory=list)
     path_params: List[Param] = field(default_factory=list)
     example_args: Dict[str, object] = field(default_factory=dict)
+    now_variant: Optional[str] = None  # alternate path when trailing optional path param is None
+    exclude_leagues: List[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -114,6 +119,21 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
                     default=extra.get("default"),
                 ),
             )
+        pps = []
+        for pp in e.get("path_params", []):
+            pps.append(
+                Param(
+                    python_name=pp["name"],
+                    api=pp["name"],
+                    type=pp.get("type", "str"),
+                    required=pp.get("required", True),
+                    default=pp.get("default"),
+                    is_query=False,
+                    optional_segment=pp.get("optional_segment", False),
+                    default_from=pp.get("default_from"),
+                    transform=pp.get("transform"),
+                ),
+            )
         ep = Endpoint(
             short=e["short"],
             path=e["path"],
@@ -123,10 +143,15 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
             parser=e.get("parser"),
             returns_schema=e.get("returns_schema"),
             query_params=qps,
+            path_params=pps,
             example_args=e.get("example_args", {}) or {},
+            now_variant=e.get("now_variant"),
+            exclude_leagues=list(e.get("exclude_leagues", [])),
         )
-        # validate path tokens (excluding the {sport}/{league} slugs) have a known param
-        tokens = set(_PATH_TOKEN.findall(ep.path)) - {"sport", "league"}
+        # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
+        # strip optional-segment brackets first so "[/{token}]" tokens are seen.
+        bare_path = ep.path.replace("[", "").replace("]", "")
+        tokens = set(_PATH_TOKEN.findall(bare_path)) - {"sport", "league"}
         known = {p.python_name for p in ep.path_params} | set(registry)
         missing = tokens - known
         if missing:
