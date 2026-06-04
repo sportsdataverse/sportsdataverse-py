@@ -76,9 +76,7 @@ repos:
         # Docusaurus pages under docs/docs/ carry YAML frontmatter that must be
         # the first content in the file; a doctoc TOC injected above it breaks the
         # page render. Exclude that tree (docs/architecture/ etc. still get TOCs).
-        # The codegen docs staging mirror carries the same frontmatter and is
-        # machine-generated (drift-gated), so exclude it too.
-        exclude: ^(docs/docs/|tools/codegen/_generated_docs/)
+        exclude: ^docs/docs/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.20.0
     hooks:

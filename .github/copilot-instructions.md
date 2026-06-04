@@ -328,20 +328,20 @@ uv add --dev some-package           # add dev-only dep
   documented in `recipe/README.md`. Don't drift the runtime deps in
   `recipe/meta.yaml` from the ones in `pyproject.toml` — keep them in
   lockstep.
-- **Sphinx docs are clean under `sphinx-build -W`.** New module
-  docstrings must use Google-style sections (Args/Returns/Raises) so
-  `sphinx.ext.napoleon` can parse them. Free-form `Caveats:` /
-  `<Heading>:` paragraph headers immediately followed by a bullet list
-  need a blank line before the list, and `*` bullet markers (not `-`).
-  Don't remove the `visit_abbreviation` shim in `Sphinx-docs/conf.py` —
-  it patches `sphinx_markdown_builder` 0.6.10 to render the keyword-only
-  `*` separator that Sphinx 9 emits as an abbreviation node.
+- **Reference docs are generated, not Sphinx'd.** The legacy Sphinx
+  pipeline (`Sphinx-docs/` + `create_docs.sh`) is retired; the per-league
+  reference subtree under `docs/docs/<sport>/` is generated from endpoint
+  metadata by `python tools/codegen/generate.py --docs` and gated by
+  `--check` (CI + the `sdv-codegen` pre-commit hook). Never hand-edit the
+  generated league/`reference/` dirs; conceptual pages outside them
+  (`intro`, `quality-of-life`, `architecture/`, `parsers/`) are
+  hand-authored. Verify the site with `cd docs && yarn build`.
 - **Every new public function ships a runnable `Example:` block.** Use
   the napoleon literal-block format (heading + `::` + 4-space indented
   code), 2-4 sub-blocks max (quick-start, useful parameters, optional
-  pipeline next-step). NEVER use raw `>>> ...` doctest prompts —
-  `sphinx.ext.doctest` is enabled and live-API loaders drift, so
-  doctest noise is guaranteed. Include a `See Also:` block linking to
+  pipeline next-step). NEVER use raw `>>> ...` doctest prompts (they
+  drift for live-API loaders, so they read as noise). Include a
+  `See Also:` block linking to
   the relevant companion R package (`wehoop` / `hoopR` / `cfbfastR` /
   `baseballr` / `fastRhockey`) and any reasonable Python alternative
   (`nflreadpy`, `nba_api`, `nhl-api-py`). Existing one-line backtick

@@ -150,7 +150,7 @@ endpoint families that share a shape:
 
 ## See also
 
-- [NHL EDGE parsers](../nhl/edge-parsers) — defensive family parsers
-  for the EDGE Statcast surface.
+- [NHL EDGE reference](../nhl/reference/nhl_edge.md) — the EDGE
+  Statcast surface (parsers documented per endpoint).
 - [ESPN cross-league architecture](../architecture/espn-cross-league) —
   how `make_league_module()` registers each wrapper with its parser.

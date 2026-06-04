@@ -8,7 +8,7 @@ sidebar_position: 1
 
 `sportsdataverse-py` wraps **804 ESPN endpoints** across eight leagues
 (NBA, MBB, WNBA, WBB, CFB, NFL, MLB, NHL — *NHL via its own modern
-api-web.nhle.com path; see the [NHL section](../nhl/index)*) with a
+api-web.nhle.com path; see the [NHL section](../nhl/index.md)*) with a
 single core of ~80 `(sport, league)`-parameterized functions. This page
 explains why that's possible and how to use the resulting surface.
 
@@ -85,7 +85,7 @@ helper that does two things:
    introspection, and `inspect.signature()`.
 
 Wrappers whose `short` name has a registered parser in
-[`ENDPOINT_PARSERS`](../parsers/index) gain a third treatment: instead
+[`ENDPOINT_PARSERS`](../parsers/index.md) gain a third treatment: instead
 of a plain partial, they're wrapped in a closure that adds two optional
 kwargs.
 
@@ -154,7 +154,7 @@ auto-complete works the same as any other function:
 | CFB  | 118 |  5 | **123** |
 | NFL  | 115 |  4 | **119** |
 | MLB  | 113 |  5 | **118** |
-| NHL  | (separate api-web.nhle.com surface — see [NHL section](../nhl/index)) |
+| NHL  | (separate api-web.nhle.com surface — see [NHL section](../nhl/index.md)) |
 
 The naming convention diverges slightly from the R packages
 (hoopR/wehoop/cfbfastR): where R collapses multiple `/teams` paths into
@@ -164,11 +164,11 @@ functions (`_teams_site`, `_teams_core`, `_season_teams`,
 
 ## See also
 
-- [The parser layer](../parsers/index) — how `ENDPOINT_PARSERS` is
+- [The parser layer](../parsers/index.md) — how `ENDPOINT_PARSERS` is
   built, what each parser does, and how to extend the registry.
-- [NHL section](../nhl/index) — NHL gets its own modern
+- [NHL section](../nhl/index.md) — NHL gets its own modern
   `api-web.nhle.com/v1/` surface plus EDGE Statcast, Stats REST, and
   Records modules.
-- [MLB section](../mlb/index) — MLB pairs the ESPN cross-league
+- [MLB section](../mlb/index.md) — MLB pairs the ESPN cross-league
   wrappers with the official MLB Stats API and Baseball Savant
   (Statcast) wrappers.

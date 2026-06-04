@@ -164,5 +164,5 @@ even when the repo is otherwise quiet.
 
 ## See also
 
-- [Parsers (general overview)](./index)
+- [Parsers (general overview)](./index.md)
 - [Architecture](../architecture/espn-cross-league)

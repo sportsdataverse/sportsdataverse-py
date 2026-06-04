@@ -984,15 +984,20 @@ def check() -> int:
 
 
 # ===========================================================================
-# Docs generation (staging mirror -> tools/codegen/_generated_docs)
+# Docs generation (live Docusaurus tree -> docs/docs/{league})
 #
-# Non-destructive: the generated reference tree is written into a tracked staging
-# dir parallel to ``_generated`` (the same drift-gated pattern as the Python
-# modules), NOT into the hand-maintained Docusaurus ``docs/docs/{league}`` tree.
-# Wiring the real tree + sidebar/navbar is the deferred (Node-dependent) slice.
+# `generate.py --docs` regenerates the per-league reference subtree directly into
+# the Docusaurus "Next" surface (docs/docs/), full-clobbering each generated dir.
+# Package-wide conceptual pages (intro, quality-of-life, architecture/, parsers/)
+# live OUTSIDE the generated league/reference dirs and are preserved untouched.
+# The drift gate (`--check`) only orphan-checks the fully-generated subtrees.
 # ===========================================================================
 
-DOCS_OUT = ROOT / "tools" / "codegen" / "_generated_docs"
+DOCS = ROOT / "docs" / "docs"
+
+# Top-level docs/docs subdir that is fully owned by the generator (shared
+# reference pages like parameters.md). League dirs are the other generated roots.
+_DOCS_REFERENCE_DIR = "reference"
 
 # ESPN API -> (reference-file slug, human label) for the per-API doc pages.
 _ESPN_API_DOC = {
@@ -1189,14 +1194,25 @@ def _render_docs_all() -> dict[str, str]:
     return {rel: content.rstrip() + "\n" for rel, content in out.items()}
 
 
+def _generated_docs_roots() -> set[str]:
+    """Top-level docs/docs subdirs the generator fully owns (and may clobber): every
+    documented league dir + the shared ``reference/`` dir. Conceptual top-level pages
+    (intro.md, quality-of-life.md, architecture/, parsers/) are NOT here and survive."""
+    return set(_doc_leagues()) | {_DOCS_REFERENCE_DIR}
+
+
 def build_docs() -> list[Path]:
-    """Regenerate the staging docs tree (tools/codegen/_generated_docs). Non-destructive
-    to the live Docusaurus tree."""
-    if DOCS_OUT.exists():
-        shutil.rmtree(DOCS_OUT)
+    """Regenerate the per-league reference subtree into the live Docusaurus tree
+    (docs/docs/). Full-clobbers each generated root (league dirs + reference/) and
+    rewrites it from metadata; conceptual top-level pages are left untouched."""
+    rendered = _render_docs_all()
+    for root in _generated_docs_roots():
+        d = DOCS / root
+        if d.exists():
+            shutil.rmtree(d)
     written = []
-    for rel, content in _render_docs_all().items():
-        dest = DOCS_OUT / rel
+    for rel, content in rendered.items():
+        dest = DOCS / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(content, encoding="utf-8", newline="\n")
         written.append(dest)
@@ -1204,17 +1220,22 @@ def build_docs() -> list[Path]:
 
 
 def _docs_stale() -> list[str]:
-    """Generated-docs staging files that differ from a fresh render (missing/changed/orphan)."""
+    """Live docs/docs generated files that differ from a fresh render. Orphan-checks
+    ONLY the fully-generated roots (league dirs + reference/) so preserved conceptual
+    pages outside them are never flagged."""
     rendered = _render_docs_all()
     stale = []
     for rel, content in rendered.items():
-        f = DOCS_OUT / rel
+        f = DOCS / rel
         if not f.exists() or f.read_text(encoding="utf-8") != content:
-            stale.append(f"_generated_docs/{rel}")
-    if DOCS_OUT.exists():
-        for f in DOCS_OUT.rglob("*"):
-            if f.is_file() and f.relative_to(DOCS_OUT).as_posix() not in rendered:
-                stale.append(f"_generated_docs/{f.relative_to(DOCS_OUT).as_posix()} (orphan)")
+            stale.append(rel)
+    for root in _generated_docs_roots():
+        d = DOCS / root
+        if not d.exists():
+            continue
+        for f in d.rglob("*"):
+            if f.is_file() and f.relative_to(DOCS).as_posix() not in rendered:
+                stale.append(f"{f.relative_to(DOCS).as_posix()} (orphan)")
     return sorted(stale)
 
 
@@ -1234,7 +1255,7 @@ def main(argv=None) -> int:
     ap.add_argument(
         "--docs",
         action="store_true",
-        help="regenerate the staging docs tree (tools/codegen/_generated_docs) and exit",
+        help="regenerate the per-league reference subtree into docs/docs/ and exit",
     )
     args = ap.parse_args(argv)
     if args.loader_schemas:
@@ -1243,7 +1264,7 @@ def main(argv=None) -> int:
         return audit_releases()
     if args.docs:
         d = len(build_docs())
-        print(f"codegen --docs: wrote {d} doc files to {DOCS_OUT}")
+        print(f"codegen --docs: wrote {d} doc files to {DOCS}")
         return 0
     if args.check:
         rc = check()

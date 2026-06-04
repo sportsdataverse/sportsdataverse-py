@@ -1,10 +1,9 @@
 """Offline tests for the generated documentation layer (``generate.render_*``).
 
 These cover the pure markdown renderers -- the 8-section reference block, the league
-index, the loaders page, and the parameter reference -- without touching the network
-or the live Docusaurus tree. The generated docs are written to the tracked staging
-mirror ``tools/codegen/_generated_docs`` (parallel to ``_generated``); a drift guard
-asserts that staging matches a fresh render.
+index, the loaders page, and the parameter reference -- without touching the network.
+``generate.py --docs`` writes the per-league reference subtree into the live Docusaurus
+tree (``docs/docs/{league}/``); a drift guard asserts that tree matches a fresh render.
 """
 
 from __future__ import annotations

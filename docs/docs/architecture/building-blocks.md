@@ -158,9 +158,9 @@ Current dispatchers in the package:
 
 | Function | Sections | Endpoint |
 |---|---:|---|
-| [`parse_summary`](../parsers/index) | 21 | ESPN Site v2 `summary` |
-| [`parse_nhl_web_right_rail`](../nhl/api-web) | 6 | NHL `gamecenter/{id}/right-rail` |
-| [`parse_nhl_web_club_stats`](../nhl/api-web) | 2 | NHL `club-stats/{team}/{season}/{game_type}` |
+| [`parse_summary`](../parsers/index.md) | 21 | ESPN Site v2 `summary` |
+| [`parse_nhl_web_right_rail`](../nhl/reference/nhl_api_web.md) | 6 | NHL `gamecenter/{id}/right-rail` |
+| [`parse_nhl_web_club_stats`](../nhl/reference/nhl_api_web.md) | 2 | NHL `club-stats/{team}/{season}/{game_type}` |
 
 **When to use**: a new endpoint whose payload would force the
 caller to extract 3+ unrelated sub-frames manually. The dispatcher
@@ -193,7 +193,7 @@ When adding a parser to any of the 5 parser modules:
 
 - [ESPN cross-league architecture](./espn-cross-league) — the
   factory / shim pattern in full.
-- [Parsers overview](../parsers/index) — the registry contract +
+- [Parsers overview](../parsers/index.md) — the registry contract +
   the 3 generic fall-throughs.
 - [Test fixtures index](../parsers/fixtures) — the 89-capture
   inventory.
