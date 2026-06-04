@@ -124,6 +124,32 @@ from sportsdataverse.mlb import espn_mlb_tournaments as _raw_espn_mlb_tournament
 from sportsdataverse.mlb import espn_mlb_transactions as _raw_espn_mlb_transactions
 from sportsdataverse.mlb import espn_mlb_venue as _raw_espn_mlb_venue
 from sportsdataverse.mlb import espn_mlb_venues as _raw_espn_mlb_venues
+from sportsdataverse.mlb import mlb_api_award_recipients as _raw_mlb_api_award_recipients
+from sportsdataverse.mlb import mlb_api_awards as _raw_mlb_api_awards
+from sportsdataverse.mlb import mlb_api_boxscore as _raw_mlb_api_boxscore
+from sportsdataverse.mlb import mlb_api_draft as _raw_mlb_api_draft
+from sportsdataverse.mlb import mlb_api_game_content as _raw_mlb_api_game_content
+from sportsdataverse.mlb import mlb_api_game_context_metrics as _raw_mlb_api_game_context_metrics
+from sportsdataverse.mlb import mlb_api_leagues as _raw_mlb_api_leagues
+from sportsdataverse.mlb import mlb_api_linescore as _raw_mlb_api_linescore
+from sportsdataverse.mlb import mlb_api_meta as _raw_mlb_api_meta
+from sportsdataverse.mlb import mlb_api_pbp as _raw_mlb_api_pbp
+from sportsdataverse.mlb import mlb_api_people as _raw_mlb_api_people
+from sportsdataverse.mlb import mlb_api_person as _raw_mlb_api_person
+from sportsdataverse.mlb import mlb_api_person_game_stats as _raw_mlb_api_person_game_stats
+from sportsdataverse.mlb import mlb_api_play_by_play as _raw_mlb_api_play_by_play
+from sportsdataverse.mlb import mlb_api_schedule_postseason as _raw_mlb_api_schedule_postseason
+from sportsdataverse.mlb import mlb_api_season as _raw_mlb_api_season
+from sportsdataverse.mlb import mlb_api_sport_players as _raw_mlb_api_sport_players
+from sportsdataverse.mlb import mlb_api_sports as _raw_mlb_api_sports
+from sportsdataverse.mlb import mlb_api_team as _raw_mlb_api_team
+from sportsdataverse.mlb import mlb_api_team_affiliates as _raw_mlb_api_team_affiliates
+from sportsdataverse.mlb import mlb_api_team_alumni as _raw_mlb_api_team_alumni
+from sportsdataverse.mlb import mlb_api_team_roster as _raw_mlb_api_team_roster
+from sportsdataverse.mlb import mlb_api_umpires as _raw_mlb_api_umpires
+from sportsdataverse.mlb import mlb_api_venue as _raw_mlb_api_venue
+from sportsdataverse.mlb import mlb_api_venues as _raw_mlb_api_venues
+from sportsdataverse.mlb import mlb_api_win_probability as _raw_mlb_api_win_probability
 from sportsdataverse.mlb import download as download  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_calendar as espn_mlb_calendar  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_game_rosters as espn_mlb_game_rosters  # noqa: F401
@@ -137,46 +163,20 @@ from sportsdataverse.mlb import load_mlb_rosters as load_mlb_rosters  # noqa: F4
 from sportsdataverse.mlb import load_mlb_schedule as load_mlb_schedule  # noqa: F401
 from sportsdataverse.mlb import load_mlb_team_boxscore as load_mlb_team_boxscore  # noqa: F401
 from sportsdataverse.mlb import mlb_api_attendance as mlb_api_attendance  # noqa: F401
-from sportsdataverse.mlb import mlb_api_award_recipients as mlb_api_award_recipients  # noqa: F401
-from sportsdataverse.mlb import mlb_api_awards as mlb_api_awards  # noqa: F401
-from sportsdataverse.mlb import mlb_api_boxscore as mlb_api_boxscore  # noqa: F401
 from sportsdataverse.mlb import mlb_api_divisions as mlb_api_divisions  # noqa: F401
-from sportsdataverse.mlb import mlb_api_draft as mlb_api_draft  # noqa: F401
 from sportsdataverse.mlb import mlb_api_draft_prospects as mlb_api_draft_prospects  # noqa: F401
-from sportsdataverse.mlb import mlb_api_game_content as mlb_api_game_content  # noqa: F401
-from sportsdataverse.mlb import mlb_api_game_context_metrics as mlb_api_game_context_metrics  # noqa: F401
-from sportsdataverse.mlb import mlb_api_leagues as mlb_api_leagues  # noqa: F401
-from sportsdataverse.mlb import mlb_api_linescore as mlb_api_linescore  # noqa: F401
-from sportsdataverse.mlb import mlb_api_meta as mlb_api_meta  # noqa: F401
-from sportsdataverse.mlb import mlb_api_pbp as mlb_api_pbp  # noqa: F401
 from sportsdataverse.mlb import mlb_api_pbp_diff as mlb_api_pbp_diff  # noqa: F401
 from sportsdataverse.mlb import mlb_api_pbp_live as mlb_api_pbp_live  # noqa: F401
-from sportsdataverse.mlb import mlb_api_people as mlb_api_people  # noqa: F401
-from sportsdataverse.mlb import mlb_api_person as mlb_api_person  # noqa: F401
-from sportsdataverse.mlb import mlb_api_person_game_stats as mlb_api_person_game_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_api_person_stats as mlb_api_person_stats  # noqa: F401
-from sportsdataverse.mlb import mlb_api_play_by_play as mlb_api_play_by_play  # noqa: F401
 from sportsdataverse.mlb import mlb_api_schedule as mlb_api_schedule  # noqa: F401
-from sportsdataverse.mlb import mlb_api_schedule_postseason as mlb_api_schedule_postseason  # noqa: F401
-from sportsdataverse.mlb import mlb_api_season as mlb_api_season  # noqa: F401
 from sportsdataverse.mlb import mlb_api_seasons as mlb_api_seasons  # noqa: F401
-from sportsdataverse.mlb import mlb_api_sport_players as mlb_api_sport_players  # noqa: F401
-from sportsdataverse.mlb import mlb_api_sports as mlb_api_sports  # noqa: F401
 from sportsdataverse.mlb import mlb_api_standings as mlb_api_standings  # noqa: F401
 from sportsdataverse.mlb import mlb_api_stats as mlb_api_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_api_stats_leaders as mlb_api_stats_leaders  # noqa: F401
 from sportsdataverse.mlb import mlb_api_stats_streaks as mlb_api_stats_streaks  # noqa: F401
-from sportsdataverse.mlb import mlb_api_team as mlb_api_team  # noqa: F401
-from sportsdataverse.mlb import mlb_api_team_affiliates as mlb_api_team_affiliates  # noqa: F401
-from sportsdataverse.mlb import mlb_api_team_alumni as mlb_api_team_alumni  # noqa: F401
 from sportsdataverse.mlb import mlb_api_team_leaders as mlb_api_team_leaders  # noqa: F401
-from sportsdataverse.mlb import mlb_api_team_roster as mlb_api_team_roster  # noqa: F401
 from sportsdataverse.mlb import mlb_api_team_stats as mlb_api_team_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_api_teams as mlb_api_teams  # noqa: F401
-from sportsdataverse.mlb import mlb_api_umpires as mlb_api_umpires  # noqa: F401
-from sportsdataverse.mlb import mlb_api_venue as mlb_api_venue  # noqa: F401
-from sportsdataverse.mlb import mlb_api_venues as mlb_api_venues  # noqa: F401
-from sportsdataverse.mlb import mlb_api_win_probability as mlb_api_win_probability  # noqa: F401
 from sportsdataverse.mlb import most_recent_mlb_season as most_recent_mlb_season  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_list as parse_mlb_api_list  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_person_stats as parse_mlb_api_person_stats  # noqa: F401
@@ -1542,3 +1542,263 @@ def espn_mlb_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mlb_venues(*args, **kwargs)
+
+
+def mlb_api_award_recipients(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_award_recipients``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_award_recipients` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_award_recipients(*args, **kwargs)
+
+
+def mlb_api_awards(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_awards``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_awards` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_awards(*args, **kwargs)
+
+
+def mlb_api_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_boxscore``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_boxscore(*args, **kwargs)
+
+
+def mlb_api_draft(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_draft``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_draft` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_draft(*args, **kwargs)
+
+
+def mlb_api_game_content(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_game_content``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_game_content` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_game_content(*args, **kwargs)
+
+
+def mlb_api_game_context_metrics(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_game_context_metrics``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_game_context_metrics` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_game_context_metrics(*args, **kwargs)
+
+
+def mlb_api_leagues(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_leagues``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_leagues` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_leagues(*args, **kwargs)
+
+
+def mlb_api_linescore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_linescore``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_linescore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_linescore(*args, **kwargs)
+
+
+def mlb_api_meta(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_meta``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_meta` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_meta(*args, **kwargs)
+
+
+def mlb_api_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_pbp``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_pbp(*args, **kwargs)
+
+
+def mlb_api_people(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_people``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_people` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_people(*args, **kwargs)
+
+
+def mlb_api_person(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_person``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_person` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_person(*args, **kwargs)
+
+
+def mlb_api_person_game_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_person_game_stats``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_person_game_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_person_game_stats(*args, **kwargs)
+
+
+def mlb_api_play_by_play(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_play_by_play``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_play_by_play` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_play_by_play(*args, **kwargs)
+
+
+def mlb_api_schedule_postseason(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_schedule_postseason``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_schedule_postseason` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_schedule_postseason(*args, **kwargs)
+
+
+def mlb_api_season(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_season``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_season` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_season(*args, **kwargs)
+
+
+def mlb_api_sport_players(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_sport_players``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_sport_players` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_sport_players(*args, **kwargs)
+
+
+def mlb_api_sports(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_sports``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_sports` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_sports(*args, **kwargs)
+
+
+def mlb_api_team(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_team``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_team` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_team(*args, **kwargs)
+
+
+def mlb_api_team_affiliates(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_team_affiliates``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_team_affiliates` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_team_affiliates(*args, **kwargs)
+
+
+def mlb_api_team_alumni(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_team_alumni``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_team_alumni` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_team_alumni(*args, **kwargs)
+
+
+def mlb_api_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_team_roster``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_team_roster(*args, **kwargs)
+
+
+def mlb_api_umpires(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_umpires``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_umpires` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_umpires(*args, **kwargs)
+
+
+def mlb_api_venue(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_venue``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_venue` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_venue(*args, **kwargs)
+
+
+def mlb_api_venues(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_venues``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_venues` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_venues(*args, **kwargs)
+
+
+def mlb_api_win_probability(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_api_win_probability``).
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_api_win_probability` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_api_win_probability(*args, **kwargs)

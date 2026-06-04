@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from sportsdataverse.mlb.mlb_api import *
+from sportsdataverse.mlb.mlb_api_extra import *
 from sportsdataverse.mlb.mlb_api_parsers import (
     MLB_API_ENDPOINT_PARSERS,
     parse_mlb_api_list,

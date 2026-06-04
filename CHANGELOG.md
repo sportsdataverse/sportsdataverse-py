@@ -172,9 +172,17 @@ The hand-written NHL native modules are being regenerated from endpoint specs
   records.nhl.com product), **non-breaking** (50 functions: 44 generated +
   `passthrough_query`, 6 value-embedded/scope-conditional ones preserved
   hand-written in `nhl_records_extra.py`).
-- The codegen engine gained flat-API collision resolution (`FlatApi.qualifier` +
-  `resolve_name`), `passthrough_query`, and a `build_flat`/`--check` path.
-  Remaining: `mlb_api` (family 5, hydrate/fields/metaType + 16 irregular residual).
+- **`mlb_api`** (family 5, final) is generated too -- kept `mlb_api_*` (the raw MLB
+  Stats API namespace, distinct from the curated `mlb_*` composites),
+  **non-breaking** (41 names: 26 generated + `passthrough_query` for hydrate/fields,
+  15 conditional-`_csv` / multi-param / `/api/v1.1/`-host functions preserved
+  hand-written in `mlb_api_extra.py`).
+- **All five native families are now codegen-generated.** Only `nhl_api_web` was a
+  breaking rename (its `web` qualifier was host-noise); the other four kept their
+  meaningful API namespaces. The codegen engine gained flat-API collision
+  resolution (`FlatApi.qualifier` + `resolve_name`), `passthrough_query`, and a
+  `build_flat`/`--check` drift gate. `test_parity_native` locked in each family's
+  faithfulness before its swap.
 
 ### CFB — advanced box score expansion (`create_box_score`)
 

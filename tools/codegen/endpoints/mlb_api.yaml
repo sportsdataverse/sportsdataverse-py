@@ -1,0 +1,434 @@
+api: mlb_api
+host: https://statsapi.mlb.com
+name_pattern: mlb_api_{short}
+module: mlb_api
+parser_module: mlb.mlb_api_parsers
+qualifier: ''
+passthrough_query: true
+runtime_imports:
+- _get
+endpoints:
+- short: schedule_postseason
+  summary: "GET /api/v1/schedule/postseason \u2014 postseason-only schedule for a season."
+  path: /api/v1/schedule/postseason
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: sport_id
+    query_key: sportId
+    type: int
+    default: 1
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  parser: parse_mlb_api_schedule
+- short: pbp
+  summary: "GET /api/v1.1/game/{gamePk}/feed/live \u2014 live firehose (v1.1)."
+  path: /api/v1.1/game/{game_pk}/feed/live
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: language
+    query_key: language
+    type: str
+  - name: timecode
+    query_key: language
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: boxscore
+  summary: "GET /api/v1/game/{gamePk}/boxscore \u2014 team + player boxscore for one game."
+  path: /api/v1/game/{game_pk}/boxscore
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: timecode
+    query_key: timecode
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: linescore
+  summary: "GET /api/v1/game/{gamePk}/linescore \u2014 inning-by-inning + current game state."
+  path: /api/v1/game/{game_pk}/linescore
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: timecode
+    query_key: timecode
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: play_by_play
+  summary: "GET /api/v1/game/{gamePk}/playByPlay \u2014 play-by-play with at-bat detail."
+  path: /api/v1/game/{game_pk}/playByPlay
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: timecode
+    query_key: timecode
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: game_context_metrics
+  summary: "GET /api/v1/game/{gamePk}/contextMetrics \u2014 WP, leverage index, in-game context."
+  path: /api/v1/game/{game_pk}/contextMetrics
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: win_probability
+  summary: "GET /api/v1/game/{gamePk}/winProbability \u2014 per-play WP timeline."
+  path: /api/v1/game/{game_pk}/winProbability
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: game_content
+  summary: "GET /api/v1/game/{gamePk}/content \u2014 articles, highlights, editorial content."
+  path: /api/v1/game/{game_pk}/content
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: team
+  summary: "GET /api/v1/teams/{teamId} \u2014 single team detail."
+  path: /api/v1/teams/{team_id}
+  path_params:
+  - name: team_id
+    type: int
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: sport_id
+    query_key: sportId
+    type: int
+    default: 1
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    team_id: 10
+  parser: parse_mlb_api_list
+- short: team_roster
+  summary: "GET /api/v1/teams/{teamId}/roster \u2014 team roster."
+  path: /api/v1/teams/{team_id}/roster
+  path_params:
+  - name: team_id
+    type: int
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: roster_type
+    query_key: rosterType
+    type: str
+    default: active
+  - name: date
+    query_key: date
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    team_id: 10
+  parser: parse_mlb_api_team_roster
+- short: team_alumni
+  summary: "GET /api/v1/teams/{teamId}/alumni \u2014 players who played for this team in a season."
+  path: /api/v1/teams/{team_id}/alumni
+  path_params:
+  - name: team_id
+    type: int
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: group
+    query_key: group
+    type: str
+    default: hitting
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  example_args:
+    team_id: 10
+  parser: parse_mlb_api_list
+- short: team_affiliates
+  summary: "GET /api/v1/teams/affiliates \u2014 org affiliates (MLB parent \u2192 minor league chain)."
+  path: /api/v1/teams/affiliates
+  extra_params:
+  - name: team_ids
+    query_key: teamIds
+    type: int|List[int]
+  - name: sport_id
+    query_key: sportId
+    type: int
+    default: 1
+  - name: season
+    query_key: season
+    type: int|str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  parser: parse_mlb_api_list
+- short: people
+  summary: "GET /api/v1/people?personIds=... \u2014 bulk person lookup by MLBAM id."
+  path: /api/v1/people
+  extra_params:
+  - name: person_ids
+    query_key: personIds
+    type: int|List[int]
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: person
+  summary: "GET /api/v1/people/{personId} \u2014 single person detail."
+  path: /api/v1/people/{person_id}
+  path_params:
+  - name: person_id
+    type: int
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    person_id: 660271
+  parser: parse_mlb_api_list
+- short: person_game_stats
+  summary: "GET /api/v1/people/{personId}/stats/game/{gamePk} \u2014 one player, one game."
+  path: /api/v1/people/{person_id}/stats/game/{game_pk}
+  path_params:
+  - name: person_id
+    type: int
+    required: true
+  - name: game_pk
+    type: int|str
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    person_id: 660271
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: sport_players
+  summary: "GET /api/v1/sports/{sportId}/players \u2014 every player in a sport for a season."
+  path: /api/v1/sports/{sport_id}/players
+  path_params:
+  - name: sport_id
+    type: int
+    required: false
+    default: 1
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: sports
+  summary: "GET /api/v1/sports \u2014 list known sports (MLB, MiLB, KBO, NPB, \u2026)."
+  path: /api/v1/sports
+  extra_params:
+  - name: sport_id
+    query_key: sportId
+    type: int
+  parser: parse_mlb_api_list
+- short: leagues
+  summary: "GET /api/v1/leagues \u2014 list leagues."
+  path: /api/v1/leagues
+  extra_params:
+  - name: sport_id
+    query_key: sportId
+    type: int
+    default: 1
+  - name: season
+    query_key: season
+    type: int|str
+  - name: league_ids
+    query_key: leagueIds
+    type: int|List[int]
+  parser: parse_mlb_api_list
+- short: season
+  summary: "GET /api/v1/seasons/{seasonId} \u2014 single season detail."
+  path: /api/v1/seasons/{season_id}
+  path_params:
+  - name: season_id
+    type: int|str
+    required: true
+  extra_params:
+  - name: sport_id
+    query_key: sportId
+    type: int
+    default: 1
+  example_args:
+    season_id: X
+  parser: parse_mlb_api_list
+- short: venues
+  summary: "GET /api/v1/venues \u2014 list venues."
+  path: /api/v1/venues
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: sport_ids
+    query_key: sportIds
+    type: int|List[int]
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  parser: parse_mlb_api_list
+- short: venue
+  summary: "GET /api/v1/venues/{venueId} \u2014 single venue detail."
+  path: /api/v1/venues/{venue_id}
+  path_params:
+  - name: venue_id
+    type: int
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  example_args:
+    venue_id: 15
+  parser: parse_mlb_api_list
+- short: meta
+  summary: "GET /api/v1/{metaType} \u2014 enum lookup (the API's self-describing surface)."
+  path: /api/v1/{meta_type}
+  path_params:
+  - name: meta_type
+    type: str
+    required: true
+  example_args:
+    meta_type: leagueLeaderTypes
+  parser: parse_mlb_api_list
+- short: awards
+  summary: "GET /api/v1/awards \u2014 list award IDs (call with no params to enumerate)."
+  path: /api/v1/awards
+  extra_params:
+  - name: sport_id
+    query_key: sportId
+    type: int
+  parser: parse_mlb_api_list
+- short: award_recipients
+  summary: "GET /api/v1/awards/{awardId}/recipients \u2014 historical winners of one award."
+  path: /api/v1/awards/{award_id}/recipients
+  path_params:
+  - name: award_id
+    type: str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  - name: sport_id
+    query_key: sportId
+    type: int
+    default: 1
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  example_args:
+    award_id: MLBHOF
+  parser: parse_mlb_api_list
+- short: draft
+  summary: "GET /api/v1/draft/{year} \u2014 draft results for a year (optionally one round)."
+  path: /api/v1/draft/{year}
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  extra_params:
+  - name: round_
+    query_key: round
+    type: int|str
+  - name: team_id
+    query_key: teamId
+    type: int
+  - name: player_id
+    query_key: playerId
+    type: int
+  - name: limit
+    query_key: limit
+    type: int
+    default: 100
+  example_args:
+    year: 2024
+  parser: parse_mlb_api_list
+- short: umpires
+  summary: "GET /api/v1/jobs/umpires \u2014 current umpire crew assignments."
+  path: /api/v1/jobs/umpires
+  parser: parse_mlb_api_list
