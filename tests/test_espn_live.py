@@ -158,9 +158,9 @@ def test_espn_cfb_conferences_returns_groups():
     payload = espn_cfb_conferences()
     assert isinstance(payload, dict), "expected a dict response"
     # The groups endpoint wraps its list under 'groups' or 'items'
-    assert (
-        "groups" in payload or "items" in payload
-    ), f"expected 'groups' or 'items' key, got keys: {list(payload.keys())}"
+    assert "groups" in payload or "items" in payload, (
+        f"expected 'groups' or 'items' key, got keys: {list(payload.keys())}"
+    )
 
 
 # ===========================================================================
@@ -210,7 +210,10 @@ def test_nhl_web_roster_toronto_2024():
 
 
 def test_mlb_api_teams_returns_30_teams_for_2024():
-    from sportsdataverse.mlb.mlb_api import mlb_api_teams
+    # mlb_api_teams is an irregular (multi-param) wrapper kept hand-written in
+    # mlb_api_extra after the codegen cutover; import from the package namespace,
+    # which re-exports both the generated mlb_api wrappers and the residuals.
+    from sportsdataverse.mlb import mlb_api_teams
 
     payload = mlb_api_teams(season=2024)
     teams = payload.get("teams") or []
@@ -220,7 +223,9 @@ def test_mlb_api_teams_returns_30_teams_for_2024():
 
 
 def test_mlb_api_schedule_opening_day_2024_returns_games():
-    from sportsdataverse.mlb.mlb_api import mlb_api_schedule
+    # mlb_api_schedule is a hand-written residual in mlb_api_extra (it forwards
+    # arbitrary **filters); import from the package namespace, which re-exports it.
+    from sportsdataverse.mlb import mlb_api_schedule
 
     payload = mlb_api_schedule(date="2024-03-20", sport_id=1)
     dates = payload.get("dates") or []
@@ -271,18 +276,18 @@ def test_espn_nfl_scoreboard_is_callable_with_correct_name():
     from sportsdataverse.nfl.nfl_espn_ext import espn_nfl_scoreboard
 
     assert callable(espn_nfl_scoreboard), "espn_nfl_scoreboard must be callable"
-    assert (
-        espn_nfl_scoreboard.__name__ == "espn_nfl_scoreboard"
-    ), f"__name__ mismatch: got {espn_nfl_scoreboard.__name__!r}"
+    assert espn_nfl_scoreboard.__name__ == "espn_nfl_scoreboard", (
+        f"__name__ mismatch: got {espn_nfl_scoreboard.__name__!r}"
+    )
 
 
 def test_espn_mlb_scoreboard_is_callable_with_correct_name():
     from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_scoreboard
 
     assert callable(espn_mlb_scoreboard), "espn_mlb_scoreboard must be callable"
-    assert (
-        espn_mlb_scoreboard.__name__ == "espn_mlb_scoreboard"
-    ), f"__name__ mismatch: got {espn_mlb_scoreboard.__name__!r}"
+    assert espn_mlb_scoreboard.__name__ == "espn_mlb_scoreboard", (
+        f"__name__ mismatch: got {espn_mlb_scoreboard.__name__!r}"
+    )
 
 
 # ===========================================================================
