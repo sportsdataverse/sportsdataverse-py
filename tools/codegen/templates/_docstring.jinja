@@ -1,7 +1,7 @@
 {% macro docstring(ep, sport, league) -%}
     """{{ ep.summary }}
 
-    Bound to sport={{ sport!r }}, league={{ league!r }}.
+    Bound to sport={{ sport|py_repr }}, league={{ league|py_repr }}.
 
     Endpoint: ``GET {{ ep.host_url }}{{ ep.path }}``
 {% if ep.example_url %}
