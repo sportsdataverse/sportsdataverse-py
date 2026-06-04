@@ -6,9 +6,16 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
+
+import polars as pl
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import SeasonNotFoundError  # noqa: F401  (re-export for generated loaders)
+
+# Release / raw-data hosts for the generated dataset loaders.
+_SDV_RELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
+_RAW_DATA = "https://raw.githubusercontent.com/sportsdataverse/"
 
 
 def _get(url: str, params: Optional[dict] = None, **kwargs) -> Dict:
@@ -40,6 +47,37 @@ def bool_str(value: Any) -> Optional[str]:
     if value is None:
         return None
     return "true" if value else "false"
+
+
+def _as_season_list(seasons: Any) -> List[int]:
+    """Normalize an int / iterable of seasons to a list of ints."""
+    if isinstance(seasons, (int,)) and not isinstance(seasons, bool):
+        return [seasons]
+    if isinstance(seasons, str):
+        return [int(seasons)]
+    return [int(s) for s in seasons]
+
+
+def cli_warn(msg: str) -> None:
+    """Emit a non-fatal warning (used by 404-safe loaders for skipped seasons)."""
+    import warnings
+
+    warnings.warn(msg, stacklevel=2)
+
+
+def _read_release_parquet(url: str):
+    """Read a release parquet; return ``None`` on 404 / missing asset (404-safe loaders).
+
+    Re-raises anything that isn't a missing-asset error so genuine parse/schema bugs
+    aren't silently swallowed.
+    """
+    try:
+        return pl.read_parquet(url, use_pyarrow=True)
+    except Exception as e:  # noqa: BLE001 -- classify fetch/parse failures
+        msg = str(e).lower()
+        if any(tok in msg for tok in ("404", "not found", "no such", "forbidden", "could not")):
+            return None
+        raise
 
 
 def format_nhl_season(season: Any) -> Optional[str]:
