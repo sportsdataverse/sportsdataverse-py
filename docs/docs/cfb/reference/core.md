@@ -1990,7 +1990,7 @@ ESPN endpoint.
 | `division_wins` | double |  |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
-| `away` | character |  |
+| `away` | character | Away team name. |
 | `vs. conf.` | character | Vs. conf.. |
 | `vs ap top 25` | character |  |
 | `vs usa ranked teams` | character |  |

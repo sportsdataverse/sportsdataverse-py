@@ -1985,7 +1985,7 @@ ESPN endpoint.
 | `differential` | double | Differential. |
 | `division_win_percent` | double | Division win percent. |
 | `games_behind` | double | Games behind. |
-| `games_played` | double |  |
+| `games_played` | double | Games played. |
 | `league_win_percent` | double | League win percent. |
 | `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
@@ -1994,27 +1994,27 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `ties` | double |  |
+| `ties` | double | Ties. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
 | `division_games_behind` | double |  |
 | `division_percent` | double |  |
 | `division_tied` | double |  |
-| `home_losses` | double |  |
-| `home_ties` | double |  |
-| `home_wins` | double |  |
+| `home_losses` | double | Home team's losses. |
+| `home_ties` | double | Total home ties. |
+| `home_wins` | double | Home team's wins. |
 | `magic_number_division` | double |  |
 | `magic_number_wildcard` | double |  |
 | `playoff_percent` | double |  |
-| `road_losses` | double |  |
+| `road_losses` | double | Road losses. |
 | `road_ties` | double |  |
-| `road_wins` | double |  |
+| `road_wins` | double | Road wins. |
 | `wild_card_percent` | double |  |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `intradivision` | character |  |
-| `intraleague` | character |  |
+| `intradivision` | character | Intradivision. |
+| `intraleague` | character | Intraleague. |
 | `last ten games` | character | Last ten games. |
 
 ### Example

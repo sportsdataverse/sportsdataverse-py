@@ -172,6 +172,78 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
     return rows
 
 
+# ---------------------------------------------------------------------------
+# Render-time column-description fill from the mined SDV R-package dictionary.
+#
+# A prior codegen step mined per-column descriptions from the SDV R packages
+# (cfbfastR / hoopR / wehoop / baseballr) into r_column_descriptions.yaml, shape:
+#   {package: {col_name: description}, ..., _merged: {col_name: description}}
+# At RENDER time (NOT capture) we backfill any blank return-table description
+# cell from this dictionary, keyed by column name and league-aware package. A
+# stored (hand-curated) description is never overwritten. Unmatched columns stay
+# blank. This is purely cosmetic doc enrichment -- no schema YAML is mutated.
+# ---------------------------------------------------------------------------
+
+_R_DICT_FILE = ROOT / "tools" / "codegen" / "r_column_descriptions.yaml"
+
+# League prefix -> SDV R package whose @return tables describe its columns.
+# nfl/nhl/pwhl have no package, so they resolve via the ``_merged`` fallback.
+_LEAGUE_R_PACKAGE = {
+    "cfb": "cfbfastR",
+    "nba": "hoopR",
+    "mbb": "hoopR",
+    "wnba": "wehoop",
+    "wbb": "wehoop",
+    "mlb": "baseballr",
+}
+
+
+@functools.lru_cache(maxsize=1)
+def _r_col_descs() -> dict:
+    """``{package: {col_name: description}}`` mined SDV R-package column docs.
+
+    Cached loader of ``r_column_descriptions.yaml`` (committed + deterministic).
+    Empty dict if the file is absent so the render-time fill is a silent no-op."""
+    if not _R_DICT_FILE.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(_R_DICT_FILE.read_text(encoding="utf-8")) or {}
+
+
+@functools.lru_cache(maxsize=None)
+def _r_pkg_dict(league: str | None) -> dict:
+    """The per-league lookup dict: the league's R package map (cached per league).
+
+    ``None`` (or a league with no R package) yields ``{}`` so the caller falls
+    back to ``_merged`` -- the union, most-frequent description per column name."""
+    d = _r_col_descs()
+    pkg = _LEAGUE_R_PACKAGE.get(league or "")
+    return d.get(pkg, {}) if pkg else {}
+
+
+def _r_col_desc(league: str | None, col: str) -> str:
+    """Mined description for ``col`` for ``league``'s R package, else ``_merged``.
+
+    Resolution: league package dict -> ``_merged`` union -> ``""``. ``league=None``
+    (or a league with no package, e.g. nfl/nhl/pwhl) skips straight to ``_merged``."""
+    if not col:
+        return ""
+    val = _r_pkg_dict(league).get(col)
+    if val:
+        return val
+    return _r_col_descs().get("_merged", {}).get(col, "") or ""
+
+
+def _table_cell_desc(stored: str, league: str | None, col: str) -> str:
+    """A return-table description cell: stored value if non-empty, else R-dict fill.
+
+    Never overwrites a non-empty (hand-curated) stored description. The result is
+    pipe/newline-escaped so it is safe inside a single markdown table cell."""
+    raw = stored if (stored or "").strip() else _r_col_desc(league, col)
+    return (raw or "").replace("|", "\\|").replace("\n", " ").strip()
+
+
 @functools.lru_cache(maxsize=None)
 def _return_table(schema_name: str | None, league: str | None = None) -> str:
     """Markdown ``@return`` table(s) for a ``returns_schema``.
@@ -200,7 +272,11 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
 
     def tbl(cols) -> str:
         head = "| col_name | type | description |\n|---|---|---|\n"
-        return head + "".join(f"| `{c['name']}` | {c.get('type', '')} | {c.get('description', '')} |\n" for c in cols)
+        return head + "".join(
+            f"| `{c['name']}` | {c.get('type', '')} | "
+            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''))} |\n"
+            for c in cols
+        )
 
     if d.get("kind") == "frames":
         blocks = [blk for blk in d.get("frames", []) if blk.get("columns")]
@@ -1890,10 +1966,15 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
                 p[k] = p[k].replace("|", "\\|")
         # Returns column table from the committed autodoc schema (offline read);
         # empty list -> the template falls back to the docstring Returns prose.
+        # Blank description cells are backfilled from the mined SDV R-package dict
+        # (league-aware; ``global`` scope -> ``_merged`` fallback via league=None);
+        # a non-empty captured description is preserved.
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
         for c in return_columns:
-            for k in ("name", "type", "description"):
-                c[k] = str(c.get(k, "")).replace("|", "\\|")
+            raw_name = str(c.get("name", ""))
+            c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name)
+            c["name"] = raw_name.replace("|", "\\|")
+            c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n), []).append(
             {"name": n, "signature": _autodoc_signature(obj), "return_columns": return_columns, **view},
         )

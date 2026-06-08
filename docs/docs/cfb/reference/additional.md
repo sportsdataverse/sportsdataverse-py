@@ -28,75 +28,75 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_id` | integer |  |
-| `athlete_uid` | character |  |
-| `athlete_guid` | character |  |
-| `athlete_type` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `full_name` | character |  |
-| `athlete_display_name` | character |  |
-| `short_name` | character |  |
-| `weight` | double |  |
-| `display_weight` | character |  |
-| `height` | double |  |
-| `display_height` | character |  |
-| `slug` | character |  |
-| `jersey` | character |  |
-| `linked` | logical |  |
-| `active` | logical |  |
+| `athlete_id` | integer | ESPN athlete id. |
+| `athlete_uid` | character | ESPN athlete UID (universal identifier). |
+| `athlete_guid` | character | ESPN athlete GUID. |
+| `athlete_type` | character | Athlete type / class. |
+| `first_name` | character | Athlete first name. |
+| `last_name` | character | Athlete last name. |
+| `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
+| `athlete_display_name` | character | Player display name; `athlete_detail = TRUE` only. |
+| `short_name` | character | Ranking source short name (e.g. `AP Poll`). |
+| `weight` | double | Listed weight (lbs). |
+| `display_weight` | character | Human-readable weight (e.g. `205 lbs`). |
+| `height` | double | Listed height (inches). |
+| `display_height` | character | Human-readable height (e.g. `6' 1"`). |
+| `slug` | character | URL slug for the team. |
+| `jersey` | character | Jersey number. |
+| `linked` | logical | TRUE if the record is linked to a related entity. |
+| `active` | logical | `TRUE` if the player was active for the game. |
 | `alternate_ids_sdr` | character |  |
-| `birth_place_city` | character |  |
-| `birth_place_state` | character |  |
-| `birth_place_country` | character |  |
+| `birth_place_city` | character | Birth place city. |
+| `birth_place_state` | character | Birth place state. |
+| `birth_place_country` | character | Birth place country. |
 | `birth_country_alternate_id` | character |  |
 | `birth_country_abbreviation` | character |  |
-| `headshot_href` | character |  |
-| `headshot_alt` | character |  |
+| `headshot_href` | character | URL of the athlete headshot image. |
+| `headshot_alt` | character | Alternative-text label for the headshot. |
 | `flag_href` | character |  |
 | `flag_alt` | character |  |
 | `flag_rel` | character |  |
-| `experience_years` | integer |  |
-| `experience_display_value` | character |  |
-| `experience_abbreviation` | character |  |
-| `status_id` | character |  |
-| `status_name` | character |  |
-| `status_type` | character |  |
-| `status_abbreviation` | character |  |
-| `hand_type` | character |  |
-| `hand_abbreviation` | character |  |
-| `hand_display_value` | character |  |
-| `age` | integer |  |
-| `date_of_birth` | character |  |
-| `starter` | logical |  |
+| `experience_years` | integer | Years of experience. |
+| `experience_display_value` | character | Experience display value. |
+| `experience_abbreviation` | character | Experience abbreviation. |
+| `status_id` | character | ESPN commitment status id. |
+| `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
+| `status_type` | character | Status type. |
+| `status_abbreviation` | character | Status abbreviation. |
+| `hand_type` | character | Hand type. |
+| `hand_abbreviation` | character | Hand abbreviation. |
+| `hand_display_value` | character | Hand display value. |
+| `age` | integer | Player age (in years). |
+| `date_of_birth` | character | Player date of birth (if published). |
+| `starter` | logical | `TRUE` if the athlete started the game. |
 | `jersey_right` | character |  |
-| `valid` | logical |  |
-| `did_not_play` | logical |  |
-| `display_name` | character |  |
+| `valid` | logical | `TRUE` if the roster entry is flagged valid by ESPN. |
+| `did_not_play` | logical | `TRUE` if the athlete did not play. |
+| `display_name` | character | Human-readable metric name. |
 | `athlete_href` | character |  |
 | `position_href` | character |  |
 | `statistics_href` | character |  |
-| `team_id` | integer |  |
-| `order` | integer |  |
-| `home_away` | character |  |
-| `winner` | logical |  |
-| `team_guid` | character |  |
-| `team_uid` | character |  |
-| `team_slug` | character |  |
-| `team_location` | character |  |
-| `team_name` | character |  |
-| `team_nickname` | character |  |
-| `team_abbreviation` | character |  |
-| `team_display_name` | character |  |
-| `team_short_display_name` | character |  |
-| `team_color` | character |  |
-| `team_alternate_color` | character |  |
-| `is_active` | logical |  |
-| `is_all_star` | logical |  |
+| `team_id` | integer | ESPN team id. |
+| `order` | integer | Team order within the competition (0 = first). |
+| `home_away` | character | `home` or `away`. |
+| `winner` | logical | `TRUE` if this team won the game. |
+| `team_guid` | character | ESPN team GUID. |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_slug` | character | Team slug for the stat row. |
+| `team_location` | character | Team location / school name; `team_detail = TRUE` only. |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
+| `team_nickname` | character | Team nickname label; `team_detail = TRUE` only. |
+| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `team_display_name` | character | Full team display name; `team_detail = TRUE` only. |
+| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
+| `team_color` | character | Primary team color; `team_detail = TRUE` only. |
+| `team_alternate_color` | character | Alternate team color; `team_detail = TRUE` only. |
+| `is_active` | logical | Whether the team is currently active. |
+| `is_all_star` | logical | Whether the team is an all-star team. |
 | `team_alternate_ids_sdr` | character |  |
-| `logo_href` | character |  |
-| `logo_dark_href` | character |  |
-| `game_id` | integer |  |
+| `logo_href` | character | URL of the default team logo. |
+| `logo_dark_href` | character | URL of the dark-variant team logo. |
+| `game_id` | integer | ESPN game identifier. |
 
 **Example**
 
@@ -138,19 +138,19 @@ Polars (or pandas) DataFrame, one row per play. Columns include ``game_id``, ``p
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer |  |
-| `play_id` | integer |  |
+| `game_id` | integer | ESPN game identifier. |
+| `play_id` | integer | ESPN play id. |
 | `kicker_player_name` | character |  |
-| `passer_player_name` | character |  |
-| `receiver_player_name` | character |  |
-| `rusher_player_name` | character |  |
+| `passer_player_name` | character | Name of the passer on a passing play. |
+| `receiver_player_name` | character | Name of the receiver on a passing play. |
+| `rusher_player_name` | character | Name of the rusher on a rushing play. |
 | `scorer_player_name` | character |  |
 | `returner_player_name` | character |  |
 | `pass_defender_player_name` | character |  |
 | `penalized_player_name` | character |  |
 | `sacked_by_player_name` | character |  |
 | `pat_scorer_player_name` | character |  |
-| `punter_player_name` | character |  |
+| `punter_player_name` | character | Name of the punter. |
 | `kicker_player_id` | character |  |
 | `passer_player_id` | character |  |
 | `receiver_player_id` | character |  |
@@ -230,44 +230,44 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer |  |
-| `season_type` | character |  |
-| `total` | logical |  |
-| `athlete_id` | integer |  |
-| `athlete_uid` | character |  |
-| `athlete_guid` | character |  |
-| `athlete_type` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `full_name` | character |  |
-| `display_name` | character |  |
-| `short_name` | character |  |
-| `weight` | double |  |
-| `display_weight` | character |  |
-| `height` | double |  |
-| `display_height` | character |  |
-| `age` | integer |  |
-| `date_of_birth` | character |  |
-| `jersey` | character |  |
-| `slug` | character |  |
-| `active` | logical |  |
-| `position_id` | integer |  |
-| `position_name` | character |  |
-| `position_display_name` | character |  |
-| `position_abbreviation` | character |  |
-| `college_name` | character |  |
-| `status_id` | integer |  |
-| `status_name` | character |  |
+| `season` | integer | Season (4-digit year). |
+| `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
+| `total` | logical | Total. |
+| `athlete_id` | integer | ESPN athlete id. |
+| `athlete_uid` | character | ESPN athlete UID (universal identifier). |
+| `athlete_guid` | character | ESPN athlete GUID. |
+| `athlete_type` | character | Athlete type / class. |
+| `first_name` | character | Athlete first name. |
+| `last_name` | character | Athlete last name. |
+| `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
+| `display_name` | character | Human-readable metric name. |
+| `short_name` | character | Ranking source short name (e.g. `AP Poll`). |
+| `weight` | double | Listed weight (lbs). |
+| `display_weight` | character | Human-readable weight (e.g. `205 lbs`). |
+| `height` | double | Listed height (inches). |
+| `display_height` | character | Human-readable height (e.g. `6' 1"`). |
+| `age` | integer | Player age (in years). |
+| `date_of_birth` | character | Player date of birth (if published). |
+| `jersey` | character | Jersey number. |
+| `slug` | character | URL slug for the team. |
+| `active` | logical | `TRUE` if the player was active for the game. |
+| `position_id` | integer | ESPN position id. |
+| `position_name` | character | Position name (e.g. `Quarterback`); `position_detail = TRUE` only. |
+| `position_display_name` | character | Human-readable position name; `position_detail = TRUE` only. |
+| `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
+| `college_name` | character | College name. |
+| `status_id` | integer | ESPN commitment status id. |
+| `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
 | `general_fumbles` | double |  |
 | `general_fumbles_lost` | double |  |
 | `general_fumbles_touchdowns` | double |  |
-| `general_games_played` | double |  |
+| `general_games_played` | double | Games Played. |
 | `general_offensive_two_pt_returns` | double |  |
 | `general_offensive_fumbles_touchdowns` | double |  |
 | `general_defensive_fumbles_touchdowns` | double |  |
 | `passing_avg_gain` | double |  |
 | `passing_completion_pct` | double |  |
-| `passing_completions` | double |  |
+| `passing_completions` | double | Pass completions (split from CFBD's `C/ATT` field). |
 | `passing_espnqb_rating` | double |  |
 | `passing_interception_pct` | double |  |
 | `passing_interceptions` | double |  |
@@ -304,7 +304,7 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 | `passing_yards_per_game` | double |  |
 | `passing_yards_per_pass_attempt` | double |  |
 | `passing_net_yards_per_pass_attempt` | double |  |
-| `passing_qbr` | double |  |
+| `passing_qbr` | double | ESPN Quarterback Rating (QBR) for the player in this game. |
 | `passing_adj_qbr` | double |  |
 | `passing_quarterback_rating` | double |  |
 | `rushing_avg_gain` | double |  |
@@ -379,19 +379,19 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 | `scoring_two_point_rec_convs` | double |  |
 | `scoring_two_point_rush_convs` | double |  |
 | `scoring_one_pt_safeties_made` | double |  |
-| `team_id` | integer |  |
-| `team_uid` | character |  |
-| `team_guid` | character |  |
-| `team_slug` | character |  |
-| `team_location` | character |  |
-| `team_name` | character |  |
-| `team_abbreviation` | character |  |
-| `team_display_name` | character |  |
-| `team_short_display_name` | character |  |
-| `team_color` | character |  |
-| `team_alternate_color` | character |  |
-| `team_is_active` | logical |  |
-| `team_logo_href` | character |  |
+| `team_id` | integer | ESPN team id. |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_guid` | character | ESPN team GUID. |
+| `team_slug` | character | Team slug for the stat row. |
+| `team_location` | character | Team location / school name; `team_detail = TRUE` only. |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
+| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `team_display_name` | character | Full team display name; `team_detail = TRUE` only. |
+| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
+| `team_color` | character | Primary team color; `team_detail = TRUE` only. |
+| `team_alternate_color` | character | Alternate team color; `team_detail = TRUE` only. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_logo_href` | character | Default team logo URL; `team_detail = TRUE` only. |
 
 **Example**
 
@@ -422,84 +422,84 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
-| `uid` | character |  |
-| `date` | character |  |
-| `attendance` | integer |  |
-| `time_valid` | logical |  |
+| `id` | character | 247Sports referencing id for the recruit. |
+| `uid` | character | ESPN global unique identifier. |
+| `date` | character | Date of the poll release. |
+| `attendance` | integer | Reported attendance at the game. |
+| `time_valid` | logical | Time valid. |
 | `date_valid` | logical |  |
-| `neutral_site` | logical |  |
-| `conference_competition` | logical |  |
-| `play_by_play_available` | logical |  |
-| `recent` | logical |  |
-| `start_date` | character |  |
-| `broadcast` | character |  |
-| `highlights` | character |  |
-| `notes_type` | character |  |
-| `notes_headline` | character |  |
-| `broadcast_market` | character |  |
-| `broadcast_name` | character |  |
-| `type_id` | character |  |
-| `type_abbreviation` | character |  |
-| `venue_id` | character |  |
-| `venue_full_name` | character |  |
-| `venue_address_city` | character |  |
+| `neutral_site` | logical | TRUE/FALSE flag for if the game took place at a neutral site. |
+| `conference_competition` | logical | Conference competition. |
+| `play_by_play_available` | logical | TRUE if play-by-play is available. |
+| `recent` | logical | Recent. |
+| `start_date` | character | Season start timestamp (ISO 8601, UTC). |
+| `broadcast` | character | Broadcast network short name. |
+| `highlights` | character | Game highlight urls. |
+| `notes_type` | character | Notes type. |
+| `notes_headline` | character | Notes headline. |
+| `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
+| `broadcast_name` | character | Broadcast name. |
+| `type_id` | character | Play-type id. |
+| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
+| `venue_id` | character | Referencing venue id. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_address_city` | character | Venue address city. |
 | `venue_address_country` | character |  |
-| `venue_indoor` | logical |  |
-| `status_clock` | double |  |
-| `status_display_clock` | character |  |
-| `status_period` | integer |  |
-| `status_type_id` | character |  |
-| `status_type_name` | character |  |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `status_type_detail` | character |  |
-| `status_type_short_detail` | character |  |
-| `format_regulation_periods` | integer |  |
-| `home_id` | character |  |
-| `home_uid` | character |  |
-| `home_location` | character |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_short_display_name` | character |  |
-| `home_color` | character |  |
-| `home_alternate_color` | character |  |
-| `home_is_active` | logical |  |
-| `home_venue_id` | character |  |
-| `home_logo` | character |  |
-| `home_conference_id` | character |  |
-| `home_score` | character |  |
+| `venue_indoor` | logical | Whether the home venue is indoors. |
+| `status_clock` | double | Status clock. |
+| `status_display_clock` | character | Status display clock. |
+| `status_period` | integer | Status period. |
+| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_name` | character | Status type name. |
+| `status_type_state` | character | Status type state. |
+| `status_type_completed` | logical | Status type completed. |
+| `status_type_description` | character | Status type description. |
+| `status_type_detail` | character | Status type detail. |
+| `status_type_short_detail` | character | Status type short detail. |
+| `format_regulation_periods` | integer | Format regulation periods. |
+| `home_id` | character | Home team referencing id. |
+| `home_uid` | character | Home team's uid. |
+| `home_location` | character | Home team's location. |
+| `home_name` | character | Home name. |
+| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_display_name` | character | Home display name. |
+| `home_short_display_name` | character | Home short display name. |
+| `home_color` | character | Color code (hex) for home. |
+| `home_alternate_color` | character | Color code (hex) for home alternate. |
+| `home_is_active` | logical | Home team's is active. |
+| `home_venue_id` | character | Unique identifier for home venue. |
+| `home_logo` | character | Home team logo URL. |
+| `home_conference_id` | character | Unique identifier for home conference. |
+| `home_score` | character | Home-team score after the play. |
 | `home_current_rank` | integer |  |
 | `home_linescores` | integer |  |
 | `home_records` | character |  |
-| `away_id` | character |  |
-| `away_uid` | character |  |
-| `away_location` | character |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_short_display_name` | character |  |
-| `away_color` | character |  |
-| `away_alternate_color` | character |  |
-| `away_is_active` | logical |  |
-| `away_venue_id` | character |  |
-| `away_logo` | character |  |
-| `away_conference_id` | character |  |
-| `away_score` | character |  |
+| `away_id` | character | Away team referencing id. |
+| `away_uid` | character | Away team's uid. |
+| `away_location` | character | Away team's location. |
+| `away_name` | character | Away name. |
+| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_display_name` | character | Away display name. |
+| `away_short_display_name` | character | Away short display name. |
+| `away_color` | character | Color code (hex) for away. |
+| `away_alternate_color` | character | Color code (hex) for away alternate. |
+| `away_is_active` | logical | Away team's is active. |
+| `away_venue_id` | character | Unique identifier for away venue. |
+| `away_logo` | character | Away team logo URL. |
+| `away_conference_id` | character | Unique identifier for away conference. |
+| `away_score` | character | Away-team score after the play. |
 | `away_current_rank` | integer |  |
 | `away_linescores` | integer |  |
 | `away_records` | character |  |
-| `game_id` | integer |  |
-| `season` | integer |  |
-| `season_type` | integer |  |
-| `week` | integer |  |
-| `venue_address_state` | character |  |
-| `groups_id` | character |  |
-| `groups_name` | character |  |
-| `groups_short_name` | character |  |
-| `groups_is_conference` | logical |  |
+| `game_id` | integer | ESPN game identifier. |
+| `season` | integer | Season (4-digit year). |
+| `season_type` | integer | ESPN season type (2 = regular, 3 = postseason). |
+| `week` | integer | Game week of the season. |
+| `venue_address_state` | character | Venue address state / region. |
+| `groups_id` | character | Unique identifier for groups. |
+| `groups_name` | character | Groups name. |
+| `groups_short_name` | character | Groups short name. |
+| `groups_is_conference` | logical | Groups is conference. |
 
 **Example**
 
@@ -538,20 +538,20 @@ Polars dataframe containing betting lines available for the available seasons.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | double |  |
-| `game_id` | integer |  |
-| `season` | double |  |
+| `id` | double | 247Sports referencing id for the recruit. |
+| `game_id` | integer | ESPN game identifier. |
+| `season` | double | Season (4-digit year). |
 | `game_desc` | character |  |
 | `date_time` | character |  |
-| `market_type` | character |  |
+| `market_type` | character | Geographic market type (e.g. `National`). |
 | `abbr` | character |  |
 | `lines` | double |  |
 | `odds` | integer |  |
 | `opening_lines` | double |  |
 | `opening_odds` | integer |  |
 | `book` | character |  |
-| `season_type` | character |  |
-| `week` | integer |  |
+| `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
+| `week` | integer | Game week of the season. |
 
 **Example**
 
@@ -631,20 +631,20 @@ Polars dataframe containing schedule dates for the requested season. This functi
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character |  |
-| `team_alternate_color` | character |  |
-| `team_color` | character |  |
-| `team_display_name` | character |  |
-| `team_id` | character |  |
-| `team_is_active` | logical |  |
-| `team_is_all_star` | logical |  |
-| `team_location` | character |  |
+| `team_abbreviation` | character | Team abbreviation; `team_detail = TRUE` only. |
+| `team_alternate_color` | character | Alternate team color; `team_detail = TRUE` only. |
+| `team_color` | character | Primary team color; `team_detail = TRUE` only. |
+| `team_display_name` | character | Full team display name; `team_detail = TRUE` only. |
+| `team_id` | character | ESPN team id. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
+| `team_location` | character | Team location / school name; `team_detail = TRUE` only. |
 | `team_logos` | integer |  |
-| `team_name` | character |  |
-| `team_nickname` | character |  |
-| `team_short_display_name` | character |  |
-| `team_slug` | character |  |
-| `team_uid` | character |  |
+| `team_name` | character | Team nickname; `team_detail = TRUE` only. |
+| `team_nickname` | character | Team nickname label; `team_detail = TRUE` only. |
+| `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
+| `team_slug` | character | Team slug for the stat row. |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 
 **Example**
 
@@ -680,19 +680,19 @@ Polars dataframe containing teams available.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer |  |
-| `school` | character |  |
-| `mascot` | character |  |
-| `abbreviation` | character |  |
-| `alt_name1` | character |  |
-| `alt_name2` | character |  |
-| `alt_name3` | character |  |
-| `conference` | character |  |
-| `division` | character |  |
-| `color` | character |  |
-| `alt_color` | character |  |
-| `logo` | character |  |
-| `logo_dark` | character |  |
+| `team_id` | integer | ESPN team id. |
+| `school` | character | Team name. |
+| `mascot` | character | Team mascot. |
+| `abbreviation` | character | Metric abbreviation. |
+| `alt_name1` | character | Team alternate name 1 (as it appears in `play_text`). |
+| `alt_name2` | character | Team alternate name 2 (as it appears in `play_text`). |
+| `alt_name3` | character | Team alternate name 3 (as it appears in `play_text`). |
+| `conference` | character | Conference of the team. |
+| `division` | character | Division in the conference for the team. |
+| `color` | character | Primary team color (hex, no `#`). |
+| `alt_color` | character | Team color (alternate). |
+| `logo` | character | Team or league logo URL. |
+| `logo_dark` | character | Dark-mode logo URL. |
 
 **Example**
 

@@ -28,18 +28,18 @@ Pull EDGE detail stats for a single skater.
 | `seasons_with_edge_stats` | character |  |
 | `sog_summary` | character |  |
 | `sog_details` | character |  |
-| `player_id` | integer |  |
+| `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character |  |
 | `player_last_name_default` | character |  |
-| `player_birth_date` | character |  |
+| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
 | `player_shoots_catches` | character |  |
 | `player_sweater_number` | integer |  |
 | `player_position` | character |  |
-| `player_slug` | character |  |
+| `player_slug` | character | URL-safe player identifier. |
 | `player_headshot` | character |  |
 | `player_goals` | integer |  |
 | `player_assists` | integer |  |
-| `player_points` | integer |  |
+| `player_points` | integer | Player points. |
 | `player_games_played` | integer |  |
 | `player_team_common_name_default` | character |  |
 | `player_team_place_name_with_preposition_default` | character |  |
@@ -518,13 +518,13 @@ Pull EDGE detail stats for a single goalie.
 | `seasons_with_edge_stats` | character |  |
 | `shot_location_summary` | character |  |
 | `shot_location_details` | character |  |
-| `player_id` | integer |  |
+| `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character |  |
 | `player_last_name_default` | character |  |
-| `player_birth_date` | character |  |
+| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
 | `player_shoots_catches` | character |  |
 | `player_sweater_number` | integer |  |
-| `player_slug` | character |  |
+| `player_slug` | character | URL-safe player identifier. |
 | `player_headshot` | character |  |
 | `player_wins` | integer |  |
 | `player_losses` | integer |  |
@@ -710,9 +710,9 @@ Pull EDGE shot-location detail for a single goalie.
 
 | col_name | type | description |
 |---|---|---|
-| `area` | character |  |
+| `area` | character | Area. |
 | `shots_against` | integer |  |
-| `saves` | integer |  |
+| `saves` | integer | Saves. |
 | `goals_against` | integer |  |
 | `save_pctg` | double |  |
 | `shots_against_percentile` | double |  |
@@ -801,21 +801,21 @@ Pull EDGE detail stats for a single team.
 | `seasons_with_edge_stats` | character |  |
 | `sog_summary` | character |  |
 | `sog_details` | character |  |
-| `team_id` | integer |  |
+| `team_id` | integer | Unique team identifier. |
 | `team_common_name_default` | character |  |
 | `team_place_name_with_preposition_default` | character |  |
 | `team_place_name_with_preposition_fr` | character |  |
-| `team_abbrev` | character |  |
+| `team_abbrev` | character | Abbreviation for team. |
 | `team_team_logo_light` | character |  |
 | `team_team_logo_dark` | character |  |
-| `team_slug` | character |  |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_conference` | character |  |
 | `team_division` | character |  |
-| `team_wins` | integer |  |
-| `team_losses` | integer |  |
+| `team_wins` | integer | Team wins. |
+| `team_losses` | integer | Team losses. |
 | `team_ot_losses` | integer |  |
 | `team_games_played` | integer |  |
-| `team_points` | integer |  |
+| `team_points` | integer | Total points scored by the player's team in this game. |
 | `shot_speed_shot_attempts_over90_value` | integer |  |
 | `shot_speed_shot_attempts_over90_rank` | integer |  |
 | `shot_speed_top_shot_speed_imperial` | double |  |
@@ -929,7 +929,7 @@ Pull EDGE shot-location detail for a single team.
 
 | col_name | type | description |
 |---|---|---|
-| `area` | character |  |
+| `area` | character | Area. |
 | `sog` | integer |  |
 | `sog_rank` | integer |  |
 | `goals` | integer |  |

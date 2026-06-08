@@ -1981,7 +1981,7 @@ ESPN endpoint.
 | `clincher` | double | Clincher. |
 | `differential` | double | Differential. |
 | `games_behind` | double | Games behind. |
-| `games_played` | double |  |
+| `games_played` | double | Games played. |
 | `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
 | `point_differential` | double | Point differential. |

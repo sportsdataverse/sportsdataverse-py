@@ -28,54 +28,54 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
-| `uid` | character |  |
-| `date` | character |  |
-| `name` | character |  |
-| `short_name` | character |  |
-| `season_year` | integer |  |
-| `season_type` | integer |  |
-| `season_slug` | character |  |
-| `status_type_id` | character |  |
-| `status_type_name` | character |  |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `status_type_detail` | character |  |
-| `status_type_short_detail` | character |  |
-| `status_clock` | double |  |
-| `status_display_clock` | character |  |
-| `status_period` | integer |  |
-| `neutral_site` | logical |  |
-| `conference_competition` | logical |  |
-| `attendance` | integer |  |
-| `venue_id` | character |  |
-| `venue_full_name` | character |  |
-| `venue_city` | character |  |
-| `venue_state` | character |  |
-| `venue_indoor` | logical |  |
-| `broadcast` | character |  |
+| `uid` | character | ESPN UID string. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `name` | character | Display name. |
+| `short_name` | character | Short display name. |
+| `season_year` | integer | Season year string ('YYYY-YY' format). |
+| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `season_slug` | character | Season slug. |
+| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_name` | character | Status type name. |
+| `status_type_state` | character | Status type state. |
+| `status_type_completed` | logical | Status type completed. |
+| `status_type_description` | character | Status type description. |
+| `status_type_detail` | character | Status type detail. |
+| `status_type_short_detail` | character | Status type short detail. |
+| `status_clock` | double | Status clock. |
+| `status_display_clock` | character | Status display clock. |
+| `status_period` | integer | Status period. |
+| `neutral_site` | logical | Neutral site. |
+| `conference_competition` | logical | Conference competition. |
+| `attendance` | integer | Reported attendance. |
+| `venue_id` | character | Unique venue identifier. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_city` | character | Venue city. |
+| `venue_state` | character | Venue state / region. |
+| `venue_indoor` | logical | Whether the home venue is indoors. |
+| `broadcast` | character | Broadcast information string. |
 | `note` | character |  |
-| `home_id` | character |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_location` | character |  |
-| `home_color` | character |  |
-| `home_alternate_color` | character |  |
-| `home_logo` | character |  |
-| `home_score` | character |  |
-| `home_winner` | logical |  |
+| `home_id` | character | Unique identifier for home. |
+| `home_name` | character | Home name. |
+| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_display_name` | character | Home display name. |
+| `home_location` | character | Home team's location. |
+| `home_color` | character | Color code (hex) for home. |
+| `home_alternate_color` | character | Color code (hex) for home alternate. |
+| `home_logo` | character | Home team logo URL. |
+| `home_score` | character | Home team score at the time of the play. |
+| `home_winner` | logical | Home team's winner. |
 | `home_rank` | character |  |
-| `away_id` | character |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_location` | character |  |
-| `away_color` | character |  |
-| `away_alternate_color` | character |  |
-| `away_logo` | character |  |
-| `away_score` | character |  |
-| `away_winner` | logical |  |
+| `away_id` | character | Unique identifier for away. |
+| `away_name` | character | Away name. |
+| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_display_name` | character | Away display name. |
+| `away_location` | character | Away team's location. |
+| `away_color` | character | Color code (hex) for away. |
+| `away_alternate_color` | character | Color code (hex) for away alternate. |
+| `away_logo` | character | Away team logo URL. |
+| `away_score` | character | Away team score at the time of the play. |
+| `away_winner` | logical | Away team's winner. |
 | `away_rank` | character |  |
 
 ### Example
@@ -255,7 +255,7 @@ ESPN endpoint.
 | `series_score` | character | Series score. |
 | `short_summary` | character | Short summary. |
 | `events` | character | Events. |
-| `round` | character |  |
+| `round` | character | Tournament / playoff round. |
 
 **standings**
 

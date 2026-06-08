@@ -262,16 +262,16 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character |  |
-| `person_id` | integer |  |
-| `person_full_name` | character |  |
-| `person_link` | character |  |
-| `position_code` | character |  |
-| `position_name` | character |  |
-| `position_type` | character |  |
-| `position_abbreviation` | character |  |
-| `status_code` | character |  |
-| `status_description` | character |  |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
+| `position_code` | character | Numeric scorekeeping position code. |
+| `position_name` | character | Position name. |
+| `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
+| `position_abbreviation` | character | Position abbreviation. |
+| `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
+| `status_description` | character | Roster status description (e.g. 'Active'). |
 
 ### Example
 
@@ -457,13 +457,13 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `code` | character |  |
-| `link` | character |  |
-| `name` | character |  |
-| `abbreviation` | character |  |
-| `sort_order` | integer |  |
-| `active_status` | logical |  |
+| `id` | integer | Id. |
+| `code` | character | Fielder detail type code. |
+| `link` | character | API link to the game feed. |
+| `name` | character | Display name. |
+| `abbreviation` | character | Short abbreviation. |
+| `sort_order` | integer | Display sort order for the sport. |
+| `active_status` | logical | Whether the sport/level is active. |
 
 ### Example
 
@@ -542,11 +542,11 @@ GET /api/v1/venues — list venues.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `name` | character |  |
-| `link` | character |  |
-| `active` | logical |  |
-| `season` | character |  |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `active` | logical | Whether the player is currently active. |
+| `season` | character | Season year. |
 
 ### Example
 
@@ -726,16 +726,16 @@ View all PCL conferences.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `name` | character |  |
-| `link` | character |  |
-| `abbreviation` | character |  |
-| `has_wildcard` | logical |  |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `abbreviation` | character | Short abbreviation. |
+| `has_wildcard` | logical | Whether the season has a wild card round. |
 | `name_short` | character |  |
-| `league_id` | integer |  |
-| `league_link` | character |  |
-| `sport_id` | integer |  |
-| `sport_link` | character |  |
+| `league_id` | integer | League MLBAM ID. |
+| `league_link` | character | API link to the league. |
+| `sport_id` | integer | Sport MLBAM ID. |
+| `sport_link` | character | API link to the sport. |
 
 ### Example
 
@@ -763,16 +763,16 @@ View PCL conferences by conferenceId.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `name` | character |  |
-| `link` | character |  |
-| `abbreviation` | character |  |
-| `has_wildcard` | logical |  |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `abbreviation` | character | Short abbreviation. |
+| `has_wildcard` | logical | Whether the season has a wild card round. |
 | `name_short` | character |  |
-| `league_id` | integer |  |
-| `league_link` | character |  |
-| `sport_id` | integer |  |
-| `sport_link` | character |  |
+| `league_id` | integer | League MLBAM ID. |
+| `league_link` | character | API link to the league. |
+| `sport_id` | integer | Sport MLBAM ID. |
+| `sport_link` | character | API link to the sport. |
 
 ### Example
 
@@ -798,7 +798,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 
 | col_name | type | description |
 |---|---|---|
-| `number` | integer |  |
+| `number` | integer | Number. |
 | `next_up` | character |  |
 | `pick_pick_round` | character |  |
 | `pick_pick_number` | integer |  |
@@ -946,69 +946,69 @@ View corrected non Statcast information for games
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character |  |
-| `game_pk` | integer |  |
-| `game_guid` | character |  |
-| `link` | character |  |
-| `game_type` | character |  |
-| `season` | character |  |
-| `game_date` | character |  |
-| `official_date` | character |  |
-| `is_tie` | logical |  |
-| `game_number` | integer |  |
-| `public_facing` | logical |  |
-| `double_header` | character |  |
-| `gameday_type` | character |  |
-| `tiebreaker` | character |  |
-| `calendar_event_id` | character |  |
-| `season_display` | character |  |
-| `day_night` | character |  |
-| `scheduled_innings` | integer |  |
-| `reverse_home_away_status` | logical |  |
-| `inning_break_length` | integer |  |
-| `games_in_series` | double |  |
-| `series_game_number` | double |  |
-| `series_description` | character |  |
-| `record_source` | character |  |
-| `if_necessary` | character |  |
-| `if_necessary_description` | character |  |
-| `status_abstract_game_state` | character |  |
-| `status_coded_game_state` | character |  |
-| `status_detailed_state` | character |  |
-| `status_status_code` | character |  |
-| `status_start_time_tbd` | logical |  |
-| `status_abstract_game_code` | character |  |
-| `teams_away_team_id` | integer |  |
-| `teams_away_team_name` | character |  |
-| `teams_away_team_link` | character |  |
-| `teams_away_league_record_wins` | integer |  |
-| `teams_away_league_record_losses` | integer |  |
-| `teams_away_league_record_ties` | integer |  |
-| `teams_away_league_record_pct` | character |  |
-| `teams_away_score` | integer |  |
-| `teams_away_is_winner` | logical |  |
-| `teams_away_split_squad` | logical |  |
-| `teams_away_series_number` | double |  |
-| `teams_home_team_id` | integer |  |
-| `teams_home_team_name` | character |  |
-| `teams_home_team_link` | character |  |
-| `teams_home_league_record_wins` | integer |  |
-| `teams_home_league_record_losses` | integer |  |
-| `teams_home_league_record_ties` | integer |  |
-| `teams_home_league_record_pct` | character |  |
-| `teams_home_score` | integer |  |
-| `teams_home_is_winner` | logical |  |
-| `teams_home_split_squad` | logical |  |
-| `teams_home_series_number` | double |  |
-| `venue_id` | integer |  |
-| `venue_name` | character |  |
-| `venue_link` | character |  |
-| `content_link` | character |  |
-| `rescheduled_from` | character |  |
-| `rescheduled_from_date` | character |  |
-| `description` | character |  |
-| `status_reason` | character |  |
-| `resumed_from` | character |  |
-| `resumed_from_date` | character |  |
+| `game_pk` | integer | Unique game identifier. |
+| `game_guid` | character | Globally unique game identifier (GUID). |
+| `link` | character | API link to the game feed. |
+| `game_type` | character | Game type code (R, P, etc.). |
+| `season` | character | Season year. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `official_date` | character | Official game date (YYYY-MM-DD). |
+| `is_tie` | logical | Whether the game ended in a tie. |
+| `game_number` | integer | Game number within a doubleheader. |
+| `public_facing` | logical | Whether the game is public-facing. |
+| `double_header` | character | Doubleheader indicator ('N', 'S', 'Y'). |
+| `gameday_type` | character | Gameday data feed type. |
+| `tiebreaker` | character | Whether the game is a tiebreaker. |
+| `calendar_event_id` | character | Calendar event identifier. |
+| `season_display` | character | Display string for the season. |
+| `day_night` | character | Day or night game indicator. |
+| `scheduled_innings` | integer | Scheduled number of innings. |
+| `reverse_home_away_status` | logical | Whether home/away teams are reversed. |
+| `inning_break_length` | integer | Length of inning breaks in seconds. |
+| `games_in_series` | double | Number of games in the series. |
+| `series_game_number` | double | Game number within the series. |
+| `series_description` | character | Description of the series. |
+| `record_source` | character | Source of the schedule record. |
+| `if_necessary` | character | Whether the game is played only if necessary. |
+| `if_necessary_description` | character | Description of the if-necessary status. |
+| `status_abstract_game_state` | character | Abstract game state (e.g. 'Final'). |
+| `status_coded_game_state` | character | Coded game state. |
+| `status_detailed_state` | character | Detailed game state. |
+| `status_status_code` | character | Status code for the game. |
+| `status_start_time_tbd` | logical | Whether the start time is TBD. |
+| `status_abstract_game_code` | character | Abstract game state code. |
+| `teams_away_team_id` | integer | Away team MLBAM ID. |
+| `teams_away_team_name` | character | Away team name. |
+| `teams_away_team_link` | character | API link to the away team. |
+| `teams_away_league_record_wins` | integer | Away team league-record wins. |
+| `teams_away_league_record_losses` | integer | Away team league-record losses. |
+| `teams_away_league_record_ties` | integer | Away team league-record ties. |
+| `teams_away_league_record_pct` | character | Away team winning percentage. |
+| `teams_away_score` | integer | Away team score. |
+| `teams_away_is_winner` | logical | Whether the away team won. |
+| `teams_away_split_squad` | logical | Whether the away team is a split squad. |
+| `teams_away_series_number` | double | Away team's series number. |
+| `teams_home_team_id` | integer | Home team MLBAM ID. |
+| `teams_home_team_name` | character | Home team name. |
+| `teams_home_team_link` | character | API link to the home team. |
+| `teams_home_league_record_wins` | integer | Home team league-record wins. |
+| `teams_home_league_record_losses` | integer | Home team league-record losses. |
+| `teams_home_league_record_ties` | integer | Home team league-record ties. |
+| `teams_home_league_record_pct` | character | Home team winning percentage. |
+| `teams_home_score` | integer | Home team score. |
+| `teams_home_is_winner` | logical | Whether the home team won. |
+| `teams_home_split_squad` | logical | Whether the home team is a split squad. |
+| `teams_home_series_number` | double | Home team's series number. |
+| `venue_id` | integer | MLBAM venue ID. |
+| `venue_name` | character | Venue name. |
+| `venue_link` | character | API link to the venue. |
+| `content_link` | character | API link to the game content. |
+| `rescheduled_from` | character | Original date-time the game was rescheduled from. |
+| `rescheduled_from_date` | character | Original date the game was rescheduled from. |
+| `description` | character | Long-form description text. |
+| `status_reason` | character | Reason for the game status (e.g. 'Rain'). |
+| `resumed_from` | character | Original date-time if the game was resumed. |
+| `resumed_from_date` | character | Original date if the game was resumed. |
 
 ### Example
 
@@ -1270,47 +1270,47 @@ View time of game info.
 | `runs_per9_inn` | double |  |
 | `pitches_per9_inn` | double |  |
 | `plate_appearances_per9_inn` | double |  |
-| `hits_per_game` | double |  |
-| `runs_per_game` | double |  |
-| `innings_played_per_game` | double |  |
-| `pitches_per_game` | double |  |
-| `pitchers_per_game` | double |  |
-| `plate_appearances_per_game` | double |  |
-| `total_game_time` | character |  |
-| `total_innings_played` | double |  |
-| `total_hits` | integer |  |
-| `total_runs` | integer |  |
-| `total_plate_appearances` | integer |  |
-| `total_pitchers` | integer |  |
-| `total_pitches` | integer |  |
-| `total_games` | integer |  |
+| `hits_per_game` | double | Hits per game. |
+| `runs_per_game` | double | Runs per game. |
+| `innings_played_per_game` | double | Innings played per game. |
+| `pitches_per_game` | double | Pitches per game. |
+| `pitchers_per_game` | double | Pitchers used per game. |
+| `plate_appearances_per_game` | double | Plate appearances per game. |
+| `total_game_time` | character | Total game time (HHH:MM:SS). |
+| `total_innings_played` | double | Total innings played. |
+| `total_hits` | integer | Total hits. |
+| `total_runs` | integer | Total runs. |
+| `total_plate_appearances` | integer | Total plate appearances. |
+| `total_pitchers` | integer | Total pitchers used. |
+| `total_pitches` | integer | Total pitches thrown. |
+| `total_games` | integer | Total games on the date. |
 | `total7_inn_games` | integer |  |
 | `total9_inn_games` | double |  |
-| `total_extra_inn_games` | integer |  |
-| `time_per_game` | character |  |
-| `time_per_pitch` | character |  |
-| `time_per_hit` | character |  |
-| `time_per_run` | character |  |
-| `time_per_plate_appearance` | character |  |
+| `total_extra_inn_games` | integer | Total extra-inning games. |
+| `time_per_game` | character | Average time per game (HH:MM:SS). |
+| `time_per_pitch` | character | Average time per pitch (HH:MM:SS). |
+| `time_per_hit` | character | Average time per hit (HH:MM:SS). |
+| `time_per_run` | character | Average time per run (HH:MM:SS). |
+| `time_per_plate_appearance` | character | Average time per plate appearance (HH:MM:SS). |
 | `time_per9_inn` | character |  |
 | `time_per77_plate_appearances` | character |  |
-| `total_extra_inn_time` | character |  |
+| `total_extra_inn_time` | character | Total extra-inning time (HHH:MM:SS). |
 | `time_per7_inn_game_without_extra_inn` | character |  |
 | `total9_inn_games_completed_early` | integer |  |
 | `total9_inn_games_without_extra_inn` | double |  |
 | `total9_inn_games_scheduled` | integer |  |
-| `hits_per_run` | double |  |
-| `pitches_per_pitcher` | double |  |
-| `season` | character |  |
-| `sport_id` | integer |  |
-| `sport_code` | character |  |
-| `sport_link` | character |  |
+| `hits_per_run` | double | Hits per run. |
+| `pitches_per_pitcher` | double | Pitches per pitcher. |
+| `season` | character | Season year. |
+| `sport_id` | integer | Sport MLBAM ID. |
+| `sport_code` | character | Short sport code (e.g. 'mlb', 'aaa'). |
+| `sport_link` | character | API link to the sport. |
 | `pr_portal_calculated_fields_total7_inn_games` | integer |  |
 | `pr_portal_calculated_fields_total9_inn_games` | double |  |
-| `pr_portal_calculated_fields_total_extra_inn_games` | integer |  |
+| `pr_portal_calculated_fields_total_extra_inn_games` | integer | Portal-calculated total extra-inning games. |
 | `pr_portal_calculated_fields_time_per7_inn_game` | character |  |
 | `pr_portal_calculated_fields_time_per9_inn_game` | character |  |
-| `pr_portal_calculated_fields_time_per_extra_inn_game` | character |  |
+| `pr_portal_calculated_fields_time_per_extra_inn_game` | character | Portal-calculated time per extra-inning game. |
 | `time_per7_inn_game` | character |  |
 | `total7_inn_games_scheduled` | double |  |
 | `total7_inn_games_without_extra_inn` | double |  |
@@ -1349,20 +1349,20 @@ View high/low stats by player or team.
 
 | col_name | type | description |
 |---|---|---|
-| `total_splits` | integer |  |
+| `total_splits` | integer | Total number of splits in the leaderboard. |
 | `exemptions` | character |  |
-| `splits` | character |  |
-| `splits_tied_with_offset` | character |  |
-| `splits_tied_with_limit` | character |  |
-| `season` | character |  |
-| `combined_stats` | logical |  |
-| `group_display_name` | character |  |
-| `game_type_id` | character |  |
-| `game_type_description` | character |  |
-| `sort_stat_name` | character |  |
-| `sort_stat_lookup_param` | character |  |
-| `sort_stat_is_counting` | logical |  |
-| `sort_stat_label` | character |  |
+| `splits` | character | Splits. |
+| `splits_tied_with_offset` | character | Players tied at the offset boundary. |
+| `splits_tied_with_limit` | character | Players tied at the limit boundary. |
+| `season` | character | Season year. |
+| `combined_stats` | logical | Whether the stat combines multiple split sources. |
+| `group_display_name` | character | Stat group display name. |
+| `game_type_id` | character | Game type code (e.g., R for regular season). |
+| `game_type_description` | character | Game type description. |
+| `sort_stat_name` | character | Snake-case name of the sorted statistic (e.g. 'at_bats'). |
+| `sort_stat_lookup_param` | character | API lookup parameter for the sorted statistic (e.g. 'atBats'). |
+| `sort_stat_is_counting` | logical | Whether the sorted statistic is a counting stat. |
+| `sort_stat_label` | character | Human-readable label of the sorted statistic (e.g. 'At bats'). |
 | `sort_stat_stat_groups` | character |  |
 | `sort_stat_org_types` | character |  |
 | `sort_stat_high_low_types` | character |  |
@@ -1393,50 +1393,50 @@ View a home run derby object based on gamePk.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `full_name` | character |  |
-| `link` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `primary_number` | character |  |
-| `birth_date` | character |  |
-| `current_age` | integer |  |
-| `birth_city` | character |  |
-| `birth_state_province` | character |  |
-| `birth_country` | character |  |
-| `height` | character |  |
-| `weight` | integer |  |
-| `active` | logical |  |
-| `use_name` | character |  |
-| `use_last_name` | character |  |
-| `middle_name` | character |  |
-| `boxscore_name` | character |  |
-| `nick_name` | character |  |
-| `gender` | character |  |
-| `is_player` | logical |  |
-| `is_verified` | logical |  |
-| `draft_year` | double |  |
-| `pronunciation` | character |  |
-| `stats` | character |  |
-| `mlb_debut_date` | character |  |
-| `name_first_last` | character |  |
-| `name_slug` | character |  |
-| `first_last_name` | character |  |
-| `last_first_name` | character |  |
-| `last_init_name` | character |  |
-| `init_last_name` | character |  |
-| `full_fml_name` | character |  |
-| `full_lfm_name` | character |  |
-| `strike_zone_top` | double |  |
-| `strike_zone_bottom` | double |  |
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `primary_number` | character | Player uniform number. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_state_province` | character | State or province of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `middle_name` | character | Player middle name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `nick_name` | character | Player nickname. |
+| `gender` | character | Player gender. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `draft_year` | double | Year the player was drafted. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `stats` | character | Stats. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
 | `current_team_spring_league_id` | double |  |
 | `current_team_spring_league_name` | character |  |
 | `current_team_spring_league_link` | character |  |
 | `current_team_spring_league_abbreviation` | character |  |
 | `current_team_all_star_status` | character |  |
-| `current_team_id` | integer |  |
-| `current_team_name` | character |  |
-| `current_team_link` | character |  |
+| `current_team_id` | integer | Current team MLBAM ID. |
+| `current_team_name` | character | Current team name. |
+| `current_team_link` | character | API link to the current team. |
 | `current_team_season` | integer |  |
 | `current_team_venue_id` | integer |  |
 | `current_team_venue_name` | character |  |
@@ -1462,16 +1462,16 @@ View a home run derby object based on gamePk.
 | `current_team_franchise_name` | character |  |
 | `current_team_club_name` | character |  |
 | `current_team_active` | logical |  |
-| `primary_position_code` | character |  |
-| `primary_position_name` | character |  |
-| `primary_position_type` | character |  |
-| `primary_position_abbreviation` | character |  |
-| `bat_side_code` | character |  |
-| `bat_side_description` | character |  |
-| `pitch_hand_code` | character |  |
-| `pitch_hand_description` | character |  |
-| `last_played_date` | character |  |
-| `name_matrilineal` | character |  |
+| `primary_position_code` | character | Primary position code. |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_type` | character | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `last_played_date` | character | Date of last MLB game played. |
+| `name_matrilineal` | character | Maternal family name. |
 | `current_team_parent_org_name` | character |  |
 | `current_team_parent_org_id` | double |  |
 
@@ -1500,50 +1500,50 @@ View a home run derby object based on bracket.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `full_name` | character |  |
-| `link` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `primary_number` | character |  |
-| `birth_date` | character |  |
-| `current_age` | integer |  |
-| `birth_city` | character |  |
-| `birth_state_province` | character |  |
-| `birth_country` | character |  |
-| `height` | character |  |
-| `weight` | integer |  |
-| `active` | logical |  |
-| `use_name` | character |  |
-| `use_last_name` | character |  |
-| `middle_name` | character |  |
-| `boxscore_name` | character |  |
-| `nick_name` | character |  |
-| `gender` | character |  |
-| `is_player` | logical |  |
-| `is_verified` | logical |  |
-| `draft_year` | double |  |
-| `pronunciation` | character |  |
-| `stats` | character |  |
-| `mlb_debut_date` | character |  |
-| `name_first_last` | character |  |
-| `name_slug` | character |  |
-| `first_last_name` | character |  |
-| `last_first_name` | character |  |
-| `last_init_name` | character |  |
-| `init_last_name` | character |  |
-| `full_fml_name` | character |  |
-| `full_lfm_name` | character |  |
-| `strike_zone_top` | double |  |
-| `strike_zone_bottom` | double |  |
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `primary_number` | character | Player uniform number. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_state_province` | character | State or province of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `middle_name` | character | Player middle name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `nick_name` | character | Player nickname. |
+| `gender` | character | Player gender. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `draft_year` | double | Year the player was drafted. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `stats` | character | Stats. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
 | `current_team_spring_league_id` | double |  |
 | `current_team_spring_league_name` | character |  |
 | `current_team_spring_league_link` | character |  |
 | `current_team_spring_league_abbreviation` | character |  |
 | `current_team_all_star_status` | character |  |
-| `current_team_id` | integer |  |
-| `current_team_name` | character |  |
-| `current_team_link` | character |  |
+| `current_team_id` | integer | Current team MLBAM ID. |
+| `current_team_name` | character | Current team name. |
+| `current_team_link` | character | API link to the current team. |
 | `current_team_season` | integer |  |
 | `current_team_venue_id` | integer |  |
 | `current_team_venue_name` | character |  |
@@ -1569,16 +1569,16 @@ View a home run derby object based on bracket.
 | `current_team_franchise_name` | character |  |
 | `current_team_club_name` | character |  |
 | `current_team_active` | logical |  |
-| `primary_position_code` | character |  |
-| `primary_position_name` | character |  |
-| `primary_position_type` | character |  |
-| `primary_position_abbreviation` | character |  |
-| `bat_side_code` | character |  |
-| `bat_side_description` | character |  |
-| `pitch_hand_code` | character |  |
-| `pitch_hand_description` | character |  |
-| `last_played_date` | character |  |
-| `name_matrilineal` | character |  |
+| `primary_position_code` | character | Primary position code. |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_type` | character | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `last_played_date` | character | Date of last MLB game played. |
+| `name_matrilineal` | character | Maternal family name. |
 | `current_team_parent_org_name` | character |  |
 | `current_team_parent_org_id` | double |  |
 
@@ -1607,50 +1607,50 @@ View a home run derby object based on pool.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `full_name` | character |  |
-| `link` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `primary_number` | character |  |
-| `birth_date` | character |  |
-| `current_age` | integer |  |
-| `birth_city` | character |  |
-| `birth_state_province` | character |  |
-| `birth_country` | character |  |
-| `height` | character |  |
-| `weight` | integer |  |
-| `active` | logical |  |
-| `use_name` | character |  |
-| `use_last_name` | character |  |
-| `middle_name` | character |  |
-| `boxscore_name` | character |  |
-| `nick_name` | character |  |
-| `gender` | character |  |
-| `is_player` | logical |  |
-| `is_verified` | logical |  |
-| `draft_year` | double |  |
-| `pronunciation` | character |  |
-| `stats` | character |  |
-| `mlb_debut_date` | character |  |
-| `name_first_last` | character |  |
-| `name_slug` | character |  |
-| `first_last_name` | character |  |
-| `last_first_name` | character |  |
-| `last_init_name` | character |  |
-| `init_last_name` | character |  |
-| `full_fml_name` | character |  |
-| `full_lfm_name` | character |  |
-| `strike_zone_top` | double |  |
-| `strike_zone_bottom` | double |  |
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `primary_number` | character | Player uniform number. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_state_province` | character | State or province of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `middle_name` | character | Player middle name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `nick_name` | character | Player nickname. |
+| `gender` | character | Player gender. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `draft_year` | double | Year the player was drafted. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `stats` | character | Stats. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
 | `current_team_spring_league_id` | double |  |
 | `current_team_spring_league_name` | character |  |
 | `current_team_spring_league_link` | character |  |
 | `current_team_spring_league_abbreviation` | character |  |
 | `current_team_all_star_status` | character |  |
-| `current_team_id` | integer |  |
-| `current_team_name` | character |  |
-| `current_team_link` | character |  |
+| `current_team_id` | integer | Current team MLBAM ID. |
+| `current_team_name` | character | Current team name. |
+| `current_team_link` | character | API link to the current team. |
 | `current_team_season` | integer |  |
 | `current_team_venue_id` | integer |  |
 | `current_team_venue_name` | character |  |
@@ -1676,16 +1676,16 @@ View a home run derby object based on pool.
 | `current_team_franchise_name` | character |  |
 | `current_team_club_name` | character |  |
 | `current_team_active` | logical |  |
-| `primary_position_code` | character |  |
-| `primary_position_name` | character |  |
-| `primary_position_type` | character |  |
-| `primary_position_abbreviation` | character |  |
-| `bat_side_code` | character |  |
-| `bat_side_description` | character |  |
-| `pitch_hand_code` | character |  |
-| `pitch_hand_description` | character |  |
-| `last_played_date` | character |  |
-| `name_matrilineal` | character |  |
+| `primary_position_code` | character | Primary position code. |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_type` | character | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `last_played_date` | character | Date of last MLB game played. |
+| `name_matrilineal` | character | Maternal family name. |
 | `current_team_parent_org_name` | character |  |
 | `current_team_parent_org_id` | double |  |
 
@@ -1715,53 +1715,53 @@ View All-Star Ballots per league.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `full_name` | character |  |
-| `link` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `primary_number` | character |  |
-| `birth_date` | character |  |
-| `current_age` | integer |  |
-| `birth_city` | character |  |
-| `birth_country` | character |  |
-| `height` | character |  |
-| `weight` | integer |  |
-| `active` | logical |  |
-| `use_name` | character |  |
-| `use_last_name` | character |  |
-| `middle_name` | character |  |
-| `boxscore_name` | character |  |
-| `nick_name` | character |  |
-| `gender` | character |  |
-| `name_matrilineal` | character |  |
-| `is_player` | logical |  |
-| `is_verified` | logical |  |
-| `pronunciation` | character |  |
-| `last_played_date` | character |  |
-| `mlb_debut_date` | character |  |
-| `name_first_last` | character |  |
-| `name_slug` | character |  |
-| `first_last_name` | character |  |
-| `last_first_name` | character |  |
-| `last_init_name` | character |  |
-| `init_last_name` | character |  |
-| `full_fml_name` | character |  |
-| `full_lfm_name` | character |  |
-| `strike_zone_top` | double |  |
-| `strike_zone_bottom` | double |  |
-| `primary_position_code` | character |  |
-| `primary_position_name` | character |  |
-| `primary_position_type` | character |  |
-| `primary_position_abbreviation` | character |  |
-| `bat_side_code` | character |  |
-| `bat_side_description` | character |  |
-| `pitch_hand_code` | character |  |
-| `pitch_hand_description` | character |  |
-| `birth_state_province` | character |  |
-| `draft_year` | double |  |
-| `name_title` | character |  |
-| `name_suffix` | character |  |
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `primary_number` | character | Player uniform number. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `middle_name` | character | Player middle name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `nick_name` | character | Player nickname. |
+| `gender` | character | Player gender. |
+| `name_matrilineal` | character | Maternal family name. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `last_played_date` | character | Date of last MLB game played. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
+| `primary_position_code` | character | Primary position code. |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_type` | character | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `birth_state_province` | character | State or province of birth. |
+| `draft_year` | double | Year the player was drafted. |
+| `name_title` | character | Name title. |
+| `name_suffix` | character | Name suffix (e.g. Jr., Sr., III). |
 
 ### Example
 
@@ -1789,49 +1789,49 @@ View All-Star Write-ins per league.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `full_name` | character |  |
-| `link` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `birth_date` | character |  |
-| `current_age` | integer |  |
-| `birth_city` | character |  |
-| `birth_state_province` | character |  |
-| `birth_country` | character |  |
-| `height` | character |  |
-| `weight` | integer |  |
-| `active` | logical |  |
-| `use_name` | character |  |
-| `use_last_name` | character |  |
-| `boxscore_name` | character |  |
-| `gender` | character |  |
-| `is_player` | logical |  |
-| `is_verified` | logical |  |
-| `pronunciation` | character |  |
-| `mlb_debut_date` | character |  |
-| `name_first_last` | character |  |
-| `name_slug` | character |  |
-| `first_last_name` | character |  |
-| `last_first_name` | character |  |
-| `last_init_name` | character |  |
-| `init_last_name` | character |  |
-| `full_fml_name` | character |  |
-| `full_lfm_name` | character |  |
-| `strike_zone_top` | double |  |
-| `strike_zone_bottom` | double |  |
-| `bat_side_code` | character |  |
-| `bat_side_description` | character |  |
-| `pitch_hand_code` | character |  |
-| `pitch_hand_description` | character |  |
-| `primary_number` | character |  |
-| `draft_year` | double |  |
-| `middle_name` | character |  |
-| `name_matrilineal` | character |  |
-| `last_played_date` | character |  |
-| `nick_name` | character |  |
-| `name_title` | character |  |
-| `name_suffix` | character |  |
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_state_province` | character | State or province of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `gender` | character | Player gender. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `primary_number` | character | Player uniform number. |
+| `draft_year` | double | Year the player was drafted. |
+| `middle_name` | character | Player middle name. |
+| `name_matrilineal` | character | Maternal family name. |
+| `last_played_date` | character | Date of last MLB game played. |
+| `nick_name` | character | Player nickname. |
+| `name_title` | character | Name title. |
+| `name_suffix` | character | Name suffix (e.g. Jr., Sr., III). |
 
 ### Example
 
@@ -1859,53 +1859,53 @@ View All-Star Final Vote per league.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `full_name` | character |  |
-| `link` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `primary_number` | character |  |
-| `birth_date` | character |  |
-| `current_age` | integer |  |
-| `birth_city` | character |  |
-| `birth_country` | character |  |
-| `height` | character |  |
-| `weight` | integer |  |
-| `active` | logical |  |
-| `use_name` | character |  |
-| `use_last_name` | character |  |
-| `boxscore_name` | character |  |
-| `nick_name` | character |  |
-| `gender` | character |  |
-| `is_player` | logical |  |
-| `is_verified` | logical |  |
-| `pronunciation` | character |  |
-| `mlb_debut_date` | character |  |
-| `name_first_last` | character |  |
-| `name_slug` | character |  |
-| `first_last_name` | character |  |
-| `last_first_name` | character |  |
-| `last_init_name` | character |  |
-| `init_last_name` | character |  |
-| `full_fml_name` | character |  |
-| `full_lfm_name` | character |  |
-| `strike_zone_top` | double |  |
-| `strike_zone_bottom` | double |  |
-| `primary_position_code` | character |  |
-| `primary_position_name` | character |  |
-| `primary_position_type` | character |  |
-| `primary_position_abbreviation` | character |  |
-| `bat_side_code` | character |  |
-| `bat_side_description` | character |  |
-| `pitch_hand_code` | character |  |
-| `pitch_hand_description` | character |  |
-| `name_matrilineal` | character |  |
-| `birth_state_province` | character |  |
-| `name_title` | character |  |
-| `name_suffix` | character |  |
-| `middle_name` | character |  |
-| `draft_year` | double |  |
-| `last_played_date` | character |  |
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `primary_number` | character | Player uniform number. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `nick_name` | character | Player nickname. |
+| `gender` | character | Player gender. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
+| `primary_position_code` | character | Primary position code. |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_type` | character | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `name_matrilineal` | character | Maternal family name. |
+| `birth_state_province` | character | State or province of birth. |
+| `name_title` | character | Name title. |
+| `name_suffix` | character | Name suffix (e.g. Jr., Sr., III). |
+| `middle_name` | character | Player middle name. |
+| `draft_year` | double | Year the player was drafted. |
+| `last_played_date` | character | Date of last MLB game played. |
 
 ### Example
 
@@ -1934,23 +1934,23 @@ View biographical information and stats for Free Agents.
 
 | col_name | type | description |
 |---|---|---|
-| `notes` | character |  |
-| `date_declared` | character |  |
-| `player_id` | integer |  |
-| `player_full_name` | character |  |
-| `player_link` | character |  |
-| `original_team_id` | double |  |
-| `original_team_name` | character |  |
-| `original_team_link` | character |  |
-| `new_team_link` | character |  |
-| `position_code` | character |  |
-| `position_name` | character |  |
-| `position_type` | character |  |
-| `position_abbreviation` | character |  |
-| `date_signed` | character |  |
-| `new_team_id` | double |  |
-| `new_team_name` | character |  |
-| `sort_order` | double |  |
+| `notes` | character | Notes. |
+| `date_declared` | character | Date the player declared free agency (YYYY-MM-DD). |
+| `player_id` | integer | MLBAM player ID. |
+| `player_full_name` | character | Player full name. |
+| `player_link` | character | API relative link to the player. |
+| `original_team_id` | double | Team id the player left. |
+| `original_team_name` | character | Name of the team the player left. |
+| `original_team_link` | character | API relative link to the original team. |
+| `new_team_link` | character | API relative link to the new team. |
+| `position_code` | character | Numeric scorekeeping position code. |
+| `position_name` | character | Position name. |
+| `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
+| `position_abbreviation` | character | Position abbreviation. |
+| `date_signed` | character | Date the player signed a new contract (YYYY-MM-DD). |
+| `new_team_id` | double | Team id the player signed with. |
+| `new_team_name` | character | Name of the team the player signed with. |
+| `sort_order` | double | Display sort order for the sport. |
 
 ### Example
 
@@ -1979,13 +1979,13 @@ View directory by jobType.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character |  |
-| `job` | character |  |
-| `job_id` | character |  |
-| `title` | character |  |
-| `person_id` | integer |  |
-| `person_full_name` | character |  |
-| `person_link` | character |  |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | character | Job title (e.g. 'Umpire'). |
+| `job_id` | character | Job code identifier. |
+| `title` | character | Specific role title for the assignment. |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
 
 ### Example
 
@@ -2014,13 +2014,13 @@ View datacasters directory.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character |  |
-| `job` | character |  |
-| `job_id` | character |  |
-| `title` | character |  |
-| `person_id` | integer |  |
-| `person_full_name` | character |  |
-| `person_link` | character |  |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | character | Job title (e.g. 'Umpire'). |
+| `job_id` | character | Job code identifier. |
+| `title` | character | Specific role title for the assignment. |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
 
 ### Example
 
@@ -2049,13 +2049,13 @@ View official scorer directory.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character |  |
-| `job` | character |  |
-| `job_id` | character |  |
-| `title` | character |  |
-| `person_id` | integer |  |
-| `person_full_name` | character |  |
-| `person_link` | character |  |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | character | Job title (e.g. 'Umpire'). |
+| `job_id` | character | Job code identifier. |
+| `title` | character | Specific role title for the assignment. |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
 
 ### Example
 
@@ -2112,62 +2112,62 @@ View tied game schedule info.
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character |  |
-| `game_pk` | integer |  |
-| `game_guid` | character |  |
-| `link` | character |  |
-| `game_type` | character |  |
-| `season` | character |  |
-| `game_date` | character |  |
-| `official_date` | character |  |
-| `is_tie` | logical |  |
-| `game_number` | integer |  |
-| `public_facing` | logical |  |
-| `double_header` | character |  |
-| `gameday_type` | character |  |
-| `tiebreaker` | character |  |
-| `calendar_event_id` | character |  |
-| `season_display` | character |  |
-| `day_night` | character |  |
-| `scheduled_innings` | integer |  |
-| `reverse_home_away_status` | logical |  |
-| `inning_break_length` | integer |  |
-| `games_in_series` | integer |  |
-| `series_game_number` | integer |  |
-| `series_description` | character |  |
-| `record_source` | character |  |
-| `if_necessary` | character |  |
-| `if_necessary_description` | character |  |
-| `status_abstract_game_state` | character |  |
-| `status_coded_game_state` | character |  |
-| `status_detailed_state` | character |  |
-| `status_status_code` | character |  |
-| `status_start_time_tbd` | logical |  |
-| `status_reason` | character |  |
-| `status_abstract_game_code` | character |  |
-| `teams_away_team_id` | integer |  |
-| `teams_away_team_name` | character |  |
-| `teams_away_team_link` | character |  |
-| `teams_away_league_record_wins` | integer |  |
-| `teams_away_league_record_losses` | integer |  |
-| `teams_away_league_record_ties` | integer |  |
-| `teams_away_league_record_pct` | character |  |
-| `teams_away_score` | integer |  |
-| `teams_away_split_squad` | logical |  |
-| `teams_away_series_number` | integer |  |
-| `teams_home_team_id` | integer |  |
-| `teams_home_team_name` | character |  |
-| `teams_home_team_link` | character |  |
-| `teams_home_league_record_wins` | integer |  |
-| `teams_home_league_record_losses` | integer |  |
-| `teams_home_league_record_ties` | integer |  |
-| `teams_home_league_record_pct` | character |  |
-| `teams_home_score` | integer |  |
-| `teams_home_split_squad` | logical |  |
-| `teams_home_series_number` | integer |  |
-| `venue_id` | integer |  |
-| `venue_name` | character |  |
-| `venue_link` | character |  |
-| `content_link` | character |  |
+| `game_pk` | integer | Unique game identifier. |
+| `game_guid` | character | Globally unique game identifier (GUID). |
+| `link` | character | API link to the game feed. |
+| `game_type` | character | Game type code (R, P, etc.). |
+| `season` | character | Season year. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `official_date` | character | Official game date (YYYY-MM-DD). |
+| `is_tie` | logical | Whether the game ended in a tie. |
+| `game_number` | integer | Game number within a doubleheader. |
+| `public_facing` | logical | Whether the game is public-facing. |
+| `double_header` | character | Doubleheader indicator ('N', 'S', 'Y'). |
+| `gameday_type` | character | Gameday data feed type. |
+| `tiebreaker` | character | Whether the game is a tiebreaker. |
+| `calendar_event_id` | character | Calendar event identifier. |
+| `season_display` | character | Display string for the season. |
+| `day_night` | character | Day or night game indicator. |
+| `scheduled_innings` | integer | Scheduled number of innings. |
+| `reverse_home_away_status` | logical | Whether home/away teams are reversed. |
+| `inning_break_length` | integer | Length of inning breaks in seconds. |
+| `games_in_series` | integer | Number of games in the series. |
+| `series_game_number` | integer | Game number within the series. |
+| `series_description` | character | Description of the series. |
+| `record_source` | character | Source of the schedule record. |
+| `if_necessary` | character | Whether the game is played only if necessary. |
+| `if_necessary_description` | character | Description of the if-necessary status. |
+| `status_abstract_game_state` | character | Abstract game state (e.g. 'Final'). |
+| `status_coded_game_state` | character | Coded game state. |
+| `status_detailed_state` | character | Detailed game state. |
+| `status_status_code` | character | Status code for the game. |
+| `status_start_time_tbd` | logical | Whether the start time is TBD. |
+| `status_reason` | character | Reason for the game status (e.g. 'Rain'). |
+| `status_abstract_game_code` | character | Abstract game state code. |
+| `teams_away_team_id` | integer | Away team MLBAM ID. |
+| `teams_away_team_name` | character | Away team name. |
+| `teams_away_team_link` | character | API link to the away team. |
+| `teams_away_league_record_wins` | integer | Away team league-record wins. |
+| `teams_away_league_record_losses` | integer | Away team league-record losses. |
+| `teams_away_league_record_ties` | integer | Away team league-record ties. |
+| `teams_away_league_record_pct` | character | Away team winning percentage. |
+| `teams_away_score` | integer | Away team score. |
+| `teams_away_split_squad` | logical | Whether the away team is a split squad. |
+| `teams_away_series_number` | integer | Away team's series number. |
+| `teams_home_team_id` | integer | Home team MLBAM ID. |
+| `teams_home_team_name` | character | Home team name. |
+| `teams_home_team_link` | character | API link to the home team. |
+| `teams_home_league_record_wins` | integer | Home team league-record wins. |
+| `teams_home_league_record_losses` | integer | Home team league-record losses. |
+| `teams_home_league_record_ties` | integer | Home team league-record ties. |
+| `teams_home_league_record_pct` | character | Home team winning percentage. |
+| `teams_home_score` | integer | Home team score. |
+| `teams_home_split_squad` | logical | Whether the home team is a split squad. |
+| `teams_home_series_number` | integer | Home team's series number. |
+| `venue_id` | integer | MLBAM venue ID. |
+| `venue_name` | character | Venue name. |
+| `venue_link` | character | API link to the venue. |
+| `content_link` | character | API link to the game content. |
 
 ### Example
 
@@ -2198,15 +2198,15 @@ View schedule info for postseason based on series.
 
 | col_name | type | description |
 |---|---|---|
-| `total_items` | integer |  |
-| `total_games` | integer |  |
-| `total_games_in_progress` | integer |  |
-| `games` | character |  |
-| `sort_order` | integer |  |
-| `series_id` | character |  |
-| `series_sort_number` | integer |  |
-| `series_is_default` | logical |  |
-| `series_game_type` | character |  |
+| `total_items` | integer | Total schedule items on the date. |
+| `total_games` | integer | Total games on the date. |
+| `total_games_in_progress` | integer | Games currently in progress on the date. |
+| `games` | character | Number of games included in the ATS summary. |
+| `sort_order` | integer | Display sort order for the sport. |
+| `series_id` | character | Series identifier (e.g. 'W_1'). |
+| `series_sort_number` | integer | Sort number for the series. |
+| `series_is_default` | logical | Whether the series is the default series. |
+| `series_game_type` | character | Game type code for the series. |
 
 ### Example
 
@@ -2264,27 +2264,27 @@ View information for all seasons based on id.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character |  |
-| `has_wildcard` | logical |  |
-| `pre_season_start_date` | character |  |
-| `season_start_date` | character |  |
-| `regular_season_start_date` | character |  |
-| `regular_season_end_date` | character |  |
-| `season_end_date` | character |  |
-| `offseason_start_date` | character |  |
-| `off_season_end_date` | character |  |
-| `season_level_gameday_type` | character |  |
-| `game_level_gameday_type` | character |  |
-| `qualifier_plate_appearances` | double |  |
-| `qualifier_outs_pitched` | double |  |
-| `post_season_start_date` | character |  |
-| `post_season_end_date` | character |  |
-| `last_date1st_half` | character |  |
-| `all_star_date` | character |  |
-| `first_date2nd_half` | character |  |
-| `pre_season_end_date` | character |  |
-| `spring_start_date` | character |  |
-| `spring_end_date` | character |  |
+| `season_id` | character | Season year identifier. |
+| `has_wildcard` | logical | Whether the season has a wild card round. |
+| `pre_season_start_date` | character | Pre-season start date. |
+| `season_start_date` | character | Season start date. |
+| `regular_season_start_date` | character | Regular season start date. |
+| `regular_season_end_date` | character | Regular season end date. |
+| `season_end_date` | character | Season end date. |
+| `offseason_start_date` | character | Off-season start date. |
+| `off_season_end_date` | character | Off-season end date. |
+| `season_level_gameday_type` | character | Season-level Gameday data feed type. |
+| `game_level_gameday_type` | character | Game-level Gameday data feed type. |
+| `qualifier_plate_appearances` | double | Plate appearances per team game to qualify. |
+| `qualifier_outs_pitched` | double | Outs pitched per team game to qualify. |
+| `post_season_start_date` | character | Post-season start date. |
+| `post_season_end_date` | character | Post-season end date. |
+| `last_date1st_half` | character | Last date of the first half. |
+| `all_star_date` | character | All-Star Game date. |
+| `first_date2nd_half` | character | First date of the second half. |
+| `pre_season_end_date` | character | Pre-season end date. |
+| `spring_start_date` | character | Spring training start date. |
+| `spring_end_date` | character | Spring training end date. |
 
 ### Example
 
@@ -2311,13 +2311,13 @@ View information for any given sportId.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `code` | character |  |
-| `link` | character |  |
-| `name` | character |  |
-| `abbreviation` | character |  |
-| `sort_order` | integer |  |
-| `active_status` | logical |  |
+| `id` | integer | Id. |
+| `code` | character | Fielder detail type code. |
+| `link` | character | API link to the game feed. |
+| `name` | character | Display name. |
+| `abbreviation` | character | Short abbreviation. |
+| `sort_order` | integer | Display sort order for the sport. |
+| `active_status` | logical | Whether the sport/level is active. |
 
 ### Example
 
@@ -2384,32 +2384,32 @@ View historical records for a list of teams.
 
 | col_name | type | description |
 |---|---|---|
-| `all_star_status` | character |  |
-| `id` | integer |  |
-| `name` | character |  |
-| `link` | character |  |
-| `season` | integer |  |
-| `team_code` | character |  |
-| `file_code` | character |  |
-| `abbreviation` | character |  |
-| `team_name` | character |  |
-| `location_name` | character |  |
-| `first_year_of_play` | character |  |
-| `short_name` | character |  |
-| `franchise_name` | character |  |
-| `club_name` | character |  |
-| `active` | logical |  |
-| `venue_id` | integer |  |
-| `venue_name` | character |  |
-| `venue_link` | character |  |
-| `spring_venue_id` | double |  |
-| `spring_venue_link` | character |  |
-| `league_id` | integer |  |
-| `league_name` | character |  |
-| `league_link` | character |  |
-| `sport_id` | integer |  |
-| `sport_link` | character |  |
-| `sport_name` | character |  |
+| `all_star_status` | character | All-star status flag. |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `season` | integer | Season year. |
+| `team_code` | character | Internal team code. |
+| `file_code` | character | File code abbreviation. |
+| `abbreviation` | character | Short abbreviation. |
+| `team_name` | character | Team name. |
+| `location_name` | character | Team location (city). |
+| `first_year_of_play` | character | First year the franchise played. |
+| `short_name` | character | Short display name. |
+| `franchise_name` | character | Franchise name. |
+| `club_name` | character | Club name. |
+| `active` | logical | Whether the player is currently active. |
+| `venue_id` | integer | MLBAM venue ID. |
+| `venue_name` | character | Venue name. |
+| `venue_link` | character | API link to the venue. |
+| `spring_venue_id` | double | Spring training venue MLBAM ID. |
+| `spring_venue_link` | character | API link to the spring venue. |
+| `league_id` | integer | League MLBAM ID. |
+| `league_name` | character | League name. |
+| `league_link` | character | API link to the league. |
+| `sport_id` | integer | Sport MLBAM ID. |
+| `sport_link` | character | API link to the sport. |
+| `sport_name` | character | Sport name (e.g., Major League Baseball). |
 
 ### Example
 
@@ -2442,13 +2442,13 @@ View team stats.
 
 | col_name | type | description |
 |---|---|---|
-| `total_splits` | integer |  |
+| `total_splits` | integer | Total number of splits in the leaderboard. |
 | `exemptions` | character |  |
-| `splits` | character |  |
-| `splits_tied_with_offset` | character |  |
-| `splits_tied_with_limit` | character |  |
-| `type_display_name` | character |  |
-| `group_display_name` | character |  |
+| `splits` | character | Splits. |
+| `splits_tied_with_offset` | character | Players tied at the offset boundary. |
+| `splits_tied_with_limit` | character | Players tied at the limit boundary. |
+| `type_display_name` | character | Stat type display name. |
+| `group_display_name` | character | Stat group display name. |
 
 ### Example
 
@@ -2485,13 +2485,13 @@ View leaders for a statistic.
 
 | col_name | type | description |
 |---|---|---|
-| `leader_category` | character |  |
-| `season` | character |  |
+| `leader_category` | character | Team leader category (e.g., homeRuns). |
+| `season` | character | Season year. |
 | `leaders` | character |  |
-| `stat_group` | character |  |
-| `total_splits` | integer |  |
-| `game_type_id` | character |  |
-| `game_type_description` | character |  |
+| `stat_group` | character | Stat group (e.g., hitting). |
+| `total_splits` | integer | Total number of splits in the leaderboard. |
+| `game_type_id` | character | Game type code (e.g., R for regular season). |
+| `game_type_description` | character | Game type description. |
 
 ### Example
 
@@ -2520,13 +2520,13 @@ View biographical  information on all coaches for a given club.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character |  |
-| `job` | character |  |
-| `job_id` | character |  |
-| `title` | character |  |
-| `person_id` | integer |  |
-| `person_full_name` | character |  |
-| `person_link` | character |  |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | character | Job title (e.g. 'Umpire'). |
+| `job_id` | character | Job code identifier. |
+| `title` | character | Specific role title for the assignment. |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
 
 ### Example
 
@@ -2554,13 +2554,13 @@ View biographical  information on all personnel for a given club.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character |  |
-| `job` | character |  |
-| `job_id` | character |  |
-| `title` | character |  |
-| `person_id` | integer |  |
-| `person_full_name` | character |  |
-| `person_link` | character |  |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | character | Job title (e.g. 'Umpire'). |
+| `job_id` | character | Job code identifier. |
+| `title` | character | Specific role title for the assignment. |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
 
 ### Example
 
@@ -2591,16 +2591,16 @@ View biographical and statistical information for a club's roster based on roste
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character |  |
-| `person_id` | integer |  |
-| `person_full_name` | character |  |
-| `person_link` | character |  |
-| `position_code` | character |  |
-| `position_name` | character |  |
-| `position_type` | character |  |
-| `position_abbreviation` | character |  |
-| `status_code` | character |  |
-| `status_description` | character |  |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
+| `position_code` | character | Numeric scorekeeping position code. |
+| `position_name` | character | Position name. |
+| `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
+| `position_abbreviation` | character | Position abbreviation. |
+| `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
+| `status_description` | character | Roster status description (e.g. 'Active'). |
 
 ### Example
 

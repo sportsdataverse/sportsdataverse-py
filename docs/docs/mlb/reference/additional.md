@@ -42,10 +42,10 @@ GET /leaderboard/arm-strength — outfielder + infielder arm-strength leaders.
 | col_name | type | description |
 |---|---|---|
 | `fielder_name` | character |  |
-| `player_id` | integer |  |
-| `team_name` | character |  |
+| `player_id` | integer | MLBAM player ID. |
+| `team_name` | character | Team name. |
 | `primary_position` | integer |  |
-| `primary_position_name` | character |  |
+| `primary_position_name` | character | Primary fielding position name. |
 | `total_throws` | integer |  |
 | `total_throws_1b` | integer |  |
 | `total_throws_2b` | integer |  |
@@ -88,8 +88,8 @@ GET /leaderboard/bat-tracking — swing speed / attack angle (2024+).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `name` | character |  |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
 | `swings_competitive` | integer |  |
 | `percent_swings_competitive` | double |  |
 | `contact` | integer |  |
@@ -99,7 +99,7 @@ GET /leaderboard/bat-tracking — swing speed / attack angle (2024+).
 | `squared_up_per_swing` | double |  |
 | `blast_per_bat_contact` | double |  |
 | `blast_per_swing` | double |  |
-| `swing_length` | double |  |
+| `swing_length` | double | Length of the swing path to contact (feet). |
 | `swords` | integer |  |
 | `batter_run_value` | double |  |
 | `whiffs` | character |  |
@@ -124,8 +124,8 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character |  |
-| `player_id` | integer |  |
+| `last_name, first_name` | character | Player name as "Last, First". |
+| `player_id` | integer | MLBAM player ID. |
 | `oaa` | integer |  |
 | `n_fieldout_5stars` | integer |  |
 | `n_opp_5stars` | integer |  |
@@ -182,15 +182,15 @@ GET /leaderboard/expected_statistics — xBA / xSLG / xwOBA / xISO leaders.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character |  |
-| `player_id` | integer |  |
-| `year` | integer |  |
+| `last_name, first_name` | character | Player name as "Last, First". |
+| `player_id` | integer | MLBAM player ID. |
+| `year` | integer | Draft year (YYYY). |
 | `pa` | integer |  |
 | `bip` | integer |  |
 | `ba` | double |  |
 | `est_ba` | double |  |
 | `est_ba_minus_ba_diff` | double |  |
-| `slg` | double |  |
+| `slg` | double | Slugging percentage. |
 | `est_slg` | double |  |
 | `est_slg_minus_slg_diff` | double |  |
 | `woba` | double |  |
@@ -217,10 +217,10 @@ GET /leaderboard/outs_above_average — OAA fielding leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character |  |
-| `player_id` | integer |  |
+| `last_name, first_name` | character | Player name as "Last, First". |
+| `player_id` | integer | MLBAM player ID. |
 | `display_team_name` | character |  |
-| `year` | integer |  |
+| `year` | integer | Draft year (YYYY). |
 | `primary_pos_formatted` | character |  |
 | `fielding_runs_prevented` | integer |  |
 | `outs_above_average` | integer |  |
@@ -270,8 +270,8 @@ GET /leaderboard/poptime — catcher pop-time leaders.
 |---|---|---|
 | `entity_name` | character |  |
 | `entity_id` | integer |  |
-| `team_id` | integer |  |
-| `age` | integer |  |
+| `team_id` | integer | Unique ESPN team identifier. |
+| `age` | integer | Player age (in years). |
 | `maxeff_arm_2b_3b_sba` | double |  |
 | `exchange_2b_3b_sba` | double |  |
 | `pop_2b_sba_count` | integer |  |
@@ -303,12 +303,12 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaders.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character |  |
-| `player_id` | integer |  |
-| `team_id` | integer |  |
-| `team` | character |  |
-| `position` | character |  |
-| `age` | integer |  |
+| `last_name, first_name` | character | Player name as "Last, First". |
+| `player_id` | integer | MLBAM player ID. |
+| `team_id` | integer | Unique ESPN team identifier. |
+| `team` | character | Team. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `age` | integer | Player age (in years). |
 | `competitive_runs` | integer |  |
 | `bolts` | integer |  |
 | `hp_to_1b` | double |  |
@@ -370,124 +370,124 @@ polars.DataFrame (or pandas if ``return_as_pandas=True``) with one row per pitch
 
 | col_name | type | description |
 |---|---|---|
-| `pitch_type` | character |  |
-| `game_date` | character |  |
-| `release_speed` | double |  |
-| `release_pos_x` | double |  |
-| `release_pos_z` | double |  |
-| `player_name` | character |  |
-| `batter` | integer |  |
-| `pitcher` | integer |  |
-| `events` | character |  |
-| `description` | character |  |
-| `spin_dir` | character |  |
-| `spin_rate_deprecated` | character |  |
-| `break_angle_deprecated` | character |  |
-| `break_length_deprecated` | character |  |
-| `zone` | integer |  |
-| `des` | character |  |
-| `game_type` | character |  |
-| `stand` | character |  |
-| `p_throws` | character |  |
-| `home_team` | character |  |
-| `away_team` | character |  |
-| `type` | character |  |
-| `hit_location` | integer |  |
-| `bb_type` | character |  |
-| `balls` | integer |  |
-| `strikes` | integer |  |
-| `game_year` | integer |  |
-| `pfx_x` | double |  |
-| `pfx_z` | double |  |
-| `plate_x` | double |  |
-| `plate_z` | double |  |
-| `on_3b` | character |  |
-| `on_2b` | integer |  |
-| `on_1b` | integer |  |
-| `outs_when_up` | integer |  |
-| `inning` | integer |  |
-| `inning_topbot` | character |  |
-| `hc_x` | double |  |
-| `hc_y` | double |  |
-| `tfs_deprecated` | character |  |
-| `tfs_zulu_deprecated` | character |  |
-| `umpire` | character |  |
-| `sv_id` | character |  |
-| `vx0` | double |  |
-| `vy0` | double |  |
-| `vz0` | double |  |
-| `ax` | double |  |
-| `ay` | double |  |
-| `az` | double |  |
-| `sz_top` | double |  |
-| `sz_bot` | double |  |
-| `hit_distance_sc` | integer |  |
-| `launch_speed` | double |  |
-| `launch_angle` | integer |  |
-| `effective_speed` | double |  |
-| `release_spin_rate` | integer |  |
-| `release_extension` | double |  |
-| `game_pk` | integer |  |
-| `fielder_2` | integer |  |
-| `fielder_3` | integer |  |
-| `fielder_4` | integer |  |
-| `fielder_5` | integer |  |
-| `fielder_6` | integer |  |
-| `fielder_7` | integer |  |
-| `fielder_8` | integer |  |
-| `fielder_9` | integer |  |
-| `release_pos_y` | double |  |
-| `estimated_ba_using_speedangle` | double |  |
-| `estimated_woba_using_speedangle` | double |  |
-| `woba_value` | double |  |
-| `woba_denom` | integer |  |
-| `babip_value` | integer |  |
-| `iso_value` | integer |  |
-| `launch_speed_angle` | integer |  |
-| `at_bat_number` | integer |  |
-| `pitch_number` | integer |  |
-| `pitch_name` | character |  |
-| `home_score` | integer |  |
-| `away_score` | integer |  |
-| `bat_score` | integer |  |
-| `fld_score` | integer |  |
-| `post_away_score` | integer |  |
-| `post_home_score` | integer |  |
-| `post_bat_score` | integer |  |
-| `post_fld_score` | integer |  |
-| `if_fielding_alignment` | character |  |
-| `of_fielding_alignment` | character |  |
-| `spin_axis` | integer |  |
-| `delta_home_win_exp` | double |  |
-| `delta_run_exp` | double |  |
-| `bat_speed` | double |  |
-| `swing_length` | double |  |
-| `estimated_slg_using_speedangle` | double |  |
-| `delta_pitcher_run_exp` | double |  |
-| `hyper_speed` | double |  |
-| `home_score_diff` | integer |  |
-| `bat_score_diff` | integer |  |
-| `home_win_exp` | double |  |
-| `bat_win_exp` | double |  |
-| `age_pit_legacy` | integer |  |
-| `age_bat_legacy` | integer |  |
-| `age_pit` | integer |  |
-| `age_bat` | integer |  |
-| `n_thruorder_pitcher` | integer |  |
-| `n_priorpa_thisgame_player_at_bat` | integer |  |
-| `pitcher_days_since_prev_game` | integer |  |
-| `batter_days_since_prev_game` | integer |  |
-| `pitcher_days_until_next_game` | integer |  |
-| `batter_days_until_next_game` | integer |  |
-| `api_break_z_with_gravity` | double |  |
-| `api_break_x_arm` | double |  |
-| `api_break_x_batter_in` | double |  |
-| `arm_angle` | double |  |
-| `attack_angle` | double |  |
-| `attack_direction` | double |  |
-| `swing_path_tilt` | double |  |
-| `intercept_ball_minus_batter_pos_x_inches` | double |  |
-| `intercept_ball_minus_batter_pos_y_inches` | double |  |
+| `pitch_type` | character | Abbreviation of the pitch type thrown (e.g. FF, SL, CH). |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `release_speed` | double | Pitch velocity out of the hand (mph). |
+| `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
+| `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
+| `player_name` | character | Pitcher (or batter, by query) name, Last, First. |
+| `batter` | integer | Full name of the batter for this swing record. |
+| `pitcher` | integer | Whether the position is a pitcher. |
+| `events` | character | Nested list of non-game events. |
+| `description` | character | Long-form description text. |
+| `spin_dir` | character | Deprecated spin direction field, no longer populated. |
+| `spin_rate_deprecated` | character | Deprecated legacy spin-rate field, no longer populated. |
+| `break_angle_deprecated` | character | Deprecated legacy break-angle field, no longer populated. |
+| `break_length_deprecated` | character | Deprecated legacy break-length field, no longer populated. |
+| `zone` | integer | Strike-zone region the pitch crossed (1-14 Gameday zone). |
+| `des` | character | Full text description of the play. |
+| `game_type` | character | Game type code (R, P, etc.). |
+| `stand` | character | Side of the plate the batter is standing (L or R). |
+| `p_throws` | character | Hand the pitcher throws with (L or R). |
+| `home_team` | character | Home team name. |
+| `away_team` | character | Away team name. |
+| `type` | character | Record type / category. |
+| `hit_location` | integer | Fielder position number that fielded the ball. |
+| `bb_type` | character | Batted-ball type (ground_ball, line_drive, fly_ball, popup). |
+| `balls` | integer | Ball count before the pitch. |
+| `strikes` | integer | Strike count before the pitch. |
+| `game_year` | integer | Season year of the game. |
+| `pfx_x` | double | Horizontal pitch movement from the catcher's perspective (feet). |
+| `pfx_z` | double | Vertical pitch movement from the catcher's perspective (feet). |
+| `plate_x` | double | Horizontal position of the pitch crossing the plate (feet from center). |
+| `plate_z` | double | Vertical position of the pitch crossing the plate (feet above ground). |
+| `on_3b` | character | MLBAM ID of the runner on third base, if any. |
+| `on_2b` | integer | MLBAM ID of the runner on second base, if any. |
+| `on_1b` | integer | MLBAM ID of the runner on first base, if any. |
+| `outs_when_up` | integer | Number of outs when the batter came to the plate. |
+| `inning` | integer | Inning number. |
+| `inning_topbot` | character | Half of the inning (Top or Bot). |
+| `hc_x` | double | Hit coordinate X on the field diagram. |
+| `hc_y` | double | Hit coordinate Y on the field diagram. |
+| `tfs_deprecated` | character | Deprecated time-from-start field, no longer populated. |
+| `tfs_zulu_deprecated` | character | Deprecated Zulu time-from-start field, no longer populated. |
+| `umpire` | character | Deprecated umpire field, no longer populated. |
+| `sv_id` | character | Deprecated Sportvision/Statcast pitch identifier, no longer populated. |
+| `vx0` | double | Velocity of the pitch in the x-direction at y=50 ft (ft/s). |
+| `vy0` | double | Velocity of the pitch in the y-direction at y=50 ft (ft/s). |
+| `vz0` | double | Velocity of the pitch in the z-direction at y=50 ft (ft/s). |
+| `ax` | double | Acceleration of the pitch in the x-direction at y=50 ft (ft/s^2). |
+| `ay` | double | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
+| `az` | double | Acceleration of the pitch in the z-direction at y=50 ft (ft/s^2). |
+| `sz_top` | double | Top of the batter's strike zone for the pitch (feet). |
+| `sz_bot` | double | Bottom of the batter's strike zone for the pitch (feet). |
+| `hit_distance_sc` | integer | Statcast-measured projected distance of the batted ball (feet). |
+| `launch_speed` | double | Exit velocity of the batted ball (mph). |
+| `launch_angle` | integer | Vertical launch angle of the batted ball (degrees). |
+| `effective_speed` | double | Perceived velocity adjusted for release extension (mph). |
+| `release_spin_rate` | integer | Spin rate of the pitch at release (rpm). |
+| `release_extension` | double | Distance toward the plate at release (feet). |
+| `game_pk` | integer | Unique game identifier. |
+| `fielder_2` | integer | MLBAM ID of the catcher. |
+| `fielder_3` | integer | MLBAM ID of the first baseman. |
+| `fielder_4` | integer | MLBAM ID of the second baseman. |
+| `fielder_5` | integer | MLBAM ID of the third baseman. |
+| `fielder_6` | integer | MLBAM ID of the shortstop. |
+| `fielder_7` | integer | MLBAM ID of the left fielder. |
+| `fielder_8` | integer | MLBAM ID of the center fielder. |
+| `fielder_9` | integer | MLBAM ID of the right fielder. |
+| `release_pos_y` | double | Release position of the ball toward the plate (feet). |
+| `estimated_ba_using_speedangle` | double | Expected batting average based on exit velocity and launch angle. |
+| `estimated_woba_using_speedangle` | double | Expected wOBA based on exit velocity and launch angle. |
+| `woba_value` | double | wOBA value assigned to the event. |
+| `woba_denom` | integer | wOBA denominator (plate-appearance weight) for the event. |
+| `babip_value` | integer | BABIP value assigned to the event (0 or 1). |
+| `iso_value` | integer | Isolated power value assigned to the event. |
+| `launch_speed_angle` | integer | Batted-ball classification code (1-6) from exit velocity and angle. |
+| `at_bat_number` | integer | Sequential plate-appearance number within the game. |
+| `pitch_number` | integer | Pitch number within the plate appearance. |
+| `pitch_name` | character | Full name of the pitch type (e.g. 4-Seam Fastball, Slider). |
+| `home_score` | integer | Home team run total after the play. |
+| `away_score` | integer | Away team run total after the play. |
+| `bat_score` | integer | Batting team score before the pitch. |
+| `fld_score` | integer | Fielding team score before the pitch. |
+| `post_away_score` | integer | Away team score after the pitch. |
+| `post_home_score` | integer | Home team score after the pitch. |
+| `post_bat_score` | integer | Batting team score after the pitch. |
+| `post_fld_score` | integer | Fielding team score after the pitch. |
+| `if_fielding_alignment` | character | Infield defensive alignment (Standard, Strategic, Infield shift). |
+| `of_fielding_alignment` | character | Outfield defensive alignment (Standard, Strategic, 4th outfielder). |
+| `spin_axis` | integer | Spin axis of the pitch as a clock-face angle (degrees). |
+| `delta_home_win_exp` | double | Change in home team win expectancy on the play. |
+| `delta_run_exp` | double | Change in run expectancy on the play. |
+| `bat_speed` | double | Bat speed at the point of contact (mph). |
+| `swing_length` | double | Length of the swing path to contact (feet). |
+| `estimated_slg_using_speedangle` | double | Expected slugging based on exit velocity and launch angle. |
+| `delta_pitcher_run_exp` | double | Change in run expectancy credited to the pitcher. |
+| `hyper_speed` | double | Adjusted (90th-percentile) exit velocity (mph). |
+| `home_score_diff` | integer | Home team score minus away team score before the pitch. |
+| `bat_score_diff` | integer | Batting team score minus fielding team score before the pitch. |
+| `home_win_exp` | double | Home team win expectancy before the play. |
+| `bat_win_exp` | double | Batting team win expectancy before the play. |
+| `age_pit_legacy` | integer | Pitcher age using the legacy calculation. |
+| `age_bat_legacy` | integer | Batter age using the legacy calculation. |
+| `age_pit` | integer | Pitcher age for the season. |
+| `age_bat` | integer | Batter age for the season. |
+| `n_thruorder_pitcher` | integer | Times through the order the pitcher is facing the lineup. |
+| `n_priorpa_thisgame_player_at_bat` | integer | Number of prior plate appearances by the batter in the game. |
+| `pitcher_days_since_prev_game` | integer | Days since the pitcher's previous game appearance. |
+| `batter_days_since_prev_game` | integer | Days since the batter's previous game appearance. |
+| `pitcher_days_until_next_game` | integer | Days until the pitcher's next game appearance. |
+| `batter_days_until_next_game` | integer | Days until the batter's next game appearance. |
+| `api_break_z_with_gravity` | double | Vertical pitch break including gravity (inches). |
+| `api_break_x_arm` | double | Horizontal pitch break to the pitcher's arm side (inches). |
+| `api_break_x_batter_in` | double | Horizontal pitch break toward/away from the batter (inches). |
+| `arm_angle` | double | Pitcher's arm angle at release (degrees). |
+| `attack_angle` | double | Angle of the bat's path at contact (degrees). |
+| `attack_direction` | double | Horizontal direction of the swing at contact (degrees). |
+| `swing_path_tilt` | double | Vertical tilt of the swing path (degrees). |
+| `intercept_ball_minus_batter_pos_x_inches` | double | Horizontal offset of ball-bat intercept from batter position (inches). |
+| `intercept_ball_minus_batter_pos_y_inches` | double | Depth offset of ball-bat intercept from batter position (inches). |
 
 ### `statcast_search_chunked(start_date: 'str', end_date: 'str', *, chunk_days: 'int' = 5, return_as_pandas: 'bool' = False, **kwargs)`
 
@@ -838,88 +838,88 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer |  |
-| `season_type` | character |  |
-| `total` | logical |  |
-| `athlete_id` | integer |  |
-| `athlete_uid` | character |  |
-| `athlete_guid` | character |  |
-| `athlete_type` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `full_name` | character |  |
-| `display_name` | character |  |
-| `short_name` | character |  |
-| `weight` | double |  |
-| `display_weight` | character |  |
-| `height` | double |  |
-| `display_height` | character |  |
-| `age` | integer |  |
-| `date_of_birth` | character |  |
-| `jersey` | character |  |
-| `slug` | character |  |
-| `active` | logical |  |
-| `position_id` | integer |  |
-| `position_name` | character |  |
-| `position_display_name` | character |  |
-| `position_abbreviation` | character |  |
-| `college_name` | character |  |
-| `status_id` | integer |  |
-| `status_name` | character |  |
-| `batting_games_played` | double |  |
-| `batting_team_games_played` | double |  |
-| `batting_hit_by_pitch` | double |  |
-| `batting_ground_balls` | double |  |
-| `batting_strikeouts` | double |  |
-| `batting_rb_is` | double |  |
-| `batting_sac_hits` | double |  |
-| `batting_hits` | double |  |
-| `batting_stolen_bases` | double |  |
-| `batting_walks` | double |  |
-| `batting_catcher_interference` | double |  |
-| `batting_runs` | double |  |
-| `batting_gid_ps` | double |  |
-| `batting_sac_flies` | double |  |
-| `batting_at_bats` | double |  |
-| `batting_home_runs` | double |  |
-| `batting_grand_slam_home_runs` | double |  |
-| `batting_runners_left_on_base` | double |  |
-| `batting_triples` | double |  |
-| `batting_game_winning_rb_is` | double |  |
-| `batting_intentional_walks` | double |  |
-| `batting_doubles` | double |  |
-| `batting_fly_balls` | double |  |
-| `batting_caught_stealing` | double |  |
-| `batting_pitches` | double |  |
-| `batting_games_started` | double |  |
-| `batting_pinch_at_bats` | double |  |
-| `batting_pinch_hits` | double |  |
-| `batting_player_rating` | double |  |
-| `batting_is_qualified` | double |  |
-| `batting_is_qualified_steals` | double |  |
-| `batting_total_bases` | double |  |
-| `batting_plate_appearances` | double |  |
-| `batting_projected_home_runs` | double |  |
-| `batting_extra_base_hits` | double |  |
-| `batting_runs_created` | double |  |
-| `batting_avg` | double |  |
-| `batting_pinch_avg` | double |  |
-| `batting_slug_avg` | double |  |
-| `batting_secondary_avg` | double |  |
-| `batting_on_base_pct` | double |  |
-| `batting_ops` | double |  |
-| `batting_ground_to_fly_ratio` | double |  |
+| `season` | integer | Season year. |
+| `season_type` | character | Season-type id. |
+| `total` | logical | Total. |
+| `athlete_id` | integer | Unique ESPN athlete identifier. |
+| `athlete_uid` | character | Athlete uid. |
+| `athlete_guid` | character | Athlete guid. |
+| `athlete_type` | character | Athlete type. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `full_name` | character | Player's full name. |
+| `display_name` | character | Display name. |
+| `short_name` | character | Short display name. |
+| `weight` | double | Weight in pounds. |
+| `display_weight` | character | Display weight. |
+| `height` | double | Height (feet and inches). |
+| `display_height` | character | Display height. |
+| `age` | integer | Player age (in years). |
+| `date_of_birth` | character | Date of birth. |
+| `jersey` | character | Jersey number worn by the player. |
+| `slug` | character | URL-safe identifier. |
+| `active` | logical | Whether the player is currently active. |
+| `position_id` | integer | Unique position identifier. |
+| `position_name` | character | Position name. |
+| `position_display_name` | character | Position display name. |
+| `position_abbreviation` | character | Position abbreviation. |
+| `college_name` | character | College name. |
+| `status_id` | integer | Status id. |
+| `status_name` | character | Game status (e.g. 'STATUS_FINAL'). |
+| `batting_games_played` | double | Team batting: batting games played. |
+| `batting_team_games_played` | double | Team batting: batting team games played. |
+| `batting_hit_by_pitch` | double | Team batting: batting hit by pitch. |
+| `batting_ground_balls` | double | Team batting: batting ground balls. |
+| `batting_strikeouts` | double | Team batting: batting strikeouts. |
+| `batting_rb_is` | double | Team batting: batting rb is. |
+| `batting_sac_hits` | double | Team batting: batting sac hits. |
+| `batting_hits` | double | Team batting: batting hits. |
+| `batting_stolen_bases` | double | Team batting: batting stolen bases. |
+| `batting_walks` | double | Team batting: batting walks. |
+| `batting_catcher_interference` | double | Team batting: batting catcher interference. |
+| `batting_runs` | double | Team batting: batting runs. |
+| `batting_gid_ps` | double | Team batting: batting gid ps. |
+| `batting_sac_flies` | double | Team batting: batting sac flies. |
+| `batting_at_bats` | double | Team batting: batting at bats. |
+| `batting_home_runs` | double | Team batting: batting home runs. |
+| `batting_grand_slam_home_runs` | double | Team batting: batting grand slam home runs. |
+| `batting_runners_left_on_base` | double | Team batting: batting runners left on base. |
+| `batting_triples` | double | Team batting: batting triples. |
+| `batting_game_winning_rb_is` | double | Team batting: batting game winning rb is. |
+| `batting_intentional_walks` | double | Team batting: batting intentional walks. |
+| `batting_doubles` | double | Team batting: batting doubles. |
+| `batting_fly_balls` | double | Team batting: batting fly balls. |
+| `batting_caught_stealing` | double | Team batting: batting caught stealing. |
+| `batting_pitches` | double | Team batting: batting pitches. |
+| `batting_games_started` | double | Team batting: batting games started. |
+| `batting_pinch_at_bats` | double | Team batting: batting pinch at bats. |
+| `batting_pinch_hits` | double | Team batting: batting pinch hits. |
+| `batting_player_rating` | double | Team batting: batting player rating. |
+| `batting_is_qualified` | double | Team batting: batting is qualified. |
+| `batting_is_qualified_steals` | double | Team batting: batting is qualified steals. |
+| `batting_total_bases` | double | Team batting: batting total bases. |
+| `batting_plate_appearances` | double | Team batting: batting plate appearances. |
+| `batting_projected_home_runs` | double | Team batting: batting projected home runs. |
+| `batting_extra_base_hits` | double | Team batting: batting extra base hits. |
+| `batting_runs_created` | double | Team batting: batting runs created. |
+| `batting_avg` | double | Team batting: batting average. |
+| `batting_pinch_avg` | double | Team batting: batting pinch avg. |
+| `batting_slug_avg` | double | Team batting: batting slug avg. |
+| `batting_secondary_avg` | double | Team batting: batting secondary avg. |
+| `batting_on_base_pct` | double | Team batting: batting on base pct. |
+| `batting_ops` | double | Team batting: batting ops. |
+| `batting_ground_to_fly_ratio` | double | Team batting: batting ground to fly ratio. |
 | `batting_runs_created_per27_outs` | double |  |
-| `batting_batter_rating` | double |  |
-| `batting_at_bats_per_home_run` | double |  |
-| `batting_stolen_base_pct` | double |  |
-| `batting_pitches_per_plate_appearance` | double |  |
-| `batting_isolated_power` | double |  |
-| `batting_walk_to_strikeout_ratio` | double |  |
-| `batting_walks_per_plate_appearance` | double |  |
-| `batting_secondary_avg_minus_ba` | double |  |
-| `batting_runs_produced` | double |  |
-| `batting_runs_ratio` | double |  |
+| `batting_batter_rating` | double | Team batting: batting batter rating. |
+| `batting_at_bats_per_home_run` | double | Team batting: batting at bats per home run. |
+| `batting_stolen_base_pct` | double | Team batting: batting stolen base pct. |
+| `batting_pitches_per_plate_appearance` | double | Team batting: batting pitches per plate appearance. |
+| `batting_isolated_power` | double | Team batting: batting isolated power. |
+| `batting_walk_to_strikeout_ratio` | double | Team batting: batting walk to strikeout ratio. |
+| `batting_walks_per_plate_appearance` | double | Team batting: batting walks per plate appearance. |
+| `batting_secondary_avg_minus_ba` | double | Team batting: batting secondary avg minus ba. |
+| `batting_runs_produced` | double | Team batting: batting runs produced. |
+| `batting_runs_ratio` | double | Team batting: batting runs ratio. |
 | `batting_patience_ratio` | double |  |
 | `batting_bipa` | double |  |
 | `batting_mlb_rating` | double |  |
@@ -960,19 +960,19 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 | `fielding_catcher_caught_stealing_pct` | double |  |
 | `fielding_catcher_era` | double |  |
 | `fielding_def_warbr` | double |  |
-| `team_id` | integer |  |
-| `team_uid` | character |  |
-| `team_guid` | character |  |
-| `team_slug` | character |  |
-| `team_location` | character |  |
-| `team_name` | character |  |
-| `team_abbreviation` | character |  |
-| `team_display_name` | character |  |
-| `team_short_display_name` | character |  |
-| `team_color` | character |  |
-| `team_alternate_color` | character |  |
-| `team_is_active` | logical |  |
-| `team_logo_href` | character |  |
+| `team_id` | integer | Unique ESPN team identifier. |
+| `team_uid` | character | ESPN universal team identifier (UID). |
+| `team_guid` | character | ESPN team GUID. |
+| `team_slug` | character | URL-safe team identifier. |
+| `team_location` | character | Team city / location. |
+| `team_name` | character | Team name. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'NYY'). |
+| `team_display_name` | character | Full team display name (e.g. 'New York Yankees'). |
+| `team_short_display_name` | character | Short team display name. |
+| `team_color` | character | Team primary color (hex, no leading '#'). |
+| `team_alternate_color` | character | Team alternate color (hex). |
+| `team_is_active` | logical | Team is active. |
+| `team_logo_href` | character | Default team logo URL; `team_detail = TRUE` only. |
 
 **Example**
 
@@ -1001,29 +1001,29 @@ Polars dataframe containing the schedule. Returns ``None`` if no games.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `date` | character |  |
-| `season_year` | integer |  |
-| `season_type` | integer |  |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `venue_id` | character |  |
-| `venue_full_name` | character |  |
-| `venue_city` | character |  |
-| `venue_state` | character |  |
-| `home_id` | character |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_score` | character |  |
-| `home_winner` | logical |  |
-| `away_id` | character |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_score` | character |  |
-| `away_winner` | logical |  |
+| `game_id` | character | Unique ESPN game/event identifier. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `season_year` | integer | Season year string ('YYYY-YY' format). |
+| `season_type` | integer | Season-type id. |
+| `status_type_state` | character | Status type state. |
+| `status_type_completed` | logical | Status type completed. |
+| `status_type_description` | character | Status type description. |
+| `venue_id` | character | MLBAM venue ID. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_city` | character | Venue city. |
+| `venue_state` | character | Venue state / province. |
+| `home_id` | character | Unique identifier for home. |
+| `home_name` | character | Home name. |
+| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_display_name` | character | Home display name. |
+| `home_score` | character | Home team run total after the play. |
+| `home_winner` | logical | Home team's winner. |
+| `away_id` | character | Unique identifier for away. |
+| `away_name` | character | Away name. |
+| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_display_name` | character | Away display name. |
+| `away_score` | character | Away team run total after the play. |
+| `away_winner` | logical | Away team's winner. |
 
 **Example**
 
@@ -1134,20 +1134,20 @@ Polars dataframe containing teams for MLB. This function caches by default, so i
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character |  |
-| `team_alternate_color` | character |  |
-| `team_color` | character |  |
-| `team_display_name` | character |  |
-| `team_id` | character |  |
-| `team_is_active` | logical |  |
-| `team_is_all_star` | logical |  |
-| `team_location` | character |  |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'NYY'). |
+| `team_alternate_color` | character | Team alternate color (hex). |
+| `team_color` | character | Team primary color (hex, no leading '#'). |
+| `team_display_name` | character | Full team display name (e.g. 'New York Yankees'). |
+| `team_id` | character | Unique ESPN team identifier. |
+| `team_is_active` | logical | Team is active. |
+| `team_is_all_star` | logical | Team is all star. |
+| `team_location` | character | Team city / location. |
 | `team_logos` | integer |  |
-| `team_name` | character |  |
-| `team_nickname` | character |  |
-| `team_short_display_name` | character |  |
-| `team_slug` | character |  |
-| `team_uid` | character |  |
+| `team_name` | character | Team name. |
+| `team_nickname` | character | Team nickname. |
+| `team_short_display_name` | character | Short team display name. |
+| `team_slug` | character | URL-safe team identifier. |
+| `team_uid` | character | ESPN universal team identifier (UID). |
 
 **Example**
 

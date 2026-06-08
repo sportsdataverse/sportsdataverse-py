@@ -31,17 +31,17 @@ Polars (or pandas) DataFrame with the same columns documented in :func:`sportsda
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer |  |
-| `season` | integer |  |
-| `official_id` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `full_name` | character |  |
-| `display_name` | character |  |
-| `position_id` | character |  |
-| `position_name` | character |  |
-| `position_display_name` | character |  |
-| `order` | integer |  |
+| `game_id` | integer | Unique game identifier. |
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `official_id` | character | Unique official / referee identifier. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `full_name` | character | Player's full name. |
+| `display_name` | character | Display name. |
+| `position_id` | character | Unique position identifier. |
+| `position_name` | character | Listed roster position ('Guard', 'Forward', 'Center'). |
+| `position_display_name` | character | Position display name. |
+| `order` | integer | Display order within the result set. |
 
 **Example**
 
@@ -87,121 +87,121 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer |  |
-| `season_type` | character |  |
-| `total` | logical |  |
-| `athlete_id` | integer |  |
-| `athlete_uid` | character |  |
-| `athlete_guid` | character |  |
-| `athlete_type` | character |  |
-| `first_name` | character |  |
-| `last_name` | character |  |
-| `full_name` | character |  |
-| `display_name` | character |  |
-| `short_name` | character |  |
-| `weight` | double |  |
-| `display_weight` | character |  |
-| `height` | double |  |
-| `display_height` | character |  |
-| `age` | integer |  |
-| `date_of_birth` | character |  |
-| `jersey` | character |  |
-| `slug` | character |  |
-| `active` | logical |  |
-| `position_id` | integer |  |
-| `position_name` | character |  |
-| `position_display_name` | character |  |
-| `position_abbreviation` | character |  |
-| `college_name` | character |  |
-| `status_id` | integer |  |
-| `status_name` | character |  |
-| `defensive_blocks` | double |  |
-| `defensive_defensive_rebounds` | double |  |
-| `defensive_steals` | double |  |
-| `defensive_avg_defensive_rebounds` | double |  |
-| `defensive_avg_blocks` | double |  |
-| `defensive_avg_steals` | double |  |
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `total` | logical | Total. |
+| `athlete_id` | integer | Unique athlete identifier (ESPN). |
+| `athlete_uid` | character | ESPN athlete UID (universal identifier). |
+| `athlete_guid` | character | ESPN athlete GUID. |
+| `athlete_type` | character | Athlete type / class. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `full_name` | character | Player's full name. |
+| `display_name` | character | Display name. |
+| `short_name` | character | Short display name. |
+| `weight` | double | Player weight in pounds. |
+| `display_weight` | character | Player weight in display format (e.g. '180 lbs'). |
+| `height` | double | Player height (string e.g. '6-2' or inches). |
+| `display_height` | character | Player height in display format (e.g. '6-2'). |
+| `age` | integer | Player age (in years). |
+| `date_of_birth` | character | Date of birth (YYYY-MM-DD). |
+| `jersey` | character | Jersey number worn by the player. |
+| `slug` | character | URL-safe identifier. |
+| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `position_id` | integer | Unique position identifier. |
+| `position_name` | character | Listed roster position ('Guard', 'Forward', 'Center'). |
+| `position_display_name` | character | Position display name. |
+| `position_abbreviation` | character | Position abbreviation ('G' / 'F' / 'C'). |
+| `college_name` | character | College name. |
+| `status_id` | integer | Status identifier. |
+| `status_name` | character | Status label. |
+| `defensive_blocks` | double | Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player. |
+| `defensive_defensive_rebounds` | double | The number of times when the defense obtains the possession of the ball after a missed shot by the offense. |
+| `defensive_steals` | double | The number of times a defensive player forced a turnover by intercepting or deflecting a pass or a dribble of an offensive player. |
+| `defensive_avg_defensive_rebounds` | double | The average defensive rebounds per game. |
+| `defensive_avg_blocks` | double | The average blocks per game. |
+| `defensive_avg_steals` | double | The average steals per game. |
 | `defensive_avg48_defensive_rebounds` | double |  |
 | `defensive_avg48_blocks` | double |  |
 | `defensive_avg48_steals` | double |  |
-| `general_disqualifications` | double |  |
-| `general_flagrant_fouls` | double |  |
-| `general_fouls` | double |  |
-| `general_ejections` | double |  |
-| `general_technical_fouls` | double |  |
-| `general_rebounds` | double |  |
-| `general_vorp` | double |  |
-| `general_minutes` | double |  |
-| `general_avg_minutes` | double |  |
-| `general_fantasy_rating` | double |  |
-| `general_nba_rating` | double |  |
-| `general_plus_minus` | double |  |
-| `general_avg_rebounds` | double |  |
-| `general_avg_fouls` | double |  |
-| `general_avg_flagrant_fouls` | double |  |
-| `general_avg_technical_fouls` | double |  |
-| `general_avg_ejections` | double |  |
-| `general_avg_disqualifications` | double |  |
-| `general_assist_turnover_ratio` | double |  |
-| `general_steal_foul_ratio` | double |  |
-| `general_block_foul_ratio` | double |  |
-| `general_avg_team_rebounds` | double |  |
-| `general_total_rebounds` | double |  |
-| `general_total_technical_fouls` | double |  |
-| `general_team_assist_turnover_ratio` | double |  |
-| `general_steal_turnover_ratio` | double |  |
+| `general_disqualifications` | double | The number of times a player reached the foul limit. |
+| `general_flagrant_fouls` | double | The number of fouls that the officials thought were unnecessary or excessive. |
+| `general_fouls` | double | The number of times a player had illegal contact with the opponent. |
+| `general_ejections` | double | The number of times a player or coach is removed from the game as a result of a serious offense. |
+| `general_technical_fouls` | double | The number of times an player or coach was called for a technical foul (unsportsmanlike conduct or violations). |
+| `general_rebounds` | double | The total number of rebounds (offensive and defensive). |
+| `general_vorp` | double | Value Over Replacement Player. |
+| `general_minutes` | double | The total number of minutes played. |
+| `general_avg_minutes` | double | The average number of minutes per game. |
+| `general_fantasy_rating` | double | The Fantasy Rating of a player. |
+| `general_nba_rating` | double | General nba rating. |
+| `general_plus_minus` | double | A player's estimated on-court impact on team performance measured in point differential per 100 possessions. |
+| `general_avg_rebounds` | double | The average rebounds per game. |
+| `general_avg_fouls` | double | The average fouls committed per game. |
+| `general_avg_flagrant_fouls` | double | The average number of flagrant fouls per game. |
+| `general_avg_technical_fouls` | double | The average number of technical fouls per game. |
+| `general_avg_ejections` | double | The average ejections per game. |
+| `general_avg_disqualifications` | double | The average number of disqualifications per game. |
+| `general_assist_turnover_ratio` | double | The average number of assists a player or team records per turnover. |
+| `general_steal_foul_ratio` | double | The average number of steals a player or team records per foul committed. |
+| `general_block_foul_ratio` | double | The average number of blocks a player or record per foul committed. |
+| `general_avg_team_rebounds` | double | The average number of rebounds for a team per game. |
+| `general_total_rebounds` | double | The total number of rebounds for a team or player. |
+| `general_total_technical_fouls` | double | The total number of technical fouls for a team or player. |
+| `general_team_assist_turnover_ratio` | double | The number of assists per turnover for a team. |
+| `general_steal_turnover_ratio` | double | The number of steals per turnover. |
 | `general_avg48_rebounds` | double |  |
 | `general_avg48_fouls` | double |  |
 | `general_avg48_flagrant_fouls` | double |  |
 | `general_avg48_technical_fouls` | double |  |
 | `general_avg48_ejections` | double |  |
 | `general_avg48_disqualifications` | double |  |
-| `general_games_played` | double |  |
-| `general_games_started` | double |  |
-| `general_double_double` | double |  |
-| `general_triple_double` | double |  |
-| `offensive_assists` | double |  |
-| `offensive_field_goals` | double |  |
-| `offensive_field_goals_attempted` | double |  |
-| `offensive_field_goals_made` | double |  |
-| `offensive_field_goal_pct` | double |  |
-| `offensive_free_throws` | double |  |
-| `offensive_free_throw_pct` | double |  |
-| `offensive_free_throws_attempted` | double |  |
-| `offensive_free_throws_made` | double |  |
-| `offensive_offensive_rebounds` | double |  |
-| `offensive_points` | double |  |
-| `offensive_turnovers` | double |  |
-| `offensive_three_point_pct` | double |  |
-| `offensive_three_point_field_goals_attempted` | double |  |
-| `offensive_three_point_field_goals_made` | double |  |
-| `offensive_total_turnovers` | double |  |
-| `offensive_points_in_paint` | double |  |
-| `offensive_brick_index` | double |  |
-| `offensive_avg_field_goals_made` | double |  |
-| `offensive_avg_field_goals_attempted` | double |  |
-| `offensive_avg_three_point_field_goals_made` | double |  |
-| `offensive_avg_three_point_field_goals_attempted` | double |  |
-| `offensive_avg_free_throws_made` | double |  |
-| `offensive_avg_free_throws_attempted` | double |  |
-| `offensive_avg_points` | double |  |
-| `offensive_avg_offensive_rebounds` | double |  |
-| `offensive_avg_assists` | double |  |
-| `offensive_avg_turnovers` | double |  |
-| `offensive_offensive_rebound_pct` | double |  |
-| `offensive_estimated_possessions` | double |  |
-| `offensive_avg_estimated_possessions` | double |  |
-| `offensive_points_per_estimated_possessions` | double |  |
-| `offensive_avg_team_turnovers` | double |  |
-| `offensive_avg_total_turnovers` | double |  |
-| `offensive_three_point_field_goal_pct` | double |  |
-| `offensive_two_point_field_goals_made` | double |  |
-| `offensive_two_point_field_goals_attempted` | double |  |
-| `offensive_avg_two_point_field_goals_made` | double |  |
-| `offensive_avg_two_point_field_goals_attempted` | double |  |
-| `offensive_two_point_field_goal_pct` | double |  |
-| `offensive_shooting_efficiency` | double |  |
-| `offensive_scoring_efficiency` | double |  |
+| `general_games_played` | double | Games Played. |
+| `general_games_started` | double | The number of games started by an athlete. |
+| `general_double_double` | double | The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots. |
+| `general_triple_double` | double | The number of times double digit values were accumulated in 3 of the following categories: points, rebounds, assists, steals, and blocked shots. |
+| `offensive_assists` | double | The number of times a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was "assisting" in the basket. There is some judgment involved in deciding whether a passer should be credited with an assist. |
+| `offensive_field_goals` | double | Field Goal makes and attempts. |
+| `offensive_field_goals_attempted` | double | The number of times a 2pt field goal was attempted. |
+| `offensive_field_goals_made` | double | The number of times a 2pt field goal was made. |
+| `offensive_field_goal_pct` | double | The ratio of field goals made to field goals attempted: FGM / FGA. |
+| `offensive_free_throws` | double | Free Throw makes and attempts. |
+| `offensive_free_throw_pct` | double | The ratio of free throws made to free throws attempted: FTM / FTA. |
+| `offensive_free_throws_attempted` | double | The number of times a free throw was attempted. |
+| `offensive_free_throws_made` | double | The number of times a free throw was made. |
+| `offensive_offensive_rebounds` | double | The number of times when the offense obtains the possession of the ball after a missed shot. |
+| `offensive_points` | double | The number of points scored. |
+| `offensive_turnovers` | double | The number of times a player loses possession to the other team. |
+| `offensive_three_point_pct` | double | The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA. |
+| `offensive_three_point_field_goals_attempted` | double | The number of times a 3pt field goal was attempted. |
+| `offensive_three_point_field_goals_made` | double | The number of times a 3pt field goal was made. |
+| `offensive_total_turnovers` | double | The number of turnovers plus team turnovers for the team. |
+| `offensive_points_in_paint` | double | The amount of points scored in the area known as "the Paint"(the rectangle between the foul line and the baseline). |
+| `offensive_brick_index` | double | How many points a player costs his team with his shooting compared with the league average on a per-40-minute basis. ((52.8 - TS%) x (FGA + (FTA x 0.44))) / (Min/40) . |
+| `offensive_avg_field_goals_made` | double | The average field goals made per game. |
+| `offensive_avg_field_goals_attempted` | double | The average field goals attempted per game. |
+| `offensive_avg_three_point_field_goals_made` | double | The average three point field goals made per game. |
+| `offensive_avg_three_point_field_goals_attempted` | double | The average three point field goals attempted per game. |
+| `offensive_avg_free_throws_made` | double | The average free throw shots made per game. |
+| `offensive_avg_free_throws_attempted` | double | The average free throw shots attempted per game. |
+| `offensive_avg_points` | double | The average number of points scored per game. |
+| `offensive_avg_offensive_rebounds` | double | The average offensive rebounds per game. |
+| `offensive_avg_assists` | double | The average assists per game. |
+| `offensive_avg_turnovers` | double | The average turnovers committed per game. |
+| `offensive_offensive_rebound_pct` | double | The percentage of the number of times they obtain the possession of the ball after a missed shot. |
+| `offensive_estimated_possessions` | double | An estimation of the number of possessions for a team or player. |
+| `offensive_avg_estimated_possessions` | double | The average number of estimated possessions per game for a team or player. |
+| `offensive_points_per_estimated_possessions` | double | The number of points per estimated possession for a team or player. |
+| `offensive_avg_team_turnovers` | double | The average number of turnovers for a team per game. |
+| `offensive_avg_total_turnovers` | double | The average number of total turnovers for a team per game. |
+| `offensive_three_point_field_goal_pct` | double | The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA. |
+| `offensive_two_point_field_goals_made` | double | The number of 2-point field goals made for a team or player. |
+| `offensive_two_point_field_goals_attempted` | double | The number of 2-point field goals attempted for a team or player. |
+| `offensive_avg_two_point_field_goals_made` | double | The number of 2-point field goals made per game for a team or player. |
+| `offensive_avg_two_point_field_goals_attempted` | double | The number of 2-point field goals attempted per game for a team or player. |
+| `offensive_two_point_field_goal_pct` | double | The percentage of 2-points fields goals made by a team or player. |
+| `offensive_shooting_efficiency` | double | The efficiency with which a team or player shoots the basketball. |
+| `offensive_scoring_efficiency` | double | The efficiency with which a team or player scores the basketball. |
 | `offensive_avg48_field_goals_made` | double |  |
 | `offensive_avg48_field_goals_attempted` | double |  |
 | `offensive_avg48_three_point_field_goals_made` | double |  |
@@ -212,19 +212,19 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 | `offensive_avg48_offensive_rebounds` | double |  |
 | `offensive_avg48_assists` | double |  |
 | `offensive_avg48_turnovers` | double |  |
-| `team_id` | integer |  |
-| `team_uid` | character |  |
-| `team_guid` | character |  |
-| `team_slug` | character |  |
-| `team_location` | character |  |
-| `team_name` | character |  |
-| `team_abbreviation` | character |  |
-| `team_display_name` | character |  |
-| `team_short_display_name` | character |  |
-| `team_color` | character |  |
-| `team_alternate_color` | character |  |
-| `team_is_active` | logical |  |
-| `team_logo_href` | character |  |
+| `team_id` | integer | Unique team identifier. |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_guid` | character | ESPN team GUID. |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_location` | character | Team city or location string. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_display_name` | character | Full team display name. |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_logo_href` | character | Default team logo URL; `team_detail = TRUE` only. |
 
 **Example**
 
@@ -253,75 +253,75 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
-| `uid` | character |  |
-| `date` | character |  |
-| `attendance` | integer |  |
-| `time_valid` | logical |  |
-| `neutral_site` | logical |  |
-| `conference_competition` | logical |  |
-| `play_by_play_available` | logical |  |
-| `recent` | logical |  |
-| `start_date` | character |  |
-| `broadcast` | character |  |
-| `highlights` | integer |  |
-| `notes_type` | character |  |
-| `notes_headline` | character |  |
-| `broadcast_market` | character |  |
-| `broadcast_name` | character |  |
-| `type_id` | character |  |
-| `type_abbreviation` | character |  |
-| `venue_id` | character |  |
-| `venue_full_name` | character |  |
-| `venue_address_city` | character |  |
-| `venue_address_state` | character |  |
-| `venue_indoor` | logical |  |
-| `status_clock` | double |  |
-| `status_display_clock` | character |  |
-| `status_period` | integer |  |
-| `status_type_id` | character |  |
-| `status_type_name` | character |  |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `status_type_detail` | character |  |
-| `status_type_short_detail` | character |  |
-| `format_regulation_periods` | integer |  |
-| `home_id` | character |  |
-| `home_uid` | character |  |
-| `home_location` | character |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_short_display_name` | character |  |
-| `home_color` | character |  |
-| `home_alternate_color` | character |  |
-| `home_is_active` | logical |  |
-| `home_venue_id` | character |  |
-| `home_logo` | character |  |
-| `home_score` | character |  |
-| `home_winner` | logical |  |
+| `id` | character | Unique play identifcation number |
+| `uid` | character | ESPN UID string. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `attendance` | integer | Reported attendance. |
+| `time_valid` | logical | Time valid. |
+| `neutral_site` | logical | Neutral site. |
+| `conference_competition` | logical | Conference competition. |
+| `play_by_play_available` | logical | TRUE if play-by-play is available. |
+| `recent` | logical | Recent. |
+| `start_date` | character | Start date (YYYY-MM-DD). |
+| `broadcast` | character | Broadcast information string. |
+| `highlights` | integer | Game highlight urls. |
+| `notes_type` | character | Notes type. |
+| `notes_headline` | character | Notes headline. |
+| `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
+| `broadcast_name` | character | Broadcast name. |
+| `type_id` | character | Type identifier (numeric). |
+| `type_abbreviation` | character | Play type abbreviation |
+| `venue_id` | character | Unique venue identifier. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_address_city` | character | Venue address city. |
+| `venue_address_state` | character | Venue address state / region. |
+| `venue_indoor` | logical | Whether the home venue is indoors. |
+| `status_clock` | double | Status clock. |
+| `status_display_clock` | character | Status display clock. |
+| `status_period` | integer | Status period. |
+| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_name` | character | Status type name. |
+| `status_type_state` | character | Status type state. |
+| `status_type_completed` | logical | Status type completed. |
+| `status_type_description` | character | Status type description. |
+| `status_type_detail` | character | Status type detail. |
+| `status_type_short_detail` | character | Status type short detail. |
+| `format_regulation_periods` | integer | Format regulation periods. |
+| `home_id` | character | Unique identifier for home. |
+| `home_uid` | character | Home team's uid. |
+| `home_location` | character | Home team's location. |
+| `home_name` | character | Home name. |
+| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_display_name` | character | Home display name. |
+| `home_short_display_name` | character | Home short display name. |
+| `home_color` | character | Color code (hex) for home. |
+| `home_alternate_color` | character | Color code (hex) for home alternate. |
+| `home_is_active` | logical | Home team's is active. |
+| `home_venue_id` | character | Unique identifier for home venue. |
+| `home_logo` | character | Home team logo URL. |
+| `home_score` | character | Home team score at the time of the play. |
+| `home_winner` | logical | Home team's winner. |
 | `home_linescores` | integer |  |
 | `home_records` | character |  |
-| `away_id` | character |  |
-| `away_uid` | character |  |
-| `away_location` | character |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_short_display_name` | character |  |
-| `away_color` | character |  |
-| `away_alternate_color` | character |  |
-| `away_is_active` | logical |  |
-| `away_venue_id` | character |  |
-| `away_logo` | character |  |
-| `away_score` | character |  |
-| `away_winner` | logical |  |
+| `away_id` | character | Unique identifier for away. |
+| `away_uid` | character | Away team's uid. |
+| `away_location` | character | Away team's location. |
+| `away_name` | character | Away name. |
+| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_display_name` | character | Away display name. |
+| `away_short_display_name` | character | Away short display name. |
+| `away_color` | character | Color code (hex) for away. |
+| `away_alternate_color` | character | Color code (hex) for away alternate. |
+| `away_is_active` | logical | Away team's is active. |
+| `away_venue_id` | character | Unique identifier for away venue. |
+| `away_logo` | character | Away team logo URL. |
+| `away_score` | character | Away team score at the time of the play. |
+| `away_winner` | logical | Away team's winner. |
 | `away_linescores` | integer |  |
 | `away_records` | character |  |
-| `game_id` | integer |  |
-| `season` | integer |  |
-| `season_type` | integer |  |
+| `game_id` | integer | Unique game identifier. |
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 **Example**
 
@@ -420,20 +420,20 @@ Polars dataframe containing teams for the requested league. This function caches
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character |  |
-| `team_alternate_color` | character |  |
-| `team_color` | character |  |
-| `team_display_name` | character |  |
-| `team_id` | character |  |
-| `team_is_active` | logical |  |
-| `team_is_all_star` | logical |  |
-| `team_location` | character |  |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_id` | character | Unique team identifier. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
+| `team_location` | character | Team city or location string. |
 | `team_logos` | integer |  |
-| `team_name` | character |  |
-| `team_nickname` | character |  |
-| `team_short_display_name` | character |  |
-| `team_slug` | character |  |
-| `team_uid` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_nickname` | character | Team nickname. |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 
 **Example**
 

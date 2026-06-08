@@ -1986,7 +1986,7 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `ties` | double |  |
+| `ties` | double | Number of ties in the series. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
 | `division_losses` | double |  |
