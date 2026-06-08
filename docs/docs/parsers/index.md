@@ -6,7 +6,8 @@ sidebar_position: 1
 
 # The parser layer
 
-Every league wrapper returns raw `Dict` by default. The parser layer in
+Parser-backed wrappers return a tidy polars DataFrame by default (0.0.54+);
+pass `return_parsed=False` to recover the raw `Dict`. The parser layer in
 [`sportsdataverse._common_espn_parsers`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/sportsdataverse/_common_espn_parsers.py)
 turns those payloads into tidy polars (or pandas) DataFrames. Parsers
 are league-agnostic: the same parser handles MLB, NFL, NBA, WBB, etc.
@@ -14,18 +15,18 @@ because ESPN's payload shapes are identical across leagues.
 
 ## Two ways to invoke a parser
 
-### 1. The `return_parsed=True` shim (recommended)
+### 1. The `return_parsed` default (recommended)
 
-Wrappers whose short name is in `ENDPOINT_PARSERS` accept an optional
-`return_parsed=True` kwarg:
+Wrappers whose short name is in `ENDPOINT_PARSERS` return a polars
+DataFrame by default (0.0.54+). Pass `return_parsed=False` for the raw
+`Dict`, or `return_as_pandas=True` for pandas:
 
 ```python
 from sportsdataverse.nba import espn_nba_team_roster
 
-df = espn_nba_team_roster(team_id=13, return_parsed=True)        # → polars
-df = espn_nba_team_roster(team_id=13, return_parsed=True,
-                          return_as_pandas=True)                 # → pandas
-raw = espn_nba_team_roster(team_id=13)                            # → raw Dict (default)
+df  = espn_nba_team_roster(team_id=13)                            # → polars (default)
+pdf = espn_nba_team_roster(team_id=13, return_as_pandas=True)     # → pandas
+raw = espn_nba_team_roster(team_id=13, return_parsed=False)       # → raw Dict
 ```
 
 This is the shortest path and the right default for most callers.

@@ -84,30 +84,30 @@ for the full workflow.
 Wrappers whose endpoint has a registered parser additionally take two
 optional kwargs (`return_parsed` / `return_as_pandas`), described next.
 
-## The `return_parsed=True` shim
+## The `return_parsed` shim
 
-Every wrapper with a registered parser accepts an optional
-`return_parsed=True` kwarg that dispatches the raw response through the
-parser, returning a polars DataFrame (or pandas via
-`return_as_pandas=True`):
+Every wrapper with a registered parser defaults to returning a polars
+DataFrame (0.0.54+). Pass `return_parsed=False` to recover the raw
+`Dict`, or `return_as_pandas=True` to get a pandas DataFrame:
 
 ```python
 from sportsdataverse.nba import espn_nba_teams_site, espn_nba_scoreboard
 
-# Default: raw Dict (unchanged from pre-shim API)
-raw  = espn_nba_teams_site()                # → Dict
-print(raw["sports"][0]["leagues"][0]["teams"][0]["team"]["displayName"])
-
-# Opt-in: polars DataFrame
-df   = espn_nba_teams_site(return_parsed=True)
+# Default (0.0.54+): polars DataFrame
+df   = espn_nba_teams_site()                # → polars DataFrame
 print(df.select(["team_id", "team_abbreviation", "team_display_name"]).head())
 
-# Opt-in: pandas DataFrame
-pdf  = espn_nba_teams_site(return_parsed=True, return_as_pandas=True)
+# Opt-out: raw Dict
+raw  = espn_nba_teams_site(return_parsed=False)   # → Dict
+print(raw["sports"][0]["leagues"][0]["teams"][0]["team"]["displayName"])
+
+# pandas DataFrame
+pdf  = espn_nba_teams_site(return_as_pandas=True)
 ```
 
-The shim is **backwards-compatible by design** — every existing caller
-continues to get raw `Dict`. The two parsing kwargs are additive.
+The two parsing kwargs (`return_parsed` / `return_as_pandas`) are additive.
+Callers from 0.0.50 and earlier that relied on the raw-Dict default should
+add `return_parsed=False` to preserve their existing behavior.
 
 ### Wrappers WITHOUT a parser
 

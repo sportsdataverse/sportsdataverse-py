@@ -50,20 +50,17 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 
 ## Polars / pandas parser layer
 
-Every wrapper returns raw `Dict` by default. A parser layer turns
-those payloads into tidy polars (or pandas) DataFrames.
-
-For ESPN cross-league wrappers, pass `return_parsed=True` to get a
-DataFrame directly — the raw-Dict contract is unchanged when the
-kwarg is omitted, so existing callers are unaffected:
+Parser-backed wrappers return a tidy polars DataFrame **by default**
+(0.0.54+). Pass `return_parsed=False` for the raw `Dict`, or
+`return_as_pandas=True` for pandas. Wrappers without a registered
+parser return the raw `Dict`.
 
 ```python
 from sportsdataverse.nba import espn_nba_team_roster
 
-raw = espn_nba_team_roster(team_id=13)                          # → Dict (default)
-df  = espn_nba_team_roster(team_id=13, return_parsed=True)      # → polars
+df  = espn_nba_team_roster(team_id=13)                          # → polars (default)
+raw = espn_nba_team_roster(team_id=13, return_parsed=False)     # → Dict
 pdf = espn_nba_team_roster(team_id=13,
-                            return_parsed=True,
                             return_as_pandas=True)              # → pandas
 ```
 

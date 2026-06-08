@@ -68,11 +68,10 @@ mcdavid = parse_edge_detail(nhl_edge_skater_detail(8478402))
 print(mcdavid.select(["player_first_name_default", "top_shot_speed_metric"]))
 ```
 
-Every wrapper returns a raw `Dict` by default; pass
-`return_parsed=True` (ESPN cross-league wrappers) or compose with the
-matching `parse_*` function (NHL / MLB sibling APIs) to get a polars
-DataFrame. See [Polars / pandas parser layer](#polars--pandas-parser-layer)
-below.
+Parser-backed wrappers return a polars DataFrame by default (0.0.54+);
+pass `return_parsed=False` for the raw `Dict`. Compose with the
+matching `parse_*` function for NHL / MLB sibling APIs. See
+[Polars / pandas parser layer](#polars--pandas-parser-layer) below.
 
 ## Supported leagues and data sources
 
@@ -90,22 +89,22 @@ below.
 
 ## Polars / pandas parser layer
 
-Every wrapper returns raw `Dict` by default. The parser layer in
+Parser-backed wrappers return a polars DataFrame by default (0.0.54+);
+pass `return_parsed=False` for the raw `Dict`. The parser layer in
 [`sportsdataverse._common_espn_parsers`](https://py.sportsdataverse.org/docs/parsers/index)
 (plus matching modules for the MLB and NHL sibling APIs) turns those
 payloads into tidy polars (or pandas) DataFrames.
 
-For ESPN wrappers, pass `return_parsed=True` to get a DataFrame
-directly — the raw-Dict contract is unchanged when the kwarg is
-omitted, so existing callers are unaffected:
+For ESPN wrappers, `return_parsed=True` is now the default for
+parser-backed endpoints. Pass `return_parsed=False` to recover the
+raw `Dict`, or `return_as_pandas=True` to get a pandas DataFrame:
 
 ```python
 from sportsdataverse.nba import espn_nba_team_roster
 
-raw = espn_nba_team_roster(team_id=13)                          # → Dict (default)
-df  = espn_nba_team_roster(team_id=13, return_parsed=True)      # → polars
+df  = espn_nba_team_roster(team_id=13)                          # → polars (default)
+raw = espn_nba_team_roster(team_id=13, return_parsed=False)     # → Dict
 pdf = espn_nba_team_roster(team_id=13,
-                            return_parsed=True,
                             return_as_pandas=True)              # → pandas
 ```
 

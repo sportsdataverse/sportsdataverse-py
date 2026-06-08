@@ -55,12 +55,12 @@ Two conventions keep the ESPN surface aligned with the R packages:
   Every league therefore has a bare `espn_<league>_player_stats()` (season stats)
   alongside the comprehensive `espn_<league>_player_stats_v3()`.
 
-Return types are uniform too: **every wrapper returns a raw `Dict` by default.**
-Opt into a tidy frame with `return_parsed=True` (ESPN wrappers), by composing a
-`parse_*` function (native NHL/MLB APIs), or by importing from the
-`sportsdataverse.parsed.<league>` mirror, which flips the default to parsed. See
-[Architecture](architecture/espn-cross-league.md) and
-[Parsers](parsers/index.md) for the full story.
+Return types are predictable: **parser-backed wrappers return a polars DataFrame
+by default (0.0.54+)** — pass `return_parsed=False` for the raw `Dict`; wrappers
+without a parser return the `Dict`. Use `return_as_pandas=True` to get a pandas
+DataFrame, or import from the `sportsdataverse.parsed.<league>` mirror for an
+explicit parsed-by-default namespace. See [Architecture](architecture/espn-cross-league.md)
+and [Parsers](parsers/index.md) for the full story.
 
 ## Data releases & loaders
 

@@ -11,23 +11,27 @@ significantly easier to use day-to-day.
 
 ## 1. `sportsdataverse.parsed.*` — DataFrame by default
 
-The default `sportsdataverse.{league}` modules return raw `Dict` —
-the parser layer is opt-in via `return_parsed=True` so existing
-callers from 0.0.50 and earlier are unaffected. **The
-`sportsdataverse.parsed.{league}` namespace flips that default**:
+The default `sportsdataverse.{league}` modules return a parsed polars
+DataFrame for parser-backed endpoints (0.0.54+); pass `return_parsed=False`
+for the raw `Dict` — so existing callers from 0.0.50 and earlier can opt
+out. **The `sportsdataverse.parsed.{league}` namespace was introduced in
+0.0.51 as an explicit parsed-by-default alias** and remains fully supported:
 
 ```python
-# Raw-Dict default (existing API, unchanged):
+# Parsed DataFrame by default (0.0.54+, parser-backed wrappers):
 from sportsdataverse.nba import espn_nba_scoreboard
-raw = espn_nba_scoreboard()                # → Dict
+df = espn_nba_scoreboard()                 # → polars DataFrame
 
-# DataFrame default (new namespace):
+# Recover the raw Dict:
+raw = espn_nba_scoreboard(return_parsed=False)  # → Dict
+
+# Explicit parsed namespace (unchanged from 0.0.51):
 from sportsdataverse.parsed.nba import espn_nba_scoreboard
 df = espn_nba_scoreboard()                 # → polars DataFrame
 
 # Override either direction:
-df  = espn_nba_scoreboard(return_parsed=True)   # works from raw module
-raw = espn_nba_scoreboard(return_parsed=False)  # works from parsed module
+df  = espn_nba_scoreboard(return_parsed=True)   # explicit opt-in (same as default)
+raw = espn_nba_scoreboard(return_parsed=False)  # works from parsed module too
 ```
 
 Every league has a parsed variant: `parsed.nba`, `parsed.wnba`,
