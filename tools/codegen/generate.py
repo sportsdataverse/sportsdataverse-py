@@ -141,18 +141,21 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
     may be omitted/``None``). Path params come first, matching the signature order
     used by the generated wrapper.
 
-    When ``league_prefix`` + ``fn_name`` are supplied, the live wrapper's parsed
-    docstring is consulted (via :func:`_docstring_param_descs`) to populate a
-    ``description`` field on each row.  Descriptions are best-effort: rows whose
-    python name is not found in the docstring get an empty string. Pipe characters
-    in descriptions are escaped so they don't break the markdown table renderer.
+    Description resolution priority (highest wins):
+    1. ``description`` field on the param definition (parameters.yaml or extra_params/path_params).
+    2. The live wrapper's parsed docstring Args section (via :func:`_docstring_param_descs`).
+    3. Empty string (silent fallback).
+
+    Pipe characters in descriptions are escaped so they don't break the markdown
+    table renderer.
     """
-    descs: dict[str, str] = {}
+    doc_descs: dict[str, str] = {}
     if league_prefix and fn_name:
-        descs = _docstring_param_descs(league_prefix, fn_name)
+        doc_descs = _docstring_param_descs(league_prefix, fn_name)
     rows: list[dict] = []
     for p in (*ep.path_params, *ep.query_params):
-        raw_desc = descs.get(p.python_name, "")
+        # Prefer the authored spec description; fall back to the parsed docstring.
+        raw_desc = p.description or doc_descs.get(p.python_name, "")
         # Escape pipe chars and collapse newlines so the description is safe
         # inside a single markdown table cell.
         desc = raw_desc.replace("|", "\\|").replace("\n", " ").strip()

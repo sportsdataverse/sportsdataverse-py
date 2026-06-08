@@ -2,6 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.55 (unreleased)](#0055-unreleased)
+  - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
+  - [Bug fixes](#bug-fixes)
 - [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
   - [Per-sport return schemas (correctness)](#per-sport-return-schemas-correctness)
   - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
@@ -36,7 +39,7 @@
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
   - [New: NHL api-web parser layer](#new-nhl-api-web-parser-layer)
-  - [Bug fixes](#bug-fixes)
+  - [Bug fixes](#bug-fixes-1)
   - [New: NFL drive-plays parser (true PBP parity)](#new-nfl-drive-plays-parser-true-pbp-parity)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
@@ -57,7 +60,7 @@
   - [CFB — `cfb_play_participants` and `__add_player_cols` collapse](#cfb--cfb_play_participants-and-__add_player_cols-collapse)
   - [CFB — pandas → polars 1.x bug-fix reconciliation (`0.36-live` → `main`)](#cfb--pandas-%E2%86%92-polars-1x-bug-fix-reconciliation-036-live-%E2%86%92-main)
   - [Infrastructure and tooling](#infrastructure-and-tooling)
-  - [Bug fixes](#bug-fixes-1)
+  - [Bug fixes](#bug-fixes-2)
   - [Deprecations](#deprecations-1)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
@@ -71,6 +74,28 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.55 (unreleased)
+
+### Documentation — richer per-function reference
+
+- Autodoc "Additional functions" pages now render full **Parameters** tables
+  (name/type/default/description), **Returns**, and runnable **Example** blocks
+  parsed from each function's docstring (previously just a signature + one line).
+- Endpoint reference pages gained a **Description** column on the parameter table;
+  shared query params carry authored descriptions.
+- Function **Returns** are now `col_name | type | description` tables: endpoint
+  pages from introspected per-sport schemas, and autodoc DataFrame functions from
+  a new `generate.py --autodoc-schemas` live-introspection pass (best-effort, with
+  prose fallback where a function can't be introspected offline).
+
+### Bug fixes
+
+- `espn_mbb_game_rosters` / `espn_wbb_game_rosters` / `espn_nfl_game_rosters`:
+  fixed a `ShapeError` (positional column rename broke when ESPN ships extra
+  `*_$ref` fields); columns are now renamed by source key.
+- `espn_nhl_schedule`: fixed `'NoneType' object has no attribute 'get'` with
+  default args (a helper was missing its `return event`).
 
 ## 0.0.54 Release: June 8, 2026
 

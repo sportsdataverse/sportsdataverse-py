@@ -63,7 +63,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -214,7 +214,7 @@ ESPN endpoint.
 | `season` | `season` |  | `Y` |  | season path parameter. |
 | `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 | `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -368,7 +368,7 @@ ESPN endpoint.
 | `season` | `season` |  | `Y` |  | season path parameter. |
 | `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 | `week` | `week` |  | `Y` |  | week path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -393,7 +393,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | season path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -443,7 +443,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | season path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 
 ### Returns
@@ -469,7 +469,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | season path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -664,7 +664,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `active` | `active` |  |  | `Y` | active query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 
 ### Returns
@@ -955,8 +955,8 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `dates` | `dates` |  |  | `Y` | dates query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -1237,7 +1237,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
 | `cid` | `cid` |  |  | `Y` | cid path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -1263,7 +1263,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
 | `cid` | `cid` |  |  | `Y` | cid path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -1590,7 +1590,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -1653,7 +1653,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -1701,7 +1701,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -1749,7 +1749,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -2084,7 +2084,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  | `Y` |  | season path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 

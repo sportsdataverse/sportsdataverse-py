@@ -17,11 +17,11 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `dates` | `dates` |  |  | `Y` | dates query parameter. |
-| `week` | `week` |  |  | `Y` | week query parameter. |
-| `seasontype` | `season_type` |  |  | `Y` | seasontype query parameter. |
-| `groups` | `groups` |  |  | `Y` | groups query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
+| `week` | `week` |  |  | `Y` | Week number within the season (football). |
+| `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -492,7 +492,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -631,7 +631,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -767,7 +767,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
 ### Returns
 
@@ -912,7 +912,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -1032,9 +1032,9 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season year, forwarded to ESPN as ``?season=YYYY``. |
-| `group` | `group` |  |  | `Y` |  |
-| `type` | `standings_type` |  |  | `Y` |  |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
 
 ### Returns
 

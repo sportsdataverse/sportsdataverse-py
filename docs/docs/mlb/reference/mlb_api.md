@@ -17,7 +17,7 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
@@ -224,7 +224,7 @@ GET /api/v1/teams/{teamId} — single team detail.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
@@ -252,7 +252,7 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `rosterType` | `roster_type` |  |  | `Y` | rosterType query parameter. |
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
@@ -292,8 +292,8 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
-| `group` | `group` |  |  | `Y` | group query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
@@ -320,7 +320,7 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 |---|---|:---:|:---:|:---:|---|
 | `teamIds` | `team_ids` |  |  | `Y` | teamIds query parameter. |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
@@ -372,7 +372,7 @@ GET /api/v1/people/{personId} — single person detail.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `person_id` | `person_id` |  | `Y` |  | person_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
@@ -425,7 +425,7 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `sport_id` | `sport_id` |  |  | `Y` | sport_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
@@ -484,7 +484,7 @@ GET /api/v1/leagues — list leagues.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `leagueIds` | `league_ids` |  |  | `Y` | leagueIds query parameter. |
 
 ### Returns
@@ -534,7 +534,7 @@ GET /api/v1/venues — list venues.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `sportIds` | `sport_ids` |  |  | `Y` | sportIds query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
@@ -567,7 +567,7 @@ GET /api/v1/venues/{venueId} — single venue detail.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `venue_id` | `venue_id` |  | `Y` |  | venue_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
@@ -641,7 +641,7 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `award_id` | `award_id` |  | `Y` |  | award_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
@@ -671,7 +671,7 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 | `round` | `round_` |  |  | `Y` | round query parameter. |
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 | `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
 
@@ -719,7 +719,7 @@ View all PCL conferences.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `conferenceId` | `conference_id` |  |  | `Y` | conferenceId query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -756,7 +756,7 @@ View PCL conferences by conferenceId.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `conference_id` | `conference_id` |  | `Y` |  | conference_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -1030,7 +1030,7 @@ View timestamps of most recent data corrections made to games.
 |---|---|:---:|:---:|:---:|---|
 | `gameModeId` | `game_mode_id` |  |  | `Y` | gameModeId query parameter. |
 | `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `sortBy` | `sort_by` |  |  | `Y` | sortBy query parameter. |
 | `isNonStatcast` | `is_non_statcast` |  |  | `Y` | isNonStatcast query parameter. |
 | `offset` | `offset` |  |  | `Y` | offset query parameter. |
@@ -1060,7 +1060,7 @@ View timestamps of most recent data corrections made to GUIDs.
 |---|---|:---:|:---:|:---:|---|
 | `gameModeId` | `game_mode_id` |  |  | `Y` | gameModeId query parameter. |
 | `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `sortBy` | `sort_by` |  |  | `Y` | sortBy query parameter. |
 | `isNonStatcast` | `is_non_statcast` |  |  | `Y` | isNonStatcast query parameter. |
 | `offset` | `offset` |  |  | `Y` | offset query parameter. |
@@ -1249,7 +1249,7 @@ View time of game info.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `teamIds` | `team_ids` |  |  | `Y` | teamIds query parameter. |
 | `leagueIds` | `league_ids` |  |  | `Y` | leagueIds query parameter. |
 | `leagueListId` | `league_list_id` |  |  | `Y` | leagueListId query parameter. |
@@ -1337,12 +1337,12 @@ View high/low stats by player or team.
 | `org_type` | `org_type` |  | `Y` |  | org_type path parameter. |
 | `statGroup` | `stat_group` |  |  | `Y` | statGroup query parameter. |
 | `sortStat` | `sort_stat` |  |  | `Y` | sortStat query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `gameType` | `game_type` |  |  | `Y` | gameType query parameter. |
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 | `leagueId` | `league_id` |  |  | `Y` | leagueId query parameter. |
 | `sportIds` | `sport_ids` |  |  | `Y` | sportIds query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -1708,7 +1708,7 @@ View All-Star Ballots per league.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -1782,7 +1782,7 @@ View All-Star Write-ins per league.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -1852,7 +1852,7 @@ View All-Star Final Vote per league.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -1925,7 +1925,7 @@ View biographical information and stats for Free Agents.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `order` | `order` |  |  | `Y` | order query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
@@ -2076,7 +2076,7 @@ Get umpires and associated game for umpireId.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `umpire_id` | `umpire_id` |  | `Y` |  | umpire_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
@@ -2103,7 +2103,7 @@ View tied game schedule info.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `gameTypes` | `game_types` |  |  | `Y` | gameTypes query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
@@ -2191,7 +2191,7 @@ View schedule info for postseason based on series.
 | `seriesNumber` | `series_number` |  |  | `Y` | seriesNumber query parameter. |
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -2228,7 +2228,7 @@ View schedule info for the tuneIn application.
 |---|---|:---:|:---:|:---:|---|
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
@@ -2338,9 +2338,9 @@ View Statcast stats.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `stats` | `stats` |  |  | `Y` | stats query parameter. |
-| `group` | `group` |  |  | `Y` | group query parameter. |
+| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `gameType` | `game_type` |  |  | `Y` | gameType query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `startDate` | `start_date` |  |  | `Y` | startDate query parameter. |
 | `endDate` | `end_date` |  |  | `Y` | endDate query parameter. |
 | `venueId` | `venue_id` |  |  | `Y` | venueId query parameter. |
@@ -2348,7 +2348,7 @@ View Statcast stats.
 | `percentile` | `percentile` |  |  | `Y` | percentile query parameter. |
 | `personId` | `person_id` |  |  | `Y` | personId query parameter. |
 | `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `offset` | `offset` |  |  | `Y` | offset query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
@@ -2429,7 +2429,7 @@ View team stats.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `sportIds` | `sport_ids` |  |  | `Y` | sportIds query parameter. |
 | `group` | `stat_group` |  |  | `Y` | group query parameter. |
 | `gameType` | `game_type` |  |  | `Y` | gameType query parameter. |
@@ -2472,13 +2472,13 @@ View leaders for a statistic.
 | `sitCodes` | `sit_codes` |  |  | `Y` | sitCodes query parameter. |
 | `gameTypes` | `game_types` |  |  | `Y` | gameTypes query parameter. |
 | `statGroup` | `stat_group` |  |  | `Y` | statGroup query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `leagueIds` | `league_ids` |  |  | `Y` | leagueIds query parameter. |
 | `startDate` | `start_date` |  |  | `Y` | startDate query parameter. |
 | `endDate` | `end_date` |  |  | `Y` | endDate query parameter. |
 | `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
@@ -2512,7 +2512,7 @@ View biographical  information on all coaches for a given club.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
@@ -2582,7 +2582,7 @@ View biographical and statistical information for a club's roster based on roste
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `roster_type` | `roster_type` |  | `Y` |  | roster_type path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `date` | `date` |  |  | `Y` | date query parameter. |
 | `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 | `fields` | `fields` |  |  | `Y` | fields query parameter. |

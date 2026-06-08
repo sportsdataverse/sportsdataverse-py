@@ -26,6 +26,7 @@ class Param:
     optional_segment: bool = False  # pairs with [/{token}] in path
     default_from: Optional[str] = None  # use another arg's value when None
     transform: Optional[str] = None  # named runtime transform (e.g. format_nhl_season, _csv)
+    description: str = ""  # authored human-readable description for docs
 
 
 @dataclass(frozen=True)
@@ -135,6 +136,7 @@ def load_parameters(path: Path) -> Dict[str, Param]:
             default=v.get("default"),
             pattern=v.get("pattern"),
             is_query=v.get("is_query", True),
+            description=v.get("description", ""),
         )
     return out
 
@@ -158,6 +160,9 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
     """Parse one endpoint dict (shared by ESPN + flat-API loaders)."""
     qps = [_resolve_param(k, registry, path) for k in e.get("params", [])]
     for extra in e.get("extra_params", []):
+        # Inherit description from the shared registry when not set inline.
+        reg_desc = registry.get(extra["name"], None)
+        inherited_desc = reg_desc.description if reg_desc is not None else ""
         qps.append(
             Param(
                 python_name=extra["name"],
@@ -166,6 +171,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 required=extra.get("required", False),
                 default=extra.get("default"),
                 transform=extra.get("transform"),
+                description=extra.get("description", "") or inherited_desc,
             ),
         )
     pps = []
@@ -181,6 +187,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 optional_segment=pp.get("optional_segment", False),
                 default_from=pp.get("default_from"),
                 transform=pp.get("transform"),
+                description=pp.get("description", ""),
             ),
         )
     ep = Endpoint(

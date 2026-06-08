@@ -42,7 +42,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
 ### Returns
 
@@ -67,7 +67,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
 ### Returns
 
@@ -92,7 +92,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
 ### Returns
 
@@ -117,9 +117,9 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `category` | `category` |  |  | `Y` | category query parameter. |
-| `season` | `season` |  |  | `Y` | season query parameter. |
-| `seasontype` | `season_type` |  |  | `Y` | seasontype query parameter. |
-| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `sort` | `sort` |  |  | `Y` | sort query parameter. |
 
