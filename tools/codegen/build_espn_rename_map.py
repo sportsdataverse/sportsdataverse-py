@@ -1,7 +1,7 @@
 """Draft an ESPN generated-name -> R-export rename map (best-guess, for review).
 
 Matches each generated ESPN endpoint to the R sister-package function (hoopR /
-wehoop / cfbfastR) that hits the **same ESPN URL**, keyed by (host-class,
+wehoop / cfbfastR / baseballr / fastRhockey) that hits the **same ESPN URL**, keyed by (host-class,
 path-suffix-after-sport/league). R URLs are reconstructed by joining the
 consecutive string literals of each ``glue``/``paste`` call inside a function's
 own block, and indexed by the function's *own* prefix (so hoopR's shared R/ dir
@@ -36,6 +36,8 @@ _PKG = {
     "wnba": ("wehoop-dev/wehoop", {"universal"}, "basketball", "wnba"),
     "wbb": ("wehoop-dev/wehoop", {"universal", "ncaa"}, "basketball", "womens-college-basketball"),
     "cfb": ("cfbfastR-dev/cfbfastR", {"universal", "ncaa", "football"}, "football", "college-football"),
+    "mlb": ("baseball-dev/baseballr", {"universal"}, "baseball", "mlb"),
+    "nhl": ("hockey-dev/fastRhockey", {"universal"}, "hockey", "nhl"),
 }
 _API_HOST = {"espn_site_v2": "site_v2", "espn_web_v3": "web_v3", "espn_core_v2": "core_v2"}
 
@@ -123,7 +125,7 @@ def main() -> int:
     md = ["# ESPN -> R naming worksheet (best-guess, for review)\n"]
     md.append(
         "Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. "
-        "Suggestions come from URL matching against hoopR/wehoop/cfbfastR. Edit the "
+        "Suggestions come from URL matching against hoopR/wehoop/cfbfastR/baseballr/fastRhockey. Edit the "
         "`suggestion` column: `rename to <r>` / `keep` / `qualify`. `review:` rows are "
         "one raw endpoint that feeds several R functions — pick or split.\n",
     )

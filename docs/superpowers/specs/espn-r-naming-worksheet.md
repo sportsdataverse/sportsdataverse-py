@@ -9,6 +9,8 @@
   - [wnba (vs wehoop)](#wnba-vs-wehoop)
   - [wbb (vs wehoop)](#wbb-vs-wehoop)
   - [cfb (vs cfbfastR)](#cfb-vs-cfbfastr)
+  - [mlb (vs baseballr)](#mlb-vs-baseballr)
+  - [nhl (vs fastRhockey)](#nhl-vs-fastrhockey)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -18,37 +20,39 @@
 
 | league | gen | exact | rename | review | keep |
 |---|--:|--:|--:|--:|--:|
-Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Suggestions come from URL matching against hoopR/wehoop/cfbfastR. Edit the `suggestion` column: `rename to <r>` / `keep` / `qualify`. `review:` rows are one raw endpoint that feeds several R functions — pick or split.
+Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Suggestions come from URL matching against hoopR/wehoop/cfbfastR/baseballr/fastRhockey. Edit the `suggestion` column: `rename to <r>` / `keep` / `qualify`. `review:` rows are one raw endpoint that feeds several R functions — pick or split.
 
-| cfb | 120 | 24 | 29 | 3 | 64 |
-| wbb | 118 | 62 | 2 | 1 | 53 |
-| wnba | 115 | 62 | 2 | 1 | 50 |
-| mbb | 118 | 63 | 2 | 1 | 52 |
-| nba | 115 | 66 | 2 | 1 | 46 |
+| nhl | 115 | 0 | 1 | 0 | 114 |
+| mlb | 115 | 40 | 2 | 1 | 72 |
+| cfb | 120 | 24 | 30 | 3 | 63 |
+| wbb | 118 | 37 | 2 | 1 | 78 |
+| wnba | 115 | 37 | 2 | 1 | 75 |
+| mbb | 118 | 38 | 2 | 1 | 77 |
+| nba | 115 | 40 | 2 | 1 | 72 |
 
 ## nba (vs hoopR)
 
-- generated 115 | exact 66 | suggested-rename 2 | review(1->many) 1 | keep 46
+- generated 115 | exact 40 | suggested-rename 2 | review(1->many) 1 | keep 72
 
 | generated | host | path | suggestion |
 |-----------|------|------|------------|
-| `espn_nba_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (exact R match) |
+| `espn_nba_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (no R twin found) |
 | `espn_nba_athlete_bio` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/bio` | keep (no R twin found) |
-| `espn_nba_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (exact R match) |
-| `espn_nba_athlete_contracts` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/contracts` | keep (exact R match) |
+| `espn_nba_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (no R twin found) |
+| `espn_nba_athlete_contracts` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/contracts` | keep (no R twin found) |
 | `espn_nba_athlete_core` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}` | keep (no R twin found) |
-| `espn_nba_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (exact R match) |
-| `espn_nba_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (exact R match) |
-| `espn_nba_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (exact R match) |
+| `espn_nba_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (no R twin found) |
+| `espn_nba_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (no R twin found) |
+| `espn_nba_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (no R twin found) |
 | `espn_nba_athlete_injuries` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/injuries` | keep (no R twin found) |
 | `espn_nba_athlete_news` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/news` | keep (no R twin found) |
 | `espn_nba_athlete_notes` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/notes` | keep (no R twin found) |
-| `espn_nba_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (exact R match) |
+| `espn_nba_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (no R twin found) |
 | `espn_nba_athlete_records` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/records` | keep (no R twin found) |
-| `espn_nba_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (exact R match) |
-| `espn_nba_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (exact R match) |
-| `espn_nba_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (exact R match) |
-| `espn_nba_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (exact R match) |
+| `espn_nba_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (no R twin found) |
+| `espn_nba_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (no R twin found) |
+| `espn_nba_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (no R twin found) |
+| `espn_nba_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (no R twin found) |
 | `espn_nba_athlete_vs_athlete` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}` | keep (no R twin found) |
 | `espn_nba_athletes_index` | core_v2 | `/{sport}/leagues/{league}/athletes` | keep (exact R match) |
 | `espn_nba_award` | core_v2 | `/{sport}/leagues/{league}/awards/{award_id}` | keep (exact R match) |
@@ -65,28 +69,28 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 | `espn_nba_conferences` | site_v2 | `/{sport}/{league}/groups` | keep (exact R match) |
 | `espn_nba_draft` | site_v2 | `/{sport}/{league}/draft` | keep (exact R match) |
 | `espn_nba_event` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}` | keep (no R twin found) |
-| `espn_nba_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (exact R match) |
+| `espn_nba_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (no R twin found) |
 | `espn_nba_event_competition` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}` | keep (no R twin found) |
 | `espn_nba_event_competitor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}` | keep (no R twin found) |
-| `espn_nba_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (exact R match) |
-| `espn_nba_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (exact R match) |
+| `espn_nba_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (no R twin found) |
+| `espn_nba_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (no R twin found) |
 | `espn_nba_event_competitor_record` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record` | keep (no R twin found) |
-| `espn_nba_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (exact R match) |
-| `espn_nba_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (exact R match) |
+| `espn_nba_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (no R twin found) |
+| `espn_nba_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (no R twin found) |
 | `espn_nba_event_competitors` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors` | keep (no R twin found) |
 | `espn_nba_event_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders` | keep (no R twin found) |
-| `espn_nba_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (exact R match) |
-| `espn_nba_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (exact R match) |
-| `espn_nba_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (exact R match) |
-| `espn_nba_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (exact R match) |
-| `espn_nba_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (exact R match) |
+| `espn_nba_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (no R twin found) |
+| `espn_nba_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (no R twin found) |
+| `espn_nba_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (no R twin found) |
+| `espn_nba_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (no R twin found) |
+| `espn_nba_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (no R twin found) |
 | `espn_nba_event_plays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays` | keep (no R twin found) |
-| `espn_nba_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (exact R match) |
-| `espn_nba_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (exact R match) |
-| `espn_nba_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (exact R match) |
-| `espn_nba_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (exact R match) |
+| `espn_nba_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (no R twin found) |
+| `espn_nba_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (no R twin found) |
+| `espn_nba_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (no R twin found) |
+| `espn_nba_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (no R twin found) |
 | `espn_nba_event_scoringplays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays` | keep (no R twin found) |
-| `espn_nba_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (exact R match) |
+| `espn_nba_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (no R twin found) |
 | `espn_nba_event_status` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status` | keep (no R twin found) |
 | `espn_nba_events` | core_v2 | `/{sport}/leagues/{league}/events` | rename to `espn_nba_game_rosters` (check) |
 | `espn_nba_franchise` | core_v2 | `/{sport}/leagues/{league}/franchises/{franchise_id}` | keep (exact R match) |
@@ -150,27 +154,27 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 
 ## mbb (vs hoopR)
 
-- generated 118 | exact 63 | suggested-rename 2 | review(1->many) 1 | keep 52
+- generated 118 | exact 38 | suggested-rename 2 | review(1->many) 1 | keep 77
 
 | generated | host | path | suggestion |
 |-----------|------|------|------------|
-| `espn_mbb_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (exact R match) |
+| `espn_mbb_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (no R twin found) |
 | `espn_mbb_athlete_bio` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/bio` | keep (no R twin found) |
-| `espn_mbb_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (exact R match) |
+| `espn_mbb_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (no R twin found) |
 | `espn_mbb_athlete_contracts` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/contracts` | keep (no R twin found) |
 | `espn_mbb_athlete_core` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}` | keep (no R twin found) |
-| `espn_mbb_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (exact R match) |
-| `espn_mbb_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (exact R match) |
-| `espn_mbb_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (exact R match) |
+| `espn_mbb_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (no R twin found) |
+| `espn_mbb_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (no R twin found) |
+| `espn_mbb_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (no R twin found) |
 | `espn_mbb_athlete_injuries` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/injuries` | keep (no R twin found) |
 | `espn_mbb_athlete_news` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/news` | keep (no R twin found) |
 | `espn_mbb_athlete_notes` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/notes` | keep (no R twin found) |
-| `espn_mbb_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (exact R match) |
+| `espn_mbb_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (no R twin found) |
 | `espn_mbb_athlete_records` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/records` | keep (no R twin found) |
-| `espn_mbb_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (exact R match) |
-| `espn_mbb_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (exact R match) |
-| `espn_mbb_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (exact R match) |
-| `espn_mbb_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (exact R match) |
+| `espn_mbb_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (no R twin found) |
+| `espn_mbb_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (no R twin found) |
+| `espn_mbb_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (no R twin found) |
+| `espn_mbb_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (no R twin found) |
 | `espn_mbb_athlete_vs_athlete` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}` | keep (no R twin found) |
 | `espn_mbb_athletes_index` | core_v2 | `/{sport}/leagues/{league}/athletes` | keep (exact R match) |
 | `espn_mbb_award` | core_v2 | `/{sport}/leagues/{league}/awards/{award_id}` | keep (exact R match) |
@@ -187,28 +191,28 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 | `espn_mbb_conferences` | site_v2 | `/{sport}/{league}/groups` | keep (exact R match) |
 | `espn_mbb_draft` | site_v2 | `/{sport}/{league}/draft` | keep (no R twin found) |
 | `espn_mbb_event` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}` | keep (no R twin found) |
-| `espn_mbb_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (exact R match) |
+| `espn_mbb_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (no R twin found) |
 | `espn_mbb_event_competition` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}` | keep (no R twin found) |
 | `espn_mbb_event_competitor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}` | keep (no R twin found) |
-| `espn_mbb_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (exact R match) |
-| `espn_mbb_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (exact R match) |
+| `espn_mbb_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (no R twin found) |
+| `espn_mbb_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (no R twin found) |
 | `espn_mbb_event_competitor_record` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record` | keep (no R twin found) |
-| `espn_mbb_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (exact R match) |
-| `espn_mbb_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (exact R match) |
+| `espn_mbb_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (no R twin found) |
+| `espn_mbb_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (no R twin found) |
 | `espn_mbb_event_competitors` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors` | keep (no R twin found) |
 | `espn_mbb_event_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders` | keep (no R twin found) |
-| `espn_mbb_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (exact R match) |
-| `espn_mbb_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (exact R match) |
-| `espn_mbb_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (exact R match) |
-| `espn_mbb_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (exact R match) |
-| `espn_mbb_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (exact R match) |
+| `espn_mbb_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (no R twin found) |
+| `espn_mbb_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (no R twin found) |
+| `espn_mbb_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (no R twin found) |
+| `espn_mbb_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (no R twin found) |
+| `espn_mbb_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (no R twin found) |
 | `espn_mbb_event_plays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays` | keep (no R twin found) |
-| `espn_mbb_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (exact R match) |
-| `espn_mbb_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (exact R match) |
-| `espn_mbb_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (exact R match) |
-| `espn_mbb_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (exact R match) |
+| `espn_mbb_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (no R twin found) |
+| `espn_mbb_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (no R twin found) |
+| `espn_mbb_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (no R twin found) |
+| `espn_mbb_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (no R twin found) |
 | `espn_mbb_event_scoringplays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays` | keep (no R twin found) |
-| `espn_mbb_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (exact R match) |
+| `espn_mbb_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (no R twin found) |
 | `espn_mbb_event_status` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status` | keep (no R twin found) |
 | `espn_mbb_events` | core_v2 | `/{sport}/leagues/{league}/events` | rename to `espn_mbb_game_rosters` (check) |
 | `espn_mbb_franchise` | core_v2 | `/{sport}/leagues/{league}/franchises/{franchise_id}` | keep (exact R match) |
@@ -275,27 +279,27 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 
 ## wnba (vs wehoop)
 
-- generated 115 | exact 62 | suggested-rename 2 | review(1->many) 1 | keep 50
+- generated 115 | exact 37 | suggested-rename 2 | review(1->many) 1 | keep 75
 
 | generated | host | path | suggestion |
 |-----------|------|------|------------|
-| `espn_wnba_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (exact R match) |
+| `espn_wnba_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (no R twin found) |
 | `espn_wnba_athlete_bio` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/bio` | keep (no R twin found) |
-| `espn_wnba_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (exact R match) |
+| `espn_wnba_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (no R twin found) |
 | `espn_wnba_athlete_contracts` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/contracts` | keep (no R twin found) |
 | `espn_wnba_athlete_core` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}` | keep (no R twin found) |
-| `espn_wnba_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (exact R match) |
-| `espn_wnba_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (exact R match) |
-| `espn_wnba_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (exact R match) |
+| `espn_wnba_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (no R twin found) |
+| `espn_wnba_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (no R twin found) |
+| `espn_wnba_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (no R twin found) |
 | `espn_wnba_athlete_injuries` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/injuries` | keep (no R twin found) |
 | `espn_wnba_athlete_news` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/news` | keep (no R twin found) |
 | `espn_wnba_athlete_notes` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/notes` | keep (no R twin found) |
-| `espn_wnba_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (exact R match) |
+| `espn_wnba_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (no R twin found) |
 | `espn_wnba_athlete_records` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/records` | keep (no R twin found) |
-| `espn_wnba_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (exact R match) |
-| `espn_wnba_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (exact R match) |
-| `espn_wnba_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (exact R match) |
-| `espn_wnba_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (exact R match) |
+| `espn_wnba_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (no R twin found) |
+| `espn_wnba_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (no R twin found) |
+| `espn_wnba_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (no R twin found) |
+| `espn_wnba_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (no R twin found) |
 | `espn_wnba_athlete_vs_athlete` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}` | keep (no R twin found) |
 | `espn_wnba_athletes_index` | core_v2 | `/{sport}/leagues/{league}/athletes` | keep (exact R match) |
 | `espn_wnba_award` | core_v2 | `/{sport}/leagues/{league}/awards/{award_id}` | keep (exact R match) |
@@ -312,28 +316,28 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 | `espn_wnba_conferences` | site_v2 | `/{sport}/{league}/groups` | keep (exact R match) |
 | `espn_wnba_draft` | site_v2 | `/{sport}/{league}/draft` | keep (exact R match) |
 | `espn_wnba_event` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}` | keep (no R twin found) |
-| `espn_wnba_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (exact R match) |
+| `espn_wnba_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (no R twin found) |
 | `espn_wnba_event_competition` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}` | keep (no R twin found) |
 | `espn_wnba_event_competitor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}` | keep (no R twin found) |
-| `espn_wnba_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (exact R match) |
-| `espn_wnba_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (exact R match) |
+| `espn_wnba_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (no R twin found) |
+| `espn_wnba_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (no R twin found) |
 | `espn_wnba_event_competitor_record` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record` | keep (no R twin found) |
-| `espn_wnba_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (exact R match) |
-| `espn_wnba_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (exact R match) |
+| `espn_wnba_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (no R twin found) |
+| `espn_wnba_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (no R twin found) |
 | `espn_wnba_event_competitors` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors` | keep (no R twin found) |
 | `espn_wnba_event_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders` | keep (no R twin found) |
-| `espn_wnba_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (exact R match) |
-| `espn_wnba_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (exact R match) |
-| `espn_wnba_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (exact R match) |
-| `espn_wnba_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (exact R match) |
-| `espn_wnba_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (exact R match) |
+| `espn_wnba_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (no R twin found) |
+| `espn_wnba_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (no R twin found) |
+| `espn_wnba_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (no R twin found) |
+| `espn_wnba_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (no R twin found) |
+| `espn_wnba_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (no R twin found) |
 | `espn_wnba_event_plays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays` | keep (no R twin found) |
-| `espn_wnba_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (exact R match) |
-| `espn_wnba_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (exact R match) |
-| `espn_wnba_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (exact R match) |
-| `espn_wnba_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (exact R match) |
+| `espn_wnba_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (no R twin found) |
+| `espn_wnba_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (no R twin found) |
+| `espn_wnba_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (no R twin found) |
+| `espn_wnba_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (no R twin found) |
 | `espn_wnba_event_scoringplays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays` | keep (no R twin found) |
-| `espn_wnba_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (exact R match) |
+| `espn_wnba_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (no R twin found) |
 | `espn_wnba_event_status` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status` | keep (no R twin found) |
 | `espn_wnba_events` | core_v2 | `/{sport}/leagues/{league}/events` | rename to `espn_wnba_game_rosters` (check) |
 | `espn_wnba_franchise` | core_v2 | `/{sport}/leagues/{league}/franchises/{franchise_id}` | keep (exact R match) |
@@ -397,27 +401,27 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 
 ## wbb (vs wehoop)
 
-- generated 118 | exact 62 | suggested-rename 2 | review(1->many) 1 | keep 53
+- generated 118 | exact 37 | suggested-rename 2 | review(1->many) 1 | keep 78
 
 | generated | host | path | suggestion |
 |-----------|------|------|------------|
-| `espn_wbb_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (exact R match) |
+| `espn_wbb_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (no R twin found) |
 | `espn_wbb_athlete_bio` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/bio` | keep (no R twin found) |
-| `espn_wbb_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (exact R match) |
+| `espn_wbb_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (no R twin found) |
 | `espn_wbb_athlete_contracts` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/contracts` | keep (no R twin found) |
 | `espn_wbb_athlete_core` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}` | keep (no R twin found) |
-| `espn_wbb_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (exact R match) |
-| `espn_wbb_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (exact R match) |
-| `espn_wbb_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (exact R match) |
+| `espn_wbb_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (no R twin found) |
+| `espn_wbb_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (no R twin found) |
+| `espn_wbb_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (no R twin found) |
 | `espn_wbb_athlete_injuries` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/injuries` | keep (no R twin found) |
 | `espn_wbb_athlete_news` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/news` | keep (no R twin found) |
 | `espn_wbb_athlete_notes` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/notes` | keep (no R twin found) |
-| `espn_wbb_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (exact R match) |
+| `espn_wbb_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (no R twin found) |
 | `espn_wbb_athlete_records` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/records` | keep (no R twin found) |
-| `espn_wbb_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (exact R match) |
-| `espn_wbb_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (exact R match) |
-| `espn_wbb_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (exact R match) |
-| `espn_wbb_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (exact R match) |
+| `espn_wbb_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (no R twin found) |
+| `espn_wbb_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (no R twin found) |
+| `espn_wbb_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (no R twin found) |
+| `espn_wbb_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (no R twin found) |
 | `espn_wbb_athlete_vs_athlete` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}` | keep (no R twin found) |
 | `espn_wbb_athletes_index` | core_v2 | `/{sport}/leagues/{league}/athletes` | keep (exact R match) |
 | `espn_wbb_award` | core_v2 | `/{sport}/leagues/{league}/awards/{award_id}` | keep (exact R match) |
@@ -434,28 +438,28 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 | `espn_wbb_conferences` | site_v2 | `/{sport}/{league}/groups` | keep (exact R match) |
 | `espn_wbb_draft` | site_v2 | `/{sport}/{league}/draft` | keep (no R twin found) |
 | `espn_wbb_event` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}` | keep (no R twin found) |
-| `espn_wbb_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (exact R match) |
+| `espn_wbb_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (no R twin found) |
 | `espn_wbb_event_competition` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}` | keep (no R twin found) |
 | `espn_wbb_event_competitor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}` | keep (no R twin found) |
-| `espn_wbb_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (exact R match) |
-| `espn_wbb_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (exact R match) |
+| `espn_wbb_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (no R twin found) |
+| `espn_wbb_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (no R twin found) |
 | `espn_wbb_event_competitor_record` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record` | keep (no R twin found) |
-| `espn_wbb_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (exact R match) |
-| `espn_wbb_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (exact R match) |
+| `espn_wbb_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (no R twin found) |
+| `espn_wbb_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (no R twin found) |
 | `espn_wbb_event_competitors` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors` | keep (no R twin found) |
 | `espn_wbb_event_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders` | keep (no R twin found) |
-| `espn_wbb_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (exact R match) |
-| `espn_wbb_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (exact R match) |
-| `espn_wbb_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (exact R match) |
-| `espn_wbb_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (exact R match) |
-| `espn_wbb_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (exact R match) |
+| `espn_wbb_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (no R twin found) |
+| `espn_wbb_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (no R twin found) |
+| `espn_wbb_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (no R twin found) |
+| `espn_wbb_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (no R twin found) |
+| `espn_wbb_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (no R twin found) |
 | `espn_wbb_event_plays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays` | keep (no R twin found) |
-| `espn_wbb_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (exact R match) |
-| `espn_wbb_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (exact R match) |
-| `espn_wbb_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (exact R match) |
-| `espn_wbb_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (exact R match) |
+| `espn_wbb_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (no R twin found) |
+| `espn_wbb_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (no R twin found) |
+| `espn_wbb_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (no R twin found) |
+| `espn_wbb_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (no R twin found) |
 | `espn_wbb_event_scoringplays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays` | keep (no R twin found) |
-| `espn_wbb_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (exact R match) |
+| `espn_wbb_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (no R twin found) |
 | `espn_wbb_event_status` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status` | keep (no R twin found) |
 | `espn_wbb_events` | core_v2 | `/{sport}/leagues/{league}/events` | rename to `espn_wbb_game_rosters` (check) |
 | `espn_wbb_franchise` | core_v2 | `/{sport}/leagues/{league}/franchises/{franchise_id}` | keep (exact R match) |
@@ -522,7 +526,7 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 
 ## cfb (vs cfbfastR)
 
-- generated 120 | exact 24 | suggested-rename 29 | review(1->many) 3 | keep 64
+- generated 120 | exact 24 | suggested-rename 30 | review(1->many) 3 | keep 63
 
 | generated | host | path | suggestion |
 |-----------|------|------|------------|
@@ -542,7 +546,7 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 | `espn_cfb_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (no R twin found) |
 | `espn_cfb_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | rename to `espn_cfb_player_splits` (high) |
 | `espn_cfb_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | rename to `espn_cfb_player_seasons` (check) |
-| `espn_cfb_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (no R twin found) |
+| `espn_cfb_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | rename to `espn_cfb_player_stats_v3` (high) |
 | `espn_cfb_athlete_vs_athlete` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}` | keep (no R twin found) |
 | `espn_cfb_athletes_index` | core_v2 | `/{sport}/leagues/{league}/athletes` | keep (no R twin found) |
 | `espn_cfb_award` | core_v2 | `/{sport}/leagues/{league}/awards/{award_id}` | keep (exact R match) |
@@ -646,3 +650,247 @@ Behavior is fixed (Plan 2, URL-parity-proven); this is for **public names**. Sug
 | `espn_cfb_transactions` | site_v2 | `/{sport}/{league}/transactions` | keep (no R twin found) |
 | `espn_cfb_venue` | core_v2 | `/{sport}/leagues/{league}/venues/{venue_id}` | keep (exact R match) |
 | `espn_cfb_venues` | core_v2 | `/{sport}/leagues/{league}/venues` | keep (exact R match) |
+
+## mlb (vs baseballr)
+
+- generated 115 | exact 40 | suggested-rename 2 | review(1->many) 1 | keep 72
+
+| generated | host | path | suggestion |
+|-----------|------|------|------------|
+| `espn_mlb_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (no R twin found) |
+| `espn_mlb_athlete_bio` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/bio` | keep (no R twin found) |
+| `espn_mlb_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (no R twin found) |
+| `espn_mlb_athlete_contracts` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/contracts` | keep (no R twin found) |
+| `espn_mlb_athlete_core` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}` | keep (no R twin found) |
+| `espn_mlb_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (no R twin found) |
+| `espn_mlb_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (no R twin found) |
+| `espn_mlb_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (no R twin found) |
+| `espn_mlb_athlete_injuries` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/injuries` | keep (no R twin found) |
+| `espn_mlb_athlete_news` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/news` | keep (no R twin found) |
+| `espn_mlb_athlete_notes` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/notes` | keep (no R twin found) |
+| `espn_mlb_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (no R twin found) |
+| `espn_mlb_athlete_records` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/records` | keep (no R twin found) |
+| `espn_mlb_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (no R twin found) |
+| `espn_mlb_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (no R twin found) |
+| `espn_mlb_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (no R twin found) |
+| `espn_mlb_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (no R twin found) |
+| `espn_mlb_athlete_vs_athlete` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}` | keep (no R twin found) |
+| `espn_mlb_athletes_index` | core_v2 | `/{sport}/leagues/{league}/athletes` | keep (exact R match) |
+| `espn_mlb_award` | core_v2 | `/{sport}/leagues/{league}/awards/{award_id}` | keep (exact R match) |
+| `espn_mlb_awards` | core_v2 | `/{sport}/leagues/{league}/awards` | keep (no R twin found) |
+| `espn_mlb_calendar` | site_v2 | `/{sport}/{league}/calendar` | keep (exact R match) |
+| `espn_mlb_calendar_offseason` | site_v2 | `/{sport}/{league}/calendar/offseason` | keep (no R twin found) |
+| `espn_mlb_calendar_ondays` | site_v2 | `/{sport}/{league}/calendar/ondays` | keep (no R twin found) |
+| `espn_mlb_calendar_postseason` | site_v2 | `/{sport}/{league}/calendar/postseason` | keep (no R twin found) |
+| `espn_mlb_calendar_regular_season` | site_v2 | `/{sport}/{league}/calendar/regular-season` | keep (no R twin found) |
+| `espn_mlb_coach` | core_v2 | `/{sport}/leagues/{league}/coaches/{coach_id}` | keep (exact R match) |
+| `espn_mlb_coach_record` | core_v2 | `/{sport}/leagues/{league}/coaches/{coach_id}/record/{record_type}` | keep (exact R match) |
+| `espn_mlb_coach_season` | core_v2 | `/{sport}/leagues/{league}/coaches/{coach_id}/seasons/{season}` | keep (exact R match) |
+| `espn_mlb_coaches` | core_v2 | `/{sport}/leagues/{league}/coaches` | keep (exact R match) |
+| `espn_mlb_conferences` | site_v2 | `/{sport}/{league}/groups` | keep (exact R match) |
+| `espn_mlb_draft` | site_v2 | `/{sport}/{league}/draft` | keep (exact R match) |
+| `espn_mlb_event` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}` | keep (no R twin found) |
+| `espn_mlb_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (no R twin found) |
+| `espn_mlb_event_competition` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}` | keep (no R twin found) |
+| `espn_mlb_event_competitor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}` | keep (no R twin found) |
+| `espn_mlb_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (no R twin found) |
+| `espn_mlb_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (no R twin found) |
+| `espn_mlb_event_competitor_record` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record` | keep (no R twin found) |
+| `espn_mlb_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (no R twin found) |
+| `espn_mlb_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (no R twin found) |
+| `espn_mlb_event_competitors` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors` | keep (no R twin found) |
+| `espn_mlb_event_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders` | keep (no R twin found) |
+| `espn_mlb_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (no R twin found) |
+| `espn_mlb_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (no R twin found) |
+| `espn_mlb_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (no R twin found) |
+| `espn_mlb_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (no R twin found) |
+| `espn_mlb_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (no R twin found) |
+| `espn_mlb_event_plays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays` | keep (no R twin found) |
+| `espn_mlb_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (no R twin found) |
+| `espn_mlb_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (no R twin found) |
+| `espn_mlb_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (no R twin found) |
+| `espn_mlb_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (no R twin found) |
+| `espn_mlb_event_scoringplays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays` | keep (no R twin found) |
+| `espn_mlb_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (no R twin found) |
+| `espn_mlb_event_status` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status` | keep (no R twin found) |
+| `espn_mlb_events` | core_v2 | `/{sport}/leagues/{league}/events` | rename to `espn_mlb_game_rosters` (check) |
+| `espn_mlb_franchise` | core_v2 | `/{sport}/leagues/{league}/franchises/{franchise_id}` | keep (exact R match) |
+| `espn_mlb_franchises` | core_v2 | `/{sport}/leagues/{league}/franchises` | keep (exact R match) |
+| `espn_mlb_injuries` | site_v2 | `/{sport}/{league}/injuries` | keep (exact R match) |
+| `espn_mlb_leaders` | web_v3 | `/{sport}/{league}/statistics/byathlete` | keep (exact R match) |
+| `espn_mlb_leaders_core` | core_v2 | `/{sport}/leagues/{league}/leaders` | keep (no R twin found) |
+| `espn_mlb_league_notes` | core_v2 | `/{sport}/leagues/{league}/notes` | keep (no R twin found) |
+| `espn_mlb_league_root` | core_v2 | `/{sport}/leagues/{league}` | keep (no R twin found) |
+| `espn_mlb_news` | site_v2 | `/{sport}/{league}/news` | keep (exact R match) |
+| `espn_mlb_position` | core_v2 | `/{sport}/leagues/{league}/positions/{position_id}` | keep (exact R match) |
+| `espn_mlb_positions` | core_v2 | `/{sport}/leagues/{league}/positions` | keep (exact R match) |
+| `espn_mlb_scoreboard` | site_v2 | `/{sport}/{league}/scoreboard` | keep (exact R match) |
+| `espn_mlb_season_athletes` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/athletes` | keep (no R twin found) |
+| `espn_mlb_season_awards` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/awards` | keep (exact R match) |
+| `espn_mlb_season_coaches` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/coaches` | keep (no R twin found) |
+| `espn_mlb_season_draft` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/draft` | keep (exact R match) |
+| `espn_mlb_season_draft_round_picks` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/draft/rounds/{round_num}/picks` | keep (no R twin found) |
+| `espn_mlb_season_freeagents` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/freeagents` | keep (no R twin found) |
+| `espn_mlb_season_futures` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/futures` | keep (no R twin found) |
+| `espn_mlb_season_group` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}` | keep (exact R match) |
+| `espn_mlb_season_group_children` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children` | keep (exact R match) |
+| `espn_mlb_season_group_teams` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams` | keep (exact R match) |
+| `espn_mlb_season_groups` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups` | keep (exact R match) |
+| `espn_mlb_season_info` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}` | keep (exact R match) |
+| `espn_mlb_season_pointer` | core_v2 | `/{sport}/leagues/{league}/season` | keep (no R twin found) |
+| `espn_mlb_season_powerindex` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/powerindex[/{team_id}]` | keep (no R twin found) |
+| `espn_mlb_season_powerindex_leaders` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/powerindex/leaders` | keep (no R twin found) |
+| `espn_mlb_season_team` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/teams/{team_id}` | keep (no R twin found) |
+| `espn_mlb_season_teams` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/teams` | keep (no R twin found) |
+| `espn_mlb_season_type` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}` | keep (exact R match) |
+| `espn_mlb_season_type_corrections` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/corrections` | keep (no R twin found) |
+| `espn_mlb_season_type_leaders` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/leaders` | keep (no R twin found) |
+| `espn_mlb_season_types` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types` | keep (exact R match) |
+| `espn_mlb_season_week` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}` | keep (exact R match) |
+| `espn_mlb_season_week_events` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events` | keep (no R twin found) |
+| `espn_mlb_season_weeks` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks` | keep (exact R match) |
+| `espn_mlb_seasons` | core_v2 | `/{sport}/leagues/{league}/seasons` | keep (exact R match) |
+| `espn_mlb_standings` | site_v2_alt | `/{sport}/{league}/standings` | keep (exact R match) |
+| `espn_mlb_standings_core` | core_v2 | `/{sport}/leagues/{league}/standings` | keep (no R twin found) |
+| `espn_mlb_statistics_league` | site_v2 | `/{sport}/{league}/statistics` | keep (no R twin found) |
+| `espn_mlb_summary` | site_v2 | `/{sport}/{league}/summary` | review: `espn_mlb_betting` | `espn_mlb_game_all` | `espn_mlb_game_info` | `espn_mlb_game_probables` | `espn_mlb_pbp` | `espn_mlb_player_box` | `espn_mlb_team_box` | `espn_mlb_wp` |
+| `espn_mlb_talentpicks` | core_v2 | `/{sport}/leagues/{league}/talentpicks` | keep (no R twin found) |
+| `espn_mlb_team` | site_v2 | `/{sport}/{league}/teams/{team_id}` | keep (exact R match) |
+| `espn_mlb_team_core` | core_v2 | `/{sport}/leagues/{league}/teams/{team_id}` | keep (no R twin found) |
+| `espn_mlb_team_depthcharts` | site_v2 | `/{sport}/{league}/teams/{team_id}/depthcharts` | keep (no R twin found) |
+| `espn_mlb_team_history` | site_v2 | `/{sport}/{league}/teams/{team_id}/history` | keep (no R twin found) |
+| `espn_mlb_team_injuries` | site_v2 | `/{sport}/{league}/teams/{team_id}/injuries` | keep (exact R match) |
+| `espn_mlb_team_leaders` | site_v2 | `/{sport}/{league}/teams/{team_id}/leaders` | keep (exact R match) |
+| `espn_mlb_team_news` | site_v2 | `/{sport}/{league}/teams/{team_id}/news` | keep (exact R match) |
+| `espn_mlb_team_record` | site_v2 | `/{sport}/{league}/teams/{team_id}/record` | keep (exact R match) |
+| `espn_mlb_team_roster` | site_v2 | `/{sport}/{league}/teams/{team_id}/roster` | keep (exact R match) |
+| `espn_mlb_team_schedule` | site_v2 | `/{sport}/{league}/teams/{team_id}/schedule` | keep (exact R match) |
+| `espn_mlb_team_transactions` | site_v2 | `/{sport}/{league}/teams/{team_id}/transactions` | keep (no R twin found) |
+| `espn_mlb_teams_core` | core_v2 | `/{sport}/leagues/{league}/teams` | keep (no R twin found) |
+| `espn_mlb_teams_site` | site_v2 | `/{sport}/{league}/teams` | rename to `espn_mlb_teams` (high) |
+| `espn_mlb_tournaments` | core_v2 | `/{sport}/leagues/{league}/tournaments` | keep (exact R match) |
+| `espn_mlb_transactions` | site_v2 | `/{sport}/{league}/transactions` | keep (exact R match) |
+| `espn_mlb_venue` | core_v2 | `/{sport}/leagues/{league}/venues/{venue_id}` | keep (no R twin found) |
+| `espn_mlb_venues` | core_v2 | `/{sport}/leagues/{league}/venues` | keep (exact R match) |
+
+## nhl (vs fastRhockey)
+
+- generated 115 | exact 0 | suggested-rename 1 | review(1->many) 0 | keep 114
+
+| generated | host | path | suggestion |
+|-----------|------|------|------------|
+| `espn_nhl_athlete_awards` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/awards` | keep (no R twin found) |
+| `espn_nhl_athlete_bio` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/bio` | keep (no R twin found) |
+| `espn_nhl_athlete_career_stats` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]` | keep (no R twin found) |
+| `espn_nhl_athlete_contracts` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/contracts` | keep (no R twin found) |
+| `espn_nhl_athlete_core` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}` | keep (no R twin found) |
+| `espn_nhl_athlete_eventlog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/eventlog` | keep (no R twin found) |
+| `espn_nhl_athlete_gamelog` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/gamelog` | keep (no R twin found) |
+| `espn_nhl_athlete_info` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}` | keep (no R twin found) |
+| `espn_nhl_athlete_injuries` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/injuries` | keep (no R twin found) |
+| `espn_nhl_athlete_news` | site_v2 | `/{sport}/{league}/athletes/{athlete_id}/news` | keep (no R twin found) |
+| `espn_nhl_athlete_notes` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/notes` | keep (no R twin found) |
+| `espn_nhl_athlete_overview` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/overview` | keep (no R twin found) |
+| `espn_nhl_athlete_records` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/records` | keep (no R twin found) |
+| `espn_nhl_athlete_seasons` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/seasons` | keep (no R twin found) |
+| `espn_nhl_athlete_splits` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/splits` | keep (no R twin found) |
+| `espn_nhl_athlete_statisticslog` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/statisticslog` | keep (no R twin found) |
+| `espn_nhl_athlete_stats` | web_v3 | `/{sport}/{league}/athletes/{athlete_id}/stats` | keep (no R twin found) |
+| `espn_nhl_athlete_vs_athlete` | core_v2 | `/{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}` | keep (no R twin found) |
+| `espn_nhl_athletes_index` | core_v2 | `/{sport}/leagues/{league}/athletes` | keep (no R twin found) |
+| `espn_nhl_award` | core_v2 | `/{sport}/leagues/{league}/awards/{award_id}` | keep (no R twin found) |
+| `espn_nhl_awards` | core_v2 | `/{sport}/leagues/{league}/awards` | keep (no R twin found) |
+| `espn_nhl_calendar` | site_v2 | `/{sport}/{league}/calendar` | keep (no R twin found) |
+| `espn_nhl_calendar_offseason` | site_v2 | `/{sport}/{league}/calendar/offseason` | keep (no R twin found) |
+| `espn_nhl_calendar_ondays` | site_v2 | `/{sport}/{league}/calendar/ondays` | keep (no R twin found) |
+| `espn_nhl_calendar_postseason` | site_v2 | `/{sport}/{league}/calendar/postseason` | keep (no R twin found) |
+| `espn_nhl_calendar_regular_season` | site_v2 | `/{sport}/{league}/calendar/regular-season` | keep (no R twin found) |
+| `espn_nhl_coach` | core_v2 | `/{sport}/leagues/{league}/coaches/{coach_id}` | keep (no R twin found) |
+| `espn_nhl_coach_record` | core_v2 | `/{sport}/leagues/{league}/coaches/{coach_id}/record/{record_type}` | keep (no R twin found) |
+| `espn_nhl_coach_season` | core_v2 | `/{sport}/leagues/{league}/coaches/{coach_id}/seasons/{season}` | keep (no R twin found) |
+| `espn_nhl_coaches` | core_v2 | `/{sport}/leagues/{league}/coaches` | keep (no R twin found) |
+| `espn_nhl_conferences` | site_v2 | `/{sport}/{league}/groups` | keep (no R twin found) |
+| `espn_nhl_draft` | site_v2 | `/{sport}/{league}/draft` | keep (no R twin found) |
+| `espn_nhl_event` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}` | keep (no R twin found) |
+| `espn_nhl_event_broadcasts` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts` | keep (no R twin found) |
+| `espn_nhl_event_competition` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}` | keep (no R twin found) |
+| `espn_nhl_event_competitor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}` | keep (no R twin found) |
+| `espn_nhl_event_competitor_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders` | keep (no R twin found) |
+| `espn_nhl_event_competitor_linescores` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores` | keep (no R twin found) |
+| `espn_nhl_event_competitor_record` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record` | keep (no R twin found) |
+| `espn_nhl_event_competitor_roster` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster` | keep (no R twin found) |
+| `espn_nhl_event_competitor_statistics` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics` | keep (no R twin found) |
+| `espn_nhl_event_competitors` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors` | keep (no R twin found) |
+| `espn_nhl_event_leaders` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders` | keep (no R twin found) |
+| `espn_nhl_event_odds` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds` | keep (no R twin found) |
+| `espn_nhl_event_official_detail` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}` | keep (no R twin found) |
+| `espn_nhl_event_officials` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials` | keep (no R twin found) |
+| `espn_nhl_event_play` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}` | keep (no R twin found) |
+| `espn_nhl_event_play_personnel` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel` | keep (no R twin found) |
+| `espn_nhl_event_plays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays` | keep (no R twin found) |
+| `espn_nhl_event_powerindex` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex` | keep (no R twin found) |
+| `espn_nhl_event_predictor` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor` | keep (no R twin found) |
+| `espn_nhl_event_probabilities` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities` | keep (no R twin found) |
+| `espn_nhl_event_propbets` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets` | keep (no R twin found) |
+| `espn_nhl_event_scoringplays` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays` | keep (no R twin found) |
+| `espn_nhl_event_situation` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation` | keep (no R twin found) |
+| `espn_nhl_event_status` | core_v2 | `/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status` | keep (no R twin found) |
+| `espn_nhl_events` | core_v2 | `/{sport}/leagues/{league}/events` | keep (no R twin found) |
+| `espn_nhl_franchise` | core_v2 | `/{sport}/leagues/{league}/franchises/{franchise_id}` | keep (no R twin found) |
+| `espn_nhl_franchises` | core_v2 | `/{sport}/leagues/{league}/franchises` | keep (no R twin found) |
+| `espn_nhl_injuries` | site_v2 | `/{sport}/{league}/injuries` | keep (no R twin found) |
+| `espn_nhl_leaders` | web_v3 | `/{sport}/{league}/statistics/byathlete` | keep (no R twin found) |
+| `espn_nhl_leaders_core` | core_v2 | `/{sport}/leagues/{league}/leaders` | keep (no R twin found) |
+| `espn_nhl_league_notes` | core_v2 | `/{sport}/leagues/{league}/notes` | keep (no R twin found) |
+| `espn_nhl_league_root` | core_v2 | `/{sport}/leagues/{league}` | keep (no R twin found) |
+| `espn_nhl_news` | site_v2 | `/{sport}/{league}/news` | keep (no R twin found) |
+| `espn_nhl_position` | core_v2 | `/{sport}/leagues/{league}/positions/{position_id}` | keep (no R twin found) |
+| `espn_nhl_positions` | core_v2 | `/{sport}/leagues/{league}/positions` | keep (no R twin found) |
+| `espn_nhl_scoreboard` | site_v2 | `/{sport}/{league}/scoreboard` | keep (no R twin found) |
+| `espn_nhl_season_athletes` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/athletes` | keep (no R twin found) |
+| `espn_nhl_season_awards` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/awards` | keep (no R twin found) |
+| `espn_nhl_season_coaches` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/coaches` | keep (no R twin found) |
+| `espn_nhl_season_draft` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/draft` | keep (no R twin found) |
+| `espn_nhl_season_draft_round_picks` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/draft/rounds/{round_num}/picks` | keep (no R twin found) |
+| `espn_nhl_season_freeagents` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/freeagents` | keep (no R twin found) |
+| `espn_nhl_season_futures` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/futures` | keep (no R twin found) |
+| `espn_nhl_season_group` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}` | keep (no R twin found) |
+| `espn_nhl_season_group_children` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children` | keep (no R twin found) |
+| `espn_nhl_season_group_teams` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams` | keep (no R twin found) |
+| `espn_nhl_season_groups` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups` | keep (no R twin found) |
+| `espn_nhl_season_info` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}` | keep (no R twin found) |
+| `espn_nhl_season_pointer` | core_v2 | `/{sport}/leagues/{league}/season` | keep (no R twin found) |
+| `espn_nhl_season_powerindex` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/powerindex[/{team_id}]` | keep (no R twin found) |
+| `espn_nhl_season_powerindex_leaders` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/powerindex/leaders` | keep (no R twin found) |
+| `espn_nhl_season_team` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/teams/{team_id}` | keep (no R twin found) |
+| `espn_nhl_season_teams` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/teams` | keep (no R twin found) |
+| `espn_nhl_season_type` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}` | keep (no R twin found) |
+| `espn_nhl_season_type_corrections` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/corrections` | keep (no R twin found) |
+| `espn_nhl_season_type_leaders` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/leaders` | keep (no R twin found) |
+| `espn_nhl_season_types` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types` | keep (no R twin found) |
+| `espn_nhl_season_week` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}` | keep (no R twin found) |
+| `espn_nhl_season_week_events` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events` | keep (no R twin found) |
+| `espn_nhl_season_weeks` | core_v2 | `/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks` | keep (no R twin found) |
+| `espn_nhl_seasons` | core_v2 | `/{sport}/leagues/{league}/seasons` | keep (no R twin found) |
+| `espn_nhl_standings` | site_v2_alt | `/{sport}/{league}/standings` | keep (no R twin found) |
+| `espn_nhl_standings_core` | core_v2 | `/{sport}/leagues/{league}/standings` | keep (no R twin found) |
+| `espn_nhl_statistics_league` | site_v2 | `/{sport}/{league}/statistics` | keep (no R twin found) |
+| `espn_nhl_summary` | site_v2 | `/{sport}/{league}/summary` | keep (no R twin found) |
+| `espn_nhl_talentpicks` | core_v2 | `/{sport}/leagues/{league}/talentpicks` | keep (no R twin found) |
+| `espn_nhl_team` | site_v2 | `/{sport}/{league}/teams/{team_id}` | keep (no R twin found) |
+| `espn_nhl_team_core` | core_v2 | `/{sport}/leagues/{league}/teams/{team_id}` | keep (no R twin found) |
+| `espn_nhl_team_depthcharts` | site_v2 | `/{sport}/{league}/teams/{team_id}/depthcharts` | keep (no R twin found) |
+| `espn_nhl_team_history` | site_v2 | `/{sport}/{league}/teams/{team_id}/history` | keep (no R twin found) |
+| `espn_nhl_team_injuries` | site_v2 | `/{sport}/{league}/teams/{team_id}/injuries` | keep (no R twin found) |
+| `espn_nhl_team_leaders` | site_v2 | `/{sport}/{league}/teams/{team_id}/leaders` | keep (no R twin found) |
+| `espn_nhl_team_news` | site_v2 | `/{sport}/{league}/teams/{team_id}/news` | keep (no R twin found) |
+| `espn_nhl_team_record` | site_v2 | `/{sport}/{league}/teams/{team_id}/record` | keep (no R twin found) |
+| `espn_nhl_team_roster` | site_v2 | `/{sport}/{league}/teams/{team_id}/roster` | keep (no R twin found) |
+| `espn_nhl_team_schedule` | site_v2 | `/{sport}/{league}/teams/{team_id}/schedule` | keep (no R twin found) |
+| `espn_nhl_team_transactions` | site_v2 | `/{sport}/{league}/teams/{team_id}/transactions` | keep (no R twin found) |
+| `espn_nhl_teams_core` | core_v2 | `/{sport}/leagues/{league}/teams` | keep (no R twin found) |
+| `espn_nhl_teams_site` | site_v2 | `/{sport}/{league}/teams` | rename to `espn_nhl_teams` (high) |
+| `espn_nhl_tournaments` | core_v2 | `/{sport}/leagues/{league}/tournaments` | keep (no R twin found) |
+| `espn_nhl_transactions` | site_v2 | `/{sport}/{league}/transactions` | keep (no R twin found) |
+| `espn_nhl_venue` | core_v2 | `/{sport}/leagues/{league}/venues/{venue_id}` | keep (no R twin found) |
+| `espn_nhl_venues` | core_v2 | `/{sport}/leagues/{league}/venues` | keep (no R twin found) |

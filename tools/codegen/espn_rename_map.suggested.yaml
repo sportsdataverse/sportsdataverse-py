@@ -2,6 +2,7 @@ rename:
   espn_cfb_athlete_gamelog: espn_cfb_player_gamelog
   espn_cfb_athlete_overview: espn_cfb_player_overview
   espn_cfb_athlete_splits: espn_cfb_player_splits
+  espn_cfb_athlete_stats: espn_cfb_player_stats_v3
   espn_cfb_event_broadcasts: espn_cfb_game_broadcasts
   espn_cfb_event_competitor_leaders: espn_cfb_game_team_leaders
   espn_cfb_event_competitor_linescores: espn_cfb_game_team_linescores
@@ -24,6 +25,8 @@ rename:
   espn_cfb_season_week_rankings: espn_cfb_week_rankings
   espn_cfb_teams_site: espn_cfb_teams
   espn_mbb_teams_site: espn_mbb_teams
+  espn_mlb_teams_site: espn_mlb_teams
   espn_nba_teams_site: espn_nba_teams
+  espn_nhl_teams_site: espn_nhl_teams
   espn_wbb_teams_site: espn_wbb_teams
   espn_wnba_teams_site: espn_wnba_teams
