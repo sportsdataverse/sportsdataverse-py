@@ -8,7 +8,6 @@
   - [Installation](#installation)
     - [Standard install (pip)](#standard-install-pip)
     - [Modern install (uv — recommended)](#modern-install-uv--recommended)
-    - [Conda install](#conda-install)
     - [Development install](#development-install)
     - [Notes](#notes)
   - [Examples and tutorials](#examples-and-tutorials)
@@ -114,26 +113,6 @@ uv add "sportsdataverse[all]"
 # Or install the latest dev snapshot from GitHub:
 uv add "sportsdataverse @ git+https://github.com/sportsdataverse/sportsdataverse-py"
 ```
-
-### Conda install
-
-Once the conda-forge feedstock is published the package is also available via:
-
-```bash
-conda install -c conda-forge sportsdataverse
-# or
-mamba install -c conda-forge sportsdataverse
-```
-
-Until then, conda users can build a local package from this repo:
-
-```bash
-conda install conda-build conda-verify
-conda build recipe/
-conda install --use-local sportsdataverse
-```
-
-See [`recipe/README.md`](recipe/README.md) for the full conda workflow.
 
 ### Development install
 
