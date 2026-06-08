@@ -9,6 +9,7 @@ sidebar_label: {{ prefix|upper }}
 {% for a in api_rows %}| [{{ a.label }}](reference/{{ a.slug }}) | {{ a.count }} | `{{ a.base }}` |
 {% endfor %}
 {% if has_loaders %}| [Dataset loaders](reference/loaders) | {{ loader_count }} | sportsdataverse-data releases |
+{% endif %}{% if has_additional %}| [Additional functions](reference/additional) | {{ additional_count }} | hand-written wrappers, loaders & helpers |
 {% endif %}
 {% if notebooks %}
 

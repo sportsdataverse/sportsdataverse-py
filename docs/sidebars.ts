@@ -28,6 +28,7 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'architecture/espn-cross-league', label: 'How it works'},
     {type: 'doc', id: 'parsers/index', label: 'Parser layer'},
     {type: 'doc', id: 'reference/parameters', label: 'Parameter reference'},
+    {type: 'doc', id: 'reference/python-helpers', label: 'Package helpers'},
     {
       type: 'category',
       label: 'Basketball',

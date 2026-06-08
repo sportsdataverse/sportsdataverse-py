@@ -1593,8 +1593,18 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     )
 
 
-def render_league_index(prefix: str) -> str:
-    """Render a league's ``index.md`` (reference table + optional loaders link)."""
+def render_league_index(
+    prefix: str,
+    *,
+    has_additional: bool = False,
+    additional_count: int = 0,
+) -> str:
+    """Render a league's ``index.md`` (reference table + optional loaders link).
+
+    ``has_additional`` / ``additional_count`` are supplied by :func:`_render_docs_all`
+    (and :func:`_autodoc_names_by_scope`) after they compute the autodoc set for this
+    league, so the index table can link the ``reference/additional`` page with an
+    accurate function count."""
     loaders = _loader_doc_views(prefix)
     template = render.ENV.get_template("league_index.md.jinja")
     return template.render(
@@ -1602,6 +1612,8 @@ def render_league_index(prefix: str) -> str:
         api_rows=_apis_for(prefix),
         has_loaders=bool(loaders),
         loader_count=len(loaders),
+        has_additional=has_additional,
+        additional_count=additional_count,
         notebooks=[],
     )
 
@@ -2024,7 +2036,6 @@ def _autodoc_names_by_scope() -> dict[str | None, list[str]]:
     for prefix in _doc_leagues():
         apis = _apis_for(prefix)
         loaders = _loader_doc_views(prefix)
-        out[f"{prefix}/index.md"] = render_league_index(prefix)
         espn_n = flat_n = 0
         for a in apis:
             if a["kind"] == "espn":
@@ -2036,8 +2047,16 @@ def _autodoc_names_by_scope() -> dict[str | None, list[str]]:
             out[f"{prefix}/reference/{a['slug']}.md"] = render_reference_page(prefix, a["name"], pos)
         if loaders:
             out[f"{prefix}/reference/loaders.md"] = render_loaders_page(prefix, 1)
-        league_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
-        result[prefix] = _autodoc_names(prefix, league_corpus)
+        # Compute autodoc names from the reference-pages corpus (without the index)
+        # then store the index with the accurate additional-functions count.
+        ref_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
+        names = _autodoc_names(prefix, ref_corpus)
+        out[f"{prefix}/index.md"] = render_league_index(
+            prefix,
+            has_additional=bool(names),
+            additional_count=len(names),
+        )
+        result[prefix] = names
     out["reference/parameters.md"] = render_parameters_page()
     global_corpus = "\n".join(c for rel, c in out.items() if rel.endswith(".md")) + "\n" + preserved
     result[None] = _autodoc_names(None, global_corpus)
@@ -2169,7 +2188,6 @@ def _render_docs_all() -> dict[str, str]:
     for i, prefix in enumerate(_doc_leagues()):
         apis = _apis_for(prefix)
         loaders = _loader_doc_views(prefix)
-        out[f"{prefix}/index.md"] = render_league_index(prefix)
         out[f"{prefix}/_category_.json"] = render_category(prefix.upper(), 10 + i, True)
         # Sidebar order within a league's Reference category: Loaders first (1),
         # then native/flat APIs (NHL/MLB API; 10+), then ESPN APIs (site/web/core;
@@ -2194,7 +2212,18 @@ def _render_docs_all() -> dict[str, str]:
         # (`_docs_corpus(league)` = `docs/docs/{league}/**` only). Conceptual pages
         # outside the league dir are deliberately NOT consulted here so the autodoc
         # set stays in lockstep with what `--coverage` counts as missing.
-        league_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
+        # Compute autodoc names from the reference-pages corpus (index excluded) so
+        # the function count is available for the index table link.  The index
+        # contains only table links, not function names, so excluding it from this
+        # corpus does not change which names are "already documented".
+        ref_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
+        autodoc_names_list = _autodoc_names(prefix, ref_corpus)
+        out[f"{prefix}/index.md"] = render_league_index(
+            prefix,
+            has_additional=bool(autodoc_names_list),
+            additional_count=len(autodoc_names_list),
+        )
+        league_corpus = ref_corpus + "\n" + out[f"{prefix}/index.md"]
         autodoc = render_autodoc_page(prefix, league_corpus)
         if autodoc is not None:
             out[f"{prefix}/reference/{_AUTODOC_PAGE}"] = autodoc
