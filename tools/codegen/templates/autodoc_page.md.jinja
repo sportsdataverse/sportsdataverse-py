@@ -14,7 +14,39 @@ not covered by the generated API-endpoint reference above.
 {% for fn in group.functions %}
 ### `{{ fn.name }}{{ fn.signature }}`
 
-{{ fn.summary }}
+{% if fn.short %}
+{{ fn.short }}
+{% else %}
+_No description available._
+{% endif %}
+{% if fn.long %}
+
+{{ fn.long }}
+{% endif %}
+{% if fn.params %}
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+{% for p in fn.params %}
+| `{{ p.name }}` | {% if p.type %}`{{ p.type }}`{% endif %} | {% if p.default %}`{{ p.default }}`{% endif %} | {{ p.description }} |
+{% endfor %}
+{% endif %}
+{% if fn.returns %}
+
+**Returns**
+
+{{ fn.returns }}
+{% endif %}
+{% if fn.example %}
+
+**Example**
+
+```python
+{{ fn.example }}
+```
+{% endif %}
 
 {% endfor %}
 {% endfor %}

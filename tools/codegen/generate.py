@@ -1558,20 +1558,6 @@ def _autodoc_family(name: str) -> str:
     return "Other"
 
 
-def _autodoc_summary(obj) -> str:
-    """First paragraph of ``obj``'s docstring, collapsed and pipe-escaped, or ``""``."""
-    import inspect
-
-    doc = inspect.getdoc(obj) or ""
-    if not doc:
-        return ""
-    # First blank-line-delimited paragraph; collapse internal whitespace runs to
-    # single spaces so the one-liner renders cleanly under the heading.
-    para = doc.split("\n\n", 1)[0]
-    para = " ".join(para.split())
-    return para.replace("|", "\\|")
-
-
 def _autodoc_signature(obj) -> str:
     """``str(inspect.signature(obj))`` with a ``"(...)"`` fallback for un-introspectable objects."""
     import inspect
@@ -1580,6 +1566,83 @@ def _autodoc_signature(obj) -> str:
         return str(inspect.signature(obj))
     except (TypeError, ValueError):
         return "(...)"
+
+
+def _ann_str(annotation) -> str:
+    """Stringify a signature annotation cleanly for the autodoc Parameters table.
+
+    Annotations may be live types (``int``, ``pl.DataFrame``) or strings (PEP 563
+    ``from __future__ import annotations`` makes every annotation a string). Strip
+    surrounding quotes and module qualifiers (``pl.DataFrame`` -> ``DataFrame``,
+    ``sportsdataverse.errors.NoEspnDataError`` -> ``NoEspnDataError``) so the table
+    stays readable. Subscripted generics (``list[int]``) and unions keep their
+    bracketed/`|`-joined form but with each component qualifier stripped."""
+    import re as _re
+
+    if isinstance(annotation, str):
+        text = annotation.strip().strip("'\"")
+    else:
+        # Prefer a __name__ for plain classes; fall back to repr for typing forms.
+        text = getattr(annotation, "__name__", None) or str(annotation)
+        # ``typing.Optional[int]`` etc. render with a ``typing.`` prefix via str().
+        text = text.replace("typing.", "")
+    # Drop dotted module qualifiers on each identifier-ish token, keeping the final
+    # component (e.g. ``pl.DataFrame`` -> ``DataFrame``). Leaves brackets, commas,
+    # ``|`` and spaces intact so generics/unions survive.
+    text = _re.sub(r"\b(?:[A-Za-z_][\w]*\.)+([A-Za-z_]\w*)", r"\1", text)
+    return text.strip()
+
+
+def _doc_view(obj) -> dict:
+    """Parsed docstring + signature for rich autodoc rendering of ``obj``.
+
+    Robust to missing docstrings, classes, builtins, and un-introspectable
+    callables: every field falls back to an empty value rather than raising. Param
+    descriptions come from the docstring; param *types* prefer the live annotation
+    (docstrings frequently omit them) and fall back to the docstring's declared
+    type. ``self``/``cls`` and ``*args``/``**kwargs`` are dropped from the table."""
+    import inspect
+
+    from docstring_parser import parse
+
+    raw = inspect.getdoc(obj) or ""
+    ds = parse(raw)
+    try:
+        sig = inspect.signature(obj)
+    except (ValueError, TypeError):
+        sig = None
+    doc_params = {p.arg_name: p for p in ds.params}
+    params: list[dict] = []
+    if sig is not None:
+        for name, sp in sig.parameters.items():
+            if name in ("self", "cls") or sp.kind in (sp.VAR_POSITIONAL, sp.VAR_KEYWORD):
+                continue
+            dp = doc_params.get(name)
+            ann = "" if sp.annotation is sp.empty else _ann_str(sp.annotation)
+            default = "" if sp.default is sp.empty else repr(sp.default)
+            desc = ""
+            if dp is not None:
+                desc = " ".join((dp.description or "").split())
+            params.append(
+                {
+                    "name": name,
+                    "type": (dp.type_name if dp is not None and dp.type_name else ann),
+                    "default": default,
+                    "description": desc,
+                },
+            )
+    long = " ".join((ds.long_description or "").split()) if ds.long_description else ""
+    returns = ""
+    if ds.returns is not None and ds.returns.description:
+        returns = " ".join(ds.returns.description.split())
+    example = ds.examples[0].description.strip() if ds.examples and ds.examples[0].description else ""
+    return {
+        "short": (ds.short_description or "").strip(),
+        "long": long,
+        "params": params,
+        "returns": returns,
+        "example": example,
+    }
 
 
 def _autodoc_names(league: str | None, corpus: str) -> list[str]:
@@ -1624,18 +1687,25 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
 
 
 def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
-    """``[{family, functions:[{name, signature, summary}]}]`` for the template.
+    """``[{family, functions:[{name, signature, short, long, params, returns, example}]}]``.
 
     Families ordered by :data:`_AUTODOC_FAMILY_ORDER` (unknown families last,
-    alphabetically); functions sorted alphabetically within each family."""
+    alphabetically); functions sorted alphabetically within each family. Each
+    function carries the parsed-docstring view from :func:`_doc_view` so the
+    template can render Parameters/Returns/Example sections."""
     import importlib
 
     mod = importlib.import_module("sportsdataverse" if league is None else f"sportsdataverse.{league}")
     by_family: dict[str, list[dict]] = {}
     for n in names:
         obj = getattr(mod, n)
+        view = _doc_view(obj)
+        # Pipe-escape param cells (table-rendered); short/long/returns are prose.
+        for p in view["params"]:
+            for k in ("type", "default", "description"):
+                p[k] = p[k].replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n), []).append(
-            {"name": n, "signature": _autodoc_signature(obj), "summary": _autodoc_summary(obj)},
+            {"name": n, "signature": _autodoc_signature(obj), **view},
         )
 
     def fam_key(fam: str) -> tuple[int, str]:

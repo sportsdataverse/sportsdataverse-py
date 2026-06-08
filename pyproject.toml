@@ -172,6 +172,9 @@ dev = [
     {include-group = "test"},
     {include-group = "lint"},
     "build>=1.0",
+    # Parses function docstrings (Google/NumPy/Sphinx) so the codegen autodoc pages
+    # can render Args/Returns/Examples tables. Build-time only; never ships to users.
+    "docstring_parser>=0.16",
     "ipykernel>=6.0",  # for executing examples/notebooks/*.ipynb locally
     "jinja2>=3.1",
     "nbformat>=5.0",
