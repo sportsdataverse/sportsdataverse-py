@@ -5,6 +5,8 @@
 - [0.0.54 (unreleased)](#0054-unreleased)
   - [Per-sport return schemas (correctness)](#per-sport-return-schemas-correctness)
   - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
+  - [Docs coverage gate + autodoc](#docs-coverage-gate--autodoc)
+  - [MLB - full MLB Stats API coverage](#mlb---full-mlb-stats-api-coverage)
 - [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
   - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
   - [NHL native — codegen cutover + clean names (api-web; in progress)](#nhl-native--codegen-cutover--clean-names-api-web-in-progress)
@@ -87,6 +89,27 @@ return a tidy polars DataFrame instead of the raw `Dict`. Pass
 `return_parsed=False` to recover the raw `Dict`; `return_as_pandas=True` switches
 polars→pandas. Wrappers without a registered parser are unchanged (still `Dict`).
 The `sportsdataverse.parsed.{league}` mirror modules are unaffected.
+
+### Docs coverage gate + autodoc
+
+Every user-facing function now reaches the docs. A new `generate.py --coverage`
+audit enumerates in-scope exported functions per league and fails `--check` if
+any is undocumented (allowlist for cross-cutting internals in
+`tools/codegen/coverage_allowlist.yaml`). ~180 hand-written wrappers/loaders/
+statcast/utility functions that the endpoint-YAML codegen never documented are
+now rendered into per-league "Additional functions" reference pages
+(autodoc from live signatures + docstrings).
+
+### MLB - full MLB Stats API coverage
+
+The codegen now wraps the full `statsapi.mlb.com` surface: 38 previously
+unwrapped endpoints were added (home run derby, all-star ballots, conferences,
+free agents, game pace, jobs/datacasters/official-scorers, team coaches/
+personnel, schedule variants, seasons/all, sport, teams history/stats, etc.).
+28 are publicly serviceable and ship with captured fixtures + introspected
+return schemas; the remaining handful are auth-gated/internal MLBAM feeds
+(analytics/guids/color), wrapped with valid example args for if/when access
+exists.
 
 ## 0.0.53 Release: June 8, 2026
 
