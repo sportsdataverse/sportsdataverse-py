@@ -28,7 +28,7 @@ def {{ ep.fn_name }}(
 {% endfor %}
 {% if ep.parser %}
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
 {% endif %}
     **kwargs,

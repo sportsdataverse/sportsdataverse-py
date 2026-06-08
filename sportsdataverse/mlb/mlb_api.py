@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse.mlb.mlb_api_parsers import parse_mlb_api_list, parse_mlb_api_schedule, parse_mlb_api_team_roster
@@ -44,7 +44,7 @@ def mlb_api_schedule_postseason(
     sport_id: Optional[int] = 1,
     hydrate: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -57,11 +57,11 @@ def mlb_api_schedule_postseason(
         season: season query parameter.
         sport_id: sportId query parameter.
         hydrate: hydrate query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_schedule -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_schedule_postseason()
@@ -87,7 +87,7 @@ def mlb_api_pbp(
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -102,11 +102,11 @@ def mlb_api_pbp(
         timecode: language query parameter.
         hydrate: hydrate query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_pbp(game_pk=716390)
@@ -131,7 +131,7 @@ def mlb_api_boxscore(
     timecode: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -144,11 +144,11 @@ def mlb_api_boxscore(
         game_pk: game_pk path parameter.
         timecode: timecode query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_boxscore(game_pk=716390)
@@ -171,7 +171,7 @@ def mlb_api_linescore(
     timecode: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -184,11 +184,11 @@ def mlb_api_linescore(
         game_pk: game_pk path parameter.
         timecode: timecode query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_linescore(game_pk=716390)
@@ -211,7 +211,7 @@ def mlb_api_play_by_play(
     timecode: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -224,11 +224,11 @@ def mlb_api_play_by_play(
         game_pk: game_pk path parameter.
         timecode: timecode query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_play_by_play(game_pk=716390)
@@ -250,7 +250,7 @@ def mlb_api_game_context_metrics(
     game_pk: int,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -262,11 +262,11 @@ def mlb_api_game_context_metrics(
     Args:
         game_pk: game_pk path parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_game_context_metrics(game_pk=716390)
@@ -287,7 +287,7 @@ def mlb_api_win_probability(
     game_pk: int,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -299,11 +299,11 @@ def mlb_api_win_probability(
     Args:
         game_pk: game_pk path parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_win_probability(game_pk=716390)
@@ -323,7 +323,7 @@ def mlb_api_win_probability(
 def mlb_api_game_content(
     game_pk: int,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -334,11 +334,11 @@ def mlb_api_game_content(
 
     Args:
         game_pk: game_pk path parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_game_content(game_pk=716390)
@@ -361,7 +361,7 @@ def mlb_api_team(
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -376,11 +376,11 @@ def mlb_api_team(
         sport_id: sportId query parameter.
         hydrate: hydrate query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_team(team_id=10)
@@ -408,7 +408,7 @@ def mlb_api_team_roster(
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -424,11 +424,11 @@ def mlb_api_team_roster(
         date: date query parameter.
         hydrate: hydrate query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_team_roster -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_team_roster(team_id=10)
@@ -455,7 +455,7 @@ def mlb_api_team_alumni(
     group: Optional[str] = "hitting",
     hydrate: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -469,11 +469,11 @@ def mlb_api_team_alumni(
         season: season query parameter.
         group: group query parameter.
         hydrate: hydrate query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_team_alumni(team_id=10)
@@ -498,7 +498,7 @@ def mlb_api_team_affiliates(
     season: Optional[Union[int, str]] = None,
     hydrate: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -512,11 +512,11 @@ def mlb_api_team_affiliates(
         sport_id: sportId query parameter.
         season: season query parameter.
         hydrate: hydrate query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_team_affiliates()
@@ -541,7 +541,7 @@ def mlb_api_people(
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -554,11 +554,11 @@ def mlb_api_people(
         person_ids: personIds query parameter.
         hydrate: hydrate query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_people()
@@ -583,7 +583,7 @@ def mlb_api_person(
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -597,11 +597,11 @@ def mlb_api_person(
         season: season query parameter.
         hydrate: hydrate query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_person(person_id=660271)
@@ -625,7 +625,7 @@ def mlb_api_person_game_stats(
     game_pk: Union[int, str],
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -638,11 +638,11 @@ def mlb_api_person_game_stats(
         person_id: person_id path parameter.
         game_pk: game_pk path parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_person_game_stats(person_id=660271, game_pk=716390)
@@ -665,7 +665,7 @@ def mlb_api_sport_players(
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -679,11 +679,11 @@ def mlb_api_sport_players(
         season: season query parameter.
         hydrate: hydrate query parameter.
         fields: fields query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_sport_players()
@@ -705,7 +705,7 @@ def mlb_api_sport_players(
 def mlb_api_sports(
     sport_id: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -716,11 +716,11 @@ def mlb_api_sports(
 
     Args:
         sport_id: sportId query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_sports()
@@ -742,7 +742,7 @@ def mlb_api_leagues(
     season: Optional[Union[int, str]] = None,
     league_ids: Optional[Union[int, List[int]]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -755,11 +755,11 @@ def mlb_api_leagues(
         sport_id: sportId query parameter.
         season: season query parameter.
         league_ids: leagueIds query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_leagues()
@@ -782,7 +782,7 @@ def mlb_api_season(
     season_id: Union[int, str],
     sport_id: Optional[int] = 1,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -794,11 +794,11 @@ def mlb_api_season(
     Args:
         season_id: season_id path parameter.
         sport_id: sportId query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_season(season_id='X')
@@ -820,7 +820,7 @@ def mlb_api_venues(
     sport_ids: Optional[Union[int, List[int]]] = None,
     hydrate: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -833,11 +833,11 @@ def mlb_api_venues(
         season: season query parameter.
         sport_ids: sportIds query parameter.
         hydrate: hydrate query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_venues()
@@ -861,7 +861,7 @@ def mlb_api_venue(
     season: Optional[Union[int, str]] = None,
     hydrate: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -874,11 +874,11 @@ def mlb_api_venue(
         venue_id: venue_id path parameter.
         season: season query parameter.
         hydrate: hydrate query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_venue(venue_id=15)
@@ -899,7 +899,7 @@ def mlb_api_venue(
 def mlb_api_meta(
     meta_type: str,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -910,11 +910,11 @@ def mlb_api_meta(
 
     Args:
         meta_type: meta_type path parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_meta(meta_type='leagueLeaderTypes')
@@ -933,7 +933,7 @@ def mlb_api_meta(
 def mlb_api_awards(
     sport_id: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -944,11 +944,11 @@ def mlb_api_awards(
 
     Args:
         sport_id: sportId query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_awards()
@@ -971,7 +971,7 @@ def mlb_api_award_recipients(
     sport_id: Optional[int] = 1,
     hydrate: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -985,11 +985,11 @@ def mlb_api_award_recipients(
         season: season query parameter.
         sport_id: sportId query parameter.
         hydrate: hydrate query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_award_recipients(award_id='MLBHOF')
@@ -1015,7 +1015,7 @@ def mlb_api_draft(
     player_id: Optional[int] = None,
     limit: Optional[int] = 100,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1030,11 +1030,11 @@ def mlb_api_draft(
         team_id: teamId query parameter.
         player_id: playerId query parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_draft(year=2024)
@@ -1056,7 +1056,7 @@ def mlb_api_draft(
 
 def mlb_api_umpires(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1066,11 +1066,11 @@ def mlb_api_umpires(
     Example URL: https://statsapi.mlb.com/api/v1/jobs/umpires
 
     Args:
-        return_parsed: dispatch the raw payload through parse_mlb_api_list -> polars DataFrame.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> mlb_api_umpires()

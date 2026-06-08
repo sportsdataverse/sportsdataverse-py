@@ -3,7 +3,7 @@
 """{{ api }} wrappers (host {{ host }}). Generated."""
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import {{ runtime_imports|join(", ") }}
 {% if parser_imports %}
@@ -28,7 +28,7 @@ def {{ ep.fn_name }}(
 {% endfor %}
 {% if ep.parser %}
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
 {% endif %}
     **kwargs,

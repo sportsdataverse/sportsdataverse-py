@@ -87,12 +87,15 @@ def _build_docstring(
     for p in ep.query_params:
         lines.append(f"    {p.python_name}: {p.api} query parameter.")
     if ep.parser:
-        lines.append(f"    return_parsed: dispatch the raw payload through {ep.parser} -> polars DataFrame.")
+        lines.append(
+            f"    return_parsed: parse the payload through {ep.parser} -> polars DataFrame "
+            "(default True). Pass return_parsed=False for the raw JSON Dict."
+        )
         lines.append("    return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.")
     lines.append("")
     lines.append("Returns:")
     if ep.parser:
-        lines.append("    polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.")
+        lines.append("    A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.")
     else:
         lines.append("    The raw JSON ``Dict``.")
     lines.append("")
@@ -267,7 +270,9 @@ class _EndpointView:
                 toggle = none_default[0] if none_default else ep.path_params[-1].python_name
             now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
             full_f = ep_host + _sub_slugs(ep.path, sport, lg)
-            lines.append(f'__url = f"{now_f}" if {toggle} is None else f"{full_f}"')
+            # now_f has no path-param placeholders, so emit a plain string literal;
+            # full_f may have {param} tokens, so it stays an f-string.
+            lines.append(f'__url = "{now_f}" if {toggle} is None else f"{full_f}"')
         else:
             full_f = _sub_slugs(ep.path, sport, lg)
             lines.append(f'__url = f"{ep_host}{full_f}"')
@@ -526,7 +531,15 @@ def render_flat_module(api: spec.FlatApi) -> str:
         for p in (*v.path_params, *v.query_params):
             if p.transform:
                 transforms.add(p.transform)
-    runtime_imports = list(dict.fromkeys([*api.runtime_imports, *sorted(transforms)]))
+    # Also count transforms that appear in dynamic path build expressions
+    # (e.g. format_nhl_season used in path_build_expr assignments).
+    for v in views:
+        if v.path_build_expr:
+            for rt in api.runtime_imports:
+                if rt != "_get" and rt in v.path_build_expr:
+                    transforms.add(rt)
+    # Always include _get; include YAML-declared extras only when actually used.
+    runtime_imports = list(dict.fromkeys(["_get", *sorted(transforms)]))
     template = render.ENV.get_template("api_module.py.jinja")
     return template.render(
         api=api.api,

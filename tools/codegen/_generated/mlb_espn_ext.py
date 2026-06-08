@@ -159,7 +159,7 @@ def espn_mlb_scoreboard(
     groups: Optional[Union[int, str]] = None,
     limit: Optional[int] = 500,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -176,11 +176,11 @@ def espn_mlb_scoreboard(
         season_type: seasontype query parameter.
         groups: groups query parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_scoreboard -> polars DataFrame.
+        return_parsed: parse the payload through parse_scoreboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_scoreboard(dates='20240115')
@@ -204,7 +204,7 @@ def espn_mlb_scoreboard(
 def espn_mlb_summary(
     event_id: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -217,11 +217,11 @@ def espn_mlb_summary(
 
     Args:
         event_id: event query parameter.
-        return_parsed: dispatch the raw payload through parse_summary -> polars DataFrame.
+        return_parsed: parse the payload through parse_summary -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_summary()
@@ -240,7 +240,7 @@ def espn_mlb_summary(
 
 def espn_mlb_calendar(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -252,11 +252,11 @@ def espn_mlb_calendar(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_calendar()
@@ -273,7 +273,7 @@ def espn_mlb_calendar(
 
 def espn_mlb_calendar_offseason(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -285,11 +285,11 @@ def espn_mlb_calendar_offseason(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/offseason
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_calendar_offseason()
@@ -306,7 +306,7 @@ def espn_mlb_calendar_offseason(
 
 def espn_mlb_calendar_regular_season(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -318,11 +318,11 @@ def espn_mlb_calendar_regular_season(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/regular-season
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_calendar_regular_season()
@@ -339,7 +339,7 @@ def espn_mlb_calendar_regular_season(
 
 def espn_mlb_calendar_postseason(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -351,11 +351,11 @@ def espn_mlb_calendar_postseason(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/postseason
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_calendar_postseason()
@@ -372,7 +372,7 @@ def espn_mlb_calendar_postseason(
 
 def espn_mlb_calendar_ondays(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -384,11 +384,11 @@ def espn_mlb_calendar_ondays(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/ondays
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_calendar_ondays()
@@ -406,7 +406,7 @@ def espn_mlb_calendar_ondays(
 def espn_mlb_news(
     limit: Optional[int] = 50,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -419,11 +419,11 @@ def espn_mlb_news(
 
     Args:
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_news -> polars DataFrame.
+        return_parsed: parse the payload through parse_news -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_news()
@@ -442,7 +442,7 @@ def espn_mlb_news(
 
 def espn_mlb_injuries(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -454,11 +454,11 @@ def espn_mlb_injuries(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/injuries
 
     Args:
-        return_parsed: dispatch the raw payload through parse_injuries -> polars DataFrame.
+        return_parsed: parse the payload through parse_injuries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_injuries()
@@ -475,7 +475,7 @@ def espn_mlb_injuries(
 
 def espn_mlb_transactions(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -487,11 +487,11 @@ def espn_mlb_transactions(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/transactions
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_transactions()
@@ -508,7 +508,7 @@ def espn_mlb_transactions(
 
 def espn_mlb_conferences(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -520,11 +520,11 @@ def espn_mlb_conferences(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/groups
 
     Args:
-        return_parsed: dispatch the raw payload through parse_groups -> polars DataFrame.
+        return_parsed: parse the payload through parse_groups -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_conferences()
@@ -541,7 +541,7 @@ def espn_mlb_conferences(
 
 def espn_mlb_statistics_league(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -553,11 +553,11 @@ def espn_mlb_statistics_league(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/statistics
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_statistics_league()
@@ -574,7 +574,7 @@ def espn_mlb_statistics_league(
 
 def espn_mlb_draft(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -586,11 +586,11 @@ def espn_mlb_draft(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/draft
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_draft()
@@ -608,7 +608,7 @@ def espn_mlb_draft(
 def espn_mlb_teams_site(
     limit: Optional[int] = 1000,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -621,11 +621,11 @@ def espn_mlb_teams_site(
 
     Args:
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_teams -> polars DataFrame.
+        return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_teams_site()
@@ -645,7 +645,7 @@ def espn_mlb_teams_site(
 def espn_mlb_team(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -658,11 +658,11 @@ def espn_mlb_team(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team(team_id='4')
@@ -680,7 +680,7 @@ def espn_mlb_team(
 def espn_mlb_team_roster(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -693,11 +693,11 @@ def espn_mlb_team_roster(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_team_roster -> polars DataFrame.
+        return_parsed: parse the payload through parse_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_roster(team_id='4')
@@ -716,7 +716,7 @@ def espn_mlb_team_schedule(
     team_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -730,11 +730,11 @@ def espn_mlb_team_schedule(
     Args:
         team_id: team_id path parameter.
         season: season query parameter.
-        return_parsed: dispatch the raw payload through parse_team_schedule -> polars DataFrame.
+        return_parsed: parse the payload through parse_team_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_schedule(team_id='4')
@@ -754,7 +754,7 @@ def espn_mlb_team_schedule(
 def espn_mlb_team_record(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -767,11 +767,11 @@ def espn_mlb_team_record(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_record(team_id='4')
@@ -789,7 +789,7 @@ def espn_mlb_team_record(
 def espn_mlb_team_depthcharts(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -802,11 +802,11 @@ def espn_mlb_team_depthcharts(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_depthcharts(team_id='4')
@@ -824,7 +824,7 @@ def espn_mlb_team_depthcharts(
 def espn_mlb_team_injuries(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -837,11 +837,11 @@ def espn_mlb_team_injuries(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_injuries -> polars DataFrame.
+        return_parsed: parse the payload through parse_injuries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_injuries(team_id='4')
@@ -859,7 +859,7 @@ def espn_mlb_team_injuries(
 def espn_mlb_team_transactions(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -872,11 +872,11 @@ def espn_mlb_team_transactions(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_transactions(team_id='4')
@@ -894,7 +894,7 @@ def espn_mlb_team_transactions(
 def espn_mlb_team_history(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -907,11 +907,11 @@ def espn_mlb_team_history(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_history(team_id='4')
@@ -930,7 +930,7 @@ def espn_mlb_team_news(
     team_id: Union[int, str],
     limit: Optional[int] = 50,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -944,11 +944,11 @@ def espn_mlb_team_news(
     Args:
         team_id: team_id path parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_news -> polars DataFrame.
+        return_parsed: parse the payload through parse_news -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_news(team_id='4')
@@ -968,7 +968,7 @@ def espn_mlb_team_news(
 def espn_mlb_team_leaders(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -981,11 +981,11 @@ def espn_mlb_team_leaders(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_leaders(team_id='4')
@@ -1003,7 +1003,7 @@ def espn_mlb_team_leaders(
 def espn_mlb_player_info(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1016,11 +1016,11 @@ def espn_mlb_player_info(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_info(athlete_id='4239')
@@ -1038,7 +1038,7 @@ def espn_mlb_player_info(
 def espn_mlb_player_bio(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1051,11 +1051,11 @@ def espn_mlb_player_bio(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_bio(athlete_id='4239')
@@ -1073,7 +1073,7 @@ def espn_mlb_player_bio(
 def espn_mlb_player_news(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1086,11 +1086,11 @@ def espn_mlb_player_news(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_news -> polars DataFrame.
+        return_parsed: parse the payload through parse_news -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_news(athlete_id='4239')
@@ -1110,7 +1110,7 @@ def espn_mlb_standings(
     group: Optional[Union[int, str]] = None,
     standings_type: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1125,11 +1125,11 @@ def espn_mlb_standings(
         season: season query parameter.
         group: group query parameter.
         standings_type: type query parameter.
-        return_parsed: dispatch the raw payload through parse_standings -> polars DataFrame.
+        return_parsed: parse the payload through parse_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_standings()
@@ -1151,7 +1151,7 @@ def espn_mlb_standings(
 def espn_mlb_player_overview(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1164,11 +1164,11 @@ def espn_mlb_player_overview(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_athlete_overview -> polars DataFrame.
+        return_parsed: parse the payload through parse_athlete_overview -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_overview(athlete_id='4239')
@@ -1187,7 +1187,7 @@ def espn_mlb_player_stats_v3(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1201,11 +1201,11 @@ def espn_mlb_player_stats_v3(
     Args:
         athlete_id: athlete_id path parameter.
         season: season query parameter.
-        return_parsed: dispatch the raw payload through parse_athlete_stats -> polars DataFrame.
+        return_parsed: parse the payload through parse_athlete_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_stats_v3(athlete_id='4239')
@@ -1226,7 +1226,7 @@ def espn_mlb_player_gamelog(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1240,11 +1240,11 @@ def espn_mlb_player_gamelog(
     Args:
         athlete_id: athlete_id path parameter.
         season: season query parameter.
-        return_parsed: dispatch the raw payload through parse_athlete_gamelog -> polars DataFrame.
+        return_parsed: parse the payload through parse_athlete_gamelog -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_gamelog(athlete_id='4239')
@@ -1265,7 +1265,7 @@ def espn_mlb_player_splits(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1279,11 +1279,11 @@ def espn_mlb_player_splits(
     Args:
         athlete_id: athlete_id path parameter.
         season: season query parameter.
-        return_parsed: dispatch the raw payload through parse_athlete_splits -> polars DataFrame.
+        return_parsed: parse the payload through parse_athlete_splits -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_splits(athlete_id='4239')
@@ -1308,7 +1308,7 @@ def espn_mlb_leaders(
     page: Optional[int] = 1,
     sort: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1326,11 +1326,11 @@ def espn_mlb_leaders(
         limit: limit query parameter.
         page: page query parameter.
         sort: sort query parameter.
-        return_parsed: dispatch the raw payload through parse_leaders -> polars DataFrame.
+        return_parsed: parse the payload through parse_leaders -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_leaders()
@@ -1354,7 +1354,7 @@ def espn_mlb_leaders(
 
 def espn_mlb_league_root(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1366,11 +1366,11 @@ def espn_mlb_league_root(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb
 
     Args:
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_league_root()
@@ -1387,7 +1387,7 @@ def espn_mlb_league_root(
 
 def espn_mlb_season_pointer(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1399,11 +1399,11 @@ def espn_mlb_season_pointer(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/season
 
     Args:
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_pointer()
@@ -1421,7 +1421,7 @@ def espn_mlb_season_pointer(
 def espn_mlb_seasons(
     limit: Optional[int] = 200,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1434,11 +1434,11 @@ def espn_mlb_seasons(
 
     Args:
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_seasons()
@@ -1458,7 +1458,7 @@ def espn_mlb_seasons(
 def espn_mlb_season_info(
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1471,11 +1471,11 @@ def espn_mlb_season_info(
 
     Args:
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_info(season=2024)
@@ -1493,7 +1493,7 @@ def espn_mlb_season_info(
 def espn_mlb_season_types(
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1506,11 +1506,11 @@ def espn_mlb_season_types(
 
     Args:
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_types(season=2024)
@@ -1529,7 +1529,7 @@ def espn_mlb_season_type(
     season: Union[int, str],
     season_type: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1543,11 +1543,11 @@ def espn_mlb_season_type(
     Args:
         season: season path parameter.
         season_type: season_type path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_type(season=2024, season_type=2)
@@ -1567,7 +1567,7 @@ def espn_mlb_season_group(
     season_type: Union[int, str],
     group_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1582,11 +1582,11 @@ def espn_mlb_season_group(
         season: season path parameter.
         season_type: season_type path parameter.
         group_id: group_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_group(season=2024, season_type=2, group_id=80)
@@ -1605,7 +1605,7 @@ def espn_mlb_season_groups(
     season: Union[int, str],
     season_type: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1619,11 +1619,11 @@ def espn_mlb_season_groups(
     Args:
         season: season path parameter.
         season_type: season_type path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_groups(season=2024, season_type=2)
@@ -1644,7 +1644,7 @@ def espn_mlb_season_group_teams(
     group_id: Union[int, str],
     limit: Optional[int] = 500,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1660,11 +1660,11 @@ def espn_mlb_season_group_teams(
         season_type: season_type path parameter.
         group_id: group_id path parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_group_teams(season=2024, season_type=2, group_id=80)
@@ -1686,7 +1686,7 @@ def espn_mlb_season_group_children(
     season_type: Union[int, str],
     group_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1701,11 +1701,11 @@ def espn_mlb_season_group_children(
         season: season path parameter.
         season_type: season_type path parameter.
         group_id: group_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_group_children(season=2024, season_type=2, group_id=80)
@@ -1724,7 +1724,7 @@ def espn_mlb_season_type_leaders(
     season: Union[int, str],
     season_type: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1738,11 +1738,11 @@ def espn_mlb_season_type_leaders(
     Args:
         season: season path parameter.
         season_type: season_type path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_type_leaders(season=2024, season_type=2)
@@ -1761,7 +1761,7 @@ def espn_mlb_season_type_corrections(
     season: Union[int, str],
     season_type: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1775,11 +1775,11 @@ def espn_mlb_season_type_corrections(
     Args:
         season: season path parameter.
         season_type: season_type path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_type_corrections(season=2024, season_type=2)
@@ -1798,7 +1798,7 @@ def espn_mlb_season_weeks(
     season: Union[int, str],
     season_type: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1812,11 +1812,11 @@ def espn_mlb_season_weeks(
     Args:
         season: season path parameter.
         season_type: season_type path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_weeks(season=2024, season_type=2)
@@ -1836,7 +1836,7 @@ def espn_mlb_season_week(
     season_type: Union[int, str],
     week: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1851,11 +1851,11 @@ def espn_mlb_season_week(
         season: season path parameter.
         season_type: season_type path parameter.
         week: week path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_week(season=2024, season_type=2, week=1)
@@ -1876,7 +1876,7 @@ def espn_mlb_season_week_games(
     week: Union[int, str],
     limit: Optional[int] = 500,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1892,11 +1892,11 @@ def espn_mlb_season_week_games(
         season_type: season_type path parameter.
         week: week path parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_week_games(season=2024, season_type=2, week=1)
@@ -1917,7 +1917,7 @@ def espn_mlb_season_teams(
     season: Union[int, str],
     limit: Optional[int] = 500,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1931,11 +1931,11 @@ def espn_mlb_season_teams(
     Args:
         season: season path parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_teams(season=2024)
@@ -1956,7 +1956,7 @@ def espn_mlb_season_team(
     season: Union[int, str],
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1970,11 +1970,11 @@ def espn_mlb_season_team(
     Args:
         season: season path parameter.
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_team(season=2024, team_id='4')
@@ -1994,7 +1994,7 @@ def espn_mlb_season_players(
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2009,11 +2009,11 @@ def espn_mlb_season_players(
         season: season path parameter.
         limit: limit query parameter.
         page: page query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_players(season=2024)
@@ -2035,7 +2035,7 @@ def espn_mlb_season_coaches(
     season: Union[int, str],
     limit: Optional[int] = 200,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2049,11 +2049,11 @@ def espn_mlb_season_coaches(
     Args:
         season: season path parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_coaches -> polars DataFrame.
+        return_parsed: parse the payload through parse_coaches -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_coaches(season=2024)
@@ -2073,7 +2073,7 @@ def espn_mlb_season_coaches(
 def espn_mlb_season_draft(
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2086,11 +2086,11 @@ def espn_mlb_season_draft(
 
     Args:
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_draft -> polars DataFrame.
+        return_parsed: parse the payload through parse_draft -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_draft(season=2024)
@@ -2109,7 +2109,7 @@ def espn_mlb_season_draft_round_picks(
     season: Union[int, str],
     round_num: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2123,11 +2123,11 @@ def espn_mlb_season_draft_round_picks(
     Args:
         season: season path parameter.
         round_num: round_num path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_draft_round_picks(season=2024, round_num='1')
@@ -2145,7 +2145,7 @@ def espn_mlb_season_draft_round_picks(
 def espn_mlb_season_futures(
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2158,11 +2158,11 @@ def espn_mlb_season_futures(
 
     Args:
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_futures(season=2024)
@@ -2180,7 +2180,7 @@ def espn_mlb_season_futures(
 def espn_mlb_season_freeagents(
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2193,11 +2193,11 @@ def espn_mlb_season_freeagents(
 
     Args:
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_freeagents(season=2024)
@@ -2216,7 +2216,7 @@ def espn_mlb_season_powerindex(
     season: Union[int, str],
     team_id: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2230,11 +2230,11 @@ def espn_mlb_season_powerindex(
     Args:
         season: season path parameter.
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_powerindex(season=2024)
@@ -2254,7 +2254,7 @@ def espn_mlb_season_powerindex(
 def espn_mlb_season_powerindex_leaders(
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2267,11 +2267,11 @@ def espn_mlb_season_powerindex_leaders(
 
     Args:
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_powerindex_leaders(season=2024)
@@ -2289,7 +2289,7 @@ def espn_mlb_season_powerindex_leaders(
 def espn_mlb_season_awards(
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2302,11 +2302,11 @@ def espn_mlb_season_awards(
 
     Args:
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_season_awards(season=2024)
@@ -2326,7 +2326,7 @@ def espn_mlb_players_index(
     limit: Optional[int] = 100,
     page: Optional[int] = 1,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2341,11 +2341,11 @@ def espn_mlb_players_index(
         active: active query parameter.
         limit: limit query parameter.
         page: page query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_players_index()
@@ -2367,7 +2367,7 @@ def espn_mlb_players_index(
 def espn_mlb_player_core(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2380,11 +2380,11 @@ def espn_mlb_player_core(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_core(athlete_id='4239')
@@ -2403,7 +2403,7 @@ def espn_mlb_player_career_stats(
     athlete_id: Union[int, str],
     stat_type: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2417,11 +2417,11 @@ def espn_mlb_player_career_stats(
     Args:
         athlete_id: athlete_id path parameter.
         stat_type: stat_type path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_career_stats(athlete_id='4239')
@@ -2441,7 +2441,7 @@ def espn_mlb_player_career_stats(
 def espn_mlb_player_statisticslog(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2454,11 +2454,11 @@ def espn_mlb_player_statisticslog(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_statisticslog(athlete_id='4239')
@@ -2476,7 +2476,7 @@ def espn_mlb_player_statisticslog(
 def espn_mlb_player_eventlog(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2489,11 +2489,11 @@ def espn_mlb_player_eventlog(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_eventlog(athlete_id='4239')
@@ -2511,7 +2511,7 @@ def espn_mlb_player_eventlog(
 def espn_mlb_player_contracts(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2524,11 +2524,11 @@ def espn_mlb_player_contracts(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_contracts(athlete_id='4239')
@@ -2546,7 +2546,7 @@ def espn_mlb_player_contracts(
 def espn_mlb_player_awards(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2559,11 +2559,11 @@ def espn_mlb_player_awards(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_awards(athlete_id='4239')
@@ -2581,7 +2581,7 @@ def espn_mlb_player_awards(
 def espn_mlb_player_seasons(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2594,11 +2594,11 @@ def espn_mlb_player_seasons(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_seasons(athlete_id='4239')
@@ -2616,7 +2616,7 @@ def espn_mlb_player_seasons(
 def espn_mlb_player_records(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2629,11 +2629,11 @@ def espn_mlb_player_records(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_records(athlete_id='4239')
@@ -2651,7 +2651,7 @@ def espn_mlb_player_records(
 def espn_mlb_player_injuries(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2664,11 +2664,11 @@ def espn_mlb_player_injuries(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_injuries -> polars DataFrame.
+        return_parsed: parse the payload through parse_injuries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_injuries(athlete_id='4239')
@@ -2686,7 +2686,7 @@ def espn_mlb_player_injuries(
 def espn_mlb_player_notes(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2699,11 +2699,11 @@ def espn_mlb_player_notes(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_notes(athlete_id='4239')
@@ -2722,7 +2722,7 @@ def espn_mlb_player_vs_player(
     athlete_id: Union[int, str],
     opp_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2736,11 +2736,11 @@ def espn_mlb_player_vs_player(
     Args:
         athlete_id: athlete_id path parameter.
         opp_id: opp_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_vs_player(athlete_id='4239', opp_id='5')
@@ -2759,7 +2759,7 @@ def espn_mlb_games(
     dates: Optional[Union[int, str]] = None,
     limit: Optional[int] = 500,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2773,11 +2773,11 @@ def espn_mlb_games(
     Args:
         dates: dates query parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_games()
@@ -2798,7 +2798,7 @@ def espn_mlb_games(
 def espn_mlb_game(
     event_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2811,11 +2811,11 @@ def espn_mlb_game(
 
     Args:
         event_id: event_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game(event_id='401584793')
@@ -2834,7 +2834,7 @@ def espn_mlb_game_competition(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2848,11 +2848,11 @@ def espn_mlb_game_competition(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_competition(event_id='401584793')
@@ -2873,7 +2873,7 @@ def espn_mlb_game_teams(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2887,11 +2887,11 @@ def espn_mlb_game_teams(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_teams(event_id='401584793')
@@ -2913,7 +2913,7 @@ def espn_mlb_game_team(
     team_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2928,11 +2928,11 @@ def espn_mlb_game_team(
         event_id: event_id path parameter.
         team_id: team_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_team(event_id='401584793', team_id='4')
@@ -2954,7 +2954,7 @@ def espn_mlb_game_team_roster(
     team_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -2969,11 +2969,11 @@ def espn_mlb_game_team_roster(
         event_id: event_id path parameter.
         team_id: team_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_event_competitor_roster -> polars DataFrame.
+        return_parsed: parse the payload through parse_event_competitor_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_team_roster(event_id='401584793', team_id='4')
@@ -2995,7 +2995,7 @@ def espn_mlb_game_team_linescores(
     team_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3010,11 +3010,11 @@ def espn_mlb_game_team_linescores(
         event_id: event_id path parameter.
         team_id: team_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_event_competitor_linescores -> polars DataFrame.
+        return_parsed: parse the payload through parse_event_competitor_linescores -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_team_linescores(event_id='401584793', team_id='4')
@@ -3036,7 +3036,7 @@ def espn_mlb_game_team_statistics(
     team_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3051,11 +3051,11 @@ def espn_mlb_game_team_statistics(
         event_id: event_id path parameter.
         team_id: team_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_event_competitor_statistics -> polars DataFrame.
+        return_parsed: parse the payload through parse_event_competitor_statistics -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_team_statistics(event_id='401584793', team_id='4')
@@ -3077,7 +3077,7 @@ def espn_mlb_game_team_record(
     team_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3092,11 +3092,11 @@ def espn_mlb_game_team_record(
         event_id: event_id path parameter.
         team_id: team_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_team_record(event_id='401584793', team_id='4')
@@ -3118,7 +3118,7 @@ def espn_mlb_game_team_leaders(
     team_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3133,11 +3133,11 @@ def espn_mlb_game_team_leaders(
         event_id: event_id path parameter.
         team_id: team_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_team_leaders(event_id='401584793', team_id='4')
@@ -3158,7 +3158,7 @@ def espn_mlb_game_odds(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3172,11 +3172,11 @@ def espn_mlb_game_odds(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_odds(event_id='401584793')
@@ -3198,7 +3198,7 @@ def espn_mlb_game_probabilities(
     cid: Optional[Union[int, str]] = None,
     limit: Optional[int] = 300,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3213,11 +3213,11 @@ def espn_mlb_game_probabilities(
         event_id: event_id path parameter.
         cid: cid path parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_probabilities(event_id='401584793')
@@ -3241,7 +3241,7 @@ def espn_mlb_game_plays(
     cid: Optional[Union[int, str]] = None,
     limit: Optional[int] = 1000,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3256,11 +3256,11 @@ def espn_mlb_game_plays(
         event_id: event_id path parameter.
         cid: cid path parameter.
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_event_plays -> polars DataFrame.
+        return_parsed: parse the payload through parse_event_plays -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_plays(event_id='401584793')
@@ -3286,7 +3286,7 @@ def espn_mlb_game_play(
     play_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3301,11 +3301,11 @@ def espn_mlb_game_play(
         event_id: event_id path parameter.
         play_id: play_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_play(event_id='401584793', play_id='1')
@@ -3327,7 +3327,7 @@ def espn_mlb_game_play_personnel(
     play_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3342,11 +3342,11 @@ def espn_mlb_game_play_personnel(
         event_id: event_id path parameter.
         play_id: play_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_play_personnel(event_id='401584793', play_id='1')
@@ -3367,7 +3367,7 @@ def espn_mlb_game_situation(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3381,11 +3381,11 @@ def espn_mlb_game_situation(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_situation(event_id='401584793')
@@ -3406,7 +3406,7 @@ def espn_mlb_game_status(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3420,11 +3420,11 @@ def espn_mlb_game_status(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_status(event_id='401584793')
@@ -3447,7 +3447,7 @@ def espn_mlb_game_officials(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3461,11 +3461,11 @@ def espn_mlb_game_officials(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_officials(event_id='401584793')
@@ -3486,7 +3486,7 @@ def espn_mlb_game_broadcasts(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3500,11 +3500,11 @@ def espn_mlb_game_broadcasts(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_broadcasts(event_id='401584793')
@@ -3525,7 +3525,7 @@ def espn_mlb_game_predictor(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3539,11 +3539,11 @@ def espn_mlb_game_predictor(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_predictor(event_id='401584793')
@@ -3564,7 +3564,7 @@ def espn_mlb_game_powerindex(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3578,11 +3578,11 @@ def espn_mlb_game_powerindex(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_powerindex(event_id='401584793')
@@ -3603,7 +3603,7 @@ def espn_mlb_game_propbets(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3617,11 +3617,11 @@ def espn_mlb_game_propbets(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_propbets(event_id='401584793')
@@ -3644,7 +3644,7 @@ def espn_mlb_game_leaders(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3658,11 +3658,11 @@ def espn_mlb_game_leaders(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_leaders(event_id='401584793')
@@ -3685,7 +3685,7 @@ def espn_mlb_game_scoringplays(
     event_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3699,11 +3699,11 @@ def espn_mlb_game_scoringplays(
     Args:
         event_id: event_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_scoringplays(event_id='401584793')
@@ -3725,7 +3725,7 @@ def espn_mlb_game_official_detail(
     official_id: Union[int, str],
     cid: Optional[Union[int, str]] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3740,11 +3740,11 @@ def espn_mlb_game_official_detail(
         event_id: event_id path parameter.
         official_id: official_id path parameter.
         cid: cid path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_game_official_detail(event_id='401584793', official_id='1')
@@ -3764,7 +3764,7 @@ def espn_mlb_game_official_detail(
 def espn_mlb_teams_core(
     limit: Optional[int] = 500,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3777,11 +3777,11 @@ def espn_mlb_teams_core(
 
     Args:
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_teams -> polars DataFrame.
+        return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_teams_core()
@@ -3801,7 +3801,7 @@ def espn_mlb_teams_core(
 def espn_mlb_team_core(
     team_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3814,11 +3814,11 @@ def espn_mlb_team_core(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_team_core(team_id='4')
@@ -3836,7 +3836,7 @@ def espn_mlb_team_core(
 def espn_mlb_venues(
     limit: Optional[int] = 200,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3849,11 +3849,11 @@ def espn_mlb_venues(
 
     Args:
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_venues()
@@ -3873,7 +3873,7 @@ def espn_mlb_venues(
 def espn_mlb_venue(
     venue_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3886,11 +3886,11 @@ def espn_mlb_venue(
 
     Args:
         venue_id: venue_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_venue(venue_id='3663')
@@ -3908,7 +3908,7 @@ def espn_mlb_venue(
 def espn_mlb_franchises(
     limit: Optional[int] = 200,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3921,11 +3921,11 @@ def espn_mlb_franchises(
 
     Args:
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_franchises()
@@ -3945,7 +3945,7 @@ def espn_mlb_franchises(
 def espn_mlb_franchise(
     franchise_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3958,11 +3958,11 @@ def espn_mlb_franchise(
 
     Args:
         franchise_id: franchise_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_franchise(franchise_id='2')
@@ -3980,7 +3980,7 @@ def espn_mlb_franchise(
 def espn_mlb_coaches(
     limit: Optional[int] = 200,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -3993,11 +3993,11 @@ def espn_mlb_coaches(
 
     Args:
         limit: limit query parameter.
-        return_parsed: dispatch the raw payload through parse_coaches -> polars DataFrame.
+        return_parsed: parse the payload through parse_coaches -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_coaches()
@@ -4017,7 +4017,7 @@ def espn_mlb_coaches(
 def espn_mlb_coach(
     coach_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4030,11 +4030,11 @@ def espn_mlb_coach(
 
     Args:
         coach_id: coach_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_coach(coach_id='1')
@@ -4053,7 +4053,7 @@ def espn_mlb_coach_record(
     coach_id: Union[int, str],
     record_type: Optional[Union[int, str]] = 0,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4067,11 +4067,11 @@ def espn_mlb_coach_record(
     Args:
         coach_id: coach_id path parameter.
         record_type: record_type path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_coach_record(coach_id='1')
@@ -4090,7 +4090,7 @@ def espn_mlb_coach_season(
     coach_id: Union[int, str],
     season: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4104,11 +4104,11 @@ def espn_mlb_coach_season(
     Args:
         coach_id: coach_id path parameter.
         season: season path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_coach_season(coach_id='1', season=2024)
@@ -4125,7 +4125,7 @@ def espn_mlb_coach_season(
 
 def espn_mlb_positions(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4137,11 +4137,11 @@ def espn_mlb_positions(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_positions()
@@ -4159,7 +4159,7 @@ def espn_mlb_positions(
 def espn_mlb_position(
     position_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4172,11 +4172,11 @@ def espn_mlb_position(
 
     Args:
         position_id: position_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_position(position_id='1')
@@ -4193,7 +4193,7 @@ def espn_mlb_position(
 
 def espn_mlb_tournaments(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4205,11 +4205,11 @@ def espn_mlb_tournaments(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/tournaments
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_tournaments()
@@ -4226,7 +4226,7 @@ def espn_mlb_tournaments(
 
 def espn_mlb_awards(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4238,11 +4238,11 @@ def espn_mlb_awards(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/awards
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_awards()
@@ -4260,7 +4260,7 @@ def espn_mlb_awards(
 def espn_mlb_award(
     award_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4273,11 +4273,11 @@ def espn_mlb_award(
 
     Args:
         award_id: award_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_award(award_id='1')
@@ -4294,7 +4294,7 @@ def espn_mlb_award(
 
 def espn_mlb_standings_core(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4306,11 +4306,11 @@ def espn_mlb_standings_core(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/standings
 
     Args:
-        return_parsed: dispatch the raw payload through parse_standings -> polars DataFrame.
+        return_parsed: parse the payload through parse_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_standings_core()
@@ -4327,7 +4327,7 @@ def espn_mlb_standings_core(
 
 def espn_mlb_leaders_core(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4339,11 +4339,11 @@ def espn_mlb_leaders_core(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/leaders
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_leaders_core()
@@ -4360,7 +4360,7 @@ def espn_mlb_leaders_core(
 
 def espn_mlb_league_notes(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4372,11 +4372,11 @@ def espn_mlb_league_notes(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/notes
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_league_notes()
@@ -4393,7 +4393,7 @@ def espn_mlb_league_notes(
 
 def espn_mlb_talentpicks(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4405,11 +4405,11 @@ def espn_mlb_talentpicks(
     Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/talentpicks
 
     Args:
-        return_parsed: dispatch the raw payload through parse_items -> polars DataFrame.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_talentpicks()
@@ -4427,7 +4427,7 @@ def espn_mlb_talentpicks(
 def espn_mlb_player_hotzones(
     athlete_id: Union[int, str],
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -4440,11 +4440,11 @@ def espn_mlb_player_hotzones(
 
     Args:
         athlete_id: athlete_id path parameter.
-        return_parsed: dispatch the raw payload through parse_single_entity -> polars DataFrame.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> espn_mlb_player_hotzones(athlete_id='4239')

@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get, format_nhl_season
+from sportsdataverse._codegen_runtime import _get
 from sportsdataverse.nhl.nhl_records_parsers import parse_nhl_records
 
 __all__ = [
@@ -59,7 +59,7 @@ __all__ = [
 
 def nhl_records_awards(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -69,11 +69,11 @@ def nhl_records_awards(
     Example URL: https://records.nhl.com/site/api/award-details
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_awards()
@@ -92,7 +92,7 @@ def nhl_records_awards(
 def nhl_records_awards_by_franchise(
     franchise_id: int,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -103,11 +103,11 @@ def nhl_records_awards_by_franchise(
 
     Args:
         franchise_id: franchise_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_awards_by_franchise(franchise_id=1)
@@ -127,7 +127,7 @@ def nhl_records_awards_trophy_season(
     trophy_id: int,
     season_id: int,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -139,11 +139,11 @@ def nhl_records_awards_trophy_season(
     Args:
         trophy_id: trophy_id path parameter.
         season_id: season_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_awards_trophy_season(trophy_id=1, season_id='X')
@@ -161,7 +161,7 @@ def nhl_records_awards_trophy_season(
 
 def nhl_records_coaches(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -171,11 +171,11 @@ def nhl_records_coaches(
     Example URL: https://records.nhl.com/site/api/coach
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_coaches()
@@ -194,7 +194,7 @@ def nhl_records_coaches(
 def nhl_records_coach(
     coach_id: int,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -205,11 +205,11 @@ def nhl_records_coach(
 
     Args:
         coach_id: coach_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_coach(coach_id='X')
@@ -228,7 +228,7 @@ def nhl_records_coach(
 def nhl_records_coach_career(
     coach_id: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -239,17 +239,17 @@ def nhl_records_coach_career(
 
     Args:
         coach_id: coach_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_coach_career()
     """
     __url = (
-        f"https://records.nhl.com/site/api/coach-career-records"
+        "https://records.nhl.com/site/api/coach-career-records"
         if coach_id is None
         else f"https://records.nhl.com/site/api/coach-career-records/{coach_id}"
     )
@@ -266,7 +266,7 @@ def nhl_records_coach_career(
 
 def nhl_records_coach_career_with_playoffs(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -276,11 +276,11 @@ def nhl_records_coach_career_with_playoffs(
     Example URL: https://records.nhl.com/site/api/coach-career-records-regular-plus-playoffs
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_coach_career_with_playoffs()
@@ -299,7 +299,7 @@ def nhl_records_coach_career_with_playoffs(
 def nhl_records_coach_franchise(
     coach_id: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -310,17 +310,17 @@ def nhl_records_coach_franchise(
 
     Args:
         coach_id: coach_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_coach_franchise()
     """
     __url = (
-        f"https://records.nhl.com/site/api/coach-franchise-records"
+        "https://records.nhl.com/site/api/coach-franchise-records"
         if coach_id is None
         else f"https://records.nhl.com/site/api/coach-franchise-records/{coach_id}"
     )
@@ -337,7 +337,7 @@ def nhl_records_coach_franchise(
 
 def nhl_records_coach_stanley_cup(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -347,11 +347,11 @@ def nhl_records_coach_stanley_cup(
     Example URL: https://records.nhl.com/site/api/coach-stanley-cup-streak
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_coach_stanley_cup()
@@ -369,7 +369,7 @@ def nhl_records_coach_stanley_cup(
 
 def nhl_records_franchises(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -379,11 +379,11 @@ def nhl_records_franchises(
     Example URL: https://records.nhl.com/site/api/franchise
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_franchises()
@@ -401,7 +401,7 @@ def nhl_records_franchises(
 
 def nhl_records_franchise_detail(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -411,11 +411,11 @@ def nhl_records_franchise_detail(
     Example URL: https://records.nhl.com/site/api/franchise-detail
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_franchise_detail()
@@ -433,7 +433,7 @@ def nhl_records_franchise_detail(
 
 def nhl_records_franchise_team_totals(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -443,11 +443,11 @@ def nhl_records_franchise_team_totals(
     Example URL: https://records.nhl.com/site/api/franchise-team-totals
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_franchise_team_totals()
@@ -465,7 +465,7 @@ def nhl_records_franchise_team_totals(
 
 def nhl_records_franchise_season_results(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -475,11 +475,11 @@ def nhl_records_franchise_season_results(
     Example URL: https://records.nhl.com/site/api/franchise-season-results
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_franchise_season_results()
@@ -497,7 +497,7 @@ def nhl_records_franchise_season_results(
 
 def nhl_records_franchise_playoff_appearances(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -507,11 +507,11 @@ def nhl_records_franchise_playoff_appearances(
     Example URL: https://records.nhl.com/site/api/franchise-playoff-appearances
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_franchise_playoff_appearances()
@@ -529,7 +529,7 @@ def nhl_records_franchise_playoff_appearances(
 
 def nhl_records_franchise_totals(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -539,11 +539,11 @@ def nhl_records_franchise_totals(
     Example URL: https://records.nhl.com/site/api/franchise-totals
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_franchise_totals()
@@ -561,7 +561,7 @@ def nhl_records_franchise_totals(
 
 def nhl_records_all_time_record_vs_franchise(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -571,11 +571,11 @@ def nhl_records_all_time_record_vs_franchise(
     Example URL: https://records.nhl.com/site/api/all-time-record-vs-franchise
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_all_time_record_vs_franchise()
@@ -593,7 +593,7 @@ def nhl_records_all_time_record_vs_franchise(
 
 def nhl_records_skater_career_stats(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -603,11 +603,11 @@ def nhl_records_skater_career_stats(
     Example URL: https://records.nhl.com/site/api/skater-career-statistics
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_skater_career_stats()
@@ -625,7 +625,7 @@ def nhl_records_skater_career_stats(
 
 def nhl_records_skater_career_leaders(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -635,11 +635,11 @@ def nhl_records_skater_career_leaders(
     Example URL: https://records.nhl.com/site/api/skater-career-leaders
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_skater_career_leaders()
@@ -657,7 +657,7 @@ def nhl_records_skater_career_leaders(
 
 def nhl_records_consecutive_100pt_seasons(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -667,11 +667,11 @@ def nhl_records_consecutive_100pt_seasons(
     Example URL: https://records.nhl.com/site/api/consecutive-100-point-seasons
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_consecutive_100pt_seasons()
@@ -689,7 +689,7 @@ def nhl_records_consecutive_100pt_seasons(
 
 def nhl_records_goalie_career_stats(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -699,11 +699,11 @@ def nhl_records_goalie_career_stats(
     Example URL: https://records.nhl.com/site/api/goalie-career-stats
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_career_stats()
@@ -721,7 +721,7 @@ def nhl_records_goalie_career_stats(
 
 def nhl_records_goalie_career_stats_with_playoffs(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -731,11 +731,11 @@ def nhl_records_goalie_career_stats_with_playoffs(
     Example URL: https://records.nhl.com/site/api/goalie_career_stats_incl_playoffs
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_career_stats_with_playoffs()
@@ -753,7 +753,7 @@ def nhl_records_goalie_career_stats_with_playoffs(
 
 def nhl_records_goalie_season_stats(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -763,11 +763,11 @@ def nhl_records_goalie_season_stats(
     Example URL: https://records.nhl.com/site/api/goalie-season-stats
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_season_stats()
@@ -785,7 +785,7 @@ def nhl_records_goalie_season_stats(
 
 def nhl_records_goalie_win_streak(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -795,11 +795,11 @@ def nhl_records_goalie_win_streak(
     Example URL: https://records.nhl.com/site/api/goalie-win-streak
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_win_streak()
@@ -817,7 +817,7 @@ def nhl_records_goalie_win_streak(
 
 def nhl_records_goalie_shutout_streak(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -827,11 +827,11 @@ def nhl_records_goalie_shutout_streak(
     Example URL: https://records.nhl.com/site/api/goalie-shutout-streak
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_shutout_streak()
@@ -849,7 +849,7 @@ def nhl_records_goalie_shutout_streak(
 
 def nhl_records_goalie_win_plateaus(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -859,11 +859,11 @@ def nhl_records_goalie_win_plateaus(
     Example URL: https://records.nhl.com/site/api/goalie-win-plateaus
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_win_plateaus()
@@ -881,7 +881,7 @@ def nhl_records_goalie_win_plateaus(
 
 def nhl_records_goalie_playoff_streak(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -891,11 +891,11 @@ def nhl_records_goalie_playoff_streak(
     Example URL: https://records.nhl.com/site/api/goalie-playoff-streak
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_playoff_streak()
@@ -913,7 +913,7 @@ def nhl_records_goalie_playoff_streak(
 
 def nhl_records_goalie_undefeated_streak(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -923,11 +923,11 @@ def nhl_records_goalie_undefeated_streak(
     Example URL: https://records.nhl.com/site/api/goalie-undefeated-streak
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_goalie_undefeated_streak()
@@ -946,7 +946,7 @@ def nhl_records_goalie_undefeated_streak(
 def nhl_records_draft(
     draft_id: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -957,17 +957,17 @@ def nhl_records_draft(
 
     Args:
         draft_id: draft_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_draft()
     """
     __url = (
-        f"https://records.nhl.com/site/api/draft"
+        "https://records.nhl.com/site/api/draft"
         if draft_id is None
         else f"https://records.nhl.com/site/api/draft/{draft_id}"
     )
@@ -985,7 +985,7 @@ def nhl_records_draft(
 def nhl_records_draft_by_team(
     team_id: int,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -996,11 +996,11 @@ def nhl_records_draft_by_team(
 
     Args:
         team_id: team_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_draft_by_team(team_id=10)
@@ -1019,7 +1019,7 @@ def nhl_records_draft_by_team(
 def nhl_records_draft_prospect(
     prospect_id: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1030,17 +1030,17 @@ def nhl_records_draft_prospect(
 
     Args:
         prospect_id: prospect_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_draft_prospect()
     """
     __url = (
-        f"https://records.nhl.com/site/api/draft-prospect"
+        "https://records.nhl.com/site/api/draft-prospect"
         if prospect_id is None
         else f"https://records.nhl.com/site/api/draft-prospect/{prospect_id}"
     )
@@ -1057,7 +1057,7 @@ def nhl_records_draft_prospect(
 
 def nhl_records_draft_lottery_odds(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1067,11 +1067,11 @@ def nhl_records_draft_lottery_odds(
     Example URL: https://records.nhl.com/site/api/draft-lottery-odds
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_draft_lottery_odds()
@@ -1089,7 +1089,7 @@ def nhl_records_draft_lottery_odds(
 
 def nhl_records_expansion_draft_picks(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1099,11 +1099,11 @@ def nhl_records_expansion_draft_picks(
     Example URL: https://records.nhl.com/site/api/expansion-draft-picks
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_expansion_draft_picks()
@@ -1121,7 +1121,7 @@ def nhl_records_expansion_draft_picks(
 
 def nhl_records_allstar_skater_career(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1131,11 +1131,11 @@ def nhl_records_allstar_skater_career(
     Example URL: https://records.nhl.com/site/api/all-star-skater-career-stats
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_allstar_skater_career()
@@ -1153,7 +1153,7 @@ def nhl_records_allstar_skater_career(
 
 def nhl_records_allstar_goalie_career(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1163,11 +1163,11 @@ def nhl_records_allstar_goalie_career(
     Example URL: https://records.nhl.com/site/api/all-star-goaltender-career-stats
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_allstar_goalie_career()
@@ -1185,7 +1185,7 @@ def nhl_records_allstar_goalie_career(
 
 def nhl_records_allstar_coach_career(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1195,11 +1195,11 @@ def nhl_records_allstar_coach_career(
     Example URL: https://records.nhl.com/site/api/all-star-coach-career-stats
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_allstar_coach_career()
@@ -1217,7 +1217,7 @@ def nhl_records_allstar_coach_career(
 
 def nhl_records_allstar_skater_game(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1227,11 +1227,11 @@ def nhl_records_allstar_skater_game(
     Example URL: https://records.nhl.com/site/api/all-star-skater-game-stats
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_allstar_skater_game()
@@ -1249,7 +1249,7 @@ def nhl_records_allstar_skater_game(
 
 def nhl_records_allstar_goalie_game(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1259,11 +1259,11 @@ def nhl_records_allstar_goalie_game(
     Example URL: https://records.nhl.com/site/api/all-star-goaltender-game-stats
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_allstar_goalie_game()
@@ -1281,7 +1281,7 @@ def nhl_records_allstar_goalie_game(
 
 def nhl_records_attendance(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1291,11 +1291,11 @@ def nhl_records_attendance(
     Example URL: https://records.nhl.com/site/api/attendance
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_attendance()
@@ -1313,7 +1313,7 @@ def nhl_records_attendance(
 
 def nhl_records_hof_players(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1323,11 +1323,11 @@ def nhl_records_hof_players(
     Example URL: https://records.nhl.com/site/api/hof/players
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_hof_players()
@@ -1346,7 +1346,7 @@ def nhl_records_hof_players(
 def nhl_records_hof_players_by_office(
     office_id: int,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1357,11 +1357,11 @@ def nhl_records_hof_players_by_office(
 
     Args:
         office_id: office_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_hof_players_by_office(office_id='X')
@@ -1380,7 +1380,7 @@ def nhl_records_hof_players_by_office(
 def nhl_records_gm_career(
     gm_id: Optional[int] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1391,17 +1391,17 @@ def nhl_records_gm_career(
 
     Args:
         gm_id: gm_id path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_gm_career()
     """
     __url = (
-        f"https://records.nhl.com/site/api/general-manager-career-records"
+        "https://records.nhl.com/site/api/general-manager-career-records"
         if gm_id is None
         else f"https://records.nhl.com/site/api/general-manager/{gm_id}"
     )
@@ -1418,7 +1418,7 @@ def nhl_records_gm_career(
 
 def nhl_records_gm_franchise(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1428,11 +1428,11 @@ def nhl_records_gm_franchise(
     Example URL: https://records.nhl.com/site/api/general-manager-franchise-records
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_gm_franchise()
@@ -1450,7 +1450,7 @@ def nhl_records_gm_franchise(
 
 def nhl_records_home_team_record(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1460,11 +1460,11 @@ def nhl_records_home_team_record(
     Example URL: https://records.nhl.com/site/api/home-team-record
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_home_team_record()
@@ -1482,7 +1482,7 @@ def nhl_records_home_team_record(
 
 def nhl_records_away_team_record(
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -1492,11 +1492,11 @@ def nhl_records_away_team_record(
     Example URL: https://records.nhl.com/site/api/away-team-record
 
     Args:
-        return_parsed: dispatch the raw payload through parse_nhl_records -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_records -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_records_away_team_record()

@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get, format_nhl_season
+from sportsdataverse._codegen_runtime import _get
 from sportsdataverse.nhl.nhl_stats_rest_parsers import parse_nhl_stats_rest
 
 __all__ = [
@@ -145,7 +145,7 @@ def nhl_stats_rest_content_module(
 def nhl_stats_rest_country(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -156,11 +156,11 @@ def nhl_stats_rest_country(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_country()
@@ -179,7 +179,7 @@ def nhl_stats_rest_country(
 def nhl_stats_rest_draft(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -190,11 +190,11 @@ def nhl_stats_rest_draft(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_draft()
@@ -213,7 +213,7 @@ def nhl_stats_rest_draft(
 def nhl_stats_rest_franchise(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -224,11 +224,11 @@ def nhl_stats_rest_franchise(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_franchise()
@@ -247,7 +247,7 @@ def nhl_stats_rest_franchise(
 def nhl_stats_rest_game(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -258,11 +258,11 @@ def nhl_stats_rest_game(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_game()
@@ -281,7 +281,7 @@ def nhl_stats_rest_game(
 def nhl_stats_rest_glossary(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -292,11 +292,11 @@ def nhl_stats_rest_glossary(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_glossary()
@@ -316,7 +316,7 @@ def nhl_stats_rest_goalie_report(
     report: str,
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -328,11 +328,11 @@ def nhl_stats_rest_goalie_report(
     Args:
         report: report path parameter.
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_goalie_report(report='summary')
@@ -352,7 +352,7 @@ def nhl_stats_rest_leaders_goalies(
     attribute: str,
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -364,11 +364,11 @@ def nhl_stats_rest_leaders_goalies(
     Args:
         attribute: attribute path parameter.
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_leaders_goalies(attribute='X')
@@ -388,7 +388,7 @@ def nhl_stats_rest_leaders_skaters(
     attribute: str,
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -400,11 +400,11 @@ def nhl_stats_rest_leaders_skaters(
     Args:
         attribute: attribute path parameter.
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_leaders_skaters(attribute='X')
@@ -423,7 +423,7 @@ def nhl_stats_rest_leaders_skaters(
 def nhl_stats_rest_milestones_goalies(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -434,11 +434,11 @@ def nhl_stats_rest_milestones_goalies(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_milestones_goalies()
@@ -457,7 +457,7 @@ def nhl_stats_rest_milestones_goalies(
 def nhl_stats_rest_milestones_skaters(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -468,11 +468,11 @@ def nhl_stats_rest_milestones_skaters(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_milestones_skaters()
@@ -491,7 +491,7 @@ def nhl_stats_rest_milestones_skaters(
 def nhl_stats_rest_players(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -502,11 +502,11 @@ def nhl_stats_rest_players(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_players()
@@ -525,7 +525,7 @@ def nhl_stats_rest_players(
 def nhl_stats_rest_season(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -536,11 +536,11 @@ def nhl_stats_rest_season(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_season()
@@ -559,7 +559,7 @@ def nhl_stats_rest_season(
 def nhl_stats_rest_shiftcharts(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -570,11 +570,11 @@ def nhl_stats_rest_shiftcharts(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_shiftcharts()
@@ -594,7 +594,7 @@ def nhl_stats_rest_skater_report(
     report: str,
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -606,11 +606,11 @@ def nhl_stats_rest_skater_report(
     Args:
         report: report path parameter.
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_skater_report(report='summary')
@@ -629,7 +629,7 @@ def nhl_stats_rest_skater_report(
 def nhl_stats_rest_team(
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -640,11 +640,11 @@ def nhl_stats_rest_team(
 
     Args:
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_team()
@@ -664,7 +664,7 @@ def nhl_stats_rest_team_by_id(
     team_id: int,
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -676,11 +676,11 @@ def nhl_stats_rest_team_by_id(
     Args:
         team_id: team_id path parameter.
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_team_by_id(team_id=10)
@@ -700,7 +700,7 @@ def nhl_stats_rest_team_report(
     report: str,
     lang: Optional[str] = "en",
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -712,11 +712,11 @@ def nhl_stats_rest_team_report(
     Args:
         report: report path parameter.
         lang: lang path parameter.
-        return_parsed: dispatch the raw payload through parse_nhl_stats_rest -> polars DataFrame.
+        return_parsed: parse the payload through parse_nhl_stats_rest -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        polars/pandas DataFrame when ``return_parsed=True``, else the raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_stats_rest_team_report(report='summary')
