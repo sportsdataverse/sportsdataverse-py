@@ -119,7 +119,7 @@ ESPN endpoint.
 | `ejected` | character | Ejected. |
 | `reason` | character | Reason. |
 | `completions/passing_attempts` | character |  |
-| `passing_yards` | character |  |
+| `passing_yards` | character | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
 | `yards_per_pass_attempt` | character |  |
 | `passing_touchdowns` | character |  |
 | `interceptions` | character | Passing interceptions. |
@@ -129,8 +129,8 @@ ESPN endpoint.
 | `yards_per_rush_attempt` | character | Team yards per rush attempt. |
 | `rushing_touchdowns` | character |  |
 | `long_rushing` | character |  |
-| `receptions` | character |  |
-| `receiving_yards` | character |  |
+| `receptions` | character | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `receiving_yards` | character | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
 | `yards_per_reception` | character |  |
 | `receiving_touchdowns` | character |  |
 | `long_reception` | character |  |

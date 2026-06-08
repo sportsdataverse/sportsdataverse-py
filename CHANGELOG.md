@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
+  - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
   - [Bug fixes](#bug-fixes)
@@ -101,6 +102,23 @@
 - Added `tests/test_loader_parity.py` covering importability, `__all__` membership,
   docstring-based forwarding assertions, and live alias shape-parity + manifest tests
   (gated behind `SDV_PY_LIVE_TESTS=1`).
+
+### Documentation — NFL return-table descriptions mined from nflverse
+
+- Extended `tools/codegen/build_r_col_descriptions.py` with two nflverse source
+  parsers: `mine_csv_dictionaries()` reads nflreadr's canonical
+  `data-raw/dictionary_*.csv` field docs (delimiter-sniffing for the
+  semicolon-delimited NGS file, BOM-stripping for `roster_status`, and
+  case-insensitive Field/Description column resolution across 6 header variants),
+  and `mine_item_list()` reads nflfastR's `data-raw/variable_list.txt`
+  (`\item{Field}{Description}` form). Yields `nflreadr` (941 columns) and
+  `nflfastR` (372 columns) dictionaries in `r_column_descriptions.yaml`.
+- Mapped `nfl → nflreadr` in `generate.py`'s `_LEAGUE_R_PACKAGE`; nflfastR's
+  fields still contribute via the `_merged` cross-package fallback.
+- NFL generated reference-page description fill rose from ~36% to ~85%. The
+  enlarged `_merged` union (7.3k → 8.1k columns) also backfilled previously-blank
+  shared football/stat columns on the CFB and MLB reference pages
+  (e.g. `passing_yards`, `receptions`, `kicker_player_name`, `name_short`).
 
 ## 0.0.55 Release: June 8, 2026
 

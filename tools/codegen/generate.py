@@ -176,7 +176,9 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 # Render-time column-description fill from the mined SDV R-package dictionary.
 #
 # A prior codegen step mined per-column descriptions from the SDV R packages
-# (cfbfastR / hoopR / wehoop / baseballr) into r_column_descriptions.yaml, shape:
+# (cfbfastR / hoopR / wehoop / baseballr / fastRhockey) plus the nflverse data
+# dictionaries (nflreadr CSVs + nflfastR variable list) into
+# r_column_descriptions.yaml, shape:
 #   {package: {col_name: description}, ..., _merged: {col_name: description}}
 # At RENDER time (NOT capture) we backfill any blank return-table description
 # cell from this dictionary, keyed by column name and league-aware package. A
@@ -186,8 +188,10 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 
 _R_DICT_FILE = ROOT / "tools" / "codegen" / "r_column_descriptions.yaml"
 
-# League prefix -> SDV R package whose @return tables describe its columns.
-# nfl/pwhl have no package, so they resolve via the ``_merged`` fallback.
+# League prefix -> R package whose column docs describe its columns. nfl maps to
+# nflreadr (canonical nflverse dictionaries); nflfastR's variable list still
+# contributes via the ``_merged`` fallback. Only pwhl has no package and
+# resolves entirely via ``_merged``.
 _LEAGUE_R_PACKAGE = {
     "cfb": "cfbfastR",
     "nba": "hoopR",
@@ -196,6 +200,7 @@ _LEAGUE_R_PACKAGE = {
     "wbb": "wehoop",
     "mlb": "baseballr",
     "nhl": "fastRhockey",
+    "nfl": "nflreadr",
 }
 
 
@@ -227,7 +232,7 @@ def _r_col_desc(league: str | None, col: str) -> str:
     """Mined description for ``col`` for ``league``'s R package, else ``_merged``.
 
     Resolution: league package dict -> ``_merged`` union -> ``""``. ``league=None``
-    (or a league with no package, e.g. nfl/nhl/pwhl) skips straight to ``_merged``."""
+    (or a league with no package, e.g. pwhl) skips straight to ``_merged``."""
     if not col:
         return ""
     val = _r_pkg_dict(league).get(col)

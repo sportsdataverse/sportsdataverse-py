@@ -30,10 +30,10 @@ ESPN endpoint.
 | `game_id` | character | ESPN event id. |
 | `uid` | character | ESPN UID string. |
 | `date` | character | Date in YYYY-MM-DD format. |
-| `name` | character | Display name. |
-| `short_name` | character | Short display name. |
+| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
+| `short_name` | character | Player short name (i.e. "F.Last") |
 | `season_year` | integer | Season year string ('YYYY-YY' format). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `season_type` | integer | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `season_slug` | character | Season slug. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
@@ -63,7 +63,7 @@ ESPN endpoint.
 | `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_logo` | character | Home team logo URL. |
-| `home_score` | character | Home team score at the time of the play. |
+| `home_score` | character | The number of points the home team scored. Is NA for games which haven't yet been played. |
 | `home_winner` | logical | Whether the home team won. |
 | `home_rank` | character | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
@@ -74,7 +74,7 @@ ESPN endpoint.
 | `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_logo` | character | Away team logo URL. |
-| `away_score` | character | Away team score at the time of the play. |
+| `away_score` | character | The number of points the away team scored. Is NA for games which haven't yet been played. |
 | `away_winner` | logical | Whether the away team won. |
 | `away_rank` | character | Away team rank (if ranked). |
 
@@ -119,20 +119,20 @@ ESPN endpoint.
 | `ejected` | character | Ejected. |
 | `reason` | character | Reason. |
 | `completions/passing_attempts` | character |  |
-| `passing_yards` | character |  |
+| `passing_yards` | character | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
 | `yards_per_pass_attempt` | character |  |
 | `passing_touchdowns` | character |  |
-| `interceptions` | character | Passing interceptions. |
+| `interceptions` | character | The number of interceptions thrown. |
 | `sacks_sack_yards_lost` | character |  |
 | `adj_qbr` | character |  |
 | `qb_rating` | character |  |
 | `rushing_attempts` | character | Team rushing attempts. |
-| `rushing_yards` | character | Team rushing yards. |
+| `rushing_yards` | character | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
 | `yards_per_rush_attempt` | character | Team yards per rush attempt. |
 | `rushing_touchdowns` | character |  |
 | `long_rushing` | character |  |
-| `receptions` | character |  |
-| `receiving_yards` | character |  |
+| `receptions` | character | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `receiving_yards` | character | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
 | `yards_per_reception` | character |  |
 | `receiving_touchdowns` | character |  |
 | `long_reception` | character |  |
@@ -142,7 +142,7 @@ ESPN endpoint.
 | `fumbles_recovered` | character | Team fumbles recovered. |
 | `total_tackles` | character |  |
 | `solo_tackles` | character |  |
-| `sacks` | character | Team sacks. |
+| `sacks` | character | The Number of times sacked. |
 | `tackles_for_loss` | character | Team tackles for a loss. |
 | `passes_defended` | character |  |
 | `qb_hits` | character |  |
@@ -243,7 +243,7 @@ ESPN endpoint.
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
-| `week` | integer | Week number. |
+| `week` | integer | Season week. |
 | `game_note` | character |  |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
@@ -365,10 +365,10 @@ ESPN endpoint.
 |---|---|---|
 | `id` | character | Id. |
 | `description` | character | Description. |
-| `yards` | integer | Total yards gained on the drive. |
+| `yards` | integer | The number of receiving yards |
 | `is_score` | logical | `TRUE` if the drive resulted in a score. |
 | `offensive_plays` | integer | Number of offensive plays on the drive. |
-| `result` | character | Result. |
+| `result` | character | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
 | `short_display_result` | character | Short drive-result label. |
 | `display_result` | character | Drive-result label (e.g. `Punt`, `Touchdown`). |
 | `plays` | character | Total qualifying passing plays included in the WEPA calculation. |
@@ -386,7 +386,7 @@ ESPN endpoint.
 | `end_period_type` | character | Period type at the end of the drive (e.g. `quarter`). |
 | `end_period_number` | integer |  |
 | `end_clock_display_value` | character |  |
-| `end_yard_line` | integer | Yard line at the end of the play. |
+| `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
 | `end_text` | character | Field-position text at the end of the drive. |
 | `time_elapsed_display_value` | character |  |
 
@@ -421,7 +421,7 @@ ESPN endpoint.
 | `start_team_id` | character | ESPN team id in possession at the start of the play. |
 | `end_down` | integer | Down at the end of the play. |
 | `end_distance` | integer | Yards to go at the end of the play. |
-| `end_yard_line` | integer | Yard line at the end of the play. |
+| `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
 | `end_yards_to_endzone` | integer | Yards to the end zone at the end of the play. |
 | `end_down_distance_text` | character | Down-and-distance text at the end of the play. |
 | `end_short_down_distance_text` | character | Short down-and-distance text at the end of the play. |
@@ -804,7 +804,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
+| `position_group` | character | Postion group of player as listed by NFL |
 | `id` | character | Id. |
 | `uid` | character | Uid. |
 | `guid` | character | Guid. |

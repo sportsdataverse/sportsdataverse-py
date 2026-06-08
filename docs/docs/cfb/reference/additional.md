@@ -140,7 +140,7 @@ Polars (or pandas) DataFrame, one row per play. Columns include `game_id`, `play
 |---|---|---|
 | `game_id` | integer | ESPN game identifier. |
 | `play_id` | integer | ESPN play id. |
-| `kicker_player_name` | character |  |
+| `kicker_player_name` | character | String name for the kicker on FG or kickoff. |
 | `passer_player_name` | character | Name of the passer on a passing play. |
 | `receiver_player_name` | character | Name of the receiver on a passing play. |
 | `rusher_player_name` | character | Name of the rusher on a rushing play. |
@@ -151,17 +151,17 @@ Polars (or pandas) DataFrame, one row per play. Columns include `game_id`, `play
 | `sacked_by_player_name` | character |  |
 | `pat_scorer_player_name` | character |  |
 | `punter_player_name` | character | Name of the punter. |
-| `kicker_player_id` | character |  |
-| `passer_player_id` | character |  |
-| `receiver_player_id` | character |  |
-| `rusher_player_id` | character |  |
+| `kicker_player_id` | character | Unique identifier for the kicker on FG or kickoff. |
+| `passer_player_id` | character | Unique identifier for the player that attempted the pass. |
+| `receiver_player_id` | character | Unique identifier for the receiver that was targeted on the pass. |
+| `rusher_player_id` | character | Unique identifier for the player that attempted the run. |
 | `scorer_player_id` | character |  |
 | `returner_player_id` | character |  |
 | `pass_defender_player_id` | character |  |
 | `penalized_player_id` | character |  |
 | `sacked_by_player_id` | character |  |
 | `pat_scorer_player_id` | character |  |
-| `punter_player_id` | character |  |
+| `punter_player_id` | character | Unique identifier for the punter. |
 | `kicker_player_names` | character |  |
 | `passer_player_names` | character |  |
 | `receiver_player_names` | character |  |

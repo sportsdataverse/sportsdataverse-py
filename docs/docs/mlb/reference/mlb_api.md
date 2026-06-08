@@ -731,7 +731,7 @@ View all PCL conferences.
 | `link` | character | API link to the game feed. |
 | `abbreviation` | character | Short abbreviation. |
 | `has_wildcard` | logical | Whether the season has a wild card round. |
-| `name_short` | character |  |
+| `name_short` | character | Short name of player (First Initial, Last Name) |
 | `league_id` | integer | League MLBAM ID. |
 | `league_link` | character | API link to the league. |
 | `sport_id` | integer | Sport MLBAM ID. |
@@ -768,7 +768,7 @@ View PCL conferences by conferenceId.
 | `link` | character | API link to the game feed. |
 | `abbreviation` | character | Short abbreviation. |
 | `has_wildcard` | logical | Whether the season has a wild card round. |
-| `name_short` | character |  |
+| `name_short` | character | Short name of player (First Initial, Last Name) |
 | `league_id` | integer | League MLBAM ID. |
 | `league_link` | character | API link to the league. |
 | `sport_id` | integer | Sport MLBAM ID. |
