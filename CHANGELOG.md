@@ -96,6 +96,9 @@
   `*_$ref` fields); columns are now renamed by source key.
 - `espn_nhl_schedule`: fixed `'NoneType' object has no attribute 'get'` with
   default args (a helper was missing its `return event`).
+- The `espn_*_game_rosters` rename-by-source-key fix is additive: NBA/WNBA roster
+  frames now include a `team_alternate_ids_sdr` column when ESPN ships it (the old
+  positional rename would have raised once that field appeared).
 
 ## 0.0.54 Release: June 8, 2026
 
