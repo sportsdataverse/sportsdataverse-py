@@ -1,8 +1,9 @@
 ---
-title: NHL — nhl records
-sidebar_label: nhl records
+title: NHL — NHL Records API
+sidebar_label: NHL Records API
+sidebar_position: 13
 ---
-# NHL — nhl records
+# NHL — NHL Records API
 
 `sportsdataverse.nhl` — 44 endpoints.
 

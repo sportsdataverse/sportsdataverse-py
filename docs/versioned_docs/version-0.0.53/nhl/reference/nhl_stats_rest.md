@@ -1,8 +1,9 @@
 ---
-title: NHL — nhl stats rest
-sidebar_label: nhl stats rest
+title: NHL — NHL Stats REST API
+sidebar_label: NHL Stats REST API
+sidebar_position: 12
 ---
-# NHL — nhl stats rest
+# NHL — NHL Stats REST API
 
 `sportsdataverse.nhl` — 21 endpoints.
 

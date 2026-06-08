@@ -1016,6 +1016,17 @@ _ESPN_API_DOC = {
     "espn_core_v2": ("core", "ESPN core API (v2)"),
 }
 
+# Flat/native API module -> human label for the per-API doc pages. Parallels
+# _ESPN_API_DOC; without it the label falls back to the raw module name with
+# underscores->spaces ("nhl api web"), which reads poorly in the nav.
+_FLAT_API_DOC = {
+    "nhl_api_web": "NHL Web API",
+    "nhl_edge": "NHL EDGE API",
+    "nhl_stats_rest": "NHL Stats REST API",
+    "nhl_records": "NHL Records API",
+    "mlb_api": "MLB Stats API",
+}
+
 
 def _loader_schema_table(fn: str) -> str:
     """Markdown column table for a loader from the introspected footer schemas."""
@@ -1087,7 +1098,7 @@ def _apis_for(prefix: str) -> list[dict]:
             {
                 "name": stem,
                 "slug": fa.module,
-                "label": fa.module.replace("_", " "),
+                "label": _FLAT_API_DOC.get(fa.module, fa.module.replace("_", " ")),
                 "base": fa.host,
                 "count": len(fa.endpoints),
                 "kind": "flat",
@@ -1096,13 +1107,15 @@ def _apis_for(prefix: str) -> list[dict]:
     return out
 
 
-def render_reference_page(prefix: str, api: str) -> str:
+def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     """Render the per-API reference page (8-section block per function) as markdown.
 
     ``api`` is either an ESPN API name (``espn_site_v2``/``espn_web_v3``/
     ``espn_core_v2``) or a flat-API YAML stem (``nhl_api_web``/``mlb_api``/...).
     Names are resolved through the same view helpers the module codegen uses, so the
-    page documents exactly the wrapper names that get emitted."""
+    page documents exactly the wrapper names that get emitted. ``position`` sets the
+    page's ``sidebar_position`` so the league's Reference category orders Loaders
+    first, then native APIs, then the ESPN APIs (site/web/core)."""
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
     if api in ESPN_APIS:
         cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
@@ -1113,12 +1126,13 @@ def render_reference_page(prefix: str, api: str) -> str:
     else:
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
         endpoints = _flat_views(fa)
-        label = fa.module.replace("_", " ")
+        label = _FLAT_API_DOC.get(fa.module, fa.module.replace("_", " "))
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(
         prefix=prefix,
         title=f"{prefix.upper()} — {label}",
         label=label,
+        sidebar_position=position,
         count=len(endpoints),
         endpoints=endpoints,
     )
@@ -1137,10 +1151,13 @@ def render_league_index(prefix: str) -> str:
     )
 
 
-def render_loaders_page(prefix: str) -> str:
-    """Render a league's ``reference/loaders.md`` (diagram + automation table + blocks)."""
+def render_loaders_page(prefix: str, position: int = 1) -> str:
+    """Render a league's ``reference/loaders.md`` (diagram + automation table + blocks).
+
+    ``position`` defaults low so Loaders sorts first in the league's Reference
+    category (ahead of the native and ESPN API pages)."""
     template = render.ENV.get_template("loaders_page.md.jinja")
-    return template.render(prefix=prefix, loaders=_loader_doc_views(prefix))
+    return template.render(prefix=prefix, sidebar_position=position, loaders=_loader_doc_views(prefix))
 
 
 def render_parameters_page() -> str:
@@ -1187,10 +1204,21 @@ def _render_docs_all() -> dict[str, str]:
         loaders = _loader_doc_views(prefix)
         out[f"{prefix}/index.md"] = render_league_index(prefix)
         out[f"{prefix}/_category_.json"] = render_category(prefix.upper(), 10 + i, True)
+        # Sidebar order within a league's Reference category: Loaders first (1),
+        # then native/flat APIs (NHL/MLB API; 10+), then ESPN APIs (site/web/core;
+        # 20+). _apis_for returns ESPN first then flat, so assign position by kind
+        # rather than by iteration order.
+        espn_n = flat_n = 0
         for a in apis:
-            out[f"{prefix}/reference/{a['slug']}.md"] = render_reference_page(prefix, a["name"])
+            if a["kind"] == "espn":
+                pos = 20 + espn_n
+                espn_n += 1
+            else:
+                pos = 10 + flat_n
+                flat_n += 1
+            out[f"{prefix}/reference/{a['slug']}.md"] = render_reference_page(prefix, a["name"], pos)
         if loaders:
-            out[f"{prefix}/reference/loaders.md"] = render_loaders_page(prefix)
+            out[f"{prefix}/reference/loaders.md"] = render_loaders_page(prefix, 1)
         if apis or loaders:
             out[f"{prefix}/reference/_category_.json"] = render_category("Reference", 1, True)
     out["reference/parameters.md"] = render_parameters_page()

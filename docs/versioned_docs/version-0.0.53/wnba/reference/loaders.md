@@ -1,6 +1,7 @@
 ---
 title: WNBA dataset loaders
 sidebar_label: Loaders
+sidebar_position: 1
 ---
 # WNBA dataset loaders
 

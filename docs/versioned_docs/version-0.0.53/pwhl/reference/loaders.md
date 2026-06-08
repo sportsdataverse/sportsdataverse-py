@@ -1,6 +1,7 @@
 ---
 title: PWHL dataset loaders
 sidebar_label: Loaders
+sidebar_position: 1
 ---
 # PWHL dataset loaders
 

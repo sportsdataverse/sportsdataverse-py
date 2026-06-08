@@ -143,4 +143,3 @@ df = parse_summary_boxscore_player(raw)
 
 - [Architecture overview](./architecture/espn-cross-league)
 - [Parser layer](./parsers/index.md)
-- [Building blocks](./architecture/building-blocks)

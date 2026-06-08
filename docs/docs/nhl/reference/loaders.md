@@ -1,6 +1,7 @@
 ---
 title: NHL dataset loaders
 sidebar_label: Loaders
+sidebar_position: 1
 ---
 # NHL dataset loaders
 

@@ -1,6 +1,7 @@
 ---
 title: NBA dataset loaders
 sidebar_label: Loaders
+sidebar_position: 1
 ---
 # NBA dataset loaders
 

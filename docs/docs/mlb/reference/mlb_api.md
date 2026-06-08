@@ -1,8 +1,9 @@
 ---
-title: MLB — mlb api
-sidebar_label: mlb api
+title: MLB — MLB Stats API
+sidebar_label: MLB Stats API
+sidebar_position: 10
 ---
-# MLB — mlb api
+# MLB — MLB Stats API
 
 `sportsdataverse.mlb` — 26 endpoints.
 

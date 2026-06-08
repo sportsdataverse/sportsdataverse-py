@@ -1,6 +1,7 @@
 ---
 title: NBA — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
+sidebar_position: 22
 ---
 # NBA — ESPN core API (v2)
 

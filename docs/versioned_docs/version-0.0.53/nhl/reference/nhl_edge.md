@@ -1,8 +1,9 @@
 ---
-title: NHL — nhl edge
-sidebar_label: nhl edge
+title: NHL — NHL EDGE API
+sidebar_label: NHL EDGE API
+sidebar_position: 11
 ---
-# NHL — nhl edge
+# NHL — NHL EDGE API
 
 `sportsdataverse.nhl` — 35 endpoints.
 

@@ -1,6 +1,7 @@
 ---
 title: CFB dataset loaders
 sidebar_label: Loaders
+sidebar_position: 1
 ---
 # CFB dataset loaders
 

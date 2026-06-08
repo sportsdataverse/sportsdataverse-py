@@ -1,6 +1,7 @@
 ---
 title: WBB dataset loaders
 sidebar_label: Loaders
+sidebar_position: 1
 ---
 # WBB dataset loaders
 

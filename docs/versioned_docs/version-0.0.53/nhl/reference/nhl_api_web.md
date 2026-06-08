@@ -1,8 +1,9 @@
 ---
-title: NHL — nhl api web
-sidebar_label: nhl api web
+title: NHL — NHL Web API
+sidebar_label: NHL Web API
+sidebar_position: 10
 ---
-# NHL — nhl api web
+# NHL — NHL Web API
 
 `sportsdataverse.nhl` — 27 endpoints.
 
