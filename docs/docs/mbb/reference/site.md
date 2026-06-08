@@ -15,13 +15,13 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240115](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240115)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `dates` | `dates` |  |  | `Y` |
-| `week` | `week` |  |  | `Y` |
-| `seasontype` | `season_type` |  |  | `Y` |
-| `groups` | `groups` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `dates` | `dates` |  |  | `Y` | dates query parameter. |
+| `week` | `week` |  |  | `Y` | week query parameter. |
+| `seasontype` | `season_type` |  |  | `Y` | seasontype query parameter. |
+| `groups` | `groups` |  |  | `Y` | groups query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -94,9 +94,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event` | `event_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event` | `event_id` |  |  | `Y` | event query parameter. |
 
 ### Returns
 
@@ -346,8 +346,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -369,8 +369,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/offseason](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/offseason)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -392,8 +392,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/regular-season](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/regular-season)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -415,8 +415,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/postseason](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/postseason)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -438,8 +438,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/ondays](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar/ondays)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -461,9 +461,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/news](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/news)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -485,8 +485,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/injuries](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/injuries)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -508,8 +508,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/transactions](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/transactions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -531,8 +531,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/groups](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/groups)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -554,8 +554,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/statistics](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/statistics)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -577,8 +577,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/draft](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/draft)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -600,9 +600,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -639,9 +639,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -663,9 +663,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/roster](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/roster)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -732,10 +732,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/schedule](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/schedule)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
 
 ### Returns
 
@@ -757,9 +757,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/record](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/record)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -781,9 +781,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/depthcharts](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/depthcharts)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -805,9 +805,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/injuries](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/injuries)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -829,9 +829,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/transactions](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/transactions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -853,9 +853,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/history](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/history)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -877,10 +877,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/news](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/news)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -902,9 +902,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/leaders](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/4/leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -926,9 +926,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/athletes/4239](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/athletes/4239)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -950,9 +950,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/athletes/4239/bio](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/athletes/4239/bio)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -974,9 +974,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/athletes/4239/news](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/athletes/4239/news)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -998,11 +998,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/v2/sports/basketball/mens-college-basketball/standings](https://site.api.espn.com/apis/v2/sports/basketball/mens-college-basketball/standings)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `group` | `group` |  |  | `Y` |
-| `type` | `standings_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `group` | `group` |  |  | `Y` | group query parameter. |
+| `type` | `standings_type` |  |  | `Y` | type query parameter. |
 
 ### Returns
 
@@ -1052,8 +1052,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/rankings](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/rankings)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 

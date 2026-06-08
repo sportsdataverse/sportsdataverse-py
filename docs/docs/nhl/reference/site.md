@@ -15,13 +15,13 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20240115](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20240115)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `dates` | `dates` |  |  | `Y` |
-| `week` | `week` |  |  | `Y` |
-| `seasontype` | `season_type` |  |  | `Y` |
-| `groups` | `groups` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `dates` | `dates` |  |  | `Y` | dates query parameter. |
+| `week` | `week` |  |  | `Y` | week query parameter. |
+| `seasontype` | `season_type` |  |  | `Y` | seasontype query parameter. |
+| `groups` | `groups` |  |  | `Y` | groups query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -94,9 +94,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event` | `event_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event` | `event_id` |  |  | `Y` | event query parameter. |
 
 ### Returns
 
@@ -401,8 +401,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -424,8 +424,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/offseason](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/offseason)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -447,8 +447,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/regular-season](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/regular-season)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -470,8 +470,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/postseason](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/postseason)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -493,8 +493,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/ondays](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/ondays)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -516,9 +516,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/news](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/news)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -540,8 +540,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -563,8 +563,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/transactions](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/transactions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -586,8 +586,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/groups](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/groups)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -609,8 +609,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/statistics](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/statistics)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -632,8 +632,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/draft](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/draft)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -655,9 +655,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -694,9 +694,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -718,9 +718,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/roster](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/roster)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -799,10 +799,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/schedule)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
 
 ### Returns
 
@@ -824,9 +824,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/record](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/record)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -848,9 +848,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/depthcharts](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/depthcharts)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -872,9 +872,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/injuries](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/injuries)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -896,9 +896,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/transactions](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/transactions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -920,9 +920,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/history](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/history)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -944,10 +944,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/news](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/news)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -969,9 +969,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/leaders](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/4/leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -993,9 +993,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/athletes/4239](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/athletes/4239)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -1017,9 +1017,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/athletes/4239/bio](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/athletes/4239/bio)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -1041,9 +1041,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/athletes/4239/news](https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/athletes/4239/news)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -1065,11 +1065,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.api.espn.com/apis/v2/sports/hockey/nhl/standings](https://site.api.espn.com/apis/v2/sports/hockey/nhl/standings)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `group` | `group` |  |  | `Y` |
-| `type` | `standings_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `group` | `group` |  |  | `Y` | group query parameter. |
+| `type` | `standings_type` |  |  | `Y` | type query parameter. |
 
 ### Returns
 

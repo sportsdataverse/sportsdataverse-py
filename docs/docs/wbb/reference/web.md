@@ -15,9 +15,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/overview](https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/overview)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -39,10 +39,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/stats](https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
 
 ### Returns
 
@@ -64,10 +64,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/gamelog](https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/gamelog)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
 
 ### Returns
 
@@ -89,10 +89,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/splits](https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/splits)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
 
 ### Returns
 
@@ -114,14 +114,14 @@ ESPN endpoint.
 
 **Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/statistics/byathlete](https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/statistics/byathlete)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `category` | `category` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `seasontype` | `season_type` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
-| `page` | `page` |  |  | `Y` |
-| `sort` | `sort` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `category` | `category` |  |  | `Y` | category query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `seasontype` | `season_type` |  |  | `Y` | seasontype query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `page` | `page` |  |  | `Y` | page query parameter. |
+| `sort` | `sort` |  |  | `Y` | sort query parameter. |
 
 ### Returns
 

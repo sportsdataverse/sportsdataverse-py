@@ -16,9 +16,9 @@
 **R equivalent:** {% for pkg, fn in ep.r_equivalent.items() %}`{{ pkg }}::{{ fn }}()`{% if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-{% for r in ep.param_rows %}| `{{ r.api }}` | `{{ r.python }}` | {% if r.pattern %}`{{ r.pattern }}`{% endif %} | {% if r.required %}`Y`{% endif %} | {% if r.nullable %}`Y`{% endif %} |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+{% for r in ep.param_rows %}| `{{ r.api }}` | `{{ r.python }}` | {% if r.pattern %}`{{ r.pattern }}`{% endif %} | {% if r.required %}`Y`{% endif %} | {% if r.nullable %}`Y`{% endif %} | {{ r.description }} |
 {% endfor %}
 
 ### Returns

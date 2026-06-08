@@ -21,8 +21,8 @@ def test_reference_block_has_all_sections():
     assert "## `espn_nba_scoreboard`" in md
     assert "Endpoint URL" in md
     assert "Valid URL" in md
-    # nba_api-style parameter table
-    assert "| API Parameter | Python | Pattern | Required | Nullable |" in md
+    # nba_api-style parameter table (6-column: added Description column in F2a)
+    assert "| API Parameter | Python | Pattern | Required | Nullable | Description |" in md
     assert "### Returns" in md
     assert "### Example" in md
     assert "Last validated" in md

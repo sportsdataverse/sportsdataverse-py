@@ -15,11 +15,11 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason](https://statsapi.mlb.com/api/v1/schedule/postseason)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
 
@@ -41,13 +41,13 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1.1/game/716390/feed/live](https://statsapi.mlb.com/api/v1.1/game/716390/feed/live)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `language` | `language` |  |  | `Y` |
-| `language` | `timecode` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `language` | `language` |  |  | `Y` | language query parameter. |
+| `language` | `timecode` |  |  | `Y` | language query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -69,11 +69,11 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/boxscore](https://statsapi.mlb.com/api/v1/game/716390/boxscore)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `timecode` | `timecode` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -95,11 +95,11 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/linescore](https://statsapi.mlb.com/api/v1/game/716390/linescore)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `timecode` | `timecode` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -121,11 +121,11 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/playByPlay](https://statsapi.mlb.com/api/v1/game/716390/playByPlay)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `timecode` | `timecode` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -147,10 +147,10 @@ GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/contextMetrics](https://statsapi.mlb.com/api/v1/game/716390/contextMetrics)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -172,10 +172,10 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/winProbability](https://statsapi.mlb.com/api/v1/game/716390/winProbability)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -197,9 +197,9 @@ GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/content](https://statsapi.mlb.com/api/v1/game/716390/content)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 
 ### Returns
 
@@ -221,13 +221,13 @@ GET /api/v1/teams/{teamId} — single team detail.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10](https://statsapi.mlb.com/api/v1/teams/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -249,14 +249,14 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/roster](https://statsapi.mlb.com/api/v1/teams/10/roster)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `rosterType` | `roster_type` |  |  | `Y` |
-| `date` | `date` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `rosterType` | `roster_type` |  |  | `Y` | rosterType query parameter. |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -289,12 +289,12 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/alumni](https://statsapi.mlb.com/api/v1/teams/10/alumni)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `group` | `group` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `group` | `group` |  |  | `Y` | group query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
 
@@ -316,12 +316,12 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/affiliates](https://statsapi.mlb.com/api/v1/teams/affiliates)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `teamIds` | `team_ids` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `teamIds` | `team_ids` |  |  | `Y` | teamIds query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
 
@@ -343,11 +343,11 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/people](https://statsapi.mlb.com/api/v1/people)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `personIds` | `person_ids` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `personIds` | `person_ids` |  |  | `Y` | personIds query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -369,12 +369,12 @@ GET /api/v1/people/{personId} — single person detail.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/people/660271](https://statsapi.mlb.com/api/v1/people/660271)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `person_id` | `person_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `person_id` | `person_id` |  | `Y` |  | person_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -396,11 +396,11 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/people/660271/stats/game/716390](https://statsapi.mlb.com/api/v1/people/660271/stats/game/716390)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `person_id` | `person_id` |  | `Y` |  |
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `person_id` | `person_id` |  | `Y` |  | person_id path parameter. |
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -422,12 +422,12 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/sports](https://statsapi.mlb.com/api/v1/sports)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sport_id` | `sport_id` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sport_id` | `sport_id` |  |  | `Y` | sport_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -449,9 +449,9 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/sports](https://statsapi.mlb.com/api/v1/sports)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sportId` | `sport_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 
 ### Returns
 
@@ -481,11 +481,11 @@ GET /api/v1/leagues — list leagues.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/leagues](https://statsapi.mlb.com/api/v1/leagues)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sportId` | `sport_id` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `leagueIds` | `league_ids` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `leagueIds` | `league_ids` |  |  | `Y` | leagueIds query parameter. |
 
 ### Returns
 
@@ -507,10 +507,10 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/seasons/X](https://statsapi.mlb.com/api/v1/seasons/X)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season_id` | `season_id` |  | `Y` |  |
-| `sportId` | `sport_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season_id` | `season_id` |  | `Y` |  | season_id path parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 
 ### Returns
 
@@ -532,11 +532,11 @@ GET /api/v1/venues — list venues.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/venues](https://statsapi.mlb.com/api/v1/venues)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `sportIds` | `sport_ids` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `sportIds` | `sport_ids` |  |  | `Y` | sportIds query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
 
@@ -564,11 +564,11 @@ GET /api/v1/venues/{venueId} — single venue detail.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/venues/15](https://statsapi.mlb.com/api/v1/venues/15)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `venue_id` | `venue_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `venue_id` | `venue_id` |  | `Y` |  | venue_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
 
@@ -590,9 +590,9 @@ GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/leagueLeaderTypes](https://statsapi.mlb.com/api/v1/leagueLeaderTypes)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `meta_type` | `meta_type` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `meta_type` | `meta_type` |  | `Y` |  | meta_type path parameter. |
 
 ### Returns
 
@@ -614,9 +614,9 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/awards](https://statsapi.mlb.com/api/v1/awards)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sportId` | `sport_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
 
 ### Returns
 
@@ -638,12 +638,12 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients](https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `award_id` | `award_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `award_id` | `award_id` |  | `Y` |  | award_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
 
 ### Returns
 
@@ -665,13 +665,13 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/draft/2024](https://statsapi.mlb.com/api/v1/draft/2024)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `year` | `year` |  | `Y` |  |
-| `round` | `round_` |  |  | `Y` |
-| `teamId` | `team_id` |  |  | `Y` |
-| `playerId` | `player_id` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+| `round` | `round_` |  |  | `Y` | round query parameter. |
+| `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
+| `playerId` | `player_id` |  |  | `Y` | playerId query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -693,8 +693,8 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/jobs/umpires](https://statsapi.mlb.com/api/v1/jobs/umpires)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -716,11 +716,11 @@ View all PCL conferences.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/conferences](https://statsapi.mlb.com/api/v1/conferences)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `conferenceId` | `conference_id` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `conferenceId` | `conference_id` |  |  | `Y` | conferenceId query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -753,11 +753,11 @@ View PCL conferences by conferenceId.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/conferences/301](https://statsapi.mlb.com/api/v1/conferences/301)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `conference_id` | `conference_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `conference_id` | `conference_id` |  | `Y` |  | conference_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -790,9 +790,9 @@ View latest player drafted, endpoint best used when draft is currently open.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/draft/2023/latest](https://statsapi.mlb.com/api/v1/draft/2023/latest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `year` | `year` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
 
 ### Returns
 
@@ -909,9 +909,9 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1.1/game/716390/feed/live/timestamps](https://statsapi.mlb.com/api/v1.1/game/716390/feed/live/timestamps)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 
 ### Returns
 
@@ -935,11 +935,11 @@ View corrected non Statcast information for games
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/changes?updatedSince=2023-09-01T00%3A00%3A00Z&sportId=1](https://statsapi.mlb.com/api/v1/game/changes?updatedSince=2023-09-01T00%3A00%3A00Z&sportId=1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `updatedSince` | `updated_since` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `updatedSince` | `updated_since` |  |  | `Y` | updatedSince query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1026,15 +1026,15 @@ View timestamps of most recent data corrections made to games.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/analytics/game](https://statsapi.mlb.com/api/v1/game/analytics/game)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `gameModeId` | `game_mode_id` |  |  | `Y` |
-| `timecode` | `timecode` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
-| `sortBy` | `sort_by` |  |  | `Y` |
-| `isNonStatcast` | `is_non_statcast` |  |  | `Y` |
-| `offset` | `offset` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `gameModeId` | `game_mode_id` |  |  | `Y` | gameModeId query parameter. |
+| `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `sortBy` | `sort_by` |  |  | `Y` | sortBy query parameter. |
+| `isNonStatcast` | `is_non_statcast` |  |  | `Y` | isNonStatcast query parameter. |
+| `offset` | `offset` |  |  | `Y` | offset query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1056,15 +1056,15 @@ View timestamps of most recent data corrections made to GUIDs.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/analytics/guids](https://statsapi.mlb.com/api/v1/game/analytics/guids)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `gameModeId` | `game_mode_id` |  |  | `Y` |
-| `timecode` | `timecode` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
-| `sortBy` | `sort_by` |  |  | `Y` |
-| `isNonStatcast` | `is_non_statcast` |  |  | `Y` |
-| `offset` | `offset` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `gameModeId` | `game_mode_id` |  |  | `Y` | gameModeId query parameter. |
+| `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `sortBy` | `sort_by` |  |  | `Y` | sortBy query parameter. |
+| `isNonStatcast` | `is_non_statcast` |  |  | `Y` | isNonStatcast query parameter. |
+| `offset` | `offset` |  |  | `Y` | offset query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1086,17 +1086,17 @@ View Statcast data for a specific game.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/guids](https://statsapi.mlb.com/api/v1/game/716390/guids)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `gameModeId` | `game_mode_id` |  |  | `Y` |
-| `updatedSince` | `updated_since` |  |  | `Y` |
-| `isPitch` | `is_pitch` |  |  | `Y` |
-| `isHit` | `is_hit` |  |  | `Y` |
-| `isPickoff` | `is_pickoff` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `parsed/raw` | `parsed_raw` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `gameModeId` | `game_mode_id` |  |  | `Y` | gameModeId query parameter. |
+| `updatedSince` | `updated_since` |  |  | `Y` | updatedSince query parameter. |
+| `isPitch` | `is_pitch` |  |  | `Y` | isPitch query parameter. |
+| `isHit` | `is_hit` |  |  | `Y` | isHit query parameter. |
+| `isPickoff` | `is_pickoff` |  |  | `Y` | isPickoff query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `parsed/raw` | `parsed_raw` |  |  | `Y` | parsed/raw query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1118,12 +1118,12 @@ View Statcast data for a specific play.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/90groovy-2438-test-guid-placeholder0/analytics](https://statsapi.mlb.com/api/v1/game/716390/90groovy-2438-test-guid-placeholder0/analytics)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `guid` | `guid` |  | `Y` |  |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `guid` | `guid` |  | `Y` |  | guid path parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1145,11 +1145,11 @@ View Statcast contextMetrics data for a specific play.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/90groovy-2438-test-guid-placeholder0/contextMetricsAverages](https://statsapi.mlb.com/api/v1/game/716390/90groovy-2438-test-guid-placeholder0/contextMetricsAverages)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `guid` | `guid` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `guid` | `guid` |  | `Y` |  | guid path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1171,11 +1171,11 @@ View game color commentary info.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/feed/color](https://statsapi.mlb.com/api/v1/game/716390/feed/color)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `timecode` | `timecode` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `timecode` | `timecode` |  |  | `Y` | timecode query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1197,11 +1197,11 @@ View game color feed.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/feed/color/diffPatch](https://statsapi.mlb.com/api/v1/game/716390/feed/color/diffPatch)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `startTimecode` | `start_timecode` |  |  | `Y` |
-| `endTimecode` | `end_timecode` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `startTimecode` | `start_timecode` |  |  | `Y` | startTimecode query parameter. |
+| `endTimecode` | `end_timecode` |  |  | `Y` | endTimecode query parameter. |
 
 ### Returns
 
@@ -1223,9 +1223,9 @@ View all of the color timecodes for a game.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/game/716390/feed/color/timestamps](https://statsapi.mlb.com/api/v1/game/716390/feed/color/timestamps)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
 
 ### Returns
 
@@ -1247,20 +1247,20 @@ View time of game info.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/gamePace?season=2023](https://statsapi.mlb.com/api/v1/gamePace?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `teamIds` | `team_ids` |  |  | `Y` |
-| `leagueIds` | `league_ids` |  |  | `Y` |
-| `leagueListId` | `league_list_id` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `gameType` | `game_type` |  |  | `Y` |
-| `startDate` | `start_date` |  |  | `Y` |
-| `endDate` | `end_date` |  |  | `Y` |
-| `venueIds` | `venue_ids` |  |  | `Y` |
-| `orgType` | `org_type` |  |  | `Y` |
-| `includeChildren` | `include_children` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `teamIds` | `team_ids` |  |  | `Y` | teamIds query parameter. |
+| `leagueIds` | `league_ids` |  |  | `Y` | leagueIds query parameter. |
+| `leagueListId` | `league_list_id` |  |  | `Y` | leagueListId query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `gameType` | `game_type` |  |  | `Y` | gameType query parameter. |
+| `startDate` | `start_date` |  |  | `Y` | startDate query parameter. |
+| `endDate` | `end_date` |  |  | `Y` | endDate query parameter. |
+| `venueIds` | `venue_ids` |  |  | `Y` | venueIds query parameter. |
+| `orgType` | `org_type` |  |  | `Y` | orgType query parameter. |
+| `includeChildren` | `include_children` |  |  | `Y` | includeChildren query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1332,18 +1332,18 @@ View high/low stats by player or team.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/highLow/player?statGroup=hitting&sortStat=homeRuns&season=2023](https://statsapi.mlb.com/api/v1/highLow/player?statGroup=hitting&sortStat=homeRuns&season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `org_type` | `org_type` |  | `Y` |  |
-| `statGroup` | `stat_group` |  |  | `Y` |
-| `sortStat` | `sort_stat` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `gameType` | `game_type` |  |  | `Y` |
-| `teamId` | `team_id` |  |  | `Y` |
-| `leagueId` | `league_id` |  |  | `Y` |
-| `sportIds` | `sport_ids` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `org_type` | `org_type` |  | `Y` |  | org_type path parameter. |
+| `statGroup` | `stat_group` |  |  | `Y` | statGroup query parameter. |
+| `sortStat` | `sort_stat` |  |  | `Y` | sortStat query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `gameType` | `game_type` |  |  | `Y` | gameType query parameter. |
+| `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
+| `leagueId` | `league_id` |  |  | `Y` | leagueId query parameter. |
+| `sportIds` | `sport_ids` |  |  | `Y` | sportIds query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1384,10 +1384,10 @@ View a home run derby object based on gamePk.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/511101](https://statsapi.mlb.com/api/v1/homeRunDerby/511101)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1491,10 +1491,10 @@ View a home run derby object based on bracket.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/511101/bracket](https://statsapi.mlb.com/api/v1/homeRunDerby/511101/bracket)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1598,10 +1598,10 @@ View a home run derby object based on pool.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/511101/pool](https://statsapi.mlb.com/api/v1/homeRunDerby/511101/pool)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_pk` | `game_pk` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1705,11 +1705,11 @@ View All-Star Ballots per league.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarBallot?season=2023](https://statsapi.mlb.com/api/v1/league/103/allStarBallot?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `league_id` | `league_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1779,11 +1779,11 @@ View All-Star Write-ins per league.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarWriteIns?season=2023](https://statsapi.mlb.com/api/v1/league/103/allStarWriteIns?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `league_id` | `league_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1849,11 +1849,11 @@ View All-Star Final Vote per league.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarFinalVote?season=2023](https://statsapi.mlb.com/api/v1/league/103/allStarFinalVote?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `league_id` | `league_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1923,12 +1923,12 @@ View biographical information and stats for Free Agents.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/people/freeAgents?season=2023](https://statsapi.mlb.com/api/v1/people/freeAgents?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `order` | `order` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `order` | `order` |  |  | `Y` | order query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -1968,12 +1968,12 @@ View directory by jobType.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/jobs?jobType=UMPR](https://statsapi.mlb.com/api/v1/jobs?jobType=UMPR)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `jobType` | `job_type` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `date` | `date` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `jobType` | `job_type` |  |  | `Y` | jobType query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2003,12 +2003,12 @@ View datacasters directory.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/jobs/datacasters](https://statsapi.mlb.com/api/v1/jobs/datacasters)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sportId` | `sport_id` |  |  | `Y` |
-| `date` | `date` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2038,12 +2038,12 @@ View official scorer directory.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/jobs/officialScorers](https://statsapi.mlb.com/api/v1/jobs/officialScorers)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sportId` | `sport_id` |  |  | `Y` |
-| `date` | `date` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2073,12 +2073,12 @@ Get umpires and associated game for umpireId.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/jobs/umpires/games/596809?season=2023](https://statsapi.mlb.com/api/v1/jobs/umpires/games/596809?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `umpire_id` | `umpire_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `umpire_id` | `umpire_id` |  | `Y` |  | umpire_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2100,12 +2100,12 @@ View tied game schedule info.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/games/tied?season=2016](https://statsapi.mlb.com/api/v1/schedule/games/tied?season=2016)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `gameTypes` | `game_types` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `gameTypes` | `game_types` |  |  | `Y` | gameTypes query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2185,14 +2185,14 @@ View schedule info for postseason based on series.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason/series?season=2023](https://statsapi.mlb.com/api/v1/schedule/postseason/series?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `gameTypes` | `game_types` |  |  | `Y` |
-| `seriesNumber` | `series_number` |  |  | `Y` |
-| `teamId` | `team_id` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `gameTypes` | `game_types` |  |  | `Y` | gameTypes query parameter. |
+| `seriesNumber` | `series_number` |  |  | `Y` | seriesNumber query parameter. |
+| `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2224,13 +2224,13 @@ View schedule info for the tuneIn application.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn?season=2023](https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `teamId` | `team_id` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2252,13 +2252,13 @@ View information for all seasons based on id.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/seasons/all?sportId=1](https://statsapi.mlb.com/api/v1/seasons/all?sportId=1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `divisionId` | `division_id` |  |  | `Y` |
-| `leagueId` | `league_id` |  |  | `Y` |
-| `withGameTypeDates` | `with_game_type_dates` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `divisionId` | `division_id` |  |  | `Y` | divisionId query parameter. |
+| `leagueId` | `league_id` |  |  | `Y` | leagueId query parameter. |
+| `withGameTypeDates` | `with_game_type_dates` |  |  | `Y` | withGameTypeDates query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2302,10 +2302,10 @@ View information for any given sportId.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/sports/1](https://statsapi.mlb.com/api/v1/sports/1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sport_id` | `sport_id` |  | `Y` |  |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sport_id` | `sport_id` |  | `Y` |  | sport_id path parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2335,23 +2335,23 @@ View Statcast stats.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/stats/metrics](https://statsapi.mlb.com/api/v1/stats/metrics)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `stats` | `stats` |  |  | `Y` |
-| `group` | `group` |  |  | `Y` |
-| `gameType` | `game_type` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `startDate` | `start_date` |  |  | `Y` |
-| `endDate` | `end_date` |  |  | `Y` |
-| `venueId` | `venue_id` |  |  | `Y` |
-| `minOccurrences` | `min_occurrences` |  |  | `Y` |
-| `percentile` | `percentile` |  |  | `Y` |
-| `personId` | `person_id` |  |  | `Y` |
-| `teamId` | `team_id` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
-| `offset` | `offset` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `stats` | `stats` |  |  | `Y` | stats query parameter. |
+| `group` | `group` |  |  | `Y` | group query parameter. |
+| `gameType` | `game_type` |  |  | `Y` | gameType query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `startDate` | `start_date` |  |  | `Y` | startDate query parameter. |
+| `endDate` | `end_date` |  |  | `Y` | endDate query parameter. |
+| `venueId` | `venue_id` |  |  | `Y` | venueId query parameter. |
+| `minOccurrences` | `min_occurrences` |  |  | `Y` | minOccurrences query parameter. |
+| `percentile` | `percentile` |  |  | `Y` | percentile query parameter. |
+| `personId` | `person_id` |  |  | `Y` | personId query parameter. |
+| `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `offset` | `offset` |  |  | `Y` | offset query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2373,12 +2373,12 @@ View historical records for a list of teams.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/history?teamIds=147](https://statsapi.mlb.com/api/v1/teams/history?teamIds=147)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `teamIds` | `team_ids` |  |  | `Y` |
-| `startSeason` | `start_season` |  |  | `Y` |
-| `endSeason` | `end_season` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `teamIds` | `team_ids` |  |  | `Y` | teamIds query parameter. |
+| `startSeason` | `start_season` |  |  | `Y` | startSeason query parameter. |
+| `endSeason` | `end_season` |  |  | `Y` | endSeason query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2427,16 +2427,16 @@ View team stats.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/stats?season=2023&sportIds=1&group=hitting&stats=season](https://statsapi.mlb.com/api/v1/teams/stats?season=2023&sportIds=1&group=hitting&stats=season)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `sportIds` | `sport_ids` |  |  | `Y` |
-| `group` | `stat_group` |  |  | `Y` |
-| `gameType` | `game_type` |  |  | `Y` |
-| `stats` | `stats` |  |  | `Y` |
-| `order` | `order` |  |  | `Y` |
-| `sortStat` | `sort_stat` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `sportIds` | `sport_ids` |  |  | `Y` | sportIds query parameter. |
+| `group` | `stat_group` |  |  | `Y` | group query parameter. |
+| `gameType` | `game_type` |  |  | `Y` | gameType query parameter. |
+| `stats` | `stats` |  |  | `Y` | stats query parameter. |
+| `order` | `order` |  |  | `Y` | order query parameter. |
+| `sortStat` | `sort_stat` |  |  | `Y` | sortStat query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2466,20 +2466,20 @@ View leaders for a statistic.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/stats/leaders?leaderCategories=homeRuns&season=2023](https://statsapi.mlb.com/api/v1/teams/stats/leaders?leaderCategories=homeRuns&season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `leaderCategories` | `leader_categories` |  |  | `Y` |
-| `sitCodes` | `sit_codes` |  |  | `Y` |
-| `gameTypes` | `game_types` |  |  | `Y` |
-| `statGroup` | `stat_group` |  |  | `Y` |
-| `season` | `season` |  |  | `Y` |
-| `leagueIds` | `league_ids` |  |  | `Y` |
-| `startDate` | `start_date` |  |  | `Y` |
-| `endDate` | `end_date` |  |  | `Y` |
-| `sportId` | `sport_id` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `leaderCategories` | `leader_categories` |  |  | `Y` | leaderCategories query parameter. |
+| `sitCodes` | `sit_codes` |  |  | `Y` | sitCodes query parameter. |
+| `gameTypes` | `game_types` |  |  | `Y` | gameTypes query parameter. |
+| `statGroup` | `stat_group` |  |  | `Y` | statGroup query parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `leagueIds` | `league_ids` |  |  | `Y` | leagueIds query parameter. |
+| `startDate` | `start_date` |  |  | `Y` | startDate query parameter. |
+| `endDate` | `end_date` |  |  | `Y` | endDate query parameter. |
+| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2509,12 +2509,12 @@ View biographical  information on all coaches for a given club.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/147/coaches?season=2023](https://statsapi.mlb.com/api/v1/teams/147/coaches?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `date` | `date` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2544,11 +2544,11 @@ View biographical  information on all personnel for a given club.
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/147/personnel](https://statsapi.mlb.com/api/v1/teams/147/personnel)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `date` | `date` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 
@@ -2578,14 +2578,14 @@ View biographical and statistical information for a club's roster based on roste
 
 **Valid URL:** [https://statsapi.mlb.com/api/v1/teams/147/roster/active?season=2023](https://statsapi.mlb.com/api/v1/teams/147/roster/active?season=2023)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `roster_type` | `roster_type` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `date` | `date` |  |  | `Y` |
-| `hydrate` | `hydrate` |  |  | `Y` |
-| `fields` | `fields` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `roster_type` | `roster_type` |  | `Y` |  | roster_type path parameter. |
+| `season` | `season` |  |  | `Y` | season query parameter. |
+| `date` | `date` |  |  | `Y` | date query parameter. |
+| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
+| `fields` | `fields` |  |  | `Y` | fields query parameter. |
 
 ### Returns
 

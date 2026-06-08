@@ -105,15 +105,57 @@ def _build_docstring(
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
 
-def _param_rows(ep: spec.Endpoint) -> list[dict]:
+@functools.lru_cache(maxsize=None)
+def _docstring_param_descs(league_prefix: str, fn_name: str) -> dict[str, str]:
+    """``{python_name: description}`` from the live wrapper's parsed docstring.
+
+    Resolves the wrapper function from ``sportsdataverse.{league_prefix}`` (or
+    directly from ``sportsdataverse.{league_prefix}`` for flat-API wrappers) and
+    delegates to :func:`_doc_view` to extract the per-param descriptions.
+
+    Returns an empty dict when the function is not importable (stub / not yet
+    wired) so callers always get a safe fallback.  Results are cached per
+    ``(league_prefix, fn_name)`` so repeated endpoint views inside the same
+    codegen run share one import + parse.
+    """
+    import importlib
+
+    try:
+        mod = importlib.import_module(f"sportsdataverse.{league_prefix}") if league_prefix else None
+    except Exception:  # noqa: BLE001
+        return {}
+    fn = getattr(mod, fn_name, None) if mod is not None else None
+    if fn is None or not callable(fn):
+        return {}
+    try:
+        view = _doc_view(fn)
+    except Exception:  # noqa: BLE001
+        return {}
+    return {p["name"]: p["description"] for p in view["params"]}
+
+
+def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -> list[dict]:
     """Merge path + query params into nba_api-style doc rows.
 
     ``required`` mirrors the spec; ``nullable`` is its inverse (an optional param
     may be omitted/``None``). Path params come first, matching the signature order
     used by the generated wrapper.
+
+    When ``league_prefix`` + ``fn_name`` are supplied, the live wrapper's parsed
+    docstring is consulted (via :func:`_docstring_param_descs`) to populate a
+    ``description`` field on each row.  Descriptions are best-effort: rows whose
+    python name is not found in the docstring get an empty string. Pipe characters
+    in descriptions are escaped so they don't break the markdown table renderer.
     """
+    descs: dict[str, str] = {}
+    if league_prefix and fn_name:
+        descs = _docstring_param_descs(league_prefix, fn_name)
     rows: list[dict] = []
     for p in (*ep.path_params, *ep.query_params):
+        raw_desc = descs.get(p.python_name, "")
+        # Escape pipe chars and collapse newlines so the description is safe
+        # inside a single markdown table cell.
+        desc = raw_desc.replace("|", "\\|").replace("\n", " ").strip()
         rows.append(
             {
                 "api": p.api,
@@ -121,6 +163,7 @@ def _param_rows(ep: spec.Endpoint) -> list[dict]:
                 "pattern": p.pattern,
                 "required": p.required,
                 "nullable": not p.required,
+                "description": desc,
             },
         )
     return rows
@@ -229,7 +272,7 @@ class _EndpointView:
         # Every attribute below is read under StrictUndefined, so all must exist.
         self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
         self.valid_url = self.example_url
-        self.param_rows = _param_rows(ep)
+        self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.return_table = _return_table(ep.returns_schema, league.prefix)
         self.returns_prose = ep.summary
         self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map
@@ -504,16 +547,27 @@ def resolve_name(prefix: str, short: str, reserved: set, qualifier: str) -> str:
     return f"{prefix}_{qualifier}_{short}"
 
 
-def _flat_views(api: spec.FlatApi) -> list[_EndpointView]:
+def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointView]:
     """Resolve a flat API's endpoints to their final wrapper names + views.
 
     Shared by the module renderer (:func:`render_flat_module`) and the docs renderer
     (:func:`render_reference_page`). When ``api.qualifier`` is set, each function gets
     a clean ``{prefix}_{short}`` name, qualified to ``{prefix}_{qualifier}_{short}``
-    only on collision with a hand-written composite or another generated name."""
+    only on collision with a hand-written composite or another generated name.
+
+    ``league_prefix`` is the *importable* league prefix under ``sportsdataverse``
+    (e.g. ``"mlb"`` for the MLB Stats API).  When provided, docstring-based
+    descriptions are resolved for each wrapper; when omitted the name-pattern
+    prefix (``api.prefix``, which may be ``"mlb_api"`` etc.) is used as a
+    best-effort fallback.
+    """
     reserved = reserved_names(api.prefix, exclude_modules=(api.module,)) if api.qualifier else set()
     used: set[str] = set()
     views: list[_EndpointView] = []
+    # Build a stub League that carries the real importable prefix so _EndpointView
+    # can look up docstring descriptions via _docstring_param_descs.
+    effective_prefix = league_prefix or api.prefix
+    stub_league = spec.League(prefix=effective_prefix, sport="", league="", scopes=[])
     for ep in api.endpoints:
         if api.qualifier:
             fn_name = resolve_name(api.prefix, ep.short, reserved | used, api.qualifier)
@@ -521,13 +575,13 @@ def _flat_views(api: spec.FlatApi) -> list[_EndpointView]:
             fn_name = api.name_pattern.format(short=ep.short)
         used.add(fn_name)
         ep_host = ep.host or api.host
-        views.append(_EndpointView(ep, fn_name, ep_host, _FLAT_STUB_LEAGUE, flat=True))
+        views.append(_EndpointView(ep, fn_name, ep_host, stub_league, flat=True))
     return views
 
 
-def render_flat_module(api: spec.FlatApi) -> str:
+def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
     """Render a flat (non-sport/league) API module (NHL api-web/edge/..., MLB stats)."""
-    views = _flat_views(api)
+    views = _flat_views(api, league_prefix=league_prefix)
     parser_imports = {v.parser for v in views if v.parser}
     transforms: set[str] = set()
     for v in views:
@@ -983,7 +1037,7 @@ def _render_flat_all() -> dict[str, tuple[str, str]]:
         if not y.exists():
             continue
         api = spec.load_flat_api(y, {})
-        out[api.module] = (prefix, render_flat_module(api))
+        out[api.module] = (prefix, render_flat_module(api, league_prefix=prefix))
     return out
 
 
@@ -1447,7 +1501,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
         _slug, label = _ESPN_API_DOC[api]
     else:
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
-        endpoints = _flat_views(fa)
+        endpoints = _flat_views(fa, league_prefix=prefix)
         label = _FLAT_API_DOC.get(fa.module, fa.module.replace("_", " "))
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(

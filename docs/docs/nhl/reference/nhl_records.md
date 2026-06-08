@@ -15,8 +15,8 @@ List all NHL award / trophy records.
 
 **Valid URL:** [https://records.nhl.com/site/api/award-details](https://records.nhl.com/site/api/award-details)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -38,9 +38,9 @@ List award records for a single franchise.
 
 **Valid URL:** [https://records.nhl.com/site/api/award-details/1](https://records.nhl.com/site/api/award-details/1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `franchise_id` | `franchise_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `franchise_id` | `franchise_id` |  | `Y` |  | franchise_id path parameter. |
 
 ### Returns
 
@@ -62,10 +62,10 @@ Retrieve the trophy winner for a specific season.
 
 **Valid URL:** [https://records.nhl.com/site/api/award-details/trophy/1/season/X](https://records.nhl.com/site/api/award-details/trophy/1/season/X)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `trophy_id` | `trophy_id` |  | `Y` |  |
-| `season_id` | `season_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `trophy_id` | `trophy_id` |  | `Y` |  | trophy_id path parameter. |
+| `season_id` | `season_id` |  | `Y` |  | season_id path parameter. |
 
 ### Returns
 
@@ -87,8 +87,8 @@ List NHL head coaches.
 
 **Valid URL:** [https://records.nhl.com/site/api/coach](https://records.nhl.com/site/api/coach)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -138,9 +138,9 @@ Retrieve one coach by their numeric ID.
 
 **Valid URL:** [https://records.nhl.com/site/api/coach/X](https://records.nhl.com/site/api/coach/X)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `coach_id` | `coach_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
 
 ### Returns
 
@@ -162,9 +162,9 @@ Coach career-records (regular season).
 
 **Valid URL:** [https://records.nhl.com/site/api/coach-career-records](https://records.nhl.com/site/api/coach-career-records)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `coach_id` | `coach_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  |  | `Y` | coach_id path parameter. |
 
 ### Returns
 
@@ -186,8 +186,8 @@ Coach career records inclusive of regular season + playoffs.
 
 **Valid URL:** [https://records.nhl.com/site/api/coach-career-records-regular-plus-playoffs](https://records.nhl.com/site/api/coach-career-records-regular-plus-playoffs)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -209,9 +209,9 @@ Coach records scoped to individual franchise stints.
 
 **Valid URL:** [https://records.nhl.com/site/api/coach-franchise-records](https://records.nhl.com/site/api/coach-franchise-records)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `coach_id` | `coach_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  |  | `Y` | coach_id path parameter. |
 
 ### Returns
 
@@ -233,8 +233,8 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 
 **Valid URL:** [https://records.nhl.com/site/api/coach-stanley-cup-streak](https://records.nhl.com/site/api/coach-stanley-cup-streak)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -256,8 +256,8 @@ List all NHL franchises (historical and active).
 
 **Valid URL:** [https://records.nhl.com/site/api/franchise](https://records.nhl.com/site/api/franchise)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -288,8 +288,8 @@ Franchise detail records (extended metadata per franchise).
 
 **Valid URL:** [https://records.nhl.com/site/api/franchise-detail](https://records.nhl.com/site/api/franchise-detail)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -311,8 +311,8 @@ All-time team totals per franchise (regular season).
 
 **Valid URL:** [https://records.nhl.com/site/api/franchise-team-totals](https://records.nhl.com/site/api/franchise-team-totals)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -373,8 +373,8 @@ Season-by-season results for each franchise.
 
 **Valid URL:** [https://records.nhl.com/site/api/franchise-season-results](https://records.nhl.com/site/api/franchise-season-results)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -396,8 +396,8 @@ Franchise playoff appearance counts and streak information.
 
 **Valid URL:** [https://records.nhl.com/site/api/franchise-playoff-appearances](https://records.nhl.com/site/api/franchise-playoff-appearances)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -419,8 +419,8 @@ League-wide franchise totals (all-time aggregate per franchise).
 
 **Valid URL:** [https://records.nhl.com/site/api/franchise-totals](https://records.nhl.com/site/api/franchise-totals)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -442,8 +442,8 @@ All-time head-to-head records between every franchise pairing.
 
 **Valid URL:** [https://records.nhl.com/site/api/all-time-record-vs-franchise](https://records.nhl.com/site/api/all-time-record-vs-franchise)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -465,8 +465,8 @@ Skater career statistics (all-time, regular season).
 
 **Valid URL:** [https://records.nhl.com/site/api/skater-career-statistics](https://records.nhl.com/site/api/skater-career-statistics)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -488,8 +488,8 @@ All-time skater career leaderboards.
 
 **Valid URL:** [https://records.nhl.com/site/api/skater-career-leaders](https://records.nhl.com/site/api/skater-career-leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -511,8 +511,8 @@ Skaters with the most consecutive 100-point seasons.
 
 **Valid URL:** [https://records.nhl.com/site/api/consecutive-100-point-seasons](https://records.nhl.com/site/api/consecutive-100-point-seasons)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -534,8 +534,8 @@ Goaltender career statistics (regular season).
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie-career-stats](https://records.nhl.com/site/api/goalie-career-stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -557,8 +557,8 @@ Goaltender career stats inclusive of regular season and playoffs.
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie_career_stats_incl_playoffs](https://records.nhl.com/site/api/goalie_career_stats_incl_playoffs)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -580,8 +580,8 @@ Goaltender single-season statistics.
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie-season-stats](https://records.nhl.com/site/api/goalie-season-stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -603,8 +603,8 @@ Goaltenders with the longest consecutive-win streaks.
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie-win-streak](https://records.nhl.com/site/api/goalie-win-streak)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -626,8 +626,8 @@ Goaltenders with the longest consecutive-shutout streaks.
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie-shutout-streak](https://records.nhl.com/site/api/goalie-shutout-streak)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -649,8 +649,8 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie-win-plateaus](https://records.nhl.com/site/api/goalie-win-plateaus)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -672,8 +672,8 @@ Goaltender consecutive playoff-win streaks.
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie-playoff-streak](https://records.nhl.com/site/api/goalie-playoff-streak)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -695,8 +695,8 @@ Goaltender longest undefeated streaks (wins + ties).
 
 **Valid URL:** [https://records.nhl.com/site/api/goalie-undefeated-streak](https://records.nhl.com/site/api/goalie-undefeated-streak)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -718,9 +718,9 @@ Retrieve NHL Entry Draft picks.
 
 **Valid URL:** [https://records.nhl.com/site/api/draft](https://records.nhl.com/site/api/draft)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `draft_id` | `draft_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `draft_id` | `draft_id` |  |  | `Y` | draft_id path parameter. |
 
 ### Returns
 
@@ -774,9 +774,9 @@ All draft picks made by a single team.
 
 **Valid URL:** [https://records.nhl.com/site/api/draft/byTeam/10](https://records.nhl.com/site/api/draft/byTeam/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -798,9 +798,9 @@ Draft prospect records.
 
 **Valid URL:** [https://records.nhl.com/site/api/draft-prospect](https://records.nhl.com/site/api/draft-prospect)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `prospect_id` | `prospect_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `prospect_id` | `prospect_id` |  |  | `Y` | prospect_id path parameter. |
 
 ### Returns
 
@@ -822,8 +822,8 @@ Draft lottery odds (current year or filtered by season).
 
 **Valid URL:** [https://records.nhl.com/site/api/draft-lottery-odds](https://records.nhl.com/site/api/draft-lottery-odds)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -845,8 +845,8 @@ Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 
 **Valid URL:** [https://records.nhl.com/site/api/expansion-draft-picks](https://records.nhl.com/site/api/expansion-draft-picks)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -868,8 +868,8 @@ All-Star Game career statistics for skaters.
 
 **Valid URL:** [https://records.nhl.com/site/api/all-star-skater-career-stats](https://records.nhl.com/site/api/all-star-skater-career-stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -891,8 +891,8 @@ All-Star Game career statistics for goaltenders.
 
 **Valid URL:** [https://records.nhl.com/site/api/all-star-goaltender-career-stats](https://records.nhl.com/site/api/all-star-goaltender-career-stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -914,8 +914,8 @@ All-Star Game career records for coaches.
 
 **Valid URL:** [https://records.nhl.com/site/api/all-star-coach-career-stats](https://records.nhl.com/site/api/all-star-coach-career-stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -937,8 +937,8 @@ All-Star Game single-game scoring records for skaters.
 
 **Valid URL:** [https://records.nhl.com/site/api/all-star-skater-game-stats](https://records.nhl.com/site/api/all-star-skater-game-stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -960,8 +960,8 @@ All-Star Game single-game stats for goaltenders.
 
 **Valid URL:** [https://records.nhl.com/site/api/all-star-goaltender-game-stats](https://records.nhl.com/site/api/all-star-goaltender-game-stats)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -983,8 +983,8 @@ NHL arena attendance records.
 
 **Valid URL:** [https://records.nhl.com/site/api/attendance](https://records.nhl.com/site/api/attendance)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1012,8 +1012,8 @@ Hockey Hall of Fame player inductees.
 
 **Valid URL:** [https://records.nhl.com/site/api/hof/players](https://records.nhl.com/site/api/hof/players)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1035,9 +1035,9 @@ Hall of Fame players for a specific induction office/category.
 
 **Valid URL:** [https://records.nhl.com/site/api/hof/players/X](https://records.nhl.com/site/api/hof/players/X)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `office_id` | `office_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `office_id` | `office_id` |  | `Y` |  | office_id path parameter. |
 
 ### Returns
 
@@ -1059,9 +1059,9 @@ General Manager career records.
 
 **Valid URL:** [https://records.nhl.com/site/api/general-manager](https://records.nhl.com/site/api/general-manager)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `gm_id` | `gm_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `gm_id` | `gm_id` |  |  | `Y` | gm_id path parameter. |
 
 ### Returns
 
@@ -1083,8 +1083,8 @@ General Manager records scoped to franchise stints.
 
 **Valid URL:** [https://records.nhl.com/site/api/general-manager-franchise-records](https://records.nhl.com/site/api/general-manager-franchise-records)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1106,8 +1106,8 @@ League-wide home-team win/loss record by season.
 
 **Valid URL:** [https://records.nhl.com/site/api/home-team-record](https://records.nhl.com/site/api/home-team-record)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1129,8 +1129,8 @@ League-wide away-team win/loss record by season.
 
 **Valid URL:** [https://records.nhl.com/site/api/away-team-record](https://records.nhl.com/site/api/away-team-record)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 

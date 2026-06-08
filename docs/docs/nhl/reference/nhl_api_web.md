@@ -15,9 +15,9 @@ Pull the play-by-play feed for one NHL game.
 
 **Valid URL:** [https://api-web.nhle.com/v1/gamecenter/2024020001/play-by-play](https://api-web.nhle.com/v1/gamecenter/2024020001/play-by-play)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_id` | `game_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
 ### Returns
 
@@ -88,9 +88,9 @@ Pull the boxscore for one NHL game.
 
 **Valid URL:** [https://api-web.nhle.com/v1/gamecenter/2024020001/boxscore](https://api-web.nhle.com/v1/gamecenter/2024020001/boxscore)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_id` | `game_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
 ### Returns
 
@@ -149,9 +149,9 @@ Pull the gamecenter landing payload for one NHL game.
 
 **Valid URL:** [https://api-web.nhle.com/v1/gamecenter/2024020001/landing](https://api-web.nhle.com/v1/gamecenter/2024020001/landing)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_id` | `game_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
 ### Returns
 
@@ -223,9 +223,9 @@ Pull the gamecenter right-rail payload (in-game widgets).
 
 **Valid URL:** [https://api-web.nhle.com/v1/gamecenter/2024020001/right-rail](https://api-web.nhle.com/v1/gamecenter/2024020001/right-rail)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `game_id` | `game_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | game_id path parameter. |
 
 ### Returns
 
@@ -247,9 +247,9 @@ Pull the week-of NHL schedule rooted at ``date``.
 
 **Valid URL:** [https://api-web.nhle.com/v1/schedule](https://api-web.nhle.com/v1/schedule)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `date` | `date` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `date` | `date` |  |  | `Y` | date path parameter. |
 
 ### Returns
 
@@ -332,9 +332,9 @@ Pull the single-day scoreboard for ``date``.
 
 **Valid URL:** [https://api-web.nhle.com/v1/score](https://api-web.nhle.com/v1/score)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `date` | `date` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `date` | `date` |  |  | `Y` | date path parameter. |
 
 ### Returns
 
@@ -405,9 +405,9 @@ Pull the calendar of game-days for the season.
 
 **Valid URL:** [https://api-web.nhle.com/v1/schedule-calendar](https://api-web.nhle.com/v1/schedule-calendar)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `date` | `date` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `date` | `date` |  |  | `Y` | date path parameter. |
 
 ### Returns
 
@@ -429,10 +429,10 @@ Pull a single playoff series payload.
 
 **Valid URL:** [https://api-web.nhle.com/v1/schedule/playoff-series/2025/a](https://api-web.nhle.com/v1/schedule/playoff-series/2025/a)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `series_letter` | `series_letter` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `series_letter` | `series_letter` |  | `Y` |  | series_letter path parameter. |
 
 ### Returns
 
@@ -454,9 +454,9 @@ Pull the NHL standings.
 
 **Valid URL:** [https://api-web.nhle.com/v1/standings](https://api-web.nhle.com/v1/standings)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `date` | `date` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `date` | `date` |  |  | `Y` | date path parameter. |
 
 ### Returns
 
@@ -563,8 +563,8 @@ Pull the per-season standings cutover dates.
 
 **Valid URL:** [https://api-web.nhle.com/v1/standings-season](https://api-web.nhle.com/v1/standings-season)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -597,10 +597,10 @@ Pull a team's full-season schedule.
 
 **Valid URL:** [https://api-web.nhle.com/v1/club-schedule-season/TOR](https://api-web.nhle.com/v1/club-schedule-season/TOR)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team` | `team` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team` | `team` |  | `Y` |  | team path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
 
 ### Returns
 
@@ -702,10 +702,10 @@ Pull a team's schedule for one month.
 
 **Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/month](https://api-web.nhle.com/v1/club-schedule/TOR/month)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team` | `team` |  | `Y` |  |
-| `month` | `month` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team` | `team` |  | `Y` |  | team path parameter. |
+| `month` | `month` |  |  | `Y` | month path parameter. |
 
 ### Returns
 
@@ -727,10 +727,10 @@ Pull a team's schedule for one week.
 
 **Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/week](https://api-web.nhle.com/v1/club-schedule/TOR/week)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team` | `team` |  | `Y` |  |
-| `date` | `date` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team` | `team` |  | `Y` |  | team path parameter. |
+| `date` | `date` |  |  | `Y` | date path parameter. |
 
 ### Returns
 
@@ -752,11 +752,11 @@ Pull a team's season stat block.
 
 **Valid URL:** [https://api-web.nhle.com/v1/club-stats/TOR](https://api-web.nhle.com/v1/club-stats/TOR)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team` | `team` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team` | `team` |  | `Y` |  | team path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -778,9 +778,9 @@ Pull the seasons a team has stats for.
 
 **Valid URL:** [https://api-web.nhle.com/v1/club-stats-season/TOR](https://api-web.nhle.com/v1/club-stats-season/TOR)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team` | `team` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team` | `team` |  | `Y` |  | team path parameter. |
 
 ### Returns
 
@@ -802,10 +802,10 @@ Pull a team's roster.
 
 **Valid URL:** [https://api-web.nhle.com/v1/roster/TOR](https://api-web.nhle.com/v1/roster/TOR)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team` | `team` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team` | `team` |  | `Y` |  | team path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
 
 ### Returns
 
@@ -849,9 +849,9 @@ Pull every season a team has had on file.
 
 **Valid URL:** [https://api-web.nhle.com/v1/roster-season/TOR](https://api-web.nhle.com/v1/roster-season/TOR)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team` | `team` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team` | `team` |  | `Y` |  | team path parameter. |
 
 ### Returns
 
@@ -873,9 +873,9 @@ Pull the player profile / overview.
 
 **Valid URL:** [https://api-web.nhle.com/v1/player/8480801/landing](https://api-web.nhle.com/v1/player/8480801/landing)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
 
 ### Returns
 
@@ -1028,11 +1028,11 @@ Pull a player's game-by-game log.
 
 **Valid URL:** [https://api-web.nhle.com/v1/player/8480801/game-log](https://api-web.nhle.com/v1/player/8480801/game-log)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1077,8 +1077,8 @@ Pull the league's currently featured players.
 
 **Valid URL:** [https://api-web.nhle.com/v1/player-spotlight](https://api-web.nhle.com/v1/player-spotlight)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1100,10 +1100,10 @@ Pull skater stat leaders.
 
 **Valid URL:** [https://api-web.nhle.com/v1/skater-stats-leaders](https://api-web.nhle.com/v1/skater-stats-leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1146,10 +1146,10 @@ Pull goalie stat leaders.
 
 **Valid URL:** [https://api-web.nhle.com/v1/goalie-stats-leaders](https://api-web.nhle.com/v1/goalie-stats-leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1188,10 +1188,10 @@ Pull NHL draft picks for a year (and optionally one round).
 
 **Valid URL:** [https://api-web.nhle.com/v1/draft/picks/2024](https://api-web.nhle.com/v1/draft/picks/2024)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `year` | `year` |  | `Y` |  |
-| `round_` | `round_` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+| `round_` | `round_` |  |  | `Y` | round_ path parameter. |
 
 ### Returns
 
@@ -1237,10 +1237,10 @@ Pull NHL Central Scouting rankings for a draft year.
 
 **Valid URL:** [https://api-web.nhle.com/v1/draft/rankings/2024](https://api-web.nhle.com/v1/draft/rankings/2024)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `year` | `year` |  | `Y` |  |
-| `category` | `category` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+| `category` | `category` |  |  | `Y` | category path parameter. |
 
 ### Returns
 
@@ -1262,8 +1262,8 @@ Pull the current / most recent draft pick set.
 
 **Valid URL:** [https://api-web.nhle.com/v1/draft/picks/now](https://api-web.nhle.com/v1/draft/picks/now)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1285,8 +1285,8 @@ Pull the current Central Scouting rankings.
 
 **Valid URL:** [https://api-web.nhle.com/v1/draft/rankings/now](https://api-web.nhle.com/v1/draft/rankings/now)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1308,8 +1308,8 @@ Pull the live draft-tracker pick list (during the draft itself).
 
 **Valid URL:** [https://api-web.nhle.com/v1/draft-tracker/picks/now](https://api-web.nhle.com/v1/draft-tracker/picks/now)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 

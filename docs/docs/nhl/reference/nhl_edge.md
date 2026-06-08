@@ -15,11 +15,11 @@ Pull EDGE detail stats for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-detail/8480801](https://api-web.nhle.com/v1/edge/skater-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -138,11 +138,11 @@ Pull EDGE comparison data for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-comparison/8480801](https://api-web.nhle.com/v1/edge/skater-comparison/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -164,11 +164,11 @@ Pull EDGE shot-location detail for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-shot-location-detail/8480801](https://api-web.nhle.com/v1/edge/skater-shot-location-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -190,13 +190,13 @@ Pull the EDGE top-10 skaters for a shot-location category.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/forwards/shots/points](https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/forwards/shots/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `position` | `position` |  | `Y` |  |
-| `category` | `category` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `position` | `position` |  | `Y` |  | position path parameter. |
+| `category` | `category` |  | `Y` |  | category path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -218,11 +218,11 @@ Pull EDGE shot-speed detail for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/8480801](https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -281,12 +281,12 @@ Pull the EDGE top-10 skaters by shot speed.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/points](https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `positions` | `positions` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `positions` | `positions` |  | `Y` |  | positions path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -308,11 +308,11 @@ Pull EDGE skating-distance detail for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/8480801](https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -334,11 +334,11 @@ Pull EDGE skating-speed detail for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/8480801](https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -360,12 +360,12 @@ Pull the EDGE top-10 skaters by skating speed.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/points](https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `positions` | `positions` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `positions` | `positions` |  | `Y` |  | positions path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -387,13 +387,13 @@ Pull the EDGE top-10 skaters by skating distance.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/ev/points](https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/ev/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `positions` | `positions` |  | `Y` |  |
-| `strength` | `strength` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `positions` | `positions` |  | `Y` |  | positions path parameter. |
+| `strength` | `strength` |  | `Y` |  | strength path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -415,11 +415,11 @@ Pull EDGE zone-time detail for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time/8480801](https://api-web.nhle.com/v1/edge/skater-zone-time/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -452,13 +452,13 @@ Pull the EDGE top-10 skaters by zone time.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/ev/points](https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/ev/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `positions` | `positions` |  | `Y` |  |
-| `strength` | `strength` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `positions` | `positions` |  | `Y` |  | positions path parameter. |
+| `strength` | `strength` |  | `Y` |  | strength path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -480,10 +480,10 @@ Pull the EDGE skater landing page (summary across all skaters).
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/skater-landing](https://api-web.nhle.com/v1/edge/skater-landing)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -505,11 +505,11 @@ Pull EDGE detail stats for a single goalie.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -570,11 +570,11 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -596,11 +596,11 @@ Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points](https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -622,11 +622,11 @@ Pull EDGE comparison data for a single goalie.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-comparison/8480801](https://api-web.nhle.com/v1/edge/goalie-comparison/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -648,11 +648,11 @@ Pull EDGE save-percentage detail for a single goalie.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -674,11 +674,11 @@ Pull the EDGE top-10 goalies by save-percentage.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points](https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -700,11 +700,11 @@ Pull EDGE shot-location detail for a single goalie.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -736,12 +736,12 @@ Pull the EDGE top-10 goalies for a shot-location category.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points](https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `category` | `category` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `category` | `category` |  | `Y` |  | category path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -763,10 +763,10 @@ Pull the EDGE goalie landing page (summary across all goalies).
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-landing](https://api-web.nhle.com/v1/edge/goalie-landing)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -788,11 +788,11 @@ Pull EDGE detail stats for a single team.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-detail/10](https://api-web.nhle.com/v1/edge/team-detail/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -894,10 +894,10 @@ Pull the EDGE team landing page (summary across all teams).
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-landing](https://api-web.nhle.com/v1/edge/team-landing)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -919,11 +919,11 @@ Pull EDGE shot-location detail for a single team.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-location-detail/10](https://api-web.nhle.com/v1/edge/team-shot-location-detail/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -953,13 +953,13 @@ Pull the EDGE top-10 teams for a shot-location category.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points](https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `position` | `position` |  | `Y` |  |
-| `category` | `category` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `position` | `position` |  | `Y` |  | position path parameter. |
+| `category` | `category` |  | `Y` |  | category path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -981,11 +981,11 @@ Pull EDGE shot-speed detail for a single team.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10](https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1007,11 +1007,11 @@ Pull EDGE skating-distance detail for a single team.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10](https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1033,13 +1033,13 @@ Pull the EDGE top-10 teams by skating distance.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points](https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `positions` | `positions` |  | `Y` |  |
-| `strength` | `strength` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `positions` | `positions` |  | `Y` |  | positions path parameter. |
+| `strength` | `strength` |  | `Y` |  | strength path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1061,11 +1061,11 @@ Pull EDGE skating-speed detail for a single team.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10](https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1087,12 +1087,12 @@ Pull the EDGE top-10 teams by skating speed.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points](https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `positions` | `positions` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `positions` | `positions` |  | `Y` |  | positions path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1114,11 +1114,11 @@ Pull EDGE zone-time details for a single team.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-zone-time-details/10](https://api-web.nhle.com/v1/edge/team-zone-time-details/10)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1140,12 +1140,12 @@ Pull the EDGE top-10 teams by zone time.
 
 **Valid URL:** [https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points](https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `strength` | `strength` |  | `Y` |  |
-| `sort_by` | `sort_by` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `strength` | `strength` |  | `Y` |  | strength path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1167,11 +1167,11 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 
 **Valid URL:** [https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801](https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 
@@ -1193,11 +1193,11 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 
 **Valid URL:** [https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801](https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `player_id` | `player_id` |  | `Y` |  |
-| `season` | `season` |  |  | `Y` |
-| `game_type` | `game_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
 ### Returns
 

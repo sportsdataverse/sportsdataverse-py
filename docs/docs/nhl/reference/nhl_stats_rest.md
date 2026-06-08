@@ -15,8 +15,8 @@ Ping the NHL Stats REST API database.
 
 **Valid URL:** [https://api.nhle.com/stats/rest/ping](https://api.nhle.com/stats/rest/ping)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -38,9 +38,9 @@ Retrieve the component-season configuration.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -62,9 +62,9 @@ Retrieve the Stats REST API configuration payload.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -86,10 +86,10 @@ Retrieve a content module by template key.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `template_key` | `template_key` |  | `Y` |  |
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `template_key` | `template_key` |  | `Y` |  | template_key path parameter. |
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -111,9 +111,9 @@ Retrieve the list of countries used in NHL data.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -147,9 +147,9 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -171,9 +171,9 @@ Retrieve franchise data.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -200,9 +200,9 @@ Retrieve game-level data.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -224,9 +224,9 @@ Retrieve the NHL Stats glossary of stat definitions.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -256,10 +256,10 @@ Retrieve a goalie statistical report.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `report` | `report` |  | `Y` |  |
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `report` | `report` |  | `Y` |  | report path parameter. |
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -305,10 +305,10 @@ Retrieve league leaders for a goalie statistical attribute.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `attribute` | `attribute` |  | `Y` |  |
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `attribute` | `attribute` |  | `Y` |  | attribute path parameter. |
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -330,10 +330,10 @@ Retrieve league leaders for a skater statistical attribute.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `attribute` | `attribute` |  | `Y` |  |
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `attribute` | `attribute` |  | `Y` |  | attribute path parameter. |
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -355,9 +355,9 @@ Retrieve milestone data for goalies.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -379,9 +379,9 @@ Retrieve milestone data for skaters.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -403,9 +403,9 @@ Retrieve the NHL player registry.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -427,9 +427,9 @@ Retrieve the list of all NHL seasons.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -475,9 +475,9 @@ Retrieve shift-chart data.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -499,10 +499,10 @@ Retrieve a skater statistical report.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `report` | `report` |  | `Y` |  |
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `report` | `report` |  | `Y` |  | report path parameter. |
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -551,9 +551,9 @@ Retrieve the list of all NHL teams.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -575,10 +575,10 @@ Retrieve a single team by its numeric ID.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 
@@ -600,10 +600,10 @@ Retrieve a team statistical report.
 
 **Valid URL:** [https://api.nhle.com/stats/rest](https://api.nhle.com/stats/rest)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `report` | `report` |  | `Y` |  |
-| `lang` | `lang` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `report` | `report` |  | `Y` |  | report path parameter. |
+| `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
 ### Returns
 

@@ -15,8 +15,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -38,8 +38,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/season](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/season)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -61,9 +61,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -85,9 +85,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -109,9 +109,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -133,10 +133,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 
 ### Returns
 
@@ -158,11 +158,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
-| `group_id` | `group_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
 
 ### Returns
 
@@ -184,10 +184,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 
 ### Returns
 
@@ -209,12 +209,12 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/teams](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/teams)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
-| `group_id` | `group_id` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -236,11 +236,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/children](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/children)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
-| `group_id` | `group_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
 
 ### Returns
 
@@ -262,10 +262,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/leaders](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 
 ### Returns
 
@@ -287,10 +287,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/corrections](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/corrections)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 
 ### Returns
 
@@ -312,10 +312,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
 
 ### Returns
 
@@ -337,11 +337,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks/1](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks/1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
-| `week` | `week` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `week` | `week` |  | `Y` |  | week path parameter. |
 
 ### Returns
 
@@ -363,12 +363,12 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks/1/events](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks/1/events)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
-| `week` | `week` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `week` | `week` |  | `Y` |  | week path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -390,10 +390,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -415,10 +415,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/4](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/4)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -440,11 +440,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/athletes](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/athletes)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
-| `page` | `page` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `page` | `page` |  |  | `Y` | page query parameter. |
 
 ### Returns
 
@@ -466,10 +466,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/coaches](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/coaches)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -491,9 +491,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/draft](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/draft)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -515,10 +515,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/draft/rounds/1/picks](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/draft/rounds/1/picks)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `round_num` | `round_num` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `round_num` | `round_num` |  | `Y` |  | round_num path parameter. |
 
 ### Returns
 
@@ -540,9 +540,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/futures](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/futures)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -564,9 +564,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/freeagents](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/freeagents)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -588,10 +588,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/powerindex](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/powerindex)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `team_id` | `team_id` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `team_id` | `team_id` |  |  | `Y` | team_id path parameter. |
 
 ### Returns
 
@@ -613,9 +613,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/powerindex/leaders](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/powerindex/leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -637,9 +637,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/awards](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/awards)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -661,11 +661,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `active` | `active` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
-| `page` | `page` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `active` | `active` |  |  | `Y` | active query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
+| `page` | `page` |  |  | `Y` | page query parameter. |
 
 ### Returns
 
@@ -687,9 +687,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -711,10 +711,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/statistics](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/statistics)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
-| `stat_type` | `stat_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+| `stat_type` | `stat_type` |  |  | `Y` | stat_type path parameter. |
 
 ### Returns
 
@@ -736,9 +736,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/statisticslog](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/statisticslog)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -760,9 +760,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/eventlog](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/eventlog)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -784,9 +784,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/contracts](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/contracts)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -808,9 +808,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/awards](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/awards)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -832,9 +832,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/seasons](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/seasons)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -856,9 +856,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/records](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/records)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -880,9 +880,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/injuries](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/injuries)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -904,9 +904,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/notes](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/notes)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -928,10 +928,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/vsathlete/5](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4239/vsathlete/5)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `athlete_id` | `athlete_id` |  | `Y` |  |
-| `opp_id` | `opp_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
+| `opp_id` | `opp_id` |  | `Y` |  | opp_id path parameter. |
 
 ### Returns
 
@@ -953,10 +953,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `dates` | `dates` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `dates` | `dates` |  |  | `Y` | dates query parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -978,9 +978,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
 
 ### Returns
 
@@ -1002,10 +1002,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1027,10 +1027,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1052,11 +1052,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `team_id` | `team_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1078,11 +1078,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `team_id` | `team_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1104,11 +1104,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `team_id` | `team_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1130,11 +1130,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `team_id` | `team_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1156,11 +1156,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `team_id` | `team_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1182,11 +1182,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `team_id` | `team_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1208,10 +1208,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1233,11 +1233,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -1259,11 +1259,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -1285,11 +1285,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `play_id` | `play_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `play_id` | `play_id` |  | `Y` |  | play_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1311,11 +1311,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `play_id` | `play_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `play_id` | `play_id` |  | `Y` |  | play_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1337,10 +1337,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1362,10 +1362,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1387,10 +1387,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1412,10 +1412,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1437,10 +1437,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1462,10 +1462,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1487,10 +1487,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1512,10 +1512,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1537,10 +1537,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1562,11 +1562,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401584793/competitions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `event_id` | `event_id` |  | `Y` |  |
-| `official_id` | `official_id` |  | `Y` |  |
-| `cid` | `cid` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `official_id` | `official_id` |  | `Y` |  | official_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
 
 ### Returns
 
@@ -1588,9 +1588,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -1627,9 +1627,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams/4](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams/4)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `team_id` | `team_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -1651,9 +1651,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -1675,9 +1675,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues/3663](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues/3663)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `venue_id` | `venue_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `venue_id` | `venue_id` |  | `Y` |  | venue_id path parameter. |
 
 ### Returns
 
@@ -1699,9 +1699,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -1723,9 +1723,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises/2](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises/2)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `franchise_id` | `franchise_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `franchise_id` | `franchise_id` |  | `Y` |  | franchise_id path parameter. |
 
 ### Returns
 
@@ -1747,9 +1747,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -1771,9 +1771,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `coach_id` | `coach_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
 
 ### Returns
 
@@ -1795,10 +1795,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/record](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/record)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `coach_id` | `coach_id` |  | `Y` |  |
-| `record_type` | `record_type` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
+| `record_type` | `record_type` |  |  | `Y` | record_type path parameter. |
 
 ### Returns
 
@@ -1820,10 +1820,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/seasons/2024](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/seasons/2024)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `coach_id` | `coach_id` |  | `Y` |  |
-| `season` | `season` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns
 
@@ -1845,8 +1845,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1868,9 +1868,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions/1](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions/1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `position_id` | `position_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `position_id` | `position_id` |  | `Y` |  | position_id path parameter. |
 
 ### Returns
 
@@ -1892,8 +1892,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/tournaments](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/tournaments)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1915,8 +1915,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -1938,9 +1938,9 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards/1](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards/1)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `award_id` | `award_id` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `award_id` | `award_id` |  | `Y` |  | award_id path parameter. |
 
 ### Returns
 
@@ -1962,8 +1962,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/standings](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/standings)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -2012,8 +2012,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/leaders](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/leaders)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -2035,8 +2035,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/notes](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/notes)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -2058,8 +2058,8 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/talentpicks](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/talentpicks)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
 
 ### Returns
 
@@ -2081,10 +2081,10 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/recruits](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/recruits)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `limit` | `limit` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `limit` | `limit` |  |  | `Y` | limit query parameter. |
 
 ### Returns
 
@@ -2106,11 +2106,11 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks/1/rankings](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/weeks/1/rankings)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  | `Y` |  |
-| `week` | `week` |  | `Y` |  |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `week` | `week` |  | `Y` |  | week path parameter. |
 
 ### Returns
 
@@ -2132,12 +2132,12 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `season_type` | `season_type` |  |  | `Y` |
-| `group_id` | `group_id` |  |  | `Y` |
-| `split` | `split` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  |  | `Y` | season_type path parameter. |
+| `group_id` | `group_id` |  |  | `Y` | group_id path parameter. |
+| `split` | `split` |  |  | `Y` | split path parameter. |
 
 ### Returns
 
@@ -2159,12 +2159,12 @@ ESPN endpoint.
 
 **Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types)
 
-| API Parameter | Python | Pattern | Required | Nullable |
-|---|---|:---:|:---:|:---:|
-| `season` | `season` |  | `Y` |  |
-| `week` | `week` |  | `Y` |  |
-| `season_type` | `season_type` |  |  | `Y` |
-| `split` | `split` |  |  | `Y` |
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `week` | `week` |  | `Y` |  | week path parameter. |
+| `season_type` | `season_type` |  |  | `Y` | season_type path parameter. |
+| `split` | `split` |  |  | `Y` | split path parameter. |
 
 ### Returns
 
