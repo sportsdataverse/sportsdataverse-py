@@ -435,3 +435,793 @@ endpoints:
   summary: "GET /api/v1/jobs/umpires \u2014 current umpire crew assignments."
   path: /api/v1/jobs/umpires
   parser: parse_mlb_api_list
+- short: conferences
+  summary: View all PCL conferences.
+  path: /api/v1/conferences
+  extra_params:
+  - name: conference_id
+    query_key: conferenceId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: conference
+  summary: View PCL conferences by conferenceId.
+  path: /api/v1/conferences/{conference_id}
+  path_params:
+  - name: conference_id
+    type: int
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    conference_id: 100
+  parser: parse_mlb_api_list
+- short: draft_latest
+  summary: View latest player drafted, endpoint best used when draft is currently open.
+  path: /api/v1/draft/{year}/latest
+  path_params:
+  - name: year
+    type: int
+    required: true
+  example_args:
+    year: 2023
+  parser: parse_mlb_api_list
+- short: game_timestamps
+  summary: Retrieve all of the play timecodes for a game in GUMBO feed.
+  path: /api/v1.1/game/{game_pk}/feed/live/timestamps
+  path_params:
+  - name: game_pk
+    type: str
+    required: true
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: game_changes
+  summary: View corrected non Statcast information for games
+  path: /api/v1/game/changes
+  extra_params:
+  - name: updated_since
+    query_key: updatedSince
+    type: str
+  - name: sport_id
+    query_key: sportId
+    type: int
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: analytics_games
+  summary: View timestamps of most recent data corrections made to games.
+  path: /api/v1/game/analytics/game
+  extra_params:
+  - name: game_mode_id
+    query_key: gameModeId
+    type: int
+  - name: timecode
+    query_key: timecode
+    type: str
+  - name: limit
+    query_key: limit
+    type: str
+  - name: sort_by
+    query_key: sortBy
+    type: str
+  - name: is_non_statcast
+    query_key: isNonStatcast
+    type: bool
+  - name: offset
+    query_key: offset
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: analytics_guids
+  summary: View timestamps of most recent data corrections made to GUIDs.
+  path: /api/v1/game/analytics/guids
+  extra_params:
+  - name: game_mode_id
+    query_key: gameModeId
+    type: int
+  - name: timecode
+    query_key: timecode
+    type: str
+  - name: limit
+    query_key: limit
+    type: str
+  - name: sort_by
+    query_key: sortBy
+    type: str
+  - name: is_non_statcast
+    query_key: isNonStatcast
+    type: bool
+  - name: offset
+    query_key: offset
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: game_guids
+  summary: View Statcast data for a specific game.
+  path: /api/v1/game/{game_pk}/guids
+  path_params:
+  - name: game_pk
+    type: str
+    required: true
+  extra_params:
+  - name: game_mode_id
+    query_key: gameModeId
+    type: int
+  - name: updated_since
+    query_key: updatedSince
+    type: str
+  - name: is_pitch
+    query_key: isPitch
+    type: str
+  - name: is_hit
+    query_key: isHit
+    type: str
+  - name: is_pickoff
+    query_key: isPickoff
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: parsed_raw
+    query_key: parsed/raw
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: play_analytics
+  summary: View Statcast data for a specific play.
+  path: /api/v1/game/{game_pk}/{guid}/analytics
+  path_params:
+  - name: game_pk
+    type: str
+    required: true
+  - name: guid
+    type: str
+    required: true
+  extra_params:
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+    guid: 90groovy-2438-test-guid-placeholder0
+  parser: parse_mlb_api_list
+- short: play_context_metrics_averages
+  summary: View Statcast contextMetrics data for a specific play.
+  path: /api/v1/game/{game_pk}/{guid}/contextMetricsAverages
+  path_params:
+  - name: game_pk
+    type: str
+    required: true
+  - name: guid
+    type: str
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+    guid: 90groovy-2438-test-guid-placeholder0
+  parser: parse_mlb_api_list
+- short: game_color
+  summary: View game color commentary info.
+  path: /api/v1/game/{game_pk}/feed/color
+  path_params:
+  - name: game_pk
+    type: str
+    required: true
+  extra_params:
+  - name: timecode
+    query_key: timecode
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: game_color_diff
+  summary: View game color feed.
+  path: /api/v1/game/{game_pk}/feed/color/diffPatch
+  path_params:
+  - name: game_pk
+    type: str
+    required: true
+  extra_params:
+  - name: start_timecode
+    query_key: startTimecode
+    type: str
+  - name: end_timecode
+    query_key: endTimecode
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: game_color_timestamps
+  summary: View all of the color timecodes for a game.
+  path: /api/v1/game/{game_pk}/feed/color/timestamps
+  path_params:
+  - name: game_pk
+    type: str
+    required: true
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: game_pace
+  summary: View time of game info.
+  path: /api/v1/gamePace
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: team_ids
+    query_key: teamIds
+    type: str
+  - name: league_ids
+    query_key: leagueIds
+    type: str
+  - name: league_list_id
+    query_key: leagueListId
+    type: str
+  - name: sport_id
+    query_key: sportId
+    type: int
+  - name: game_type
+    query_key: gameType
+    type: str
+  - name: start_date
+    query_key: startDate
+    type: str
+  - name: end_date
+    query_key: endDate
+    type: str
+  - name: venue_ids
+    query_key: venueIds
+    type: str
+  - name: org_type
+    query_key: orgType
+    type: str
+  - name: include_children
+    query_key: includeChildren
+    type: bool
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: high_low
+  summary: View high/low stats by player or team.
+  path: /api/v1/highLow/{org_type}
+  path_params:
+  - name: org_type
+    type: str
+    required: true
+  extra_params:
+  - name: stat_group
+    query_key: statGroup
+    type: str
+  - name: sort_stat
+    query_key: sortStat
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: game_type
+    query_key: gameType
+    type: str
+  - name: team_id
+    query_key: teamId
+    type: int
+  - name: league_id
+    query_key: leagueId
+    type: int
+  - name: sport_ids
+    query_key: sportIds
+    type: int
+  - name: limit
+    query_key: limit
+    type: int
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    org_type: player
+  parser: parse_mlb_api_list
+- short: home_run_derby
+  summary: View a home run derby object based on gamePk.
+  path: /api/v1/homeRunDerby/{game_pk}
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: home_run_derby_bracket
+  summary: View a home run derby object based on bracket.
+  path: /api/v1/homeRunDerby/{game_pk}/bracket
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: home_run_derby_pool
+  summary: View a home run derby object based on pool.
+  path: /api/v1/homeRunDerby/{game_pk}/pool
+  path_params:
+  - name: game_pk
+    type: int
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    game_pk: 716390
+  parser: parse_mlb_api_list
+- short: all_star_ballot
+  summary: View All-Star Ballots per league.
+  path: /api/v1/league/{league_id}/allStarBallot
+  path_params:
+  - name: league_id
+    type: str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    league_id: 103
+  parser: parse_mlb_api_list
+- short: all_star_write_ins
+  summary: View All-Star Write-ins per league.
+  path: /api/v1/league/{league_id}/allStarWriteIns
+  path_params:
+  - name: league_id
+    type: str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    league_id: 103
+  parser: parse_mlb_api_list
+- short: all_star_final_vote
+  summary: View All-Star Final Vote per league.
+  path: /api/v1/league/{league_id}/allStarFinalVote
+  path_params:
+  - name: league_id
+    type: str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    league_id: 103
+  parser: parse_mlb_api_list
+- short: free_agents
+  summary: View biographical information and stats for Free Agents.
+  path: /api/v1/people/freeAgents
+  extra_params:
+  - name: season_id
+    query_key: seasonId
+    type: str
+  - name: order
+    query_key: order
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: jobs
+  summary: View directory by jobType.
+  path: /api/v1/jobs
+  extra_params:
+  - name: job_type
+    query_key: jobType
+    type: str
+  - name: sport_id
+    query_key: sportId
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: datacasters
+  summary: View datacasters directory.
+  path: /api/v1/jobs/datacasters
+  extra_params:
+  - name: sport_id
+    query_key: sportId
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: official_scorers
+  summary: View official scorer directory.
+  path: /api/v1/jobs/officialScorers
+  extra_params:
+  - name: sport_id
+    query_key: sportId
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: umpire_games
+  summary: Get umpires and associated game for umpireId.
+  path: /api/v1/jobs/umpires/games/{umpire_id}
+  path_params:
+  - name: umpire_id
+    type: str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    umpire_id: 427044
+  parser: parse_mlb_api_list
+- short: schedule_tied
+  summary: View tied game schedule info.
+  path: /api/v1/schedule/games/tied
+  extra_params:
+  - name: game_types
+    query_key: gameTypes
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: schedule_postseason_series
+  summary: View schedule info for postseason based on series.
+  path: /api/v1/schedule/postseason/series
+  extra_params:
+  - name: game_types
+    query_key: gameTypes
+    type: str
+  - name: series_number
+    query_key: seriesNumber
+    type: int
+  - name: team_id
+    query_key: teamId
+    type: int
+  - name: sport_id
+    query_key: sportId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: schedule_postseason_tunein
+  summary: View schedule info for the tuneIn application.
+  path: /api/v1/schedule/postseason/tuneIn
+  extra_params:
+  - name: team_id
+    query_key: teamId
+    type: int
+  - name: sport_id
+    query_key: sportId
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: seasons_all
+  summary: View information for all seasons based on id.
+  path: /api/v1/seasons/all
+  extra_params:
+  - name: division_id
+    query_key: divisionId
+    type: str
+  - name: league_id
+    query_key: leagueId
+    type: int
+  - name: with_game_type_dates
+    query_key: withGameTypeDates
+    type: int
+  - name: sport_id
+    query_key: sportId
+    type: int
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: sport
+  summary: View information for any given sportId.
+  path: /api/v1/sports/{sport_id}
+  path_params:
+  - name: sport_id
+    type: str
+    required: true
+  extra_params:
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    sport_id: 1
+  parser: parse_mlb_api_list
+- short: stats_metrics
+  summary: View Statcast stats.
+  path: /api/v1/stats/metrics
+  extra_params:
+  - name: stats
+    query_key: stats
+    type: str
+  - name: group
+    query_key: group
+    type: str
+  - name: game_type
+    query_key: gameType
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: start_date
+    query_key: startDate
+    type: str
+  - name: end_date
+    query_key: endDate
+    type: str
+  - name: venue_id
+    query_key: venueId
+    type: int
+  - name: min_occurrences
+    query_key: minOccurrences
+    type: int
+  - name: percentile
+    query_key: percentile
+    type: int
+  - name: person_id
+    query_key: personId
+    type: int
+  - name: team_id
+    query_key: teamId
+    type: int
+  - name: limit
+    query_key: limit
+    type: int
+  - name: offset
+    query_key: offset
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: teams_history
+  summary: View historical records for a list of teams.
+  path: /api/v1/teams/history
+  extra_params:
+  - name: team_ids
+    query_key: teamIds
+    type: str
+  - name: start_season
+    query_key: startSeason
+    type: str
+  - name: end_season
+    query_key: endSeason
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: teams_stats
+  summary: View team stats.
+  path: /api/v1/teams/stats
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: sport_ids
+    query_key: sportIds
+    type: str
+  - name: stat_group
+    query_key: statGroup
+    type: str
+  - name: game_type
+    query_key: gameType
+    type: str
+  - name: stats
+    query_key: stats
+    type: str
+  - name: order
+    query_key: order
+    type: str
+  - name: sort_stat
+    query_key: sortStat
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: teams_stats_leaders
+  summary: View leaders for a statistic.
+  path: /api/v1/teams/stats/leaders
+  extra_params:
+  - name: leader_categories
+    query_key: leaderCategories
+    type: str
+  - name: sit_codes
+    query_key: sitCodes
+    type: str
+  - name: game_types
+    query_key: gameTypes
+    type: str
+  - name: stat_group
+    query_key: statGroup
+    type: str
+  - name: season
+    query_key: season
+    type: str
+  - name: league_ids
+    query_key: leagueIds
+    type: int
+  - name: start_date
+    query_key: startDate
+    type: str
+  - name: end_date
+    query_key: endDate
+    type: str
+  - name: sport_id
+    query_key: sportId
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: limit
+    query_key: limit
+    type: int
+  - name: fields
+    query_key: fields
+    type: str
+  parser: parse_mlb_api_list
+- short: team_coaches
+  summary: View biographical  information on all coaches for a given club.
+  path: /api/v1/teams/{team_id}/coaches
+  path_params:
+  - name: team_id
+    type: int
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    team_id: 10
+  parser: parse_mlb_api_list
+- short: team_personnel
+  summary: View biographical  information on all personnel for a given club.
+  path: /api/v1/teams/{team_id}/personnel
+  path_params:
+  - name: team_id
+    type: int
+    required: true
+  extra_params:
+  - name: date
+    query_key: date
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    team_id: 10
+  parser: parse_mlb_api_list
+- short: team_roster_type
+  summary: View biographical and statistical information for a club's roster based on roster type.
+  path: /api/v1/teams/{team_id}/roster/{roster_type}
+  path_params:
+  - name: team_id
+    type: int
+    required: true
+  - name: roster_type
+    type: str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: str
+  - name: date
+    query_key: date
+    type: str
+  - name: hydrate
+    query_key: hydrate
+    type: str
+  - name: fields
+    query_key: fields
+    type: str
+  example_args:
+    team_id: 10
+    roster_type: active
+  parser: parse_mlb_api_list

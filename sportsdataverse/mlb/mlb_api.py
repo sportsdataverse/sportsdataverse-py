@@ -36,6 +36,44 @@ __all__ = [
     "mlb_api_award_recipients",
     "mlb_api_draft",
     "mlb_api_umpires",
+    "mlb_api_conferences",
+    "mlb_api_conference",
+    "mlb_api_draft_latest",
+    "mlb_api_game_timestamps",
+    "mlb_api_game_changes",
+    "mlb_api_analytics_games",
+    "mlb_api_analytics_guids",
+    "mlb_api_game_guids",
+    "mlb_api_play_analytics",
+    "mlb_api_play_context_metrics_averages",
+    "mlb_api_game_color",
+    "mlb_api_game_color_diff",
+    "mlb_api_game_color_timestamps",
+    "mlb_api_game_pace",
+    "mlb_api_high_low",
+    "mlb_api_home_run_derby",
+    "mlb_api_home_run_derby_bracket",
+    "mlb_api_home_run_derby_pool",
+    "mlb_api_all_star_ballot",
+    "mlb_api_all_star_write_ins",
+    "mlb_api_all_star_final_vote",
+    "mlb_api_free_agents",
+    "mlb_api_jobs",
+    "mlb_api_datacasters",
+    "mlb_api_official_scorers",
+    "mlb_api_umpire_games",
+    "mlb_api_schedule_tied",
+    "mlb_api_schedule_postseason_series",
+    "mlb_api_schedule_postseason_tunein",
+    "mlb_api_seasons_all",
+    "mlb_api_sport",
+    "mlb_api_stats_metrics",
+    "mlb_api_teams_history",
+    "mlb_api_teams_stats",
+    "mlb_api_teams_stats_leaders",
+    "mlb_api_team_coaches",
+    "mlb_api_team_personnel",
+    "mlb_api_team_roster_type",
 ]
 
 
@@ -1078,6 +1116,1735 @@ def mlb_api_umpires(
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs/umpires",
         params={
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_conferences(
+    conference_id: Optional[str] = None,
+    season: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View all PCL conferences.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/conferences``
+    Example URL: https://statsapi.mlb.com/api/v1/conferences
+
+    Args:
+        conference_id: conferenceId query parameter.
+        season: season query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_conferences()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/conferences",
+        params={
+            "conferenceId": conference_id,
+            "season": season,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_conference(
+    conference_id: int,
+    season: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View PCL conferences by conferenceId.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/conferences/{conference_id}``
+    Example URL: https://statsapi.mlb.com/api/v1/conferences/100
+
+    Args:
+        conference_id: conference_id path parameter.
+        season: season query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_conference(conference_id=100)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/conferences/{conference_id}",
+        params={
+            "season": season,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_draft_latest(
+    year: int,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View latest player drafted, endpoint best used when draft is currently open.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/draft/{year}/latest``
+    Example URL: https://statsapi.mlb.com/api/v1/draft/2023/latest
+
+    Args:
+        year: year path parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_draft_latest(year=2023)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/draft/{year}/latest",
+        params={
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_game_timestamps(
+    game_pk: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Retrieve all of the play timecodes for a game in GUMBO feed.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live/timestamps``
+    Example URL: https://statsapi.mlb.com/api/v1.1/game/716390/feed/live/timestamps
+
+    Args:
+        game_pk: game_pk path parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_game_timestamps(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live/timestamps",
+        params={
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_game_changes(
+    updated_since: Optional[str] = None,
+    sport_id: Optional[int] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View corrected non Statcast information for games
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/changes``
+    Example URL: https://statsapi.mlb.com/api/v1/game/changes
+
+    Args:
+        updated_since: updatedSince query parameter.
+        sport_id: sportId query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_game_changes()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/game/changes",
+        params={
+            "updatedSince": updated_since,
+            "sportId": sport_id,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_analytics_games(
+    game_mode_id: Optional[int] = None,
+    timecode: Optional[str] = None,
+    limit: Optional[str] = None,
+    sort_by: Optional[str] = None,
+    is_non_statcast: Optional[bool] = None,
+    offset: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View timestamps of most recent data corrections made to games.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/analytics/game``
+    Example URL: https://statsapi.mlb.com/api/v1/game/analytics/game
+
+    Args:
+        game_mode_id: gameModeId query parameter.
+        timecode: timecode query parameter.
+        limit: limit query parameter.
+        sort_by: sortBy query parameter.
+        is_non_statcast: isNonStatcast query parameter.
+        offset: offset query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_analytics_games()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/game/analytics/game",
+        params={
+            "gameModeId": game_mode_id,
+            "timecode": timecode,
+            "limit": limit,
+            "sortBy": sort_by,
+            "isNonStatcast": is_non_statcast,
+            "offset": offset,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_analytics_guids(
+    game_mode_id: Optional[int] = None,
+    timecode: Optional[str] = None,
+    limit: Optional[str] = None,
+    sort_by: Optional[str] = None,
+    is_non_statcast: Optional[bool] = None,
+    offset: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View timestamps of most recent data corrections made to GUIDs.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/analytics/guids``
+    Example URL: https://statsapi.mlb.com/api/v1/game/analytics/guids
+
+    Args:
+        game_mode_id: gameModeId query parameter.
+        timecode: timecode query parameter.
+        limit: limit query parameter.
+        sort_by: sortBy query parameter.
+        is_non_statcast: isNonStatcast query parameter.
+        offset: offset query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_analytics_guids()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/game/analytics/guids",
+        params={
+            "gameModeId": game_mode_id,
+            "timecode": timecode,
+            "limit": limit,
+            "sortBy": sort_by,
+            "isNonStatcast": is_non_statcast,
+            "offset": offset,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_game_guids(
+    game_pk: str,
+    game_mode_id: Optional[int] = None,
+    updated_since: Optional[str] = None,
+    is_pitch: Optional[str] = None,
+    is_hit: Optional[str] = None,
+    is_pickoff: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    parsed_raw: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View Statcast data for a specific game.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/guids``
+    Example URL: https://statsapi.mlb.com/api/v1/game/716390/guids
+
+    Args:
+        game_pk: game_pk path parameter.
+        game_mode_id: gameModeId query parameter.
+        updated_since: updatedSince query parameter.
+        is_pitch: isPitch query parameter.
+        is_hit: isHit query parameter.
+        is_pickoff: isPickoff query parameter.
+        hydrate: hydrate query parameter.
+        parsed_raw: parsed/raw query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_game_guids(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/game/{game_pk}/guids",
+        params={
+            "gameModeId": game_mode_id,
+            "updatedSince": updated_since,
+            "isPitch": is_pitch,
+            "isHit": is_hit,
+            "isPickoff": is_pickoff,
+            "hydrate": hydrate,
+            "parsed/raw": parsed_raw,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_play_analytics(
+    game_pk: str,
+    guid: str,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View Statcast data for a specific play.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/analytics``
+    Example URL: https://statsapi.mlb.com/api/v1/game/716390/90groovy-2438-test-guid-placeholder0/analytics
+
+    Args:
+        game_pk: game_pk path parameter.
+        guid: guid path parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/analytics",
+        params={
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_play_context_metrics_averages(
+    game_pk: str,
+    guid: str,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View Statcast contextMetrics data for a specific play.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/contextMetricsAverages``
+    Example URL: https://statsapi.mlb.com/api/v1/game/716390/90groovy-2438-test-guid-placeholder0/contextMetricsAverages
+
+    Args:
+        game_pk: game_pk path parameter.
+        guid: guid path parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/contextMetricsAverages",
+        params={
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_game_color(
+    game_pk: str,
+    timecode: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View game color commentary info.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color``
+    Example URL: https://statsapi.mlb.com/api/v1/game/716390/feed/color
+
+    Args:
+        game_pk: game_pk path parameter.
+        timecode: timecode query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_game_color(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color",
+        params={
+            "timecode": timecode,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_game_color_diff(
+    game_pk: str,
+    start_timecode: Optional[str] = None,
+    end_timecode: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View game color feed.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/diffPatch``
+    Example URL: https://statsapi.mlb.com/api/v1/game/716390/feed/color/diffPatch
+
+    Args:
+        game_pk: game_pk path parameter.
+        start_timecode: startTimecode query parameter.
+        end_timecode: endTimecode query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_game_color_diff(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/diffPatch",
+        params={
+            "startTimecode": start_timecode,
+            "endTimecode": end_timecode,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_game_color_timestamps(
+    game_pk: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View all of the color timecodes for a game.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/timestamps``
+    Example URL: https://statsapi.mlb.com/api/v1/game/716390/feed/color/timestamps
+
+    Args:
+        game_pk: game_pk path parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_game_color_timestamps(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/timestamps",
+        params={
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_game_pace(
+    season: Optional[str] = None,
+    team_ids: Optional[str] = None,
+    league_ids: Optional[str] = None,
+    league_list_id: Optional[str] = None,
+    sport_id: Optional[int] = None,
+    game_type: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    venue_ids: Optional[str] = None,
+    org_type: Optional[str] = None,
+    include_children: Optional[bool] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View time of game info.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/gamePace``
+    Example URL: https://statsapi.mlb.com/api/v1/gamePace
+
+    Args:
+        season: season query parameter.
+        team_ids: teamIds query parameter.
+        league_ids: leagueIds query parameter.
+        league_list_id: leagueListId query parameter.
+        sport_id: sportId query parameter.
+        game_type: gameType query parameter.
+        start_date: startDate query parameter.
+        end_date: endDate query parameter.
+        venue_ids: venueIds query parameter.
+        org_type: orgType query parameter.
+        include_children: includeChildren query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_game_pace()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/gamePace",
+        params={
+            "season": season,
+            "teamIds": team_ids,
+            "leagueIds": league_ids,
+            "leagueListId": league_list_id,
+            "sportId": sport_id,
+            "gameType": game_type,
+            "startDate": start_date,
+            "endDate": end_date,
+            "venueIds": venue_ids,
+            "orgType": org_type,
+            "includeChildren": include_children,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_high_low(
+    org_type: str,
+    stat_group: Optional[str] = None,
+    sort_stat: Optional[str] = None,
+    season: Optional[str] = None,
+    game_type: Optional[str] = None,
+    team_id: Optional[int] = None,
+    league_id: Optional[int] = None,
+    sport_ids: Optional[int] = None,
+    limit: Optional[int] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View high/low stats by player or team.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/highLow/{org_type}``
+    Example URL: https://statsapi.mlb.com/api/v1/highLow/player
+
+    Args:
+        org_type: org_type path parameter.
+        stat_group: statGroup query parameter.
+        sort_stat: sortStat query parameter.
+        season: season query parameter.
+        game_type: gameType query parameter.
+        team_id: teamId query parameter.
+        league_id: leagueId query parameter.
+        sport_ids: sportIds query parameter.
+        limit: limit query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_high_low(org_type='player')
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/highLow/{org_type}",
+        params={
+            "statGroup": stat_group,
+            "sortStat": sort_stat,
+            "season": season,
+            "gameType": game_type,
+            "teamId": team_id,
+            "leagueId": league_id,
+            "sportIds": sport_ids,
+            "limit": limit,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_home_run_derby(
+    game_pk: int,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View a home run derby object based on gamePk.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}``
+    Example URL: https://statsapi.mlb.com/api/v1/homeRunDerby/716390
+
+    Args:
+        game_pk: game_pk path parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_home_run_derby(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}",
+        params={
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_home_run_derby_bracket(
+    game_pk: int,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View a home run derby object based on bracket.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/bracket``
+    Example URL: https://statsapi.mlb.com/api/v1/homeRunDerby/716390/bracket
+
+    Args:
+        game_pk: game_pk path parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_home_run_derby_bracket(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/bracket",
+        params={
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_home_run_derby_pool(
+    game_pk: int,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View a home run derby object based on pool.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/pool``
+    Example URL: https://statsapi.mlb.com/api/v1/homeRunDerby/716390/pool
+
+    Args:
+        game_pk: game_pk path parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_home_run_derby_pool(game_pk=716390)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/pool",
+        params={
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_all_star_ballot(
+    league_id: str,
+    season: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View All-Star Ballots per league.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarBallot``
+    Example URL: https://statsapi.mlb.com/api/v1/league/103/allStarBallot
+
+    Args:
+        league_id: league_id path parameter.
+        season: season query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_all_star_ballot(league_id=103)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarBallot",
+        params={
+            "season": season,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_all_star_write_ins(
+    league_id: str,
+    season: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View All-Star Write-ins per league.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarWriteIns``
+    Example URL: https://statsapi.mlb.com/api/v1/league/103/allStarWriteIns
+
+    Args:
+        league_id: league_id path parameter.
+        season: season query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_all_star_write_ins(league_id=103)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarWriteIns",
+        params={
+            "season": season,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_all_star_final_vote(
+    league_id: str,
+    season: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View All-Star Final Vote per league.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarFinalVote``
+    Example URL: https://statsapi.mlb.com/api/v1/league/103/allStarFinalVote
+
+    Args:
+        league_id: league_id path parameter.
+        season: season query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_all_star_final_vote(league_id=103)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarFinalVote",
+        params={
+            "season": season,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_free_agents(
+    season_id: Optional[str] = None,
+    order: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View biographical information and stats for Free Agents.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/people/freeAgents``
+    Example URL: https://statsapi.mlb.com/api/v1/people/freeAgents
+
+    Args:
+        season_id: seasonId query parameter.
+        order: order query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_free_agents()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/people/freeAgents",
+        params={
+            "seasonId": season_id,
+            "order": order,
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_jobs(
+    job_type: Optional[str] = None,
+    sport_id: Optional[str] = None,
+    date: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View directory by jobType.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs``
+    Example URL: https://statsapi.mlb.com/api/v1/jobs
+
+    Args:
+        job_type: jobType query parameter.
+        sport_id: sportId query parameter.
+        date: date query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_jobs()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/jobs",
+        params={
+            "jobType": job_type,
+            "sportId": sport_id,
+            "date": date,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_datacasters(
+    sport_id: Optional[str] = None,
+    date: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View datacasters directory.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs/datacasters``
+    Example URL: https://statsapi.mlb.com/api/v1/jobs/datacasters
+
+    Args:
+        sport_id: sportId query parameter.
+        date: date query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_datacasters()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/jobs/datacasters",
+        params={
+            "sportId": sport_id,
+            "date": date,
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_official_scorers(
+    sport_id: Optional[str] = None,
+    date: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View official scorer directory.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs/officialScorers``
+    Example URL: https://statsapi.mlb.com/api/v1/jobs/officialScorers
+
+    Args:
+        sport_id: sportId query parameter.
+        date: date query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_official_scorers()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/jobs/officialScorers",
+        params={
+            "sportId": sport_id,
+            "date": date,
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_umpire_games(
+    umpire_id: str,
+    season: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Get umpires and associated game for umpireId.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs/umpires/games/{umpire_id}``
+    Example URL: https://statsapi.mlb.com/api/v1/jobs/umpires/games/427044
+
+    Args:
+        umpire_id: umpire_id path parameter.
+        season: season query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_umpire_games(umpire_id=427044)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/jobs/umpires/games/{umpire_id}",
+        params={
+            "season": season,
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_schedule_tied(
+    game_types: Optional[str] = None,
+    season: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View tied game schedule info.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/games/tied``
+    Example URL: https://statsapi.mlb.com/api/v1/schedule/games/tied
+
+    Args:
+        game_types: gameTypes query parameter.
+        season: season query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_schedule_tied()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/schedule/games/tied",
+        params={
+            "gameTypes": game_types,
+            "season": season,
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_schedule_postseason_series(
+    game_types: Optional[str] = None,
+    series_number: Optional[int] = None,
+    team_id: Optional[int] = None,
+    sport_id: Optional[str] = None,
+    season: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View schedule info for postseason based on series.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/postseason/series``
+    Example URL: https://statsapi.mlb.com/api/v1/schedule/postseason/series
+
+    Args:
+        game_types: gameTypes query parameter.
+        series_number: seriesNumber query parameter.
+        team_id: teamId query parameter.
+        sport_id: sportId query parameter.
+        season: season query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_schedule_postseason_series()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/schedule/postseason/series",
+        params={
+            "gameTypes": game_types,
+            "seriesNumber": series_number,
+            "teamId": team_id,
+            "sportId": sport_id,
+            "season": season,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_schedule_postseason_tunein(
+    team_id: Optional[int] = None,
+    sport_id: Optional[str] = None,
+    season: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View schedule info for the tuneIn application.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn``
+    Example URL: https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn
+
+    Args:
+        team_id: teamId query parameter.
+        sport_id: sportId query parameter.
+        season: season query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_schedule_postseason_tunein()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn",
+        params={
+            "teamId": team_id,
+            "sportId": sport_id,
+            "season": season,
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_seasons_all(
+    division_id: Optional[str] = None,
+    league_id: Optional[int] = None,
+    with_game_type_dates: Optional[int] = None,
+    sport_id: Optional[int] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View information for all seasons based on id.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/seasons/all``
+    Example URL: https://statsapi.mlb.com/api/v1/seasons/all
+
+    Args:
+        division_id: divisionId query parameter.
+        league_id: leagueId query parameter.
+        with_game_type_dates: withGameTypeDates query parameter.
+        sport_id: sportId query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_seasons_all()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/seasons/all",
+        params={
+            "divisionId": division_id,
+            "leagueId": league_id,
+            "withGameTypeDates": with_game_type_dates,
+            "sportId": sport_id,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_sport(
+    sport_id: str,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View information for any given sportId.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/sports/{sport_id}``
+    Example URL: https://statsapi.mlb.com/api/v1/sports/1
+
+    Args:
+        sport_id: sport_id path parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_sport(sport_id=1)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/sports/{sport_id}",
+        params={
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_stats_metrics(
+    stats: Optional[str] = None,
+    group: Optional[str] = None,
+    game_type: Optional[str] = None,
+    season: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    venue_id: Optional[int] = None,
+    min_occurrences: Optional[int] = None,
+    percentile: Optional[int] = None,
+    person_id: Optional[int] = None,
+    team_id: Optional[int] = None,
+    limit: Optional[int] = None,
+    offset: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View Statcast stats.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/stats/metrics``
+    Example URL: https://statsapi.mlb.com/api/v1/stats/metrics
+
+    Args:
+        stats: stats query parameter.
+        group: group query parameter.
+        game_type: gameType query parameter.
+        season: season query parameter.
+        start_date: startDate query parameter.
+        end_date: endDate query parameter.
+        venue_id: venueId query parameter.
+        min_occurrences: minOccurrences query parameter.
+        percentile: percentile query parameter.
+        person_id: personId query parameter.
+        team_id: teamId query parameter.
+        limit: limit query parameter.
+        offset: offset query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_stats_metrics()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/stats/metrics",
+        params={
+            "stats": stats,
+            "group": group,
+            "gameType": game_type,
+            "season": season,
+            "startDate": start_date,
+            "endDate": end_date,
+            "venueId": venue_id,
+            "minOccurrences": min_occurrences,
+            "percentile": percentile,
+            "personId": person_id,
+            "teamId": team_id,
+            "limit": limit,
+            "offset": offset,
+            "hydrate": hydrate,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_teams_history(
+    team_ids: Optional[str] = None,
+    start_season: Optional[str] = None,
+    end_season: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View historical records for a list of teams.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/history``
+    Example URL: https://statsapi.mlb.com/api/v1/teams/history
+
+    Args:
+        team_ids: teamIds query parameter.
+        start_season: startSeason query parameter.
+        end_season: endSeason query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_teams_history()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/teams/history",
+        params={
+            "teamIds": team_ids,
+            "startSeason": start_season,
+            "endSeason": end_season,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_teams_stats(
+    season: Optional[str] = None,
+    sport_ids: Optional[str] = None,
+    stat_group: Optional[str] = None,
+    game_type: Optional[str] = None,
+    stats: Optional[str] = None,
+    order: Optional[str] = None,
+    sort_stat: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View team stats.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/stats``
+    Example URL: https://statsapi.mlb.com/api/v1/teams/stats
+
+    Args:
+        season: season query parameter.
+        sport_ids: sportIds query parameter.
+        stat_group: statGroup query parameter.
+        game_type: gameType query parameter.
+        stats: stats query parameter.
+        order: order query parameter.
+        sort_stat: sortStat query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_teams_stats()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/teams/stats",
+        params={
+            "season": season,
+            "sportIds": sport_ids,
+            "statGroup": stat_group,
+            "gameType": game_type,
+            "stats": stats,
+            "order": order,
+            "sortStat": sort_stat,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_teams_stats_leaders(
+    leader_categories: Optional[str] = None,
+    sit_codes: Optional[str] = None,
+    game_types: Optional[str] = None,
+    stat_group: Optional[str] = None,
+    season: Optional[str] = None,
+    league_ids: Optional[int] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    sport_id: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    limit: Optional[int] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View leaders for a statistic.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/stats/leaders``
+    Example URL: https://statsapi.mlb.com/api/v1/teams/stats/leaders
+
+    Args:
+        leader_categories: leaderCategories query parameter.
+        sit_codes: sitCodes query parameter.
+        game_types: gameTypes query parameter.
+        stat_group: statGroup query parameter.
+        season: season query parameter.
+        league_ids: leagueIds query parameter.
+        start_date: startDate query parameter.
+        end_date: endDate query parameter.
+        sport_id: sportId query parameter.
+        hydrate: hydrate query parameter.
+        limit: limit query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_teams_stats_leaders()
+    """
+    raw = _get(
+        "https://statsapi.mlb.com/api/v1/teams/stats/leaders",
+        params={
+            "leaderCategories": leader_categories,
+            "sitCodes": sit_codes,
+            "gameTypes": game_types,
+            "statGroup": stat_group,
+            "season": season,
+            "leagueIds": league_ids,
+            "startDate": start_date,
+            "endDate": end_date,
+            "sportId": sport_id,
+            "hydrate": hydrate,
+            "limit": limit,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_team_coaches(
+    team_id: int,
+    season: Optional[str] = None,
+    date: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View biographical  information on all coaches for a given club.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/coaches``
+    Example URL: https://statsapi.mlb.com/api/v1/teams/10/coaches
+
+    Args:
+        team_id: team_id path parameter.
+        season: season query parameter.
+        date: date query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_team_coaches(team_id=10)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/teams/{team_id}/coaches",
+        params={
+            "season": season,
+            "date": date,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_team_personnel(
+    team_id: int,
+    date: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View biographical  information on all personnel for a given club.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/personnel``
+    Example URL: https://statsapi.mlb.com/api/v1/teams/10/personnel
+
+    Args:
+        team_id: team_id path parameter.
+        date: date query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_team_personnel(team_id=10)
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/teams/{team_id}/personnel",
+        params={
+            "date": date,
+            "fields": fields,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_api_team_roster_type(
+    team_id: int,
+    roster_type: str,
+    season: Optional[str] = None,
+    date: Optional[str] = None,
+    hydrate: Optional[str] = None,
+    fields: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """View biographical and statistical information for a club's roster based on roster type.
+
+    Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/roster/{roster_type}``
+    Example URL: https://statsapi.mlb.com/api/v1/teams/10/roster/active
+
+    Args:
+        team_id: team_id path parameter.
+        roster_type: roster_type path parameter.
+        season: season query parameter.
+        date: date query parameter.
+        hydrate: hydrate query parameter.
+        fields: fields query parameter.
+        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_api_team_roster_type(team_id=10, roster_type='active')
+    """
+    raw = _get(
+        f"https://statsapi.mlb.com/api/v1/teams/{team_id}/roster/{roster_type}",
+        params={
+            "season": season,
+            "date": date,
+            "hydrate": hydrate,
+            "fields": fields,
             **{_k: _v for _k, _v in kwargs.items() if _v is not None},
         },
     )
