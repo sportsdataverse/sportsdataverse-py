@@ -10,9 +10,10 @@ Design notes
 ------------
 * ``scoreboard`` / ``standings`` / ``leaders`` wrappers accept
   ``return_parsed=False`` and return a raw ``dict``; the fixture is that dict.
-* ``teams`` wrappers return a Polars DataFrame directly (no ``return_parsed``
-  parameter). The fixture is the DataFrame serialised as a JSON list-of-records
-  so the schema introspector can read column names without importing Polars.
+* ``teams`` wrappers are always-parsed (no ``return_parsed`` parameter).
+  Instead we fetch the raw ESPN site v2 teams URL directly so the fixture
+  contains the raw dict that ``parse_teams(payload)`` expects.
+  URL pattern: https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams
 * ``espn_wnba_standings`` / ``espn_wbb_standings`` use ``raw=True`` instead of
   ``return_parsed=False`` (different wrapper generation era); handled below.
 * In-season dates / seasons chosen to guarantee non-empty payloads:
@@ -28,11 +29,35 @@ from __future__ import annotations
 
 import importlib
 import json
+import urllib.request
 from pathlib import Path
 from typing import Any
 
 import polars as pl
 import pandas as pd
+
+# ESPN site v2 teams URL: sport/league slugs for direct raw fetch.
+# espn_{league}_teams wrappers are always-parsed (no return_parsed param),
+# so we bypass them and hit the URL directly.
+_TEAMS_SLUGS: dict[str, str] = {
+    "nba": "basketball/nba",
+    "wnba": "basketball/wnba",
+    "mbb": "basketball/mens-college-basketball",
+    "wbb": "basketball/womens-college-basketball",
+    "cfb": "football/college-football",
+    "nfl": "football/nfl",
+    "mlb": "baseball/mlb",
+    "nhl": "hockey/nhl",
+}
+_TEAMS_BASE_URL = "https://site.api.espn.com/apis/site/v2/sports/{slug}/teams?limit=1000"
+_HTTP_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/json",
+}
 
 OUT = Path("tests/fixtures/espn")
 LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"]
@@ -92,6 +117,16 @@ def _serialize(raw: Any) -> str:
     return json.dumps(raw, default=str)
 
 
+def _fetch_teams_raw(league: str) -> dict:
+    """Fetch raw ESPN site v2 teams payload for a league via direct HTTP GET."""
+    slug = _TEAMS_SLUGS[league]
+    url = _TEAMS_BASE_URL.format(slug=slug)
+    req = urllib.request.Request(url, headers=_HTTP_HEADERS)
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        body = resp.read()
+    return json.loads(body)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     written = 0
@@ -101,20 +136,36 @@ def main() -> None:
         mod = importlib.import_module(f"sportsdataverse.{league}")
         for stem, short, kwargs_map in ENDPOINTS:
             fn_name = f"espn_{league}_{short}"
-            fn = getattr(mod, fn_name, None)
-            if fn is None:
-                print(f"skip  {league}/{stem}: no wrapper '{fn_name}'")
-                failed.append(f"{league}/{stem}: no wrapper")
-                continue
-
-            # Determine kwargs for this (league, endpoint) combination
-            if kwargs_map is not None:
-                call_kwargs = kwargs_map.get(league, {})
-            else:
-                # teams: no special kwargs; call bare (lru_cache is fine)
-                call_kwargs = {}
 
             try:
+                # --- teams: bypass the always-parsed wrapper; fetch raw directly ---
+                if stem == "teams":
+                    raw = _fetch_teams_raw(league)
+                    if not isinstance(raw, dict) or "sports" not in raw:
+                        raise ValueError(
+                            f"unexpected teams payload structure: "
+                            f"type={type(raw).__name__}, "
+                            f"top-level keys={list(raw.keys())[:5] if isinstance(raw, dict) else 'N/A'}"
+                        )
+                    payload_str = json.dumps(raw, default=str)
+                    if len(payload_str) < MIN_BYTES:
+                        raise ValueError(f"payload too small ({len(payload_str)} bytes) — likely empty or error stub")
+                    path = OUT / f"{stem}_{league}.json"
+                    path.write_text(payload_str, encoding="utf-8")
+                    print(f"wrote {path} ({path.stat().st_size:,} bytes)")
+                    written += 1
+                    continue
+
+                # --- all other endpoints: call the wrapper as before ---
+                fn = getattr(mod, fn_name, None)
+                if fn is None:
+                    print(f"skip  {league}/{stem}: no wrapper '{fn_name}'")
+                    failed.append(f"{league}/{stem}: no wrapper")
+                    continue
+
+                # Determine kwargs for this (league, endpoint) combination
+                call_kwargs = kwargs_map.get(league, {}) if kwargs_map is not None else {}
+
                 # Clear lru_cache between leagues so we don't cross-contaminate
                 clear_fn = getattr(fn, "cache_clear", None)
                 if clear_fn is not None:
