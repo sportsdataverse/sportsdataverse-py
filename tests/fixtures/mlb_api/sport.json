@@ -1,0 +1,14 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "sports": [
+    {
+      "id": 1,
+      "code": "mlb",
+      "link": "/api/v1/sports/1",
+      "name": "Major League Baseball",
+      "abbreviation": "MLB",
+      "sortOrder": 11,
+      "activeStatus": true
+    }
+  ]
+}

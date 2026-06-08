@@ -1,0 +1,33 @@
+schema: team_roster_type
+kind: dataframe
+columns:
+- name: jersey_number
+  type: character
+  description: ''
+- name: person_id
+  type: integer
+  description: ''
+- name: person_full_name
+  type: character
+  description: ''
+- name: person_link
+  type: character
+  description: ''
+- name: position_code
+  type: character
+  description: ''
+- name: position_name
+  type: character
+  description: ''
+- name: position_type
+  type: character
+  description: ''
+- name: position_abbreviation
+  type: character
+  description: ''
+- name: status_code
+  type: character
+  description: ''
+- name: status_description
+  type: character
+  description: ''

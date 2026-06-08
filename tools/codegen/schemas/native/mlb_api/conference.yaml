@@ -1,0 +1,33 @@
+schema: conference
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: link
+  type: character
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: has_wildcard
+  type: logical
+  description: ''
+- name: name_short
+  type: character
+  description: ''
+- name: league_id
+  type: integer
+  description: ''
+- name: league_link
+  type: character
+  description: ''
+- name: sport_id
+  type: integer
+  description: ''
+- name: sport_link
+  type: character
+  description: ''

@@ -1,0 +1,2348 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "roster": [
+    {
+      "person": {
+        "id": 666938,
+        "fullName": "Edward Alvarez",
+        "link": "/api/v1/people/666938"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684798,
+        "fullName": "David Amoriello",
+        "link": "/api/v1/people/684798"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 632811,
+        "fullName": "Doug Anderson",
+        "link": "/api/v1/people/632811"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 584273,
+        "fullName": "Andy Andres",
+        "link": "/api/v1/people/584273"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 511710,
+        "fullName": "Troy Andre",
+        "link": "/api/v1/people/511710"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 584288,
+        "fullName": "Jose Isabel Anguiano",
+        "link": "/api/v1/people/584288"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800990,
+        "fullName": "Terri Arms",
+        "link": "/api/v1/people/800990"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 821942,
+        "fullName": "Amanda Bachelder",
+        "link": "/api/v1/people/821942"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 670060,
+        "fullName": "Keith Barnes",
+        "link": "/api/v1/people/670060"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427022,
+        "fullName": "Matt Bartlett",
+        "link": "/api/v1/people/427022"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 478601,
+        "fullName": "Tyler Barton",
+        "link": "/api/v1/people/478601"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684802,
+        "fullName": "Zac Basile",
+        "link": "/api/v1/people/684802"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831878,
+        "fullName": "Leslie Basler",
+        "link": "/api/v1/people/831878"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 601482,
+        "fullName": "Dan Battaglia",
+        "link": "/api/v1/people/601482"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831435,
+        "fullName": "Michael Benton",
+        "link": "/api/v1/people/831435"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 482136,
+        "fullName": "Brian Berger",
+        "link": "/api/v1/people/482136"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831877,
+        "fullName": "Ashley Bernardo",
+        "link": "/api/v1/people/831877"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 650888,
+        "fullName": "Kara Blackstone",
+        "link": "/api/v1/people/650888"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 816249,
+        "fullName": "Aidan Blaylock",
+        "link": "/api/v1/people/816249"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 511228,
+        "fullName": "Gerry Bondoc",
+        "link": "/api/v1/people/511228"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 816252,
+        "fullName": "Shawn Bonds",
+        "link": "/api/v1/people/816252"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 815804,
+        "fullName": "Michael Britt",
+        "link": "/api/v1/people/815804"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 663033,
+        "fullName": "Jim Buckle",
+        "link": "/api/v1/people/663033"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800987,
+        "fullName": "Diana Bump",
+        "link": "/api/v1/people/800987"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800985,
+        "fullName": "Erin Bump",
+        "link": "/api/v1/people/800985"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831863,
+        "fullName": "Ayad Bunni",
+        "link": "/api/v1/people/831863"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 482141,
+        "fullName": "Jeff Businger",
+        "link": "/api/v1/people/482141"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 535257,
+        "fullName": "Pat Butcher",
+        "link": "/api/v1/people/535257"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 816248,
+        "fullName": "Tyler Butterfield",
+        "link": "/api/v1/people/816248"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 661296,
+        "fullName": "John Caine",
+        "link": "/api/v1/people/661296"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 836581,
+        "fullName": "Wilson Cam",
+        "link": "/api/v1/people/836581"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 810850,
+        "fullName": "Hope Capp",
+        "link": "/api/v1/people/810850"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427052,
+        "fullName": "Richard Carletti",
+        "link": "/api/v1/people/427052"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 837210,
+        "fullName": "TJ Carnes",
+        "link": "/api/v1/people/837210"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 802038,
+        "fullName": "Steve Carney",
+        "link": "/api/v1/people/802038"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800979,
+        "fullName": "James Carrig",
+        "link": "/api/v1/people/800979"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 636643,
+        "fullName": "Tim Clodjeaux",
+        "link": "/api/v1/people/636643"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 638686,
+        "fullName": "Alan Cohen",
+        "link": "/api/v1/people/638686"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 632807,
+        "fullName": "Josh Cookson",
+        "link": "/api/v1/people/632807"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 823337,
+        "fullName": "Ryan Cosgrove",
+        "link": "/api/v1/people/823337"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 678326,
+        "fullName": "Manuel Cruz",
+        "link": "/api/v1/people/678326"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684807,
+        "fullName": "Jeremy Davis",
+        "link": "/api/v1/people/684807"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700075,
+        "fullName": "Madison Day",
+        "link": "/api/v1/people/700075"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 703859,
+        "fullName": "Joshua DeFamio",
+        "link": "/api/v1/people/703859"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 823353,
+        "fullName": "Dayna Denner",
+        "link": "/api/v1/people/823353"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 677480,
+        "fullName": "Nick DiCostanzo",
+        "link": "/api/v1/people/677480"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 478610,
+        "fullName": "Joe DiMare",
+        "link": "/api/v1/people/478610"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 816253,
+        "fullName": "Ryan Driscoll",
+        "link": "/api/v1/people/816253"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 816253,
+        "fullName": "Ryan Driscoll",
+        "link": "/api/v1/people/816253"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427131,
+        "fullName": "Michael Duca",
+        "link": "/api/v1/people/427131"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700144,
+        "fullName": "Brooke Duerst",
+        "link": "/api/v1/people/700144"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 702082,
+        "fullName": "Michael Dufton",
+        "link": "/api/v1/people/702082"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 661294,
+        "fullName": "Ryan Easton",
+        "link": "/api/v1/people/661294"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 626560,
+        "fullName": "Rob Engel",
+        "link": "/api/v1/people/626560"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 626560,
+        "fullName": "Rob Engel",
+        "link": "/api/v1/people/626560"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 626560,
+        "fullName": "Rob Engel",
+        "link": "/api/v1/people/626560"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831984,
+        "fullName": "Ryan Erickson",
+        "link": "/api/v1/people/831984"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 477745,
+        "fullName": "Bryan Evans",
+        "link": "/api/v1/people/477745"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 601476,
+        "fullName": "Doug Feldmann",
+        "link": "/api/v1/people/601476"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 809879,
+        "fullName": "Ryan Feuerstein",
+        "link": "/api/v1/people/809879"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 504213,
+        "fullName": "Doug Fischer",
+        "link": "/api/v1/people/504213"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 544665,
+        "fullName": "Greg Fischer",
+        "link": "/api/v1/people/544665"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 478612,
+        "fullName": "Lawrence Fischer",
+        "link": "/api/v1/people/478612"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700134,
+        "fullName": "Paul Folkemer",
+        "link": "/api/v1/people/700134"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 490176,
+        "fullName": "Jake Fox",
+        "link": "/api/v1/people/490176"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700141,
+        "fullName": "Matthew Fox",
+        "link": "/api/v1/people/700141"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 489955,
+        "fullName": "David Freeman",
+        "link": "/api/v1/people/489955"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 541398,
+        "fullName": "Dominic French",
+        "link": "/api/v1/people/541398"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 811130,
+        "fullName": "Matthew Frizzell",
+        "link": "/api/v1/people/811130"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666101,
+        "fullName": "Jay Garneau",
+        "link": "/api/v1/people/666101"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 669525,
+        "fullName": "Jillian Geib",
+        "link": "/api/v1/people/669525"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 435060,
+        "fullName": "Shawn Geraghty",
+        "link": "/api/v1/people/435060"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 806524,
+        "fullName": "Andrew Golden",
+        "link": "/api/v1/people/806524"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 485542,
+        "fullName": "Don Golden",
+        "link": "/api/v1/people/485542"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 477748,
+        "fullName": "David Gonzalez",
+        "link": "/api/v1/people/477748"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 661260,
+        "fullName": "Marc Grossman",
+        "link": "/api/v1/people/661260"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831538,
+        "fullName": "Jacob Hable",
+        "link": "/api/v1/people/831538"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800982,
+        "fullName": "Alex Haese",
+        "link": "/api/v1/people/800982"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684883,
+        "fullName": "Karl Hain",
+        "link": "/api/v1/people/684883"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 837205,
+        "fullName": "Ryan Harding",
+        "link": "/api/v1/people/837205"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 803380,
+        "fullName": "Daniel Harrington",
+        "link": "/api/v1/people/803380"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700422,
+        "fullName": "Jonathan Henderson",
+        "link": "/api/v1/people/700422"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666944,
+        "fullName": "Andrew Hendriks",
+        "link": "/api/v1/people/666944"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 679165,
+        "fullName": "Kay Hill",
+        "link": "/api/v1/people/679165"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800977,
+        "fullName": "Brandon Hogan",
+        "link": "/api/v1/people/800977"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 650314,
+        "fullName": "Stacey Hohl",
+        "link": "/api/v1/people/650314"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700142,
+        "fullName": "Zack Holler",
+        "link": "/api/v1/people/700142"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427237,
+        "fullName": "Scott Hollister",
+        "link": "/api/v1/people/427237"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 836361,
+        "fullName": "Jordan  Holm",
+        "link": "/api/v1/people/836361"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700147,
+        "fullName": "George Holton",
+        "link": "/api/v1/people/700147"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 482170,
+        "fullName": "Mark Honbo",
+        "link": "/api/v1/people/482170"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800981,
+        "fullName": "Matthew Houk",
+        "link": "/api/v1/people/800981"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666946,
+        "fullName": "Kurt Hoyt",
+        "link": "/api/v1/people/666946"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700154,
+        "fullName": "Arik Hughes",
+        "link": "/api/v1/people/700154"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 661298,
+        "fullName": "Alexandra Irving",
+        "link": "/api/v1/people/661298"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 811288,
+        "fullName": "Claire Johnson",
+        "link": "/api/v1/people/811288"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700149,
+        "fullName": "Lauren Johnson",
+        "link": "/api/v1/people/700149"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831789,
+        "fullName": "Logan Jones",
+        "link": "/api/v1/people/831789"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831789,
+        "fullName": "Logan Jones",
+        "link": "/api/v1/people/831789"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 816246,
+        "fullName": "Hau'oli Kalipi",
+        "link": "/api/v1/people/816246"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 809809,
+        "fullName": "Jared Kane",
+        "link": "/api/v1/people/809809"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 829275,
+        "fullName": "Paul Krause",
+        "link": "/api/v1/people/829275"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 605321,
+        "fullName": "Kyle Kraus",
+        "link": "/api/v1/people/605321"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 702838,
+        "fullName": "Samantha Labombarda",
+        "link": "/api/v1/people/702838"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 613598,
+        "fullName": "Patrick Lagreid",
+        "link": "/api/v1/people/613598"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 810854,
+        "fullName": "Matthew Langston",
+        "link": "/api/v1/people/810854"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 478634,
+        "fullName": "Dan Lauletta",
+        "link": "/api/v1/people/478634"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 478636,
+        "fullName": "Kelvin Lee",
+        "link": "/api/v1/people/478636"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700146,
+        "fullName": "Ryan Leffel",
+        "link": "/api/v1/people/700146"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666948,
+        "fullName": "Jeff Lehtinen",
+        "link": "/api/v1/people/666948"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 802253,
+        "fullName": "Shawn Leitner",
+        "link": "/api/v1/people/802253"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 430022,
+        "fullName": "Chris Lentine",
+        "link": "/api/v1/people/430022"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 650313,
+        "fullName": "Steve Loher",
+        "link": "/api/v1/people/650313"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 498926,
+        "fullName": "Kelly Luse",
+        "link": "/api/v1/people/498926"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427308,
+        "fullName": "Ed Luteran",
+        "link": "/api/v1/people/427308"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 632813,
+        "fullName": "Pat Madden",
+        "link": "/api/v1/people/632813"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 693488,
+        "fullName": "Pat Madine",
+        "link": "/api/v1/people/693488"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 518190,
+        "fullName": "Larry Mahnken",
+        "link": "/api/v1/people/518190"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 570881,
+        "fullName": "John Malkoski",
+        "link": "/api/v1/people/570881"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 839295,
+        "fullName": "Kevin Manley",
+        "link": "/api/v1/people/839295"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 431181,
+        "fullName": "Jim Marshall",
+        "link": "/api/v1/people/431181"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 632812,
+        "fullName": "Jason Martinez",
+        "link": "/api/v1/people/632812"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 511128,
+        "fullName": "Kyle Matschke",
+        "link": "/api/v1/people/511128"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 497526,
+        "fullName": "Brennan McDonald",
+        "link": "/api/v1/people/497526"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 802027,
+        "fullName": "James McMillan",
+        "link": "/api/v1/people/802027"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 664665,
+        "fullName": "Matt Meffe",
+        "link": "/api/v1/people/664665"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 654829,
+        "fullName": "Charles Miller",
+        "link": "/api/v1/people/654829"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684800,
+        "fullName": "Chuck Miller",
+        "link": "/api/v1/people/684800"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 496213,
+        "fullName": "Tim Miller",
+        "link": "/api/v1/people/496213"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 496216,
+        "fullName": "Steve Mitchell",
+        "link": "/api/v1/people/496216"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684884,
+        "fullName": "Scott Moeller",
+        "link": "/api/v1/people/684884"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 653745,
+        "fullName": "Tyler Molina",
+        "link": "/api/v1/people/653745"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800986,
+        "fullName": "Michael Monostra",
+        "link": "/api/v1/people/800986"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 618606,
+        "fullName": "Jim Morrison",
+        "link": "/api/v1/people/618606"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700155,
+        "fullName": "Jeff Moulton",
+        "link": "/api/v1/people/700155"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 802252,
+        "fullName": "August Mueller",
+        "link": "/api/v1/people/802252"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 491580,
+        "fullName": "Brian Mullen",
+        "link": "/api/v1/people/491580"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700150,
+        "fullName": "Tom Mussa",
+        "link": "/api/v1/people/700150"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427356,
+        "fullName": "Richard Musterer",
+        "link": "/api/v1/people/427356"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700152,
+        "fullName": "Joe Nardella",
+        "link": "/api/v1/people/700152"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 686229,
+        "fullName": "Corey Neal",
+        "link": "/api/v1/people/686229"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 804624,
+        "fullName": "Curt Newport",
+        "link": "/api/v1/people/804624"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 829276,
+        "fullName": "Carter Paine",
+        "link": "/api/v1/people/829276"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 496214,
+        "fullName": "Karen Palmyra",
+        "link": "/api/v1/people/496214"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 837202,
+        "fullName": "Louis Pannone",
+        "link": "/api/v1/people/837202"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 805370,
+        "fullName": "Nolan Papacek",
+        "link": "/api/v1/people/805370"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 661292,
+        "fullName": "Micah Parshall",
+        "link": "/api/v1/people/661292"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 477744,
+        "fullName": "Earl Paylor",
+        "link": "/api/v1/people/477744"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 686221,
+        "fullName": "Ben Pearson",
+        "link": "/api/v1/people/686221"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700230,
+        "fullName": "Rainier Perez",
+        "link": "/api/v1/people/700230"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 595851,
+        "fullName": "Mark Pertierra",
+        "link": "/api/v1/people/595851"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 810853,
+        "fullName": "Jeremy Pilgrim-Stoppel",
+        "link": "/api/v1/people/810853"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427401,
+        "fullName": "Jim Planamento",
+        "link": "/api/v1/people/427401"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 496221,
+        "fullName": "Robert Poe",
+        "link": "/api/v1/people/496221"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 535256,
+        "fullName": "Mark Polishuk",
+        "link": "/api/v1/people/535256"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 661303,
+        "fullName": "Sean Poor",
+        "link": "/api/v1/people/661303"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 823354,
+        "fullName": "Aidan Post",
+        "link": "/api/v1/people/823354"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666939,
+        "fullName": "Todd Reeves",
+        "link": "/api/v1/people/666939"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800988,
+        "fullName": "Marissa Richards",
+        "link": "/api/v1/people/800988"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 477743,
+        "fullName": "Jason Rigatti",
+        "link": "/api/v1/people/477743"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 496220,
+        "fullName": "Jason Risley",
+        "link": "/api/v1/people/496220"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 827715,
+        "fullName": "Evan Roberts",
+        "link": "/api/v1/people/827715"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 477747,
+        "fullName": "Craig Rondinone",
+        "link": "/api/v1/people/477747"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 839297,
+        "fullName": "Chris Ruffner",
+        "link": "/api/v1/people/839297"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 810851,
+        "fullName": "William Russo",
+        "link": "/api/v1/people/810851"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 802733,
+        "fullName": "Patrick Rydeen",
+        "link": "/api/v1/people/802733"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 829278,
+        "fullName": "Nate Sanchez",
+        "link": "/api/v1/people/829278"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 809418,
+        "fullName": "Angela Sanson",
+        "link": "/api/v1/people/809418"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 838658,
+        "fullName": "Jason Sawyer",
+        "link": "/api/v1/people/838658"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427456,
+        "fullName": "Cory Schwartz",
+        "link": "/api/v1/people/427456"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 477742,
+        "fullName": "Ian Schwartz",
+        "link": "/api/v1/people/477742"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800975,
+        "fullName": "Jeff Schwartz",
+        "link": "/api/v1/people/800975"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 546740,
+        "fullName": "Marti Sementelli",
+        "link": "/api/v1/people/546740"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684801,
+        "fullName": "Art Shendell",
+        "link": "/api/v1/people/684801"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 478659,
+        "fullName": "Gary P. Shiff",
+        "link": "/api/v1/people/478659"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 831879,
+        "fullName": "Andrew Shin",
+        "link": "/api/v1/people/831879"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 663022,
+        "fullName": "Ryan Shute",
+        "link": "/api/v1/people/663022"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800983,
+        "fullName": "Kevin Sinclair",
+        "link": "/api/v1/people/800983"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666942,
+        "fullName": "Howard Smith",
+        "link": "/api/v1/people/666942"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800984,
+        "fullName": "Justin Smith",
+        "link": "/api/v1/people/800984"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 668176,
+        "fullName": "Richie Smith",
+        "link": "/api/v1/people/668176"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 838858,
+        "fullName": "Jacob Snelgrove",
+        "link": "/api/v1/people/838858"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 693946,
+        "fullName": "Rick Soos",
+        "link": "/api/v1/people/693946"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 684808,
+        "fullName": "TJ Souhlaris",
+        "link": "/api/v1/people/684808"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 657378,
+        "fullName": "John Spataro",
+        "link": "/api/v1/people/657378"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 825939,
+        "fullName": "Jeremy Stangelo",
+        "link": "/api/v1/people/825939"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427493,
+        "fullName": "Dale Stevens",
+        "link": "/api/v1/people/427493"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 668010,
+        "fullName": "Forest Stulting",
+        "link": "/api/v1/people/668010"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 485928,
+        "fullName": "Russ Stutz",
+        "link": "/api/v1/people/485928"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427503,
+        "fullName": "Ben Sussman",
+        "link": "/api/v1/people/427503"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666941,
+        "fullName": "Scott Sussman",
+        "link": "/api/v1/people/666941"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800978,
+        "fullName": "Sarah Swartz",
+        "link": "/api/v1/people/800978"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 496223,
+        "fullName": "Bob Taylor",
+        "link": "/api/v1/people/496223"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 829280,
+        "fullName": "Alex Terrazas",
+        "link": "/api/v1/people/829280"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 823355,
+        "fullName": "Chris Thompson",
+        "link": "/api/v1/people/823355"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 431178,
+        "fullName": "Leah Tobin",
+        "link": "/api/v1/people/431178"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 667791,
+        "fullName": "Craig Vanderkam",
+        "link": "/api/v1/people/667791"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 679748,
+        "fullName": "Cameron Varnau",
+        "link": "/api/v1/people/679748"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 500435,
+        "fullName": "Lou Villano",
+        "link": "/api/v1/people/500435"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 824000,
+        "fullName": "Nicole Vos",
+        "link": "/api/v1/people/824000"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 669603,
+        "fullName": "Andy Walker",
+        "link": "/api/v1/people/669603"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 703852,
+        "fullName": "Spencer Ward",
+        "link": "/api/v1/people/703852"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 613603,
+        "fullName": "Jonathan Webb",
+        "link": "/api/v1/people/613603"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 700156,
+        "fullName": "Max Whieldon",
+        "link": "/api/v1/people/700156"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427541,
+        "fullName": "Doug White",
+        "link": "/api/v1/people/427541"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 693660,
+        "fullName": "Mike Wick",
+        "link": "/api/v1/people/693660"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 427544,
+        "fullName": "Hank Widmer",
+        "link": "/api/v1/people/427544"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 597452,
+        "fullName": "Megan Widmer",
+        "link": "/api/v1/people/597452"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 679746,
+        "fullName": "Danny Wind",
+        "link": "/api/v1/people/679746"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 685972,
+        "fullName": "Kent Wipf",
+        "link": "/api/v1/people/685972"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 839296,
+        "fullName": "Kerry Wolff",
+        "link": "/api/v1/people/839296"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 666945,
+        "fullName": "Steve Wong",
+        "link": "/api/v1/people/666945"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    },
+    {
+      "person": {
+        "id": 800976,
+        "fullName": "Matthew Yates",
+        "link": "/api/v1/people/800976"
+      },
+      "jerseyNumber": "",
+      "job": "Stringer",
+      "jobId": "MSTR",
+      "title": "Stringer"
+    }
+  ]
+}

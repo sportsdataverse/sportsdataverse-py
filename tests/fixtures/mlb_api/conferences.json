@@ -1,0 +1,37 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "conferences": [
+    {
+      "id": 301,
+      "name": "PCL American Conference",
+      "link": "/api/v1/conferences/301",
+      "abbreviation": "PCLA",
+      "hasWildcard": false,
+      "league": {
+        "id": 112,
+        "link": "/api/v1/league/112"
+      },
+      "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+      },
+      "nameShort": "PCL American"
+    },
+    {
+      "id": 302,
+      "name": "PCL Pacific Conference",
+      "link": "/api/v1/conferences/302",
+      "abbreviation": "PCLP",
+      "hasWildcard": false,
+      "league": {
+        "id": 112,
+        "link": "/api/v1/league/112"
+      },
+      "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+      },
+      "nameShort": "PCL Pacific"
+    }
+  ]
+}

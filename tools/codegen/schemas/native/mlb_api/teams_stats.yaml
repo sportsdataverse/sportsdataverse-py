@@ -1,0 +1,24 @@
+schema: teams_stats
+kind: dataframe
+columns:
+- name: total_splits
+  type: integer
+  description: ''
+- name: exemptions
+  type: character
+  description: ''
+- name: splits
+  type: character
+  description: ''
+- name: splits_tied_with_offset
+  type: character
+  description: ''
+- name: splits_tied_with_limit
+  type: character
+  description: ''
+- name: type_display_name
+  type: character
+  description: ''
+- name: group_display_name
+  type: character
+  description: ''

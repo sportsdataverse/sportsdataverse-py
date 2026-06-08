@@ -1,0 +1,140 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "roster": [
+    {
+      "person": {
+        "id": 111213,
+        "fullName": "Aaron Boone",
+        "link": "/api/v1/people/111213"
+      },
+      "jerseyNumber": "17",
+      "job": "Manager",
+      "jobId": "MNGR",
+      "title": "Manager"
+    },
+    {
+      "person": {
+        "id": 425825,
+        "fullName": "Carlos Mendoza",
+        "link": "/api/v1/people/425825"
+      },
+      "jerseyNumber": "64",
+      "job": "Bench Coach",
+      "jobId": "COAB",
+      "title": "Bench Coach"
+    },
+    {
+      "person": {
+        "id": 112087,
+        "fullName": "Sean Casey",
+        "link": "/api/v1/people/112087"
+      },
+      "jerseyNumber": "",
+      "job": "Hitting Coach",
+      "jobId": "COAT",
+      "title": "Hitting Coach"
+    },
+    {
+      "person": {
+        "id": 666867,
+        "fullName": "Dillon Lawson",
+        "link": "/api/v1/people/666867"
+      },
+      "jerseyNumber": "74",
+      "job": "Hitting Coach",
+      "jobId": "COAT",
+      "title": "Hitting Coach"
+    },
+    {
+      "person": {
+        "id": 605217,
+        "fullName": "Casey Dykes",
+        "link": "/api/v1/people/605217"
+      },
+      "jerseyNumber": "78",
+      "job": "Assistant Hitting Coach",
+      "jobId": "COAA",
+      "title": "Assistant Hitting Coach"
+    },
+    {
+      "person": {
+        "id": 150415,
+        "fullName": "Brad Wilkerson",
+        "link": "/api/v1/people/150415"
+      },
+      "jerseyNumber": "68",
+      "job": "Assistant Hitting Coach",
+      "jobId": "COAA",
+      "title": "Assistant Hitting Coach"
+    },
+    {
+      "person": {
+        "id": 666880,
+        "fullName": "Matt Blake",
+        "link": "/api/v1/people/666880"
+      },
+      "jerseyNumber": "77",
+      "job": "Pitching Coach",
+      "jobId": "COAP",
+      "title": "Pitching Coach"
+    },
+    {
+      "person": {
+        "id": 800100,
+        "fullName": "Desi Druschel",
+        "link": "/api/v1/people/800100"
+      },
+      "jerseyNumber": "79",
+      "job": "Assistant Pitching Coach",
+      "jobId": "COPA",
+      "title": "Assistant Pitching Coach"
+    },
+    {
+      "person": {
+        "id": 425648,
+        "fullName": "Travis Chapman",
+        "link": "/api/v1/people/425648"
+      },
+      "jerseyNumber": "75",
+      "job": "First Base Coach",
+      "jobId": "COA1",
+      "title": "First Base/Infield Coach"
+    },
+    {
+      "person": {
+        "id": 467588,
+        "fullName": "Luis Rojas",
+        "link": "/api/v1/people/467588"
+      },
+      "jerseyNumber": "67",
+      "job": "Third Base Coach",
+      "jobId": "COA3",
+      "title": "Third Base/Outfield Coach"
+    },
+    {
+      "person": {
+        "id": 115476,
+        "fullName": "Mike Harkey",
+        "link": "/api/v1/people/115476"
+      },
+      "jerseyNumber": "60",
+      "job": "Bullpen Coach",
+      "jobId": "COAU",
+      "title": "Bullpen Coach"
+    },
+    {
+      "person": {
+        "id": 678933,
+        "fullName": "Tanner Swanson",
+        "link": "/api/v1/people/678933"
+      },
+      "jerseyNumber": "76",
+      "job": "Coach",
+      "jobId": "COAC",
+      "title": "Major League Field Coordinator and Director of Catching"
+    }
+  ],
+  "link": "/api/v1/teams/147/coaches",
+  "teamId": 147,
+  "rosterType": "coach"
+}

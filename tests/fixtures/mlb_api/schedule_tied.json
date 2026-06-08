@@ -1,0 +1,97 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "totalItems": 1,
+  "totalEvents": 0,
+  "totalGames": 1,
+  "totalGamesInProgress": 0,
+  "dates": [
+    {
+      "date": "2016-09-29",
+      "totalItems": 1,
+      "totalEvents": 0,
+      "totalGames": 1,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 449244,
+          "gameGuid": "fe60e012-7bea-4349-9d42-72438bc1c708",
+          "link": "/api/v1.1/game/449244/feed/live",
+          "gameType": "R",
+          "season": "2016",
+          "gameDate": "2016-09-29T23:05:00Z",
+          "officialDate": "2016-09-29",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "FT",
+            "startTimeTBD": false,
+            "reason": "Tied",
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 112,
+                "name": "Chicago Cubs",
+                "link": "/api/v1/teams/112"
+              },
+              "leagueRecord": {
+                "wins": 101,
+                "losses": 57,
+                "ties": 1,
+                "pct": ".639"
+              },
+              "score": 1,
+              "splitSquad": false,
+              "seriesNumber": 51
+            },
+            "home": {
+              "team": {
+                "id": 134,
+                "name": "Pittsburgh Pirates",
+                "link": "/api/v1/teams/134"
+              },
+              "leagueRecord": {
+                "wins": 78,
+                "losses": 80,
+                "ties": 1,
+                "pct": ".494"
+              },
+              "score": 1,
+              "splitSquad": false,
+              "seriesNumber": 51
+            }
+          },
+          "venue": {
+            "id": 31,
+            "name": "PNC Park",
+            "link": "/api/v1/venues/31"
+          },
+          "content": {
+            "link": "/api/v1/game/449244/content"
+          },
+          "isTie": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-449244-2016-09-29",
+          "seasonDisplay": "2016",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 4,
+          "seriesGameNumber": 4,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

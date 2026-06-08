@@ -1,0 +1,169 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "teams": [
+    {
+      "allStarStatus": "N",
+      "id": 147,
+      "name": "New York Yankees",
+      "link": "/api/v1/teams/147",
+      "season": 2009,
+      "venue": {
+        "id": 3313,
+        "name": "Yankee Stadium",
+        "link": "/api/v1/venues/3313"
+      },
+      "springVenue": {
+        "id": 2523,
+        "link": "/api/v1/venues/2523"
+      },
+      "teamCode": "nya",
+      "fileCode": "nyy",
+      "abbreviation": "NYY",
+      "teamName": "Yankees",
+      "locationName": "Bronx",
+      "firstYearOfPlay": "1903",
+      "league": {
+        "id": 103,
+        "name": "American League",
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1",
+        "name": "Major League Baseball"
+      },
+      "shortName": "NY Yankees",
+      "franchiseName": "New York",
+      "clubName": "Yankees",
+      "active": true
+    },
+    {
+      "allStarStatus": "N",
+      "id": 147,
+      "name": "New York Yankees",
+      "link": "/api/v1/teams/147",
+      "season": 1974,
+      "venue": {
+        "id": 25,
+        "name": "Shea Stadium",
+        "link": "/api/v1/venues/25"
+      },
+      "teamCode": "nya",
+      "fileCode": "nyy",
+      "abbreviation": "NYY",
+      "teamName": "Yankees",
+      "locationName": "Flushing",
+      "firstYearOfPlay": "1903",
+      "league": {
+        "id": 103,
+        "name": "American League",
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1",
+        "name": "Major League Baseball"
+      },
+      "shortName": "NY Yankees",
+      "franchiseName": "New York",
+      "clubName": "Yankees",
+      "active": true
+    },
+    {
+      "allStarStatus": "N",
+      "id": 147,
+      "name": "New York Yankees",
+      "link": "/api/v1/teams/147",
+      "season": 1923,
+      "venue": {
+        "id": 9,
+        "name": "Yankee Stadium I",
+        "link": "/api/v1/venues/9"
+      },
+      "teamCode": "nya",
+      "fileCode": "nyy",
+      "abbreviation": "NYY",
+      "teamName": "Yankees",
+      "locationName": "Bronx",
+      "firstYearOfPlay": "1903",
+      "league": {
+        "id": 103,
+        "name": "American League",
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1",
+        "name": "Major League Baseball"
+      },
+      "shortName": "NY Yankees",
+      "franchiseName": "New York",
+      "clubName": "Yankees",
+      "active": true
+    },
+    {
+      "allStarStatus": "N",
+      "id": 147,
+      "name": "New York Yankees",
+      "link": "/api/v1/teams/147",
+      "season": 1913,
+      "venue": {
+        "id": 3140,
+        "name": "Polo Grounds IV",
+        "link": "/api/v1/venues/3140"
+      },
+      "teamCode": "nya",
+      "fileCode": "nyy",
+      "abbreviation": "NYY",
+      "teamName": "Yankees",
+      "locationName": "New York",
+      "firstYearOfPlay": "1903",
+      "league": {
+        "id": 103,
+        "name": "American League",
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1",
+        "name": "Major League Baseball"
+      },
+      "shortName": "NY Yankees",
+      "franchiseName": "New York",
+      "clubName": "Yankees",
+      "active": true
+    },
+    {
+      "allStarStatus": "N",
+      "id": 147,
+      "name": "New York Highlanders",
+      "link": "/api/v1/teams/147",
+      "season": 1903,
+      "venue": {
+        "id": 3127,
+        "name": "Hilltop Park",
+        "link": "/api/v1/venues/3127"
+      },
+      "teamCode": "nya",
+      "fileCode": "nyy",
+      "abbreviation": "NYH",
+      "teamName": "Highlanders",
+      "locationName": "New York",
+      "firstYearOfPlay": "1903",
+      "league": {
+        "id": 103,
+        "name": "American League",
+        "link": "/api/v1/league/103"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1",
+        "name": "Major League Baseball"
+      },
+      "shortName": "NY Yankees",
+      "franchiseName": "New York",
+      "clubName": "Highlanders",
+      "active": true
+    }
+  ]
+}

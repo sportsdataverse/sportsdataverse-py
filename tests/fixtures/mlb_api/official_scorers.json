@@ -1,0 +1,2601 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "roster": [
+    {
+      "person": {
+        "id": 582413,
+        "fullName": "Fernando Alcala",
+        "link": "/api/v1/people/582413"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 434138,
+        "fullName": "Billy Altman",
+        "link": "/api/v1/people/434138"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 679924,
+        "fullName": "Kenny Ayres",
+        "link": "/api/v1/people/679924"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 839313,
+        "fullName": "Zach Bamberger",
+        "link": "/api/v1/people/839313"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 478601,
+        "fullName": "Tyler Barton",
+        "link": "/api/v1/people/478601"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831878,
+        "fullName": "Leslie Basler",
+        "link": "/api/v1/people/831878"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493719,
+        "fullName": "Bob Beghtol",
+        "link": "/api/v1/people/493719"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 679730,
+        "fullName": "Devin Benson",
+        "link": "/api/v1/people/679730"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482136,
+        "fullName": "Brian Berger",
+        "link": "/api/v1/people/482136"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 550488,
+        "fullName": "Court Berry-Tripp",
+        "link": "/api/v1/people/550488"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 602880,
+        "fullName": "Matt Birch",
+        "link": "/api/v1/people/602880"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 602880,
+        "fullName": "Matt Birch",
+        "link": "/api/v1/people/602880"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 650888,
+        "fullName": "Kara Blackstone",
+        "link": "/api/v1/people/650888"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 816249,
+        "fullName": "Aidan Blaylock",
+        "link": "/api/v1/people/816249"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431016,
+        "fullName": "Rick Blount",
+        "link": "/api/v1/people/431016"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 815804,
+        "fullName": "Michael Britt",
+        "link": "/api/v1/people/815804"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 499385,
+        "fullName": "Gary Brooks",
+        "link": "/api/v1/people/499385"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 433218,
+        "fullName": "Chad Broski",
+        "link": "/api/v1/people/433218"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 602652,
+        "fullName": "Kyle Brostowitz",
+        "link": "/api/v1/people/602652"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 650981,
+        "fullName": "Megan Brown",
+        "link": "/api/v1/people/650981"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 674015,
+        "fullName": "Jared Burleyson",
+        "link": "/api/v1/people/674015"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482141,
+        "fullName": "Jeff Businger",
+        "link": "/api/v1/people/482141"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 837210,
+        "fullName": "TJ Carnes",
+        "link": "/api/v1/people/837210"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 802038,
+        "fullName": "Steve Carney",
+        "link": "/api/v1/people/802038"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 494295,
+        "fullName": "Jason Carr",
+        "link": "/api/v1/people/494295"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 510528,
+        "fullName": "Matt Chisholm",
+        "link": "/api/v1/people/510528"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 616620,
+        "fullName": "Adam Chodzko",
+        "link": "/api/v1/people/616620"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 809811,
+        "fullName": "Raleigh Clark",
+        "link": "/api/v1/people/809811"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 636643,
+        "fullName": "Tim Clodjeaux",
+        "link": "/api/v1/people/636643"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 638686,
+        "fullName": "Alan Cohen",
+        "link": "/api/v1/people/638686"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831566,
+        "fullName": "Austin Controulas",
+        "link": "/api/v1/people/831566"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 667644,
+        "fullName": "Chad Crunk",
+        "link": "/api/v1/people/667644"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 678326,
+        "fullName": "Manuel Cruz",
+        "link": "/api/v1/people/678326"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 603539,
+        "fullName": "Guy Curtright",
+        "link": "/api/v1/people/603539"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 800937,
+        "fullName": "Jay D'Abramo",
+        "link": "/api/v1/people/800937"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 700075,
+        "fullName": "Madison Day",
+        "link": "/api/v1/people/700075"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493748,
+        "fullName": "John Dever",
+        "link": "/api/v1/people/493748"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 548794,
+        "fullName": "Gene Dias",
+        "link": "/api/v1/people/548794"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 677480,
+        "fullName": "Nick DiCostanzo",
+        "link": "/api/v1/people/677480"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685028,
+        "fullName": "Juan Dorado",
+        "link": "/api/v1/people/685028"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 427131,
+        "fullName": "Michael Duca",
+        "link": "/api/v1/people/427131"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431020,
+        "fullName": "Jeff Durbin",
+        "link": "/api/v1/people/431020"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 661294,
+        "fullName": "Ryan Easton",
+        "link": "/api/v1/people/661294"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 496219,
+        "fullName": "Ryan Eigenbrode",
+        "link": "/api/v1/people/496219"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431022,
+        "fullName": "Dave Einspahr",
+        "link": "/api/v1/people/431022"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 504025,
+        "fullName": "Bob Ellis",
+        "link": "/api/v1/people/504025"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831984,
+        "fullName": "Ryan Erickson",
+        "link": "/api/v1/people/831984"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 667815,
+        "fullName": "Darren Feeney",
+        "link": "/api/v1/people/667815"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 433339,
+        "fullName": "David Feldman",
+        "link": "/api/v1/people/433339"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 601476,
+        "fullName": "Doug Feldmann",
+        "link": "/api/v1/people/601476"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 504213,
+        "fullName": "Doug Fischer",
+        "link": "/api/v1/people/504213"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 504213,
+        "fullName": "Doug Fischer",
+        "link": "/api/v1/people/504213"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 478612,
+        "fullName": "Lawrence Fischer",
+        "link": "/api/v1/people/478612"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 490176,
+        "fullName": "Jake Fox",
+        "link": "/api/v1/people/490176"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 490176,
+        "fullName": "Jake Fox",
+        "link": "/api/v1/people/490176"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 699537,
+        "fullName": "Loren Foxx",
+        "link": "/api/v1/people/699537"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 842278,
+        "fullName": "Curtis Fraser",
+        "link": "/api/v1/people/842278"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 489955,
+        "fullName": "David Freeman",
+        "link": "/api/v1/people/489955"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 541398,
+        "fullName": "Dominic French",
+        "link": "/api/v1/people/541398"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 569602,
+        "fullName": "Franco Garcia",
+        "link": "/api/v1/people/569602"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 602531,
+        "fullName": "Ray Garcia",
+        "link": "/api/v1/people/602531"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 666101,
+        "fullName": "Jay Garneau",
+        "link": "/api/v1/people/666101"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 669525,
+        "fullName": "Jillian Geib",
+        "link": "/api/v1/people/669525"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 840017,
+        "fullName": "Allison George",
+        "link": "/api/v1/people/840017"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 680446,
+        "fullName": "Mark Gola",
+        "link": "/api/v1/people/680446"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 806524,
+        "fullName": "Andrew Golden",
+        "link": "/api/v1/people/806524"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 485542,
+        "fullName": "Don Golden",
+        "link": "/api/v1/people/485542"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 485542,
+        "fullName": "Don Golden",
+        "link": "/api/v1/people/485542"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 477748,
+        "fullName": "David Gonzalez",
+        "link": "/api/v1/people/477748"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 550217,
+        "fullName": "Steve Grande",
+        "link": "/api/v1/people/550217"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 584271,
+        "fullName": "Kevin Gregg",
+        "link": "/api/v1/people/584271"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 801949,
+        "fullName": "Adam Gresch",
+        "link": "/api/v1/people/801949"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 549794,
+        "fullName": "Richard Griffin",
+        "link": "/api/v1/people/549794"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 700061,
+        "fullName": "Andrew Gruman",
+        "link": "/api/v1/people/700061"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685579,
+        "fullName": "Carlos Guillen",
+        "link": "/api/v1/people/685579"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831538,
+        "fullName": "Jacob Hable",
+        "link": "/api/v1/people/831538"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 684883,
+        "fullName": "Karl Hain",
+        "link": "/api/v1/people/684883"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 537491,
+        "fullName": "Dave Haller",
+        "link": "/api/v1/people/537491"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 837205,
+        "fullName": "Ryan Harding",
+        "link": "/api/v1/people/837205"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 549369,
+        "fullName": "Larry Herms",
+        "link": "/api/v1/people/549369"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 632280,
+        "fullName": "Mitch Hestad",
+        "link": "/api/v1/people/632280"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 484489,
+        "fullName": "Dennis Hetrick",
+        "link": "/api/v1/people/484489"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493727,
+        "fullName": "Tim Hevly",
+        "link": "/api/v1/people/493727"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685469,
+        "fullName": "Rodney Hiemstra",
+        "link": "/api/v1/people/685469"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 495395,
+        "fullName": "Matt Hodson",
+        "link": "/api/v1/people/495395"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 800977,
+        "fullName": "Brandon Hogan",
+        "link": "/api/v1/people/800977"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685558,
+        "fullName": "Jim Hogan",
+        "link": "/api/v1/people/685558"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482170,
+        "fullName": "Mark Honbo",
+        "link": "/api/v1/people/482170"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 674250,
+        "fullName": "Ryan Hueter",
+        "link": "/api/v1/people/674250"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 630353,
+        "fullName": "Craig Hughner",
+        "link": "/api/v1/people/630353"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 661298,
+        "fullName": "Alexandra Irving",
+        "link": "/api/v1/people/661298"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 800935,
+        "fullName": "John Jackson",
+        "link": "/api/v1/people/800935"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 478627,
+        "fullName": "Joe Jareck",
+        "link": "/api/v1/people/478627"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431036,
+        "fullName": "Ron Jernick",
+        "link": "/api/v1/people/431036"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 511409,
+        "fullName": "Chris Johnson",
+        "link": "/api/v1/people/511409"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 800936,
+        "fullName": "Frank Johnson",
+        "link": "/api/v1/people/800936"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 607890,
+        "fullName": "Jason Johnson",
+        "link": "/api/v1/people/607890"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 686265,
+        "fullName": "Sarah Johnson",
+        "link": "/api/v1/people/686265"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831789,
+        "fullName": "Logan Jones",
+        "link": "/api/v1/people/831789"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 816246,
+        "fullName": "Hau'oli Kalipi",
+        "link": "/api/v1/people/816246"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 809809,
+        "fullName": "Jared Kane",
+        "link": "/api/v1/people/809809"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 693945,
+        "fullName": "Elyssa Kaplan",
+        "link": "/api/v1/people/693945"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 670603,
+        "fullName": "Howard Kaplan",
+        "link": "/api/v1/people/670603"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 667816,
+        "fullName": "Nick Kappel",
+        "link": "/api/v1/people/667816"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431038,
+        "fullName": "Howie Karpin",
+        "link": "/api/v1/people/431038"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 667642,
+        "fullName": "Jonathan Kerber",
+        "link": "/api/v1/people/667642"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482386,
+        "fullName": "Ron Kleinfelter",
+        "link": "/api/v1/people/482386"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 427283,
+        "fullName": "Chuck Klonke",
+        "link": "/api/v1/people/427283"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831579,
+        "fullName": "Greg Korn",
+        "link": "/api/v1/people/831579"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831473,
+        "fullName": "Ian Kraft",
+        "link": "/api/v1/people/831473"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 829275,
+        "fullName": "Paul Krause",
+        "link": "/api/v1/people/829275"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 693695,
+        "fullName": "Dan Kurish",
+        "link": "/api/v1/people/693695"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 602631,
+        "fullName": "Patrick Kurish",
+        "link": "/api/v1/people/602631"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 613598,
+        "fullName": "Patrick Lagreid",
+        "link": "/api/v1/people/613598"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 624930,
+        "fullName": "Roger Lajoie",
+        "link": "/api/v1/people/624930"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 839393,
+        "fullName": "Kate Leahy",
+        "link": "/api/v1/people/839393"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 663079,
+        "fullName": "Jason Lee",
+        "link": "/api/v1/people/663079"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 521129,
+        "fullName": "Peter Legner",
+        "link": "/api/v1/people/521129"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 430022,
+        "fullName": "Chris Lentine",
+        "link": "/api/v1/people/430022"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 430022,
+        "fullName": "Chris Lentine",
+        "link": "/api/v1/people/430022"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831571,
+        "fullName": "James Leo",
+        "link": "/api/v1/people/831571"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 494624,
+        "fullName": "Adam Liberman",
+        "link": "/api/v1/people/494624"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 484193,
+        "fullName": "Matt Lindsay",
+        "link": "/api/v1/people/484193"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 511136,
+        "fullName": "Randy Liss",
+        "link": "/api/v1/people/511136"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 662906,
+        "fullName": "Cory Little",
+        "link": "/api/v1/people/662906"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 839314,
+        "fullName": "Freddy Llanos",
+        "link": "/api/v1/people/839314"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 650313,
+        "fullName": "Steve Loher",
+        "link": "/api/v1/people/650313"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 673949,
+        "fullName": "Justin Long",
+        "link": "/api/v1/people/673949"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 835917,
+        "fullName": "Loren Foxx,  Shawn Medeiros",
+        "link": "/api/v1/people/835917"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 803429,
+        "fullName": "Don Louzader",
+        "link": "/api/v1/people/803429"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 590652,
+        "fullName": "Mike Lucas",
+        "link": "/api/v1/people/590652"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 433437,
+        "fullName": "Mike Maconi",
+        "link": "/api/v1/people/433437"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 680379,
+        "fullName": "John Maffei",
+        "link": "/api/v1/people/680379"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831790,
+        "fullName": "Carter Martin",
+        "link": "/api/v1/people/831790"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685023,
+        "fullName": "Elvis Martinez",
+        "link": "/api/v1/people/685023"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431047,
+        "fullName": "Dave Matheson",
+        "link": "/api/v1/people/431047"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482388,
+        "fullName": "Bill Mathews",
+        "link": "/api/v1/people/482388"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 501169,
+        "fullName": "Bob Maver",
+        "link": "/api/v1/people/501169"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 674533,
+        "fullName": "Alex Mayer",
+        "link": "/api/v1/people/674533"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 573949,
+        "fullName": "Charlie McCarthy",
+        "link": "/api/v1/people/573949"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 573949,
+        "fullName": "Charlie McCarthy",
+        "link": "/api/v1/people/573949"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 497526,
+        "fullName": "Brennan McDonald",
+        "link": "/api/v1/people/497526"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685089,
+        "fullName": "Grace McNamee",
+        "link": "/api/v1/people/685089"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 811630,
+        "fullName": "Shawn Medeiros",
+        "link": "/api/v1/people/811630"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 654829,
+        "fullName": "Charles Miller",
+        "link": "/api/v1/people/654829"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 654829,
+        "fullName": "Charles Miller",
+        "link": "/api/v1/people/654829"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 814501,
+        "fullName": "Michael Miller",
+        "link": "/api/v1/people/814501"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 496213,
+        "fullName": "Tim Miller",
+        "link": "/api/v1/people/496213"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 684884,
+        "fullName": "Scott Moeller",
+        "link": "/api/v1/people/684884"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 639680,
+        "fullName": "Herb Morell",
+        "link": "/api/v1/people/639680"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 630395,
+        "fullName": "Dustin Morse",
+        "link": "/api/v1/people/630395"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 491580,
+        "fullName": "Brian Mullen",
+        "link": "/api/v1/people/491580"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 667689,
+        "fullName": "Kelly Munro",
+        "link": "/api/v1/people/667689"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431054,
+        "fullName": "Ed Munson",
+        "link": "/api/v1/people/431054"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 496999,
+        "fullName": "Dave Musil Jr.",
+        "link": "/api/v1/people/496999"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 679834,
+        "fullName": "JP Nolan",
+        "link": "/api/v1/people/679834"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 695905,
+        "fullName": "Jim O'Connor",
+        "link": "/api/v1/people/695905"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431058,
+        "fullName": "Tim O'Driscoll",
+        "link": "/api/v1/people/431058"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 699520,
+        "fullName": "Randy Oliver",
+        "link": "/api/v1/people/699520"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 681131,
+        "fullName": "Drew Olson",
+        "link": "/api/v1/people/681131"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482187,
+        "fullName": "Eric Opperman",
+        "link": "/api/v1/people/482187"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831852,
+        "fullName": "Mauricio Ortiz",
+        "link": "/api/v1/people/831852"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 679671,
+        "fullName": "Bob Pacitti",
+        "link": "/api/v1/people/679671"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482188,
+        "fullName": "Darin Padur",
+        "link": "/api/v1/people/482188"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 829276,
+        "fullName": "Carter Paine",
+        "link": "/api/v1/people/829276"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 837202,
+        "fullName": "Louis Pannone",
+        "link": "/api/v1/people/837202"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 661292,
+        "fullName": "Micah Parshall",
+        "link": "/api/v1/people/661292"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 513470,
+        "fullName": "Mike Passanisi",
+        "link": "/api/v1/people/513470"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685283,
+        "fullName": "Daveson Perez",
+        "link": "/api/v1/people/685283"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 484662,
+        "fullName": "Dan Peterson",
+        "link": "/api/v1/people/484662"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 831627,
+        "fullName": "Andrew Polk",
+        "link": "/api/v1/people/831627"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 699949,
+        "fullName": "Dan Quesnell",
+        "link": "/api/v1/people/699949"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 674385,
+        "fullName": "Jesus Quinonez",
+        "link": "/api/v1/people/674385"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 840674,
+        "fullName": "Martin Radosevic",
+        "link": "/api/v1/people/840674"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 433298,
+        "fullName": "Eric Radovich",
+        "link": "/api/v1/people/433298"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 585191,
+        "fullName": "Jamie Ramsey",
+        "link": "/api/v1/people/585191"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 665415,
+        "fullName": "Anthony Reel",
+        "link": "/api/v1/people/665415"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493849,
+        "fullName": "Rich Rice",
+        "link": "/api/v1/people/493849"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 827715,
+        "fullName": "Evan Roberts",
+        "link": "/api/v1/people/827715"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431070,
+        "fullName": "Ronald Roth",
+        "link": "/api/v1/people/431070"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 674470,
+        "fullName": "Joe Roti",
+        "link": "/api/v1/people/674470"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 541663,
+        "fullName": "Greg Royce",
+        "link": "/api/v1/people/541663"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 432625,
+        "fullName": "Will Rudd",
+        "link": "/api/v1/people/432625"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 674635,
+        "fullName": "Chris Ruiz",
+        "link": "/api/v1/people/674635"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 662961,
+        "fullName": "Billy Russo",
+        "link": "/api/v1/people/662961"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 829278,
+        "fullName": "Nate Sanchez",
+        "link": "/api/v1/people/829278"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 640277,
+        "fullName": "Bill Seiple",
+        "link": "/api/v1/people/640277"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493850,
+        "fullName": "Mike Selleck",
+        "link": "/api/v1/people/493850"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 478659,
+        "fullName": "Gary P. Shiff",
+        "link": "/api/v1/people/478659"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 478659,
+        "fullName": "Gary P. Shiff",
+        "link": "/api/v1/people/478659"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482194,
+        "fullName": "Dick Shute",
+        "link": "/api/v1/people/482194"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 663022,
+        "fullName": "Ryan Shute",
+        "link": "/api/v1/people/663022"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 800983,
+        "fullName": "Kevin Sinclair",
+        "link": "/api/v1/people/800983"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431079,
+        "fullName": "Mike Smith",
+        "link": "/api/v1/people/431079"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431080,
+        "fullName": "Dennis Smythe",
+        "link": "/api/v1/people/431080"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 837209,
+        "fullName": "Jake Snelgrove",
+        "link": "/api/v1/people/837209"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 693946,
+        "fullName": "Rick Soos",
+        "link": "/api/v1/people/693946"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431081,
+        "fullName": "Allan Spear",
+        "link": "/api/v1/people/431081"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 617917,
+        "fullName": "Ken Spindler",
+        "link": "/api/v1/people/617917"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431083,
+        "fullName": "Jordan Sprechman",
+        "link": "/api/v1/people/431083"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431084,
+        "fullName": "Mike Stamus",
+        "link": "/api/v1/people/431084"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431085,
+        "fullName": "Howard Starkman",
+        "link": "/api/v1/people/431085"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 823698,
+        "fullName": "Jordan Stone",
+        "link": "/api/v1/people/823698"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 810046,
+        "fullName": "Tyler Strachan",
+        "link": "/api/v1/people/810046"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 685017,
+        "fullName": "Melissa Strozza",
+        "link": "/api/v1/people/685017"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 485928,
+        "fullName": "Russ Stutz",
+        "link": "/api/v1/people/485928"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493721,
+        "fullName": "Bart Swain",
+        "link": "/api/v1/people/493721"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493732,
+        "fullName": "Mike Swanson",
+        "link": "/api/v1/people/493732"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 829280,
+        "fullName": "Alex Terrazas",
+        "link": "/api/v1/people/829280"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 639285,
+        "fullName": "Chris Thoms",
+        "link": "/api/v1/people/639285"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 427508,
+        "fullName": "Stew Thornley",
+        "link": "/api/v1/people/427508"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 508211,
+        "fullName": "Jim Trdinich",
+        "link": "/api/v1/people/508211"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 482394,
+        "fullName": "Benjamin Trittipoe",
+        "link": "/api/v1/people/482394"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 624500,
+        "fullName": "Chris Tunno",
+        "link": "/api/v1/people/624500"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 640298,
+        "fullName": "Max Utsler",
+        "link": "/api/v1/people/640298"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 667791,
+        "fullName": "Craig Vanderkam",
+        "link": "/api/v1/people/667791"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 508729,
+        "fullName": "Mike Vassallo",
+        "link": "/api/v1/people/508729"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 603873,
+        "fullName": "David Vatz",
+        "link": "/api/v1/people/603873"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 500435,
+        "fullName": "Lou Villano",
+        "link": "/api/v1/people/500435"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 703852,
+        "fullName": "Spencer Ward",
+        "link": "/api/v1/people/703852"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 662921,
+        "fullName": "Chris Ware",
+        "link": "/api/v1/people/662921"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431088,
+        "fullName": "Bob Webb",
+        "link": "/api/v1/people/431088"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 613603,
+        "fullName": "Jonathan Webb",
+        "link": "/api/v1/people/613603"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431089,
+        "fullName": "Steve Weller",
+        "link": "/api/v1/people/431089"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 700156,
+        "fullName": "Max Whieldon",
+        "link": "/api/v1/people/700156"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 663065,
+        "fullName": "Bill Whitehead",
+        "link": "/api/v1/people/663065"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 582631,
+        "fullName": "Casey Wilcox",
+        "link": "/api/v1/people/582631"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431091,
+        "fullName": "Trey Wilkinson",
+        "link": "/api/v1/people/431091"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 823823,
+        "fullName": "Lauren Wiser",
+        "link": "/api/v1/people/823823"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 800934,
+        "fullName": "Brittany Womack",
+        "link": "/api/v1/people/800934"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 679673,
+        "fullName": "Michelle Wysocki",
+        "link": "/api/v1/people/679673"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493726,
+        "fullName": "Jim Young",
+        "link": "/api/v1/people/493726"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431092,
+        "fullName": "Bill Zavestoski",
+        "link": "/api/v1/people/431092"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 700452,
+        "fullName": "Dan Zibell",
+        "link": "/api/v1/people/700452"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 700036,
+        "fullName": "Nina Zimmerman",
+        "link": "/api/v1/people/700036"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 662974,
+        "fullName": "Jerry White",
+        "link": "/api/v1/people/662974"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    }
+  ]
+}

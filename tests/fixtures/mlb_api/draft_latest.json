@@ -1,0 +1,133 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "pick": {
+    "pickRound": "20",
+    "pickNumber": 614,
+    "displayPickNumber": 614,
+    "roundPickNumber": 30,
+    "signingBonus": "150000",
+    "home": {
+      "city": "Duluth",
+      "state": "Georgia",
+      "country": "USA"
+    },
+    "school": {
+      "name": "Western Carolina",
+      "schoolClass": "4YR JR",
+      "city": "Cullowhee",
+      "country": "USA",
+      "state": "NC"
+    },
+    "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/814299/headshot/draft/current",
+    "person": {
+      "id": 814299,
+      "fullName": "Pascanel Ferreras",
+      "link": "/api/v1/people/814299",
+      "firstName": "Pascanel",
+      "lastName": "Ferreras",
+      "birthDate": "2001-11-25",
+      "currentAge": 24,
+      "birthCity": "Philipsburg",
+      "birthStateProvince": "GA",
+      "birthCountry": "USA",
+      "height": "5' 7\"",
+      "weight": 185,
+      "active": true,
+      "primaryPosition": {
+        "code": "6",
+        "name": "Shortstop",
+        "type": "Infielder",
+        "abbreviation": "SS"
+      },
+      "useName": "Pascanel",
+      "useLastName": "Ferreras",
+      "middleName": "Enrique",
+      "boxscoreName": "Ferreras",
+      "gender": "M",
+      "isPlayer": true,
+      "isVerified": true,
+      "draftYear": 2023,
+      "batSide": {
+        "code": "R",
+        "description": "Right"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "Pascanel Ferreras",
+      "nameSlug": "pascanel-ferreras-814299",
+      "firstLastName": "Pascanel Ferreras",
+      "lastFirstName": "Ferreras, Pascanel",
+      "lastInitName": "Ferreras, P",
+      "initLastName": "P Ferreras",
+      "fullFMLName": "Pascanel Ferreras",
+      "fullLFMName": "Ferreras, Pascanel ",
+      "strikeZoneTop": 3.001,
+      "strikeZoneBottom": 1.515,
+      "xrefIds": [
+        {
+          "xrefId": "5027449",
+          "xrefType": "bis",
+          "season": "2023"
+        }
+      ]
+    },
+    "team": {
+      "springLeague": {
+        "id": 115,
+        "name": "Grapefruit League",
+        "link": "/api/v1/league/115",
+        "abbreviation": "GL"
+      },
+      "allStarStatus": "N",
+      "id": 117,
+      "name": "Houston Astros",
+      "link": "/api/v1/teams/117",
+      "season": 2026,
+      "venue": {
+        "id": 2392,
+        "name": "Daikin Park",
+        "link": "/api/v1/venues/2392"
+      },
+      "springVenue": {
+        "id": 5000,
+        "link": "/api/v1/venues/5000"
+      },
+      "teamCode": "hou",
+      "fileCode": "hou",
+      "abbreviation": "HOU",
+      "teamName": "Astros",
+      "locationName": "Houston",
+      "firstYearOfPlay": "1962",
+      "league": {
+        "id": 103,
+        "name": "American League",
+        "link": "/api/v1/league/103"
+      },
+      "division": {
+        "id": 200,
+        "name": "American League West",
+        "link": "/api/v1/divisions/200"
+      },
+      "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1",
+        "name": "Major League Baseball"
+      },
+      "shortName": "Houston",
+      "franchiseName": "Houston",
+      "clubName": "Astros",
+      "active": true
+    },
+    "draftType": {
+      "code": "JR",
+      "description": "Rule 4 / June Amateur Draft"
+    },
+    "isDrafted": true,
+    "isPass": false,
+    "year": "2023"
+  },
+  "number": 614,
+  "nextUp": []
+}

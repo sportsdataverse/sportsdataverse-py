@@ -1,0 +1,3485 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "totalItems": 41,
+  "totalEvents": 0,
+  "totalGames": 41,
+  "totalGamesInProgress": 0,
+  "wait": 10,
+  "series": [
+    {
+      "series": {
+        "id": "W_1",
+        "sortNumber": 1,
+        "isDefault": true,
+        "gameType": "W"
+      },
+      "totalItems": 5,
+      "totalGames": 5,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748542,
+          "gameGuid": "2c02da53-e7c5-4017-8d9c-059c0506dc51",
+          "link": "/api/v1.1/game/748542/feed/live",
+          "gameType": "W",
+          "season": "2023",
+          "gameDate": "2023-10-28T00:05:00Z",
+          "officialDate": "2023-10-27",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 5,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 6,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 5325,
+            "name": "Globe Life Field",
+            "link": "/api/v1/venues/5325"
+          },
+          "content": {
+            "link": "/api/v1/game/748542/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748542-2023-10-27",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "World Series Game 1",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 1,
+          "seriesDescription": "World Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748541,
+          "gameGuid": "95ce9e6a-bc4c-467f-bc0f-22d389358e92",
+          "link": "/api/v1.1/game/748541/feed/live",
+          "gameType": "W",
+          "season": "2023",
+          "gameDate": "2023-10-29T00:03:00Z",
+          "officialDate": "2023-10-28",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 9,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 5325,
+            "name": "Globe Life Field",
+            "link": "/api/v1/venues/5325"
+          },
+          "content": {
+            "link": "/api/v1/game/748541/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748541-2023-10-28",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "World Series Game 2",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 2,
+          "seriesDescription": "World Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748540,
+          "gameGuid": "23481542-b0d7-4b8b-9d7f-044bfe95f8e6",
+          "link": "/api/v1.1/game/748540/feed/live",
+          "gameType": "W",
+          "season": "2023",
+          "gameDate": "2023-10-31T00:03:00Z",
+          "officialDate": "2023-10-30",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".667"
+              },
+              "score": 3,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".333"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 15,
+            "name": "Chase Field",
+            "link": "/api/v1/venues/15"
+          },
+          "content": {
+            "link": "/api/v1/game/748540/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748540-2023-10-30",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "World Series Game 3",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 3,
+          "seriesDescription": "World Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748535,
+          "gameGuid": "f6065a09-eed1-4e8e-a29f-52d6a6888754",
+          "link": "/api/v1.1/game/748535/feed/live",
+          "gameType": "W",
+          "season": "2023",
+          "gameDate": "2023-11-01T00:03:00Z",
+          "officialDate": "2023-10-31",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".750"
+              },
+              "score": 11,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".250"
+              },
+              "score": 7,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 15,
+            "name": "Chase Field",
+            "link": "/api/v1/venues/15"
+          },
+          "content": {
+            "link": "/api/v1/game/748535/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748535-2023-10-31",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "World Series Game 4",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 4,
+          "seriesDescription": "World Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748534,
+          "gameGuid": "f3f76a5b-9530-4e02-99f1-40d4ce443e8c",
+          "link": "/api/v1.1/game/748534/feed/live",
+          "gameType": "W",
+          "season": "2023",
+          "gameDate": "2023-11-02T00:03:00Z",
+          "officialDate": "2023-11-01",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 4,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".800"
+              },
+              "score": 5,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 4,
+                "ties": 0,
+                "pct": ".200"
+              },
+              "score": 0,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 15,
+            "name": "Chase Field",
+            "link": "/api/v1/venues/15"
+          },
+          "content": {
+            "link": "/api/v1/game/748534/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748534-2023-11-01",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "World Series Game 5",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 5,
+          "seriesDescription": "World Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 1
+    },
+    {
+      "series": {
+        "id": "F_2",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "F"
+      },
+      "totalItems": 2,
+      "totalGames": 2,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748581,
+          "gameGuid": "0bcbbf38-33ee-4322-8e0e-79a128c9185d",
+          "link": "/api/v1.1/game/748581/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-03T19:08:00Z",
+          "officialDate": "2023-10-03",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 4,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 139,
+                "name": "Tampa Bay Rays",
+                "link": "/api/v1/teams/139"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 0,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 12,
+            "name": "Tropicana Field",
+            "link": "/api/v1/venues/12"
+          },
+          "content": {
+            "link": "/api/v1/game/748581/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748581-2023-10-03",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "AL Wild Card Series - 4 vs. 5",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 1,
+          "seriesDescription": "AL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748580,
+          "gameGuid": "ce21176e-f207-4c96-8b56-9e8b21c6c485",
+          "link": "/api/v1.1/game/748580/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-04T19:08:00Z",
+          "officialDate": "2023-10-04",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 7,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 139,
+                "name": "Tampa Bay Rays",
+                "link": "/api/v1/teams/139"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 12,
+            "name": "Tropicana Field",
+            "link": "/api/v1/venues/12"
+          },
+          "content": {
+            "link": "/api/v1/game/748580/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748580-2023-10-04",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "AL Wild Card Series - 4 vs. 5",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "AL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "F_1",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "F"
+      },
+      "totalItems": 2,
+      "totalGames": 2,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748585,
+          "gameGuid": "35d70226-413a-48aa-bc22-60659bcebbd8",
+          "link": "/api/v1.1/game/748585/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-03T20:38:00Z",
+          "officialDate": "2023-10-03",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 141,
+                "name": "Toronto Blue Jays",
+                "link": "/api/v1/teams/141"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 142,
+                "name": "Minnesota Twins",
+                "link": "/api/v1/teams/142"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 3,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 3312,
+            "name": "Target Field",
+            "link": "/api/v1/venues/3312"
+          },
+          "content": {
+            "link": "/api/v1/game/748585/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748585-2023-10-03",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "AL Wild Card Series - 3 vs.6",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 1,
+          "seriesDescription": "AL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748583,
+          "gameGuid": "02adbe27-88d1-4859-a9c5-12d1e4d18491",
+          "link": "/api/v1.1/game/748583/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-04T20:38:00Z",
+          "officialDate": "2023-10-04",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 141,
+                "name": "Toronto Blue Jays",
+                "link": "/api/v1/teams/141"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 0,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 142,
+                "name": "Minnesota Twins",
+                "link": "/api/v1/teams/142"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 2,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 3312,
+            "name": "Target Field",
+            "link": "/api/v1/venues/3312"
+          },
+          "content": {
+            "link": "/api/v1/game/748583/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748583-2023-10-04",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "AL Wild Card Series - 3 vs.6",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "AL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "F_4",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "F"
+      },
+      "totalItems": 2,
+      "totalGames": 2,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748577,
+          "gameGuid": "e7eaabe6-7f77-4005-ac75-8f17815b7895",
+          "link": "/api/v1.1/game/748577/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-04T00:08:00Z",
+          "officialDate": "2023-10-03",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 146,
+                "name": "Miami Marlins",
+                "link": "/api/v1/teams/146"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 4
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 4,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 4
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748577/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748577-2023-10-03",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NL Wild Card Series - 4 vs. 5",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 1,
+          "seriesDescription": "NL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748575,
+          "gameGuid": "d1d05409-191d-4035-8312-4f2f30d301bc",
+          "link": "/api/v1.1/game/748575/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-05T00:08:00Z",
+          "officialDate": "2023-10-04",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 146,
+                "name": "Miami Marlins",
+                "link": "/api/v1/teams/146"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 4
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 7,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 4
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748575/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748575-2023-10-04",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NL Wild Card Series - 4 vs. 5",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "NL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "F_3",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "F"
+      },
+      "totalItems": 2,
+      "totalGames": 2,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748582,
+          "gameGuid": "cec69194-75f1-4fd6-bc20-cf0258cbb621",
+          "link": "/api/v1.1/game/748582/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-03T23:08:00Z",
+          "officialDate": "2023-10-03",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 6,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 3
+            },
+            "home": {
+              "team": {
+                "id": 158,
+                "name": "Milwaukee Brewers",
+                "link": "/api/v1/teams/158"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 3,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 3
+            }
+          },
+          "venue": {
+            "id": 32,
+            "name": "American Family Field",
+            "link": "/api/v1/venues/32"
+          },
+          "content": {
+            "link": "/api/v1/game/748582/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748582-2023-10-03",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NL Wild Card Series - 3 vs.6",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 1,
+          "seriesDescription": "NL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748578,
+          "gameGuid": "4a5d80cf-4503-450d-9aba-0e21b7fa2ab4",
+          "link": "/api/v1.1/game/748578/feed/live",
+          "gameType": "F",
+          "season": "2023",
+          "gameDate": "2023-10-04T23:08:00Z",
+          "officialDate": "2023-10-04",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 5,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 3
+            },
+            "home": {
+              "team": {
+                "id": 158,
+                "name": "Milwaukee Brewers",
+                "link": "/api/v1/teams/158"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 3
+            }
+          },
+          "venue": {
+            "id": 32,
+            "name": "American Family Field",
+            "link": "/api/v1/venues/32"
+          },
+          "content": {
+            "link": "/api/v1/game/748578/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748578-2023-10-04",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NL Wild Card Series - 3 vs.6",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "NL Wild Card Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "D_2",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "D"
+      },
+      "totalItems": 4,
+      "totalGames": 4,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748568,
+          "gameGuid": "317742d9-8725-434a-820c-40aabedc0b41",
+          "link": "/api/v1.1/game/748568/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-07T20:45:00Z",
+          "officialDate": "2023-10-07",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 142,
+                "name": "Minnesota Twins",
+                "link": "/api/v1/teams/142"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 4,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 6,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 2392,
+            "name": "Minute Maid Park",
+            "link": "/api/v1/venues/2392"
+          },
+          "content": {
+            "link": "/api/v1/game/748568/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748568-2023-10-07",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "ALDS 'B' Game 1",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 1,
+          "seriesDescription": "AL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748565,
+          "gameGuid": "b8fb580b-eab1-4ec4-9670-98ea8cbd2de9",
+          "link": "/api/v1.1/game/748565/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-09T00:03:00Z",
+          "officialDate": "2023-10-08",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 142,
+                "name": "Minnesota Twins",
+                "link": "/api/v1/teams/142"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 6,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 2392,
+            "name": "Minute Maid Park",
+            "link": "/api/v1/venues/2392"
+          },
+          "content": {
+            "link": "/api/v1/game/748565/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748565-2023-10-08",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALDS 'B' Game 2",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 2,
+          "seriesDescription": "AL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748567,
+          "gameGuid": "a3dfb622-2142-4d53-8bc3-4f3c5b27af42",
+          "link": "/api/v1.1/game/748567/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-10T20:07:00Z",
+          "officialDate": "2023-10-10",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".667"
+              },
+              "score": 9,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 142,
+                "name": "Minnesota Twins",
+                "link": "/api/v1/teams/142"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".333"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 3312,
+            "name": "Target Field",
+            "link": "/api/v1/venues/3312"
+          },
+          "content": {
+            "link": "/api/v1/game/748567/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748567-2023-10-10",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "ALDS 'B' Game 3",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 3,
+          "seriesDescription": "AL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748566,
+          "gameGuid": "d0add9ab-6595-4a5d-b9f8-15ebe20f0291",
+          "link": "/api/v1.1/game/748566/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-11T23:07:00Z",
+          "officialDate": "2023-10-11",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".750"
+              },
+              "score": 3,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 142,
+                "name": "Minnesota Twins",
+                "link": "/api/v1/teams/142"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".250"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 3312,
+            "name": "Target Field",
+            "link": "/api/v1/venues/3312"
+          },
+          "content": {
+            "link": "/api/v1/game/748566/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748566-2023-10-11",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALDS 'B' Game 4",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 4,
+          "seriesDescription": "AL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "D_1",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "D"
+      },
+      "totalItems": 3,
+      "totalGames": 3,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748573,
+          "gameGuid": "2cddaee5-3ec3-4329-968c-4ff04dd6049f",
+          "link": "/api/v1.1/game/748573/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-07T17:03:00Z",
+          "officialDate": "2023-10-07",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 3,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 110,
+                "name": "Baltimore Orioles",
+                "link": "/api/v1/teams/110"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 2,
+            "name": "Oriole Park at Camden Yards",
+            "link": "/api/v1/venues/2"
+          },
+          "content": {
+            "link": "/api/v1/game/748573/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748573-2023-10-07",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "ALDS 'A' Game 1",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 1,
+          "seriesDescription": "AL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748569,
+          "gameGuid": "a05de737-601b-4fa4-9bc6-bcb76765c11b",
+          "link": "/api/v1.1/game/748569/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-08T20:07:00Z",
+          "officialDate": "2023-10-08",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 11,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 110,
+                "name": "Baltimore Orioles",
+                "link": "/api/v1/teams/110"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 8,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 2,
+            "name": "Oriole Park at Camden Yards",
+            "link": "/api/v1/venues/2"
+          },
+          "content": {
+            "link": "/api/v1/game/748569/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748569-2023-10-08",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "ALDS 'A' Game 2",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 2,
+          "seriesDescription": "AL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748572,
+          "gameGuid": "e2332dfe-c255-43e1-a3b9-5d4feddb3de7",
+          "link": "/api/v1.1/game/748572/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-11T00:03:00Z",
+          "officialDate": "2023-10-10",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 110,
+                "name": "Baltimore Orioles",
+                "link": "/api/v1/teams/110"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 7,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 5325,
+            "name": "Globe Life Field",
+            "link": "/api/v1/venues/5325"
+          },
+          "content": {
+            "link": "/api/v1/game/748572/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748572-2023-10-10",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALDS 'A' Game 3",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 3,
+          "seriesDescription": "AL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "D_4",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "D"
+      },
+      "totalItems": 3,
+      "totalGames": 3,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748555,
+          "gameGuid": "c974c311-d0f6-4abf-84af-b072c80f2739",
+          "link": "/api/v1.1/game/748555/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-08T01:20:00Z",
+          "officialDate": "2023-10-07",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 11,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 4
+            },
+            "home": {
+              "team": {
+                "id": 119,
+                "name": "Los Angeles Dodgers",
+                "link": "/api/v1/teams/119"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 4
+            }
+          },
+          "venue": {
+            "id": 22,
+            "name": "Dodger Stadium",
+            "link": "/api/v1/venues/22"
+          },
+          "content": {
+            "link": "/api/v1/game/748555/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748555-2023-10-07",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLDS 'B' Game 1",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 1,
+          "seriesDescription": "NL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748556,
+          "gameGuid": "b4db25b0-cb37-477c-855c-c0a0e921fa9b",
+          "link": "/api/v1.1/game/748556/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-10T01:07:00Z",
+          "officialDate": "2023-10-09",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 4,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 4
+            },
+            "home": {
+              "team": {
+                "id": 119,
+                "name": "Los Angeles Dodgers",
+                "link": "/api/v1/teams/119"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 4
+            }
+          },
+          "venue": {
+            "id": 22,
+            "name": "Dodger Stadium",
+            "link": "/api/v1/venues/22"
+          },
+          "content": {
+            "link": "/api/v1/game/748556/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748556-2023-10-09",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLDS 'B' Game 2",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 2,
+          "seriesDescription": "NL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748557,
+          "gameGuid": "b2ce12fc-1735-415b-8287-32c5a1a7f5d5",
+          "link": "/api/v1.1/game/748557/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-12T01:07:00Z",
+          "officialDate": "2023-10-11",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 119,
+                "name": "Los Angeles Dodgers",
+                "link": "/api/v1/teams/119"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 4
+            },
+            "home": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 4,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 4
+            }
+          },
+          "venue": {
+            "id": 15,
+            "name": "Chase Field",
+            "link": "/api/v1/venues/15"
+          },
+          "content": {
+            "link": "/api/v1/game/748557/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748557-2023-10-11",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLDS 'B' Game 3",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 3,
+          "seriesDescription": "NL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "D_3",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "D"
+      },
+      "totalItems": 4,
+      "totalGames": 4,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748562,
+          "gameGuid": "b0eae0f8-c51b-4cbc-a5f9-c94bf829f53d",
+          "link": "/api/v1.1/game/748562/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-07T22:07:00Z",
+          "officialDate": "2023-10-07",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 3,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 3
+            },
+            "home": {
+              "team": {
+                "id": 144,
+                "name": "Atlanta Braves",
+                "link": "/api/v1/teams/144"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 0,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 3
+            }
+          },
+          "venue": {
+            "id": 4705,
+            "name": "Truist Park",
+            "link": "/api/v1/venues/4705"
+          },
+          "content": {
+            "link": "/api/v1/game/748562/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748562-2023-10-07",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLDS 'A' Game 1",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 1,
+          "seriesDescription": "NL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748563,
+          "gameGuid": "63540360-9712-4d8a-8b96-20bfb1515cb6",
+          "link": "/api/v1.1/game/748563/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-09T22:07:00Z",
+          "officialDate": "2023-10-09",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 4,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 3
+            },
+            "home": {
+              "team": {
+                "id": 144,
+                "name": "Atlanta Braves",
+                "link": "/api/v1/teams/144"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 5,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 3
+            }
+          },
+          "venue": {
+            "id": 4705,
+            "name": "Truist Park",
+            "link": "/api/v1/venues/4705"
+          },
+          "content": {
+            "link": "/api/v1/game/748563/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748563-2023-10-09",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLDS 'A' Game 2",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 2,
+          "seriesDescription": "NL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748564,
+          "gameGuid": "27c70084-7e97-4be7-853a-14fbdaba46d2",
+          "link": "/api/v1.1/game/748564/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-11T21:07:00Z",
+          "officialDate": "2023-10-11",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 144,
+                "name": "Atlanta Braves",
+                "link": "/api/v1/teams/144"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".333"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 3
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".667"
+              },
+              "score": 10,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 3
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748564/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748564-2023-10-11",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLDS 'A' Game 3",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 3,
+          "seriesDescription": "NL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748561,
+          "gameGuid": "c6bee97a-9d1f-4b5e-9950-e04513e0b36f",
+          "link": "/api/v1.1/game/748561/feed/live",
+          "gameType": "D",
+          "season": "2023",
+          "gameDate": "2023-10-13T00:07:00Z",
+          "officialDate": "2023-10-12",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 144,
+                "name": "Atlanta Braves",
+                "link": "/api/v1/teams/144"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".250"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 3
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".750"
+              },
+              "score": 3,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 3
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748561/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748561-2023-10-12",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLDS 'A' Game 4",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 5,
+          "seriesGameNumber": 4,
+          "seriesDescription": "NL Division Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "L_1",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "L"
+      },
+      "totalItems": 7,
+      "totalGames": 7,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748553,
+          "gameGuid": "26d4ba96-602c-4ea5-9563-d9de887f2d45",
+          "link": "/api/v1.1/game/748553/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-16T00:15:00Z",
+          "officialDate": "2023-10-15",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 2,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 0,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 2392,
+            "name": "Minute Maid Park",
+            "link": "/api/v1/venues/2392"
+          },
+          "content": {
+            "link": "/api/v1/game/748553/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748553-2023-10-15",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALCS Game 1",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 1,
+          "seriesDescription": "AL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748548,
+          "gameGuid": "1de9a00c-2f35-4e38-93c7-854ae6dcd96c",
+          "link": "/api/v1.1/game/748548/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-16T20:37:00Z",
+          "officialDate": "2023-10-16",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 5,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 4,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 2392,
+            "name": "Minute Maid Park",
+            "link": "/api/v1/venues/2392"
+          },
+          "content": {
+            "link": "/api/v1/game/748548/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748548-2023-10-16",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "ALCS Game 2",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 2,
+          "seriesDescription": "AL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748552,
+          "gameGuid": "cc641bd3-ec1c-49ba-a189-1e89c3ea0b62",
+          "link": "/api/v1.1/game/748552/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-19T00:03:00Z",
+          "officialDate": "2023-10-18",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".333"
+              },
+              "score": 8,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".667"
+              },
+              "score": 5,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 5325,
+            "name": "Globe Life Field",
+            "link": "/api/v1/venues/5325"
+          },
+          "content": {
+            "link": "/api/v1/game/748552/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748552-2023-10-18",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALCS Game 3",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 3,
+          "seriesDescription": "AL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748551,
+          "gameGuid": "a288ca8b-a2b2-4e77-8d24-66f70dd59404",
+          "link": "/api/v1.1/game/748551/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-20T00:03:00Z",
+          "officialDate": "2023-10-19",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 10,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 3,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 5325,
+            "name": "Globe Life Field",
+            "link": "/api/v1/venues/5325"
+          },
+          "content": {
+            "link": "/api/v1/game/748551/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748551-2023-10-19",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALCS Game 4",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 4,
+          "seriesDescription": "AL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748550,
+          "gameGuid": "7fb23b17-f091-4514-8840-7d4570ed2595",
+          "link": "/api/v1.1/game/748550/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-20T21:07:00Z",
+          "officialDate": "2023-10-20",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".600"
+              },
+              "score": 5,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".400"
+              },
+              "score": 4,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 5325,
+            "name": "Globe Life Field",
+            "link": "/api/v1/venues/5325"
+          },
+          "content": {
+            "link": "/api/v1/game/748550/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748550-2023-10-20",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "ALCS Game 5",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 5,
+          "seriesDescription": "AL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748549,
+          "gameGuid": "9aa2d810-325a-4c2a-826e-c2e5df32eace",
+          "link": "/api/v1.1/game/748549/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-23T00:03:00Z",
+          "officialDate": "2023-10-22",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 9,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 2392,
+            "name": "Minute Maid Park",
+            "link": "/api/v1/venues/2392"
+          },
+          "content": {
+            "link": "/api/v1/game/748549/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748549-2023-10-22",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALCS Game 6",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 6,
+          "seriesDescription": "AL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748547,
+          "gameGuid": "76257a6c-7b63-4794-bff0-9f22ec32391d",
+          "link": "/api/v1.1/game/748547/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-24T00:03:00Z",
+          "officialDate": "2023-10-23",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "leagueRecord": {
+                "wins": 4,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".571"
+              },
+              "score": 11,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 4,
+                "ties": 0,
+                "pct": ".429"
+              },
+              "score": 4,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 2392,
+            "name": "Minute Maid Park",
+            "link": "/api/v1/venues/2392"
+          },
+          "content": {
+            "link": "/api/v1/game/748547/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748547-2023-10-23",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "ALCS Game 7",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 7,
+          "seriesDescription": "AL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    },
+    {
+      "series": {
+        "id": "L_2",
+        "sortNumber": 0,
+        "isDefault": false,
+        "gameType": "L"
+      },
+      "totalItems": 7,
+      "totalGames": 7,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 748543,
+          "gameGuid": "8980ea51-c664-473a-acc9-99bccbcb6e65",
+          "link": "/api/v1.1/game/748543/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-17T00:07:00Z",
+          "officialDate": "2023-10-16",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 3,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 5,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748543/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748543-2023-10-16",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLCS Game 1",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 1,
+          "seriesDescription": "NL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748546,
+          "gameGuid": "d4eb05c9-56a8-4faa-aa89-6ffa0f82bd80",
+          "link": "/api/v1.1/game/748546/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-18T00:07:00Z",
+          "officialDate": "2023-10-17",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".000"
+              },
+              "score": 0,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 0,
+                "ties": 0,
+                "pct": "1.000"
+              },
+              "score": 10,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748546/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748546-2023-10-17",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLCS Game 2",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 2,
+          "seriesDescription": "NL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748545,
+          "gameGuid": "6fdf6ff5-4bfa-4122-8c54-01c82cb330c1",
+          "link": "/api/v1.1/game/748545/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-19T21:07:00Z",
+          "officialDate": "2023-10-19",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 1,
+                "ties": 0,
+                "pct": ".667"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 1,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".333"
+              },
+              "score": 2,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 15,
+            "name": "Chase Field",
+            "link": "/api/v1/venues/15"
+          },
+          "content": {
+            "link": "/api/v1/game/748545/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748545-2023-10-19",
+          "seasonDisplay": "2023",
+          "dayNight": "day",
+          "description": "NLCS Game 3",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 3,
+          "seriesDescription": "NL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748544,
+          "gameGuid": "1db410be-75fc-473b-96b9-6248ea5d8848",
+          "link": "/api/v1.1/game/748544/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-21T00:07:00Z",
+          "officialDate": "2023-10-20",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 5,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 6,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 15,
+            "name": "Chase Field",
+            "link": "/api/v1/venues/15"
+          },
+          "content": {
+            "link": "/api/v1/game/748544/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748544-2023-10-20",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLCS Game 4",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 4,
+          "seriesDescription": "NL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748538,
+          "gameGuid": "4a993d1d-9798-4935-88a9-0ddae932fde3",
+          "link": "/api/v1.1/game/748538/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-22T00:07:00Z",
+          "officialDate": "2023-10-21",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 2,
+                "ties": 0,
+                "pct": ".600"
+              },
+              "score": 6,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 2,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".400"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 15,
+            "name": "Chase Field",
+            "link": "/api/v1/venues/15"
+          },
+          "content": {
+            "link": "/api/v1/game/748538/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748538-2023-10-21",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLCS Game 5",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 5,
+          "seriesDescription": "NL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748539,
+          "gameGuid": "b720ff3b-6b43-4ba9-b3ee-2972bc78d312",
+          "link": "/api/v1.1/game/748539/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-23T21:07:00Z",
+          "officialDate": "2023-10-23",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 5,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".500"
+              },
+              "score": 1,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748539/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": false,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748539-2023-10-23",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLCS Game 6",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 6,
+          "seriesDescription": "NL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 748537,
+          "gameGuid": "ceaa7391-b0d2-4b26-81f8-7d9b61d5cf40",
+          "link": "/api/v1.1/game/748537/feed/live",
+          "gameType": "L",
+          "season": "2023",
+          "gameDate": "2023-10-25T00:07:00Z",
+          "officialDate": "2023-10-24",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Final",
+            "statusCode": "F",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "leagueRecord": {
+                "wins": 4,
+                "losses": 3,
+                "ties": 0,
+                "pct": ".571"
+              },
+              "score": 4,
+              "isWinner": true,
+              "splitSquad": false,
+              "seriesNumber": 2
+            },
+            "home": {
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "leagueRecord": {
+                "wins": 3,
+                "losses": 4,
+                "ties": 0,
+                "pct": ".429"
+              },
+              "score": 2,
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 2
+            }
+          },
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
+          },
+          "content": {
+            "link": "/api/v1/game/748537/content"
+          },
+          "isTie": false,
+          "isFeaturedGame": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-748537-2023-10-24",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "description": "NLCS Game 7",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 175,
+          "gamesInSeries": 7,
+          "seriesGameNumber": 7,
+          "seriesDescription": "NL Championship Series",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "sortOrder": 0
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "roster": [
+    {
+      "person": {
+        "id": 693113,
+        "fullName": "Eric Cressey",
+        "link": "/api/v1/people/693113"
+      },
+      "jerseyNumber": "",
+      "job": "Director of Player Health",
+      "jobId": "DRPH",
+      "title": "Director of Player Health and Performance"
+    },
+    {
+      "person": {
+        "id": 674480,
+        "fullName": "Michael Schuk",
+        "link": "/api/v1/people/674480"
+      },
+      "jerseyNumber": "",
+      "job": "Director of Sports Performance",
+      "jobId": "DOSP",
+      "title": "Director of Sports Medicine and Rehabilitation"
+    },
+    {
+      "person": {
+        "id": 579797,
+        "fullName": "Tim Lentych",
+        "link": "/api/v1/people/579797"
+      },
+      "jerseyNumber": "",
+      "job": "Head Athletic Trainer",
+      "jobId": "HATR",
+      "title": "Head Athletic Trainer"
+    },
+    {
+      "person": {
+        "id": 578671,
+        "fullName": "Steve Donohue",
+        "link": "/api/v1/people/578671"
+      },
+      "jerseyNumber": "",
+      "job": "Director of Medical Services",
+      "jobId": "DMES",
+      "title": "Director of Medical Services"
+    },
+    {
+      "person": {
+        "id": 805445,
+        "fullName": "Alfonso Malaguti",
+        "link": "/api/v1/people/805445"
+      },
+      "jerseyNumber": "",
+      "job": "Assistant Athletic Trainer",
+      "jobId": "AATR",
+      "title": "Assistant Athletic Trainer"
+    },
+    {
+      "person": {
+        "id": 805446,
+        "fullName": "Joe Bello",
+        "link": "/api/v1/people/805446"
+      },
+      "jerseyNumber": "",
+      "job": "Physical Therapist",
+      "jobId": "PTHR",
+      "title": "Major League Physical Therapist & Rehab Coordinator"
+    },
+    {
+      "person": {
+        "id": 578668,
+        "fullName": "Christopher Ahmad",
+        "link": "/api/v1/people/578668"
+      },
+      "jerseyNumber": "",
+      "job": "Head Team Physician",
+      "jobId": "HTPH",
+      "title": "Head Team Physician"
+    },
+    {
+      "person": {
+        "id": 693114,
+        "fullName": "Brett McCabe",
+        "link": "/api/v1/people/693114"
+      },
+      "jerseyNumber": "",
+      "job": "Strength and Conditioning Coach",
+      "jobId": "SCCC",
+      "title": "Major League Strength and Conditioning Coach"
+    },
+    {
+      "person": {
+        "id": 474829,
+        "fullName": "Chad Bohling",
+        "link": "/api/v1/people/474829"
+      },
+      "jerseyNumber": "",
+      "job": "Director of Mental Conditioning",
+      "jobId": "DRMC",
+      "title": "Senior Director, Organizational Performance"
+    },
+    {
+      "person": {
+        "id": 838337,
+        "fullName": "Marlon Abreu",
+        "link": "/api/v1/people/838337"
+      },
+      "jerseyNumber": "",
+      "job": "Media Member",
+      "jobId": "MEDI",
+      "title": "Bilingual Media Relations Coordinator"
+    },
+    {
+      "person": {
+        "id": 805447,
+        "fullName": "Drew Weisberg",
+        "link": "/api/v1/people/805447"
+      },
+      "jerseyNumber": "",
+      "job": "Major League Dietitian",
+      "jobId": "DIET",
+      "title": "Director of Performance Nutrition"
+    },
+    {
+      "person": {
+        "id": 461572,
+        "fullName": "Doug Cecil",
+        "link": "/api/v1/people/461572"
+      },
+      "jerseyNumber": "",
+      "job": "Massage Therapist",
+      "jobId": "MASS",
+      "title": "Massage Therapist"
+    },
+    {
+      "person": {
+        "id": 578672,
+        "fullName": "Rob Cucuzza",
+        "link": "/api/v1/people/578672"
+      },
+      "jerseyNumber": "",
+      "job": "Equipment Manager",
+      "jobId": "EQUP",
+      "title": "Equipment Manager"
+    },
+    {
+      "person": {
+        "id": 578673,
+        "fullName": "Lou Cucuzza Jr.",
+        "link": "/api/v1/people/578673"
+      },
+      "jerseyNumber": "",
+      "job": "Director, Clubhouse Operations",
+      "jobId": "DCLO",
+      "title": "Director, Clubhouse Operations"
+    },
+    {
+      "person": {
+        "id": 508607,
+        "fullName": "Ben Tuliebitz",
+        "link": "/api/v1/people/508607"
+      },
+      "jerseyNumber": "",
+      "job": "Director, Team Travel and Player Services",
+      "jobId": "DTEP",
+      "title": "Executive Director, Team Travel and Player Services"
+    },
+    {
+      "person": {
+        "id": 618000,
+        "fullName": "Mark Kafalas",
+        "link": "/api/v1/people/618000"
+      },
+      "jerseyNumber": "",
+      "job": "Team Security",
+      "jobId": "TSEC",
+      "title": "Executive Director, Team Operations"
+    },
+    {
+      "person": {
+        "id": 838335,
+        "fullName": "Rob Gomez",
+        "link": "/api/v1/people/838335"
+      },
+      "jerseyNumber": "",
+      "job": "Team Security",
+      "jobId": "TSEC",
+      "title": "Director, Security Operations"
+    },
+    {
+      "person": {
+        "id": 810857,
+        "fullName": "Sam Briend",
+        "link": "/api/v1/people/810857"
+      },
+      "jerseyNumber": "",
+      "job": "Director of Pitching Operations ",
+      "jobId": "DOPO",
+      "title": "Senior Director, Pitching"
+    },
+    {
+      "person": {
+        "id": 437906,
+        "fullName": "Brett Weber",
+        "link": "/api/v1/people/437906"
+      },
+      "jerseyNumber": "",
+      "job": "Director of Amateur Scouting",
+      "jobId": "DIRA",
+      "title": "Senior Director, Advance Scouting"
+    },
+    {
+      "person": {
+        "id": 820923,
+        "fullName": "Larry Adegoke",
+        "link": "/api/v1/people/820923"
+      },
+      "jerseyNumber": "",
+      "job": "Strength and Conditioning Coach",
+      "jobId": "SCCC",
+      "title": "Assistant Major League Strength and Conditioning Coach"
+    },
+    {
+      "person": {
+        "id": 810858,
+        "fullName": "Victor Roldan",
+        "link": "/api/v1/people/810858"
+      },
+      "jerseyNumber": "",
+      "job": "International Field Coordinator",
+      "jobId": "IFCO",
+      "title": "Director, International Operations"
+    },
+    {
+      "person": {
+        "id": 593720,
+        "fullName": "Rainiero Coa",
+        "link": "/api/v1/people/593720"
+      },
+      "jerseyNumber": "",
+      "job": "Bullpen Staff",
+      "jobId": "BPSF",
+      "title": "Bullpen Catcher"
+    },
+    {
+      "person": {
+        "id": 832314,
+        "fullName": "Peter Serruto",
+        "link": "/api/v1/people/832314"
+      },
+      "jerseyNumber": "",
+      "job": "Bullpen Staff",
+      "jobId": "BPSF",
+      "title": "Bullpen Catcher"
+    },
+    {
+      "person": {
+        "id": 674479,
+        "fullName": "Dan Pane",
+        "link": "/api/v1/people/674479"
+      },
+      "jerseyNumber": "",
+      "job": "Video Coordinator",
+      "jobId": "VIDC",
+      "title": "Major League Video Coordinator"
+    },
+    {
+      "person": {
+        "id": 805449,
+        "fullName": "Tyler DeClerck",
+        "link": "/api/v1/people/805449"
+      },
+      "jerseyNumber": "",
+      "job": "Advance Scout",
+      "jobId": "ADSC",
+      "title": "Assistant Director, Advance Scouting"
+    },
+    {
+      "person": {
+        "id": 805450,
+        "fullName": "Zac Fieroh",
+        "link": "/api/v1/people/805450"
+      },
+      "jerseyNumber": "",
+      "job": "Analytics Coordinator",
+      "jobId": "ANAC",
+      "title": "Analyst, Major League Coaching Staff"
+    },
+    {
+      "person": {
+        "id": 832313,
+        "fullName": "Jimmy Downam",
+        "link": "/api/v1/people/832313"
+      },
+      "jerseyNumber": "",
+      "job": "Assistant Athletic Trainer",
+      "jobId": "AATR",
+      "title": "Major League Assistant Athletic Trainer"
+    }
+  ]
+}

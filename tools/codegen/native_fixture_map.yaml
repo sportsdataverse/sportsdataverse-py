@@ -8,6 +8,63 @@ mlb_api:
   venues_active.json: venues
   # /api/v1/sports                         -> /api/v1/sports
   sports.json: sports
+  # --- 0.0.54: broader MLB Stats API surface (E2 live-captured fixtures) ---
+  # /api/v1/conferences
+  conferences.json: conferences
+  # /api/v1/conferences/301
+  conference.json: conference
+  # /api/v1/draft/2023/latest
+  draft_latest.json: draft_latest
+  # /api/v1.1/game/716390/feed/live/timestamps
+  game_timestamps.json: game_timestamps
+  # /api/v1/game/changes?sportId=1&updatedSince=...
+  game_changes.json: game_changes
+  # /api/v1/gamePace?season=2023
+  game_pace.json: game_pace
+  # /api/v1/highLow/player?statGroup=hitting&sortStat=homeRuns&season=2023
+  high_low.json: high_low
+  # /api/v1/homeRunDerby/511101
+  home_run_derby.json: home_run_derby
+  # /api/v1/homeRunDerby/511101/bracket
+  home_run_derby_bracket.json: home_run_derby_bracket
+  # /api/v1/homeRunDerby/511101/pool
+  home_run_derby_pool.json: home_run_derby_pool
+  # /api/v1/league/103/allStarBallot?season=2023
+  all_star_ballot.json: all_star_ballot
+  # /api/v1/league/103/allStarWriteIns?season=2023
+  all_star_write_ins.json: all_star_write_ins
+  # /api/v1/league/103/allStarFinalVote?season=2023
+  all_star_final_vote.json: all_star_final_vote
+  # /api/v1/people/freeAgents?season=2023
+  free_agents.json: free_agents
+  # /api/v1/jobs?jobType=UMPR
+  jobs.json: jobs
+  # /api/v1/jobs/datacasters
+  datacasters.json: datacasters
+  # /api/v1/jobs/officialScorers
+  official_scorers.json: official_scorers
+  # /api/v1/schedule/games/tied?season=2016
+  schedule_tied.json: schedule_tied
+  # /api/v1/schedule/postseason/series?season=2023
+  schedule_postseason_series.json: schedule_postseason_series
+  # /api/v1/schedule/postseason/tuneIn?season=2023 (valid; dates[] empty off-cycle)
+  schedule_postseason_tunein.json: schedule_postseason_tunein
+  # /api/v1/seasons/all?sportId=1
+  seasons_all.json: seasons_all
+  # /api/v1/sports/1
+  sport.json: sport
+  # /api/v1/teams/history?teamIds=147
+  teams_history.json: teams_history
+  # /api/v1/teams/stats?season=2023&sportIds=1&group=hitting&stats=season
+  teams_stats.json: teams_stats
+  # /api/v1/teams/stats/leaders?leaderCategories=homeRuns&season=2023
+  teams_stats_leaders.json: teams_stats_leaders
+  # /api/v1/teams/147/coaches?season=2023
+  team_coaches.json: team_coaches
+  # /api/v1/teams/147/personnel
+  team_personnel.json: team_personnel
+  # /api/v1/teams/147/roster/active?season=2023
+  team_roster_type.json: team_roster_type
 
 nhl_api_web:
   # /gamecenter/2023030417/play-by-play   -> /v1/gamecenter/{game_id}/play-by-play

@@ -1,0 +1,379 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "highLowResults": [
+    {
+      "group": {
+        "displayName": "hitting"
+      },
+      "totalSplits": 346,
+      "exemptions": [],
+      "splits": [
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 117,
+            "name": "Houston Astros",
+            "link": "/api/v1/teams/117"
+          },
+          "player": {
+            "id": 514888,
+            "fullName": "Jose Altuve",
+            "link": "/api/v1/people/514888",
+            "firstName": "Jose",
+            "lastName": "Altuve"
+          },
+          "opponent": {
+            "id": 140,
+            "name": "Texas Rangers",
+            "link": "/api/v1/teams/140"
+          },
+          "date": "2023-09-05",
+          "gameType": "R",
+          "isHome": false,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 716705,
+            "link": "/api/v1.1/game/716705/feed/live",
+            "content": {
+              "link": "/api/v1/game/716705/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 133,
+            "name": "Oakland Athletics",
+            "link": "/api/v1/teams/133"
+          },
+          "player": {
+            "id": 672478,
+            "fullName": "Jordan Diaz",
+            "link": "/api/v1/people/672478",
+            "firstName": "Jordan",
+            "lastName": "Diaz"
+          },
+          "opponent": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "date": "2023-05-09",
+          "gameType": "R",
+          "isHome": false,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 718247,
+            "link": "/api/v1.1/game/718247/feed/live",
+            "content": {
+              "link": "/api/v1/game/718247/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 140,
+            "name": "Texas Rangers",
+            "link": "/api/v1/teams/140"
+          },
+          "player": {
+            "id": 666969,
+            "fullName": "Adolis Garc\u00eda",
+            "link": "/api/v1/people/666969",
+            "firstName": "Adolis",
+            "lastName": "Garc\u00eda"
+          },
+          "opponent": {
+            "id": 133,
+            "name": "Oakland Athletics",
+            "link": "/api/v1/teams/133"
+          },
+          "date": "2023-04-22",
+          "gameType": "R",
+          "isHome": true,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 718469,
+            "link": "/api/v1.1/game/718469/feed/live",
+            "content": {
+              "link": "/api/v1/game/718469/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 138,
+            "name": "St. Louis Cardinals",
+            "link": "/api/v1/teams/138"
+          },
+          "player": {
+            "id": 502671,
+            "fullName": "Paul Goldschmidt",
+            "link": "/api/v1/people/502671",
+            "firstName": "Paul",
+            "lastName": "Goldschmidt"
+          },
+          "opponent": {
+            "id": 116,
+            "name": "Detroit Tigers",
+            "link": "/api/v1/teams/116"
+          },
+          "date": "2023-05-07",
+          "gameType": "R",
+          "isHome": true,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 718272,
+            "link": "/api/v1.1/game/718272/feed/live",
+            "content": {
+              "link": "/api/v1/game/718272/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "player": {
+            "id": 592450,
+            "fullName": "Aaron Judge",
+            "link": "/api/v1/people/592450",
+            "firstName": "Aaron",
+            "lastName": "Judge"
+          },
+          "opponent": {
+            "id": 120,
+            "name": "Washington Nationals",
+            "link": "/api/v1/teams/120"
+          },
+          "date": "2023-08-23",
+          "gameType": "R",
+          "isHome": true,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 716877,
+            "link": "/api/v1.1/game/716877/feed/live",
+            "content": {
+              "link": "/api/v1/game/716877/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        }
+      ],
+      "splitsTiedWithOffset": [],
+      "splitsTiedWithLimit": [
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "player": {
+            "id": 592450,
+            "fullName": "Aaron Judge",
+            "link": "/api/v1/people/592450",
+            "firstName": "Aaron",
+            "lastName": "Judge"
+          },
+          "opponent": {
+            "id": 109,
+            "name": "Arizona Diamondbacks",
+            "link": "/api/v1/teams/109"
+          },
+          "date": "2023-09-22",
+          "gameType": "R",
+          "isHome": true,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 716480,
+            "link": "/api/v1.1/game/716480/feed/live",
+            "content": {
+              "link": "/api/v1/game/716480/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 114,
+            "name": "Cleveland Guardians",
+            "link": "/api/v1/teams/114"
+          },
+          "player": {
+            "id": 608070,
+            "fullName": "Jos\u00e9 Ram\u00edrez",
+            "link": "/api/v1/people/608070",
+            "firstName": "Jos\u00e9",
+            "lastName": "Ram\u00edrez"
+          },
+          "opponent": {
+            "id": 111,
+            "name": "Boston Red Sox",
+            "link": "/api/v1/teams/111"
+          },
+          "date": "2023-06-08",
+          "gameType": "R",
+          "isHome": true,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 717842,
+            "link": "/api/v1.1/game/717842/feed/live",
+            "content": {
+              "link": "/api/v1/game/717842/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          },
+          "player": {
+            "id": 572204,
+            "fullName": "Trayce Thompson",
+            "link": "/api/v1/people/572204",
+            "firstName": "Trayce",
+            "lastName": "Thompson"
+          },
+          "opponent": {
+            "id": 109,
+            "name": "Arizona Diamondbacks",
+            "link": "/api/v1/teams/109"
+          },
+          "date": "2023-04-01",
+          "gameType": "R",
+          "isHome": true,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 718749,
+            "link": "/api/v1.1/game/718749/feed/live",
+            "content": {
+              "link": "/api/v1/game/718749/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "homeRuns": 3
+          },
+          "team": {
+            "id": 117,
+            "name": "Houston Astros",
+            "link": "/api/v1/teams/117"
+          },
+          "player": {
+            "id": 663656,
+            "fullName": "Kyle Tucker",
+            "link": "/api/v1/people/663656",
+            "firstName": "Kyle",
+            "lastName": "Tucker"
+          },
+          "opponent": {
+            "id": 133,
+            "name": "Oakland Athletics",
+            "link": "/api/v1/teams/133"
+          },
+          "date": "2023-07-21",
+          "gameType": "R",
+          "isHome": false,
+          "rank": 1,
+          "gameInnings": 9,
+          "game": {
+            "gamePk": 717310,
+            "link": "/api/v1.1/game/717310/feed/live",
+            "content": {
+              "link": "/api/v1/game/717310/content"
+            },
+            "gameNumber": 1,
+            "dayNight": "day"
+          }
+        }
+      ],
+      "season": "2023",
+      "gameType": {
+        "id": "R",
+        "description": "Regular Season"
+      },
+      "sortStat": {
+        "name": "home_runs",
+        "lookupParam": "homeRuns",
+        "isCounting": true,
+        "label": "Home runs",
+        "statGroups": [
+          {
+            "displayName": "hitting"
+          },
+          {
+            "displayName": "pitching"
+          }
+        ],
+        "orgTypes": [
+          "PLAYER",
+          "TEAM"
+        ],
+        "highLowTypes": [
+          "PLAYER",
+          "TEAM"
+        ],
+        "streakLevels": []
+      },
+      "combinedStats": false
+    }
+  ]
+}

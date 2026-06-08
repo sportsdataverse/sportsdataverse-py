@@ -117,6 +117,17 @@ _LIST_KEYS = (
     "players",
     "items",
     "records",
+    # Additional top-level list wrappers used by the broader MLB Stats API
+    # surface (conferences, jobs/roster directories, high/low, leaders,
+    # free agents, team/league stats). Appended so the existing key order /
+    # behavior above is unchanged.
+    "conferences",
+    "roster",
+    "highLowResults",
+    "leagueLeaders",
+    "freeAgents",
+    "stats",
+    "series",
 )
 
 
@@ -304,6 +315,37 @@ def parse_mlb_api_person_stats(payload: Dict, return_as_pandas: bool = False) ->
 
 
 # ---------------------------------------------------------------------------
+# Single-object / scalar-list endpoints
+# ---------------------------------------------------------------------------
+
+
+def parse_mlb_api_draft_latest(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``mlb_api_draft_latest()`` into a single-row frame.
+
+    The latest-pick endpoint returns ``{pick: {...}, number, nextUp}`` -- a
+    single object rather than a list -- so it is flattened as one row (with the
+    ``copyright`` boilerplate dropped). The nested ``pick`` sub-dict is unrolled
+    into ``pick_*`` columns.
+    """
+    if not isinstance(payload, dict) or not payload:
+        return _empty_frame(return_as_pandas)
+    row = {k: v for k, v in payload.items() if k != "copyright"}
+    return _flatten_rows([row], return_as_pandas)
+
+
+def parse_mlb_api_timecodes(payload, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse a bare list of GUMBO/color timecodes into a one-column frame.
+
+    The ``feed/live/timestamps`` and ``feed/color/timestamps`` endpoints return
+    a bare JSON array of timecode strings (e.g. ``"20230929_215457"``). This
+    parser shapes that into a single ``timecode`` column, one row per timestamp.
+    """
+    if not isinstance(payload, list) or not payload:
+        return _empty_frame(return_as_pandas)
+    return _flatten_rows([{"timecode": t} for t in payload], return_as_pandas)
+
+
+# ---------------------------------------------------------------------------
 # Endpoint → parser registry
 # ---------------------------------------------------------------------------
 
@@ -340,6 +382,13 @@ MLB_API_ENDPOINT_PARSERS = {
     "mlb_api_draft": parse_mlb_api_list,
     "mlb_api_draft_prospects": parse_mlb_api_list,
     "mlb_api_attendance": parse_mlb_api_list,
+    # Broader Stats API surface (dedicated shapes):
+    "mlb_api_draft_latest": parse_mlb_api_draft_latest,
+    "mlb_api_game_timestamps": parse_mlb_api_timecodes,
+    "mlb_api_game_color_timestamps": parse_mlb_api_timecodes,
+    "mlb_api_game_changes": parse_mlb_api_schedule,
+    "mlb_api_schedule_tied": parse_mlb_api_schedule,
+    "mlb_api_schedule_postseason_tunein": parse_mlb_api_schedule,
 }
 
 

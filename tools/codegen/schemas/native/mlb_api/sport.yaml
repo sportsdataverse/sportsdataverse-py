@@ -1,0 +1,24 @@
+schema: sport
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: code
+  type: character
+  description: ''
+- name: link
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: sort_order
+  type: integer
+  description: ''
+- name: active_status
+  type: logical
+  description: ''

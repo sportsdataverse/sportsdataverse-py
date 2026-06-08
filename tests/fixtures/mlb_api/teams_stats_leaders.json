@@ -1,0 +1,191 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "leagueLeaders": [
+    {
+      "leaderCategory": "homeRuns",
+      "season": "2023",
+      "gameType": {
+        "id": "R",
+        "description": "Regular Season"
+      },
+      "leaders": [
+        {
+          "rank": 1,
+          "value": "307",
+          "team": {
+            "id": 144,
+            "name": "Atlanta Braves",
+            "link": "/api/v1/teams/144"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 2,
+          "value": "249",
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 3,
+          "value": "233",
+          "team": {
+            "id": 142,
+            "name": "Minnesota Twins",
+            "link": "/api/v1/teams/142"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 3,
+          "value": "233",
+          "team": {
+            "id": 140,
+            "name": "Texas Rangers",
+            "link": "/api/v1/teams/140"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 5,
+          "value": "231",
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          },
+          "season": "2023"
+        }
+      ],
+      "statGroup": "hitting",
+      "totalSplits": 30
+    },
+    {
+      "leaderCategory": "homeRuns",
+      "season": "2023",
+      "gameType": {
+        "id": "R",
+        "description": "Regular Season"
+      },
+      "leaders": [
+        {
+          "rank": 1,
+          "value": "245",
+          "team": {
+            "id": 120,
+            "name": "Washington Nationals",
+            "link": "/api/v1/teams/120"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 2,
+          "value": "234",
+          "team": {
+            "id": 115,
+            "name": "Colorado Rockies",
+            "link": "/api/v1/teams/115"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 3,
+          "value": "222",
+          "team": {
+            "id": 113,
+            "name": "Cincinnati Reds",
+            "link": "/api/v1/teams/113"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 4,
+          "value": "214",
+          "team": {
+            "id": 145,
+            "name": "Chicago White Sox",
+            "link": "/api/v1/teams/145"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 5,
+          "value": "213",
+          "team": {
+            "id": 133,
+            "name": "Oakland Athletics",
+            "link": "/api/v1/teams/133"
+          },
+          "season": "2023"
+        }
+      ],
+      "statGroup": "pitching",
+      "totalSplits": 30
+    },
+    {
+      "leaderCategory": "homeRuns",
+      "season": "2023",
+      "gameType": {
+        "id": "R",
+        "description": "Regular Season"
+      },
+      "leaders": [
+        {
+          "rank": 1,
+          "value": "1211",
+          "team": {
+            "id": 114,
+            "name": "Cleveland Guardians",
+            "link": "/api/v1/teams/114"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 2,
+          "value": "1035",
+          "team": {
+            "id": 118,
+            "name": "Kansas City Royals",
+            "link": "/api/v1/teams/118"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 3,
+          "value": "990",
+          "team": {
+            "id": 140,
+            "name": "Texas Rangers",
+            "link": "/api/v1/teams/140"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 4,
+          "value": "950",
+          "team": {
+            "id": 121,
+            "name": "New York Mets",
+            "link": "/api/v1/teams/121"
+          },
+          "season": "2023"
+        },
+        {
+          "rank": 5,
+          "value": "936",
+          "team": {
+            "id": 115,
+            "name": "Colorado Rockies",
+            "link": "/api/v1/teams/115"
+          },
+          "season": "2023"
+        }
+      ],
+      "statGroup": "catching",
+      "totalSplits": 30
+    }
+  ]
+}

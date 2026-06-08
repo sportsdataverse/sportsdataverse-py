@@ -724,7 +724,18 @@ View all PCL conferences.
 
 ### Returns
 
-View all PCL conferences.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `name` | character |  |
+| `link` | character |  |
+| `abbreviation` | character |  |
+| `has_wildcard` | logical |  |
+| `name_short` | character |  |
+| `league_id` | integer |  |
+| `league_link` | character |  |
+| `sport_id` | integer |  |
+| `sport_link` | character |  |
 
 ### Example
 
@@ -740,7 +751,7 @@ View PCL conferences by conferenceId.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/conferences/{conference_id}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/conferences/100](https://statsapi.mlb.com/api/v1/conferences/100)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/conferences/301](https://statsapi.mlb.com/api/v1/conferences/301)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -750,12 +761,23 @@ View PCL conferences by conferenceId.
 
 ### Returns
 
-View PCL conferences by conferenceId.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `name` | character |  |
+| `link` | character |  |
+| `abbreviation` | character |  |
+| `has_wildcard` | logical |  |
+| `name_short` | character |  |
+| `league_id` | integer |  |
+| `league_link` | character |  |
+| `sport_id` | integer |  |
+| `sport_link` | character |  |
 
 ### Example
 
 ```python
-mlb_api_conference(conference_id=100)
+mlb_api_conference(conference_id=301)
 ```
 
 _Last validated n/a._
@@ -774,7 +796,102 @@ View latest player drafted, endpoint best used when draft is currently open.
 
 ### Returns
 
-View latest player drafted, endpoint best used when draft is currently open.
+| col_name | type | description |
+|---|---|---|
+| `number` | integer |  |
+| `next_up` | character |  |
+| `pick_pick_round` | character |  |
+| `pick_pick_number` | integer |  |
+| `pick_display_pick_number` | integer |  |
+| `pick_round_pick_number` | integer |  |
+| `pick_signing_bonus` | character |  |
+| `pick_home_city` | character |  |
+| `pick_home_state` | character |  |
+| `pick_home_country` | character |  |
+| `pick_school_name` | character |  |
+| `pick_school_school_class` | character |  |
+| `pick_school_city` | character |  |
+| `pick_school_country` | character |  |
+| `pick_school_state` | character |  |
+| `pick_headshot_link` | character |  |
+| `pick_person_id` | integer |  |
+| `pick_person_full_name` | character |  |
+| `pick_person_link` | character |  |
+| `pick_person_first_name` | character |  |
+| `pick_person_last_name` | character |  |
+| `pick_person_birth_date` | character |  |
+| `pick_person_current_age` | integer |  |
+| `pick_person_birth_city` | character |  |
+| `pick_person_birth_state_province` | character |  |
+| `pick_person_birth_country` | character |  |
+| `pick_person_height` | character |  |
+| `pick_person_weight` | integer |  |
+| `pick_person_active` | logical |  |
+| `pick_person_primary_position_code` | character |  |
+| `pick_person_primary_position_name` | character |  |
+| `pick_person_primary_position_type` | character |  |
+| `pick_person_primary_position_abbreviation` | character |  |
+| `pick_person_use_name` | character |  |
+| `pick_person_use_last_name` | character |  |
+| `pick_person_middle_name` | character |  |
+| `pick_person_boxscore_name` | character |  |
+| `pick_person_gender` | character |  |
+| `pick_person_is_player` | logical |  |
+| `pick_person_is_verified` | logical |  |
+| `pick_person_draft_year` | integer |  |
+| `pick_person_bat_side_code` | character |  |
+| `pick_person_bat_side_description` | character |  |
+| `pick_person_pitch_hand_code` | character |  |
+| `pick_person_pitch_hand_description` | character |  |
+| `pick_person_name_first_last` | character |  |
+| `pick_person_name_slug` | character |  |
+| `pick_person_first_last_name` | character |  |
+| `pick_person_last_first_name` | character |  |
+| `pick_person_last_init_name` | character |  |
+| `pick_person_init_last_name` | character |  |
+| `pick_person_full_fml_name` | character |  |
+| `pick_person_full_lfm_name` | character |  |
+| `pick_person_strike_zone_top` | double |  |
+| `pick_person_strike_zone_bottom` | double |  |
+| `pick_person_xref_ids` | character |  |
+| `pick_team_spring_league_id` | integer |  |
+| `pick_team_spring_league_name` | character |  |
+| `pick_team_spring_league_link` | character |  |
+| `pick_team_spring_league_abbreviation` | character |  |
+| `pick_team_all_star_status` | character |  |
+| `pick_team_id` | integer |  |
+| `pick_team_name` | character |  |
+| `pick_team_link` | character |  |
+| `pick_team_season` | integer |  |
+| `pick_team_venue_id` | integer |  |
+| `pick_team_venue_name` | character |  |
+| `pick_team_venue_link` | character |  |
+| `pick_team_spring_venue_id` | integer |  |
+| `pick_team_spring_venue_link` | character |  |
+| `pick_team_team_code` | character |  |
+| `pick_team_file_code` | character |  |
+| `pick_team_abbreviation` | character |  |
+| `pick_team_team_name` | character |  |
+| `pick_team_location_name` | character |  |
+| `pick_team_first_year_of_play` | character |  |
+| `pick_team_league_id` | integer |  |
+| `pick_team_league_name` | character |  |
+| `pick_team_league_link` | character |  |
+| `pick_team_division_id` | integer |  |
+| `pick_team_division_name` | character |  |
+| `pick_team_division_link` | character |  |
+| `pick_team_sport_id` | integer |  |
+| `pick_team_sport_link` | character |  |
+| `pick_team_sport_name` | character |  |
+| `pick_team_short_name` | character |  |
+| `pick_team_franchise_name` | character |  |
+| `pick_team_club_name` | character |  |
+| `pick_team_active` | logical |  |
+| `pick_draft_type_code` | character |  |
+| `pick_draft_type_description` | character |  |
+| `pick_is_drafted` | logical |  |
+| `pick_is_pass` | logical |  |
+| `pick_year` | character |  |
 
 ### Example
 
@@ -798,7 +915,9 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 
 ### Returns
 
-Retrieve all of the play timecodes for a game in GUMBO feed.
+| col_name | type | description |
+|---|---|---|
+| `timecode` | character |  |
 
 ### Example
 
@@ -814,7 +933,7 @@ View corrected non Statcast information for games
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/game/changes`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/game/changes](https://statsapi.mlb.com/api/v1/game/changes)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/game/changes?updatedSince=2023-09-01T00%3A00%3A00Z&sportId=1](https://statsapi.mlb.com/api/v1/game/changes?updatedSince=2023-09-01T00%3A00%3A00Z&sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -824,12 +943,77 @@ View corrected non Statcast information for games
 
 ### Returns
 
-View corrected non Statcast information for games
+| col_name | type | description |
+|---|---|---|
+| `schedule_date` | character |  |
+| `game_pk` | integer |  |
+| `game_guid` | character |  |
+| `link` | character |  |
+| `game_type` | character |  |
+| `season` | character |  |
+| `game_date` | character |  |
+| `official_date` | character |  |
+| `is_tie` | logical |  |
+| `game_number` | integer |  |
+| `public_facing` | logical |  |
+| `double_header` | character |  |
+| `gameday_type` | character |  |
+| `tiebreaker` | character |  |
+| `calendar_event_id` | character |  |
+| `season_display` | character |  |
+| `day_night` | character |  |
+| `scheduled_innings` | integer |  |
+| `reverse_home_away_status` | logical |  |
+| `inning_break_length` | integer |  |
+| `games_in_series` | double |  |
+| `series_game_number` | double |  |
+| `series_description` | character |  |
+| `record_source` | character |  |
+| `if_necessary` | character |  |
+| `if_necessary_description` | character |  |
+| `status_abstract_game_state` | character |  |
+| `status_coded_game_state` | character |  |
+| `status_detailed_state` | character |  |
+| `status_status_code` | character |  |
+| `status_start_time_tbd` | logical |  |
+| `status_abstract_game_code` | character |  |
+| `teams_away_team_id` | integer |  |
+| `teams_away_team_name` | character |  |
+| `teams_away_team_link` | character |  |
+| `teams_away_league_record_wins` | integer |  |
+| `teams_away_league_record_losses` | integer |  |
+| `teams_away_league_record_ties` | integer |  |
+| `teams_away_league_record_pct` | character |  |
+| `teams_away_score` | integer |  |
+| `teams_away_is_winner` | logical |  |
+| `teams_away_split_squad` | logical |  |
+| `teams_away_series_number` | double |  |
+| `teams_home_team_id` | integer |  |
+| `teams_home_team_name` | character |  |
+| `teams_home_team_link` | character |  |
+| `teams_home_league_record_wins` | integer |  |
+| `teams_home_league_record_losses` | integer |  |
+| `teams_home_league_record_ties` | integer |  |
+| `teams_home_league_record_pct` | character |  |
+| `teams_home_score` | integer |  |
+| `teams_home_is_winner` | logical |  |
+| `teams_home_split_squad` | logical |  |
+| `teams_home_series_number` | double |  |
+| `venue_id` | integer |  |
+| `venue_name` | character |  |
+| `venue_link` | character |  |
+| `content_link` | character |  |
+| `rescheduled_from` | character |  |
+| `rescheduled_from_date` | character |  |
+| `description` | character |  |
+| `status_reason` | character |  |
+| `resumed_from` | character |  |
+| `resumed_from_date` | character |  |
 
 ### Example
 
 ```python
-mlb_api_game_changes()
+mlb_api_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
 ```
 
 _Last validated n/a._
@@ -1061,7 +1245,7 @@ View time of game info.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/gamePace`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/gamePace](https://statsapi.mlb.com/api/v1/gamePace)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/gamePace?season=2023](https://statsapi.mlb.com/api/v1/gamePace?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1080,12 +1264,62 @@ View time of game info.
 
 ### Returns
 
-View time of game info.
+| col_name | type | description |
+|---|---|---|
+| `hits_per9_inn` | double |  |
+| `runs_per9_inn` | double |  |
+| `pitches_per9_inn` | double |  |
+| `plate_appearances_per9_inn` | double |  |
+| `hits_per_game` | double |  |
+| `runs_per_game` | double |  |
+| `innings_played_per_game` | double |  |
+| `pitches_per_game` | double |  |
+| `pitchers_per_game` | double |  |
+| `plate_appearances_per_game` | double |  |
+| `total_game_time` | character |  |
+| `total_innings_played` | double |  |
+| `total_hits` | integer |  |
+| `total_runs` | integer |  |
+| `total_plate_appearances` | integer |  |
+| `total_pitchers` | integer |  |
+| `total_pitches` | integer |  |
+| `total_games` | integer |  |
+| `total7_inn_games` | integer |  |
+| `total9_inn_games` | double |  |
+| `total_extra_inn_games` | integer |  |
+| `time_per_game` | character |  |
+| `time_per_pitch` | character |  |
+| `time_per_hit` | character |  |
+| `time_per_run` | character |  |
+| `time_per_plate_appearance` | character |  |
+| `time_per9_inn` | character |  |
+| `time_per77_plate_appearances` | character |  |
+| `total_extra_inn_time` | character |  |
+| `time_per7_inn_game_without_extra_inn` | character |  |
+| `total9_inn_games_completed_early` | integer |  |
+| `total9_inn_games_without_extra_inn` | double |  |
+| `total9_inn_games_scheduled` | integer |  |
+| `hits_per_run` | double |  |
+| `pitches_per_pitcher` | double |  |
+| `season` | character |  |
+| `sport_id` | integer |  |
+| `sport_code` | character |  |
+| `sport_link` | character |  |
+| `pr_portal_calculated_fields_total7_inn_games` | integer |  |
+| `pr_portal_calculated_fields_total9_inn_games` | double |  |
+| `pr_portal_calculated_fields_total_extra_inn_games` | integer |  |
+| `pr_portal_calculated_fields_time_per7_inn_game` | character |  |
+| `pr_portal_calculated_fields_time_per9_inn_game` | character |  |
+| `pr_portal_calculated_fields_time_per_extra_inn_game` | character |  |
+| `time_per7_inn_game` | character |  |
+| `total7_inn_games_scheduled` | double |  |
+| `total7_inn_games_without_extra_inn` | double |  |
+| `total7_inn_games_completed_early` | double |  |
 
 ### Example
 
 ```python
-mlb_api_game_pace()
+mlb_api_game_pace(season='2023')
 ```
 
 _Last validated n/a._
@@ -1096,7 +1330,7 @@ View high/low stats by player or team.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/highLow/{org_type}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/highLow/player](https://statsapi.mlb.com/api/v1/highLow/player)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/highLow/player?statGroup=hitting&sortStat=homeRuns&season=2023](https://statsapi.mlb.com/api/v1/highLow/player?statGroup=hitting&sortStat=homeRuns&season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1113,12 +1347,31 @@ View high/low stats by player or team.
 
 ### Returns
 
-View high/low stats by player or team.
+| col_name | type | description |
+|---|---|---|
+| `total_splits` | integer |  |
+| `exemptions` | character |  |
+| `splits` | character |  |
+| `splits_tied_with_offset` | character |  |
+| `splits_tied_with_limit` | character |  |
+| `season` | character |  |
+| `combined_stats` | logical |  |
+| `group_display_name` | character |  |
+| `game_type_id` | character |  |
+| `game_type_description` | character |  |
+| `sort_stat_name` | character |  |
+| `sort_stat_lookup_param` | character |  |
+| `sort_stat_is_counting` | logical |  |
+| `sort_stat_label` | character |  |
+| `sort_stat_stat_groups` | character |  |
+| `sort_stat_org_types` | character |  |
+| `sort_stat_high_low_types` | character |  |
+| `sort_stat_streak_levels` | character |  |
 
 ### Example
 
 ```python
-mlb_api_high_low(org_type='player')
+mlb_api_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
 ```
 
 _Last validated n/a._
@@ -1129,7 +1382,7 @@ View a home run derby object based on gamePk.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/716390](https://statsapi.mlb.com/api/v1/homeRunDerby/716390)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/511101](https://statsapi.mlb.com/api/v1/homeRunDerby/511101)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1138,12 +1391,94 @@ View a home run derby object based on gamePk.
 
 ### Returns
 
-View a home run derby object based on gamePk.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `full_name` | character |  |
+| `link` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `primary_number` | character |  |
+| `birth_date` | character |  |
+| `current_age` | integer |  |
+| `birth_city` | character |  |
+| `birth_state_province` | character |  |
+| `birth_country` | character |  |
+| `height` | character |  |
+| `weight` | integer |  |
+| `active` | logical |  |
+| `use_name` | character |  |
+| `use_last_name` | character |  |
+| `middle_name` | character |  |
+| `boxscore_name` | character |  |
+| `nick_name` | character |  |
+| `gender` | character |  |
+| `is_player` | logical |  |
+| `is_verified` | logical |  |
+| `draft_year` | double |  |
+| `pronunciation` | character |  |
+| `stats` | character |  |
+| `mlb_debut_date` | character |  |
+| `name_first_last` | character |  |
+| `name_slug` | character |  |
+| `first_last_name` | character |  |
+| `last_first_name` | character |  |
+| `last_init_name` | character |  |
+| `init_last_name` | character |  |
+| `full_fml_name` | character |  |
+| `full_lfm_name` | character |  |
+| `strike_zone_top` | double |  |
+| `strike_zone_bottom` | double |  |
+| `current_team_spring_league_id` | double |  |
+| `current_team_spring_league_name` | character |  |
+| `current_team_spring_league_link` | character |  |
+| `current_team_spring_league_abbreviation` | character |  |
+| `current_team_all_star_status` | character |  |
+| `current_team_id` | integer |  |
+| `current_team_name` | character |  |
+| `current_team_link` | character |  |
+| `current_team_season` | integer |  |
+| `current_team_venue_id` | integer |  |
+| `current_team_venue_name` | character |  |
+| `current_team_venue_link` | character |  |
+| `current_team_spring_venue_id` | double |  |
+| `current_team_spring_venue_link` | character |  |
+| `current_team_team_code` | character |  |
+| `current_team_file_code` | character |  |
+| `current_team_abbreviation` | character |  |
+| `current_team_team_name` | character |  |
+| `current_team_location_name` | character |  |
+| `current_team_first_year_of_play` | character |  |
+| `current_team_league_id` | integer |  |
+| `current_team_league_name` | character |  |
+| `current_team_league_link` | character |  |
+| `current_team_division_id` | double |  |
+| `current_team_division_name` | character |  |
+| `current_team_division_link` | character |  |
+| `current_team_sport_id` | integer |  |
+| `current_team_sport_link` | character |  |
+| `current_team_sport_name` | character |  |
+| `current_team_short_name` | character |  |
+| `current_team_franchise_name` | character |  |
+| `current_team_club_name` | character |  |
+| `current_team_active` | logical |  |
+| `primary_position_code` | character |  |
+| `primary_position_name` | character |  |
+| `primary_position_type` | character |  |
+| `primary_position_abbreviation` | character |  |
+| `bat_side_code` | character |  |
+| `bat_side_description` | character |  |
+| `pitch_hand_code` | character |  |
+| `pitch_hand_description` | character |  |
+| `last_played_date` | character |  |
+| `name_matrilineal` | character |  |
+| `current_team_parent_org_name` | character |  |
+| `current_team_parent_org_id` | double |  |
 
 ### Example
 
 ```python
-mlb_api_home_run_derby(game_pk=716390)
+mlb_api_home_run_derby(game_pk=511101)
 ```
 
 _Last validated n/a._
@@ -1154,7 +1489,7 @@ View a home run derby object based on bracket.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/bracket`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/716390/bracket](https://statsapi.mlb.com/api/v1/homeRunDerby/716390/bracket)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/511101/bracket](https://statsapi.mlb.com/api/v1/homeRunDerby/511101/bracket)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1163,12 +1498,94 @@ View a home run derby object based on bracket.
 
 ### Returns
 
-View a home run derby object based on bracket.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `full_name` | character |  |
+| `link` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `primary_number` | character |  |
+| `birth_date` | character |  |
+| `current_age` | integer |  |
+| `birth_city` | character |  |
+| `birth_state_province` | character |  |
+| `birth_country` | character |  |
+| `height` | character |  |
+| `weight` | integer |  |
+| `active` | logical |  |
+| `use_name` | character |  |
+| `use_last_name` | character |  |
+| `middle_name` | character |  |
+| `boxscore_name` | character |  |
+| `nick_name` | character |  |
+| `gender` | character |  |
+| `is_player` | logical |  |
+| `is_verified` | logical |  |
+| `draft_year` | double |  |
+| `pronunciation` | character |  |
+| `stats` | character |  |
+| `mlb_debut_date` | character |  |
+| `name_first_last` | character |  |
+| `name_slug` | character |  |
+| `first_last_name` | character |  |
+| `last_first_name` | character |  |
+| `last_init_name` | character |  |
+| `init_last_name` | character |  |
+| `full_fml_name` | character |  |
+| `full_lfm_name` | character |  |
+| `strike_zone_top` | double |  |
+| `strike_zone_bottom` | double |  |
+| `current_team_spring_league_id` | double |  |
+| `current_team_spring_league_name` | character |  |
+| `current_team_spring_league_link` | character |  |
+| `current_team_spring_league_abbreviation` | character |  |
+| `current_team_all_star_status` | character |  |
+| `current_team_id` | integer |  |
+| `current_team_name` | character |  |
+| `current_team_link` | character |  |
+| `current_team_season` | integer |  |
+| `current_team_venue_id` | integer |  |
+| `current_team_venue_name` | character |  |
+| `current_team_venue_link` | character |  |
+| `current_team_spring_venue_id` | double |  |
+| `current_team_spring_venue_link` | character |  |
+| `current_team_team_code` | character |  |
+| `current_team_file_code` | character |  |
+| `current_team_abbreviation` | character |  |
+| `current_team_team_name` | character |  |
+| `current_team_location_name` | character |  |
+| `current_team_first_year_of_play` | character |  |
+| `current_team_league_id` | integer |  |
+| `current_team_league_name` | character |  |
+| `current_team_league_link` | character |  |
+| `current_team_division_id` | double |  |
+| `current_team_division_name` | character |  |
+| `current_team_division_link` | character |  |
+| `current_team_sport_id` | integer |  |
+| `current_team_sport_link` | character |  |
+| `current_team_sport_name` | character |  |
+| `current_team_short_name` | character |  |
+| `current_team_franchise_name` | character |  |
+| `current_team_club_name` | character |  |
+| `current_team_active` | logical |  |
+| `primary_position_code` | character |  |
+| `primary_position_name` | character |  |
+| `primary_position_type` | character |  |
+| `primary_position_abbreviation` | character |  |
+| `bat_side_code` | character |  |
+| `bat_side_description` | character |  |
+| `pitch_hand_code` | character |  |
+| `pitch_hand_description` | character |  |
+| `last_played_date` | character |  |
+| `name_matrilineal` | character |  |
+| `current_team_parent_org_name` | character |  |
+| `current_team_parent_org_id` | double |  |
 
 ### Example
 
 ```python
-mlb_api_home_run_derby_bracket(game_pk=716390)
+mlb_api_home_run_derby_bracket(game_pk=511101)
 ```
 
 _Last validated n/a._
@@ -1179,7 +1596,7 @@ View a home run derby object based on pool.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/pool`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/716390/pool](https://statsapi.mlb.com/api/v1/homeRunDerby/716390/pool)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/homeRunDerby/511101/pool](https://statsapi.mlb.com/api/v1/homeRunDerby/511101/pool)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1188,12 +1605,94 @@ View a home run derby object based on pool.
 
 ### Returns
 
-View a home run derby object based on pool.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `full_name` | character |  |
+| `link` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `primary_number` | character |  |
+| `birth_date` | character |  |
+| `current_age` | integer |  |
+| `birth_city` | character |  |
+| `birth_state_province` | character |  |
+| `birth_country` | character |  |
+| `height` | character |  |
+| `weight` | integer |  |
+| `active` | logical |  |
+| `use_name` | character |  |
+| `use_last_name` | character |  |
+| `middle_name` | character |  |
+| `boxscore_name` | character |  |
+| `nick_name` | character |  |
+| `gender` | character |  |
+| `is_player` | logical |  |
+| `is_verified` | logical |  |
+| `draft_year` | double |  |
+| `pronunciation` | character |  |
+| `stats` | character |  |
+| `mlb_debut_date` | character |  |
+| `name_first_last` | character |  |
+| `name_slug` | character |  |
+| `first_last_name` | character |  |
+| `last_first_name` | character |  |
+| `last_init_name` | character |  |
+| `init_last_name` | character |  |
+| `full_fml_name` | character |  |
+| `full_lfm_name` | character |  |
+| `strike_zone_top` | double |  |
+| `strike_zone_bottom` | double |  |
+| `current_team_spring_league_id` | double |  |
+| `current_team_spring_league_name` | character |  |
+| `current_team_spring_league_link` | character |  |
+| `current_team_spring_league_abbreviation` | character |  |
+| `current_team_all_star_status` | character |  |
+| `current_team_id` | integer |  |
+| `current_team_name` | character |  |
+| `current_team_link` | character |  |
+| `current_team_season` | integer |  |
+| `current_team_venue_id` | integer |  |
+| `current_team_venue_name` | character |  |
+| `current_team_venue_link` | character |  |
+| `current_team_spring_venue_id` | double |  |
+| `current_team_spring_venue_link` | character |  |
+| `current_team_team_code` | character |  |
+| `current_team_file_code` | character |  |
+| `current_team_abbreviation` | character |  |
+| `current_team_team_name` | character |  |
+| `current_team_location_name` | character |  |
+| `current_team_first_year_of_play` | character |  |
+| `current_team_league_id` | integer |  |
+| `current_team_league_name` | character |  |
+| `current_team_league_link` | character |  |
+| `current_team_division_id` | double |  |
+| `current_team_division_name` | character |  |
+| `current_team_division_link` | character |  |
+| `current_team_sport_id` | integer |  |
+| `current_team_sport_link` | character |  |
+| `current_team_sport_name` | character |  |
+| `current_team_short_name` | character |  |
+| `current_team_franchise_name` | character |  |
+| `current_team_club_name` | character |  |
+| `current_team_active` | logical |  |
+| `primary_position_code` | character |  |
+| `primary_position_name` | character |  |
+| `primary_position_type` | character |  |
+| `primary_position_abbreviation` | character |  |
+| `bat_side_code` | character |  |
+| `bat_side_description` | character |  |
+| `pitch_hand_code` | character |  |
+| `pitch_hand_description` | character |  |
+| `last_played_date` | character |  |
+| `name_matrilineal` | character |  |
+| `current_team_parent_org_name` | character |  |
+| `current_team_parent_org_id` | double |  |
 
 ### Example
 
 ```python
-mlb_api_home_run_derby_pool(game_pk=716390)
+mlb_api_home_run_derby_pool(game_pk=511101)
 ```
 
 _Last validated n/a._
@@ -1204,7 +1703,7 @@ View All-Star Ballots per league.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarBallot`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarBallot](https://statsapi.mlb.com/api/v1/league/103/allStarBallot)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarBallot?season=2023](https://statsapi.mlb.com/api/v1/league/103/allStarBallot?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1214,12 +1713,60 @@ View All-Star Ballots per league.
 
 ### Returns
 
-View All-Star Ballots per league.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `full_name` | character |  |
+| `link` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `primary_number` | character |  |
+| `birth_date` | character |  |
+| `current_age` | integer |  |
+| `birth_city` | character |  |
+| `birth_country` | character |  |
+| `height` | character |  |
+| `weight` | integer |  |
+| `active` | logical |  |
+| `use_name` | character |  |
+| `use_last_name` | character |  |
+| `middle_name` | character |  |
+| `boxscore_name` | character |  |
+| `nick_name` | character |  |
+| `gender` | character |  |
+| `name_matrilineal` | character |  |
+| `is_player` | logical |  |
+| `is_verified` | logical |  |
+| `pronunciation` | character |  |
+| `last_played_date` | character |  |
+| `mlb_debut_date` | character |  |
+| `name_first_last` | character |  |
+| `name_slug` | character |  |
+| `first_last_name` | character |  |
+| `last_first_name` | character |  |
+| `last_init_name` | character |  |
+| `init_last_name` | character |  |
+| `full_fml_name` | character |  |
+| `full_lfm_name` | character |  |
+| `strike_zone_top` | double |  |
+| `strike_zone_bottom` | double |  |
+| `primary_position_code` | character |  |
+| `primary_position_name` | character |  |
+| `primary_position_type` | character |  |
+| `primary_position_abbreviation` | character |  |
+| `bat_side_code` | character |  |
+| `bat_side_description` | character |  |
+| `pitch_hand_code` | character |  |
+| `pitch_hand_description` | character |  |
+| `birth_state_province` | character |  |
+| `draft_year` | double |  |
+| `name_title` | character |  |
+| `name_suffix` | character |  |
 
 ### Example
 
 ```python
-mlb_api_all_star_ballot(league_id=103)
+mlb_api_all_star_ballot(league_id='103', season='2023')
 ```
 
 _Last validated n/a._
@@ -1230,7 +1777,7 @@ View All-Star Write-ins per league.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarWriteIns`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarWriteIns](https://statsapi.mlb.com/api/v1/league/103/allStarWriteIns)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarWriteIns?season=2023](https://statsapi.mlb.com/api/v1/league/103/allStarWriteIns?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1240,12 +1787,56 @@ View All-Star Write-ins per league.
 
 ### Returns
 
-View All-Star Write-ins per league.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `full_name` | character |  |
+| `link` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `birth_date` | character |  |
+| `current_age` | integer |  |
+| `birth_city` | character |  |
+| `birth_state_province` | character |  |
+| `birth_country` | character |  |
+| `height` | character |  |
+| `weight` | integer |  |
+| `active` | logical |  |
+| `use_name` | character |  |
+| `use_last_name` | character |  |
+| `boxscore_name` | character |  |
+| `gender` | character |  |
+| `is_player` | logical |  |
+| `is_verified` | logical |  |
+| `pronunciation` | character |  |
+| `mlb_debut_date` | character |  |
+| `name_first_last` | character |  |
+| `name_slug` | character |  |
+| `first_last_name` | character |  |
+| `last_first_name` | character |  |
+| `last_init_name` | character |  |
+| `init_last_name` | character |  |
+| `full_fml_name` | character |  |
+| `full_lfm_name` | character |  |
+| `strike_zone_top` | double |  |
+| `strike_zone_bottom` | double |  |
+| `bat_side_code` | character |  |
+| `bat_side_description` | character |  |
+| `pitch_hand_code` | character |  |
+| `pitch_hand_description` | character |  |
+| `primary_number` | character |  |
+| `draft_year` | double |  |
+| `middle_name` | character |  |
+| `name_matrilineal` | character |  |
+| `last_played_date` | character |  |
+| `nick_name` | character |  |
+| `name_title` | character |  |
+| `name_suffix` | character |  |
 
 ### Example
 
 ```python
-mlb_api_all_star_write_ins(league_id=103)
+mlb_api_all_star_write_ins(league_id='103', season='2023')
 ```
 
 _Last validated n/a._
@@ -1256,7 +1847,7 @@ View All-Star Final Vote per league.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarFinalVote`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarFinalVote](https://statsapi.mlb.com/api/v1/league/103/allStarFinalVote)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/league/103/allStarFinalVote?season=2023](https://statsapi.mlb.com/api/v1/league/103/allStarFinalVote?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1266,12 +1857,60 @@ View All-Star Final Vote per league.
 
 ### Returns
 
-View All-Star Final Vote per league.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `full_name` | character |  |
+| `link` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `primary_number` | character |  |
+| `birth_date` | character |  |
+| `current_age` | integer |  |
+| `birth_city` | character |  |
+| `birth_country` | character |  |
+| `height` | character |  |
+| `weight` | integer |  |
+| `active` | logical |  |
+| `use_name` | character |  |
+| `use_last_name` | character |  |
+| `boxscore_name` | character |  |
+| `nick_name` | character |  |
+| `gender` | character |  |
+| `is_player` | logical |  |
+| `is_verified` | logical |  |
+| `pronunciation` | character |  |
+| `mlb_debut_date` | character |  |
+| `name_first_last` | character |  |
+| `name_slug` | character |  |
+| `first_last_name` | character |  |
+| `last_first_name` | character |  |
+| `last_init_name` | character |  |
+| `init_last_name` | character |  |
+| `full_fml_name` | character |  |
+| `full_lfm_name` | character |  |
+| `strike_zone_top` | double |  |
+| `strike_zone_bottom` | double |  |
+| `primary_position_code` | character |  |
+| `primary_position_name` | character |  |
+| `primary_position_type` | character |  |
+| `primary_position_abbreviation` | character |  |
+| `bat_side_code` | character |  |
+| `bat_side_description` | character |  |
+| `pitch_hand_code` | character |  |
+| `pitch_hand_description` | character |  |
+| `name_matrilineal` | character |  |
+| `birth_state_province` | character |  |
+| `name_title` | character |  |
+| `name_suffix` | character |  |
+| `middle_name` | character |  |
+| `draft_year` | double |  |
+| `last_played_date` | character |  |
 
 ### Example
 
 ```python
-mlb_api_all_star_final_vote(league_id=103)
+mlb_api_all_star_final_vote(league_id='103', season='2023')
 ```
 
 _Last validated n/a._
@@ -1282,23 +1921,41 @@ View biographical information and stats for Free Agents.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/people/freeAgents`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/people/freeAgents](https://statsapi.mlb.com/api/v1/people/freeAgents)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/people/freeAgents?season=2023](https://statsapi.mlb.com/api/v1/people/freeAgents?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
-| `seasonId` | `season_id` |  |  | `Y` |
+| `season` | `season` |  |  | `Y` |
 | `order` | `order` |  |  | `Y` |
 | `hydrate` | `hydrate` |  |  | `Y` |
 | `fields` | `fields` |  |  | `Y` |
 
 ### Returns
 
-View biographical information and stats for Free Agents.
+| col_name | type | description |
+|---|---|---|
+| `notes` | character |  |
+| `date_declared` | character |  |
+| `player_id` | integer |  |
+| `player_full_name` | character |  |
+| `player_link` | character |  |
+| `original_team_id` | double |  |
+| `original_team_name` | character |  |
+| `original_team_link` | character |  |
+| `new_team_link` | character |  |
+| `position_code` | character |  |
+| `position_name` | character |  |
+| `position_type` | character |  |
+| `position_abbreviation` | character |  |
+| `date_signed` | character |  |
+| `new_team_id` | double |  |
+| `new_team_name` | character |  |
+| `sort_order` | double |  |
 
 ### Example
 
 ```python
-mlb_api_free_agents()
+mlb_api_free_agents(season='2023')
 ```
 
 _Last validated n/a._
@@ -1309,7 +1966,7 @@ View directory by jobType.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/jobs`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/jobs](https://statsapi.mlb.com/api/v1/jobs)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/jobs?jobType=UMPR](https://statsapi.mlb.com/api/v1/jobs?jobType=UMPR)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1320,12 +1977,20 @@ View directory by jobType.
 
 ### Returns
 
-View directory by jobType.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character |  |
+| `job` | character |  |
+| `job_id` | character |  |
+| `title` | character |  |
+| `person_id` | integer |  |
+| `person_full_name` | character |  |
+| `person_link` | character |  |
 
 ### Example
 
 ```python
-mlb_api_jobs()
+mlb_api_jobs(job_type='UMPR')
 ```
 
 _Last validated n/a._
@@ -1347,7 +2012,15 @@ View datacasters directory.
 
 ### Returns
 
-View datacasters directory.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character |  |
+| `job` | character |  |
+| `job_id` | character |  |
+| `title` | character |  |
+| `person_id` | integer |  |
+| `person_full_name` | character |  |
+| `person_link` | character |  |
 
 ### Example
 
@@ -1374,7 +2047,15 @@ View official scorer directory.
 
 ### Returns
 
-View official scorer directory.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character |  |
+| `job` | character |  |
+| `job_id` | character |  |
+| `title` | character |  |
+| `person_id` | integer |  |
+| `person_full_name` | character |  |
+| `person_link` | character |  |
 
 ### Example
 
@@ -1390,7 +2071,7 @@ Get umpires and associated game for umpireId.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/jobs/umpires/games/{umpire_id}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/jobs/umpires/games/427044](https://statsapi.mlb.com/api/v1/jobs/umpires/games/427044)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/jobs/umpires/games/596809?season=2023](https://statsapi.mlb.com/api/v1/jobs/umpires/games/596809?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1406,7 +2087,7 @@ Get umpires and associated game for umpireId.
 ### Example
 
 ```python
-mlb_api_umpire_games(umpire_id=427044)
+mlb_api_umpire_games(umpire_id=596809, season='2023')
 ```
 
 _Last validated n/a._
@@ -1417,7 +2098,7 @@ View tied game schedule info.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/schedule/games/tied`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/games/tied](https://statsapi.mlb.com/api/v1/schedule/games/tied)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/games/tied?season=2016](https://statsapi.mlb.com/api/v1/schedule/games/tied?season=2016)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1428,12 +2109,70 @@ View tied game schedule info.
 
 ### Returns
 
-View tied game schedule info.
+| col_name | type | description |
+|---|---|---|
+| `schedule_date` | character |  |
+| `game_pk` | integer |  |
+| `game_guid` | character |  |
+| `link` | character |  |
+| `game_type` | character |  |
+| `season` | character |  |
+| `game_date` | character |  |
+| `official_date` | character |  |
+| `is_tie` | logical |  |
+| `game_number` | integer |  |
+| `public_facing` | logical |  |
+| `double_header` | character |  |
+| `gameday_type` | character |  |
+| `tiebreaker` | character |  |
+| `calendar_event_id` | character |  |
+| `season_display` | character |  |
+| `day_night` | character |  |
+| `scheduled_innings` | integer |  |
+| `reverse_home_away_status` | logical |  |
+| `inning_break_length` | integer |  |
+| `games_in_series` | integer |  |
+| `series_game_number` | integer |  |
+| `series_description` | character |  |
+| `record_source` | character |  |
+| `if_necessary` | character |  |
+| `if_necessary_description` | character |  |
+| `status_abstract_game_state` | character |  |
+| `status_coded_game_state` | character |  |
+| `status_detailed_state` | character |  |
+| `status_status_code` | character |  |
+| `status_start_time_tbd` | logical |  |
+| `status_reason` | character |  |
+| `status_abstract_game_code` | character |  |
+| `teams_away_team_id` | integer |  |
+| `teams_away_team_name` | character |  |
+| `teams_away_team_link` | character |  |
+| `teams_away_league_record_wins` | integer |  |
+| `teams_away_league_record_losses` | integer |  |
+| `teams_away_league_record_ties` | integer |  |
+| `teams_away_league_record_pct` | character |  |
+| `teams_away_score` | integer |  |
+| `teams_away_split_squad` | logical |  |
+| `teams_away_series_number` | integer |  |
+| `teams_home_team_id` | integer |  |
+| `teams_home_team_name` | character |  |
+| `teams_home_team_link` | character |  |
+| `teams_home_league_record_wins` | integer |  |
+| `teams_home_league_record_losses` | integer |  |
+| `teams_home_league_record_ties` | integer |  |
+| `teams_home_league_record_pct` | character |  |
+| `teams_home_score` | integer |  |
+| `teams_home_split_squad` | logical |  |
+| `teams_home_series_number` | integer |  |
+| `venue_id` | integer |  |
+| `venue_name` | character |  |
+| `venue_link` | character |  |
+| `content_link` | character |  |
 
 ### Example
 
 ```python
-mlb_api_schedule_tied()
+mlb_api_schedule_tied(season='2016')
 ```
 
 _Last validated n/a._
@@ -1444,7 +2183,7 @@ View schedule info for postseason based on series.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/schedule/postseason/series`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason/series](https://statsapi.mlb.com/api/v1/schedule/postseason/series)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason/series?season=2023](https://statsapi.mlb.com/api/v1/schedule/postseason/series?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1457,12 +2196,22 @@ View schedule info for postseason based on series.
 
 ### Returns
 
-View schedule info for postseason based on series.
+| col_name | type | description |
+|---|---|---|
+| `total_items` | integer |  |
+| `total_games` | integer |  |
+| `total_games_in_progress` | integer |  |
+| `games` | character |  |
+| `sort_order` | integer |  |
+| `series_id` | character |  |
+| `series_sort_number` | integer |  |
+| `series_is_default` | logical |  |
+| `series_game_type` | character |  |
 
 ### Example
 
 ```python
-mlb_api_schedule_postseason_series()
+mlb_api_schedule_postseason_series(season='2023')
 ```
 
 _Last validated n/a._
@@ -1473,7 +2222,7 @@ View schedule info for the tuneIn application.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn](https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn?season=2023](https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1490,7 +2239,7 @@ View schedule info for the tuneIn application.
 ### Example
 
 ```python
-mlb_api_schedule_postseason_tunein()
+mlb_api_schedule_postseason_tunein(season='2023')
 ```
 
 _Last validated n/a._
@@ -1501,7 +2250,7 @@ View information for all seasons based on id.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/seasons/all`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/seasons/all](https://statsapi.mlb.com/api/v1/seasons/all)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/seasons/all?sportId=1](https://statsapi.mlb.com/api/v1/seasons/all?sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1513,12 +2262,34 @@ View information for all seasons based on id.
 
 ### Returns
 
-View information for all seasons based on id.
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character |  |
+| `has_wildcard` | logical |  |
+| `pre_season_start_date` | character |  |
+| `season_start_date` | character |  |
+| `regular_season_start_date` | character |  |
+| `regular_season_end_date` | character |  |
+| `season_end_date` | character |  |
+| `offseason_start_date` | character |  |
+| `off_season_end_date` | character |  |
+| `season_level_gameday_type` | character |  |
+| `game_level_gameday_type` | character |  |
+| `qualifier_plate_appearances` | double |  |
+| `qualifier_outs_pitched` | double |  |
+| `post_season_start_date` | character |  |
+| `post_season_end_date` | character |  |
+| `last_date1st_half` | character |  |
+| `all_star_date` | character |  |
+| `first_date2nd_half` | character |  |
+| `pre_season_end_date` | character |  |
+| `spring_start_date` | character |  |
+| `spring_end_date` | character |  |
 
 ### Example
 
 ```python
-mlb_api_seasons_all()
+mlb_api_seasons_all(sport_id=1)
 ```
 
 _Last validated n/a._
@@ -1538,7 +2309,15 @@ View information for any given sportId.
 
 ### Returns
 
-View information for any given sportId.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `code` | character |  |
+| `link` | character |  |
+| `name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | integer |  |
+| `active_status` | logical |  |
 
 ### Example
 
@@ -1592,7 +2371,7 @@ View historical records for a list of teams.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/history`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/history](https://statsapi.mlb.com/api/v1/teams/history)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/history?teamIds=147](https://statsapi.mlb.com/api/v1/teams/history?teamIds=147)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1603,12 +2382,39 @@ View historical records for a list of teams.
 
 ### Returns
 
-View historical records for a list of teams.
+| col_name | type | description |
+|---|---|---|
+| `all_star_status` | character |  |
+| `id` | integer |  |
+| `name` | character |  |
+| `link` | character |  |
+| `season` | integer |  |
+| `team_code` | character |  |
+| `file_code` | character |  |
+| `abbreviation` | character |  |
+| `team_name` | character |  |
+| `location_name` | character |  |
+| `first_year_of_play` | character |  |
+| `short_name` | character |  |
+| `franchise_name` | character |  |
+| `club_name` | character |  |
+| `active` | logical |  |
+| `venue_id` | integer |  |
+| `venue_name` | character |  |
+| `venue_link` | character |  |
+| `spring_venue_id` | double |  |
+| `spring_venue_link` | character |  |
+| `league_id` | integer |  |
+| `league_name` | character |  |
+| `league_link` | character |  |
+| `sport_id` | integer |  |
+| `sport_link` | character |  |
+| `sport_name` | character |  |
 
 ### Example
 
 ```python
-mlb_api_teams_history()
+mlb_api_teams_history(team_ids='147')
 ```
 
 _Last validated n/a._
@@ -1619,13 +2425,13 @@ View team stats.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/stats`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/stats](https://statsapi.mlb.com/api/v1/teams/stats)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/stats?season=2023&sportIds=1&group=hitting&stats=season](https://statsapi.mlb.com/api/v1/teams/stats?season=2023&sportIds=1&group=hitting&stats=season)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
 | `season` | `season` |  |  | `Y` |
 | `sportIds` | `sport_ids` |  |  | `Y` |
-| `statGroup` | `stat_group` |  |  | `Y` |
+| `group` | `stat_group` |  |  | `Y` |
 | `gameType` | `game_type` |  |  | `Y` |
 | `stats` | `stats` |  |  | `Y` |
 | `order` | `order` |  |  | `Y` |
@@ -1634,12 +2440,20 @@ View team stats.
 
 ### Returns
 
-View team stats.
+| col_name | type | description |
+|---|---|---|
+| `total_splits` | integer |  |
+| `exemptions` | character |  |
+| `splits` | character |  |
+| `splits_tied_with_offset` | character |  |
+| `splits_tied_with_limit` | character |  |
+| `type_display_name` | character |  |
+| `group_display_name` | character |  |
 
 ### Example
 
 ```python
-mlb_api_teams_stats()
+mlb_api_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
 ```
 
 _Last validated n/a._
@@ -1650,7 +2464,7 @@ View leaders for a statistic.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/stats/leaders`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/stats/leaders](https://statsapi.mlb.com/api/v1/teams/stats/leaders)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/stats/leaders?leaderCategories=homeRuns&season=2023](https://statsapi.mlb.com/api/v1/teams/stats/leaders?leaderCategories=homeRuns&season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1669,12 +2483,20 @@ View leaders for a statistic.
 
 ### Returns
 
-View leaders for a statistic.
+| col_name | type | description |
+|---|---|---|
+| `leader_category` | character |  |
+| `season` | character |  |
+| `leaders` | character |  |
+| `stat_group` | character |  |
+| `total_splits` | integer |  |
+| `game_type_id` | character |  |
+| `game_type_description` | character |  |
 
 ### Example
 
 ```python
-mlb_api_teams_stats_leaders()
+mlb_api_teams_stats_leaders(leader_categories='homeRuns', season='2023')
 ```
 
 _Last validated n/a._
@@ -1685,7 +2507,7 @@ View biographical  information on all coaches for a given club.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/{team_id}/coaches`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/coaches](https://statsapi.mlb.com/api/v1/teams/10/coaches)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/147/coaches?season=2023](https://statsapi.mlb.com/api/v1/teams/147/coaches?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1696,12 +2518,20 @@ View biographical  information on all coaches for a given club.
 
 ### Returns
 
-View biographical  information on all coaches for a given club.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character |  |
+| `job` | character |  |
+| `job_id` | character |  |
+| `title` | character |  |
+| `person_id` | integer |  |
+| `person_full_name` | character |  |
+| `person_link` | character |  |
 
 ### Example
 
 ```python
-mlb_api_team_coaches(team_id=10)
+mlb_api_team_coaches(team_id=147, season='2023')
 ```
 
 _Last validated n/a._
@@ -1712,7 +2542,7 @@ View biographical  information on all personnel for a given club.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/{team_id}/personnel`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/personnel](https://statsapi.mlb.com/api/v1/teams/10/personnel)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/147/personnel](https://statsapi.mlb.com/api/v1/teams/147/personnel)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1722,12 +2552,20 @@ View biographical  information on all personnel for a given club.
 
 ### Returns
 
-View biographical  information on all personnel for a given club.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character |  |
+| `job` | character |  |
+| `job_id` | character |  |
+| `title` | character |  |
+| `person_id` | integer |  |
+| `person_full_name` | character |  |
+| `person_link` | character |  |
 
 ### Example
 
 ```python
-mlb_api_team_personnel(team_id=10)
+mlb_api_team_personnel(team_id=147)
 ```
 
 _Last validated n/a._
@@ -1738,7 +2576,7 @@ View biographical and statistical information for a club's roster based on roste
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/teams/{team_id}/roster/{roster_type}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/10/roster/active](https://statsapi.mlb.com/api/v1/teams/10/roster/active)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/teams/147/roster/active?season=2023](https://statsapi.mlb.com/api/v1/teams/147/roster/active?season=2023)
 
 | API Parameter | Python | Pattern | Required | Nullable |
 |---|---|:---:|:---:|:---:|
@@ -1751,12 +2589,23 @@ View biographical and statistical information for a club's roster based on roste
 
 ### Returns
 
-View biographical and statistical information for a club's roster based on roster type.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character |  |
+| `person_id` | integer |  |
+| `person_full_name` | character |  |
+| `person_link` | character |  |
+| `position_code` | character |  |
+| `position_name` | character |  |
+| `position_type` | character |  |
+| `position_abbreviation` | character |  |
+| `status_code` | character |  |
+| `status_description` | character |  |
 
 ### Example
 
 ```python
-mlb_api_team_roster_type(team_id=10, roster_type='active')
+mlb_api_team_roster_type(team_id=147, roster_type='active', season='2023')
 ```
 
 _Last validated n/a._

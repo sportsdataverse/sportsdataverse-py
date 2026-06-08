@@ -449,6 +449,7 @@ endpoints:
     query_key: fields
     type: str
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/conferences
 - short: conference
   summary: View PCL conferences by conferenceId.
   path: /api/v1/conferences/{conference_id}
@@ -464,8 +465,9 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    conference_id: 100
+    conference_id: 301
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/conference
 - short: draft_latest
   summary: View latest player drafted, endpoint best used when draft is currently open.
   path: /api/v1/draft/{year}/latest
@@ -475,7 +477,8 @@ endpoints:
     required: true
   example_args:
     year: 2023
-  parser: parse_mlb_api_list
+  parser: parse_mlb_api_draft_latest
+  returns_schema: native/mlb_api/draft_latest
 - short: game_timestamps
   summary: Retrieve all of the play timecodes for a game in GUMBO feed.
   path: /api/v1.1/game/{game_pk}/feed/live/timestamps
@@ -485,7 +488,8 @@ endpoints:
     required: true
   example_args:
     game_pk: 716390
-  parser: parse_mlb_api_list
+  parser: parse_mlb_api_timecodes
+  returns_schema: native/mlb_api/game_timestamps
 - short: game_changes
   summary: View corrected non Statcast information for games
   path: /api/v1/game/changes
@@ -499,7 +503,11 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
-  parser: parse_mlb_api_list
+  example_args:
+    sport_id: 1
+    updated_since: '2023-09-01T00:00:00Z'
+  parser: parse_mlb_api_schedule
+  returns_schema: native/mlb_api/game_changes
 - short: analytics_games
   summary: View timestamps of most recent data corrections made to games.
   path: /api/v1/game/analytics/game
@@ -669,7 +677,7 @@ endpoints:
     required: true
   example_args:
     game_pk: 716390
-  parser: parse_mlb_api_list
+  parser: parse_mlb_api_timecodes
 - short: game_pace
   summary: View time of game info.
   path: /api/v1/gamePace
@@ -710,7 +718,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/game_pace
 - short: high_low
   summary: View high/low stats by player or team.
   path: /api/v1/highLow/{org_type}
@@ -748,7 +759,11 @@ endpoints:
     type: str
   example_args:
     org_type: player
+    stat_group: hitting
+    sort_stat: homeRuns
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/high_low
 - short: home_run_derby
   summary: View a home run derby object based on gamePk.
   path: /api/v1/homeRunDerby/{game_pk}
@@ -761,8 +776,9 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    game_pk: 716390
+    game_pk: 511101
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/home_run_derby
 - short: home_run_derby_bracket
   summary: View a home run derby object based on bracket.
   path: /api/v1/homeRunDerby/{game_pk}/bracket
@@ -775,8 +791,9 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    game_pk: 716390
+    game_pk: 511101
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/home_run_derby_bracket
 - short: home_run_derby_pool
   summary: View a home run derby object based on pool.
   path: /api/v1/homeRunDerby/{game_pk}/pool
@@ -789,8 +806,9 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    game_pk: 716390
+    game_pk: 511101
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/home_run_derby_pool
 - short: all_star_ballot
   summary: View All-Star Ballots per league.
   path: /api/v1/league/{league_id}/allStarBallot
@@ -806,8 +824,10 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    league_id: 103
+    league_id: '103'
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/all_star_ballot
 - short: all_star_write_ins
   summary: View All-Star Write-ins per league.
   path: /api/v1/league/{league_id}/allStarWriteIns
@@ -823,8 +843,10 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    league_id: 103
+    league_id: '103'
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/all_star_write_ins
 - short: all_star_final_vote
   summary: View All-Star Final Vote per league.
   path: /api/v1/league/{league_id}/allStarFinalVote
@@ -840,14 +862,16 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    league_id: 103
+    league_id: '103'
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/all_star_final_vote
 - short: free_agents
   summary: View biographical information and stats for Free Agents.
   path: /api/v1/people/freeAgents
   extra_params:
-  - name: season_id
-    query_key: seasonId
+  - name: season
+    query_key: season
     type: str
   - name: order
     query_key: order
@@ -858,7 +882,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/free_agents
 - short: jobs
   summary: View directory by jobType.
   path: /api/v1/jobs
@@ -875,7 +902,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    job_type: UMPR
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/jobs
 - short: datacasters
   summary: View datacasters directory.
   path: /api/v1/jobs/datacasters
@@ -893,6 +923,7 @@ endpoints:
     query_key: fields
     type: str
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/datacasters
 - short: official_scorers
   summary: View official scorer directory.
   path: /api/v1/jobs/officialScorers
@@ -910,6 +941,7 @@ endpoints:
     query_key: fields
     type: str
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/official_scorers
 - short: umpire_games
   summary: Get umpires and associated game for umpireId.
   path: /api/v1/jobs/umpires/games/{umpire_id}
@@ -928,7 +960,8 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    umpire_id: 427044
+    umpire_id: 596809
+    season: '2023'
   parser: parse_mlb_api_list
 - short: schedule_tied
   summary: View tied game schedule info.
@@ -946,7 +979,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
-  parser: parse_mlb_api_list
+  example_args:
+    season: '2016'
+  parser: parse_mlb_api_schedule
+  returns_schema: native/mlb_api/schedule_tied
 - short: schedule_postseason_series
   summary: View schedule info for postseason based on series.
   path: /api/v1/schedule/postseason/series
@@ -969,7 +1005,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/schedule_postseason_series
 - short: schedule_postseason_tunein
   summary: View schedule info for the tuneIn application.
   path: /api/v1/schedule/postseason/tuneIn
@@ -989,7 +1028,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
-  parser: parse_mlb_api_list
+  example_args:
+    season: '2023'
+  parser: parse_mlb_api_schedule
+  returns_schema: native/mlb_api/schedule_postseason_tunein
 - short: seasons_all
   summary: View information for all seasons based on id.
   path: /api/v1/seasons/all
@@ -1009,7 +1051,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    sport_id: 1
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/seasons_all
 - short: sport
   summary: View information for any given sportId.
   path: /api/v1/sports/{sport_id}
@@ -1024,6 +1069,7 @@ endpoints:
   example_args:
     sport_id: 1
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/sport
 - short: stats_metrics
   summary: View Statcast stats.
   path: /api/v1/stats/metrics
@@ -1090,7 +1136,10 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    team_ids: '147'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/teams_history
 - short: teams_stats
   summary: View team stats.
   path: /api/v1/teams/stats
@@ -1102,7 +1151,7 @@ endpoints:
     query_key: sportIds
     type: str
   - name: stat_group
-    query_key: statGroup
+    query_key: group
     type: str
   - name: game_type
     query_key: gameType
@@ -1119,7 +1168,13 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    season: '2023'
+    sport_ids: '1'
+    stat_group: hitting
+    stats: season
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/teams_stats
 - short: teams_stats_leaders
   summary: View leaders for a statistic.
   path: /api/v1/teams/stats/leaders
@@ -1160,7 +1215,11 @@ endpoints:
   - name: fields
     query_key: fields
     type: str
+  example_args:
+    leader_categories: homeRuns
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/teams_stats_leaders
 - short: team_coaches
   summary: View biographical  information on all coaches for a given club.
   path: /api/v1/teams/{team_id}/coaches
@@ -1179,8 +1238,10 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    team_id: 10
+    team_id: 147
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/team_coaches
 - short: team_personnel
   summary: View biographical  information on all personnel for a given club.
   path: /api/v1/teams/{team_id}/personnel
@@ -1196,8 +1257,9 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    team_id: 10
+    team_id: 147
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/team_personnel
 - short: team_roster_type
   summary: View biographical and statistical information for a club's roster based on roster type.
   path: /api/v1/teams/{team_id}/roster/{roster_type}
@@ -1222,6 +1284,8 @@ endpoints:
     query_key: fields
     type: str
   example_args:
-    team_id: 10
+    team_id: 147
     roster_type: active
+    season: '2023'
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/team_roster_type

@@ -1,0 +1,24 @@
+schema: teams_stats_leaders
+kind: dataframe
+columns:
+- name: leader_category
+  type: character
+  description: ''
+- name: season
+  type: character
+  description: ''
+- name: leaders
+  type: character
+  description: ''
+- name: stat_group
+  type: character
+  description: ''
+- name: total_splits
+  type: integer
+  description: ''
+- name: game_type_id
+  type: character
+  description: ''
+- name: game_type_description
+  type: character
+  description: ''

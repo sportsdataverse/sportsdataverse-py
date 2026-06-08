@@ -1,0 +1,1083 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "roster": [
+    {
+      "person": {
+        "id": 596809,
+        "fullName": "Ryan Additon",
+        "link": "/api/v1/people/596809"
+      },
+      "jerseyNumber": "67",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 623938,
+        "fullName": "Erich Bacchus",
+        "link": "/api/v1/people/623938"
+      },
+      "jerseyNumber": "12",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 545402,
+        "fullName": "John Bacon",
+        "link": "/api/v1/people/545402"
+      },
+      "jerseyNumber": "70",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 490319,
+        "fullName": "Jordan Baker",
+        "link": "/api/v1/people/490319"
+      },
+      "jerseyNumber": "71",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 665576,
+        "fullName": "Brock Ballou",
+        "link": "/api/v1/people/665576"
+      },
+      "jerseyNumber": "41",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 503493,
+        "fullName": "Sean Barber",
+        "link": "/api/v1/people/503493"
+      },
+      "jerseyNumber": "29",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427013,
+        "fullName": "Lance Barksdale",
+        "link": "/api/v1/people/427013"
+      },
+      "jerseyNumber": "23",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483561,
+        "fullName": "Lance Barrett",
+        "link": "/api/v1/people/483561"
+      },
+      "jerseyNumber": "16",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 482608,
+        "fullName": "Scott Barry",
+        "link": "/api/v1/people/482608"
+      },
+      "jerseyNumber": "87",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 644760,
+        "fullName": "Adam Beck",
+        "link": "/api/v1/people/644760"
+      },
+      "jerseyNumber": "38",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483564,
+        "fullName": "Dan Bellino",
+        "link": "/api/v1/people/483564"
+      },
+      "jerseyNumber": "2",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 503502,
+        "fullName": "Ryan Blakney",
+        "link": "/api/v1/people/503502"
+      },
+      "jerseyNumber": "36",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 484183,
+        "fullName": "Cory Blaser",
+        "link": "/api/v1/people/484183"
+      },
+      "jerseyNumber": "89",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427044,
+        "fullName": "CB Bucknor",
+        "link": "/api/v1/people/427044"
+      },
+      "jerseyNumber": "54",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483569,
+        "fullName": "Vic Carapazza",
+        "link": "/api/v1/people/483569"
+      },
+      "jerseyNumber": "19",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 598411,
+        "fullName": "Nestor Ceja",
+        "link": "/api/v1/people/598411"
+      },
+      "jerseyNumber": "33",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 607884,
+        "fullName": "Paul Clemons",
+        "link": "/api/v1/people/607884"
+      },
+      "jerseyNumber": "57",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 482620,
+        "fullName": "Chris Conroy",
+        "link": "/api/v1/people/482620"
+      },
+      "jerseyNumber": "98",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 594151,
+        "fullName": "Ramon De Jesus",
+        "link": "/api/v1/people/594151"
+      },
+      "jerseyNumber": "18",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427113,
+        "fullName": "Laz Diaz",
+        "link": "/api/v1/people/427113"
+      },
+      "jerseyNumber": "63",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427128,
+        "fullName": "Rob Drake",
+        "link": "/api/v1/people/427128"
+      },
+      "jerseyNumber": "8",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427129,
+        "fullName": "Bruce Dreckman",
+        "link": "/api/v1/people/427129"
+      },
+      "jerseyNumber": "1",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427139,
+        "fullName": "Doug Eddings",
+        "link": "/api/v1/people/427139"
+      },
+      "jerseyNumber": "88",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 482631,
+        "fullName": "Mike Estabrook",
+        "link": "/api/v1/people/482631"
+      },
+      "jerseyNumber": "83",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 431232,
+        "fullName": "Chad Fairchild",
+        "link": "/api/v1/people/431232"
+      },
+      "jerseyNumber": "4",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427164,
+        "fullName": "Andy Fletcher",
+        "link": "/api/v1/people/427164"
+      },
+      "jerseyNumber": "49",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 503586,
+        "fullName": "Tripp Gibson",
+        "link": "/api/v1/people/503586"
+      },
+      "jerseyNumber": "73",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 484499,
+        "fullName": "Manny Gonzalez",
+        "link": "/api/v1/people/484499"
+      },
+      "jerseyNumber": "79",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427197,
+        "fullName": "Chris Guccione",
+        "link": "/api/v1/people/427197"
+      },
+      "jerseyNumber": "68",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 503077,
+        "fullName": "Adam Hamari",
+        "link": "/api/v1/people/503077"
+      },
+      "jerseyNumber": "78",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 665297,
+        "fullName": "Tom Hanahan",
+        "link": "/api/v1/people/665297"
+      },
+      "jerseyNumber": "69",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 428442,
+        "fullName": "James Hoye",
+        "link": "/api/v1/people/428442"
+      },
+      "jerseyNumber": "92",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427243,
+        "fullName": "Marvin Hudson",
+        "link": "/api/v1/people/427243"
+      },
+      "jerseyNumber": "51",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427248,
+        "fullName": "Dan Iassogna",
+        "link": "/api/v1/people/427248"
+      },
+      "jerseyNumber": "58",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 676580,
+        "fullName": "Steven Jaschinski",
+        "link": "/api/v1/people/676580"
+      },
+      "jerseyNumber": "65",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 676581,
+        "fullName": "James Jean",
+        "link": "/api/v1/people/676581"
+      },
+      "jerseyNumber": "61",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 664263,
+        "fullName": "Edwin Jimenez",
+        "link": "/api/v1/people/664263"
+      },
+      "jerseyNumber": "75",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 621660,
+        "fullName": "Emil Jimenez",
+        "link": "/api/v1/people/621660"
+      },
+      "jerseyNumber": "82",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 482641,
+        "fullName": "Adrian Johnson",
+        "link": "/api/v1/people/482641"
+      },
+      "jerseyNumber": "80",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 658536,
+        "fullName": "Austin Jones",
+        "link": "/api/v1/people/658536"
+      },
+      "jerseyNumber": "77",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 658325,
+        "fullName": "Tyler Jones",
+        "link": "/api/v1/people/658325"
+      },
+      "jerseyNumber": "39",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 665298,
+        "fullName": "Dexter Kelley",
+        "link": "/api/v1/people/665298"
+      },
+      "jerseyNumber": "56",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 665299,
+        "fullName": "Louie Krupa",
+        "link": "/api/v1/people/665299"
+      },
+      "jerseyNumber": "27",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427292,
+        "fullName": "Ron Kulpa",
+        "link": "/api/v1/people/427292"
+      },
+      "jerseyNumber": "46",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 544728,
+        "fullName": "Nic Lentz",
+        "link": "/api/v1/people/544728"
+      },
+      "jerseyNumber": "59",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 596805,
+        "fullName": "John Libka",
+        "link": "/api/v1/people/596805"
+      },
+      "jerseyNumber": "84",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 504381,
+        "fullName": "Will Little",
+        "link": "/api/v1/people/504381"
+      },
+      "jerseyNumber": "93",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 575629,
+        "fullName": "Shane Livensparger",
+        "link": "/api/v1/people/575629"
+      },
+      "jerseyNumber": "43",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 623945,
+        "fullName": "Alex MacKay",
+        "link": "/api/v1/people/623945"
+      },
+      "jerseyNumber": "9",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 521051,
+        "fullName": "Nick Mahrley",
+        "link": "/api/v1/people/521051"
+      },
+      "jerseyNumber": "48",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427315,
+        "fullName": "Alfonso M\u00e1rquez",
+        "link": "/api/v1/people/427315"
+      },
+      "jerseyNumber": "72",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 682874,
+        "fullName": "Trevor Mathews",
+        "link": "/api/v1/people/682874"
+      },
+      "jerseyNumber": "",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 521251,
+        "fullName": "Ben May",
+        "link": "/api/v1/people/521251"
+      },
+      "jerseyNumber": "97",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 605670,
+        "fullName": "Dan Merzel",
+        "link": "/api/v1/people/605670"
+      },
+      "jerseyNumber": "3",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 658082,
+        "fullName": "Jacob Metz",
+        "link": "/api/v1/people/658082"
+      },
+      "jerseyNumber": "94",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427344,
+        "fullName": "Bill Miller",
+        "link": "/api/v1/people/427344"
+      },
+      "jerseyNumber": "26",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 639723,
+        "fullName": "Brennan Miller",
+        "link": "/api/v1/people/639723"
+      },
+      "jerseyNumber": "55",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 623946,
+        "fullName": "Malachi Moore",
+        "link": "/api/v1/people/623946"
+      },
+      "jerseyNumber": "44",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 573597,
+        "fullName": "Gabe Morales",
+        "link": "/api/v1/people/573597"
+      },
+      "jerseyNumber": "47",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 554242,
+        "fullName": "Edwin Moscoso",
+        "link": "/api/v1/people/554242"
+      },
+      "jerseyNumber": "32",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483912,
+        "fullName": "Mike Muchlinski",
+        "link": "/api/v1/people/483912"
+      },
+      "jerseyNumber": "76",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 681849,
+        "fullName": "Felix Neon",
+        "link": "/api/v1/people/681849"
+      },
+      "jerseyNumber": "99",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427366,
+        "fullName": "Brian O'Nora",
+        "link": "/api/v1/people/427366"
+      },
+      "jerseyNumber": "7",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 577468,
+        "fullName": "Roberto Ortiz",
+        "link": "/api/v1/people/577468"
+      },
+      "jerseyNumber": "40",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 485856,
+        "fullName": "Jonathan Parra",
+        "link": "/api/v1/people/485856"
+      },
+      "jerseyNumber": "30",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 668921,
+        "fullName": "Jen Pawol",
+        "link": "/api/v1/people/668921"
+      },
+      "jerseyNumber": "95",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 484198,
+        "fullName": "Alan Porter",
+        "link": "/api/v1/people/484198"
+      },
+      "jerseyNumber": "64",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 482663,
+        "fullName": "David Rackley",
+        "link": "/api/v1/people/482663"
+      },
+      "jerseyNumber": "86",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 605671,
+        "fullName": "Charlie Ramos",
+        "link": "/api/v1/people/605671"
+      },
+      "jerseyNumber": "50",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427413,
+        "fullName": "Tony Randazzo",
+        "link": "/api/v1/people/427413"
+      },
+      "jerseyNumber": "11",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 605672,
+        "fullName": "Jeremie Rehak",
+        "link": "/api/v1/people/605672"
+      },
+      "jerseyNumber": "35",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 482666,
+        "fullName": "D.J. Reyburn",
+        "link": "/api/v1/people/482666"
+      },
+      "jerseyNumber": "17",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483919,
+        "fullName": "Mark Ripperger",
+        "link": "/api/v1/people/483919"
+      },
+      "jerseyNumber": "90",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 521889,
+        "fullName": "Stu Scheurwater",
+        "link": "/api/v1/people/521889"
+      },
+      "jerseyNumber": "85",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 503490,
+        "fullName": "Chris Segal",
+        "link": "/api/v1/people/503490"
+      },
+      "jerseyNumber": "96",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 658292,
+        "fullName": "Derek Thomas",
+        "link": "/api/v1/people/658292"
+      },
+      "jerseyNumber": "53",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 429805,
+        "fullName": "Todd Tichenor",
+        "link": "/api/v1/people/429805"
+      },
+      "jerseyNumber": "13",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 608158,
+        "fullName": "Nate Tomlinson",
+        "link": "/api/v1/people/608158"
+      },
+      "jerseyNumber": "34",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 547380,
+        "fullName": "Carlos Torres",
+        "link": "/api/v1/people/547380"
+      },
+      "jerseyNumber": "37",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 605673,
+        "fullName": "Alex Tosi",
+        "link": "/api/v1/people/605673"
+      },
+      "jerseyNumber": "66",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 691042,
+        "fullName": "Willie Traynor",
+        "link": "/api/v1/people/691042"
+      },
+      "jerseyNumber": "45",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483630,
+        "fullName": "John Tumpane",
+        "link": "/api/v1/people/483630"
+      },
+      "jerseyNumber": "74",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 496166,
+        "fullName": "1B Umpire",
+        "link": "/api/v1/people/496166"
+      },
+      "jerseyNumber": "0",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 496167,
+        "fullName": "2B Umpire",
+        "link": "/api/v1/people/496167"
+      },
+      "jerseyNumber": "0",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 496168,
+        "fullName": "3B Umpire",
+        "link": "/api/v1/people/496168"
+      },
+      "jerseyNumber": "0",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 496165,
+        "fullName": "HP Umpire",
+        "link": "/api/v1/people/496165"
+      },
+      "jerseyNumber": "0",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 433417,
+        "fullName": "NO UMPIRE",
+        "link": "/api/v1/people/433417"
+      },
+      "jerseyNumber": "0",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 608093,
+        "fullName": "Junior Valentine",
+        "link": "/api/v1/people/608093"
+      },
+      "jerseyNumber": "25",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 596740,
+        "fullName": "Jansen Visconti",
+        "link": "/api/v1/people/596740"
+      },
+      "jerseyNumber": "52",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 623949,
+        "fullName": "Clint Vondrak",
+        "link": "/api/v1/people/623949"
+      },
+      "jerseyNumber": "15",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 665281,
+        "fullName": "Brian Walsh",
+        "link": "/api/v1/people/665281"
+      },
+      "jerseyNumber": "60",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427533,
+        "fullName": "Mark Wegner",
+        "link": "/api/v1/people/427533"
+      },
+      "jerseyNumber": "14",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427537,
+        "fullName": "Hunter Wendelstedt",
+        "link": "/api/v1/people/427537"
+      },
+      "jerseyNumber": "21",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 489985,
+        "fullName": "Chad Whitson",
+        "link": "/api/v1/people/489985"
+      },
+      "jerseyNumber": "62",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 605674,
+        "fullName": "Ryan Wills",
+        "link": "/api/v1/people/605674"
+      },
+      "jerseyNumber": "20",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 665302,
+        "fullName": "Dillon Wilson",
+        "link": "/api/v1/people/665302"
+      },
+      "jerseyNumber": "24",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 511890,
+        "fullName": "Quinn Wolcott",
+        "link": "/api/v1/people/511890"
+      },
+      "jerseyNumber": "81",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427554,
+        "fullName": "Jim Wolf",
+        "link": "/api/v1/people/427554"
+      },
+      "jerseyNumber": "28",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    }
+  ]
+}

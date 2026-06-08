@@ -1,0 +1,30 @@
+schema: schedule_postseason_series
+kind: dataframe
+columns:
+- name: total_items
+  type: integer
+  description: ''
+- name: total_games
+  type: integer
+  description: ''
+- name: total_games_in_progress
+  type: integer
+  description: ''
+- name: games
+  type: character
+  description: ''
+- name: sort_order
+  type: integer
+  description: ''
+- name: series_id
+  type: character
+  description: ''
+- name: series_sort_number
+  type: integer
+  description: ''
+- name: series_is_default
+  type: logical
+  description: ''
+- name: series_game_type
+  type: character
+  description: ''
