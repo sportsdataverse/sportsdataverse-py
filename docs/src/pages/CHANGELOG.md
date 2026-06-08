@@ -88,6 +88,10 @@
   pages from introspected per-sport schemas, and autodoc DataFrame functions from
   a new `generate.py --autodoc-schemas` live-introspection pass (best-effort, with
   prose fallback where a function can't be introspected offline).
+- Return-table column **descriptions** are filled by column name from the sibling
+  SDV R packages' `@return` docs (cfbfastR / hoopR / wehoop / baseballr), mined to
+  `tools/codegen/r_column_descriptions.yaml` and applied at render time
+  (hand-curated descriptions take precedence; unmatched columns stay blank).
 
 ### Bug fixes
 
