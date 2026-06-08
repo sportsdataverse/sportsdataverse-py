@@ -14,7 +14,10 @@ not covered by the generated API-endpoint reference above.
 
 Pull the officials assigned to a WNBA game.
 
-See :func:`sportsdataverse.wbb.espn_wbb_game_officials` for full documentation of the column set, the empty-frame fallback when ESPN ships no officials, and the ``raw`` / ``return_as_pandas`` flag semantics.
+See :func:`sportsdataverse.wbb.espn_wbb_game_officials` for full
+documentation of the column set, the empty-frame fallback when ESPN
+ships no officials, and the ``raw`` / ``return_as_pandas`` flag
+semantics.
 
 **Parameters**
 
@@ -51,14 +54,14 @@ refs = espn_wnba_game_officials(game_id=401620238, season=2024)
 print(refs.shape)
 refs.select(["full_name", "position_name", "order"]).head()
 
-Pandas round-trip::
+# Pandas round-trip
 
 refs_pd = espn_wnba_game_officials(
     game_id=401620238, season=2024, return_as_pandas=True
 )
 refs_pd[["full_name", "position_name"]].head()
 
-Inspect the raw ESPN payload (e.g. for fields not flattened)::
+# Inspect the raw ESPN payload (e.g. for fields not flattened)
 
 payload = espn_wnba_game_officials(game_id=401620238, season=2024, raw=True)
 list(payload.keys())[:8]
@@ -68,7 +71,10 @@ list(payload.keys())[:8]
 
 Pull a WNBA athlete's ESPN **season** stat line.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of the wide return shape, the ``{category}_{stat}`` stat columns, the athlete / team metadata blocks, and the ``season_type`` / ``total`` parameters.
+See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the ``{category}_{stat}``
+stat columns, the athlete / team metadata blocks, and the
+``season_type`` / ``total`` parameters.
 
 **Parameters**
 
@@ -331,12 +337,12 @@ sched = espn_wnba_schedule(dates=20241011)  # 2024 WNBA Finals Game 1
 print(sched.shape)
 sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
 
-Pull a full regular season's worth of games::
+# Pull a full regular season's worth of games
 
 reg = espn_wnba_schedule(dates=2024, season_type=2, limit=500)
 reg.group_by("status_type_description").len().sort("len", descending=True)
 
-Pandas round-trip for a single date::
+# Pandas round-trip for a single date
 
 espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
 ```
@@ -345,7 +351,10 @@ espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
 
 Pull ESPN team season stats for a WNBA team.
 
-See :func:`sportsdataverse.wbb.espn_wbb_team_stats` for full documentation of the return shape, the canonical three category keys (``"Averages"``, ``"Totals"``, ``"Misc"``), the per-category column set, and the ``"Other"`` fallback bucket.
+See :func:`sportsdataverse.wbb.espn_wbb_team_stats` for full
+documentation of the return shape, the canonical three category keys
+(``"Averages"``, ``"Totals"``, ``"Misc"``), the per-category column
+set, and the ``"Other"`` fallback bucket.
 
 **Parameters**
 
@@ -368,14 +377,14 @@ frames = espn_wnba_team_stats(team_id=17, season=2024)
 sorted(frames.keys())  # 'Averages', 'Totals', 'Misc' (plus optional 'Other')
 frames["Averages"].head()
 
-Compare per-game and totals at a glance::
+# Compare per-game and totals at a glance
 
 avgs = frames["Averages"]
 totals = frames["Totals"]
 print(avgs.shape, totals.shape)
 avgs.select(["games_played", "points_per_game", "rebounds_per_game"])
 
-Pandas round-trip::
+# Pandas round-trip
 
 frames_pd = espn_wnba_team_stats(team_id=17, season=2024, return_as_pandas=True)
 frames_pd["Misc"].head()
@@ -387,7 +396,8 @@ frames_pd["Misc"].head()
 
 most_recent_wnba_season - return the most recent (likely-completed) WNBA season year.
 
-Returns the current calendar year if it's May or later (the WNBA regular season has tipped off), otherwise the previous calendar year.
+Returns the current calendar year if it's May or later (the WNBA regular
+season has tipped off), otherwise the previous calendar year.
 
 **Returns**
 
@@ -443,11 +453,11 @@ teams = espn_wnba_teams()
 print(teams.shape)
 teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 
-Find Las Vegas Aces (team_id 17)::
+# Find Las Vegas Aces (team_id 17)
 
 teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
 
-Refresh the cache (the call is ``lru_cache``'d)::
+# Refresh the cache (the call is ``lru_cache``'d)
 
 espn_wnba_teams.cache_clear()  # cached at function-level
 teams_pd = espn_wnba_teams(return_as_pandas=True)

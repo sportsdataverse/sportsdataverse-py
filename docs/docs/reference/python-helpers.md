@@ -14,7 +14,11 @@ not covered by the generated API-endpoint reference above.
 
 Load the PWHL games-in-data-repo manifest (no ``seasons`` argument).
 
-Mirrors fastRhockey (R) ``load_pwhl_games()`` which reads a manifest of every PWHL game that has processed data in the data repository. Tries the sportsdataverse-data release asset first; falls back to the raw fastRhockey-data GitHub path.
+Mirrors fastRhockey (R) ``load_pwhl_games()`` which reads a manifest of every
+PWHL game that has processed data in the data repository.
+
+Tries the sportsdataverse-data release asset first; falls back to the raw
+fastRhockey-data GitHub path.
 
 **Parameters**
 
@@ -93,7 +97,9 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
 Return a snapshot of the cache for debugging / inspection.
 
-Returns a dict with ``mode``, ``entries``, and ``disk_bytes`` (only populated when mode=filesystem). Cheap — doesn't read the cached bodies, just counts + sizes.
+Returns a dict with ``mode``, ``entries``, and ``disk_bytes`` (only
+populated when mode=filesystem). Cheap — doesn't read the cached
+bodies, just counts + sizes.
 
 ### `get_cache_mode() -> 'str'`
 

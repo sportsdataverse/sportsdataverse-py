@@ -49,14 +49,14 @@ officials = espn_wbb_game_officials(game_id=401587902, season=2024)
 print(officials.shape)
 officials.select(["full_name", "position_display_name", "order"]).head()
 
-Pandas round-trip::
+# Pandas round-trip
 
 officials_pd = espn_wbb_game_officials(
     game_id=401587902, season=2024, return_as_pandas=True
 )
 officials_pd.head()
 
-Raw payload (skip the cleaning pipeline)::
+# Raw payload (skip the cleaning pipeline)
 
 raw = espn_wbb_game_officials(
     game_id=401587902, season=2024, raw=True
@@ -160,14 +160,14 @@ from sportsdataverse.wbb import espn_wbb_game_rosters
 roster = espn_wbb_game_rosters(game_id=401587902)
 print(roster.shape)
 
-Identify starters::
+# Identify starters
 
 import polars as pl
 starters = roster.filter(pl.col("starter") == True).select(
     ["full_name", "jersey", "team_display_name"]
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 roster_pd = espn_wbb_game_rosters(game_id=401587902, return_as_pandas=True)
 roster_pd.head()
@@ -198,20 +198,20 @@ game = espn_wbb_pbp(game_id=401587902)
 print(game["gameId"])
 print(len(game["plays"]))
 
-Convert plays to a DataFrame and filter shooting plays::
+# Convert plays to a DataFrame and filter shooting plays
 
 import polars as pl
 plays = pl.DataFrame(game["plays"])
 shots = plays.filter(pl.col("scoring_play") | pl.col("shooting_play"))
 shots.select(["period_number", "clock_display_value", "team_id", "coordinate_x", "coordinate_y", "score_value", "text"]).head()
 
-Convert to pandas for downstream analysis::
+# Convert to pandas for downstream analysis
 
 import pandas as pd
 shots_pd = pd.DataFrame(game["plays"])
 shots_pd[shots_pd["shooting_play"] == True].head()
 
-Raw payload (skip the cleaning pipeline) for debugging::
+# Raw payload (skip the cleaning pipeline) for debugging
 
 raw = espn_wbb_pbp(game_id=401587902, raw=True)
 sorted(raw.keys())
@@ -221,7 +221,10 @@ sorted(raw.keys())
 
 Pull a women's-college-basketball athlete's ESPN **season** stat line.
 
-Returns **one wide row** combining athlete identity, the season stat line pivoted as ``{category}_{stat}`` columns, and team identity. For the richer multi-category web-v3 payload use :func:`espn_wbb_player_stats_v3` instead.
+Returns **one wide row** combining athlete identity, the season stat
+line pivoted as ``{category}_{stat}`` columns, and team identity. For
+the richer multi-category web-v3 payload use
+:func:`espn_wbb_player_stats_v3` instead.
 
 **Parameters**
 
@@ -469,19 +472,19 @@ from sportsdataverse.wbb import espn_wbb_schedule
 day = espn_wbb_schedule(dates=20240407)
 print(day.shape)
 
-Season-level pull (2024 season)::
+# Season-level pull (2024 season)
 
 season = espn_wbb_schedule(dates=2024, limit=1500)
 print(season.shape)
 
-Filter to a specific team (UConn ``team_id=2509``)::
+# Filter to a specific team (UConn ``team_id=2509``)
 
 import polars as pl
 uconn = season.filter(
     (pl.col("home_id") == "2509") | (pl.col("away_id") == "2509")
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 season_pd = espn_wbb_schedule(dates=2024, return_as_pandas=True)
 season_pd.head()
@@ -511,24 +514,24 @@ from sportsdataverse.wbb import espn_wbb_team_stats
 frames = espn_wbb_team_stats(team_id=2509, season=2025)
 print(sorted(frames.keys()))
 
-Index into a specific table::
+# Index into a specific table
 
 averages = frames["Averages"]
 print(averages.shape)
 averages.select(["stat_name", "display_value", "value"]).head()
 
-Iterate the canonical categories::
+# Iterate the canonical categories
 
 for cat in ("Averages", "Totals", "Misc"):
     print(cat, frames[cat].shape)
 
 ``Other`` fallback bucket (only present when ESPN ships a category
-that does not map onto one of the three canonical keys)::
+# that does not map onto one of the three canonical keys)
 
 if "Other" in frames:
     frames["Other"].select(["category", "stat_name", "value"])
 
-Pandas round-trip::
+# Pandas round-trip
 
 frames_pd = espn_wbb_team_stats(
     team_id=2579, season=2025, return_as_pandas=True
@@ -542,7 +545,9 @@ frames_pd["Averages"].head()
 
 Return the most recent women's college basketball season year.
 
-The women's college basketball season spans late October through early April; for any month October-December the "current season" is the following calendar year (e.g. October 2025 returns ``2026``).
+The women's college basketball season spans late October through early
+April; for any month October-December the "current season" is the
+following calendar year (e.g. October 2025 returns ``2026``).
 
 **Returns**
 
@@ -598,12 +603,12 @@ teams = espn_wbb_teams()
 print(teams.shape)
 print(teams.columns[:8])
 
-Walk every team-id (handy for batched scrapes)::
+# Walk every team-id (handy for batched scrapes)
 
 team_ids = teams["team_id"].to_list()
 print(len(team_ids), "D1 teams")
 
-Pandas round-trip + Division II/III::
+# Pandas round-trip + Division II/III
 
 d2_d3 = espn_wbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()

@@ -107,12 +107,12 @@ rosters = espn_nhl_game_rosters(game_id=401559395)
 print(rosters.shape)
 rosters.select(["athlete_display_name", "jersey", "team_abbreviation", "starter"]).head(10)
 
-Just the starters::
+# Just the starters
 
 import polars as pl
 rosters.filter(pl.col("starter") == True).select(["athlete_display_name", "team_abbreviation"])
 
-Pandas round-trip::
+# Pandas round-trip
 
 rosters_pd = espn_nhl_game_rosters(game_id=401559395, return_as_pandas=True)
 rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
@@ -121,8 +121,6 @@ rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
 ### `espn_nhl_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
 
 espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
-
-.. note:: This is the **ESPN** NHL play-by-play, not the modern NHL api-web one. The two surfaces have different ID spaces and different schemas — they are NOT interchangeable: - ``espn_nhl_pbp(game_id)`` uses **ESPN event IDs** (e.g. ``401559395``). Returns a Dict of ~17 sub-frames matching the ESPN Site v2 summary shape (boxscore / plays / leaders / standings / etc.). Useful for historical alignment with the hoopR / wehoop R-package data stack. - ``nhl_web_pbp(game_id)`` + ``parse_nhl_web_pbp(payload)`` uses **NHL native game IDs** (e.g. ``2023030417``). Returns the modern api-web.nhle.com PBP shape (``plays[]`` with ``eventId``, ``typeCode``, ``typeDescKey``, ``periodDescriptor``, nested ``details``). Use this for live games + modern NHL.com source-of-truth data. Pick the surface that matches your ID space + downstream join keys. The two cannot be cross-referenced by ``game_id``.
 
 **Parameters**
 
@@ -142,7 +140,7 @@ from sportsdataverse.nhl import espn_nhl_pbp
 game = espn_nhl_pbp(game_id=401559395)
 list(game.keys())  # 'gameId', 'plays', 'boxscore', ...
 
-Inspect parsed plays and a quick filter on goal events::
+# Inspect parsed plays and a quick filter on goal events
 
 import polars as pl
 plays = pl.DataFrame(game["plays"])
@@ -150,7 +148,7 @@ print(plays.shape)
 goals = plays.filter(pl.col("type.text") == "Goal")
 goals.select(["period", "time", "text"]).head()
 
-Pull the unparsed payload for custom downstream parsing::
+# Pull the unparsed payload for custom downstream parsing
 
 raw = espn_nhl_pbp(game_id=401559395, raw=True)
 sorted(raw.keys())[:5]
@@ -160,7 +158,12 @@ sorted(raw.keys())[:5]
 
 Pull an NHL athlete's ESPN **season** stat line as one wide row.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of the wide return shape, the ``{category}_{stat}`` stat columns (for hockey: ``offensive_*``, ``defensive_*``, ``penalties_*``, ...), the athlete / team metadata blocks, and the ``season_type`` / ``total`` parameters. For the richer multi-category web-v3 payload use :func:`sportsdataverse.nhl.espn_nhl_player_stats_v3`.
+See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the ``{category}_{stat}`` stat
+columns (for hockey: ``offensive_*``, ``defensive_*``, ``penalties_*``,
+...), the athlete / team metadata blocks, and the ``season_type`` /
+``total`` parameters. For the richer multi-category web-v3 payload use
+:func:`sportsdataverse.nhl.espn_nhl_player_stats_v3`.
 
 **Parameters**
 
@@ -408,12 +411,12 @@ sched = espn_nhl_schedule(dates=20230613)  # 2023 Stanley Cup Final game date
 print(sched.shape)
 sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
 
-Pull a regular-season slate from a season-year::
+# Pull a regular-season slate from a season-year
 
 reg = espn_nhl_schedule(dates=2023, season_type=2, limit=500)
 reg.group_by("status_type_description").len().sort("len", descending=True)
 
-Pandas round-trip for one date::
+# Pandas round-trip for one date
 
 espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 ```
@@ -435,7 +438,11 @@ _No description available._
 
 Coaches who reached a wins milestone in fewest games.
 
-Wraps one of the ``/coach-fewest-games-to-{N}-wins`` or ``/coach-fewest-games-to-{N}-playoff-wins`` paths. Supported *wins* values: ``50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000`` (regular season); ``50, 100, 150`` (playoffs).
+Wraps one of the ``/coach-fewest-games-to-{N}-wins`` or
+``/coach-fewest-games-to-{N}-playoff-wins`` paths.
+
+Supported *wins* values: ``50, 100, 150, 200, 300, 400, 500, 600, 700,
+800, 900, 1000`` (regular season); ``50, 100, 150`` (playoffs).
 
 **Parameters**
 
@@ -452,7 +459,9 @@ Coaches who hit the milestone, sorted by games needed.
 
 Comeback wins from a multi-goal deficit.
 
-Wraps: * ``GET /comeback-league-wins`` when *scope* is ``"league"``. * ``GET /comeback-franchise-wins`` when *scope* is ``"franchise"``.
+Wraps:
+  * ``GET /comeback-league-wins`` when *scope* is ``"league"``.
+  * ``GET /comeback-franchise-wins`` when *scope* is ``"franchise"``.
 
 **Parameters**
 
@@ -468,7 +477,12 @@ Games where the team overcame a deficit to win.
 
 Skaters with the most consecutive N-goal seasons.
 
-Wraps one of: * ``GET /consecutive-20-goal-seasons`` * ``GET /consecutive-30-goal-seasons`` * ``GET /consecutive-40-goal-seasons`` * ``GET /consecutive-50-goal-seasons`` * ``GET /consecutive-60-goal-seasons``
+Wraps one of:
+  * ``GET /consecutive-20-goal-seasons``
+  * ``GET /consecutive-30-goal-seasons``
+  * ``GET /consecutive-40-goal-seasons``
+  * ``GET /consecutive-50-goal-seasons``
+  * ``GET /consecutive-60-goal-seasons``
 
 **Parameters**
 
@@ -484,7 +498,11 @@ Skaters sorted by consecutive-season streak.
 
 Fastest N goals by one team in a single game.
 
-Wraps one of: * ``GET /fastest-2-goals-one-team`` * ``GET /fastest-3-goals-one-team`` * ``GET /fastest-4-goals-one-team`` * ``GET /fastest-5-goals-one-team``
+Wraps one of:
+  * ``GET /fastest-2-goals-one-team``
+  * ``GET /fastest-3-goals-one-team``
+  * ``GET /fastest-4-goals-one-team``
+  * ``GET /fastest-5-goals-one-team``
 
 **Parameters**
 
@@ -500,7 +518,12 @@ Games where the milestone was set, sorted by elapsed time (fastest first).
 
 Fastest N goals combined (both teams) in a single game.
 
-Wraps one of: * ``GET /fastest-2-goals-both-teams`` * ``GET /fastest-3-goals-both-teams`` * ``GET /fastest-4-goals-both-teams`` * ``GET /fastest-5-goals-both-teams`` * ``GET /fastest-6-goals-both-teams``
+Wraps one of:
+  * ``GET /fastest-2-goals-both-teams``
+  * ``GET /fastest-3-goals-both-teams``
+  * ``GET /fastest-4-goals-both-teams``
+  * ``GET /fastest-5-goals-both-teams``
+  * ``GET /fastest-6-goals-both-teams``
 
 **Parameters**
 
@@ -516,7 +539,8 @@ Sorted by elapsed time (fastest first).
 
 Consecutive games-played streaks for skaters.
 
-Wraps ``GET /games-played-streak-skaters`` (career) or ``GET /games-played-active-streak-skaters`` (currently active streaks).
+Wraps ``GET /games-played-streak-skaters`` (career) or
+``GET /games-played-active-streak-skaters`` (currently active streaks).
 
 **Parameters**
 
@@ -532,7 +556,12 @@ Skaters sorted by streak length.
 
 In-game scoreboard payload (renamed from ``nhl_web_scoreboard``).
 
-Picks among three mutually-exclusive NHL api-web forms (kept hand-written because the URL-builder codegen can't represent the 3-way branch): * ``GET /v1/scoreboard/{team}/now`` -- team-scoped now (when ``team`` set), * ``GET /v1/scoreboard/{date}`` -- league-wide on a date, * ``GET /v1/scoreboard/now`` -- league-wide now (both args None).
+Picks among three mutually-exclusive NHL api-web forms (kept hand-written
+because the URL-builder codegen can't represent the 3-way branch):
+
+* ``GET /v1/scoreboard/{team}/now`` -- team-scoped now (when ``team`` set),
+* ``GET /v1/scoreboard/{date}`` -- league-wide on a date,
+* ``GET /v1/scoreboard/now`` -- league-wide now (both args None).
 
 **Parameters**
 
@@ -611,7 +640,11 @@ A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed
 
 Load the NHL games-in-data-repo manifest (no ``seasons`` argument).
 
-Mirrors fastRhockey (R) ``load_nhl_games()`` which reads a manifest of every NHL game that has processed data in the data repository. Tries the sportsdataverse-data release asset first; falls back to the raw fastRhockey-data GitHub path.
+Mirrors fastRhockey (R) ``load_nhl_games()`` which reads a manifest of every
+NHL game that has processed data in the data repository.
+
+Tries the sportsdataverse-data release asset first; falls back to the raw
+fastRhockey-data GitHub path.
 
 **Parameters**
 
@@ -679,7 +712,9 @@ Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
 
 most_recent_nhl_season - return the season year for "today".
 
-NHL seasons are labeled by the year they end in. October flips the label to next calendar year (the new season just started), otherwise the current calendar year is returned.
+NHL seasons are labeled by the year they end in. October flips the
+label to next calendar year (the new season just started), otherwise
+the current calendar year is returned.
 
 **Returns**
 
@@ -698,7 +733,8 @@ print(season, cal.height)
 
 year_to_season - format a starting year as the canonical ``YYYY-YY`` season string.
 
-NHL season strings (used by ``statsapi`` / ``api-web.nhle.com``) are of the form ``"2023-24"``. This helper converts a starting year (``2023``) into that string.
+NHL season strings (used by ``statsapi`` / ``api-web.nhle.com``) are of the form
+``"2023-24"``. This helper converts a starting year (``2023``) into that string.
 
 **Parameters**
 
@@ -760,12 +796,12 @@ teams = espn_nhl_teams()
 print(teams.shape)
 teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 
-Find Tampa Bay Lightning (team_id 14)::
+# Find Tampa Bay Lightning (team_id 14)
 
 import polars as pl
 teams.filter(pl.col("team_id") == "14").to_dicts()
 
-Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas::
+# Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas
 
 espn_nhl_teams.cache_clear()
 teams_pd = espn_nhl_teams(return_as_pandas=True)

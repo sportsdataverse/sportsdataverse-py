@@ -106,14 +106,14 @@ from sportsdataverse.mbb import espn_mbb_game_rosters
 roster = espn_mbb_game_rosters(game_id=401638637)
 print(roster.shape)
 
-Identify starters::
+# Identify starters
 
 import polars as pl
 starters = roster.filter(pl.col("starter") == True).select(
     ["full_name", "jersey", "team_display_name"]
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 roster_pd = espn_mbb_game_rosters(game_id=401638637, return_as_pandas=True)
 roster_pd.head()
@@ -142,7 +142,7 @@ game = espn_mbb_pbp(game_id=401638637)
 print(game["gameId"])
 print(len(game["plays"]))
 
-Filter shooting plays for a basic shot chart::
+# Filter shooting plays for a basic shot chart
 
 import polars as pl
 plays = pl.DataFrame(game["plays"])
@@ -159,13 +159,13 @@ shots.select(
     ]
 ).head()
 
-Convert to pandas::
+# Convert to pandas
 
 import pandas as pd
 plays_pd = pd.DataFrame(game["plays"])
 plays_pd[plays_pd["shooting_play"] == True].head()
 
-Raw payload (skip the cleaning pipeline) for debugging::
+# Raw payload (skip the cleaning pipeline) for debugging
 
 raw = espn_mbb_pbp(game_id=401638637, raw=True)
 sorted(raw.keys())
@@ -175,7 +175,11 @@ sorted(raw.keys())
 
 Pull a men's-college-basketball athlete's ESPN **season** stat line.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of the wide return shape, the ``{category}_{stat}`` stat columns, the athlete / team metadata blocks, and the ``season_type`` / ``total`` parameters. For the richer web-v3 payload use :func:`sportsdataverse.mbb.espn_mbb_player_stats_v3`.
+See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the ``{category}_{stat}`` stat
+columns, the athlete / team metadata blocks, and the ``season_type`` /
+``total`` parameters. For the richer web-v3 payload use
+:func:`sportsdataverse.mbb.espn_mbb_player_stats_v3`.
 
 **Parameters**
 
@@ -423,19 +427,19 @@ from sportsdataverse.mbb import espn_mbb_schedule
 day = espn_mbb_schedule(dates=20240408)
 print(day.shape)
 
-Season-level pull (2024 season)::
+# Season-level pull (2024 season)
 
 season = espn_mbb_schedule(dates=2024, limit=1500)
 print(season.shape)
 
-Filter to a specific team (Duke ``team_id=150``)::
+# Filter to a specific team (Duke ``team_id=150``)
 
 import polars as pl
 duke = season.filter(
     (pl.col("home_id") == "150") | (pl.col("away_id") == "150")
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 season_pd = espn_mbb_schedule(dates=2024, return_as_pandas=True)
 season_pd.head()
@@ -447,7 +451,9 @@ season_pd.head()
 
 Return the most recent men's college basketball season year.
 
-The men's college basketball season spans early November through early April; for any month October-December the "current season" is the following calendar year (e.g. October 2025 returns ``2026``).
+The men's college basketball season spans early November through early
+April; for any month October-December the "current season" is the
+following calendar year (e.g. October 2025 returns ``2026``).
 
 **Returns**
 
@@ -503,12 +509,12 @@ teams = espn_mbb_teams()
 print(teams.shape)
 print(teams.columns[:8])
 
-Walk every team-id (handy for batched scrapes)::
+# Walk every team-id (handy for batched scrapes)
 
 team_ids = teams["team_id"].to_list()
 print(len(team_ids), "D1 teams")
 
-Pandas round-trip + Division II/III::
+# Pandas round-trip + Division II/III
 
 d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()

@@ -118,7 +118,7 @@ from sportsdataverse.nfl import espn_nfl_game_rosters
 rosters = espn_nfl_game_rosters(game_id=401220403)
 rosters.shape
 
-Pandas round-trip with home/away split::
+# Pandas round-trip with home/away split
 
 rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
 home = rosters_pd[rosters_pd["home_away"] == "home"]
@@ -129,7 +129,12 @@ away = rosters_pd[rosters_pd["home_away"] == "away"]
 
 Pull an NFL athlete's ESPN **season** stat line as one wide row.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of the wide return shape, the ``{category}_{stat}`` stat columns (for football: ``passing_*``, ``rushing_*``, ``receiving_*``, ``scoring_*``, ...), the athlete / team metadata blocks, and the ``season_type`` / ``total`` parameters. For the richer multi-category web-v3 payload use :func:`sportsdataverse.nfl.espn_nfl_player_stats_v3`.
+See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the ``{category}_{stat}`` stat
+columns (for football: ``passing_*``, ``rushing_*``, ``receiving_*``,
+``scoring_*``, ...), the athlete / team metadata blocks, and the
+``season_type`` / ``total`` parameters. For the richer multi-category
+web-v3 payload use :func:`sportsdataverse.nfl.espn_nfl_player_stats_v3`.
 
 **Parameters**
 
@@ -456,11 +461,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 from sportsdataverse.nfl import espn_nfl_schedule
 sched = espn_nfl_schedule(dates=20240908)
 
-Specific week of regular season (``season_type=2``)::
+# Specific week of regular season (``season_type=2``)
 
 wk1 = espn_nfl_schedule(dates=2024, week=1, season_type=2)
 
-Pandas round-trip::
+# Pandas round-trip
 
 sched_pd = espn_nfl_schedule(dates=20240908, return_as_pandas=True)
 ```
@@ -509,7 +514,7 @@ from sportsdataverse.nfl import load_nfl_combine
 combine = load_nfl_combine()
 combine.shape
 
-Filter by draft year and position::
+# Filter by draft year and position
 
 import polars as pl
 qbs_2024 = (
@@ -567,7 +572,7 @@ from sportsdataverse.nfl import load_nfl_contracts
 contracts = load_nfl_contracts()
 contracts.shape
 
-Pandas round-trip with sort by APY::
+# Pandas round-trip with sort by APY
 
 contracts_pd = load_nfl_contracts(return_as_pandas=True)
 contracts_pd.sort_values("apy", ascending=False).head()
@@ -612,7 +617,7 @@ Polars dataframe containing depth chart data available for the requested seasons
 from sportsdataverse.nfl import load_nfl_depth_charts
 depth = load_nfl_depth_charts(seasons=[2024])
 
-Multi-season range::
+# Multi-season range
 
 depth = load_nfl_depth_charts(seasons=range(2020, 2025))
 ```
@@ -677,7 +682,7 @@ from sportsdataverse.nfl import load_nfl_draft_picks
 picks = load_nfl_draft_picks()
 picks.shape
 
-Filter to a single year and round::
+# Filter to a single year and round
 
 import polars as pl
 r1_2024 = (
@@ -871,11 +876,11 @@ Polars dataframe containing fantasy football opportunity data for the requested 
 from sportsdataverse.nfl import load_nfl_ff_opportunity
 weekly = load_nfl_ff_opportunity(seasons=[2024])
 
-Pass play-by-play opportunity stats::
+# Pass play-by-play opportunity stats
 
 pbp_pass = load_nfl_ff_opportunity(seasons=[2024], stat_type="pbp_pass")
 
-Rush play-by-play opportunity stats with pinned model version::
+# Rush play-by-play opportunity stats with pinned model version
 
 pbp_rush = load_nfl_ff_opportunity(
     seasons=[2024], stat_type="pbp_rush", model_version="v1.0.0"
@@ -941,7 +946,7 @@ from sportsdataverse.nfl import load_nfl_ff_playerids
 ids = load_nfl_ff_playerids()
 ids.shape
 
-Filter to active QBs::
+# Filter to active QBs
 
 import polars as pl
 qbs = (
@@ -1000,15 +1005,15 @@ Polars dataframe containing fantasy football rankings data.
 from sportsdataverse.nfl import load_nfl_ff_rankings
 draft = load_nfl_ff_rankings(kind="draft")
 
-Weekly rankings::
+# Weekly rankings
 
 weekly = load_nfl_ff_rankings(kind="week")
 
-Full historical rankings (parquet)::
+# Full historical rankings (parquet)
 
 history = load_nfl_ff_rankings(kind="all")
 
-nflreadpy-parity ``type=`` parameter (still supported)::
+# nflreadpy-parity ``type=`` parameter (still supported)
 
 draft = load_nfl_ff_rankings(type="draft")
 ```
@@ -1066,11 +1071,11 @@ Polars dataframe containing FTN charting data available for the requested season
 from sportsdataverse.nfl import load_nfl_ftn_charting
 charting = load_nfl_ftn_charting(seasons=[2024])
 
-Multi-season range::
+# Multi-season range
 
 charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
 
-Filter to plays with motion::
+# Filter to plays with motion
 
 import polars as pl
 motion_plays = (
@@ -1119,7 +1124,7 @@ Polars dataframe containing injuries data available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_injuries
 injuries = load_nfl_injuries(seasons=[2024])
 
-Multi-season range with team filter::
+# Multi-season range with team filter
 
 import polars as pl
 sf_injuries = (
@@ -1132,7 +1137,10 @@ sf_injuries = (
 
 Load NFL NextGen Stats data going back to 2016.
 
-Unified loader that consolidates the per-stat-type NextGen Stats accessors. Mirrors the API surface of nflreadpy's ``load_nextgen_stats`` so downstream code can swap engines without changing call sites.
+Unified loader that consolidates the per-stat-type NextGen Stats
+accessors. Mirrors the API surface of nflreadpy's
+``load_nextgen_stats`` so downstream code can swap engines without
+changing call sites.
 
 **Parameters**
 
@@ -1184,11 +1192,11 @@ Polars dataframe containing NextGen Stats data for the requested ``stat_type`` a
 from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs_pass = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 
-Rushing NextGen stats::
+# Rushing NextGen stats
 
 ngs_rush = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
 
-Receiving NextGen stats with a follow-up filter::
+# Receiving NextGen stats with a follow-up filter
 
 import polars as pl
 ngs_rec = (
@@ -1196,7 +1204,7 @@ ngs_rec = (
     .filter(pl.col("week") > 0)
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 ngs_pd = load_nfl_nextgen_stats(
     seasons=[2024], stat_type="passing", return_as_pandas=True
@@ -1245,7 +1253,7 @@ from sportsdataverse.nfl import load_nfl_combine
 combine = load_nfl_combine()
 combine.shape
 
-Filter by draft year and position::
+# Filter by draft year and position
 
 import polars as pl
 qbs_2024 = (
@@ -1303,7 +1311,7 @@ from sportsdataverse.nfl import load_nfl_contracts
 contracts = load_nfl_contracts()
 contracts.shape
 
-Pandas round-trip with sort by APY::
+# Pandas round-trip with sort by APY
 
 contracts_pd = load_nfl_contracts(return_as_pandas=True)
 contracts_pd.sort_values("apy", ascending=False).head()
@@ -1348,7 +1356,7 @@ Polars dataframe containing depth chart data available for the requested seasons
 from sportsdataverse.nfl import load_nfl_depth_charts
 depth = load_nfl_depth_charts(seasons=[2024])
 
-Multi-season range::
+# Multi-season range
 
 depth = load_nfl_depth_charts(seasons=range(2020, 2025))
 ```
@@ -1413,7 +1421,7 @@ from sportsdataverse.nfl import load_nfl_draft_picks
 picks = load_nfl_draft_picks()
 picks.shape
 
-Filter to a single year and round::
+# Filter to a single year and round
 
 import polars as pl
 r1_2024 = (
@@ -1607,11 +1615,11 @@ Polars dataframe containing fantasy football opportunity data for the requested 
 from sportsdataverse.nfl import load_nfl_ff_opportunity
 weekly = load_nfl_ff_opportunity(seasons=[2024])
 
-Pass play-by-play opportunity stats::
+# Pass play-by-play opportunity stats
 
 pbp_pass = load_nfl_ff_opportunity(seasons=[2024], stat_type="pbp_pass")
 
-Rush play-by-play opportunity stats with pinned model version::
+# Rush play-by-play opportunity stats with pinned model version
 
 pbp_rush = load_nfl_ff_opportunity(
     seasons=[2024], stat_type="pbp_rush", model_version="v1.0.0"
@@ -1677,7 +1685,7 @@ from sportsdataverse.nfl import load_nfl_ff_playerids
 ids = load_nfl_ff_playerids()
 ids.shape
 
-Filter to active QBs::
+# Filter to active QBs
 
 import polars as pl
 qbs = (
@@ -1736,15 +1744,15 @@ Polars dataframe containing fantasy football rankings data.
 from sportsdataverse.nfl import load_nfl_ff_rankings
 draft = load_nfl_ff_rankings(kind="draft")
 
-Weekly rankings::
+# Weekly rankings
 
 weekly = load_nfl_ff_rankings(kind="week")
 
-Full historical rankings (parquet)::
+# Full historical rankings (parquet)
 
 history = load_nfl_ff_rankings(kind="all")
 
-nflreadpy-parity ``type=`` parameter (still supported)::
+# nflreadpy-parity ``type=`` parameter (still supported)
 
 draft = load_nfl_ff_rankings(type="draft")
 ```
@@ -1802,11 +1810,11 @@ Polars dataframe containing FTN charting data available for the requested season
 from sportsdataverse.nfl import load_nfl_ftn_charting
 charting = load_nfl_ftn_charting(seasons=[2024])
 
-Multi-season range::
+# Multi-season range
 
 charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
 
-Filter to plays with motion::
+# Filter to plays with motion
 
 import polars as pl
 motion_plays = (
@@ -1855,7 +1863,7 @@ Polars dataframe containing injuries data available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_injuries
 injuries = load_nfl_injuries(seasons=[2024])
 
-Multi-season range with team filter::
+# Multi-season range with team filter
 
 import polars as pl
 sf_injuries = (
@@ -1868,7 +1876,10 @@ sf_injuries = (
 
 Load NFL NextGen Stats data going back to 2016.
 
-Unified loader that consolidates the per-stat-type NextGen Stats accessors. Mirrors the API surface of nflreadpy's ``load_nextgen_stats`` so downstream code can swap engines without changing call sites.
+Unified loader that consolidates the per-stat-type NextGen Stats
+accessors. Mirrors the API surface of nflreadpy's
+``load_nextgen_stats`` so downstream code can swap engines without
+changing call sites.
 
 **Parameters**
 
@@ -1920,11 +1931,11 @@ Polars dataframe containing NextGen Stats data for the requested ``stat_type`` a
 from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs_pass = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 
-Rushing NextGen stats::
+# Rushing NextGen stats
 
 ngs_rush = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
 
-Receiving NextGen stats with a follow-up filter::
+# Receiving NextGen stats with a follow-up filter
 
 import polars as pl
 ngs_rec = (
@@ -1932,7 +1943,7 @@ ngs_rec = (
     .filter(pl.col("week") > 0)
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 ngs_pd = load_nfl_nextgen_stats(
     seasons=[2024], stat_type="passing", return_as_pandas=True
@@ -1943,7 +1954,8 @@ ngs_pd = load_nfl_nextgen_stats(
 
 Deprecated alias for ``load_nfl_nextgen_stats(stat_type='passing')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_nextgen_stats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_nextgen_stats`` function.
 
 **Parameters**
 
@@ -1998,7 +2010,8 @@ ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 
 Deprecated alias for ``load_nfl_nextgen_stats(stat_type='receiving')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_nextgen_stats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_nextgen_stats`` function.
 
 **Parameters**
 
@@ -2047,7 +2060,8 @@ ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
 
 Deprecated alias for ``load_nfl_nextgen_stats(stat_type='rushing')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_nextgen_stats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_nextgen_stats`` function.
 
 **Parameters**
 
@@ -2124,7 +2138,7 @@ from sportsdataverse.nfl import load_nfl_officials
 officials = load_nfl_officials()
 officials.shape
 
-Pandas round-trip::
+# Pandas round-trip
 
 officials_pd = load_nfl_officials(return_as_pandas=True)
 officials_pd.head()
@@ -2527,17 +2541,17 @@ from sportsdataverse.nfl import load_nfl_pbp
 pbp = load_nfl_pbp(seasons=[2024])
 print(pbp.shape)
 
-Multi-season range::
+# Multi-season range
 
 pbp = load_nfl_pbp(seasons=range(2020, 2025))
 
-With cache off (development workflow)::
+# With cache off (development workflow)
 
 from sportsdataverse.nfl import load_nfl_pbp, update_config
 update_config(cache_mode="off")
 pbp = load_nfl_pbp(seasons=[2024])
 
-Pandas round-trip::
+# Pandas round-trip
 
 pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
 pbp_pd.head()
@@ -2593,7 +2607,7 @@ Polars dataframe containing play-by-play participation data available for the re
 from sportsdataverse.nfl import load_nfl_pbp_participation
 participation = load_nfl_pbp_participation(seasons=[2022])
 
-Multi-season range::
+# Multi-season range
 
 participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
@@ -2602,7 +2616,10 @@ participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 
 Load Pro-Football Reference advanced statistics going back to 2018.
 
-Unified loader that consolidates the per-stat-type / per-summary-level PFR advstats accessors. Mirrors the API surface of nflreadpy's ``load_pfr_advstats`` so downstream code can swap engines without changing call sites.
+Unified loader that consolidates the per-stat-type / per-summary-level
+PFR advstats accessors. Mirrors the API surface of nflreadpy's
+``load_pfr_advstats`` so downstream code can swap engines without
+changing call sites.
 
 **Parameters**
 
@@ -2652,13 +2669,13 @@ pass_week = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="pass", summary_level="week"
 )
 
-Season-level rushing summaries (one row per player per season)::
+# Season-level rushing summaries (one row per player per season)
 
 rush_season = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="rush", summary_level="season"
 )
 
-Defensive stats with a follow-up filter::
+# Defensive stats with a follow-up filter
 
 import polars as pl
 def_week = (
@@ -2666,7 +2683,7 @@ def_week = (
     .filter(pl.col("week") <= 8)
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 rec_pd = load_nfl_pfr_advstats(
     seasons=[2024],
@@ -2680,7 +2697,8 @@ rec_pd = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='season')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -2737,7 +2755,8 @@ df = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='season')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -2801,7 +2820,8 @@ df = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='season')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -2853,7 +2873,8 @@ df = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='season')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -2899,7 +2920,8 @@ df = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='week')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -2956,7 +2978,8 @@ df = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='week')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -3008,7 +3031,8 @@ df = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='week')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -3053,7 +3077,8 @@ df = load_nfl_pfr_advstats(
 
 Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='week')``.
 
-Will be removed in a future release. Migrate callers to the unified ``load_nfl_pfr_advstats`` function.
+Will be removed in a future release. Migrate callers to the unified
+``load_nfl_pfr_advstats`` function.
 
 **Parameters**
 
@@ -3171,11 +3196,11 @@ from sportsdataverse.nfl import load_nfl_player_stats
 stats = load_nfl_player_stats()
 stats.shape
 
-Kicking-only stats::
+# Kicking-only stats
 
 kicking = load_nfl_player_stats(kicking=True)
 
-Filter to a single season after load::
+# Filter to a single season after load
 
 import polars as pl
 stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
@@ -3214,7 +3239,7 @@ from sportsdataverse.nfl import load_nfl_players
 players = load_nfl_players()
 players.shape
 
-Pandas round-trip::
+# Pandas round-trip
 
 players_pd = load_nfl_players(return_as_pandas=True)
 players_pd.head()
@@ -3280,11 +3305,11 @@ Polars dataframe containing rosters available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_rosters
 rosters = load_nfl_rosters(seasons=[2024])
 
-Multi-season range::
+# Multi-season range
 
 rosters = load_nfl_rosters(seasons=range(2020, 2025))
 
-Filter to a single team::
+# Filter to a single team
 
 import polars as pl
 kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
@@ -3361,16 +3386,16 @@ from sportsdataverse.nfl import load_nfl_schedule
 schedule = load_nfl_schedule(seasons=[2024])
 schedule.shape
 
-Multi-season range::
+# Multi-season range
 
 schedule = load_nfl_schedule(seasons=range(2020, 2025))
 
-Filter to a single week::
+# Filter to a single week
 
 import polars as pl
 week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
 
-Pandas round-trip::
+# Pandas round-trip
 
 schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
 schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
@@ -3416,7 +3441,7 @@ Polars dataframe containing snap counts available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_snap_counts
 snaps = load_nfl_snap_counts(seasons=[2024])
 
-Multi-season range with offense-only filter::
+# Multi-season range with offense-only filter
 
 import polars as pl
 offense = (
@@ -3552,11 +3577,11 @@ Polars dataframe containing team stats available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_team_stats
 weekly = load_nfl_team_stats(seasons=[2024])
 
-Regular-season-only team stats::
+# Regular-season-only team stats
 
 reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 
-Combined regular + post-season at season grain::
+# Combined regular + post-season at season grain
 
 combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
 ```
@@ -3601,7 +3626,7 @@ from sportsdataverse.nfl import load_nfl_teams
 teams = load_nfl_teams()
 teams.shape
 
-Pandas round-trip::
+# Pandas round-trip
 
 teams_pd = load_nfl_teams(return_as_pandas=True)
 teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
@@ -3642,7 +3667,7 @@ from sportsdataverse.nfl import load_nfl_trades
 trades = load_nfl_trades()
 trades.shape
 
-Filter to a single season::
+# Filter to a single season
 
 import polars as pl
 trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
@@ -3708,7 +3733,7 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_weekly_rosters
 weekly = load_nfl_weekly_rosters(seasons=[2024])
 
-Multi-season range with a follow-up week filter::
+# Multi-season range with a follow-up week filter
 
 import polars as pl
 wk1 = (
@@ -3750,7 +3775,7 @@ from sportsdataverse.nfl import load_nfl_officials
 officials = load_nfl_officials()
 officials.shape
 
-Pandas round-trip::
+# Pandas round-trip
 
 officials_pd = load_nfl_officials(return_as_pandas=True)
 officials_pd.head()
@@ -3806,7 +3831,7 @@ Polars dataframe containing play-by-play participation data available for the re
 from sportsdataverse.nfl import load_nfl_pbp_participation
 participation = load_nfl_pbp_participation(seasons=[2022])
 
-Multi-season range::
+# Multi-season range
 
 participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
@@ -4208,17 +4233,17 @@ from sportsdataverse.nfl import load_nfl_pbp
 pbp = load_nfl_pbp(seasons=[2024])
 print(pbp.shape)
 
-Multi-season range::
+# Multi-season range
 
 pbp = load_nfl_pbp(seasons=range(2020, 2025))
 
-With cache off (development workflow)::
+# With cache off (development workflow)
 
 from sportsdataverse.nfl import load_nfl_pbp, update_config
 update_config(cache_mode="off")
 pbp = load_nfl_pbp(seasons=[2024])
 
-Pandas round-trip::
+# Pandas round-trip
 
 pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
 pbp_pd.head()
@@ -4228,7 +4253,10 @@ pbp_pd.head()
 
 Load Pro-Football Reference advanced statistics going back to 2018.
 
-Unified loader that consolidates the per-stat-type / per-summary-level PFR advstats accessors. Mirrors the API surface of nflreadpy's ``load_pfr_advstats`` so downstream code can swap engines without changing call sites.
+Unified loader that consolidates the per-stat-type / per-summary-level
+PFR advstats accessors. Mirrors the API surface of nflreadpy's
+``load_pfr_advstats`` so downstream code can swap engines without
+changing call sites.
 
 **Parameters**
 
@@ -4278,13 +4306,13 @@ pass_week = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="pass", summary_level="week"
 )
 
-Season-level rushing summaries (one row per player per season)::
+# Season-level rushing summaries (one row per player per season)
 
 rush_season = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="rush", summary_level="season"
 )
 
-Defensive stats with a follow-up filter::
+# Defensive stats with a follow-up filter
 
 import polars as pl
 def_week = (
@@ -4292,7 +4320,7 @@ def_week = (
     .filter(pl.col("week") <= 8)
 )
 
-Pandas round-trip::
+# Pandas round-trip
 
 rec_pd = load_nfl_pfr_advstats(
     seasons=[2024],
@@ -4380,11 +4408,11 @@ from sportsdataverse.nfl import load_nfl_player_stats
 stats = load_nfl_player_stats()
 stats.shape
 
-Kicking-only stats::
+# Kicking-only stats
 
 kicking = load_nfl_player_stats(kicking=True)
 
-Filter to a single season after load::
+# Filter to a single season after load
 
 import polars as pl
 stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
@@ -4423,7 +4451,7 @@ from sportsdataverse.nfl import load_nfl_players
 players = load_nfl_players()
 players.shape
 
-Pandas round-trip::
+# Pandas round-trip
 
 players_pd = load_nfl_players(return_as_pandas=True)
 players_pd.head()
@@ -4489,11 +4517,11 @@ Polars dataframe containing rosters available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_rosters
 rosters = load_nfl_rosters(seasons=[2024])
 
-Multi-season range::
+# Multi-season range
 
 rosters = load_nfl_rosters(seasons=range(2020, 2025))
 
-Filter to a single team::
+# Filter to a single team
 
 import polars as pl
 kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
@@ -4559,7 +4587,7 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_weekly_rosters
 weekly = load_nfl_weekly_rosters(seasons=[2024])
 
-Multi-season range with a follow-up week filter::
+# Multi-season range with a follow-up week filter
 
 import polars as pl
 wk1 = (
@@ -4639,16 +4667,16 @@ from sportsdataverse.nfl import load_nfl_schedule
 schedule = load_nfl_schedule(seasons=[2024])
 schedule.shape
 
-Multi-season range::
+# Multi-season range
 
 schedule = load_nfl_schedule(seasons=range(2020, 2025))
 
-Filter to a single week::
+# Filter to a single week
 
 import polars as pl
 week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
 
-Pandas round-trip::
+# Pandas round-trip
 
 schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
 schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
@@ -4694,7 +4722,7 @@ Polars dataframe containing snap counts available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_snap_counts
 snaps = load_nfl_snap_counts(seasons=[2024])
 
-Multi-season range with offense-only filter::
+# Multi-season range with offense-only filter
 
 import polars as pl
 offense = (
@@ -4830,11 +4858,11 @@ Polars dataframe containing team stats available for the requested seasons.
 from sportsdataverse.nfl import load_nfl_team_stats
 weekly = load_nfl_team_stats(seasons=[2024])
 
-Regular-season-only team stats::
+# Regular-season-only team stats
 
 reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 
-Combined regular + post-season at season grain::
+# Combined regular + post-season at season grain
 
 combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
 ```
@@ -4879,7 +4907,7 @@ from sportsdataverse.nfl import load_nfl_teams
 teams = load_nfl_teams()
 teams.shape
 
-Pandas round-trip::
+# Pandas round-trip
 
 teams_pd = load_nfl_teams(return_as_pandas=True)
 teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
@@ -4920,7 +4948,7 @@ from sportsdataverse.nfl import load_nfl_trades
 trades = load_nfl_trades()
 trades.shape
 
-Filter to a single season::
+# Filter to a single season
 
 import polars as pl
 trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
@@ -4932,7 +4960,11 @@ trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
 
 Process ESPN NFL play-by-play feeds into a tidy game-level dictionary.
 
-Wraps the ESPN ``summary`` endpoint (or a local JSON dump) and pipes the result through a chain of feature-engineering steps -- down/distance, play-type flags, EPA, WPA, QBR, drive aggregation, and an advanced box score. Use ``run_processing_pipeline()`` for the full feature set or ``run_cleaning_pipeline()`` for a lighter clean.
+Wraps the ESPN ``summary`` endpoint (or a local JSON dump) and pipes the
+result through a chain of feature-engineering steps -- down/distance,
+play-type flags, EPA, WPA, QBR, drive aggregation, and an advanced
+box score. Use ``run_processing_pipeline()`` for the full feature set
+or ``run_cleaning_pipeline()`` for a lighter clean.
 
 **Parameters**
 
@@ -4952,13 +4984,13 @@ proc.espn_nfl_pbp()
 result = proc.run_processing_pipeline()
 len(result["plays"])
 
-Offline replay from a JSON dump::
+# Offline replay from a JSON dump
 
 proc = NFLPlayProcess(gameId=401671801, path_to_json="./pbp_dump")
 proc.nfl_pbp_disk()
 cleaned = proc.run_cleaning_pipeline()
 
-Subset the return payload::
+# Subset the return payload
 
 proc = NFLPlayProcess(gameId=401671801, return_keys=["plays", "boxscore"])
 proc.espn_nfl_pbp()
@@ -4987,11 +5019,11 @@ from sportsdataverse.nfl import get_current_nfl_season
 season = get_current_nfl_season()
 print(season)
 
-Roster-year semantics (March 15 cutover)::
+# Roster-year semantics (March 15 cutover)
 
 roster_year = get_current_nfl_season(roster=True)
 
-Pair with a loader to fetch only the active season::
+# Pair with a loader to fetch only the active season
 
 from sportsdataverse.nfl import load_nfl_schedule
 schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
@@ -5018,15 +5050,15 @@ The current week, capped at 22.
 from sportsdataverse.nfl import get_current_nfl_week
 week = get_current_nfl_week()
 
-Schedule-driven week (hits the live schedule parquet)::
+# Schedule-driven week (hits the live schedule parquet)
 
 week_live = get_current_nfl_week(use_date=False)
 
-Roster-year season inference::
+# Roster-year season inference
 
 week_roster = get_current_nfl_week(roster=True)
 
-Pair with a PBP fetch to grab only the most recent season+week::
+# Pair with a PBP fetch to grab only the most recent season+week
 
 import polars as pl
 from sportsdataverse.nfl import (
@@ -5059,11 +5091,11 @@ from sportsdataverse.nfl import get_current_nfl_season
 season = get_current_nfl_season()
 print(season)
 
-Roster-year semantics (March 15 cutover)::
+# Roster-year semantics (March 15 cutover)
 
 roster_year = get_current_nfl_season(roster=True)
 
-Pair with a loader to fetch only the active season::
+# Pair with a loader to fetch only the active season
 
 from sportsdataverse.nfl import load_nfl_schedule
 schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
@@ -5090,15 +5122,15 @@ The current week, capped at 22.
 from sportsdataverse.nfl import get_current_nfl_week
 week = get_current_nfl_week()
 
-Schedule-driven week (hits the live schedule parquet)::
+# Schedule-driven week (hits the live schedule parquet)
 
 week_live = get_current_nfl_week(use_date=False)
 
-Roster-year season inference::
+# Roster-year season inference
 
 week_roster = get_current_nfl_week(roster=True)
 
-Pair with a PBP fetch to grab only the most recent season+week::
+# Pair with a PBP fetch to grab only the most recent season+week
 
 import polars as pl
 from sportsdataverse.nfl import (
@@ -5128,7 +5160,7 @@ Alias for `get_current_nfl_season()` mirroring nflreadr's
 from sportsdataverse.nfl.utils_date import most_recent_nfl_season
 season = most_recent_nfl_season()
 
-Roster-year flavor::
+# Roster-year flavor
 
 roster_year = most_recent_nfl_season(roster=True)
 ```
@@ -5139,7 +5171,10 @@ roster_year = most_recent_nfl_season(roster=True)
 
 Runtime configuration for sdv-py NFL loaders.
 
-Fields mirror nflreadpy's ``NflreadpyConfig`` so users can swap engines without changing call sites. The defaults are conservative: in-memory caching with a 24-hour TTL, verbose progress bars on, 30-second HTTP timeout.
+Fields mirror nflreadpy's ``NflreadpyConfig`` so users can swap engines
+without changing call sites. The defaults are conservative: in-memory
+caching with a 24-hour TTL, verbose progress bars on, 30-second
+HTTP timeout.
 
 **Parameters**
 
@@ -5162,7 +5197,7 @@ cfg.cache_duration  # 86400 (24h)
 cfg.timeout         # 30 (seconds)
 
 Construct a fresh instance directly (rarely needed -- prefer
-``update_config``)::
+# ``update_config``)
 
 from sportsdataverse.nfl import NflConfig
 cfg = NflConfig(cache_mode="off", timeout=10)
@@ -5172,7 +5207,16 @@ cfg = NflConfig(cache_mode="off", timeout=10)
 
 Decorator that adds caching to a ``load_nfl_*`` function.
 
-Honors the active ``NflConfig.cache_mode``: - ``memory``: dict-based per-process cache. - ``filesystem``: parquet-based cross-process cache under ``cache_dir``. - ``off``: no caching, function runs every time. The cache key is the hash of ``(qualified_name, args, kwargs)`` with ``return_as_pandas`` excluded so memory / disk hits work regardless of which return shape the caller asked for. The cache always stores the polars frame internally and converts to pandas on read when requested.
+Honors the active ``NflConfig.cache_mode``:
+
+- ``memory``: dict-based per-process cache.
+- ``filesystem``: parquet-based cross-process cache under ``cache_dir``.
+- ``off``: no caching, function runs every time.
+
+The cache key is the hash of ``(qualified_name, args, kwargs)`` with
+``return_as_pandas`` excluded so memory / disk hits work regardless of
+which return shape the caller asked for. The cache always stores the
+polars frame internally and converts to pandas on read when requested.
 
 **Parameters**
 
@@ -5197,7 +5241,7 @@ df_pd = load_my_thing(2024, return_as_pandas=True)
 # `return_as_pandas` is excluded from the cache key, so the
 # polars hit is reused and converted to pandas on the way out.
 
-Switch caching modes at runtime::
+# Switch caching modes at runtime
 
 from sportsdataverse.nfl import clear_cache, update_config
 
@@ -5211,7 +5255,10 @@ update_config(cache_mode="off")         # bypass cache entirely
 
 Clear both memory and filesystem caches.
 
-Memory: empties the in-process dict. Filesystem: removes all entries under ``config.cache_dir``. The directory itself is preserved so subsequent writes succeed without needing ``mkdir``.
+Memory: empties the in-process dict.
+Filesystem: removes all entries under ``config.cache_dir``. The
+directory itself is preserved so subsequent writes succeed without
+needing ``mkdir``.
 
 **Example**
 
@@ -5220,7 +5267,7 @@ from sportsdataverse.nfl import clear_cache, load_nfl_pbp
 clear_cache()
 pbp = load_nfl_pbp(seasons=[2024])
 
-Pair with a cache-mode switch::
+# Pair with a cache-mode switch
 
 from sportsdataverse.nfl import clear_cache, update_config
 update_config(cache_mode="filesystem")
@@ -5266,12 +5313,12 @@ from sportsdataverse.nfl import espn_nfl_teams
 teams = espn_nfl_teams()
 teams.shape
 
-Pandas round-trip::
+# Pandas round-trip
 
 teams_pd = espn_nfl_teams(return_as_pandas=True)
 teams_pd[["team_abbreviation", "team_display_name"]].head()
 
-Force a refresh after upstream ESPN updates::
+# Force a refresh after upstream ESPN updates
 
 espn_nfl_teams.cache_clear()  # underlying lru_cache
 teams = espn_nfl_teams()
@@ -5281,7 +5328,9 @@ teams = espn_nfl_teams()
 
 Return the live ``NflConfig`` singleton.
 
-The same object is returned on every call; mutate via ``update_config`` rather than reassigning fields directly so future hooks (e.g. logging on config change) have a single choke point.
+The same object is returned on every call; mutate via ``update_config``
+rather than reassigning fields directly so future hooks (e.g. logging
+on config change) have a single choke point.
 
 **Example**
 
@@ -5290,7 +5339,7 @@ from sportsdataverse.nfl import get_config
 cfg = get_config()
 print(cfg.cache_mode, cfg.cache_duration, cfg.cache_dir)
 
-Pair with ``update_config`` to verify a change took effect::
+# Pair with ``update_config`` to verify a change took effect
 
 from sportsdataverse.nfl import update_config, get_config
 update_config(cache_mode="off")
@@ -5320,7 +5369,7 @@ from sportsdataverse.nfl.nfl_games import nfl_game_details
 details = nfl_game_details(game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884")
 sorted(details.keys())[:5]
 
-Reuse headers across many calls (avoids re-minting tokens)::
+# Reuse headers across many calls (avoids re-minting tokens)
 
 from sportsdataverse.nfl.nfl_games import nfl_game_details, nfl_headers_gen
 hdrs = nfl_headers_gen()
@@ -5328,7 +5377,7 @@ details = nfl_game_details(
     game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", headers=hdrs
 )
 
-Raw passthrough::
+# Raw passthrough
 
 raw = nfl_game_details(
     game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", raw=True
@@ -5359,11 +5408,11 @@ Dictionary with the games list under ``"games"`` plus pagination metadata.
 from sportsdataverse.nfl.nfl_games import nfl_game_schedule
 week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
 
-Wild Card weekend (post-season)::
+# Wild Card weekend (post-season)
 
 wild_card = nfl_game_schedule(season=2023, season_type="POST", week=1)
 
-Reuse headers across many calls::
+# Reuse headers across many calls
 
 from sportsdataverse.nfl.nfl_games import nfl_game_schedule, nfl_headers_gen
 hdrs = nfl_headers_gen()
@@ -5377,7 +5426,9 @@ for week in range(1, 19):
 
 Build the full request-header dict expected by ``api.nfl.com``.
 
-Mints a fresh bearer token via :func:`nfl_token_gen` and combines it with the browser-style headers (``Origin``, ``Referer``, ``User-Agent``, ``Sec-Fetch-*``, etc.) the NFL.com web app sends on every request.
+Mints a fresh bearer token via :func:`nfl_token_gen` and combines it
+with the browser-style headers (``Origin``, ``Referer``, ``User-Agent``,
+``Sec-Fetch-*``, etc.) the NFL.com web app sends on every request.
 
 **Returns**
 
@@ -5398,7 +5449,9 @@ week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdr
 
 Mint a fresh ``api.nfl.com`` access token via the public reroute endpoint.
 
-Wraps the unauthenticated ``client_credentials`` grant the NFL.com web app uses. The returned bearer token is what ``nfl_headers_gen()`` puts on the ``Authorization`` header.
+Wraps the unauthenticated ``client_credentials`` grant the NFL.com web
+app uses. The returned bearer token is what ``nfl_headers_gen()`` puts
+on the ``Authorization`` header.
 
 **Returns**
 
@@ -5411,7 +5464,7 @@ from sportsdataverse.nfl.nfl_games import nfl_token_gen
 token = nfl_token_gen()
 assert isinstance(token, str)
 
-Pair with a downstream call (``nfl_headers_gen`` does this for you)::
+# Pair with a downstream call (``nfl_headers_gen`` does this for you)
 
 import requests
 token = nfl_token_gen()
@@ -5422,7 +5475,8 @@ headers = {"Authorization": f"Bearer {token}"}
 
 Reset the active config to its env-var-derived defaults.
 
-Convenience for tests / interactive sessions that want to undo a chain of ``update_config()`` calls without restarting the interpreter.
+Convenience for tests / interactive sessions that want to undo a chain
+of ``update_config()`` calls without restarting the interpreter.
 
 **Example**
 
@@ -5437,7 +5491,11 @@ reset_config()  # back to env-derived defaults
 
 Normalize one ESPN scoreboard ``event`` into a flatter shape.
 
-Splits the competitors list into ``home`` / ``away`` siblings, hoists notes / broadcast metadata onto the competition root, and drops the fields the schedule helper does not need (``odds``, ``leaders``, ``geoBroadcasts``, etc.). Used internally by :func:`espn_nfl_schedule`.
+Splits the competitors list into ``home`` / ``away`` siblings, hoists
+notes / broadcast metadata onto the competition root, and drops the
+fields the schedule helper does not need (``odds``, ``leaders``,
+``geoBroadcasts``, etc.). Used internally by
+:func:`espn_nfl_schedule`.
 
 **Parameters**
 
@@ -5465,8 +5523,6 @@ for ev in payload.get("events", []):
 
 Update the active config in place.
 
-Pass keyword arguments matching ``NflConfig`` fields:: update_config(cache_mode="filesystem", cache_duration=3600) String values for ``cache_dir`` are coerced to ``pathlib.Path`` and ``~`` is expanded for convenience.
-
 **Returns**
 
 The (mutated) global config object, for chaining or inspection.
@@ -5477,11 +5533,11 @@ The (mutated) global config object, for chaining or inspection.
 from sportsdataverse.nfl import update_config
 update_config(cache_mode="filesystem", cache_duration=3600)
 
-Disable caching for development::
+# Disable caching for development
 
 update_config(cache_mode="off")
 
-Point cache at a custom directory::
+# Point cache at a custom directory
 
 update_config(cache_dir="~/sdv-cache")
 ```

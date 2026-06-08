@@ -1782,6 +1782,196 @@ _PROSE_SECTION_RE = re.compile(
 )
 _RST_DIRECTIVE_RE = re.compile(r"^\.\.\s+\S")
 
+# Any docstring SECTION HEADER -- a line that is JUST the header word (optionally
+# followed by ``:``). Used by :func:`_clean_long` to truncate the prose wall the
+# moment a section starts, and by :func:`_fallback_doc_sections` to split the
+# raw docstring into sections. Kept broad (every Google/NumPy/reST heading we
+# know) so no section body ever leaks into the rendered prose.
+_DOC_SECTION_NAMES = (
+    "Args",
+    "Arguments",
+    "Parameters",
+    "Param",
+    "Returns",
+    "Return",
+    "Yields",
+    "Yield",
+    "Raises",
+    "Example",
+    "Examples",
+    "See Also",
+    "Note",
+    "Notes",
+    "References",
+    "Reference",
+    "Warning",
+    "Warnings",
+    "Attributes",
+    "Todo",
+)
+_DOC_SECTION_HEADER_RE = re.compile(
+    r"^\s*(?:" + "|".join(re.escape(n) for n in _DOC_SECTION_NAMES) + r")\s*:?\s*$",
+    re.IGNORECASE,
+)
+# Section header that may carry trailing content on the same line (``Args: foo``).
+# Only the subset of headers we actively extract in the lenient fallback.
+_FALLBACK_HEADER_RE = re.compile(
+    r"^\s*(Args|Arguments|Parameters|Param|Returns|Return|Yields|Yield|Raises"
+    r"|Examples?|See Also|Notes?)\s*:\s*(.*)$",
+    re.IGNORECASE,
+)
+# A Google-style ``name (type): desc`` or ``name: desc`` arg-line OPENER. The
+# name must be a bare identifier (no spaces), which is what distinguishes a new
+# entry from a wrapped continuation line.
+_ARG_LINE_RE = re.compile(
+    r"^(?P<name>\*{0,2}[A-Za-z_]\w*)\s*(?:\((?P<type>[^)]*)\))?\s*:\s*(?P<desc>.*)$",
+)
+# reST inline link: ``text <url>``_  -> capture text + url.
+_RST_LINK_RE = re.compile(r"`([^`<]+?)\s*<([^>]+)>`_+")
+# Bare reST trailing-underscore / role artifacts left after link stripping, e.g.
+# a dangling `` `_ `` or `` ` ``-wrapped fragment with no target.
+_RST_BACKTICK_ARTIFACT_RE = re.compile(r"`_+")
+
+
+def _strip_rst_links(text: str) -> str:
+    """Convert reST inline links to plain markdown and drop stray reST artifacts.
+
+    * `` `text <url>`_ `` -> ``[text](url)`` (markdown link).
+    * Any remaining bare `` `_ `` / `` `__ `` trailing-underscore artifacts are
+      removed so they do not render as literal backtick+underscore noise.
+
+    Safe on text with no reST links (returns it unchanged); never raises."""
+    if not text:
+        return text
+    out = _RST_LINK_RE.sub(lambda m: f"[{m.group(1).strip()}]({m.group(2).strip()})", text)
+    out = _RST_BACKTICK_ARTIFACT_RE.sub("", out)
+    return out
+
+
+def _clean_long(text: str) -> str:
+    """Defensive truncation of a docstring's long-description prose.
+
+    ``docstring_parser`` occasionally fails to split a Google-style docstring
+    (e.g. wrapped multi-line ``Args`` descriptions defeat the parser) and dumps
+    the ENTIRE docstring -- Args/Returns/Example/See Also -- into
+    ``long_description``. This helper truncates at the first line that is a
+    section HEADER (:data:`_DOC_SECTION_HEADER_RE`) or a reST literal-block
+    intro (a line ending in ``::``), so no section body ever leaks into the
+    rendered prose wall. Returns the dedented, stripped prose before that point;
+    reST links are normalised. Never raises."""
+    if not text:
+        return ""
+    lines = text.splitlines()
+    collected: list[str] = []
+    for ln in lines:
+        s = ln.strip()
+        if _DOC_SECTION_HEADER_RE.match(ln):
+            break
+        if s.endswith("::"):  # reST literal-block intro (e.g. ``Quick start::``)
+            break
+        collected.append(ln)
+    import textwrap
+
+    block = textwrap.dedent("\n".join(collected)).strip()
+    return _strip_rst_links(block)
+
+
+def _fallback_doc_sections(raw: str) -> dict:
+    """Lenient Google-section extractor for docstrings the strict parser drops.
+
+    When ``docstring_parser`` yields no params/returns/example but the raw
+    docstring clearly has ``Args:``/``Returns:``/``Example(s):`` headers (the
+    classic failure: a wrapped multi-line Arg description such as ``4 for
+    all-star, 5 for off-season`` makes the strict Google parser raise), this
+    recovers them by hand.
+
+    Returns ``{"params": [...], "returns": str, "example": str}`` where each
+    param is ``{"arg_name", "type_name", "description"}``. Continuation lines
+    (lines that do NOT open a new ``name (...):`` / ``name:`` entry) are
+    space-joined onto the previous param's description. Never raises; returns
+    empty pieces when it cannot parse."""
+    out = {"params": [], "returns": "", "example": ""}
+    if not raw:
+        return out
+    try:
+        lines = raw.splitlines()
+        # Group lines into sections keyed by header name. Anything before the
+        # first header is preamble (short/long description) and ignored here.
+        sections: dict[str, list[str]] = {}
+        current: str | None = None
+        for ln in lines:
+            m = _FALLBACK_HEADER_RE.match(ln)
+            if m:
+                current = m.group(1).strip().lower()
+                sections.setdefault(current, [])
+                trailing = m.group(2).strip()
+                if trailing:
+                    sections[current].append("    " + trailing)
+                continue
+            if current is not None:
+                sections[current].append(ln)
+
+        def section(*keys: str) -> list[str]:
+            for k in keys:
+                if k in sections:
+                    return sections[k]
+            return []
+
+        # --- Args / Parameters ---------------------------------------------
+        arg_lines = section("args", "arguments", "parameters", "param")
+        params: list[dict] = []
+        for raw_line in arg_lines:
+            s = raw_line.strip()
+            if not s:
+                continue
+            am = _ARG_LINE_RE.match(s)
+            if am and (am.group("type") is not None or " " not in am.group("name")):
+                # New entry. Guard: a continuation line like "4 for all-star: x"
+                # would falsely match name="4"? No -- name must be an identifier
+                # (\w starting with a letter/underscore), so leading-digit
+                # continuations are treated as continuations below.
+                params.append(
+                    {
+                        "arg_name": am.group("name"),
+                        "type_name": (am.group("type") or "").strip(),
+                        "description": am.group("desc").strip(),
+                    },
+                )
+            elif params:
+                # Continuation of the previous param's description.
+                joined = (params[-1]["description"] + " " + s).strip()
+                params[-1]["description"] = joined
+            # else: stray line before any param -- ignore.
+        for p in params:
+            p["description"] = _strip_rst_links(" ".join(p["description"].split()))
+        out["params"] = params
+
+        # --- Returns / Yields ----------------------------------------------
+        ret_lines = section("returns", "return", "yields", "yield")
+        if ret_lines:
+            ret = textwrap_dedent_join(ret_lines)
+            ret = " ".join(ret.split())
+            # Strip a leading ``pl.DataFrame:`` / ``type:`` prefix if present.
+            rm = re.match(r"^[A-Za-z_][\w.\[\], |]*\s*:\s*(.*)$", ret)
+            if rm and rm.group(1):
+                ret = rm.group(1).strip()
+            out["returns"] = _strip_rst_links(ret)
+
+        # --- Example / Examples --------------------------------------------
+        ex_lines = section("examples", "example")
+        if ex_lines:
+            out["example"] = textwrap_dedent_join(ex_lines).strip()
+    except Exception:  # noqa: BLE001 -- never raise on odd docstrings.
+        return {"params": [], "returns": "", "example": ""}
+    return out
+
+
+def textwrap_dedent_join(lines: list[str]) -> str:
+    """Dedent a block of section lines and join into a single string."""
+    import textwrap
+
+    return textwrap.dedent("\n".join(lines))
+
 
 def _clean_example(text: str) -> str:
     """Strip reST intro lines and trailing prose sections from a parsed example block.
@@ -1834,7 +2024,11 @@ def _clean_example(text: str) -> str:
                 while i < n and not lines[i].strip():
                     i += 1
 
-    # Step 3 — collect lines until a prose-section sentinel.
+    # Step 3 — collect lines until a prose-section sentinel.  Mid-block reST
+    # literal-block intro lines (a prose line ending in ``::``, e.g.
+    # ``Pull a specific date::``) are not code; left verbatim they render as a
+    # broken statement inside the ```python``` fence.  Convert each to a ``# ``
+    # comment so the example stays valid Python and reads as a labelled step.
     collected: list[str] = []
     for j in range(i, n):
         s = lines[j].strip()
@@ -1842,7 +2036,15 @@ def _clean_example(text: str) -> str:
             break
         if _RST_DIRECTIVE_RE.match(lines[j]):
             break
-        collected.append(lines[j])
+        if s.endswith("::") and s != "::":
+            leading_spaces = len(lines[j]) - len(lines[j].lstrip())
+            looks_like_code = leading_spaces >= 4 or s.startswith(("from ", "import ", ">>>"))
+            if not looks_like_code:
+                label = s[:-2].rstrip().rstrip(":").strip()
+                pad = " " * leading_spaces
+                collected.append(f"{pad}# {label}" if label else "")
+                continue
+        collected.append(_strip_rst_links(lines[j]))
 
     # Step 4 — dedent and strip.
     # textwrap.dedent uses the minimum common leading whitespace across ALL
@@ -1876,39 +2078,72 @@ def _doc_view(obj) -> dict:
     from docstring_parser import parse
 
     raw = inspect.getdoc(obj) or ""
-    ds = parse(raw)
+    try:
+        ds = parse(raw)
+    except Exception:  # noqa: BLE001 -- AUTO parse can raise on malformed sections.
+        ds = None
+
+    # Lenient recovery for docstrings the strict parser drops (wrapped multi-line
+    # Google ``Args`` defeat it: 0 params, whole body dumped into long_description).
+    ds_params = list(ds.params) if ds is not None else []
+    ds_returns = ds.returns if ds is not None else None
+    ds_examples = ds.examples if ds is not None else []
+    ds_short = ds.short_description if ds is not None else ""
+    ds_long = ds.long_description if ds is not None else ""
+
+    need_fallback = (
+        not ds_params
+        and (ds_returns is None or not ds_returns.description)
+        and not (ds_examples and ds_examples[0].description)
+    )
+    fb = _fallback_doc_sections(raw) if need_fallback else {"params": [], "returns": "", "example": ""}
+
+    # Param descriptions: prefer the strict parser; fall back to the lenient one.
+    doc_params = {p.arg_name: p for p in ds_params}
+    fb_params = {p["arg_name"]: p for p in fb["params"]}
+
     try:
         sig = inspect.signature(obj)
     except (ValueError, TypeError):
         sig = None
-    doc_params = {p.arg_name: p for p in ds.params}
     params: list[dict] = []
     if sig is not None:
         for name, sp in sig.parameters.items():
             if name in ("self", "cls") or sp.kind in (sp.VAR_POSITIONAL, sp.VAR_KEYWORD):
                 continue
             dp = doc_params.get(name)
+            fbp = fb_params.get(name)
             ann = "" if sp.annotation is sp.empty else _ann_str(sp.annotation)
             default = "" if sp.default is sp.empty else repr(sp.default)
             desc = ""
-            if dp is not None:
+            if dp is not None and dp.description:
                 desc = " ".join((dp.description or "").split())
+            elif fbp is not None and fbp["description"]:
+                desc = " ".join(fbp["description"].split())
+            doc_type = (dp.type_name if dp is not None and dp.type_name else "") or (
+                fbp["type_name"] if fbp is not None and fbp["type_name"] else ""
+            )
             params.append(
                 {
                     "name": name,
-                    "type": (dp.type_name if dp is not None and dp.type_name else ann),
+                    "type": (doc_type or ann),
                     "default": default,
-                    "description": desc,
+                    "description": _strip_rst_links(desc),
                 },
             )
-    long = " ".join((ds.long_description or "").split()) if ds.long_description else ""
+
+    long = _clean_long(ds_long or "")
     returns = ""
-    if ds.returns is not None and ds.returns.description:
-        returns = " ".join(ds.returns.description.split())
-    raw_example = ds.examples[0].description if ds.examples and ds.examples[0].description else ""
+    if ds_returns is not None and ds_returns.description:
+        returns = _strip_rst_links(" ".join(ds_returns.description.split()))
+    elif fb["returns"]:
+        returns = fb["returns"]
+    raw_example = ds_examples[0].description if ds_examples and ds_examples[0].description else ""
+    if not raw_example and fb["example"]:
+        raw_example = fb["example"]
     example = _clean_example(raw_example)
     return {
-        "short": (ds.short_description or "").strip(),
+        "short": (ds_short or "").strip(),
         "long": long,
         "params": params,
         "returns": returns,

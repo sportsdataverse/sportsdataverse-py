@@ -105,12 +105,12 @@ from sportsdataverse.cfb import espn_cfb_game_rosters
 rosters = espn_cfb_game_rosters(game_id=401628334)
 print(rosters.shape)
 
-Pandas round-trip::
+# Pandas round-trip
 
 rosters_pd = espn_cfb_game_rosters(game_id=401628334, return_as_pandas=True)
 rosters_pd.head()
 
-Pipeline next step (filter to game starters)::
+# Pipeline next step (filter to game starters)
 
 import polars as pl
 starters = espn_cfb_game_rosters(game_id=401628334).filter(
@@ -192,14 +192,14 @@ from sportsdataverse.cfb import espn_cfb_play_participants
 participants = espn_cfb_play_participants(game_id=401628334)
 print(participants.shape)
 
-Skip the per-athlete fan-out for speed::
+# Skip the per-athlete fan-out for speed
 
 participants_fast = espn_cfb_play_participants(
     game_id=401628334,
     resolve_missing=False,
 )
 
-Pipeline next step (join onto play-by-play frame)::
+# Pipeline next step (join onto play-by-play frame)
 
 from sportsdataverse.cfb import CFBPlayProcess
 pbp = CFBPlayProcess(gameId=401628334).espn_cfb_pbp()
@@ -211,7 +211,12 @@ joined = plays.join(participants, how="left", left_on="id", right_on="play_id")
 
 Pull a college-football athlete's ESPN **season** stat line.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of the wide return shape, the ``{category}_{stat}`` stat columns (for football: ``passing_*``, ``rushing_*``, ``receiving_*``, ``scoring_*``, ...), the athlete / team metadata blocks, and the ``season_type`` / ``total`` parameters. For the richer multi-category web-v3 payload use :func:`sportsdataverse.cfb.espn_cfb_player_stats_v3`.
+See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the ``{category}_{stat}`` stat
+columns (for football: ``passing_*``, ``rushing_*``, ``receiving_*``,
+``scoring_*``, ...), the athlete / team metadata blocks, and the
+``season_type`` / ``total`` parameters. For the richer multi-category
+web-v3 payload use :func:`sportsdataverse.cfb.espn_cfb_player_stats_v3`.
 
 **Parameters**
 
@@ -508,11 +513,11 @@ from sportsdataverse.cfb import espn_cfb_schedule
 slate = espn_cfb_schedule()
 print(slate.shape if slate is not None else "no games")
 
-Pull a specific week of FBS games::
+# Pull a specific week of FBS games
 
 week5 = espn_cfb_schedule(dates=2023, week=5, season_type=2)
 
-Pipeline next step (extract finals only)::
+# Pipeline next step (extract finals only)
 
 import polars as pl
 finals = espn_cfb_schedule(dates=2023, week=5).filter(
@@ -560,12 +565,12 @@ from sportsdataverse.cfb import load_cfb_betting_lines
 lines = load_cfb_betting_lines()
 print(lines.shape)
 
-Pandas round-trip::
+# Pandas round-trip
 
 lines_pd = load_cfb_betting_lines(return_as_pandas=True)
 lines_pd.head()
 
-Pipeline next step (filter to one provider in 2023)::
+# Pipeline next step (filter to one provider in 2023)
 
 import polars as pl
 consensus_2023 = load_cfb_betting_lines().filter(
@@ -593,7 +598,9 @@ _No description available._
 
 Return the most recent college football season year based on today's date.
 
-The college football season starts in mid-August. If today is on or after August 15 (or any day in September or later), this returns the current calendar year. Otherwise, it returns the previous calendar year.
+The college football season starts in mid-August. If today is on or after
+August 15 (or any day in September or later), this returns the current
+calendar year. Otherwise, it returns the previous calendar year.
 
 **Returns**
 
@@ -606,7 +613,7 @@ from sportsdataverse.cfb import most_recent_cfb_season
 year = most_recent_cfb_season()
 print(year)
 
-Combine with the loaders for a "current season" pull::
+# Combine with the loaders for a "current season" pull
 
 from sportsdataverse.cfb import load_cfb_schedule, most_recent_cfb_season
 sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
@@ -653,12 +660,12 @@ from sportsdataverse.cfb import espn_cfb_teams
 teams = espn_cfb_teams()
 print(teams.shape)
 
-Pull FCS teams (group 81)::
+# Pull FCS teams (group 81)
 
 fcs = espn_cfb_teams(groups=81, return_as_pandas=True)
 fcs.head()
 
-Pipeline next step (build an abbreviation lookup)::
+# Pipeline next step (build an abbreviation lookup)
 
 teams = espn_cfb_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
@@ -701,12 +708,12 @@ from sportsdataverse.cfb import get_cfb_teams
 teams = get_cfb_teams()
 print(teams.shape)
 
-Pandas round-trip::
+# Pandas round-trip
 
 teams_pd = get_cfb_teams(return_as_pandas=True)
 teams_pd.head()
 
-Pipeline next step (build a team_id to logo URL map)::
+# Pipeline next step (build a team_id to logo URL map)
 
 teams = get_cfb_teams()
 logo_map = dict(zip(teams["team_id"], teams["logo"]))
