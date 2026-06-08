@@ -3,12 +3,15 @@
 
 These tests lock in: real on-disk modules, the ``return_parsed=True`` default
 flip on parser-backed wrappers, the explicit-override escape hatch, and that
-every league mirror imports cleanly.
+every league mirror imports cleanly.  As of 0.0.54 these modules are
+deprecated -- each import must emit a ``DeprecationWarning``.
 """
 
 from __future__ import annotations
 
+import importlib
 import os
+import sys
 
 import pytest
 
@@ -81,3 +84,23 @@ def _safe_params(fn):
         return set(inspect.signature(fn).parameters)
     except (TypeError, ValueError):
         return set()
+
+
+@pytest.mark.parametrize("league", _LEAGUES)
+def test_parsed_module_emits_deprecation_warning(league):
+    """Importing any sportsdataverse.parsed.{league} must emit a DeprecationWarning.
+
+    Since 0.0.54, the default league modules return parsed DataFrames by default,
+    making the parsed.* alias namespace redundant (deprecated).
+    """
+    mod_name = f"sportsdataverse.parsed.{league}"
+    # Remove module from cache so the import runs fresh and the warning fires.
+    for key in list(sys.modules.keys()):
+        if key == mod_name or key.startswith(f"{mod_name}."):
+            del sys.modules[key]
+    # Also evict the parent parsed package so its eager sub-module imports re-run.
+    if "sportsdataverse.parsed" in sys.modules:
+        del sys.modules["sportsdataverse.parsed"]
+
+    with pytest.warns(DeprecationWarning, match=rf"sportsdataverse\.parsed\.{league}.*deprecated.*0\.0\.54"):
+        importlib.import_module(mod_name)

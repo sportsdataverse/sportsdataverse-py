@@ -7,6 +7,7 @@
   - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
   - [Docs coverage gate + autodoc](#docs-coverage-gate--autodoc)
   - [MLB - full MLB Stats API coverage](#mlb---full-mlb-stats-api-coverage)
+  - [Deprecations](#deprecations)
 - [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
   - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
   - [NHL native — codegen cutover + clean names (api-web; in progress)](#nhl-native--codegen-cutover--clean-names-api-web-in-progress)
@@ -57,7 +58,7 @@
   - [CFB — pandas → polars 1.x bug-fix reconciliation (`0.36-live` → `main`)](#cfb--pandas-%E2%86%92-polars-1x-bug-fix-reconciliation-036-live-%E2%86%92-main)
   - [Infrastructure and tooling](#infrastructure-and-tooling)
   - [Bug fixes](#bug-fixes-1)
-  - [Deprecations](#deprecations)
+  - [Deprecations](#deprecations-1)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
 - [0.0.36-37 Release: July 9, 2023](#0036-37-release-july-9-2023)
@@ -110,6 +111,13 @@ personnel, schedule variants, seasons/all, sport, teams history/stats, etc.).
 return schemas; the remaining handful are auth-gated/internal MLBAM feeds
 (analytics/guids/color), wrapped with valid example args for if/when access
 exists.
+
+### Deprecations
+
+- `sportsdataverse.parsed.{league}` is **deprecated** (since the default modules
+  now return parsed DataFrames by default). Importing a `parsed.*` module emits a
+  `DeprecationWarning`; it still works and will be removed in a future release.
+  Migrate to `from sportsdataverse.{league} import <fn>` directly.
 
 ## 0.0.53 Release: June 8, 2026
 

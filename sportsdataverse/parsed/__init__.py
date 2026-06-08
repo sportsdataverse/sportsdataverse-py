@@ -1,24 +1,27 @@
-"""sportsdataverse.parsed -- explicit DataFrame-by-default alias modules.
+"""DEPRECATED since 0.0.54 -- sportsdataverse.parsed alias namespace.
 
-As of 0.0.54 the default ``sportsdataverse.{league}`` modules already
-return a polars DataFrame for parser-backed wrappers (pass
-``return_parsed=False`` for the raw ``Dict``). This namespace predates
-that change and is retained as an explicit, self-documenting alias:
-every wrapper imported from ``sportsdataverse.parsed.{league}`` returns
-a polars DataFrame by default (or pandas via ``return_as_pandas=True``),
-regardless of the raw module's default.
+.. deprecated:: 0.0.54
+   The ``sportsdataverse.parsed`` namespace is **deprecated** and will be
+   removed in a future release.  As of 0.0.54, the default
+   ``sportsdataverse.{league}`` modules already return parsed polars
+   DataFrames for parser-backed wrappers (pass ``return_parsed=False`` to
+   recover the raw ``Dict``).  Importing any ``sportsdataverse.parsed.{league}``
+   module emits a :class:`DeprecationWarning`.
 
-Usage::
+Migrate by replacing ``parsed.*`` imports with direct league imports::
 
-    # Default modules (0.0.54+): parsed DataFrame for parser-backed wrappers
-    from sportsdataverse.nba import espn_nba_scoreboard
-    df = espn_nba_scoreboard()                           # -> polars
-    raw = espn_nba_scoreboard(return_parsed=False)       # -> Dict
-
-    # Explicit parsed alias (always DataFrame-by-default):
+    # Before (deprecated):
     from sportsdataverse.parsed.nba import espn_nba_scoreboard
     df = espn_nba_scoreboard()                           # -> polars
+
+    # After (0.0.54+, preferred):
+    from sportsdataverse.nba import espn_nba_scoreboard
+    df = espn_nba_scoreboard()                           # -> polars (default)
     raw = espn_nba_scoreboard(return_parsed=False)       # -> Dict
+
+The ``parsed.*`` modules still function correctly (they pass
+``return_parsed=True`` by default), so existing code continues to work
+until the namespace is removed.
 
 Available leagues: ``nba``, ``wnba``, ``mbb``, ``wbb``, ``cfb``, ``nfl``,
 ``mlb``, ``nhl``.
