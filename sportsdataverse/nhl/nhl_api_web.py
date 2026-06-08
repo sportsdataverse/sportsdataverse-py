@@ -420,7 +420,7 @@ def nhl_club_schedule_season(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/club-schedule-season/{team}/now"
+        f"https://api-web.nhle.com/v1/club-schedule-season/{team}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/club-schedule-season/{team}/{season}"
     )
@@ -460,7 +460,7 @@ def nhl_club_schedule_month(
         >>> nhl_club_schedule_month(team='TOR')
     """
     __url = (
-        "https://api-web.nhle.com/v1/club-schedule/{team}/month/now"
+        f"https://api-web.nhle.com/v1/club-schedule/{team}/month/now"
         if month is None
         else f"https://api-web.nhle.com/v1/club-schedule/{team}/month/{month}"
     )
@@ -500,7 +500,7 @@ def nhl_club_schedule_week(
         >>> nhl_club_schedule_week(team='TOR')
     """
     __url = (
-        "https://api-web.nhle.com/v1/club-schedule/{team}/week/now"
+        f"https://api-web.nhle.com/v1/club-schedule/{team}/week/now"
         if date is None
         else f"https://api-web.nhle.com/v1/club-schedule/{team}/week/{date}"
     )
@@ -543,7 +543,7 @@ def nhl_club_stats(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/club-stats/{team}/now"
+        f"https://api-web.nhle.com/v1/club-stats/{team}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/club-stats/{team}/{season}/{game_type}"
     )
@@ -617,7 +617,7 @@ def nhl_roster(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/roster/{team}/current"
+        f"https://api-web.nhle.com/v1/roster/{team}/current"
         if season is None
         else f"https://api-web.nhle.com/v1/roster/{team}/{season}"
     )
@@ -726,7 +726,7 @@ def nhl_player_game_log(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/player/{player_id}/game-log/now"
+        f"https://api-web.nhle.com/v1/player/{player_id}/game-log/now"
         if season is None
         else f"https://api-web.nhle.com/v1/player/{player_id}/game-log/{season}/{game_type}"
     )

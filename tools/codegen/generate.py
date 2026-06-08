@@ -270,9 +270,12 @@ class _EndpointView:
                 toggle = none_default[0] if none_default else ep.path_params[-1].python_name
             now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
             full_f = ep_host + _sub_slugs(ep.path, sport, lg)
-            # now_f has no path-param placeholders, so emit a plain string literal;
-            # full_f may have {param} tokens, so it stays an f-string.
-            lines.append(f'__url = "{now_f}" if {toggle} is None else f"{full_f}"')
+            # Emit the now-variant as an f-string only when it still has path-param
+            # placeholders to interpolate (e.g. /club-schedule-season/{team}/now);
+            # placeholder-free now-variants (e.g. /score/now) stay plain literals so
+            # ruff F541 doesn't strip the prefix.
+            now_literal = f'f"{now_f}"' if "{" in now_f else f'"{now_f}"'
+            lines.append(f'__url = {now_literal} if {toggle} is None else f"{full_f}"')
         else:
             full_f = _sub_slugs(ep.path, sport, lg)
             lines.append(f'__url = f"{ep_host}{full_f}"')

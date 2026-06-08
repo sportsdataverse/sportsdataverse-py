@@ -82,7 +82,7 @@ def nhl_edge_skater_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-detail/{player_id}/{season}/{game_type}"
     )
@@ -125,7 +125,7 @@ def nhl_edge_skater_comparison(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-comparison/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-comparison/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-comparison/{player_id}/{season}/{game_type}"
     )
@@ -168,7 +168,7 @@ def nhl_edge_skater_shot_location_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-shot-location-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-shot-location-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-shot-location-detail/{player_id}/{season}/{game_type}"
     )
@@ -215,7 +215,7 @@ def nhl_edge_skater_shot_location_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/{position}/{category}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/{position}/{category}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/{position}/{category}/{sort_by}/{season}/{game_type}"
     )
@@ -258,7 +258,7 @@ def nhl_edge_skater_shot_speed_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/{player_id}/{season}/{game_type}"
     )
@@ -303,7 +303,7 @@ def nhl_edge_skater_shot_speed_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/{season}/{game_type}"
     )
@@ -346,7 +346,7 @@ def nhl_edge_skater_skating_distance_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/{player_id}/{season}/{game_type}"
     )
@@ -389,7 +389,7 @@ def nhl_edge_skater_skating_speed_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/{player_id}/{season}/{game_type}"
     )
@@ -434,7 +434,7 @@ def nhl_edge_skater_speed_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/{season}/{game_type}"
     )
@@ -481,7 +481,7 @@ def nhl_edge_skater_distance_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}"
     )
@@ -524,7 +524,7 @@ def nhl_edge_skater_zone_time(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/{season}/{game_type}"
     )
@@ -571,7 +571,7 @@ def nhl_edge_skater_zone_time_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}"
     )
@@ -655,7 +655,7 @@ def nhl_edge_goalie_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-detail/{player_id}/{season}/{game_type}"
     )
@@ -698,7 +698,7 @@ def nhl_edge_goalie_5v5_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-5v5-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-5v5-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-5v5-detail/{player_id}/{season}/{game_type}"
     )
@@ -741,7 +741,7 @@ def nhl_edge_goalie_5v5_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/{season}/{game_type}"
     )
@@ -784,7 +784,7 @@ def nhl_edge_goalie_comparison(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-comparison/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-comparison/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-comparison/{player_id}/{season}/{game_type}"
     )
@@ -827,7 +827,7 @@ def nhl_edge_goalie_save_percentage_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/{player_id}/{season}/{game_type}"
     )
@@ -870,7 +870,7 @@ def nhl_edge_goalie_edge_save_pctg_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/{sort_by}/{season}/{game_type}"
     )
@@ -913,7 +913,7 @@ def nhl_edge_goalie_shot_location_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}"
     )
@@ -958,7 +958,7 @@ def nhl_edge_goalie_shot_location_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/{category}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/{category}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/{category}/{sort_by}/{season}/{game_type}"
     )
@@ -1042,7 +1042,7 @@ def nhl_edge_team_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-detail/{team_id}/now"
+        f"https://api-web.nhle.com/v1/edge/team-detail/{team_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-detail/{team_id}/{season}/{game_type}"
     )
@@ -1126,7 +1126,7 @@ def nhl_edge_team_shot_location_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-shot-location-detail/{team_id}/now"
+        f"https://api-web.nhle.com/v1/edge/team-shot-location-detail/{team_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-shot-location-detail/{team_id}/{season}/{game_type}"
     )
@@ -1173,7 +1173,7 @@ def nhl_edge_team_shot_location_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-shot-location-top-10/{position}/{category}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/team-shot-location-top-10/{position}/{category}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-shot-location-top-10/{position}/{category}/{sort_by}/{season}/{game_type}"
     )
@@ -1216,7 +1216,7 @@ def nhl_edge_team_shot_speed_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-shot-speed-detail/{team_id}/now"
+        f"https://api-web.nhle.com/v1/edge/team-shot-speed-detail/{team_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-shot-speed-detail/{team_id}/{season}/{game_type}"
     )
@@ -1254,7 +1254,7 @@ def nhl_edge_team_skating_distance_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-skating-distance-detail/{team_id}/now"
+        f"https://api-web.nhle.com/v1/edge/team-skating-distance-detail/{team_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-skating-distance-detail/{team_id}/{season}/{game_type}"
     )
@@ -1299,7 +1299,7 @@ def nhl_edge_team_skating_distance_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}"
     )
@@ -1337,7 +1337,7 @@ def nhl_edge_team_skating_speed_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-skating-speed-detail/{team_id}/now"
+        f"https://api-web.nhle.com/v1/edge/team-skating-speed-detail/{team_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-skating-speed-detail/{team_id}/{season}/{game_type}"
     )
@@ -1380,7 +1380,7 @@ def nhl_edge_team_skating_speed_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/{season}/{game_type}"
     )
@@ -1423,7 +1423,7 @@ def nhl_edge_team_zone_time_details(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-zone-time-details/{team_id}/now"
+        f"https://api-web.nhle.com/v1/edge/team-zone-time-details/{team_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-zone-time-details/{team_id}/{season}/{game_type}"
     )
@@ -1468,7 +1468,7 @@ def nhl_edge_team_zone_time_top_10(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/now"
+        f"https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/{season}/{game_type}"
     )
@@ -1511,7 +1511,7 @@ def nhl_edge_cat_skater_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/cat/edge/skater-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/cat/edge/skater-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/cat/edge/skater-detail/{player_id}/{season}/{game_type}"
     )
@@ -1554,7 +1554,7 @@ def nhl_edge_cat_goalie_detail(
     """
     season = format_nhl_season(season)
     __url = (
-        "https://api-web.nhle.com/v1/cat/edge/goalie-detail/{player_id}/now"
+        f"https://api-web.nhle.com/v1/cat/edge/goalie-detail/{player_id}/now"
         if season is None
         else f"https://api-web.nhle.com/v1/cat/edge/goalie-detail/{player_id}/{season}/{game_type}"
     )
