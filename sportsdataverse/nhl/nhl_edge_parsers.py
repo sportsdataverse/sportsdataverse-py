@@ -53,7 +53,7 @@ Usage
     from sportsdataverse.nhl import nhl_edge_skater_shot_speed_top_10
     from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_top10
 
-    raw = nhl_edge_skater_shot_speed_top_10("all", "maxSpeed")
+    raw = nhl_edge_skater_shot_speed_top_10("all", "maxSpeed", return_parsed=False)
     df = parse_edge_top10(raw)
     print(df.shape)
 """

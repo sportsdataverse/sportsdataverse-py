@@ -1142,8 +1142,9 @@ def check() -> int:
 #
 # `generate.py --coverage` enumerates the public, callable, in-package functions
 # each league exports, then proves each name's exact text appears somewhere in the
-# rendered markdown corpus. The intent is enforcement + measurement -- it is
-# report-only for now (NOT wired into `--check`), since real gaps still exist.
+# rendered markdown corpus. It is enforcement + measurement: `--coverage` is the
+# verbose human report, and `_coverage_gaps()` is wired into `--check`, which fails
+# on any undocumented in-scope function (allowlist for cross-cutting internals).
 # ===========================================================================
 
 # The 8 documented sport leagues. (pwhl is loader-only and has no module of its
