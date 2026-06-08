@@ -7,12 +7,62 @@
 #
 # Do NOT seed this with the current documentation gaps -- those are meant to be
 # FIXED (a doc page added) in later tasks, not papered over here.
+#
+# WHY THESE NAMES ARE EXCLUDED
+# =============================
+# Every name below is a cross-cutting internal symbol that leaks into league
+# namespaces via ``from ... import *`` in subpackage __init__ files.  None of
+# them are user-facing data wrappers, loaders, or sport-specific utilities.
+# They fall into three buckets:
+#
+#   1. Shared HTTP / JSON utilities (dl_utils.py):
+#        download              -- canonical HTTP gateway (internal; users never call it)
+#        flatten_json_iterative -- recursive JSON flattener (parser-layer helper)
+#        key_check             -- safe dict-key accessor (parser-layer helper)
+#        underscore            -- camelCase -> snake_case string transform (internal)
+#
+#   2. Error types (errors.py):
+#        SeasonNotFoundError   -- exception class; not a data function
+#        season_not_found_error -- constructor/raiser helper for SeasonNotFoundError
+#
+#   3. Parser-dispatch registries (per-sport *_parsers.py):
+#        parser_for_mlb_api    -- registry lookup for MLB Stats API parsers
+#        parser_for_edge       -- registry lookup for NHL EDGE API parsers
+#        parser_for_nhl_api_web -- registry lookup for NHL Web API parsers
+#        parser_for_nhl_records -- registry lookup for NHL Records API parsers
+#        parser_for_nhl_stats_rest -- registry lookup for NHL Stats REST parsers
+#
 global: []          # package-level names (find_*, list_functions, ...) to skip
-nba: []
-wnba: []
-mbb: []
-wbb: []
-cfb: []
-nfl: []
-mlb: []
-nhl: []
+nba:
+  - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
+  - underscore               # dl_utils string transform leaking via import *
+wnba:
+  - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
+  - underscore               # dl_utils string transform leaking via import *
+mbb:
+  - SeasonNotFoundError      # errors.py exception class leaking via import *
+  - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
+  - underscore               # dl_utils string transform leaking via import *
+wbb:
+  - SeasonNotFoundError      # errors.py exception class leaking via import *
+  - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
+  - underscore               # dl_utils string transform leaking via import *
+cfb:
+  - download    # dl_utils HTTP gateway leaking via import *
+  - underscore  # dl_utils string transform leaking via import *
+nfl:
+  - download              # dl_utils HTTP gateway leaking via import *
+  - season_not_found_error  # errors.py raiser helper leaking via import *
+  - underscore            # dl_utils string transform leaking via import *
+mlb:
+  - download          # dl_utils HTTP gateway leaking via import *
+  - parser_for_mlb_api  # MLB Stats API parser-dispatch registry; not user-facing
+  - underscore        # dl_utils string transform leaking via import *
+nhl:
+  - flatten_json_iterative   # dl_utils HTTP/JSON helper leaking via import *
+  - key_check                # dl_utils safe dict-key accessor leaking via import *
+  - parser_for_edge          # NHL EDGE parser-dispatch registry; not user-facing
+  - parser_for_nhl_api_web   # NHL Web API parser-dispatch registry; not user-facing
+  - parser_for_nhl_records   # NHL Records parser-dispatch registry; not user-facing
+  - parser_for_nhl_stats_rest  # NHL Stats REST parser-dispatch registry; not user-facing
+  - underscore               # dl_utils string transform leaking via import *

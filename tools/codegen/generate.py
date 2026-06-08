@@ -1134,7 +1134,6 @@ def check() -> int:
     if stale:
         print("codegen --check: stale/missing generated files:", ", ".join(sorted(stale)), file=sys.stderr)
         return 1
-    print("codegen --check: all generated files current")
     return 0
 
 
@@ -1244,6 +1243,28 @@ def _is_documented(name: str, corpus: str) -> bool:
     return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None
 
 
+def _coverage_gaps() -> list[tuple[str, list[str]]]:
+    """Return ``[(league_label, [missing_names])]`` for any in-scope user-facing
+    function that is neither documented in the rendered docs nor allowlisted.
+
+    Used by the ``--check`` gate to fail the build when real documentation gaps
+    are introduced. Returns an empty list when every function is accounted for."""
+    per_league, global_names = _coverage_scope_names()
+    allow = _coverage_allowlist()
+
+    groups: list[tuple[str, set[str], str | None]] = [(lg, per_league[lg], lg) for lg in _COVERAGE_LEAGUES]
+    groups.append(("global", global_names, None))
+
+    gaps: list[tuple[str, list[str]]] = []
+    for label, names, league_dir in groups:
+        corpus = _docs_corpus(league_dir)
+        allowed = allow.get(label, set())
+        missing = sorted(names - {n for n in names if _is_documented(n, corpus)} - allowed)
+        if missing:
+            gaps.append((label, missing))
+    return gaps
+
+
 def coverage_report() -> int:
     """Report user-facing functions that never reach the rendered docs corpus.
 
@@ -1251,10 +1272,7 @@ def coverage_report() -> int:
     the package-level ``global`` group (searched against the whole ``docs/docs``
     corpus), compute in_scope / documented / missing (= in_scope - documented -
     allowlist). Prints a per-group table, the TOTAL missing, and the missing names
-    grouped per group. Returns 0 when nothing is missing, else 1.
-
-    This is the eventual gate contract, but it is REPORT-ONLY here -- it is not
-    invoked from ``--check`` until the known gaps are closed by later tasks."""
+    grouped per group. Returns 0 when nothing is missing, else 1."""
     per_league, global_names = _coverage_scope_names()
     allow = _coverage_allowlist()
 
@@ -1864,6 +1882,17 @@ def main(argv=None) -> int:
         if docs:
             print("codegen --check: stale doc files:", ", ".join(sorted(docs)), file=sys.stderr)
             rc = 1
+        gaps = _coverage_gaps()
+        if gaps:
+            missing_names = [name for _label, names in gaps for name in names]
+            print(
+                "codegen --check: undocumented user-facing functions:",
+                ", ".join(missing_names),
+                file=sys.stderr,
+            )
+            rc = 1
+        if rc == 0:
+            print("codegen --check: all generated files current")
         return rc
     build()
     n = len(build_live())
