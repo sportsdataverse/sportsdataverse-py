@@ -8,6 +8,85 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse`
 not covered by the generated API-endpoint reference above.
 
+## Dataset loaders
+
+### `load_pwhl_games(return_as_pandas: 'bool' = False)`
+
+Load the PWHL games-in-data-repo manifest (no ``seasons`` argument).
+
+Mirrors fastRhockey (R) ``load_pwhl_games()`` which reads a manifest of every PWHL game that has processed data in the data repository. Tries the sportsdataverse-data release asset first; falls back to the raw fastRhockey-data GitHub path.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame of all games in the data repository.
+
+**Example**
+
+```python
+>>> load_pwhl_games()
+```
+
+### `load_pwhl_goalie_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `load_pwhl_player_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `load_pwhl_schedule(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_pwhl_schedules() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `load_pwhl_skater_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `load_pwhl_team_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
 ## Other
 
 ### `cache_stats() -> 'Dict[str, Any]'`

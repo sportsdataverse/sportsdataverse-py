@@ -280,6 +280,8 @@ from sportsdataverse.nhl import helper_nhl_team_items as helper_nhl_team_items  
 from sportsdataverse.nhl import key_check as key_check  # noqa: F401
 from sportsdataverse.nhl import load_nhl_game_info as load_nhl_game_info  # noqa: F401
 from sportsdataverse.nhl import load_nhl_game_rosters as load_nhl_game_rosters  # noqa: F401
+from sportsdataverse.nhl import load_nhl_games as load_nhl_games  # noqa: F401
+from sportsdataverse.nhl import load_nhl_goalie_box as load_nhl_goalie_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_goalie_boxscores as load_nhl_goalie_boxscores  # noqa: F401
 from sportsdataverse.nhl import load_nhl_linescore as load_nhl_linescore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_officials as load_nhl_officials  # noqa: F401
@@ -287,6 +289,7 @@ from sportsdataverse.nhl import load_nhl_pbp as load_nhl_pbp  # noqa: F401
 from sportsdataverse.nhl import load_nhl_pbp_full as load_nhl_pbp_full  # noqa: F401
 from sportsdataverse.nhl import load_nhl_pbp_lite as load_nhl_pbp_lite  # noqa: F401
 from sportsdataverse.nhl import load_nhl_penalties as load_nhl_penalties  # noqa: F401
+from sportsdataverse.nhl import load_nhl_player_box as load_nhl_player_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_player_boxscore as load_nhl_player_boxscore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_player_boxscores as load_nhl_player_boxscores  # noqa: F401
 from sportsdataverse.nhl import load_nhl_rosters as load_nhl_rosters  # noqa: F401
@@ -297,7 +300,9 @@ from sportsdataverse.nhl import load_nhl_scratches as load_nhl_scratches  # noqa
 from sportsdataverse.nhl import load_nhl_shifts as load_nhl_shifts  # noqa: F401
 from sportsdataverse.nhl import load_nhl_shootout as load_nhl_shootout  # noqa: F401
 from sportsdataverse.nhl import load_nhl_shots_by_period as load_nhl_shots_by_period  # noqa: F401
+from sportsdataverse.nhl import load_nhl_skater_box as load_nhl_skater_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_skater_boxscores as load_nhl_skater_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_team_box as load_nhl_team_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscores as load_nhl_team_boxscores  # noqa: F401
 from sportsdataverse.nhl import load_nhl_three_stars as load_nhl_three_stars  # noqa: F401
@@ -488,6 +493,8 @@ __all__ = [
     "key_check",
     "load_nhl_game_info",
     "load_nhl_game_rosters",
+    "load_nhl_games",
+    "load_nhl_goalie_box",
     "load_nhl_goalie_boxscores",
     "load_nhl_linescore",
     "load_nhl_officials",
@@ -495,6 +502,7 @@ __all__ = [
     "load_nhl_pbp_full",
     "load_nhl_pbp_lite",
     "load_nhl_penalties",
+    "load_nhl_player_box",
     "load_nhl_player_boxscore",
     "load_nhl_player_boxscores",
     "load_nhl_rosters",
@@ -505,7 +513,9 @@ __all__ = [
     "load_nhl_shifts",
     "load_nhl_shootout",
     "load_nhl_shots_by_period",
+    "load_nhl_skater_box",
     "load_nhl_skater_boxscores",
+    "load_nhl_team_box",
     "load_nhl_team_boxscore",
     "load_nhl_team_boxscores",
     "load_nhl_three_stars",
