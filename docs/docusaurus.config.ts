@@ -338,8 +338,11 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} <strong>sportsdataverse-py</strong>, developed by <a href='https://twitter.com/saiemgilani'>Saiem Gilani</a>, part of the <a href='https://sportsdataverse.org'>SportsDataverse</a>.`,
     },
     prism: {
+      // Light mode: GitHub Light (clean light-on-white, matches the docs surface).
+      // Dark mode: okaidia — prism-react-renderer's Monokai port (bg #272822,
+      // green strings #a6e22e, pink keywords #f92672). Replaces dracula.
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      darkTheme: prismThemes.okaidia,
     },
   } satisfies Preset.ThemeConfig,
 };
