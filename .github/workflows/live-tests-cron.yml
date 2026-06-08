@@ -64,6 +64,25 @@ jobs:
         run: |
           set -o pipefail
           uv run --frozen pytest --maxfail=10 -rN 2>&1 | tee pytest-live.log
+      - name: Run example notebooks (nbmake)
+        # The example notebooks hit the same live APIs. Flakiness here shouldn't
+        # mask the core live-test drift signal (the tracking issue keys off the
+        # run-pytest step), so this leg is informational: continue-on-error with a
+        # separate uploaded log. A reproducible notebook break still surfaces here.
+        continue-on-error: true
+        env:
+          SDV_PY_LIVE_TESTS: "1"
+        run: |
+          set -o pipefail
+          uv run --frozen pytest --nbmake examples/notebooks/ -q -rN 2>&1 | tee pytest-notebooks.log
+      - name: Upload notebook execution log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pytest-notebooks-log
+          path: pytest-notebooks.log
+          if-no-files-found: warn
+          retention-days: 30
       - name: Upload pytest log
         if: always()
         uses: actions/upload-artifact@v7

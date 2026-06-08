@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sportsdataverse"
-version = "0.0.52"
+version = "0.0.53"
 description = "Retrieve Sports data in Python"
 readme = "README.md"
 license = "MIT"
@@ -87,11 +87,6 @@ tests = [
     "pytest-xdist>=2.1.0",
     "ruff>=0.1.0",
 ]
-docs = [
-    "sphinx>=7.0.0",
-    "sphinx-markdown-builder>=0.6.0",
-    "sphinx-material>=0.0.35",
-]
 models = [
     "beautifulsoup4>=4.11.0",
     "inflection>=0.5.1",
@@ -107,9 +102,9 @@ models = [
     "xgboost>=2.0.0",
 ]
 all = [
-    # Mirrors `tests + docs + models`. Kept explicit (rather than referencing
-    # the other groups) because PEP 621 does not have a "union of groups"
-    # mechanism that older pip / build-frontends understand uniformly.
+    # Mirrors `tests + models`. Kept explicit (rather than referencing the other
+    # groups) because PEP 621 does not have a "union of groups" mechanism that
+    # older pip / build-frontends understand uniformly.
     "black>=22.3.0",
     "flake8>=5.0.0",
     "isort>=5.10.1",
@@ -120,9 +115,6 @@ all = [
     "pytest-cov>=2.10.1",
     "pytest-xdist>=2.1.0",
     "ruff>=0.1.0",
-    "sphinx>=7.0.0",
-    "sphinx-markdown-builder>=0.6.0",
-    "sphinx-material>=0.0.35",
     "beautifulsoup4>=4.11.0",
     "inflection>=0.5.1",
     "requests>=2.28.0",
@@ -164,25 +156,28 @@ test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
     "pytest-xdist>=3.0",
+    # Executes examples/notebooks/*.ipynb as pytest items (`pytest --nbmake`).
+    # Opt-in via the flag, so the normal suite is unaffected; the live-tests-cron
+    # workflow runs it against the real APIs.
+    "nbmake>=1.5",
 ]
 lint = [
     "mypy>=1.0",
-    "ruff>=0.6",
-]
-docs = [
-    "sphinx>=7.0",
-    "sphinx-markdown-builder>=0.6",
-    "sphinx-material>=0.0.35",
+    # Pinned to match the pre-commit ruff hook (.pre-commit-config.yaml). The codegen
+    # generator formats its output with this ruff, so build/--check and the commit hook
+    # must agree byte-for-byte; a floating version reintroduces format drift.
+    "ruff==0.15.12",
 ]
 dev = [
     {include-group = "test"},
     {include-group = "lint"},
-    {include-group = "docs"},
     "build>=1.0",
-    "twine>=4.0",
     "ipykernel>=6.0",  # for executing examples/notebooks/*.ipynb locally
+    "jinja2>=3.1",
     "nbformat>=5.0",
     "pre-commit>=3.0",
+    "pyyaml>=6.0",
+    "twine>=4.0",
 ]
 
 
@@ -191,7 +186,7 @@ include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["."]
-exclude = ["tests*", "Sphinx-docs*", "docs*", "examples*", "archive*"]
+exclude = ["tests*", "docs*", "examples*", "archive*"]
 
 [tool.setuptools.package-data]
 sportsdataverse = ["cfb/models/*", "nfl/models/*"]

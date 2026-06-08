@@ -108,13 +108,13 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         return df
     # Replace any remaining pure-Python objects (dicts/lists) with their
     # string representations so polars can ingest them without errors.
-    for col in df.select_dtypes(include="object").columns:
+    for col in [c for c in df.columns if df[c].dtype == "object"]:
         df[col] = df[col].apply(lambda v: str(v) if isinstance(v, (dict, list)) else v)
     try:
         return pl.from_pandas(df)
     except Exception:
         # Last-resort: stringify everything that is still object-typed
-        for col in df.select_dtypes(include="object").columns:
+        for col in [c for c in df.columns if df[c].dtype == "object"]:
             df[col] = df[col].astype(str)
         return pl.from_pandas(df)
 
@@ -155,9 +155,7 @@ def _scoreboard_event_parsing(event: dict) -> dict:
             "location": team.get("location"),
             "color": team.get("color"),
             "alternate_color": team.get("alternateColor"),
-            "logo": (team.get("logos") or [{}])[0].get("href")
-            if team.get("logos")
-            else team.get("logo"),
+            "logo": (team.get("logos") or [{}])[0].get("href") if team.get("logos") else team.get("logo"),
             "score": side.get("score"),
             "winner": side.get("winner"),
             "home_away": side.get("homeAway"),
@@ -193,8 +191,7 @@ def _scoreboard_event_parsing(event: dict) -> dict:
         "venue_state": (venue.get("address") or {}).get("state"),
         "venue_indoor": venue.get("indoor"),
         "broadcast": ", ".join(
-            b.get("names", [""])[0] if b.get("names") else b.get("market", "")
-            for b in (comp.get("broadcasts") or [])
+            b.get("names", [""])[0] if b.get("names") else b.get("market", "") for b in (comp.get("broadcasts") or [])
         ),
         "note": note_text,
         "home_id": h["id"],
@@ -1017,7 +1014,7 @@ def parse_event_competitor_statistics(payload: Dict, return_as_pandas: bool = Fa
                         "stat_value": stat.get("value"),
                         "stat_display_value": stat.get("displayValue"),
                         "stat_description": stat.get("description"),
-                    }
+                    },
                 )
 
     if not rows:
@@ -1149,9 +1146,9 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
 # in priority order — the first one that resolves to a non-empty list
 # is the row source.
 _LIST_PAYLOAD_KEYS = (
-    "items",     # Core v2 paginated default
-    "entries",   # Core v2 athlete statisticslog
-    "events",    # site v2 schedules, scoreboards as fallback
+    "items",  # Core v2 paginated default
+    "entries",  # Core v2 athlete statisticslog
+    "events",  # site v2 schedules, scoreboards as fallback
     "athletes",  # team rosters as fallback
 )
 
@@ -1270,11 +1267,7 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     # keys, and ``items`` is a list. MLB / NFL / NHL use this shape;
     # NBA / WNBA / MBB / WBB / CFB use the flat shape.
     first = athletes[0] if athletes else {}
-    is_grouped = (
-        isinstance(first, dict)
-        and "position" in first
-        and isinstance(first.get("items"), list)
-    )
+    is_grouped = isinstance(first, dict) and "position" in first and isinstance(first.get("items"), list)
 
     if is_grouped:
         rows = []
@@ -1403,9 +1396,7 @@ def parse_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
 # to be zipped per athlete to produce a tidy long-form frame.
 
 
-def parse_summary_boxscore_player(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_boxscore_player(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-athlete boxscore stats from a Site v2 summary payload.
 
     Walks ``payload["boxscore"]["players"]`` (one entry per team), zips
@@ -1446,18 +1437,20 @@ def parse_summary_boxscore_player(
             for athlete_row in stat_block.get("athletes") or []:
                 ath = athlete_row.get("athlete") or {}
                 row = dict(team_row_base)
-                row.update({
-                    "athlete_id": ath.get("id"),
-                    "athlete_display_name": ath.get("displayName"),
-                    "athlete_short_name": ath.get("shortName"),
-                    "athlete_jersey": ath.get("jersey"),
-                    "athlete_position": (ath.get("position") or {}).get("abbreviation"),
-                    "starter": athlete_row.get("starter"),
-                    "active": athlete_row.get("active"),
-                    "did_not_play": athlete_row.get("didNotPlay"),
-                    "ejected": athlete_row.get("ejected"),
-                    "reason": athlete_row.get("reason"),
-                })
+                row.update(
+                    {
+                        "athlete_id": ath.get("id"),
+                        "athlete_display_name": ath.get("displayName"),
+                        "athlete_short_name": ath.get("shortName"),
+                        "athlete_jersey": ath.get("jersey"),
+                        "athlete_position": (ath.get("position") or {}).get("abbreviation"),
+                        "starter": athlete_row.get("starter"),
+                        "active": athlete_row.get("active"),
+                        "did_not_play": athlete_row.get("didNotPlay"),
+                        "ejected": athlete_row.get("ejected"),
+                        "reason": athlete_row.get("reason"),
+                    },
+                )
                 stats = athlete_row.get("stats") or []
                 for k, v in zip(keys, stats):
                     row[k] = v
@@ -1470,9 +1463,7 @@ def parse_summary_boxscore_player(
     return _to_output(df, return_as_pandas)
 
 
-def parse_summary_boxscore_team(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_boxscore_team(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-team boxscore stats from a Site v2 summary payload.
 
     Walks ``payload["boxscore"]["teams"]`` (one entry per team) and
@@ -1506,12 +1497,14 @@ def parse_summary_boxscore_team(
         }
         for stat in entry.get("statistics") or []:
             row = dict(team_row_base)
-            row.update({
-                "stat_name": stat.get("name"),
-                "stat_label": stat.get("label"),
-                "stat_display_value": stat.get("displayValue"),
-                "stat_value": stat.get("value"),
-            })
+            row.update(
+                {
+                    "stat_name": stat.get("name"),
+                    "stat_label": stat.get("label"),
+                    "stat_display_value": stat.get("displayValue"),
+                    "stat_value": stat.get("value"),
+                },
+            )
             rows.append(row)
 
     if not rows:
@@ -1521,9 +1514,7 @@ def parse_summary_boxscore_team(
     return _to_output(df, return_as_pandas)
 
 
-def parse_summary_plays(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the play-by-play list from a Site v2 summary payload.
 
     Site v2 ``summary`` ships a complete PBP at ``payload["plays"]``
@@ -1555,9 +1546,7 @@ def parse_summary_plays(
     return _to_output(df, return_as_pandas)
 
 
-def parse_summary_winprobability(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_winprobability(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract win-probability over time from a Site v2 summary payload.
 
     Site v2 ``summary`` ships per-play win probabilities at
@@ -1585,9 +1574,7 @@ def parse_summary_winprobability(
     return _to_output(df, return_as_pandas)
 
 
-def parse_summary_leaders(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-game stat leaders from a Site v2 summary payload.
 
     Site v2 ``summary`` ships per-team-per-category leaders at
@@ -1623,17 +1610,19 @@ def parse_summary_leaders(
             for leader in category.get("leaders") or []:
                 ath = leader.get("athlete") or {}
                 row = dict(team_row_base)
-                row.update({
-                    "category_name": cat_name,
-                    "category_display_name": cat_display,
-                    "athlete_id": ath.get("id"),
-                    "athlete_display_name": ath.get("displayName"),
-                    "athlete_position": (ath.get("position") or {}).get("abbreviation"),
-                    "value": leader.get("value"),
-                    "display_value": leader.get("displayValue"),
-                    "main_stat": leader.get("mainStat"),
-                    "summary": leader.get("summary"),
-                })
+                row.update(
+                    {
+                        "category_name": cat_name,
+                        "category_display_name": cat_display,
+                        "athlete_id": ath.get("id"),
+                        "athlete_display_name": ath.get("displayName"),
+                        "athlete_position": (ath.get("position") or {}).get("abbreviation"),
+                        "value": leader.get("value"),
+                        "display_value": leader.get("displayValue"),
+                        "main_stat": leader.get("mainStat"),
+                        "summary": leader.get("summary"),
+                    },
+                )
                 rows.append(row)
 
     if not rows:
@@ -1674,9 +1663,7 @@ def _row_per_item(items, return_as_pandas: bool):
     return _to_output(df, return_as_pandas)
 
 
-def parse_summary_game_info(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_game_info(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the venue + attendance from a summary payload's ``gameInfo``.
 
     ``gameInfo`` carries ``{venue: {...}, attendance: int, officials: [...]}``.
@@ -1698,9 +1685,7 @@ def parse_summary_game_info(
     return _single_row(flat, return_as_pandas)
 
 
-def parse_summary_officials(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_officials(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the per-game officials list from ``gameInfo.officials``.
 
     One row per official with ``full_name``, ``display_name``,
@@ -1710,9 +1695,7 @@ def parse_summary_officials(
     return _row_per_item(officials, return_as_pandas)
 
 
-def parse_summary_header(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_header(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the single-row game header from ``payload["header"]``.
 
     The ``header`` carries event id / uid / season / league plus a
@@ -1720,13 +1703,10 @@ def parse_summary_header(
     list is one element per game and is flattened as
     ``competitions_0_*`` columns.
     """
-    return _single_row(payload.get("header") if isinstance(payload, dict) else None,
-                       return_as_pandas)
+    return _single_row(payload.get("header") if isinstance(payload, dict) else None, return_as_pandas)
 
 
-def parse_summary_season_series(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_season_series(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract head-to-head season series context from ``payload["seasonseries"]``.
 
     Each entry summarises a head-to-head series between the two teams
@@ -1738,9 +1718,7 @@ def parse_summary_season_series(
     return _row_per_item(series, return_as_pandas)
 
 
-def parse_summary_against_the_spread(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_against_the_spread(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-team ATS records from ``payload["againstTheSpread"]``.
 
     Shape: ``[{team: {...}, records: [{...}, ...]}, ...]``. Walks both
@@ -1775,9 +1753,7 @@ def parse_summary_against_the_spread(
     return _to_output(df, return_as_pandas)
 
 
-def parse_summary_standings(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract a standings snapshot from ``payload["standings"]``.
 
     The ``standings`` section ships
@@ -1800,7 +1776,7 @@ def parse_summary_standings(
             "conference_header": grp.get("conferenceHeader"),
             "division_header": grp.get("divisionHeader"),
         }
-        for entry in ((grp.get("standings") or {}).get("entries") or []):
+        for entry in (grp.get("standings") or {}).get("entries") or []:
             row = dict(grp_base)
             # Standings entries put team identifiers at the top level
             # and the team's *display location* in the ``team`` string
@@ -1825,9 +1801,7 @@ def parse_summary_standings(
     return _to_output(df, return_as_pandas)
 
 
-def parse_summary_broadcasts(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_broadcasts(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract TV broadcast info from ``payload["broadcasts"]``.
 
     Site v2 ``summary`` ships ``broadcasts: [...]`` (often empty for
@@ -1838,22 +1812,17 @@ def parse_summary_broadcasts(
     return _row_per_item((payload or {}).get("broadcasts"), return_as_pandas)
 
 
-def parse_summary_format(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_format(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the game format from ``payload["format"]``.
 
     ``format`` carries ``{regulation: {periods, displayName, slug, clock},
     overtime: {displayName, slug, clock}}``. Flattens to a single-row
     frame with ``regulation_*`` and ``overtime_*`` columns.
     """
-    return _single_row(payload.get("format") if isinstance(payload, dict) else None,
-                       return_as_pandas)
+    return _single_row(payload.get("format") if isinstance(payload, dict) else None, return_as_pandas)
 
 
-def parse_summary_pickcenter(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_pickcenter(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract pre-game odds / picks from ``payload["pickcenter"]``.
 
     ``pickcenter`` ships one entry per book / provider with line, odds,
@@ -1864,9 +1833,7 @@ def parse_summary_pickcenter(
     return _row_per_item((payload or {}).get("pickcenter"), return_as_pandas)
 
 
-def parse_summary_odds(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_odds(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract odds entries from ``payload["odds"]``.
 
     Similar shape to ``pickcenter`` but typically a flatter list of
@@ -1875,22 +1842,17 @@ def parse_summary_odds(
     return _row_per_item((payload or {}).get("odds"), return_as_pandas)
 
 
-def parse_summary_article(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_article(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the recap article metadata from ``payload["article"]``.
 
     The ``article`` section is a single rich dict (~27 fields) with
     ``id, headline, description, byline, published, links, images``.
     Flattens to one row.
     """
-    return _single_row(payload.get("article") if isinstance(payload, dict) else None,
-                       return_as_pandas)
+    return _single_row(payload.get("article") if isinstance(payload, dict) else None, return_as_pandas)
 
 
-def parse_summary_injuries(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-team injuries from ``payload["injuries"]``.
 
     Same shape as the standalone ``espn_{league}_injuries()`` payload —
@@ -1902,9 +1864,7 @@ def parse_summary_injuries(
     return _row_per_item((payload or {}).get("injuries"), return_as_pandas)
 
 
-def parse_summary_news(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the embedded news feed from ``payload["news"]``.
 
     ``summary.news`` has the same shape as the standalone
@@ -1915,9 +1875,7 @@ def parse_summary_news(
     return _row_per_item(news.get("articles"), return_as_pandas)
 
 
-def parse_single_entity(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_single_entity(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Generic single-row flattener for any ESPN single-entity payload.
 
     ESPN's Core v2 ships ~30 endpoints that return a single resource —
@@ -1942,13 +1900,10 @@ def parse_single_entity(
         ``pl.DataFrame`` (or pandas) with one row of the flattened
         payload. Zero-row frame on empty / non-dict input.
     """
-    return _single_row(payload if isinstance(payload, dict) else None,
-                       return_as_pandas)
+    return _single_row(payload if isinstance(payload, dict) else None, return_as_pandas)
 
 
-def parse_summary_drives(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_drives(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-drive context from ``payload["drives"]`` (NFL / CFB).
 
     Football summary payloads don't expose a top-level ``plays`` list —
@@ -1976,9 +1931,7 @@ def parse_summary_drives(
     return _row_per_item(previous, return_as_pandas)
 
 
-def parse_summary_scoring_plays(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_scoring_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the scoring-plays summary from ``payload["scoringPlays"]``.
 
     NFL / CFB summary payloads ship a dedicated ``scoringPlays`` list
@@ -1991,9 +1944,7 @@ def parse_summary_scoring_plays(
     return _row_per_item((payload or {}).get("scoringPlays"), return_as_pandas)
 
 
-def parse_summary_drive_plays(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_summary_drive_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Explode NFL / CFB ``drives.previous[].plays[]`` into long-form rows.
 
     Football summary payloads don't ship a top-level ``plays[]`` array
@@ -2037,8 +1988,7 @@ def parse_summary_drive_plays(
     return _row_per_item(rows, return_as_pandas)
 
 
-def parse_summary(payload: Dict, section: str = None,
-                  return_as_pandas: bool = False):
+def parse_summary(payload: Dict, section: str = None, return_as_pandas: bool = False):
     """Dispatcher: parse one section of a Site v2 summary payload.
 
     With ``section=None`` (default), returns a ``dict`` of every parsable
@@ -2069,37 +2019,34 @@ def parse_summary(payload: Dict, section: str = None,
                 f"section=None for the full dict.",
             )
         return SUMMARY_SECTION_PARSERS[section](payload, return_as_pandas=return_as_pandas)
-    return {
-        name: fn(payload, return_as_pandas=return_as_pandas)
-        for name, fn in SUMMARY_SECTION_PARSERS.items()
-    }
+    return {name: fn(payload, return_as_pandas=return_as_pandas) for name, fn in SUMMARY_SECTION_PARSERS.items()}
 
 
 # Map summary section name -> parser. Used by parse_summary() and exposed
 # so callers can introspect the section list.
 SUMMARY_SECTION_PARSERS = {
-    "boxscore_player":      parse_summary_boxscore_player,
-    "boxscore_team":        parse_summary_boxscore_team,
-    "plays":                parse_summary_plays,
-    "winprobability":       parse_summary_winprobability,
-    "leaders":              parse_summary_leaders,
-    "game_info":            parse_summary_game_info,
-    "officials":            parse_summary_officials,
-    "header":               parse_summary_header,
-    "season_series":        parse_summary_season_series,
-    "against_the_spread":   parse_summary_against_the_spread,
-    "standings":            parse_summary_standings,
-    "broadcasts":           parse_summary_broadcasts,
-    "format":               parse_summary_format,
-    "pickcenter":           parse_summary_pickcenter,
-    "odds":                 parse_summary_odds,
-    "article":              parse_summary_article,
-    "injuries":             parse_summary_injuries,
-    "news":                 parse_summary_news,
+    "boxscore_player": parse_summary_boxscore_player,
+    "boxscore_team": parse_summary_boxscore_team,
+    "plays": parse_summary_plays,
+    "winprobability": parse_summary_winprobability,
+    "leaders": parse_summary_leaders,
+    "game_info": parse_summary_game_info,
+    "officials": parse_summary_officials,
+    "header": parse_summary_header,
+    "season_series": parse_summary_season_series,
+    "against_the_spread": parse_summary_against_the_spread,
+    "standings": parse_summary_standings,
+    "broadcasts": parse_summary_broadcasts,
+    "format": parse_summary_format,
+    "pickcenter": parse_summary_pickcenter,
+    "odds": parse_summary_odds,
+    "article": parse_summary_article,
+    "injuries": parse_summary_injuries,
+    "news": parse_summary_news,
     # NFL / CFB only — return zero-row frames for other sports
-    "drives":               parse_summary_drives,
-    "drive_plays":          parse_summary_drive_plays,
-    "scoring_plays":        parse_summary_scoring_plays,
+    "drives": parse_summary_drives,
+    "drive_plays": parse_summary_drive_plays,
+    "scoring_plays": parse_summary_scoring_plays,
 }
 
 

@@ -31,19 +31,21 @@ def test_basic_cfb_pbp(generated_cfb_data):
 
 def test_cfb_adv_box_score(cfb_box_score):
     assert cfb_box_score is not None
-    assert not set(cfb_box_score.keys()).difference(
-        {
-            "win_pct",
-            "pass",
-            "team",
-            "situational",
-            "rush",
-            "receiver",
-            "defensive",
-            "turnover",
-            "drives",
-        },
-    )
+    # Subset direction (expected ⊆ actual): the box score must contain these sections;
+    # additive sections are allowed so the test doesn't break when new ones are introduced.
+    expected_sections = {
+        "pass",
+        "rush",
+        "receiver",
+        "team",
+        "situational",
+        "defensive",
+        "defensive_players",
+        "specialists",
+        "turnover",
+        "drives",
+    }
+    assert expected_sections.issubset(set(cfb_box_score.keys()))
 
 
 def test_havoc_rate(cfb_box_score):

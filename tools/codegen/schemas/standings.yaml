@@ -1,0 +1,97 @@
+schema: standings
+kind: dataframe
+description: One row per team's standings record.
+columns:
+- name: group_name
+  type: character
+  description: Group name.
+- name: group_abbreviation
+  type: character
+  description: Group abbreviation.
+- name: team_id
+  type: character
+  description: Team id.
+- name: team_name
+  type: character
+  description: Team name.
+- name: team_abbreviation
+  type: character
+  description: Team abbreviation.
+- name: team_display_name
+  type: character
+  description: Team display name.
+- name: team_location
+  type: character
+  description: Team location.
+- name: team_logo
+  type: character
+  description: Team logo.
+- name: avg_points_against
+  type: double
+  description: Avg points against.
+- name: avg_points_for
+  type: double
+  description: Avg points for.
+- name: clincher
+  type: double
+  description: Clincher.
+- name: differential
+  type: double
+  description: Differential.
+- name: division_win_percent
+  type: double
+  description: Division win percent.
+- name: games_behind
+  type: double
+  description: Games behind.
+- name: league_win_percent
+  type: double
+  description: League win percent.
+- name: losses
+  type: double
+  description: Losses.
+- name: playoff_seed
+  type: double
+  description: Playoff seed.
+- name: point_differential
+  type: double
+  description: Point differential.
+- name: points
+  type: double
+  description: Points.
+- name: points_against
+  type: double
+  description: Points against.
+- name: points_for
+  type: double
+  description: Points for.
+- name: streak
+  type: double
+  description: Streak.
+- name: win_percent
+  type: double
+  description: Win percent.
+- name: wins
+  type: double
+  description: Wins.
+- name: games_ahead
+  type: double
+  description: Games ahead.
+- name: overall
+  type: character
+  description: Overall.
+- name: home
+  type: character
+  description: Home.
+- name: road
+  type: character
+  description: Road.
+- name: vs. div.
+  type: character
+  description: Vs. div..
+- name: vs. conf.
+  type: character
+  description: Vs. conf..
+- name: last ten games
+  type: character
+  description: Last ten games.

@@ -124,11 +124,11 @@ def test_espn_mlb_scoreboard_returns_events_for_known_date():
 # ===========================================================================
 
 
-def test_espn_nba_athlete_overview_lebron():
-    from sportsdataverse.nba.nba_espn_ext import espn_nba_athlete_overview
+def test_espn_nba_player_overview_lebron():
+    from sportsdataverse.nba.nba_espn_ext import espn_nba_player_overview
 
     # LeBron James ESPN id = 1966
-    payload = espn_nba_athlete_overview(athlete_id=1966)
+    payload = espn_nba_player_overview(athlete_id=1966)
     assert isinstance(payload, dict), "expected a dict response"
     assert len(payload) > 0, "payload is empty for LeBron James (id=1966)"
     # Web v3 overview always includes athlete and statsSummary (or similar)
@@ -136,11 +136,11 @@ def test_espn_nba_athlete_overview_lebron():
     assert top_keys, "payload has no top-level keys"
 
 
-def test_espn_mlb_athlete_overview_aaron_judge():
-    from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_athlete_overview
+def test_espn_mlb_player_overview_aaron_judge():
+    from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_player_overview
 
     # Aaron Judge ESPN id = 33192
-    payload = espn_mlb_athlete_overview(athlete_id=33192)
+    payload = espn_mlb_player_overview(athlete_id=33192)
     assert isinstance(payload, dict), "expected a dict response"
     assert len(payload) > 0, "payload is empty for Aaron Judge (id=33192)"
     top_keys = set(payload.keys())
@@ -169,10 +169,10 @@ def test_espn_cfb_conferences_returns_groups():
 
 
 def test_nhl_web_standings_returns_standings_list():
-    from sportsdataverse.nhl.nhl_api_web import nhl_web_standings
+    from sportsdataverse.nhl.nhl_api_web import nhl_standings
 
     # Use a past date from the 2023-24 regular season to get stable data
-    payload = nhl_web_standings(date="2024-04-01")
+    payload = nhl_standings(date="2024-04-01")
     assert isinstance(payload, dict), "expected a dict response"
     standings = payload.get("standings") or []
     assert len(standings) >= 32, f"expected >=32 team rows in standings, got {len(standings)}"
@@ -192,10 +192,10 @@ def test_nhl_web_schedule_returns_game_week():
 
 
 def test_nhl_web_roster_toronto_2024():
-    from sportsdataverse.nhl.nhl_api_web import nhl_web_roster
+    from sportsdataverse.nhl.nhl_api_web import nhl_roster
 
     # TOR 2024 (end-year → "20232024")
-    payload = nhl_web_roster(team="TOR", season=2024)
+    payload = nhl_roster(team="TOR", season=2024)
     assert isinstance(payload, dict), "expected a dict response"
     forwards = payload.get("forwards") or []
     defense = payload.get("defensemen") or []
@@ -210,7 +210,10 @@ def test_nhl_web_roster_toronto_2024():
 
 
 def test_mlb_api_teams_returns_30_teams_for_2024():
-    from sportsdataverse.mlb.mlb_api import mlb_api_teams
+    # mlb_api_teams is an irregular (multi-param) wrapper kept hand-written in
+    # mlb_api_extra after the codegen cutover; import from the package namespace,
+    # which re-exports both the generated mlb_api wrappers and the residuals.
+    from sportsdataverse.mlb import mlb_api_teams
 
     payload = mlb_api_teams(season=2024)
     teams = payload.get("teams") or []
@@ -220,7 +223,9 @@ def test_mlb_api_teams_returns_30_teams_for_2024():
 
 
 def test_mlb_api_schedule_opening_day_2024_returns_games():
-    from sportsdataverse.mlb.mlb_api import mlb_api_schedule
+    # mlb_api_schedule is a hand-written residual in mlb_api_extra (it forwards
+    # arbitrary **filters); import from the package namespace, which re-exports it.
+    from sportsdataverse.mlb import mlb_api_schedule
 
     payload = mlb_api_schedule(date="2024-03-20", sport_id=1)
     dates = payload.get("dates") or []
@@ -263,39 +268,7 @@ def test_statcast_leaderboard_expected_statistics_2024_nonempty():
 
 
 # ===========================================================================
-# 8. Bracketology (1 test)
-# ===========================================================================
-
-
-def test_espn_mbb_bracketology_current_season_smoke():
-    """Bracketology is ephemeral — ESPN only publishes it during the projection
-    window (roughly Jan–Mar).  Outside that window the endpoint 404s and
-    ``download()`` raises ``NoESPNDataError`` after exhausting retries.
-
-    This test treats both outcomes as valid:
-      * If the endpoint returns a non-empty dict, the call succeeded.
-      * If ``NoESPNDataError`` is raised, the endpoint is offline (sparse data)
-        — we mark the test as xfail rather than failing loudly, so the pattern
-        is still verified to be structurally correct.
-    """
-    from sportsdataverse.errors import NoESPNDataError
-    from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_bracketology
-
-    try:
-        payload = espn_mbb_bracketology(season=2025)
-    except NoESPNDataError:
-        pytest.xfail(
-            "ESPN bracketology endpoint is offline outside tournament-projection "
-            "window — this is expected sparse-data behaviour, not a bug.",
-        )
-        return  # unreachable, but keeps linters happy
-
-    assert isinstance(payload, dict), "expected a dict response"
-    assert payload is not None, "bracketology returned None"
-
-
-# ===========================================================================
-# 9. Cross-league pattern: smoke-test the factory
+# 8. Cross-league pattern: smoke-test the factory
 # ===========================================================================
 
 
@@ -323,9 +296,9 @@ def test_espn_mlb_scoreboard_is_callable_with_correct_name():
 
 
 def test_espn_cfb_season_recruits_2024_returns_items():
-    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_season_recruits
+    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_recruits
 
-    payload = espn_cfb_season_recruits(season=2024, limit=10)
+    payload = espn_cfb_recruits(season=2024, limit=10)
     assert isinstance(payload, dict), "expected a dict response"
     # Core v2 season_recruits wraps its list under 'items' (paginated response)
     items = payload.get("items") or []
@@ -392,10 +365,10 @@ def test_parse_athlete_overview_handles_wnba_payload():
     import polars as pl
 
     from sportsdataverse._common_espn_parsers import parse_athlete_overview
-    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_athlete_overview
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_player_overview
 
     # A'ja Wilson — ESPN id 3149391, perennial MVP candidate
-    raw = espn_wnba_athlete_overview(athlete_id=3149391)
+    raw = espn_wnba_player_overview(athlete_id=3149391)
     df = parse_athlete_overview(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
     # Overview parser flattens to a single-row summary OR a multi-row stats

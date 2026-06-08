@@ -18,15 +18,25 @@ Follow](https://img.shields.io/twitter/follow/sportsdataverse?color=blue&label=%
 
 See [CHANGELOG.md](https://py.sportsdataverse.org/CHANGELOG) for details.
 
-The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to
-provide the community with a Python package for working with sports
-data as a companion to the [cfbfastR](https://cfbfastR.sportsdataverse.org/),
-[hoopR](https://hoopR.sportsdataverse.org/), and
-[wehoop](https://wehoop.sportsdataverse.org/) R packages. Beyond data
-aggregation and tidying ease, one of the multitude of services that
-[sportsdataverse-py](https://py.sportsdataverse.org) provides is for
-benchmarking open-source expected points and win probability metrics
-for American Football.
+[sportsdataverse-py](https://py.sportsdataverse.org) gives the community
+free, tidy, analysis-ready sports data in Python. It is the Python member
+of the **[SportsDataverse](https://www.sportsdataverse.org)** family and
+deliberately mirrors its R sisters — [hoopR](https://hoopR.sportsdataverse.org/)
+(NBA/MBB), [wehoop](https://wehoop.sportsdataverse.org/) (WNBA/WBB),
+[cfbfastR](https://cfbfastR.sportsdataverse.org/) (CFB),
+[baseballr](https://billpetti.github.io/baseballr/) (MLB), and
+[fastRhockey](https://fastRhockey.sportsdataverse.org/) (NHL/PWHL) — so the
+function you know in R is the function you call in Python. The NFL module
+mirrors the [nflverse](https://nflverse.nflverse.com)'s
+[nflreadpy](https://github.com/nflverse/nflreadpy), and the package plays
+well with the wider [PySport](https://opensource.pysport.org) ecosystem.
+Beyond aggregation and tidying, the project also exists to make open-source
+expected-points and win-probability models reproducible and benchmarkable,
+especially for American football.
+
+> **New here?** Read [Ecosystem & philosophy](https://py.sportsdataverse.org/docs/ecosystem)
+> for the design philosophy, the full function-naming paradigm, and how the
+> Python and R packages line up.
 
 ## Quickstart
 
@@ -70,7 +80,7 @@ below.
 |---|---|---|
 | NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) — 118 wrappers |
 | WNBA | `sportsdataverse.wnba` | ESPN — 124 wrappers |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (bracketology, rankings, recruits) — 121 wrappers |
+| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) — 121 wrappers |
 | WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only — 126 wrappers |
 | CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) — 123 wrappers |
 | NFL | `sportsdataverse.nfl` | ESPN + football-only (QBR) — 119 wrappers |

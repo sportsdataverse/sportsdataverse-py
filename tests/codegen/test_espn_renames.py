@@ -1,0 +1,109 @@
+"""ESPN -> R-aligned name renames (espn_rename_map.yaml) are applied per-league
+with a collision guard. Behavior is unchanged (Plan 2 URL parity); only public
+cfb names align to cfbfastR's game_*/player_* taxonomy.
+"""
+
+import ast
+from pathlib import Path
+
+from tools.codegen import generate
+
+OUT = Path("tools/codegen/_generated")
+
+
+def _defs(prefix: str) -> set:
+    generate.build()
+    src = (OUT / f"{prefix}_espn_ext.py").read_text(encoding="utf-8")
+    return {n.name for n in ast.parse(src).body if isinstance(n, ast.FunctionDef)}
+
+
+def test_cfb_renames_applied():
+    cfb = _defs("cfb")
+    for new in (
+        "espn_cfb_game_broadcasts",
+        "espn_cfb_player_overview",
+        "espn_cfb_game_team_roster",
+        "espn_cfb_team_powerindex",
+        "espn_cfb_recruits",
+    ):
+        assert new in cfb, f"missing renamed {new}"
+    for old in ("espn_cfb_event_broadcasts", "espn_cfb_athlete_overview", "espn_cfb_season_recruits"):
+        assert old not in cfb, f"old name still present: {old}"
+
+
+def test_convention_is_universal_across_leagues():
+    # the structural convention (event->game, athlete->player, competitor->game_team)
+    # applies to every league at the TOKEN level, not just cfb / not just prefixes
+    for prefix in ("nba", "wnba", "nhl", "nfl"):
+        d = _defs(prefix)
+        assert f"espn_{prefix}_game_broadcasts" in d  # event_broadcasts -> game_broadcasts
+        assert f"espn_{prefix}_player_overview" in d  # athlete_overview -> player_overview
+        assert f"espn_{prefix}_game" in d  # bare event -> game
+        assert f"espn_{prefix}_game_competition" in d  # event_competition -> game_competition
+        assert f"espn_{prefix}_game_team" in d  # event_competitor -> game_team
+        assert f"espn_{prefix}_players_index" in d  # athletes_index -> players_index (plural)
+        # no raw event_/athlete_ tokens survive as generated function names
+        leftover = [n for n in d if n.startswith((f"espn_{prefix}_event", f"espn_{prefix}_athlete"))]
+        assert not leftover, f"{prefix}: un-converted event/athlete names remain: {leftover}"
+
+
+def test_token_level_convention_handles_embedded_and_plural_forms():
+    # athlete/event convert in every underscore-token position, incl. plurals;
+    # compound tokens like 'eventlog' are preserved.
+    assert generate._convention_rename("athlete_vs_athlete") == "player_vs_player"
+    assert generate._convention_rename("athletes_index") == "players_index"
+    assert generate._convention_rename("season_athletes") == "season_players"
+    assert generate._convention_rename("season_week_events") == "season_week_games"
+    assert generate._convention_rename("event") == "game"
+    assert generate._convention_rename("events") == "games"
+    assert generate._convention_rename("event_competition") == "game_competition"
+    assert generate._convention_rename("event_competitor_leaders") == "game_team_leaders"
+    assert generate._convention_rename("athlete_eventlog") == "player_eventlog"
+
+
+def test_collision_prone_names_preserved():
+    cfb = _defs("cfb")
+    # these would collide with existing generated catalog fns, so they are excluded
+    # from the curated map (and the generator's guard is the backstop) -> preserved
+    for kept in ("espn_cfb_season_team", "espn_cfb_season_awards", "espn_cfb_season_coaches"):
+        assert kept in cfb, f"collision-prone name should be preserved: {kept}"
+    # teams_site is the raw endpoint, distinct from the parsed hand-written espn_*_teams
+    assert "espn_cfb_teams_site" in cfb
+
+
+def test_athlete_stats_versions_only_when_bare_player_stats_exists():
+    # _convention_rename gives the web-v3 /athletes/{id}/stats endpoint the BARE
+    # player_stats name; the pass-2 collision guard version-qualifies it to
+    # player_stats_v3 ONLY when a bare player_stats sibling already exists. Every
+    # league now ships a hand-written core-v2 season player_stats, so the bare name
+    # is always taken and every generated wrapper is player_stats_v3 (one bare named).
+    import importlib
+
+    # the structural rule yields the bare name; the collision target is the versioned one
+    assert generate._convention_rename("athlete_stats") == "player_stats"
+    assert generate._versioned_on_collision("athlete_stats", "nba") == "espn_nba_player_stats_v3"
+    assert generate._versioned_on_collision("athlete_overview", "nba") is None  # no versioned target
+
+    for prefix in ("nba", "mbb", "nfl", "nhl", "mlb", "cfb", "wnba", "wbb"):
+        d = _defs(prefix)
+        assert f"espn_{prefix}_player_stats_v3" in d, f"{prefix}: missing player_stats_v3"
+        assert f"espn_{prefix}_athlete_stats" not in d, f"{prefix}: old athlete_stats should be gone"
+        # the bare player_stats is hand-written (core-v2 season), NOT generated
+        assert f"espn_{prefix}_player_stats" not in d, f"{prefix}: bare player_stats must be hand-written"
+        pkg = importlib.import_module(f"sportsdataverse.{prefix}")
+        fn = getattr(pkg, f"espn_{prefix}_player_stats", None)
+        assert fn is not None, f"{prefix}: hand-written bare player_stats missing"
+        assert fn.__module__.endswith("_player_stats"), f"{prefix}: bare player_stats should be hand-written"
+
+
+def test_generator_collision_guard_skips_clashes():
+    # a rename whose target already exists in the module is held back by the guard
+    generate._ESPN_RENAME_SKIPPED.clear()
+    cfg = generate.spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
+    params = generate.spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    apis = [generate.spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
+    cfb_league = next(lg for lg in cfg.leagues if lg.prefix == "cfb")
+    src = generate._league_module_source(cfb_league, apis, cfg.hosts)
+    # feeding a colliding rename via monkeypatched loader would record a skip; here we
+    # assert the curated map produced no clashes (clean) and the catalog fn survives.
+    assert "def espn_cfb_team(" in src

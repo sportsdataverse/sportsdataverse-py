@@ -1,0 +1,82 @@
+api: espn_web_v3
+host: web_v3
+name_pattern: espn_{prefix}_{short}
+endpoints:
+- short: athlete_overview
+  scope: universal
+  path: /{sport}/{league}/athletes/{athlete_id}/overview
+  path_params:
+  - name: athlete_id
+    type: int|str
+    required: true
+  parser: parse_athlete_overview
+  example_args:
+    athlete_id: '4239'
+- short: athlete_stats
+  scope: universal
+  path: /{sport}/{league}/athletes/{athlete_id}/stats
+  path_params:
+  - name: athlete_id
+    type: int|str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  parser: parse_athlete_stats
+  example_args:
+    athlete_id: '4239'
+- short: athlete_gamelog
+  scope: universal
+  path: /{sport}/{league}/athletes/{athlete_id}/gamelog
+  path_params:
+  - name: athlete_id
+    type: int|str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  parser: parse_athlete_gamelog
+  example_args:
+    athlete_id: '4239'
+- short: athlete_splits
+  scope: universal
+  path: /{sport}/{league}/athletes/{athlete_id}/splits
+  path_params:
+  - name: athlete_id
+    type: int|str
+    required: true
+  extra_params:
+  - name: season
+    query_key: season
+    type: int|str
+  parser: parse_athlete_splits
+  example_args:
+    athlete_id: '4239'
+- short: leaders
+  scope: universal
+  path: /{sport}/{league}/statistics/byathlete
+  extra_params:
+  - name: category
+    query_key: category
+    type: str
+  - name: season
+    query_key: season
+    type: int|str
+  - name: season_type
+    query_key: seasontype
+    type: int
+  - name: limit
+    query_key: limit
+    type: int
+    default: 50
+  - name: page
+    query_key: page
+    type: int
+    default: 1
+  - name: sort
+    query_key: sort
+    type: str
+  parser: parse_leaders
+  returns_schema: leaders

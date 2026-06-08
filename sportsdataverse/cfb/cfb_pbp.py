@@ -66,6 +66,188 @@ qbr_model.load_model(qbr_model_file)
 logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
 
+# ---------------------------------------------------------------------------
+# Module-level pure-function helpers (no network, no class state)
+# ---------------------------------------------------------------------------
+
+_OVERTURNED_RE = re.compile(r"\(Original Play:.*?\)\s*$", re.IGNORECASE | re.DOTALL)
+
+
+def _strip_overturned_text(text):
+    """Drop the negated ``(Original Play: …)`` clause from reviewed/overturned plays.
+
+    ESPN appends the *reversed* play description in a trailing
+    ``(Original Play: …)`` parenthetical after ``CALL OVERTURNED``. Any
+    fumble/recovery parsing must run on the kept (ruled) portion only, or a
+    reversed fumble gets counted as a real turnover (spec finding #17).
+    """
+    if not text:
+        return text
+    return _OVERTURNED_RE.sub("", text).strip()
+
+
+_RECOVERY_ABBREV_RE = re.compile(r"recovered by\s+([A-Z&]{2,})\b")
+
+# Penalty-detail labels that indicate a DEFENSIVE foul (charged to def_pos_team).
+# NOTE: "Pass Interference" is included because the upstream __setup_penalty_data
+# emits the generic "Pass Interference" label for BOTH offensive and defensive PI
+# (the generic branch fires before the offensive/defensive-specific branches), so
+# bare "Pass Interference" cannot be assumed offensive. A later task refines penalty
+# attribution by parsing the "PENALTY {TEAM_ABBR}" token from the play text.
+_DEFENSIVE_PENALTIES = frozenset(
+    {
+        "Defensive Holding",
+        "Defensive Pass Interference",
+        "Defensive Offside",
+        "Roughing the Passer",
+        "Roughing the Kicker",
+        "Roughing the Holder",
+        "Roughing the Snapper",
+        "12 Men on the Field",
+        "Neutral Zone Infraction",
+        "Encroachment",
+        "Targeting",
+        "Pass Interference",
+    },
+)
+
+
+def _parse_recovery_abbrev(text):
+    """Return the uppercase team abbreviation that recovered the ball, or None.
+
+    Operates on text that has already had overturned clauses stripped.
+    """
+    if not text:
+        return None
+    m = _RECOVERY_ABBREV_RE.search(text)
+    return m.group(1).upper() if m else None
+
+
+def _parse_recovery_abbrevs(text):
+    """Return the ordered list of uppercase team abbreviations that recovered the ball.
+
+    A single play can contain multiple ``recovered by {TEAM}`` clauses when the ball
+    changes hands more than once (e.g. offense fumbles, defense recovers and returns,
+    defense fumbles, offense recovers). Each clause is one change of possession; walking
+    them in order yields the possession chain used to charge a fumble-lost per change.
+    Operates on text that has already had overturned clauses stripped.
+    """
+    if not text:
+        return []
+    return [m.upper() for m in _RECOVERY_ABBREV_RE.findall(text)]
+
+
+_PENALTY_ABBREV_RE = re.compile(r"PENALTY\s+([A-Z&]{2,})\b")
+
+
+def _parse_penalty_abbrev(text):
+    """Return the uppercase team abbreviation of the PENALIZED team, or None.
+
+    ESPN writes ``PENALTY {TEAM_ABBR} {foul} …`` where ``{TEAM_ABBR}`` is the team that
+    committed the foul (e.g. ``"PENALTY FSU Pass Interference (#15 S.Arnoux)"``). This is the
+    authoritative penalized team and correctly distinguishes offensive vs defensive fouls
+    (e.g. offensive vs defensive pass interference), which the ``penalty_detail`` label alone
+    does not. Returns the first match; ``None`` when no ``PENALTY {ABBR}`` token is present.
+    """
+    if not text:
+        return None
+    m = _PENALTY_ABBREV_RE.search(text)
+    return m.group(1).upper() if m else None
+
+
+def _espn_num(value):
+    """Best-effort numeric cast of an ESPN ``displayValue``.
+
+    Returns ``int`` for whole numbers, ``float`` for decimals, and the original value
+    unchanged when it is not purely numeric (e.g. ``'8-37'``, ``'31:24'``, ``'16/32'``).
+    """
+    if not isinstance(value, str):
+        return value
+    v = value.strip()
+    if v.lstrip("-").isdigit():
+        return int(v)
+    try:
+        f = float(v)
+    except ValueError:
+        return value
+    # Reject non-finite floats ("inf"/"nan") so the box stays valid JSON.
+    return f if (f == f and f not in (float("inf"), float("-inf"))) else value
+
+
+def _parse_espn_team_box(boxscore):
+    """Parse ESPN's official team box statistics into a per-team dict keyed by team id.
+
+    ESPN's team box (``summary['boxscore']['teams']``) is the authoritative source for
+    countable team totals -- turnovers, fumbles lost, interceptions, total/passing/rushing
+    yards, penalties, first downs, possession time, etc. It is surfaced verbatim (numbers
+    cast where clean) so downstream totals can come straight from ESPN rather than the
+    lossy play-by-play derivation. Hyphenated combos are also split into integer fields:
+    ``totalPenaltiesYards`` ('8-37') -> ``penalties``/``penalty_yards``; ``completionAttempts``
+    ('16-32') -> ``completions``/``pass_attempts``.
+    """
+    out = {}
+    for t in (boxscore or {}).get("teams", []) or []:
+        team = t.get("team", {}) or {}
+        tid = team.get("id")
+        if tid is None:
+            continue
+        rec = {
+            "team_id": int(tid),
+            "abbreviation": team.get("abbreviation"),
+            "display_name": team.get("displayName"),
+            "home_away": t.get("homeAway"),
+        }
+        for st in t.get("statistics", []) or []:
+            name = st.get("name")
+            dv = st.get("displayValue")
+            if not name:
+                continue
+            if name == "totalPenaltiesYards" and isinstance(dv, str) and "-" in dv:
+                p, _, y = dv.partition("-")
+                rec["penalties"] = _espn_num(p)
+                rec["penalty_yards"] = _espn_num(y)
+            elif name == "completionAttempts" and isinstance(dv, str) and "-" in dv:
+                c, _, a = dv.partition("-")
+                rec["completions"] = _espn_num(c)
+                rec["pass_attempts"] = _espn_num(a)
+            rec[name] = _espn_num(dv)
+        out[int(tid)] = rec
+    return out
+
+
+def _parse_espn_player_box(boxscore):
+    """Parse ESPN's official per-player box into a flat list of rows.
+
+    Each row carries ``team_id`` / ``team_abbreviation`` / ``category`` / ``athlete_id`` /
+    ``athlete`` plus the category's stat keys mapped to the athlete's values (e.g. passing
+    ``completions/passingAttempts``, ``passingYards``, ``interceptions``; defensive
+    ``sacks``, ``tacklesForLoss``, ``passesDefended``; ``fumbles`` / ``fumblesLost`` /
+    ``fumblesRecovered``; ``puntReturns`` / ``kickReturns`` ...). ESPN's authoritative
+    player stats with clean display names.
+    """
+    rows = []
+    for pg in (boxscore or {}).get("players", []) or []:
+        team = pg.get("team", {}) or {}
+        tid = team.get("id")
+        tab = team.get("abbreviation")
+        for cat in pg.get("statistics", []) or []:
+            cname = cat.get("name")
+            keys = cat.get("keys") or []
+            for a in cat.get("athletes", []) or []:
+                ath = a.get("athlete", {}) or {}
+                stats = a.get("stats") or []
+                row = {
+                    "team_id": int(tid) if tid is not None else None,
+                    "team_abbreviation": tab,
+                    "category": cname,
+                    "athlete_id": ath.get("id"),
+                    "athlete": ath.get("displayName"),
+                }
+                for k, v in zip(keys, stats):
+                    row[k] = _espn_num(v)
+                rows.append(row)
+    return rows
+
 
 class CFBPlayProcess(object):
     gameId = 0
@@ -437,7 +619,13 @@ class CFBPlayProcess(object):
                     .and_(pl.col("start.yardsToEndzone") == pl.col("lead_start_yardsToEndzone"))
                     .and_(pl.col("start.distance") == pl.col("lead_start_distance"))
                     .and_(pl.col("text").is_in(pl.col("lead_text").implode()))
-                    .and_(pl.col("type.text") != "Timeout"),
+                    .and_(pl.col("type.text") != "Timeout")
+                    # Guard: an "End of <period/half/game>" marker inherits the preceding
+                    # play's start state (team/down/distance/yardsToEndzone), so without
+                    # this the loose is_in(lead_text) match spuriously flags the real
+                    # play right before it (e.g. an end-of-half Hail Mary interception)
+                    # as a duplicate and drops it. Never dedupe against an end-marker lead.
+                    .and_(pl.col("lead_text").str.contains(r"(?i)end of|end period|end quarter") == False),
                 )
                 .then(pl.lit(True))
                 .otherwise(pl.lit(False)),
@@ -604,15 +792,17 @@ class CFBPlayProcess(object):
                     3
                     - pl.struct("id", "period.number").map_elements(
                         lambda x: (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] <= 2)
-                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
+                            (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] <= 2)
+                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
+                                )
                             )
-                        )
-                        | (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] > 2)
-                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
+                            | (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] > 2)
+                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
+                                )
                             )
                         ),
                         return_dtype=pl.Int64,
@@ -622,15 +812,17 @@ class CFBPlayProcess(object):
                     3
                     - pl.struct("id", "period.number").map_elements(
                         lambda x: (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] <= 2)
-                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
+                            (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] <= 2)
+                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
+                                )
                             )
-                        )
-                        | (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] > 2)
-                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
+                            | (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] > 2)
+                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
+                                )
                             )
                         ),
                         return_dtype=pl.Int64,
@@ -1469,6 +1661,60 @@ class CFBPlayProcess(object):
             * Fix play types
         """
         # --------------------------------------------------
+        # --- Legacy / pre-2014 ESPN label normalization ----
+        # These raw labels appear only in older seasons (verified 2004-2013); every
+        # rule is gated on the raw label, so it is a no-op on modern data.
+        play_df = play_df.with_columns(
+            # ESPN's pre-2014 *successful* two-point label is the bare "2pt Conversion"
+            # (failed ones are already "Two-Point Conversion Missed"). Resolve good/missed
+            # via scoringPlay so the play routes through the two-point EPA/scoring path
+            # instead of being treated as a generic scrimmage play.
+            pl.when((pl.col("type.text") == "2pt Conversion").and_(pl.col("scoringPlay") == True))
+            .then(pl.lit("Two-Point Conversion Good"))
+            .when(pl.col("type.text") == "2pt Conversion")
+            .then(pl.lit("Two-Point Conversion Missed"))
+            # 2004 "Unknown" is a grab-bag of period/game markers and a few misclassified
+            # kicks. Relabel the recognizable ones from the text so the non-plays are
+            # excluded (End Period) and the real kicks get a proper type + EPA, instead of
+            # being scored as generic plays (which produced garbage EPA on non-plays).
+            .when(
+                (pl.col("type.text") == "Unknown").and_(
+                    pl.col("text").str.contains(r"(?i)(start|end) of (the )?.*(quarter|half|game|overtime|regulation)"),
+                ),
+            )
+            .then(pl.lit("End Period"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)field goal"))
+                .and_(pl.col("text").str.contains(r"(?i)no good|missed|blocked")),
+            )
+            .then(pl.lit("Field Goal Missed"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)field goal"))
+                .and_(pl.col("text").str.contains(r"(?i)is good")),
+            )
+            .then(pl.lit("Field Goal Good"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)extra point"))
+                .and_(pl.col("text").str.contains(r"(?i)no good|missed|blocked")),
+            )
+            .then(pl.lit("Extra Point Missed"))
+            .when(
+                (pl.col("type.text") == "Unknown")
+                .and_(pl.col("text").str.contains(r"(?i)extra point"))
+                .and_(pl.col("text").str.contains(r"(?i)is good")),
+            )
+            .then(pl.lit("Extra Point Good"))
+            # Pre-2014 onside-kick-recovered rows ("Onside kick recovered by ...") carry the
+            # label "Kickoff Return (Defense)"; normalize to the generic kickoff label so
+            # they fall in kickoff_vec and get consistent kickoff handling.
+            .when(pl.col("type.text") == "Kickoff Return (Defense)")
+            .then(pl.lit("Kickoff"))
+            .otherwise(pl.col("type.text"))
+            .alias("type.text"),
+        )
         play_df = (
             play_df.with_columns(
                 # --- Fix Strip Sacks to Fumbles ----
@@ -1478,7 +1724,13 @@ class CFBPlayProcess(object):
                     .and_(pl.col("change_of_poss") == 1)
                     .and_(pl.col("td_play") == False)
                     .and_(pl.col("start.down") != 4)
-                    .and_(pl.col("type.text").is_in(defense_score_vec) == False),
+                    .and_(pl.col("type.text").is_in(defense_score_vec) == False)
+                    # Do not sweep interception-return-fumbles into "Fumble Recovery
+                    # (Opponent)": the interception already set change_of_poss=1, so the
+                    # strip-sack predicate matches a pick whose returner later fumbles.
+                    # ESPN's original int label is still present here (normalization to
+                    # "Interception Return" happens later in this method), so guard on it.
+                    .and_(pl.col("type.text").is_in(int_vec) == False),
                 )
                 .then(pl.lit("Fumble Recovery (Opponent)"))
                 .otherwise(pl.col("type.text"))
@@ -1489,7 +1741,10 @@ class CFBPlayProcess(object):
                     (pl.col("fumble_vec") == True)
                     .and_(pl.col("pass") == True)
                     .and_(pl.col("change_of_poss") == 1)
-                    .and_(pl.col("td_play") == True),
+                    .and_(pl.col("td_play") == True)
+                    # Same interception guard as the non-TD strip-sack rule above: a
+                    # pick-six is an "Interception Return Touchdown", not a fumble TD.
+                    .and_(pl.col("type.text").is_in(int_vec) == False),
                 )
                 .then(pl.lit("Fumble Recovery (Opponent) Touchdown"))
                 .otherwise(pl.col("type.text"))
@@ -1600,6 +1855,29 @@ class CFBPlayProcess(object):
             .with_columns(
                 pl.when((pl.col("type.text").is_in(["Blocked Punt"])).and_(pl.col("text").str.contains("(?i)for a TD")))
                 .then(pl.lit("Blocked Punt Touchdown"))
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
+                # -- Fix blocked field goals ESPN mislabels as "Extra Point Missed" ----
+                # A blocked FG returned by the defense is sometimes typed "Extra Point
+                # Missed" by ESPN, which routes it through PAT-scoring EPA logic. Relabel to
+                # the correct blocked-FG type (TD variant when returned for a score). Gate on
+                # text showing a blocked FIELD GOAL -- "blocked" plus an FG/field-goal token --
+                # so a genuine blocked/missed PAT (no FG token) is left untouched.
+                pl.when(
+                    (pl.col("type.text") == "Extra Point Missed")
+                    .and_(pl.col("text").str.contains("(?i)blocked"))
+                    .and_(pl.col("text").str.contains(r"(?i)\bfg\b|field goal"))
+                    .and_((pl.col("td_play") == True).or_(pl.col("text").str.contains("(?i)for a TD"))),
+                )
+                .then(pl.lit("Blocked Field Goal Touchdown"))
+                .when(
+                    (pl.col("type.text") == "Extra Point Missed")
+                    .and_(pl.col("text").str.contains("(?i)blocked"))
+                    .and_(pl.col("text").str.contains(r"(?i)\bfg\b|field goal")),
+                )
+                .then(pl.lit("Blocked Field Goal"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -1802,6 +2080,25 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
+        )
+
+        # --- Normalize separate extra-point rows to the no-down sentinel ----
+        # Pre-2005 games sometimes carry a real down/distance on the separate
+        # extra-point rows (2005+ already use -1, and two-point rows already use -1
+        # in every era). Force the sentinel so these no-down scoring plays stay out
+        # of down-based logic consistently. Extra-point rows are scrimmage_play=False,
+        # so this never touches scrimmage aggregates; and modern games have no
+        # separate extra-point rows, so this is a strictly pre-2005 normalization.
+        _pat_set = ["Extra Point Good", "Extra Point Missed"]
+        play_df = play_df.with_columns(
+            pl.when(pl.col("type.text").is_in(_pat_set).and_(pl.col("start.down") >= 0))
+            .then(pl.lit(-1))
+            .otherwise(pl.col("start.down"))
+            .alias("start.down"),
+            pl.when(pl.col("type.text").is_in(_pat_set).and_(pl.col("start.distance") >= 0))
+            .then(pl.lit(-1))
+            .otherwise(pl.col("start.distance"))
+            .alias("start.distance"),
         )
 
         return play_df
@@ -2746,11 +3043,13 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 punt_block_return_player=pl.struct("punt_block_player", "punt_block_return_player").map_elements(
-                    lambda cols: cols["punt_block_return_player"]
-                    .replace(r"(?i)(.+)blocked by", "")
-                    .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
-                    if cols["punt_block_return_player"] is not None
-                    else None,
+                    lambda cols: (
+                        cols["punt_block_return_player"]
+                        .replace(r"(?i)(.+)blocked by", "")
+                        .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
+                        if cols["punt_block_return_player"] is not None
+                        else None
+                    ),
                     return_dtype=pl.Utf8,
                 ),
             )
@@ -2950,6 +3249,400 @@ class CFBPlayProcess(object):
                     "fumble_recovered_player",
                 ],
             )
+        )
+        return play_df
+
+    def __add_attribution_cols(self, play_df):
+        """Resolve the credited team per play (spec section 5).
+
+        Pure/deterministic. Reads pos_team/def_pos_team + play-type flags +
+        text, writes kicking_team/return_team, fumble_or_muff, fumbling_team,
+        recovery_team, turnover_team, is_turnover, is_st_turnover,
+        penalized_team, penalty_yards_signed, and event-team columns.
+        """
+        play_df = play_df.with_columns(
+            # --- Special-teams team flip (verified): kickoff pos_team=receiving;
+            #     punt/FG pos_team=kicking. ---
+            kicking_team=pl.when(pl.col("kickoff_play") == True)
+            .then(pl.col("def_pos_team"))
+            .when((pl.col("punt") == True) | (pl.col("fg_attempt") == True))
+            .then(pl.col("pos_team"))
+            .otherwise(None),
+            return_team=pl.when(pl.col("kickoff_play") == True)
+            .then(pl.col("pos_team"))
+            .when((pl.col("punt") == True) | (pl.col("fg_attempt") == True))
+            .then(pl.col("def_pos_team"))
+            .otherwise(None),
+            # --- Widen fumble detection to include muffs (finding #14) ---
+            fumble_or_muff=pl.when(
+                (pl.col("fumble_vec") == True) | (pl.col("text").str.contains(r"(?i)muff")),
+            )
+            .then(True)
+            .otherwise(False),
+        )
+
+        # --- Cleaned text + ordered recovery chain (strip overturned first) ---
+        play_df = (
+            play_df.with_columns(
+                _clean_text=pl.col("text").map_elements(_strip_overturned_text, return_dtype=pl.Utf8),
+            )
+            .with_columns(
+                _rec_abbrevs=pl.col("_clean_text").map_elements(
+                    _parse_recovery_abbrevs,
+                    return_dtype=pl.List(pl.Utf8),
+                ),
+            )
+            .with_columns(
+                _recovery_abbrev=pl.col("_rec_abbrevs").list.get(0, null_on_oob=True),
+                _recovery_abbrev_2=pl.col("_rec_abbrevs").list.get(1, null_on_oob=True),
+            )
+        )
+
+        # abbrev -> team id using the per-play home/away abbreviations (1st and 2nd recovery).
+        # ESPN ships two abbreviation forms for some teams -- the play text uses one (e.g.
+        # "recovered by BUF") while homeTeamAbbrev/awayTeamAbbrev carry another ("BUFF"). Match
+        # prefix-tolerantly (either is a prefix of the other) so these variants still resolve.
+        # In a two-team game cross-opponent prefix collisions are effectively nonexistent.
+        _home_u = pl.col("homeTeamAbbrev").str.to_uppercase()
+        _away_u = pl.col("awayTeamAbbrev").str.to_uppercase()
+
+        def _abbr_compat(abbr_col, team_u):
+            return (abbr_col == team_u) | team_u.str.starts_with(abbr_col) | abbr_col.str.starts_with(team_u)
+
+        def _abbrev_to_team_id(abbr_col):
+            return (
+                pl.when(abbr_col.is_null())
+                .then(pl.lit(None, dtype=pl.Int64))
+                .when(_abbr_compat(abbr_col, _home_u))
+                .then(pl.col("homeTeamId"))
+                .when(_abbr_compat(abbr_col, _away_u))
+                .then(pl.col("awayTeamId"))
+                .otherwise(pl.lit(None, dtype=pl.Int64))
+            )
+
+        play_df = play_df.with_columns(
+            recovery_team=_abbrev_to_team_id(pl.col("_recovery_abbrev")),
+            recovery_team_2=_abbrev_to_team_id(pl.col("_recovery_abbrev_2")),
+            # Penalized team parsed from the authoritative "PENALTY {ABBR}" text token --
+            # correctly distinguishes offensive vs defensive fouls (incl. OPI vs DPI).
+            _penalty_team=_abbrev_to_team_id(
+                pl.col("text").map_elements(_parse_penalty_abbrev, return_dtype=pl.Utf8),
+            ),
+        )
+
+        # Special-teams RETURN detection (flag OR text). ESPN sometimes reclassifies a
+        # punt/kickoff return fumble to a "Fumble Recovery (...)" type and DROPS the
+        # punt/kickoff_play flags (so sp becomes False), so a text fallback is required to
+        # recover the special-teams nature and attribute the fumble to the returning team.
+        play_df = play_df.with_columns(
+            _is_kick_return=pl.when(
+                (pl.col("kickoff_play") == True)
+                | (pl.col("text").str.contains(r"(?i)kickoff") & pl.col("text").str.contains(r"(?i)return|muff")),
+            )
+            .then(True)
+            .otherwise(False),
+            _is_punt_return=pl.when(
+                (pl.col("punt") == True)
+                | (
+                    pl.col("text").str.contains(r"(?i)punt")
+                    & pl.col("text").str.contains(r"(?i)return|muff|fair catch")
+                ),
+            )
+            .then(True)
+            .otherwise(False),
+        )
+
+        # fumbling team (the team that HAD the ball when the fumble/muff occurred):
+        #  - interception return: the intercepting team == def_pos_team (an INT that is
+        #    returned and then fumbled is a SECOND, opposite-direction turnover)
+        #  - kickoff return: receiving team == pos_team (kickoff pos_team=receiving)
+        #  - punt return:    receiving team == def_pos_team (punt pos_team=kicking team)
+        #  - other sp (e.g. blocked-FG return): return_team
+        #  - scrimmage:      the offense == pos_team
+        # The kick/punt cases use the text-or-flag detection above, so a reclassified
+        # return fumble (punt/kickoff flags dropped, pos_team flipped to the recovering
+        # team) still resolves the fumbling team to the side that was returning the kick.
+        play_df = play_df.with_columns(
+            fumbling_team=pl.when(pl.col("fumble_or_muff") == False)
+            .then(pl.lit(None, dtype=pl.Int64))
+            .when(pl.col("int") == True)
+            .then(pl.col("def_pos_team"))
+            .when(pl.col("_is_kick_return") == True)
+            .then(pl.col("pos_team"))
+            .when(pl.col("_is_punt_return") == True)
+            .then(pl.col("def_pos_team"))
+            .when(pl.col("sp") == True)
+            .then(pl.col("return_team"))
+            .otherwise(pl.col("pos_team")),
+        )
+
+        # Possession-chain turnover model (per side). A single play can change hands more
+        # than once -- offense fumbles (defense recovers), defense fumbles on the return
+        # (offense recovers), OR an interception that is returned and fumbled back. Walk the
+        # recovery chain: the first holder is `fumbling_team`; recovery_team / recovery_team_2
+        # are the next holders. A fumble-lost is charged each time the holder changes. Flags
+        # are framed PER SIDE (offense=pos_team, defense=def_pos_team) so BOTH teams can
+        # register a turnover on one play, matching the official box's per-event accounting.
+        play_df = (
+            play_df.with_columns(
+                # loser of the 1st fumble: the first holder, when the next holder differs
+                _loser_1=pl.when(
+                    (pl.col("fumble_or_muff") == True)
+                    & (pl.col("recovery_team").is_not_null())
+                    & (pl.col("fumbling_team").is_not_null())
+                    & (pl.col("recovery_team") != pl.col("fumbling_team")),
+                )
+                .then(pl.col("fumbling_team"))
+                .when(
+                    # last-resort possession-change fallback: scrimmage offense fumbles only
+                    (pl.col("fumble_or_muff") == True)
+                    & (pl.col("recovery_team").is_null())
+                    & (pl.col("scrimmage_play") == True)
+                    & (pl.col("int") == False)
+                    & (pl.col("_is_punt_return") == False)
+                    & (pl.col("_is_kick_return") == False)
+                    & (pl.col("fumbling_team") == pl.col("pos_team"))
+                    & (pl.col("end.pos_team.id") != pl.col("pos_team")),
+                )
+                .then(pl.col("fumbling_team"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
+                # loser of the 2nd fumble: the 1st recoverer, when the 2nd recoverer differs
+                _loser_2=pl.when(
+                    (pl.col("fumble_or_muff") == True)
+                    & (pl.col("recovery_team_2").is_not_null())
+                    & (pl.col("recovery_team").is_not_null())
+                    & (pl.col("recovery_team_2") != pl.col("recovery_team")),
+                )
+                .then(pl.col("recovery_team"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
+                int_turnover=pl.col("int") == True,
+            )
+            .with_columns(
+                pos_fumble_lost=((pl.col("_loser_1") == pl.col("pos_team")).fill_null(False))
+                | ((pl.col("_loser_2") == pl.col("pos_team")).fill_null(False)),
+                def_fumble_lost=((pl.col("_loser_1") == pl.col("def_pos_team")).fill_null(False))
+                | ((pl.col("_loser_2") == pl.col("def_pos_team")).fill_null(False)),
+            )
+            .with_columns(
+                # per-side turnover flags (a play may set BOTH)
+                is_pos_team_turnover=(pl.col("int_turnover") == True) | (pl.col("pos_fumble_lost") == True),
+                is_def_pos_team_turnover=pl.col("def_fumble_lost") == True,
+            )
+            .with_columns(
+                # back-compat single-flag view + primary losing team (pos side preferred)
+                is_turnover=(pl.col("is_pos_team_turnover") == True) | (pl.col("is_def_pos_team_turnover") == True),
+                turnover_team=pl.when(pl.col("is_pos_team_turnover") == True)
+                .then(pl.col("pos_team"))
+                .when(pl.col("is_def_pos_team_turnover") == True)
+                .then(pl.col("def_pos_team"))
+                .otherwise(pl.lit(None, dtype=pl.Int64)),
+                # special-teams turnover = a fumble lost on a kick/punt (INTs are never ST)
+                is_st_turnover=pl.when(
+                    ((pl.col("pos_fumble_lost") == True) | (pl.col("def_fumble_lost") == True))
+                    & (
+                        (pl.col("sp") == True)
+                        | (pl.col("_is_punt_return") == True)
+                        | (pl.col("_is_kick_return") == True)
+                    ),
+                )
+                .then(True)
+                .otherwise(False),
+                # Blocked-punt possession loss. ESPN's OFFICIAL box counts only giveaways
+                # (INT + fumbles lost), so blocked punts are deliberately kept OUT of
+                # is_turnover / is_st_turnover to preserve the *_pbp == espn_team
+                # reconciliation. This standalone flag surfaces the one possession-losing
+                # class that ESPN's per-play `isTurnover` flag catches and the giveaway-based
+                # derivation does not: a blocked-punt TD is always a turnover; a non-TD
+                # blocked punt is one only when possession actually changed (the defense --
+                # not the kicking team -- recovered). (Blocked FGs already yield possession
+                # via the normal missed-FG path, so they are out of scope here.)
+                is_blocked_punt_turnover=pl.when(pl.col("type.text") == "Blocked Punt Touchdown")
+                .then(True)
+                .when((pl.col("type.text") == "Blocked Punt").and_(pl.col("change_of_poss") == True))
+                .then(True)
+                .otherwise(False),
+                # Blocked-FG possession loss -- same rationale as is_blocked_punt_turnover:
+                # the official box counts only giveaways, so this stays OUT of is_turnover /
+                # is_st_turnover. True on a Blocked Field Goal Touchdown (defense scored) or a
+                # non-TD Blocked Field Goal the defense recovered (change_of_poss). Keys on the
+                # already-corrected type.text from __add_new_play_types.
+                is_blocked_fg_turnover=pl.when(pl.col("type.text") == "Blocked Field Goal Touchdown")
+                .then(True)
+                .when((pl.col("type.text") == "Blocked Field Goal").and_(pl.col("change_of_poss") == True))
+                .then(True)
+                .otherwise(False),
+            )
+        )
+
+        # event -> credited team (spec 5.2)
+        play_df = play_df.with_columns(
+            sack_team=pl.col("def_pos_team"),
+            interception_team=pl.col("def_pos_team"),
+            pass_breakup_team=pl.col("def_pos_team"),
+            forced_fumble_team=pl.col("def_pos_team"),
+            # Team that recovered the fumble/muff. Prefer the parsed recovering-team
+            # abbreviation; when it does not parse, fall back to the gaining team (the
+            # side opposite the fumbling team) for turnovers, or the fumbling team for
+            # own recoveries -- so a recovery is never dropped just because the team
+            # abbreviation in the text could not be matched.
+            fumble_recovery_team=pl.when(pl.col("recovery_team").is_not_null())
+            .then(pl.col("recovery_team"))
+            .when(pl.col("fumble_or_muff") == False)
+            .then(pl.lit(None, dtype=pl.Int64))
+            .when(pl.col("is_turnover") == True)
+            .then(
+                pl.when(pl.col("fumbling_team") == pl.col("pos_team"))
+                .then(pl.col("def_pos_team"))
+                .otherwise(pl.col("pos_team")),
+            )
+            .otherwise(pl.col("fumbling_team")),
+            punt_return_team=pl.col("return_team"),
+            kick_return_team=pl.col("return_team"),
+            fg_team=pl.col("kicking_team"),
+            punt_team=pl.col("kicking_team"),
+            # Prefer the authoritative "PENALTY {ABBR}" team parsed from text; fall back to
+            # the offensive/defensive heuristic only when no team token was parseable.
+            penalized_team=pl.when(pl.col("penalty_detail").is_null())
+            .then(pl.lit(None, dtype=pl.Int32))
+            .when(pl.col("_penalty_team").is_not_null())
+            .then(pl.col("_penalty_team"))
+            .when(pl.col("penalty_detail").is_in(list(_DEFENSIVE_PENALTIES)))
+            .then(pl.col("def_pos_team"))
+            .otherwise(pl.col("pos_team")),
+            penalty_yards_signed=pl.col("yds_penalty")
+            .cast(pl.Utf8)
+            .str.extract(r"(-?\d+)")
+            .cast(pl.Int32, strict=False)
+            .fill_null(0),
+        )
+
+        # drop temp columns that must not leak into the output frame
+        play_df = play_df.drop(
+            [
+                "_clean_text",
+                "_rec_abbrevs",
+                "_recovery_abbrev",
+                "_recovery_abbrev_2",
+                "_penalty_team",
+                "_is_kick_return",
+                "_is_punt_return",
+                "_loser_1",
+                "_loser_2",
+            ],
+        )
+
+        # cast all team-id-derived columns to Int32 for join compatibility
+        _team_id_cols = [
+            "kicking_team",
+            "return_team",
+            "recovery_team",
+            "recovery_team_2",
+            "fumbling_team",
+            "turnover_team",
+            "penalized_team",
+            "sack_team",
+            "interception_team",
+            "pass_breakup_team",
+            "forced_fumble_team",
+            "fumble_recovery_team",
+            "punt_return_team",
+            "kick_return_team",
+            "fg_team",
+            "punt_team",
+        ]
+        play_df = play_df.with_columns([pl.col(c).cast(pl.Int32) for c in _team_id_cols])
+
+        return play_df
+
+    def __refine_play_types_post_attribution(self, play_df):
+        """Correct two play-type labels that need the post-attribution turnover signal.
+
+        ``__add_new_play_types`` runs *before* ``__add_attribution_cols``, so it can only
+        key on ``change_of_poss`` -- which is ``True`` on **every** possession flip, not
+        just turnovers. Two residual mislabels survive that the now-available
+        ``is_turnover`` / ``recovery_team`` flags resolve:
+
+        1. **Sack-strip the offense recovers itself.** ``change_of_poss`` is spuriously
+           ``1`` (a returner/fumble id artifact), so the strip-sack rule relabeled it
+           ``"Fumble Recovery (Opponent)"``. ``is_turnover`` is ``False`` (the ball never
+           left the offense) -> restore ``"Fumble Recovery (Own)"``.
+        2. **Punt-return fumble the punting team recovers.** The receiving team fumbled the
+           return and the punting team (``pos_team`` on a punt) recovered -- a real
+           special-teams turnover -- but the play stayed ``"Punt Return"`` because the
+           punt-fumble rule keyed on ``type.text == "Punt"`` -> relabel
+           ``"Punt Team Fumble Recovery"``.
+
+        Only this class's own first-pass relabels are undone (guarded on
+        ``orig_play_type``). The two frozen ``type.text``-derived columns read downstream
+        are then recomputed so EPA/WPA stay consistent: ``downs_turnover`` (``normalplay``
+        membership -- ``"Fumble Recovery (Own)"`` newly joins it) and ``pos_score_diff_end``
+        (``end_change_vec`` membership). The EPA/WPA turnover sign-flips read
+        ``type.text in end_change_vec`` *live*, so they self-heal; the box-score turnover
+        totals are ESPN-sourced and unaffected. The recompute mirrors
+        ``__add_play_category_flags`` (``downs_turnover`` and ``pos_score_diff_end``) and is
+        idempotent for unrelabeled rows.
+        """
+        opp = ["Fumble Recovery (Opponent)", "Fumble Recovery (Opponent) Touchdown"]
+        play_df = play_df.with_columns(
+            pl.when(
+                pl.col("type.text")
+                .is_in(opp)
+                .and_(pl.col("orig_play_type").is_in(opp) == False)
+                .and_(pl.col("is_turnover") == False)
+                .and_(pl.col("fumble_vec") == True),
+            )
+            .then(
+                pl.when(pl.col("td_play") == True)
+                .then(pl.lit("Fumble Recovery (Own) Touchdown"))
+                .otherwise(pl.lit("Fumble Recovery (Own)")),
+            )
+            .when(
+                (pl.col("punt") == True)
+                .and_(pl.col("is_turnover") == True)
+                .and_(pl.col("recovery_team") == pl.col("pos_team"))
+                .and_(pl.col("type.text").is_in(["Punt", "Punt Return"]))
+                .and_(pl.col("td_play") == False),
+            )
+            .then(pl.lit("Punt Team Fumble Recovery"))
+            .otherwise(pl.col("type.text"))
+            .alias("type.text"),
+        )
+        # Recompute the two frozen type.text-derived columns that EPA/WPA read.
+        # Source of truth: __add_play_category_flags (downs_turnover; pos_score_diff_end).
+        play_df = play_df.with_columns(
+            downs_turnover=pl.when(
+                (pl.col("type.text").is_in(normalplay))
+                .and_(pl.col("statYardage") < pl.col("start.distance"))
+                .and_(pl.col("start.down") == 4)
+                .and_(pl.col("penalty_1st_conv") == False),
+            )
+            .then(True)
+            .otherwise(False),
+        )
+        play_df = play_df.with_columns(
+            pos_score_diff_end=pl.when(
+                (
+                    (pl.col("type.text").is_in(end_change_vec)).and_(
+                        pl.col("start.pos_team.id") != pl.col("end.pos_team.id"),
+                    )
+                ).or_(pl.col("downs_turnover") == True),
+            )
+            .then(-1 * pl.col("pos_score_diff"))
+            .otherwise(pl.col("pos_score_diff")),
+        ).with_columns(
+            pos_score_diff_end=pl.when(
+                (pl.col("pos_score_pts").abs() >= 8)
+                .and_(pl.col("scoring_play") == False)
+                .and_(pl.col("change_of_pos_team") == False),
+            )
+            .then(pl.col("pos_score_diff_start"))
+            .when(
+                (pl.col("pos_score_pts").abs() >= 8)
+                .and_(pl.col("scoring_play") == False)
+                .and_(pl.col("change_of_pos_team") == True),
+            )
+            .then(-1 * pl.col("pos_score_diff_start"))
+            .otherwise(pl.col("pos_score_diff_end")),
         )
         return play_df
 
@@ -4029,8 +4722,13 @@ class CFBPlayProcess(object):
                 flags already populated).
 
         Returns:
-            dict: Box-score sections keyed by ``"passing"``, ``"rushing"``,
-            ``"receiving"``, ``"defensive"``, ``"turnover"``, and ``"drives"``.
+            dict: Box-score sections, each a list of records — ``"pass"`` /
+            ``"rush"`` / ``"receiver"`` (per-player advanced + EPA lines),
+            ``"team"`` and ``"situational"`` (per-team), ``"defensive"`` and
+            ``"defensive_players"`` (team- and player-level havoc),
+            ``"specialists"`` (kicking / punting / return players),
+            ``"turnover"``, ``"drives"``, and the ESPN-sourced ``"espn_team"`` /
+            ``"espn_players"`` totals.
 
         Example:
             Quick start::
@@ -4219,9 +4917,37 @@ class CFBPlayProcess(object):
             .agg(
                 total_pen_yards=pl.col("statYardage").sum(),
                 EPA_penalty=pl.col("EPA_penalty").sum(),
-                penalty_first_downs_created=pl.col("penalty_1st_conv").sum(),
-                penalty_first_downs_created_rate=pl.col("penalty_1st_conv").mean(),
+                # Only ACCEPTED penalties award a first down; a declined/offsetting penalty
+                # whose text mentions "1st down" earned it from the play (counted as a
+                # passing/rushing first down), so excluding them avoids double-counting.
+                penalty_first_downs_created=(
+                    (pl.col("penalty_1st_conv") == True)
+                    & (pl.col("penalty_declined") == False)
+                    & (pl.col("penalty_offset") == False)
+                ).sum(),
+                penalty_first_downs_created_rate=(
+                    (pl.col("penalty_1st_conv") == True)
+                    & (pl.col("penalty_declined") == False)
+                    & (pl.col("penalty_offset") == False)
+                ).mean(),
             )
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+
+        team_penalized_box = (
+            play_df.filter(
+                (pl.col("penalty_flag") == True)
+                & (pl.col("penalty_declined") == False)
+                & (pl.col("penalty_offset") == False)
+                & (pl.col("penalized_team").is_not_null()),
+            )
+            .group_by(["penalized_team"])
+            .agg(
+                penalties=pl.len(),
+                penalty_yards=pl.col("penalty_yards_signed").sum(),
+            )
+            .rename({"penalized_team": "pos_team"})
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
@@ -4383,6 +5109,7 @@ class CFBPlayProcess(object):
         team_data_frames = [
             team_rush_opp_box,
             team_pen_box,
+            team_penalized_box,
             team_sp_box,
             team_scrimmage_box_rush,
             team_scrimmage_box_pass,
@@ -4698,62 +5425,98 @@ class CFBPlayProcess(object):
         )
         def_box_json = json.loads(def_box.write_json())
 
-        turnover_box = (
+        # Per-side turnover events. `is_pos_team_turnover` / `is_def_pos_team_turnover` are
+        # set PER PLAY and a single play can set BOTH -- e.g. an interception returned and
+        # fumbled back, or offense fumbles then the recovering defense fumbles it back. Emit
+        # one event row per side that fired, keyed by the LOSING team, so team turnovers
+        # match the official box's per-event accounting (a play can be a turnover for both).
+        pos_ev = play_df.filter(pl.col("is_pos_team_turnover") == True).select(
+            team=pl.col("pos_team").cast(pl.Int32),
+            is_int=pl.col("int_turnover"),
+            is_st=(pl.col("pos_fumble_lost") & pl.col("is_st_turnover")),
+        )
+        def_ev = play_df.filter(pl.col("is_def_pos_team_turnover") == True).select(
+            team=pl.col("def_pos_team").cast(pl.Int32),
+            is_int=pl.lit(False),
+            is_st=(pl.col("def_fumble_lost") & pl.col("is_st_turnover")),
+        )
+        to_events = pl.concat([pos_ev, def_ev], how="vertical")
+
+        to_lost = (
+            to_events.group_by(["team"])
+            .agg(
+                turnovers=pl.len(),
+                st_turnovers_lost=pl.col("is_st").sum(),
+                Int=pl.col("is_int").sum(),
+                fumbles_lost=(pl.col("is_int") == False).sum(),
+            )
+            .rename({"team": "pos_team"})
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+        to_aux = (
             play_df.filter(pl.col("scrimmage_play") == True)
             .group_by(["pos_team"])
             .agg(
                 pass_breakups=pl.col("pass_breakup").sum(),
-                fumbles_lost=pl.col("fumble_lost").sum(),
-                fumbles_recovered=pl.col("fumble_recovered").sum(),
-                total_fumbles=pl.col("fumble_vec").sum(),
-                Int=pl.col("int").sum(),
+                total_fumbles=pl.col("fumble_or_muff").sum(),
+                fumbles_recovered=((pl.col("fumble_or_muff") == True) & (pl.col("is_turnover") == False)).sum(),
             )
-            .with_columns(pl.col(pl.Float32).round(2))
-            .with_columns(
-                pos_team=pl.col("pos_team").cast(pl.Int32),
-            )
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
 
+        team_ids = [int(self.homeTeamId), int(self.awayTeamId)]
+        turnover_box = (
+            pl.DataFrame({"pos_team": team_ids}, schema={"pos_team": pl.Int32})
+            .join(to_lost, on="pos_team", how="left")
+            .join(to_aux, on="pos_team", how="left")
+            .fill_null(0)
+            .with_columns(team_id=pl.col("pos_team"))
+        )
         turnover_box_json = json.loads(turnover_box.write_json())
-        if len(turnover_box_json) < 2:
-            for i in range(len(turnover_box_json), 2):
-                turnover_box_json.append({})
 
-        turnover_box_json[0]["Int"] = int(turnover_box_json[0].get("Int", 0))
-        turnover_box_json[1]["Int"] = int(turnover_box_json[1].get("Int", 0))
+        # identity-keyed margins / luck (never list index).
+        # Int here is all-play (from to_lost); pass_breakups/total_fumbles are scrimmage-only (to_aux).
+        # Gained-side fields are the opponent's lost-side fields (a 2-team game: every
+        # turnover one team loses, the other gains).
+        by_id = {int(r["pos_team"]): r for r in turnover_box_json}
 
-        away_passes_def = turnover_box_json[0].get("pass_breakups", 0)
-        away_passes_int = turnover_box_json[0].get("Int", 0)
-        away_fumbles = turnover_box_json[0].get("total_fumbles", 0)
-        turnover_box_json[0]["expected_turnovers"] = (0.5 * away_fumbles) + (0.22 * (away_passes_def + away_passes_int))
+        # Source the countable turnover totals DIRECTLY from ESPN's official box where it
+        # is available (authoritative). The play-by-play derivation -- which we still
+        # compute and validate against ESPN -- is retained under ``*_pbp`` keys and is the
+        # fallback for games ESPN does not cover.
+        espn_box = self.json.get("boxscore", {}) if isinstance(self.json, dict) else {}
+        espn_team_box = _parse_espn_team_box(espn_box)
+        for tid, r in by_id.items():
+            r["turnovers_pbp"] = r.get("turnovers", 0)
+            r["Int_pbp"] = int(r.get("Int", 0))
+            r["fumbles_lost_pbp"] = r.get("fumbles_lost", 0)
+            e = espn_team_box.get(tid)
+            r["espn_sourced"] = bool(e)
+            if not e:
+                continue
+            if isinstance(e.get("turnovers"), int):
+                r["turnovers"] = e["turnovers"]
+            if isinstance(e.get("interceptions"), int):
+                r["Int"] = e["interceptions"]
+            if isinstance(e.get("fumblesLost"), int):
+                r["fumbles_lost"] = e["fumblesLost"]
 
-        home_passes_def = turnover_box_json[1].get("pass_breakups", 0)
-        home_passes_int = turnover_box_json[1].get("Int", 0)
-        home_fumbles = turnover_box_json[1].get("total_fumbles", 0)
-        turnover_box_json[1]["expected_turnovers"] = (0.5 * home_fumbles) + (0.22 * (home_passes_def + home_passes_int))
-
-        turnover_box_json[0]["expected_turnover_margin"] = (
-            turnover_box_json[1]["expected_turnovers"] - turnover_box_json[0]["expected_turnovers"]
-        )
-        turnover_box_json[1]["expected_turnover_margin"] = (
-            turnover_box_json[0]["expected_turnovers"] - turnover_box_json[1]["expected_turnovers"]
-        )
-
-        away_to = turnover_box_json[0].get("fumbles_lost", 0) + turnover_box_json[0]["Int"]
-        home_to = turnover_box_json[1].get("fumbles_lost", 0) + turnover_box_json[1]["Int"]
-
-        turnover_box_json[0]["turnovers"] = away_to
-        turnover_box_json[1]["turnovers"] = home_to
-
-        turnover_box_json[0]["turnover_margin"] = home_to - away_to
-        turnover_box_json[1]["turnover_margin"] = away_to - home_to
-
-        turnover_box_json[0]["turnover_luck"] = 5.0 * (
-            turnover_box_json[0]["turnover_margin"] - turnover_box_json[0]["expected_turnover_margin"]
-        )
-        turnover_box_json[1]["turnover_luck"] = 5.0 * (
-            turnover_box_json[1]["turnover_margin"] - turnover_box_json[1]["expected_turnover_margin"]
-        )
+        for tid, r in by_id.items():
+            r["Int"] = int(r.get("Int", 0))
+            r["expected_turnovers"] = (0.5 * r.get("total_fumbles", 0)) + (
+                0.22 * (r.get("pass_breakups", 0) + r.get("Int", 0))
+            )
+        for tid, r in by_id.items():
+            others = [x for x in team_ids if x != tid]
+            opp = by_id[others[0]] if others else r  # degenerate (home==away id): self as opponent
+            r["expected_turnover_margin"] = opp["expected_turnovers"] - r["expected_turnovers"]
+            r["turnover_margin"] = opp["turnovers"] - r["turnovers"]
+            r["turnover_luck"] = 5.0 * (r["turnover_margin"] - r["expected_turnover_margin"])
+            # takeaways gained = turnovers the opponent lost
+            r["takeaways"] = opp["turnovers"]
+            r["st_turnovers_gained"] = opp["st_turnovers_lost"]
+            r["fumble_recoveries_gained"] = opp["fumbles_lost"]
+        turnover_box_json = [by_id[t] for t in team_ids]
 
         drives_data = (
             play_df.filter(pl.col("scrimmage_play") == True)
@@ -4773,6 +5536,89 @@ class CFBPlayProcess(object):
             )
         )
 
+        # --- defensive players (0.0.53): per-defender havoc events, attributed by player ---
+        def _player_event_box(name_col, out, team_col, yds_col=None, team_out=None):
+            """Count non-null occurrences of `name_col` per (team, player); sum `yds_col`.
+
+            `team_col` is the column to group by (the resolved credited-team). `team_out`
+            optionally renames it back to the section's canonical join key (e.g. group by
+            `fumble_recovery_team` but emit it as `def_pos_team` so the section reduce-join
+            still aligns).
+            """
+            if name_col not in play_df.columns or team_col not in play_df.columns:
+                return None
+            f = play_df.filter(pl.col(name_col).is_not_null() & pl.col(team_col).is_not_null())
+            if f.height == 0:
+                return None
+            aggs = [pl.len().alias(out)]
+            if yds_col is not None and yds_col in play_df.columns:
+                aggs.append(pl.col(yds_col).sum().alias(f"{out}_yards"))
+            g = f.group_by([team_col, name_col]).agg(aggs).rename({name_col: "player_name"})
+            if team_out and team_out != team_col:
+                g = g.rename({team_col: team_out})
+            return g
+
+        def_parts = [
+            _player_event_box("sack_player_name", "sacks", "def_pos_team", "yds_sacked"),
+            _player_event_box("pass_breakup_player_name", "pass_breakups", "def_pos_team"),
+            _player_event_box("interception_player_name", "interceptions", "def_pos_team", "yds_int_return"),
+            _player_event_box("fumble_forced_player_name", "forced_fumbles", "def_pos_team"),
+            _player_event_box(
+                "fumble_recovered_player_name",
+                "fumble_recoveries",
+                "fumble_recovery_team",
+                "yds_fumble_return",
+                team_out="def_pos_team",
+            ),
+        ]
+        def_parts = [d for d in def_parts if d is not None]
+        if def_parts:
+            defensive_players = (
+                reduce(
+                    lambda left, right: left.join(right, on=["def_pos_team", "player_name"], how="full", coalesce=True),
+                    def_parts,
+                )
+                .fill_null(0)
+                .with_columns(def_pos_team=pl.col("def_pos_team").cast(pl.Int32))
+            )
+            defensive_players_json = json.loads(defensive_players.write_json())
+        else:
+            defensive_players_json = []
+
+        # --- specialists (0.0.53): kicking / punting / return players, attributed by player ---
+        spec_parts = [
+            _player_event_box("fg_kicker_player_name", "field_goals", "pos_team", "yds_fg"),
+            _player_event_box("punter_player_name", "punts", "pos_team", "yds_punted"),
+            _player_event_box("kickoff_return_player_name", "kick_returns", "pos_team", "yds_kickoff_return"),
+            _player_event_box(
+                "punt_return_player_name",
+                "punt_returns",
+                "punt_return_team",
+                "yds_punt_return",
+                team_out="pos_team",
+            ),
+        ]
+        spec_parts = [s for s in spec_parts if s is not None]
+        if spec_parts:
+            specialists = (
+                reduce(
+                    lambda left, right: left.join(right, on=["pos_team", "player_name"], how="full", coalesce=True),
+                    spec_parts,
+                )
+                .fill_null(0)
+                .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            )
+            specialists_json = json.loads(specialists.write_json())
+        else:
+            specialists_json = []
+
+        # ESPN's official team + player box -- the authoritative source for countable
+        # totals (turnovers, fumbles, interceptions, total/passing/rushing yards,
+        # penalties, first downs, player stat lines). Surfaced as dedicated sections so
+        # downstream consumers can take totals straight from ESPN; the computed sections
+        # above retain the advanced/EPA metrics ESPN does not provide.
+        espn_players = _parse_espn_player_box(espn_box)
+
         return {
             "pass": json.loads(passer_box.write_json()),
             "rush": json.loads(rusher_box.write_json()),
@@ -4780,9 +5626,154 @@ class CFBPlayProcess(object):
             "team": json.loads(team_box.write_json()),
             "situational": json.loads(situation_box.write_json()),
             "defensive": def_box_json,
+            "defensive_players": defensive_players_json,
+            "specialists": specialists_json,
             "turnover": turnover_box_json,
             "drives": json.loads(drives_data.write_json()),
+            "espn_team": list(espn_team_box.values()),
+            "espn_players": espn_players,
         }
+
+    def __join_participants(self, play_df):
+        """Join ESPN play participants to overwrite regex-extracted player names with clean display names.
+
+        Fetches participant data from :func:`~sportsdataverse.cfb.cfb_play_participants.espn_cfb_play_participants`
+        and coalesces the ESPN-provided display names over the regex-extracted names wherever the participant
+        name is non-null. Falls back to the original ``play_df`` on any failure (network error, parse error,
+        empty result, missing join key) so offline/test paths are unaffected.
+
+        Mapping (pbp_regex_col <- participant_col):
+            - ``passer_player_name``           <- ``passer_player_name``
+            - ``rusher_player_name``           <- ``rusher_player_name``
+            - ``receiver_player_name``         <- ``receiver_player_name``
+            - ``punter_player_name``           <- ``punter_player_name``
+            - ``fg_kicker_player_name``        <- ``kicker_player_name``
+            - ``sack_player_name``             <- ``sacked_by_player_name``
+            - ``fumble_forced_player_name``    <- ``forced_by_player_name``
+            - ``fumble_recovered_player_name`` <- ``recoverer_player_name`` (skipped if absent)
+            - ``pass_breakup_player_name``     <- ``pass_defender_player_name``
+            - ``punt_return_player_name``      <- ``returner_player_name``
+            - ``kickoff_return_player_name``   <- ``returner_player_name``
+
+        Note: ``recoverer_player_name`` was not present in the verified participant frame for game 401135269;
+        the mapping silently skips any participant column not found in the joined frame.
+
+        Set the instance attribute ``join_participants = False`` to skip the (network) fetch
+        entirely -- used by offline/disk reprocessing and the offline test suite so neither
+        hits ESPN. Defaults to enabled for the normal live path.
+        """
+        if not getattr(self, "join_participants", True):
+            return play_df
+        original_play_df = play_df
+        try:
+            from sportsdataverse.cfb.cfb_play_participants import espn_cfb_play_participants
+
+            parts = espn_cfb_play_participants(self.gameId)
+
+            # Graceful fallback conditions
+            if parts is None or parts.height == 0 or "id" not in play_df.columns:
+                logging.debug(
+                    f"{self.gameId}: __join_participants skipped -- "
+                    f"parts={None if parts is None else parts.height} rows, id_in_df={'id' in play_df.columns}",
+                )
+                return play_df
+
+            # Select only the scalar _player_name columns (not _player_names list columns)
+            # plus the join key. We explicitly list the columns we want to avoid pulling in
+            # list-type columns (kicker_player_names, etc.) or _player_id columns.
+            participant_name_cols = [
+                "kicker_player_name",
+                "returner_player_name",
+                "passer_player_name",
+                "receiver_player_name",
+                "rusher_player_name",
+                "punter_player_name",
+                "pass_defender_player_name",
+                "sacked_by_player_name",
+                "forced_by_player_name",
+                # recoverer_player_name is NOT in verified participant frame; skip.
+            ]
+            # Only keep participant columns that actually exist in the frame
+            available_part_cols = [c for c in participant_name_cols if c in parts.columns]
+            parts_slim = parts.select(["play_id"] + available_part_cols)
+
+            # Both play_df["id"] and parts["play_id"] are Int64 -- join directly.
+            # Rename participant columns with a _part suffix before join to avoid collision
+            # with existing pbp columns that share names (passer_player_name, etc.).
+            rename_map = {c: f"{c}_part" for c in available_part_cols}
+            parts_slim = parts_slim.rename(rename_map)
+
+            play_df = play_df.join(
+                parts_slim,
+                how="left",
+                left_on="id",
+                right_on="play_id",
+            )
+
+            # Mapping: (pbp_regex_col, participant_col_after_rename, populate_if_null)
+            #
+            # populate_if_null=True:  participant name is authoritative; fill even when regex
+            #   found nothing (safe for roles where team attribution is derived from pos_team /
+            #   def_pos_team, which is always correct).
+            # populate_if_null=False: only CLEAN UP an existing non-null regex name; never
+            #   introduce a new player name where regex was silent.  Used for the shared
+            #   `returner_player_name` participant role because it maps to both punt-return and
+            #   kickoff-return columns whose team attribution (punt_return_team / pos_team) can
+            #   point to the KICKING team for certain play types, causing mis-attribution when
+            #   we populate a previously-null name.
+            coalesce_pairs = [
+                ("passer_player_name", "passer_player_name_part", True),
+                ("rusher_player_name", "rusher_player_name_part", True),
+                ("receiver_player_name", "receiver_player_name_part", True),
+                ("punter_player_name", "punter_player_name_part", True),
+                ("fg_kicker_player_name", "kicker_player_name_part", True),
+                ("sack_player_name", "sacked_by_player_name_part", True),
+                ("fumble_forced_player_name", "forced_by_player_name_part", True),
+                ("pass_breakup_player_name", "pass_defender_player_name_part", True),
+                # returner maps to two columns; use cleanup-only mode to avoid
+                # injecting a name onto plays where punt_return_team / return_team
+                # is set to the kicking team rather than the receiving team.
+                ("punt_return_player_name", "returner_player_name_part", False),
+                ("kickoff_return_player_name", "returner_player_name_part", False),
+            ]
+
+            coalesce_exprs = []
+            for pbp_col, part_col, populate_if_null in coalesce_pairs:
+                # Only coalesce if BOTH columns exist in the joined frame
+                if pbp_col in play_df.columns and part_col in play_df.columns:
+                    if populate_if_null:
+                        # Participant name wins when non-null; regex name is fallback.
+                        expr = pl.coalesce(
+                            pl.col(part_col).str.strip_chars(),
+                            pl.col(pbp_col),
+                        ).alias(pbp_col)
+                    else:
+                        # Only replace when the regex already extracted a name AND the
+                        # participant name is also non-null (clean up, never introduce).
+                        expr = (
+                            pl.when(pl.col(pbp_col).is_not_null() & pl.col(part_col).is_not_null())
+                            .then(pl.col(part_col).str.strip_chars())
+                            .otherwise(pl.col(pbp_col))
+                            .alias(pbp_col)
+                        )
+                    coalesce_exprs.append(expr)
+
+            if coalesce_exprs:
+                play_df = play_df.with_columns(coalesce_exprs)
+
+            # Drop all _part helper columns so they don't leak into downstream schema
+            part_cols_to_drop = [f"{c}_part" for c in available_part_cols]
+            play_df = play_df.drop([c for c in part_cols_to_drop if c in play_df.columns])
+
+            logging.debug(
+                f"{self.gameId}: __join_participants applied {len(coalesce_exprs)} name coalesces "
+                f"from {parts.height} participant rows",
+            )
+            return play_df
+
+        except Exception as exc:
+            logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
+            return original_play_df
 
     def run_processing_pipeline(self):
         """Run the full play-by-play processing pipeline.
@@ -4866,6 +5857,8 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
+                    .pipe(self.__add_attribution_cols)
+                    .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__process_epa)
@@ -4873,6 +5866,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_drive_data)
                     .pipe(self.__process_qbr)
                 )
+                self.plays_json = self.plays_json.pipe(self.__join_participants)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
                 self.plays_json = self.plays_json.to_dicts()

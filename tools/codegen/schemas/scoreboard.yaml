@@ -1,0 +1,7 @@
+schema: scoreboard
+kind: dataframe
+description: "One row per event on the scoreboard for the requested date(s)."
+columns:
+  - {name: game_id, type: integer, description: "ESPN event id."}
+  - {name: season, type: integer, description: "Four-digit season year."}
+  - {name: game_date, type: character, description: "ISO 8601 kickoff timestamp (UTC)."}

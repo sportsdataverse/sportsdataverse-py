@@ -4,5 +4,6 @@ from sportsdataverse.mbb.mbb_espn_ext import *
 from sportsdataverse.mbb.mbb_game_rosters import *
 from sportsdataverse.mbb.mbb_loaders import *
 from sportsdataverse.mbb.mbb_pbp import *
+from sportsdataverse.mbb.mbb_player_stats import *
 from sportsdataverse.mbb.mbb_schedule import *
 from sportsdataverse.mbb.mbb_teams import *

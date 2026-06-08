@@ -1,2 +1,34 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Line endings: store LF in the repo AND check out LF on every platform.
+#
+# With only `* text=auto` (and core.autocrlf=false / native core.eol), a Windows
+# checkout rewrites the LF that the tooling emits (codegen, ruff, Python file
+# writes, doctoc, the CHANGELOG sync) back to CRLF, so every `git add` warns
+# "LF will be replaced by CRLF the next time Git touches it". Pinning eol=lf makes
+# the working tree match the (already all-LF) index on all platforms and ends the
+# churn. No Windows-only scripts (.bat/.cmd) live here, so nothing needs CRLF.
+* text=auto eol=lf
+
+# Binary assets — never apply text/eol normalization (it would corrupt them).
+*.png      binary
+*.ico      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.webp     binary
+*.ubj      binary
+*.parquet  binary
+*.pyc      binary
+*.woff     binary
+*.woff2    binary
+*.ttf      binary
+*.eot      binary
+*.pdf      binary
+*.zip      binary
+*.gz       binary
+
+# Jupyter notebooks are JSON — keep them explicit LF text so the binary rules
+# above never accidentally shadow them.
+*.ipynb    text eol=lf
+
+# Generated lockfile: LF text, collapsed in review diffs (machine-written).
+uv.lock    text eol=lf linguist-generated=true

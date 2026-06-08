@@ -8,7 +8,6 @@
   - [Installation](#installation)
     - [Standard install (pip)](#standard-install-pip)
     - [Modern install (uv — recommended)](#modern-install-uv--recommended)
-    - [Conda install](#conda-install)
     - [Development install](#development-install)
     - [Notes](#notes)
   - [Examples and tutorials](#examples-and-tutorials)
@@ -41,7 +40,7 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 |---|---|---|
 | NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) — 118 wrappers |
 | WNBA | `sportsdataverse.wnba` | ESPN — 124 wrappers |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (bracketology, rankings, recruits) — 121 wrappers |
+| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) — 121 wrappers |
 | WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only — 126 wrappers |
 | CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) — 123 wrappers |
 | NFL | `sportsdataverse.nfl` | ESPN + football-only (QBR) — 119 wrappers |
@@ -98,7 +97,6 @@ With optional extras (defined in `[project.optional-dependencies]` in
 pip install "sportsdataverse[all]"      # everything below
 pip install "sportsdataverse[models]"   # extra deps for the EPA / WP model code
 pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
-pip install "sportsdataverse[docs]"     # adds sphinx + sphinx-markdown-builder for the doc build
 ```
 
 ### Modern install (uv — recommended)
@@ -115,26 +113,6 @@ uv add "sportsdataverse[all]"
 # Or install the latest dev snapshot from GitHub:
 uv add "sportsdataverse @ git+https://github.com/sportsdataverse/sportsdataverse-py"
 ```
-
-### Conda install
-
-Once the conda-forge feedstock is published the package is also available via:
-
-```bash
-conda install -c conda-forge sportsdataverse
-# or
-mamba install -c conda-forge sportsdataverse
-```
-
-Until then, conda users can build a local package from this repo:
-
-```bash
-conda install conda-build conda-verify
-conda build recipe/
-conda install --use-local sportsdataverse
-```
-
-See [`recipe/README.md`](recipe/README.md) for the full conda workflow.
 
 ### Development install
 

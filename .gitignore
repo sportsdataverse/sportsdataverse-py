@@ -32,7 +32,3 @@ dev/
 
 # Local PEP 517 build outputs from `python -m build --outdir dist_check`.
 dist_check/
-
-# Sphinx build artifacts — regenerated via `bash create_docs.sh`.
-Sphinx-docs/_build/
-Sphinx-docs/_static/

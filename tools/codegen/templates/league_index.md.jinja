@@ -1,0 +1,19 @@
+---
+title: {{ prefix|upper }}
+sidebar_label: {{ prefix|upper }}
+---
+# {{ prefix|upper }} (`sportsdataverse.{{ prefix }}`)
+
+| Reference | Functions | Base URL |
+|---|---:|---|
+{% for a in api_rows %}| [{{ a.label }}](reference/{{ a.slug }}) | {{ a.count }} | `{{ a.base }}` |
+{% endfor %}
+{% if has_loaders %}| [Dataset loaders](reference/loaders) | {{ loader_count }} | sportsdataverse-data releases |
+{% endif %}
+{% if notebooks %}
+
+## Examples
+
+{% for nb in notebooks %}- [{{ nb }}](../../examples/notebooks/{{ nb }}.ipynb)
+{% endfor %}
+{% endif %}

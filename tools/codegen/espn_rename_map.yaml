@@ -1,0 +1,34 @@
+# ESPN generated-name -> R-aligned-name overrides.
+#
+# The universal *structural* convention (event->game, event_competition->game,
+# event_competitor->game_team, athlete->player) is applied in code by
+# generate._convention_rename() across ALL leagues. This file holds only the
+# non-structural, league-specific overrides that the rules can't express.
+#
+# Collision rule of thumb: when a generated name would collide with an existing
+# function but they hit DIFFERENT endpoints, keep both -- ONE stays bare and the
+# larger-or-newer one is version-qualified. This is dynamic (generate._league_module_source
+# pass 2 + generate._versioned_on_collision), not hard-coded: the web-common-v3
+# /athletes/{id}/stats wants the BARE name player_stats, and is version-qualified to
+# player_stats_v3 ONLY when a hand-written core-v2 season player_stats already claims
+# the bare name. Every league now ships a hand-written player_stats, so every generated
+# wrapper is player_stats_v3 -- but a league without the hand-written sibling would get
+# the bare player_stats automatically (no orphaned *_v3). Only a SAME-endpoint duplicate
+# is dropped (currently none).
+
+# cfb season_* cleanups (URL-matched to cfbfastR; cfb-scoped):
+rename:
+  espn_cfb_season_futures: espn_cfb_futures
+  espn_cfb_season_groups: espn_cfb_groups
+  espn_cfb_season_powerindex: espn_cfb_team_powerindex
+  espn_cfb_season_recruits: espn_cfb_recruits
+  espn_cfb_season_week_rankings: espn_cfb_week_rankings
+
+# SAME-endpoint duplicates dropped (a hand-written parsed sibling exposes this
+# exact endpoint and takes the canonical name). The base (pre-rename) generated
+# name is listed; the rename target would have been espn_*_game_officials.
+# wbb/wnba ship a hand-written, parsed espn_*_game_officials (core-api officials
+# with official ids) -- the generated raw wrapper is redundant for those two.
+drop:
+  - espn_wbb_event_officials
+  - espn_wnba_event_officials

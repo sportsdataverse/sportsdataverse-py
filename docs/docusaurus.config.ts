@@ -7,13 +7,11 @@ const config: Config = {
   tagline: "The SportsDataverse's Python Package for Sports Data.",
   url: 'https://sportsdataverse-py.sportsdataverse.org',
   baseUrl: '/',
-  // Auto-generated Sphinx markdown occasionally still emits cross-refs
-  // to pages we don't ship under docs/docs/ (e.g., sphinx-apidoc points
-  // back at the parent package page sportsdataverse.md). The
-  // post-process pass in create_docs.sh strips the worst offenders, but
-  // staying on 'warn' gives us a forgiving margin so a single new broken
-  // link doesn't take the whole site offline. Tighten back to 'throw'
-  // once the post-process pass has been hardened.
+  // The per-league reference subtree under docs/docs/{league}/ is generated from
+  // endpoint metadata (`python tools/codegen/generate.py --docs`); the conceptual
+  // pages (intro, architecture/, parsers/) are hand-authored. Staying on 'warn'
+  // gives a forgiving margin so a single stale cross-link doesn't take the whole
+  // site offline; tighten to 'throw' once link coverage is verified clean.
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -46,19 +44,26 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           editUrl:
             'https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/',
-          // Versioning: the unversioned tree under docs/docs/ is the
-          // "next" / unreleased dev surface; frozen snapshots live
-          // under versioned_docs/version-X.Y.Z. lastVersion controls
-          // which version visitors see at the root URL.
-          lastVersion: '0.0.50',
+          // Versioning policy: the unversioned tree under docs/docs/ (the codegen-
+          // generated reference + hand-authored conceptual pages) is the live
+          // DEFAULT served at the root URL (`lastVersion: 'current'`), so every
+          // push republishes it via Vercel and it can never drift from the code
+          // (the codegen `--check` gate keeps the reference pages == the wrappers).
+          // It is labelled `main` — a rolling, collision-proof label — so that the
+          // per-release snapshots cut at release time (`yarn version:docs x.y.z`,
+          // which freezes a copy under versioned_docs/version-x.y.z) get the exact
+          // release numbers without ever clashing with `current`'s label. The
+          // legacy pre-codegen Sphinx docs stay archived at /docs/0.0.50/.
+          lastVersion: 'current',
           versions: {
             current: {
-              label: 'Next 🚧',
-              path: 'next',
+              label: 'main',
+              path: '',
+              banner: 'none',
             },
             '0.0.50': {
               label: '0.0.50',
-              path: '',
+              path: '0.0.50',
             },
           },
         },

@@ -14,51 +14,75 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Men's College Basketball",
+    title: 'Basketball',
     description: (
       <>
-        It provides users with the capability to access the ESPN API’s
-        men's college basketball game play-by-plays,
-        box scores, and schedules.
+        Tidy NBA, WNBA, and NCAA men's & women's basketball — play-by-play, box
+        scores, schedules, rosters, and standings — via the cross-league{' '}
+        <code>espn_nba_*</code> / <code>espn_wnba_*</code> / <code>espn_mbb_*</code>{' '}
+        / <code>espn_wbb_*</code> wrappers, mirroring{' '}
+        <Link to="https://hoopR.sportsdataverse.org">hoopR</Link> and{' '}
+        <Link to="https://wehoop.sportsdataverse.org">wehoop</Link>.
       </>
     ),
   },
   {
-    title: 'College Football',
+    title: 'Football',
     description: (
       <>
-        It provides users with the capability to access the ESPN API’s
-        college football game play-by-plays,
-        box scores, and schedules to analyze the data for themselves.
+        College football and the NFL: ESPN play-by-play, schedules, teams, and QBR
+        through <code>espn_cfb_*</code> / <code>espn_nfl_*</code>, plus an{' '}
+        <code>nfl</code> module that mirrors{' '}
+        <Link to="https://github.com/nflverse/nflreadpy">nflreadpy</Link> and reads{' '}
+        <Link to="https://nflverse.nflverse.com">nflverse</Link> releases. Aligned
+        with <Link to="https://cfbfastR.sportsdataverse.org">cfbfastR</Link>.
       </>
     ),
   },
   {
-    title: 'EPA and WPA',
+    title: 'Baseball',
     description: (
       <>
-        It provides users with the capability to access the cfbfastR team's
-        expected points added and win probability metrics.
+        MLB across three surfaces — ESPN, the official MLB Stats API
+        (<code>mlb_api_*</code>), and Baseball Savant / Statcast — for schedules,
+        play-by-play, rosters, and pitch-level data. The Python companion to{' '}
+        <Link to="https://billpetti.github.io/baseballr/">baseballr</Link>.
       </>
     ),
   },
   {
-    title: 'NFL',
+    title: 'Hockey',
     description: (
       <>
-        It provides users with the capability to access the nflfastR team's
-        game play-by-plays, box scores, and schedules. Additionally, the
-        package provides users with functions to access the ESPN NFL API
-        endpoints during live game-play.
+        NHL & PWHL via ESPN plus the NHL's own modern APIs: the{' '}
+        <code>api-web.nhle.com</code> game feed (<code>nhl_*</code>), EDGE player
+        tracking (<code>nhl_edge_*</code>), Stats REST, and the Records site —
+        mirroring{' '}
+        <Link to="https://fastRhockey.sportsdataverse.org">fastRhockey</Link>.
       </>
     ),
   },
   {
-    title: 'NHL',
+    title: 'Tidy by default',
     description: (
       <>
-        It provides users with the capability to access ESPN's NHL endpoints for
-        game play-by-plays, box scores, and schedules.
+        Every wrapper returns raw JSON by default; opt into an analysis-ready{' '}
+        <strong>polars</strong> (or pandas) DataFrame with{' '}
+        <code>return_parsed=True</code>, a <code>parse_*</code> function, or the{' '}
+        <code>sportsdataverse.parsed.*</code> mirror. Whole seasons load from
+        pre-built parquet via <code>load_*</code>.
+      </>
+    ),
+  },
+  {
+    title: 'Part of the SportsDataverse',
+    description: (
+      <>
+        Free and open, with one mental model across sports <em>and</em> languages —
+        the function you know in R is the call you make in Python — plus
+        benchmarkable EP/WP models. See{' '}
+        <Link to="/docs/ecosystem">Ecosystem &amp; philosophy</Link> for the full
+        Python ↔ R map.
       </>
     ),
   },
@@ -91,6 +115,12 @@ function HomepageHeader(): ReactNode {
             className="button button--secondary button--lg"
             to="/docs/intro">
             Getting Started
+          </Link>
+          &nbsp;&nbsp;
+          <Link
+            className="button button--outline button--secondary button--lg"
+            to="/docs/ecosystem">
+            Ecosystem &amp; philosophy
           </Link>
         </div>
       </div>

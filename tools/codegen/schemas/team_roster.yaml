@@ -1,0 +1,208 @@
+schema: team_roster
+kind: dataframe
+description: One row per rostered athlete (site v2 /teams/{id}/roster).
+columns:
+- name: id
+  type: character
+  description: Id.
+- name: uid
+  type: character
+  description: Uid.
+- name: guid
+  type: character
+  description: Guid.
+- name: first_name
+  type: character
+  description: First name.
+- name: last_name
+  type: character
+  description: Last name.
+- name: full_name
+  type: character
+  description: Full name.
+- name: display_name
+  type: character
+  description: Display name.
+- name: short_name
+  type: character
+  description: Short name.
+- name: weight
+  type: double
+  description: Weight.
+- name: display_weight
+  type: character
+  description: Display weight.
+- name: height
+  type: double
+  description: Height.
+- name: display_height
+  type: character
+  description: Display height.
+- name: age
+  type: integer
+  description: Age.
+- name: date_of_birth
+  type: character
+  description: Date of birth.
+- name: debut_year
+  type: double
+  description: Debut year.
+- name: links
+  type: character
+  description: Links.
+- name: slug
+  type: character
+  description: Slug.
+- name: jersey
+  type: character
+  description: Jersey.
+- name: injuries
+  type: character
+  description: Injuries.
+- name: teams
+  type: character
+  description: Teams.
+- name: contracts
+  type: character
+  description: Contracts.
+- name: alternate_ids_sdr
+  type: character
+  description: Alternate ids sdr.
+- name: birth_place_city
+  type: character
+  description: Birth place city.
+- name: birth_place_country
+  type: character
+  description: Birth place country.
+- name: college_id
+  type: character
+  description: College id.
+- name: college_guid
+  type: character
+  description: College guid.
+- name: college_mascot
+  type: character
+  description: College mascot.
+- name: college_name
+  type: character
+  description: College name.
+- name: college_short_name
+  type: character
+  description: College short name.
+- name: college_abbrev
+  type: character
+  description: College abbrev.
+- name: college_logos
+  type: character
+  description: College logos.
+- name: headshot_href
+  type: character
+  description: Headshot href.
+- name: headshot_alt
+  type: character
+  description: Headshot alt.
+- name: position_id
+  type: character
+  description: Position id.
+- name: position_name
+  type: character
+  description: Position name.
+- name: position_display_name
+  type: character
+  description: Position display name.
+- name: position_abbreviation
+  type: character
+  description: Position abbreviation.
+- name: position_leaf
+  type: logical
+  description: Position leaf.
+- name: experience_years
+  type: integer
+  description: Experience years.
+- name: contract_bird_status
+  type: integer
+  description: Contract bird status.
+- name: contract_base_year_compensation_active
+  type: logical
+  description: Contract base year compensation active.
+- name: contract_poison_pill_provision_active
+  type: logical
+  description: Contract poison pill provision active.
+- name: contract_incoming_trade_value
+  type: integer
+  description: Contract incoming trade value.
+- name: contract_outgoing_trade_value
+  type: integer
+  description: Contract outgoing trade value.
+- name: contract_minimum_salary_exception
+  type: logical
+  description: Contract minimum salary exception.
+- name: contract_option_type
+  type: integer
+  description: Contract option type.
+- name: contract_salary
+  type: integer
+  description: Contract salary.
+- name: contract_salary_remaining
+  type: integer
+  description: Contract salary remaining.
+- name: contract_years_remaining
+  type: integer
+  description: Contract years remaining.
+- name: contract_season_year
+  type: integer
+  description: Contract season year.
+- name: contract_season_start_date
+  type: character
+  description: Contract season start date.
+- name: contract_season_end_date
+  type: character
+  description: Contract season end date.
+- name: contract_trade_kicker_active
+  type: logical
+  description: Contract trade kicker active.
+- name: contract_trade_kicker_percentage
+  type: double
+  description: Contract trade kicker percentage.
+- name: contract_trade_kicker_value
+  type: integer
+  description: Contract trade kicker value.
+- name: contract_trade_kicker_trade_value
+  type: integer
+  description: Contract trade kicker trade value.
+- name: contract_trade_restriction
+  type: logical
+  description: Contract trade restriction.
+- name: contract_unsigned_foreign_pick
+  type: logical
+  description: Contract unsigned foreign pick.
+- name: contract_active
+  type: logical
+  description: Contract active.
+- name: status_id
+  type: character
+  description: Status id.
+- name: status_name
+  type: character
+  description: Status name.
+- name: status_type
+  type: character
+  description: Status type.
+- name: status_abbreviation
+  type: character
+  description: Status abbreviation.
+- name: citizenship
+  type: character
+  description: Citizenship.
+- name: birth_place_state
+  type: character
+  description: Birth place state.
+- name: hand_type
+  type: character
+  description: Hand type.
+- name: hand_abbreviation
+  type: character
+  description: Hand abbreviation.
+- name: hand_display_value
+  type: character
+  description: Hand display value.

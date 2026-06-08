@@ -89,7 +89,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         # Polars rejects mixed-typed object columns sometimes; coerce to str
         # for any leftover object dtype.
         df2 = df.copy()
-        for col in df2.select_dtypes(include="object").columns:
+        for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
         return pl.from_pandas(df2)
 
@@ -233,9 +233,7 @@ _SHOT_LOCATION_KEYS = (
 )
 
 
-def parse_edge_shot_location(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_edge_shot_location(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an EDGE shot-location heat map into long-form rows.
 
     Picks the most granular zone list available in the payload, in the
@@ -323,9 +321,7 @@ _ZONE_TIME_KEYS = (
 )
 
 
-def parse_edge_zone_time(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_edge_zone_time(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an EDGE zone-time payload into long-form rows.
 
     Each zone (offensive / defensive / neutral) or strength-state row
@@ -379,9 +375,7 @@ def parse_edge_zone_time(
 # unroll them into long-form frames.
 
 
-def parse_edge_sog_details(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_edge_sog_details(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the 17-cell shots-on-goal heat map from a detail payload.
 
     Looks for ``sogDetails`` (skater-detail, team-detail) or
@@ -411,9 +405,7 @@ def parse_edge_sog_details(
     return _empty_frame(return_as_pandas)
 
 
-def parse_edge_sog_summary(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_edge_sog_summary(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the 4-row shots-on-goal location aggregate from a detail payload.
 
     Looks for ``sogSummary`` (skater-detail, team-detail),
@@ -442,9 +434,7 @@ def parse_edge_sog_summary(
     return _empty_frame(return_as_pandas)
 
 
-def parse_edge_hardest_shots(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_edge_hardest_shots(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the hardest-shots list from ``skater-shot-speed-detail``.
 
     The endpoint ships ``hardestShots: list[10]`` with per-shot metadata
@@ -534,45 +524,42 @@ def parse_edge_payload(payload: Dict, return_as_pandas: bool = False) -> pl.Data
 #   restores the surface in the future the registry stays correct.
 EDGE_ENDPOINT_PARSERS = {
     # ---- Leaderboards (paths confirmed 404 live; kept for forward-compat) ----
-    "nhl_edge_skater_shot_location_top_10":       parse_edge_top10,
-    "nhl_edge_skater_shot_speed_top_10":          parse_edge_top10,
-    "nhl_edge_skater_speed_top_10":               parse_edge_top10,
-    "nhl_edge_skater_distance_top_10":            parse_edge_top10,
-    "nhl_edge_skater_zone_time_top_10":           parse_edge_top10,
-    "nhl_edge_goalie_5v5_top_10":                 parse_edge_top10,
-    "nhl_edge_goalie_edge_save_pctg_top_10":      parse_edge_top10,
-    "nhl_edge_goalie_shot_location_top_10":       parse_edge_top10,
-    "nhl_edge_team_shot_location_top_10":         parse_edge_top10,
-    "nhl_edge_team_skating_distance_top_10":      parse_edge_top10,
-    "nhl_edge_team_skating_speed_top_10":         parse_edge_top10,
-    "nhl_edge_team_zone_time_top_10":             parse_edge_top10,
-
+    "nhl_edge_skater_shot_location_top_10": parse_edge_top10,
+    "nhl_edge_skater_shot_speed_top_10": parse_edge_top10,
+    "nhl_edge_skater_speed_top_10": parse_edge_top10,
+    "nhl_edge_skater_distance_top_10": parse_edge_top10,
+    "nhl_edge_skater_zone_time_top_10": parse_edge_top10,
+    "nhl_edge_goalie_5v5_top_10": parse_edge_top10,
+    "nhl_edge_goalie_edge_save_pctg_top_10": parse_edge_top10,
+    "nhl_edge_goalie_shot_location_top_10": parse_edge_top10,
+    "nhl_edge_team_shot_location_top_10": parse_edge_top10,
+    "nhl_edge_team_skating_distance_top_10": parse_edge_top10,
+    "nhl_edge_team_skating_speed_top_10": parse_edge_top10,
+    "nhl_edge_team_zone_time_top_10": parse_edge_top10,
     # ---- Single-entity detail / comparison (all confirmed live) ----
-    "nhl_edge_skater_detail":                     parse_edge_detail,
-    "nhl_edge_skater_comparison":                 parse_edge_detail,
-    "nhl_edge_skater_shot_speed_detail":          parse_edge_detail,
-    "nhl_edge_skater_skating_distance_detail":    parse_edge_detail,
-    "nhl_edge_skater_skating_speed_detail":       parse_edge_detail,
-    "nhl_edge_skater_landing":                    parse_edge_detail,
-    "nhl_edge_goalie_detail":                     parse_edge_detail,
-    "nhl_edge_goalie_5v5_detail":                 parse_edge_detail,
-    "nhl_edge_goalie_comparison":                 parse_edge_detail,
-    "nhl_edge_goalie_save_percentage_detail":     parse_edge_detail,
-    "nhl_edge_goalie_landing":                    parse_edge_detail,
-    "nhl_edge_team_detail":                       parse_edge_detail,
-    "nhl_edge_team_landing":                      parse_edge_detail,
-    "nhl_edge_team_shot_speed_detail":            parse_edge_detail,
-    "nhl_edge_cat_skater_detail":                 parse_edge_detail,
-    "nhl_edge_cat_goalie_detail":                 parse_edge_detail,
-
+    "nhl_edge_skater_detail": parse_edge_detail,
+    "nhl_edge_skater_comparison": parse_edge_detail,
+    "nhl_edge_skater_shot_speed_detail": parse_edge_detail,
+    "nhl_edge_skater_skating_distance_detail": parse_edge_detail,
+    "nhl_edge_skater_skating_speed_detail": parse_edge_detail,
+    "nhl_edge_skater_landing": parse_edge_detail,
+    "nhl_edge_goalie_detail": parse_edge_detail,
+    "nhl_edge_goalie_5v5_detail": parse_edge_detail,
+    "nhl_edge_goalie_comparison": parse_edge_detail,
+    "nhl_edge_goalie_save_percentage_detail": parse_edge_detail,
+    "nhl_edge_goalie_landing": parse_edge_detail,
+    "nhl_edge_team_detail": parse_edge_detail,
+    "nhl_edge_team_landing": parse_edge_detail,
+    "nhl_edge_team_shot_speed_detail": parse_edge_detail,
+    "nhl_edge_cat_skater_detail": parse_edge_detail,
+    "nhl_edge_cat_goalie_detail": parse_edge_detail,
     # ---- Shot-location heat maps (17-cell grids) ----
-    "nhl_edge_skater_shot_location_detail":       parse_edge_shot_location,
-    "nhl_edge_goalie_shot_location_detail":       parse_edge_shot_location,
-    "nhl_edge_team_shot_location_detail":         parse_edge_shot_location,
-
+    "nhl_edge_skater_shot_location_detail": parse_edge_shot_location,
+    "nhl_edge_goalie_shot_location_detail": parse_edge_shot_location,
+    "nhl_edge_team_shot_location_detail": parse_edge_shot_location,
     # ---- Zone-time breakdowns ----
-    "nhl_edge_skater_zone_time":                  parse_edge_zone_time,
-    "nhl_edge_team_zone_time_details":            parse_edge_zone_time,
+    "nhl_edge_skater_zone_time": parse_edge_zone_time,
+    "nhl_edge_team_zone_time_details": parse_edge_zone_time,
 }
 
 
@@ -586,14 +573,14 @@ EDGE_ENDPOINT_PARSERS = {
 EDGE_SUBFRAME_PARSERS = {
     # Both skater-detail and team-detail ship sogDetails (17 rows) and
     # sogSummary (4 rows).
-    "nhl_edge_skater_detail":           (parse_edge_sog_details, parse_edge_sog_summary),
-    "nhl_edge_team_detail":             (parse_edge_sog_details, parse_edge_sog_summary),
+    "nhl_edge_skater_detail": (parse_edge_sog_details, parse_edge_sog_summary),
+    "nhl_edge_team_detail": (parse_edge_sog_details, parse_edge_sog_summary),
     # goalie-detail ships shotLocationDetails (17 rows) and shotLocationSummary (4 rows).
-    "nhl_edge_goalie_detail":           (parse_edge_sog_details, parse_edge_sog_summary),
+    "nhl_edge_goalie_detail": (parse_edge_sog_details, parse_edge_sog_summary),
     # shot-location-detail endpoints ship shotLocationDetails (17 rows) and
     # shotLocationTotals (4-12 rows).
     "nhl_edge_skater_shot_location_detail": (parse_edge_sog_details, parse_edge_sog_summary),
-    "nhl_edge_team_shot_location_detail":   (parse_edge_sog_details, parse_edge_sog_summary),
+    "nhl_edge_team_shot_location_detail": (parse_edge_sog_details, parse_edge_sog_summary),
     "nhl_edge_goalie_shot_location_detail": (parse_edge_sog_details, parse_edge_sog_summary),
     # shot-speed-detail ships hardestShots (10 rows).
     "nhl_edge_skater_shot_speed_detail": (parse_edge_hardest_shots,),

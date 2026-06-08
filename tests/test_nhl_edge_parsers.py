@@ -31,10 +31,10 @@ def _load(name: str) -> dict:
 @pytest.mark.parametrize(
     "fixture,min_columns",
     [
-        ("skater_detail",      30),
-        ("team_detail",        30),
-        ("goalie_detail",      20),
-        ("skater_shot_speed",  20),
+        ("skater_detail", 30),
+        ("team_detail", 30),
+        ("goalie_detail", 20),
+        ("skater_shot_speed", 20),
     ],
 )
 def test_parse_edge_detail_returns_single_row_with_columns(fixture, min_columns):
@@ -44,8 +44,7 @@ def test_parse_edge_detail_returns_single_row_with_columns(fixture, min_columns)
     assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
     assert df.height == 1, f"detail payload should flatten to 1 row, got {df.height}"
     assert len(df.columns) >= min_columns, (
-        f"expected >= {min_columns} flattened columns, got {len(df.columns)}: "
-        f"{df.columns[:8]}"
+        f"expected >= {min_columns} flattened columns, got {len(df.columns)}: {df.columns[:8]}"
     )
 
 
@@ -75,9 +74,7 @@ def test_parse_edge_shot_location_returns_17_row_grid(fixture):
     from sportsdataverse.nhl import parse_edge_shot_location
 
     df = parse_edge_shot_location(_load(fixture))
-    assert df.height == 17, (
-        f"expected 17-cell grid, got {df.height} rows"
-    )
+    assert df.height == 17, f"expected 17-cell grid, got {df.height} rows"
     assert "area" in df.columns
 
 
@@ -103,36 +100,33 @@ def test_parse_edge_zone_time_unrolls_strength_states_for_skater():
 
 
 @pytest.mark.parametrize(
-    "fixture", ["skater_detail", "team_detail", "goalie_detail", "team_shot_loc", "goalie_shot_loc"],
+    "fixture",
+    ["skater_detail", "team_detail", "goalie_detail", "team_shot_loc", "goalie_shot_loc"],
 )
 def test_parse_edge_sog_details_returns_17_rows(fixture):
     from sportsdataverse.nhl import parse_edge_sog_details
 
     df = parse_edge_sog_details(_load(fixture))
-    assert df.height == 17, (
-        f"{fixture}: expected 17 SOG-detail rows, got {df.height}"
-    )
+    assert df.height == 17, f"{fixture}: expected 17 SOG-detail rows, got {df.height}"
     assert "area" in df.columns
 
 
 @pytest.mark.parametrize(
     "fixture,min_rows",
     [
-        ("skater_detail",     4),
-        ("team_detail",       4),
-        ("goalie_detail",     4),
+        ("skater_detail", 4),
+        ("team_detail", 4),
+        ("goalie_detail", 4),
         # team-shot-location-detail ships 12-row totals; we accept >= 4.
-        ("team_shot_loc",     4),
-        ("goalie_shot_loc",   4),
+        ("team_shot_loc", 4),
+        ("goalie_shot_loc", 4),
     ],
 )
 def test_parse_edge_sog_summary_returns_location_codes(fixture, min_rows):
     from sportsdataverse.nhl import parse_edge_sog_summary
 
     df = parse_edge_sog_summary(_load(fixture))
-    assert df.height >= min_rows, (
-        f"{fixture}: expected >= {min_rows} location-code rows, got {df.height}"
-    )
+    assert df.height >= min_rows, f"{fixture}: expected >= {min_rows} location-code rows, got {df.height}"
     assert "location_code" in df.columns
 
 
@@ -143,9 +137,7 @@ def test_parse_edge_hardest_shots_returns_10_row_list():
     assert df.height == 10, f"expected 10 hardest-shots rows, got {df.height}"
     # shotSpeed is a nested {imperial, metric} dict in the live payload,
     # so the flattened columns are shot_speed_imperial / shot_speed_metric.
-    assert any(c.startswith("shot_speed") for c in df.columns), (
-        f"missing shot_speed columns: {df.columns}"
-    )
+    assert any(c.startswith("shot_speed") for c in df.columns), f"missing shot_speed columns: {df.columns}"
     assert "game_date" in df.columns
 
 
@@ -211,11 +203,10 @@ def test_edge_endpoint_parsers_registry_covers_all_wrappers():
     """Every nhl_edge_* wrapper should have a registered parser, or fall
     through to the generic ``parse_edge_payload`` via parser_for_edge.
     """
-    from sportsdataverse.nhl import EDGE_ENDPOINT_PARSERS, nhl_edge, parse_edge_payload, parser_for_edge
+    from sportsdataverse.nhl import EDGE_ENDPOINT_PARSERS, nhl_edge, parser_for_edge
 
     wrapper_names = [
-        name for name in dir(nhl_edge)
-        if name.startswith("nhl_edge_") and callable(getattr(nhl_edge, name))
+        name for name in dir(nhl_edge) if name.startswith("nhl_edge_") and callable(getattr(nhl_edge, name))
     ]
     assert wrapper_names, "no nhl_edge_* wrappers found — import error?"
 
@@ -233,10 +224,7 @@ def test_edge_subframe_parsers_registry_consistent():
     from sportsdataverse.nhl import EDGE_SUBFRAME_PARSERS, nhl_edge
 
     wrapper_names = {
-        name for name in dir(nhl_edge)
-        if name.startswith("nhl_edge_") and callable(getattr(nhl_edge, name))
+        name for name in dir(nhl_edge) if name.startswith("nhl_edge_") and callable(getattr(nhl_edge, name))
     }
     for fn_name in EDGE_SUBFRAME_PARSERS:
-        assert fn_name in wrapper_names, (
-            f"EDGE_SUBFRAME_PARSERS references missing wrapper {fn_name!r}"
-        )
+        assert fn_name in wrapper_names, f"EDGE_SUBFRAME_PARSERS references missing wrapper {fn_name!r}"

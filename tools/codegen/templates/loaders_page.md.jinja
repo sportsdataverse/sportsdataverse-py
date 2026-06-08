@@ -1,0 +1,32 @@
+---
+title: {{ prefix|upper }} dataset loaders
+sidebar_label: Loaders
+---
+# {{ prefix|upper }} dataset loaders
+
+```mermaid
+flowchart LR
+  raw["scrape / raw"] --> enrich["enrich"] --> rel["release asset"] --> load["load_*()"]
+```
+
+## Automation status
+
+| Dataset | Release tag | Pipeline |
+|---|---|---|
+{% for ld in loaders %}| `{{ ld.fn }}` | [{{ ld.tag }}](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{{ ld.tag }}) | {% if ld.automation.repo %}![status](https://github.com/{{ ld.automation.repo }}/actions/workflows/{{ ld.automation.workflow }}/badge.svg){% else %}—{% endif %} |
+{% endfor %}
+
+{% for ld in loaders %}
+## `{{ ld.fn }}`
+
+Release: [{{ ld.tag }}](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{{ ld.tag }}){% if ld.url %} · asset `{{ ld.url }}`{% endif %}
+
+{% if ld.return_table %}### Returns
+
+{{ ld.return_table }}
+{% endif %}
+```python
+{{ ld.fn }}(seasons={{ ld.example_seasons }})
+```
+
+{% endfor %}

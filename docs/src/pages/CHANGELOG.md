@@ -2,6 +2,17 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.53 (unreleased)](#0053-unreleased)
+  - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
+  - [NHL native — codegen cutover + clean names (api-web; in progress)](#nhl-native--codegen-cutover--clean-names-api-web-in-progress)
+  - [Dataset loaders — release manifest + drift audit](#dataset-loaders--release-manifest--drift-audit)
+  - [Generated documentation — reference pages + drift gate](#generated-documentation--reference-pages--drift-gate)
+  - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
+  - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
+  - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
+  - [CFB — blocked-kick turnover flags + ESPN native-flag tripwires](#cfb--blocked-kick-turnover-flags--espn-native-flag-tripwires)
+  - [CFB — pre-2014 era support (`CFBPlayProcess`)](#cfb--pre-2014-era-support-cfbplayprocess)
+  - [Removed — NCAA bracketology](#removed--ncaa-bracketology)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
@@ -54,6 +65,396 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.53 (unreleased)
+
+### ESPN — declarative codegen + factory retirement
+
+The runtime "magic" that mass-registered each league's `espn_<league>_*` ESPN
+wrappers at import time (`_common_espn.make_league_module` / `_bind` + the
+`_UNIVERSAL_WRAPPERS` / `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` / `_MLB_WRAPPERS`
+tables + ~127 private `_site_v2_*` / `_espn_*` / `_core_v2_*` core functions) has
+been replaced by a **declarative codegen pipeline** (`tools/codegen/`). Endpoint
+metadata lives in `tools/codegen/endpoints/*.yaml`; `generate.py` renders concrete,
+fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ext.py`.
+
+- **New `espn_nhl_*` surface (115 functions).** NHL previously had no ESPN
+  cross-league wrappers; it now gets the full Site v2 / Web v3 / Core v2 surface,
+  and `find()` works for NHL for free.
+- **Identical behavior, real signatures.** Every generated function builds a
+  byte-identical URL + query string to the function it replaced (verified by a
+  URL+params parity gate across all scopes), but now exposes concrete parameter
+  names, type hints, and docstrings instead of an opaque `*args, **kwargs` shim.
+- **Names aligned to the R sister packages (universal, token-level convention).**
+  Across all eight leagues the generated `espn_*` names follow the
+  cfbfastR/hoopR/wehoop taxonomy (behavior unchanged). The rename is applied at the
+  underscore-**token** level (not just prefixes), so `athlete`/`event` convert in
+  every position incl. plurals: `athlete -> player` (`athlete_vs_athlete ->
+  player_vs_player`, `athletes_index -> players_index`, `season_athletes ->
+  season_players`), `event -> game` (bare `event -> game`, `events -> games`,
+  `event_* -> game_*`, `season_week_events -> season_week_games`). Two combined
+  mappings run first: `event_competitor* -> game_team*` (a competitor is the game's
+  team) and `event_competition -> game_competition` / `event_competition_* ->
+  game_*`. Compound tokens like `eventlog` are preserved (`athlete_eventlog ->
+  player_eventlog`). cfb additionally gets `season_*` cleanups vs cfbfastR
+  (`futures`/`groups`/`recruits`/`week_rankings`; `powerindex -> team_powerindex`).
+  Rule engine: `generate._convention_rename`; cfb-specific exceptions:
+  `tools/codegen/espn_rename_map.yaml`.
+- **Collision-guarded.** Renames that would clash with a hand-written sibling or
+  another generated name are skipped automatically: `teams_site` (raw endpoint, !=
+  parsed `espn_*_teams`) and `espn_cfb_season_{team,awards,coaches}` (vs the
+  catalog). SAME-endpoint duplicates are dropped: the generated raw
+  `espn_{wbb,wnba}_game_officials` is suppressed (via `espn_rename_map.yaml` `drop:`)
+  because the hand-written parsed `espn_{wbb,wnba}_game_officials` (renamed from
+  `event_officials`, core-api officials with ids) exposes the same endpoint. One->many
+  splits (e.g. `summary`) remain for curation
+  (see `docs/superpowers/specs/espn-r-naming-worksheet.md`).
+- **Versioned collision rule (dynamic, "one stays bare").** When a generated name
+  would collide with an existing function but they hit *different* endpoints, both are
+  kept: ONE keeps the bare name and the larger/newer one is version-qualified. This is
+  now decided dynamically by the generator (`_league_module_source` pass 2 +
+  `_versioned_on_collision`), not hard-coded. The web-common-v3 `/athletes/{id}/stats`
+  endpoint wants the bare `player_stats`; it is version-qualified to
+  `espn_*_player_stats_v3` *only* when a hand-written bare `player_stats` already claims
+  the name — a league without that sibling would get the bare name automatically (no
+  orphaned `*_v3`).
+- **Cross-league `player_stats` parity (core-v2 season) for ALL eight ESPN leagues.**
+  Every league now exposes a bare `espn_<league>_player_stats` (core-v2
+  `/seasons/{season}/types/{type}/athletes/{id}/statistics` season line) returning
+  **one wide, self-describing row** (athlete identity + season line as
+  `{category}_{stat}` columns + `team_*` identity), plus the generated
+  `espn_<league>_player_stats_v3` (web-v3 comprehensive) — matching the
+  hoopR/wehoop/cfbfastR convention exactly. nba, mbb, nfl, nhl, mlb, and cfb gain new
+  hand-written wrappers; wnba/wbb were already converted. A single sport-aware core
+  (`sportsdataverse._common_espn_player_stats._espn_player_stats`) backs all eight
+  (basketball/football/baseball/hockey share the core-v2 `splits.categories[].stats[]`
+  shape and athlete/team `$ref` graph). New `season_type` (`"regular"`/`"postseason"`)
+  and `total` params mirror the wehoop signature. **BREAKING:** `espn_wnba_player_stats`
+  / `espn_wbb_player_stats` previously hit web-v3 and returned a `dict` of category
+  frames; they now return a single core-v2 season `DataFrame` (the web-v3 payload moved
+  to `*_player_stats_v3`).
+- **`_get` / `_csv` single source.** The HTTP + coercion helpers now live in
+  `sportsdataverse._codegen_runtime` (shared by all generated wrappers);
+  `_common_espn` re-exports them. **Note for test authors:** mock
+  `sportsdataverse._codegen_runtime.download` (not `_common_espn._get`) to
+  intercept the generated wrappers.
+- **Drift guard.** `python tools/codegen/generate.py --check` (and the
+  `sdv-codegen` pre-commit hook) fail if the committed wrappers fall out of sync
+  with the endpoint metadata.
+
+**BREAKING (internal):** `sportsdataverse._common_espn` no longer exposes the
+factory (`make_league_module` / `_bind` / the `_*_WRAPPERS` tables) or the private
+`_site_v2_*` / `_core_v2_*` core functions. Public `espn_<league>_*` wrappers are
+unchanged in name and behavior.
+
+### NHL native — codegen cutover + clean names (api-web; in progress)
+
+The hand-written NHL native modules are being regenerated from endpoint specs
+(via `tools/codegen/extract_native.py` -> flat-API YAML -> `generate.py`) with
+**clean, R-aligned names**, family by family. **First family: `nhl_api_web`.**
+
+- **BREAKING renames** (`nhl_web_* -> nhl_*` where the clean name is free; the
+  qualifier is kept only on collision with a hand-written composite, so
+  `nhl_web_pbp` and `nhl_web_schedule` are unchanged): e.g. `nhl_web_boxscore ->
+  nhl_boxscore`, `nhl_web_standings -> nhl_standings`, `nhl_web_roster ->
+  nhl_roster`, `nhl_web_scoreboard -> nhl_scoreboard` (26 functions; full map in
+  `tools/codegen/rename_map.yaml`). Behavior (URL + params + parser) is identical
+  -- faithfulness was verified by `test_parity_native` before the swap.
+- `nhl_scoreboard` (the 3-way team/date/now branch) stays hand-written in
+  `nhl_api_web_extra.py` -- the single-URL-builder codegen can't represent it.
+- **Removed** the deprecated `sportsdataverse.nhl.nhl_api` module (targeted the
+  retired `statsapi.web.nhl.com`); use `nhl_api_web` / `nhl_pbp` instead.
+- **`nhl_edge`** (family 2) and **`nhl_stats_rest`** (family 3) are now generated
+  too. Both keep their meaningful API namespaces (`nhl_edge_*`, `nhl_stats_rest_*`)
+  so they are **non-breaking** codegen-ifications (35 + 21 functions). stats_rest's
+  arbitrary `**filters` power feature (cayenneExp/sort/limit/...) is preserved via
+  a new `passthrough_query` engine mode that forwards None-filtered `**kwargs` as
+  query params; `return_parsed` is additionally wired where a parser exists.
+- **`nhl_records`** (family 4) is generated too -- kept `nhl_records_*` (distinct
+  records.nhl.com product), **non-breaking** (50 functions: 44 generated +
+  `passthrough_query`, 6 value-embedded/scope-conditional ones preserved
+  hand-written in `nhl_records_extra.py`).
+- **`mlb_api`** (family 5, final) is generated too -- kept `mlb_api_*` (the raw MLB
+  Stats API namespace, distinct from the curated `mlb_*` composites),
+  **non-breaking** (41 names: 26 generated + `passthrough_query` for hydrate/fields,
+  15 conditional-`_csv` / multi-param / `/api/v1.1/`-host functions preserved
+  hand-written in `mlb_api_extra.py`).
+- **All five native families are now codegen-generated.** Only `nhl_api_web` was a
+  breaking rename (its `web` qualifier was host-noise); the other four kept their
+  meaningful API namespaces. The codegen engine gained flat-API collision
+  resolution (`FlatApi.qualifier` + `resolve_name`), `passthrough_query`, and a
+  `build_flat`/`--check` drift gate. `test_parity_native` locked in each family's
+  faithfulness before its swap.
+
+### Dataset loaders — release manifest + drift audit
+
+- **`releases.yaml` manifest expanded 24 -> 92 loaders**, seeded from the live
+  sportsdataverse-data release list: every release tag shipping season-partitioned
+  `*.parquet` assets gets a 404-safe loader entry whose URL is derived from the
+  actual asset names (verified to resolve). New coverage: WNBA (`espn_wnba_*` +
+  `wnba_stats_*`), **PWHL** (15 datasets, a new league), NHL (full `nhl_*` family
+  incl. EDGE/lite/boxscores), WBB, NBA, MBB.
+- **`generate.py --audit-releases`** compares the manifest against the live release
+  list (gh CLI) and reports tags with no loader (gaps) + orphans -- a CI-oriented
+  drift gate (separate from the offline `--check`). `tests/codegen/fixtures/release_tags.txt`
+  snapshots the live tags for offline coverage tests.
+- Release tags that don't yet ship parquet (empty / csv-only / season-less -- e.g.
+  several `espn_cfb_*` advanced-box tags, `nba_stats_*` boxscores) are intentionally
+  absent and surfaced by the audit until parquet lands.
+- **`@return` column tables** (Task 4): every non-stub loader's parquet footer is
+  introspected into `tools/codegen/schemas/loader_schemas.yaml` (92 datasets) and
+  rendered as a `|col_name|type|` table in the generated loader docstrings
+  (reproducible via `generate.py --loader-schemas`).
+- **All loader modules are now generated** (Task 5 complete). The new
+  `sportsdataverse.pwhl` league (15 loaders) plus the six existing leagues
+  (`cfb`/`mbb`/`nba`/`nhl`/`wbb`/`wnba`) are rendered from the manifest into
+  `{league}/{league}_loaders.py` -- expanding from 4 hand-written loaders per league
+  to the full release-backed set (nhl 24, wnba 25, wbb 11, nba 9, pwhl 15, ...),
+  each with `@return` column tables. **Zero loss** (verified before/after): the
+  season-less / helper functions the loop template can't express are preserved
+  hand-written in `{league}_loaders_extra.py` residuals -- `cfb`:
+  `load_cfb_betting_lines` + `get_cfb_teams`; `nhl`: `nhl_teams`. The codegen
+  `build`/`--check` drift gate covers all generated loader modules
+  (`_GENERATED_LOADER_LEAGUES`). Verified live: `load_pwhl_pbp(2024)` -> 10,456 rows,
+  `load_nhl_pbp_lite(2010)` -> 400,512, `load_wnba_shots(2024)` -> 45,480.
+
+### Generated documentation — reference pages + drift gate
+
+- **`generate.py --docs`** renders the full reference docs tree from the same
+  endpoint/loader/parameter metadata that drives the wrappers, directly into the
+  live Docusaurus "Next" surface (`docs/docs/{league}/`). 64 files: per-league
+  `index.md` + `_category_.json`, a per-API reference page for every ESPN API
+  (`site`/`web`/`core`) and native flat family
+  (`nhl_api_web`/`nhl_edge`/`nhl_stats_rest`/`nhl_records`/`mlb_api`), a
+  `reference/loaders.md` per loader league, and a shared `reference/parameters.md`.
+  This **replaces the legacy Sphinx apidoc dumps** — the 7 per-league
+  `index.md` Sphinx pages plus the hand-authored NHL/MLB conceptual pages were
+  regenerated/removed; package-wide conceptual pages (`intro`, `quality-of-life`,
+  `architecture/`, `parsers/`) are preserved untouched.
+- **8-section function block** (`templates/_reference_block.jinja`): summary,
+  endpoint URL, a concrete valid example URL, an nba_api-style
+  `| API Parameter | Python | Pattern | Required | Nullable |` table, a `@return`
+  column table sourced from the `returns_schema` (handles both `kind: dataframe`
+  and multi-frame `kind: frames` payloads), a runnable `python` example, and a
+  validated-date line.
+- **Names never drift from code**: the per-endpoint name-resolution passes were
+  extracted into shared `_espn_league_views()` / `_flat_views()` helpers used by
+  both the module renderer and the docs renderer, so a reference page always
+  documents the exact wrapper name that gets emitted (e.g. the collision-qualified
+  `nhl_web_pbp` alongside the clean `nhl_boxscore`).
+- **Drift gate**: `--check` now also fails on stale generated docs (and orphans
+  inside the fully-generated league/`reference/` dirs — conceptual pages outside
+  them are never flagged); the default `build` writes them.
+  `tools/codegen/fetch_packages.py` snapshots the SDV package list for an optional
+  packages page (network tool; the gate stays offline by omitting the page when no
+  snapshot is committed). New offline tests `tests/codegen/test_docs.py` +
+  `test_doc_parity.py` assert the 8-section contract across every league x API and
+  that the live tree is current.
+- **Docusaurus migration**: `docs/sidebars.ts` now drives each league as a
+  clickable category (link → generated `index`) expanding to an autogenerated
+  reference subtree, so new endpoints surface in the nav with no sidebar edit;
+  added a top-level "Parameter reference" entry. The legacy Sphinx pipeline
+  (`create_docs.sh` + `Sphinx-docs/`) is **deleted**, along with its now-unused
+  `sphinx`/`sphinx-markdown-builder`/`sphinx-material` dev dependencies (dropped
+  from the `docs` extra/group + the `all` extra; `uv.lock` re-resolved). `yarn build`
+  passes with a link-clean `/docs/next/` surface (remaining broken-anchor warnings
+  are confined to the frozen `0.0.50` version + the CHANGELOG doctoc fragments).
+- **Example notebooks are CI-executed** (`nbmake`): the example notebooks were
+  audited against the post-rename API — only `02_cfb_intro` broke (the standalone
+  `espn_cfb_pbp(game_id=...)` is gone), and its PBP cells were rewritten to the
+  `CFBPlayProcess(gameId=...).espn_cfb_pbp()` + `.run_processing_pipeline()` flow
+  (verified live). `nbmake` was added to the `test` dependency group, and the
+  weekly `live-tests-cron` workflow now runs `pytest --nbmake examples/notebooks/`
+  as an informational (non-blocking) leg so notebook breakage surfaces as drift.
+- **Cohesive intro docs**: a new [Ecosystem & philosophy](https://py.sportsdataverse.org/docs/ecosystem)
+  page ties the docs together — the design philosophy, the full function-naming
+  paradigm (`espn_<league>_*`, native `<league>_*`, `load_<league>_*`, `parse_*`,
+  plus the R-aligned athlete→player / event→game conventions and collision rules),
+  the Python ↔ R sister mapping (hoopR / wehoop / cfbfastR / baseballr / fastRhockey,
+  plus oddsapiR / recruitR / sportyR / sportypy / sportsdataverse.js), and how the
+  package relates to nflverse (the NFL module mirrors nflreadpy) and the wider
+  PySport ecosystem. `intro.md` and all seven example notebooks now open with a
+  consistent philosophy/naming blurb and link to it. The page also documents the
+  companion **data repositories** (sportsdataverse-data releases, cfbfastR-data,
+  fastRhockey-data, nflverse-data) behind the `load_*` family and links each
+  league's generated *Automation status* loader table, and includes a **1:1
+  function map** — a table whose `sportsdataverse-py` functions deep-link to their
+  reference pages and whose R-sister functions link to the matching
+  hoopR/wehoop/cfbfastR/fastRhockey/baseballr pkgdown docs (verified against each
+  package's NAMESPACE). The
+  [ESPN cross-league architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
+  page was realigned from the retired `make_league_module()` runtime factory to the
+  current declarative-codegen reality.
+- **Docs default flipped to the overhauled tree + per-release snapshot policy**:
+  `docusaurus.config.ts` sets `lastVersion: 'current'` (labelled `main`), so the
+  generated reference + conceptual docs are the live DEFAULT at the root `/docs/`
+  and auto-refresh on every deploy instead of sitting at `/docs/next/` behind the
+  frozen 0.0.50 Sphinx dumps; the legacy docs stay archived at `/docs/0.0.50/`. The
+  site builds on [Vercel](https://vercel.com) on push to `main` (no in-repo deploy
+  workflow — a GitHub Pages action would double-publish). At each release, freeze a
+  per-release archive with the new `cd docs && yarn version:docs <x.y.z>` helper
+  (keeping `current`/`main` the default) — so the live docs never drift from the
+  code (codegen `--check`-gated) yet every release still gets a frozen record. The
+  release step is documented in CLAUDE.md.
+- **Home page refreshed**: `docs/src/pages/index.tsx` was rewritten from the stale
+  MBB/CFB/EPA cards to the full current surface — Basketball / Football / Baseball /
+  Hockey (incl. native NHL & MLB APIs, loaders, the tidy-by-default parser layer) —
+  each card naming its R sister, with an "Ecosystem & philosophy" call-to-action.
+- Declined follow-up: a data-driven SDV navbar dropdown — `projects.json` carries
+  no canonical doc URLs, so the curated navbar in `docusaurus.config.ts` (which
+  has them) stays authoritative.
+
+### CFB — advanced box score expansion (`create_box_score`)
+
+`CFBPlayProcess.create_box_score()` (and therefore `run_processing_pipeline()`'s
+`advBoxScore`) now emits two additional per-player sections alongside the existing eight:
+
+- **`defensive_players`** — per-defender havoc events attributed by player and defensive
+  team: `sacks` (+`sacks_yards`), `pass_breakups`, `interceptions` (+`interceptions_yards`),
+  `forced_fumbles`, `fumble_recoveries` (+`fumble_recoveries_yards`). Keyed by
+  `def_pos_team` + `player_name`. Columns present vary per game (only populated stats appear);
+  all values derive from existing enriched play columns (no new tracking data).
+- **`specialists`** — per-player kicking/punting/return production keyed by `pos_team` +
+  `player_name`: `field_goals` (+`field_goals_yards`), `punts` (+`punts_yards`),
+  `kick_returns` (+`kick_returns_yards`), `punt_returns` (+`punt_returns_yards`).
+
+Both are additive and degrade to `[]` when no events are attributable. The existing
+`pass`/`rush`/`receiver`/`team`/`situational`/`defensive`/`turnover`/`drives` sections are
+unchanged.
+
+### CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)
+
+A correctness pass on team/player attribution in the advanced box score, reconciled
+against ESPN's official box score for a 5-game fixture set (all turnover totals now match
+ESPN exactly). All output is additive — existing field names are preserved; previously
+wrong values are corrected and new fields/sections are added.
+
+- **Per-play attribution layer** (`__add_attribution_cols`): resolves the credited team for
+  every play from the play text + flags, aware that `pos_team`/`def_pos_team` swap roles by
+  play type (on a kickoff `pos_team` is the receiving team; on a punt it is the punting
+  team). Produces `kicking_team`, `return_team`, `fumbling_team`, `recovery_team`,
+  `recovery_team_2`, `penalized_team`, and per-side turnover flags.
+- **Special-teams turnovers are now counted.** Previously the turnover box filtered to
+  scrimmage plays, dropping muffed punts, kickoff-return fumbles, and blocked-kick
+  recoveries; these are now included. Muffs (`"muffed by …"`) are detected as fumbles, and
+  overturned plays (`"(Original Play: …)"` after a reversed review) are stripped before
+  parsing so a reversed fumble is not counted.
+- **Per-side turnover model.** A single play can register a turnover for **both** teams via
+  `is_pos_team_turnover` / `is_def_pos_team_turnover` and a 2-deep recovery chain — e.g. an
+  interception returned and fumbled back, or a sack-strip where the recovering defense
+  fumbles it back. Turnover margins/luck are keyed by team identity (fixing a prior
+  group-order bug that could swap or sign-flip them). The `turnover` list is now ordered
+  `[home, away]` and every row carries `team_id` — consumers should key by `team_id`
+  rather than list position (the previous order came from an unordered group-by).
+- **Correct team attribution** for fumble recoveries (own recoveries credited to the
+  recovering team, not always the defense), punt returns (credited to the returning team,
+  not the punting team), and **penalty yards** (charged to the penalized team via
+  `penalty_yards`, with the legacy `total_pen_yards` retained).
+- **End-of-period play-drop fix.** A dedup heuristic was dropping the real play immediately
+  before an "End of period/half/game" marker (which inherits its start state) — losing
+  end-of-half turnovers such as a Hail Mary interception. Guarded so end markers never
+  trigger dedup of the preceding play.
+- **ESPN-sourced totals.** New **`espn_team`** and **`espn_players`** sections surface
+  ESPN's official box verbatim (turnovers, fumbles lost, interceptions, total/passing/
+  rushing yards, penalties, first downs, player stat lines) as the authoritative source for
+  countable totals. The `turnover` section sources `turnovers`/`Int`/`fumbles_lost` from the
+  ESPN box (`espn_sourced=True`), keeping the play-by-play derivation under `*_pbp` keys as
+  the fallback and as a validated cross-check.
+- **Clean player names.** `run_processing_pipeline()` joins ESPN's per-play participants
+  (`espn_cfb_play_participants`) to replace regex-extracted names (which carried team
+  prefixes, e.g. `"BYU Dayan Ghanwoloku"`) with clean display names, with graceful fallback
+  to the regex names when offline. Set `join_participants = False` to skip the fetch
+  (used by offline reprocessing and the offline test suite).
+
+### CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)
+
+- **Interceptions are no longer mislabeled as fumble recoveries.** The "strip-sack →
+  fumble" reclassification rules fire on `fumble_vec & pass & change_of_poss==1`. An
+  interception also sets `change_of_poss=1`, so a pick whose returner subsequently fumbled
+  matched the predicate and was relabeled `"Fumble Recovery (Opponent)"`, erasing the
+  interception (and, because the downstream `int` flag is derived from `type.text`, zeroing
+  it for EPA/WPA and the box score). Both pass strip-sack rules now additionally require
+  `type.text` not be an interception label (`int_vec`), so these plays keep their
+  interception classification (normalized to `"Interception Return"` later in the method).
+  Genuine strip-sacks — and the rush strip-sack rule, which cannot match an interception —
+  are unchanged. Verified across a 20-game / 3,439-play before/after diff: exactly one play
+  changed (`Fumble Recovery (Opponent)` → `Interception Return`), zero other plays affected.
+- **Post-attribution play-type refinement (`__refine_play_types_post_attribution`).** A new
+  pipeline step (after `__add_attribution_cols`) corrects two labels that need the turnover
+  signal the step-5 reclassifier lacks (it can only see `change_of_poss`, which is `True` on
+  every possession flip, not just turnovers):
+  - A sack-fumble the offense **recovers itself** was relabeled `Fumble Recovery (Opponent)`
+    (spurious `change_of_poss`); `is_turnover == False` restores `Fumble Recovery (Own)`.
+  - A punt-return fumble the **punting team** recovers (`recovery_team == pos_team`) becomes
+    `Punt Team Fumble Recovery` instead of staying `Punt Return`.
+
+  Only the package's own first-pass relabels are undone (guarded on `orig_play_type`); the two
+  frozen `type.text`-derived columns EPA/WPA read (`downs_turnover`, `pos_score_diff_end`) are
+  recomputed so EPA stays consistent (e.g. a 4th-down self-recovery short of the sticks is now
+  correctly scored a turnover on downs). ESPN-sourced box turnover totals are unaffected.
+  Verified across a 20-game / 3,439-play before/after diff: exactly two plays changed (both
+  intended relabels), with EPA moving only on those two plays — no collateral drift.
+
+### CFB — blocked-kick turnover flags + ESPN native-flag tripwires
+
+- **New `is_blocked_punt_turnover` / `is_blocked_fg_turnover` per-play flags (additive).**
+  `is_turnover` models only *giveaways* (INT + fumbles lost) to match ESPN's official-box
+  `turnovers` definition (so the `*_pbp` cross-check stays exact). A blocked kick the defense
+  recovers is a possession loss but **not** a giveaway — ESPN's official box does not count it
+  (verified) — so each is surfaced as a standalone flag kept out of `is_turnover` /
+  `is_st_turnover`: `True` on a `Blocked Punt`/`Blocked Field Goal` Touchdown, or the non-TD
+  variant with a possession change. These are the possession-losing classes ESPN's per-play
+  `isTurnover` flag catches that the giveaway-based derivation does not.
+- **Blocked-FG mislabel fix.** ESPN sometimes types a blocked field goal returned by the defense
+  as `Extra Point Missed`, routing it through PAT-scoring EPA logic. `__add_new_play_types` now
+  relabels these to `Blocked Field Goal[ Touchdown]` (gated on `"blocked"` + an FG/`field goal`
+  text token, so a genuine blocked PAT is untouched), which also corrects the EPA. Because the
+  relabel runs before the `type.text`-derived flag computation, all downstream flags recompute
+  cleanly (no staleness).
+- **ESPN native `isTurnover` / `isPenalty` are kept as cross-checks, not sources of truth.** They
+  pass through the flattener as columns (populated back to 2018). `isTurnover` is coarser (it
+  silently drops ~16% of plain interceptions on sparse-text plays and has no per-side/ST concept);
+  `isPenalty` flags only *primary*-penalty plays. New regression tripwires
+  (`test_espn_flag_tripwires.py`) assert `isTurnover ⇒ is_turnover OR is_blocked_punt_turnover OR
+  is_blocked_fg_turnover` and `isPenalty ⇒ penalty_flag` on the fixtures — the first would have
+  caught the interception-erasure bug above. Validated across 150 games (24,876 plays): all
+  blocked-punt and blocked-FG possession losses captured with 100% ESPN agreement and zero leakage
+  into the giveaway signals; penalty tripwire 0 violations; `isTurnover`/`is_turnover` agreed 99.6%
+  (residual disagreements are ESPN false positives — self-recovered fumbles — the stricter
+  derivation correctly excludes).
+
+### CFB — pre-2014 era support (`CFBPlayProcess`)
+
+Validated across a 240-game sweep (15 games × 2004-2019): every game that has play-by-play
+produces valid EPA/WPA and a full advanced box score in every era (209/209 of the sampled
+games-with-plays; games without PBP exit early gracefully). Legacy ESPN labels that only appear in
+older seasons are now normalized in `__add_new_play_types` (each rule is gated on the raw label, so
+it is a no-op on modern data):
+
+- **`2pt Conversion`** — ESPN's pre-2014 *successful* two-point label — is resolved via
+  `scoringPlay` to `Two-Point Conversion Good` / `Two-Point Conversion Missed`, so it routes
+  through the two-point EPA/scoring path instead of being scored as a generic play.
+- **2004 `Unknown` rows** are relabeled from their text: period/game markers → `End Period` (so
+  these non-plays are excluded from aggregates instead of producing garbage EPA), and the handful
+  of misclassified kicks → `Field Goal Missed` / `Extra Point Missed` / `… Good`.
+- **`Kickoff Return (Defense)`** (pre-2014 onside-kick-recovered) → `Kickoff`.
+- **Separate extra-point rows** are normalized to the no-down sentinel (`down`/`distance = -1`) for
+  the few pre-2005 games that ship a real down on them (2005+ and two-point rows already use it).
+
+Era notes (documented in the architecture reference): pre-2014 player attribution is
+text-extraction only (the participants endpoint returns nothing before 2014; `__join_participants`
+already falls back to regex names); ESPN's own win-probability array is empty before ~2016 but
+`wpa` is computed in-house in every era; and PBP coverage is sparse before 2008 (~47% of 2004
+games have no PBP), handled by the existing early-exit.
+
+### Removed — NCAA bracketology
+
+- **`espn_mbb_bracketology()` / `espn_wbb_bracketology()` removed.** The non-league
+  `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology` wrappers added in
+  0.0.51 — along with the `_common_ncaa.py` module and the `register_ncaa_bracketology()`
+  registration machinery — have been removed. The endpoint is ephemeral (ESPN only publishes it
+  during the Jan–Mar projection window) and sat outside the per-league URL pattern, so it is no
+  longer carried. The universal `espn_mbb_*` / `espn_wbb_*` wrappers are unaffected.
 
 ## 0.0.52 Release: June 3, 2026
 

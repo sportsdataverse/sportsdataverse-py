@@ -1,0 +1,68 @@
+# Codegen drift gate: the committed generated wrappers (ESPN league modules,
+# NHL/MLB native flat modules, concrete parsed.* mirrors, dataset loaders) must
+# stay in sync with their endpoint/loader metadata. `generate.py --check`
+# re-renders everything into a temp dir and diffs byte-for-byte; any drift fails
+# the build, so a contributor who edits an endpoint YAML / template must commit
+# the regenerated output. A separate, non-blocking job audits the release
+# manifest against the live sportsdataverse-data release list (network).
+name: codegen
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  drift-check:
+    name: codegen --check + codegen tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install Linux build deps for pyreadr sdist fallback
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libbz2-dev liblzma-dev
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Codegen drift check (generated files in sync with metadata)
+        run: uv run --frozen python tools/codegen/generate.py --check
+      - name: Codegen test suite
+        run: uv run --frozen pytest tests/codegen/ -q
+
+  release-audit:
+    name: release-manifest audit (informational)
+    runs-on: ubuntu-latest
+    # Network audit against the live release list. Non-blocking: a newly-published
+    # sportsdataverse-data release that lacks a loader should surface here without
+    # red-failing unrelated PRs.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Audit release manifest vs live release list
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: uv run --frozen python tools/codegen/generate.py --audit-releases

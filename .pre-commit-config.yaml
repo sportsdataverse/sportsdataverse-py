@@ -12,8 +12,9 @@
 # protect the __init__.py block if I001 is opted back in later.
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    # Ruff version.
-    rev: v0.14.14
+    # Ruff version. Kept in sync with the dev-group ``ruff`` pin in pyproject.toml
+    # so the codegen generator's format pass and this hook agree byte-for-byte.
+    rev: v0.15.12
     hooks:
       # Run the linter.
       - id: ruff-check
@@ -50,10 +51,8 @@ repos:
       - id: python-check-mock-methods
       - id: python-check-blanket-noqa
       - id: python-check-blanket-type-ignore
-  - repo: https://github.com/asottile/add-trailing-comma
-    rev: v4.0.0
-    hooks:
-      - id: add-trailing-comma
+  # NOTE: add-trailing-comma was removed — ruff-format (skip-magic-trailing-comma=false)
+  # already manages trailing commas, so the extra hook only caused re-commit churn.
   - repo: https://github.com/pre-commit/sync-pre-commit-deps
     rev: v0.0.3
     hooks:
@@ -67,14 +66,17 @@ repos:
     rev: v1.7.10
     hooks:
       - id: actionlint
-  - repo: https://github.com/google/yamlfmt
-    rev: v0.19.0
-    hooks:
-      - id: yamlfmt
+  # NOTE: yamlfmt was removed — it reformatted the codegen-generated endpoint YAML
+  # (tools/codegen/endpoints/*.yaml) on every commit, fighting extract.py's output
+  # and forcing a re-add/re-commit cycle. check-yaml still validates YAML syntax.
   - repo: https://github.com/thlorenz/doctoc
     rev: "v2.2.0" # substitute a tagged version
     hooks:
       - id: doctoc
+        # Docusaurus pages under docs/docs/ carry YAML frontmatter that must be
+        # the first content in the file; a doctoc TOC injected above it breaks the
+        # page render. Exclude that tree (docs/architecture/ etc. still get TOCs).
+        exclude: ^docs/docs/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.20.0
     hooks:
@@ -92,6 +94,19 @@ repos:
         entry: python -c "import shutil, subprocess, sys; shutil.copy('CHANGELOG.md', 'docs/src/pages/CHANGELOG.md'); subprocess.run(['git', 'add', 'docs/src/pages/CHANGELOG.md'])"
         language: system
         files: ^CHANGELOG\.md$
+        pass_filenames: false
+      # Gate: the committed generated wrappers must stay in sync with the codegen
+      # metadata (endpoint YAML / schema / template). Runs `--check` (re-render to a
+      # temp dir + byte-diff) rather than write-mode, so it fails clearly on drift
+      # without rewriting files mid-commit (the write-mode hook reported spurious
+      # "files were modified" on byte-identical regens). Regenerate manually with
+      # `python tools/codegen/generate.py` when this fails. Same gate runs in CI
+      # (.github/workflows/codegen.yml).
+      - id: sdv-codegen
+        name: codegen drift check (generated wrappers in sync with metadata)
+        entry: python tools/codegen/generate.py --check
+        language: system
+        files: ^tools/codegen/(endpoints|schemas|templates)/.*$
         pass_filenames: false
 # - repo: https://github.com/nbQA-dev/nbQA
 #   rev: 1.9.1

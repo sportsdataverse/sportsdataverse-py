@@ -1,0 +1,13 @@
+---
+title: {{ title }}
+sidebar_label: {{ label }}
+---
+{% from "_reference_block.jinja" import block %}
+# {{ title }}
+
+`sportsdataverse.{{ prefix }}` — {{ count }} endpoint{{ "" if count == 1 else "s" }}.
+
+{% for ep in endpoints %}
+{{ block(ep) }}
+
+{% endfor %}

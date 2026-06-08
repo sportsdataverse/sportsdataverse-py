@@ -1,0 +1,61 @@
+"""extract.py runtime-capture extractor (build-time tool; needs the live factory).
+
+These are *pre-retirement migration gates*: extract.py reverse-engineers the legacy
+``_common_espn`` factory, which has since been retired. They skip cleanly unless the
+factory is present (e.g. when run against a pre-retirement git ref), in which case
+they still validate the extractor end-to-end.
+"""
+
+import pytest
+
+from sportsdataverse import _common_espn as ce
+
+if not hasattr(ce, "_UNIVERSAL_WRAPPERS"):
+    pytest.skip("ESPN factory retired; extract.py is a pre-retirement tool", allow_module_level=True)
+
+from tools.codegen import extract  # noqa: E402
+
+
+def test_describe_core_fn_recovers_url_params_parser():
+    info = extract.describe_core_fn("scoreboard")
+    assert info["short"] == "scoreboard"
+    assert info["path"].endswith("/scoreboard")
+    assert "dates" in info["query_params"]
+    assert info["query_params"]["season_type"]["query_key"] == "seasontype"
+    assert info["parser"] == "parse_scoreboard"
+
+
+def test_describe_distinguishes_hosts_for_same_short_base():
+    assert extract.describe_core_fn("teams_site")["host"] == "site_v2"
+    assert extract.describe_core_fn("teams_core")["host"] == "core_v2"
+
+
+def test_describe_detects_optional_segment():
+    pi = extract.describe_core_fn("season_powerindex")
+    tid = next(p for p in pi["path_params"] if p["name"] == "team_id")
+    assert tid.get("optional_segment") is True
+    assert pi["path"].endswith("/powerindex[/{team_id}]")
+
+
+def test_describe_detects_mid_path_optional_segment():
+    qbr = extract.describe_core_fn("season_qbr")
+    assert "[/groups/{group_id}]/qbr/{split}" in qbr["path"]
+
+
+def test_describe_detects_default_from():
+    ec = extract.describe_core_fn("event_competition")
+    cid = next(p for p in ec["path_params"] if p["name"] == "cid")
+    assert cid.get("default_from") == "event_id"
+
+
+def test_describe_detects_bool_transform():
+    ai = extract.describe_core_fn("athletes_index")
+    assert ai["query_params"]["active"].get("transform") == "bool_str"
+
+
+def test_rename_map_is_empty_due_to_reserved_base_collision():
+    # teams_site is the only suffix-drop candidate, but ``teams`` is a reserved
+    # hand-written base (espn_<league>_teams), so it is NOT cleaned -> no renames.
+    rm = extract.build_rename_map()
+    assert rm == {}
+    assert "teams" in extract._RESERVED_BASE

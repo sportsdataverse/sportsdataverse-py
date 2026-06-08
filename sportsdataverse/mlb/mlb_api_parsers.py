@@ -67,7 +67,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         return pl.from_pandas(df)
     except Exception:
         df2 = df.copy()
-        for col in df2.select_dtypes(include="object").columns:
+        for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
         return pl.from_pandas(df2)
 
@@ -104,9 +104,19 @@ def _flatten_rows(items, return_as_pandas: bool):
 
 # Common top-level array keys in Stats API responses. Tried in order.
 _LIST_KEYS = (
-    "teams", "venues", "sports", "leagues", "divisions", "seasons",
-    "awards", "awardRecipients", "umpires", "people", "players",
-    "items", "records",
+    "teams",
+    "venues",
+    "sports",
+    "leagues",
+    "divisions",
+    "seasons",
+    "awards",
+    "awardRecipients",
+    "umpires",
+    "people",
+    "players",
+    "items",
+    "records",
 )
 
 
@@ -145,9 +155,7 @@ def parse_mlb_api_list(payload: Dict, return_as_pandas: bool = False) -> pl.Data
 # ---------------------------------------------------------------------------
 
 
-def parse_mlb_api_schedule(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_mlb_api_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Stats API schedule response into a tidy frame of games.
 
     Stats API ships the schedule as
@@ -186,16 +194,12 @@ def parse_mlb_api_schedule(
 # ---------------------------------------------------------------------------
 
 
-def parse_mlb_api_teams(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_mlb_api_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``mlb_api_teams()`` into one row per team."""
     return _flatten_rows((payload or {}).get("teams"), return_as_pandas)
 
 
-def parse_mlb_api_team_roster(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_mlb_api_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``mlb_api_team_roster()`` into one row per player.
 
     Input: ``{roster: [{person, jerseyNumber, position, status}, ...],
@@ -211,9 +215,7 @@ def parse_mlb_api_team_roster(
 # ---------------------------------------------------------------------------
 
 
-def parse_mlb_api_standings(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_mlb_api_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``mlb_api_standings()`` into one row per (division × team).
 
     Input: ``{records: [{standingsType, league, division, sport,
@@ -258,9 +260,7 @@ def parse_mlb_api_standings(
 # ---------------------------------------------------------------------------
 
 
-def parse_mlb_api_person_stats(
-    payload: Dict, return_as_pandas: bool = False
-) -> pl.DataFrame:
+def parse_mlb_api_person_stats(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``mlb_api_person_stats()`` / ``mlb_api_team_stats()`` into
     one row per stats split.
 
@@ -313,33 +313,33 @@ def parse_mlb_api_person_stats(
 # list flattener) or via :func:`pd.json_normalize` directly.
 MLB_API_ENDPOINT_PARSERS = {
     # Dedicated parsers (extra unrolling logic):
-    "mlb_api_schedule":              parse_mlb_api_schedule,
-    "mlb_api_schedule_postseason":   parse_mlb_api_schedule,
-    "mlb_api_teams":                 parse_mlb_api_teams,
-    "mlb_api_team_roster":           parse_mlb_api_team_roster,
-    "mlb_api_standings":             parse_mlb_api_standings,
-    "mlb_api_person_stats":          parse_mlb_api_person_stats,
-    "mlb_api_team_stats":            parse_mlb_api_person_stats,
+    "mlb_api_schedule": parse_mlb_api_schedule,
+    "mlb_api_schedule_postseason": parse_mlb_api_schedule,
+    "mlb_api_teams": parse_mlb_api_teams,
+    "mlb_api_team_roster": parse_mlb_api_team_roster,
+    "mlb_api_standings": parse_mlb_api_standings,
+    "mlb_api_person_stats": parse_mlb_api_person_stats,
+    "mlb_api_team_stats": parse_mlb_api_person_stats,
     # Generic list-shape endpoints:
-    "mlb_api_people":                parse_mlb_api_list,
-    "mlb_api_sport_players":         parse_mlb_api_list,
-    "mlb_api_sports":                parse_mlb_api_list,
-    "mlb_api_leagues":               parse_mlb_api_list,
-    "mlb_api_divisions":             parse_mlb_api_list,
-    "mlb_api_seasons":               parse_mlb_api_list,
-    "mlb_api_venues":                parse_mlb_api_list,
-    "mlb_api_awards":                parse_mlb_api_list,
-    "mlb_api_award_recipients":      parse_mlb_api_list,
-    "mlb_api_umpires":               parse_mlb_api_list,
-    "mlb_api_team_leaders":          parse_mlb_api_list,
-    "mlb_api_team_alumni":           parse_mlb_api_list,
-    "mlb_api_team_affiliates":       parse_mlb_api_list,
-    "mlb_api_stats":                 parse_mlb_api_list,
-    "mlb_api_stats_leaders":         parse_mlb_api_list,
-    "mlb_api_stats_streaks":         parse_mlb_api_list,
-    "mlb_api_draft":                 parse_mlb_api_list,
-    "mlb_api_draft_prospects":       parse_mlb_api_list,
-    "mlb_api_attendance":            parse_mlb_api_list,
+    "mlb_api_people": parse_mlb_api_list,
+    "mlb_api_sport_players": parse_mlb_api_list,
+    "mlb_api_sports": parse_mlb_api_list,
+    "mlb_api_leagues": parse_mlb_api_list,
+    "mlb_api_divisions": parse_mlb_api_list,
+    "mlb_api_seasons": parse_mlb_api_list,
+    "mlb_api_venues": parse_mlb_api_list,
+    "mlb_api_awards": parse_mlb_api_list,
+    "mlb_api_award_recipients": parse_mlb_api_list,
+    "mlb_api_umpires": parse_mlb_api_list,
+    "mlb_api_team_leaders": parse_mlb_api_list,
+    "mlb_api_team_alumni": parse_mlb_api_list,
+    "mlb_api_team_affiliates": parse_mlb_api_list,
+    "mlb_api_stats": parse_mlb_api_list,
+    "mlb_api_stats_leaders": parse_mlb_api_list,
+    "mlb_api_stats_streaks": parse_mlb_api_list,
+    "mlb_api_draft": parse_mlb_api_list,
+    "mlb_api_draft_prospects": parse_mlb_api_list,
+    "mlb_api_attendance": parse_mlb_api_list,
 }
 
 

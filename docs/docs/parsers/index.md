@@ -110,8 +110,8 @@ Every parser obeys these rules:
 
 The registry maps the *short name* in `_common_espn`'s wrapper tables
 to its parser. **All 121 wrapper short names are registered** — every
-factory-bound wrapper across all 8 leagues plus the hand-bound NCAA
-bracketology helpers gains the `return_parsed=True` shim automatically.
+factory-bound wrapper across all 8 leagues gains the `return_parsed=True`
+shim automatically.
 
 ```python
 >>> from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parser_for
@@ -150,7 +150,7 @@ endpoint families that share a shape:
 
 ## See also
 
-- [NHL EDGE parsers](../nhl/edge-parsers) — defensive family parsers
-  for the EDGE Statcast surface.
+- [NHL EDGE reference](../nhl/reference/nhl_edge.md) — the EDGE
+  Statcast surface (parsers documented per endpoint).
 - [ESPN cross-league architecture](../architecture/espn-cross-league) —
   how `make_league_module()` registers each wrapper with its parser.

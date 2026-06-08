@@ -1,9 +1,12 @@
-"""ESPN WNBA athlete season stats scraper.
+"""ESPN WNBA athlete *season* stats scraper (core-v2).
 
-Mirror of :func:`sportsdataverse.wbb.espn_wbb_player_stats` for the WNBA
-league slug. The actual fetch + parse logic lives in
-``sportsdataverse.wbb.wbb_player_stats._espn_basketball_player_stats`` to
-keep the wbb / wnba pair DRY.
+Thin league wrapper over
+:func:`sportsdataverse._common_espn_player_stats._espn_player_stats`. Returns
+**one wide row** (athlete identity + season stat line as
+``{category}_{stat}`` columns + ``team_*`` identity) from ESPN's core-v2
+``/athletes/{id}/statistics`` graph -- matching the wehoop / hoopR
+``espn_*_player_stats`` convention. For the richer web-v3 payload use
+:func:`sportsdataverse.wnba.espn_wnba_player_stats_v3`.
 """
 
 from __future__ import annotations
@@ -13,8 +16,9 @@ from typing import Any, Literal, overload
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.wbb.wbb_player_stats import _espn_basketball_player_stats
+from sportsdataverse._common_espn_player_stats import _espn_player_stats
 
+_SPORT_SLUG: str = "basketball"
 _LEAGUE_SLUG: str = "wnba"
 
 
@@ -23,6 +27,8 @@ def espn_wnba_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = ...,
+    total: bool = ...,
     raw: Literal[True],
     return_as_pandas: bool = ...,
     **kwargs: Any,
@@ -32,89 +38,80 @@ def espn_wnba_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = ...,
+    total: bool = ...,
     raw: Literal[False] = ...,
     return_as_pandas: Literal[True],
     **kwargs: Any,
-) -> dict[str, pd.DataFrame]: ...
+) -> pd.DataFrame: ...
 @overload
 def espn_wnba_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = ...,
+    total: bool = ...,
     raw: Literal[False] = ...,
     return_as_pandas: Literal[False] = ...,
     **kwargs: Any,
-) -> dict[str, pl.DataFrame]: ...
+) -> pl.DataFrame: ...
 def espn_wnba_player_stats(
     athlete_id: int,
     season: int,
     *,
+    season_type: str = "regular",
+    total: bool = False,
     raw: bool = False,
     return_as_pandas: bool = False,
     **kwargs: Any,
-) -> dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]:
-    """Pull ESPN season stats for a WNBA athlete.
+) -> pl.DataFrame | pd.DataFrame | dict[str, Any]:
+    """Pull a WNBA athlete's ESPN **season** stat line.
 
     See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-    documentation of the return shape, the canonical three category keys
-    (``"Averages"``, ``"Totals"``, ``"Misc"``), the per-category column
-    set, and the ``"Other"`` fallback bucket.
+    documentation of the wide return shape, the ``{category}_{stat}``
+    stat columns, the athlete / team metadata blocks, and the
+    ``season_type`` / ``total`` parameters.
 
     Args:
         athlete_id: ESPN WNBA athlete identifier (e.g. ``3149391`` for A'ja
             Wilson).
-        season: Season year, forwarded to ESPN as ``?season=YYYY``.
-        raw: If True, returns the parsed JSON dict before any flattening.
-        return_as_pandas: If True, returns a dict of pandas DataFrames;
-            otherwise polars.
-        **kwargs: Forwarded to ``sportsdataverse.dl_utils.download``.
+        season: Season year, used in the core-v2 path.
+        season_type: ``"regular"`` (type 2) or ``"postseason"`` (type 3).
+        total: Forward-compat totals passthrough.
+        raw: If True, returns the raw core-v2 statistics JSON dict.
+        return_as_pandas: If True, returns a pandas DataFrame; else polars.
+        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        Dict with one DataFrame per stat category — see
-        :func:`sportsdataverse.wbb.espn_wbb_player_stats` for the full
-        column / key documentation. If ``raw=True``, returns the raw
-        response dict.
+        A single-row wide DataFrame (polars by default). When ``raw=True``
+        returns the raw statistics JSON ``dict``. See
+        :func:`sportsdataverse.wbb.espn_wbb_player_stats` for the column
+        layout.
 
     Raises:
+        ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
         sportsdataverse.errors.NoESPNDataError: ESPN returned 404.
-        requests.exceptions.RequestException: Other network failures after
-            retries.
 
     Example:
-        Pull A'ja Wilson's 2024 season stats and inspect the canonical category keys::
+        Pull A'ja Wilson's 2024 season line as a single wide row::
 
             from sportsdataverse.wnba import espn_wnba_player_stats
-            frames = espn_wnba_player_stats(athlete_id=3149391, season=2024)
-            sorted(frames.keys())  # at minimum: 'Averages', 'Totals', 'Misc'
-            frames["Averages"].head()
-
-        Combine the per-game ``Averages`` and full-season ``Totals``::
-
-            avgs = frames["Averages"]
-            totals = frames["Totals"]
-            print(avgs.shape, totals.shape)
-            avgs.select(["points_per_game", "rebounds_per_game", "assists_per_game"]).head()
-
-        Pandas round-trip — returns a dict of DataFrames keyed by category::
-
-            frames_pd = espn_wnba_player_stats(
-                athlete_id=3149391, season=2024, return_as_pandas=True
-            )
-            frames_pd["Misc"].head()
+            df = espn_wnba_player_stats(athlete_id=3149391, season=2024)
+            df.select(["full_name", "team_display_name", "offensive_points"])
 
         See Also:
-            * `wehoop`_ — R sister package; mirrors this surface
-            * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
-            * `hoopR`_ — companion R package for men's basketball
+            * :func:`sportsdataverse.wnba.espn_wnba_player_stats_v3` -- web-v3 stats
+            * `wehoop`_ -- R sister package; mirrors this surface
 
         .. _wehoop: https://wehoop.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
-        .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    return _espn_basketball_player_stats(
+    return _espn_player_stats(
+        sport=_SPORT_SLUG,
         league=_LEAGUE_SLUG,
         athlete_id=athlete_id,
         season=season,
+        season_type=season_type,
+        total=total,
         raw=raw,
         return_as_pandas=return_as_pandas,
         **kwargs,

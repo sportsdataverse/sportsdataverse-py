@@ -1,0 +1,14 @@
+hosts:
+  site_v2: "https://site.api.espn.com/apis/site/v2/sports"
+  site_v2_alt: "https://site.api.espn.com/apis/v2/sports"
+  web_v3: "https://site.web.api.espn.com/apis/common/v3/sports"
+  core_v2: "https://sports.core.api.espn.com/v2/sports"
+leagues:
+  - {prefix: nba, sport: basketball, league: nba, scopes: [universal]}
+  - {prefix: wnba, sport: basketball, league: wnba, scopes: [universal]}
+  - {prefix: mbb, sport: basketball, league: mens-college-basketball, scopes: [universal, ncaa]}
+  - {prefix: wbb, sport: basketball, league: womens-college-basketball, scopes: [universal, ncaa]}
+  - {prefix: cfb, sport: football, league: college-football, scopes: [universal, ncaa, football]}
+  - {prefix: nfl, sport: football, league: nfl, scopes: [universal, football]}
+  - {prefix: mlb, sport: baseball, league: mlb, scopes: [universal, mlb]}
+  - {prefix: nhl, sport: hockey, league: nhl, scopes: [universal]}

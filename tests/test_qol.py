@@ -31,18 +31,26 @@ def test_parsed_namespace_defaults_to_polars_dataframe():
     a polars frame by default, no return_parsed=True kwarg needed."""
     import sportsdataverse._common_espn as ce
 
-    fake_teams = {"sports": [{"leagues": [{"teams": [
-        {"team": {"id": "1", "displayName": "Test", "abbreviation": "TST"}},
-    ]}]}]}
+    fake_teams = {
+        "sports": [
+            {
+                "leagues": [
+                    {
+                        "teams": [
+                            {"team": {"id": "1", "displayName": "Test", "abbreviation": "TST"}},
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
     original = ce._get
     ce._get = _fake_get_for(fake_teams)
     try:
         from sportsdataverse.parsed.nba import espn_nba_teams_site
 
         df = espn_nba_teams_site()
-        assert isinstance(df, pl.DataFrame), (
-            f"expected polars from parsed.*, got {type(df)}"
-        )
+        assert isinstance(df, pl.DataFrame), f"expected polars from parsed.*, got {type(df)}"
         assert df.height >= 1
     finally:
         ce._get = original
@@ -68,9 +76,19 @@ def test_parsed_namespace_still_supports_return_parsed_false_override():
 def test_parsed_namespace_supports_return_as_pandas():
     import sportsdataverse._common_espn as ce
 
-    fake = {"sports": [{"leagues": [{"teams": [
-        {"team": {"id": "1", "displayName": "Test"}},
-    ]}]}]}
+    fake = {
+        "sports": [
+            {
+                "leagues": [
+                    {
+                        "teams": [
+                            {"team": {"id": "1", "displayName": "Test"}},
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
     original = ce._get
     ce._get = _fake_get_for(fake)
     try:
@@ -89,9 +107,19 @@ def test_raw_module_default_is_still_dict_after_parsed_import():
     import sportsdataverse._common_espn as ce
     import sportsdataverse.parsed.nba  # noqa: F401  triggers parsed-mod build
 
-    fake = {"sports": [{"leagues": [{"teams": [
-        {"team": {"id": "1", "displayName": "Test"}},
-    ]}]}]}
+    fake = {
+        "sports": [
+            {
+                "leagues": [
+                    {
+                        "teams": [
+                            {"team": {"id": "1", "displayName": "Test"}},
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
     original = ce._get
     ce._get = _fake_get_for(fake)
     try:
@@ -99,9 +127,7 @@ def test_raw_module_default_is_still_dict_after_parsed_import():
 
         # No return_parsed kwarg → must still be raw Dict
         raw = espn_nba_teams_site()
-        assert isinstance(raw, dict), (
-            f"Raw module mutated by parsed import — expected Dict, got {type(raw)}"
-        )
+        assert isinstance(raw, dict), f"Raw module mutated by parsed import — expected Dict, got {type(raw)}"
     finally:
         ce._get = original
 
@@ -119,9 +145,7 @@ def test_parsed_namespace_docstring_notes_the_default_flip():
     from sportsdataverse.parsed.nba import espn_nba_teams_site
 
     doc = espn_nba_teams_site.__doc__ or ""
-    assert "parsed.*" in doc, (
-        "parsed.* docstring must mention the default flip"
-    )
+    assert "parsed.*" in doc, "parsed.* docstring must mention the default flip"
 
 
 # ===========================================================================
@@ -131,33 +155,68 @@ def test_parsed_namespace_docstring_notes_the_default_flip():
 
 @pytest.fixture
 def fake_nba_endpoints(monkeypatch):
-    """Replace ESPN's _get with deterministic fixture data."""
-    import sportsdataverse._common_espn as ce
-
-    teams_site = {"sports": [{"leagues": [{"teams": [
-        {"team": {"id": "13", "displayName": "Los Angeles Lakers",
-                  "location": "Los Angeles", "abbreviation": "LAL",
-                  "name": "Lakers", "shortDisplayName": "Lakers"}},
-        {"team": {"id": "2", "displayName": "Boston Celtics",
-                  "location": "Boston", "abbreviation": "BOS",
-                  "name": "Celtics", "shortDisplayName": "Celtics"}},
-        {"team": {"id": "6", "displayName": "Dallas Mavericks",
-                  "location": "Dallas", "abbreviation": "DAL",
-                  "name": "Mavericks", "shortDisplayName": "Mavericks"}},
-    ]}]}]}
+    """Replace the generated wrappers' HTTP sink with deterministic fixture data."""
+    teams_site = {
+        "sports": [
+            {
+                "leagues": [
+                    {
+                        "teams": [
+                            {
+                                "team": {
+                                    "id": "13",
+                                    "displayName": "Los Angeles Lakers",
+                                    "location": "Los Angeles",
+                                    "abbreviation": "LAL",
+                                    "name": "Lakers",
+                                    "shortDisplayName": "Lakers",
+                                }
+                            },
+                            {
+                                "team": {
+                                    "id": "2",
+                                    "displayName": "Boston Celtics",
+                                    "location": "Boston",
+                                    "abbreviation": "BOS",
+                                    "name": "Celtics",
+                                    "shortDisplayName": "Celtics",
+                                }
+                            },
+                            {
+                                "team": {
+                                    "id": "6",
+                                    "displayName": "Dallas Mavericks",
+                                    "location": "Dallas",
+                                    "abbreviation": "DAL",
+                                    "name": "Mavericks",
+                                    "shortDisplayName": "Mavericks",
+                                }
+                            },
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
     roster_lal = load_fixture("espn", "team_roster_nba")
-    scoreboard = {"events": [{
-        "id": "401585607",
-        "name": "Dallas Mavericks at Boston Celtics",
-        "competitions": [{"competitors": [
-            {"homeAway": "home", "team": {"displayName": "Boston Celtics",
-                                          "abbreviation": "BOS"}},
-            {"homeAway": "away", "team": {"displayName": "Dallas Mavericks",
-                                          "abbreviation": "DAL"}},
-        ]}],
-    }]}
+    scoreboard = {
+        "events": [
+            {
+                "id": "401585607",
+                "name": "Dallas Mavericks at Boston Celtics",
+                "competitions": [
+                    {
+                        "competitors": [
+                            {"homeAway": "home", "team": {"displayName": "Boston Celtics", "abbreviation": "BOS"}},
+                            {"homeAway": "away", "team": {"displayName": "Dallas Mavericks", "abbreviation": "DAL"}},
+                        ]
+                    }
+                ],
+            }
+        ]
+    }
 
-    def fake_get(url, **kw):
+    def fake_get(url):
         if "teams/13/roster" in url:
             return roster_lal
         if "/teams" in url and "/roster" not in url:
@@ -166,13 +225,26 @@ def fake_nba_endpoints(monkeypatch):
             return scoreboard
         return {}
 
-    original = ce._get
-    ce._get = fake_get
-    # Reset find's per-process team cache
+    class _Resp:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+    def fake_download(url, params=None, **kw):
+        return _Resp(fake_get(url))
+
+    # The generated wrappers (find.py uses espn_*_teams_site / _scoreboard) import
+    # _get from _codegen_runtime, which calls _codegen_runtime.download -- so patch
+    # there, not ce._get (a re-export the generated modules don't see).
+    import sportsdataverse._codegen_runtime as rt
+
+    monkeypatch.setattr(rt, "download", fake_download)
     from sportsdataverse.find import clear_team_cache
+
     clear_team_cache()
     yield
-    ce._get = original
     clear_team_cache()
 
 
@@ -260,9 +332,7 @@ def test_list_functions_returns_dict_grouped_by_league():
     for league in ("nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"):
         assert league in out, f"{league} missing from list_functions() output"
         assert isinstance(out[league], list)
-        assert len(out[league]) > 50, (
-            f"{league} has only {len(out[league])} functions — expected >= 50"
-        )
+        assert len(out[league]) > 50, f"{league} has only {len(out[league])} functions — expected >= 50"
 
 
 def test_list_functions_filter_by_league_returns_flat_list():
@@ -330,7 +400,6 @@ def test_top_level_qol_helpers_importable():
     top-level sportsdataverse namespace."""
     import sportsdataverse as sdv
 
-    for name in ("find_team", "find_athlete", "find_event",
-                 "list_functions", "function_count", "clear_team_cache"):
+    for name in ("find_team", "find_athlete", "find_event", "list_functions", "function_count", "clear_team_cache"):
         assert hasattr(sdv, name), f"sdv.{name} not exposed at top level"
         assert callable(getattr(sdv, name)), f"sdv.{name} is not callable"

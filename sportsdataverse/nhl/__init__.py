@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from sportsdataverse.nhl.nhl_api import *
 from sportsdataverse.nhl.nhl_api_web import *
+from sportsdataverse.nhl.nhl_api_web_extra import *
 from sportsdataverse.nhl.nhl_api_web_parsers import (
     NHL_API_WEB_ENDPOINT_PARSERS,
     parse_nhl_web_boxscore,
@@ -48,7 +48,11 @@ from sportsdataverse.nhl.nhl_stats_rest_parsers import (
 )
 from sportsdataverse.nhl.nhl_game_rosters import *
 from sportsdataverse.nhl.nhl_loaders import *
+from sportsdataverse.nhl.nhl_loaders_extra import *
 from sportsdataverse.nhl.nhl_pbp import *
 from sportsdataverse.nhl.nhl_records import *
+from sportsdataverse.nhl.nhl_records_extra import *
 from sportsdataverse.nhl.nhl_schedule import *
 from sportsdataverse.nhl.nhl_teams import *
+from sportsdataverse.nhl.nhl_espn_ext import *
+from sportsdataverse.nhl.nhl_player_stats import *

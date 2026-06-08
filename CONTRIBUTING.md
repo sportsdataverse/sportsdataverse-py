@@ -6,6 +6,9 @@
   - [Development setup](#development-setup)
   - [Python version support](#python-version-support)
   - [Code standards for new modules](#code-standards-for-new-modules)
+  - [Documentation & the docs site](#documentation--the-docs-site)
+    - [Updating docs (everyday — including a commit after a release)](#updating-docs-everyday--including-a-commit-after-a-release)
+    - [At release time](#at-release-time)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -134,3 +137,54 @@ are intentionally migrating).
   `sportsdataverse-data` GitHub release. Match the column shape of the
   R-side loader the dataset is mirroring so downstream users can swap
   engines without changing call sites.
+
+## Documentation & the docs site
+
+The docs live under `docs/` (Docusaurus) and publish to
+<https://py.sportsdataverse.org> via **Vercel**, which auto-builds and
+redeploys on every push to `main` — there is no in-repo deploy workflow.
+
+**The default docs always track the code.** The unversioned `docs/docs/`
+tree is the live `current` version, served at the root `/docs/`
+(`lastVersion: 'current'`, labelled `main`). So any docs change you push to
+`main` appears at the default URL on the next Vercel build — **no
+re-versioning needed**. Frozen per-release archives live at `/docs/<x.y.z>/`
+and are never touched by edits to `current`.
+
+### Updating docs (everyday — including a commit after a release)
+
+1. Edit the **source of truth**, not the built output:
+   - **Reference pages** (`docs/docs/<league>/reference/*`, the per-league
+     `index.md`, `reference/parameters.md`) are *generated*. Edit the endpoint
+     metadata under `tools/codegen/endpoints/*.yaml` (or the templates /
+     schemas), then regenerate with `python tools/codegen/generate.py --docs`.
+     Never hand-edit the generated files — the `--check` drift gate (CI + the
+     `sdv-codegen` pre-commit hook) will fail.
+   - **Conceptual pages** (`docs/docs/intro.md`, `ecosystem.md`,
+     `architecture/*`, `parsers/*`) and the notebook intros are hand-authored
+     — edit them directly.
+   - **Home page**: `docs/src/pages/index.tsx`.
+   - **Changelog**: edit the repo-root `CHANGELOG.md`; the
+     `sync-docs-changelog` pre-commit hook mirrors it to
+     `docs/src/pages/CHANGELOG.md` (served at `/CHANGELOG`).
+2. Commit (pre-commit runs the drift gate, doctoc, markdownlint, and the
+   changelog sync). Preview locally with `cd docs && yarn build` if you like.
+3. Push to `main`. Vercel rebuilds and the change is live at the default
+   `/docs/` — because `current` **is** the default. **That's the whole
+   workflow; a post-release docs commit is no different from any other.**
+
+### At release time
+
+Freeze a permanent snapshot of the docs for that release, then keep going:
+
+```sh
+cd docs && yarn version:docs <x.y.z>   # snapshots docs/docs/ -> versioned_docs/version-<x.y.z>/
+git add docs/versioned_docs docs/versioned_sidebars docs/versions.json
+git commit -m "docs: snapshot <x.y.z>"
+```
+
+Do **not** bump `lastVersion` — leave it `'current'` so the live `main`
+docs stay the default and keep tracking the code. The snapshot becomes a
+read-only archive at `/docs/<x.y.z>/` in the version dropdown. (To backport a
+fix into an already-released archive — rare — edit
+`docs/versioned_docs/version-<x.y.z>/...` directly.)
