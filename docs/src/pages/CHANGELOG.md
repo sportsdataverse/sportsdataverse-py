@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.0.55 (unreleased)](#0055-unreleased)
+- [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
   - [Bug fixes](#bug-fixes)
 - [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
@@ -75,7 +75,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.0.55 (unreleased)
+## 0.0.55 Release: June 8, 2026
 
 ### Documentation — richer per-function reference
 
