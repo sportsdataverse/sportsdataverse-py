@@ -27,6 +27,20 @@ Pull the officials assigned to a women's-college-basketball game.
 
 Polars (or pandas) DataFrame with one row per official: ``game_id``, ``season``, ``official_id``, ``first_name``, ``last_name``, ``full_name``, ``display_name``, ``position_id``, ``position_name``, ``position_display_name``, ``order``. When ESPN ships no officials for the game (often for unscheduled or future events), an empty frame with the documented schema is returned so callers see a stable column set. If ``raw=True``, returns the raw response dict.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer |  |
+| `season` | integer |  |
+| `official_id` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `position_id` | character |  |
+| `position_name` | character |  |
+| `position_display_name` | character |  |
+| `order` | integer |  |
+
 **Example**
 
 ```python
@@ -151,6 +165,127 @@ Returns **one wide row** combining athlete identity, the season stat line pivote
 
 A single-row wide DataFrame (polars by default). Columns: identity / echo (``season``, ``season_type``, ``total``), athlete metadata (``athlete_id``, ``full_name``, ``position_*``, ...), the season stat line as ``{category}_{stat}`` numeric columns (e.g. ``offensive_points``, ``defensive_blocks``), and team metadata (``team_id``, ``team_display_name``, ...). When ``raw=True`` returns the raw statistics JSON ``dict``.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer |  |
+| `season_type` | character |  |
+| `total` | logical |  |
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | character |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `age` | character |  |
+| `date_of_birth` | character |  |
+| `jersey` | character |  |
+| `slug` | character |  |
+| `active` | logical |  |
+| `position_id` | integer |  |
+| `position_name` | character |  |
+| `position_display_name` | character |  |
+| `position_abbreviation` | character |  |
+| `college_name` | character |  |
+| `status_id` | integer |  |
+| `status_name` | character |  |
+| `defensive_blocks` | double |  |
+| `defensive_defensive_rebounds` | double |  |
+| `defensive_steals` | double |  |
+| `defensive_turnover_points` | double |  |
+| `defensive_avg_defensive_rebounds` | double |  |
+| `defensive_avg_blocks` | double |  |
+| `defensive_avg_steals` | double |  |
+| `general_disqualifications` | double |  |
+| `general_flagrant_fouls` | double |  |
+| `general_fouls` | double |  |
+| `general_per` | double |  |
+| `general_ejections` | double |  |
+| `general_technical_fouls` | double |  |
+| `general_rebounds` | double |  |
+| `general_minutes` | double |  |
+| `general_avg_minutes` | double |  |
+| `general_fantasy_rating` | double |  |
+| `general_plus_minus` | double |  |
+| `general_avg_rebounds` | double |  |
+| `general_avg_fouls` | double |  |
+| `general_avg_flagrant_fouls` | double |  |
+| `general_avg_technical_fouls` | double |  |
+| `general_avg_ejections` | double |  |
+| `general_avg_disqualifications` | double |  |
+| `general_assist_turnover_ratio` | double |  |
+| `general_steal_foul_ratio` | double |  |
+| `general_block_foul_ratio` | double |  |
+| `general_avg_team_rebounds` | double |  |
+| `general_total_rebounds` | double |  |
+| `general_total_technical_fouls` | double |  |
+| `general_steal_turnover_ratio` | double |  |
+| `general_games_played` | double |  |
+| `general_games_started` | double |  |
+| `general_double_double` | double |  |
+| `general_triple_double` | double |  |
+| `offensive_assists` | double |  |
+| `offensive_field_goals` | double |  |
+| `offensive_field_goals_attempted` | double |  |
+| `offensive_field_goals_made` | double |  |
+| `offensive_field_goal_pct` | double |  |
+| `offensive_free_throws` | double |  |
+| `offensive_free_throw_pct` | double |  |
+| `offensive_free_throws_attempted` | double |  |
+| `offensive_free_throws_made` | double |  |
+| `offensive_offensive_rebounds` | double |  |
+| `offensive_points` | double |  |
+| `offensive_turnovers` | double |  |
+| `offensive_three_point_field_goals_attempted` | double |  |
+| `offensive_three_point_field_goals_made` | double |  |
+| `offensive_total_turnovers` | double |  |
+| `offensive_points_in_paint` | double |  |
+| `offensive_second_chance_points` | double |  |
+| `offensive_fast_break_points` | double |  |
+| `offensive_avg_field_goals_made` | double |  |
+| `offensive_avg_field_goals_attempted` | double |  |
+| `offensive_avg_three_point_field_goals_made` | double |  |
+| `offensive_avg_three_point_field_goals_attempted` | double |  |
+| `offensive_avg_free_throws_made` | double |  |
+| `offensive_avg_free_throws_attempted` | double |  |
+| `offensive_avg_points` | double |  |
+| `offensive_avg_offensive_rebounds` | double |  |
+| `offensive_avg_assists` | double |  |
+| `offensive_avg_turnovers` | double |  |
+| `offensive_offensive_rebound_pct` | double |  |
+| `offensive_estimated_possessions` | double |  |
+| `offensive_avg_estimated_possessions` | double |  |
+| `offensive_points_per_estimated_possessions` | double |  |
+| `offensive_avg_team_turnovers` | double |  |
+| `offensive_avg_total_turnovers` | double |  |
+| `offensive_three_point_field_goal_pct` | double |  |
+| `offensive_two_point_field_goals_made` | double |  |
+| `offensive_two_point_field_goals_attempted` | double |  |
+| `offensive_avg_two_point_field_goals_made` | double |  |
+| `offensive_avg_two_point_field_goals_attempted` | double |  |
+| `offensive_two_point_field_goal_pct` | double |  |
+| `offensive_shooting_efficiency` | double |  |
+| `offensive_scoring_efficiency` | double |  |
+| `team_id` | integer |  |
+| `team_uid` | character |  |
+| `team_guid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `team_is_active` | logical |  |
+| `team_logo_href` | character |  |
+
 **Example**
 
 ```python
@@ -176,6 +311,83 @@ espn_wbb_schedule - look up the women's college basketball schedule for a given 
 **Returns**
 
 Polars dataframe containing schedule dates for the requested season. Returns None if no games
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `uid` | character |  |
+| `date` | character |  |
+| `attendance` | integer |  |
+| `time_valid` | logical |  |
+| `neutral_site` | logical |  |
+| `conference_competition` | logical |  |
+| `play_by_play_available` | logical |  |
+| `recent` | logical |  |
+| `tournament_id` | integer |  |
+| `start_date` | character |  |
+| `broadcast` | character |  |
+| `highlights` | integer |  |
+| `notes_type` | character |  |
+| `notes_headline` | character |  |
+| `broadcast_market` | character |  |
+| `broadcast_name` | character |  |
+| `type_id` | character |  |
+| `type_abbreviation` | character |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_address_city` | character |  |
+| `venue_address_state` | character |  |
+| `venue_indoor` | logical |  |
+| `status_clock` | double |  |
+| `status_display_clock` | character |  |
+| `status_period` | integer |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
+| `format_regulation_periods` | integer |  |
+| `home_id` | character |  |
+| `home_uid` | character |  |
+| `home_location` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_short_display_name` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_is_active` | logical |  |
+| `home_venue_id` | character |  |
+| `home_logo` | character |  |
+| `home_conference_id` | character |  |
+| `home_score` | character |  |
+| `home_winner` | logical |  |
+| `home_current_rank` | integer |  |
+| `home_linescores` | integer |  |
+| `home_records` | character |  |
+| `away_id` | character |  |
+| `away_uid` | character |  |
+| `away_location` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_short_display_name` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_is_active` | logical |  |
+| `away_venue_id` | character |  |
+| `away_logo` | character |  |
+| `away_conference_id` | character |  |
+| `away_score` | character |  |
+| `away_winner` | logical |  |
+| `away_current_rank` | integer |  |
+| `away_linescores` | integer |  |
+| `away_records` | character |  |
+| `game_id` | integer |  |
+| `season` | integer |  |
+| `season_type` | integer |  |
 
 **Example**
 
@@ -287,6 +499,23 @@ espn_wbb_teams - look up the women's college basketball teams
 **Returns**
 
 Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.wbb.espn_wbb_teams.clear_cache().
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_is_all_star` | logical |  |
+| `team_location` | character |  |
+| `team_logos` | integer |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_uid` | character |  |
 
 **Example**
 

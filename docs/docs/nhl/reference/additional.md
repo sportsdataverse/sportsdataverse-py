@@ -26,6 +26,79 @@ espn_nhl_game_rosters() - Pull the game by id.
 
 Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'logo_href', 'logo_dark_href', 'game_id'
 
+| col_name | type | description |
+|---|---|---|
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `alternate_id` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `athlete_display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | double |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `debut_year` | integer |  |
+| `slug` | character |  |
+| `jersey` | character |  |
+| `linked` | logical |  |
+| `active` | logical |  |
+| `alternate_ids_sdr` | character |  |
+| `birth_place_city` | character |  |
+| `birth_place_state` | character |  |
+| `birth_place_country` | character |  |
+| `birth_country_abbreviation` | character |  |
+| `headshot_href` | character |  |
+| `headshot_alt` | character |  |
+| `hand_type` | character |  |
+| `hand_abbreviation` | character |  |
+| `hand_display_value` | character |  |
+| `contracts_href` | character |  |
+| `experience_years` | integer |  |
+| `draft_display_text` | character |  |
+| `draft_round` | integer |  |
+| `draft_year` | integer |  |
+| `draft_selection` | integer |  |
+| `draft_team_href` | character |  |
+| `status_id` | character |  |
+| `status_name` | character |  |
+| `status_type` | character |  |
+| `status_abbreviation` | character |  |
+| `jersey_right` | character |  |
+| `display_name` | character |  |
+| `scratched` | logical |  |
+| `scratch_reason` | character |  |
+| `athlete_href` | character |  |
+| `position_href` | character |  |
+| `statistics_href` | character |  |
+| `team_id` | integer |  |
+| `order` | integer |  |
+| `home_away` | character |  |
+| `winner` | logical |  |
+| `team_guid` | character |  |
+| `team_uid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `is_active` | logical |  |
+| `is_all_star` | logical |  |
+| `team_alternate_ids_sdr` | character |  |
+| `logo_href` | character |  |
+| `logo_dark_href` | character |  |
+| `game_id` | integer |  |
+
 **Example**
 
 ```python
@@ -103,6 +176,134 @@ See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of 
 **Returns**
 
 A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer |  |
+| `season_type` | character |  |
+| `total` | logical |  |
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | double |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `jersey` | character |  |
+| `slug` | character |  |
+| `active` | logical |  |
+| `position_id` | integer |  |
+| `position_name` | character |  |
+| `position_display_name` | character |  |
+| `position_abbreviation` | character |  |
+| `college_name` | character |  |
+| `status_id` | integer |  |
+| `status_name` | character |  |
+| `defensive_goals_against` | double |  |
+| `defensive_avg_goals_against` | double |  |
+| `defensive_shots_against` | double |  |
+| `defensive_avg_shots_against` | double |  |
+| `defensive_shootout_saves` | character |  |
+| `defensive_shootout_shots_against` | double |  |
+| `defensive_shootout_save_pct` | double |  |
+| `defensive_empty_net_goals_against` | character |  |
+| `defensive_shutouts` | double |  |
+| `defensive_saves` | double |  |
+| `defensive_save_pct` | double |  |
+| `defensive_overtime_losses` | double |  |
+| `defensive_blocked_shots` | double |  |
+| `defensive_hits` | double |  |
+| `defensive_even_strength_saves` | double |  |
+| `defensive_power_play_saves` | double |  |
+| `defensive_short_handed_saves` | double |  |
+| `general_games` | double |  |
+| `general_game_started` | double |  |
+| `general_team_games_played` | double |  |
+| `general_wins` | double |  |
+| `general_losses` | double |  |
+| `general_ties` | character |  |
+| `general_plus_minus` | double |  |
+| `general_time_on_ice` | double |  |
+| `general_time_on_ice_per_game` | double |  |
+| `general_shifts` | double |  |
+| `general_shifts_per_game` | double |  |
+| `general_production` | double |  |
+| `offensive_goals` | double |  |
+| `offensive_avg_goals` | double |  |
+| `offensive_assists` | double |  |
+| `offensive_shots_total` | double |  |
+| `offensive_avg_shots` | double |  |
+| `offensive_points` | double |  |
+| `offensive_points_per_game` | double |  |
+| `offensive_power_play_goals` | double |  |
+| `offensive_power_play_assists` | double |  |
+| `offensive_short_handed_goals` | double |  |
+| `offensive_short_handed_assists` | double |  |
+| `offensive_shootout_attempts` | double |  |
+| `offensive_shootout_goals` | double |  |
+| `offensive_shootout_shot_pct` | double |  |
+| `offensive_shooting_pct` | double |  |
+| `offensive_total_face_offs` | double |  |
+| `offensive_faceoffs_won` | double |  |
+| `offensive_faceoffs_lost` | double |  |
+| `offensive_faceoff_percent` | double |  |
+| `offensive_game_tying_goals` | character |  |
+| `offensive_game_winning_goals` | double |  |
+| `penalties_penalty_minutes` | double |  |
+| `penalties_major_penalties` | double |  |
+| `penalties_minor_penalties` | double |  |
+| `penalties_match_penalties` | double |  |
+| `penalties_misconducts` | double |  |
+| `penalties_game_misconducts` | double |  |
+| `penalties_boarding_penalties` | double |  |
+| `penalties_unsportsmanlike_penalties` | double |  |
+| `penalties_fighting_penalties` | double |  |
+| `penalties_avg_fights` | double |  |
+| `penalties_time_between_fights` | character |  |
+| `penalties_instigator_penalties` | double |  |
+| `penalties_charging_penalties` | double |  |
+| `penalties_hooking_penalties` | double |  |
+| `penalties_tripping_penalties` | double |  |
+| `penalties_roughing_penalties` | double |  |
+| `penalties_holding_penalties` | double |  |
+| `penalties_interference_penalties` | double |  |
+| `penalties_slashing_penalties` | double |  |
+| `penalties_high_sticking_penalties` | double |  |
+| `penalties_cross_checking_penalties` | double |  |
+| `penalties_stick_holding_penalties` | double |  |
+| `penalties_goalie_interference_penalties` | double |  |
+| `penalties_elbowing_penalties` | double |  |
+| `penalties_diving_penalties` | double |  |
+| `rpi_wins` | double |  |
+| `rpi_losses` | double |  |
+| `rpi_ot_losses` | character |  |
+| `rpi_points` | double |  |
+| `rpi_rpi` | character |  |
+| `rpi_sos` | character |  |
+| `rpi_power_rank` | character |  |
+| `rpi_points_for` | character |  |
+| `rpi_points_against` | character |  |
+| `team_id` | integer |  |
+| `team_uid` | character |  |
+| `team_guid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `team_is_active` | logical |  |
+| `team_logo_href` | character |  |
 
 **Example**
 
@@ -276,6 +477,58 @@ Picks among three mutually-exclusive NHL api-web forms (kept hand-written becaus
 
 A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
+| col_name | type | description |
+|---|---|---|
+| `scoreboard_date` | character |  |
+| `id` | integer |  |
+| `season` | integer |  |
+| `game_type` | integer |  |
+| `game_date` | character |  |
+| `game_center_link` | character |  |
+| `start_time_utc` | character |  |
+| `eastern_utc_offset` | character |  |
+| `venue_utc_offset` | character |  |
+| `tv_broadcasts` | character |  |
+| `game_state` | character |  |
+| `game_schedule_state` | character |  |
+| `tickets_link` | character |  |
+| `tickets_link_fr` | character |  |
+| `period` | double |  |
+| `three_min_recap` | character |  |
+| `three_min_recap_fr` | character |  |
+| `venue_default` | character |  |
+| `away_team_id` | integer |  |
+| `away_team_name_default` | character |  |
+| `away_team_name_fr` | character |  |
+| `away_team_common_name_default` | character |  |
+| `away_team_place_name_with_preposition_default` | character |  |
+| `away_team_place_name_with_preposition_fr` | character |  |
+| `away_team_abbrev` | character |  |
+| `away_team_score` | double |  |
+| `away_team_logo` | character |  |
+| `home_team_id` | integer |  |
+| `home_team_name_default` | character |  |
+| `home_team_name_fr` | character |  |
+| `home_team_common_name_default` | character |  |
+| `home_team_place_name_with_preposition_default` | character |  |
+| `home_team_place_name_with_preposition_fr` | character |  |
+| `home_team_abbrev` | character |  |
+| `home_team_score` | double |  |
+| `home_team_logo` | character |  |
+| `period_descriptor_number` | double |  |
+| `period_descriptor_period_type` | character |  |
+| `period_descriptor_max_regulation_periods` | double |  |
+| `series_status_round` | integer |  |
+| `series_status_series_abbrev` | character |  |
+| `series_status_game` | integer |  |
+| `series_status_top_seed_team_abbrev` | character |  |
+| `series_status_top_seed_wins` | integer |  |
+| `series_status_bottom_seed_team_abbrev` | character |  |
+| `series_status_bottom_seed_wins` | integer |  |
+| `period_descriptor_ot_periods` | double |  |
+| `away_team_record` | character |  |
+| `home_team_record` | character |  |
+
 **Example**
 
 ```python
@@ -343,6 +596,23 @@ espn_nhl_teams - look up NHL teams
 **Returns**
 
 Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nhl.espn_nhl_teams.clear_cache().
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_is_all_star` | logical |  |
+| `team_location` | character |  |
+| `team_logos` | integer |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_uid` | character |  |
 
 **Example**
 

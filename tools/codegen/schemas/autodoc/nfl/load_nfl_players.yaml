@@ -1,0 +1,30 @@
+schema: load_nfl_players
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: game_key
+  type: character
+  description: ''
+- name: official_name
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: jersey_number
+  type: integer
+  description: ''
+- name: official_id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: season_type
+  type: character
+  description: ''
+- name: week
+  type: integer
+  description: ''

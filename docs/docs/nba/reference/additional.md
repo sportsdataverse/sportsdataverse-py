@@ -31,6 +31,162 @@ See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of 
 
 A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer |  |
+| `season_type` | character |  |
+| `total` | logical |  |
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | double |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `jersey` | character |  |
+| `slug` | character |  |
+| `active` | logical |  |
+| `position_id` | integer |  |
+| `position_name` | character |  |
+| `position_display_name` | character |  |
+| `position_abbreviation` | character |  |
+| `college_name` | character |  |
+| `status_id` | integer |  |
+| `status_name` | character |  |
+| `defensive_blocks` | double |  |
+| `defensive_defensive_rebounds` | double |  |
+| `defensive_steals` | double |  |
+| `defensive_def_rebound_rate` | double |  |
+| `defensive_avg_defensive_rebounds` | double |  |
+| `defensive_avg_blocks` | double |  |
+| `defensive_avg_steals` | double |  |
+| `defensive_avg48_defensive_rebounds` | double |  |
+| `defensive_avg48_blocks` | double |  |
+| `defensive_avg48_steals` | double |  |
+| `defensive_drpm` | double |  |
+| `general_disqualifications` | double |  |
+| `general_flagrant_fouls` | double |  |
+| `general_fouls` | double |  |
+| `general_per` | double |  |
+| `general_rebound_rate` | double |  |
+| `general_ejections` | double |  |
+| `general_technical_fouls` | double |  |
+| `general_rebounds` | double |  |
+| `general_vorp` | double |  |
+| `general_warp` | double |  |
+| `general_rpm` | double |  |
+| `general_minutes` | double |  |
+| `general_avg_minutes` | double |  |
+| `general_nba_rating` | double |  |
+| `general_plus_minus` | double |  |
+| `general_avg_rebounds` | double |  |
+| `general_avg_fouls` | double |  |
+| `general_avg_flagrant_fouls` | double |  |
+| `general_avg_technical_fouls` | double |  |
+| `general_avg_ejections` | double |  |
+| `general_avg_disqualifications` | double |  |
+| `general_assist_turnover_ratio` | double |  |
+| `general_steal_foul_ratio` | double |  |
+| `general_block_foul_ratio` | double |  |
+| `general_avg_team_rebounds` | double |  |
+| `general_total_rebounds` | double |  |
+| `general_total_technical_fouls` | double |  |
+| `general_team_assist_turnover_ratio` | double |  |
+| `general_steal_turnover_ratio` | double |  |
+| `general_avg48_rebounds` | double |  |
+| `general_avg48_fouls` | double |  |
+| `general_avg48_flagrant_fouls` | double |  |
+| `general_avg48_technical_fouls` | double |  |
+| `general_avg48_ejections` | double |  |
+| `general_avg48_disqualifications` | double |  |
+| `general_r40` | double |  |
+| `general_games_played` | double |  |
+| `general_games_started` | double |  |
+| `general_double_double` | double |  |
+| `general_triple_double` | double |  |
+| `offensive_assists` | double |  |
+| `offensive_effective_fg_pct` | double |  |
+| `offensive_field_goals` | double |  |
+| `offensive_field_goals_attempted` | double |  |
+| `offensive_field_goals_made` | double |  |
+| `offensive_field_goal_pct` | double |  |
+| `offensive_free_throws` | double |  |
+| `offensive_free_throw_pct` | double |  |
+| `offensive_free_throws_attempted` | double |  |
+| `offensive_free_throws_made` | double |  |
+| `offensive_offensive_rebounds` | double |  |
+| `offensive_points` | double |  |
+| `offensive_turnovers` | double |  |
+| `offensive_three_point_pct` | double |  |
+| `offensive_three_point_field_goals_attempted` | double |  |
+| `offensive_three_point_field_goals_made` | double |  |
+| `offensive_true_shooting_pct` | double |  |
+| `offensive_total_turnovers` | double |  |
+| `offensive_assist_ratio` | double |  |
+| `offensive_points_in_paint` | double |  |
+| `offensive_off_rebound_rate` | double |  |
+| `offensive_turnover_ratio` | double |  |
+| `offensive_brick_index` | double |  |
+| `offensive_usage_rate` | double |  |
+| `offensive_avg_field_goals_made` | double |  |
+| `offensive_avg_field_goals_attempted` | double |  |
+| `offensive_avg_three_point_field_goals_made` | double |  |
+| `offensive_avg_three_point_field_goals_attempted` | double |  |
+| `offensive_avg_free_throws_made` | double |  |
+| `offensive_avg_free_throws_attempted` | double |  |
+| `offensive_avg_points` | double |  |
+| `offensive_avg_offensive_rebounds` | double |  |
+| `offensive_avg_assists` | double |  |
+| `offensive_avg_turnovers` | double |  |
+| `offensive_offensive_rebound_pct` | double |  |
+| `offensive_estimated_possessions` | double |  |
+| `offensive_avg_estimated_possessions` | double |  |
+| `offensive_points_per_estimated_possessions` | double |  |
+| `offensive_avg_team_turnovers` | double |  |
+| `offensive_avg_total_turnovers` | double |  |
+| `offensive_three_point_field_goal_pct` | double |  |
+| `offensive_two_point_field_goals_made` | double |  |
+| `offensive_two_point_field_goals_attempted` | double |  |
+| `offensive_avg_two_point_field_goals_made` | double |  |
+| `offensive_avg_two_point_field_goals_attempted` | double |  |
+| `offensive_two_point_field_goal_pct` | double |  |
+| `offensive_shooting_efficiency` | double |  |
+| `offensive_scoring_efficiency` | double |  |
+| `offensive_avg48_field_goals_made` | double |  |
+| `offensive_avg48_field_goals_attempted` | double |  |
+| `offensive_avg48_three_point_field_goals_made` | double |  |
+| `offensive_avg48_three_point_field_goals_attempted` | double |  |
+| `offensive_avg48_free_throws_made` | double |  |
+| `offensive_avg48_free_throws_attempted` | double |  |
+| `offensive_avg48_points` | double |  |
+| `offensive_avg48_offensive_rebounds` | double |  |
+| `offensive_avg48_assists` | double |  |
+| `offensive_avg48_turnovers` | double |  |
+| `offensive_p40` | double |  |
+| `offensive_a40` | double |  |
+| `offensive_orpm` | double |  |
+| `team_id` | integer |  |
+| `team_uid` | character |  |
+| `team_guid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `team_is_active` | logical |  |
+| `team_logo_href` | character |  |
+
 **Example**
 
 ```python
@@ -53,6 +209,79 @@ Args: dates (int): Used to define different seasons. 2002 is the earliest availa
 | `season_type` |  | `None` |  |
 | `limit` |  | `500` |  |
 | `return_as_pandas` |  | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `uid` | character |  |
+| `date` | character |  |
+| `attendance` | integer |  |
+| `time_valid` | logical |  |
+| `neutral_site` | logical |  |
+| `conference_competition` | logical |  |
+| `play_by_play_available` | logical |  |
+| `recent` | logical |  |
+| `start_date` | character |  |
+| `broadcast` | character |  |
+| `highlights` | character |  |
+| `notes_type` | character |  |
+| `notes_headline` | character |  |
+| `broadcast_market` | character |  |
+| `broadcast_name` | character |  |
+| `type_id` | character |  |
+| `type_abbreviation` | character |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_address_city` | character |  |
+| `venue_address_state` | character |  |
+| `venue_indoor` | logical |  |
+| `status_clock` | double |  |
+| `status_display_clock` | character |  |
+| `status_period` | integer |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
+| `format_regulation_periods` | integer |  |
+| `home_id` | character |  |
+| `home_uid` | character |  |
+| `home_location` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_short_display_name` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_is_active` | logical |  |
+| `home_venue_id` | character |  |
+| `home_logo` | character |  |
+| `home_score` | character |  |
+| `home_linescores` | integer |  |
+| `home_records` | character |  |
+| `away_id` | character |  |
+| `away_uid` | character |  |
+| `away_location` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_short_display_name` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_is_active` | logical |  |
+| `away_venue_id` | character |  |
+| `away_logo` | character |  |
+| `away_score` | character |  |
+| `away_linescores` | integer |  |
+| `away_records` | character |  |
+| `game_id` | integer |  |
+| `season` | integer |  |
+| `season_type` | integer |  |
 
 ## Utilities & helpers
 
@@ -122,6 +351,23 @@ espn_nba_teams - look up NBA teams
 **Returns**
 
 Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nba.espn_nba_teams.clear_cache().
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_is_all_star` | logical |  |
+| `team_location` | character |  |
+| `team_logos` | integer |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_uid` | character |  |
 
 **Example**
 

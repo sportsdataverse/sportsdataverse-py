@@ -1,0 +1,51 @@
+schema: statcast_leaderboard_outs_above_average
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: display_team_name
+  type: character
+  description: ''
+- name: year
+  type: integer
+  description: ''
+- name: primary_pos_formatted
+  type: character
+  description: ''
+- name: fielding_runs_prevented
+  type: integer
+  description: ''
+- name: outs_above_average
+  type: integer
+  description: ''
+- name: outs_above_average_infront
+  type: integer
+  description: ''
+- name: outs_above_average_lateral_toward3bline
+  type: integer
+  description: ''
+- name: outs_above_average_lateral_toward1bline
+  type: integer
+  description: ''
+- name: outs_above_average_behind
+  type: integer
+  description: ''
+- name: outs_above_average_rhh
+  type: integer
+  description: ''
+- name: outs_above_average_lhh
+  type: integer
+  description: ''
+- name: actual_success_rate_formatted
+  type: character
+  description: ''
+- name: adj_estimated_success_rate_formatted
+  type: character
+  description: ''
+- name: diff_success_rate_formatted
+  type: character
+  description: ''

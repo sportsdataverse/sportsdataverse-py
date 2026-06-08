@@ -33,11 +33,21 @@ _No description available._
 | `{{ p.name }}` | {% if p.type %}`{{ p.type }}`{% endif %} | {% if p.default %}`{{ p.default }}`{% endif %} | {{ p.description }} |
 {% endfor %}
 {% endif %}
-{% if fn.returns %}
+{% if fn.returns or fn.return_columns %}
 
 **Returns**
 
+{% if fn.returns %}
 {{ fn.returns }}
+{% endif %}
+{% if fn.return_columns %}
+
+| col_name | type | description |
+|---|---|---|
+{% for c in fn.return_columns %}
+| `{{ c.name }}` | {{ c.type }} | {{ c.description }} |
+{% endfor %}
+{% endif %}
 {% endif %}
 {% if fn.example %}
 

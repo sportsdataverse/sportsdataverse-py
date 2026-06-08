@@ -36,6 +36,38 @@ GET /leaderboard/arm-strength — outfielder + infielder arm-strength leaders.
 | `csv` | `bool` | `True` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `fielder_name` | character |  |
+| `player_id` | integer |  |
+| `team_name` | character |  |
+| `primary_position` | integer |  |
+| `primary_position_name` | character |  |
+| `total_throws` | integer |  |
+| `total_throws_1b` | integer |  |
+| `total_throws_2b` | integer |  |
+| `total_throws_3b` | integer |  |
+| `total_throws_ss` | integer |  |
+| `total_throws_lf` | integer |  |
+| `total_throws_cf` | integer |  |
+| `total_throws_rf` | integer |  |
+| `total_throws_inf` | integer |  |
+| `total_throws_of` | integer |  |
+| `max_arm_strength` | double |  |
+| `arm_1b` | double |  |
+| `arm_2b` | double |  |
+| `arm_3b` | character |  |
+| `arm_ss` | double |  |
+| `arm_lf` | double |  |
+| `arm_cf` | character |  |
+| `arm_rf` | double |  |
+| `arm_inf` | double |  |
+| `arm_of` | double |  |
+| `arm_overall` | double |  |
+
 ### `statcast_leaderboard_bat_tracking(year: 'Union[int, str]', type_: 'str' = 'batter-swings', min_: 'Optional[Union[int, str]]' = 'q', attack_zone: 'Optional[str]' = None, csv: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
 GET /leaderboard/bat-tracking — swing speed / attack angle (2024+).
@@ -51,6 +83,30 @@ GET /leaderboard/bat-tracking — swing speed / attack angle (2024+).
 | `csv` | `bool` | `True` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `name` | character |  |
+| `swings_competitive` | integer |  |
+| `percent_swings_competitive` | double |  |
+| `contact` | integer |  |
+| `avg_bat_speed` | double |  |
+| `hard_swing_rate` | double |  |
+| `squared_up_per_bat_contact` | double |  |
+| `squared_up_per_swing` | double |  |
+| `blast_per_bat_contact` | double |  |
+| `blast_per_swing` | double |  |
+| `swing_length` | double |  |
+| `swords` | integer |  |
+| `batter_run_value` | double |  |
+| `whiffs` | character |  |
+| `whiff_per_swing` | double |  |
+| `batted_ball_events` | integer |  |
+| `batted_ball_event_per_swing` | double |  |
+
 ### `statcast_leaderboard_catch_probability(year: 'Union[int, str]', csv: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
 GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
@@ -62,6 +118,30 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 | `year` | `Union[int, str]` |  |  |
 | `csv` | `bool` | `True` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `last_name, first_name` | character |  |
+| `player_id` | integer |  |
+| `oaa` | integer |  |
+| `n_fieldout_5stars` | integer |  |
+| `n_opp_5stars` | integer |  |
+| `n_5star_percent` | double |  |
+| `n_fieldout_4stars` | integer |  |
+| `n_opp_4stars` | integer |  |
+| `n_4star_percent` | double |  |
+| `n_fieldout_3stars` | integer |  |
+| `n_opp_3stars` | integer |  |
+| `n_3star_percent` | double |  |
+| `n_fieldout_2stars` | integer |  |
+| `n_opp_2stars` | integer |  |
+| `n_2star_percent` | double |  |
+| `n_fieldout_1stars` | integer |  |
+| `n_opp_1stars` | integer |  |
+| `n_1star_percent` | double |  |
 
 ### `statcast_leaderboard_custom(year: 'Union[int, str]', type_: 'str', selections: 'str', filter_: 'Optional[str]' = None, min_: 'Optional[Union[int, str]]' = 'q', sort: 'Optional[str]' = None, sort_dir: 'str' = 'desc', csv: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs)`
 
@@ -97,6 +177,26 @@ GET /leaderboard/expected_statistics — xBA / xSLG / xwOBA / xISO leaders.
 | `csv` | `bool` | `True` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `last_name, first_name` | character |  |
+| `player_id` | integer |  |
+| `year` | integer |  |
+| `pa` | integer |  |
+| `bip` | integer |  |
+| `ba` | double |  |
+| `est_ba` | double |  |
+| `est_ba_minus_ba_diff` | double |  |
+| `slg` | double |  |
+| `est_slg` | double |  |
+| `est_slg_minus_slg_diff` | double |  |
+| `woba` | double |  |
+| `est_woba` | double |  |
+| `est_woba_minus_woba_diff` | double |  |
+
 ### `statcast_leaderboard_outs_above_average(year: 'Union[int, str]', pos: 'Optional[str]' = None, team: 'Optional[str]' = None, min_: 'Optional[Union[int, str]]' = 'q', csv: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
 GET /leaderboard/outs_above_average — OAA fielding leaderboard.
@@ -111,6 +211,28 @@ GET /leaderboard/outs_above_average — OAA fielding leaderboard.
 | `min_` | `Optional[Union[int, str]]` | `'q'` |  |
 | `csv` | `bool` | `True` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `last_name, first_name` | character |  |
+| `player_id` | integer |  |
+| `display_team_name` | character |  |
+| `year` | integer |  |
+| `primary_pos_formatted` | character |  |
+| `fielding_runs_prevented` | integer |  |
+| `outs_above_average` | integer |  |
+| `outs_above_average_infront` | integer |  |
+| `outs_above_average_lateral_toward3bline` | integer |  |
+| `outs_above_average_lateral_toward1bline` | integer |  |
+| `outs_above_average_behind` | integer |  |
+| `outs_above_average_rhh` | integer |  |
+| `outs_above_average_lhh` | integer |  |
+| `actual_success_rate_formatted` | character |  |
+| `adj_estimated_success_rate_formatted` | character |  |
+| `diff_success_rate_formatted` | character |  |
 
 ### `statcast_leaderboard_pitch_arsenal(year: 'Union[int, str]', team: 'Optional[str]' = None, min_: 'Optional[Union[int, str]]' = 'q', pitch_hand: 'Optional[str]' = None, csv: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
@@ -141,6 +263,26 @@ GET /leaderboard/poptime — catcher pop-time leaders.
 | `csv` | `bool` | `True` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `entity_name` | character |  |
+| `entity_id` | integer |  |
+| `team_id` | integer |  |
+| `age` | integer |  |
+| `maxeff_arm_2b_3b_sba` | double |  |
+| `exchange_2b_3b_sba` | double |  |
+| `pop_2b_sba_count` | integer |  |
+| `pop_2b_sba` | double |  |
+| `pop_2b_cs` | double |  |
+| `pop_2b_sb` | double |  |
+| `pop_3b_sba_count` | integer |  |
+| `pop_3b_sba` | double |  |
+| `pop_3b_cs` | double |  |
+| `pop_3b_sb` | double |  |
+
 ### `statcast_leaderboard_sprint_speed(year: 'Union[int, str]', position: 'Optional[str]' = None, team: 'Optional[str]' = None, min_opp: 'Optional[int]' = None, csv: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs)`
 
 GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaders.
@@ -155,6 +297,22 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaders.
 | `min_opp` | `Optional[int]` | `None` |  |
 | `csv` | `bool` | `True` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `last_name, first_name` | character |  |
+| `player_id` | integer |  |
+| `team_id` | integer |  |
+| `team` | character |  |
+| `position` | character |  |
+| `age` | integer |  |
+| `competitive_runs` | integer |  |
+| `bolts` | integer |  |
+| `hp_to_1b` | double |  |
+| `sprint_speed` | double |  |
 
 ### `statcast_player_page(player_id: 'int', stats: 'Optional[str]' = None, **kwargs) -> 'str'`
 
@@ -209,6 +367,127 @@ Returns a polars DataFrame of pitches matching the filter set. The Savant endpoi
 **Returns**
 
 polars.DataFrame (or pandas if ``return_as_pandas=True``) with one row per pitch, ~90 columns covering pitch tracking, batted-ball metrics, Statcast outcomes, and game/play context.
+
+| col_name | type | description |
+|---|---|---|
+| `pitch_type` | character |  |
+| `game_date` | character |  |
+| `release_speed` | double |  |
+| `release_pos_x` | double |  |
+| `release_pos_z` | double |  |
+| `player_name` | character |  |
+| `batter` | integer |  |
+| `pitcher` | integer |  |
+| `events` | character |  |
+| `description` | character |  |
+| `spin_dir` | character |  |
+| `spin_rate_deprecated` | character |  |
+| `break_angle_deprecated` | character |  |
+| `break_length_deprecated` | character |  |
+| `zone` | integer |  |
+| `des` | character |  |
+| `game_type` | character |  |
+| `stand` | character |  |
+| `p_throws` | character |  |
+| `home_team` | character |  |
+| `away_team` | character |  |
+| `type` | character |  |
+| `hit_location` | integer |  |
+| `bb_type` | character |  |
+| `balls` | integer |  |
+| `strikes` | integer |  |
+| `game_year` | integer |  |
+| `pfx_x` | double |  |
+| `pfx_z` | double |  |
+| `plate_x` | double |  |
+| `plate_z` | double |  |
+| `on_3b` | character |  |
+| `on_2b` | integer |  |
+| `on_1b` | integer |  |
+| `outs_when_up` | integer |  |
+| `inning` | integer |  |
+| `inning_topbot` | character |  |
+| `hc_x` | double |  |
+| `hc_y` | double |  |
+| `tfs_deprecated` | character |  |
+| `tfs_zulu_deprecated` | character |  |
+| `umpire` | character |  |
+| `sv_id` | character |  |
+| `vx0` | double |  |
+| `vy0` | double |  |
+| `vz0` | double |  |
+| `ax` | double |  |
+| `ay` | double |  |
+| `az` | double |  |
+| `sz_top` | double |  |
+| `sz_bot` | double |  |
+| `hit_distance_sc` | integer |  |
+| `launch_speed` | double |  |
+| `launch_angle` | integer |  |
+| `effective_speed` | double |  |
+| `release_spin_rate` | integer |  |
+| `release_extension` | double |  |
+| `game_pk` | integer |  |
+| `fielder_2` | integer |  |
+| `fielder_3` | integer |  |
+| `fielder_4` | integer |  |
+| `fielder_5` | integer |  |
+| `fielder_6` | integer |  |
+| `fielder_7` | integer |  |
+| `fielder_8` | integer |  |
+| `fielder_9` | integer |  |
+| `release_pos_y` | double |  |
+| `estimated_ba_using_speedangle` | double |  |
+| `estimated_woba_using_speedangle` | double |  |
+| `woba_value` | double |  |
+| `woba_denom` | integer |  |
+| `babip_value` | integer |  |
+| `iso_value` | integer |  |
+| `launch_speed_angle` | integer |  |
+| `at_bat_number` | integer |  |
+| `pitch_number` | integer |  |
+| `pitch_name` | character |  |
+| `home_score` | integer |  |
+| `away_score` | integer |  |
+| `bat_score` | integer |  |
+| `fld_score` | integer |  |
+| `post_away_score` | integer |  |
+| `post_home_score` | integer |  |
+| `post_bat_score` | integer |  |
+| `post_fld_score` | integer |  |
+| `if_fielding_alignment` | character |  |
+| `of_fielding_alignment` | character |  |
+| `spin_axis` | integer |  |
+| `delta_home_win_exp` | double |  |
+| `delta_run_exp` | double |  |
+| `bat_speed` | double |  |
+| `swing_length` | double |  |
+| `estimated_slg_using_speedangle` | double |  |
+| `delta_pitcher_run_exp` | double |  |
+| `hyper_speed` | double |  |
+| `home_score_diff` | integer |  |
+| `bat_score_diff` | integer |  |
+| `home_win_exp` | double |  |
+| `bat_win_exp` | double |  |
+| `age_pit_legacy` | integer |  |
+| `age_bat_legacy` | integer |  |
+| `age_pit` | integer |  |
+| `age_bat` | integer |  |
+| `n_thruorder_pitcher` | integer |  |
+| `n_priorpa_thisgame_player_at_bat` | integer |  |
+| `pitcher_days_since_prev_game` | integer |  |
+| `batter_days_since_prev_game` | integer |  |
+| `pitcher_days_until_next_game` | integer |  |
+| `batter_days_until_next_game` | integer |  |
+| `api_break_z_with_gravity` | double |  |
+| `api_break_x_arm` | double |  |
+| `api_break_x_batter_in` | double |  |
+| `arm_angle` | double |  |
+| `attack_angle` | double |  |
+| `attack_direction` | double |  |
+| `swing_path_tilt` | double |  |
+| `intercept_ball_minus_batter_pos_x_inches` | double |  |
+| `intercept_ball_minus_batter_pos_y_inches` | double |  |
 
 ### `statcast_search_chunked(start_date: 'str', end_date: 'str', *, chunk_days: 'int' = 5, return_as_pandas: 'bool' = False, **kwargs)`
 
@@ -557,6 +836,144 @@ See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of 
 
 A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer |  |
+| `season_type` | character |  |
+| `total` | logical |  |
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | double |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `jersey` | character |  |
+| `slug` | character |  |
+| `active` | logical |  |
+| `position_id` | integer |  |
+| `position_name` | character |  |
+| `position_display_name` | character |  |
+| `position_abbreviation` | character |  |
+| `college_name` | character |  |
+| `status_id` | integer |  |
+| `status_name` | character |  |
+| `batting_games_played` | double |  |
+| `batting_team_games_played` | double |  |
+| `batting_hit_by_pitch` | double |  |
+| `batting_ground_balls` | double |  |
+| `batting_strikeouts` | double |  |
+| `batting_rb_is` | double |  |
+| `batting_sac_hits` | double |  |
+| `batting_hits` | double |  |
+| `batting_stolen_bases` | double |  |
+| `batting_walks` | double |  |
+| `batting_catcher_interference` | double |  |
+| `batting_runs` | double |  |
+| `batting_gid_ps` | double |  |
+| `batting_sac_flies` | double |  |
+| `batting_at_bats` | double |  |
+| `batting_home_runs` | double |  |
+| `batting_grand_slam_home_runs` | double |  |
+| `batting_runners_left_on_base` | double |  |
+| `batting_triples` | double |  |
+| `batting_game_winning_rb_is` | double |  |
+| `batting_intentional_walks` | double |  |
+| `batting_doubles` | double |  |
+| `batting_fly_balls` | double |  |
+| `batting_caught_stealing` | double |  |
+| `batting_pitches` | double |  |
+| `batting_games_started` | double |  |
+| `batting_pinch_at_bats` | double |  |
+| `batting_pinch_hits` | double |  |
+| `batting_player_rating` | double |  |
+| `batting_is_qualified` | double |  |
+| `batting_is_qualified_steals` | double |  |
+| `batting_total_bases` | double |  |
+| `batting_plate_appearances` | double |  |
+| `batting_projected_home_runs` | double |  |
+| `batting_extra_base_hits` | double |  |
+| `batting_runs_created` | double |  |
+| `batting_avg` | double |  |
+| `batting_pinch_avg` | double |  |
+| `batting_slug_avg` | double |  |
+| `batting_secondary_avg` | double |  |
+| `batting_on_base_pct` | double |  |
+| `batting_ops` | double |  |
+| `batting_ground_to_fly_ratio` | double |  |
+| `batting_runs_created_per27_outs` | double |  |
+| `batting_batter_rating` | double |  |
+| `batting_at_bats_per_home_run` | double |  |
+| `batting_stolen_base_pct` | double |  |
+| `batting_pitches_per_plate_appearance` | double |  |
+| `batting_isolated_power` | double |  |
+| `batting_walk_to_strikeout_ratio` | double |  |
+| `batting_walks_per_plate_appearance` | double |  |
+| `batting_secondary_avg_minus_ba` | double |  |
+| `batting_runs_produced` | double |  |
+| `batting_runs_ratio` | double |  |
+| `batting_patience_ratio` | double |  |
+| `batting_bipa` | double |  |
+| `batting_mlb_rating` | double |  |
+| `batting_off_warbr` | double |  |
+| `batting_warbr` | double |  |
+| `fielding_games_played` | double |  |
+| `fielding_team_games_played` | double |  |
+| `fielding_double_plays` | double |  |
+| `fielding_opportunities` | double |  |
+| `fielding_errors` | double |  |
+| `fielding_passed_balls` | double |  |
+| `fielding_assists` | double |  |
+| `fielding_outfield_assists` | double |  |
+| `fielding_pickoffs` | double |  |
+| `fielding_putouts` | double |  |
+| `fielding_outs_on_field` | double |  |
+| `fielding_triple_plays` | double |  |
+| `fielding_balls_in_zone` | double |  |
+| `fielding_extra_bases` | double |  |
+| `fielding_outs_made` | double |  |
+| `fielding_hits` | double |  |
+| `fielding_total_bases` | double |  |
+| `fielding_games_started` | double |  |
+| `fielding_catcher_third_innings_played` | double |  |
+| `fielding_catcher_caught_stealing` | double |  |
+| `fielding_catcher_stolen_bases_allowed` | double |  |
+| `fielding_catcher_earned_runs` | double |  |
+| `fielding_is_qualified` | double |  |
+| `fielding_is_qualified_catcher` | double |  |
+| `fielding_is_qualified_pitcher` | double |  |
+| `fielding_successful_chances` | double |  |
+| `fielding_total_chances` | double |  |
+| `fielding_full_innings_played` | double |  |
+| `fielding_part_innings_played` | double |  |
+| `fielding_fielding_pct` | double |  |
+| `fielding_range_factor` | double |  |
+| `fielding_zone_rating` | double |  |
+| `fielding_catcher_caught_stealing_pct` | double |  |
+| `fielding_catcher_era` | double |  |
+| `fielding_def_warbr` | double |  |
+| `team_id` | integer |  |
+| `team_uid` | character |  |
+| `team_guid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `team_is_active` | logical |  |
+| `team_logo_href` | character |  |
+
 **Example**
 
 ```python
@@ -581,6 +998,32 @@ espn_mlb_schedule - look up the MLB schedule for a given date or season-year.
 **Returns**
 
 Polars dataframe containing the schedule. Returns ``None`` if no games.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `date` | character |  |
+| `season_year` | integer |  |
+| `season_type` | integer |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_city` | character |  |
+| `venue_state` | character |  |
+| `home_id` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_score` | character |  |
+| `home_winner` | logical |  |
+| `away_id` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_score` | character |  |
+| `away_winner` | logical |  |
 
 **Example**
 
@@ -688,6 +1131,23 @@ espn_mlb_teams - look up MLB teams from ESPN's Site v2 API.
 **Returns**
 
 Polars dataframe containing teams for MLB. This function caches by default, so if you want to refresh the data, use ``sportsdataverse.mlb.espn_mlb_teams.cache_clear()``.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_is_all_star` | logical |  |
+| `team_location` | character |  |
+| `team_logos` | integer |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_uid` | character |  |
 
 **Example**
 

@@ -1562,6 +1562,44 @@ def render_parameters_page() -> str:
 _AUTODOC_PAGE = "additional.md"
 _AUTODOC_GLOBAL_PAGE = "python-helpers.md"
 
+# Committed Returns-schema artifacts for autodoc (hand-written) functions:
+# schemas/autodoc/{league}/{fn}.yaml (``league`` is a league prefix or
+# ``global``). Captured by ``--autodoc-schemas`` (network), READ offline by the
+# renderer -- exactly like loader_schemas.yaml. The example call args used during
+# capture live in autodoc_example_args.yaml.
+_AUTODOC_SCHEMA_DIR = ROOT / "tools" / "codegen" / "schemas" / "autodoc"
+_AUTODOC_EXAMPLE_ARGS_FILE = ROOT / "tools" / "codegen" / "autodoc_example_args.yaml"
+
+
+@functools.lru_cache(maxsize=1)
+def _autodoc_example_args() -> dict:
+    """``{league|'global': {fn: {kwargs}}}`` example call args for the capture step.
+
+    Empty dict if the registry file is absent; a function with no entry falls
+    back to a no-arg ``{}`` attempt during capture."""
+    if not _AUTODOC_EXAMPLE_ARGS_FILE.exists():
+        return {}
+    import yaml
+
+    d = yaml.safe_load(_AUTODOC_EXAMPLE_ARGS_FILE.read_text(encoding="utf-8")) or {}
+    return {k: (v or {}) for k, v in d.items()}
+
+
+@functools.lru_cache(maxsize=None)
+def _autodoc_return_columns(scope: str, fn: str) -> tuple:
+    """``({name,type,description}, ...)`` from the committed autodoc schema, or ``()``.
+
+    ``scope`` is a league prefix or ``"global"``. Read offline by the renderer;
+    returns an empty tuple when no schema was captured for ``fn`` (prose
+    fallback). A tuple (not list) so the result is hashable under lru_cache."""
+    p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
+    if not p.exists():
+        return ()
+    import yaml
+
+    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    return tuple(d.get("columns", []) or [])
+
 
 # Modules that leak into a league's ``dir()`` via ``from ... import *`` but are
 # NOT hand-written league functions: shared download/JSON utilities, the shared
@@ -1838,6 +1876,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     import importlib
 
     mod = importlib.import_module("sportsdataverse" if league is None else f"sportsdataverse.{league}")
+    scope = "global" if league is None else league
     by_family: dict[str, list[dict]] = {}
     for n in names:
         obj = getattr(mod, n)
@@ -1846,8 +1885,14 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         for p in view["params"]:
             for k in ("type", "default", "description"):
                 p[k] = p[k].replace("|", "\\|")
+        # Returns column table from the committed autodoc schema (offline read);
+        # empty list -> the template falls back to the docstring Returns prose.
+        return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
+        for c in return_columns:
+            for k in ("name", "type", "description"):
+                c[k] = str(c.get(k, "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n), []).append(
-            {"name": n, "signature": _autodoc_signature(obj), **view},
+            {"name": n, "signature": _autodoc_signature(obj), "return_columns": return_columns, **view},
         )
 
     def fam_key(fam: str) -> tuple[int, str]:
@@ -1879,6 +1924,108 @@ def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
         module = f"sportsdataverse.{prefix}"
     template = render.ENV.get_template("autodoc_page.md.jinja")
     return template.render(title=title, module=module, sidebar_position=50, groups=groups)
+
+
+def _autodoc_names_by_scope() -> dict[str | None, list[str]]:
+    """``{league_prefix|None: [autodoc names]}`` -- the same in-scope autodoc set the
+    docs generator documents on each ``additional.md`` / ``python-helpers.md`` page.
+
+    Mirrors :func:`_render_docs_all`'s per-league corpus construction (the "already
+    documented" judgment depends on the other rendered pages for that league), so the
+    capture step (:func:`refresh_autodoc_schemas`) introspects EXACTLY the functions
+    the autodoc pages render. ``None`` is the package-level (global) scope."""
+    out: dict[str, str] = {}
+    preserved = _preserved_docs_corpus()
+    result: dict[str | None, list[str]] = {}
+    for prefix in _doc_leagues():
+        apis = _apis_for(prefix)
+        loaders = _loader_doc_views(prefix)
+        out[f"{prefix}/index.md"] = render_league_index(prefix)
+        espn_n = flat_n = 0
+        for a in apis:
+            if a["kind"] == "espn":
+                pos = 20 + espn_n
+                espn_n += 1
+            else:
+                pos = 10 + flat_n
+                flat_n += 1
+            out[f"{prefix}/reference/{a['slug']}.md"] = render_reference_page(prefix, a["name"], pos)
+        if loaders:
+            out[f"{prefix}/reference/loaders.md"] = render_loaders_page(prefix, 1)
+        league_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
+        result[prefix] = _autodoc_names(prefix, league_corpus)
+    out["reference/parameters.md"] = render_parameters_page()
+    global_corpus = "\n".join(c for rel, c in out.items() if rel.endswith(".md")) + "\n" + preserved
+    result[None] = _autodoc_names(None, global_corpus)
+    return result
+
+
+def refresh_autodoc_schemas() -> int:
+    """Call every in-scope autodoc DataFrame-returning function and capture its
+    column schema to ``schemas/autodoc/{scope}/{fn}.yaml`` (network; best-effort).
+
+    For each autodoc name (per :func:`_autodoc_names_by_scope`) the example call
+    args are looked up in ``autodoc_example_args.yaml`` (else ``{}``), the live
+    function is invoked, and -- when the result is a polars/pandas DataFrame with
+    >0 columns -- a ``kind: dataframe`` schema is written via :func:`_cols_from_frame`
+    (descriptions left blank; there is no per-column authored source). Any failure
+    (call error, non-DataFrame return, empty frame) is logged as a skip and the
+    function falls back to its docstring Returns prose at render time. Pre-existing
+    schemas for names that no longer capture are removed so the committed set never
+    goes stale."""
+    import importlib
+
+    import yaml
+
+    captured = skipped = 0
+    skip_reasons: list[str] = []
+    written_paths: set = set()
+    args_by_scope = _autodoc_example_args()
+    for scope, names in _autodoc_names_by_scope().items():
+        scope_key = "global" if scope is None else scope
+        mod = importlib.import_module("sportsdataverse" if scope is None else f"sportsdataverse.{scope}")
+        scope_args = args_by_scope.get(scope_key, {})
+        for fn in names:
+            obj = getattr(mod, fn, None)
+            if obj is None or not callable(obj):
+                continue
+            kwargs = scope_args.get(fn, {})
+            try:
+                df = obj(**kwargs)
+            except Exception as e:  # noqa: BLE001
+                msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
+                print(f"  autodoc skip {scope_key}.{fn}: {msg}")
+                skip_reasons.append(f"{scope_key}.{fn}: {msg}")
+                skipped += 1
+                continue
+            cols = getattr(df, "columns", None)
+            ncols = (df.width if hasattr(df, "width") else len(cols)) if cols is not None else 0
+            is_frame = hasattr(df, "columns") and hasattr(df, "dtypes") and not isinstance(df, dict)
+            if not is_frame or ncols == 0:
+                print(f"  autodoc skip {scope_key}.{fn}: not a non-empty DataFrame ({type(df).__name__})")
+                skip_reasons.append(f"{scope_key}.{fn}: non-DataFrame ({type(df).__name__})")
+                skipped += 1
+                continue
+            doc = {"schema": fn, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
+            outdir = _AUTODOC_SCHEMA_DIR / scope_key
+            outdir.mkdir(parents=True, exist_ok=True)
+            dest = outdir / f"{fn}.yaml"
+            dest.write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8")
+            written_paths.add(dest.resolve())
+            captured += 1
+    # Prune stale schema files (a function that no longer captures) so the
+    # committed artifact set stays in lockstep with what the renderer can read.
+    pruned = 0
+    if _AUTODOC_SCHEMA_DIR.exists():
+        for f in _AUTODOC_SCHEMA_DIR.rglob("*.yaml"):
+            if f.resolve() not in written_paths:
+                f.unlink()
+                pruned += 1
+    _autodoc_return_columns.cache_clear()
+    print(f"autodoc schemas: {captured} captured, {skipped} skipped" + (f", {pruned} pruned" if pruned else ""))
+    if skip_reasons:
+        print("  sample skips: " + "; ".join(skip_reasons[:5]))
+    return 0
 
 
 def render_category(label: str, position: int, collapsed: bool) -> str:
@@ -2051,6 +2198,11 @@ def main(argv=None) -> int:
         help="introspect parsers against captured fixtures -> per-league return schemas (offline)",
     )
     ap.add_argument(
+        "--autodoc-schemas",
+        action="store_true",
+        help="call autodoc DataFrame functions live -> schemas/autodoc Returns col tables (network)",
+    )
+    ap.add_argument(
         "--docs",
         action="store_true",
         help="regenerate the per-league reference subtree into docs/docs/ and exit",
@@ -2063,6 +2215,8 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
     if args.coverage:
         return coverage_report()
+    if args.autodoc_schemas:
+        return refresh_autodoc_schemas()
     if args.schemas:
         return refresh_return_schemas()
     if args.loader_schemas:

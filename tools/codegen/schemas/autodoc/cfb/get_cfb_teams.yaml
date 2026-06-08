@@ -1,0 +1,42 @@
+schema: get_cfb_teams
+kind: dataframe
+columns:
+- name: team_id
+  type: integer
+  description: ''
+- name: school
+  type: character
+  description: ''
+- name: mascot
+  type: character
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: alt_name1
+  type: character
+  description: ''
+- name: alt_name2
+  type: character
+  description: ''
+- name: alt_name3
+  type: character
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: division
+  type: character
+  description: ''
+- name: color
+  type: character
+  description: ''
+- name: alt_color
+  type: character
+  description: ''
+- name: logo
+  type: character
+  description: ''
+- name: logo_dark
+  type: character
+  description: ''

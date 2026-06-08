@@ -1,0 +1,109 @@
+# Example call arguments for the autodoc Returns-schema capture
+# (`generate.py --autodoc-schemas`). Keyed by `{league}.{fn}` (use `global` for
+# package-level functions). Each value is the kwargs dict passed to the live
+# function so its output DataFrame can be introspected for the Returns col table.
+#
+# Best-effort only: a function absent here gets a no-arg `{}` attempt, and any
+# call failure falls back to the docstring Returns prose. IDs are real, completed
+# games / known athletes (sourced from the captured scoreboard/leaders fixtures)
+# so the calls return non-empty frames.
+
+# --- ESPN per-league play-by-play / rosters / participants (game-scoped) ---
+cfb:
+  espn_cfb_game_rosters: {game_id: 401636892}
+  espn_cfb_play_participants: {game_id: 401636892}
+  espn_cfb_player_stats: {athlete_id: 4426335, season: 2024}
+  espn_cfb_schedule: {}
+  espn_cfb_teams: {}
+  get_cfb_teams: {}
+  load_cfb_betting_lines: {}
+
+nfl:
+  espn_nfl_game_rosters: {game_id: 401772940}
+  espn_nfl_player_stats: {athlete_id: 2576980, season: 2024}
+  espn_nfl_schedule: {}
+  espn_nfl_teams: {}
+  # load_* dataset loaders with no `seasons` default need an explicit season.
+  load_depth_charts: {seasons: 2024}
+  load_ff_opportunity: {seasons: 2024}
+  load_ftn_charting: {seasons: 2024}
+  load_injuries: {seasons: 2024}
+  load_nextgen_stats: {seasons: 2024}
+  load_nfl_depth_charts: {seasons: 2024}
+  load_nfl_ff_opportunity: {seasons: 2024}
+  load_nfl_ftn_charting: {seasons: 2024}
+  load_nfl_injuries: {seasons: 2024}
+  load_nfl_nextgen_stats: {seasons: 2024}
+  load_nfl_pbp: {seasons: 2024}
+  load_nfl_pbp_participation: {seasons: 2023}
+  load_nfl_pfr_advstats: {seasons: 2024}
+  load_nfl_pfr_weekly_def: {seasons: 2024}
+  load_nfl_pfr_weekly_pass: {seasons: 2024}
+  load_nfl_pfr_weekly_rec: {seasons: 2024}
+  load_nfl_pfr_weekly_rush: {seasons: 2024}
+  load_nfl_rosters: {seasons: 2024}
+  load_nfl_schedule: {seasons: 2024}
+  load_nfl_snap_counts: {seasons: 2024}
+  load_nfl_team_stats: {seasons: 2024}
+  load_nfl_weekly_rosters: {seasons: 2024}
+  load_participation: {seasons: 2023}
+  load_pbp: {seasons: 2024}
+  load_pfr_advstats: {seasons: 2024}
+  load_rosters: {seasons: 2024}
+  load_rosters_weekly: {seasons: 2024}
+  load_schedules: {seasons: 2024}
+  load_snap_counts: {seasons: 2024}
+  load_team_stats: {seasons: 2024}
+
+nba:
+  espn_nba_player_stats: {athlete_id: 3059318, season: 2024}
+  espn_nba_schedule: {}
+  espn_nba_teams: {}
+
+wnba:
+  espn_wnba_game_officials: {game_id: 401620308}
+  espn_wnba_player_stats: {athlete_id: 2529137, season: 2024}
+  espn_wnba_schedule: {}
+  espn_wnba_teams: {}
+
+mbb:
+  espn_mbb_game_rosters: {game_id: 401715624}
+  espn_mbb_player_stats: {athlete_id: 4702553, season: 2024}
+  espn_mbb_schedule: {}
+  espn_mbb_teams: {}
+
+wbb:
+  espn_wbb_game_officials: {game_id: 401724075}
+  espn_wbb_game_rosters: {game_id: 401724075}
+  espn_wbb_player_stats: {athlete_id: 4706689, season: 2024}
+  espn_wbb_schedule: {}
+  espn_wbb_teams: {}
+
+mlb:
+  espn_mlb_player_stats: {athlete_id: 42470, season: 2024}
+  espn_mlb_schedule: {}
+  espn_mlb_teams: {}
+  # load_* dataset loaders with no `seasons` default need an explicit season.
+  load_mlb_pbp: {seasons: 2024}
+  load_mlb_player_boxscore: {seasons: 2024}
+  load_mlb_rosters: {seasons: 2024}
+  load_mlb_schedule: {seasons: 2024}
+  load_mlb_team_boxscore: {seasons: 2024}
+  # --- Baseball Savant / Statcast ---
+  statcast_search: {start_date: "2024-07-01", end_date: "2024-07-01"}
+  statcast_leaderboard_arm_strength: {year: 2024}
+  statcast_leaderboard_bat_tracking: {year: 2024}
+  statcast_leaderboard_catch_probability: {year: 2024}
+  statcast_leaderboard_expected_statistics: {year: 2024}
+  statcast_leaderboard_outs_above_average: {year: 2024}
+  statcast_leaderboard_pitch_arsenal: {year: 2024}
+  statcast_leaderboard_poptime: {year: 2024}
+  statcast_leaderboard_sprint_speed: {year: 2024}
+  statcast_player_page: {player_id: 660271}
+  statcast_gamefeed: {game_pk: 747066}
+
+nhl:
+  espn_nhl_game_rosters: {game_id: 401687987}
+  espn_nhl_player_stats: {athlete_id: 3895074, season: 2024}
+  espn_nhl_schedule: {}
+  espn_nhl_teams: {}

@@ -1,0 +1,36 @@
+schema: espn_wnba_game_officials
+kind: dataframe
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: official_id
+  type: character
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: position_id
+  type: character
+  description: ''
+- name: position_name
+  type: character
+  description: ''
+- name: position_display_name
+  type: character
+  description: ''
+- name: order
+  type: integer
+  description: ''

@@ -1,0 +1,36 @@
+schema: load_trades
+kind: dataframe
+columns:
+- name: trade_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: trade_date
+  type: character
+  description: ''
+- name: gave
+  type: character
+  description: ''
+- name: received
+  type: character
+  description: ''
+- name: pick_season
+  type: integer
+  description: ''
+- name: pick_round
+  type: integer
+  description: ''
+- name: pick_number
+  type: integer
+  description: ''
+- name: conditional
+  type: integer
+  description: ''
+- name: pfr_id
+  type: character
+  description: ''
+- name: pfr_name
+  type: character
+  description: ''

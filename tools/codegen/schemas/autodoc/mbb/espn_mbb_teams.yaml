@@ -1,0 +1,45 @@
+schema: espn_mbb_teams
+kind: dataframe
+columns:
+- name: team_abbreviation
+  type: character
+  description: ''
+- name: team_alternate_color
+  type: character
+  description: ''
+- name: team_color
+  type: character
+  description: ''
+- name: team_display_name
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team_is_active
+  type: logical
+  description: ''
+- name: team_is_all_star
+  type: logical
+  description: ''
+- name: team_location
+  type: character
+  description: ''
+- name: team_logos
+  type: integer
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: team_nickname
+  type: character
+  description: ''
+- name: team_short_display_name
+  type: character
+  description: ''
+- name: team_slug
+  type: character
+  description: ''
+- name: team_uid
+  type: character
+  description: ''

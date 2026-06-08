@@ -1,0 +1,45 @@
+schema: load_cfb_betting_lines
+kind: dataframe
+columns:
+- name: id
+  type: double
+  description: ''
+- name: game_id
+  type: integer
+  description: ''
+- name: season
+  type: double
+  description: ''
+- name: game_desc
+  type: character
+  description: ''
+- name: date_time
+  type: character
+  description: ''
+- name: market_type
+  type: character
+  description: ''
+- name: abbr
+  type: character
+  description: ''
+- name: lines
+  type: double
+  description: ''
+- name: odds
+  type: integer
+  description: ''
+- name: opening_lines
+  type: double
+  description: ''
+- name: opening_odds
+  type: integer
+  description: ''
+- name: book
+  type: character
+  description: ''
+- name: season_type
+  type: character
+  description: ''
+- name: week
+  type: integer
+  description: ''

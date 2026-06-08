@@ -1,0 +1,33 @@
+schema: statcast_leaderboard_sprint_speed
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: age
+  type: integer
+  description: ''
+- name: competitive_runs
+  type: integer
+  description: ''
+- name: bolts
+  type: integer
+  description: ''
+- name: hp_to_1b
+  type: double
+  description: ''
+- name: sprint_speed
+  type: double
+  description: ''

@@ -26,6 +26,78 @@ espn_cfb_game_rosters() - Pull the game by id.
 
 Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_nickname', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id'
 
+| col_name | type | description |
+|---|---|---|
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `athlete_display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | double |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `slug` | character |  |
+| `jersey` | character |  |
+| `linked` | logical |  |
+| `active` | logical |  |
+| `alternate_ids_sdr` | character |  |
+| `birth_place_city` | character |  |
+| `birth_place_state` | character |  |
+| `birth_place_country` | character |  |
+| `birth_country_alternate_id` | character |  |
+| `birth_country_abbreviation` | character |  |
+| `headshot_href` | character |  |
+| `headshot_alt` | character |  |
+| `flag_href` | character |  |
+| `flag_alt` | character |  |
+| `flag_rel` | character |  |
+| `experience_years` | integer |  |
+| `experience_display_value` | character |  |
+| `experience_abbreviation` | character |  |
+| `status_id` | character |  |
+| `status_name` | character |  |
+| `status_type` | character |  |
+| `status_abbreviation` | character |  |
+| `hand_type` | character |  |
+| `hand_abbreviation` | character |  |
+| `hand_display_value` | character |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `starter` | logical |  |
+| `jersey_right` | character |  |
+| `valid` | logical |  |
+| `did_not_play` | logical |  |
+| `display_name` | character |  |
+| `athlete_href` | character |  |
+| `position_href` | character |  |
+| `statistics_href` | character |  |
+| `team_id` | integer |  |
+| `order` | integer |  |
+| `home_away` | character |  |
+| `winner` | logical |  |
+| `team_guid` | character |  |
+| `team_uid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `is_active` | logical |  |
+| `is_all_star` | logical |  |
+| `team_alternate_ids_sdr` | character |  |
+| `logo_href` | character |  |
+| `logo_dark_href` | character |  |
+| `game_id` | integer |  |
+
 **Example**
 
 ```python
@@ -63,6 +135,55 @@ Pull ESPN per-play participants for a college-football game.
 **Returns**
 
 Polars (or pandas) DataFrame, one row per play. Columns include ``game_id``, ``play_id``, and TWO column families for every participant ``type`` ESPN ships for the game (typical types: ``passer``, ``rusher``, ``receiver``, ``tackler``, ``sacked_by``, ``forced_by``, ``pass_defender``, ``kicker``, ``punter``, ``returner``, ``recoverer``, ``scorer``, ``pat_scorer``, ``penalized``, ``assisted_by``): * **Scalar** — ``{type}_player_id`` / ``{type}_player_name``: the first occurrence of that participant type on the play. Backwards compatible with the legacy regex-extractor shape. * **List** — ``{type}_player_ids`` / ``{type}_player_names``: ``List(Utf8)`` columns containing **every** occurrence of that participant type on the play, in the order ESPN shipped them. Plays with no participant of a given type carry an empty list ``[]`` (not null) for downstream consumption simplicity. This family preserves multi-entry participant types (split sacks where ESPN ships two ``sackedBy`` entries, multi-tacklers, etc.) that the scalar family collapses to first-only. If ``raw=True``, returns the parsed JSON list of play dicts.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer |  |
+| `play_id` | integer |  |
+| `kicker_player_name` | character |  |
+| `passer_player_name` | character |  |
+| `receiver_player_name` | character |  |
+| `rusher_player_name` | character |  |
+| `scorer_player_name` | character |  |
+| `returner_player_name` | character |  |
+| `pass_defender_player_name` | character |  |
+| `penalized_player_name` | character |  |
+| `sacked_by_player_name` | character |  |
+| `pat_scorer_player_name` | character |  |
+| `punter_player_name` | character |  |
+| `kicker_player_id` | character |  |
+| `passer_player_id` | character |  |
+| `receiver_player_id` | character |  |
+| `rusher_player_id` | character |  |
+| `scorer_player_id` | character |  |
+| `returner_player_id` | character |  |
+| `pass_defender_player_id` | character |  |
+| `penalized_player_id` | character |  |
+| `sacked_by_player_id` | character |  |
+| `pat_scorer_player_id` | character |  |
+| `punter_player_id` | character |  |
+| `kicker_player_names` | character |  |
+| `passer_player_names` | character |  |
+| `receiver_player_names` | character |  |
+| `rusher_player_names` | character |  |
+| `scorer_player_names` | character |  |
+| `returner_player_names` | character |  |
+| `pass_defender_player_names` | character |  |
+| `penalized_player_names` | character |  |
+| `sacked_by_player_names` | character |  |
+| `pat_scorer_player_names` | character |  |
+| `punter_player_names` | character |  |
+| `kicker_player_ids` | character |  |
+| `passer_player_ids` | character |  |
+| `receiver_player_ids` | character |  |
+| `rusher_player_ids` | character |  |
+| `scorer_player_ids` | character |  |
+| `returner_player_ids` | character |  |
+| `pass_defender_player_ids` | character |  |
+| `penalized_player_ids` | character |  |
+| `sacked_by_player_ids` | character |  |
+| `pat_scorer_player_ids` | character |  |
+| `punter_player_ids` | character |  |
 
 **Example**
 
@@ -107,6 +228,171 @@ See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full documentation of 
 
 A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer |  |
+| `season_type` | character |  |
+| `total` | logical |  |
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | double |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `jersey` | character |  |
+| `slug` | character |  |
+| `active` | logical |  |
+| `position_id` | integer |  |
+| `position_name` | character |  |
+| `position_display_name` | character |  |
+| `position_abbreviation` | character |  |
+| `college_name` | character |  |
+| `status_id` | integer |  |
+| `status_name` | character |  |
+| `general_fumbles` | double |  |
+| `general_fumbles_lost` | double |  |
+| `general_fumbles_touchdowns` | double |  |
+| `general_games_played` | double |  |
+| `general_offensive_two_pt_returns` | double |  |
+| `general_offensive_fumbles_touchdowns` | double |  |
+| `general_defensive_fumbles_touchdowns` | double |  |
+| `passing_avg_gain` | double |  |
+| `passing_completion_pct` | double |  |
+| `passing_completions` | double |  |
+| `passing_espnqb_rating` | double |  |
+| `passing_interception_pct` | double |  |
+| `passing_interceptions` | double |  |
+| `passing_long_passing` | double |  |
+| `passing_net_passing_yards` | double |  |
+| `passing_net_passing_yards_per_game` | double |  |
+| `passing_net_total_yards` | double |  |
+| `passing_net_yards_per_game` | double |  |
+| `passing_passing_attempts` | double |  |
+| `passing_passing_big_plays` | double |  |
+| `passing_passing_first_downs` | double |  |
+| `passing_passing_fumbles` | double |  |
+| `passing_passing_fumbles_lost` | double |  |
+| `passing_passing_touchdown_pct` | double |  |
+| `passing_passing_touchdowns` | double |  |
+| `passing_passing_yards` | double |  |
+| `passing_passing_yards_after_catch` | double |  |
+| `passing_passing_yards_at_catch` | double |  |
+| `passing_passing_yards_per_game` | double |  |
+| `passing_qb_rating` | double |  |
+| `passing_sacks` | double |  |
+| `passing_sack_yards_lost` | double |  |
+| `passing_team_games_played` | double |  |
+| `passing_total_offensive_plays` | double |  |
+| `passing_total_points_per_game` | double |  |
+| `passing_total_touchdowns` | double |  |
+| `passing_total_yards` | double |  |
+| `passing_total_yards_from_scrimmage` | double |  |
+| `passing_two_point_pass_convs` | double |  |
+| `passing_two_pt_pass` | double |  |
+| `passing_two_pt_pass_attempts` | double |  |
+| `passing_yards_from_scrimmage_per_game` | double |  |
+| `passing_yards_per_completion` | double |  |
+| `passing_yards_per_game` | double |  |
+| `passing_yards_per_pass_attempt` | double |  |
+| `passing_net_yards_per_pass_attempt` | double |  |
+| `passing_qbr` | double |  |
+| `passing_adj_qbr` | double |  |
+| `passing_quarterback_rating` | double |  |
+| `rushing_avg_gain` | double |  |
+| `rushing_espnrb_rating` | double |  |
+| `rushing_long_rushing` | double |  |
+| `rushing_net_total_yards` | double |  |
+| `rushing_net_yards_per_game` | double |  |
+| `rushing_rushing_attempts` | double |  |
+| `rushing_rushing_big_plays` | double |  |
+| `rushing_rushing_first_downs` | double |  |
+| `rushing_rushing_fumbles` | double |  |
+| `rushing_rushing_fumbles_lost` | double |  |
+| `rushing_rushing_touchdowns` | double |  |
+| `rushing_rushing_yards` | double |  |
+| `rushing_rushing_yards_per_game` | double |  |
+| `rushing_stuffs` | double |  |
+| `rushing_stuff_yards_lost` | double |  |
+| `rushing_team_games_played` | double |  |
+| `rushing_total_offensive_plays` | double |  |
+| `rushing_total_points_per_game` | double |  |
+| `rushing_total_touchdowns` | double |  |
+| `rushing_total_yards` | double |  |
+| `rushing_total_yards_from_scrimmage` | double |  |
+| `rushing_two_point_rush_convs` | double |  |
+| `rushing_two_pt_rush` | double |  |
+| `rushing_two_pt_rush_attempts` | double |  |
+| `rushing_yards_from_scrimmage_per_game` | double |  |
+| `rushing_yards_per_game` | double |  |
+| `rushing_yards_per_rush_attempt` | double |  |
+| `receiving_avg_gain` | double |  |
+| `receiving_espnwr_rating` | double |  |
+| `receiving_long_reception` | double |  |
+| `receiving_net_total_yards` | double |  |
+| `receiving_net_yards_per_game` | double |  |
+| `receiving_receiving_big_plays` | double |  |
+| `receiving_receiving_first_downs` | double |  |
+| `receiving_receiving_fumbles` | double |  |
+| `receiving_receiving_fumbles_lost` | double |  |
+| `receiving_receiving_targets` | double |  |
+| `receiving_receiving_touchdowns` | double |  |
+| `receiving_receiving_yards` | double |  |
+| `receiving_receiving_yards_after_catch` | double |  |
+| `receiving_receiving_yards_at_catch` | double |  |
+| `receiving_receiving_yards_per_game` | double |  |
+| `receiving_receptions` | double |  |
+| `receiving_team_games_played` | double |  |
+| `receiving_total_offensive_plays` | double |  |
+| `receiving_total_points_per_game` | double |  |
+| `receiving_total_touchdowns` | double |  |
+| `receiving_total_yards` | double |  |
+| `receiving_total_yards_from_scrimmage` | double |  |
+| `receiving_two_point_rec_convs` | double |  |
+| `receiving_two_pt_reception` | double |  |
+| `receiving_two_pt_reception_attempts` | double |  |
+| `receiving_yards_from_scrimmage_per_game` | double |  |
+| `receiving_yards_per_game` | double |  |
+| `receiving_yards_per_reception` | double |  |
+| `scoring_defensive_points` | double |  |
+| `scoring_field_goals` | double |  |
+| `scoring_kick_extra_points` | double |  |
+| `scoring_kick_extra_points_made` | double |  |
+| `scoring_misc_points` | double |  |
+| `scoring_passing_touchdowns` | double |  |
+| `scoring_receiving_touchdowns` | double |  |
+| `scoring_return_touchdowns` | double |  |
+| `scoring_rushing_touchdowns` | double |  |
+| `scoring_total_points` | double |  |
+| `scoring_total_points_per_game` | double |  |
+| `scoring_total_touchdowns` | double |  |
+| `scoring_total_two_point_convs` | double |  |
+| `scoring_two_point_pass_convs` | double |  |
+| `scoring_two_point_rec_convs` | double |  |
+| `scoring_two_point_rush_convs` | double |  |
+| `scoring_one_pt_safeties_made` | double |  |
+| `team_id` | integer |  |
+| `team_uid` | character |  |
+| `team_guid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `team_is_active` | logical |  |
+| `team_logo_href` | character |  |
+
 **Example**
 
 ```python
@@ -133,6 +419,87 @@ espn_cfb_schedule - look up the college football schedule for a given season
 **Returns**
 
 Polars dataframe containing schedule dates for the requested season. Returns None if no games
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `uid` | character |  |
+| `date` | character |  |
+| `attendance` | integer |  |
+| `time_valid` | logical |  |
+| `date_valid` | logical |  |
+| `neutral_site` | logical |  |
+| `conference_competition` | logical |  |
+| `play_by_play_available` | logical |  |
+| `recent` | logical |  |
+| `start_date` | character |  |
+| `broadcast` | character |  |
+| `highlights` | character |  |
+| `notes_type` | character |  |
+| `notes_headline` | character |  |
+| `broadcast_market` | character |  |
+| `broadcast_name` | character |  |
+| `type_id` | character |  |
+| `type_abbreviation` | character |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_address_city` | character |  |
+| `venue_address_country` | character |  |
+| `venue_indoor` | logical |  |
+| `status_clock` | double |  |
+| `status_display_clock` | character |  |
+| `status_period` | integer |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
+| `format_regulation_periods` | integer |  |
+| `home_id` | character |  |
+| `home_uid` | character |  |
+| `home_location` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_short_display_name` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_is_active` | logical |  |
+| `home_venue_id` | character |  |
+| `home_logo` | character |  |
+| `home_conference_id` | character |  |
+| `home_score` | character |  |
+| `home_current_rank` | integer |  |
+| `home_linescores` | integer |  |
+| `home_records` | character |  |
+| `away_id` | character |  |
+| `away_uid` | character |  |
+| `away_location` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_short_display_name` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_is_active` | logical |  |
+| `away_venue_id` | character |  |
+| `away_logo` | character |  |
+| `away_conference_id` | character |  |
+| `away_score` | character |  |
+| `away_current_rank` | integer |  |
+| `away_linescores` | integer |  |
+| `away_records` | character |  |
+| `game_id` | integer |  |
+| `season` | integer |  |
+| `season_type` | integer |  |
+| `week` | integer |  |
+| `venue_address_state` | character |  |
+| `groups_id` | character |  |
+| `groups_name` | character |  |
+| `groups_short_name` | character |  |
+| `groups_is_conference` | logical |  |
 
 **Example**
 
@@ -168,6 +535,23 @@ Load college football betting lines information
 **Returns**
 
 Polars dataframe containing betting lines available for the available seasons.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | double |  |
+| `game_id` | integer |  |
+| `season` | double |  |
+| `game_desc` | character |  |
+| `date_time` | character |  |
+| `market_type` | character |  |
+| `abbr` | character |  |
+| `lines` | double |  |
+| `odds` | integer |  |
+| `opening_lines` | double |  |
+| `opening_odds` | integer |  |
+| `book` | character |  |
+| `season_type` | character |  |
+| `week` | integer |  |
 
 **Example**
 
@@ -245,6 +629,23 @@ espn_cfb_teams - look up the college football teams
 
 Polars dataframe containing schedule dates for the requested season. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.cfb.espn_cfb_teams.clear_cache().
 
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_is_all_star` | logical |  |
+| `team_location` | character |  |
+| `team_logos` | integer |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_uid` | character |  |
+
 **Example**
 
 ```python
@@ -276,6 +677,22 @@ Load college football team ID information and logos
 **Returns**
 
 Polars dataframe containing teams available.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer |  |
+| `school` | character |  |
+| `mascot` | character |  |
+| `abbreviation` | character |  |
+| `alt_name1` | character |  |
+| `alt_name2` | character |  |
+| `alt_name3` | character |  |
+| `conference` | character |  |
+| `division` | character |  |
+| `color` | character |  |
+| `alt_color` | character |  |
+| `logo` | character |  |
+| `logo_dark` | character |  |
 
 **Example**
 
