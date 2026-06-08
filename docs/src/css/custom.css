@@ -213,39 +213,66 @@ a.menu__link.menu__link--active {
 a.table-of-contents__link.table-of-contents__link--active {
   animation: glow 3s ease-in-out infinite alternate;
 }
-/* You can override the default Infima variables here. */
+/* You can override the default Infima variables here.
+ *
+ * Two coherent single-hue ramps (SDV brand navy, hue ~204deg), one per theme,
+ * generated with Infima's relative-lightness darken/lighten steps and verified
+ * for WCAG 2.1 AA on the real Docusaurus surfaces:
+ *   - Light primary #014F84  -> link-on-white 8.56:1 (AA)
+ *   - Dark  primary #178AD9  -> white-on-button 3.70:1 (AA-large; button text
+ *                               is large/bold). Dark links use the brighter
+ *                               -light shade (#2196E7) -> 5.39:1 (AA) on bg.
+ * The previous ramp mixed three hues (navy primary, purple -darker/-darkest,
+ * coral -light/-lighter/-lightest) and reused the dark navy in dark mode
+ * (links 2.01:1, failed AA), so hover/active states flashed between hues.
+ */
 :root {
   --ifm-color-primary: #014F84;
-  --ifm-color-primary-dark:	#3F72AF;
-  --ifm-color-primary-darker: hsl(271, 100%, 14%);
-  --ifm-color-primary-darkest: hsl(262, 100%, 8%);
-  --ifm-color-primary-light: hsl(7deg, 100%, 76%);
-  --ifm-color-primary-lighter: hsl(7deg, 100%, 82%);
-  --ifm-color-primary-lightest: hsl(7deg, 100%, 90%);
-  /* --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
-  --ifm-color-primary-darkest: rgb(26, 136, 112);
-  --ifm-color-primary-light: rgb(70, 203, 174);
-  --ifm-color-primary-lighter: rgb(102, 212, 189);
-  --ifm-color-primary-lightest: rgb(146, 224, 208); */
+  --ifm-color-primary-dark: #014777;
+  --ifm-color-primary-darker: #014370;
+  --ifm-color-primary-darkest: #01375C;
+  --ifm-color-primary-light: #015791;
+  --ifm-color-primary-lighter: #015B98;
+  --ifm-color-primary-lightest: #0167AC;
   --ifm-code-font-size: 95%;
 
-  --ifm-link-color: var(--ifm-color-primary-dark);
+  --ifm-link-color: var(--ifm-color-primary);
   --ifm-menu-color-active: var(--ifm-link-color);
   --ifm-navbar-link-hover-color: var(--ifm-link-color);
 }
 
 html[data-theme='dark'] {
-  --ifm-color-primary: #014F84;
+  --ifm-color-primary: #178AD9;
+  --ifm-color-primary-dark: #157CC3;
+  --ifm-color-primary-darker: #1475B8;
+  --ifm-color-primary-darkest: #106198;
+  --ifm-color-primary-light: #2196E7;
+  --ifm-color-primary-lighter: #2B9CE9;
+  --ifm-color-primary-lightest: #4CABEC;
+
+  /* Links/menus need more lift than the button primary on the dark bg, so
+   * point them at the brighter -light shade (5.39:1 AA); buttons keep the
+   * deeper primary for stronger white-text contrast. */
+  --ifm-link-color: var(--ifm-color-primary-light);
+  --ifm-menu-color-active: var(--ifm-link-color);
+  --ifm-navbar-link-hover-color: var(--ifm-link-color);
 }
 
+/* Highlighted code line (`// highlight-next-line` magic comments). A subtle
+ * brand-tinted band that reads as emphasis on both Prism themes — the old
+ * near-black hsl(228,50%,5%) looked like a hole on the light `github` theme
+ * and was darker than `dracula`'s surface in dark mode. */
 .docusaurus-highlight-code-line {
-  background-color: hsl(228, 50%, 5%);
+  background-color: rgba(1, 79, 132, 0.1);
 
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
 
   padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(33, 150, 231, 0.16);
 }
 
 .monaco-editor .contents {
