@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.0.54 (unreleased)](#0054-unreleased)
+- [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
   - [Per-sport return schemas (correctness)](#per-sport-return-schemas-correctness)
   - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
   - [Docs coverage gate + autodoc](#docs-coverage-gate--autodoc)
@@ -72,7 +72,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.0.54 (unreleased)
+## 0.0.54 Release: June 8, 2026
 
 ### Per-sport return schemas (correctness)
 
