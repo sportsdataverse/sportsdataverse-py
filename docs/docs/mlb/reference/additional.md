@@ -497,8 +497,6 @@ One row per (game × team × athlete) with columns ``game_id, team_id, home_away
 **Example**
 
 ```python
-Pull both lineups for a single game::
-
 from sportsdataverse.mlb import espn_mlb_game_rosters
 ros = espn_mlb_game_rosters(game_id=401569461)
 print(ros.shape)
@@ -525,19 +523,17 @@ The Site v2 summary payload. Top-level keys typically include ``header``, ``boxs
 **Example**
 
 ```python
-Pull a single game's raw feed (Opening Day 2024)::
-
-    from sportsdataverse.mlb import espn_mlb_pbp
-    game = espn_mlb_pbp(game_id=401569461, raw=True)
-    sorted(game.keys())
-    print(game.get("header", {}).get("competitions", [{}])[0].get("date"))
+from sportsdataverse.mlb import espn_mlb_pbp
+game = espn_mlb_pbp(game_id=401569461, raw=True)
+sorted(game.keys())
+print(game.get("header", {}).get("competitions", [{}])[0].get("date"))
 
 Iterate the plays array::
 
-    plays = game.get("plays") or []
-    print(f"{len(plays)} plays")
-    for p in plays[:3]:
-        print(p.get("text"))
+plays = game.get("plays") or []
+print(f"{len(plays)} plays")
+for p in plays[:3]:
+    print(p.get("text"))
 ```
 
 ### `espn_mlb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -564,8 +560,6 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 **Example**
 
 ```python
-Pull Aaron Judge's 2023 season line as a single wide row::
-
 from sportsdataverse.mlb import espn_mlb_player_stats
 df = espn_mlb_player_stats(athlete_id=33192, season=2023)
 df.select(["full_name", "team_display_name", "batting_home_runs"])
@@ -591,21 +585,19 @@ Polars dataframe containing the schedule. Returns ``None`` if no games.
 **Example**
 
 ```python
-Pull a single date's slate (Opening Day 2024)::
-
-    from sportsdataverse.mlb import espn_mlb_schedule
-    sched = espn_mlb_schedule(dates=20240328)
-    print(sched.shape)
-    sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
+from sportsdataverse.mlb import espn_mlb_schedule
+sched = espn_mlb_schedule(dates=20240328)
+print(sched.shape)
+sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
 
 Pull a regular-season slate from a season-year::
 
-    reg = espn_mlb_schedule(dates=2024, season_type=2, limit=500)
-    reg.group_by("status_type_description").len().sort("len", descending=True)
+reg = espn_mlb_schedule(dates=2024, season_type=2, limit=500)
+reg.group_by("status_type_description").len().sort("len", descending=True)
 
 Pandas round-trip for one date::
 
-    espn_mlb_schedule(dates=20240328, return_as_pandas=True).head()
+espn_mlb_schedule(dates=20240328, return_as_pandas=True).head()
 ```
 
 ## Dataset loaders
@@ -700,21 +692,19 @@ Polars dataframe containing teams for MLB. This function caches by default, so i
 **Example**
 
 ```python
-Pull the full MLB team directory::
-
-    from sportsdataverse.mlb import espn_mlb_teams
-    teams = espn_mlb_teams()
-    print(teams.shape)
-    teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
+from sportsdataverse.mlb import espn_mlb_teams
+teams = espn_mlb_teams()
+print(teams.shape)
+teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 
 Find Los Angeles Dodgers (team_id 19)::
 
-    import polars as pl
-    teams.filter(pl.col("team_id") == "19").to_dicts()
+import polars as pl
+teams.filter(pl.col("team_id") == "19").to_dicts()
 
 Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas::
 
-    espn_mlb_teams.cache_clear()
-    teams_pd = espn_mlb_teams(return_as_pandas=True)
-    teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
+espn_mlb_teams.cache_clear()
+teams_pd = espn_mlb_teams(return_as_pandas=True)
+teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```

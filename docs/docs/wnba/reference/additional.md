@@ -32,33 +32,22 @@ Polars (or pandas) DataFrame with the same columns documented in :func:`sportsda
 **Example**
 
 ```python
-Pull officials for the 2024 WNBA Finals Game 1::
-
-    from sportsdataverse.wnba import espn_wnba_game_officials
-    refs = espn_wnba_game_officials(game_id=401620238, season=2024)
-    print(refs.shape)
-    refs.select(["full_name", "position_name", "order"]).head()
+from sportsdataverse.wnba import espn_wnba_game_officials
+refs = espn_wnba_game_officials(game_id=401620238, season=2024)
+print(refs.shape)
+refs.select(["full_name", "position_name", "order"]).head()
 
 Pandas round-trip::
 
-    refs_pd = espn_wnba_game_officials(
-        game_id=401620238, season=2024, return_as_pandas=True
-    )
-    refs_pd[["full_name", "position_name"]].head()
+refs_pd = espn_wnba_game_officials(
+    game_id=401620238, season=2024, return_as_pandas=True
+)
+refs_pd[["full_name", "position_name"]].head()
 
 Inspect the raw ESPN payload (e.g. for fields not flattened)::
 
-    payload = espn_wnba_game_officials(game_id=401620238, season=2024, raw=True)
-    list(payload.keys())[:8]
-
-See Also:
-    * `wehoop`_ — R sister package; mirrors this surface
-    * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
-    * `hoopR`_ — companion R package for men's basketball
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _nba_api: https://github.com/swar/nba_api
-.. _hoopR: https://hoopR.sportsdataverse.org
+payload = espn_wnba_game_officials(game_id=401620238, season=2024, raw=True)
+list(payload.keys())[:8]
 ```
 
 ### `espn_wnba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -85,17 +74,9 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 **Example**
 
 ```python
-Pull A'ja Wilson's 2024 season line as a single wide row::
-
-    from sportsdataverse.wnba import espn_wnba_player_stats
-    df = espn_wnba_player_stats(athlete_id=3149391, season=2024)
-    df.select(["full_name", "team_display_name", "offensive_points"])
-
-See Also:
-    * :func:`sportsdataverse.wnba.espn_wnba_player_stats_v3` -- web-v3 stats
-    * `wehoop`_ -- R sister package; mirrors this surface
-
-.. _wehoop: https://wehoop.sportsdataverse.org
+from sportsdataverse.wnba import espn_wnba_player_stats
+df = espn_wnba_player_stats(athlete_id=3149391, season=2024)
+df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
 ### `espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
@@ -118,30 +99,19 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 **Example**
 
 ```python
-Pull a single date's slate (YYYYMMDD)::
-
-    from sportsdataverse.wnba import espn_wnba_schedule
-    sched = espn_wnba_schedule(dates=20241011)  # 2024 WNBA Finals Game 1
-    print(sched.shape)
-    sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
+from sportsdataverse.wnba import espn_wnba_schedule
+sched = espn_wnba_schedule(dates=20241011)  # 2024 WNBA Finals Game 1
+print(sched.shape)
+sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
 
 Pull a full regular season's worth of games::
 
-    reg = espn_wnba_schedule(dates=2024, season_type=2, limit=500)
-    reg.group_by("status_type_description").len().sort("len", descending=True)
+reg = espn_wnba_schedule(dates=2024, season_type=2, limit=500)
+reg.group_by("status_type_description").len().sort("len", descending=True)
 
 Pandas round-trip for a single date::
 
-    espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
-
-See Also:
-    * `wehoop`_ — R sister package; mirrors this surface
-    * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
-    * `hoopR`_ — companion R package for men's basketball
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _nba_api: https://github.com/swar/nba_api
-.. _hoopR: https://hoopR.sportsdataverse.org
+espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
 ```
 
 ### `espn_wnba_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'`
@@ -166,33 +136,22 @@ Dict with one DataFrame per stat category — see :func:`sportsdataverse.wbb.esp
 **Example**
 
 ```python
-Las Vegas Aces' 2024 team stats — keyed by category::
-
-    from sportsdataverse.wnba import espn_wnba_team_stats
-    frames = espn_wnba_team_stats(team_id=17, season=2024)
-    sorted(frames.keys())  # 'Averages', 'Totals', 'Misc' (plus optional 'Other')
-    frames["Averages"].head()
+from sportsdataverse.wnba import espn_wnba_team_stats
+frames = espn_wnba_team_stats(team_id=17, season=2024)
+sorted(frames.keys())  # 'Averages', 'Totals', 'Misc' (plus optional 'Other')
+frames["Averages"].head()
 
 Compare per-game and totals at a glance::
 
-    avgs = frames["Averages"]
-    totals = frames["Totals"]
-    print(avgs.shape, totals.shape)
-    avgs.select(["games_played", "points_per_game", "rebounds_per_game"])
+avgs = frames["Averages"]
+totals = frames["Totals"]
+print(avgs.shape, totals.shape)
+avgs.select(["games_played", "points_per_game", "rebounds_per_game"])
 
 Pandas round-trip::
 
-    frames_pd = espn_wnba_team_stats(team_id=17, season=2024, return_as_pandas=True)
-    frames_pd["Misc"].head()
-
-See Also:
-    * `wehoop`_ — R sister package; mirrors this surface
-    * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
-    * `hoopR`_ — companion R package for men's basketball
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _nba_api: https://github.com/swar/nba_api
-.. _hoopR: https://hoopR.sportsdataverse.org
+frames_pd = espn_wnba_team_stats(team_id=17, season=2024, return_as_pandas=True)
+frames_pd["Misc"].head()
 ```
 
 ## Utilities & helpers
@@ -210,21 +169,10 @@ Year (e.g. ``2024``) suitable for passing as a ``season`` argument to schedule /
 **Example**
 
 ```python
-Use as a default for season-aware loaders::
-
-    from sportsdataverse.wnba import most_recent_wnba_season, espn_wnba_calendar
-    season = most_recent_wnba_season()
-    cal = espn_wnba_calendar(season=season)
-    print(season, cal.height)
-
-See Also:
-    * `wehoop`_ — R sister package; mirrors this surface
-    * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
-    * `hoopR`_ — companion R package for men's basketball
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _nba_api: https://github.com/swar/nba_api
-.. _hoopR: https://hoopR.sportsdataverse.org
+from sportsdataverse.wnba import most_recent_wnba_season, espn_wnba_calendar
+season = most_recent_wnba_season()
+cal = espn_wnba_calendar(season=season)
+print(season, cal.height)
 ```
 
 ## Other
@@ -246,30 +194,19 @@ Polars dataframe containing teams for the requested league. This function caches
 **Example**
 
 ```python
-Pull the full WNBA team directory::
-
-    from sportsdataverse.wnba import espn_wnba_teams
-    teams = espn_wnba_teams()
-    print(teams.shape)
-    teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
+from sportsdataverse.wnba import espn_wnba_teams
+teams = espn_wnba_teams()
+print(teams.shape)
+teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 
 Find Las Vegas Aces (team_id 17)::
 
-    teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
+teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
 
 Refresh the cache (the call is ``lru_cache``'d)::
 
-    espn_wnba_teams.cache_clear()  # cached at function-level
-    teams_pd = espn_wnba_teams(return_as_pandas=True)
-
-See Also:
-    * `wehoop`_ — R sister package; mirrors this surface
-    * `nba_api`_ — alternative Python source for NBA/WNBA stats endpoints
-    * `hoopR`_ — companion R package for men's basketball
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _nba_api: https://github.com/swar/nba_api
-.. _hoopR: https://hoopR.sportsdataverse.org
+espn_wnba_teams.cache_clear()  # cached at function-level
+teams_pd = espn_wnba_teams(return_as_pandas=True)
 ```
 
 ### `scoreboard_event_parsing(event)`

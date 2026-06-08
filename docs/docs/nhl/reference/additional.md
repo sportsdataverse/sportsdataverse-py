@@ -29,29 +29,20 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 **Example**
 
 ```python
-Pull both teams' rosters for a single game (Stanley Cup Final 2023)::
-
-    from sportsdataverse.nhl import espn_nhl_game_rosters
-    rosters = espn_nhl_game_rosters(game_id=401559395)
-    print(rosters.shape)
-    rosters.select(["athlete_display_name", "jersey", "team_abbreviation", "starter"]).head(10)
+from sportsdataverse.nhl import espn_nhl_game_rosters
+rosters = espn_nhl_game_rosters(game_id=401559395)
+print(rosters.shape)
+rosters.select(["athlete_display_name", "jersey", "team_abbreviation", "starter"]).head(10)
 
 Just the starters::
 
-    import polars as pl
-    rosters.filter(pl.col("starter") == True).select(["athlete_display_name", "team_abbreviation"])
+import polars as pl
+rosters.filter(pl.col("starter") == True).select(["athlete_display_name", "team_abbreviation"])
 
 Pandas round-trip::
 
-    rosters_pd = espn_nhl_game_rosters(game_id=401559395, return_as_pandas=True)
-    rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
-
-See Also:
-    * `fastRhockey`_ — R companion package; mirrors this surface
-    * `nhl-api-py`_ — alternative Python source for the NHL stats API
-
-.. _fastRhockey: https://fastRhockey.sportsdataverse.org
-.. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+rosters_pd = espn_nhl_game_rosters(game_id=401559395, return_as_pandas=True)
+rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
 ```
 
 ### `espn_nhl_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
@@ -74,31 +65,22 @@ Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "br
 **Example**
 
 ```python
-Pull a single game's parsed feed (Stanley Cup Finals 2023 game)::
-
-    from sportsdataverse.nhl import espn_nhl_pbp
-    game = espn_nhl_pbp(game_id=401559395)
-    list(game.keys())  # 'gameId', 'plays', 'boxscore', ...
+from sportsdataverse.nhl import espn_nhl_pbp
+game = espn_nhl_pbp(game_id=401559395)
+list(game.keys())  # 'gameId', 'plays', 'boxscore', ...
 
 Inspect parsed plays and a quick filter on goal events::
 
-    import polars as pl
-    plays = pl.DataFrame(game["plays"])
-    print(plays.shape)
-    goals = plays.filter(pl.col("type.text") == "Goal")
-    goals.select(["period", "time", "text"]).head()
+import polars as pl
+plays = pl.DataFrame(game["plays"])
+print(plays.shape)
+goals = plays.filter(pl.col("type.text") == "Goal")
+goals.select(["period", "time", "text"]).head()
 
 Pull the unparsed payload for custom downstream parsing::
 
-    raw = espn_nhl_pbp(game_id=401559395, raw=True)
-    sorted(raw.keys())[:5]
-
-See Also:
-    * `fastRhockey`_ — R companion package; mirrors this surface
-    * `nhl-api-py`_ — alternative Python source for the NHL stats API
-
-.. _fastRhockey: https://fastRhockey.sportsdataverse.org
-.. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+raw = espn_nhl_pbp(game_id=401559395, raw=True)
+sorted(raw.keys())[:5]
 ```
 
 ### `espn_nhl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -125,8 +107,6 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 **Example**
 
 ```python
-Pull Connor McDavid's 2023 season line as a single wide row::
-
 from sportsdataverse.nhl import espn_nhl_player_stats
 df = espn_nhl_player_stats(athlete_id=3895074, season=2023)
 df.select(["full_name", "team_display_name", "offensive_goals"])
@@ -152,28 +132,19 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 **Example**
 
 ```python
-Pull a single date's slate (YYYYMMDD)::
-
-    from sportsdataverse.nhl import espn_nhl_schedule
-    sched = espn_nhl_schedule(dates=20230613)  # 2023 Stanley Cup Final game date
-    print(sched.shape)
-    sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
+from sportsdataverse.nhl import espn_nhl_schedule
+sched = espn_nhl_schedule(dates=20230613)  # 2023 Stanley Cup Final game date
+print(sched.shape)
+sched.select(["game_id", "home_name", "away_name", "status_type_description"]).head()
 
 Pull a regular-season slate from a season-year::
 
-    reg = espn_nhl_schedule(dates=2023, season_type=2, limit=500)
-    reg.group_by("status_type_description").len().sort("len", descending=True)
+reg = espn_nhl_schedule(dates=2023, season_type=2, limit=500)
+reg.group_by("status_type_description").len().sort("len", descending=True)
 
 Pandas round-trip for one date::
 
-    espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
-
-See Also:
-    * `fastRhockey`_ — R companion package; mirrors this surface
-    * `nhl-api-py`_ — alternative Python source for the NHL stats API
-
-.. _fastRhockey: https://fastRhockey.sportsdataverse.org
-.. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 ```
 
 ## NHL native
@@ -326,19 +297,10 @@ A season year suitable for season-aware loaders / schedule helpers.
 **Example**
 
 ```python
-Use as a default season for downstream calls::
-
-    from sportsdataverse.nhl import most_recent_nhl_season, espn_nhl_calendar
-    season = most_recent_nhl_season()
-    cal = espn_nhl_calendar(season=season)
-    print(season, cal.height)
-
-See Also:
-    * `fastRhockey`_ — R companion package; mirrors this surface
-    * `nhl-api-py`_ — alternative Python source for the NHL stats API
-
-.. _fastRhockey: https://fastRhockey.sportsdataverse.org
-.. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+from sportsdataverse.nhl import most_recent_nhl_season, espn_nhl_calendar
+season = most_recent_nhl_season()
+cal = espn_nhl_calendar(season=season)
+print(season, cal.height)
 ```
 
 ### `year_to_season(year)`
@@ -360,19 +322,10 @@ Season string formatted as ``"YYYY-YY"``.
 **Example**
 
 ```python
-Convert a starting year::
-
-    from sportsdataverse.nhl import year_to_season
-    year_to_season(2023)  # '2023-24'
-    year_to_season(2009)  # '2009-10'
-    year_to_season(1999)  # '1999-00'
-
-See Also:
-    * `fastRhockey`_ — R companion package; mirrors this surface
-    * `nhl-api-py`_ — alternative Python source for the NHL stats API
-
-.. _fastRhockey: https://fastRhockey.sportsdataverse.org
-.. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+from sportsdataverse.nhl import year_to_season
+year_to_season(2023)  # '2023-24'
+year_to_season(2009)  # '2009-10'
+year_to_season(1999)  # '1999-00'
 ```
 
 ## Other
@@ -394,30 +347,21 @@ Polars dataframe containing teams for the requested league. This function caches
 **Example**
 
 ```python
-Pull the full NHL team directory::
-
-    from sportsdataverse.nhl import espn_nhl_teams
-    teams = espn_nhl_teams()
-    print(teams.shape)
-    teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
+from sportsdataverse.nhl import espn_nhl_teams
+teams = espn_nhl_teams()
+print(teams.shape)
+teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 
 Find Tampa Bay Lightning (team_id 14)::
 
-    import polars as pl
-    teams.filter(pl.col("team_id") == "14").to_dicts()
+import polars as pl
+teams.filter(pl.col("team_id") == "14").to_dicts()
 
 Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas::
 
-    espn_nhl_teams.cache_clear()
-    teams_pd = espn_nhl_teams(return_as_pandas=True)
-    teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
-
-See Also:
-    * `fastRhockey`_ — R companion package; mirrors this surface
-    * `nhl-api-py`_ — alternative Python source for the NHL stats API
-
-.. _fastRhockey: https://fastRhockey.sportsdataverse.org
-.. _nhl-api-py: https://github.com/coreyjs/nhl-api-py
+espn_nhl_teams.cache_clear()
+teams_pd = espn_nhl_teams(return_as_pandas=True)
+teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```
 
 ### `scoreboard_event_parsing(event)`

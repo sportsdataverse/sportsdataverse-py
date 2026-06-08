@@ -29,32 +29,21 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 **Example**
 
 ```python
-Quick start (2024 NCAA M championship game)::
-
-    from sportsdataverse.mbb import espn_mbb_game_rosters
-    roster = espn_mbb_game_rosters(game_id=401638637)
-    print(roster.shape)
+from sportsdataverse.mbb import espn_mbb_game_rosters
+roster = espn_mbb_game_rosters(game_id=401638637)
+print(roster.shape)
 
 Identify starters::
 
-    import polars as pl
-    starters = roster.filter(pl.col("starter") == True).select(
-        ["full_name", "jersey", "team_display_name"]
-    )
+import polars as pl
+starters = roster.filter(pl.col("starter") == True).select(
+    ["full_name", "jersey", "team_display_name"]
+)
 
 Pandas round-trip::
 
-    roster_pd = espn_mbb_game_rosters(game_id=401638637, return_as_pandas=True)
-    roster_pd.head()
-
-See Also:
-    * `hoopR`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _hoopR: https://hoopR.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+roster_pd = espn_mbb_game_rosters(game_id=401638637, return_as_pandas=True)
+roster_pd.head()
 ```
 
 ### `espn_mbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
@@ -75,49 +64,38 @@ Dictionary of game data with keys: "gameId", "plays", "winprobability", "boxscor
 **Example**
 
 ```python
-Quick start (2024 NCAA Division I men's championship game)::
-
-    from sportsdataverse.mbb import espn_mbb_pbp
-    game = espn_mbb_pbp(game_id=401638637)
-    print(game["gameId"])
-    print(len(game["plays"]))
+from sportsdataverse.mbb import espn_mbb_pbp
+game = espn_mbb_pbp(game_id=401638637)
+print(game["gameId"])
+print(len(game["plays"]))
 
 Filter shooting plays for a basic shot chart::
 
-    import polars as pl
-    plays = pl.DataFrame(game["plays"])
-    shots = plays.filter(pl.col("shooting_play") == True)
-    shots.select(
-        [
-            "period_number",
-            "clock_display_value",
-            "team_id",
-            "coordinate_x",
-            "coordinate_y",
-            "score_value",
-            "text",
-        ]
-    ).head()
+import polars as pl
+plays = pl.DataFrame(game["plays"])
+shots = plays.filter(pl.col("shooting_play") == True)
+shots.select(
+    [
+        "period_number",
+        "clock_display_value",
+        "team_id",
+        "coordinate_x",
+        "coordinate_y",
+        "score_value",
+        "text",
+    ]
+).head()
 
 Convert to pandas::
 
-    import pandas as pd
-    plays_pd = pd.DataFrame(game["plays"])
-    plays_pd[plays_pd["shooting_play"] == True].head()
+import pandas as pd
+plays_pd = pd.DataFrame(game["plays"])
+plays_pd[plays_pd["shooting_play"] == True].head()
 
 Raw payload (skip the cleaning pipeline) for debugging::
 
-    raw = espn_mbb_pbp(game_id=401638637, raw=True)
-    sorted(raw.keys())
-
-See Also:
-    * `hoopR`_ - R sister package; mirrors this surface for men's basketball
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _hoopR: https://hoopR.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+raw = espn_mbb_pbp(game_id=401638637, raw=True)
+sorted(raw.keys())
 ```
 
 ### `espn_mbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -144,8 +122,6 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 **Example**
 
 ```python
-Pull a player's 2023 season line as a single wide row::
-
 from sportsdataverse.mbb import espn_mbb_player_stats
 df = espn_mbb_player_stats(athlete_id=4395624, season=2023)
 df.select(["full_name", "team_display_name", "offensive_points"])
@@ -172,37 +148,26 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 **Example**
 
 ```python
-Single date (April 8, 2024 - 2024 NCAA M championship day)::
-
-    from sportsdataverse.mbb import espn_mbb_schedule
-    day = espn_mbb_schedule(dates=20240408)
-    print(day.shape)
+from sportsdataverse.mbb import espn_mbb_schedule
+day = espn_mbb_schedule(dates=20240408)
+print(day.shape)
 
 Season-level pull (2024 season)::
 
-    season = espn_mbb_schedule(dates=2024, limit=1500)
-    print(season.shape)
+season = espn_mbb_schedule(dates=2024, limit=1500)
+print(season.shape)
 
 Filter to a specific team (Duke ``team_id=150``)::
 
-    import polars as pl
-    duke = season.filter(
-        (pl.col("home_id") == "150") | (pl.col("away_id") == "150")
-    )
+import polars as pl
+duke = season.filter(
+    (pl.col("home_id") == "150") | (pl.col("away_id") == "150")
+)
 
 Pandas round-trip::
 
-    season_pd = espn_mbb_schedule(dates=2024, return_as_pandas=True)
-    season_pd.head()
-
-See Also:
-    * `hoopR`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _hoopR: https://hoopR.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+season_pd = espn_mbb_schedule(dates=2024, return_as_pandas=True)
+season_pd.head()
 ```
 
 ## Utilities & helpers
@@ -220,18 +185,9 @@ The most recent / current season year.
 **Example**
 
 ```python
-Use as a default season argument::
-
-    from sportsdataverse.mbb import most_recent_mbb_season, espn_mbb_schedule
-    season = most_recent_mbb_season()
-    sched = espn_mbb_schedule(dates=season)
-
-See Also:
-    * `hoopR`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-
-.. _hoopR: https://hoopR.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
+from sportsdataverse.mbb import most_recent_mbb_season, espn_mbb_schedule
+season = most_recent_mbb_season()
+sched = espn_mbb_schedule(dates=season)
 ```
 
 ## Other
@@ -254,31 +210,20 @@ Polars dataframe containing teams for the requested league. This function caches
 **Example**
 
 ```python
-Default groups (D1)::
-
-    from sportsdataverse.mbb import espn_mbb_teams
-    teams = espn_mbb_teams()
-    print(teams.shape)
-    print(teams.columns[:8])
+from sportsdataverse.mbb import espn_mbb_teams
+teams = espn_mbb_teams()
+print(teams.shape)
+print(teams.columns[:8])
 
 Walk every team-id (handy for batched scrapes)::
 
-    team_ids = teams["team_id"].to_list()
-    print(len(team_ids), "D1 teams")
+team_ids = teams["team_id"].to_list()
+print(len(team_ids), "D1 teams")
 
 Pandas round-trip + Division II/III::
 
-    d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
-    d2_d3.head()
-
-See Also:
-    * `hoopR`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _hoopR: https://hoopR.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
+d2_d3.head()
 ```
 
 ### `mbb_pbp_disk(game_id, path_to_json)`

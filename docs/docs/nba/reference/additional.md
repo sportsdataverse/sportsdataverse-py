@@ -34,8 +34,6 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 **Example**
 
 ```python
-Pull LeBron James' 2023 season line as a single wide row::
-
 from sportsdataverse.nba import espn_nba_player_stats
 df = espn_nba_player_stats(athlete_id=1966, season=2023)
 df.select(["full_name", "team_display_name", "offensive_points"])
@@ -71,16 +69,14 @@ The most recent NBA season year (e.g. 2024 for the 2023-24 season).
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nba import most_recent_nba_season
-    year = most_recent_nba_season()
-    print(year)
+from sportsdataverse.nba import most_recent_nba_season
+year = most_recent_nba_season()
+print(year)
 
 Combine with the loaders for a "current season" pull::
 
-    from sportsdataverse.nba import load_nba_schedule, most_recent_nba_season
-    sched = load_nba_schedule(seasons=[most_recent_nba_season()])
+from sportsdataverse.nba import load_nba_schedule, most_recent_nba_season
+sched = load_nba_schedule(seasons=[most_recent_nba_season()])
 ```
 
 ### `year_to_season(year)`
@@ -102,15 +98,13 @@ NBA-style season label.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nba import year_to_season
-    label = year_to_season(2023)
-    print(label)  # "2023-24"
+from sportsdataverse.nba import year_to_season
+label = year_to_season(2023)
+print(label)  # "2023-24"
 
 Century rollover::
 
-    print(year_to_season(1999))  # "1999-00"
+print(year_to_season(1999))  # "1999-00"
 ```
 
 ## Other
@@ -132,25 +126,19 @@ Polars dataframe containing teams for the requested league. This function caches
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nba import espn_nba_teams
-    teams = espn_nba_teams()
-    print(teams.shape)
+from sportsdataverse.nba import espn_nba_teams
+teams = espn_nba_teams()
+print(teams.shape)
 
 Pandas round-trip::
 
-    teams_pd = espn_nba_teams(return_as_pandas=True)
-    teams_pd.head()
+teams_pd = espn_nba_teams(return_as_pandas=True)
+teams_pd.head()
 
 Pipeline next step (build a team_id to abbreviation map)::
 
-    teams = espn_nba_teams()
-    abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
-
-See Also:
-    * `hoopR <https://hoopR.sportsdataverse.org>`_ -- R sister package for NBA team data
-    * `nba_api <https://github.com/swar/nba_api>`_ -- Python alternative to the NBA Stats API
+teams = espn_nba_teams()
+abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
 ### `nba_pbp_disk(game_id, path_to_json)`
@@ -173,8 +161,6 @@ Parsed JSON contents.
 **Example**
 
 ```python
-Quick start::
-
 from sportsdataverse.nba import nba_pbp_disk
 pbp = nba_pbp_disk(game_id=401585183, path_to_json="./cache")
 print(list(pbp.keys()))
@@ -199,8 +185,6 @@ The same event dict, mutated in place with ``home``/``away`` copies of the compe
 **Example**
 
 ```python
-Used internally by :func:`espn_nba_schedule`::
-
 from sportsdataverse.nba import espn_nba_schedule
 sched = espn_nba_schedule(dates=20230102)
 ```

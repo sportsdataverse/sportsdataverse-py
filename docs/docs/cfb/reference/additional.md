@@ -29,27 +29,21 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.cfb import espn_cfb_game_rosters
-    rosters = espn_cfb_game_rosters(game_id=401628334)
-    print(rosters.shape)
+from sportsdataverse.cfb import espn_cfb_game_rosters
+rosters = espn_cfb_game_rosters(game_id=401628334)
+print(rosters.shape)
 
 Pandas round-trip::
 
-    rosters_pd = espn_cfb_game_rosters(game_id=401628334, return_as_pandas=True)
-    rosters_pd.head()
+rosters_pd = espn_cfb_game_rosters(game_id=401628334, return_as_pandas=True)
+rosters_pd.head()
 
 Pipeline next step (filter to game starters)::
 
-    import polars as pl
-    starters = espn_cfb_game_rosters(game_id=401628334).filter(
-        pl.col("starter") == True
-    )
-
-See Also:
-    * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB rosters
-    * `recruitR <https://github.com/sportsdataverse/recruitR>`_ -- recruiting data companion
+import polars as pl
+starters = espn_cfb_game_rosters(game_id=401628334).filter(
+    pl.col("starter") == True
+)
 ```
 
 ### `espn_cfb_play_participants(game_id: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, resolve_missing: 'bool' = True, resolve_missing_max: 'int' = 50, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -73,29 +67,23 @@ Polars (or pandas) DataFrame, one row per play. Columns include ``game_id``, ``p
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.cfb import espn_cfb_play_participants
-    participants = espn_cfb_play_participants(game_id=401628334)
-    print(participants.shape)
+from sportsdataverse.cfb import espn_cfb_play_participants
+participants = espn_cfb_play_participants(game_id=401628334)
+print(participants.shape)
 
 Skip the per-athlete fan-out for speed::
 
-    participants_fast = espn_cfb_play_participants(
-        game_id=401628334,
-        resolve_missing=False,
-    )
+participants_fast = espn_cfb_play_participants(
+    game_id=401628334,
+    resolve_missing=False,
+)
 
 Pipeline next step (join onto play-by-play frame)::
 
-    from sportsdataverse.cfb import CFBPlayProcess
-    pbp = CFBPlayProcess(gameId=401628334).espn_cfb_pbp()
-    plays = pbp["plays"]
-    joined = plays.join(participants, how="left", left_on="id", right_on="play_id")
-
-See Also:
-    * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB PBP
-    * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
+from sportsdataverse.cfb import CFBPlayProcess
+pbp = CFBPlayProcess(gameId=401628334).espn_cfb_pbp()
+plays = pbp["plays"]
+joined = plays.join(participants, how="left", left_on="id", right_on="play_id")
 ```
 
 ### `espn_cfb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -122,8 +110,6 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 **Example**
 
 ```python
-Pull a player's 2023 season line as a single wide row::
-
 from sportsdataverse.cfb import espn_cfb_player_stats
 df = espn_cfb_player_stats(athlete_id=4426338, season=2023)
 df.select(["full_name", "team_display_name", "passing_passing_yards"])
@@ -151,26 +137,20 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 **Example**
 
 ```python
-Quick start (today's slate)::
-
-    from sportsdataverse.cfb import espn_cfb_schedule
-    slate = espn_cfb_schedule()
-    print(slate.shape if slate is not None else "no games")
+from sportsdataverse.cfb import espn_cfb_schedule
+slate = espn_cfb_schedule()
+print(slate.shape if slate is not None else "no games")
 
 Pull a specific week of FBS games::
 
-    week5 = espn_cfb_schedule(dates=2023, week=5, season_type=2)
+week5 = espn_cfb_schedule(dates=2023, week=5, season_type=2)
 
 Pipeline next step (extract finals only)::
 
-    import polars as pl
-    finals = espn_cfb_schedule(dates=2023, week=5).filter(
-        pl.col("status_type_completed") == True
-    )
-
-See Also:
-    * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB schedules
-    * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
+import polars as pl
+finals = espn_cfb_schedule(dates=2023, week=5).filter(
+    pl.col("status_type_completed") == True
+)
 ```
 
 ## Dataset loaders
@@ -192,27 +172,21 @@ Polars dataframe containing betting lines available for the available seasons.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.cfb import load_cfb_betting_lines
-    lines = load_cfb_betting_lines()
-    print(lines.shape)
+from sportsdataverse.cfb import load_cfb_betting_lines
+lines = load_cfb_betting_lines()
+print(lines.shape)
 
 Pandas round-trip::
 
-    lines_pd = load_cfb_betting_lines(return_as_pandas=True)
-    lines_pd.head()
+lines_pd = load_cfb_betting_lines(return_as_pandas=True)
+lines_pd.head()
 
 Pipeline next step (filter to one provider in 2023)::
 
-    import polars as pl
-    consensus_2023 = load_cfb_betting_lines().filter(
-        (pl.col("season") == 2023) & (pl.col("provider") == "consensus")
-    )
-
-See Also:
-    * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB betting lines
-    * `nflverse <https://nflverse.nflverse.com>`_ -- companion data ecosystem for the NFL
+import polars as pl
+consensus_2023 = load_cfb_betting_lines().filter(
+    (pl.col("season") == 2023) & (pl.col("provider") == "consensus")
+)
 ```
 
 ## Utilities & helpers
@@ -244,16 +218,14 @@ The most recent CFB season year.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.cfb import most_recent_cfb_season
-    year = most_recent_cfb_season()
-    print(year)
+from sportsdataverse.cfb import most_recent_cfb_season
+year = most_recent_cfb_season()
+print(year)
 
 Combine with the loaders for a "current season" pull::
 
-    from sportsdataverse.cfb import load_cfb_schedule, most_recent_cfb_season
-    sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
+from sportsdataverse.cfb import load_cfb_schedule, most_recent_cfb_season
+sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 ```
 
 ## Other
@@ -276,25 +248,19 @@ Polars dataframe containing schedule dates for the requested season. This functi
 **Example**
 
 ```python
-Quick start (FBS only by default)::
-
-    from sportsdataverse.cfb import espn_cfb_teams
-    teams = espn_cfb_teams()
-    print(teams.shape)
+from sportsdataverse.cfb import espn_cfb_teams
+teams = espn_cfb_teams()
+print(teams.shape)
 
 Pull FCS teams (group 81)::
 
-    fcs = espn_cfb_teams(groups=81, return_as_pandas=True)
-    fcs.head()
+fcs = espn_cfb_teams(groups=81, return_as_pandas=True)
+fcs.head()
 
 Pipeline next step (build an abbreviation lookup)::
 
-    teams = espn_cfb_teams()
-    abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
-
-See Also:
-    * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB team data
-    * `recruitR <https://github.com/sportsdataverse/recruitR>`_ -- recruiting data companion
+teams = espn_cfb_teams()
+abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
 ### `get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -314,24 +280,19 @@ Polars dataframe containing teams available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.cfb import get_cfb_teams
-    teams = get_cfb_teams()
-    print(teams.shape)
+from sportsdataverse.cfb import get_cfb_teams
+teams = get_cfb_teams()
+print(teams.shape)
 
 Pandas round-trip::
 
-    teams_pd = get_cfb_teams(return_as_pandas=True)
-    teams_pd.head()
+teams_pd = get_cfb_teams(return_as_pandas=True)
+teams_pd.head()
 
 Pipeline next step (build a team_id to logo URL map)::
 
-    teams = get_cfb_teams()
-    logo_map = dict(zip(teams["team_id"], teams["logo"]))
-
-See Also:
-    * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB team metadata
+teams = get_cfb_teams()
+logo_map = dict(zip(teams["team_id"], teams["logo"]))
 ```
 
 ### `scoreboard_event_parsing(event)`
@@ -353,8 +314,6 @@ The same event dict, mutated in place with ``home``/``away`` copies of the compe
 **Example**
 
 ```python
-Used internally by :func:`espn_cfb_schedule`::
-
 from sportsdataverse.cfb import espn_cfb_schedule
 sched = espn_cfb_schedule(dates=2023, week=5)
 ```

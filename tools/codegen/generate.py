@@ -1593,6 +1593,93 @@ def _ann_str(annotation) -> str:
     return text.strip()
 
 
+_PROSE_SECTION_RE = re.compile(
+    r"^(See Also|Notes?|Returns?|Raises?|Warnings?|Warning|Todo|References?)\s*:?\s*$",
+    re.IGNORECASE,
+)
+_RST_DIRECTIVE_RE = re.compile(r"^\.\.\s+\S")
+
+
+def _clean_example(text: str) -> str:
+    """Strip reST intro lines and trailing prose sections from a parsed example block.
+
+    docstring_parser folds the entire ``Examples:`` section body into
+    ``ds.examples[0].description``, which means the rendered text may contain:
+
+    * A leading reST literal-block intro line (e.g. ``Quick start::``).
+    * Trailing prose sections that docstring_parser did not split off
+      (``See Also:``, ``Notes:``, RST ``.. _ref:`` footnotes, etc.).
+
+    This helper:
+
+    1. Skips leading blank lines then strips exactly ONE leading line whose
+       stripped form ends with ``::`` (the reST literal-block marker).  Only
+       a *single* intro is removed; if the first real content is already code
+       it is kept intact.
+    2. Collects lines until the first trailing-prose sentinel: a line whose
+       stripped form matches a known prose section header (``See Also``,
+       ``Notes``, ``Returns``, ``Raises``, ``Warnings``, ``Todo``,
+       ``References`` -- optionally followed by ``:``) OR a bare RST
+       ``.. directive`` line (``.. _ref:``, ``.. note::``, etc.).
+    3. ``textwrap.dedent``-strips the collected block and ``.strip()``s it.
+    4. Returns ``""`` when nothing real remains.
+    """
+    lines = text.splitlines()
+    i = 0
+    n = len(lines)
+
+    # Step 1 — skip leading blank lines.
+    while i < n and not lines[i].strip():
+        i += 1
+
+    # Step 2 — skip exactly ONE leading reST intro line (ends with "::").
+    # A line is a "pure intro" when it is non-empty, ends with "::", and is
+    # not itself indented code (indented lines are kept regardless).
+    if i < n:
+        stripped = lines[i].strip()
+        if stripped.endswith("::") and stripped != "::":
+            # Only skip when the line looks like prose, not code.  We treat a
+            # line as prose when it has no leading whitespace (or very little)
+            # AND it does not look like a Python statement.
+            leading_spaces = len(lines[i]) - len(lines[i].lstrip())
+            looks_like_code = leading_spaces >= 4 or stripped.startswith(("from ", "import ", ">>>"))
+            if not looks_like_code:
+                i += 1  # consume the intro line
+                # Also skip the blank line(s) that follow the reST intro
+                # so they don't defeat textwrap.dedent (blank lines have
+                # zero leading spaces and would anchor the common indent to 0).
+                while i < n and not lines[i].strip():
+                    i += 1
+
+    # Step 3 — collect lines until a prose-section sentinel.
+    collected: list[str] = []
+    for j in range(i, n):
+        s = lines[j].strip()
+        if _PROSE_SECTION_RE.match(s):
+            break
+        if _RST_DIRECTIVE_RE.match(lines[j]):
+            break
+        collected.append(lines[j])
+
+    # Step 4 — dedent and strip.
+    # textwrap.dedent uses the minimum common leading whitespace across ALL
+    # non-blank lines.  When a collected block mixes 4-space-indented code with
+    # 0-space section-header lines (``Section label::``), the common indent is
+    # 0 and dedent is a no-op.  We instead compute the indent from the FIRST
+    # non-blank collected line and strip that prefix from every line, which
+    # matches what a human reader expects when the block starts with indented
+    # code (after the intro was removed) but also contains 0-indent headers.
+    stripped_lines = [ln for ln in collected if ln.strip()]
+    if not stripped_lines:
+        return ""
+    first_indent = len(stripped_lines[0]) - len(stripped_lines[0].lstrip())
+    if first_indent > 0:
+        prefix = " " * first_indent
+        collected = [ln[first_indent:] if ln.startswith(prefix) else ln for ln in collected]
+    result = "\n".join(collected).strip()
+    return result
+
+
 def _doc_view(obj) -> dict:
     """Parsed docstring + signature for rich autodoc rendering of ``obj``.
 
@@ -1635,7 +1722,8 @@ def _doc_view(obj) -> dict:
     returns = ""
     if ds.returns is not None and ds.returns.description:
         returns = " ".join(ds.returns.description.split())
-    example = ds.examples[0].description.strip() if ds.examples and ds.examples[0].description else ""
+    raw_example = ds.examples[0].description if ds.examples and ds.examples[0].description else ""
+    example = _clean_example(raw_example)
     return {
         "short": (ds.short_description or "").strip(),
         "long": long,

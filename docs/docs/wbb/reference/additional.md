@@ -30,35 +30,24 @@ Polars (or pandas) DataFrame with one row per official: ``game_id``, ``season``,
 **Example**
 
 ```python
-Quick start (2024 NCAA W championship game)::
-
-    from sportsdataverse.wbb import espn_wbb_game_officials
-    officials = espn_wbb_game_officials(game_id=401587902, season=2024)
-    print(officials.shape)
-    officials.select(["full_name", "position_display_name", "order"]).head()
+from sportsdataverse.wbb import espn_wbb_game_officials
+officials = espn_wbb_game_officials(game_id=401587902, season=2024)
+print(officials.shape)
+officials.select(["full_name", "position_display_name", "order"]).head()
 
 Pandas round-trip::
 
-    officials_pd = espn_wbb_game_officials(
-        game_id=401587902, season=2024, return_as_pandas=True
-    )
-    officials_pd.head()
+officials_pd = espn_wbb_game_officials(
+    game_id=401587902, season=2024, return_as_pandas=True
+)
+officials_pd.head()
 
 Raw payload (skip the cleaning pipeline)::
 
-    raw = espn_wbb_game_officials(
-        game_id=401587902, season=2024, raw=True
-    )
-    sorted(raw.keys())
-
-See Also:
-    * `wehoop`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+raw = espn_wbb_game_officials(
+    game_id=401587902, season=2024, raw=True
+)
+sorted(raw.keys())
 ```
 
 ### `espn_wbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
@@ -80,32 +69,21 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 **Example**
 
 ```python
-Quick start (2024 NCAA W championship game)::
-
-    from sportsdataverse.wbb import espn_wbb_game_rosters
-    roster = espn_wbb_game_rosters(game_id=401587902)
-    print(roster.shape)
+from sportsdataverse.wbb import espn_wbb_game_rosters
+roster = espn_wbb_game_rosters(game_id=401587902)
+print(roster.shape)
 
 Identify starters::
 
-    import polars as pl
-    starters = roster.filter(pl.col("starter") == True).select(
-        ["full_name", "jersey", "team_display_name"]
-    )
+import polars as pl
+starters = roster.filter(pl.col("starter") == True).select(
+    ["full_name", "jersey", "team_display_name"]
+)
 
 Pandas round-trip::
 
-    roster_pd = espn_wbb_game_rosters(game_id=401587902, return_as_pandas=True)
-    roster_pd.head()
-
-See Also:
-    * `wehoop`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+roster_pd = espn_wbb_game_rosters(game_id=401587902, return_as_pandas=True)
+roster_pd.head()
 ```
 
 ### `espn_wbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
@@ -128,39 +106,28 @@ Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxsco
 **Example**
 
 ```python
-Quick start (2024 NCAA Division I women's championship game)::
-
-    from sportsdataverse.wbb import espn_wbb_pbp
-    game = espn_wbb_pbp(game_id=401587902)
-    print(game["gameId"])
-    print(len(game["plays"]))
+from sportsdataverse.wbb import espn_wbb_pbp
+game = espn_wbb_pbp(game_id=401587902)
+print(game["gameId"])
+print(len(game["plays"]))
 
 Convert plays to a DataFrame and filter shooting plays::
 
-    import polars as pl
-    plays = pl.DataFrame(game["plays"])
-    shots = plays.filter(pl.col("scoring_play") | pl.col("shooting_play"))
-    shots.select(["period_number", "clock_display_value", "team_id", "coordinate_x", "coordinate_y", "score_value", "text"]).head()
+import polars as pl
+plays = pl.DataFrame(game["plays"])
+shots = plays.filter(pl.col("scoring_play") | pl.col("shooting_play"))
+shots.select(["period_number", "clock_display_value", "team_id", "coordinate_x", "coordinate_y", "score_value", "text"]).head()
 
 Convert to pandas for downstream analysis::
 
-    import pandas as pd
-    shots_pd = pd.DataFrame(game["plays"])
-    shots_pd[shots_pd["shooting_play"] == True].head()
+import pandas as pd
+shots_pd = pd.DataFrame(game["plays"])
+shots_pd[shots_pd["shooting_play"] == True].head()
 
 Raw payload (skip the cleaning pipeline) for debugging::
 
-    raw = espn_wbb_pbp(game_id=401587902, raw=True)
-    sorted(raw.keys())
-
-See Also:
-    * `wehoop`_ - R sister package; mirrors this surface for women's basketball
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+raw = espn_wbb_pbp(game_id=401587902, raw=True)
+sorted(raw.keys())
 ```
 
 ### `espn_wbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -187,17 +154,9 @@ A single-row wide DataFrame (polars by default). Columns: identity / echo (``sea
 **Example**
 
 ```python
-Pull a player's 2025 season line as a single wide row::
-
-    from sportsdataverse.wbb import espn_wbb_player_stats
-    df = espn_wbb_player_stats(athlete_id=4433985, season=2025)
-    df.select(["full_name", "team_display_name", "offensive_points"])
-
-See Also:
-    * :func:`espn_wbb_player_stats_v3` -- comprehensive web-v3 stats
-    * `wehoop`_ -- R sister package (``espn_wbb_player_stats``)
-
-.. _wehoop: https://wehoop.sportsdataverse.org
+from sportsdataverse.wbb import espn_wbb_player_stats
+df = espn_wbb_player_stats(athlete_id=4433985, season=2025)
+df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
 ### `espn_wbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
@@ -221,37 +180,26 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 **Example**
 
 ```python
-Single date (April 7, 2024 - 2024 NCAA W championship day)::
-
-    from sportsdataverse.wbb import espn_wbb_schedule
-    day = espn_wbb_schedule(dates=20240407)
-    print(day.shape)
+from sportsdataverse.wbb import espn_wbb_schedule
+day = espn_wbb_schedule(dates=20240407)
+print(day.shape)
 
 Season-level pull (2024 season)::
 
-    season = espn_wbb_schedule(dates=2024, limit=1500)
-    print(season.shape)
+season = espn_wbb_schedule(dates=2024, limit=1500)
+print(season.shape)
 
 Filter to a specific team (UConn ``team_id=2509``)::
 
-    import polars as pl
-    uconn = season.filter(
-        (pl.col("home_id") == "2509") | (pl.col("away_id") == "2509")
-    )
+import polars as pl
+uconn = season.filter(
+    (pl.col("home_id") == "2509") | (pl.col("away_id") == "2509")
+)
 
 Pandas round-trip::
 
-    season_pd = espn_wbb_schedule(dates=2024, return_as_pandas=True)
-    season_pd.head()
-
-See Also:
-    * `wehoop`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+season_pd = espn_wbb_schedule(dates=2024, return_as_pandas=True)
+season_pd.head()
 ```
 
 ### `espn_wbb_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'`
@@ -274,44 +222,33 @@ Dict with one DataFrame per stat category. The canonical keys ``"Averages"``, ``
 **Example**
 
 ```python
-Quick start (UConn ``team_id=2509``)::
-
-    from sportsdataverse.wbb import espn_wbb_team_stats
-    frames = espn_wbb_team_stats(team_id=2509, season=2025)
-    print(sorted(frames.keys()))
+from sportsdataverse.wbb import espn_wbb_team_stats
+frames = espn_wbb_team_stats(team_id=2509, season=2025)
+print(sorted(frames.keys()))
 
 Index into a specific table::
 
-    averages = frames["Averages"]
-    print(averages.shape)
-    averages.select(["stat_name", "display_value", "value"]).head()
+averages = frames["Averages"]
+print(averages.shape)
+averages.select(["stat_name", "display_value", "value"]).head()
 
 Iterate the canonical categories::
 
-    for cat in ("Averages", "Totals", "Misc"):
-        print(cat, frames[cat].shape)
+for cat in ("Averages", "Totals", "Misc"):
+    print(cat, frames[cat].shape)
 
 ``Other`` fallback bucket (only present when ESPN ships a category
 that does not map onto one of the three canonical keys)::
 
-    if "Other" in frames:
-        frames["Other"].select(["category", "stat_name", "value"])
+if "Other" in frames:
+    frames["Other"].select(["category", "stat_name", "value"])
 
 Pandas round-trip::
 
-    frames_pd = espn_wbb_team_stats(
-        team_id=2579, season=2025, return_as_pandas=True
-    )  # team_id 2579 = South Carolina
-    frames_pd["Averages"].head()
-
-See Also:
-    * `wehoop`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+frames_pd = espn_wbb_team_stats(
+    team_id=2579, season=2025, return_as_pandas=True
+)  # team_id 2579 = South Carolina
+frames_pd["Averages"].head()
 ```
 
 ## Utilities & helpers
@@ -329,18 +266,9 @@ The most recent / current season year.
 **Example**
 
 ```python
-Use as a default season argument::
-
-    from sportsdataverse.wbb import most_recent_wbb_season, espn_wbb_schedule
-    season = most_recent_wbb_season()
-    sched = espn_wbb_schedule(dates=season)
-
-See Also:
-    * `wehoop`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
+from sportsdataverse.wbb import most_recent_wbb_season, espn_wbb_schedule
+season = most_recent_wbb_season()
+sched = espn_wbb_schedule(dates=season)
 ```
 
 ## Other
@@ -363,31 +291,20 @@ Polars dataframe containing teams for the requested league. This function caches
 **Example**
 
 ```python
-Default groups (D1 = ``50``)::
-
-    from sportsdataverse.wbb import espn_wbb_teams
-    teams = espn_wbb_teams()
-    print(teams.shape)
-    print(teams.columns[:8])
+from sportsdataverse.wbb import espn_wbb_teams
+teams = espn_wbb_teams()
+print(teams.shape)
+print(teams.columns[:8])
 
 Walk every team-id (handy for batched scrapes)::
 
-    team_ids = teams["team_id"].to_list()
-    print(len(team_ids), "D1 teams")
+team_ids = teams["team_id"].to_list()
+print(len(team_ids), "D1 teams")
 
 Pandas round-trip + Division II/III::
 
-    d2_d3 = espn_wbb_teams(groups=51, return_as_pandas=True)
-    d2_d3.head()
-
-See Also:
-    * `wehoop`_ - R sister package
-    * `cfbfastR`_ - companion R package for college football
-    * `ESPN`_ - data origin
-
-.. _wehoop: https://wehoop.sportsdataverse.org
-.. _cfbfastR: https://cfbfastR.sportsdataverse.org
-.. _ESPN: https://www.espn.com
+d2_d3 = espn_wbb_teams(groups=51, return_as_pandas=True)
+d2_d3.head()
 ```
 
 ### `scoreboard_event_parsing(event)`

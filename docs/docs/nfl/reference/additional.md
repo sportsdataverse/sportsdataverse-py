@@ -29,17 +29,15 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import espn_nfl_game_rosters
-    rosters = espn_nfl_game_rosters(game_id=401220403)
-    rosters.shape
+from sportsdataverse.nfl import espn_nfl_game_rosters
+rosters = espn_nfl_game_rosters(game_id=401220403)
+rosters.shape
 
 Pandas round-trip with home/away split::
 
-    rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
-    home = rosters_pd[rosters_pd["home_away"] == "home"]
-    away = rosters_pd[rosters_pd["home_away"] == "away"]
+rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
+home = rosters_pd[rosters_pd["home_away"] == "home"]
+away = rosters_pd[rosters_pd["home_away"] == "away"]
 ```
 
 ### `espn_nfl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -66,8 +64,6 @@ A single-row wide DataFrame (polars by default). When ``raw=True`` returns the r
 **Example**
 
 ```python
-Pull Patrick Mahomes' 2023 season line as a single wide row::
-
 from sportsdataverse.nfl import espn_nfl_player_stats
 df = espn_nfl_player_stats(athlete_id=3139477, season=2023)
 df.select(["full_name", "team_display_name", "passing_passing_yards"])
@@ -95,18 +91,16 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 **Example**
 
 ```python
-Single date (YYYYMMDD)::
-
-    from sportsdataverse.nfl import espn_nfl_schedule
-    sched = espn_nfl_schedule(dates=20240908)
+from sportsdataverse.nfl import espn_nfl_schedule
+sched = espn_nfl_schedule(dates=20240908)
 
 Specific week of regular season (``season_type=2``)::
 
-    wk1 = espn_nfl_schedule(dates=2024, week=1, season_type=2)
+wk1 = espn_nfl_schedule(dates=2024, week=1, season_type=2)
 
 Pandas round-trip::
 
-    sched_pd = espn_nfl_schedule(dates=20240908, return_as_pandas=True)
+sched_pd = espn_nfl_schedule(dates=20240908, return_as_pandas=True)
 ```
 
 ## Dataset loaders
@@ -128,26 +122,17 @@ Polars dataframe containing NFL combine data available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_combine
-    combine = load_nfl_combine()
-    combine.shape
+from sportsdataverse.nfl import load_nfl_combine
+combine = load_nfl_combine()
+combine.shape
 
 Filter by draft year and position::
 
-    import polars as pl
-    qbs_2024 = (
-        load_nfl_combine()
-        .filter((pl.col("season") == 2024) & (pl.col("pos") == "QB"))
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream combine source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+qbs_2024 = (
+    load_nfl_combine()
+    .filter((pl.col("season") == 2024) & (pl.col("pos") == "QB"))
+)
 ```
 
 ### `load_contracts(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -167,23 +152,14 @@ Polars dataframe containing historical contracts available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_contracts
-    contracts = load_nfl_contracts()
-    contracts.shape
+from sportsdataverse.nfl import load_nfl_contracts
+contracts = load_nfl_contracts()
+contracts.shape
 
 Pandas round-trip with sort by APY::
 
-    contracts_pd = load_nfl_contracts(return_as_pandas=True)
-    contracts_pd.sort_values("apy", ascending=False).head()
-
-See Also:
-    * `Over The Cap`_ -- upstream contracts source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Over The Cap: https://overthecap.com
-.. _nflverse: https://nflverse.nflverse.com
+contracts_pd = load_nfl_contracts(return_as_pandas=True)
+contracts_pd.sort_values("apy", ascending=False).head()
 ```
 
 ### `load_depth_charts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -204,21 +180,12 @@ Polars dataframe containing depth chart data available for the requested seasons
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_depth_charts
-    depth = load_nfl_depth_charts(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_depth_charts
+depth = load_nfl_depth_charts(seasons=[2024])
 
 Multi-season range::
 
-    depth = load_nfl_depth_charts(seasons=range(2020, 2025))
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+depth = load_nfl_depth_charts(seasons=range(2020, 2025))
 ```
 
 ### `load_draft_picks(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -238,26 +205,17 @@ Polars dataframe containing NFL Draft picks data available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_draft_picks
-    picks = load_nfl_draft_picks()
-    picks.shape
+from sportsdataverse.nfl import load_nfl_draft_picks
+picks = load_nfl_draft_picks()
+picks.shape
 
 Filter to a single year and round::
 
-    import polars as pl
-    r1_2024 = (
-        load_nfl_draft_picks()
-        .filter((pl.col("season") == 2024) & (pl.col("round") == 1))
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream draft source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+r1_2024 = (
+    load_nfl_draft_picks()
+    .filter((pl.col("season") == 2024) & (pl.col("round") == 1))
+)
 ```
 
 ### `load_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -280,27 +238,18 @@ Polars dataframe containing fantasy football opportunity data for the requested 
 **Example**
 
 ```python
-Weekly opportunity stats (default)::
-
-    from sportsdataverse.nfl import load_nfl_ff_opportunity
-    weekly = load_nfl_ff_opportunity(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_ff_opportunity
+weekly = load_nfl_ff_opportunity(seasons=[2024])
 
 Pass play-by-play opportunity stats::
 
-    pbp_pass = load_nfl_ff_opportunity(seasons=[2024], stat_type="pbp_pass")
+pbp_pass = load_nfl_ff_opportunity(seasons=[2024], stat_type="pbp_pass")
 
 Rush play-by-play opportunity stats with pinned model version::
 
-    pbp_rush = load_nfl_ff_opportunity(
-        seasons=[2024], stat_type="pbp_rush", model_version="v1.0.0"
-    )
-
-See Also:
-    * `ffopportunity`_ -- upstream opportunity model
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _ffopportunity: https://github.com/ffverse/ffopportunity
-.. _nflverse: https://nflverse.nflverse.com
+pbp_rush = load_nfl_ff_opportunity(
+    seasons=[2024], stat_type="pbp_rush", model_version="v1.0.0"
+)
 ```
 
 ### `load_ff_playerids(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -320,26 +269,17 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_ff_playerids
-    ids = load_nfl_ff_playerids()
-    ids.shape
+from sportsdataverse.nfl import load_nfl_ff_playerids
+ids = load_nfl_ff_playerids()
+ids.shape
 
 Filter to active QBs::
 
-    import polars as pl
-    qbs = (
-        load_nfl_ff_playerids()
-        .filter((pl.col("position") == "QB") & (pl.col("status") == "ACT"))
-    )
-
-See Also:
-    * `DynastyProcess`_ -- upstream ID-mapping project
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _DynastyProcess: https://github.com/dynastyprocess
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+qbs = (
+    load_nfl_ff_playerids()
+    .filter((pl.col("position") == "QB") & (pl.col("status") == "ACT"))
+)
 ```
 
 ### `load_ff_rankings(type: 'str' = 'draft', kind: 'str' = None, return_as_pandas=False) -> 'pl.DataFrame'`
@@ -361,29 +301,20 @@ Polars dataframe containing fantasy football rankings data.
 **Example**
 
 ```python
-Preferred ``kind=`` parameter::
-
-    from sportsdataverse.nfl import load_nfl_ff_rankings
-    draft = load_nfl_ff_rankings(kind="draft")
+from sportsdataverse.nfl import load_nfl_ff_rankings
+draft = load_nfl_ff_rankings(kind="draft")
 
 Weekly rankings::
 
-    weekly = load_nfl_ff_rankings(kind="week")
+weekly = load_nfl_ff_rankings(kind="week")
 
 Full historical rankings (parquet)::
 
-    history = load_nfl_ff_rankings(kind="all")
+history = load_nfl_ff_rankings(kind="all")
 
 nflreadpy-parity ``type=`` parameter (still supported)::
 
-    draft = load_nfl_ff_rankings(type="draft")
-
-See Also:
-    * `DynastyProcess`_ -- upstream rankings source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _DynastyProcess: https://github.com/dynastyprocess
-.. _nflverse: https://nflverse.nflverse.com
+draft = load_nfl_ff_rankings(type="draft")
 ```
 
 ### `load_ftn_charting(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -404,29 +335,20 @@ Polars dataframe containing FTN charting data available for the requested season
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_ftn_charting
-    charting = load_nfl_ftn_charting(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_ftn_charting
+charting = load_nfl_ftn_charting(seasons=[2024])
 
 Multi-season range::
 
-    charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
+charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
 
 Filter to plays with motion::
 
-    import polars as pl
-    motion_plays = (
-        load_nfl_ftn_charting(seasons=[2024])
-        .filter(pl.col("is_motion") == 1)
-    )
-
-See Also:
-    * `FTN Network`_ -- upstream charting source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _FTN Network: https://ftnfantasy.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+motion_plays = (
+    load_nfl_ftn_charting(seasons=[2024])
+    .filter(pl.col("is_motion") == 1)
+)
 ```
 
 ### `load_injuries(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -447,25 +369,16 @@ Polars dataframe containing injuries data available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_injuries
-    injuries = load_nfl_injuries(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_injuries
+injuries = load_nfl_injuries(seasons=[2024])
 
 Multi-season range with team filter::
 
-    import polars as pl
-    sf_injuries = (
-        load_nfl_injuries(seasons=range(2020, 2025))
-        .filter(pl.col("team") == "SF")
-    )
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+sf_injuries = (
+    load_nfl_injuries(seasons=range(2020, 2025))
+    .filter(pl.col("team") == "SF")
+)
 ```
 
 ### `load_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
@@ -489,35 +402,26 @@ Polars dataframe containing NextGen Stats data for the requested ``stat_type`` a
 **Example**
 
 ```python
-Passing NextGen stats (default)::
-
-    from sportsdataverse.nfl import load_nfl_nextgen_stats
-    ngs_pass = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
+from sportsdataverse.nfl import load_nfl_nextgen_stats
+ngs_pass = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 
 Rushing NextGen stats::
 
-    ngs_rush = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
+ngs_rush = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
 
 Receiving NextGen stats with a follow-up filter::
 
-    import polars as pl
-    ngs_rec = (
-        load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
-        .filter(pl.col("week") > 0)
-    )
+import polars as pl
+ngs_rec = (
+    load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
+    .filter(pl.col("week") > 0)
+)
 
 Pandas round-trip::
 
-    ngs_pd = load_nfl_nextgen_stats(
-        seasons=[2024], stat_type="passing", return_as_pandas=True
-    )
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+ngs_pd = load_nfl_nextgen_stats(
+    seasons=[2024], stat_type="passing", return_as_pandas=True
+)
 ```
 
 ### `load_nfl_combine(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -537,26 +441,17 @@ Polars dataframe containing NFL combine data available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_combine
-    combine = load_nfl_combine()
-    combine.shape
+from sportsdataverse.nfl import load_nfl_combine
+combine = load_nfl_combine()
+combine.shape
 
 Filter by draft year and position::
 
-    import polars as pl
-    qbs_2024 = (
-        load_nfl_combine()
-        .filter((pl.col("season") == 2024) & (pl.col("pos") == "QB"))
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream combine source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+qbs_2024 = (
+    load_nfl_combine()
+    .filter((pl.col("season") == 2024) & (pl.col("pos") == "QB"))
+)
 ```
 
 ### `load_nfl_contracts(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -576,23 +471,14 @@ Polars dataframe containing historical contracts available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_contracts
-    contracts = load_nfl_contracts()
-    contracts.shape
+from sportsdataverse.nfl import load_nfl_contracts
+contracts = load_nfl_contracts()
+contracts.shape
 
 Pandas round-trip with sort by APY::
 
-    contracts_pd = load_nfl_contracts(return_as_pandas=True)
-    contracts_pd.sort_values("apy", ascending=False).head()
-
-See Also:
-    * `Over The Cap`_ -- upstream contracts source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Over The Cap: https://overthecap.com
-.. _nflverse: https://nflverse.nflverse.com
+contracts_pd = load_nfl_contracts(return_as_pandas=True)
+contracts_pd.sort_values("apy", ascending=False).head()
 ```
 
 ### `load_nfl_depth_charts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -613,21 +499,12 @@ Polars dataframe containing depth chart data available for the requested seasons
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_depth_charts
-    depth = load_nfl_depth_charts(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_depth_charts
+depth = load_nfl_depth_charts(seasons=[2024])
 
 Multi-season range::
 
-    depth = load_nfl_depth_charts(seasons=range(2020, 2025))
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+depth = load_nfl_depth_charts(seasons=range(2020, 2025))
 ```
 
 ### `load_nfl_draft_picks(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -647,26 +524,17 @@ Polars dataframe containing NFL Draft picks data available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_draft_picks
-    picks = load_nfl_draft_picks()
-    picks.shape
+from sportsdataverse.nfl import load_nfl_draft_picks
+picks = load_nfl_draft_picks()
+picks.shape
 
 Filter to a single year and round::
 
-    import polars as pl
-    r1_2024 = (
-        load_nfl_draft_picks()
-        .filter((pl.col("season") == 2024) & (pl.col("round") == 1))
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream draft source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+r1_2024 = (
+    load_nfl_draft_picks()
+    .filter((pl.col("season") == 2024) & (pl.col("round") == 1))
+)
 ```
 
 ### `load_nfl_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -689,27 +557,18 @@ Polars dataframe containing fantasy football opportunity data for the requested 
 **Example**
 
 ```python
-Weekly opportunity stats (default)::
-
-    from sportsdataverse.nfl import load_nfl_ff_opportunity
-    weekly = load_nfl_ff_opportunity(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_ff_opportunity
+weekly = load_nfl_ff_opportunity(seasons=[2024])
 
 Pass play-by-play opportunity stats::
 
-    pbp_pass = load_nfl_ff_opportunity(seasons=[2024], stat_type="pbp_pass")
+pbp_pass = load_nfl_ff_opportunity(seasons=[2024], stat_type="pbp_pass")
 
 Rush play-by-play opportunity stats with pinned model version::
 
-    pbp_rush = load_nfl_ff_opportunity(
-        seasons=[2024], stat_type="pbp_rush", model_version="v1.0.0"
-    )
-
-See Also:
-    * `ffopportunity`_ -- upstream opportunity model
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _ffopportunity: https://github.com/ffverse/ffopportunity
-.. _nflverse: https://nflverse.nflverse.com
+pbp_rush = load_nfl_ff_opportunity(
+    seasons=[2024], stat_type="pbp_rush", model_version="v1.0.0"
+)
 ```
 
 ### `load_nfl_ff_playerids(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -729,26 +588,17 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_ff_playerids
-    ids = load_nfl_ff_playerids()
-    ids.shape
+from sportsdataverse.nfl import load_nfl_ff_playerids
+ids = load_nfl_ff_playerids()
+ids.shape
 
 Filter to active QBs::
 
-    import polars as pl
-    qbs = (
-        load_nfl_ff_playerids()
-        .filter((pl.col("position") == "QB") & (pl.col("status") == "ACT"))
-    )
-
-See Also:
-    * `DynastyProcess`_ -- upstream ID-mapping project
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _DynastyProcess: https://github.com/dynastyprocess
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+qbs = (
+    load_nfl_ff_playerids()
+    .filter((pl.col("position") == "QB") & (pl.col("status") == "ACT"))
+)
 ```
 
 ### `load_nfl_ff_rankings(type: 'str' = 'draft', kind: 'str' = None, return_as_pandas=False) -> 'pl.DataFrame'`
@@ -770,29 +620,20 @@ Polars dataframe containing fantasy football rankings data.
 **Example**
 
 ```python
-Preferred ``kind=`` parameter::
-
-    from sportsdataverse.nfl import load_nfl_ff_rankings
-    draft = load_nfl_ff_rankings(kind="draft")
+from sportsdataverse.nfl import load_nfl_ff_rankings
+draft = load_nfl_ff_rankings(kind="draft")
 
 Weekly rankings::
 
-    weekly = load_nfl_ff_rankings(kind="week")
+weekly = load_nfl_ff_rankings(kind="week")
 
 Full historical rankings (parquet)::
 
-    history = load_nfl_ff_rankings(kind="all")
+history = load_nfl_ff_rankings(kind="all")
 
 nflreadpy-parity ``type=`` parameter (still supported)::
 
-    draft = load_nfl_ff_rankings(type="draft")
-
-See Also:
-    * `DynastyProcess`_ -- upstream rankings source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _DynastyProcess: https://github.com/dynastyprocess
-.. _nflverse: https://nflverse.nflverse.com
+draft = load_nfl_ff_rankings(type="draft")
 ```
 
 ### `load_nfl_ftn_charting(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -813,29 +654,20 @@ Polars dataframe containing FTN charting data available for the requested season
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_ftn_charting
-    charting = load_nfl_ftn_charting(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_ftn_charting
+charting = load_nfl_ftn_charting(seasons=[2024])
 
 Multi-season range::
 
-    charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
+charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
 
 Filter to plays with motion::
 
-    import polars as pl
-    motion_plays = (
-        load_nfl_ftn_charting(seasons=[2024])
-        .filter(pl.col("is_motion") == 1)
-    )
-
-See Also:
-    * `FTN Network`_ -- upstream charting source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _FTN Network: https://ftnfantasy.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+motion_plays = (
+    load_nfl_ftn_charting(seasons=[2024])
+    .filter(pl.col("is_motion") == 1)
+)
 ```
 
 ### `load_nfl_injuries(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -856,25 +688,16 @@ Polars dataframe containing injuries data available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_injuries
-    injuries = load_nfl_injuries(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_injuries
+injuries = load_nfl_injuries(seasons=[2024])
 
 Multi-season range with team filter::
 
-    import polars as pl
-    sf_injuries = (
-        load_nfl_injuries(seasons=range(2020, 2025))
-        .filter(pl.col("team") == "SF")
-    )
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+sf_injuries = (
+    load_nfl_injuries(seasons=range(2020, 2025))
+    .filter(pl.col("team") == "SF")
+)
 ```
 
 ### `load_nfl_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
@@ -898,35 +721,26 @@ Polars dataframe containing NextGen Stats data for the requested ``stat_type`` a
 **Example**
 
 ```python
-Passing NextGen stats (default)::
-
-    from sportsdataverse.nfl import load_nfl_nextgen_stats
-    ngs_pass = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
+from sportsdataverse.nfl import load_nfl_nextgen_stats
+ngs_pass = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 
 Rushing NextGen stats::
 
-    ngs_rush = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
+ngs_rush = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
 
 Receiving NextGen stats with a follow-up filter::
 
-    import polars as pl
-    ngs_rec = (
-        load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
-        .filter(pl.col("week") > 0)
-    )
+import polars as pl
+ngs_rec = (
+    load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
+    .filter(pl.col("week") > 0)
+)
 
 Pandas round-trip::
 
-    ngs_pd = load_nfl_nextgen_stats(
-        seasons=[2024], stat_type="passing", return_as_pandas=True
-    )
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+ngs_pd = load_nfl_nextgen_stats(
+    seasons=[2024], stat_type="passing", return_as_pandas=True
+)
 ```
 
 ### `load_nfl_ngs_passing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
@@ -945,8 +759,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_n
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 ```
@@ -967,8 +779,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_n
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
 ```
@@ -989,8 +799,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_n
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
 ```
@@ -1012,23 +820,14 @@ Polars dataframe containing officials available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_officials
-    officials = load_nfl_officials()
-    officials.shape
+from sportsdataverse.nfl import load_nfl_officials
+officials = load_nfl_officials()
+officials.shape
 
 Pandas round-trip::
 
-    officials_pd = load_nfl_officials(return_as_pandas=True)
-    officials_pd.head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+officials_pd = load_nfl_officials(return_as_pandas=True)
+officials_pd.head()
 ```
 
 ### `load_nfl_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1049,35 +848,24 @@ Polars dataframe containing the play-by-plays available for the requested season
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_pbp
-    pbp = load_nfl_pbp(seasons=[2024])
-    print(pbp.shape)
+from sportsdataverse.nfl import load_nfl_pbp
+pbp = load_nfl_pbp(seasons=[2024])
+print(pbp.shape)
 
 Multi-season range::
 
-    pbp = load_nfl_pbp(seasons=range(2020, 2025))
+pbp = load_nfl_pbp(seasons=range(2020, 2025))
 
 With cache off (development workflow)::
 
-    from sportsdataverse.nfl import load_nfl_pbp, update_config
-    update_config(cache_mode="off")
-    pbp = load_nfl_pbp(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_pbp, update_config
+update_config(cache_mode="off")
+pbp = load_nfl_pbp(seasons=[2024])
 
 Pandas round-trip::
 
-    pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
-    pbp_pd.head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-    * `nflfastR`_ -- R sister package for NFL PBP
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
-.. _nflfastR: https://www.nflfastr.com
+pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
+pbp_pd.head()
 ```
 
 ### `load_nfl_pbp_participation(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1098,21 +886,12 @@ Polars dataframe containing play-by-play participation data available for the re
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_pbp_participation
-    participation = load_nfl_pbp_participation(seasons=[2022])
+from sportsdataverse.nfl import load_nfl_pbp_participation
+participation = load_nfl_pbp_participation(seasons=[2022])
 
 Multi-season range::
 
-    participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
 
 ### `load_nfl_pfr_advstats(seasons: 'List[int]', stat_type: 'str' = 'pass', summary_level: 'str' = 'week', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
@@ -1137,44 +916,33 @@ Polars dataframe containing PFR advanced stats data for the requested ``stat_typ
 **Example**
 
 ```python
-Weekly passing advanced stats (per-game splits)::
-
-    from sportsdataverse.nfl import load_nfl_pfr_advstats
-    pass_week = load_nfl_pfr_advstats(
-        seasons=[2024], stat_type="pass", summary_level="week"
-    )
+from sportsdataverse.nfl import load_nfl_pfr_advstats
+pass_week = load_nfl_pfr_advstats(
+    seasons=[2024], stat_type="pass", summary_level="week"
+)
 
 Season-level rushing summaries (one row per player per season)::
 
-    rush_season = load_nfl_pfr_advstats(
-        seasons=[2024], stat_type="rush", summary_level="season"
-    )
+rush_season = load_nfl_pfr_advstats(
+    seasons=[2024], stat_type="rush", summary_level="season"
+)
 
 Defensive stats with a follow-up filter::
 
-    import polars as pl
-    def_week = (
-        load_nfl_pfr_advstats(seasons=[2024], stat_type="def", summary_level="week")
-        .filter(pl.col("week") <= 8)
-    )
+import polars as pl
+def_week = (
+    load_nfl_pfr_advstats(seasons=[2024], stat_type="def", summary_level="week")
+    .filter(pl.col("week") <= 8)
+)
 
 Pandas round-trip::
 
-    rec_pd = load_nfl_pfr_advstats(
-        seasons=[2024],
-        stat_type="rec",
-        summary_level="season",
-        return_as_pandas=True,
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream source for advanced stats
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+rec_pd = load_nfl_pfr_advstats(
+    seasons=[2024],
+    stat_type="rec",
+    summary_level="season",
+    return_as_pandas=True,
+)
 ```
 
 ### `load_nfl_pfr_def(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
@@ -1192,8 +960,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="def", summary_level="season"
@@ -1215,8 +981,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="pass", summary_level="season"
@@ -1238,8 +1002,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="rec", summary_level="season"
@@ -1261,8 +1023,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="rush", summary_level="season"
@@ -1285,8 +1045,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="def", summary_level="week"
@@ -1309,8 +1067,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="pass", summary_level="week"
@@ -1333,8 +1089,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="rec", summary_level="week"
@@ -1357,8 +1111,6 @@ Will be removed in a future release. Migrate callers to the unified ``load_nfl_p
 **Example**
 
 ```python
-Migrate to the unified entry point::
-
 from sportsdataverse.nfl import load_nfl_pfr_advstats
 df = load_nfl_pfr_advstats(
     seasons=[2024], stat_type="rush", summary_level="week"
@@ -1383,27 +1135,18 @@ Polars dataframe containing player stats.
 **Example**
 
 ```python
-Quick start (offense / defense / special teams)::
-
-    from sportsdataverse.nfl import load_nfl_player_stats
-    stats = load_nfl_player_stats()
-    stats.shape
+from sportsdataverse.nfl import load_nfl_player_stats
+stats = load_nfl_player_stats()
+stats.shape
 
 Kicking-only stats::
 
-    kicking = load_nfl_player_stats(kicking=True)
+kicking = load_nfl_player_stats(kicking=True)
 
 Filter to a single season after load::
 
-    import polars as pl
-    stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 ```
 
 ### `load_nfl_players(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1423,23 +1166,14 @@ Polars dataframe containing players available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_players
-    players = load_nfl_players()
-    players.shape
+from sportsdataverse.nfl import load_nfl_players
+players = load_nfl_players()
+players.shape
 
 Pandas round-trip::
 
-    players_pd = load_nfl_players(return_as_pandas=True)
-    players_pd.head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+players_pd = load_nfl_players(return_as_pandas=True)
+players_pd.head()
 ```
 
 ### `load_nfl_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1460,26 +1194,17 @@ Polars dataframe containing rosters available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_rosters
-    rosters = load_nfl_rosters(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_rosters
+rosters = load_nfl_rosters(seasons=[2024])
 
 Multi-season range::
 
-    rosters = load_nfl_rosters(seasons=range(2020, 2025))
+rosters = load_nfl_rosters(seasons=range(2020, 2025))
 
 Filter to a single team::
 
-    import polars as pl
-    kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
 ```
 
 ### `load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1500,32 +1225,23 @@ Polars dataframe containing the schedule for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_schedule
-    schedule = load_nfl_schedule(seasons=[2024])
-    schedule.shape
+from sportsdataverse.nfl import load_nfl_schedule
+schedule = load_nfl_schedule(seasons=[2024])
+schedule.shape
 
 Multi-season range::
 
-    schedule = load_nfl_schedule(seasons=range(2020, 2025))
+schedule = load_nfl_schedule(seasons=range(2020, 2025))
 
 Filter to a single week::
 
-    import polars as pl
-    week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
+import polars as pl
+week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
 
 Pandas round-trip::
 
-    schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
-    schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
+schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```
 
 ### `load_nfl_snap_counts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1546,25 +1262,16 @@ Polars dataframe containing snap counts available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_snap_counts
-    snaps = load_nfl_snap_counts(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_snap_counts
+snaps = load_nfl_snap_counts(seasons=[2024])
 
 Multi-season range with offense-only filter::
 
-    import polars as pl
-    offense = (
-        load_nfl_snap_counts(seasons=range(2022, 2025))
-        .filter(pl.col("offense_snaps") > 0)
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream snap-count source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+offense = (
+    load_nfl_snap_counts(seasons=range(2022, 2025))
+    .filter(pl.col("offense_snaps") > 0)
+)
 ```
 
 ### `load_nfl_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1586,25 +1293,16 @@ Polars dataframe containing team stats available for the requested seasons.
 **Example**
 
 ```python
-Weekly team stats (default)::
-
-    from sportsdataverse.nfl import load_nfl_team_stats
-    weekly = load_nfl_team_stats(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_team_stats
+weekly = load_nfl_team_stats(seasons=[2024])
 
 Regular-season-only team stats::
 
-    reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
+reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 
 Combined regular + post-season at season grain::
 
-    combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
 ```
 
 ### `load_nfl_teams(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1624,23 +1322,14 @@ Polars dataframe containing teams available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_teams
-    teams = load_nfl_teams()
-    teams.shape
+from sportsdataverse.nfl import load_nfl_teams
+teams = load_nfl_teams()
+teams.shape
 
 Pandas round-trip::
 
-    teams_pd = load_nfl_teams(return_as_pandas=True)
-    teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+teams_pd = load_nfl_teams(return_as_pandas=True)
+teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
 ```
 
 ### `load_nfl_trades(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1660,23 +1349,14 @@ Polars dataframe containing NFL trade information.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_trades
-    trades = load_nfl_trades()
-    trades.shape
+from sportsdataverse.nfl import load_nfl_trades
+trades = load_nfl_trades()
+trades.shape
 
 Filter to a single season::
 
-    import polars as pl
-    trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
 ```
 
 ### `load_nfl_weekly_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1697,25 +1377,16 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_weekly_rosters
-    weekly = load_nfl_weekly_rosters(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_weekly_rosters
+weekly = load_nfl_weekly_rosters(seasons=[2024])
 
 Multi-season range with a follow-up week filter::
 
-    import polars as pl
-    wk1 = (
-        load_nfl_weekly_rosters(seasons=range(2022, 2025))
-        .filter(pl.col("week") == 1)
-    )
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+wk1 = (
+    load_nfl_weekly_rosters(seasons=range(2022, 2025))
+    .filter(pl.col("week") == 1)
+)
 ```
 
 ### `load_officials(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1735,23 +1406,14 @@ Polars dataframe containing officials available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_officials
-    officials = load_nfl_officials()
-    officials.shape
+from sportsdataverse.nfl import load_nfl_officials
+officials = load_nfl_officials()
+officials.shape
 
 Pandas round-trip::
 
-    officials_pd = load_nfl_officials(return_as_pandas=True)
-    officials_pd.head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+officials_pd = load_nfl_officials(return_as_pandas=True)
+officials_pd.head()
 ```
 
 ### `load_participation(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1772,21 +1434,12 @@ Polars dataframe containing play-by-play participation data available for the re
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_pbp_participation
-    participation = load_nfl_pbp_participation(seasons=[2022])
+from sportsdataverse.nfl import load_nfl_pbp_participation
+participation = load_nfl_pbp_participation(seasons=[2022])
 
 Multi-season range::
 
-    participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
 
 ### `load_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1807,35 +1460,24 @@ Polars dataframe containing the play-by-plays available for the requested season
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_pbp
-    pbp = load_nfl_pbp(seasons=[2024])
-    print(pbp.shape)
+from sportsdataverse.nfl import load_nfl_pbp
+pbp = load_nfl_pbp(seasons=[2024])
+print(pbp.shape)
 
 Multi-season range::
 
-    pbp = load_nfl_pbp(seasons=range(2020, 2025))
+pbp = load_nfl_pbp(seasons=range(2020, 2025))
 
 With cache off (development workflow)::
 
-    from sportsdataverse.nfl import load_nfl_pbp, update_config
-    update_config(cache_mode="off")
-    pbp = load_nfl_pbp(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_pbp, update_config
+update_config(cache_mode="off")
+pbp = load_nfl_pbp(seasons=[2024])
 
 Pandas round-trip::
 
-    pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
-    pbp_pd.head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-    * `nflfastR`_ -- R sister package for NFL PBP
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
-.. _nflfastR: https://www.nflfastr.com
+pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
+pbp_pd.head()
 ```
 
 ### `load_pfr_advstats(seasons: 'List[int]', stat_type: 'str' = 'pass', summary_level: 'str' = 'week', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
@@ -1860,44 +1502,33 @@ Polars dataframe containing PFR advanced stats data for the requested ``stat_typ
 **Example**
 
 ```python
-Weekly passing advanced stats (per-game splits)::
-
-    from sportsdataverse.nfl import load_nfl_pfr_advstats
-    pass_week = load_nfl_pfr_advstats(
-        seasons=[2024], stat_type="pass", summary_level="week"
-    )
+from sportsdataverse.nfl import load_nfl_pfr_advstats
+pass_week = load_nfl_pfr_advstats(
+    seasons=[2024], stat_type="pass", summary_level="week"
+)
 
 Season-level rushing summaries (one row per player per season)::
 
-    rush_season = load_nfl_pfr_advstats(
-        seasons=[2024], stat_type="rush", summary_level="season"
-    )
+rush_season = load_nfl_pfr_advstats(
+    seasons=[2024], stat_type="rush", summary_level="season"
+)
 
 Defensive stats with a follow-up filter::
 
-    import polars as pl
-    def_week = (
-        load_nfl_pfr_advstats(seasons=[2024], stat_type="def", summary_level="week")
-        .filter(pl.col("week") <= 8)
-    )
+import polars as pl
+def_week = (
+    load_nfl_pfr_advstats(seasons=[2024], stat_type="def", summary_level="week")
+    .filter(pl.col("week") <= 8)
+)
 
 Pandas round-trip::
 
-    rec_pd = load_nfl_pfr_advstats(
-        seasons=[2024],
-        stat_type="rec",
-        summary_level="season",
-        return_as_pandas=True,
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream source for advanced stats
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+rec_pd = load_nfl_pfr_advstats(
+    seasons=[2024],
+    stat_type="rec",
+    summary_level="season",
+    return_as_pandas=True,
+)
 ```
 
 ### `load_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1918,27 +1549,18 @@ Polars dataframe containing player stats.
 **Example**
 
 ```python
-Quick start (offense / defense / special teams)::
-
-    from sportsdataverse.nfl import load_nfl_player_stats
-    stats = load_nfl_player_stats()
-    stats.shape
+from sportsdataverse.nfl import load_nfl_player_stats
+stats = load_nfl_player_stats()
+stats.shape
 
 Kicking-only stats::
 
-    kicking = load_nfl_player_stats(kicking=True)
+kicking = load_nfl_player_stats(kicking=True)
 
 Filter to a single season after load::
 
-    import polars as pl
-    stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 ```
 
 ### `load_players(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1958,23 +1580,14 @@ Polars dataframe containing players available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_players
-    players = load_nfl_players()
-    players.shape
+from sportsdataverse.nfl import load_nfl_players
+players = load_nfl_players()
+players.shape
 
 Pandas round-trip::
 
-    players_pd = load_nfl_players(return_as_pandas=True)
-    players_pd.head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+players_pd = load_nfl_players(return_as_pandas=True)
+players_pd.head()
 ```
 
 ### `load_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -1995,26 +1608,17 @@ Polars dataframe containing rosters available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_rosters
-    rosters = load_nfl_rosters(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_rosters
+rosters = load_nfl_rosters(seasons=[2024])
 
 Multi-season range::
 
-    rosters = load_nfl_rosters(seasons=range(2020, 2025))
+rosters = load_nfl_rosters(seasons=range(2020, 2025))
 
 Filter to a single team::
 
-    import polars as pl
-    kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
 ```
 
 ### `load_rosters_weekly(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -2035,25 +1639,16 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_weekly_rosters
-    weekly = load_nfl_weekly_rosters(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_weekly_rosters
+weekly = load_nfl_weekly_rosters(seasons=[2024])
 
 Multi-season range with a follow-up week filter::
 
-    import polars as pl
-    wk1 = (
-        load_nfl_weekly_rosters(seasons=range(2022, 2025))
-        .filter(pl.col("week") == 1)
-    )
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+wk1 = (
+    load_nfl_weekly_rosters(seasons=range(2022, 2025))
+    .filter(pl.col("week") == 1)
+)
 ```
 
 ### `load_schedules(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -2074,32 +1669,23 @@ Polars dataframe containing the schedule for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_schedule
-    schedule = load_nfl_schedule(seasons=[2024])
-    schedule.shape
+from sportsdataverse.nfl import load_nfl_schedule
+schedule = load_nfl_schedule(seasons=[2024])
+schedule.shape
 
 Multi-season range::
 
-    schedule = load_nfl_schedule(seasons=range(2020, 2025))
+schedule = load_nfl_schedule(seasons=range(2020, 2025))
 
 Filter to a single week::
 
-    import polars as pl
-    week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
+import polars as pl
+week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
 
 Pandas round-trip::
 
-    schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
-    schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
+schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```
 
 ### `load_snap_counts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -2120,25 +1706,16 @@ Polars dataframe containing snap counts available for the requested seasons.
 **Example**
 
 ```python
-Single season::
-
-    from sportsdataverse.nfl import load_nfl_snap_counts
-    snaps = load_nfl_snap_counts(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_snap_counts
+snaps = load_nfl_snap_counts(seasons=[2024])
 
 Multi-season range with offense-only filter::
 
-    import polars as pl
-    offense = (
-        load_nfl_snap_counts(seasons=range(2022, 2025))
-        .filter(pl.col("offense_snaps") > 0)
-    )
-
-See Also:
-    * `Pro Football Reference`_ -- upstream snap-count source
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _Pro Football Reference: https://www.pro-football-reference.com
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+offense = (
+    load_nfl_snap_counts(seasons=range(2022, 2025))
+    .filter(pl.col("offense_snaps") > 0)
+)
 ```
 
 ### `load_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'`
@@ -2160,25 +1737,16 @@ Polars dataframe containing team stats available for the requested seasons.
 **Example**
 
 ```python
-Weekly team stats (default)::
-
-    from sportsdataverse.nfl import load_nfl_team_stats
-    weekly = load_nfl_team_stats(seasons=[2024])
+from sportsdataverse.nfl import load_nfl_team_stats
+weekly = load_nfl_team_stats(seasons=[2024])
 
 Regular-season-only team stats::
 
-    reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
+reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 
 Combined regular + post-season at season grain::
 
-    combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
 ```
 
 ### `load_teams(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -2198,23 +1766,14 @@ Polars dataframe containing teams available.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_teams
-    teams = load_nfl_teams()
-    teams.shape
+from sportsdataverse.nfl import load_nfl_teams
+teams = load_nfl_teams()
+teams.shape
 
 Pandas round-trip::
 
-    teams_pd = load_nfl_teams(return_as_pandas=True)
-    teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+teams_pd = load_nfl_teams(return_as_pandas=True)
+teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
 ```
 
 ### `load_trades(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -2234,23 +1793,14 @@ Polars dataframe containing NFL trade information.
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import load_nfl_trades
-    trades = load_nfl_trades()
-    trades.shape
+from sportsdataverse.nfl import load_nfl_trades
+trades = load_nfl_trades()
+trades.shape
 
 Filter to a single season::
 
-    import polars as pl
-    trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflreadpy`_ -- direct nflverse Python bindings
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
+import polars as pl
+trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
 ```
 
 ## Utilities & helpers
@@ -2273,33 +1823,24 @@ Wraps the ESPN ``summary`` endpoint (or a local JSON dump) and pipes the result 
 **Example**
 
 ```python
-End-to-end pipeline against the live ESPN endpoint::
-
-    from sportsdataverse.nfl import NFLPlayProcess
-    proc = NFLPlayProcess(gameId=401671801)
-    proc.espn_nfl_pbp()
-    result = proc.run_processing_pipeline()
-    len(result["plays"])
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401671801)
+proc.espn_nfl_pbp()
+result = proc.run_processing_pipeline()
+len(result["plays"])
 
 Offline replay from a JSON dump::
 
-    proc = NFLPlayProcess(gameId=401671801, path_to_json="./pbp_dump")
-    proc.nfl_pbp_disk()
-    cleaned = proc.run_cleaning_pipeline()
+proc = NFLPlayProcess(gameId=401671801, path_to_json="./pbp_dump")
+proc.nfl_pbp_disk()
+cleaned = proc.run_cleaning_pipeline()
 
 Subset the return payload::
 
-    proc = NFLPlayProcess(gameId=401671801, return_keys=["plays", "boxscore"])
-    proc.espn_nfl_pbp()
-    slim = proc.run_processing_pipeline()
-    sorted(slim.keys())  # ['boxscore', 'plays']
-
-See Also:
-    * `nflverse`_ -- full data ecosystem (R + Python)
-    * `nflfastR`_ -- R sister package for NFL PBP
-
-.. _nflverse: https://nflverse.nflverse.com
-.. _nflfastR: https://www.nflfastr.com
+proc = NFLPlayProcess(gameId=401671801, return_keys=["plays", "boxscore"])
+proc.espn_nfl_pbp()
+slim = proc.run_processing_pipeline()
+sorted(slim.keys())  # ['boxscore', 'plays']
 ```
 
 ### `get_current_nfl_season(roster: 'bool' = False) -> 'int'`
@@ -2319,27 +1860,18 @@ The current season (or roster) year.
 **Example**
 
 ```python
-Default season-year semantics::
-
-    from sportsdataverse.nfl import get_current_nfl_season
-    season = get_current_nfl_season()
-    print(season)
+from sportsdataverse.nfl import get_current_nfl_season
+season = get_current_nfl_season()
+print(season)
 
 Roster-year semantics (March 15 cutover)::
 
-    roster_year = get_current_nfl_season(roster=True)
+roster_year = get_current_nfl_season(roster=True)
 
 Pair with a loader to fetch only the active season::
 
-    from sportsdataverse.nfl import load_nfl_schedule
-    schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
-
-See Also:
-    * `nflreadpy`_ -- mirrors this convention
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
-.. _nflverse: https://nflverse.nflverse.com
+from sportsdataverse.nfl import load_nfl_schedule
+schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
 ```
 
 ### `get_current_nfl_week(use_date: 'bool' = True, roster: 'bool' = False) -> 'int'`
@@ -2360,36 +1892,27 @@ The current week, capped at 22.
 **Example**
 
 ```python
-Calendar-driven week (default, no network)::
-
-    from sportsdataverse.nfl import get_current_nfl_week
-    week = get_current_nfl_week()
+from sportsdataverse.nfl import get_current_nfl_week
+week = get_current_nfl_week()
 
 Schedule-driven week (hits the live schedule parquet)::
 
-    week_live = get_current_nfl_week(use_date=False)
+week_live = get_current_nfl_week(use_date=False)
 
 Roster-year season inference::
 
-    week_roster = get_current_nfl_week(roster=True)
+week_roster = get_current_nfl_week(roster=True)
 
 Pair with a PBP fetch to grab only the most recent season+week::
 
-    import polars as pl
-    from sportsdataverse.nfl import (
-        get_current_nfl_season, get_current_nfl_week, load_nfl_pbp,
-    )
-    current_pbp = (
-        load_nfl_pbp(seasons=[get_current_nfl_season()])
-        .filter(pl.col("week") == get_current_nfl_week())
-    )
-
-See Also:
-    * `nflreadpy`_ -- mirrors this convention
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+from sportsdataverse.nfl import (
+    get_current_nfl_season, get_current_nfl_week, load_nfl_pbp,
+)
+current_pbp = (
+    load_nfl_pbp(seasons=[get_current_nfl_season()])
+    .filter(pl.col("week") == get_current_nfl_week())
+)
 ```
 
 ### `get_current_season(roster: 'bool' = False) -> 'int'`
@@ -2409,27 +1932,18 @@ The current season (or roster) year.
 **Example**
 
 ```python
-Default season-year semantics::
-
-    from sportsdataverse.nfl import get_current_nfl_season
-    season = get_current_nfl_season()
-    print(season)
+from sportsdataverse.nfl import get_current_nfl_season
+season = get_current_nfl_season()
+print(season)
 
 Roster-year semantics (March 15 cutover)::
 
-    roster_year = get_current_nfl_season(roster=True)
+roster_year = get_current_nfl_season(roster=True)
 
 Pair with a loader to fetch only the active season::
 
-    from sportsdataverse.nfl import load_nfl_schedule
-    schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
-
-See Also:
-    * `nflreadpy`_ -- mirrors this convention
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
-.. _nflverse: https://nflverse.nflverse.com
+from sportsdataverse.nfl import load_nfl_schedule
+schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
 ```
 
 ### `get_current_week(use_date: 'bool' = True, roster: 'bool' = False) -> 'int'`
@@ -2450,36 +1964,27 @@ The current week, capped at 22.
 **Example**
 
 ```python
-Calendar-driven week (default, no network)::
-
-    from sportsdataverse.nfl import get_current_nfl_week
-    week = get_current_nfl_week()
+from sportsdataverse.nfl import get_current_nfl_week
+week = get_current_nfl_week()
 
 Schedule-driven week (hits the live schedule parquet)::
 
-    week_live = get_current_nfl_week(use_date=False)
+week_live = get_current_nfl_week(use_date=False)
 
 Roster-year season inference::
 
-    week_roster = get_current_nfl_week(roster=True)
+week_roster = get_current_nfl_week(roster=True)
 
 Pair with a PBP fetch to grab only the most recent season+week::
 
-    import polars as pl
-    from sportsdataverse.nfl import (
-        get_current_nfl_season, get_current_nfl_week, load_nfl_pbp,
-    )
-    current_pbp = (
-        load_nfl_pbp(seasons=[get_current_nfl_season()])
-        .filter(pl.col("week") == get_current_nfl_week())
-    )
-
-See Also:
-    * `nflreadpy`_ -- mirrors this convention
-    * `nflverse`_ -- full data ecosystem (R + Python)
-
-.. _nflreadpy: https://github.com/nflverse/nflreadpy
-.. _nflverse: https://nflverse.nflverse.com
+import polars as pl
+from sportsdataverse.nfl import (
+    get_current_nfl_season, get_current_nfl_week, load_nfl_pbp,
+)
+current_pbp = (
+    load_nfl_pbp(seasons=[get_current_nfl_season()])
+    .filter(pl.col("week") == get_current_nfl_week())
+)
 ```
 
 ### `most_recent_nfl_season(roster: 'bool' = False) -> 'int'`
@@ -2497,14 +2002,12 @@ Alias for `get_current_nfl_season()` mirroring nflreadr's
 **Example**
 
 ```python
-Bare alias call (matches the R-side ``most_recent_season()``)::
-
-    from sportsdataverse.nfl.utils_date import most_recent_nfl_season
-    season = most_recent_nfl_season()
+from sportsdataverse.nfl.utils_date import most_recent_nfl_season
+season = most_recent_nfl_season()
 
 Roster-year flavor::
 
-    roster_year = most_recent_nfl_season(roster=True)
+roster_year = most_recent_nfl_season(roster=True)
 ```
 
 ## Other
@@ -2529,19 +2032,17 @@ Fields mirror nflreadpy's ``NflreadpyConfig`` so users can swap engines without 
 **Example**
 
 ```python
-Inspect defaults via ``get_config()``::
-
-    from sportsdataverse.nfl import get_config
-    cfg = get_config()  # NflConfig instance
-    cfg.cache_mode      # "memory"
-    cfg.cache_duration  # 86400 (24h)
-    cfg.timeout         # 30 (seconds)
+from sportsdataverse.nfl import get_config
+cfg = get_config()  # NflConfig instance
+cfg.cache_mode      # "memory"
+cfg.cache_duration  # 86400 (24h)
+cfg.timeout         # 30 (seconds)
 
 Construct a fresh instance directly (rarely needed -- prefer
 ``update_config``)::
 
-    from sportsdataverse.nfl import NflConfig
-    cfg = NflConfig(cache_mode="off", timeout=10)
+from sportsdataverse.nfl import NflConfig
+cfg = NflConfig(cache_mode="off", timeout=10)
 ```
 
 ### `cached_loader(func: 'F') -> 'F'`
@@ -2559,38 +2060,28 @@ Honors the active ``NflConfig.cache_mode``: - ``memory``: dict-based per-process
 **Example**
 
 ```python
-Decorate a custom loader::
+import polars as pl
+from sportsdataverse.nfl.cache import cached_loader
 
-    import polars as pl
-    from sportsdataverse.nfl.cache import cached_loader
+@cached_loader
+def load_my_thing(season: int, return_as_pandas: bool = False):
+    # ... fetch parquet, build a polars frame ...
+    return pl.DataFrame({"season": [season]})
 
-    @cached_loader
-    def load_my_thing(season: int, return_as_pandas: bool = False):
-        # ... fetch parquet, build a polars frame ...
-        return pl.DataFrame({"season": [season]})
-
-    df1 = load_my_thing(2024)            # network hit, populates cache
-    df2 = load_my_thing(2024)            # served from cache
-    df_pd = load_my_thing(2024, return_as_pandas=True)
-    # `return_as_pandas` is excluded from the cache key, so the
-    # polars hit is reused and converted to pandas on the way out.
+df1 = load_my_thing(2024)            # network hit, populates cache
+df2 = load_my_thing(2024)            # served from cache
+df_pd = load_my_thing(2024, return_as_pandas=True)
+# `return_as_pandas` is excluded from the cache key, so the
+# polars hit is reused and converted to pandas on the way out.
 
 Switch caching modes at runtime::
 
-    from sportsdataverse.nfl import clear_cache, update_config
+from sportsdataverse.nfl import clear_cache, update_config
 
-    update_config(cache_mode="filesystem")  # parquet-on-disk reuse
-    df3 = load_my_thing(2024)               # writes parquet under cache_dir
-    clear_cache()                           # wipe both memory + filesystem
-    update_config(cache_mode="off")         # bypass cache entirely
-
-See Also:
-    * :func:`functools.lru_cache` -- standard-library alternative.
-      ``cached_loader`` exists separately to add a TTL
-      (``cache_duration``), a filesystem persistence mode, and a
-      polars/pandas return-type round-trip on top of the same
-      ``(qualname, args, sorted_kwargs)`` key shape. See
-      https://docs.python.org/3/library/functools.html#functools.lru_cache.
+update_config(cache_mode="filesystem")  # parquet-on-disk reuse
+df3 = load_my_thing(2024)               # writes parquet under cache_dir
+clear_cache()                           # wipe both memory + filesystem
+update_config(cache_mode="off")         # bypass cache entirely
 ```
 
 ### `clear_cache() -> 'None'`
@@ -2602,22 +2093,16 @@ Memory: empties the in-process dict. Filesystem: removes all entries under ``con
 **Example**
 
 ```python
-Force a fresh fetch after upstream changes::
-
-    from sportsdataverse.nfl import clear_cache, load_nfl_pbp
-    clear_cache()
-    pbp = load_nfl_pbp(seasons=[2024])
+from sportsdataverse.nfl import clear_cache, load_nfl_pbp
+clear_cache()
+pbp = load_nfl_pbp(seasons=[2024])
 
 Pair with a cache-mode switch::
 
-    from sportsdataverse.nfl import clear_cache, update_config
-    update_config(cache_mode="filesystem")
-    # ... lots of cached calls accumulate parquet files on disk ...
-    clear_cache()  # wipe disk + memory together
-
-See Also:
-    * :func:`sportsdataverse.nfl.update_config` -- toggle cache mode/duration.
-    * :func:`sportsdataverse.nfl.cache.cached_loader` -- decorator that reads/writes the cache.
+from sportsdataverse.nfl import clear_cache, update_config
+update_config(cache_mode="filesystem")
+# ... lots of cached calls accumulate parquet files on disk ...
+clear_cache()  # wipe disk + memory together
 ```
 
 ### `espn_nfl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
@@ -2637,21 +2122,19 @@ Polars dataframe containing teams for the requested league. This function caches
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl import espn_nfl_teams
-    teams = espn_nfl_teams()
-    teams.shape
+from sportsdataverse.nfl import espn_nfl_teams
+teams = espn_nfl_teams()
+teams.shape
 
 Pandas round-trip::
 
-    teams_pd = espn_nfl_teams(return_as_pandas=True)
-    teams_pd[["team_abbreviation", "team_display_name"]].head()
+teams_pd = espn_nfl_teams(return_as_pandas=True)
+teams_pd[["team_abbreviation", "team_display_name"]].head()
 
 Force a refresh after upstream ESPN updates::
 
-    espn_nfl_teams.cache_clear()  # underlying lru_cache
-    teams = espn_nfl_teams()
+espn_nfl_teams.cache_clear()  # underlying lru_cache
+teams = espn_nfl_teams()
 ```
 
 ### `get_config() -> 'NflConfig'`
@@ -2663,17 +2146,15 @@ The same object is returned on every call; mutate via ``update_config`` rather t
 **Example**
 
 ```python
-Inspect the active config::
-
-    from sportsdataverse.nfl import get_config
-    cfg = get_config()
-    print(cfg.cache_mode, cfg.cache_duration, cfg.cache_dir)
+from sportsdataverse.nfl import get_config
+cfg = get_config()
+print(cfg.cache_mode, cfg.cache_duration, cfg.cache_dir)
 
 Pair with ``update_config`` to verify a change took effect::
 
-    from sportsdataverse.nfl import update_config, get_config
-    update_config(cache_mode="off")
-    assert get_config().cache_mode == "off"
+from sportsdataverse.nfl import update_config, get_config
+update_config(cache_mode="off")
+assert get_config().cache_mode == "off"
 ```
 
 ### `nfl_game_details(game_id=None, headers=None, raw=False) -> 'Dict'`
@@ -2695,25 +2176,23 @@ Dictionary of game details (drives, plays, scoring summaries, timeouts, weather,
 **Example**
 
 ```python
-Quick start::
-
-    from sportsdataverse.nfl.nfl_games import nfl_game_details
-    details = nfl_game_details(game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884")
-    sorted(details.keys())[:5]
+from sportsdataverse.nfl.nfl_games import nfl_game_details
+details = nfl_game_details(game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884")
+sorted(details.keys())[:5]
 
 Reuse headers across many calls (avoids re-minting tokens)::
 
-    from sportsdataverse.nfl.nfl_games import nfl_game_details, nfl_headers_gen
-    hdrs = nfl_headers_gen()
-    details = nfl_game_details(
-        game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", headers=hdrs
-    )
+from sportsdataverse.nfl.nfl_games import nfl_game_details, nfl_headers_gen
+hdrs = nfl_headers_gen()
+details = nfl_game_details(
+    game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", headers=hdrs
+)
 
 Raw passthrough::
 
-    raw = nfl_game_details(
-        game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", raw=True
-    )
+raw = nfl_game_details(
+    game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", raw=True
+)
 ```
 
 ### `nfl_game_schedule(season=2021, season_type='REG', week=1, headers=None, raw=False) -> 'Dict'`
@@ -2737,23 +2216,21 @@ Dictionary with the games list under ``"games"`` plus pagination metadata.
 **Example**
 
 ```python
-Week 1 of the 2024 regular season::
-
-    from sportsdataverse.nfl.nfl_games import nfl_game_schedule
-    week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
+from sportsdataverse.nfl.nfl_games import nfl_game_schedule
+week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
 
 Wild Card weekend (post-season)::
 
-    wild_card = nfl_game_schedule(season=2023, season_type="POST", week=1)
+wild_card = nfl_game_schedule(season=2023, season_type="POST", week=1)
 
 Reuse headers across many calls::
 
-    from sportsdataverse.nfl.nfl_games import nfl_game_schedule, nfl_headers_gen
-    hdrs = nfl_headers_gen()
-    for week in range(1, 19):
-        summary = nfl_game_schedule(
-            season=2024, season_type="REG", week=week, headers=hdrs,
-        )
+from sportsdataverse.nfl.nfl_games import nfl_game_schedule, nfl_headers_gen
+hdrs = nfl_headers_gen()
+for week in range(1, 19):
+    summary = nfl_game_schedule(
+        season=2024, season_type="REG", week=week, headers=hdrs,
+    )
 ```
 
 ### `nfl_headers_gen()`
@@ -2769,8 +2246,6 @@ Header dict ready to drop into ``requests.get``.
 **Example**
 
 ```python
-Reuse one header set across many calls::
-
 from sportsdataverse.nfl.nfl_games import (
     nfl_headers_gen, nfl_game_schedule,
 )
@@ -2792,17 +2267,15 @@ The access token string.
 **Example**
 
 ```python
-Mint a token and inspect its prefix::
-
-    from sportsdataverse.nfl.nfl_games import nfl_token_gen
-    token = nfl_token_gen()
-    assert isinstance(token, str)
+from sportsdataverse.nfl.nfl_games import nfl_token_gen
+token = nfl_token_gen()
+assert isinstance(token, str)
 
 Pair with a downstream call (``nfl_headers_gen`` does this for you)::
 
-    import requests
-    token = nfl_token_gen()
-    headers = {"Authorization": f"Bearer {token}"}
+import requests
+token = nfl_token_gen()
+headers = {"Authorization": f"Bearer {token}"}
 ```
 
 ### `reset_config() -> 'NflConfig'`
@@ -2814,8 +2287,6 @@ Convenience for tests / interactive sessions that want to undo a chain of ``upda
 **Example**
 
 ```python
-Restore defaults after a session of tweaks::
-
 from sportsdataverse.nfl import update_config, reset_config
 update_config(cache_mode="off", timeout=5)
 # ... do work ...
@@ -2841,8 +2312,6 @@ The mutated event dict with normalized ``home`` / ``away`` / broadcast keys.
 **Example**
 
 ```python
-Wire it into a custom schedule pull::
-
 from sportsdataverse.dl_utils import download
 from sportsdataverse.nfl.nfl_schedule import scoreboard_event_parsing
 url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
@@ -2865,20 +2334,14 @@ The (mutated) global config object, for chaining or inspection.
 **Example**
 
 ```python
-Switch to filesystem caching with a 1-hour TTL::
-
-    from sportsdataverse.nfl import update_config
-    update_config(cache_mode="filesystem", cache_duration=3600)
+from sportsdataverse.nfl import update_config
+update_config(cache_mode="filesystem", cache_duration=3600)
 
 Disable caching for development::
 
-    update_config(cache_mode="off")
+update_config(cache_mode="off")
 
 Point cache at a custom directory::
 
-    update_config(cache_dir="~/sdv-cache")
-
-See Also:
-    * :func:`sportsdataverse.nfl.reset_config` -- undo a chain of updates.
-    * :func:`sportsdataverse.nfl.clear_cache` -- wipe cached entries.
+update_config(cache_dir="~/sdv-cache")
 ```
