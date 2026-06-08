@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.0.53 (unreleased)](#0053-unreleased)
+- [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
   - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
   - [NHL native — codegen cutover + clean names (api-web; in progress)](#nhl-native--codegen-cutover--clean-names-api-web-in-progress)
   - [Dataset loaders — release manifest + drift audit](#dataset-loaders--release-manifest--drift-audit)
@@ -66,7 +66,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.0.53 (unreleased)
+## 0.0.53 Release: June 8, 2026
 
 ### ESPN — declarative codegen + factory retirement
 

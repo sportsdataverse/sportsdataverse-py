@@ -76,7 +76,9 @@ repos:
         # Docusaurus pages under docs/docs/ carry YAML frontmatter that must be
         # the first content in the file; a doctoc TOC injected above it breaks the
         # page render. Exclude that tree (docs/architecture/ etc. still get TOCs).
-        exclude: ^docs/docs/
+        # docs/versioned_docs/ holds frozen `yarn version:docs` snapshots of
+        # docs/docs/ — same frontmatter pages, so it must be excluded too.
+        exclude: ^docs/(docs|versioned_docs)/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.20.0
     hooks:
