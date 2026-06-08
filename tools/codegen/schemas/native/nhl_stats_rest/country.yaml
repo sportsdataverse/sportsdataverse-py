@@ -1,0 +1,36 @@
+schema: country
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: country3_code
+  type: character
+  description: ''
+- name: country_code
+  type: character
+  description: ''
+- name: country_name
+  type: character
+  description: ''
+- name: has_player_stats
+  type: integer
+  description: ''
+- name: image_url
+  type: character
+  description: ''
+- name: ioc_code
+  type: character
+  description: ''
+- name: is_active
+  type: integer
+  description: ''
+- name: nationality_name
+  type: character
+  description: ''
+- name: olympic_url
+  type: character
+  description: ''
+- name: thumbnail_url
+  type: character
+  description: ''

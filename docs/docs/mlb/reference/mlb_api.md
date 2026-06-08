@@ -260,7 +260,18 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 
 ### Returns
 
-GET /api/v1/teams/{teamId}/roster — team roster.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character |  |
+| `person_id` | integer |  |
+| `person_full_name` | character |  |
+| `person_link` | character |  |
+| `position_code` | character |  |
+| `position_name` | character |  |
+| `position_type` | character |  |
+| `position_abbreviation` | character |  |
+| `status_code` | character |  |
+| `status_description` | character |  |
 
 ### Example
 
@@ -444,7 +455,15 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
 ### Returns
 
-GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `code` | character |  |
+| `link` | character |  |
+| `name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | integer |  |
+| `active_status` | logical |  |
 
 ### Example
 
@@ -521,7 +540,13 @@ GET /api/v1/venues — list venues.
 
 ### Returns
 
-GET /api/v1/venues — list venues.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `name` | character |  |
+| `link` | character |  |
+| `active` | logical |  |
+| `season` | character |  |
 
 ### Example
 

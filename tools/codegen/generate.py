@@ -780,6 +780,32 @@ def refresh_return_schemas() -> int:
                 doc = {"schema": name, "kind": "dataframe", "columns": _cols_from_frame(df, descs)}
             (outdir / f"{league}.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8")
             written += 1
+
+    # --- natives ---
+    import importlib
+
+    nat = yaml.safe_load((ROOT / "tools" / "codegen" / "native_fixture_map.yaml").read_text("utf-8")) or {}
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    for api, files in nat.items():
+        fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
+        by_short = {e.short: e for e in fa.endpoints}
+        pmod = importlib.import_module(f"sportsdataverse.{fa.parser_module}")
+        for fname, short in files.items():
+            ep = by_short.get(short)
+            if ep is None or not ep.parser:
+                continue
+            try:
+                payload = json.loads((ROOT / "tests" / "fixtures" / api / fname).read_text("utf-8"))
+                df = getattr(pmod, ep.parser)(payload)
+                doc = {"schema": short, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
+            except Exception as e:  # noqa: BLE001
+                print(f"  native skip {api}/{short} ({fname}): {e}")
+                continue
+            outdir = ROOT / "tools" / "codegen" / "schemas" / "native" / api
+            outdir.mkdir(parents=True, exist_ok=True)
+            (outdir / f"{short}.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8")
+            written += 1
+
     print(f"return schemas: {written} per-league written, {skipped} skipped (no fixture)")
     return 0
 

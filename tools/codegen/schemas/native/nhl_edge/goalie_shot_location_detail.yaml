@@ -1,0 +1,30 @@
+schema: goalie_shot_location_detail
+kind: dataframe
+columns:
+- name: area
+  type: character
+  description: ''
+- name: shots_against
+  type: integer
+  description: ''
+- name: saves
+  type: integer
+  description: ''
+- name: goals_against
+  type: integer
+  description: ''
+- name: save_pctg
+  type: double
+  description: ''
+- name: shots_against_percentile
+  type: double
+  description: ''
+- name: saves_percentile
+  type: double
+  description: ''
+- name: goals_against_percentile
+  type: double
+  description: ''
+- name: save_pctg_percentile
+  type: double
+  description: ''

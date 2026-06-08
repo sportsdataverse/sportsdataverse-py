@@ -1,0 +1,24 @@
+schema: team_shot_location_detail
+kind: dataframe
+columns:
+- name: area
+  type: character
+  description: ''
+- name: sog
+  type: integer
+  description: ''
+- name: sog_rank
+  type: integer
+  description: ''
+- name: goals
+  type: integer
+  description: ''
+- name: goals_rank
+  type: integer
+  description: ''
+- name: shooting_pctg
+  type: double
+  description: ''
+- name: shooting_pctg_rank
+  type: integer
+  description: ''

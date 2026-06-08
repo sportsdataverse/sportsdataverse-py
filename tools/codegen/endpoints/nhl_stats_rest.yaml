@@ -42,6 +42,7 @@ endpoints:
   example_args:
     template_key: X
 - short: country
+  returns_schema: native/nhl_stats_rest/country
   summary: Retrieve the list of countries used in NHL data.
   path: /{lang}/country
   path_params:
@@ -60,6 +61,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: franchise
+  returns_schema: native/nhl_stats_rest/franchise
   summary: Retrieve franchise data.
   path: /{lang}/franchise
   path_params:
@@ -78,6 +80,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: glossary
+  returns_schema: native/nhl_stats_rest/glossary
   summary: Retrieve the NHL Stats glossary of stat definitions.
   path: /{lang}/glossary
   path_params:
@@ -87,6 +90,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: goalie_report
+  returns_schema: native/nhl_stats_rest/goalie_report
   summary: Retrieve a goalie statistical report.
   path: /{lang}/goalie/{report}
   path_params:
@@ -156,6 +160,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: season
+  returns_schema: native/nhl_stats_rest/season
   summary: Retrieve the list of all NHL seasons.
   path: /{lang}/season
   path_params:
@@ -174,6 +179,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: skater_report
+  returns_schema: native/nhl_stats_rest/skater_report
   summary: Retrieve a skater statistical report.
   path: /{lang}/skater/{report}
   path_params:
@@ -211,6 +217,7 @@ endpoints:
     team_id: 10
   parser: parse_nhl_stats_rest
 - short: team_report
+  returns_schema: native/nhl_stats_rest/team_report
   summary: Retrieve a team statistical report.
   path: /{lang}/team/{report}
   path_params:

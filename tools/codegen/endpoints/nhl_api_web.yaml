@@ -9,6 +9,7 @@ runtime_imports:
 - format_nhl_season
 endpoints:
 - short: pbp
+  returns_schema: native/nhl_api_web/pbp
   summary: Pull the play-by-play feed for one NHL game.
   path: /v1/gamecenter/{game_id}/play-by-play
   path_params:
@@ -19,6 +20,7 @@ endpoints:
     game_id: 2024020001
   parser: parse_nhl_web_pbp
 - short: boxscore
+  returns_schema: native/nhl_api_web/boxscore
   summary: Pull the boxscore for one NHL game.
   path: /v1/gamecenter/{game_id}/boxscore
   path_params:
@@ -29,6 +31,7 @@ endpoints:
     game_id: 2024020001
   parser: parse_nhl_web_boxscore
 - short: landing
+  returns_schema: native/nhl_api_web/landing
   summary: Pull the gamecenter landing payload for one NHL game.
   path: /v1/gamecenter/{game_id}/landing
   path_params:
@@ -49,6 +52,7 @@ endpoints:
     game_id: 2024020001
   parser: parse_nhl_web_right_rail
 - short: schedule
+  returns_schema: native/nhl_api_web/schedule
   summary: Pull the week-of NHL schedule rooted at ``date``.
   path: /v1/schedule/{date}
   now_variant: /v1/schedule/now
@@ -59,6 +63,7 @@ endpoints:
     required: false
   parser: parse_nhl_web_schedule
 - short: score
+  returns_schema: native/nhl_api_web/score
   summary: Pull the single-day scoreboard for ``date``.
   path: /v1/score/{date}
   now_variant: /v1/score/now
@@ -93,6 +98,7 @@ endpoints:
     season: 2025
     series_letter: a
 - short: standings
+  returns_schema: native/nhl_api_web/standings
   summary: Pull the NHL standings.
   path: /v1/standings/{date}
   now_variant: /v1/standings/now
@@ -103,10 +109,12 @@ endpoints:
     required: false
   parser: parse_nhl_web_standings
 - short: standings_season
+  returns_schema: native/nhl_api_web/standings_season
   summary: Pull the per-season standings cutover dates.
   path: /v1/standings-season
   parser: parse_nhl_web_standings_season
 - short: club_schedule_season
+  returns_schema: native/nhl_api_web/club_schedule_season
   summary: Pull a team's full-season schedule.
   path: /v1/club-schedule-season/{team}/{season}
   now_variant: /v1/club-schedule-season/{team}/now
@@ -183,6 +191,7 @@ endpoints:
     team: TOR
   parser: parse_nhl_web_club_stats
 - short: roster
+  returns_schema: native/nhl_api_web/roster
   summary: Pull a team's roster.
   path: /v1/roster/{team}/{season}
   now_variant: /v1/roster/{team}/current
@@ -209,6 +218,7 @@ endpoints:
     team: TOR
   parser: parse_nhl_web_roster
 - short: player_landing
+  returns_schema: native/nhl_api_web/player_landing
   summary: Pull the player profile / overview.
   path: /v1/player/{player_id}/landing
   path_params:
@@ -219,6 +229,7 @@ endpoints:
     player_id: 8480801
   parser: parse_nhl_web_player_landing
 - short: player_game_log
+  returns_schema: native/nhl_api_web/player_game_log
   summary: Pull a player's game-by-game log.
   path: /v1/player/{player_id}/game-log/{season}/{game_type}
   now_variant: /v1/player/{player_id}/game-log/now
@@ -242,6 +253,7 @@ endpoints:
   summary: Pull the league's currently featured players.
   path: /v1/player-spotlight
 - short: skater_leaders
+  returns_schema: native/nhl_api_web/skater_leaders
   summary: Pull skater stat leaders.
   path: /v1/skater-stats-leaders/{season}/{game_type}
   now_variant: /v1/skater-stats-leaders/current
@@ -257,6 +269,7 @@ endpoints:
     default: 2
   parser: parse_nhl_web_leaders
 - short: goalie_leaders
+  returns_schema: native/nhl_api_web/goalie_leaders
   summary: Pull goalie stat leaders.
   path: /v1/goalie-stats-leaders/{season}/{game_type}
   now_variant: /v1/goalie-stats-leaders/current
@@ -272,6 +285,7 @@ endpoints:
     default: 2
   parser: parse_nhl_web_leaders
 - short: draft_picks
+  returns_schema: native/nhl_api_web/draft_picks
   summary: Pull NHL draft picks for a year (and optionally one round).
   path: /v1/draft/picks/{year}/{round_}
   path_params:

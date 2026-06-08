@@ -1,0 +1,15 @@
+schema: franchise
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: team_common_name
+  type: character
+  description: ''
+- name: team_place_name
+  type: character
+  description: ''

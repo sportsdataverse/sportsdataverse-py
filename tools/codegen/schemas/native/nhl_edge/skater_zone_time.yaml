@@ -1,0 +1,33 @@
+schema: skater_zone_time
+kind: dataframe
+columns:
+- name: strength_code
+  type: character
+  description: ''
+- name: offensive_zone_pctg
+  type: double
+  description: ''
+- name: offensive_zone_percentile
+  type: double
+  description: ''
+- name: offensive_zone_league_avg
+  type: double
+  description: ''
+- name: neutral_zone_pctg
+  type: double
+  description: ''
+- name: neutral_zone_percentile
+  type: double
+  description: ''
+- name: neutral_zone_league_avg
+  type: double
+  description: ''
+- name: defensive_zone_pctg
+  type: double
+  description: ''
+- name: defensive_zone_percentile
+  type: double
+  description: ''
+- name: defensive_zone_league_avg
+  type: double
+  description: ''

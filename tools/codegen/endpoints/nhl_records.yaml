@@ -38,6 +38,7 @@ endpoints:
     season_id: X
   parser: parse_nhl_records
 - short: coaches
+  returns_schema: native/nhl_records/coaches
   summary: List NHL head coaches.
   path: /coach
   parser: parse_nhl_records
@@ -80,6 +81,7 @@ endpoints:
   path: /coach-stanley-cup-streak
   parser: parse_nhl_records
 - short: franchises
+  returns_schema: native/nhl_records/franchises
   summary: List all NHL franchises (historical and active).
   path: /franchise
   parser: parse_nhl_records
@@ -88,6 +90,7 @@ endpoints:
   path: /franchise-detail
   parser: parse_nhl_records
 - short: franchise_team_totals
+  returns_schema: native/nhl_records/franchise_team_totals
   summary: All-time team totals per franchise (regular season).
   path: /franchise-team-totals
   parser: parse_nhl_records
@@ -152,6 +155,7 @@ endpoints:
   path: /goalie-undefeated-streak
   parser: parse_nhl_records
 - short: draft
+  returns_schema: native/nhl_records/draft
   summary: Retrieve NHL Entry Draft picks.
   path: /draft/{draft_id}
   now_variant: /draft
@@ -210,6 +214,7 @@ endpoints:
   path: /all-star-goaltender-game-stats
   parser: parse_nhl_records
 - short: attendance
+  returns_schema: native/nhl_records/attendance
   summary: NHL arena attendance records.
   path: /attendance
   parser: parse_nhl_records

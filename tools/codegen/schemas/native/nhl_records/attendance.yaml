@@ -1,0 +1,18 @@
+schema: attendance
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: playoff_attendance
+  type: double
+  description: ''
+- name: regular_attendance
+  type: double
+  description: ''
+- name: season_id
+  type: integer
+  description: ''
+- name: total_attendance
+  type: double
+  description: ''

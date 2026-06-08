@@ -117,7 +117,19 @@ Retrieve the list of countries used in NHL data.
 
 ### Returns
 
-Retrieve the list of countries used in NHL data.
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `country3_code` | character |  |
+| `country_code` | character |  |
+| `country_name` | character |  |
+| `has_player_stats` | integer |  |
+| `image_url` | character |  |
+| `ioc_code` | character |  |
+| `is_active` | integer |  |
+| `nationality_name` | character |  |
+| `olympic_url` | character |  |
+| `thumbnail_url` | character |  |
 
 ### Example
 
@@ -165,7 +177,12 @@ Retrieve franchise data.
 
 ### Returns
 
-Retrieve franchise data.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `full_name` | character |  |
+| `team_common_name` | character |  |
+| `team_place_name` | character |  |
 
 ### Example
 
@@ -213,7 +230,15 @@ Retrieve the NHL Stats glossary of stat definitions.
 
 ### Returns
 
-Retrieve the NHL Stats glossary of stat definitions.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `abbreviation` | character |  |
+| `definition` | character |  |
+| `first_season_for_stat` | double |  |
+| `full_name` | character |  |
+| `language_code` | character |  |
+| `last_updated` | character |  |
 
 ### Example
 
@@ -238,7 +263,31 @@ Retrieve a goalie statistical report.
 
 ### Returns
 
-Retrieve a goalie statistical report.
+| col_name | type | description |
+|---|---|---|
+| `assists` | integer |  |
+| `games_played` | integer |  |
+| `games_started` | integer |  |
+| `goalie_full_name` | character |  |
+| `goals` | integer |  |
+| `goals_against` | integer |  |
+| `goals_against_average` | double |  |
+| `last_name` | character |  |
+| `losses` | integer |  |
+| `ot_losses` | integer |  |
+| `penalty_minutes` | integer |  |
+| `player_id` | integer |  |
+| `points` | integer |  |
+| `save_pct` | double |  |
+| `saves` | integer |  |
+| `season_id` | integer |  |
+| `shoots_catches` | character |  |
+| `shots_against` | integer |  |
+| `shutouts` | integer |  |
+| `team_abbrevs` | character |  |
+| `ties` | character |  |
+| `time_on_ice` | integer |  |
+| `wins` | integer |  |
 
 ### Example
 
@@ -384,7 +433,31 @@ Retrieve the list of all NHL seasons.
 
 ### Returns
 
-Retrieve the list of all NHL seasons.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `all_star_game_in_use` | integer |  |
+| `conferences_in_use` | integer |  |
+| `divisions_in_use` | integer |  |
+| `end_date` | character |  |
+| `entry_draft_in_use` | integer |  |
+| `formatted_season_id` | character |  |
+| `minimum_playoff_minutes_for_goalie_stats_leaders` | integer |  |
+| `minimum_regular_games_for_goalie_stats_leaders` | integer |  |
+| `nhl_stanley_cup_owner` | integer |  |
+| `number_of_games` | integer |  |
+| `olympics_participation` | integer |  |
+| `point_for_ot_loss_in_use` | integer |  |
+| `preseason_startdate` | character |  |
+| `regular_season_end_date` | character |  |
+| `row_in_use` | integer |  |
+| `season_ordinal` | integer |  |
+| `start_date` | character |  |
+| `supplemental_draft_in_use` | integer |  |
+| `ties_in_use` | integer |  |
+| `total_playoff_games` | integer |  |
+| `total_regular_season_games` | integer |  |
+| `wildcard_in_use` | integer |  |
 
 ### Example
 
@@ -433,7 +506,34 @@ Retrieve a skater statistical report.
 
 ### Returns
 
-Retrieve a skater statistical report.
+| col_name | type | description |
+|---|---|---|
+| `assists` | integer |  |
+| `ev_goals` | integer |  |
+| `ev_points` | integer |  |
+| `faceoff_win_pct` | double |  |
+| `game_winning_goals` | integer |  |
+| `games_played` | integer |  |
+| `goals` | integer |  |
+| `last_name` | character |  |
+| `ot_goals` | integer |  |
+| `penalty_minutes` | integer |  |
+| `player_id` | integer |  |
+| `plus_minus` | integer |  |
+| `points` | integer |  |
+| `points_per_game` | double |  |
+| `position_code` | character |  |
+| `pp_goals` | integer |  |
+| `pp_points` | integer |  |
+| `season_id` | integer |  |
+| `sh_goals` | integer |  |
+| `sh_points` | integer |  |
+| `shooting_pct` | double |  |
+| `shoots_catches` | character |  |
+| `shots` | integer |  |
+| `skater_full_name` | character |  |
+| `team_abbrevs` | character |  |
+| `time_on_ice_per_game` | double |  |
 
 ### Example
 
@@ -507,7 +607,33 @@ Retrieve a team statistical report.
 
 ### Returns
 
-Retrieve a team statistical report.
+| col_name | type | description |
+|---|---|---|
+| `faceoff_win_pct` | double |  |
+| `games_played` | integer |  |
+| `goals_against` | integer |  |
+| `goals_against_per_game` | double |  |
+| `goals_for` | integer |  |
+| `goals_for_per_game` | double |  |
+| `losses` | integer |  |
+| `ot_losses` | integer |  |
+| `penalty_kill_net_pct` | double |  |
+| `penalty_kill_pct` | double |  |
+| `point_pct` | double |  |
+| `points` | integer |  |
+| `power_play_net_pct` | double |  |
+| `power_play_pct` | double |  |
+| `regulation_and_ot_wins` | integer |  |
+| `season_id` | integer |  |
+| `shots_against_per_game` | double |  |
+| `shots_for_per_game` | double |  |
+| `team_full_name` | character |  |
+| `team_id` | integer |  |
+| `team_shutouts` | integer |  |
+| `ties` | character |  |
+| `wins` | integer |  |
+| `wins_in_regulation` | integer |  |
+| `wins_in_shootout` | integer |  |
 
 ### Example
 

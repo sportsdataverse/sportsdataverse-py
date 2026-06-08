@@ -92,7 +92,35 @@ List NHL head coaches.
 
 ### Returns
 
-List NHL head coaches.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `bio` | character |  |
+| `birth_city` | character |  |
+| `birth_country3code` | character |  |
+| `birth_date` | character |  |
+| `birth_state_province_code` | character |  |
+| `brief_description` | character |  |
+| `date_of_death` | character |  |
+| `deceased` | logical |  |
+| `description` | character |  |
+| `featured_image` | character |  |
+| `first_name` | character |  |
+| `full_name` | character |  |
+| `history` | character |  |
+| `hockey_hof_link` | character |  |
+| `in_hockey_hof` | logical |  |
+| `in_iihf_hockey_hof` | logical |  |
+| `in_us_hockey_hof` | logical |  |
+| `instagram` | character |  |
+| `is_active` | logical |  |
+| `last_name` | character |  |
+| `nationality_code` | character |  |
+| `player_id` | double |  |
+| `stanley_cup` | double |  |
+| `team_id` | character |  |
+| `top100_player_link` | character |  |
+| `twitter` | character |  |
 
 ### Example
 
@@ -233,7 +261,16 @@ List all NHL franchises (historical and active).
 
 ### Returns
 
-List all NHL franchises (historical and active).
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `first_season_id` | integer |  |
+| `full_name` | character |  |
+| `last_season_id` | double |  |
+| `most_recent_team_id` | integer |  |
+| `team_abbrev` | character |  |
+| `team_common_name` | character |  |
+| `team_place_name` | character |  |
 
 ### Example
 
@@ -279,7 +316,46 @@ All-time team totals per franchise (regular season).
 
 ### Returns
 
-All-time team totals per franchise (regular season).
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `active_franchise` | integer |  |
+| `active_team` | logical |  |
+| `cups` | integer |  |
+| `first_season_id` | integer |  |
+| `franchise_id` | integer |  |
+| `game_type_id` | integer |  |
+| `game_win_pctg` | double |  |
+| `games_played` | double |  |
+| `goals_against` | double |  |
+| `goals_for` | double |  |
+| `home_losses` | double |  |
+| `home_overtime_losses` | double |  |
+| `home_ties` | double |  |
+| `home_wins` | double |  |
+| `last_season_id` | double |  |
+| `losses` | double |  |
+| `overtime_losses` | double |  |
+| `penalty_minutes` | double |  |
+| `playoff_seasons` | double |  |
+| `point_pctg` | double |  |
+| `points` | double |  |
+| `road_losses` | double |  |
+| `road_overtime_losses` | double |  |
+| `road_ties` | double |  |
+| `road_wins` | double |  |
+| `series_losses` | integer |  |
+| `series_played` | double |  |
+| `series_win_pctg` | double |  |
+| `series_wins` | integer |  |
+| `shootout_losses` | double |  |
+| `shootout_wins` | double |  |
+| `shutouts` | double |  |
+| `team_id` | integer |  |
+| `team_name` | character |  |
+| `ties` | double |  |
+| `tri_code` | character |  |
+| `wins` | double |  |
 
 ### Example
 
@@ -648,7 +724,39 @@ Retrieve NHL Entry Draft picks.
 
 ### Returns
 
-Retrieve NHL Entry Draft picks.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `age_in_days` | character |  |
+| `age_in_days_for_year` | character |  |
+| `age_in_years` | character |  |
+| `amateur_club_name` | character |  |
+| `amateur_league` | character |  |
+| `birth_date` | character |  |
+| `birth_place` | character |  |
+| `country_code` | character |  |
+| `cs_player_id` | character |  |
+| `draft_date` | character |  |
+| `draft_master_id` | integer |  |
+| `draft_year` | integer |  |
+| `drafted_by_team_id` | character |  |
+| `first_name` | character |  |
+| `height` | character |  |
+| `last_name` | character |  |
+| `notes` | character |  |
+| `overall_pick_number` | integer |  |
+| `pick_in_round` | integer |  |
+| `player_id` | character |  |
+| `player_name` | character |  |
+| `position` | character |  |
+| `removed_outright` | character |  |
+| `removed_outright_why` | character |  |
+| `round_number` | integer |  |
+| `shoots_catches` | character |  |
+| `supplemental_draft` | character |  |
+| `team_pick_history` | character |  |
+| `tri_code` | character |  |
+| `weight` | character |  |
 
 ### Example
 
@@ -880,7 +988,13 @@ NHL arena attendance records.
 
 ### Returns
 
-NHL arena attendance records.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer |  |
+| `playoff_attendance` | double |  |
+| `regular_attendance` | double |  |
+| `season_id` | integer |  |
+| `total_attendance` | double |  |
 
 ### Example
 

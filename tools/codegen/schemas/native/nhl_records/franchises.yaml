@@ -1,0 +1,27 @@
+schema: franchises
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: first_season_id
+  type: integer
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: last_season_id
+  type: double
+  description: ''
+- name: most_recent_team_id
+  type: integer
+  description: ''
+- name: team_abbrev
+  type: character
+  description: ''
+- name: team_common_name
+  type: character
+  description: ''
+- name: team_place_name
+  type: character
+  description: ''

@@ -9,6 +9,7 @@ runtime_imports:
 - format_nhl_season
 endpoints:
 - short: skater_detail
+  returns_schema: native/nhl_edge/skater_detail
   summary: Pull EDGE detail stats for a single skater.
   path: /v1/edge/skater-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/skater-detail/{player_id}/now
@@ -97,6 +98,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: skater_shot_speed_detail
+  returns_schema: native/nhl_edge/skater_shot_speed_detail
   summary: Pull EDGE shot-speed detail for a single skater.
   path: /v1/edge/skater-shot-speed-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/skater-shot-speed-detail/{player_id}/now
@@ -233,6 +235,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: skater_zone_time
+  returns_schema: native/nhl_edge/skater_zone_time
   summary: Pull EDGE zone-time detail for a single skater.
   path: /v1/edge/skater-zone-time/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/skater-zone-time/{player_id}/now
@@ -296,6 +299,7 @@ endpoints:
     default: 2
   parser: parse_edge_detail
 - short: goalie_detail
+  returns_schema: native/nhl_edge/goalie_detail
   summary: Pull EDGE detail stats for a single goalie.
   path: /v1/edge/goalie-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/goalie-detail/{player_id}/now
@@ -416,6 +420,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: goalie_shot_location_detail
+  returns_schema: native/nhl_edge/goalie_shot_location_detail
   summary: Pull EDGE shot-location detail for a single goalie.
   path: /v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/goalie-shot-location-detail/{player_id}/now
@@ -475,6 +480,7 @@ endpoints:
     default: 2
   parser: parse_edge_detail
 - short: team_detail
+  returns_schema: native/nhl_edge/team_detail
   summary: Pull EDGE detail stats for a single team.
   path: /v1/edge/team-detail/{team_id}/{season}/{game_type}
   now_variant: /v1/edge/team-detail/{team_id}/now
@@ -510,6 +516,7 @@ endpoints:
     default: 2
   parser: parse_edge_detail
 - short: team_shot_location_detail
+  returns_schema: native/nhl_edge/team_shot_location_detail
   summary: Pull EDGE shot-location detail for a single team.
   path: /v1/edge/team-shot-location-detail/{team_id}/{season}/{game_type}
   now_variant: /v1/edge/team-shot-location-detail/{team_id}/now

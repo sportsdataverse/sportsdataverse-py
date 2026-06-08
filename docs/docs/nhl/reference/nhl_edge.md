@@ -23,7 +23,104 @@ Pull EDGE detail stats for a single skater.
 
 ### Returns
 
-Pull EDGE detail stats for a single skater.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `sog_summary` | character |  |
+| `sog_details` | character |  |
+| `player_id` | integer |  |
+| `player_first_name_default` | character |  |
+| `player_last_name_default` | character |  |
+| `player_birth_date` | character |  |
+| `player_shoots_catches` | character |  |
+| `player_sweater_number` | integer |  |
+| `player_position` | character |  |
+| `player_slug` | character |  |
+| `player_headshot` | character |  |
+| `player_goals` | integer |  |
+| `player_assists` | integer |  |
+| `player_points` | integer |  |
+| `player_games_played` | integer |  |
+| `player_team_common_name_default` | character |  |
+| `player_team_place_name_with_preposition_default` | character |  |
+| `player_team_place_name_with_preposition_fr` | character |  |
+| `player_team_abbrev` | character |  |
+| `player_team_team_logo_light` | character |  |
+| `player_team_team_logo_dark` | character |  |
+| `top_shot_speed_imperial` | double |  |
+| `top_shot_speed_metric` | double |  |
+| `top_shot_speed_percentile` | double |  |
+| `top_shot_speed_league_avg_imperial` | double |  |
+| `top_shot_speed_league_avg_metric` | double |  |
+| `top_shot_speed_overlay_player_first_name_default` | character |  |
+| `top_shot_speed_overlay_player_last_name_default` | character |  |
+| `top_shot_speed_overlay_game_date` | character |  |
+| `top_shot_speed_overlay_away_team_abbrev` | character |  |
+| `top_shot_speed_overlay_away_team_score` | integer |  |
+| `top_shot_speed_overlay_home_team_abbrev` | character |  |
+| `top_shot_speed_overlay_home_team_score` | integer |  |
+| `top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
+| `top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `top_shot_speed_overlay_period_descriptor_number` | integer |  |
+| `top_shot_speed_overlay_period_descriptor_period_type` | character |  |
+| `top_shot_speed_overlay_time_in_period` | character |  |
+| `top_shot_speed_overlay_game_type` | integer |  |
+| `skating_speed_speed_max_imperial` | double |  |
+| `skating_speed_speed_max_metric` | double |  |
+| `skating_speed_speed_max_percentile` | double |  |
+| `skating_speed_speed_max_league_avg_imperial` | double |  |
+| `skating_speed_speed_max_league_avg_metric` | double |  |
+| `skating_speed_speed_max_overlay_player_first_name_default` | character |  |
+| `skating_speed_speed_max_overlay_player_last_name_default` | character |  |
+| `skating_speed_speed_max_overlay_game_date` | character |  |
+| `skating_speed_speed_max_overlay_away_team_abbrev` | character |  |
+| `skating_speed_speed_max_overlay_away_team_score` | integer |  |
+| `skating_speed_speed_max_overlay_home_team_abbrev` | character |  |
+| `skating_speed_speed_max_overlay_home_team_score` | integer |  |
+| `skating_speed_speed_max_overlay_game_outcome_last_period_type` | character |  |
+| `skating_speed_speed_max_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `skating_speed_speed_max_overlay_period_descriptor_number` | integer |  |
+| `skating_speed_speed_max_overlay_period_descriptor_period_type` | character |  |
+| `skating_speed_speed_max_overlay_time_in_period` | character |  |
+| `skating_speed_speed_max_overlay_game_type` | integer |  |
+| `skating_speed_bursts_over20_value` | integer |  |
+| `skating_speed_bursts_over20_percentile` | double |  |
+| `skating_speed_bursts_over20_league_avg_value` | double |  |
+| `total_distance_skated_imperial` | double |  |
+| `total_distance_skated_metric` | double |  |
+| `total_distance_skated_percentile` | double |  |
+| `total_distance_skated_league_avg_imperial` | double |  |
+| `total_distance_skated_league_avg_metric` | double |  |
+| `distance_max_game_imperial` | double |  |
+| `distance_max_game_metric` | double |  |
+| `distance_max_game_percentile` | double |  |
+| `distance_max_game_league_avg_imperial` | double |  |
+| `distance_max_game_league_avg_metric` | double |  |
+| `distance_max_game_overlay_player_first_name_default` | character |  |
+| `distance_max_game_overlay_player_last_name_default` | character |  |
+| `distance_max_game_overlay_game_date` | character |  |
+| `distance_max_game_overlay_away_team_abbrev` | character |  |
+| `distance_max_game_overlay_away_team_score` | integer |  |
+| `distance_max_game_overlay_home_team_abbrev` | character |  |
+| `distance_max_game_overlay_home_team_score` | integer |  |
+| `distance_max_game_overlay_game_outcome_last_period_type` | character |  |
+| `distance_max_game_overlay_game_outcome_ot_periods` | integer |  |
+| `distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `distance_max_game_overlay_period_descriptor_number` | integer |  |
+| `distance_max_game_overlay_period_descriptor_period_type` | character |  |
+| `distance_max_game_overlay_game_type` | integer |  |
+| `zone_time_details_offensive_zone_pctg` | double |  |
+| `zone_time_details_offensive_zone_percentile` | double |  |
+| `zone_time_details_offensive_zone_league_avg` | double |  |
+| `zone_time_details_offensive_zone_ev_pctg` | double |  |
+| `zone_time_details_offensive_zone_ev_percentile` | double |  |
+| `zone_time_details_offensive_zone_ev_league_avg` | double |  |
+| `zone_time_details_neutral_zone_pctg` | double |  |
+| `zone_time_details_neutral_zone_percentile` | double |  |
+| `zone_time_details_neutral_zone_league_avg` | double |  |
+| `zone_time_details_defensive_zone_pctg` | double |  |
+| `zone_time_details_defensive_zone_percentile` | double |  |
+| `zone_time_details_defensive_zone_league_avg` | double |  |
 
 ### Example
 
@@ -129,7 +226,44 @@ Pull EDGE shot-speed detail for a single skater.
 
 ### Returns
 
-Pull EDGE shot-speed detail for a single skater.
+| col_name | type | description |
+|---|---|---|
+| `hardest_shots` | character |  |
+| `shot_speed_details_top_shot_speed_imperial` | double |  |
+| `shot_speed_details_top_shot_speed_metric` | double |  |
+| `shot_speed_details_top_shot_speed_percentile` | double |  |
+| `shot_speed_details_top_shot_speed_league_avg_imperial` | double |  |
+| `shot_speed_details_top_shot_speed_league_avg_metric` | double |  |
+| `shot_speed_details_top_shot_speed_overlay_player_first_name_default` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_player_last_name_default` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_game_date` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_away_team_abbrev` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_away_team_score` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_home_team_abbrev` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_home_team_score` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_number` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_period_type` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_time_in_period` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_game_type` | integer |  |
+| `shot_speed_details_avg_shot_speed_imperial` | double |  |
+| `shot_speed_details_avg_shot_speed_metric` | double |  |
+| `shot_speed_details_avg_shot_speed_percentile` | double |  |
+| `shot_speed_details_avg_shot_speed_league_avg_imperial` | double |  |
+| `shot_speed_details_avg_shot_speed_league_avg_metric` | double |  |
+| `shot_speed_details_shot_attempts_over100_value` | integer |  |
+| `shot_speed_details_shot_attempts_over100_percentile` | double |  |
+| `shot_speed_details_shot_attempts_over100_league_avg` | double |  |
+| `shot_speed_details_shot_attempts90_to100_value` | integer |  |
+| `shot_speed_details_shot_attempts90_to100_percentile` | double |  |
+| `shot_speed_details_shot_attempts90_to100_league_avg` | double |  |
+| `shot_speed_details_shot_attempts80_to90_value` | integer |  |
+| `shot_speed_details_shot_attempts80_to90_percentile` | double |  |
+| `shot_speed_details_shot_attempts80_to90_league_avg` | double |  |
+| `shot_speed_details_shot_attempts70_to80_value` | integer |  |
+| `shot_speed_details_shot_attempts70_to80_percentile` | double |  |
+| `shot_speed_details_shot_attempts70_to80_league_avg` | double |  |
 
 ### Example
 
@@ -289,7 +423,18 @@ Pull EDGE zone-time detail for a single skater.
 
 ### Returns
 
-Pull EDGE zone-time detail for a single skater.
+| col_name | type | description |
+|---|---|---|
+| `strength_code` | character |  |
+| `offensive_zone_pctg` | double |  |
+| `offensive_zone_percentile` | double |  |
+| `offensive_zone_league_avg` | double |  |
+| `neutral_zone_pctg` | double |  |
+| `neutral_zone_percentile` | double |  |
+| `neutral_zone_league_avg` | double |  |
+| `defensive_zone_pctg` | double |  |
+| `defensive_zone_percentile` | double |  |
+| `defensive_zone_league_avg` | double |  |
 
 ### Example
 
@@ -368,7 +513,46 @@ Pull EDGE detail stats for a single goalie.
 
 ### Returns
 
-Pull EDGE detail stats for a single goalie.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `shot_location_summary` | character |  |
+| `shot_location_details` | character |  |
+| `player_id` | integer |  |
+| `player_first_name_default` | character |  |
+| `player_last_name_default` | character |  |
+| `player_birth_date` | character |  |
+| `player_shoots_catches` | character |  |
+| `player_sweater_number` | integer |  |
+| `player_slug` | character |  |
+| `player_headshot` | character |  |
+| `player_wins` | integer |  |
+| `player_losses` | integer |  |
+| `player_overtime_losses` | integer |  |
+| `player_goals_against_avg` | double |  |
+| `player_save_pctg` | double |  |
+| `player_games_played` | integer |  |
+| `player_team_common_name_default` | character |  |
+| `player_team_place_name_with_preposition_default` | character |  |
+| `player_team_place_name_with_preposition_fr` | character |  |
+| `player_team_abbrev` | character |  |
+| `player_team_team_logo_light` | character |  |
+| `player_team_team_logo_dark` | character |  |
+| `stats_goals_against_avg_value` | double |  |
+| `stats_goals_against_avg_percentile` | double |  |
+| `stats_goals_against_avg_league_avg` | double |  |
+| `stats_games_above900_value` | double |  |
+| `stats_games_above900_percentile` | double |  |
+| `stats_games_above900_league_avg` | double |  |
+| `stats_goal_differential_per60_value` | double |  |
+| `stats_goal_differential_per60_percentile` | double |  |
+| `stats_goal_differential_per60_league_avg` | double |  |
+| `stats_goal_support_avg_value` | double |  |
+| `stats_goal_support_avg_percentile` | double |  |
+| `stats_goal_support_avg_league_avg` | double |  |
+| `stats_point_pctg_value` | double |  |
+| `stats_point_pctg_percentile` | double |  |
+| `stats_point_pctg_league_avg` | double |  |
 
 ### Example
 
@@ -524,7 +708,17 @@ Pull EDGE shot-location detail for a single goalie.
 
 ### Returns
 
-Pull EDGE shot-location detail for a single goalie.
+| col_name | type | description |
+|---|---|---|
+| `area` | character |  |
+| `shots_against` | integer |  |
+| `saves` | integer |  |
+| `goals_against` | integer |  |
+| `save_pctg` | double |  |
+| `shots_against_percentile` | double |  |
+| `saves_percentile` | double |  |
+| `goals_against_percentile` | double |  |
+| `save_pctg_percentile` | double |  |
 
 ### Example
 
@@ -602,7 +796,87 @@ Pull EDGE detail stats for a single team.
 
 ### Returns
 
-Pull EDGE detail stats for a single team.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `sog_summary` | character |  |
+| `sog_details` | character |  |
+| `team_id` | integer |  |
+| `team_common_name_default` | character |  |
+| `team_place_name_with_preposition_default` | character |  |
+| `team_place_name_with_preposition_fr` | character |  |
+| `team_abbrev` | character |  |
+| `team_team_logo_light` | character |  |
+| `team_team_logo_dark` | character |  |
+| `team_slug` | character |  |
+| `team_conference` | character |  |
+| `team_division` | character |  |
+| `team_wins` | integer |  |
+| `team_losses` | integer |  |
+| `team_ot_losses` | integer |  |
+| `team_games_played` | integer |  |
+| `team_points` | integer |  |
+| `shot_speed_shot_attempts_over90_value` | integer |  |
+| `shot_speed_shot_attempts_over90_rank` | integer |  |
+| `shot_speed_top_shot_speed_imperial` | double |  |
+| `shot_speed_top_shot_speed_metric` | double |  |
+| `shot_speed_top_shot_speed_rank` | integer |  |
+| `shot_speed_top_shot_speed_league_avg_imperial` | double |  |
+| `shot_speed_top_shot_speed_league_avg_metric` | double |  |
+| `shot_speed_top_shot_speed_overlay_player_first_name_default` | character |  |
+| `shot_speed_top_shot_speed_overlay_player_last_name_default` | character |  |
+| `shot_speed_top_shot_speed_overlay_game_date` | character |  |
+| `shot_speed_top_shot_speed_overlay_away_team_abbrev` | character |  |
+| `shot_speed_top_shot_speed_overlay_away_team_score` | integer |  |
+| `shot_speed_top_shot_speed_overlay_home_team_abbrev` | character |  |
+| `shot_speed_top_shot_speed_overlay_home_team_score` | integer |  |
+| `shot_speed_top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
+| `shot_speed_top_shot_speed_overlay_game_outcome_ot_periods` | integer |  |
+| `shot_speed_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `shot_speed_top_shot_speed_overlay_period_descriptor_number` | integer |  |
+| `shot_speed_top_shot_speed_overlay_period_descriptor_period_type` | character |  |
+| `shot_speed_top_shot_speed_overlay_time_in_period` | character |  |
+| `shot_speed_top_shot_speed_overlay_game_type` | integer |  |
+| `skating_speed_bursts_over22_value` | integer |  |
+| `skating_speed_bursts_over22_rank` | integer |  |
+| `skating_speed_bursts_over20_value` | integer |  |
+| `skating_speed_bursts_over20_rank` | integer |  |
+| `skating_speed_bursts_over20_league_avg_value` | integer |  |
+| `skating_speed_speed_max_imperial` | double |  |
+| `skating_speed_speed_max_metric` | double |  |
+| `skating_speed_speed_max_rank` | integer |  |
+| `skating_speed_speed_max_league_avg_imperial` | double |  |
+| `skating_speed_speed_max_league_avg_metric` | double |  |
+| `skating_speed_speed_max_overlay_player_first_name_default` | character |  |
+| `skating_speed_speed_max_overlay_player_last_name_default` | character |  |
+| `skating_speed_speed_max_overlay_game_date` | character |  |
+| `skating_speed_speed_max_overlay_away_team_abbrev` | character |  |
+| `skating_speed_speed_max_overlay_away_team_score` | integer |  |
+| `skating_speed_speed_max_overlay_home_team_abbrev` | character |  |
+| `skating_speed_speed_max_overlay_home_team_score` | integer |  |
+| `skating_speed_speed_max_overlay_game_outcome_last_period_type` | character |  |
+| `skating_speed_speed_max_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `skating_speed_speed_max_overlay_period_descriptor_number` | integer |  |
+| `skating_speed_speed_max_overlay_period_descriptor_period_type` | character |  |
+| `skating_speed_speed_max_overlay_time_in_period` | character |  |
+| `skating_speed_speed_max_overlay_game_type` | integer |  |
+| `distance_skated_total_imperial` | double |  |
+| `distance_skated_total_metric` | double |  |
+| `distance_skated_total_rank` | integer |  |
+| `distance_skated_total_league_avg_imperial` | double |  |
+| `distance_skated_total_league_avg_metric` | double |  |
+| `zone_time_details_offensive_zone_pctg` | double |  |
+| `zone_time_details_offensive_zone_rank` | integer |  |
+| `zone_time_details_offensive_zone_league_avg` | double |  |
+| `zone_time_details_offensive_zone_ev_pctg` | double |  |
+| `zone_time_details_offensive_zone_ev_rank` | integer |  |
+| `zone_time_details_offensive_zone_ev_league_avg` | double |  |
+| `zone_time_details_neutral_zone_pctg` | double |  |
+| `zone_time_details_neutral_zone_rank` | integer |  |
+| `zone_time_details_neutral_zone_league_avg` | double |  |
+| `zone_time_details_defensive_zone_pctg` | double |  |
+| `zone_time_details_defensive_zone_rank` | integer |  |
+| `zone_time_details_defensive_zone_league_avg` | double |  |
 
 ### Example
 
@@ -653,7 +927,15 @@ Pull EDGE shot-location detail for a single team.
 
 ### Returns
 
-Pull EDGE shot-location detail for a single team.
+| col_name | type | description |
+|---|---|---|
+| `area` | character |  |
+| `sog` | integer |  |
+| `sog_rank` | integer |  |
+| `goals` | integer |  |
+| `goals_rank` | integer |  |
+| `shooting_pctg` | double |  |
+| `shooting_pctg_rank` | integer |  |
 
 ### Example
 

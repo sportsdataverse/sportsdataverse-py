@@ -1,0 +1,24 @@
+schema: glossary
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: definition
+  type: character
+  description: ''
+- name: first_season_for_stat
+  type: double
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: language_code
+  type: character
+  description: ''
+- name: last_updated
+  type: character
+  description: ''

@@ -1,0 +1,33 @@
+schema: standings_season
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: conferences_in_use
+  type: logical
+  description: ''
+- name: divisions_in_use
+  type: logical
+  description: ''
+- name: point_for_o_tloss_in_use
+  type: logical
+  description: ''
+- name: regulation_wins_in_use
+  type: logical
+  description: ''
+- name: row_in_use
+  type: logical
+  description: ''
+- name: standings_end
+  type: character
+  description: ''
+- name: standings_start
+  type: character
+  description: ''
+- name: ties_in_use
+  type: logical
+  description: ''
+- name: wildcard_in_use
+  type: logical
+  description: ''

@@ -186,6 +186,7 @@ endpoints:
   example_args:
     team_id: 10
   parser: parse_mlb_api_team_roster
+  returns_schema: native/mlb_api/team_roster
 - short: team_alumni
   summary: "GET /api/v1/teams/{teamId}/alumni \u2014 players who played for this team in a season."
   path: /api/v1/teams/{team_id}/alumni
@@ -304,6 +305,7 @@ endpoints:
     query_key: sportId
     type: int
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/sports
 - short: leagues
   summary: "GET /api/v1/leagues \u2014 list leagues."
   path: /api/v1/leagues
@@ -348,6 +350,7 @@ endpoints:
     query_key: hydrate
     type: str
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/venues
 - short: venue
   summary: "GET /api/v1/venues/{venueId} \u2014 single venue detail."
   path: /api/v1/venues/{venue_id}
