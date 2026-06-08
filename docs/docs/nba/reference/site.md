@@ -27,9 +27,56 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN event id. |
-| `season` | integer | Four-digit season year. |
-| `game_date` | character | ISO 8601 kickoff timestamp (UTC). |
+| `game_id` | character | ESPN event id. |
+| `uid` | character |  |
+| `date` | character |  |
+| `name` | character |  |
+| `short_name` | character |  |
+| `season_year` | integer |  |
+| `season_type` | integer |  |
+| `season_slug` | character |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
+| `status_clock` | double |  |
+| `status_display_clock` | character |  |
+| `status_period` | integer |  |
+| `neutral_site` | logical |  |
+| `conference_competition` | logical |  |
+| `attendance` | integer |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_city` | character |  |
+| `venue_state` | character |  |
+| `venue_indoor` | logical |  |
+| `broadcast` | character |  |
+| `note` | character |  |
+| `home_id` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_location` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_logo` | character |  |
+| `home_score` | character |  |
+| `home_winner` | logical |  |
+| `home_rank` | character |  |
+| `away_id` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_location` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_logo` | character |  |
+| `away_score` | character |  |
+| `away_winner` | logical |  |
+| `away_rank` | character |  |
 
 ### Example
 
@@ -209,11 +256,6 @@ ESPN endpoint.
 | `short_summary` | character | Short summary. |
 | `events` | character | Events. |
 
-**against_the_spread**
-
-| col_name | type | description |
-|---|---|---|
-
 **standings**
 
 | col_name | type | description |
@@ -230,11 +272,6 @@ ESPN endpoint.
 | `win_percent` | character | Win percent. |
 | `wins` | character | Wins. |
 
-**broadcasts**
-
-| col_name | type | description |
-|---|---|---|
-
 **format**
 
 | col_name | type | description |
@@ -246,16 +283,6 @@ ESPN endpoint.
 | `overtime_display_name` | character | Overtime display name. |
 | `overtime_slug` | character | Overtime slug. |
 | `overtime_clock` | double | Overtime clock. |
-
-**pickcenter**
-
-| col_name | type | description |
-|---|---|---|
-
-**odds**
-
-| col_name | type | description |
-|---|---|---|
 
 **article**
 
@@ -326,21 +353,6 @@ ESPN endpoint.
 | `links_mobile_href` | character | Links mobile href. |
 | `links_api_self_href` | character | Links api self href. |
 | `links_app_sportscenter_href` | character | Links app sportscenter href. |
-
-**drives**
-
-| col_name | type | description |
-|---|---|---|
-
-**drive_plays**
-
-| col_name | type | description |
-|---|---|---|
-
-**scoring_plays**
-
-| col_name | type | description |
-|---|---|---|
 
 ### Example
 

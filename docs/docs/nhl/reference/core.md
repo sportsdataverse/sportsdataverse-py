@@ -1977,13 +1977,11 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
-| `avg_points_against` | double | Avg points against. |
-| `avg_points_for` | double | Avg points for. |
+| `ot_losses` | double |  |
 | `clincher` | double | Clincher. |
 | `differential` | double | Differential. |
-| `division_win_percent` | double | Division win percent. |
 | `games_behind` | double | Games behind. |
-| `league_win_percent` | double | League win percent. |
+| `games_played` | double |  |
 | `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
 | `point_differential` | double | Point differential. |
@@ -1991,15 +1989,21 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
+| `overtime_losses` | double |  |
+| `overtime_wins` | double |  |
+| `points_diff` | double |  |
+| `reg_losses` | double |  |
+| `reg_wins` | double |  |
+| `rot_losses` | double |  |
+| `rot_wins` | double |  |
+| `shootout_losses` | double |  |
+| `shootout_wins` | double |  |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
 | `last ten games` | character | Last ten games. |
+| `vs. div.` | character | Vs. div.. |
 
 ### Example
 

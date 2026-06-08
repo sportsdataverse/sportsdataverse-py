@@ -27,9 +27,56 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN event id. |
-| `season` | integer | Four-digit season year. |
-| `game_date` | character | ISO 8601 kickoff timestamp (UTC). |
+| `game_id` | character | ESPN event id. |
+| `uid` | character |  |
+| `date` | character |  |
+| `name` | character |  |
+| `short_name` | character |  |
+| `season_year` | integer |  |
+| `season_type` | integer |  |
+| `season_slug` | character |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
+| `status_clock` | double |  |
+| `status_display_clock` | character |  |
+| `status_period` | integer |  |
+| `neutral_site` | logical |  |
+| `conference_competition` | logical |  |
+| `attendance` | integer |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_city` | character |  |
+| `venue_state` | character |  |
+| `venue_indoor` | logical |  |
+| `broadcast` | character |  |
+| `note` | character |  |
+| `home_id` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_location` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_logo` | character |  |
+| `home_score` | character |  |
+| `home_winner` | logical |  |
+| `home_rank` | character |  |
+| `away_id` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_location` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_logo` | character |  |
+| `away_score` | character |  |
+| `away_winner` | logical |  |
+| `away_rank` | character |  |
 
 ### Example
 
@@ -68,23 +115,25 @@ ESPN endpoint.
 | `athlete_position` | character | Athlete position. |
 | `starter` | logical | Starter. |
 | `active` | logical | Active. |
-| `did_not_play` | logical | Did not play. |
-| `ejected` | logical | Ejected. |
+| `did_not_play` | character | Did not play. |
+| `ejected` | character | Ejected. |
 | `reason` | character | Reason. |
-| `minutes` | character | Minutes. |
-| `points` | character | Points. |
-| `field_goals_made_field_goals_attempted` | character | Field goals made field goals attempted. |
-| `three_point_field_goals_made_three_point_field_goals_attempted` | character | Three point field goals made three point field goals attempted. |
-| `free_throws_made_free_throws_attempted` | character | Free throws made free throws attempted. |
-| `rebounds` | character | Rebounds. |
-| `assists` | character | Assists. |
-| `turnovers` | character | Turnovers. |
-| `steals` | character | Steals. |
-| `blocks` | character | Blocks. |
-| `offensive_rebounds` | character | Offensive rebounds. |
-| `defensive_rebounds` | character | Defensive rebounds. |
-| `fouls` | character | Fouls. |
-| `plus_minus` | character | Plus minus. |
+| `hits_at_bats` | character |  |
+| `at_bats` | character |  |
+| `runs` | character |  |
+| `hits` | character |  |
+| `rb_is` | character |  |
+| `home_runs` | character |  |
+| `walks` | character |  |
+| `strikeouts` | character |  |
+| `pitches` | character |  |
+| `avg` | character |  |
+| `on_base_pct` | character |  |
+| `slug_avg` | character |  |
+| `full_innings.part_innings` | character |  |
+| `earned_runs` | character |  |
+| `pitches_strikes` | character |  |
+| `era` | character |  |
 
 **boxscore_team**
 
@@ -111,19 +160,47 @@ ESPN endpoint.
 | `home_score` | integer | Home score. |
 | `scoring_play` | logical | Scoring play. |
 | `score_value` | integer | Score value. |
-| `participants` | character | Participants. |
 | `wallclock` | character | Wallclock. |
-| `shooting_play` | logical | Shooting play. |
-| `points_attempted` | integer | Points attempted. |
-| `short_description` | character | Short description. |
+| `at_bat_id` | character |  |
+| `summary_type` | character |  |
+| `outs` | integer |  |
 | `type_id` | character | Type id. |
 | `type_text` | character | Type text. |
+| `type_type` | character |  |
+| `period_type` | character |  |
 | `period_number` | integer | Period number. |
 | `period_display_value` | character | Period display value. |
-| `clock_display_value` | character | Clock display value. |
 | `team_id` | character | Team id. |
-| `coordinate_x` | integer | Coordinate x. |
-| `coordinate_y` | integer | Coordinate y. |
+| `pitch_count_balls` | integer |  |
+| `pitch_count_strikes` | integer |  |
+| `result_count_balls` | integer |  |
+| `result_count_strikes` | integer |  |
+| `participants` | character | Participants. |
+| `bat_order` | double |  |
+| `type_alternative_text` | character |  |
+| `bats_type` | character |  |
+| `bats_abbreviation` | character |  |
+| `bats_display_value` | character |  |
+| `at_bat_pitch_number` | double |  |
+| `pitch_velocity` | double |  |
+| `trajectory` | character |  |
+| `type_abbreviation` | character |  |
+| `pitch_coordinate_x` | double |  |
+| `pitch_coordinate_y` | double |  |
+| `pitch_type_id` | character |  |
+| `pitch_type_text` | character |  |
+| `pitch_type_abbreviation` | character |  |
+| `hit_coordinate_x` | double |  |
+| `hit_coordinate_y` | double |  |
+| `alternative_play` | character |  |
+| `alternative_type_id` | character |  |
+| `alternative_type_text` | character |  |
+| `alternative_type_abbreviation` | character |  |
+| `alternative_type_alternative_text` | character |  |
+| `alternative_type_type` | character |  |
+| `on_first_athlete_id` | character |  |
+| `on_second_athlete_id` | character |  |
+| `on_third_athlete_id` | character |  |
 
 **winprobability**
 
@@ -133,40 +210,22 @@ ESPN endpoint.
 | `tie_percentage` | double | Tie percentage. |
 | `play_id` | character | Play id. |
 
-**leaders**
-
-| col_name | type | description |
-|---|---|---|
-| `team_id` | character | Team id. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `category_name` | character | Category name. |
-| `category_display_name` | character | Category display name. |
-| `athlete_id` | character | Athlete id. |
-| `athlete_display_name` | character | Athlete display name. |
-| `athlete_position` | character | Athlete position. |
-| `value` | double | Value. |
-| `display_value` | character | Display value. |
-| `main_stat` | character | Main stat. |
-| `summary` | character | Summary. |
-
 **game_info**
 
 | col_name | type | description |
 |---|---|---|
 | `attendance` | integer | Attendance. |
 | `venue_id` | character | Venue id. |
-| `venue_guid` | character | Venue guid. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_short_name` | character | Venue short name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state. |
-| `venue_grass` | logical | Venue grass. |
+| `venue_address_zip_code` | character |  |
 
 **officials**
 
 | col_name | type | description |
 |---|---|---|
-| `full_name` | character | Full name. |
 | `display_name` | character | Display name. |
 | `order` | integer | Order. |
 | `position_name` | character | Position name. |
@@ -182,6 +241,7 @@ ESPN endpoint.
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
+| `game_note` | character |  |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -189,6 +249,7 @@ ESPN endpoint.
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
+| `league_midsize_name` | character |  |
 | `league_slug` | character | League slug. |
 | `league_is_tournament` | logical | League is tournament. |
 | `league_links` | character | League links. |
@@ -204,15 +265,11 @@ ESPN endpoint.
 | `summary` | character | Summary. |
 | `completed` | logical | Completed. |
 | `total_competitions` | integer | Total competitions. |
-| `series_label` | character | Series label. |
 | `series_score` | character | Series score. |
-| `short_summary` | character | Short summary. |
 | `events` | character | Events. |
-
-**against_the_spread**
-
-| col_name | type | description |
-|---|---|---|
+| `series_label` | character | Series label. |
+| `short_summary` | character | Short summary. |
+| `round` | character |  |
 
 **standings**
 
@@ -234,6 +291,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
+| `station` | character |  |
+| `station_key` | character |  |
+| `lang` | character |  |
+| `region` | character |  |
+| `is_national` | logical |  |
+| `type_id` | character | Type id. |
+| `type_short_name` | character |  |
+| `type_long_name` | character |  |
+| `type_slug` | character |  |
+| `market_id` | character |  |
+| `market_type` | character |  |
+| `media_call_letters` | character |  |
+| `media_name` | character |  |
+| `media_short_name` | character |  |
 
 **format**
 
@@ -242,20 +313,6 @@ ESPN endpoint.
 | `regulation_periods` | integer | Regulation periods. |
 | `regulation_display_name` | character | Regulation display name. |
 | `regulation_slug` | character | Regulation slug. |
-| `regulation_clock` | double | Regulation clock. |
-| `overtime_display_name` | character | Overtime display name. |
-| `overtime_slug` | character | Overtime slug. |
-| `overtime_clock` | double | Overtime clock. |
-
-**pickcenter**
-
-| col_name | type | description |
-|---|---|---|
-
-**odds**
-
-| col_name | type | description |
-|---|---|---|
 
 **article**
 
@@ -321,26 +378,14 @@ ESPN endpoint.
 | `images` | character | Images. |
 | `categories` | character | Categories. |
 | `premium` | logical | Premium. |
-| `byline` | character | Byline. |
 | `links_web_href` | character | Links web href. |
 | `links_mobile_href` | character | Links mobile href. |
 | `links_api_self_href` | character | Links api self href. |
 | `links_app_sportscenter_href` | character | Links app sportscenter href. |
-
-**drives**
-
-| col_name | type | description |
-|---|---|---|
-
-**drive_plays**
-
-| col_name | type | description |
-|---|---|---|
-
-**scoring_plays**
-
-| col_name | type | description |
-|---|---|---|
+| `links_web_self_href` | character |  |
+| `links_web_self_dsi_href` | character |  |
+| `links_api_artwork_href` | character |  |
+| `links_sportscenter_href` | character |  |
 
 ### Example
 
@@ -683,6 +728,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
+| `position_group` | character |  |
 | `id` | character | Id. |
 | `uid` | character | Uid. |
 | `guid` | character | Guid. |
@@ -690,6 +736,7 @@ ESPN endpoint.
 | `last_name` | character | Last name. |
 | `full_name` | character | Full name. |
 | `display_name` | character | Display name. |
+| `nickname` | character |  |
 | `short_name` | character | Short name. |
 | `weight` | double | Weight. |
 | `display_weight` | character | Display weight. |
@@ -697,16 +744,19 @@ ESPN endpoint.
 | `display_height` | character | Display height. |
 | `age` | integer | Age. |
 | `date_of_birth` | character | Date of birth. |
-| `debut_year` | double | Debut year. |
+| `debut_year` | integer | Debut year. |
 | `links` | character | Links. |
 | `slug` | character | Slug. |
 | `jersey` | character | Jersey. |
+| `positions` | character |  |
 | `injuries` | character | Injuries. |
 | `teams` | character | Teams. |
 | `contracts` | character | Contracts. |
 | `alternate_ids_sdr` | character | Alternate ids sdr. |
 | `birth_place_city` | character | Birth place city. |
+| `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
+| `birth_place_display_text` | character |  |
 | `college_id` | character | College id. |
 | `college_guid` | character | College guid. |
 | `college_mascot` | character | College mascot. |
@@ -721,36 +771,22 @@ ESPN endpoint.
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
+| `position_parent_id` | character |  |
+| `position_parent_name` | character |  |
+| `position_parent_display_name` | character |  |
+| `position_parent_abbreviation` | character |  |
+| `position_parent_leaf` | logical |  |
 | `experience_years` | integer | Experience years. |
-| `contract_bird_status` | integer | Contract bird status. |
-| `contract_base_year_compensation_active` | logical | Contract base year compensation active. |
-| `contract_poison_pill_provision_active` | logical | Contract poison pill provision active. |
-| `contract_incoming_trade_value` | integer | Contract incoming trade value. |
-| `contract_outgoing_trade_value` | integer | Contract outgoing trade value. |
-| `contract_minimum_salary_exception` | logical | Contract minimum salary exception. |
-| `contract_option_type` | integer | Contract option type. |
-| `contract_salary` | integer | Contract salary. |
-| `contract_salary_remaining` | integer | Contract salary remaining. |
-| `contract_years_remaining` | integer | Contract years remaining. |
-| `contract_season_year` | integer | Contract season year. |
-| `contract_season_start_date` | character | Contract season start date. |
-| `contract_season_end_date` | character | Contract season end date. |
-| `contract_trade_kicker_active` | logical | Contract trade kicker active. |
-| `contract_trade_kicker_percentage` | double | Contract trade kicker percentage. |
-| `contract_trade_kicker_value` | integer | Contract trade kicker value. |
-| `contract_trade_kicker_trade_value` | integer | Contract trade kicker trade value. |
-| `contract_trade_restriction` | logical | Contract trade restriction. |
-| `contract_unsigned_foreign_pick` | logical | Contract unsigned foreign pick. |
-| `contract_active` | logical | Contract active. |
 | `status_id` | character | Status id. |
 | `status_name` | character | Status name. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
-| `citizenship` | character | Citizenship. |
-| `birth_place_state` | character | Birth place state. |
-| `hand_type` | character | Hand type. |
-| `hand_abbreviation` | character | Hand abbreviation. |
-| `hand_display_value` | character | Hand display value. |
+| `bats_type` | character |  |
+| `bats_abbreviation` | character |  |
+| `bats_display_value` | character |  |
+| `throws_type` | character |  |
+| `throws_abbreviation` | character |  |
+| `throws_display_value` | character |  |
 
 ### Example
 
@@ -1052,12 +1088,15 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
+| `ot_losses` | double |  |
+| `ot_wins` | double |  |
 | `avg_points_against` | double | Avg points against. |
 | `avg_points_for` | double | Avg points for. |
 | `clincher` | double | Clincher. |
 | `differential` | double | Differential. |
 | `division_win_percent` | double | Division win percent. |
 | `games_behind` | double | Games behind. |
+| `games_played` | double |  |
 | `league_win_percent` | double | League win percent. |
 | `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
@@ -1066,14 +1105,27 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
+| `ties` | double |  |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
+| `division_games_behind` | double |  |
+| `division_percent` | double |  |
+| `division_tied` | double |  |
+| `home_losses` | double |  |
+| `home_ties` | double |  |
+| `home_wins` | double |  |
+| `magic_number_division` | double |  |
+| `magic_number_wildcard` | double |  |
+| `playoff_percent` | double |  |
+| `road_losses` | double |  |
+| `road_ties` | double |  |
+| `road_wins` | double |  |
+| `wild_card_percent` | double |  |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
+| `intradivision` | character |  |
+| `intraleague` | character |  |
 | `last ten games` | character | Last ten games. |
 
 ### Example

@@ -124,18 +124,27 @@ def _param_rows(ep: spec.Endpoint) -> list[dict]:
 
 
 @functools.lru_cache(maxsize=None)
-def _return_table(schema_name: str | None) -> str:
-    """Markdown ``@return`` table(s) for a ``returns_schema`` (schemas/{name}.yaml).
+def _return_table(schema_name: str | None, league: str | None = None) -> str:
+    """Markdown ``@return`` table(s) for a ``returns_schema``.
+
+    Resolution order:
+    1. ``schemas/{schema_name}/{league}.yaml`` -- per-league file (when ``league`` is given).
+    2. ``schemas/{schema_name}.yaml`` -- generic fallback.
 
     Handles both on-disk shapes: ``kind: dataframe`` (top-level ``columns``) renders
     one table; ``kind: frames`` (``frames: [{section, columns}]``) renders one bolded
-    table per sub-frame. Empty string when no schema is registered/found.
+    table per non-empty sub-frame. Empty sub-frames (zero columns) are silently skipped
+    so sport-specific sections that are vacant for another sport produce no noise.
+    Empty string when no schema is registered/found or all columns are absent.
     """
     if not schema_name:
         return ""
     import yaml
 
-    p = ROOT / "tools" / "codegen" / "schemas" / f"{schema_name}.yaml"
+    base = ROOT / "tools" / "codegen" / "schemas"
+    p = (base / schema_name / f"{league}.yaml") if league else None
+    if not (p and p.exists()):
+        p = base / f"{schema_name}.yaml"  # fallback: generic
     if not p.exists():
         return ""
     d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
@@ -145,8 +154,10 @@ def _return_table(schema_name: str | None) -> str:
         return head + "".join(f"| `{c['name']}` | {c.get('type', '')} | {c.get('description', '')} |\n" for c in cols)
 
     if d.get("kind") == "frames":
-        return "\n".join(f"**{blk['section']}**\n\n{tbl(blk['columns'])}" for blk in d.get("frames", []))
-    return tbl(d.get("columns", []))
+        blocks = [blk for blk in d.get("frames", []) if blk.get("columns")]
+        return "\n".join(f"**{blk['section']}**\n\n{tbl(blk['columns'])}" for blk in blocks)
+    cols = d.get("columns", [])
+    return tbl(cols) if cols else ""
 
 
 class _EndpointView:
@@ -216,7 +227,7 @@ class _EndpointView:
         self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
         self.valid_url = self.example_url
         self.param_rows = _param_rows(ep)
-        self.return_table = _return_table(ep.returns_schema)
+        self.return_table = _return_table(ep.returns_schema, league.prefix)
         self.returns_prose = ep.summary
         self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map
         self.notebook: str | None = None

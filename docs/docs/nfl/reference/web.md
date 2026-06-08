@@ -152,6 +152,10 @@ ESPN endpoint.
 | `current_season_type_name` | character | Current season type name. |
 | `current_season_type_start_date` | character | Current season type start date. |
 | `current_season_type_end_date` | character | Current season type end date. |
+| `current_season_type_week_number` | integer |  |
+| `current_season_type_week_start_date` | character |  |
+| `current_season_type_week_end_date` | character |  |
+| `current_season_type_week_text` | character |  |
 | `requested_season_year` | integer | Requested season year. |
 | `requested_season_display_name` | character | Requested season display name. |
 | `requested_season_start_date` | character | Requested season start date. |

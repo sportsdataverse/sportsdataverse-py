@@ -1977,12 +1977,15 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
+| `ot_losses` | double |  |
+| `ot_wins` | double |  |
 | `avg_points_against` | double | Avg points against. |
 | `avg_points_for` | double | Avg points for. |
 | `clincher` | double | Clincher. |
 | `differential` | double | Differential. |
 | `division_win_percent` | double | Division win percent. |
 | `games_behind` | double | Games behind. |
+| `games_played` | double |  |
 | `league_win_percent` | double | League win percent. |
 | `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
@@ -1991,14 +1994,27 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
+| `ties` | double |  |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
+| `division_games_behind` | double |  |
+| `division_percent` | double |  |
+| `division_tied` | double |  |
+| `home_losses` | double |  |
+| `home_ties` | double |  |
+| `home_wins` | double |  |
+| `magic_number_division` | double |  |
+| `magic_number_wildcard` | double |  |
+| `playoff_percent` | double |  |
+| `road_losses` | double |  |
+| `road_ties` | double |  |
+| `road_wins` | double |  |
+| `wild_card_percent` | double |  |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
+| `intradivision` | character |  |
+| `intraleague` | character |  |
 | `last ten games` | character | Last ten games. |
 
 ### Example

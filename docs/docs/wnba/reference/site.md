@@ -27,9 +27,56 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN event id. |
-| `season` | integer | Four-digit season year. |
-| `game_date` | character | ISO 8601 kickoff timestamp (UTC). |
+| `game_id` | character | ESPN event id. |
+| `uid` | character |  |
+| `date` | character |  |
+| `name` | character |  |
+| `short_name` | character |  |
+| `season_year` | integer |  |
+| `season_type` | integer |  |
+| `season_slug` | character |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
+| `status_clock` | double |  |
+| `status_display_clock` | character |  |
+| `status_period` | integer |  |
+| `neutral_site` | logical |  |
+| `conference_competition` | logical |  |
+| `attendance` | integer |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_city` | character |  |
+| `venue_state` | character |  |
+| `venue_indoor` | logical |  |
+| `broadcast` | character |  |
+| `note` | character |  |
+| `home_id` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_location` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_logo` | character |  |
+| `home_score` | character |  |
+| `home_winner` | logical |  |
+| `home_rank` | character |  |
+| `away_id` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_location` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_logo` | character |  |
+| `away_score` | character |  |
+| `away_winner` | logical |  |
+| `away_rank` | character |  |
 
 ### Example
 
@@ -157,7 +204,6 @@ ESPN endpoint.
 | `venue_id` | character | Venue id. |
 | `venue_guid` | character | Venue guid. |
 | `venue_full_name` | character | Venue full name. |
-| `venue_short_name` | character | Venue short name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state. |
 | `venue_grass` | logical | Venue grass. |
@@ -182,6 +228,7 @@ ESPN endpoint.
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
+| `game_note` | character |  |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -208,11 +255,7 @@ ESPN endpoint.
 | `series_score` | character | Series score. |
 | `short_summary` | character | Short summary. |
 | `events` | character | Events. |
-
-**against_the_spread**
-
-| col_name | type | description |
-|---|---|---|
+| `round` | character |  |
 
 **standings**
 
@@ -230,11 +273,6 @@ ESPN endpoint.
 | `win_percent` | character | Win percent. |
 | `wins` | character | Wins. |
 
-**broadcasts**
-
-| col_name | type | description |
-|---|---|---|
-
 **format**
 
 | col_name | type | description |
@@ -246,16 +284,6 @@ ESPN endpoint.
 | `overtime_display_name` | character | Overtime display name. |
 | `overtime_slug` | character | Overtime slug. |
 | `overtime_clock` | double | Overtime clock. |
-
-**pickcenter**
-
-| col_name | type | description |
-|---|---|---|
-
-**odds**
-
-| col_name | type | description |
-|---|---|---|
 
 **article**
 
@@ -321,26 +349,15 @@ ESPN endpoint.
 | `images` | character | Images. |
 | `categories` | character | Categories. |
 | `premium` | logical | Premium. |
-| `byline` | character | Byline. |
 | `links_web_href` | character | Links web href. |
 | `links_mobile_href` | character | Links mobile href. |
 | `links_api_self_href` | character | Links api self href. |
 | `links_app_sportscenter_href` | character | Links app sportscenter href. |
-
-**drives**
-
-| col_name | type | description |
-|---|---|---|
-
-**drive_plays**
-
-| col_name | type | description |
-|---|---|---|
-
-**scoring_plays**
-
-| col_name | type | description |
-|---|---|---|
+| `byline` | character | Byline. |
+| `links_web_self_href` | character |  |
+| `links_web_self_dsi_href` | character |  |
+| `links_api_artwork_href` | character |  |
+| `links_sportscenter_href` | character |  |
 
 ### Example
 
@@ -691,29 +708,19 @@ ESPN endpoint.
 | `full_name` | character | Full name. |
 | `display_name` | character | Display name. |
 | `short_name` | character | Short name. |
-| `weight` | double | Weight. |
-| `display_weight` | character | Display weight. |
 | `height` | double | Height. |
 | `display_height` | character | Display height. |
 | `age` | integer | Age. |
 | `date_of_birth` | character | Date of birth. |
-| `debut_year` | double | Debut year. |
 | `links` | character | Links. |
 | `slug` | character | Slug. |
 | `jersey` | character | Jersey. |
 | `injuries` | character | Injuries. |
-| `teams` | character | Teams. |
 | `contracts` | character | Contracts. |
 | `alternate_ids_sdr` | character | Alternate ids sdr. |
 | `birth_place_city` | character | Birth place city. |
+| `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `college_id` | character | College id. |
-| `college_guid` | character | College guid. |
-| `college_mascot` | character | College mascot. |
-| `college_name` | character | College name. |
-| `college_short_name` | character | College short name. |
-| `college_abbrev` | character | College abbrev. |
-| `college_logos` | character | College logos. |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
 | `position_id` | character | Position id. |
@@ -722,35 +729,24 @@ ESPN endpoint.
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
 | `experience_years` | integer | Experience years. |
-| `contract_bird_status` | integer | Contract bird status. |
-| `contract_base_year_compensation_active` | logical | Contract base year compensation active. |
-| `contract_poison_pill_provision_active` | logical | Contract poison pill provision active. |
-| `contract_incoming_trade_value` | integer | Contract incoming trade value. |
-| `contract_outgoing_trade_value` | integer | Contract outgoing trade value. |
-| `contract_minimum_salary_exception` | logical | Contract minimum salary exception. |
-| `contract_option_type` | integer | Contract option type. |
-| `contract_salary` | integer | Contract salary. |
-| `contract_salary_remaining` | integer | Contract salary remaining. |
-| `contract_years_remaining` | integer | Contract years remaining. |
-| `contract_season_year` | integer | Contract season year. |
-| `contract_season_start_date` | character | Contract season start date. |
-| `contract_season_end_date` | character | Contract season end date. |
-| `contract_trade_kicker_active` | logical | Contract trade kicker active. |
-| `contract_trade_kicker_percentage` | double | Contract trade kicker percentage. |
-| `contract_trade_kicker_value` | integer | Contract trade kicker value. |
-| `contract_trade_kicker_trade_value` | integer | Contract trade kicker trade value. |
-| `contract_trade_restriction` | logical | Contract trade restriction. |
-| `contract_unsigned_foreign_pick` | logical | Contract unsigned foreign pick. |
-| `contract_active` | logical | Contract active. |
 | `status_id` | character | Status id. |
 | `status_name` | character | Status name. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
-| `citizenship` | character | Citizenship. |
-| `birth_place_state` | character | Birth place state. |
+| `weight` | double | Weight. |
+| `display_weight` | character | Display weight. |
+| `college_id` | character | College id. |
+| `college_guid` | character | College guid. |
+| `college_mascot` | character | College mascot. |
+| `college_name` | character | College name. |
+| `college_short_name` | character | College short name. |
+| `college_abbrev` | character | College abbrev. |
+| `college_logos` | character | College logos. |
 | `hand_type` | character | Hand type. |
 | `hand_abbreviation` | character | Hand abbreviation. |
 | `hand_display_value` | character | Hand display value. |
+| `citizenship` | character | Citizenship. |
+| `teams` | character | Teams. |
 
 ### Example
 

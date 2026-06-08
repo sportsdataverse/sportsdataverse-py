@@ -1977,29 +1977,24 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
-| `avg_points_against` | double | Avg points against. |
-| `avg_points_for` | double | Avg points for. |
-| `clincher` | double | Clincher. |
-| `differential` | double | Differential. |
-| `division_win_percent` | double | Division win percent. |
 | `games_behind` | double | Games behind. |
 | `league_win_percent` | double | League win percent. |
-| `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
 | `point_differential` | double | Point differential. |
-| `points` | double | Points. |
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
+| `division_losses` | double |  |
+| `division_ties` | double |  |
+| `division_wins` | double |  |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
-| `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
+| `away` | character |  |
 | `vs. conf.` | character | Vs. conf.. |
-| `last ten games` | character | Last ten games. |
+| `vs ap top 25` | character |  |
+| `vs usa ranked teams` | character |  |
+| `vs division` | double |  |
 
 ### Example
 
