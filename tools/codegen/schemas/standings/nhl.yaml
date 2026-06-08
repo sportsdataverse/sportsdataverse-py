@@ -1,0 +1,108 @@
+schema: standings
+kind: dataframe
+columns:
+- name: group_name
+  type: character
+  description: Group name.
+- name: group_abbreviation
+  type: character
+  description: Group abbreviation.
+- name: team_id
+  type: character
+  description: Team id.
+- name: team_name
+  type: character
+  description: Team name.
+- name: team_abbreviation
+  type: character
+  description: Team abbreviation.
+- name: team_display_name
+  type: character
+  description: Team display name.
+- name: team_location
+  type: character
+  description: Team location.
+- name: team_logo
+  type: character
+  description: Team logo.
+- name: ot_losses
+  type: double
+  description: ''
+- name: clincher
+  type: double
+  description: Clincher.
+- name: differential
+  type: double
+  description: Differential.
+- name: games_behind
+  type: double
+  description: Games behind.
+- name: games_played
+  type: double
+  description: ''
+- name: losses
+  type: double
+  description: Losses.
+- name: playoff_seed
+  type: double
+  description: Playoff seed.
+- name: point_differential
+  type: double
+  description: Point differential.
+- name: points
+  type: double
+  description: Points.
+- name: points_against
+  type: double
+  description: Points against.
+- name: points_for
+  type: double
+  description: Points for.
+- name: streak
+  type: double
+  description: Streak.
+- name: wins
+  type: double
+  description: Wins.
+- name: overtime_losses
+  type: double
+  description: ''
+- name: overtime_wins
+  type: double
+  description: ''
+- name: points_diff
+  type: double
+  description: ''
+- name: reg_losses
+  type: double
+  description: ''
+- name: reg_wins
+  type: double
+  description: ''
+- name: rot_losses
+  type: double
+  description: ''
+- name: rot_wins
+  type: double
+  description: ''
+- name: shootout_losses
+  type: double
+  description: ''
+- name: shootout_wins
+  type: double
+  description: ''
+- name: overall
+  type: character
+  description: Overall.
+- name: home
+  type: character
+  description: Home.
+- name: road
+  type: character
+  description: Road.
+- name: last ten games
+  type: character
+  description: Last ten games.
+- name: vs. div.
+  type: character
+  description: Vs. div..

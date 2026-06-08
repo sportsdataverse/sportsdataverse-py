@@ -681,6 +681,98 @@ def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: i
     return sorted({line.split("\t")[0].strip() for line in out.splitlines() if line.strip()})
 
 
+# returns_schema name -> (parser callable, "frames" | "dataframe").
+# parse_summary returns a {section: frame} dict; the rest return one frame.
+def _return_schema_parsers():
+    from sportsdataverse import _common_espn_parsers as P
+
+    return {
+        "scoreboard": (P.parse_scoreboard, "dataframe"),
+        "teams": (P.parse_teams, "dataframe"),
+        "team_roster": (P.parse_team_roster, "dataframe"),
+        "standings": (P.parse_standings, "dataframe"),
+        "leaders": (P.parse_leaders, "dataframe"),
+        "summary": (P.parse_summary, "frames"),
+    }
+
+
+def _desc_lookup(schema_name: str) -> dict:
+    """{column_name: description} from the hand-curated generic schema, used to
+    annotate the introspected per-league columns (which carry only name+type)."""
+    import yaml
+
+    p = ROOT / "tools" / "codegen" / "schemas" / f"{schema_name}.yaml"
+    if not p.exists():
+        return {}
+    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    out = {}
+    if d.get("kind") == "frames":
+        for blk in d.get("frames", []):
+            for c in blk.get("columns", []):
+                out[c["name"]] = c.get("description", "")
+    else:
+        for c in d.get("columns", []):
+            out[c["name"]] = c.get("description", "")
+    return out
+
+
+def _pl_to_doc_type(pl_type: str) -> str:
+    s = pl_type.lower()
+    if "int" in s:
+        return "integer"
+    if "float" in s:
+        return "double"
+    if "bool" in s:
+        return "logical"
+    return "character"
+
+
+def _cols_from_frame(df, descs: dict) -> list:
+    return [
+        {"name": n, "type": _pl_to_doc_type(str(t)), "description": descs.get(n, "")}
+        for n, t in zip(df.columns, df.dtypes)
+    ]
+
+
+_LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"]
+_FIX = ROOT / "tests" / "fixtures" / "espn"
+
+
+def refresh_return_schemas() -> int:
+    """Run each parser on every per-league captured fixture and emit per-league
+    column schemas under schemas/{name}/{league}.yaml. Descriptions are merged
+    from the hand-curated generic schemas/{name}.yaml by column name."""
+    import json
+
+    import yaml
+
+    written = skipped = 0
+    for name, (parser, kind) in _return_schema_parsers().items():
+        descs = _desc_lookup(name)
+        outdir = ROOT / "tools" / "codegen" / "schemas" / name
+        for league in _LEAGUES:
+            fx = _FIX / f"{name}_{league}.json"
+            if not fx.exists():
+                skipped += 1
+                continue
+            payload = json.loads(fx.read_text(encoding="utf-8"))
+            outdir.mkdir(parents=True, exist_ok=True)
+            if kind == "frames":
+                frames = parser(payload)  # {section: df}
+                doc = {
+                    "schema": name,
+                    "kind": "frames",
+                    "frames": [{"section": sec, "columns": _cols_from_frame(df, descs)} for sec, df in frames.items()],
+                }
+            else:
+                df = parser(payload)
+                doc = {"schema": name, "kind": "dataframe", "columns": _cols_from_frame(df, descs)}
+            (outdir / f"{league}.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8")
+            written += 1
+    print(f"return schemas: {written} per-league written, {skipped} skipped (no fixture)")
+    return 0
+
+
 def refresh_loader_schemas() -> int:
     """Re-introspect every non-stub loader's release parquet footer and rewrite
     tools/codegen/schemas/loader_schemas.yaml (network; reads metadata only)."""
@@ -1291,11 +1383,18 @@ def main(argv=None) -> int:
         help="re-introspect release parquet footers -> schemas/loader_schemas.yaml (network)",
     )
     ap.add_argument(
+        "--schemas",
+        action="store_true",
+        help="introspect parsers against captured fixtures -> per-league return schemas (offline)",
+    )
+    ap.add_argument(
         "--docs",
         action="store_true",
         help="regenerate the per-league reference subtree into docs/docs/ and exit",
     )
     args = ap.parse_args(argv)
+    if args.schemas:
+        return refresh_return_schemas()
     if args.loader_schemas:
         return refresh_loader_schemas()
     if args.audit_releases:

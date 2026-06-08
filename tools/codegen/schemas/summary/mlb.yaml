@@ -1,0 +1,696 @@
+schema: summary
+kind: frames
+frames:
+- section: boxscore_player
+  columns:
+  - name: team_id
+    type: character
+    description: Team id.
+  - name: team_abbreviation
+    type: character
+    description: Team abbreviation.
+  - name: team_display_name
+    type: character
+    description: Team display name.
+  - name: team_location
+    type: character
+    description: Team location.
+  - name: athlete_id
+    type: character
+    description: Athlete id.
+  - name: athlete_display_name
+    type: character
+    description: Athlete display name.
+  - name: athlete_short_name
+    type: character
+    description: Athlete short name.
+  - name: athlete_jersey
+    type: character
+    description: Athlete jersey.
+  - name: athlete_position
+    type: character
+    description: Athlete position.
+  - name: starter
+    type: logical
+    description: Starter.
+  - name: active
+    type: logical
+    description: Active.
+  - name: did_not_play
+    type: character
+    description: Did not play.
+  - name: ejected
+    type: character
+    description: Ejected.
+  - name: reason
+    type: character
+    description: Reason.
+  - name: hits_at_bats
+    type: character
+    description: ''
+  - name: at_bats
+    type: character
+    description: ''
+  - name: runs
+    type: character
+    description: ''
+  - name: hits
+    type: character
+    description: ''
+  - name: rb_is
+    type: character
+    description: ''
+  - name: home_runs
+    type: character
+    description: ''
+  - name: walks
+    type: character
+    description: ''
+  - name: strikeouts
+    type: character
+    description: ''
+  - name: pitches
+    type: character
+    description: ''
+  - name: avg
+    type: character
+    description: ''
+  - name: on_base_pct
+    type: character
+    description: ''
+  - name: slug_avg
+    type: character
+    description: ''
+  - name: full_innings.part_innings
+    type: character
+    description: ''
+  - name: earned_runs
+    type: character
+    description: ''
+  - name: pitches_strikes
+    type: character
+    description: ''
+  - name: era
+    type: character
+    description: ''
+- section: boxscore_team
+  columns:
+  - name: team_id
+    type: character
+    description: Team id.
+  - name: team_abbreviation
+    type: character
+    description: Team abbreviation.
+  - name: team_display_name
+    type: character
+    description: Team display name.
+  - name: home_away
+    type: character
+    description: Home away.
+  - name: display_order
+    type: integer
+    description: Display order.
+  - name: stat_name
+    type: character
+    description: Stat name.
+  - name: stat_label
+    type: character
+    description: Stat label.
+  - name: stat_display_value
+    type: character
+    description: Stat display value.
+  - name: stat_value
+    type: character
+    description: Stat value.
+- section: plays
+  columns:
+  - name: id
+    type: character
+    description: Id.
+  - name: sequence_number
+    type: character
+    description: Sequence number.
+  - name: text
+    type: character
+    description: Text.
+  - name: away_score
+    type: integer
+    description: Away score.
+  - name: home_score
+    type: integer
+    description: Home score.
+  - name: scoring_play
+    type: logical
+    description: Scoring play.
+  - name: score_value
+    type: integer
+    description: Score value.
+  - name: wallclock
+    type: character
+    description: Wallclock.
+  - name: at_bat_id
+    type: character
+    description: ''
+  - name: summary_type
+    type: character
+    description: ''
+  - name: outs
+    type: integer
+    description: ''
+  - name: type_id
+    type: character
+    description: Type id.
+  - name: type_text
+    type: character
+    description: Type text.
+  - name: type_type
+    type: character
+    description: ''
+  - name: period_type
+    type: character
+    description: ''
+  - name: period_number
+    type: integer
+    description: Period number.
+  - name: period_display_value
+    type: character
+    description: Period display value.
+  - name: team_id
+    type: character
+    description: Team id.
+  - name: pitch_count_balls
+    type: integer
+    description: ''
+  - name: pitch_count_strikes
+    type: integer
+    description: ''
+  - name: result_count_balls
+    type: integer
+    description: ''
+  - name: result_count_strikes
+    type: integer
+    description: ''
+  - name: participants
+    type: character
+    description: Participants.
+  - name: bat_order
+    type: double
+    description: ''
+  - name: type_alternative_text
+    type: character
+    description: ''
+  - name: bats_type
+    type: character
+    description: ''
+  - name: bats_abbreviation
+    type: character
+    description: ''
+  - name: bats_display_value
+    type: character
+    description: ''
+  - name: at_bat_pitch_number
+    type: double
+    description: ''
+  - name: pitch_velocity
+    type: double
+    description: ''
+  - name: trajectory
+    type: character
+    description: ''
+  - name: type_abbreviation
+    type: character
+    description: ''
+  - name: pitch_coordinate_x
+    type: double
+    description: ''
+  - name: pitch_coordinate_y
+    type: double
+    description: ''
+  - name: pitch_type_id
+    type: character
+    description: ''
+  - name: pitch_type_text
+    type: character
+    description: ''
+  - name: pitch_type_abbreviation
+    type: character
+    description: ''
+  - name: hit_coordinate_x
+    type: double
+    description: ''
+  - name: hit_coordinate_y
+    type: double
+    description: ''
+  - name: alternative_play
+    type: character
+    description: ''
+  - name: alternative_type_id
+    type: character
+    description: ''
+  - name: alternative_type_text
+    type: character
+    description: ''
+  - name: alternative_type_abbreviation
+    type: character
+    description: ''
+  - name: alternative_type_alternative_text
+    type: character
+    description: ''
+  - name: alternative_type_type
+    type: character
+    description: ''
+  - name: on_first_athlete_id
+    type: character
+    description: ''
+  - name: on_second_athlete_id
+    type: character
+    description: ''
+  - name: on_third_athlete_id
+    type: character
+    description: ''
+- section: winprobability
+  columns:
+  - name: home_win_percentage
+    type: double
+    description: Home win percentage.
+  - name: tie_percentage
+    type: double
+    description: Tie percentage.
+  - name: play_id
+    type: character
+    description: Play id.
+- section: leaders
+  columns: []
+- section: game_info
+  columns:
+  - name: attendance
+    type: integer
+    description: Attendance.
+  - name: venue_id
+    type: character
+    description: Venue id.
+  - name: venue_full_name
+    type: character
+    description: Venue full name.
+  - name: venue_short_name
+    type: character
+    description: Venue short name.
+  - name: venue_address_city
+    type: character
+    description: Venue address city.
+  - name: venue_address_state
+    type: character
+    description: Venue address state.
+  - name: venue_address_zip_code
+    type: character
+    description: ''
+- section: officials
+  columns:
+  - name: display_name
+    type: character
+    description: Display name.
+  - name: order
+    type: integer
+    description: Order.
+  - name: position_name
+    type: character
+    description: Position name.
+  - name: position_display_name
+    type: character
+    description: Position display name.
+  - name: position_id
+    type: character
+    description: Position id.
+- section: header
+  columns:
+  - name: id
+    type: character
+    description: Id.
+  - name: uid
+    type: character
+    description: Uid.
+  - name: time_valid
+    type: logical
+    description: Time valid.
+  - name: competitions
+    type: character
+    description: Competitions.
+  - name: links
+    type: character
+    description: Links.
+  - name: game_note
+    type: character
+    description: ''
+  - name: season_year
+    type: integer
+    description: Season year.
+  - name: season_current
+    type: logical
+    description: Season current.
+  - name: season_type
+    type: integer
+    description: Season type.
+  - name: league_id
+    type: character
+    description: League id.
+  - name: league_uid
+    type: character
+    description: League uid.
+  - name: league_name
+    type: character
+    description: League name.
+  - name: league_abbreviation
+    type: character
+    description: League abbreviation.
+  - name: league_midsize_name
+    type: character
+    description: ''
+  - name: league_slug
+    type: character
+    description: League slug.
+  - name: league_is_tournament
+    type: logical
+    description: League is tournament.
+  - name: league_links
+    type: character
+    description: League links.
+  - name: league_logos
+    type: character
+    description: League logos.
+- section: season_series
+  columns:
+  - name: type
+    type: character
+    description: Type.
+  - name: title
+    type: character
+    description: Title.
+  - name: description
+    type: character
+    description: Description.
+  - name: summary
+    type: character
+    description: Summary.
+  - name: completed
+    type: logical
+    description: Completed.
+  - name: total_competitions
+    type: integer
+    description: Total competitions.
+  - name: series_score
+    type: character
+    description: Series score.
+  - name: events
+    type: character
+    description: Events.
+  - name: series_label
+    type: character
+    description: Series label.
+  - name: short_summary
+    type: character
+    description: Short summary.
+  - name: round
+    type: character
+    description: ''
+- section: against_the_spread
+  columns: []
+- section: standings
+  columns:
+  - name: group_header
+    type: character
+    description: Group header.
+  - name: conference_header
+    type: character
+    description: Conference header.
+  - name: division_header
+    type: character
+    description: Division header.
+  - name: team_id
+    type: character
+    description: Team id.
+  - name: team_uid
+    type: character
+    description: Team uid.
+  - name: team_location
+    type: character
+    description: Team location.
+  - name: games_behind
+    type: character
+    description: Games behind.
+  - name: losses
+    type: character
+    description: Losses.
+  - name: streak
+    type: character
+    description: Streak.
+  - name: win_percent
+    type: character
+    description: Win percent.
+  - name: wins
+    type: character
+    description: Wins.
+- section: broadcasts
+  columns:
+  - name: station
+    type: character
+    description: ''
+  - name: station_key
+    type: character
+    description: ''
+  - name: lang
+    type: character
+    description: ''
+  - name: region
+    type: character
+    description: ''
+  - name: is_national
+    type: logical
+    description: ''
+  - name: type_id
+    type: character
+    description: Type id.
+  - name: type_short_name
+    type: character
+    description: ''
+  - name: type_long_name
+    type: character
+    description: ''
+  - name: type_slug
+    type: character
+    description: ''
+  - name: market_id
+    type: character
+    description: ''
+  - name: market_type
+    type: character
+    description: ''
+  - name: media_call_letters
+    type: character
+    description: ''
+  - name: media_name
+    type: character
+    description: ''
+  - name: media_short_name
+    type: character
+    description: ''
+- section: format
+  columns:
+  - name: regulation_periods
+    type: integer
+    description: Regulation periods.
+  - name: regulation_display_name
+    type: character
+    description: Regulation display name.
+  - name: regulation_slug
+    type: character
+    description: Regulation slug.
+- section: pickcenter
+  columns: []
+- section: odds
+  columns: []
+- section: article
+  columns:
+  - name: id
+    type: integer
+    description: Id.
+  - name: now_id
+    type: character
+    description: Now id.
+  - name: content_key
+    type: character
+    description: Content key.
+  - name: data_source_identifier
+    type: character
+    description: Data source identifier.
+  - name: publishedkey
+    type: character
+    description: Publishedkey.
+  - name: type
+    type: character
+    description: Type.
+  - name: game_id
+    type: character
+    description: Game id.
+  - name: headline
+    type: character
+    description: Headline.
+  - name: description
+    type: character
+    description: Description.
+  - name: link_text
+    type: character
+    description: Link text.
+  - name: categorized
+    type: character
+    description: Categorized.
+  - name: originally_posted
+    type: character
+    description: Originally posted.
+  - name: last_modified
+    type: character
+    description: Last modified.
+  - name: published
+    type: character
+    description: Published.
+  - name: section
+    type: character
+    description: Section.
+  - name: source
+    type: character
+    description: Source.
+  - name: images
+    type: character
+    description: Images.
+  - name: video
+    type: character
+    description: Video.
+  - name: categories
+    type: character
+    description: Categories.
+  - name: keywords
+    type: character
+    description: Keywords.
+  - name: story
+    type: character
+    description: Story.
+  - name: premium
+    type: logical
+    description: Premium.
+  - name: is_live_blog
+    type: logical
+    description: Is live blog.
+  - name: allow_comments
+    type: logical
+    description: Allow comments.
+  - name: allow_search
+    type: logical
+    description: Allow search.
+  - name: allow_content_reactions
+    type: logical
+    description: Allow content reactions.
+  - name: links_web_href
+    type: character
+    description: Links web href.
+  - name: links_mobile_href
+    type: character
+    description: Links mobile href.
+  - name: links_api_self_href
+    type: character
+    description: Links api self href.
+  - name: links_app_sportscenter_href
+    type: character
+    description: Links app sportscenter href.
+- section: injuries
+  columns:
+  - name: injuries
+    type: character
+    description: Injuries.
+  - name: team_id
+    type: character
+    description: Team id.
+  - name: team_uid
+    type: character
+    description: Team uid.
+  - name: team_display_name
+    type: character
+    description: Team display name.
+  - name: team_abbreviation
+    type: character
+    description: Team abbreviation.
+  - name: team_links
+    type: character
+    description: Team links.
+  - name: team_logo
+    type: character
+    description: Team logo.
+  - name: team_logos
+    type: character
+    description: Team logos.
+- section: news
+  columns:
+  - name: id
+    type: integer
+    description: Id.
+  - name: now_id
+    type: character
+    description: Now id.
+  - name: content_key
+    type: character
+    description: Content key.
+  - name: data_source_identifier
+    type: character
+    description: Data source identifier.
+  - name: type
+    type: character
+    description: Type.
+  - name: headline
+    type: character
+    description: Headline.
+  - name: description
+    type: character
+    description: Description.
+  - name: last_modified
+    type: character
+    description: Last modified.
+  - name: published
+    type: character
+    description: Published.
+  - name: images
+    type: character
+    description: Images.
+  - name: categories
+    type: character
+    description: Categories.
+  - name: premium
+    type: logical
+    description: Premium.
+  - name: links_web_href
+    type: character
+    description: Links web href.
+  - name: links_mobile_href
+    type: character
+    description: Links mobile href.
+  - name: links_api_self_href
+    type: character
+    description: Links api self href.
+  - name: links_app_sportscenter_href
+    type: character
+    description: Links app sportscenter href.
+  - name: links_web_self_href
+    type: character
+    description: ''
+  - name: links_web_self_dsi_href
+    type: character
+    description: ''
+  - name: links_api_artwork_href
+    type: character
+    description: ''
+  - name: links_sportscenter_href
+    type: character
+    description: ''
+- section: drives
+  columns: []
+- section: drive_plays
+  columns: []
+- section: scoring_plays
+  columns: []

@@ -1,0 +1,90 @@
+schema: standings
+kind: dataframe
+columns:
+- name: group_name
+  type: character
+  description: Group name.
+- name: group_abbreviation
+  type: character
+  description: Group abbreviation.
+- name: team_id
+  type: character
+  description: Team id.
+- name: team_name
+  type: character
+  description: Team name.
+- name: team_abbreviation
+  type: character
+  description: Team abbreviation.
+- name: team_display_name
+  type: character
+  description: Team display name.
+- name: team_location
+  type: character
+  description: Team location.
+- name: team_logo
+  type: character
+  description: Team logo.
+- name: clincher
+  type: double
+  description: Clincher.
+- name: differential
+  type: double
+  description: Differential.
+- name: games_behind
+  type: double
+  description: Games behind.
+- name: losses
+  type: double
+  description: Losses.
+- name: playoff_seed
+  type: double
+  description: Playoff seed.
+- name: point_differential
+  type: double
+  description: Point differential.
+- name: points_against
+  type: double
+  description: Points against.
+- name: points_for
+  type: double
+  description: Points for.
+- name: streak
+  type: double
+  description: Streak.
+- name: ties
+  type: double
+  description: ''
+- name: win_percent
+  type: double
+  description: Win percent.
+- name: wins
+  type: double
+  description: Wins.
+- name: division_losses
+  type: double
+  description: ''
+- name: division_record
+  type: double
+  description: ''
+- name: division_ties
+  type: double
+  description: ''
+- name: division_wins
+  type: double
+  description: ''
+- name: overall
+  type: character
+  description: Overall.
+- name: home
+  type: character
+  description: Home.
+- name: road
+  type: character
+  description: Road.
+- name: vs. div.
+  type: character
+  description: Vs. div..
+- name: vs. conf.
+  type: character
+  description: Vs. conf..

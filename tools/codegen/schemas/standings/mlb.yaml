@@ -1,0 +1,144 @@
+schema: standings
+kind: dataframe
+columns:
+- name: group_name
+  type: character
+  description: Group name.
+- name: group_abbreviation
+  type: character
+  description: Group abbreviation.
+- name: team_id
+  type: character
+  description: Team id.
+- name: team_name
+  type: character
+  description: Team name.
+- name: team_abbreviation
+  type: character
+  description: Team abbreviation.
+- name: team_display_name
+  type: character
+  description: Team display name.
+- name: team_location
+  type: character
+  description: Team location.
+- name: team_logo
+  type: character
+  description: Team logo.
+- name: ot_losses
+  type: double
+  description: ''
+- name: ot_wins
+  type: double
+  description: ''
+- name: avg_points_against
+  type: double
+  description: Avg points against.
+- name: avg_points_for
+  type: double
+  description: Avg points for.
+- name: clincher
+  type: double
+  description: Clincher.
+- name: differential
+  type: double
+  description: Differential.
+- name: division_win_percent
+  type: double
+  description: Division win percent.
+- name: games_behind
+  type: double
+  description: Games behind.
+- name: games_played
+  type: double
+  description: ''
+- name: league_win_percent
+  type: double
+  description: League win percent.
+- name: losses
+  type: double
+  description: Losses.
+- name: playoff_seed
+  type: double
+  description: Playoff seed.
+- name: point_differential
+  type: double
+  description: Point differential.
+- name: points
+  type: double
+  description: Points.
+- name: points_against
+  type: double
+  description: Points against.
+- name: points_for
+  type: double
+  description: Points for.
+- name: streak
+  type: double
+  description: Streak.
+- name: ties
+  type: double
+  description: ''
+- name: win_percent
+  type: double
+  description: Win percent.
+- name: wins
+  type: double
+  description: Wins.
+- name: division_games_behind
+  type: double
+  description: ''
+- name: division_percent
+  type: double
+  description: ''
+- name: division_tied
+  type: double
+  description: ''
+- name: home_losses
+  type: double
+  description: ''
+- name: home_ties
+  type: double
+  description: ''
+- name: home_wins
+  type: double
+  description: ''
+- name: magic_number_division
+  type: double
+  description: ''
+- name: magic_number_wildcard
+  type: double
+  description: ''
+- name: playoff_percent
+  type: double
+  description: ''
+- name: road_losses
+  type: double
+  description: ''
+- name: road_ties
+  type: double
+  description: ''
+- name: road_wins
+  type: double
+  description: ''
+- name: wild_card_percent
+  type: double
+  description: ''
+- name: overall
+  type: character
+  description: Overall.
+- name: home
+  type: character
+  description: Home.
+- name: road
+  type: character
+  description: Road.
+- name: intradivision
+  type: character
+  description: ''
+- name: intraleague
+  type: character
+  description: ''
+- name: last ten games
+  type: character
+  description: Last ten games.

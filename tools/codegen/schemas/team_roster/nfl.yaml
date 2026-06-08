@@ -1,0 +1,159 @@
+schema: team_roster
+kind: dataframe
+columns:
+- name: position_group
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: Id.
+- name: uid
+  type: character
+  description: Uid.
+- name: guid
+  type: character
+  description: Guid.
+- name: first_name
+  type: character
+  description: First name.
+- name: last_name
+  type: character
+  description: Last name.
+- name: full_name
+  type: character
+  description: Full name.
+- name: display_name
+  type: character
+  description: Display name.
+- name: short_name
+  type: character
+  description: Short name.
+- name: weight
+  type: double
+  description: Weight.
+- name: display_weight
+  type: character
+  description: Display weight.
+- name: height
+  type: double
+  description: Height.
+- name: display_height
+  type: character
+  description: Display height.
+- name: links
+  type: character
+  description: Links.
+- name: slug
+  type: character
+  description: Slug.
+- name: jersey
+  type: character
+  description: Jersey.
+- name: injuries
+  type: character
+  description: Injuries.
+- name: contracts
+  type: character
+  description: Contracts.
+- name: alternate_ids_sdr
+  type: character
+  description: Alternate ids sdr.
+- name: birth_place_city
+  type: character
+  description: Birth place city.
+- name: birth_place_state
+  type: character
+  description: Birth place state.
+- name: birth_place_country
+  type: character
+  description: Birth place country.
+- name: college_id
+  type: character
+  description: College id.
+- name: college_guid
+  type: character
+  description: College guid.
+- name: college_mascot
+  type: character
+  description: College mascot.
+- name: college_name
+  type: character
+  description: College name.
+- name: college_short_name
+  type: character
+  description: College short name.
+- name: college_abbrev
+  type: character
+  description: College abbrev.
+- name: college_logos
+  type: character
+  description: College logos.
+- name: headshot_href
+  type: character
+  description: Headshot href.
+- name: headshot_alt
+  type: character
+  description: Headshot alt.
+- name: position_id
+  type: character
+  description: Position id.
+- name: position_name
+  type: character
+  description: Position name.
+- name: position_display_name
+  type: character
+  description: Position display name.
+- name: position_abbreviation
+  type: character
+  description: Position abbreviation.
+- name: position_leaf
+  type: logical
+  description: Position leaf.
+- name: position_parent_id
+  type: character
+  description: ''
+- name: position_parent_name
+  type: character
+  description: ''
+- name: position_parent_display_name
+  type: character
+  description: ''
+- name: position_parent_abbreviation
+  type: character
+  description: ''
+- name: position_parent_leaf
+  type: logical
+  description: ''
+- name: experience_years
+  type: integer
+  description: Experience years.
+- name: status_id
+  type: character
+  description: Status id.
+- name: status_name
+  type: character
+  description: Status name.
+- name: status_type
+  type: character
+  description: Status type.
+- name: status_abbreviation
+  type: character
+  description: Status abbreviation.
+- name: age
+  type: double
+  description: Age.
+- name: date_of_birth
+  type: character
+  description: Date of birth.
+- name: debut_year
+  type: double
+  description: Debut year.
+- name: hand_type
+  type: character
+  description: Hand type.
+- name: hand_abbreviation
+  type: character
+  description: Hand abbreviation.
+- name: hand_display_value
+  type: character
+  description: Hand display value.
