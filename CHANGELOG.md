@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
   - [Bug fixes](#bug-fixes)
@@ -74,6 +76,31 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)
+
+- Added 4 NHL short-name aliases in `sportsdataverse/nhl/nhl_loaders.py`:
+  `load_nhl_team_box` → `load_nhl_team_boxscore`,
+  `load_nhl_player_box` → `load_nhl_player_boxscore`,
+  `load_nhl_skater_box` → `load_nhl_skater_boxscores`,
+  `load_nhl_goalie_box` → `load_nhl_goalie_boxscores`.
+- Added 5 PWHL short-name aliases in `sportsdataverse/pwhl/pwhl_loaders.py`:
+  `load_pwhl_team_box` → `load_pwhl_team_boxscores`,
+  `load_pwhl_player_box` → `load_pwhl_player_boxscores`,
+  `load_pwhl_skater_box` → `load_pwhl_skater_boxscores`,
+  `load_pwhl_goalie_box` → `load_pwhl_goalie_boxscores`,
+  `load_pwhl_schedule` → `load_pwhl_schedules`.
+- Added `load_nhl_games()` (no `seasons` arg) reading the NHL games-in-data-repo
+  manifest parquet from the `nhl_schedules` release asset (primary URL verified
+  working: `sportsdataverse-data/releases/download/nhl_schedules/nhl_games_in_data_repo.parquet`).
+- Added `load_pwhl_games()` (no `seasons` arg) reading the PWHL games-in-data-repo
+  manifest parquet from the `pwhl_schedules` release asset (primary URL verified
+  working: `sportsdataverse-data/releases/download/pwhl_schedules/pwhl_games_in_data_repo.parquet`).
+- Added `tests/test_loader_parity.py` covering importability, `__all__` membership,
+  docstring-based forwarding assertions, and live alias shape-parity + manifest tests
+  (gated behind `SDV_PY_LIVE_TESTS=1`).
 
 ## 0.0.55 Release: June 8, 2026
 
