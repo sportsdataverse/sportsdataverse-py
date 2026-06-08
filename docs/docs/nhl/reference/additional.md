@@ -605,6 +605,74 @@ A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed
 >>> nhl_scoreboard(date="2024-03-01")
 ```
 
+## Dataset loaders
+
+### `load_nhl_games(return_as_pandas: 'bool' = False)`
+
+Load the NHL games-in-data-repo manifest (no ``seasons`` argument).
+
+Mirrors fastRhockey (R) ``load_nhl_games()`` which reads a manifest of every NHL game that has processed data in the data repository. Tries the sportsdataverse-data release asset first; falls back to the raw fastRhockey-data GitHub path.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame of all games in the data repository.
+
+**Example**
+
+```python
+>>> load_nhl_games()
+```
+
+### `load_nhl_goalie_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `load_nhl_player_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `load_nhl_skater_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `load_nhl_team_box(seasons, return_as_pandas: 'bool' = False)`
+
+Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
 ## Utilities & helpers
 
 ### `most_recent_nhl_season()`

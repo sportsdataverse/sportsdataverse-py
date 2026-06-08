@@ -32,7 +32,7 @@ from sportsdataverse.nhl import (
     load_nhl_team_box,
     load_nhl_team_boxscore,
 )
-from sportsdataverse.nhl.nhl_loaders import load_nhl_games
+from sportsdataverse.nhl.nhl_loaders_extra import load_nhl_games
 from sportsdataverse.pwhl import (
     load_pwhl_goalie_box,
     load_pwhl_goalie_boxscores,
@@ -45,7 +45,7 @@ from sportsdataverse.pwhl import (
     load_pwhl_team_box,
     load_pwhl_team_boxscores,
 )
-from sportsdataverse.pwhl.pwhl_loaders import load_pwhl_games
+from sportsdataverse.pwhl.pwhl_loaders_extra import load_pwhl_games
 from tests.conftest import skip_if_no_live
 
 # ---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ def test_all_11_new_names_are_present():
 
 
 def test_nhl_aliases_in_all():
-    from sportsdataverse.nhl import nhl_loaders
+    from sportsdataverse.nhl import nhl_loaders_extra
 
     for name in [
         "load_nhl_team_box",
@@ -105,11 +105,11 @@ def test_nhl_aliases_in_all():
         "load_nhl_goalie_box",
         "load_nhl_games",
     ]:
-        assert name in nhl_loaders.__all__, f"{name} missing from nhl_loaders.__all__"
+        assert name in nhl_loaders_extra.__all__, f"{name} missing from nhl_loaders_extra.__all__"
 
 
 def test_pwhl_aliases_in_all():
-    from sportsdataverse.pwhl import pwhl_loaders
+    from sportsdataverse.pwhl import pwhl_loaders_extra
 
     for name in [
         "load_pwhl_team_box",
@@ -119,7 +119,7 @@ def test_pwhl_aliases_in_all():
         "load_pwhl_schedule",
         "load_pwhl_games",
     ]:
-        assert name in pwhl_loaders.__all__, f"{name} missing from pwhl_loaders.__all__"
+        assert name in pwhl_loaders_extra.__all__, f"{name} missing from pwhl_loaders_extra.__all__"
 
 
 # ---------------------------------------------------------------------------
