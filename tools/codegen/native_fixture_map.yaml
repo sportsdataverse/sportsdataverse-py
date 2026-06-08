@@ -1,0 +1,90 @@
+# tools/codegen/native_fixture_map.yaml
+# native API -> {fixture filename: endpoint short}. Built from each
+# tests/fixtures/<api>/README.md provenance URL matched to endpoints/<api>.yaml.
+mlb_api:
+  # /api/v1/teams/147/roster?season=2024  -> /api/v1/teams/{team_id}/roster
+  team_roster_yankees_2024.json: team_roster
+  # /api/v1/venues?activeStatus=Y         -> /api/v1/venues
+  venues_active.json: venues
+  # /api/v1/sports                         -> /api/v1/sports
+  sports.json: sports
+
+nhl_api_web:
+  # /gamecenter/2023030417/play-by-play   -> /v1/gamecenter/{game_id}/play-by-play
+  pbp_2024_scf_g7.json: pbp
+  # /gamecenter/2023030417/boxscore       -> /v1/gamecenter/{game_id}/boxscore
+  boxscore_2024_scf_g7.json: boxscore
+  # /gamecenter/2023030417/landing        -> /v1/gamecenter/{game_id}/landing
+  landing_2024_scf_g7.json: landing
+  # /gamecenter/2023030417/right-rail     -> /v1/gamecenter/{game_id}/right-rail
+  right_rail_2024_scf_g7.json: right_rail
+  # /schedule/2024-06-24                  -> /v1/schedule/{date}
+  schedule_2024_06_24.json: schedule
+  # /score/2024-06-24                     -> /v1/score/{date}
+  score_2024_06_24.json: score
+  # /standings/now                        -> /v1/standings/{date} (now_variant)
+  standings_now.json: standings
+  # /standings-season                     -> /v1/standings-season
+  standings_season.json: standings_season
+  # /club-schedule-season/EDM/20232024    -> /v1/club-schedule-season/{team}/{season}
+  club_schedule_edm_2024.json: club_schedule_season
+  # /club-stats/EDM/20232024/2            -> /v1/club-stats/{team}/{season}/{game_type}
+  club_stats_edm_2024.json: club_stats
+  # /roster/EDM/20232024                  -> /v1/roster/{team}/{season}
+  roster_edm_2024.json: roster
+  # /player/8478402/landing               -> /v1/player/{player_id}/landing
+  player_mcdavid_landing.json: player_landing
+  # /player/8478402/game-log/20232024/2   -> /v1/player/{player_id}/game-log/{season}/{game_type}
+  player_mcdavid_gamelog.json: player_game_log
+  # /skater-stats-leaders/current         -> /v1/skater-stats-leaders/{season}/{game_type} (now_variant)
+  skater_leaders_now.json: skater_leaders
+  # /goalie-stats-leaders/current         -> /v1/goalie-stats-leaders/{season}/{game_type} (now_variant)
+  goalie_leaders_now.json: goalie_leaders
+  # /draft/picks/2024/1                   -> /v1/draft/picks/{year}/{round_}
+  draft_picks_2024_r1.json: draft_picks
+
+nhl_edge:
+  # /edge/skater-detail/8478402/20242025/2            -> /v1/edge/skater-detail/{player_id}/{season}/{game_type}
+  skater_detail.json: skater_detail
+  # /edge/skater-zone-time/8478402/20242025/2         -> /v1/edge/skater-zone-time/{player_id}/{season}/{game_type}
+  skater_zone_time.json: skater_zone_time
+  # /edge/skater-shot-speed-detail/8478402/20242025/2 -> /v1/edge/skater-shot-speed-detail/{player_id}/{season}/{game_type}
+  skater_shot_speed.json: skater_shot_speed_detail
+  # /edge/team-detail/22/20242025/2                   -> /v1/edge/team-detail/{team_id}/{season}/{game_type}
+  team_detail.json: team_detail
+  # /edge/team-shot-location-detail/22/20242025/2     -> /v1/edge/team-shot-location-detail/{team_id}/{season}/{game_type}
+  team_shot_loc.json: team_shot_location_detail
+  # /edge/goalie-detail/8480313/20242025/2            -> /v1/edge/goalie-detail/{player_id}/{season}/{game_type}
+  goalie_detail.json: goalie_detail
+  # /edge/goalie-shot-location-detail/8480313/20242025/2 -> /v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}
+  goalie_shot_loc.json: goalie_shot_location_detail
+
+nhl_records:
+  # /franchise                            -> /franchise
+  records_franchise.json: franchises
+  # /franchise-team-totals?limit=10       -> /franchise-team-totals
+  records_franchise_team_totals.json: franchise_team_totals
+  # /coach?limit=10                       -> /coach
+  records_coach.json: coaches
+  # /draft?limit=10                       -> /draft (now_variant of /draft/{draft_id})
+  records_draft.json: draft
+  # /attendance                           -> /attendance
+  records_attendance.json: attendance
+
+nhl_stats_rest:
+  # /season                               -> /{lang}/season
+  stats_rest_season.json: season
+  # /franchise                            -> /{lang}/franchise
+  stats_rest_franchise.json: franchise
+  # /country                              -> /{lang}/country
+  stats_rest_country.json: country
+  # /glossary                             -> /{lang}/glossary
+  stats_rest_glossary.json: glossary
+  # /config                               -> /{lang}/config
+  stats_rest_config.json: config
+  # /skater/summary?cayenneExp=...        -> /{lang}/skater/{report} (report=summary)
+  stats_rest_skater_summary_2024.json: skater_report
+  # /goalie/summary?...                   -> /{lang}/goalie/{report} (report=summary)
+  stats_rest_goalie_summary_2024.json: goalie_report
+  # /team/summary?...                     -> /{lang}/team/{report} (report=summary)
+  stats_rest_team_summary_2024.json: team_report
