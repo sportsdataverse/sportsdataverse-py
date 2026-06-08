@@ -225,7 +225,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `time_valid` | logical | Time valid. |
 | `neutral_site` | logical | Neutral site. |
 | `conference_competition` | logical | Conference competition. |
-| `play_by_play_available` | logical | TRUE if play-by-play is available. |
+| `play_by_play_available` | logical | Whether play-by-play data is available. |
 | `recent` | logical | Recent. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
@@ -389,7 +389,7 @@ Polars dataframe containing teams for the requested league. This function caches
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
 | `team_location` | character | Team city or location string. |
-| `team_logos` | integer |  |
+| `team_logos` | integer | Team logo metadata. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_nickname` | character | Team nickname. |
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |

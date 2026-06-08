@@ -94,28 +94,28 @@ List NHL head coaches.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
+| `id` | integer | Unique player identifier. |
 | `bio` | character |  |
 | `birth_city` | character | Birth city. |
-| `birth_country3code` | character |  |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `birth_country3code` | character | Prospect birth country three-letter code. |
+| `birth_date` | character | Player birth date. |
 | `birth_state_province_code` | character |  |
-| `brief_description` | character |  |
-| `date_of_death` | character |  |
-| `deceased` | logical |  |
-| `description` | character | Long-form description text. |
+| `brief_description` | character | Brief description of the trophy. |
+| `date_of_death` | character | Date of death, if applicable. |
+| `deceased` | logical | Whether the player is deceased. |
+| `description` | character | Full text description of the event. |
 | `featured_image` | character |  |
-| `first_name` | character | Player's first name. |
-| `full_name` | character | Player's full name. |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
 | `history` | character | ESPN's long-form history text for the award. |
 | `hockey_hof_link` | character |  |
-| `in_hockey_hof` | logical |  |
+| `in_hockey_hof` | logical | Whether the player is in the Hockey Hall of Fame. |
 | `in_iihf_hockey_hof` | logical |  |
-| `in_us_hockey_hof` | logical |  |
+| `in_us_hockey_hof` | logical | Whether the player is in the US Hockey Hall of Fame. |
 | `instagram` | character |  |
-| `is_active` | logical | Whether the team was active in this season. |
-| `last_name` | character | Player's last name. |
-| `nationality_code` | character |  |
+| `is_active` | logical | Whether the team is active. |
+| `last_name` | character | Player last name. |
+| `nationality_code` | character | Nationality code of the official. |
 | `player_id` | double | Unique player identifier. |
 | `stanley_cup` | double |  |
 | `team_id` | character | Unique team identifier. |
@@ -263,14 +263,14 @@ List all NHL franchises (historical and active).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `first_season_id` | integer |  |
-| `full_name` | character | Player's full name. |
-| `last_season_id` | double |  |
-| `most_recent_team_id` | integer |  |
-| `team_abbrev` | character | Abbreviation for team. |
-| `team_common_name` | character |  |
-| `team_place_name` | character |  |
+| `id` | integer | Unique player identifier. |
+| `first_season_id` | integer | Season identifier of the first season. |
+| `full_name` | character | Player full name. |
+| `last_season_id` | double | Season ID of the franchise's last season. |
+| `most_recent_team_id` | integer | Most recent team identifier. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_common_name` | character | Team common (nickname) name. |
+| `team_place_name` | character | Team place (city/location) name. |
 
 ### Example
 
@@ -318,44 +318,44 @@ All-time team totals per franchise (regular season).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `active_franchise` | integer |  |
-| `active_team` | logical |  |
-| `cups` | integer |  |
-| `first_season_id` | integer |  |
-| `franchise_id` | integer | ESPN franchise identifier. |
-| `game_type_id` | integer | Game type code (e.g., R for regular season). |
-| `game_win_pctg` | double |  |
+| `id` | integer | Unique player identifier. |
+| `active_franchise` | integer | Indicator of whether the franchise is active. |
+| `active_team` | logical | Indicator of whether the team is active. |
+| `cups` | integer | Number of Stanley Cup championships. |
+| `first_season_id` | integer | Season identifier of the first season. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `game_win_pctg` | double | Game-winning percentage. |
 | `games_played` | double | Games played. |
-| `goals_against` | double |  |
-| `goals_for` | double |  |
-| `home_losses` | double | Home team's losses. |
-| `home_overtime_losses` | double |  |
-| `home_ties` | double | Total home ties. |
-| `home_wins` | double | Home team's wins. |
-| `last_season_id` | double |  |
-| `losses` | double | Total losses. |
-| `overtime_losses` | double |  |
-| `penalty_minutes` | double |  |
-| `playoff_seasons` | double |  |
-| `point_pctg` | double |  |
-| `points` | double | Points scored. |
-| `road_losses` | double | Road losses. |
-| `road_overtime_losses` | double |  |
-| `road_ties` | double |  |
-| `road_wins` | double | Road wins. |
-| `series_losses` | integer |  |
-| `series_played` | double |  |
-| `series_win_pctg` | double |  |
-| `series_wins` | integer |  |
-| `shootout_losses` | double |  |
-| `shootout_wins` | double |  |
-| `shutouts` | double | Shutouts. |
+| `goals_against` | double | Goals against. |
+| `goals_for` | double | Goals for. |
+| `home_losses` | double | Losses at home. |
+| `home_overtime_losses` | double | Overtime losses at home. |
+| `home_ties` | double | Ties at home. |
+| `home_wins` | double | Wins at home. |
+| `last_season_id` | double | Season ID of the franchise's last season. |
+| `losses` | double | Losses. |
+| `overtime_losses` | double | Total overtime losses. |
+| `penalty_minutes` | double | Penalty minutes. |
+| `playoff_seasons` | double | Number of playoff seasons. |
+| `point_pctg` | double | Points percentage. |
+| `points` | double | Total points (goals + assists). |
+| `road_losses` | double | Losses on the road. |
+| `road_overtime_losses` | double | Overtime losses on the road. |
+| `road_ties` | double | Ties on the road. |
+| `road_wins` | double | Wins on the road. |
+| `series_losses` | integer | Playoff series losses. |
+| `series_played` | double | Playoff series played. |
+| `series_win_pctg` | double | Playoff series win percentage. |
+| `series_wins` | integer | Playoff series wins. |
+| `shootout_losses` | double | Shootout losses. |
+| `shootout_wins` | double | Shootout wins. |
+| `shutouts` | double | Shutouts recorded. |
 | `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `ties` | double | Number of ties in the series. |
-| `tri_code` | character |  |
-| `wins` | double | Total wins. |
+| `team_name` | character | Team name. |
+| `ties` | double | Total ties. |
+| `tri_code` | character | Team three-letter code. |
+| `wins` | double | Wins. |
 
 ### Example
 
@@ -726,36 +726,36 @@ Retrieve NHL Entry Draft picks.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `age_in_days` | character |  |
-| `age_in_days_for_year` | character |  |
-| `age_in_years` | character |  |
-| `amateur_club_name` | character |  |
-| `amateur_league` | character |  |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `birth_place` | character | Place of birth. |
-| `country_code` | character | Team/venue country code. |
-| `cs_player_id` | character |  |
-| `draft_date` | character | Date in YYYY-MM-DD format. |
-| `draft_master_id` | integer |  |
-| `draft_year` | integer | Draft year (4-digit). |
-| `drafted_by_team_id` | character |  |
-| `first_name` | character | Player's first name. |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `last_name` | character | Player's last name. |
-| `notes` | character | Free-form notes attached to the record. |
-| `overall_pick_number` | integer |  |
-| `pick_in_round` | integer |  |
+| `id` | integer | Unique player identifier. |
+| `age_in_days` | character | Player age in days. |
+| `age_in_days_for_year` | character | Player age in days for the draft year. |
+| `age_in_years` | character | Player age in years. |
+| `amateur_club_name` | character | Amateur club the player played for. |
+| `amateur_league` | character | Amateur league the player played in. |
+| `birth_date` | character | Player birth date. |
+| `birth_place` | character | Player birth place. |
+| `country_code` | character | Player country code. |
+| `cs_player_id` | character | Central Scouting player identifier. |
+| `draft_date` | character | Date the player was drafted. |
+| `draft_master_id` | integer | Draft master record identifier. |
+| `draft_year` | integer | Draft year the lottery applies to. |
+| `drafted_by_team_id` | character | Identifier of the drafting team. |
+| `first_name` | character | Player first name. |
+| `height` | character | Player height in inches. |
+| `last_name` | character | Player last name. |
+| `notes` | character | Notes flag for the pick. |
+| `overall_pick_number` | integer | Overall pick number in the draft. |
+| `pick_in_round` | integer | Pick number within the round. |
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `removed_outright` | character |  |
-| `removed_outright_why` | character |  |
-| `round_number` | integer | Numeric round. |
-| `shoots_catches` | character |  |
-| `supplemental_draft` | character |  |
-| `team_pick_history` | character |  |
-| `tri_code` | character |  |
+| `position` | character | Player position. |
+| `removed_outright` | character | Removed-outright indicator. |
+| `removed_outright_why` | character | Reason the pick was removed outright. |
+| `round_number` | integer | Draft round number. |
+| `shoots_catches` | character | Handedness (shoots/catches). |
+| `supplemental_draft` | character | Supplemental draft indicator. |
+| `team_pick_history` | character | History of the team's picks at this slot. |
+| `tri_code` | character | Team three-letter code. |
 | `weight` | character | Player weight in pounds. |
 
 ### Example
@@ -990,11 +990,11 @@ NHL arena attendance records.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `playoff_attendance` | double |  |
-| `regular_attendance` | double |  |
-| `season_id` | integer | Unique season identifier. |
-| `total_attendance` | double |  |
+| `id` | integer | Unique player identifier. |
+| `playoff_attendance` | double | Total playoff attendance. |
+| `regular_attendance` | double | Total regular-season attendance. |
+| `season_id` | integer | Season identifier. |
+| `total_attendance` | double | Total attendance for the season. |
 
 ### Example
 

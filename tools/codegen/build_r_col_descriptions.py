@@ -1,6 +1,6 @@
 """Mine SDV R packages' @return column descriptions into a YAML dictionary.
 
-Parses each of the 4 R packages' R/*.R files for @return markdown tables that
+Parses each of the 5 R packages' R/*.R files for @return markdown tables that
 include a ``description`` column, extracts col_name -> description mappings,
 deduplicates by most-frequent description (longest on tie), and emits
 ``tools/codegen/r_column_descriptions.yaml``.
@@ -16,6 +16,7 @@ Output YAML shape::
     hoopR: { ... }
     wehoop: { ... }
     baseballr: { ... }
+    fastRhockey: { ... }
     _merged: { ... }  # union across all packages, most-frequent globally
 """
 
@@ -41,6 +42,7 @@ PACKAGES: dict[str, Path] = {
     "hoopR": Path(f"{_DEV}/hoopR-dev/hoopR/R"),
     "wehoop": Path(f"{_DEV}/wehoop-dev/wehoop/R"),
     "baseballr": Path(f"{_DEV}/baseball-dev/baseballr/R"),
+    "fastRhockey": Path(f"{_DEV}/hockey-dev/fastRhockey/R"),
 }
 
 OUTPUT = ROOT / "tools" / "codegen" / "r_column_descriptions.yaml"

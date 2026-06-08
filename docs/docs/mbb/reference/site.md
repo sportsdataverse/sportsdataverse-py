@@ -54,7 +54,7 @@ ESPN endpoint.
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `broadcast` | character | Broadcast information string. |
-| `note` | character |  |
+| `note` | character | Game note or headline. |
 | `home_id` | character | Unique identifier for home. |
 | `home_name` | character | Home name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
@@ -65,7 +65,7 @@ ESPN endpoint.
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Home team's winner. |
-| `home_rank` | integer |  |
+| `home_rank` | integer | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
@@ -76,7 +76,7 @@ ESPN endpoint.
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Away team's winner. |
-| `away_rank` | integer |  |
+| `away_rank` | integer | Away team rank (if ranked). |
 
 ### Example
 
@@ -692,9 +692,9 @@ ESPN endpoint.
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_place_display_text` | character |  |
+| `birth_place_display_text` | character | Birth place display text. |
 | `birth_country_alternate_id` | character |  |
-| `birth_country_abbreviation` | character |  |
+| `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
 | `flag_href` | character |  |

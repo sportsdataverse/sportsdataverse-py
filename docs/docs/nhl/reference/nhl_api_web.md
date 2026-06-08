@@ -23,17 +23,17 @@ Pull the play-by-play feed for one NHL game.
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | integer | Unique event / game identifier (ESPN). |
-| `time_in_period` | character |  |
+| `event_id` | integer | ESPN event id (echoed from arg). |
+| `time_in_period` | character | Time elapsed in the period when the shot occurred. |
 | `time_remaining` | character | Time remaining. |
 | `situation_code` | character | Code identifying the game situation. |
 | `home_team_defending_side` | character |  |
 | `type_code` | integer |  |
 | `type_desc_key` | character |  |
 | `sort_order` | integer | Display sort order for the sport. |
-| `period_descriptor_number` | integer |  |
-| `period_descriptor_period_type` | character |  |
-| `period_descriptor_max_regulation_periods` | integer |  |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
 | `details_event_owner_team_id` | double |  |
 | `details_losing_player_id` | double |  |
 | `details_winning_player_id` | double |  |
@@ -96,42 +96,42 @@ Pull the boxscore for one NHL game.
 
 | col_name | type | description |
 |---|---|---|
-| `home_away` | character | Game venue label ('home' or 'away'). |
-| `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
+| `home_away` | character | Home or away indicator. |
+| `position_group` | character | Position group name (e.g. Centers). |
 | `player_id` | integer | Unique player identifier. |
-| `sweater_number` | integer |  |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `goals` | double |  |
-| `assists` | double | Total assists. |
-| `points` | double | Points scored. |
-| `plus_minus` | double | Plus/minus point differential while on court. |
-| `pim` | integer |  |
+| `sweater_number` | integer | Jersey number. |
+| `position` | character | Player position. |
+| `goals` | double | Goals scored. |
+| `assists` | double | Assists. |
+| `points` | double | Total points (goals + assists). |
+| `plus_minus` | double | Plus/minus rating. |
+| `pim` | integer | Penalty minutes. |
 | `hits` | double | Hits. |
-| `power_play_goals` | double |  |
-| `sog` | double |  |
-| `faceoff_winning_pctg` | double |  |
-| `toi` | character |  |
-| `blocked_shots` | double |  |
-| `shifts` | double |  |
-| `giveaways` | double |  |
-| `takeaways` | double |  |
-| `name_default` | character |  |
-| `even_strength_shots_against` | character |  |
-| `power_play_shots_against` | character |  |
-| `shorthanded_shots_against` | character |  |
-| `save_shots_against` | character |  |
-| `even_strength_goals_against` | double |  |
-| `power_play_goals_against` | double |  |
-| `shorthanded_goals_against` | double |  |
-| `goals_against` | double |  |
-| `starter` | logical | TRUE if the player was in the starting lineup; FALSE otherwise. |
-| `shots_against` | double |  |
-| `saves` | double | Saves. |
-| `save_pctg` | double |  |
-| `decision` | character |  |
-| `name_cs` | character |  |
-| `name_fi` | character |  |
-| `name_sk` | character |  |
+| `power_play_goals` | double | Power-play goals. |
+| `sog` | double | Shots on goal from the area. |
+| `faceoff_winning_pctg` | double | Faceoff win percentage. |
+| `toi` | character | Time on ice. |
+| `blocked_shots` | double | Blocked shots. |
+| `shifts` | double | Number of shifts. |
+| `giveaways` | double | Giveaways. |
+| `takeaways` | double | Takeaways. |
+| `name_default` | character | Player name (default localization). |
+| `even_strength_shots_against` | character | Even-strength shots against (saves/total). |
+| `power_play_shots_against` | character | Power-play shots against (saves/total). |
+| `shorthanded_shots_against` | character | Shorthanded shots against (saves/total). |
+| `save_shots_against` | character | Total shots against (saves/total). |
+| `even_strength_goals_against` | double | Even-strength goals against. |
+| `power_play_goals_against` | double | Power-play goals against. |
+| `shorthanded_goals_against` | double | Shorthanded goals against. |
+| `goals_against` | double | Goals against. |
+| `starter` | logical | Whether the goalie started the game. |
+| `shots_against` | double | Shots faced. |
+| `saves` | double | Saves made. |
+| `save_pctg` | double | Save percentage. |
+| `decision` | character | Goalie decision (W/L/O). |
+| `name_cs` | character | Player name (Czech localization). |
+| `name_fi` | character | Player name (Finnish localization). |
+| `name_sk` | character | Player name (Slovak localization). |
 
 ### Example
 
@@ -157,48 +157,48 @@ Pull the gamecenter landing payload for one NHL game.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `season` | integer | Season year. |
-| `game_type` | integer | Game type code (R, P, etc.). |
+| `id` | integer | Unique player identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_type` | integer | Game type the row belongs to. |
 | `limited_scoring` | logical |  |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `start_time_utc` | character |  |
-| `eastern_utc_offset` | character |  |
-| `venue_utc_offset` | character |  |
-| `venue_timezone` | character |  |
-| `tv_broadcasts` | character |  |
-| `game_state` | character |  |
-| `game_schedule_state` | character |  |
+| `game_date` | character | Game date. |
+| `start_time_utc` | character | Scheduled start time in UTC. |
+| `eastern_utc_offset` | character | Eastern time UTC offset. |
+| `venue_utc_offset` | character | Venue UTC offset. |
+| `venue_timezone` | character | Venue time zone. |
+| `tv_broadcasts` | character | Nested list of TV broadcast details. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `game_schedule_state` | character | Schedule state of the game. |
 | `shootout_in_use` | logical |  |
 | `reg_periods` | integer |  |
 | `ot_in_use` | logical |  |
-| `ties_in_use` | logical |  |
-| `venue_default` | character |  |
+| `ties_in_use` | logical | Whether ties were in use that season. |
+| `venue_default` | character | Venue name (default language). |
 | `venue_location_default` | character |  |
-| `period_descriptor_number` | integer |  |
-| `period_descriptor_period_type` | character |  |
-| `period_descriptor_max_regulation_periods` | integer |  |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `away_team_common_name_default` | character |  |
-| `away_team_abbrev` | character | Away team three-letter abbreviation. |
-| `away_team_place_name_default` | character |  |
-| `away_team_place_name_with_preposition_default` | character |  |
-| `away_team_place_name_with_preposition_fr` | character |  |
-| `away_team_score` | integer | Away team's score. |
-| `away_team_sog` | integer |  |
-| `away_team_logo` | character | Away team logo URL. |
-| `away_team_dark_logo` | character |  |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_team_common_name_default` | character |  |
-| `home_team_abbrev` | character | Home team three-letter abbreviation. |
-| `home_team_place_name_default` | character |  |
-| `home_team_place_name_fr` | character |  |
-| `home_team_place_name_with_preposition_default` | character |  |
-| `home_team_place_name_with_preposition_fr` | character |  |
-| `home_team_score` | integer | Home team's score. |
-| `home_team_sog` | integer |  |
-| `home_team_logo` | character | Home team logo URL. |
-| `home_team_dark_logo` | character |  |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+| `away_team_id` | integer | Away team identifier. |
+| `away_team_common_name_default` | character | Away team common name (default language). |
+| `away_team_abbrev` | character | Away team abbreviation. |
+| `away_team_place_name_default` | character | Away team place name (default language). |
+| `away_team_place_name_with_preposition_default` | character | Away team place name with preposition (default). |
+| `away_team_place_name_with_preposition_fr` | character | Away team place name with preposition (French). |
+| `away_team_score` | integer | Away team final score. |
+| `away_team_sog` | integer | Away team shots on goal. |
+| `away_team_logo` | character | URL to the away team logo. |
+| `away_team_dark_logo` | character | URL to the away team dark logo. |
+| `home_team_id` | integer | Home team identifier. |
+| `home_team_common_name_default` | character | Home team common name (default language). |
+| `home_team_abbrev` | character | Home team abbreviation. |
+| `home_team_place_name_default` | character | Home team place name (default language). |
+| `home_team_place_name_fr` | character | Home team place name (French). |
+| `home_team_place_name_with_preposition_default` | character | Home team place name with preposition (default). |
+| `home_team_place_name_with_preposition_fr` | character | Home team place name with preposition (French). |
+| `home_team_score` | integer | Home team final score. |
+| `home_team_sog` | integer | Home team shots on goal. |
+| `home_team_logo` | character | URL to the home team logo. |
+| `home_team_dark_logo` | character | URL to the home team dark logo. |
 | `summary_scoring` | character |  |
 | `summary_three_stars` | character |  |
 | `summary_penalties` | character |  |
@@ -256,55 +256,55 @@ Pull the week-of NHL schedule rooted at `date`.
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character |  |
-| `id` | integer | Id. |
-| `season` | integer | Season year. |
-| `game_type` | integer | Game type code (R, P, etc.). |
-| `neutral_site` | logical | Neutral site. |
-| `start_time_utc` | character |  |
-| `eastern_utc_offset` | character |  |
-| `venue_utc_offset` | character |  |
-| `venue_timezone` | character |  |
-| `game_state` | character |  |
-| `game_schedule_state` | character |  |
-| `tv_broadcasts` | character |  |
+| `id` | integer | Unique player identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_type` | integer | Game type the row belongs to. |
+| `neutral_site` | logical | Whether the game is at a neutral site. |
+| `start_time_utc` | character | Scheduled start time in UTC. |
+| `eastern_utc_offset` | character | Eastern time UTC offset. |
+| `venue_utc_offset` | character | Venue UTC offset. |
+| `venue_timezone` | character | Venue time zone. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `game_schedule_state` | character | Schedule state of the game. |
+| `tv_broadcasts` | character | Nested list of TV broadcast details. |
 | `series_url` | character |  |
-| `three_min_recap` | character |  |
-| `game_center_link` | character |  |
-| `venue_default` | character |  |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `away_team_common_name_default` | character |  |
-| `away_team_place_name_default` | character |  |
-| `away_team_place_name_with_preposition_default` | character |  |
-| `away_team_place_name_with_preposition_fr` | character |  |
-| `away_team_abbrev` | character | Away team three-letter abbreviation. |
-| `away_team_logo` | character | Away team logo URL. |
-| `away_team_dark_logo` | character |  |
-| `away_team_away_split_squad` | logical |  |
-| `away_team_score` | integer | Away team's score. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_team_common_name_default` | character |  |
-| `home_team_place_name_default` | character |  |
-| `home_team_place_name_fr` | character |  |
-| `home_team_place_name_with_preposition_default` | character |  |
-| `home_team_place_name_with_preposition_fr` | character |  |
-| `home_team_abbrev` | character | Home team three-letter abbreviation. |
-| `home_team_logo` | character | Home team logo URL. |
-| `home_team_dark_logo` | character |  |
-| `home_team_home_split_squad` | logical |  |
-| `home_team_score` | integer | Home team's score. |
-| `period_descriptor_number` | integer |  |
-| `period_descriptor_period_type` | character |  |
-| `period_descriptor_max_regulation_periods` | integer |  |
-| `game_outcome_last_period_type` | character |  |
-| `winning_goalie_player_id` | integer |  |
-| `winning_goalie_first_initial_default` | character |  |
-| `winning_goalie_last_name_default` | character |  |
-| `winning_goalie_last_name_cs` | character |  |
-| `winning_goalie_last_name_fi` | character |  |
-| `winning_goalie_last_name_sk` | character |  |
-| `winning_goal_scorer_player_id` | integer |  |
-| `winning_goal_scorer_first_initial_default` | character |  |
-| `winning_goal_scorer_last_name_default` | character |  |
+| `three_min_recap` | character | Link to the three-minute recap. |
+| `game_center_link` | character | Link to the NHL game center page. |
+| `venue_default` | character | Venue name (default language). |
+| `away_team_id` | integer | Away team identifier. |
+| `away_team_common_name_default` | character | Away team common name (default language). |
+| `away_team_place_name_default` | character | Away team place name (default language). |
+| `away_team_place_name_with_preposition_default` | character | Away team place name with preposition (default). |
+| `away_team_place_name_with_preposition_fr` | character | Away team place name with preposition (French). |
+| `away_team_abbrev` | character | Away team abbreviation. |
+| `away_team_logo` | character | URL to the away team logo. |
+| `away_team_dark_logo` | character | URL to the away team dark logo. |
+| `away_team_away_split_squad` | logical | Whether the away team is a split squad. |
+| `away_team_score` | integer | Away team final score. |
+| `home_team_id` | integer | Home team identifier. |
+| `home_team_common_name_default` | character | Home team common name (default language). |
+| `home_team_place_name_default` | character | Home team place name (default language). |
+| `home_team_place_name_fr` | character | Home team place name (French). |
+| `home_team_place_name_with_preposition_default` | character | Home team place name with preposition (default). |
+| `home_team_place_name_with_preposition_fr` | character | Home team place name with preposition (French). |
+| `home_team_abbrev` | character | Home team abbreviation. |
+| `home_team_logo` | character | URL to the home team logo. |
+| `home_team_dark_logo` | character | URL to the home team dark logo. |
+| `home_team_home_split_squad` | logical | Whether the home team is a split squad. |
+| `home_team_score` | integer | Home team final score. |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+| `game_outcome_last_period_type` | character | Period type in which the game ended. |
+| `winning_goalie_player_id` | integer | Winning goalie player identifier. |
+| `winning_goalie_first_initial_default` | character | Winning goalie first initial (default language). |
+| `winning_goalie_last_name_default` | character | Winning goalie last name (default language). |
+| `winning_goalie_last_name_cs` | character | Winning goalie last name (Czech). |
+| `winning_goalie_last_name_fi` | character | Winning goalie last name (Finnish). |
+| `winning_goalie_last_name_sk` | character | Winning goalie last name (Slovak). |
+| `winning_goal_scorer_player_id` | integer | Winning goal scorer player identifier. |
+| `winning_goal_scorer_first_initial_default` | character | Winning goal scorer first initial (default). |
+| `winning_goal_scorer_last_name_default` | character | Winning goal scorer last name (default language). |
 | `series_status_round` | integer |  |
 | `series_status_series_abbrev` | character |  |
 | `series_status_series_title` | character |  |
@@ -340,36 +340,36 @@ Pull the single-day scoreboard for `date`.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `season` | integer | Season year. |
-| `game_type` | integer | Game type code (R, P, etc.). |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `start_time_utc` | character |  |
-| `eastern_utc_offset` | character |  |
-| `venue_utc_offset` | character |  |
-| `tv_broadcasts` | character |  |
-| `game_state` | character |  |
-| `game_schedule_state` | character |  |
-| `game_center_link` | character |  |
+| `id` | integer | Unique player identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_type` | integer | Game type the row belongs to. |
+| `game_date` | character | Game date. |
+| `start_time_utc` | character | Scheduled start time in UTC. |
+| `eastern_utc_offset` | character | Eastern time UTC offset. |
+| `venue_utc_offset` | character | Venue UTC offset. |
+| `tv_broadcasts` | character | Nested list of TV broadcast details. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `game_schedule_state` | character | Schedule state of the game. |
+| `game_center_link` | character | Link to the NHL game center page. |
 | `series_url` | character |  |
-| `three_min_recap` | character |  |
-| `neutral_site` | logical | Neutral site. |
-| `venue_timezone` | character |  |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `goals` | character |  |
-| `venue_default` | character |  |
-| `away_team_id` | integer | Unique identifier for the away team. |
+| `three_min_recap` | character | Link to the three-minute recap. |
+| `neutral_site` | logical | Whether the game is at a neutral site. |
+| `venue_timezone` | character | Venue time zone. |
+| `period` | integer | Period number. |
+| `goals` | character | Goals scored. |
+| `venue_default` | character | Venue name (default language). |
+| `away_team_id` | integer | Away team identifier. |
 | `away_team_name_default` | character |  |
-| `away_team_abbrev` | character | Away team three-letter abbreviation. |
-| `away_team_score` | integer | Away team's score. |
-| `away_team_sog` | integer |  |
-| `away_team_logo` | character | Away team logo URL. |
-| `home_team_id` | integer | Unique identifier for the home team. |
+| `away_team_abbrev` | character | Away team abbreviation. |
+| `away_team_score` | integer | Away team final score. |
+| `away_team_sog` | integer | Away team shots on goal. |
+| `away_team_logo` | character | URL to the away team logo. |
+| `home_team_id` | integer | Home team identifier. |
 | `home_team_name_default` | character |  |
-| `home_team_abbrev` | character | Home team three-letter abbreviation. |
-| `home_team_score` | integer | Home team's score. |
-| `home_team_sog` | integer |  |
-| `home_team_logo` | character | Home team logo URL. |
+| `home_team_abbrev` | character | Home team abbreviation. |
+| `home_team_score` | integer | Home team final score. |
+| `home_team_sog` | integer | Home team shots on goal. |
+| `home_team_logo` | character | URL to the home team logo. |
 | `series_status_round` | integer |  |
 | `series_status_series_abbrev` | character |  |
 | `series_status_series_title` | character |  |
@@ -384,10 +384,10 @@ Pull the single-day scoreboard for `date`.
 | `clock_seconds_remaining` | integer |  |
 | `clock_running` | logical |  |
 | `clock_in_intermission` | logical |  |
-| `period_descriptor_number` | integer |  |
-| `period_descriptor_period_type` | character |  |
-| `period_descriptor_max_regulation_periods` | integer |  |
-| `game_outcome_last_period_type` | character |  |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+| `game_outcome_last_period_type` | character | Period type in which the game ended. |
 
 ### Example
 
@@ -463,22 +463,22 @@ Pull the NHL standings.
 | col_name | type | description |
 |---|---|---|
 | `clinch_indicator` | character | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
-| `conference_abbrev` | character |  |
+| `conference_abbrev` | character | Conference abbreviation. |
 | `conference_home_sequence` | integer |  |
 | `conference_l10_sequence` | integer |  |
-| `conference_name` | character | Full conference name. |
+| `conference_name` | character | Conference name. |
 | `conference_road_sequence` | integer |  |
-| `conference_sequence` | integer |  |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `division_abbrev` | character |  |
+| `conference_sequence` | integer | Team's seeding position within the conference. |
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `division_abbrev` | character | Division abbreviation. |
 | `division_home_sequence` | integer |  |
 | `division_l10_sequence` | integer |  |
 | `division_name` | character | Division name. |
 | `division_road_sequence` | integer |  |
-| `division_sequence` | integer |  |
-| `game_type_id` | integer | Game type code (e.g., R for regular season). |
+| `division_sequence` | integer | Team's seeding position within the division. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games_played` | integer | Games played. |
-| `goal_differential` | integer |  |
+| `goal_differential` | integer | Goal differential. |
 | `goal_differential_pctg` | double |  |
 | `goal_against` | integer |  |
 | `goal_for` | integer |  |
@@ -487,65 +487,65 @@ Pull the NHL standings.
 | `home_goal_differential` | integer |  |
 | `home_goals_against` | integer |  |
 | `home_goals_for` | integer |  |
-| `home_losses` | integer | Home team's losses. |
-| `home_ot_losses` | integer |  |
+| `home_losses` | integer | Losses at home. |
+| `home_ot_losses` | integer | Home overtime losses. |
 | `home_points` | integer | Home team total points scored in the game so far. |
 | `home_regulation_plus_ot_wins` | integer |  |
 | `home_regulation_wins` | integer |  |
-| `home_ties` | integer | Total home ties. |
-| `home_wins` | integer | Home team's wins. |
+| `home_ties` | integer | Ties at home. |
+| `home_wins` | integer | Wins at home. |
 | `l10_games_played` | integer |  |
 | `l10_goal_differential` | integer |  |
 | `l10_goals_against` | integer |  |
 | `l10_goals_for` | integer |  |
-| `l10_losses` | integer |  |
-| `l10_ot_losses` | integer |  |
+| `l10_losses` | integer | Losses in the last ten games. |
+| `l10_ot_losses` | integer | Overtime losses in the last ten games. |
 | `l10_points` | integer |  |
 | `l10_regulation_plus_ot_wins` | integer |  |
 | `l10_regulation_wins` | integer |  |
 | `l10_ties` | integer |  |
-| `l10_wins` | integer |  |
+| `l10_wins` | integer | Wins in the last ten games. |
 | `league_home_sequence` | integer |  |
 | `league_l10_sequence` | integer |  |
 | `league_road_sequence` | integer |  |
-| `league_sequence` | integer |  |
-| `losses` | integer | Total losses. |
-| `ot_losses` | integer |  |
-| `point_pctg` | double |  |
-| `points` | integer | Points scored. |
+| `league_sequence` | integer | Team's seeding position within the league. |
+| `losses` | integer | Losses. |
+| `ot_losses` | integer | Overtime losses. |
+| `point_pctg` | double | Points percentage. |
+| `points` | integer | Total points (goals + assists). |
 | `regulation_plus_ot_win_pctg` | double |  |
-| `regulation_plus_ot_wins` | integer |  |
+| `regulation_plus_ot_wins` | integer | Wins in regulation plus overtime. |
 | `regulation_win_pctg` | double |  |
-| `regulation_wins` | integer |  |
+| `regulation_wins` | integer | Wins in regulation. |
 | `road_games_played` | integer |  |
 | `road_goal_differential` | integer |  |
 | `road_goals_against` | integer |  |
 | `road_goals_for` | integer |  |
-| `road_losses` | integer | Road losses. |
-| `road_ot_losses` | integer |  |
+| `road_losses` | integer | Losses on the road. |
+| `road_ot_losses` | integer | Road overtime losses. |
 | `road_points` | integer |  |
 | `road_regulation_plus_ot_wins` | integer |  |
 | `road_regulation_wins` | integer |  |
-| `road_ties` | integer |  |
-| `road_wins` | integer | Road wins. |
-| `season_id` | integer | Unique season identifier. |
-| `shootout_losses` | integer |  |
-| `shootout_wins` | integer |  |
-| `streak_code` | character |  |
-| `streak_count` | integer |  |
-| `team_logo` | character | Team logo image URL. |
-| `ties` | integer | Number of ties in the series. |
+| `road_ties` | integer | Ties on the road. |
+| `road_wins` | integer | Wins on the road. |
+| `season_id` | integer | Season identifier. |
+| `shootout_losses` | integer | Shootout losses. |
+| `shootout_wins` | integer | Shootout wins. |
+| `streak_code` | character | Current streak code (W/L/OT). |
+| `streak_count` | integer | Length of the current streak. |
+| `team_logo` | character | URL to the team logo image. |
+| `ties` | integer | Total ties. |
 | `waivers_sequence` | integer |  |
-| `wildcard_sequence` | integer |  |
+| `wildcard_sequence` | integer | Team's wild card seeding position. |
 | `win_pctg` | double |  |
-| `wins` | integer | Total wins. |
+| `wins` | integer | Wins. |
 | `place_name_default` | character |  |
-| `team_name_default` | character |  |
-| `team_name_fr` | character |  |
-| `team_common_name_default` | character |  |
+| `team_name_default` | character | Team name (default locale). |
+| `team_name_fr` | character | Team name (French locale). |
+| `team_common_name_default` | character | Team common name (default language). |
 | `team_abbrev_default` | character |  |
 | `place_name_fr` | character |  |
-| `team_common_name_fr` | character |  |
+| `team_common_name_fr` | character | Team common name (French localization). |
 
 ### Example
 
@@ -570,16 +570,16 @@ Pull the per-season standings cutover dates.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `conferences_in_use` | logical |  |
-| `divisions_in_use` | logical |  |
-| `point_for_o_tloss_in_use` | logical |  |
-| `regulation_wins_in_use` | logical |  |
-| `row_in_use` | logical |  |
-| `standings_end` | character |  |
-| `standings_start` | character |  |
-| `ties_in_use` | logical |  |
-| `wildcard_in_use` | logical |  |
+| `id` | integer | Unique player identifier. |
+| `conferences_in_use` | logical | Whether conferences were in use that season. |
+| `divisions_in_use` | logical | Whether divisions were in use that season. |
+| `point_for_o_tloss_in_use` | logical | Whether a point for overtime losses was in use. |
+| `regulation_wins_in_use` | logical | Whether regulation wins were tracked. |
+| `row_in_use` | logical | Whether the regulation/overtime/shootout format was in use. |
+| `standings_end` | character | End date of the standings period. |
+| `standings_start` | character | Start date of the standings period. |
+| `ties_in_use` | logical | Whether ties were in use that season. |
+| `wildcard_in_use` | logical | Whether the wild-card playoff format was in use this season. |
 
 ### Example
 
@@ -610,72 +610,72 @@ Pull a team's full-season schedule.
 | `club_current_season` | integer |  |
 | `club_next_season` | integer |  |
 | `club_timezone` | character |  |
-| `id` | integer | Id. |
-| `season` | integer | Season year. |
-| `game_type` | integer | Game type code (R, P, etc.). |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `neutral_site` | logical | Neutral site. |
-| `start_time_utc` | character |  |
-| `eastern_utc_offset` | character |  |
-| `venue_utc_offset` | character |  |
-| `venue_timezone` | character |  |
-| `game_state` | character |  |
-| `game_schedule_state` | character |  |
-| `tv_broadcasts` | character |  |
-| `game_center_link` | character |  |
-| `venue_default` | character |  |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `away_team_common_name_default` | character |  |
-| `away_team_place_name_default` | character |  |
-| `away_team_place_name_with_preposition_default` | character |  |
-| `away_team_place_name_with_preposition_fr` | character |  |
-| `away_team_abbrev` | character | Away team three-letter abbreviation. |
-| `away_team_logo` | character | Away team logo URL. |
-| `away_team_dark_logo` | character |  |
-| `away_team_away_split_squad` | logical |  |
-| `away_team_score` | integer | Away team's score. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_team_common_name_default` | character |  |
-| `home_team_place_name_default` | character |  |
-| `home_team_place_name_with_preposition_default` | character |  |
-| `home_team_place_name_with_preposition_fr` | character |  |
-| `home_team_abbrev` | character | Home team three-letter abbreviation. |
-| `home_team_logo` | character | Home team logo URL. |
-| `home_team_dark_logo` | character |  |
-| `home_team_home_split_squad` | logical |  |
-| `home_team_airline_link` | character |  |
-| `home_team_airline_desc` | character |  |
-| `home_team_hotel_link` | character |  |
-| `home_team_hotel_desc` | character |  |
-| `home_team_score` | integer | Home team's score. |
-| `period_descriptor_period_type` | character |  |
-| `period_descriptor_max_regulation_periods` | integer |  |
-| `game_outcome_last_period_type` | character |  |
-| `winning_goalie_player_id` | integer |  |
-| `winning_goalie_first_initial_default` | character |  |
-| `winning_goalie_last_name_default` | character |  |
-| `away_team_airline_link` | character |  |
-| `away_team_airline_desc` | character |  |
-| `winning_goal_scorer_player_id` | double |  |
-| `winning_goal_scorer_first_initial_default` | character |  |
-| `winning_goal_scorer_last_name_default` | character |  |
-| `three_min_recap` | character |  |
-| `home_team_place_name_fr` | character |  |
-| `condensed_game` | character |  |
-| `venue_es` | character |  |
-| `venue_fr` | character |  |
+| `id` | integer | Unique player identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_type` | integer | Game type the row belongs to. |
+| `game_date` | character | Game date. |
+| `neutral_site` | logical | Whether the game is at a neutral site. |
+| `start_time_utc` | character | Scheduled start time in UTC. |
+| `eastern_utc_offset` | character | Eastern time UTC offset. |
+| `venue_utc_offset` | character | Venue UTC offset. |
+| `venue_timezone` | character | Venue time zone. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `game_schedule_state` | character | Schedule state of the game. |
+| `tv_broadcasts` | character | Nested list of TV broadcast details. |
+| `game_center_link` | character | Link to the NHL game center page. |
+| `venue_default` | character | Venue name (default language). |
+| `away_team_id` | integer | Away team identifier. |
+| `away_team_common_name_default` | character | Away team common name (default language). |
+| `away_team_place_name_default` | character | Away team place name (default language). |
+| `away_team_place_name_with_preposition_default` | character | Away team place name with preposition (default). |
+| `away_team_place_name_with_preposition_fr` | character | Away team place name with preposition (French). |
+| `away_team_abbrev` | character | Away team abbreviation. |
+| `away_team_logo` | character | URL to the away team logo. |
+| `away_team_dark_logo` | character | URL to the away team dark logo. |
+| `away_team_away_split_squad` | logical | Whether the away team is a split squad. |
+| `away_team_score` | integer | Away team final score. |
+| `home_team_id` | integer | Home team identifier. |
+| `home_team_common_name_default` | character | Home team common name (default language). |
+| `home_team_place_name_default` | character | Home team place name (default language). |
+| `home_team_place_name_with_preposition_default` | character | Home team place name with preposition (default). |
+| `home_team_place_name_with_preposition_fr` | character | Home team place name with preposition (French). |
+| `home_team_abbrev` | character | Home team abbreviation. |
+| `home_team_logo` | character | URL to the home team logo. |
+| `home_team_dark_logo` | character | URL to the home team dark logo. |
+| `home_team_home_split_squad` | logical | Whether the home team is a split squad. |
+| `home_team_airline_link` | character | Link to home team airline info. |
+| `home_team_airline_desc` | character | Home team airline description. |
+| `home_team_hotel_link` | character | Link to home team hotel info. |
+| `home_team_hotel_desc` | character | Home team hotel description. |
+| `home_team_score` | integer | Home team final score. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+| `game_outcome_last_period_type` | character | Period type in which the game ended. |
+| `winning_goalie_player_id` | integer | Winning goalie player identifier. |
+| `winning_goalie_first_initial_default` | character | Winning goalie first initial (default language). |
+| `winning_goalie_last_name_default` | character | Winning goalie last name (default language). |
+| `away_team_airline_link` | character | Link to away team airline info. |
+| `away_team_airline_desc` | character | Away team airline description. |
+| `winning_goal_scorer_player_id` | double | Winning goal scorer player identifier. |
+| `winning_goal_scorer_first_initial_default` | character | Winning goal scorer first initial (default). |
+| `winning_goal_scorer_last_name_default` | character | Winning goal scorer last name (default language). |
+| `three_min_recap` | character | Link to the three-minute recap. |
+| `home_team_place_name_fr` | character | Home team place name (French). |
+| `condensed_game` | character | Link to the condensed game video. |
+| `venue_es` | character | Venue name (Spanish). |
+| `venue_fr` | character | Venue name (French). |
 | `special_event_parent_id` | double |  |
 | `special_event_name_default` | character |  |
 | `special_event_name_fr` | character |  |
-| `away_team_hotel_link` | character |  |
-| `away_team_hotel_desc` | character |  |
-| `three_min_recap_fr` | character |  |
-| `winning_goalie_last_name_cs` | character |  |
-| `winning_goalie_last_name_fi` | character |  |
-| `winning_goalie_last_name_sk` | character |  |
-| `away_team_place_name_fr` | character |  |
-| `away_team_common_name_fr` | character |  |
-| `home_team_common_name_fr` | character |  |
+| `away_team_hotel_link` | character | Link to away team hotel info. |
+| `away_team_hotel_desc` | character | Away team hotel description. |
+| `three_min_recap_fr` | character | Link to the French three-minute recap. |
+| `winning_goalie_last_name_cs` | character | Winning goalie last name (Czech). |
+| `winning_goalie_last_name_fi` | character | Winning goalie last name (Finnish). |
+| `winning_goalie_last_name_sk` | character | Winning goalie last name (Slovak). |
+| `away_team_place_name_fr` | character | Away team place name (French). |
+| `away_team_common_name_fr` | character | Away team common name (French). |
+| `home_team_common_name_fr` | character | Home team common name (French). |
 | `series_url` | character |  |
 | `series_status_round` | double |  |
 | `series_status_series_abbrev` | character |  |
@@ -811,27 +811,27 @@ Pull a team's roster.
 
 | col_name | type | description |
 |---|---|---|
-| `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
-| `id` | integer | Id. |
-| `headshot` | character | Headshot image URL. |
-| `sweater_number` | integer |  |
-| `position_code` | character | Numeric scorekeeping position code. |
-| `shoots_catches` | character |  |
-| `height_in_inches` | integer |  |
-| `weight_in_pounds` | integer |  |
-| `height_in_centimeters` | integer |  |
-| `weight_in_kilograms` | integer |  |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `birth_country` | character | Birthplace country. |
-| `first_name_default` | character |  |
-| `last_name_default` | character |  |
-| `birth_city_default` | character |  |
-| `birth_state_province_default` | character |  |
-| `birth_city_cs` | character |  |
-| `birth_city_de` | character |  |
-| `birth_city_fi` | character |  |
-| `birth_city_sk` | character |  |
-| `birth_city_sv` | character |  |
+| `position_group` | character | Position group name (e.g. Centers). |
+| `id` | integer | Unique player identifier. |
+| `headshot` | character | URL to the player headshot image. |
+| `sweater_number` | integer | Jersey number. |
+| `position_code` | character | Player position code. |
+| `shoots_catches` | character | Handedness (shoots/catches). |
+| `height_in_inches` | integer | Height in inches. |
+| `weight_in_pounds` | integer | Weight in pounds. |
+| `height_in_centimeters` | integer | Height in centimeters. |
+| `weight_in_kilograms` | integer | Weight in kilograms. |
+| `birth_date` | character | Player birth date. |
+| `birth_country` | character | Player birth country. |
+| `first_name_default` | character | Player first name (default language). |
+| `last_name_default` | character | Player last name (default language). |
+| `birth_city_default` | character | Birth city (default localization). |
+| `birth_state_province_default` | character | Birth state/province (default localization). |
+| `birth_city_cs` | character | Birth city (Czech localization). |
+| `birth_city_de` | character | Birth city (German localization). |
+| `birth_city_fi` | character | Birth city (Finnish localization). |
+| `birth_city_sk` | character | Birth city (Slovak localization). |
+| `birth_city_sv` | character | Birth city (Swedish localization). |
 
 ### Example
 
@@ -882,23 +882,23 @@ Pull the player profile / overview.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
-| `is_active` | logical | Whether the team was active in this season. |
-| `current_team_id` | integer | Current team MLBAM ID. |
+| `is_active` | logical | Whether the team is active. |
+| `current_team_id` | integer | Player's current team identifier. |
 | `current_team_abbrev` | character |  |
 | `badges` | character |  |
-| `team_logo` | character | Team logo image URL. |
-| `sweater_number` | integer |  |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `headshot` | character | Headshot image URL. |
+| `team_logo` | character | URL to the team logo image. |
+| `sweater_number` | integer | Jersey number. |
+| `position` | character | Player position. |
+| `headshot` | character | URL to the player headshot image. |
 | `hero_image` | character |  |
-| `height_in_inches` | integer |  |
-| `height_in_centimeters` | integer |  |
-| `weight_in_pounds` | integer |  |
-| `weight_in_kilograms` | integer |  |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `birth_country` | character | Birthplace country. |
-| `shoots_catches` | character |  |
-| `player_slug` | character | URL-safe player identifier. |
+| `height_in_inches` | integer | Height in inches. |
+| `height_in_centimeters` | integer | Height in centimeters. |
+| `weight_in_pounds` | integer | Weight in pounds. |
+| `weight_in_kilograms` | integer | Weight in kilograms. |
+| `birth_date` | character | Player birth date. |
+| `birth_country` | character | Player birth country. |
+| `shoots_catches` | character | Handedness (shoots/catches). |
+| `player_slug` | character | URL slug for the player. |
 | `in_top100_all_time` | integer |  |
 | `in_hhof` | integer |  |
 | `shop_link` | character |  |
@@ -910,13 +910,13 @@ Pull the player profile / overview.
 | `current_team_roster` | character |  |
 | `full_team_name_default` | character |  |
 | `full_team_name_fr` | character |  |
-| `team_common_name_default` | character |  |
-| `team_place_name_with_preposition_default` | character |  |
-| `team_place_name_with_preposition_fr` | character |  |
-| `first_name_default` | character |  |
-| `last_name_default` | character |  |
-| `birth_city_default` | character |  |
-| `birth_state_province_default` | character |  |
+| `team_common_name_default` | character | Team common name (default language). |
+| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
+| `first_name_default` | character | Player first name (default language). |
+| `last_name_default` | character | Player last name (default language). |
+| `birth_city_default` | character | Birth city (default localization). |
+| `birth_state_province_default` | character | Birth state/province (default localization). |
 | `draft_details_year` | integer |  |
 | `draft_details_team_abbrev` | character |  |
 | `draft_details_round` | integer |  |
@@ -1039,26 +1039,26 @@ Pull a player's game-by-game log.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
-| `team_abbrev` | character | Abbreviation for team. |
-| `home_road_flag` | character |  |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `goals` | integer |  |
-| `assists` | integer | Total assists. |
-| `points` | integer | Points scored. |
-| `plus_minus` | integer | Plus/minus point differential while on court. |
-| `power_play_goals` | integer |  |
-| `power_play_points` | integer |  |
-| `game_winning_goals` | integer |  |
-| `ot_goals` | integer |  |
-| `shots` | integer |  |
-| `shifts` | integer |  |
-| `shorthanded_goals` | integer |  |
-| `shorthanded_points` | integer |  |
-| `opponent_abbrev` | character | Abbreviation for opponent. |
-| `pim` | integer |  |
-| `toi` | character |  |
-| `common_name_default` | character |  |
-| `opponent_common_name_default` | character |  |
+| `team_abbrev` | character | Team abbreviation. |
+| `home_road_flag` | character | Home or road indicator. |
+| `game_date` | character | Game date. |
+| `goals` | integer | Goals scored. |
+| `assists` | integer | Assists. |
+| `points` | integer | Total points (goals + assists). |
+| `plus_minus` | integer | Plus/minus rating. |
+| `power_play_goals` | integer | Power-play goals. |
+| `power_play_points` | integer | Power play points. |
+| `game_winning_goals` | integer | Game-winning goals. |
+| `ot_goals` | integer | Overtime goals. |
+| `shots` | integer | Shots on goal. |
+| `shifts` | integer | Number of shifts. |
+| `shorthanded_goals` | integer | Shorthanded goals. |
+| `shorthanded_points` | integer | Shorthanded points. |
+| `opponent_abbrev` | character | Opponent team abbreviation. |
+| `pim` | integer | Penalty minutes. |
+| `toi` | character | Time on ice. |
+| `common_name_default` | character | Player's team common name. |
+| `opponent_common_name_default` | character | Opponent team common name. |
 | `opponent_common_name_fr` | character |  |
 
 ### Example
@@ -1109,26 +1109,26 @@ Pull skater stat leaders.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | Category label. |
-| `id` | integer | Id. |
-| `sweater_number` | integer |  |
-| `headshot` | character | Headshot image URL. |
-| `team_abbrev` | character | Abbreviation for team. |
-| `team_logo` | character | Team logo image URL. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `value` | integer | Numeric or string value field. |
-| `first_name_default` | character |  |
-| `first_name_cs` | character |  |
-| `first_name_de` | character |  |
-| `first_name_es` | character |  |
-| `first_name_fi` | character |  |
-| `first_name_sk` | character |  |
-| `first_name_sv` | character |  |
-| `last_name_default` | character |  |
-| `team_name_default` | character |  |
-| `last_name_cs` | character |  |
-| `last_name_fi` | character |  |
-| `last_name_sk` | character |  |
+| `category` | character | Stat leader category. |
+| `id` | integer | Unique player identifier. |
+| `sweater_number` | integer | Jersey number. |
+| `headshot` | character | URL to the player headshot image. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_logo` | character | URL to the team logo image. |
+| `position` | character | Player position. |
+| `value` | integer | Leader stat numeric value. |
+| `first_name_default` | character | Player first name (default language). |
+| `first_name_cs` | character | Player first name (Czech localization). |
+| `first_name_de` | character | Player first name (German). |
+| `first_name_es` | character | Player first name (Spanish). |
+| `first_name_fi` | character | Player first name (Finnish). |
+| `first_name_sk` | character | Player first name (Slovak localization). |
+| `first_name_sv` | character | Player first name (Swedish). |
+| `last_name_default` | character | Player last name (default language). |
+| `team_name_default` | character | Team name (default locale). |
+| `last_name_cs` | character | Player last name (Czech localization). |
+| `last_name_fi` | character | Player last name (Finnish localization). |
+| `last_name_sk` | character | Player last name (Slovak localization). |
 
 ### Example
 
@@ -1155,22 +1155,22 @@ Pull goalie stat leaders.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | Category label. |
-| `id` | integer | Id. |
-| `sweater_number` | integer |  |
-| `headshot` | character | Headshot image URL. |
-| `team_abbrev` | character | Abbreviation for team. |
-| `team_logo` | character | Team logo image URL. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `value` | integer | Numeric or string value field. |
-| `first_name_default` | character |  |
-| `last_name_default` | character |  |
-| `team_name_default` | character |  |
-| `first_name_cs` | character |  |
-| `first_name_sk` | character |  |
-| `last_name_cs` | character |  |
-| `last_name_sk` | character |  |
-| `last_name_fi` | character |  |
+| `category` | character | Stat leader category. |
+| `id` | integer | Unique player identifier. |
+| `sweater_number` | integer | Jersey number. |
+| `headshot` | character | URL to the player headshot image. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_logo` | character | URL to the team logo image. |
+| `position` | character | Player position. |
+| `value` | integer | Leader stat numeric value. |
+| `first_name_default` | character | Player first name (default language). |
+| `last_name_default` | character | Player last name (default language). |
+| `team_name_default` | character | Team name (default locale). |
+| `first_name_cs` | character | Player first name (Czech localization). |
+| `first_name_sk` | character | Player first name (Slovak localization). |
+| `last_name_cs` | character | Player last name (Czech localization). |
+| `last_name_sk` | character | Player last name (Slovak localization). |
+| `last_name_fi` | character | Player last name (Finnish localization). |
 
 ### Example
 
@@ -1197,29 +1197,29 @@ Pull NHL draft picks for a year (and optionally one round).
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Tournament / playoff round. |
-| `pick_in_round` | integer |  |
-| `overall_pick` | integer | Overall pick. |
+| `round` | integer | Shootout round number. |
+| `pick_in_round` | integer | Pick number within the round. |
+| `overall_pick` | integer | Overall pick number in the draft. |
 | `team_id` | integer | Unique team identifier. |
-| `team_abbrev` | character | Abbreviation for team. |
-| `team_logo_light` | character |  |
-| `team_logo_dark` | character |  |
-| `team_pick_history` | character |  |
-| `position_code` | character | Numeric scorekeeping position code. |
-| `country_code` | character | Team/venue country code. |
-| `height` | integer | Player height (string e.g. '6-2' or inches). |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_logo_light` | character | URL to the team logo (light variant). |
+| `team_logo_dark` | character | URL to the team logo (dark variant). |
+| `team_pick_history` | character | History of the team's picks at this slot. |
+| `position_code` | character | Player position code. |
+| `country_code` | character | Player country code. |
+| `height` | integer | Player height in inches. |
 | `weight` | integer | Player weight in pounds. |
-| `amateur_league` | character |  |
-| `amateur_club_name` | character |  |
-| `team_name_default` | character |  |
-| `team_name_fr` | character |  |
-| `team_common_name_default` | character |  |
-| `team_place_name_with_preposition_default` | character |  |
-| `team_place_name_with_preposition_fr` | character |  |
+| `amateur_league` | character | Amateur league the player played in. |
+| `amateur_club_name` | character | Amateur club the player played for. |
+| `team_name_default` | character | Team name (default locale). |
+| `team_name_fr` | character | Team name (French locale). |
+| `team_common_name_default` | character | Team common name (default language). |
+| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
 | `display_abbrev_default` | character |  |
-| `first_name_default` | character |  |
-| `last_name_default` | character |  |
-| `team_common_name_fr` | character |  |
+| `first_name_default` | character | Player first name (default language). |
+| `last_name_default` | character | Player last name (default language). |
+| `team_common_name_fr` | character | Team common name (French localization). |
 
 ### Example
 

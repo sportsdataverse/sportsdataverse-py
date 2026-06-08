@@ -1977,7 +1977,7 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
-| `ot_losses` | double |  |
+| `ot_losses` | double | Overtime losses. |
 | `clincher` | double | Clincher. |
 | `differential` | double | Differential. |
 | `games_behind` | double | Games behind. |
@@ -1990,15 +1990,15 @@ ESPN endpoint.
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
 | `wins` | double | Wins. |
-| `overtime_losses` | double |  |
-| `overtime_wins` | double |  |
+| `overtime_losses` | double | Total overtime losses. |
+| `overtime_wins` | double | Overtime wins. |
 | `points_diff` | double |  |
 | `reg_losses` | double |  |
 | `reg_wins` | double |  |
 | `rot_losses` | double |  |
 | `rot_wins` | double |  |
-| `shootout_losses` | double |  |
-| `shootout_wins` | double |  |
+| `shootout_losses` | double | Shootout losses. |
+| `shootout_wins` | double | Shootout wins. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |

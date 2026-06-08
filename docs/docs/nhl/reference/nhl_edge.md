@@ -29,24 +29,24 @@ Pull EDGE detail stats for a single skater.
 | `sog_summary` | character |  |
 | `sog_details` | character |  |
 | `player_id` | integer | Unique player identifier. |
-| `player_first_name_default` | character |  |
-| `player_last_name_default` | character |  |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
 | `player_shoots_catches` | character |  |
-| `player_sweater_number` | integer |  |
-| `player_position` | character |  |
-| `player_slug` | character | URL-safe player identifier. |
-| `player_headshot` | character |  |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_headshot` | character | URL to the player headshot image. |
 | `player_goals` | integer |  |
 | `player_assists` | integer |  |
 | `player_points` | integer | Player points. |
 | `player_games_played` | integer |  |
-| `player_team_common_name_default` | character |  |
-| `player_team_place_name_with_preposition_default` | character |  |
-| `player_team_place_name_with_preposition_fr` | character |  |
-| `player_team_abbrev` | character |  |
-| `player_team_team_logo_light` | character |  |
-| `player_team_team_logo_dark` | character |  |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
 | `top_shot_speed_imperial` | double |  |
 | `top_shot_speed_metric` | double |  |
 | `top_shot_speed_percentile` | double |  |
@@ -425,16 +425,16 @@ Pull EDGE zone-time detail for a single skater.
 
 | col_name | type | description |
 |---|---|---|
-| `strength_code` | character |  |
-| `offensive_zone_pctg` | double |  |
-| `offensive_zone_percentile` | double |  |
-| `offensive_zone_league_avg` | double |  |
-| `neutral_zone_pctg` | double |  |
-| `neutral_zone_percentile` | double |  |
-| `neutral_zone_league_avg` | double |  |
-| `defensive_zone_pctg` | double |  |
-| `defensive_zone_percentile` | double |  |
-| `defensive_zone_league_avg` | double |  |
+| `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
+| `offensive_zone_pctg` | double | Percentage of time spent in the offensive zone. |
+| `offensive_zone_percentile` | double | League percentile rank for offensive-zone time. |
+| `offensive_zone_league_avg` | double | League average offensive-zone time percentage. |
+| `neutral_zone_pctg` | double | Percentage of time spent in the neutral zone. |
+| `neutral_zone_percentile` | double | League percentile rank for neutral-zone time. |
+| `neutral_zone_league_avg` | double | League average neutral-zone time percentage. |
+| `defensive_zone_pctg` | double | Percentage of time spent in the defensive zone. |
+| `defensive_zone_percentile` | double | League percentile rank for defensive-zone time. |
+| `defensive_zone_league_avg` | double | League average defensive-zone time percentage. |
 
 ### Example
 
@@ -519,25 +519,25 @@ Pull EDGE detail stats for a single goalie.
 | `shot_location_summary` | character |  |
 | `shot_location_details` | character |  |
 | `player_id` | integer | Unique player identifier. |
-| `player_first_name_default` | character |  |
-| `player_last_name_default` | character |  |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
 | `player_shoots_catches` | character |  |
-| `player_sweater_number` | integer |  |
-| `player_slug` | character | URL-safe player identifier. |
-| `player_headshot` | character |  |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_slug` | character | URL slug for the player. |
+| `player_headshot` | character | URL to the player headshot image. |
 | `player_wins` | integer |  |
 | `player_losses` | integer |  |
 | `player_overtime_losses` | integer |  |
 | `player_goals_against_avg` | double |  |
 | `player_save_pctg` | double |  |
 | `player_games_played` | integer |  |
-| `player_team_common_name_default` | character |  |
-| `player_team_place_name_with_preposition_default` | character |  |
-| `player_team_place_name_with_preposition_fr` | character |  |
-| `player_team_abbrev` | character |  |
-| `player_team_team_logo_light` | character |  |
-| `player_team_team_logo_dark` | character |  |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
 | `stats_goals_against_avg_value` | double |  |
 | `stats_goals_against_avg_percentile` | double |  |
 | `stats_goals_against_avg_league_avg` | double |  |
@@ -710,15 +710,15 @@ Pull EDGE shot-location detail for a single goalie.
 
 | col_name | type | description |
 |---|---|---|
-| `area` | character | Area. |
-| `shots_against` | integer |  |
-| `saves` | integer | Saves. |
-| `goals_against` | integer |  |
-| `save_pctg` | double |  |
-| `shots_against_percentile` | double |  |
-| `saves_percentile` | double |  |
-| `goals_against_percentile` | double |  |
-| `save_pctg_percentile` | double |  |
+| `area` | character | Net/ice zone the shots were taken from. |
+| `shots_against` | integer | Shots faced. |
+| `saves` | integer | Saves made. |
+| `goals_against` | integer | Goals against. |
+| `save_pctg` | double | Save percentage. |
+| `shots_against_percentile` | double | League percentile rank for shots against. |
+| `saves_percentile` | double | League percentile rank for saves. |
+| `goals_against_percentile` | double | League percentile rank for goals against. |
+| `save_pctg_percentile` | double | League percentile rank for save percentage. |
 
 ### Example
 
@@ -802,13 +802,13 @@ Pull EDGE detail stats for a single team.
 | `sog_summary` | character |  |
 | `sog_details` | character |  |
 | `team_id` | integer | Unique team identifier. |
-| `team_common_name_default` | character |  |
-| `team_place_name_with_preposition_default` | character |  |
-| `team_place_name_with_preposition_fr` | character |  |
-| `team_abbrev` | character | Abbreviation for team. |
-| `team_team_logo_light` | character |  |
-| `team_team_logo_dark` | character |  |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_common_name_default` | character | Team common name (default language). |
+| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_team_logo_light` | character | URL to the team light logo. |
+| `team_team_logo_dark` | character | URL to the team dark logo. |
+| `team_slug` | character | Team URL slug. |
 | `team_conference` | character |  |
 | `team_division` | character |  |
 | `team_wins` | integer | Team wins. |
@@ -929,13 +929,13 @@ Pull EDGE shot-location detail for a single team.
 
 | col_name | type | description |
 |---|---|---|
-| `area` | character | Area. |
-| `sog` | integer |  |
-| `sog_rank` | integer |  |
-| `goals` | integer |  |
-| `goals_rank` | integer |  |
-| `shooting_pctg` | double |  |
-| `shooting_pctg_rank` | integer |  |
+| `area` | character | Net/ice zone the shots were taken from. |
+| `sog` | integer | Shots on goal from the area. |
+| `sog_rank` | integer | League rank for shots on goal from the area. |
+| `goals` | integer | Goals scored. |
+| `goals_rank` | integer | League rank for goals scored from the area. |
+| `shooting_pctg` | double | Shooting percentage from the area. |
+| `shooting_pctg_rank` | integer | League rank for shooting percentage from the area. |
 
 ### Example
 

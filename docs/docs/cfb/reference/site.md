@@ -37,14 +37,14 @@ ESPN endpoint.
 | `season_slug` | character | Season slug. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
-| `status_clock` | double | Status clock. |
+| `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Status period. |
+| `status_period` | integer | Current period. |
 | `neutral_site` | logical | TRUE/FALSE flag for if the game took place at a neutral site. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance at the game. |
@@ -54,29 +54,29 @@ ESPN endpoint.
 | `venue_state` | character | State (or province/country) where the venue is located. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast network short name. |
-| `note` | character |  |
+| `note` | character | Game note or headline. |
 | `home_id` | character | Home team referencing id. |
-| `home_name` | character | Home name. |
+| `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
+| `home_display_name` | character | Home team display name. |
 | `home_location` | character | Home team's location. |
-| `home_color` | character | Color code (hex) for home. |
+| `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home-team score after the play. |
-| `home_winner` | logical | Home team's winner. |
-| `home_rank` | integer |  |
+| `home_winner` | logical | Whether the home team won. |
+| `home_rank` | integer | Home team rank (if ranked). |
 | `away_id` | character | Away team referencing id. |
-| `away_name` | character | Away name. |
+| `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
+| `away_display_name` | character | Away team display name. |
 | `away_location` | character | Away team's location. |
-| `away_color` | character | Color code (hex) for away. |
+| `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away-team score after the play. |
-| `away_winner` | logical | Away team's winner. |
-| `away_rank` | integer |  |
+| `away_winner` | logical | Whether the away team won. |
+| `away_rank` | integer | Away team rank (if ranked). |
 
 ### Example
 
@@ -265,8 +265,8 @@ ESPN endpoint.
 | `region` | character | Broadcast region code. |
 | `is_national` | logical |  |
 | `type_id` | character | Type id. |
-| `type_short_name` | character | Type short name. |
-| `type_long_name` | character | Type long name. |
+| `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
+| `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
 | `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
 | `market_id` | character | ESPN futures-market identifier. |
 | `market_type` | character | Geographic market type (e.g. `National`). |
@@ -439,7 +439,7 @@ ESPN endpoint.
 | `type_text` | character | Type text. |
 | `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
 | `period_number` | integer | Period number. |
-| `clock_value` | double |  |
+| `clock_value` | double | Clock value in seconds. |
 | `clock_display_value` | character | Clock display value. |
 | `team_id` | character | Team id. |
 | `team_uid` | character | Team uid. |
@@ -814,9 +814,9 @@ ESPN endpoint.
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_place_display_text` | character |  |
+| `birth_place_display_text` | character | Birth place display text. |
 | `birth_country_alternate_id` | character |  |
-| `birth_country_abbreviation` | character |  |
+| `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `college_id` | character | College id. |
 | `college_guid` | character | College guid. |
 | `college_mascot` | character | College mascot. |
@@ -835,10 +835,10 @@ ESPN endpoint.
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
 | `position_parent_id` | character | ESPN id of the parent position; `position_detail = TRUE` only. |
-| `position_parent_name` | character |  |
-| `position_parent_display_name` | character |  |
-| `position_parent_abbreviation` | character |  |
-| `position_parent_leaf` | logical |  |
+| `position_parent_name` | character | Parent position name. |
+| `position_parent_display_name` | character | Parent position display name. |
+| `position_parent_abbreviation` | character | Parent position abbreviation. |
+| `position_parent_leaf` | logical | Whether parent position is leaf. |
 | `experience_years` | integer | Experience years. |
 | `experience_display_value` | character | Experience display value. |
 | `experience_abbreviation` | character | Experience abbreviation. |

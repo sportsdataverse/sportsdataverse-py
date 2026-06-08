@@ -54,7 +54,7 @@ ESPN endpoint.
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `broadcast` | character | Broadcast information string. |
-| `note` | character |  |
+| `note` | character | Game note or headline. |
 | `home_id` | character | Unique identifier for home. |
 | `home_name` | character | Home name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
@@ -65,7 +65,7 @@ ESPN endpoint.
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Home team's winner. |
-| `home_rank` | character |  |
+| `home_rank` | character | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
@@ -76,7 +76,7 @@ ESPN endpoint.
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Away team's winner. |
-| `away_rank` | character |  |
+| `away_rank` | character | Away team rank (if ranked). |
 
 ### Example
 

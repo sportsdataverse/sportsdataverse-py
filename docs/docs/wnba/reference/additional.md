@@ -263,11 +263,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `uid` | character | ESPN UID string. |
 | `date` | character | Date in YYYY-MM-DD format. |
 | `attendance` | integer | Reported attendance. |
-| `time_valid` | logical | Time valid. |
+| `time_valid` | logical | Whether the start time is confirmed. |
 | `neutral_site` | logical | Neutral site. |
 | `conference_competition` | logical | Conference competition. |
-| `play_by_play_available` | logical | TRUE if play-by-play is available. |
-| `recent` | logical | Recent. |
+| `play_by_play_available` | logical | Whether play-by-play data is available. |
+| `recent` | logical | Whether the game is recent. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
 | `highlights` | integer | Game highlight urls. |
@@ -282,13 +282,13 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state / region. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
-| `status_clock` | double | Status clock. |
+| `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Status period. |
+| `status_period` | integer | Current period. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
@@ -296,33 +296,33 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_id` | character | Unique identifier for home. |
 | `home_uid` | character | Home team's uid. |
 | `home_location` | character | Home team's location. |
-| `home_name` | character | Home name. |
+| `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
+| `home_display_name` | character | Home team display name. |
 | `home_short_display_name` | character | Home short display name. |
-| `home_color` | character | Color code (hex) for home. |
+| `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_is_active` | logical | Home team's is active. |
 | `home_venue_id` | character | Unique identifier for home venue. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
-| `home_winner` | logical | Home team's winner. |
+| `home_winner` | logical | Whether the home team won. |
 | `home_linescores` | integer |  |
 | `home_records` | character |  |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
-| `away_name` | character | Away name. |
+| `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
+| `away_display_name` | character | Away team display name. |
 | `away_short_display_name` | character | Away short display name. |
-| `away_color` | character | Color code (hex) for away. |
+| `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_is_active` | logical | Away team's is active. |
 | `away_venue_id` | character | Unique identifier for away venue. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
-| `away_winner` | logical | Away team's winner. |
+| `away_winner` | logical | Whether the away team won. |
 | `away_linescores` | integer |  |
 | `away_records` | character |  |
 | `game_id` | integer | Unique game identifier. |
@@ -438,7 +438,7 @@ Polars dataframe containing teams for the requested league. This function caches
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
 | `team_location` | character | Team city or location string. |
-| `team_logos` | integer |  |
+| `team_logos` | integer | Team logo metadata. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_nickname` | character | Team nickname. |
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |

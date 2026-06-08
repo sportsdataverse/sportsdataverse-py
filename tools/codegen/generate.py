@@ -187,7 +187,7 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 _R_DICT_FILE = ROOT / "tools" / "codegen" / "r_column_descriptions.yaml"
 
 # League prefix -> SDV R package whose @return tables describe its columns.
-# nfl/nhl/pwhl have no package, so they resolve via the ``_merged`` fallback.
+# nfl/pwhl have no package, so they resolve via the ``_merged`` fallback.
 _LEAGUE_R_PACKAGE = {
     "cfb": "cfbfastR",
     "nba": "hoopR",
@@ -195,6 +195,7 @@ _LEAGUE_R_PACKAGE = {
     "wnba": "wehoop",
     "wbb": "wehoop",
     "mlb": "baseballr",
+    "nhl": "fastRhockey",
 }
 
 

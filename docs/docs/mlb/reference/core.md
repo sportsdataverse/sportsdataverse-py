@@ -1977,8 +1977,8 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
-| `ot_losses` | double |  |
-| `ot_wins` | double |  |
+| `ot_losses` | double | Overtime losses. |
+| `ot_wins` | double | Overtime wins. |
 | `avg_points_against` | double | Avg points against. |
 | `avg_points_for` | double | Avg points for. |
 | `clincher` | double | Clincher. |
@@ -2007,7 +2007,7 @@ ESPN endpoint.
 | `magic_number_wildcard` | double |  |
 | `playoff_percent` | double |  |
 | `road_losses` | double | Road losses. |
-| `road_ties` | double |  |
+| `road_ties` | double | Ties on the road. |
 | `road_wins` | double | Road wins. |
 | `wild_card_percent` | double |  |
 | `overall` | character | Overall. |

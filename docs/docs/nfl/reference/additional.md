@@ -48,7 +48,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `jersey` | character | Jersey number worn by the player. |
 | `linked` | logical | TRUE if the record is linked to a related entity. |
 | `active` | logical | TRUE if the row represents an active record (player / team / season). |
-| `alternate_ids_sdr` | character |  |
+| `alternate_ids_sdr` | character | Alternate ids sdr. |
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
@@ -386,11 +386,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `uid` | character | ESPN UID string. |
 | `date` | character | Date in YYYY-MM-DD format. |
 | `attendance` | integer | Reported attendance. |
-| `time_valid` | logical | Time valid. |
+| `time_valid` | logical | Whether the start time is confirmed. |
 | `neutral_site` | logical | Neutral site. |
 | `conference_competition` | logical | Conference competition. |
-| `play_by_play_available` | logical | TRUE if play-by-play is available. |
-| `recent` | logical | Recent. |
+| `play_by_play_available` | logical | Whether play-by-play data is available. |
+| `recent` | logical | Whether the game is recent. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
 | `highlights` | character | Game highlight urls. |
@@ -399,20 +399,20 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
 | `broadcast_name` | character | Broadcast name. |
 | `type_id` | character | Type identifier (numeric). |
-| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
+| `type_abbreviation` | character | Play type abbreviation. |
 | `venue_id` | character | Unique venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state / region. |
 | `venue_address_country` | character |  |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
-| `status_clock` | double | Status clock. |
+| `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Status period. |
+| `status_period` | integer | Current period. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
@@ -421,11 +421,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_id` | character | Unique identifier for home. |
 | `home_uid` | character | Home team's uid. |
 | `home_location` | character | Home team's location. |
-| `home_name` | character | Home name. |
+| `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
+| `home_display_name` | character | Home team display name. |
 | `home_short_display_name` | character | Home short display name. |
-| `home_color` | character | Color code (hex) for home. |
+| `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_is_active` | logical | Home team's is active. |
 | `home_venue_id` | character | Unique identifier for home venue. |
@@ -437,11 +437,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
-| `away_name` | character | Away name. |
+| `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
+| `away_display_name` | character | Away team display name. |
 | `away_short_display_name` | character | Away short display name. |
-| `away_color` | character | Color code (hex) for away. |
+| `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_is_active` | logical | Away team's is active. |
 | `away_venue_id` | character | Unique identifier for away venue. |
@@ -498,7 +498,7 @@ Polars dataframe containing NFL combine data available.
 | `player_name` | character | Player name. |
 | `pos` | character | Player position. |
 | `school` | character | Player's school / college (when distinct from 'college'). |
-| `ht` | character | Ht. |
+| `ht` | character | Hits (skaters). |
 | `wt` | double | Wt. |
 | `forty` | double |  |
 | `bench` | double | Bench. |
@@ -539,7 +539,7 @@ Polars dataframe containing historical contracts available.
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `team` | character | Team-side label or team identifier. |
 | `is_active` | logical | Whether the team was active in this season. |
@@ -561,7 +561,7 @@ Polars dataframe containing historical contracts available.
 | `college` | character | College or school attended. |
 | `draft_year` | integer | Draft year (4-digit). |
 | `draft_round` | integer | Round of the draft selection. |
-| `draft_overall` | integer |  |
+| `draft_overall` | integer | Overall draft selection number. |
 | `draft_team` | character |  |
 | `cols` | double |  |
 
@@ -598,7 +598,7 @@ Polars dataframe containing depth chart data available for the requested seasons
 | `season` | integer | Season year. |
 | `club_code` | character |  |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `depth_team` | character |  |
 | `last_name` | character | Player's last name. |
 | `first_name` | character | Player's first name. |
@@ -910,7 +910,7 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 | `pff_id` | character |  |
 | `sleeper_id` | integer |  |
 | `nfl_id` | character |  |
-| `espn_id` | integer |  |
+| `espn_id` | integer | ESPN internal coach id. |
 | `yahoo_id` | character |  |
 | `fleaflicker_id` | character |  |
 | `cbs_id` | integer |  |
@@ -927,11 +927,11 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 | `merge_name` | character |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `team` | character | Team-side label or team identifier. |
-| `birthdate` | character |  |
+| `birthdate` | character | Date of birth. |
 | `age` | double | Player age (in years). |
 | `draft_year` | integer | Draft year (4-digit). |
 | `draft_round` | integer | Round of the draft selection. |
-| `draft_pick` | integer |  |
+| `draft_pick` | integer | Draft pick within the round. |
 | `draft_ovr` | integer |  |
 | `twitter_username` | character |  |
 | `height` | integer | Player height (string e.g. '6-2' or inches). |
@@ -976,7 +976,7 @@ Polars dataframe containing fantasy football rankings data.
 | `fp_page` | character |  |
 | `page_type` | character |  |
 | `ecr_type` | character |  |
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `id` | integer | Id. |
 | `pos` | character | Player position. |
 | `team` | character | Team-side label or team identifier. |
@@ -991,7 +991,7 @@ Polars dataframe containing fantasy football rankings data.
 | `player_owned_avg` | double |  |
 | `player_owned_espn` | character |  |
 | `player_owned_yahoo` | character |  |
-| `player_image_url` | character |  |
+| `player_image_url` | character | URL to the player image. |
 | `player_square_image_url` | character |  |
 | `rank_delta` | integer |  |
 | `bye` | integer |  |
@@ -1102,7 +1102,7 @@ Polars dataframe containing injuries data available for the requested seasons.
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `week` | integer | Week number. |
 | `gsis_id` | character |  |
@@ -1159,8 +1159,8 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | `season` | integer | Season year. |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `week` | integer | Week number. |
-| `player_display_name` | character |  |
-| `player_position` | character |  |
+| `player_display_name` | character | Player display name. |
+| `player_position` | character | Primary player position. |
 | `team_abbr` | character | Team abbreviation. |
 | `avg_time_to_throw` | double |  |
 | `avg_completed_air_yards` | double |  |
@@ -1184,7 +1184,7 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | `player_first_name` | character | Participant first name. |
 | `player_last_name` | character | Participant last name. |
 | `player_jersey_number` | integer |  |
-| `player_short_name` | character |  |
+| `player_short_name` | character | Player short name. |
 
 **Example**
 
@@ -1237,7 +1237,7 @@ Polars dataframe containing NFL combine data available.
 | `player_name` | character | Player name. |
 | `pos` | character | Player position. |
 | `school` | character | Player's school / college (when distinct from 'college'). |
-| `ht` | character | Ht. |
+| `ht` | character | Hits (skaters). |
 | `wt` | double | Wt. |
 | `forty` | double |  |
 | `bench` | double | Bench. |
@@ -1278,7 +1278,7 @@ Polars dataframe containing historical contracts available.
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `team` | character | Team-side label or team identifier. |
 | `is_active` | logical | Whether the team was active in this season. |
@@ -1300,7 +1300,7 @@ Polars dataframe containing historical contracts available.
 | `college` | character | College or school attended. |
 | `draft_year` | integer | Draft year (4-digit). |
 | `draft_round` | integer | Round of the draft selection. |
-| `draft_overall` | integer |  |
+| `draft_overall` | integer | Overall draft selection number. |
 | `draft_team` | character |  |
 | `cols` | double |  |
 
@@ -1337,7 +1337,7 @@ Polars dataframe containing depth chart data available for the requested seasons
 | `season` | integer | Season year. |
 | `club_code` | character |  |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `depth_team` | character |  |
 | `last_name` | character | Player's last name. |
 | `first_name` | character | Player's first name. |
@@ -1649,7 +1649,7 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 | `pff_id` | character |  |
 | `sleeper_id` | integer |  |
 | `nfl_id` | character |  |
-| `espn_id` | integer |  |
+| `espn_id` | integer | ESPN internal coach id. |
 | `yahoo_id` | character |  |
 | `fleaflicker_id` | character |  |
 | `cbs_id` | integer |  |
@@ -1666,11 +1666,11 @@ Polars dataframe containing fantasy football player ID mappings across platforms
 | `merge_name` | character |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `team` | character | Team-side label or team identifier. |
-| `birthdate` | character |  |
+| `birthdate` | character | Date of birth. |
 | `age` | double | Player age (in years). |
 | `draft_year` | integer | Draft year (4-digit). |
 | `draft_round` | integer | Round of the draft selection. |
-| `draft_pick` | integer |  |
+| `draft_pick` | integer | Draft pick within the round. |
 | `draft_ovr` | integer |  |
 | `twitter_username` | character |  |
 | `height` | integer | Player height (string e.g. '6-2' or inches). |
@@ -1715,7 +1715,7 @@ Polars dataframe containing fantasy football rankings data.
 | `fp_page` | character |  |
 | `page_type` | character |  |
 | `ecr_type` | character |  |
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `id` | integer | Id. |
 | `pos` | character | Player position. |
 | `team` | character | Team-side label or team identifier. |
@@ -1730,7 +1730,7 @@ Polars dataframe containing fantasy football rankings data.
 | `player_owned_avg` | double |  |
 | `player_owned_espn` | character |  |
 | `player_owned_yahoo` | character |  |
-| `player_image_url` | character |  |
+| `player_image_url` | character | URL to the player image. |
 | `player_square_image_url` | character |  |
 | `rank_delta` | integer |  |
 | `bye` | integer |  |
@@ -1841,7 +1841,7 @@ Polars dataframe containing injuries data available for the requested seasons.
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `week` | integer | Week number. |
 | `gsis_id` | character |  |
@@ -1898,8 +1898,8 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | `season` | integer | Season year. |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `week` | integer | Week number. |
-| `player_display_name` | character |  |
-| `player_position` | character |  |
+| `player_display_name` | character | Player display name. |
+| `player_position` | character | Primary player position. |
 | `team_abbr` | character | Team abbreviation. |
 | `avg_time_to_throw` | double |  |
 | `avg_completed_air_yards` | double |  |
@@ -1923,7 +1923,7 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | `player_first_name` | character | Participant first name. |
 | `player_last_name` | character | Participant last name. |
 | `player_jersey_number` | integer |  |
-| `player_short_name` | character |  |
+| `player_short_name` | character | Player short name. |
 
 **Example**
 
@@ -1972,8 +1972,8 @@ Will be removed in a future release. Migrate callers to the unified
 | `season` | integer | Season year. |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `week` | integer | Week number. |
-| `player_display_name` | character |  |
-| `player_position` | character |  |
+| `player_display_name` | character | Player display name. |
+| `player_position` | character | Primary player position. |
 | `team_abbr` | character | Team abbreviation. |
 | `avg_time_to_throw` | double |  |
 | `avg_completed_air_yards` | double |  |
@@ -1997,7 +1997,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `player_first_name` | character | Participant first name. |
 | `player_last_name` | character | Participant last name. |
 | `player_jersey_number` | integer |  |
-| `player_short_name` | character |  |
+| `player_short_name` | character | Player short name. |
 
 **Example**
 
@@ -2028,8 +2028,8 @@ Will be removed in a future release. Migrate callers to the unified
 | `season` | integer | Season year. |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `week` | integer | Week number. |
-| `player_display_name` | character |  |
-| `player_position` | character |  |
+| `player_display_name` | character | Player display name. |
+| `player_position` | character | Primary player position. |
 | `team_abbr` | character | Team abbreviation. |
 | `avg_cushion` | double |  |
 | `avg_separation` | double |  |
@@ -2047,7 +2047,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `player_first_name` | character | Participant first name. |
 | `player_last_name` | character | Participant last name. |
 | `player_jersey_number` | integer |  |
-| `player_short_name` | character |  |
+| `player_short_name` | character | Player short name. |
 
 **Example**
 
@@ -2078,8 +2078,8 @@ Will be removed in a future release. Migrate callers to the unified
 | `season` | integer | Season year. |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `week` | integer | Week number. |
-| `player_display_name` | character |  |
-| `player_position` | character |  |
+| `player_display_name` | character | Player display name. |
+| `player_position` | character | Primary player position. |
 | `team_abbr` | character | Team abbreviation. |
 | `efficiency` | double | Efficiency. |
 | `percent_attempts_gte_eight_defenders` | double |  |
@@ -2092,7 +2092,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `player_first_name` | character | Participant first name. |
 | `player_last_name` | character | Participant last name. |
 | `player_jersey_number` | integer |  |
-| `player_short_name` | character |  |
+| `player_short_name` | character | Player short name. |
 | `expected_rush_yards` | double |  |
 | `rush_yards_over_expected` | double |  |
 | `rush_yards_over_expected_per_att` | double |  |
@@ -2176,7 +2176,7 @@ Polars dataframe containing the play-by-plays available for the requested season
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `quarter_seconds_remaining` | double |  |
 | `half_seconds_remaining` | double |  |
-| `game_seconds_remaining` | double |  |
+| `game_seconds_remaining` | double | Seconds remaining in regulation. |
 | `game_half` | character | Half of the game (1 or 2). |
 | `quarter_end` | double |  |
 | `drive` | double |  |
@@ -2184,7 +2184,7 @@ Polars dataframe containing the play-by-plays available for the requested season
 | `qtr` | double | Quarter (1-4) or OT period (5+). |
 | `down` | double | Down of the play (1-4). |
 | `goal_to_go` | integer |  |
-| `time` | character | Time left within the period |
+| `time` | character | Game clock at infraction (MM:SS). |
 | `yrdln` | character |  |
 | `ydstogo` | double |  |
 | `ydsnet` | double |  |
@@ -2449,7 +2449,7 @@ Polars dataframe containing the play-by-plays available for the requested season
 | `season` | integer | Season year. |
 | `cp` | double |  |
 | `cpoe` | double |  |
-| `series` | double |  |
+| `series` | double | Nested list of series within the round. |
 | `series_success` | double |  |
 | `series_result` | character |  |
 | `order_sequence` | double |  |
@@ -2640,7 +2640,7 @@ Polars dataframe containing PFR advanced stats data for the requested `stat_type
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `opponent` | character | Opponent team name. |
 | `pfr_player_name` | character |  |
@@ -2712,12 +2712,12 @@ Will be removed in a future release. Migrate callers to the unified
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year. |
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `pfr_id` | character |  |
 | `tm` | character |  |
 | `age` | double | Player age (in years). |
 | `pos` | character | Player position. |
-| `g` | double | Games played. |
+| `g` | double | Goals (skaters). |
 | `gs` | double |  |
 | `int` | double | Binary flag for an interception. |
 | `tgt` | double |  |
@@ -2769,7 +2769,7 @@ Will be removed in a future release. Migrate callers to the unified
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `team` | character | Team-side label or team identifier. |
 | `pass_attempts` | double |  |
 | `throwaways` | double |  |
@@ -2835,12 +2835,12 @@ Will be removed in a future release. Migrate callers to the unified
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year. |
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `pfr_id` | character |  |
 | `tm` | character |  |
 | `age` | double | Player age (in years). |
 | `pos` | character | Player position. |
-| `g` | double | Games played. |
+| `g` | double | Goals (skaters). |
 | `gs` | double |  |
 | `tgt` | double |  |
 | `rec` | double |  |
@@ -2888,12 +2888,12 @@ Will be removed in a future release. Migrate callers to the unified
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year. |
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `pfr_id` | character |  |
 | `tm` | character |  |
 | `age` | double | Player age (in years). |
 | `pos` | character | Player position. |
-| `g` | double | Games played. |
+| `g` | double | Goals (skaters). |
 | `gs` | double |  |
 | `att` | double |  |
 | `yds` | double |  |
@@ -2939,7 +2939,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `opponent` | character | Opponent team name. |
 | `pfr_player_name` | character |  |
@@ -2997,7 +2997,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `opponent` | character | Opponent team name. |
 | `pfr_player_name` | character |  |
@@ -3050,7 +3050,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `opponent` | character | Opponent team name. |
 | `pfr_player_name` | character |  |
@@ -3096,7 +3096,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `opponent` | character | Opponent team name. |
 | `pfr_player_name` | character |  |
@@ -3137,10 +3137,10 @@ Polars dataframe containing player stats.
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `player_display_name` | character |  |
+| `player_display_name` | character | Player display name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
-| `headshot_url` | character | Player ESPN headshot url. |
+| `headshot_url` | character | URL to the official's headshot image. |
 | `recent_team` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
@@ -3276,7 +3276,7 @@ Polars dataframe containing rosters available for the requested seasons.
 | `weight` | integer | Player weight in pounds. |
 | `college` | character | College or school attended. |
 | `gsis_id` | character |  |
-| `espn_id` | character |  |
+| `espn_id` | character | ESPN internal coach id. |
 | `sportradar_id` | character |  |
 | `yahoo_id` | character |  |
 | `rotowire_id` | character |  |
@@ -3285,10 +3285,10 @@ Polars dataframe containing rosters available for the requested seasons.
 | `fantasy_data_id` | character |  |
 | `sleeper_id` | character |  |
 | `years_exp` | integer |  |
-| `headshot_url` | character | Player ESPN headshot url. |
+| `headshot_url` | character | URL to the official's headshot image. |
 | `ngs_position` | character |  |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `status_description_abbr` | character |  |
 | `football_name` | character |  |
 | `esb_id` | character |  |
@@ -3334,7 +3334,7 @@ Polars dataframe containing the schedule for the requested seasons.
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
 | `season` | integer | Season year. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `week` | integer | Week number. |
 | `gameday` | character |  |
 | `weekday` | character |  |
@@ -3362,8 +3362,8 @@ Polars dataframe containing the schedule for the requested seasons.
 | `away_spread_odds` | integer | American odds price on the away-team spread. |
 | `home_spread_odds` | integer | American odds price on the home-team spread. |
 | `total_line` | double |  |
-| `under_odds` | integer | American odds price on the under. |
-| `over_odds` | integer | American odds price on the over. |
+| `under_odds` | integer | Under moneyline odds (American format). |
+| `over_odds` | integer | Over moneyline odds (American format). |
 | `div_game` | integer |  |
 | `roof` | character |  |
 | `surface` | character |  |
@@ -3421,9 +3421,9 @@ Polars dataframe containing snap counts available for the requested seasons.
 | `game_id` | character | Unique game identifier. |
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `week` | integer | Week number. |
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `pfr_player_id` | character |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `team` | character | Team-side label or team identifier. |
@@ -3704,7 +3704,7 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 | `weight` | integer | Player weight in pounds. |
 | `college` | character | College or school attended. |
 | `gsis_id` | character |  |
-| `espn_id` | character |  |
+| `espn_id` | character | ESPN internal coach id. |
 | `sportradar_id` | character |  |
 | `yahoo_id` | character |  |
 | `rotowire_id` | character |  |
@@ -3713,10 +3713,10 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 | `fantasy_data_id` | character |  |
 | `sleeper_id` | character |  |
 | `years_exp` | integer |  |
-| `headshot_url` | character | Player ESPN headshot url. |
+| `headshot_url` | character | URL to the official's headshot image. |
 | `ngs_position` | character |  |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `status_description_abbr` | character |  |
 | `football_name` | character |  |
 | `esb_id` | character |  |
@@ -3868,7 +3868,7 @@ Polars dataframe containing the play-by-plays available for the requested season
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `quarter_seconds_remaining` | double |  |
 | `half_seconds_remaining` | double |  |
-| `game_seconds_remaining` | double |  |
+| `game_seconds_remaining` | double | Seconds remaining in regulation. |
 | `game_half` | character | Half of the game (1 or 2). |
 | `quarter_end` | double |  |
 | `drive` | double |  |
@@ -3876,7 +3876,7 @@ Polars dataframe containing the play-by-plays available for the requested season
 | `qtr` | double | Quarter (1-4) or OT period (5+). |
 | `down` | double | Down of the play (1-4). |
 | `goal_to_go` | integer |  |
-| `time` | character | Time left within the period |
+| `time` | character | Game clock at infraction (MM:SS). |
 | `yrdln` | character |  |
 | `ydstogo` | double |  |
 | `ydsnet` | double |  |
@@ -4141,7 +4141,7 @@ Polars dataframe containing the play-by-plays available for the requested season
 | `season` | integer | Season year. |
 | `cp` | double |  |
 | `cpoe` | double |  |
-| `series` | double |  |
+| `series` | double | Nested list of series within the round. |
 | `series_success` | double |  |
 | `series_result` | character |  |
 | `order_sequence` | double |  |
@@ -4277,7 +4277,7 @@ Polars dataframe containing PFR advanced stats data for the requested `stat_type
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `team` | character | Team-side label or team identifier. |
 | `opponent` | character | Opponent team name. |
 | `pfr_player_name` | character |  |
@@ -4349,10 +4349,10 @@ Polars dataframe containing player stats.
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `player_display_name` | character |  |
+| `player_display_name` | character | Player display name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
-| `headshot_url` | character | Player ESPN headshot url. |
+| `headshot_url` | character | URL to the official's headshot image. |
 | `recent_team` | character |  |
 | `season` | integer | Season year. |
 | `week` | integer | Week number. |
@@ -4488,7 +4488,7 @@ Polars dataframe containing rosters available for the requested seasons.
 | `weight` | integer | Player weight in pounds. |
 | `college` | character | College or school attended. |
 | `gsis_id` | character |  |
-| `espn_id` | character |  |
+| `espn_id` | character | ESPN internal coach id. |
 | `sportradar_id` | character |  |
 | `yahoo_id` | character |  |
 | `rotowire_id` | character |  |
@@ -4497,10 +4497,10 @@ Polars dataframe containing rosters available for the requested seasons.
 | `fantasy_data_id` | character |  |
 | `sleeper_id` | character |  |
 | `years_exp` | integer |  |
-| `headshot_url` | character | Player ESPN headshot url. |
+| `headshot_url` | character | URL to the official's headshot image. |
 | `ngs_position` | character |  |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `status_description_abbr` | character |  |
 | `football_name` | character |  |
 | `esb_id` | character |  |
@@ -4558,7 +4558,7 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 | `weight` | integer | Player weight in pounds. |
 | `college` | character | College or school attended. |
 | `gsis_id` | character |  |
-| `espn_id` | character |  |
+| `espn_id` | character | ESPN internal coach id. |
 | `sportradar_id` | character |  |
 | `yahoo_id` | character |  |
 | `rotowire_id` | character |  |
@@ -4567,10 +4567,10 @@ Polars dataframe containing weekly rosters available for the requested seasons.
 | `fantasy_data_id` | character |  |
 | `sleeper_id` | character |  |
 | `years_exp` | integer |  |
-| `headshot_url` | character | Player ESPN headshot url. |
+| `headshot_url` | character | URL to the official's headshot image. |
 | `ngs_position` | character |  |
 | `week` | integer | Week number. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `status_description_abbr` | character |  |
 | `football_name` | character |  |
 | `esb_id` | character |  |
@@ -4615,7 +4615,7 @@ Polars dataframe containing the schedule for the requested seasons.
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
 | `season` | integer | Season year. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `week` | integer | Week number. |
 | `gameday` | character |  |
 | `weekday` | character |  |
@@ -4643,8 +4643,8 @@ Polars dataframe containing the schedule for the requested seasons.
 | `away_spread_odds` | integer | American odds price on the away-team spread. |
 | `home_spread_odds` | integer | American odds price on the home-team spread. |
 | `total_line` | double |  |
-| `under_odds` | integer | American odds price on the under. |
-| `over_odds` | integer | American odds price on the over. |
+| `under_odds` | integer | Under moneyline odds (American format). |
+| `over_odds` | integer | Over moneyline odds (American format). |
 | `div_game` | integer |  |
 | `roof` | character |  |
 | `surface` | character |  |
@@ -4702,9 +4702,9 @@ Polars dataframe containing snap counts available for the requested seasons.
 | `game_id` | character | Unique game identifier. |
 | `pfr_game_id` | character |  |
 | `season` | integer | Season year. |
-| `game_type` | character | Game type code (R, P, etc.). |
+| `game_type` | character | Game type the row belongs to. |
 | `week` | integer | Week number. |
-| `player` | character | Player name. |
+| `player` | character | Penalized player name. |
 | `pfr_player_id` | character |  |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `team` | character | Team-side label or team identifier. |
@@ -5299,7 +5299,7 @@ Polars dataframe containing teams for the requested league. This function caches
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
 | `team_location` | character | Team city or location string. |
-| `team_logos` | integer |  |
+| `team_logos` | integer | Team logo metadata. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_nickname` | character | Team nickname. |
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |

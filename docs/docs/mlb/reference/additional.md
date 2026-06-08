@@ -1033,25 +1033,25 @@ Polars dataframe containing the schedule. Returns `None` if no games.
 | `date` | character | Date in YYYY-MM-DD format. |
 | `season_year` | integer | Season year string ('YYYY-YY' format). |
 | `season_type` | integer | Season-type id. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
 | `status_type_description` | character | Status type description. |
 | `venue_id` | character | MLBAM venue ID. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / province. |
 | `home_id` | character | Unique identifier for home. |
-| `home_name` | character | Home name. |
+| `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
+| `home_display_name` | character | Home team display name. |
 | `home_score` | character | Home team run total after the play. |
-| `home_winner` | logical | Home team's winner. |
+| `home_winner` | logical | Whether the home team won. |
 | `away_id` | character | Unique identifier for away. |
-| `away_name` | character | Away name. |
+| `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
+| `away_display_name` | character | Away team display name. |
 | `away_score` | character | Away team run total after the play. |
-| `away_winner` | logical | Away team's winner. |
+| `away_winner` | logical | Whether the away team won. |
 
 **Example**
 
@@ -1171,7 +1171,7 @@ Polars dataframe containing teams for MLB. This function caches by default, so i
 | `team_is_active` | logical | Team is active. |
 | `team_is_all_star` | logical | Team is all star. |
 | `team_location` | character | Team city / location. |
-| `team_logos` | integer |  |
+| `team_logos` | integer | Team logo metadata. |
 | `team_name` | character | Team name. |
 | `team_nickname` | character | Team nickname. |
 | `team_short_display_name` | character | Short team display name. |

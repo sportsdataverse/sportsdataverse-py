@@ -28,55 +28,55 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
-| `uid` | character | ESPN UID string. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `name` | character | Display name. |
-| `short_name` | character | Short display name. |
-| `season_year` | integer | Season year string ('YYYY-YY' format). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `season_slug` | character | Season slug. |
-| `status_type_id` | character | Unique identifier for status type. |
+| `uid` | character | Competitor uid string. |
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `name` | character | Team mascot name. |
+| `short_name` | character | Short game name. |
+| `season_year` | integer | Season end year. |
+| `season_type` | integer | Season type code (echoed from arg). |
+| `season_slug` | character | Season type slug. |
+| `status_type_id` | character | Status type identifier. |
 | `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
-| `status_type_description` | character | Status type description. |
-| `status_type_detail` | character | Status type detail. |
-| `status_type_short_detail` | character | Status type short detail. |
-| `status_clock` | double | Status clock. |
-| `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Status period. |
-| `neutral_site` | logical | Neutral site. |
-| `conference_competition` | character | Conference competition. |
-| `attendance` | integer | Reported attendance. |
-| `venue_id` | character | Unique venue identifier. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
+| `status_type_description` | character | Status description. |
+| `status_type_detail` | character | Status detail text. |
+| `status_type_short_detail` | character | Short status detail. |
+| `status_clock` | double | Game clock in seconds. |
+| `status_display_clock` | character | Display clock string. |
+| `status_period` | integer | Current period. |
+| `neutral_site` | logical | Whether the game is at a neutral site. |
+| `conference_competition` | character | Whether it is a conference competition. |
+| `attendance` | integer | Game attendance. |
+| `venue_id` | character | Venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_city` | character | Venue city. |
-| `venue_state` | character | Venue state / region. |
-| `venue_indoor` | logical | Whether the home venue is indoors. |
-| `broadcast` | character | Broadcast information string. |
-| `note` | character |  |
-| `home_id` | character | Unique identifier for home. |
-| `home_name` | character | Home name. |
-| `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
-| `home_location` | character | Home team's location. |
-| `home_color` | character | Color code (hex) for home. |
-| `home_alternate_color` | character | Color code (hex) for home alternate. |
+| `venue_state` | character | Venue state. |
+| `venue_indoor` | logical | Whether the venue is indoors. |
+| `broadcast` | character | Broadcast network(s). |
+| `note` | character | Game note or headline. |
+| `home_id` | character | Home team ESPN identifier. |
+| `home_name` | character | Home team display name. |
+| `home_abbreviation` | character | Home team abbreviation. |
+| `home_display_name` | character | Home team display name. |
+| `home_location` | character | Home team city. |
+| `home_color` | character | Home team primary color hex. |
+| `home_alternate_color` | character | Home team alternate color hex. |
 | `home_logo` | character | Home team logo URL. |
-| `home_score` | character | Home team score at the time of the play. |
-| `home_winner` | logical | Home team's winner. |
-| `home_rank` | integer |  |
-| `away_id` | character | Unique identifier for away. |
-| `away_name` | character | Away name. |
-| `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
-| `away_location` | character | Away team's location. |
-| `away_color` | character | Color code (hex) for away. |
-| `away_alternate_color` | character | Color code (hex) for away alternate. |
+| `home_score` | character | Home team final score. |
+| `home_winner` | logical | Whether the home team won. |
+| `home_rank` | integer | Home team rank (if ranked). |
+| `away_id` | character | Away team ESPN identifier. |
+| `away_name` | character | Away team display name. |
+| `away_abbreviation` | character | Away team abbreviation. |
+| `away_display_name` | character | Away team display name. |
+| `away_location` | character | Away team city. |
+| `away_color` | character | Away team primary color hex. |
+| `away_alternate_color` | character | Away team alternate color hex. |
 | `away_logo` | character | Away team logo URL. |
-| `away_score` | character | Away team score at the time of the play. |
-| `away_winner` | logical | Away team's winner. |
-| `away_rank` | integer |  |
+| `away_score` | character | Away team final score. |
+| `away_winner` | logical | Whether the away team won. |
+| `away_rank` | integer | Away team rank (if ranked). |
 
 ### Example
 
@@ -118,33 +118,33 @@ ESPN endpoint.
 | `did_not_play` | character | Did not play. |
 | `ejected` | character | Ejected. |
 | `reason` | character | Reason. |
-| `blocked_shots` | character |  |
+| `blocked_shots` | character | Blocked shots. |
 | `hits` | character | Hits. |
-| `takeaways` | character |  |
+| `takeaways` | character | Takeaways. |
 | `plus_minus` | character | Plus minus. |
-| `time_on_ice` | character |  |
+| `time_on_ice` | character | Time on ice in seconds. |
 | `power_play_time_on_ice` | character |  |
 | `short_handed_time_on_ice` | character |  |
 | `even_strength_time_on_ice` | character |  |
-| `shifts` | character |  |
-| `goals` | character |  |
+| `shifts` | character | Number of shifts. |
+| `goals` | character | Goals scored. |
 | `ytd_goals` | character |  |
 | `assists` | character | Assists. |
-| `shots_total` | character |  |
+| `shots_total` | character | Shots on goal. |
 | `shots_missed` | character |  |
-| `shootout_goals` | character |  |
-| `faceoffs_won` | character |  |
-| `faceoffs_lost` | character |  |
-| `faceoff_percent` | character |  |
-| `giveaways` | character |  |
-| `penalties` | character | Total number of penalties. |
-| `penalty_minutes` | character |  |
-| `goals_against` | character |  |
-| `shots_against` | character |  |
-| `shootout_saves` | character |  |
+| `shootout_goals` | character | Shootout goals. |
+| `faceoffs_won` | character | Faceoffs won in the season. |
+| `faceoffs_lost` | character | Faceoffs lost in the season. |
+| `faceoff_percent` | character | Faceoff win percentage. |
+| `giveaways` | character | Giveaways. |
+| `penalties` | character | Penalty count. |
+| `penalty_minutes` | character | Penalty minutes. |
+| `goals_against` | character | Goals against. |
+| `shots_against` | character | Shots faced. |
+| `shootout_saves` | character | Shootout saves made. |
 | `shootout_shots_against` | character |  |
-| `saves` | character | Saves. |
-| `save_pct` | character |  |
+| `saves` | character | Saves made. |
+| `save_pct` | character | Save percentage. |
 | `even_strength_saves` | character |  |
 | `power_play_saves` | character |  |
 | `short_handed_saves` | character |  |
@@ -179,19 +179,19 @@ ESPN endpoint.
 | `shooting_play` | logical | Shooting play. |
 | `type_id` | character | Type id. |
 | `type_text` | character | Type text. |
-| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
+| `type_abbreviation` | character | Play type abbreviation. |
 | `period_number` | integer | Period number. |
 | `period_display_value` | character | Period display value. |
 | `clock_display_value` | character | Clock display value. |
 | `participants` | character | Participants. |
 | `team_id` | character | Team id. |
-| `strength_id` | character |  |
-| `strength_text` | character |  |
+| `strength_id` | character | Strength situation id (e.g. even strength, PP, SH). |
+| `strength_text` | character | Strength situation (e.g. "Even Strength", "Power Play"). |
 | `strength_abbreviation` | character |  |
 | `coordinate_x` | double | Coordinate x. |
 | `coordinate_y` | double | Coordinate y. |
-| `shot_info_id` | character |  |
-| `shot_info_text` | character |  |
+| `shot_info_id` | character | Shot type identifier. |
+| `shot_info_text` | character | Shot type text (e.g. "Wrist Shot"). |
 | `shot_info_abbreviation` | character |  |
 
 **leaders**
@@ -271,7 +271,7 @@ ESPN endpoint.
 | `series_score` | character | Series score. |
 | `short_summary` | character | Short summary. |
 | `events` | character | Events. |
-| `round` | character | Tournament / playoff round. |
+| `round` | character | Shootout round number. |
 
 **standings**
 
@@ -283,7 +283,7 @@ ESPN endpoint.
 | `team_id` | character | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_location` | character | Team location. |
-| `ot_losses` | character |  |
+| `ot_losses` | character | Overtime losses. |
 | `losses` | character | Losses. |
 | `points` | character | Points. |
 | `wins` | character | Wins. |
@@ -292,19 +292,19 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `station` | character | Broadcast station / network name (e.g. `ESPN+`). |
-| `lang` | character | Broadcast language code. |
-| `region` | character | Region label. |
+| `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
+| `lang` | character | Broadcast language (e.g. "en"). |
+| `region` | character | Broadcast region (e.g. "us"). |
 | `is_national` | logical |  |
 | `type_id` | character | Type id. |
-| `type_short_name` | character | Type short name. |
-| `type_long_name` | character | Type long name. |
-| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
-| `market_id` | character | ESPN futures-market identifier. |
-| `market_type` | character | Market type code (`winLeague`, `winConference`, `winDivision`, ...). |
-| `media_call_letters` | character | Broadcast call letters for the outlet. |
-| `media_name` | character | ESPN media name for the outlet. |
-| `media_short_name` | character | Short ESPN media name for the outlet. |
+| `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
+| `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
+| `type_slug` | character | Broadcast type slug. |
+| `market_id` | character | Market identifier. |
+| `market_type` | character | Market type. |
+| `media_call_letters` | character | Media outlet call letters. |
+| `media_name` | character | Media outlet full name. |
+| `media_short_name` | character | Media outlet short name. |
 
 **format**
 
@@ -726,11 +726,11 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
+| `position_group` | character | Position group name (e.g. Centers). |
 | `id` | character | Id. |
 | `uid` | character | Uid. |
 | `guid` | character | Guid. |
-| `alternate_id` | character |  |
+| `alternate_id` | character | Alternate player identifier. |
 | `first_name` | character | First name. |
 | `last_name` | character | Last name. |
 | `full_name` | character | Full name. |
@@ -751,8 +751,8 @@ ESPN endpoint.
 | `alternate_ids_sdr` | character | Alternate ids sdr. |
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_place_display_text` | character |  |
-| `birth_country_abbreviation` | character |  |
+| `birth_place_display_text` | character | Birth place display text. |
+| `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
 | `hand_type` | character | Hand type. |
@@ -763,11 +763,11 @@ ESPN endpoint.
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
-| `position_parent_id` | character | ESPN id of the parent position; `position_detail = TRUE` only. |
-| `position_parent_name` | character |  |
-| `position_parent_display_name` | character |  |
-| `position_parent_abbreviation` | character |  |
-| `position_parent_leaf` | logical |  |
+| `position_parent_id` | character | Parent position identifier. |
+| `position_parent_name` | character | Parent position name. |
+| `position_parent_display_name` | character | Parent position display name. |
+| `position_parent_abbreviation` | character | Parent position abbreviation. |
+| `position_parent_leaf` | logical | Whether parent position is leaf. |
 | `experience_years` | integer | Experience years. |
 | `status_id` | character | Status id. |
 | `status_name` | character | Status name. |
@@ -1083,7 +1083,7 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
-| `ot_losses` | double |  |
+| `ot_losses` | double | Overtime losses. |
 | `clincher` | double | Clincher. |
 | `differential` | double | Differential. |
 | `games_behind` | double | Games behind. |
@@ -1096,15 +1096,15 @@ ESPN endpoint.
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
 | `wins` | double | Wins. |
-| `overtime_losses` | double |  |
-| `overtime_wins` | double |  |
+| `overtime_losses` | double | Total overtime losses. |
+| `overtime_wins` | double | Overtime wins. |
 | `points_diff` | double |  |
 | `reg_losses` | double |  |
 | `reg_wins` | double |  |
 | `rot_losses` | double |  |
 | `rot_wins` | double |  |
-| `shootout_losses` | double |  |
-| `shootout_wins` | double |  |
+| `shootout_losses` | double | Shootout losses. |
+| `shootout_wins` | double | Shootout wins. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |

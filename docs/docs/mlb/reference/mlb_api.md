@@ -798,7 +798,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 
 | col_name | type | description |
 |---|---|---|
-| `number` | integer | Number. |
+| `number` | integer | Week number as returned by the API. |
 | `next_up` | character |  |
 | `pick_pick_round` | character |  |
 | `pick_pick_number` | integer |  |

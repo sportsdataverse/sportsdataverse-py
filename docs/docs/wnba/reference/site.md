@@ -37,14 +37,14 @@ ESPN endpoint.
 | `season_slug` | character | Season slug. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
-| `status_clock` | double | Status clock. |
+| `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Status period. |
+| `status_period` | integer | Current period. |
 | `neutral_site` | logical | Neutral site. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance. |
@@ -54,29 +54,29 @@ ESPN endpoint.
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast information string. |
-| `note` | character |  |
+| `note` | character | Game note or headline. |
 | `home_id` | character | Unique identifier for home. |
-| `home_name` | character | Home name. |
+| `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
+| `home_display_name` | character | Home team display name. |
 | `home_location` | character | Home team's location. |
-| `home_color` | character | Color code (hex) for home. |
+| `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
-| `home_winner` | logical | Home team's winner. |
-| `home_rank` | character |  |
+| `home_winner` | logical | Whether the home team won. |
+| `home_rank` | character | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
-| `away_name` | character | Away name. |
+| `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
+| `away_display_name` | character | Away team display name. |
 | `away_location` | character | Away team's location. |
-| `away_color` | character | Color code (hex) for away. |
+| `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
-| `away_winner` | logical | Away team's winner. |
-| `away_rank` | character |  |
+| `away_winner` | logical | Whether the away team won. |
+| `away_rank` | character | Away team rank (if ranked). |
 
 ### Example
 

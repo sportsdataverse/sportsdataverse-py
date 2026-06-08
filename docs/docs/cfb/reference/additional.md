@@ -45,12 +45,12 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `jersey` | character | Jersey number. |
 | `linked` | logical | TRUE if the record is linked to a related entity. |
 | `active` | logical | `TRUE` if the player was active for the game. |
-| `alternate_ids_sdr` | character |  |
+| `alternate_ids_sdr` | character | Alternate ids sdr. |
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
 | `birth_country_alternate_id` | character |  |
-| `birth_country_abbreviation` | character |  |
+| `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `headshot_href` | character | URL of the athlete headshot image. |
 | `headshot_alt` | character | Alternative-text label for the headshot. |
 | `flag_href` | character |  |
@@ -431,12 +431,12 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `uid` | character | ESPN global unique identifier. |
 | `date` | character | Date of the poll release. |
 | `attendance` | integer | Reported attendance at the game. |
-| `time_valid` | logical | Time valid. |
+| `time_valid` | logical | Whether the start time is confirmed. |
 | `date_valid` | logical |  |
 | `neutral_site` | logical | TRUE/FALSE flag for if the game took place at a neutral site. |
 | `conference_competition` | logical | Conference competition. |
-| `play_by_play_available` | logical | TRUE if play-by-play is available. |
-| `recent` | logical | Recent. |
+| `play_by_play_available` | logical | Whether play-by-play data is available. |
+| `recent` | logical | Whether the game is recent. |
 | `start_date` | character | Season start timestamp (ISO 8601, UTC). |
 | `broadcast` | character | Broadcast network short name. |
 | `highlights` | character | Game highlight urls. |
@@ -451,13 +451,13 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_country` | character |  |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
-| `status_clock` | double | Status clock. |
+| `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Status period. |
+| `status_period` | integer | Current period. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
+| `status_type_state` | character | Status state (pre/in/post). |
+| `status_type_completed` | logical | Whether the game is complete. |
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
@@ -465,11 +465,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_id` | character | Home team referencing id. |
 | `home_uid` | character | Home team's uid. |
 | `home_location` | character | Home team's location. |
-| `home_name` | character | Home name. |
+| `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
+| `home_display_name` | character | Home team display name. |
 | `home_short_display_name` | character | Home short display name. |
-| `home_color` | character | Color code (hex) for home. |
+| `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_is_active` | logical | Home team's is active. |
 | `home_venue_id` | character | Unique identifier for home venue. |
@@ -482,11 +482,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_id` | character | Away team referencing id. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
-| `away_name` | character | Away name. |
+| `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
+| `away_display_name` | character | Away team display name. |
 | `away_short_display_name` | character | Away short display name. |
-| `away_color` | character | Color code (hex) for away. |
+| `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_is_active` | logical | Away team's is active. |
 | `away_venue_id` | character | Unique identifier for away venue. |
@@ -646,7 +646,7 @@ Polars dataframe containing schedule dates for the requested season. This functi
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
 | `team_location` | character | Team location / school name; `team_detail = TRUE` only. |
-| `team_logos` | integer |  |
+| `team_logos` | integer | Team logo metadata. |
 | `team_name` | character | Team nickname; `team_detail = TRUE` only. |
 | `team_nickname` | character | Team nickname label; `team_detail = TRUE` only. |
 | `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |
