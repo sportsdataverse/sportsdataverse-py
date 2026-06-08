@@ -984,13 +984,20 @@ def test_return_parsed_shim_dispatches_through_new_parser_for_team_roster():
     try:
         from sportsdataverse.nba.nba_espn_ext import espn_nba_team_roster
 
-        raw = espn_nba_team_roster(team_id=13)
+        # return_parsed=False recovers the raw Dict payload (0.0.54 default flip).
+        raw = espn_nba_team_roster(team_id=13, return_parsed=False)
         assert isinstance(raw, dict)
         assert "athletes" in raw
 
-        df = espn_nba_team_roster(team_id=13, return_parsed=True)
+        # Default (no kwarg) now routes through parse_team_roster → DataFrame.
+        df = espn_nba_team_roster(team_id=13)
         assert isinstance(df, pl.DataFrame)
         assert df.height >= 10
         assert "first_name" in df.columns
+
+        # Explicit return_parsed=True must match the default.
+        df_explicit = espn_nba_team_roster(team_id=13, return_parsed=True)
+        assert isinstance(df_explicit, pl.DataFrame)
+        assert df_explicit.height >= 10
     finally:
         ce._get = real_get

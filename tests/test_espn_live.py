@@ -31,7 +31,7 @@ pytestmark = skip_if_no_live
 def test_espn_nba_teams_site_returns_30_teams():
     from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
 
-    payload = espn_nba_teams_site()
+    payload = espn_nba_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     assert len(teams) == 30, f"expected 30 NBA teams, got {len(teams)}"
@@ -40,7 +40,7 @@ def test_espn_nba_teams_site_returns_30_teams():
 def test_espn_mbb_teams_site_returns_many_teams():
     from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_teams_site
 
-    payload = espn_mbb_teams_site()
+    payload = espn_mbb_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     # ~350 DI programs; be loose to survive ESPN roster churn
@@ -50,7 +50,7 @@ def test_espn_mbb_teams_site_returns_many_teams():
 def test_espn_wnba_teams_site_returns_wnba_teams():
     from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_teams_site
 
-    payload = espn_wnba_teams_site()
+    payload = espn_wnba_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     # WNBA has been expanding: 12 (2023) → 13 (2024) → 15 (2025+).
@@ -61,7 +61,7 @@ def test_espn_wnba_teams_site_returns_wnba_teams():
 def test_espn_wbb_teams_site_returns_many_teams():
     from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_teams_site
 
-    payload = espn_wbb_teams_site()
+    payload = espn_wbb_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     assert len(teams) >= 300, f"expected >=300 WBB teams, got {len(teams)}"
@@ -70,7 +70,7 @@ def test_espn_wbb_teams_site_returns_many_teams():
 def test_espn_cfb_teams_site_returns_many_teams():
     from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_teams_site
 
-    payload = espn_cfb_teams_site()
+    payload = espn_cfb_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     assert len(teams) >= 200, f"expected >=200 CFB teams, got {len(teams)}"
@@ -79,7 +79,7 @@ def test_espn_cfb_teams_site_returns_many_teams():
 def test_espn_nfl_teams_site_returns_32_teams():
     from sportsdataverse.nfl.nfl_espn_ext import espn_nfl_teams_site
 
-    payload = espn_nfl_teams_site()
+    payload = espn_nfl_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     assert len(teams) == 32, f"expected 32 NFL teams, got {len(teams)}"
@@ -88,7 +88,7 @@ def test_espn_nfl_teams_site_returns_32_teams():
 def test_espn_mlb_teams_site_returns_30_teams():
     from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_teams_site
 
-    payload = espn_mlb_teams_site()
+    payload = espn_mlb_teams_site(return_parsed=False)
     sports = payload.get("sports", [{}])
     teams = sports[0].get("leagues", [{}])[0].get("teams") or []
     assert len(teams) == 30, f"expected 30 MLB teams, got {len(teams)}"
@@ -103,7 +103,7 @@ def test_espn_nba_scoreboard_returns_events_for_known_date():
     from sportsdataverse.nba.nba_espn_ext import espn_nba_scoreboard
 
     # Christmas Day 2024 — historically game-heavy
-    payload = espn_nba_scoreboard(dates=20241225)
+    payload = espn_nba_scoreboard(dates=20241225, return_parsed=False)
     events = payload.get("events") or []
     assert isinstance(events, list), "events must be a list"
     assert len(events) > 0, "expected at least one NBA event on 2024-12-25"
@@ -113,7 +113,7 @@ def test_espn_mlb_scoreboard_returns_events_for_known_date():
     from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_scoreboard
 
     # Opening Day 2024 — full slate of games
-    payload = espn_mlb_scoreboard(dates=20240320)
+    payload = espn_mlb_scoreboard(dates=20240320, return_parsed=False)
     events = payload.get("events") or []
     assert isinstance(events, list), "events must be a list"
     assert len(events) > 0, "expected at least one MLB event on 2024-03-20"
@@ -128,7 +128,7 @@ def test_espn_nba_player_overview_lebron():
     from sportsdataverse.nba.nba_espn_ext import espn_nba_player_overview
 
     # LeBron James ESPN id = 1966
-    payload = espn_nba_player_overview(athlete_id=1966)
+    payload = espn_nba_player_overview(athlete_id=1966, return_parsed=False)
     assert isinstance(payload, dict), "expected a dict response"
     assert len(payload) > 0, "payload is empty for LeBron James (id=1966)"
     # Web v3 overview always includes athlete and statsSummary (or similar)
@@ -140,7 +140,7 @@ def test_espn_mlb_player_overview_aaron_judge():
     from sportsdataverse.mlb.mlb_espn_ext import espn_mlb_player_overview
 
     # Aaron Judge ESPN id = 33192
-    payload = espn_mlb_player_overview(athlete_id=33192)
+    payload = espn_mlb_player_overview(athlete_id=33192, return_parsed=False)
     assert isinstance(payload, dict), "expected a dict response"
     assert len(payload) > 0, "payload is empty for Aaron Judge (id=33192)"
     top_keys = set(payload.keys())
@@ -155,7 +155,7 @@ def test_espn_mlb_player_overview_aaron_judge():
 def test_espn_cfb_conferences_returns_groups():
     from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_conferences
 
-    payload = espn_cfb_conferences()
+    payload = espn_cfb_conferences(return_parsed=False)
     assert isinstance(payload, dict), "expected a dict response"
     # The groups endpoint wraps its list under 'groups' or 'items'
     assert "groups" in payload or "items" in payload, (
@@ -172,7 +172,7 @@ def test_nhl_web_standings_returns_standings_list():
     from sportsdataverse.nhl.nhl_api_web import nhl_standings
 
     # Use a past date from the 2023-24 regular season to get stable data
-    payload = nhl_standings(date="2024-04-01")
+    payload = nhl_standings(date="2024-04-01", return_parsed=False)
     assert isinstance(payload, dict), "expected a dict response"
     standings = payload.get("standings") or []
     assert len(standings) >= 32, f"expected >=32 team rows in standings, got {len(standings)}"
@@ -182,7 +182,7 @@ def test_nhl_web_schedule_returns_game_week():
     from sportsdataverse.nhl.nhl_api_web import nhl_web_schedule
 
     # A specific past regular-season date guaranteed to have games
-    payload = nhl_web_schedule(date="2024-01-15")
+    payload = nhl_web_schedule(date="2024-01-15", return_parsed=False)
     assert isinstance(payload, dict), "expected a dict response"
     game_week = payload.get("gameWeek") or []
     assert isinstance(game_week, list), "'gameWeek' must be a list"
@@ -195,7 +195,7 @@ def test_nhl_web_roster_toronto_2024():
     from sportsdataverse.nhl.nhl_api_web import nhl_roster
 
     # TOR 2024 (end-year → "20232024")
-    payload = nhl_roster(team="TOR", season=2024)
+    payload = nhl_roster(team="TOR", season=2024, return_parsed=False)
     assert isinstance(payload, dict), "expected a dict response"
     forwards = payload.get("forwards") or []
     defense = payload.get("defensemen") or []
@@ -298,7 +298,7 @@ def test_espn_mlb_scoreboard_is_callable_with_correct_name():
 def test_espn_cfb_season_recruits_2024_returns_items():
     from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_recruits
 
-    payload = espn_cfb_recruits(season=2024, limit=10)
+    payload = espn_cfb_recruits(season=2024, limit=10, return_parsed=False)
     assert isinstance(payload, dict), "expected a dict response"
     # Core v2 season_recruits wraps its list under 'items' (paginated response)
     items = payload.get("items") or []
@@ -326,7 +326,7 @@ def test_parse_teams_handles_wnba_payload():
     from sportsdataverse._common_espn_parsers import parse_teams
     from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_teams_site
 
-    raw = espn_wnba_teams_site()
+    raw = espn_wnba_teams_site(return_parsed=False)
     df = parse_teams(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
     assert df.height >= 12, f"expected >=12 WNBA team rows from parse_teams, got {df.height}"
@@ -339,7 +339,7 @@ def test_parse_scoreboard_handles_wnba_payload():
     from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_scoreboard
 
     # July 7 2024 — guaranteed mid-season WNBA slate
-    raw = espn_wnba_scoreboard(dates=20240707)
+    raw = espn_wnba_scoreboard(dates=20240707, return_parsed=False)
     df = parse_scoreboard(raw)
     assert isinstance(df, pl.DataFrame)
     # If the date has games (it does, historically) we expect rows; otherwise
@@ -354,7 +354,7 @@ def test_parse_standings_handles_wnba_payload():
     from sportsdataverse._common_espn_parsers import parse_standings
     from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_standings
 
-    raw = espn_wnba_standings()
+    raw = espn_wnba_standings(return_parsed=False)
     df = parse_standings(raw)
     assert isinstance(df, pl.DataFrame)
     # WNBA standings have one row per team; minimum 12 across history
@@ -368,7 +368,7 @@ def test_parse_athlete_overview_handles_wnba_payload():
     from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_player_overview
 
     # A'ja Wilson — ESPN id 3149391, perennial MVP candidate
-    raw = espn_wnba_player_overview(athlete_id=3149391)
+    raw = espn_wnba_player_overview(athlete_id=3149391, return_parsed=False)
     df = parse_athlete_overview(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars frame, got {type(df)}"
     # Overview parser flattens to a single-row summary OR a multi-row stats
@@ -384,7 +384,7 @@ def test_parse_leaders_handles_wnba_payload():
     from sportsdataverse._common_espn_parsers import parse_leaders
     from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_leaders
 
-    raw = espn_wnba_leaders()
+    raw = espn_wnba_leaders(return_parsed=False)
     df = parse_leaders(raw)
     assert isinstance(df, pl.DataFrame)
     # Leaders endpoint always returns multiple stat categories × multiple
@@ -427,8 +427,8 @@ def test_return_parsed_with_return_as_pandas_returns_pandas():
 def test_return_parsed_false_keeps_raw_dict():
     from sportsdataverse.nba.nba_espn_ext import espn_nba_teams_site
 
-    raw = espn_nba_teams_site()  # default: return_parsed=False
-    assert isinstance(raw, dict), f"expected raw dict when return_parsed omitted, got {type(raw)}"
+    raw = espn_nba_teams_site(return_parsed=False)  # 0.0.54 default is True; opt out for the Dict
+    assert isinstance(raw, dict), f"expected raw dict when return_parsed=False, got {type(raw)}"
     # Confirm raw shape preserved
     assert "sports" in raw, f"raw payload missing 'sports' key — got {list(raw)[:3]}"
 
@@ -455,7 +455,7 @@ def test_parse_edge_top10_handles_live_leaderboard():
     from sportsdataverse.nhl.nhl_edge import nhl_edge_skater_shot_speed_top_10
     from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_top10
 
-    raw = nhl_edge_skater_shot_speed_top_10(positions="all", sort_by="maxSpeed")
+    raw = nhl_edge_skater_shot_speed_top_10(positions="all", sort_by="maxSpeed", return_parsed=False)
     df = parse_edge_top10(raw)
     assert isinstance(df, pl.DataFrame), f"expected polars DataFrame, got {type(df)}"
     # Off-season may return empty; in-season expect rows.
@@ -547,7 +547,7 @@ def test_espn_cfb_team_schedule_live():
     non-empty raw payload structure either way."""
     from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_team_schedule
 
-    raw = espn_cfb_team_schedule(team_id=333)  # Alabama
+    raw = espn_cfb_team_schedule(team_id=333, return_parsed=False)  # Alabama
     assert isinstance(raw, dict), f"expected dict, got {type(raw)}"
     # Raw payload always has 'team' identifier and 'requestedSeason' even
     # when the schedule is empty
@@ -592,7 +592,7 @@ def test_espn_mbb_summary_live_full_dispatch():
     )
     from sportsdataverse.mbb.mbb_espn_ext import espn_mbb_summary
 
-    raw = espn_mbb_summary(event_id=401638645)
+    raw = espn_mbb_summary(event_id=401638645, return_parsed=False)
     assert isinstance(raw, dict), f"expected dict, got {type(raw)}"
     out = parse_summary(raw)
     assert set(out) == set(SUMMARY_SECTION_PARSERS), "dispatcher returned different sections than registry"
@@ -625,7 +625,7 @@ def test_espn_cfb_summary_live_uses_football_pattern():
     from sportsdataverse._common_espn_parsers import parse_summary
     from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_summary
 
-    out = parse_summary(espn_cfb_summary(event_id=401677192))
+    out = parse_summary(espn_cfb_summary(event_id=401677192, return_parsed=False))
     # CFB football: top-level plays[] is empty, drives.previous[] populated
     assert out["plays"].height == 0
     assert out["drives"].height >= 10, f"expected >=10 drives, got {out['drives'].height}"
@@ -750,7 +750,7 @@ def test_ncaa_team_roster_return_parsed_round_trip(league, team_id, parser_name)
     wrapper = getattr(module, f"espn_{league}_team_roster")
 
     # Three calling modes
-    raw = wrapper(team_id=team_id)
+    raw = wrapper(team_id=team_id, return_parsed=False)
     df_pl = wrapper(team_id=team_id, return_parsed=True)
     df_pd = wrapper(team_id=team_id, return_parsed=True, return_as_pandas=True)
 
@@ -800,7 +800,7 @@ def test_ncaa_news_return_parsed_matches_direct_parse_news(league):
     module = __import__(f"sportsdataverse.{league}.{league}_espn_ext", fromlist=["espn_*"])
     wrapper = getattr(module, f"espn_{league}_news")
 
-    raw = wrapper(limit=5)
+    raw = wrapper(limit=5, return_parsed=False)
     df_a = parse_news(raw)
     df_b = wrapper(limit=5, return_parsed=True)
     assert df_a.shape == df_b.shape, f"{league}: shim vs direct shape mismatch: {df_a.shape} vs {df_b.shape}"

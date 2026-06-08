@@ -101,9 +101,12 @@ def test_parsed_namespace_supports_return_as_pandas():
         ce._get = original
 
 
-def test_raw_module_default_is_still_dict_after_parsed_import():
-    """Importing the parsed namespace must NOT mutate the raw module
-    — backwards compatibility for every existing caller."""
+def test_raw_module_not_mutated_by_parsed_import():
+    """Importing the parsed namespace must NOT mutate the raw module's
+    behavior — the parsed.* build must not lock the raw wrapper into a
+    single mode. Under the 0.0.54 contract the raw module itself defaults
+    to a DataFrame, and ``return_parsed=False`` still recovers the Dict;
+    both paths must survive a parsed.* import."""
     import sportsdataverse._common_espn as ce
     import sportsdataverse.parsed.nba  # noqa: F401  triggers parsed-mod build
 
@@ -125,9 +128,16 @@ def test_raw_module_default_is_still_dict_after_parsed_import():
     try:
         from sportsdataverse.nba import espn_nba_teams_site
 
-        # No return_parsed kwarg → must still be raw Dict
-        raw = espn_nba_teams_site()
-        assert isinstance(raw, dict), f"Raw module mutated by parsed import — expected Dict, got {type(raw)}"
+        # 0.0.54 default flip: no kwarg → DataFrame (raw module, post parsed import).
+        df = espn_nba_teams_site()
+        assert isinstance(df, pl.DataFrame), (
+            f"Raw module mutated by parsed import — expected DataFrame default, got {type(df)}"
+        )
+        assert df.height >= 1
+        # return_parsed=False must still recover the raw Dict from the raw module.
+        raw = espn_nba_teams_site(return_parsed=False)
+        assert isinstance(raw, dict), f"return_parsed=False broken on raw module — got {type(raw)}"
+        assert "sports" in raw
     finally:
         ce._get = original
 

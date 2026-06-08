@@ -23,7 +23,7 @@ def nhl_scoreboard(
     date: Optional[str] = None,
     team: Optional[str] = None,
     *,
-    return_parsed: bool = False,
+    return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Dict:
@@ -43,7 +43,8 @@ def nhl_scoreboard(
         return_as_pandas: with ``return_parsed``, return pandas instead of polars.
 
     Returns:
-        Raw JSON ``Dict`` (or a polars/pandas DataFrame when ``return_parsed``).
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when
+        ``return_parsed=False``.
 
     Example:
         >>> nhl_scoreboard(date="2024-03-01")

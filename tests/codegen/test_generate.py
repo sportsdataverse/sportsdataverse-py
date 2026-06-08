@@ -38,7 +38,9 @@ def test_generated_function_builds_correct_url_and_strips_none():
             return {"events": []}
 
     with patch("sportsdataverse._codegen_runtime.download", return_value=FakeResp()) as dl:
-        out = mod.espn_nba_scoreboard(dates="20240115")
+        # return_parsed=False: this test is about URL/param construction, so we
+        # want the raw payload passed through (0.0.54 default is the DataFrame).
+        out = mod.espn_nba_scoreboard(dates="20240115", return_parsed=False)
     assert out == {"events": []}
     called = dl.call_args.kwargs
     assert called["url"] == "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"

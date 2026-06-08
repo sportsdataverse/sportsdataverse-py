@@ -75,7 +75,9 @@ def _list_teams(league: str) -> List[Dict[str, Any]]:
 
     _, teams_attr, _ = _LEAGUE_SLUG[league]
     teams_fn = _resolve_league_callable(league, teams_attr)
-    payload = teams_fn()  # raw Dict
+    # return_parsed=False: this resolver walks the raw JSON, so we need the raw
+    # Dict, not the parser-backed DataFrame default (0.0.54 contract).
+    payload = teams_fn(return_parsed=False)  # raw Dict
     teams_raw = ((payload or {}).get("sports") or [{}])[0].get("leagues") or [{}]
     teams_raw = (teams_raw[0] or {}).get("teams") or [] if teams_raw else []
     # Each entry is {"team": {id, displayName, abbreviation, location, ...}}
@@ -210,7 +212,8 @@ def find_athlete(
         if team_id is None:
             continue
         try:
-            payload = roster_fn(team_id=team_id)
+            # return_parsed=False: walk the raw roster JSON (0.0.54 contract).
+            payload = roster_fn(team_id=team_id, return_parsed=False)
         except Exception:
             continue
         # Roster shape varies — handle both flat and position-grouped
@@ -286,7 +289,9 @@ def find_event(
     _, _, sb_attr = _LEAGUE_SLUG[league]
     scoreboard_fn = _resolve_league_callable(league, sb_attr)
     date_int = int(date.replace("-", ""))
-    payload = scoreboard_fn(dates=date_int)
+    # return_parsed=False: this resolver walks the raw scoreboard JSON, so we
+    # need the raw Dict, not the parser-backed DataFrame default (0.0.54).
+    payload = scoreboard_fn(dates=date_int, return_parsed=False)
     events = (payload or {}).get("events") or []
 
     def _team_label(competitor: Dict[str, Any]) -> str:
