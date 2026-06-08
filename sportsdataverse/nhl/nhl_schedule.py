@@ -149,6 +149,7 @@ def __extract_home_away(event, arg1, arg2):
             ],
         )
     )
+    return event
 
 
 def espn_nhl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:

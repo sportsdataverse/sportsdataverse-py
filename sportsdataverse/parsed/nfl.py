@@ -220,6 +220,7 @@ from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F4
 from sportsdataverse.nfl import nfl_game_schedule as nfl_game_schedule  # noqa: F401
 from sportsdataverse.nfl import nfl_headers_gen as nfl_headers_gen  # noqa: F401
 from sportsdataverse.nfl import nfl_token_gen as nfl_token_gen  # noqa: F401
+from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nfl import reset_config as reset_config  # noqa: F401
 from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nfl import season_not_found_error as season_not_found_error  # noqa: F401
@@ -424,6 +425,7 @@ __all__ = [
     "nfl_game_schedule",
     "nfl_headers_gen",
     "nfl_token_gen",
+    "normalize_team_roster_columns",
     "reset_config",
     "scoreboard_event_parsing",
     "season_not_found_error",

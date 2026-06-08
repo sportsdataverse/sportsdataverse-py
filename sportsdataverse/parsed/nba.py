@@ -164,6 +164,7 @@ from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_sched
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
 from sportsdataverse.nba import most_recent_nba_season as most_recent_nba_season  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
+from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nba import underscore as underscore  # noqa: F401
 from sportsdataverse.nba import year_to_season as year_to_season  # noqa: F401
@@ -310,6 +311,7 @@ __all__ = [
     "load_nba_team_boxscore",
     "most_recent_nba_season",
     "nba_pbp_disk",
+    "normalize_team_roster_columns",
     "scoreboard_event_parsing",
     "underscore",
     "year_to_season",

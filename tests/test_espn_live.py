@@ -804,3 +804,89 @@ def test_ncaa_news_return_parsed_matches_direct_parse_news(league):
     df_a = parse_news(raw)
     df_b = wrapper(limit=5, return_parsed=True)
     assert df_a.shape == df_b.shape, f"{league}: shim vs direct shape mismatch: {df_a.shape} vs {df_b.shape}"
+
+
+# ===========================================================================
+# 18. game_rosters column-width regression + nhl_schedule None-guard
+# ===========================================================================
+#
+# Regression coverage for four previously-broken ESPN wrappers (surfaced by
+# the autodoc live-capture on the 0.0.55 branch):
+#
+#   * espn_{mbb,wbb,nfl}_game_rosters raised polars ShapeError
+#     ("16 column names provided for a DataFrame of width 18") because the
+#     per-team ESPN payload gained top-level reference fields (awards_$ref,
+#     coaches_$ref) for some leagues/games, breaking the positional column
+#     rename in helper_<lg>_team_items. The fix renames by source key via
+#     sportsdataverse.dl_utils.normalize_team_roster_columns, so column
+#     drift is survivable.
+#   * espn_nhl_schedule() with default args raised
+#     "'NoneType' object has no attribute 'get'" because the NHL variant of
+#     __extract_home_away mutated the event in place but (unlike the 6 other
+#     leagues) lacked a `return event`, so `event = __extract_home_away(...)`
+#     reassigned event to None before the second call.
+#
+# These tests pin both fixes and guard against regressing the league
+# variants that were already working (cfb / nba / wnba / nhl rosters).
+
+
+@pytest.mark.parametrize(
+    "league,game_id",
+    [
+        # Previously broken (width-18 team payload):
+        ("mbb", 401746082),  # 2025 NCAA M championship (Florida @ Houston)
+        ("wbb", 401746075),  # 2025 NCAA W championship (UConn @ South Carolina)
+        ("nfl", 401671789),  # completed 2024 NFL game
+        # Must NOT regress (already working before the fix):
+        ("cfb", 401628334),
+        ("nba", 401585183),
+        ("wnba", 401726992),
+        ("nhl", 401559395),  # 2023 Stanley Cup Final
+    ],
+)
+def test_espn_game_rosters_returns_nonempty_frame(league, game_id):
+    """Every league's espn_<lg>_game_rosters must return a DataFrame with
+    >0 columns (and, for these real completed games, >0 rows). Covers the
+    mbb/wbb/nfl ShapeError fix and pins the working leagues against
+    regression from the shared normalize_team_roster_columns change."""
+    import polars as pl
+
+    module = __import__(f"sportsdataverse.{league}", fromlist=[f"espn_{league}_game_rosters"])
+    wrapper = getattr(module, f"espn_{league}_game_rosters")
+
+    df = wrapper(game_id=game_id)
+    assert isinstance(df, pl.DataFrame), f"{league}: expected polars DataFrame, got {type(df)}"
+    assert df.width > 0, f"{league}: expected >0 columns, got width {df.width}"
+    assert df.height > 0, f"{league}: expected >0 roster rows for completed game {game_id}"
+    # Canonical team identity column survives the rename-by-key path.
+    assert "team_id" in df.columns, f"{league}: missing team_id after normalize_team_roster_columns"
+
+
+def test_espn_nhl_schedule_default_args_returns_frame():
+    """espn_nhl_schedule() with NO args previously raised
+    AttributeError ('NoneType' object has no attribute 'get') because the
+    NHL __extract_home_away helper returned None. It must now return a
+    valid (possibly empty) DataFrame."""
+    import polars as pl
+
+    from sportsdataverse.nhl import espn_nhl_schedule
+
+    df = espn_nhl_schedule()
+    assert isinstance(df, pl.DataFrame), f"expected polars DataFrame, got {type(df)}"
+    # Today's slate may legitimately be empty (off-day) — a valid empty
+    # frame is correct behaviour. When games exist we get >0 columns.
+    if df.height > 0:
+        assert df.width > 0, "non-empty NHL schedule frame must have columns"
+
+
+def test_espn_nhl_schedule_known_date_returns_games():
+    """A known game date (2023 Stanley Cup Final) must return a populated
+    schedule frame with the game_id column."""
+    import polars as pl
+
+    from sportsdataverse.nhl import espn_nhl_schedule
+
+    df = espn_nhl_schedule(dates=20230613)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0, "expected >=1 NHL game on 2023-06-13 (Stanley Cup Final)"
+    assert "game_id" in df.columns, "schedule frame missing game_id column"

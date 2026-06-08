@@ -170,6 +170,7 @@ from sportsdataverse.wbb import load_wbb_standings as load_wbb_standings  # noqa
 from sportsdataverse.wbb import load_wbb_team_boxscore as load_wbb_team_boxscore  # noqa: F401
 from sportsdataverse.wbb import load_wbb_team_season_stats as load_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import most_recent_wbb_season as most_recent_wbb_season  # noqa: F401
+from sportsdataverse.wbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.wbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.wbb import underscore as underscore  # noqa: F401
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
@@ -322,6 +323,7 @@ __all__ = [
     "load_wbb_team_boxscore",
     "load_wbb_team_season_stats",
     "most_recent_wbb_season",
+    "normalize_team_roster_columns",
     "scoreboard_event_parsing",
     "underscore",
     "wbb_pbp_disk",

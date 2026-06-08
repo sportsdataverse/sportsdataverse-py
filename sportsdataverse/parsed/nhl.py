@@ -319,6 +319,7 @@ from sportsdataverse.nhl import nhl_stats_rest_component_season as nhl_stats_res
 from sportsdataverse.nhl import nhl_stats_rest_config as nhl_stats_rest_config  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_content_module as nhl_stats_rest_content_module  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_ping as nhl_stats_rest_ping  # noqa: F401
+from sportsdataverse.nhl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nhl import parse_edge_detail as parse_edge_detail  # noqa: F401
 from sportsdataverse.nhl import parse_edge_hardest_shots as parse_edge_hardest_shots  # noqa: F401
 from sportsdataverse.nhl import parse_edge_payload as parse_edge_payload  # noqa: F401
@@ -644,6 +645,7 @@ __all__ = [
     "nhl_stats_rest_team_report",
     "nhl_web_pbp",
     "nhl_web_schedule",
+    "normalize_team_roster_columns",
     "parse_edge_detail",
     "parse_edge_hardest_shots",
     "parse_edge_payload",

@@ -161,6 +161,7 @@ from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F4
 from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
+from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 
@@ -303,6 +304,7 @@ __all__ = [
     "load_cfb_schedule",
     "load_cfb_team_info",
     "most_recent_cfb_season",
+    "normalize_team_roster_columns",
     "scoreboard_event_parsing",
     "underscore",
 ]

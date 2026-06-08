@@ -17,7 +17,15 @@ logger.addHandler(logging.NullHandler())
 
 
 def download(
-    url, params=None, headers=None, proxy=None, timeout=30, num_retries=15, session=None, logger=None, cache_ttl=None,
+    url,
+    params=None,
+    headers=None,
+    proxy=None,
+    timeout=30,
+    num_retries=15,
+    session=None,
+    logger=None,
+    cache_ttl=None,
 ):
     """Download a URL with retries and ESPN-aware error handling.
 
@@ -251,6 +259,75 @@ def flatten_json_iterative(dictionary, sep=".", ind_start=0):
             break
 
     return dictionary
+
+
+def normalize_team_roster_columns(teams_df: pl.DataFrame) -> pl.DataFrame:
+    """Normalize the raw ESPN team-detail frame used by the ``*_game_rosters`` helpers.
+
+    Every league's ``helper_<lg>_team_items`` fetches a per-team payload from the
+    ESPN core API, pops the heavyweight nested keys, then flattens what remains with
+    :func:`pandas.json_normalize`. Historically the resulting frame was renamed by
+    *position* (``teams_df.columns = [16 hard-coded names]``), which broke the moment
+    ESPN added or dropped a top-level field for a given league/game (e.g.
+    ``awards_$ref`` / ``coaches_$ref`` appearing for some college payloads -> a
+    width-18 frame fed a width-16 name list -> ``ShapeError``).
+
+    This helper renames by *source key* instead, so column drift is survivable:
+
+    * extra columns ESPN adds (any leftover ``*_$ref`` / ``*_href`` reference link,
+      or unknown fields) are dropped,
+    * known fields are renamed to the canonical ``team_*`` schema regardless of
+      their position, and
+    * ``logos`` is preserved untouched for the caller's logo-flattening step.
+
+    Args:
+        teams_df: Flattened per-team frame whose columns are the raw ESPN keys
+            (camelCase, possibly containing ``$ref``), e.g. ``id``, ``guid``,
+            ``displayName``, ``alternateIds_sdr``, ``logos``, ``awards_$ref``.
+
+    Returns:
+        A polars DataFrame with the canonical team columns (those present in the
+        input), plus ``logos`` when supplied. Column order follows the canonical
+        schema, with ``logos`` last.
+
+    Example:
+        Used internally by every ``helper_<lg>_team_items``::
+
+            from sportsdataverse.dl_utils import normalize_team_roster_columns
+            teams_df = normalize_team_roster_columns(teams_df)
+    """
+    # Canonicalize raw keys: $ref -> href, camelCase -> snake_case. Matches the
+    # convention the sibling roster/athlete helpers already use.
+    teams_df = teams_df.rename({c: underscore(c.replace("$ref", "href")) for c in teams_df.columns})
+
+    # Source (post-underscore) -> canonical target name.
+    rename_map = {
+        "id": "team_id",
+        "guid": "team_guid",
+        "uid": "team_uid",
+        "slug": "team_slug",
+        "location": "team_location",
+        "name": "team_name",
+        "nickname": "team_nickname",
+        "abbreviation": "team_abbreviation",
+        "display_name": "team_display_name",
+        "short_display_name": "team_short_display_name",
+        "color": "team_color",
+        "alternate_color": "team_alternate_color",
+        "is_active": "is_active",
+        "is_all_star": "is_all_star",
+        "alternate_ids_sdr": "team_alternate_ids_sdr",
+    }
+    present = {src: dst for src, dst in rename_map.items() if src in teams_df.columns}
+    teams_df = teams_df.rename(present)
+
+    # Keep only the canonical columns we know about (+ logos for downstream
+    # flattening). Anything else ESPN added (e.g. awards_href, coaches_href) is
+    # dropped instead of crashing a positional rename.
+    keep = [dst for dst in rename_map.values() if dst in teams_df.columns]
+    if "logos" in teams_df.columns:
+        keep.append("logos")
+    return teams_df.select(keep)
 
 
 def key_check(obj, key, replacement=np.array([])):

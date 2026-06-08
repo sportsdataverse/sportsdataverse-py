@@ -26,6 +26,91 @@ espn_nfl_game_rosters() - Pull the game by id.
 
 Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_nickname', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id'
 
+| col_name | type | description |
+|---|---|---|
+| `athlete_id` | integer |  |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `full_name` | character |  |
+| `athlete_display_name` | character |  |
+| `short_name` | character |  |
+| `weight` | double |  |
+| `display_weight` | character |  |
+| `height` | double |  |
+| `display_height` | character |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `debut_year` | integer |  |
+| `slug` | character |  |
+| `jersey` | character |  |
+| `linked` | logical |  |
+| `active` | logical |  |
+| `alternate_ids_sdr` | character |  |
+| `birth_place_city` | character |  |
+| `birth_place_state` | character |  |
+| `birth_place_country` | character |  |
+| `headshot_href` | character |  |
+| `headshot_alt` | character |  |
+| `projections_href` | character |  |
+| `contracts_href` | character |  |
+| `experience_years` | integer |  |
+| `college_athlete_href` | character |  |
+| `contract_href` | character |  |
+| `contract_option_type` | integer |  |
+| `contract_salary` | integer |  |
+| `contract_bonus` | integer |  |
+| `contract_years_remaining` | integer |  |
+| `contract_signed_through` | integer |  |
+| `contract_season_href` | character |  |
+| `contract_team_href` | character |  |
+| `contract_active` | logical |  |
+| `status_id` | character |  |
+| `status_name` | character |  |
+| `status_type` | character |  |
+| `status_abbreviation` | character |  |
+| `contract_salary_remaining` | integer |  |
+| `draft_display_text` | character |  |
+| `draft_round` | integer |  |
+| `draft_year` | integer |  |
+| `draft_selection` | integer |  |
+| `draft_team_href` | character |  |
+| `draft_pick_href` | character |  |
+| `hand_type` | character |  |
+| `hand_abbreviation` | character |  |
+| `hand_display_value` | character |  |
+| `starter` | logical |  |
+| `jersey_right` | character |  |
+| `valid` | logical |  |
+| `did_not_play` | logical |  |
+| `display_name` | character |  |
+| `athlete_href` | character |  |
+| `position_href` | character |  |
+| `statistics_href` | character |  |
+| `team_id` | integer |  |
+| `order` | integer |  |
+| `home_away` | character |  |
+| `winner` | logical |  |
+| `team_guid` | character |  |
+| `team_uid` | character |  |
+| `team_slug` | character |  |
+| `team_location` | character |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_color` | character |  |
+| `team_alternate_color` | character |  |
+| `is_active` | logical |  |
+| `is_all_star` | logical |  |
+| `team_alternate_ids_sdr` | character |  |
+| `logo_href` | character |  |
+| `logo_dark_href` | character |  |
+| `game_id` | integer |  |
+
 **Example**
 
 ```python

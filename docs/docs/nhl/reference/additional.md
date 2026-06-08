@@ -330,6 +330,76 @@ espn_nhl_schedule - look up the NHL schedule for a given date
 
 Polars dataframe containing schedule dates for the requested season. Returns None if no games
 
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `uid` | character |  |
+| `date` | character |  |
+| `attendance` | integer |  |
+| `time_valid` | logical |  |
+| `neutral_site` | logical |  |
+| `play_by_play_available` | logical |  |
+| `recent` | logical |  |
+| `start_date` | character |  |
+| `broadcast` | character |  |
+| `highlights` | character |  |
+| `notes_type` | character |  |
+| `notes_headline` | character |  |
+| `broadcast_market` | character |  |
+| `broadcast_name` | character |  |
+| `type_id` | character |  |
+| `type_abbreviation` | character |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_address_city` | character |  |
+| `venue_address_state` | character |  |
+| `venue_address_country` | character |  |
+| `venue_indoor` | logical |  |
+| `status_clock` | double |  |
+| `status_display_clock` | character |  |
+| `status_period` | integer |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
+| `format_regulation_periods` | integer |  |
+| `home_id` | character |  |
+| `home_uid` | character |  |
+| `home_location` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_short_display_name` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_is_active` | logical |  |
+| `home_venue_id` | character |  |
+| `home_logo` | character |  |
+| `home_score` | character |  |
+| `home_linescores` | integer |  |
+| `home_records` | character |  |
+| `away_id` | character |  |
+| `away_uid` | character |  |
+| `away_location` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_short_display_name` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_is_active` | logical |  |
+| `away_venue_id` | character |  |
+| `away_logo` | character |  |
+| `away_score` | character |  |
+| `away_linescores` | integer |  |
+| `away_records` | character |  |
+| `game_id` | integer |  |
+| `season` | integer |  |
+| `season_type` | integer |  |
+
 **Example**
 
 ```python

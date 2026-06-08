@@ -164,6 +164,7 @@ from sportsdataverse.mbb import load_mbb_shots as load_mbb_shots  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
+from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.mbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.mbb import underscore as underscore  # noqa: F401
 
@@ -309,6 +310,7 @@ __all__ = [
     "load_mbb_team_boxscore",
     "mbb_pbp_disk",
     "most_recent_mbb_season",
+    "normalize_team_roster_columns",
     "scoreboard_event_parsing",
     "underscore",
 ]

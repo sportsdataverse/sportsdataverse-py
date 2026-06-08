@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.dl_utils import download, underscore
+from sportsdataverse.dl_utils import download, normalize_team_roster_columns, underscore
 
 
 def espn_nba_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwargs) -> pl.DataFrame:
@@ -145,24 +145,9 @@ def helper_nba_team_items(items, **kwargs):
         for k in pop_cols:
             team.pop(k, None)
         team_row = pl.from_pandas(pd.json_normalize(team, sep="_"))
-        teams_df = pl.concat([teams_df, team_row], how="vertical")
+        teams_df = pl.concat([teams_df, team_row], how="diagonal")
 
-    teams_df.columns = [
-        "team_id",
-        "team_guid",
-        "team_uid",
-        "team_slug",
-        "team_location",
-        "team_name",
-        "team_abbreviation",
-        "team_display_name",
-        "team_short_display_name",
-        "team_color",
-        "team_alternate_color",
-        "is_active",
-        "is_all_star",
-        "logos",
-    ]
+    teams_df = normalize_team_roster_columns(teams_df)
     teams_df = teams_df.with_columns(logo_href=pl.lit(""), logo_dark_href=pl.lit(""))
     for row in range(len(teams_df["logos"])):
         team = teams_df["logos"][row]

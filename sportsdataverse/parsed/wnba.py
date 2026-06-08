@@ -180,6 +180,7 @@ from sportsdataverse.wnba import load_wnba_stats_team_season_stats as load_wnba_
 from sportsdataverse.wnba import load_wnba_team_boxscore as load_wnba_team_boxscore  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_season_stats as load_wnba_team_season_stats  # noqa: F401
 from sportsdataverse.wnba import most_recent_wnba_season as most_recent_wnba_season  # noqa: F401
+from sportsdataverse.wnba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.wnba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.wnba import underscore as underscore  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
@@ -342,6 +343,7 @@ __all__ = [
     "load_wnba_team_boxscore",
     "load_wnba_team_season_stats",
     "most_recent_wnba_season",
+    "normalize_team_roster_columns",
     "scoreboard_event_parsing",
     "underscore",
     "wnba_pbp_disk",
