@@ -1,0 +1,18 @@
+# Functions intentionally excluded from the docs-coverage gate (with reason).
+# Keep this SMALL -- it is escape-hatch only, not a backlog dump.
+#
+# Each list holds bare function/class names (no module prefix) that the
+# --coverage gate should NOT flag as missing even when they are absent from the
+# rendered docs corpus. Add an inline ``# reason`` comment for every entry.
+#
+# Do NOT seed this with the current documentation gaps -- those are meant to be
+# FIXED (a doc page added) in later tasks, not papered over here.
+global: []          # package-level names (find_*, list_functions, ...) to skip
+nba: []
+wnba: []
+mbb: []
+wbb: []
+cfb: []
+nfl: []
+mlb: []
+nhl: []

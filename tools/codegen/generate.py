@@ -1139,6 +1139,164 @@ def check() -> int:
 
 
 # ===========================================================================
+# Docs-coverage gate (every user-facing function must reach the rendered docs)
+#
+# `generate.py --coverage` enumerates the public, callable, in-package functions
+# each league exports, then proves each name's exact text appears somewhere in the
+# rendered markdown corpus. The intent is enforcement + measurement -- it is
+# report-only for now (NOT wired into `--check`), since real gaps still exist.
+# ===========================================================================
+
+# The 8 documented sport leagues. (pwhl is loader-only and has no module of its
+# own to import; its load_pwhl_* loaders surface at the package top level and are
+# checked as package-level/global names against the whole docs corpus.)
+_COVERAGE_LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"]
+
+_COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
+
+
+def _coverage_in_scope(name: str, obj) -> bool:
+    """True when ``name``/``obj`` is a user-facing function that must reach the docs.
+
+    A name is IN SCOPE iff ALL of:
+      * it is not private (no leading ``_``);
+      * ``obj`` is callable;
+      * ``obj.__module__`` is rooted in ``sportsdataverse`` (this excludes
+        re-exported third-party / typing names like ``Any``, ``Literal``,
+        ``lru_cache``, ``download``, ``DMatrix``, ``Booster``, ``datetime``,
+        ``reduce``, ``StringIO`` -- their module is ``typing``/``functools``/...);
+      * it is not an internal ``helper_*`` function; and
+      * it is not a ``parse_*`` parser (parsers are covered generically by the
+        shared parsers page, so they are out of scope for this gate).
+    """
+    if name.startswith("_"):
+        return False
+    if not callable(obj):
+        return False
+    if not getattr(obj, "__module__", "").startswith("sportsdataverse"):
+        return False
+    if name.startswith("helper_"):
+        return False
+    if name.startswith("parse_"):
+        return False
+    return True
+
+
+def _coverage_scope_names() -> tuple[dict[str, set[str]], set[str]]:
+    """Enumerate in-scope user-facing names per league + the package-level (global) set.
+
+    Returns ``(per_league, global_names)`` where ``per_league`` maps each league
+    prefix to its in-scope name set (introspected from ``sportsdataverse.{league}``),
+    and ``global_names`` is the set of top-level (``import sportsdataverse``) in-scope
+    names NOT already attributed to any league module -- e.g. ``find_team``,
+    ``find_athlete``, ``find_event``, ``list_functions``, ``function_count``,
+    ``clear_team_cache``, the cache-config getters, and the loader-only ``load_pwhl_*``
+    functions."""
+    import importlib
+
+    per_league: dict[str, set[str]] = {}
+    all_league: set[str] = set()
+    for lg in _COVERAGE_LEAGUES:
+        mod = importlib.import_module(f"sportsdataverse.{lg}")
+        names = {n for n in dir(mod) if _coverage_in_scope(n, getattr(mod, n))}
+        per_league[lg] = names
+        all_league |= names
+
+    top = importlib.import_module("sportsdataverse")
+    top_names = {n for n in dir(top) if _coverage_in_scope(n, getattr(top, n))}
+    global_names = top_names - all_league
+    return per_league, global_names
+
+
+def _coverage_allowlist() -> dict[str, set[str]]:
+    """``{league|'global': {names...}}`` of intentionally-excluded names.
+
+    Missing keys default to an empty set, so the gate works even before a key is
+    added to the YAML."""
+    if not _COVERAGE_ALLOWLIST_FILE.exists():
+        return {}
+    import yaml
+
+    d = yaml.safe_load(_COVERAGE_ALLOWLIST_FILE.read_text(encoding="utf-8")) or {}
+    return {k: set(v or []) for k, v in d.items()}
+
+
+@functools.lru_cache(maxsize=None)
+def _docs_corpus(league: str | None) -> str:
+    """Concatenated rendered markdown for the coverage search.
+
+    ``league`` selects ``docs/docs/{league}/**/*.md``; ``None`` selects the whole
+    ``docs/docs/**/*.md`` corpus (for package-level names). Only the live
+    ``docs/docs/`` tree is searched -- ``docs/versioned_docs/`` is deliberately
+    excluded. Returns ``""`` when the directory does not exist."""
+    base = DOCS / league if league else DOCS
+    if not base.exists():
+        return ""
+    return "\n".join(f.read_text(encoding="utf-8") for f in sorted(base.rglob("*.md")))
+
+
+def _is_documented(name: str, corpus: str) -> bool:
+    """True when ``name`` appears as a whole word in ``corpus``.
+
+    A word-boundary search (``_`` counts as a word character) so ``player_stats``
+    is NOT considered documented merely because ``player_stats_v3`` appears, while
+    surrounding punctuation/backticks/whitespace still count as a match."""
+    return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None
+
+
+def coverage_report() -> int:
+    """Report user-facing functions that never reach the rendered docs corpus.
+
+    For each league (per-league names searched against ``docs/docs/{league}``) plus
+    the package-level ``global`` group (searched against the whole ``docs/docs``
+    corpus), compute in_scope / documented / missing (= in_scope - documented -
+    allowlist). Prints a per-group table, the TOTAL missing, and the missing names
+    grouped per group. Returns 0 when nothing is missing, else 1.
+
+    This is the eventual gate contract, but it is REPORT-ONLY here -- it is not
+    invoked from ``--check`` until the known gaps are closed by later tasks."""
+    per_league, global_names = _coverage_scope_names()
+    allow = _coverage_allowlist()
+
+    groups: list[tuple[str, set[str], str | None]] = [(lg, per_league[lg], lg) for lg in _COVERAGE_LEAGUES]
+    groups.append(("global", global_names, None))
+
+    rows: list[tuple[str, int, int, int]] = []
+    missing_by_group: dict[str, list[str]] = {}
+    total_missing = 0
+    for label, names, league_dir in groups:
+        corpus = _docs_corpus(league_dir)
+        allowed = allow.get(label, set())
+        documented = {n for n in names if _is_documented(n, corpus)}
+        missing = sorted(names - documented - allowed)
+        rows.append((label, len(names), len(documented), len(missing)))
+        missing_by_group[label] = missing
+        total_missing += len(missing)
+
+    w = max(len("league"), *(len(r[0]) for r in rows))
+    print("docs-coverage report (user-facing functions reaching the rendered docs):\n")
+    print(f"  {'league'.ljust(w)} | in_scope | documented | missing")
+    print(f"  {'-' * w}-|----------|------------|--------")
+    for label, n_scope, n_doc, n_miss in rows:
+        print(f"  {label.ljust(w)} | {n_scope:>8} | {n_doc:>10} | {n_miss:>7}")
+    print(f"  {'-' * w}-|----------|------------|--------")
+    print(f"  {'TOTAL'.ljust(w)} | {sum(r[1] for r in rows):>8} | {sum(r[2] for r in rows):>10} | {total_missing:>7}")
+
+    if total_missing:
+        print(f"\nMISSING ({total_missing} user-facing function(s) not in docs, not allowlisted):")
+        for label, _names, _ in groups:
+            miss = missing_by_group[label]
+            if miss:
+                print(f"\n  {label} ({len(miss)}):")
+                for n in miss:
+                    print(f"    {n}")
+        return 1
+
+    print("\ndocs-coverage: every in-scope user-facing function reaches the docs.")
+    return 0
+
+
+# ===========================================================================
 # Docs generation (live Docusaurus tree -> docs/docs/{league})
 #
 # `generate.py --docs` regenerates the per-league reference subtree directly into
@@ -1445,7 +1603,14 @@ def main(argv=None) -> int:
         action="store_true",
         help="regenerate the per-league reference subtree into docs/docs/ and exit",
     )
+    ap.add_argument(
+        "--coverage",
+        action="store_true",
+        help="report user-facing functions that never reach the rendered docs (offline; report-only)",
+    )
     args = ap.parse_args(argv)
+    if args.coverage:
+        return coverage_report()
     if args.schemas:
         return refresh_return_schemas()
     if args.loader_schemas:
