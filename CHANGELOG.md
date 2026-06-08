@@ -2,6 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.54 (unreleased)](#0054-unreleased)
+  - [Per-sport return schemas (correctness)](#per-sport-return-schemas-correctness)
+  - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
 - [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
   - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
   - [NHL native — codegen cutover + clean names (api-web; in progress)](#nhl-native--codegen-cutover--clean-names-api-web-in-progress)
@@ -65,6 +68,25 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.54 (unreleased)
+
+### Per-sport return schemas (correctness)
+
+`@return` tables are now derived per league by running the real parsers against
+captured per-sport fixtures (`generate.py --schemas`), replacing the previous
+sport-agnostic schemas that showed (e.g.) basketball boxscore columns on MLB/NHL
+pages. Native API pages (`nhl_api_web`/`nhl_edge`/`nhl_records`/`nhl_stats_rest`/
+`mlb_api`) gained accurate return schemas. Schemas are now introspected truth,
+gated by `generate.py --check`.
+
+### BREAKING — parser-backed wrappers return a DataFrame by default
+
+`return_parsed` now defaults to **`True`** for the parser-backed wrappers; they
+return a tidy polars DataFrame instead of the raw `Dict`. Pass
+`return_parsed=False` to recover the raw `Dict`; `return_as_pandas=True` switches
+polars→pandas. Wrappers without a registered parser are unchanged (still `Dict`).
+The `sportsdataverse.parsed.{league}` mirror modules are unaffected.
 
 ## 0.0.53 Release: June 8, 2026
 
