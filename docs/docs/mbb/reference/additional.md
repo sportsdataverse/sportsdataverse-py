@@ -175,11 +175,11 @@ sorted(raw.keys())
 
 Pull a men's-college-basketball athlete's ESPN **season** stat line.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-documentation of the wide return shape, the ``{category}_{stat}`` stat
-columns, the athlete / team metadata blocks, and the ``season_type`` /
-``total`` parameters. For the richer web-v3 payload use
-:func:`sportsdataverse.mbb.espn_mbb_player_stats_v3`.
+See `sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the `{category}_{stat}` stat
+columns, the athlete / team metadata blocks, and the `season_type` /
+`total` parameters. For the richer web-v3 payload use
+`sportsdataverse.mbb.espn_mbb_player_stats_v3`.
 
 **Parameters**
 
@@ -187,14 +187,14 @@ columns, the athlete / team metadata blocks, and the ``season_type`` /
 |---|---|---|---|
 | `athlete_id` | `int` |  | ESPN men's-college-basketball athlete identifier. |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
+A single-row wide DataFrame (polars by default). When `raw=True` returns the raw statistics JSON `dict`.
 
 | col_name | type | description |
 |---|---|---|
@@ -453,7 +453,7 @@ Return the most recent men's college basketball season year.
 
 The men's college basketball season spans early November through early
 April; for any month October-December the "current season" is the
-following calendar year (e.g. October 2025 returns ``2026``).
+following calendar year (e.g. October 2025 returns `2026`).
 
 **Returns**
 

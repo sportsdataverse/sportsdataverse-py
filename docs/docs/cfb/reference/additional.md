@@ -129,12 +129,12 @@ Pull ESPN per-play participants for a college-football game.
 | `game_id` | `int` |  | ESPN game / event identifier. |
 | `raw` | `bool` | `False` | If True, returns the raw list of play-items dicts (after following pagination) before any flattening. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
-| `resolve_missing` | `bool` | `True` | If True (default), athletes that the ``cdn.espn.com`` sidecar omits are fetched one-by-one from their canonical ESPN ``$ref`` URL so the resulting frame has populated ``*_player_name`` / ``*_player_names`` columns wherever an ``*_player_id`` is non-null. Setting this to False skips the extra HTTP fan-out and reproduces the pre-enhancement behavior — rows may then ship with ``*_player_id`` populated but ``*_player_name`` null on the handful of athletes the sidecar misses (most visible on split sacks, multi-lateral returns, and older games). |
-| `resolve_missing_max` | `int` | `50` | Hard cap on the number of per-athlete ``$ref`` requests issued for a single game. Defaults to 50, which comfortably covers every probed game (typical max is ≤8 unique missing athletes). If breached, a warning is logged and the remaining missing athletes are left with null names. Ignored when ``resolve_missing=False``. |
+| `resolve_missing` | `bool` | `True` | If True (default), athletes that the `cdn.espn.com` sidecar omits are fetched one-by-one from their canonical ESPN `$ref` URL so the resulting frame has populated `*_player_name` / `*_player_names` columns wherever an `*_player_id` is non-null. Setting this to False skips the extra HTTP fan-out and reproduces the pre-enhancement behavior — rows may then ship with `*_player_id` populated but `*_player_name` null on the handful of athletes the sidecar misses (most visible on split sacks, multi-lateral returns, and older games). |
+| `resolve_missing_max` | `int` | `50` | Hard cap on the number of per-athlete `$ref` requests issued for a single game. Defaults to 50, which comfortably covers every probed game (typical max is ≤8 unique missing athletes). If breached, a warning is logged and the remaining missing athletes are left with null names. Ignored when `resolve_missing=False`. |
 
 **Returns**
 
-Polars (or pandas) DataFrame, one row per play. Columns include ``game_id``, ``play_id``, and TWO column families for every participant ``type`` ESPN ships for the game (typical types: ``passer``, ``rusher``, ``receiver``, ``tackler``, ``sacked_by``, ``forced_by``, ``pass_defender``, ``kicker``, ``punter``, ``returner``, ``recoverer``, ``scorer``, ``pat_scorer``, ``penalized``, ``assisted_by``): * **Scalar** — ``{type}_player_id`` / ``{type}_player_name``: the first occurrence of that participant type on the play. Backwards compatible with the legacy regex-extractor shape. * **List** — ``{type}_player_ids`` / ``{type}_player_names``: ``List(Utf8)`` columns containing **every** occurrence of that participant type on the play, in the order ESPN shipped them. Plays with no participant of a given type carry an empty list ``[]`` (not null) for downstream consumption simplicity. This family preserves multi-entry participant types (split sacks where ESPN ships two ``sackedBy`` entries, multi-tacklers, etc.) that the scalar family collapses to first-only. If ``raw=True``, returns the parsed JSON list of play dicts.
+Polars (or pandas) DataFrame, one row per play. Columns include `game_id`, `play_id`, and TWO column families for every participant `type` ESPN ships for the game (typical types: `passer`, `rusher`, `receiver`, `tackler`, `sacked_by`, `forced_by`, `pass_defender`, `kicker`, `punter`, `returner`, `recoverer`, `scorer`, `pat_scorer`, `penalized`, `assisted_by`): * **Scalar** — `{type}_player_id` / `{type}_player_name`: the first occurrence of that participant type on the play. Backwards compatible with the legacy regex-extractor shape. * **List** — `{type}_player_ids` / `{type}_player_names`: `List(Utf8)` columns containing **every** occurrence of that participant type on the play, in the order ESPN shipped them. Plays with no participant of a given type carry an empty list `[]` (not null) for downstream consumption simplicity. This family preserves multi-entry participant types (split sacks where ESPN ships two `sackedBy` entries, multi-tacklers, etc.) that the scalar family collapses to first-only. If `raw=True`, returns the parsed JSON list of play dicts.
 
 | col_name | type | description |
 |---|---|---|
@@ -211,12 +211,12 @@ joined = plays.join(participants, how="left", left_on="id", right_on="play_id")
 
 Pull a college-football athlete's ESPN **season** stat line.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-documentation of the wide return shape, the ``{category}_{stat}`` stat
-columns (for football: ``passing_*``, ``rushing_*``, ``receiving_*``,
-``scoring_*``, ...), the athlete / team metadata blocks, and the
-``season_type`` / ``total`` parameters. For the richer multi-category
-web-v3 payload use :func:`sportsdataverse.cfb.espn_cfb_player_stats_v3`.
+See `sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the `{category}_{stat}` stat
+columns (for football: `passing_*`, `rushing_*`, `receiving_*`,
+`scoring_*`, ...), the athlete / team metadata blocks, and the
+`season_type` / `total` parameters. For the richer multi-category
+web-v3 payload use `sportsdataverse.cfb.espn_cfb_player_stats_v3`.
 
 **Parameters**
 
@@ -224,14 +224,14 @@ web-v3 payload use :func:`sportsdataverse.cfb.espn_cfb_player_stats_v3`.
 |---|---|---|---|
 | `athlete_id` | `int` |  | ESPN college-football athlete identifier. |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
+A single-row wide DataFrame (polars by default). When `raw=True` returns the raw statistics JSON `dict`.
 
 | col_name | type | description |
 |---|---|---|
@@ -723,17 +723,17 @@ logo_map = dict(zip(teams["team_id"], teams["logo"]))
 
 Internal helper that flattens an ESPN scoreboard event dict into a shape
 
-suitable for ``pd.json_normalize``.
+suitable for `pd.json_normalize`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `event` | `dict` |  | A single scoreboard ``events[*]`` entry from the ESPN college-football scoreboard API. |
+| `event` | `dict` |  | A single scoreboard `events[*]` entry from the ESPN college-football scoreboard API. |
 
 **Returns**
 
-The same event dict, mutated in place with ``home``/``away`` copies of the competitors and trimmed of unused link/odds keys.
+The same event dict, mutated in place with `home`/`away` copies of the competitors and trimmed of unused link/odds keys.
 
 **Example**
 

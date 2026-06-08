@@ -158,27 +158,27 @@ sorted(raw.keys())[:5]
 
 Pull an NHL athlete's ESPN **season** stat line as one wide row.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-documentation of the wide return shape, the ``{category}_{stat}`` stat
-columns (for hockey: ``offensive_*``, ``defensive_*``, ``penalties_*``,
-...), the athlete / team metadata blocks, and the ``season_type`` /
-``total`` parameters. For the richer multi-category web-v3 payload use
-:func:`sportsdataverse.nhl.espn_nhl_player_stats_v3`.
+See `sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the `{category}_{stat}` stat
+columns (for hockey: `offensive_*`, `defensive_*`, `penalties_*`,
+...), the athlete / team metadata blocks, and the `season_type` /
+`total` parameters. For the richer multi-category web-v3 payload use
+`sportsdataverse.nhl.espn_nhl_player_stats_v3`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `athlete_id` | `int` |  | ESPN NHL athlete identifier (e.g. ``3895074`` for Connor McDavid). |
+| `athlete_id` | `int` |  | ESPN NHL athlete identifier (e.g. `3895074` for Connor McDavid). |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
+A single-row wide DataFrame (polars by default). When `raw=True` returns the raw statistics JSON `dict`.
 
 | col_name | type | description |
 |---|---|---|
@@ -438,18 +438,18 @@ _No description available._
 
 Coaches who reached a wins milestone in fewest games.
 
-Wraps one of the ``/coach-fewest-games-to-{N}-wins`` or
-``/coach-fewest-games-to-{N}-playoff-wins`` paths.
+Wraps one of the `/coach-fewest-games-to-{N}-wins` or
+`/coach-fewest-games-to-{N}-playoff-wins` paths.
 
-Supported *wins* values: ``50, 100, 150, 200, 300, 400, 500, 600, 700,
-800, 900, 1000`` (regular season); ``50, 100, 150`` (playoffs).
+Supported *wins* values: `50, 100, 150, 200, 300, 400, 500, 600, 700,
+800, 900, 1000` (regular season); `50, 100, 150` (playoffs).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `wins` | `int` |  | Milestone win total (e.g. ``100``). |
-| `playoffs` | `bool` | `False` | If ``True``, use the playoff-wins path. |
+| `wins` | `int` |  | Milestone win total (e.g. `100`). |
+| `playoffs` | `bool` | `False` | If `True`, use the playoff-wins path. |
 
 **Returns**
 
@@ -460,14 +460,14 @@ Coaches who hit the milestone, sorted by games needed.
 Comeback wins from a multi-goal deficit.
 
 Wraps:
-  * ``GET /comeback-league-wins`` when *scope* is ``"league"``.
-  * ``GET /comeback-franchise-wins`` when *scope* is ``"franchise"``.
+  * `GET /comeback-league-wins` when *scope* is `"league"`.
+  * `GET /comeback-franchise-wins` when *scope* is `"franchise"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `scope` | `str` | `'league'` | ``"league"`` (default) or ``"franchise"``. |
+| `scope` | `str` | `'league'` | `"league"` (default) or `"franchise"`. |
 
 **Returns**
 
@@ -478,17 +478,17 @@ Games where the team overcame a deficit to win.
 Skaters with the most consecutive N-goal seasons.
 
 Wraps one of:
-  * ``GET /consecutive-20-goal-seasons``
-  * ``GET /consecutive-30-goal-seasons``
-  * ``GET /consecutive-40-goal-seasons``
-  * ``GET /consecutive-50-goal-seasons``
-  * ``GET /consecutive-60-goal-seasons``
+  * `GET /consecutive-20-goal-seasons`
+  * `GET /consecutive-30-goal-seasons`
+  * `GET /consecutive-40-goal-seasons`
+  * `GET /consecutive-50-goal-seasons`
+  * `GET /consecutive-60-goal-seasons`
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `goals` | `int` | `50` | Goal threshold — one of ``20, 30, 40, 50, 60``. |
+| `goals` | `int` | `50` | Goal threshold — one of `20, 30, 40, 50, 60`. |
 
 **Returns**
 
@@ -499,16 +499,16 @@ Skaters sorted by consecutive-season streak.
 Fastest N goals by one team in a single game.
 
 Wraps one of:
-  * ``GET /fastest-2-goals-one-team``
-  * ``GET /fastest-3-goals-one-team``
-  * ``GET /fastest-4-goals-one-team``
-  * ``GET /fastest-5-goals-one-team``
+  * `GET /fastest-2-goals-one-team`
+  * `GET /fastest-3-goals-one-team`
+  * `GET /fastest-4-goals-one-team`
+  * `GET /fastest-5-goals-one-team`
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `n_goals` | `int` | `2` | Goal count — one of ``2, 3, 4, 5``. |
+| `n_goals` | `int` | `2` | Goal count — one of `2, 3, 4, 5`. |
 
 **Returns**
 
@@ -519,17 +519,17 @@ Games where the milestone was set, sorted by elapsed time (fastest first).
 Fastest N goals combined (both teams) in a single game.
 
 Wraps one of:
-  * ``GET /fastest-2-goals-both-teams``
-  * ``GET /fastest-3-goals-both-teams``
-  * ``GET /fastest-4-goals-both-teams``
-  * ``GET /fastest-5-goals-both-teams``
-  * ``GET /fastest-6-goals-both-teams``
+  * `GET /fastest-2-goals-both-teams`
+  * `GET /fastest-3-goals-both-teams`
+  * `GET /fastest-4-goals-both-teams`
+  * `GET /fastest-5-goals-both-teams`
+  * `GET /fastest-6-goals-both-teams`
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `n_goals` | `int` | `2` | Combined goal count — one of ``2, 3, 4, 5, 6``. |
+| `n_goals` | `int` | `2` | Combined goal count — one of `2, 3, 4, 5, 6`. |
 
 **Returns**
 
@@ -539,14 +539,14 @@ Sorted by elapsed time (fastest first).
 
 Consecutive games-played streaks for skaters.
 
-Wraps ``GET /games-played-streak-skaters`` (career) or
-``GET /games-played-active-streak-skaters`` (currently active streaks).
+Wraps `GET /games-played-streak-skaters` (career) or
+`GET /games-played-active-streak-skaters` (currently active streaks).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `active_only` | `bool` | `False` | If ``True``, return only active streaks. |
+| `active_only` | `bool` | `False` | If `True`, return only active streaks. |
 
 **Returns**
 
@@ -554,27 +554,27 @@ Skaters sorted by streak length.
 
 ### `nhl_scoreboard(date: 'Optional[str]' = None, team: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'`
 
-In-game scoreboard payload (renamed from ``nhl_web_scoreboard``).
+In-game scoreboard payload (renamed from `nhl_web_scoreboard`).
 
 Picks among three mutually-exclusive NHL api-web forms (kept hand-written
 because the URL-builder codegen can't represent the 3-way branch):
 
-* ``GET /v1/scoreboard/{team}/now`` -- team-scoped now (when ``team`` set),
-* ``GET /v1/scoreboard/{date}`` -- league-wide on a date,
-* ``GET /v1/scoreboard/now`` -- league-wide now (both args None).
+* `GET /v1/scoreboard/{team}/now` -- team-scoped now (when `team` set),
+* `GET /v1/scoreboard/{date}` -- league-wide on a date,
+* `GET /v1/scoreboard/now` -- league-wide now (both args None).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `date` | `Optional[str]` | `None` | ``YYYY-MM-DD``; ``None`` -> ``/now``. Mutually exclusive with ``team``. |
-| `team` | `Optional[str]` | `None` | 3-letter abbreviation; takes precedence over ``date``. |
-| `return_parsed` | `bool` | `True` | dispatch the raw payload through ``parse_nhl_web_scoreboard``. |
-| `return_as_pandas` | `bool` | `False` | with ``return_parsed``, return pandas instead of polars. |
+| `date` | `Optional[str]` | `None` | `YYYY-MM-DD`; `None` -> `/now`. Mutually exclusive with `team`. |
+| `team` | `Optional[str]` | `None` | 3-letter abbreviation; takes precedence over `date`. |
+| `return_parsed` | `bool` | `True` | dispatch the raw payload through `parse_nhl_web_scoreboard`. |
+| `return_as_pandas` | `bool` | `False` | with `return_parsed`, return pandas instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -638,9 +638,9 @@ A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed
 
 ### `load_nhl_games(return_as_pandas: 'bool' = False)`
 
-Load the NHL games-in-data-repo manifest (no ``seasons`` argument).
+Load the NHL games-in-data-repo manifest (no `seasons` argument).
 
-Mirrors fastRhockey (R) ``load_nhl_games()`` which reads a manifest of every
+Mirrors fastRhockey (R) `load_nhl_games()` which reads a manifest of every
 NHL game that has processed data in the data repository.
 
 Tries the sportsdataverse-data release asset first; falls back to the raw
@@ -731,20 +731,20 @@ print(season, cal.height)
 
 ### `year_to_season(year)`
 
-year_to_season - format a starting year as the canonical ``YYYY-YY`` season string.
+year_to_season - format a starting year as the canonical `YYYY-YY` season string.
 
-NHL season strings (used by ``statsapi`` / ``api-web.nhle.com``) are of the form
-``"2023-24"``. This helper converts a starting year (``2023``) into that string.
+NHL season strings (used by `statsapi` / `api-web.nhle.com`) are of the form
+`"2023-24"`. This helper converts a starting year (`2023`) into that string.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `year` |  |  | Starting calendar year of the season (e.g. ``2023``). |
+| `year` |  |  | Starting calendar year of the season (e.g. `2023`). |
 
 **Returns**
 
-Season string formatted as ``"YYYY-YY"``.
+Season string formatted as `"YYYY-YY"`.
 
 **Example**
 

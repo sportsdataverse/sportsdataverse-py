@@ -648,7 +648,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  | ESPN team identifier (e.g. ``2509`` for UConn). |
+| `team_id` | `team_id` |  | `Y` |  | ESPN team identifier (e.g. `2509` for UConn). |
 
 ### Returns
 

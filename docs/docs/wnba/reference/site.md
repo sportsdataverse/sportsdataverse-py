@@ -694,7 +694,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  | ESPN WNBA team identifier (e.g. ``3`` for Dallas Wings). |
+| `team_id` | `team_id` |  | `Y` |  | ESPN WNBA team identifier (e.g. `3` for Dallas Wings). |
 
 ### Returns
 

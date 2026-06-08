@@ -18,14 +18,14 @@ Pull the officials assigned to a women's-college-basketball game.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | ESPN event identifier (e.g. ``401637613`` for the 2024 NCAA Division I women's championship game). |
-| `season` | `int \| None` | `None` | Season year. Recorded as the ``season`` column on the output; does NOT alter the request URL because ESPN's officials endpoint keys on event ID alone. |
+| `game_id` | `int` |  | ESPN event identifier (e.g. `401637613` for the 2024 NCAA Division I women's championship game). |
+| `season` | `int \| None` | `None` | Season year. Recorded as the `season` column on the output; does NOT alter the request URL because ESPN's officials endpoint keys on event ID alone. |
 | `raw` | `bool` | `False` | If True, returns the parsed JSON dict before any flattening. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
 
 **Returns**
 
-Polars (or pandas) DataFrame with one row per official: ``game_id``, ``season``, ``official_id``, ``first_name``, ``last_name``, ``full_name``, ``display_name``, ``position_id``, ``position_name``, ``position_display_name``, ``order``. When ESPN ships no officials for the game (often for unscheduled or future events), an empty frame with the documented schema is returned so callers see a stable column set. If ``raw=True``, returns the raw response dict.
+Polars (or pandas) DataFrame with one row per official: `game_id`, `season`, `official_id`, `first_name`, `last_name`, `full_name`, `display_name`, `position_id`, `position_name`, `position_display_name`, `order`. When ESPN ships no officials for the game (often for unscheduled or future events), an empty frame with the documented schema is returned so callers see a stable column set. If `raw=True`, returns the raw response dict.
 
 | col_name | type | description |
 |---|---|---|
@@ -222,24 +222,24 @@ sorted(raw.keys())
 Pull a women's-college-basketball athlete's ESPN **season** stat line.
 
 Returns **one wide row** combining athlete identity, the season stat
-line pivoted as ``{category}_{stat}`` columns, and team identity. For
+line pivoted as `{category}_{stat}` columns, and team identity. For
 the richer multi-category web-v3 payload use
-:func:`espn_wbb_player_stats_v3` instead.
+`espn_wbb_player_stats_v3` instead.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `athlete_id` | `int` |  | ESPN athlete identifier (e.g. ``4433985``). |
+| `athlete_id` | `int` |  | ESPN athlete identifier (e.g. `4433985`). |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). Columns: identity / echo (``season``, ``season_type``, ``total``), athlete metadata (``athlete_id``, ``full_name``, ``position_*``, ...), the season stat line as ``{category}_{stat}`` numeric columns (e.g. ``offensive_points``, ``defensive_blocks``), and team metadata (``team_id``, ``team_display_name``, ...). When ``raw=True`` returns the raw statistics JSON ``dict``.
+A single-row wide DataFrame (polars by default). Columns: identity / echo (`season`, `season_type`, `total`), athlete metadata (`athlete_id`, `full_name`, `position_*`, ...), the season stat line as `{category}_{stat}` numeric columns (e.g. `offensive_points`, `defensive_blocks`), and team metadata (`team_id`, `team_display_name`, ...). When `raw=True` returns the raw statistics JSON `dict`.
 
 | col_name | type | description |
 |---|---|---|
@@ -498,14 +498,14 @@ Pull ESPN team season stats for a women's-college-basketball team.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `int` |  | ESPN team identifier (e.g. ``2509`` for UConn). |
-| `season` | `int` |  | Season year, forwarded to ESPN as ``?season=YYYY``. |
+| `team_id` | `int` |  | ESPN team identifier (e.g. `2509` for UConn). |
+| `season` | `int` |  | Season year, forwarded to ESPN as `?season=YYYY`. |
 | `raw` | `bool` | `False` | If True, returns the parsed JSON dict before any flattening. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a dict of pandas DataFrames; otherwise polars. |
 
 **Returns**
 
-Dict with one DataFrame per stat category. The canonical keys ``"Averages"``, ``"Totals"``, ``"Misc"`` are ALWAYS present; missing categories come back as empty frames carrying the documented schema. Any ESPN-shipped category whose name does not match one of the three canonical keys is collected under an additional ``"Other"`` key (only added if non-empty). Per-category column set (one row per stat): * ``stat_name`` (Utf8) * ``abbreviation`` (Utf8) * ``display_value`` (Utf8) * ``value`` (Float64) * ``description`` (Utf8) * ``category`` (Utf8, constant per frame) * ``team_id`` (Int64, constant) * ``season`` (Int32, constant) If ``raw=True``, returns the raw response dict.
+Dict with one DataFrame per stat category. The canonical keys `"Averages"`, `"Totals"`, `"Misc"` are ALWAYS present; missing categories come back as empty frames carrying the documented schema. Any ESPN-shipped category whose name does not match one of the three canonical keys is collected under an additional `"Other"` key (only added if non-empty). Per-category column set (one row per stat): * `stat_name` (Utf8) * `abbreviation` (Utf8) * `display_value` (Utf8) * `value` (Float64) * `description` (Utf8) * `category` (Utf8, constant per frame) * `team_id` (Int64, constant) * `season` (Int32, constant) If `raw=True`, returns the raw response dict.
 
 **Example**
 
@@ -547,7 +547,7 @@ Return the most recent women's college basketball season year.
 
 The women's college basketball season spans late October through early
 April; for any month October-December the "current season" is the
-following calendar year (e.g. October 2025 returns ``2026``).
+following calendar year (e.g. October 2025 returns `2026`).
 
 **Returns**
 

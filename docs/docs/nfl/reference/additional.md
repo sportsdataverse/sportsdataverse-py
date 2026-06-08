@@ -129,27 +129,27 @@ away = rosters_pd[rosters_pd["home_away"] == "away"]
 
 Pull an NFL athlete's ESPN **season** stat line as one wide row.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-documentation of the wide return shape, the ``{category}_{stat}`` stat
-columns (for football: ``passing_*``, ``rushing_*``, ``receiving_*``,
-``scoring_*``, ...), the athlete / team metadata blocks, and the
-``season_type`` / ``total`` parameters. For the richer multi-category
-web-v3 payload use :func:`sportsdataverse.nfl.espn_nfl_player_stats_v3`.
+See `sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the `{category}_{stat}` stat
+columns (for football: `passing_*`, `rushing_*`, `receiving_*`,
+`scoring_*`, ...), the athlete / team metadata blocks, and the
+`season_type` / `total` parameters. For the richer multi-category
+web-v3 payload use `sportsdataverse.nfl.espn_nfl_player_stats_v3`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `athlete_id` | `int` |  | ESPN NFL athlete identifier (e.g. ``3139477`` for Patrick Mahomes). |
+| `athlete_id` | `int` |  | ESPN NFL athlete identifier (e.g. `3139477` for Patrick Mahomes). |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
+A single-row wide DataFrame (polars by default). When `raw=True` returns the raw statistics JSON `dict`.
 
 | col_name | type | description |
 |---|---|---|
@@ -963,8 +963,8 @@ Load fantasy football rankings and projections
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `type` | `str` | `'draft'` | Type of rankings to load. One of ``"draft"`` (current draft rankings), ``"week"`` (weekly rankings), or ``"all"`` (full historical rankings). Defaults to ``"draft"``. Kept for nflreadpy parity since its parameter is also called ``type``; the forward-going preferred name is ``kind``. |
-| `kind` | `str` | `None` | Preferred parameter name. Same semantics and allowed values as ``type``. If both are supplied, ``kind`` wins. If neither is supplied, defaults to ``"draft"`` via ``type``. |
+| `type` | `str` | `'draft'` | Type of rankings to load. One of `"draft"` (current draft rankings), `"week"` (weekly rankings), or `"all"` (full historical rankings). Defaults to `"draft"`. Kept for nflreadpy parity since its parameter is also called `type`; the forward-going preferred name is `kind`. |
+| `kind` | `str` | `None` | Preferred parameter name. Same semantics and allowed values as `type`. If both are supplied, `kind` wins. If neither is supplied, defaults to `"draft"` via `type`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
@@ -1139,20 +1139,20 @@ Load NFL NextGen Stats data going back to 2016.
 
 Unified loader that consolidates the per-stat-type NextGen Stats
 accessors. Mirrors the API surface of nflreadpy's
-``load_nextgen_stats`` so downstream code can swap engines without
+`load_nextgen_stats` so downstream code can swap engines without
 changing call sites.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — ``seasons`` is applied as a post-filter on the ``season`` column. |
-| `stat_type` | `str` | `'passing'` | One of ``"passing"``, ``"rushing"``, ``"receiving"``. Defaults to ``"passing"``. |
+| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. |
+| `stat_type` | `str` | `'passing'` | One of `"passing"`, `"rushing"`, `"receiving"`. Defaults to `"passing"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing NextGen Stats data for the requested ``stat_type`` and ``seasons``.
+Polars dataframe containing NextGen Stats data for the requested `stat_type` and `seasons`.
 
 | col_name | type | description |
 |---|---|---|
@@ -1702,8 +1702,8 @@ Load fantasy football rankings and projections
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `type` | `str` | `'draft'` | Type of rankings to load. One of ``"draft"`` (current draft rankings), ``"week"`` (weekly rankings), or ``"all"`` (full historical rankings). Defaults to ``"draft"``. Kept for nflreadpy parity since its parameter is also called ``type``; the forward-going preferred name is ``kind``. |
-| `kind` | `str` | `None` | Preferred parameter name. Same semantics and allowed values as ``type``. If both are supplied, ``kind`` wins. If neither is supplied, defaults to ``"draft"`` via ``type``. |
+| `type` | `str` | `'draft'` | Type of rankings to load. One of `"draft"` (current draft rankings), `"week"` (weekly rankings), or `"all"` (full historical rankings). Defaults to `"draft"`. Kept for nflreadpy parity since its parameter is also called `type`; the forward-going preferred name is `kind`. |
+| `kind` | `str` | `None` | Preferred parameter name. Same semantics and allowed values as `type`. If both are supplied, `kind` wins. If neither is supplied, defaults to `"draft"` via `type`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
@@ -1878,20 +1878,20 @@ Load NFL NextGen Stats data going back to 2016.
 
 Unified loader that consolidates the per-stat-type NextGen Stats
 accessors. Mirrors the API surface of nflreadpy's
-``load_nextgen_stats`` so downstream code can swap engines without
+`load_nextgen_stats` so downstream code can swap engines without
 changing call sites.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — ``seasons`` is applied as a post-filter on the ``season`` column. |
-| `stat_type` | `str` | `'passing'` | One of ``"passing"``, ``"rushing"``, ``"receiving"``. Defaults to ``"passing"``. |
+| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. |
+| `stat_type` | `str` | `'passing'` | One of `"passing"`, `"rushing"`, `"receiving"`. Defaults to `"passing"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing NextGen Stats data for the requested ``stat_type`` and ``seasons``.
+Polars dataframe containing NextGen Stats data for the requested `stat_type` and `seasons`.
 
 | col_name | type | description |
 |---|---|---|
@@ -1952,10 +1952,10 @@ ngs_pd = load_nfl_nextgen_stats(
 
 ### `load_nfl_ngs_passing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_nextgen_stats(stat_type='passing')``.
+Deprecated alias for `load_nfl_nextgen_stats(stat_type='passing')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_nextgen_stats`` function.
+`load_nfl_nextgen_stats` function.
 
 **Parameters**
 
@@ -2008,10 +2008,10 @@ ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 
 ### `load_nfl_ngs_receiving(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_nextgen_stats(stat_type='receiving')``.
+Deprecated alias for `load_nfl_nextgen_stats(stat_type='receiving')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_nextgen_stats`` function.
+`load_nfl_nextgen_stats` function.
 
 **Parameters**
 
@@ -2058,10 +2058,10 @@ ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
 
 ### `load_nfl_ngs_rushing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_nextgen_stats(stat_type='rushing')``.
+Deprecated alias for `load_nfl_nextgen_stats(stat_type='rushing')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_nextgen_stats`` function.
+`load_nfl_nextgen_stats` function.
 
 **Parameters**
 
@@ -2618,21 +2618,21 @@ Load Pro-Football Reference advanced statistics going back to 2018.
 
 Unified loader that consolidates the per-stat-type / per-summary-level
 PFR advstats accessors. Mirrors the API surface of nflreadpy's
-``load_pfr_advstats`` so downstream code can swap engines without
+`load_pfr_advstats` so downstream code can swap engines without
 changing call sites.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to load. For ``summary_level='week'`` this drives the per-season parquet fan-out; for ``summary_level='season'`` it post-filters the combined parquet by the ``season`` column. |
-| `stat_type` | `str` | `'pass'` | One of ``"pass"``, ``"rush"``, ``"rec"``, ``"def"``. Defaults to ``"pass"``. |
-| `summary_level` | `str` | `'week'` | One of ``"week"`` or ``"season"``. Defaults to ``"week"``. |
+| `seasons` | `list[int]` |  | Seasons to load. For `summary_level='week'` this drives the per-season parquet fan-out; for `summary_level='season'` it post-filters the combined parquet by the `season` column. |
+| `stat_type` | `str` | `'pass'` | One of `"pass"`, `"rush"`, `"rec"`, `"def"`. Defaults to `"pass"`. |
+| `summary_level` | `str` | `'week'` | One of `"week"` or `"season"`. Defaults to `"week"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing PFR advanced stats data for the requested ``stat_type``, ``summary_level``, and ``seasons``.
+Polars dataframe containing PFR advanced stats data for the requested `stat_type`, `summary_level`, and `seasons`.
 
 | col_name | type | description |
 |---|---|---|
@@ -2695,10 +2695,10 @@ rec_pd = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_def(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='season')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='season')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -2753,10 +2753,10 @@ df = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_pass(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='season')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='season')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -2818,10 +2818,10 @@ df = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_rec(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='season')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='season')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -2871,10 +2871,10 @@ df = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_rush(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='season')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='season')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -2918,10 +2918,10 @@ df = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_weekly_def(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='def', summary_level='week')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='week')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -2976,10 +2976,10 @@ df = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_weekly_pass(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='pass', summary_level='week')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='week')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -3029,10 +3029,10 @@ df = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_weekly_rec(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rec', summary_level='week')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='week')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -3075,10 +3075,10 @@ df = load_nfl_pfr_advstats(
 
 ### `load_nfl_pfr_weekly_rush(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
-Deprecated alias for ``load_nfl_pfr_advstats(stat_type='rush', summary_level='week')``.
+Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='week')`.
 
 Will be removed in a future release. Migrate callers to the unified
-``load_nfl_pfr_advstats`` function.
+`load_nfl_pfr_advstats` function.
 
 **Parameters**
 
@@ -4255,21 +4255,21 @@ Load Pro-Football Reference advanced statistics going back to 2018.
 
 Unified loader that consolidates the per-stat-type / per-summary-level
 PFR advstats accessors. Mirrors the API surface of nflreadpy's
-``load_pfr_advstats`` so downstream code can swap engines without
+`load_pfr_advstats` so downstream code can swap engines without
 changing call sites.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to load. For ``summary_level='week'`` this drives the per-season parquet fan-out; for ``summary_level='season'`` it post-filters the combined parquet by the ``season`` column. |
-| `stat_type` | `str` | `'pass'` | One of ``"pass"``, ``"rush"``, ``"rec"``, ``"def"``. Defaults to ``"pass"``. |
-| `summary_level` | `str` | `'week'` | One of ``"week"`` or ``"season"``. Defaults to ``"week"``. |
+| `seasons` | `list[int]` |  | Seasons to load. For `summary_level='week'` this drives the per-season parquet fan-out; for `summary_level='season'` it post-filters the combined parquet by the `season` column. |
+| `stat_type` | `str` | `'pass'` | One of `"pass"`, `"rush"`, `"rec"`, `"def"`. Defaults to `"pass"`. |
+| `summary_level` | `str` | `'week'` | One of `"week"` or `"season"`. Defaults to `"week"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing PFR advanced stats data for the requested ``stat_type``, ``summary_level``, and ``seasons``.
+Polars dataframe containing PFR advanced stats data for the requested `stat_type`, `summary_level`, and `seasons`.
 
 | col_name | type | description |
 |---|---|---|
@@ -4960,20 +4960,20 @@ trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
 
 Process ESPN NFL play-by-play feeds into a tidy game-level dictionary.
 
-Wraps the ESPN ``summary`` endpoint (or a local JSON dump) and pipes the
+Wraps the ESPN `summary` endpoint (or a local JSON dump) and pipes the
 result through a chain of feature-engineering steps -- down/distance,
 play-type flags, EPA, WPA, QBR, drive aggregation, and an advanced
-box score. Use ``run_processing_pipeline()`` for the full feature set
-or ``run_cleaning_pipeline()`` for a lighter clean.
+box score. Use `run_processing_pipeline()` for the full feature set
+or `run_cleaning_pipeline()` for a lighter clean.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `gameId` | `int` | `0` | ESPN ``event`` id (e.g. ``401671801``). |
-| `raw` | `bool` | `False` | If ``True``, ``espn_nfl_pbp()`` returns the ESPN payload untouched. If ``False`` (default), it normalizes keys. |
-| `path_to_json` | `str` | `'/'` | Directory containing ``{gameId}.json`` for the ``nfl_pbp_disk()`` flow (offline replay). |
-| `return_keys` | `list[str] \| None` | `None` | If supplied, ``run_processing_pipeline`` returns only the listed keys from the result dict. |
+| `gameId` | `int` | `0` | ESPN `event` id (e.g. `401671801`). |
+| `raw` | `bool` | `False` | If `True`, `espn_nfl_pbp()` returns the ESPN payload untouched. If `False` (default), it normalizes keys. |
+| `path_to_json` | `str` | `'/'` | Directory containing `{gameId}.json` for the `nfl_pbp_disk()` flow (offline replay). |
+| `return_keys` | `list[str] \| None` | `None` | If supplied, `run_processing_pipeline` returns only the listed keys from the result dict. |
 
 **Example**
 
@@ -5171,7 +5171,7 @@ roster_year = most_recent_nfl_season(roster=True)
 
 Runtime configuration for sdv-py NFL loaders.
 
-Fields mirror nflreadpy's ``NflreadpyConfig`` so users can swap engines
+Fields mirror nflreadpy's `NflreadpyConfig` so users can swap engines
 without changing call sites. The defaults are conservative: in-memory
 caching with a 24-hour TTL, verbose progress bars on, 30-second
 HTTP timeout.
@@ -5205,16 +5205,16 @@ cfg = NflConfig(cache_mode="off", timeout=10)
 
 ### `cached_loader(func: 'F') -> 'F'`
 
-Decorator that adds caching to a ``load_nfl_*`` function.
+Decorator that adds caching to a `load_nfl_*` function.
 
-Honors the active ``NflConfig.cache_mode``:
+Honors the active `NflConfig.cache_mode`:
 
-- ``memory``: dict-based per-process cache.
-- ``filesystem``: parquet-based cross-process cache under ``cache_dir``.
-- ``off``: no caching, function runs every time.
+- `memory`: dict-based per-process cache.
+- `filesystem`: parquet-based cross-process cache under `cache_dir`.
+- `off`: no caching, function runs every time.
 
-The cache key is the hash of ``(qualified_name, args, kwargs)`` with
-``return_as_pandas`` excluded so memory / disk hits work regardless of
+The cache key is the hash of `(qualified_name, args, kwargs)` with
+`return_as_pandas` excluded so memory / disk hits work regardless of
 which return shape the caller asked for. The cache always stores the
 polars frame internally and converts to pandas on read when requested.
 
@@ -5256,9 +5256,9 @@ update_config(cache_mode="off")         # bypass cache entirely
 Clear both memory and filesystem caches.
 
 Memory: empties the in-process dict.
-Filesystem: removes all entries under ``config.cache_dir``. The
+Filesystem: removes all entries under `config.cache_dir`. The
 directory itself is preserved so subsequent writes succeed without
-needing ``mkdir``.
+needing `mkdir`.
 
 **Example**
 
@@ -5326,9 +5326,9 @@ teams = espn_nfl_teams()
 
 ### `get_config() -> 'NflConfig'`
 
-Return the live ``NflConfig`` singleton.
+Return the live `NflConfig` singleton.
 
-The same object is returned on every call; mutate via ``update_config``
+The same object is returned on every call; mutate via `update_config`
 rather than reassigning fields directly so future hooks (e.g. logging
 on config change) have a single choke point.
 
@@ -5348,14 +5348,14 @@ assert get_config().cache_mode == "off"
 
 ### `nfl_game_details(game_id=None, headers=None, raw=False) -> 'Dict'`
 
-nfl_game_details() -- pull full ``api.nfl.com`` game details by game id.
+nfl_game_details() -- pull full `api.nfl.com` game details by game id.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `str` | `None` | UUID-style game id from ``api.nfl.com`` (e.g. ``'7ae87c4c-d24c-11ec-b23d-d15a91047884'``). |
-| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict (skip the auth roundtrip). Defaults to a fresh ``nfl_headers_gen()`` call. |
+| `game_id` | `str` | `None` | UUID-style game id from `api.nfl.com` (e.g. `'7ae87c4c-d24c-11ec-b23d-d15a91047884'`). |
+| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict (skip the auth roundtrip). Defaults to a fresh `nfl_headers_gen()` call. |
 | `raw` | `bool` | `False` | If True, return the ESPN payload untouched. If False (default), normalize keys to the expected schema (filling missing keys with empty dicts/lists). |
 
 **Returns**
@@ -5386,21 +5386,21 @@ raw = nfl_game_details(
 
 ### `nfl_game_schedule(season=2021, season_type='REG', week=1, headers=None, raw=False) -> 'Dict'`
 
-nfl_game_schedule() -- list ``api.nfl.com`` games for a season/week slice.
+nfl_game_schedule() -- list `api.nfl.com` games for a season/week slice.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` | `2021` | season year (e.g. ``2024``). |
-| `season_type` | `str` | `'REG'` | season type. One of ``"REG"`` or ``"POST"``. |
+| `season` | `int` | `2021` | season year (e.g. `2024`). |
+| `season_type` | `str` | `'REG'` | season type. One of `"REG"` or `"POST"`. |
 | `week` | `int` | `1` | week number (1-18 regular season, 1-4 post-season). |
-| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict. Defaults to a fresh ``nfl_headers_gen()`` call. |
+| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict. Defaults to a fresh `nfl_headers_gen()` call. |
 | `raw` | `bool` | `False` | Currently ignored -- the function always returns the raw NFL.com summary payload. |
 
 **Returns**
 
-Dictionary with the games list under ``"games"`` plus pagination metadata.
+Dictionary with the games list under `"games"` plus pagination metadata.
 
 **Example**
 
@@ -5424,15 +5424,15 @@ for week in range(1, 19):
 
 ### `nfl_headers_gen()`
 
-Build the full request-header dict expected by ``api.nfl.com``.
+Build the full request-header dict expected by `api.nfl.com`.
 
-Mints a fresh bearer token via :func:`nfl_token_gen` and combines it
-with the browser-style headers (``Origin``, ``Referer``, ``User-Agent``,
-``Sec-Fetch-*``, etc.) the NFL.com web app sends on every request.
+Mints a fresh bearer token via `nfl_token_gen` and combines it
+with the browser-style headers (`Origin`, `Referer`, `User-Agent`,
+`Sec-Fetch-*`, etc.) the NFL.com web app sends on every request.
 
 **Returns**
 
-Header dict ready to drop into ``requests.get``.
+Header dict ready to drop into `requests.get`.
 
 **Example**
 
@@ -5447,11 +5447,11 @@ week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdr
 
 ### `nfl_token_gen()`
 
-Mint a fresh ``api.nfl.com`` access token via the public reroute endpoint.
+Mint a fresh `api.nfl.com` access token via the public reroute endpoint.
 
-Wraps the unauthenticated ``client_credentials`` grant the NFL.com web
-app uses. The returned bearer token is what ``nfl_headers_gen()`` puts
-on the ``Authorization`` header.
+Wraps the unauthenticated `client_credentials` grant the NFL.com web
+app uses. The returned bearer token is what `nfl_headers_gen()` puts
+on the `Authorization` header.
 
 **Returns**
 
@@ -5476,7 +5476,7 @@ headers = {"Authorization": f"Bearer {token}"}
 Reset the active config to its env-var-derived defaults.
 
 Convenience for tests / interactive sessions that want to undo a chain
-of ``update_config()`` calls without restarting the interpreter.
+of `update_config()` calls without restarting the interpreter.
 
 **Example**
 
@@ -5489,23 +5489,23 @@ reset_config()  # back to env-derived defaults
 
 ### `scoreboard_event_parsing(event)`
 
-Normalize one ESPN scoreboard ``event`` into a flatter shape.
+Normalize one ESPN scoreboard `event` into a flatter shape.
 
-Splits the competitors list into ``home`` / ``away`` siblings, hoists
+Splits the competitors list into `home` / `away` siblings, hoists
 notes / broadcast metadata onto the competition root, and drops the
-fields the schedule helper does not need (``odds``, ``leaders``,
-``geoBroadcasts``, etc.). Used internally by
-:func:`espn_nfl_schedule`.
+fields the schedule helper does not need (`odds`, `leaders`,
+`geoBroadcasts`, etc.). Used internally by
+`espn_nfl_schedule`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `event` | `Dict` |  | A single ``events[i]`` dict from the ESPN scoreboard endpoint. |
+| `event` | `Dict` |  | A single `events[i]` dict from the ESPN scoreboard endpoint. |
 
 **Returns**
 
-The mutated event dict with normalized ``home`` / ``away`` / broadcast keys.
+The mutated event dict with normalized `home` / `away` / broadcast keys.
 
 **Example**
 

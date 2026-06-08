@@ -14,7 +14,7 @@ not covered by the generated API-endpoint reference above.
 
 GET /gf?game_pk=... — Savant per-game JSON feed (richer than the Stats API live feed).
 
-Returns a dict with ``team_home, team_away, scoreboard, game_status, …`` plus
+Returns a dict with `team_home, team_away, scoreboard, game_status, …` plus
 per-play pitch tracking and shift positioning details.
 
 **Parameters**
@@ -153,11 +153,11 @@ GET /leaderboard/custom — build-your-own metric leaderboard.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `year` | `Union[int, str]` |  | season year. |
-| `type_` | `str` |  | leaderboard type (``batter`` / ``pitcher`` / ``fielder``). |
-| `selections` | `str` |  | comma-separated metric ids (e.g. ``"xba,xslg,xwoba"``). |
-| `filter_` | `Optional[str]` | `None` | row filter (e.g. ``"hand_R"``). |
-| `min_` | `Optional[Union[int, str]]` | `'q'` | minimum threshold; ``"q"`` for qualified. |
-| `sort` | `Optional[str]` | `None` | metric to sort by; ``sort_dir`` ``"desc"`` or ``"asc"``. |
+| `type_` | `str` |  | leaderboard type (`batter` / `pitcher` / `fielder`). |
+| `selections` | `str` |  | comma-separated metric ids (e.g. `"xba,xslg,xwoba"`). |
+| `filter_` | `Optional[str]` | `None` | row filter (e.g. `"hand_R"`). |
+| `min_` | `Optional[Union[int, str]]` | `'q'` | minimum threshold; `"q"` for qualified. |
+| `sort` | `Optional[str]` | `None` | metric to sort by; `sort_dir` `"desc"` or `"asc"`. |
 | `sort_dir` | `str` | `'desc'` |  |
 | `csv` | `bool` | `False` | when True, request CSV; otherwise JSON. |
 | `return_as_pandas` | `bool` | `False` |  |
@@ -320,12 +320,12 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaders.
 GET /savant-player/{playerId} — Savant player profile page (HTML with embedded JSON).
 
 Returns the raw HTML text. The page embeds JSON blobs under
-``<script id="player-data" type="application/json">…</script>`` (and a
+`<script id="player-data" type="application/json">…</script>` (and a
 handful of others) that carry the canonical Statcast snapshots for the
 player. Extracting those blobs is a follow-up — for now the wrapper
 returns the full HTML so callers can mine it.
 
-TODO: add a sibling :func:`statcast_player_data` that does the BS4 /
+TODO: add a sibling `statcast_player_data` that does the BS4 /
 regex extraction and returns a typed dict.
 
 **Parameters**
@@ -342,13 +342,13 @@ GET /statcast_search/csv — pitch-by-pitch Statcast search.
 Returns a polars DataFrame of pitches matching the filter set. The Savant
 endpoint caps results at **25,000 rows per response with no pagination**;
 if the wrapper detects exactly 25,000 rows in the response and
-``raise_on_truncation=True`` (default), it raises :class:`RuntimeError`
+`raise_on_truncation=True` (default), it raises `RuntimeError`
 rather than silently returning a partial frame. Use
-:func:`statcast_search_chunked` for date ranges that may exceed 25k pitches.
+`statcast_search_chunked` for date ranges that may exceed 25k pitches.
 
 Most filter args accept either a scalar or an iterable; the wrapper joins
-iterables with Savant's trailing-pipe convention (e.g. ``["FF","SL"]`` →
-``"FF|SL|"``).
+iterables with Savant's trailing-pipe convention (e.g. `["FF","SL"]` →
+`"FF|SL|"`).
 
 **Parameters**
 
@@ -356,34 +356,34 @@ iterables with Savant's trailing-pipe convention (e.g. ``["FF","SL"]`` →
 |---|---|---|---|
 | `start_date` | `str` |  |  |
 | `end_date` | `str` |  |  |
-| `player_type` | `str` | `'batter'` | ``"batter"`` (default) or ``"pitcher"`` — controls which side of the matchup ``batters_lookup`` / ``pitchers_lookup`` / ``team`` filters apply to. |
+| `player_type` | `str` | `'batter'` | `"batter"` (default) or `"pitcher"` — controls which side of the matchup `batters_lookup` / `pitchers_lookup` / `team` filters apply to. |
 | `season` | `Optional[Union[str, Iterable[str]]]` | `None` |  |
 | `game_type` | `Optional[Union[str, Iterable[str]]]` | `None` |  |
 | `batters_lookup` | `Optional[Union[int, Iterable[int]]]` | `None` |  |
 | `pitchers_lookup` | `Optional[Union[int, Iterable[int]]]` | `None` |  |
 | `team` | `Optional[str]` | `None` |  |
 | `opponent` | `Optional[str]` | `None` |  |
-| `home_road` | `Optional[str]` | `None` | ``"home"`` / ``"road"``. |
+| `home_road` | `Optional[str]` | `None` | `"home"` / `"road"`. |
 | `stadium` | `Optional[Union[int, str]]` | `None` | venue id. |
 | `pitcher_throws` | `Optional[str]` | `None` |  |
 | `batter_stands` | `Optional[str]` | `None` |  |
 | `position` | `Optional[Union[str, Iterable[str]]]` | `None` |  |
-| `pitch_type` | `Optional[Union[str, Iterable[str]]]` | `None` | pipe-list of pitch codes (``"FF","SL","CU","CH","SI","FC"``…). |
-| `count` | `Optional[Union[str, Iterable[str]]]` | `None` | pipe-list of pitcher–batter counts (e.g. ``["00","11"]``). |
-| `at_bat_result` | `Optional[Union[str, Iterable[str]]]` | `None` | pipe-list of PA outcomes (``"single","home_run","walk"``…). |
-| `batted_ball_type` | `Optional[Union[str, Iterable[str]]]` | `None` | ``"fly_ball","ground_ball","line_drive","popup"``. |
-| `pitch_result` | `Optional[Union[str, Iterable[str]]]` | `None` | ``"called_strike","ball","swinging_strike","foul",…``. |
-| `zone` | `Optional[Union[str, Iterable[str]]]` | `None` | gameday zone (``1``–``14``). |
+| `pitch_type` | `Optional[Union[str, Iterable[str]]]` | `None` | pipe-list of pitch codes (`"FF","SL","CU","CH","SI","FC"`…). |
+| `count` | `Optional[Union[str, Iterable[str]]]` | `None` | pipe-list of pitcher–batter counts (e.g. `["00","11"]`). |
+| `at_bat_result` | `Optional[Union[str, Iterable[str]]]` | `None` | pipe-list of PA outcomes (`"single","home_run","walk"`…). |
+| `batted_ball_type` | `Optional[Union[str, Iterable[str]]]` | `None` | `"fly_ball","ground_ball","line_drive","popup"`. |
+| `pitch_result` | `Optional[Union[str, Iterable[str]]]` | `None` | `"called_strike","ball","swinging_strike","foul",…`. |
+| `zone` | `Optional[Union[str, Iterable[str]]]` | `None` | gameday zone (`1`–`14`). |
 | `outs` | `Optional[Union[int, Iterable[int]]]` | `None` |  |
 | `inning` | `Optional[Union[int, Iterable[int]]]` | `None` |  |
-| `runners_on` | `Optional[Union[str, Iterable[str]]]` | `None` | ``"none","on_first","on_second","on_third","RISP"``… |
-| `flag` | `Optional[Union[str, Iterable[str]]]` | `None` | special flags (``"is_barrel","is_solidcontact","is_putaway"``…). |
+| `runners_on` | `Optional[Union[str, Iterable[str]]]` | `None` | `"none","on_first","on_second","on_third","RISP"`… |
+| `flag` | `Optional[Union[str, Iterable[str]]]` | `None` | special flags (`"is_barrel","is_solidcontact","is_putaway"`…). |
 | `return_as_pandas` | `bool` | `False` | convert the returned polars frame to pandas. |
 | `raise_on_truncation` | `bool` | `True` | when True (default), raise if the response has exactly 25,000 rows. |
 
 **Returns**
 
-polars.DataFrame (or pandas if ``return_as_pandas=True``) with one row per pitch, ~90 columns covering pitch tracking, batted-ball metrics, Statcast outcomes, and game/play context.
+polars.DataFrame (or pandas if `return_as_pandas=True`) with one row per pitch, ~90 columns covering pitch tracking, batted-ball metrics, Statcast outcomes, and game/play context.
 
 | col_name | type | description |
 |---|---|---|
@@ -508,9 +508,9 @@ polars.DataFrame (or pandas if ``return_as_pandas=True``) with one row per pitch
 
 ### `statcast_search_chunked(start_date: 'str', end_date: 'str', *, chunk_days: 'int' = 5, return_as_pandas: 'bool' = False, **kwargs)`
 
-Auto-chunk a date range into ``chunk_days``-day windows and concatenate.
+Auto-chunk a date range into `chunk_days`-day windows and concatenate.
 
-Wraps :func:`statcast_search` and stitches results client-side. Useful for
+Wraps `statcast_search` and stitches results client-side. Useful for
 multi-month or full-season pulls that would exceed the 25k row cap in a
 single request.
 
@@ -585,9 +585,9 @@ Replays of in-game state for low-bandwidth clients.
 
 GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
-Top-level keys: ``copyright, gamePk, link, metaData, gameData, liveData``.
+Top-level keys: `copyright, gamePk, link, metaData, gameData, liveData`.
 Includes Statcast metrics where available. The historical name
-``mlb_api_pbp`` is preserved as an alias.
+`mlb_api_pbp` is preserved as an alias.
 
 **Parameters**
 
@@ -603,8 +603,8 @@ Includes Statcast metrics where available. The historical name
 
 GET /api/v1/people/{personId}/stats — player aggregate stats.
 
-``stats``: ``season``, ``career``, ``yearByYear``, ``vsTeam``, ``vsPlayer``,
-``byMonth``, ``byDayOfWeek``, ``homeAndAway``, ``gameLog``, ``lastXGames``, …
+`stats`: `season`, `career`, `yearByYear`, `vsTeam`, `vsPlayer`,
+`byMonth`, `byDayOfWeek`, `homeAndAway`, `gameLog`, `lastXGames`, …
 
 **Parameters**
 
@@ -623,7 +623,7 @@ GET /api/v1/people/{personId}/stats — player aggregate stats.
 
 GET /api/v1/schedule — schedule of games for a date, range, team, or season.
 
-Response: ``dates[].games[]``.
+Response: `dates[].games[]`.
 
 **Parameters**
 
@@ -657,8 +657,8 @@ GET /api/v1/seasons — list of seasons for a sport.
 
 GET /api/v1/standings — league standings.
 
-``league_id``: ``103`` AL, ``104`` NL (comma-separated for both, the default).
-``standings_types`` e.g. ``regularSeason``, ``wildCard``, ``divisionLeaders``.
+`league_id`: `103` AL, `104` NL (comma-separated for both, the default).
+`standings_types` e.g. `regularSeason`, `wildCard`, `divisionLeaders`.
 
 **Parameters**
 
@@ -675,9 +675,9 @@ GET /api/v1/standings — league standings.
 
 GET /api/v1/stats — generic stats query.
 
-``stats`` selects the slice (``season``, ``career``, ``yearByYear``, …) and
-``group`` selects the stat group (``hitting``, ``pitching``, ``fielding``).
-Filters: ``season``, ``team_id``, ``league_id``, ``game_type``, ``player_pool``.
+`stats` selects the slice (`season`, `career`, `yearByYear`, …) and
+`group` selects the stat group (`hitting`, `pitching`, `fielding`).
+Filters: `season`, `team_id`, `league_id`, `game_type`, `player_pool`.
 
 **Parameters**
 
@@ -715,7 +715,7 @@ GET /api/v1/stats/leaders — top-N leaders for a stat category.
 
 GET /api/v1/stats/streaks — active or historical streaks.
 
-``streak_type`` e.g. ``hittingStreakOverall``, ``onBaseOverall``.
+`streak_type` e.g. `hittingStreakOverall`, `onBaseOverall`.
 
 **Parameters**
 
@@ -732,8 +732,8 @@ GET /api/v1/stats/streaks — active or historical streaks.
 
 GET /api/v1/teams/{teamId}/leaders — team leaders.
 
-``leader_categories`` e.g. ``homeRuns``, ``battingAverage``, ``wins``,
-``earnedRunAverage`` (comma-separated for multi).
+`leader_categories` e.g. `homeRuns`, `battingAverage`, `wins`,
+`earnedRunAverage` (comma-separated for multi).
 
 **Parameters**
 
@@ -749,8 +749,8 @@ GET /api/v1/teams/{teamId}/leaders — team leaders.
 
 GET /api/v1/teams/{teamId}/stats — team-level stats.
 
-``stats``: ``season``, ``career``, ``yearByYear``, ``byMonth``, ``byDayOfWeek``, …
-``group``: ``hitting``, ``pitching``, ``fielding``.
+`stats`: `season`, `career`, `yearByYear`, `byMonth`, `byDayOfWeek`, …
+`group`: `hitting`, `pitching`, `fielding`.
 
 **Parameters**
 
@@ -766,7 +766,7 @@ GET /api/v1/teams/{teamId}/stats — team-level stats.
 
 ### `mlb_api_teams(season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_ids: 'Optional[Union[int, List[int], str]]' = None, active_status: 'Optional[str]' = None, all_star_statuses: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
 
-GET /api/v1/teams — list teams. ``sport_id=1`` = MLB.
+GET /api/v1/teams — list teams. `sport_id=1` = MLB.
 
 **Parameters**
 
@@ -796,7 +796,7 @@ espn_mlb_game_rosters - pull the active game rosters for both teams.
 
 **Returns**
 
-One row per (game × team × athlete) with columns ``game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_starter``.
+One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_starter`.
 
 **Example**
 
@@ -815,12 +815,12 @@ espn_mlb_pbp - pull the full ESPN game-summary payload for one MLB game.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | ESPN game id (the "event id"). Obtainable from :func:`espn_mlb_schedule`. |
+| `game_id` | `int` |  | ESPN game id (the "event id"). Obtainable from `espn_mlb_schedule`. |
 | `raw` | `bool` | `False` | When True, returns the full nested payload unchanged. When False (default), the same payload is returned for now — full parsing into a tidy plays / boxscore dict is **not yet implemented**; see the TODO below. |
 
 **Returns**
 
-The Site v2 summary payload. Top-level keys typically include ``header``, ``boxscore``, ``plays``, ``leaders``, ``scoringPlays``, ``gameInfo``, ``winprobability``, ``pickcenter``, ``news``, ``videos``, ``standings``, ``article``, ``seasonseries``, ``broadcasts``, ``predictor``.
+The Site v2 summary payload. Top-level keys typically include `header`, `boxscore`, `plays`, `leaders`, `scoringPlays`, `gameInfo`, `winprobability`, `pickcenter`, `news`, `videos`, `standings`, `article`, `seasonseries`, `broadcasts`, `predictor`.
 
 **Example**
 
@@ -842,27 +842,27 @@ for p in plays[:3]:
 
 Pull an MLB athlete's ESPN **season** stat line as one wide row.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-documentation of the wide return shape, the ``{category}_{stat}`` stat
-columns (for baseball: ``batting_*``, ``pitching_*``, ``fielding_*``),
-the athlete / team metadata blocks, and the ``season_type`` / ``total``
+See `sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the `{category}_{stat}` stat
+columns (for baseball: `batting_*`, `pitching_*`, `fielding_*`),
+the athlete / team metadata blocks, and the `season_type` / `total`
 parameters. For the richer multi-category web-v3 payload use
-:func:`sportsdataverse.mlb.espn_mlb_player_stats_v3`.
+`sportsdataverse.mlb.espn_mlb_player_stats_v3`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `athlete_id` | `int` |  | ESPN MLB athlete identifier (e.g. ``33192`` for Aaron Judge). |
+| `athlete_id` | `int` |  | ESPN MLB athlete identifier (e.g. `33192` for Aaron Judge). |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
+A single-row wide DataFrame (polars by default). When `raw=True` returns the raw statistics JSON `dict`.
 
 | col_name | type | description |
 |---|---|---|
@@ -1018,14 +1018,14 @@ espn_mlb_schedule - look up the MLB schedule for a given date or season-year.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `dates` | `int` | `None` | Date filter. Either a calendar date as YYYYMMDD or a season-year (e.g. 2024). When a 4-digit year is passed, the call returns the full season slate (paginated by ``limit``). |
+| `dates` | `int` | `None` | Date filter. Either a calendar date as YYYYMMDD or a season-year (e.g. 2024). When a 4-digit year is passed, the call returns the full season slate (paginated by `limit`). |
 | `season_type` | `int` | `None` | Season type — 1 = spring training, 2 = regular, 3 = postseason, 4 = all-star. |
 | `limit` | `int` | `500` | Number of records to return. Default 500. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False (default), returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing the schedule. Returns ``None`` if no games.
+Polars dataframe containing the schedule. Returns `None` if no games.
 
 | col_name | type | description |
 |---|---|---|
@@ -1143,7 +1143,7 @@ the "most recent" season (since spring training only starts in late February).
 
 **Returns**
 
-The most recent MLB season year (e.g. ``2024``).
+The most recent MLB season year (e.g. `2024`).
 
 ## Other
 
@@ -1159,7 +1159,7 @@ espn_mlb_teams - look up MLB teams from ESPN's Site v2 API.
 
 **Returns**
 
-Polars dataframe containing teams for MLB. This function caches by default, so if you want to refresh the data, use ``sportsdataverse.mlb.espn_mlb_teams.cache_clear()``.
+Polars dataframe containing teams for MLB. This function caches by default, so if you want to refresh the data, use `sportsdataverse.mlb.espn_mlb_teams.cache_clear()`.
 
 | col_name | type | description |
 |---|---|---|

@@ -239,9 +239,12 @@ def _table_cell_desc(stored: str, league: str | None, col: str) -> str:
     """A return-table description cell: stored value if non-empty, else R-dict fill.
 
     Never overwrites a non-empty (hand-curated) stored description. The result is
-    pipe/newline-escaped so it is safe inside a single markdown table cell."""
+    pipe/newline-escaped so it is safe inside a single markdown table cell.
+    reST markup (double-backtick literals, Sphinx roles) is normalised to
+    standard markdown inline code."""
     raw = stored if (stored or "").strip() else _r_col_desc(league, col)
-    return (raw or "").replace("|", "\\|").replace("\n", " ").strip()
+    normalized = _normalize_rst((raw or "").replace("\n", " ").strip())
+    return normalized.replace("|", "\\|")
 
 
 @functools.lru_cache(maxsize=None)
@@ -300,7 +303,7 @@ class _EndpointView:
     def __init__(self, ep: spec.Endpoint, fn_name: str, ep_host: str, league: spec.League, flat: bool = False):
         self.fn_name = fn_name
         self.short = ep.short
-        self.summary = ep.summary
+        self.summary = _normalize_rst(ep.summary or "")
         self.query_params = ep.query_params
         self.path_params = ep.path_params
         self.parser = ep.parser
@@ -353,7 +356,7 @@ class _EndpointView:
         self.valid_url = self.example_url
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.return_table = _return_table(ep.returns_schema, league.prefix)
-        self.returns_prose = ep.summary
+        self.returns_prose = _normalize_rst(ep.summary or "")
         self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map
         self.notebook: str | None = None
         self.last_validated: str | None = None
@@ -1831,6 +1834,10 @@ _RST_LINK_RE = re.compile(r"`([^`<]+?)\s*<([^>]+)>`_+")
 # Bare reST trailing-underscore / role artifacts left after link stripping, e.g.
 # a dangling `` `_ `` or `` ` ``-wrapped fragment with no target.
 _RST_BACKTICK_ARTIFACT_RE = re.compile(r"`_+")
+# Sphinx cross-reference roles: :func:`X`, :class:`X`, etc. -> `X`
+_RST_ROLE_RE = re.compile(r":(?:func|class|mod|meth|attr|data|ref|obj|exc):`([^`]+)`")
+# reST double-backtick literals: ``X`` -> `X`
+_RST_DBL_BACKTICK_RE = re.compile(r"``([^`]+)``")
 
 
 def _strip_rst_links(text: str) -> str:
@@ -1844,6 +1851,27 @@ def _strip_rst_links(text: str) -> str:
     if not text:
         return text
     out = _RST_LINK_RE.sub(lambda m: f"[{m.group(1).strip()}]({m.group(2).strip()})", text)
+    out = _RST_BACKTICK_ARTIFACT_RE.sub("", out)
+    return out
+
+
+def _normalize_rst(text: str) -> str:
+    """Normalize reST markup in docstring prose to standard markdown inline code.
+
+    Applies in order (idempotent — running twice yields the same result):
+    1. Sphinx cross-reference roles: ``:func:`X``` / ``:class:`X``` / etc.
+       -> `` `X` `` (drop the ``:role:`` prefix, keep the backticked target).
+    2. Double-backtick literals: ````X```` -> `` `X` ``.
+    3. reST inline links: `` `text <url>`_ `` -> ``[text](url)``.
+    4. Bare trailing-underscore artifacts: `` `_ `` -> removed.
+
+    Safe on ``None`` / empty strings and on text that has already been
+    normalised; never raises."""
+    if not text:
+        return text
+    out = _RST_ROLE_RE.sub(r"`\1`", text)
+    out = _RST_DBL_BACKTICK_RE.sub(r"`\1`", out)
+    out = _RST_LINK_RE.sub(lambda m: f"[{m.group(1).strip()}]({m.group(2).strip()})", out)
     out = _RST_BACKTICK_ARTIFACT_RE.sub("", out)
     return out
 
@@ -1873,7 +1901,7 @@ def _clean_long(text: str) -> str:
     import textwrap
 
     block = textwrap.dedent("\n".join(collected)).strip()
-    return _strip_rst_links(block)
+    return _normalize_rst(block)
 
 
 def _fallback_doc_sections(raw: str) -> dict:
@@ -1943,7 +1971,7 @@ def _fallback_doc_sections(raw: str) -> dict:
                 params[-1]["description"] = joined
             # else: stray line before any param -- ignore.
         for p in params:
-            p["description"] = _strip_rst_links(" ".join(p["description"].split()))
+            p["description"] = _normalize_rst(" ".join(p["description"].split()))
         out["params"] = params
 
         # --- Returns / Yields ----------------------------------------------
@@ -1955,7 +1983,7 @@ def _fallback_doc_sections(raw: str) -> dict:
             rm = re.match(r"^[A-Za-z_][\w.\[\], |]*\s*:\s*(.*)$", ret)
             if rm and rm.group(1):
                 ret = rm.group(1).strip()
-            out["returns"] = _strip_rst_links(ret)
+            out["returns"] = _normalize_rst(ret)
 
         # --- Example / Examples --------------------------------------------
         ex_lines = section("examples", "example")
@@ -2128,14 +2156,14 @@ def _doc_view(obj) -> dict:
                     "name": name,
                     "type": (doc_type or ann),
                     "default": default,
-                    "description": _strip_rst_links(desc),
+                    "description": _normalize_rst(desc),
                 },
             )
 
     long = _clean_long(ds_long or "")
     returns = ""
     if ds_returns is not None and ds_returns.description:
-        returns = _strip_rst_links(" ".join(ds_returns.description.split()))
+        returns = _normalize_rst(" ".join(ds_returns.description.split()))
     elif fb["returns"]:
         returns = fb["returns"]
     raw_example = ds_examples[0].description if ds_examples and ds_examples[0].description else ""
@@ -2143,7 +2171,7 @@ def _doc_view(obj) -> dict:
         raw_example = fb["example"]
     example = _clean_example(raw_example)
     return {
-        "short": (ds_short or "").strip(),
+        "short": _normalize_rst((ds_short or "").strip()),
         "long": long,
         "params": params,
         "returns": returns,

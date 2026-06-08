@@ -14,26 +14,26 @@ not covered by the generated API-endpoint reference above.
 
 Pull an NBA athlete's ESPN **season** stat line as one wide row.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-documentation of the wide return shape, the ``{category}_{stat}`` stat
-columns, the athlete / team metadata blocks, and the ``season_type`` /
-``total`` parameters. For the richer multi-category web-v3 payload use
-:func:`sportsdataverse.nba.espn_nba_player_stats_v3`.
+See `sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the `{category}_{stat}` stat
+columns, the athlete / team metadata blocks, and the `season_type` /
+`total` parameters. For the richer multi-category web-v3 payload use
+`sportsdataverse.nba.espn_nba_player_stats_v3`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `athlete_id` | `int` |  | ESPN NBA athlete identifier (e.g. ``1966`` for LeBron James). |
+| `athlete_id` | `int` |  | ESPN NBA athlete identifier (e.g. `1966` for LeBron James). |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``.
+A single-row wide DataFrame (polars by default). When `raw=True` returns the raw statistics JSON `dict`.
 
 | col_name | type | description |
 |---|---|---|
@@ -336,9 +336,9 @@ sched = load_nba_schedule(seasons=[most_recent_nba_season()])
 
 Convert a season-end year (e.g. 2024) to the NBA's hyphenated label
 
-(e.g. ``"2023-24"``).
+(e.g. `"2023-24"`).
 
-Handles century rollover (1999 -> ``"1999-00"``) and zero-pads the
+Handles century rollover (1999 -> `"1999-00"`) and zero-pads the
 second half of the label.
 
 **Parameters**
@@ -418,7 +418,7 @@ abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 
 Load a previously cached ESPN NBA summary JSON for a game from disk.
 
-Reads ``{path_to_json}/{game_id}.json``.
+Reads `{path_to_json}/{game_id}.json`.
 
 **Parameters**
 
@@ -443,17 +443,17 @@ print(list(pbp.keys()))
 
 Internal helper that flattens an ESPN NBA scoreboard event dict into a
 
-shape suitable for ``pd.json_normalize``.
+shape suitable for `pd.json_normalize`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `event` | `dict` |  | A single scoreboard ``events[*]`` entry from the ESPN NBA scoreboard API. |
+| `event` | `dict` |  | A single scoreboard `events[*]` entry from the ESPN NBA scoreboard API. |
 
 **Returns**
 
-The same event dict, mutated in place with ``home``/``away`` copies of the competitors and trimmed of unused link/odds keys.
+The same event dict, mutated in place with `home`/`away` copies of the competitors and trimmed of unused link/odds keys.
 
 **Example**
 

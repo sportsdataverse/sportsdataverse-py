@@ -12,9 +12,9 @@ not covered by the generated API-endpoint reference above.
 
 ### `load_pwhl_games(return_as_pandas: 'bool' = False)`
 
-Load the PWHL games-in-data-repo manifest (no ``seasons`` argument).
+Load the PWHL games-in-data-repo manifest (no `seasons` argument).
 
-Mirrors fastRhockey (R) ``load_pwhl_games()`` which reads a manifest of every
+Mirrors fastRhockey (R) `load_pwhl_games()` which reads a manifest of every
 PWHL game that has processed data in the data repository.
 
 Tries the sportsdataverse-data release asset first; falls back to the raw
@@ -97,7 +97,7 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
 Return a snapshot of the cache for debugging / inspection.
 
-Returns a dict with ``mode``, ``entries``, and ``disk_bytes`` (only
+Returns a dict with `mode`, `entries`, and `disk_bytes` (only
 populated when mode=filesystem). Cheap — doesn't read the cached
 bodies, just counts + sizes.
 
@@ -113,7 +113,7 @@ Switch the global cache mode.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `mode` | `str` |  | One of ``"off"``, ``"memory"``, ``"filesystem"``. |
+| `mode` | `str` |  | One of `"off"`, `"memory"`, `"filesystem"`. |
 
 ### `set_default_ttl(ttl: 'Optional[Union[timedelta, int]]') -> 'None'`
 
@@ -123,4 +123,4 @@ Override the default TTL for endpoints not matched by the tier rules.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `ttl` | `Optional[Union[timedelta, int]]` |  | A ``timedelta``, an integer (interpreted as seconds), or ``None`` to reset to the built-in :data:`DEFAULT_TTL` (``MODERATE`` = 1 hour). |
+| `ttl` | `Optional[Union[timedelta, int]]` |  | A `timedelta`, an integer (interpreted as seconds), or `None` to reset to the built-in `DEFAULT_TTL` (`MODERATE` = 1 hour). |

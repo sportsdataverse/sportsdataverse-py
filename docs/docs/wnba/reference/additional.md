@@ -14,23 +14,23 @@ not covered by the generated API-endpoint reference above.
 
 Pull the officials assigned to a WNBA game.
 
-See :func:`sportsdataverse.wbb.espn_wbb_game_officials` for full
+See `sportsdataverse.wbb.espn_wbb_game_officials` for full
 documentation of the column set, the empty-frame fallback when ESPN
-ships no officials, and the ``raw`` / ``return_as_pandas`` flag
+ships no officials, and the `raw` / `return_as_pandas` flag
 semantics.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | ESPN WNBA event identifier (e.g. ``401620238`` for Game 1 of the 2024 WNBA Finals). |
+| `game_id` | `int` |  | ESPN WNBA event identifier (e.g. `401620238` for Game 1 of the 2024 WNBA Finals). |
 | `season` | `int \| None` | `None` | Season year (recorded as output column only). |
 | `raw` | `bool` | `False` | If True, returns the parsed JSON dict before any flattening. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
 
 **Returns**
 
-Polars (or pandas) DataFrame with the same columns documented in :func:`sportsdataverse.wbb.espn_wbb_game_officials`. If ``raw=True``, returns the raw response dict.
+Polars (or pandas) DataFrame with the same columns documented in `sportsdataverse.wbb.espn_wbb_game_officials`. If `raw=True`, returns the raw response dict.
 
 | col_name | type | description |
 |---|---|---|
@@ -71,25 +71,25 @@ list(payload.keys())[:8]
 
 Pull a WNBA athlete's ESPN **season** stat line.
 
-See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for full
-documentation of the wide return shape, the ``{category}_{stat}``
+See `sportsdataverse.wbb.espn_wbb_player_stats` for full
+documentation of the wide return shape, the `{category}_{stat}`
 stat columns, the athlete / team metadata blocks, and the
-``season_type`` / ``total`` parameters.
+`season_type` / `total` parameters.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `athlete_id` | `int` |  | ESPN WNBA athlete identifier (e.g. ``3149391`` for A'ja Wilson). |
+| `athlete_id` | `int` |  | ESPN WNBA athlete identifier (e.g. `3149391` for A'ja Wilson). |
 | `season` | `int` |  | Season year, used in the core-v2 path. |
-| `season_type` | `str` | `'regular'` | ``"regular"`` (type 2) or ``"postseason"`` (type 3). |
+| `season_type` | `str` | `'regular'` | `"regular"` (type 2) or `"postseason"` (type 3). |
 | `total` | `bool` | `False` | Forward-compat totals passthrough. |
 | `raw` | `bool` | `False` | If True, returns the raw core-v2 statistics JSON dict. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; else polars. |
 
 **Returns**
 
-A single-row wide DataFrame (polars by default). When ``raw=True`` returns the raw statistics JSON ``dict``. See :func:`sportsdataverse.wbb.espn_wbb_player_stats` for the column layout.
+A single-row wide DataFrame (polars by default). When `raw=True` returns the raw statistics JSON `dict`. See `sportsdataverse.wbb.espn_wbb_player_stats` for the column layout.
 
 | col_name | type | description |
 |---|---|---|
@@ -351,23 +351,23 @@ espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
 
 Pull ESPN team season stats for a WNBA team.
 
-See :func:`sportsdataverse.wbb.espn_wbb_team_stats` for full
+See `sportsdataverse.wbb.espn_wbb_team_stats` for full
 documentation of the return shape, the canonical three category keys
-(``"Averages"``, ``"Totals"``, ``"Misc"``), the per-category column
-set, and the ``"Other"`` fallback bucket.
+(`"Averages"`, `"Totals"`, `"Misc"`), the per-category column
+set, and the `"Other"` fallback bucket.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `int` |  | ESPN WNBA team identifier (e.g. ``17`` for the Las Vegas Aces). |
-| `season` | `int` |  | Season year, forwarded to ESPN as ``?season=YYYY``. |
+| `team_id` | `int` |  | ESPN WNBA team identifier (e.g. `17` for the Las Vegas Aces). |
+| `season` | `int` |  | Season year, forwarded to ESPN as `?season=YYYY`. |
 | `raw` | `bool` | `False` | If True, returns the parsed JSON dict before any flattening. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a dict of pandas DataFrames; otherwise polars. |
 
 **Returns**
 
-Dict with one DataFrame per stat category — see :func:`sportsdataverse.wbb.espn_wbb_team_stats` for the full column / key documentation. If ``raw=True``, returns the raw response dict.
+Dict with one DataFrame per stat category — see `sportsdataverse.wbb.espn_wbb_team_stats` for the full column / key documentation. If `raw=True`, returns the raw response dict.
 
 **Example**
 
@@ -401,7 +401,7 @@ season has tipped off), otherwise the previous calendar year.
 
 **Returns**
 
-Year (e.g. ``2024``) suitable for passing as a ``season`` argument to schedule / loader functions.
+Year (e.g. `2024`) suitable for passing as a `season` argument to schedule / loader functions.
 
 **Example**
 

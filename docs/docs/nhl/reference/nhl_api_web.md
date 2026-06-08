@@ -241,7 +241,7 @@ _Last validated n/a._
 
 ## `nhl_web_schedule`
 
-Pull the week-of NHL schedule rooted at ``date``.
+Pull the week-of NHL schedule rooted at `date`.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/schedule/{date}`
 
@@ -326,7 +326,7 @@ _Last validated n/a._
 
 ## `nhl_score`
 
-Pull the single-day scoreboard for ``date``.
+Pull the single-day scoreboard for `date`.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/score/{date}`
 
