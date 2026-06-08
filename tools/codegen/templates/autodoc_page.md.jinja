@@ -1,0 +1,20 @@
+---
+title: {{ title }}
+sidebar_label: Additional functions
+sidebar_position: {{ sidebar_position }}
+---
+# {{ title }}
+
+Hand-written wrappers, loaders, and helpers in `{{ module }}`
+not covered by the generated API-endpoint reference above.
+
+{% for group in groups %}
+## {{ group.family }}
+
+{% for fn in group.functions %}
+### `{{ fn.name }}{{ fn.signature }}`
+
+{{ fn.summary }}
+
+{% endfor %}
+{% endfor %}

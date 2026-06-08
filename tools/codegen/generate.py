@@ -1470,6 +1470,186 @@ def render_parameters_page() -> str:
     return template.render(params=list(params.values()))
 
 
+# ===========================================================================
+# Autodoc: hand-written public functions the endpoint-YAML codegen never covers.
+#
+# ~150 user-facing functions live in hand-written modules (mlb_statcast,
+# mlb_api_extra, nfl_loaders, nhl_records_extra, the espn_* league wrappers,
+# ...). They are NOT codegen endpoints, so the generated reference pages never
+# document them; adding them to YAML would collide with the existing defs. This
+# step renders the *coverage gap* (in-scope user-facing names NOT already
+# documented by the other generated pages and NOT allowlisted) into a per-league
+# ``reference/additional.md`` page, grouped by family, from live signatures +
+# docstrings. It reuses the coverage scope predicate -- one source of truth for
+# "user-facing".
+# ===========================================================================
+
+# The single autodoc page filename (excluded from the "already documented"
+# corpus so the gap computation is not circular).
+_AUTODOC_PAGE = "additional.md"
+_AUTODOC_GLOBAL_PAGE = "python-helpers.md"
+
+
+# Modules that leak into a league's ``dir()`` via ``from ... import *`` but are
+# NOT hand-written league functions: shared download/JSON utilities, the shared
+# error types, and the generic per-source parsers (``parser_for_*``). These are
+# genuine allowlist candidates, NOT autodoc material, so they are excluded from
+# the autodoc set and remain visible to ``--coverage`` for a later allowlist task.
+def _is_shared_leak(module: str) -> bool:
+    return module == "sportsdataverse.dl_utils" or module == "sportsdataverse.errors" or module.endswith("_parsers")
+
+
+# Deterministic family order for the autodoc page (families not listed sort last,
+# alphabetically). Functions within a family are always sorted alphabetically.
+_AUTODOC_FAMILY_ORDER = [
+    "Statcast",
+    "MLB Stats API",
+    "Play-by-play, schedule & rosters",
+    "NHL native",
+    "Dataset loaders",
+    "Utilities & helpers",
+    "Other",
+]
+
+_ESPN_PBP_FAMILY_TOKENS = (
+    "_pbp",
+    "_schedule",
+    "_game_rosters",
+    "_player_stats",
+    "_play_participants",
+    "_team_stats",
+    "_game_officials",
+)
+
+
+def _autodoc_family(name: str) -> str:
+    """Group key for an autodoc function name (see the family rules in Task D2)."""
+    if name.startswith("statcast") or name == "mlb_statcast":
+        return "Statcast"
+    if name.startswith("load_"):
+        return "Dataset loaders"
+    if name.startswith("mlb_api"):
+        return "MLB Stats API"
+    if name.startswith("espn_") and any(tok in name for tok in _ESPN_PBP_FAMILY_TOKENS):
+        return "Play-by-play, schedule & rosters"
+    if name.startswith("nhl_"):
+        return "NHL native"
+    if name.endswith("PlayProcess") or name.startswith(("most_recent_", "get_current_")) or name == "year_to_season":
+        return "Utilities & helpers"
+    return "Other"
+
+
+def _autodoc_summary(obj) -> str:
+    """First paragraph of ``obj``'s docstring, collapsed and pipe-escaped, or ``""``."""
+    import inspect
+
+    doc = inspect.getdoc(obj) or ""
+    if not doc:
+        return ""
+    # First blank-line-delimited paragraph; collapse internal whitespace runs to
+    # single spaces so the one-liner renders cleanly under the heading.
+    para = doc.split("\n\n", 1)[0]
+    para = " ".join(para.split())
+    return para.replace("|", "\\|")
+
+
+def _autodoc_signature(obj) -> str:
+    """``str(inspect.signature(obj))`` with a ``"(...)"`` fallback for un-introspectable objects."""
+    import inspect
+
+    try:
+        return str(inspect.signature(obj))
+    except (TypeError, ValueError):
+        return "(...)"
+
+
+def _autodoc_names(league: str | None, corpus: str) -> list[str]:
+    """In-scope user-facing names that the autodoc page should document for ``league``.
+
+    The set is: in-scope names (per the shared coverage predicate) MINUS names
+    already documented by the OTHER generated pages (``corpus`` -- the rendered
+    markdown of every other in-scope page, EXCLUDING this league's autodoc page so
+    the gap computation is not circular) MINUS the allowlist MINUS
+    shared-utility/error/parser leaks (genuine allowlist candidates, handled by a
+    later task). ``league=None`` is the package-level (global) set."""
+    import importlib
+
+    per_league, global_names = _coverage_scope_names()
+    allow = _coverage_allowlist()
+    if league is None:
+        names = global_names
+        mod = importlib.import_module("sportsdataverse")
+        allowed = allow.get("global", set())
+    elif league not in per_league:
+        # Loader-only leagues (e.g. pwhl) have no module of their own and no
+        # in-scope league names -- their loaders surface at the package top level
+        # and are covered by the global autodoc/coverage path.
+        return []
+    else:
+        names = per_league[league]
+        mod = importlib.import_module(f"sportsdataverse.{league}")
+        allowed = allow.get(league, set())
+    out = []
+    for n in names:
+        if n in allowed:
+            continue
+        if _is_documented(n, corpus):
+            continue
+        obj = getattr(mod, n, None)
+        if obj is None:
+            continue
+        if _is_shared_leak(getattr(obj, "__module__", "")):
+            continue
+        out.append(n)
+    return sorted(out)
+
+
+def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
+    """``[{family, functions:[{name, signature, summary}]}]`` for the template.
+
+    Families ordered by :data:`_AUTODOC_FAMILY_ORDER` (unknown families last,
+    alphabetically); functions sorted alphabetically within each family."""
+    import importlib
+
+    mod = importlib.import_module("sportsdataverse" if league is None else f"sportsdataverse.{league}")
+    by_family: dict[str, list[dict]] = {}
+    for n in names:
+        obj = getattr(mod, n)
+        by_family.setdefault(_autodoc_family(n), []).append(
+            {"name": n, "signature": _autodoc_signature(obj), "summary": _autodoc_summary(obj)},
+        )
+
+    def fam_key(fam: str) -> tuple[int, str]:
+        return (_AUTODOC_FAMILY_ORDER.index(fam) if fam in _AUTODOC_FAMILY_ORDER else len(_AUTODOC_FAMILY_ORDER), fam)
+
+    groups = []
+    for fam in sorted(by_family, key=fam_key):
+        fns = sorted(by_family[fam], key=lambda f: f["name"])
+        groups.append({"family": fam, "functions": fns})
+    return groups
+
+
+def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
+    """Render a league's (or the package-level) ``additional.md`` autodoc page.
+
+    ``prefix`` is a league prefix, or ``None`` for the package-level page.
+    ``corpus`` is the rendered markdown of the OTHER in-scope pages (used to decide
+    which names are already documented). Returns ``None`` (caller omits the page)
+    when the autodoc set is empty."""
+    names = _autodoc_names(prefix, corpus)
+    if not names:
+        return None
+    groups = _autodoc_groups(prefix, names)
+    if prefix is None:
+        title = "Package — additional Python functions"
+        module = "sportsdataverse"
+    else:
+        title = f"{prefix.upper()} — additional Python functions"
+        module = f"sportsdataverse.{prefix}"
+    template = render.ENV.get_template("autodoc_page.md.jinja")
+    return template.render(title=title, module=module, sidebar_position=50, groups=groups)
+
+
 def render_category(label: str, position: int, collapsed: bool) -> str:
     """Render a Docusaurus ``_category_.json`` sidebar descriptor."""
     template = render.ENV.get_template("category_json.jinja")
@@ -1499,9 +1679,31 @@ def _doc_leagues() -> list[str]:
     return prefixes + extra
 
 
+def _preserved_docs_corpus() -> str:
+    """Concatenated text of the on-disk docs pages the generator does NOT own.
+
+    These are the conceptual pages outside the generated roots (``intro.md``,
+    ``quality-of-life.md``, ``architecture/``, ``parsers/``, ...). They are stable
+    across a generation run (never clobbered/rewritten), so reading them here is
+    idempotent. The autodoc gap judgment unions this with the freshly-rendered
+    generated pages so a name already covered by a conceptual page is not
+    redundantly re-documented on an autodoc page."""
+    if not DOCS.exists():
+        return ""
+    roots = _generated_docs_roots()
+    parts = []
+    for f in sorted(DOCS.rglob("*.md")):
+        top = f.relative_to(DOCS).parts[0]
+        if top in roots:
+            continue
+        parts.append(f.read_text(encoding="utf-8"))
+    return "\n".join(parts)
+
+
 def _render_docs_all() -> dict[str, str]:
     """{relpath: content} for the full generated docs staging tree."""
     out: dict[str, str] = {}
+    preserved = _preserved_docs_corpus()
     for i, prefix in enumerate(_doc_leagues()):
         apis = _apis_for(prefix)
         loaders = _loader_doc_views(prefix)
@@ -1522,9 +1724,28 @@ def _render_docs_all() -> dict[str, str]:
             out[f"{prefix}/reference/{a['slug']}.md"] = render_reference_page(prefix, a["name"], pos)
         if loaders:
             out[f"{prefix}/reference/loaders.md"] = render_loaders_page(prefix, 1)
-        if apis or loaders:
+        # Autodoc page for hand-written functions not covered by the generated
+        # endpoint/loader pages above. "Already documented" is judged against the
+        # other rendered pages for THIS league only (everything emitted so far
+        # under `{prefix}/`), never against the autodoc page itself -- avoids
+        # circularity and matches the coverage gate's per-league corpus
+        # (`_docs_corpus(league)` = `docs/docs/{league}/**` only). Conceptual pages
+        # outside the league dir are deliberately NOT consulted here so the autodoc
+        # set stays in lockstep with what `--coverage` counts as missing.
+        league_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
+        autodoc = render_autodoc_page(prefix, league_corpus)
+        if autodoc is not None:
+            out[f"{prefix}/reference/{_AUTODOC_PAGE}"] = autodoc
+        if apis or loaders or autodoc is not None:
             out[f"{prefix}/reference/_category_.json"] = render_category("Reference", 1, True)
     out["reference/parameters.md"] = render_parameters_page()
+    # Package-level (global) autodoc page for hand-written package-level helpers
+    # not found anywhere in the corpus: every rendered .md plus the preserved
+    # conceptual pages, minus the global autodoc page itself.
+    global_corpus = "\n".join(c for rel, c in out.items() if rel.endswith(".md")) + "\n" + preserved
+    global_autodoc = render_autodoc_page(None, global_corpus)
+    if global_autodoc is not None:
+        out[f"reference/{_AUTODOC_GLOBAL_PAGE}"] = global_autodoc
     pkgs = render_packages_page()
     if pkgs is not None:
         out["packages.mdx"] = pkgs
