@@ -1,0 +1,17 @@
+{
+ "GC": {
+  "Parameters": {
+   "feed": "gc",
+   "view": "gamesummary",
+   "key": "446521baf8c38984",
+   "client_code": "pwhl",
+   "site_id": "0",
+   "lang": "en",
+   "game_id": "42",
+   "lang_code": "en",
+   "lang_id": 1,
+   "fmt": "json"
+  },
+  "Undefined": "Undefined Tab "
+ }
+}

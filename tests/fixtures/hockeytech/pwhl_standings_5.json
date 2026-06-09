@@ -1,0 +1,351 @@
+[
+ {
+  "sections": [
+   {
+    "title": "",
+    "headers": {
+     "overall_rank": {
+      "properties": {
+       "key": "overall_rank",
+       "hidden": false,
+       "class": "ht-hide-column",
+       "label": " ",
+       "title": "Rank",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": "overall_rank"
+      }
+     },
+     "rank": {
+      "properties": {
+       "key": "rank",
+       "hidden": false,
+       "class": "",
+       "label": " ",
+       "title": "Rank",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": ""
+      }
+     },
+     "team_code": {
+      "properties": {
+       "key": "team_code",
+       "hidden": false,
+       "class": "show-mobile",
+       "label": "PWHL",
+       "title": "PWHL",
+       "sortable": true,
+       "align": "left",
+       "highlight": false,
+       "sortKey": ""
+      }
+     },
+     "name": {
+      "properties": {
+       "key": "name",
+       "hidden": false,
+       "class": "hide-mobile",
+       "label": "PWHL",
+       "title": "PWHL",
+       "sortable": true,
+       "align": "left",
+       "highlight": false,
+       "sortKey": ""
+      }
+     },
+     "games_played": {
+      "properties": {
+       "key": "games_played",
+       "hidden": false,
+       "class": "",
+       "label": "GP",
+       "title": "Games Played",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": "games_played"
+      }
+     },
+     "games_remaining": {
+      "properties": {
+       "key": "games_remaining",
+       "hidden": false,
+       "class": "",
+       "label": "GR",
+       "title": "Games Remaining",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": ""
+      }
+     },
+     "points": {
+      "properties": {
+       "key": "points",
+       "hidden": false,
+       "class": "",
+       "label": "PTS",
+       "title": "Points",
+       "sortable": true,
+       "align": "center",
+       "highlight": true,
+       "sortKey": "points"
+      }
+     },
+     "regulation_wins": {
+      "properties": {
+       "key": "regulation_wins",
+       "hidden": false,
+       "class": "",
+       "label": "W",
+       "title": "Regulation Win",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": "regulation_wins"
+      }
+     },
+     "non_reg_wins": {
+      "properties": {
+       "key": "non_reg_wins",
+       "hidden": false,
+       "class": "",
+       "label": "OTW",
+       "title": "Overtime & Shootout Wins",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": ""
+      }
+     },
+     "non_reg_losses": {
+      "properties": {
+       "key": "non_reg_losses",
+       "hidden": false,
+       "class": "",
+       "label": "OTL",
+       "title": "Overtime & Shootout Losses",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": ""
+      }
+     },
+     "losses": {
+      "properties": {
+       "key": "losses",
+       "hidden": false,
+       "class": "",
+       "label": "L",
+       "title": "Losses",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": "losses"
+      }
+     },
+     "percentage": {
+      "properties": {
+       "key": "percentage",
+       "hidden": false,
+       "class": "",
+       "label": "PCT",
+       "title": "Percentage",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": "percentage"
+      }
+     },
+     "goals_for": {
+      "properties": {
+       "key": "goals_for",
+       "hidden": false,
+       "class": "",
+       "label": "GF",
+       "title": "Goals For",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": "goals_for"
+      }
+     },
+     "goals_against": {
+      "properties": {
+       "key": "goals_against",
+       "hidden": false,
+       "class": "",
+       "label": "GA",
+       "title": "Goals Against",
+       "sortable": true,
+       "align": "center",
+       "highlight": false,
+       "sortKey": "goals_against"
+      }
+     }
+    },
+    "data": [
+     {
+      "prop": {
+       "team_code": {
+        "teamLink": "3"
+       },
+       "name": {
+        "teamLink": "3"
+       }
+      },
+      "row": {
+       "team_code": "x - MTL",
+       "losses": "8",
+       "regulation_wins": "12",
+       "points": "53",
+       "goals_for": "77",
+       "goals_against": "67",
+       "non_reg_wins": "7",
+       "non_reg_losses": "3",
+       "games_remaining": "0",
+       "percentage": "0.589",
+       "overall_rank": "1",
+       "games_played": "30",
+       "rank": 1,
+       "name": "x - Montr\u00e9al Victoire"
+      }
+     },
+     {
+      "prop": {
+       "team_code": {
+        "teamLink": "6"
+       },
+       "name": {
+        "teamLink": "6"
+       }
+      },
+      "row": {
+       "team_code": "x - TOR",
+       "losses": "9",
+       "regulation_wins": "12",
+       "points": "48",
+       "goals_for": "73",
+       "goals_against": "73",
+       "non_reg_wins": "3",
+       "non_reg_losses": "6",
+       "games_remaining": "0",
+       "percentage": "0.533",
+       "overall_rank": "2",
+       "games_played": "30",
+       "rank": 2,
+       "name": "x - Toronto Sceptres"
+      }
+     },
+     {
+      "prop": {
+       "team_code": {
+        "teamLink": "5"
+       },
+       "name": {
+        "teamLink": "5"
+       }
+      },
+      "row": {
+       "team_code": "x - OTT",
+       "losses": "12",
+       "regulation_wins": "12",
+       "points": "44",
+       "goals_for": "71",
+       "goals_against": "80",
+       "non_reg_wins": "2",
+       "non_reg_losses": "4",
+       "games_remaining": "0",
+       "percentage": "0.489",
+       "overall_rank": "3",
+       "games_played": "30",
+       "rank": 3,
+       "name": "x - Ottawa Charge"
+      }
+     },
+     {
+      "prop": {
+       "team_code": {
+        "teamLink": "2"
+       },
+       "name": {
+        "teamLink": "2"
+       }
+      },
+      "row": {
+       "team_code": "x - MIN",
+       "losses": "11",
+       "regulation_wins": "10",
+       "points": "44",
+       "goals_for": "85",
+       "goals_against": "76",
+       "non_reg_wins": "5",
+       "non_reg_losses": "4",
+       "games_remaining": "0",
+       "percentage": "0.489",
+       "overall_rank": "4",
+       "games_played": "30",
+       "rank": 4,
+       "name": "x - Minnesota Frost"
+      }
+     },
+     {
+      "prop": {
+       "team_code": {
+        "teamLink": "1"
+       },
+       "name": {
+        "teamLink": "1"
+       }
+      },
+      "row": {
+       "team_code": "e - BOS",
+       "losses": "10",
+       "regulation_wins": "9",
+       "points": "44",
+       "goals_for": "75",
+       "goals_against": "76",
+       "non_reg_wins": "6",
+       "non_reg_losses": "5",
+       "games_remaining": "0",
+       "percentage": "0.489",
+       "overall_rank": "5",
+       "games_played": "30",
+       "rank": 5,
+       "name": "e - Boston Fleet"
+      }
+     },
+     {
+      "prop": {
+       "team_code": {
+        "teamLink": "4"
+       },
+       "name": {
+        "teamLink": "4"
+       }
+      },
+      "row": {
+       "team_code": "e - NY",
+       "losses": "13",
+       "regulation_wins": "8",
+       "points": "37",
+       "goals_for": "71",
+       "goals_against": "80",
+       "non_reg_wins": "4",
+       "non_reg_losses": "5",
+       "games_remaining": "0",
+       "percentage": "0.411",
+       "overall_rank": "6",
+       "games_played": "30",
+       "rank": 6,
+       "name": "e - New York Sirens"
+      }
+     }
+    ]
+   }
+  ]
+ }
+]

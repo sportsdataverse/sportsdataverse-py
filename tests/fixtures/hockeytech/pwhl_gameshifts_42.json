@@ -1,0 +1,6219 @@
+{
+ "SiteKit": {
+  "Parameters": {
+   "feed": "modulekit",
+   "view": "gameshifts",
+   "key": "446521baf8c38984",
+   "client_code": "pwhl",
+   "site_id": "0",
+   "lang": "en",
+   "game_id": "42",
+   "lang_id": 1,
+   "league_id": "1",
+   "season_id": "10"
+  },
+  "Gameshifts": {
+   "home": [
+    {
+     "jersey_number": "14",
+     "first_name": "Jillian",
+     "last_name": "Dempsey",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:16",
+       "end_time": "03:06",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:49",
+       "end_time": "08:02",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:46",
+       "end_time": "11:56",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:28",
+       "end_time": "16:48",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:21",
+       "end_time": "03:50",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:59",
+       "end_time": "06:14",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:41",
+       "end_time": "10:10",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:32",
+       "end_time": "15:26",
+       "length": "01:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:16",
+       "end_time": "00:00",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:23",
+       "end_time": "04:22",
+       "length": "00:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:53",
+       "end_time": "07:20",
+       "length": "01:33",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:31",
+       "end_time": "12:25",
+       "length": "00:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:21",
+       "end_time": "16:04",
+       "length": "00:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 27
+    },
+    {
+     "jersey_number": "43",
+     "first_name": "Kristin",
+     "last_name": "O'Neill",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:56",
+       "end_time": "00:00",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:29",
+       "end_time": "03:16",
+       "length": "01:13",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:57",
+       "end_time": "05:58",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:36",
+       "end_time": "09:19",
+       "length": "01:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:42",
+       "end_time": "12:49",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:22",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:15",
+       "end_time": "18:18",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:39",
+       "end_time": "00:41",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:13",
+       "end_time": "05:46",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:10",
+       "end_time": "08:56",
+       "length": "01:14",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:07",
+       "end_time": "13:10",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "16:32",
+       "length": "00:55",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:26",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:47",
+       "length": "00:44",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:19",
+       "end_time": "06:30",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:28",
+       "end_time": "09:39",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:04",
+       "end_time": "15:26",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:16",
+       "end_time": "17:51",
+       "length": "01:25",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 30
+    },
+    {
+     "jersey_number": "29",
+     "first_name": "Marie-Philip",
+     "last_name": "Poulin",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "02:03",
+       "end_time": "00:56",
+       "length": "01:07",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:30",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "06:57",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:19",
+       "end_time": "08:50",
+       "length": "00:29",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:54",
+       "end_time": "11:16",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:38",
+       "end_time": "13:43",
+       "length": "00:55",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:48",
+       "end_time": "16:09",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:16",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "00:41",
+       "end_time": "00:00",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "02:11",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:46",
+       "end_time": "05:05",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:42",
+       "end_time": "07:01",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:59",
+       "end_time": "08:00",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:10",
+       "end_time": "11:33",
+       "length": "01:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:26",
+       "end_time": "15:10",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:21",
+       "end_time": "18:20",
+       "length": "01:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "00:34",
+       "length": "01:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:11",
+       "end_time": "04:23",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:39",
+       "end_time": "08:54",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:25",
+       "end_time": "11:23",
+       "length": "01:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "13:49",
+       "length": "01:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:05",
+       "end_time": "16:22",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:19",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 31
+    },
+    {
+     "jersey_number": "7",
+     "first_name": "Laura",
+     "last_name": "Stacey",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "02:03",
+       "end_time": "01:32",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "06:40",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:03",
+       "end_time": "09:01",
+       "length": "00:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:15",
+       "end_time": "09:03",
+       "length": "00:12",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:54",
+       "end_time": "11:16",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:04",
+       "end_time": "12:49",
+       "length": "01:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:48",
+       "end_time": "16:09",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:11",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "00:13",
+       "end_time": "00:00",
+       "length": "00:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "02:11",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:46",
+       "end_time": "05:05",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:42",
+       "end_time": "07:01",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:56",
+       "end_time": "08:10",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:10",
+       "end_time": "11:17",
+       "length": "01:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:26",
+       "end_time": "15:10",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:14",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "00:08",
+       "length": "01:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:11",
+       "end_time": "04:22",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:34",
+       "end_time": "08:43",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:25",
+       "end_time": "11:31",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "13:43",
+       "length": "01:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:05",
+       "end_time": "16:32",
+       "length": "00:33",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:10",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 32
+    },
+    {
+     "jersey_number": "24",
+     "first_name": "Ann-Sophie",
+     "last_name": "Bettez",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:03",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:28",
+       "end_time": "05:13",
+       "length": "00:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:54",
+       "end_time": "07:40",
+       "length": "00:14",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:06",
+       "end_time": "10:22",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:05",
+       "length": "01:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:23",
+       "end_time": "17:39",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:08",
+       "end_time": "04:16",
+       "length": "00:52",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:59",
+       "end_time": "07:42",
+       "length": "00:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:38",
+       "end_time": "10:19",
+       "length": "01:19",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "13:48",
+       "length": "01:22",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:13",
+       "end_time": "18:15",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:29",
+       "end_time": "00:09",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:22",
+       "end_time": "03:22",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:42",
+       "end_time": "05:11",
+       "length": "01:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:30",
+       "end_time": "10:19",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:32",
+       "end_time": "13:05",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "17:05",
+       "length": "00:26",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 80
+    },
+    {
+     "jersey_number": "26",
+     "first_name": "Sarah",
+     "last_name": "Bujold",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:03",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:56",
+       "end_time": "05:13",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:13",
+       "end_time": "10:37",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:40",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:16",
+       "end_time": "17:28",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "02:10",
+       "end_time": "01:39",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "04:24",
+       "length": "00:41",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:59",
+       "end_time": "07:42",
+       "length": "00:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:08",
+       "length": "01:02",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:16",
+       "end_time": "17:27",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:30",
+       "end_time": "05:11",
+       "length": "01:19",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:23",
+       "end_time": "10:31",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:42",
+       "end_time": "15:26",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "17:05",
+       "length": "00:26",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 81
+    },
+    {
+     "jersey_number": "23",
+     "first_name": "Erin",
+     "last_name": "Ambrose",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "02:24",
+       "end_time": "01:28",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:16",
+       "end_time": "04:39",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "07:16",
+       "length": "00:24",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:00",
+       "end_time": "07:40",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:50",
+       "end_time": "10:51",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:31",
+       "end_time": "13:22",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:29",
+       "end_time": "16:47",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:20",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:16",
+       "end_time": "00:00",
+       "length": "01:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "02:17",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:08",
+       "end_time": "03:50",
+       "length": "00:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:16",
+       "end_time": "05:05",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:56",
+       "end_time": "07:56",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:48",
+       "end_time": "10:10",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:10",
+       "end_time": "11:24",
+       "length": "01:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:21",
+       "length": "00:49",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "15:58",
+       "length": "01:29",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:46",
+       "end_time": "18:15",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:10",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "00:56",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:14",
+       "end_time": "04:26",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:22",
+       "end_time": "06:30",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:25",
+       "end_time": "09:32",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:13",
+       "end_time": "12:39",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "13:30",
+       "length": "01:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "16:42",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:14",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 83
+    },
+    {
+     "jersey_number": "9",
+     "first_name": "Kati",
+     "last_name": "Tabin",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "01:28",
+       "end_time": "00:32",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:24",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:38",
+       "end_time": "03:25",
+       "length": "01:13",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:16",
+       "end_time": "06:18",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:23",
+       "end_time": "08:31",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:40",
+       "end_time": "11:51",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:33",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:46",
+       "end_time": "16:09",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:19",
+       "end_time": "18:13",
+       "length": "01:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "02:16",
+       "end_time": "01:17",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "04:08",
+       "length": "00:57",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:55",
+       "end_time": "06:58",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:10",
+       "end_time": "09:07",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:58",
+       "end_time": "10:49",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:12",
+       "end_time": "13:22",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:58",
+       "end_time": "15:26",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:09",
+       "end_time": "18:47",
+       "length": "00:22",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:09",
+       "end_time": "00:00",
+       "length": "00:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:47",
+       "length": "00:44",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:26",
+       "end_time": "03:22",
+       "length": "01:04",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:30",
+       "end_time": "05:15",
+       "length": "01:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:30",
+       "end_time": "08:25",
+       "length": "01:05",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:38",
+       "end_time": "11:13",
+       "length": "01:25",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:38",
+       "end_time": "13:13",
+       "length": "00:25",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:42",
+       "end_time": "15:22",
+       "length": "01:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:13",
+       "end_time": "18:40",
+       "length": "00:33",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 84
+    },
+    {
+     "jersey_number": "20",
+     "first_name": "Elaine",
+     "last_name": "Chuli",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "00:00",
+       "length": "20:00",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "00:00",
+       "length": "20:00",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "00:00",
+       "length": "15:26",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "15:42",
+       "length": "04:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 85
+    },
+    {
+     "jersey_number": "15",
+     "first_name": "Maureen",
+     "last_name": "Murphy",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:36",
+       "end_time": "00:32",
+       "length": "00:04",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:03",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:28",
+       "end_time": "05:13",
+       "length": "00:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:14",
+       "end_time": "07:40",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:13",
+       "end_time": "10:26",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:27",
+       "length": "00:55",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:16",
+       "end_time": "17:41",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "02:05",
+       "end_time": "01:08",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "04:17",
+       "length": "00:48",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:17",
+       "end_time": "10:41",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:01",
+       "length": "01:09",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:27",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:45",
+       "end_time": "00:08",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:47",
+       "length": "00:44",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:22",
+       "end_time": "03:22",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:53",
+       "end_time": "06:42",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:18",
+       "end_time": "09:34",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:48",
+       "end_time": "12:30",
+       "length": "01:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:04",
+       "end_time": "15:26",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:09",
+       "end_time": "17:51",
+       "length": "01:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 98
+    },
+    {
+     "jersey_number": "2",
+     "first_name": "Mariah",
+     "last_name": "Keopple",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "02:24",
+       "end_time": "01:08",
+       "length": "01:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:19",
+       "end_time": "04:40",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "07:16",
+       "length": "00:24",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:31",
+       "end_time": "07:40",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:08",
+       "end_time": "11:00",
+       "length": "01:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:31",
+       "end_time": "13:35",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:59",
+       "end_time": "15:22",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:29",
+       "end_time": "16:47",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:20",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:15",
+       "end_time": "00:00",
+       "length": "01:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "02:17",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:53",
+       "end_time": "03:50",
+       "length": "00:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:16",
+       "end_time": "05:05",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:56",
+       "end_time": "07:56",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:46",
+       "end_time": "10:10",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:12",
+       "length": "00:58",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "16:41",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:46",
+       "end_time": "18:15",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:18",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:14",
+       "end_time": "04:22",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:22",
+       "end_time": "06:30",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:25",
+       "end_time": "09:32",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:13",
+       "end_time": "12:25",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "16:42",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:14",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 99
+    },
+    {
+     "jersey_number": "8",
+     "first_name": "Gabrielle",
+     "last_name": "David",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:29",
+       "end_time": "03:06",
+       "length": "00:23",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:01",
+       "end_time": "08:14",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:45",
+       "end_time": "11:55",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:37",
+       "end_time": "16:48",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:17",
+       "end_time": "03:50",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:59",
+       "end_time": "06:14",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:18",
+       "end_time": "10:10",
+       "length": "00:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:18",
+       "end_time": "15:26",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:08",
+       "end_time": "00:00",
+       "length": "00:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:42",
+       "end_time": "07:54",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:30",
+       "end_time": "12:25",
+       "length": "00:05",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:31",
+       "end_time": "16:04",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 156
+    },
+    {
+     "jersey_number": "28",
+     "first_name": "Catherine",
+     "last_name": "Dubois",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "01:31",
+       "end_time": "00:37",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:24",
+       "end_time": "03:29",
+       "length": "00:55",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:39",
+       "end_time": "05:28",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:01",
+       "end_time": "07:40",
+       "length": "00:21",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:22",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:09",
+       "end_time": "18:20",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:07",
+       "end_time": "00:14",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:13",
+       "end_time": "05:46",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:10",
+       "end_time": "08:59",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:00",
+       "end_time": "11:38",
+       "length": "02:22",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "16:20",
+       "length": "01:07",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:19",
+       "end_time": "18:17",
+       "length": "00:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "00:30",
+       "length": "01:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:30",
+       "end_time": "05:12",
+       "length": "01:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:21",
+       "end_time": "10:31",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "13:33",
+       "length": "01:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "17:05",
+       "length": "00:26",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:22",
+       "end_time": "17:51",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 157
+    },
+    {
+     "jersey_number": "16",
+     "first_name": "Sarah",
+     "last_name": "Lefort",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:40",
+       "end_time": "03:06",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:45",
+       "end_time": "07:55",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:46",
+       "end_time": "12:02",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:34",
+       "end_time": "16:49",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:15",
+       "end_time": "03:50",
+       "length": "00:25",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:59",
+       "end_time": "06:14",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:28",
+       "end_time": "10:10",
+       "length": "00:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:24",
+       "end_time": "15:26",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:05",
+       "end_time": "00:00",
+       "length": "00:05",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:57",
+       "end_time": "01:47",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:42",
+       "end_time": "07:19",
+       "length": "01:23",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:34",
+       "end_time": "12:25",
+       "length": "00:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:21",
+       "end_time": "16:04",
+       "length": "00:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 158
+    },
+    {
+     "jersey_number": "12",
+     "first_name": "Leah",
+     "last_name": "Lum",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:24",
+       "end_time": "03:06",
+       "length": "00:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:17",
+       "end_time": "05:17",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:00",
+       "end_time": "09:24",
+       "length": "01:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:22",
+       "end_time": "12:41",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:22",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:12",
+       "end_time": "17:29",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:59",
+       "end_time": "08:56",
+       "length": "00:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:23",
+       "end_time": "10:46",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:20",
+       "end_time": "13:10",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:26",
+       "end_time": "15:10",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:27",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:56",
+       "end_time": "00:00",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:22",
+       "end_time": "03:22",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:24",
+       "end_time": "07:22",
+       "length": "01:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:13",
+       "end_time": "10:25",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:29",
+       "end_time": "13:13",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:41",
+       "end_time": "17:51",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 159
+    },
+    {
+     "jersey_number": "17",
+     "first_name": "Alexandra",
+     "last_name": "Poznikoff",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "10:26",
+       "end_time": "09:16",
+       "length": "01:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:22",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "02:10",
+       "end_time": "01:13",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:09",
+       "end_time": "07:42",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:27",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:08",
+       "end_time": "00:06",
+       "length": "00:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:33",
+       "end_time": "00:18",
+       "length": "00:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 160
+    },
+    {
+     "jersey_number": "21",
+     "first_name": "Tereza",
+     "last_name": "Vani\u0161ov\u00e1",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "01:03",
+       "end_time": "00:32",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:24",
+       "end_time": "03:41",
+       "length": "00:43",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:43",
+       "end_time": "05:29",
+       "length": "01:14",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:21",
+       "end_time": "09:32",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:42",
+       "end_time": "12:50",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:21",
+       "end_time": "18:24",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:13",
+       "end_time": "00:19",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:13",
+       "end_time": "05:46",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:10",
+       "end_time": "09:17",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:47",
+       "end_time": "12:00",
+       "length": "01:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "16:25",
+       "length": "01:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "00:46",
+       "length": "01:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:58",
+       "length": "00:33",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:18",
+       "end_time": "06:30",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:30",
+       "end_time": "09:45",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:58",
+       "end_time": "12:32",
+       "length": "00:26",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "13:39",
+       "length": "01:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:04",
+       "end_time": "15:26",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:17",
+       "end_time": "18:23",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 161
+    },
+    {
+     "jersey_number": "6",
+     "first_name": "Madison",
+     "last_name": "Bizal",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:24",
+       "end_time": "03:06",
+       "length": "00:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:15",
+       "end_time": "05:19",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:49",
+       "end_time": "09:24",
+       "length": "01:25",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:35",
+       "end_time": "12:41",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:59",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:12",
+       "end_time": "17:29",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:57",
+       "end_time": "06:16",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "09:07",
+       "end_time": "08:56",
+       "length": "00:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:20",
+       "end_time": "13:10",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:26",
+       "end_time": "15:10",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:27",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:18",
+       "end_time": "18:47",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:24",
+       "end_time": "07:22",
+       "length": "01:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:13",
+       "end_time": "10:25",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:39",
+       "end_time": "17:51",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 162
+    },
+    {
+     "jersey_number": "4",
+     "first_name": "Catherine",
+     "last_name": "Daoust",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "01:08",
+       "end_time": "00:32",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:24",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:39",
+       "end_time": "03:25",
+       "length": "01:14",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:16",
+       "end_time": "06:16",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:23",
+       "end_time": "08:01",
+       "length": "01:22",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:40",
+       "end_time": "12:09",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:33",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:46",
+       "end_time": "16:09",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:18",
+       "end_time": "18:13",
+       "length": "01:05",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "02:16",
+       "end_time": "01:16",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "03:53",
+       "length": "01:12",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:55",
+       "end_time": "06:16",
+       "length": "01:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:10",
+       "end_time": "08:59",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:21",
+       "end_time": "13:22",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:40",
+       "end_time": "15:26",
+       "length": "01:14",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:29",
+       "end_time": "18:14",
+       "length": "00:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:47",
+       "length": "00:44",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:30",
+       "end_time": "05:15",
+       "length": "01:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:30",
+       "end_time": "08:25",
+       "length": "01:05",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:25",
+       "end_time": "11:13",
+       "length": "01:12",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:42",
+       "end_time": "15:22",
+       "length": "01:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:13",
+       "end_time": "18:43",
+       "length": "00:30",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 163
+    },
+    {
+     "jersey_number": "25",
+     "first_name": "M\u00e9lodie",
+     "last_name": "Daoust",
+     "home": "1",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "02:03",
+       "end_time": "01:04",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "06:43",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:30",
+       "end_time": "08:46",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:01",
+       "end_time": "11:06",
+       "length": "00:55",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:26",
+       "end_time": "13:44",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:48",
+       "end_time": "16:09",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:22",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "00:18",
+       "end_time": "00:00",
+       "length": "00:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "02:06",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:46",
+       "end_time": "05:08",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:42",
+       "end_time": "07:01",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "09:16",
+       "end_time": "07:59",
+       "length": "01:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:31",
+       "end_time": "10:30",
+       "length": "01:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:26",
+       "end_time": "15:10",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:11",
+       "end_time": "03:22",
+       "length": "01:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:44",
+       "end_time": "08:43",
+       "length": "01:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:25",
+       "end_time": "11:21",
+       "length": "01:04",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:42",
+       "end_time": "13:04",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:05",
+       "end_time": "16:22",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:19",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 168
+    }
+   ],
+   "visitor": [
+    {
+     "jersey_number": "20",
+     "first_name": "Hannah",
+     "last_name": "Brandt",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:29",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:10",
+       "end_time": "07:40",
+       "length": "00:30",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:19",
+       "end_time": "08:11",
+       "length": "00:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:13",
+       "end_time": "10:49",
+       "length": "00:24",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:45",
+       "end_time": "12:54",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:48",
+       "end_time": "16:09",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:13",
+       "end_time": "17:23",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "00:09",
+       "end_time": "00:00",
+       "length": "00:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "04:06",
+       "length": "00:59",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "09:09",
+       "end_time": "08:56",
+       "length": "00:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:10",
+       "end_time": "11:59",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:09",
+       "end_time": "15:10",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:16",
+       "end_time": "17:27",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:09",
+       "end_time": "00:00",
+       "length": "00:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "01:16",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:22",
+       "end_time": "03:22",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:47",
+       "end_time": "06:43",
+       "length": "01:04",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:23",
+       "end_time": "10:30",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:33",
+       "end_time": "13:15",
+       "length": "00:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:46",
+       "end_time": "14:46",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:23",
+       "end_time": "17:51",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 1
+    },
+    {
+     "jersey_number": "2",
+     "first_name": "Emily",
+     "last_name": "Brown",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "02:25",
+       "end_time": "01:41",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:24",
+       "end_time": "03:42",
+       "length": "00:42",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:24",
+       "end_time": "07:48",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:26",
+       "end_time": "09:38",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:30",
+       "end_time": "12:55",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:31",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:07",
+       "end_time": "18:23",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:33",
+       "end_time": "00:06",
+       "length": "01:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "04:18",
+       "length": "00:47",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:59",
+       "end_time": "06:38",
+       "length": "01:21",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:30",
+       "end_time": "10:14",
+       "length": "01:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:04",
+       "length": "01:06",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:29",
+       "end_time": "15:31",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "00:49",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:22",
+       "end_time": "03:22",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:56",
+       "end_time": "06:00",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:42",
+       "end_time": "08:47",
+       "length": "00:55",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:26",
+       "end_time": "11:19",
+       "length": "01:07",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "14:46",
+       "end_time": "13:18",
+       "length": "01:28",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "16:12",
+       "length": "01:19",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:24",
+       "end_time": "18:33",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 2
+    },
+    {
+     "jersey_number": "27",
+     "first_name": "Shiann",
+     "last_name": "Darkangelo",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:10",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:12",
+       "end_time": "07:40",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:58",
+       "end_time": "10:10",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:42",
+       "end_time": "12:54",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:48",
+       "end_time": "16:09",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:12",
+       "end_time": "17:45",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "03:53",
+       "length": "01:12",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:25",
+       "end_time": "10:14",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:33",
+       "end_time": "15:10",
+       "length": "00:23",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:47",
+       "end_time": "06:47",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:22",
+       "end_time": "10:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "14:46",
+       "end_time": "13:33",
+       "length": "01:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:23",
+       "end_time": "17:51",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 4
+    },
+    {
+     "jersey_number": "22",
+     "first_name": "Jessica",
+     "last_name": "DiGirolamo",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:14",
+       "end_time": "03:06",
+       "length": "00:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:04",
+       "end_time": "05:13",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:59",
+       "end_time": "08:25",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:48",
+       "end_time": "11:20",
+       "length": "01:28",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:29",
+       "end_time": "14:46",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:20",
+       "end_time": "17:24",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:31",
+       "end_time": "00:03",
+       "length": "01:28",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "04:24",
+       "length": "00:41",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:59",
+       "end_time": "07:20",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:31",
+       "end_time": "10:10",
+       "length": "01:21",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:01",
+       "end_time": "13:10",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:30",
+       "end_time": "15:26",
+       "length": "00:04",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:27",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:47",
+       "length": "00:44",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:22",
+       "end_time": "03:22",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:55",
+       "end_time": "05:34",
+       "length": "01:21",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:55",
+       "end_time": "08:46",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:30",
+       "end_time": "11:12",
+       "length": "01:18",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "14:46",
+       "end_time": "13:18",
+       "length": "01:28",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "16:28",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:19",
+       "end_time": "18:33",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 5
+    },
+    {
+     "jersey_number": "31",
+     "first_name": "Aerin",
+     "last_name": "Frankel",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "00:00",
+       "length": "20:00",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "00:00",
+       "length": "20:00",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 6
+    },
+    {
+     "jersey_number": "13",
+     "first_name": "Kaleigh",
+     "last_name": "Fratkin",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "01:41",
+       "end_time": "00:41",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:26",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:47",
+       "end_time": "06:05",
+       "length": "01:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:43",
+       "end_time": "09:02",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:58",
+       "end_time": "11:22",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:36",
+       "end_time": "13:31",
+       "length": "01:05",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:21",
+       "end_time": "16:09",
+       "length": "01:12",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:09",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "01:33",
+       "length": "01:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:59",
+       "end_time": "05:05",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "09:16",
+       "end_time": "07:59",
+       "length": "01:17",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:10",
+       "end_time": "11:33",
+       "length": "01:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:26",
+       "end_time": "15:10",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "16:30",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:48",
+       "end_time": "00:00",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:53",
+       "end_time": "06:57",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:33",
+       "end_time": "09:56",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:15",
+       "end_time": "12:26",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "14:46",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:25",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 7
+    },
+    {
+     "jersey_number": "36",
+     "first_name": "Loren",
+     "last_name": "Gabel",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "01:31",
+       "end_time": "00:32",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:24",
+       "end_time": "03:21",
+       "length": "01:03",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:28",
+       "end_time": "08:51",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:51",
+       "end_time": "11:55",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:22",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:25",
+       "end_time": "18:19",
+       "length": "01:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "00:52",
+       "end_time": "00:00",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:23",
+       "end_time": "03:50",
+       "length": "00:33",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:59",
+       "end_time": "06:28",
+       "length": "01:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:24",
+       "end_time": "13:39",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:44",
+       "end_time": "15:37",
+       "length": "01:07",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:00",
+       "end_time": "18:12",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:11",
+       "end_time": "05:10",
+       "length": "00:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:46",
+       "end_time": "06:30",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:15",
+       "end_time": "11:26",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:26",
+       "end_time": "12:16",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:18",
+       "end_time": "15:44",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:13",
+       "end_time": "18:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 8
+    },
+    {
+     "jersey_number": "17",
+     "first_name": "Taylor",
+     "last_name": "Girard",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:20",
+       "end_time": "03:06",
+       "length": "00:14",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:36",
+       "end_time": "05:13",
+       "length": "01:23",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:49",
+       "end_time": "08:14",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:54",
+       "end_time": "10:58",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:48",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:52",
+       "end_time": "16:48",
+       "length": "00:04",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:27",
+       "end_time": "06:15",
+       "length": "00:12",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:10",
+       "end_time": "11:26",
+       "length": "01:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:25",
+       "length": "00:45",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:27",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:09",
+       "end_time": "00:00",
+       "length": "00:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "01:10",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "04:22",
+       "end_time": "03:22",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:42",
+       "end_time": "07:44",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:41",
+       "end_time": "09:27",
+       "length": "00:14",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "14:46",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 9
+    },
+    {
+     "jersey_number": "5",
+     "first_name": "Megan",
+     "last_name": "Keller",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "01:37",
+       "end_time": "00:35",
+       "length": "01:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:26",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "06:40",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:38",
+       "end_time": "09:02",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:21",
+       "end_time": "10:28",
+       "length": "00:53",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:31",
+       "end_time": "13:31",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:21",
+       "end_time": "16:09",
+       "length": "01:12",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:09",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "01:31",
+       "length": "01:33",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:59",
+       "end_time": "05:05",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "09:26",
+       "end_time": "07:59",
+       "length": "01:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:10",
+       "end_time": "11:32",
+       "length": "01:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:26",
+       "end_time": "15:10",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:33",
+       "end_time": "16:30",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:00",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:36",
+       "end_time": "00:11",
+       "length": "01:25",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "01:47",
+       "length": "01:35",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:33",
+       "end_time": "04:22",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:54",
+       "end_time": "06:57",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:27",
+       "end_time": "09:42",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:15",
+       "end_time": "12:31",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:26",
+       "end_time": "14:46",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:25",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 12
+    },
+    {
+     "jersey_number": "21",
+     "first_name": "Hilary",
+     "last_name": "Knight",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "01:28",
+       "end_time": "00:32",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:24",
+       "end_time": "03:38",
+       "length": "00:46",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:04",
+       "end_time": "08:54",
+       "length": "01:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:51",
+       "end_time": "11:44",
+       "length": "01:07",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:22",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:57",
+       "end_time": "18:20",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "01:38",
+       "length": "01:26",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:14",
+       "end_time": "05:05",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:56",
+       "end_time": "07:59",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:14",
+       "end_time": "09:12",
+       "length": "01:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:28",
+       "end_time": "13:40",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:45",
+       "end_time": "15:36",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:00",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:47",
+       "length": "00:44",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:10",
+       "end_time": "04:22",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:30",
+       "end_time": "05:31",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:27",
+       "end_time": "08:28",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:23",
+       "end_time": "09:46",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:15",
+       "end_time": "12:16",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "16:25",
+       "length": "01:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:14",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 13
+    },
+    {
+     "jersey_number": "11",
+     "first_name": "Alina",
+     "last_name": "M\u00fcller",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "01:20",
+       "end_time": "00:32",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:24",
+       "end_time": "03:23",
+       "length": "01:01",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:21",
+       "end_time": "05:13",
+       "length": "00:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "09:25",
+       "end_time": "08:51",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:51",
+       "end_time": "10:45",
+       "length": "02:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:22",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:05",
+       "end_time": "18:19",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "01:21",
+       "length": "01:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:14",
+       "end_time": "05:05",
+       "length": "01:09",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:56",
+       "end_time": "08:09",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:14",
+       "end_time": "09:01",
+       "length": "01:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:21",
+       "end_time": "13:27",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:08",
+       "end_time": "16:09",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:00",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:10",
+       "end_time": "00:09",
+       "length": "01:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:31",
+       "end_time": "01:47",
+       "length": "00:44",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:10",
+       "end_time": "04:22",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:30",
+       "end_time": "05:27",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:27",
+       "end_time": "08:42",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:28",
+       "end_time": "09:47",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:15",
+       "end_time": "12:26",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "16:11",
+       "length": "01:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:16",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 15
+    },
+    {
+     "jersey_number": "47",
+     "first_name": "Jamie Lee",
+     "last_name": "Rattray",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "02:28",
+       "end_time": "01:29",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "06:03",
+       "length": "01:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:44",
+       "end_time": "10:05",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:37",
+       "end_time": "13:34",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:34",
+       "end_time": "16:48",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "18:57",
+       "length": "01:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:20",
+       "end_time": "00:00",
+       "length": "01:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:52",
+       "end_time": "03:50",
+       "length": "00:02",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:56",
+       "end_time": "07:20",
+       "length": "00:36",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:38",
+       "end_time": "13:10",
+       "length": "00:28",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "16:45",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:00",
+       "end_time": "18:13",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:18",
+       "end_time": "05:10",
+       "length": "00:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:42",
+       "end_time": "06:30",
+       "length": "00:12",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:16",
+       "end_time": "11:25",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:25",
+       "end_time": "13:15",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:11",
+       "end_time": "15:26",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:13",
+       "end_time": "18:25",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 16
+    },
+    {
+     "jersey_number": "37",
+     "first_name": "Theresa",
+     "last_name": "Schafzahl",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "02:09",
+       "end_time": "01:32",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "06:43",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:09",
+       "end_time": "09:32",
+       "length": "00:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:41",
+       "end_time": "13:43",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:45",
+       "end_time": "16:53",
+       "length": "00:52",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:26",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:25",
+       "end_time": "00:10",
+       "length": "01:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:23",
+       "end_time": "03:50",
+       "length": "00:33",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:09",
+       "end_time": "06:28",
+       "length": "01:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:37",
+       "end_time": "13:10",
+       "length": "00:27",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "16:44",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:00",
+       "end_time": "18:18",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "07:47",
+       "end_time": "06:52",
+       "length": "00:55",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:25",
+       "end_time": "10:31",
+       "length": "00:54",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "15:32",
+       "end_time": "15:22",
+       "length": "00:10",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:17",
+       "end_time": "17:51",
+       "length": "00:26",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 17
+    },
+    {
+     "jersey_number": "9",
+     "first_name": "Sophie",
+     "last_name": "Shirley",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "03:06",
+       "end_time": "02:28",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:11",
+       "end_time": "07:40",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:43",
+       "end_time": "11:17",
+       "length": "00:26",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:33",
+       "end_time": "12:54",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:48",
+       "end_time": "16:09",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:14",
+       "end_time": "17:34",
+       "length": "00:40",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "05:05",
+       "end_time": "04:23",
+       "length": "00:42",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:03",
+       "end_time": "10:14",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:32",
+       "end_time": "15:10",
+       "length": "00:22",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:00",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:30",
+       "end_time": "05:10",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:51",
+       "end_time": "06:30",
+       "length": "00:21",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "12:16",
+       "end_time": "11:25",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:22",
+       "end_time": "15:47",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:13",
+       "end_time": "18:17",
+       "length": "00:56",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 18
+    },
+    {
+     "jersey_number": "88",
+     "first_name": "Susanna",
+     "last_name": "Tapani",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:32",
+       "end_time": "00:00",
+       "length": "00:32",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "02:28",
+       "end_time": "01:20",
+       "length": "01:08",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "05:13",
+       "end_time": "04:24",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "07:40",
+       "end_time": "06:42",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:48",
+       "end_time": "09:33",
+       "length": "01:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "14:37",
+       "end_time": "13:46",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "17:22",
+       "end_time": "16:48",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "20:00",
+       "end_time": "19:10",
+       "length": "00:50",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:04",
+       "end_time": "01:27",
+       "length": "01:37",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:21",
+       "end_time": "05:05",
+       "length": "01:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "08:56",
+       "end_time": "07:56",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:18",
+       "end_time": "09:06",
+       "length": "01:12",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "17:27",
+       "end_time": "17:08",
+       "length": "00:19",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "20:00",
+       "end_time": "19:00",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:15",
+       "end_time": "00:09",
+       "length": "01:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "02:22",
+       "end_time": "01:47",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:10",
+       "end_time": "04:22",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "06:30",
+       "end_time": "05:19",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:27",
+       "end_time": "07:56",
+       "length": "01:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "10:30",
+       "end_time": "09:47",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:15",
+       "end_time": "12:15",
+       "length": "01:00",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:31",
+       "end_time": "16:24",
+       "length": "01:07",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "20:00",
+       "end_time": "19:16",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 78
+    },
+    {
+     "jersey_number": "19",
+     "first_name": "Gigi",
+     "last_name": "Marvin",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:22",
+       "end_time": "03:06",
+       "length": "00:16",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:35",
+       "end_time": "05:22",
+       "length": "01:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:50",
+       "end_time": "08:19",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:48",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:20",
+       "end_time": "06:21",
+       "length": "00:59",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "11:58",
+       "end_time": "10:19",
+       "length": "01:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "13:26",
+       "end_time": "13:15",
+       "length": "00:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:22",
+       "length": "00:48",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:00",
+       "end_time": "18:14",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "03:22",
+       "end_time": "02:31",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:19",
+       "end_time": "07:48",
+       "length": "00:31",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:42",
+       "end_time": "09:27",
+       "length": "00:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "14:46",
+       "end_time": "13:35",
+       "length": "01:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 109
+    },
+    {
+     "jersey_number": "16",
+     "first_name": "Amanda",
+     "last_name": "Pelkey",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "03:36",
+       "end_time": "03:06",
+       "length": "00:30",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:02",
+       "end_time": "05:13",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:53",
+       "end_time": "08:14",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:22",
+       "end_time": "14:49",
+       "length": "00:33",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "01:35",
+       "end_time": "00:52",
+       "length": "00:43",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "03:50",
+       "end_time": "03:04",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:27",
+       "end_time": "06:14",
+       "length": "00:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "09:09",
+       "end_time": "08:56",
+       "length": "00:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:29",
+       "length": "00:41",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:27",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:25",
+       "end_time": "05:11",
+       "length": "00:14",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:27",
+       "end_time": "07:48",
+       "length": "00:39",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "09:42",
+       "end_time": "09:27",
+       "length": "00:15",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:35",
+       "end_time": "13:15",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "17:51",
+       "end_time": "17:31",
+       "length": "00:20",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 110
+    },
+    {
+     "jersey_number": "18",
+     "first_name": "Abby",
+     "last_name": "Cook",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "00:39",
+       "end_time": "00:32",
+       "length": "00:07",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "03:41",
+       "end_time": "03:06",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "06:37",
+       "end_time": "05:13",
+       "length": "01:24",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:59",
+       "end_time": "08:25",
+       "length": "00:34",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "10:22",
+       "end_time": "09:44",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "12:48",
+       "end_time": "11:59",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "15:29",
+       "end_time": "14:32",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "18:21",
+       "end_time": "17:24",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "00:03",
+       "end_time": "00:00",
+       "length": "00:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:05",
+       "end_time": "03:04",
+       "length": "01:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "06:37",
+       "end_time": "06:02",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:14",
+       "end_time": "09:26",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "14:01",
+       "end_time": "13:10",
+       "length": "00:51",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:30",
+       "end_time": "15:26",
+       "length": "00:04",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "18:15",
+       "end_time": "17:33",
+       "length": "00:42",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "01:47",
+       "end_time": "01:36",
+       "length": "00:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:45",
+       "end_time": "08:21",
+       "length": "00:24",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:19",
+       "end_time": "10:33",
+       "length": "00:46",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:18",
+       "end_time": "13:15",
+       "length": "00:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:27",
+       "end_time": "15:26",
+       "length": "01:01",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:32",
+       "end_time": "17:51",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 117
+    },
+    {
+     "jersey_number": "7",
+     "first_name": "Sidney",
+     "last_name": "Morin",
+     "home": "0",
+     "shifts": [
+      {
+       "period": "1",
+       "start_time": "02:25",
+       "end_time": "01:38",
+       "length": "00:47",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "04:24",
+       "end_time": "03:15",
+       "length": "01:09",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "08:24",
+       "end_time": "07:40",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "11:20",
+       "end_time": "10:23",
+       "length": "00:57",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "13:30",
+       "end_time": "12:55",
+       "length": "00:35",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "16:09",
+       "end_time": "15:31",
+       "length": "00:38",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "1",
+       "start_time": "19:07",
+       "end_time": "18:23",
+       "length": "00:44",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "00:06",
+       "end_time": "00:00",
+       "length": "00:06",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "04:17",
+       "end_time": "03:04",
+       "length": "01:13",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "07:20",
+       "end_time": "06:01",
+       "length": "01:19",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "10:14",
+       "end_time": "09:16",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "15:10",
+       "end_time": "14:04",
+       "length": "01:06",
+       "goal_on_shift": "1",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "16:29",
+       "end_time": "15:31",
+       "length": "00:58",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "2",
+       "start_time": "19:00",
+       "end_time": "18:15",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "00:11",
+       "end_time": "00:00",
+       "length": "00:11",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:10",
+       "end_time": "04:22",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "05:59",
+       "end_time": "05:10",
+       "length": "00:49",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "08:45",
+       "end_time": "07:57",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "11:12",
+       "end_time": "10:24",
+       "length": "00:48",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "13:18",
+       "end_time": "13:15",
+       "length": "00:03",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "16:11",
+       "end_time": "15:26",
+       "length": "00:45",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "18:32",
+       "end_time": "17:51",
+       "length": "00:41",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      },
+      {
+       "period": "3",
+       "start_time": "19:24",
+       "end_time": "19:19",
+       "length": "00:05",
+       "goal_on_shift": "0",
+       "penalty_on_shift": "0"
+      }
+     ],
+     "player_id": 167
+    }
+   ]
+  },
+  "Copyright": {
+   "required_copyright": "Official statistics provided by Professional Women's Hockey League",
+   "required_link": "http://leaguestat.com",
+   "powered_by": "Powered by HockeyTech.com",
+   "powered_by_url": "http://hockeytech.com"
+  }
+ }
+}
