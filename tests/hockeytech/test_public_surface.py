@@ -102,3 +102,49 @@ def test_pwhl_pbp_enriched_full_parity(monkeypatch):
     assert s.height == 1, "no shots have on_ice_home populated"
     assert "," in s["on_ice_home"][0], "on_ice_home should be comma-joined player ids"
     assert s["on_ice_home"][0] != s["on_ice_away"][0], "on_ice_home and on_ice_away should differ"
+
+
+# ---------------------------------------------------------------------------
+# A2.5c: pwhl_analytics public surface + player-level on-ice Corsi
+# ---------------------------------------------------------------------------
+
+
+def test_pwhl_analytics_surface(monkeypatch):
+    import sportsdataverse.pwhl as pwhl
+
+    for fn in ("pwhl_game_shifts", "pwhl_player_toi", "pwhl_game_corsi"):
+        assert hasattr(pwhl, fn), f"sportsdataverse.pwhl missing: {fn}"
+
+
+def test_pwhl_game_shifts_and_toi(monkeypatch):
+    import sportsdataverse.pwhl.pwhl_analytics as an
+
+    monkeypatch.setattr(an, "hockeytech_api", lambda *a, **k: load_fixture("hockeytech", "pwhl_gameshifts_42"))
+    sh = an.pwhl_game_shifts(game_id=42)
+    assert sh.height > 0 and "start_s" in sh.columns
+    toi = an.pwhl_player_toi(game_id=42)
+    assert "toi_seconds" in toi.columns and toi.height > 0
+
+
+def test_corsi_fenwick_on_ice_player_level():
+    from sportsdataverse.hockeytech._analytics import corsi_fenwick_on_ice
+
+    pbp = pl.DataFrame(
+        {
+            "event": ["shot", "blocked_shot", "goal"],
+            "team_id": ["3", "3", "1"],
+            "home_team_id": ["3", "3", "3"],
+            "on_ice_home": ["10,11", "10,11", "10,12"],
+            "on_ice_away": ["20,21", "20,21", "20,22"],
+        }
+    )
+    out = corsi_fenwick_on_ice(pbp)
+    # player 10 (home): on ice for 2 home attempts (shot+blocked) => CF 2
+    # the goal was by away team (team_id=1, home_team_id=3, so team != home) while 10 on ice => CA 1
+    p10 = out.filter(pl.col("player_id") == "10")
+    assert p10["corsi_for"][0] == 2 and p10["corsi_against"][0] == 1
+    # player 20 (away): home had shot+blocked while 20 on ice => CA 2
+    # away goal while 20 on => CF 1
+    p20 = out.filter(pl.col("player_id") == "20")
+    assert p20["corsi_for"][0] == 1 and p20["corsi_against"][0] == 2
+    assert not out["corsi_includes_missed"].any()

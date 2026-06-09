@@ -432,6 +432,129 @@ def corsi_fenwick(pbp: pl.DataFrame) -> pl.DataFrame:
     return pl.DataFrame(rows)
 
 
+_CORSI_FENWICK_ON_ICE_SCHEMA = {
+    "player_id": pl.Utf8,
+    "corsi_for": pl.Int64,
+    "corsi_against": pl.Int64,
+    "corsi_for_pct": pl.Float64,
+    "fenwick_for": pl.Int64,
+    "fenwick_against": pl.Int64,
+    "fenwick_for_pct": pl.Float64,
+    "corsi_includes_missed": pl.Boolean,
+}
+
+
+def corsi_fenwick_on_ice(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Player-level on-ice shot-attempt metrics (Corsi and Fenwick proxies).
+
+    Computes CF/CA/FF/FA for every player found in the ``on_ice_home`` or
+    ``on_ice_away`` column of an *enriched* play-by-play frame.  The enriched
+    frame must carry:
+
+    - ``event`` (Utf8): event type.
+    - ``team_id`` (Utf8): team that performed the event.
+    - ``home_team_id`` (Utf8): the home team for the game.
+    - ``on_ice_home`` (Utf8): comma-joined player ids for the home side.
+    - ``on_ice_away`` (Utf8): comma-joined player ids for the away side.
+
+    For each shot-attempt event (``shot``, ``blocked_shot``, ``goal``):
+
+    - The event team's side is determined by comparing ``team_id`` to
+      ``home_team_id``.  Home side == *for*; away side == *against*.
+    - Each on-ice "for" player receives **CF +1** (and **FF +1** if the event
+      is ``shot`` or ``goal``, i.e. not a ``blocked_shot``).
+    - Each on-ice "against" player receives **CA +1** (and **FA +1** if not
+      a ``blocked_shot``).
+
+    Corsi/Fenwick are proxies: the HockeyTech feed has no missed-shot event,
+    so every output row carries ``corsi_includes_missed = False``.
+
+    Parameters
+    ----------
+    pbp:
+        Enriched play-by-play frame as returned by ``pwhl_pbp()``.
+
+    Returns
+    -------
+    pl.DataFrame
+        One row per player with columns: ``player_id``, ``corsi_for``,
+        ``corsi_against``, ``corsi_for_pct``, ``fenwick_for``,
+        ``fenwick_against``, ``fenwick_for_pct``, ``corsi_includes_missed``.
+        Empty/missing-columns input returns a zero-row frame with this schema.
+    """
+    empty = pl.DataFrame(schema=_CORSI_FENWICK_ON_ICE_SCHEMA)
+
+    required = {"event", "team_id", "home_team_id", "on_ice_home", "on_ice_away"}
+    if pbp.height == 0 or not required.issubset(pbp.columns):
+        return empty
+
+    # Accumulate CF/CA/FF/FA per player_id (string key)
+    stats: dict[str, dict[str, int]] = {}
+
+    def _ensure(pid: str) -> None:
+        if pid not in stats:
+            stats[pid] = {"cf": 0, "ca": 0, "ff": 0, "fa": 0}
+
+    shot_events = {"shot", "blocked_shot", "goal"}
+    fenwick_events = {"shot", "goal"}
+
+    for row in pbp.iter_rows(named=True):
+        event = row.get("event")
+        if event not in shot_events:
+            continue
+
+        team_id = row.get("team_id")
+        home_team_id = row.get("home_team_id")
+        on_ice_home_raw = row.get("on_ice_home")
+        on_ice_away_raw = row.get("on_ice_away")
+
+        if team_id is None or home_team_id is None:
+            continue
+        if on_ice_home_raw is None or on_ice_away_raw is None:
+            continue
+
+        is_home_event = str(team_id) == str(home_team_id)
+        for_players_raw = on_ice_home_raw if is_home_event else on_ice_away_raw
+        against_players_raw = on_ice_away_raw if is_home_event else on_ice_home_raw
+
+        for_players = [p.strip() for p in str(for_players_raw).split(",") if p.strip()]
+        against_players = [p.strip() for p in str(against_players_raw).split(",") if p.strip()]
+
+        is_fenwick = event in fenwick_events
+
+        for pid in for_players:
+            _ensure(pid)
+            stats[pid]["cf"] += 1
+            if is_fenwick:
+                stats[pid]["ff"] += 1
+
+        for pid in against_players:
+            _ensure(pid)
+            stats[pid]["ca"] += 1
+            if is_fenwick:
+                stats[pid]["fa"] += 1
+
+    if not stats:
+        return empty
+
+    rows = []
+    for pid, s in stats.items():
+        cf, ca, ff, fa = s["cf"], s["ca"], s["ff"], s["fa"]
+        rows.append(
+            {
+                "player_id": pid,
+                "corsi_for": cf,
+                "corsi_against": ca,
+                "corsi_for_pct": (cf / (cf + ca)) if (cf + ca) else None,
+                "fenwick_for": ff,
+                "fenwick_against": fa,
+                "fenwick_for_pct": (ff / (ff + fa)) if (ff + fa) else None,
+                "corsi_includes_missed": False,
+            }
+        )
+    return pl.DataFrame(rows, schema=_CORSI_FENWICK_ON_ICE_SCHEMA)
+
+
 def per60(value_col: str, toi_seconds_col: str = "toi_seconds") -> pl.Expr:
     """Per-60 rate expression.
 
