@@ -525,6 +525,34 @@ def parse_leaders(payload: Any, return_as_pandas: bool = False) -> Any:
     return _to_frame(rows, return_as_pandas)
 
 
+def _shots_by_period_to_records(sbp: Any) -> List[Dict[str, Any]]:
+    """Normalise ``shotsByPeriod`` into a list of flat row dicts.
+
+    The PWHL ``gc/gamesummary`` endpoint returns::
+
+        {"visitor": {"1": 11, "2": 11, "3": 9},
+         "home":    {"1": 10, "2": 13, "3": 12}}
+
+    This helper converts that to one row per (side, period) pair.  If
+    ``sbp`` is already a list (old/alternate dialect), it is returned
+    unchanged.  None or an unsupported type yields an empty list.
+    """
+    if sbp is None:
+        return []
+    if isinstance(sbp, list):
+        return sbp
+    if isinstance(sbp, dict):
+        rows: List[Dict[str, Any]] = []
+        for side in ("visitor", "home"):
+            per_period = sbp.get(side)
+            if not isinstance(per_period, dict):
+                continue
+            for period, shots in per_period.items():
+                rows.append({"side": side, "period": period, "shots": shots})
+        return rows
+    return []
+
+
 def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
     """Parse a HockeyTech ``gc/gamesummary`` JSON payload.
 
@@ -533,56 +561,74 @@ def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
     - ``game`` -- one-row header (date, status, venue, attendance, scores).
     - ``goals`` -- scoring summary (one row per goal).
     - ``penalties`` -- penalty summary (one row per penalty).
-    - ``shots_by_period`` -- shots breakdown by period.
-    - ``three_stars`` -- post-game three-star selections.
+    - ``shots_by_period`` -- shots breakdown by period (one row per
+      side/period combination).
+    - ``three_stars`` -- post-game three-star selections (falls back to
+      ``mvps`` when ``threeStars`` is empty).
 
-    The fastRhockey R implementation accesses ``gc$details``, ``gc$homeTeam``,
-    ``gc$visitingTeam``, ``gc$goals``, ``gc$penalties``, ``gc$shotsByPeriod``,
-    and ``gc$threeStars`` directly under the ``GC`` key.  ``GC.Gamesummary``
-    may be absent in some captured responses (the fixture contains only
-    ``GC.Undefined``).  This parser therefore tries ``GC`` first, falling back
-    to ``GC.Gamesummary``.
+    The live PWHL ``gc/gamesummary`` response nests all data under
+    ``GC.Gamesummary``.  The ``visitor`` and ``home`` keys are flat team
+    dicts; ``totalGoals`` carries the final score; ``shotsByPeriod`` is a
+    ``{visitor: {period: shots}, home: {period: shots}}`` dict rather than
+    a list.  When ``threeStars`` is empty the ``mvps`` list is used instead
+    so that post-game star selections are always populated for finished games.
+
+    Older/alternate dialects may place data directly under ``GC`` with
+    ``homeTeam``/``visitingTeam`` sub-keys; both layouts are handled.
 
     An empty/None payload returns the five-key dict with zero-row frames for all
     subframes and a one-row ``game`` frame whose ``game_id`` is the supplied arg.
     """
     gc_root: Dict[str, Any] = (payload or {}).get("GC", {}) or {}
 
-    # Prefer direct GC keys (fastRhockey path); fall back to GC.Gamesummary
-    summary: Dict[str, Any] = {}
-    if gc_root.get("details") is not None or gc_root.get("homeTeam") is not None:
+    # Prefer GC.Gamesummary (live PWHL path); fall back to direct GC keys
+    # (alternate dialect where homeTeam/visitingTeam live directly under GC).
+    if gc_root.get("Gamesummary") is not None:
+        summary: Dict[str, Any] = gc_root.get("Gamesummary", {}) or {}
+    elif gc_root.get("details") is not None or gc_root.get("homeTeam") is not None:
         summary = gc_root
     else:
         summary = gc_root.get("Gamesummary", {}) or {}
 
+    # ---- game header --------------------------------------------------------
+    # Live PWHL layout: date/status/venue at top level of Gamesummary;
+    # alternate dialect wraps them in a ``details`` sub-dict.
     details = summary.get("details") or {}
-    home = summary.get("homeTeam") or summary.get("home") or {}
-    away = summary.get("visitingTeam") or summary.get("visitor") or {}
-    home_info = home.get("info", home)
-    away_info = away.get("info", away)
-    home_stats = home.get("stats", {})
-    away_stats = away.get("stats", {})
+
+    # Team info: live path -> flat ``home``/``visitor`` dicts;
+    # alternate path -> ``homeTeam``/``visitingTeam`` with ``info``/``stats``.
+    home_raw = summary.get("home") or summary.get("homeTeam") or {}
+    away_raw = summary.get("visitor") or summary.get("visitingTeam") or {}
+    home_info = home_raw.get("info", home_raw)
+    away_info = away_raw.get("info", away_raw)
+    home_stats = home_raw.get("stats", {})
+    away_stats = away_raw.get("stats", {})
 
     total_goals = summary.get("totalGoals") or {}
 
     game_row = {
         "game_id": game_id,
-        "date": details.get("date") or summary.get("date_played"),
-        "status": details.get("status") or summary.get("status"),
-        "venue": details.get("venue") or summary.get("venue"),
-        "attendance": details.get("attendance") or summary.get("attendance"),
+        "date": summary.get("game_date") or details.get("date") or summary.get("date_played"),
+        "status": summary.get("status_value") or details.get("status") or summary.get("status"),
+        "venue": summary.get("venue") or details.get("venue"),
+        "attendance": summary.get("attendance") or details.get("attendance"),
         "home_team": home_info.get("name"),
-        "home_team_id": home_info.get("id"),
+        "home_team_id": home_info.get("id") or home_info.get("team_id"),
         "home_score": home_stats.get("goals") or total_goals.get("home"),
         "away_team": away_info.get("name"),
-        "away_team_id": away_info.get("id"),
+        "away_team_id": away_info.get("id") or away_info.get("team_id"),
         "away_score": away_stats.get("goals") or total_goals.get("visitor"),
     }
 
+    # ---- subframes ----------------------------------------------------------
     goals_raw = list(summary.get("goals", []) or [])
     penalties_raw = list(summary.get("penalties", []) or [])
-    sbp_raw = list(summary.get("shotsByPeriod", None) or summary.get("shots_by_period", None) or [])
-    stars_raw = list(summary.get("threeStars", None) or summary.get("three_stars", None) or [])
+
+    # shotsByPeriod can be a dict {side: {period: shots}} or a plain list
+    sbp_raw = _shots_by_period_to_records(summary.get("shotsByPeriod") or summary.get("shots_by_period"))
+
+    # threeStars is empty for some games; fall back to mvps (same concept)
+    stars_raw = list(summary.get("threeStars") or summary.get("three_stars") or summary.get("mvps") or [])
 
     return {
         "game": _to_frame([game_row], False),

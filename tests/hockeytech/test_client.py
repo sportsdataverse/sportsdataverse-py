@@ -28,6 +28,15 @@ def test_build_url_includes_key_client_code_and_feed():
     assert "key=446521baf8c38984" in url and "client_code=pwhl" in url
 
 
+def test_build_url_gc_feed_uses_tab_not_view():
+    from sportsdataverse.hockeytech._client import _build_url
+
+    url = _build_url("pwhl", feed="gc", view="gamesummary", params={"game_id": 42})
+    assert "tab=gamesummary" in url
+    assert "view=" not in url
+    assert "feed=gc" in url
+
+
 def test_hockeytech_api_bad_status_returns_none_and_warns(monkeypatch):
     import sportsdataverse.hockeytech._client as client
 

@@ -41,7 +41,9 @@ CAPTURES = {
         "pwhl",
         "statviewfeed",
         "leadersExtended",
-        {"season": 5, "team_id": 0, "playerTypes": "skaters", "skaterStatTypes": "points,goals", "activeOnly": 0},
+        # ``season`` returns empty results for a completed season; ``season_id``
+        # is the correct key for historical season data.
+        {"season_id": 5, "team_id": 0, "playerTypes": "skaters", "skaterStatTypes": "points,goals", "activeOnly": 0},
     ),
     "pwhl_game_summary_42": ("pwhl", "gc", "gamesummary", {"game_id": 42}),
 }

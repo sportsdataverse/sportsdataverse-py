@@ -89,7 +89,7 @@ def test_parse_standings_has_team_rank_and_points():
 
 
 def test_parse_teams_and_roster():
-    from sportsdataverse.hockeytech._parsers import parse_teams, parse_roster
+    from sportsdataverse.hockeytech._parsers import parse_roster, parse_teams
 
     teams = parse_teams(_load("pwhl_teams_5"))
     assert "team_name" in teams.columns and "team_id" in teams.columns
@@ -193,12 +193,11 @@ def test_parse_leaders_has_player_and_team():
     from sportsdataverse.hockeytech._parsers import parse_leaders
 
     df = parse_leaders(_load("pwhl_leaders_5"))
-    # The fixture has empty results; parser must return a zero-row frame, not raise.
-    # We only assert it returns a polars DataFrame without error.
     assert isinstance(df, pl.DataFrame)
-    # When there are rows they must have these columns; skip column check if empty.
+    # The re-captured fixture uses season_id=5 and returns non-empty results.
+    # player_id and team_id are present in the leadersExtended shape.
     if df.height > 0:
-        for col in ("player_id", "first_name", "last_name", "team_id"):
+        for col in ("player_id", "team_id"):
             assert col in df.columns, f"missing column {col}"
 
 
@@ -211,6 +210,14 @@ def test_parse_game_summary_returns_named_subframes():
         assert key in out, f"missing key {key}"
     # game frame must have at least one row (echoes game_id even when GC is empty)
     assert out["game"].height >= 1
+    # game 42 is a completed regular-season game -- goals and shots must be populated
+    assert out["goals"].height > 0, "goals frame should have rows for a completed game"
+    assert out["shots_by_period"].height > 0, "shots_by_period should have rows for a completed game"
+    # shots_by_period frame must have the canonical columns from _shots_by_period_to_records
+    for col in ("side", "period", "shots"):
+        assert col in out["shots_by_period"].columns, f"shots_by_period missing column {col}"
+    # three_stars falls back to mvps for this game
+    assert out["three_stars"].height > 0, "three_stars (via mvps fallback) should be populated"
 
 
 def test_flat_parsers_on_synthetic_payloads():

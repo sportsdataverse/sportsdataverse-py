@@ -35,12 +35,17 @@ def _build_url(league: str, feed: str, view: str, params: Optional[Dict[str, Any
     cfg = get_config(league)
     merged = {
         "feed": feed,
-        "view": view,
         "key": resolve_api_key(league, view=view),
         "client_code": cfg.client_code,
         "site_id": str(cfg.site_id),
         "lang": "en",
     }
+    # The gc feed uses a ``tab`` parameter to select the view; all other feeds
+    # (modulekit, statviewfeed, …) use ``view``.
+    if feed == "gc":
+        merged["tab"] = view
+    else:
+        merged["view"] = view
     if params:
         merged.update({k: str(v) for k, v in params.items() if v is not None})
     return cfg.base_url + "?" + urllib.parse.urlencode(merged)
