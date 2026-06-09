@@ -5566,6 +5566,35 @@ hdrs = nfl_headers_gen()
 detail = nfl_game_details(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e", headers=hdrs)
 ```
 
+### `nfl_game_pbp(game_id: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_game_pbp}
+
+Parsed `api.nfl.com` play-by-play -- one row per play (polars/pandas frame).
+
+Tidy wrapper over `nfl_game_details`: flattens `gameDetail.plays` into a
+DataFrame (`playId`, `quarter`, `down`, `yardsToGo`, `yardLine`,
+`playType`, `playDescription`, `possessionTeam_*`, ...) and prepends the
+game context (`game_id`, `home_team`, `visitor_team`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str` | `None` | uuid game id from `nfl_week_games` / `nfl_game_schedule`. |
+| `headers` | `Optional[Dict[str, str]]` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has no play-by-play yet).
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_game_pbp
+>>> pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
+>>> pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
+```
+
 ### `nfl_game_schedule(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_schedule}
 
 List `api.nfl.com` games for a season/week slice (`/football/v2/games`).
@@ -5645,6 +5674,36 @@ The bearer `accessToken` string.
 from sportsdataverse.nfl.nfl_games import nfl_token_gen
 token = nfl_token_gen()
 assert isinstance(token, str) and token.startswith("ey")
+```
+
+### `nfl_week_games(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_week_games}
+
+Parsed `api.nfl.com` week schedule -- one row per game (polars/pandas frame).
+
+Tidy wrapper over `nfl_game_schedule`: flattens the `games` list into a
+DataFrame with `id` (uuid game id), `season`/`seasonType`/`week`,
+`date`, `status_*`, and `homeTeam_*` / `awayTeam_*` columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year. season_type (str): `"PRE"`/`"REG"`/`"POST"`. |
+| `season_type` | `str` | `'REG'` |  |
+| `week` | `int` | `1` | week number. headers: reuse a `nfl_headers_gen` dict. |
+| `headers` | `Optional[Dict[str, str]]` | `None` |  |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per game.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_week_games
+>>> sched = nfl_week_games(season=2024, season_type="REG", week=1)
+>>> sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
 ```
 
 ### `reset_config() -> 'NflConfig'` {#reset_config}

@@ -100,6 +100,11 @@
   overridable via `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` env vars or function args
   (no personal account; the token carries the anonymous `free` plan). Verified live:
   16 games for 2024 REG wk1, 194 plays / 20 drives for the opener.
+- Added a **parsed surface** over the raw dicts: `nfl_game_pbp(game_id)` returns a
+  tidy polars/pandas DataFrame (one row per play, with `game_id`/`home_team`/
+  `visitor_team` context), and `nfl_week_games(season, season_type, week)` returns
+  one row per game. (Named to avoid colliding with the `nfl_pbp`/`nfl_schedule`
+  submodules.)
 
 ### ESPN — remove always-erroring endpoint variants + NFL R-parity
 

@@ -187,3 +187,80 @@ def nfl_game_details(
     if raw:
         return payload
     return ((payload or {}).get("data", {}) or {}).get("viewer", {}).get("gameDetail", {}) or {}
+
+
+def _to_frame(records: list, return_as_pandas: bool):
+    """Flatten a list of nested dicts into a polars (or pandas) DataFrame."""
+    import polars as pl
+
+    df = pl.json_normalize(records or [], separator="_", max_level=2, infer_schema_length=None)
+    return df.to_pandas() if return_as_pandas else df
+
+
+def nfl_week_games(
+    season: int = 2024,
+    season_type: str = "REG",
+    week: int = 1,
+    headers: Optional[Dict[str, str]] = None,
+    return_as_pandas: bool = False,
+):
+    """Parsed ``api.nfl.com`` week schedule -- one row per game (polars/pandas frame).
+
+    Tidy wrapper over :func:`nfl_game_schedule`: flattens the ``games`` list into a
+    DataFrame with ``id`` (uuid game id), ``season``/``seasonType``/``week``,
+    ``date``, ``status_*``, and ``homeTeam_*`` / ``awayTeam_*`` columns.
+
+    Args:
+        season (int): season year. season_type (str): ``"PRE"``/``"REG"``/``"POST"``.
+        week (int): week number. headers: reuse a :func:`nfl_headers_gen` dict.
+        return_as_pandas (bool): return a pandas frame instead of polars.
+
+    Returns:
+        A polars (or pandas) ``DataFrame``, one row per game.
+
+    Example:
+        >>> from sportsdataverse.nfl import nfl_week_games
+        >>> sched = nfl_week_games(season=2024, season_type="REG", week=1)
+        >>> sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
+    """
+    payload = nfl_game_schedule(season=season, season_type=season_type, week=week, headers=headers)
+    return _to_frame(payload.get("games", []), return_as_pandas)
+
+
+def nfl_game_pbp(
+    game_id: Optional[str] = None,
+    headers: Optional[Dict[str, str]] = None,
+    return_as_pandas: bool = False,
+):
+    """Parsed ``api.nfl.com`` play-by-play -- one row per play (polars/pandas frame).
+
+    Tidy wrapper over :func:`nfl_game_details`: flattens ``gameDetail.plays`` into a
+    DataFrame (``playId``, ``quarter``, ``down``, ``yardsToGo``, ``yardLine``,
+    ``playType``, ``playDescription``, ``possessionTeam_*``, ...) and prepends the
+    game context (``game_id``, ``home_team``, ``visitor_team``).
+
+    Args:
+        game_id (str): uuid game id from :func:`nfl_week_games` / :func:`nfl_game_schedule`.
+        headers: reuse a :func:`nfl_headers_gen` dict.
+        return_as_pandas (bool): return a pandas frame instead of polars.
+
+    Returns:
+        A polars (or pandas) ``DataFrame``, one row per play (empty frame if the
+        game has no play-by-play yet).
+
+    Example:
+        >>> from sportsdataverse.nfl import nfl_game_pbp
+        >>> pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
+        >>> pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
+    """
+    import polars as pl
+
+    detail = nfl_game_details(game_id=game_id, headers=headers)
+    df = _to_frame(detail.get("plays", []), return_as_pandas=False)
+    if df.height:
+        df = df.with_columns(
+            pl.lit(game_id).alias("game_id"),
+            pl.lit((detail.get("homeTeam") or {}).get("abbreviation")).alias("home_team"),
+            pl.lit((detail.get("visitorTeam") or {}).get("abbreviation")).alias("visitor_team"),
+        ).select(["game_id", "home_team", "visitor_team", *[c for c in df.columns]])
+    return df.to_pandas() if return_as_pandas else df
