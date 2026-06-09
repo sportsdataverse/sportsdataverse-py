@@ -222,6 +222,18 @@ Prefix `<lg>` ∈ {`pwhl`, `ahl`, `ohl`, `whl`, `qmjhl`}.
 
 ## Output conventions
 
+- **snake_case everywhere (hard rule):** every public function name **and** every
+  returned column is `snake_case`. The raw HockeyTech feed is mixed-case
+  (`xLocation`, `shooterTeamId`, `GameStatusStringLong`, `SeasonID`, `HomeGoals`),
+  so every parser ends with a normalization pass — `janitor::clean_names()` in R,
+  an equivalent snake_case helper in Python — applied to **all** returns
+  (PWHL parity, junior/AHL families, and analytics). The pass is **idempotent**
+  on names that are already snake_case or already-lowercase-non-delimited
+  (`savepct`, `sosavepct`, `homeprov`), so it does not disturb the fastRhockey
+  PWHL contract. Where the snake_case of a raw field differs from fastRhockey's
+  chosen name (e.g. `x_location` vs fastRhockey's `x_coord`), the explicit
+  fastRhockey rename **wins** for PWHL parity and is applied before/after the pass
+  as needed.
 - **sdv-py:** polars default + `return_as_pandas: bool` (matches every existing
   loader/wrapper). PWHL columns match fastRhockey exactly; `<lg>_pbp` is a strict
   **superset** of fastRhockey columns. Returns echo `season`/`game_id`/`league`
