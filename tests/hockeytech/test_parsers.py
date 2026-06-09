@@ -174,3 +174,65 @@ def test_mmss_to_seconds_roundtrip():
     assert mmss_to_seconds("00:00") == 0
     assert mmss_to_seconds(None) is None
     assert mmss_to_seconds("") is None
+
+
+# ---------------------------------------------------------------------------
+# Task A1.8: remaining PWHL parsers
+# ---------------------------------------------------------------------------
+
+
+def test_parse_player_stats_has_season_and_points():
+    from sportsdataverse.hockeytech._parsers import parse_player_stats
+
+    df = parse_player_stats(_load("pwhl_player_stats_27"))
+    for col in ("season_id", "season_name", "games_played", "points", "team_id"):
+        assert col in df.columns, f"missing column {col}"
+
+
+def test_parse_leaders_has_player_and_team():
+    from sportsdataverse.hockeytech._parsers import parse_leaders
+
+    df = parse_leaders(_load("pwhl_leaders_5"))
+    # The fixture has empty results; parser must return a zero-row frame, not raise.
+    # We only assert it returns a polars DataFrame without error.
+    assert isinstance(df, pl.DataFrame)
+    # When there are rows they must have these columns; skip column check if empty.
+    if df.height > 0:
+        for col in ("player_id", "first_name", "last_name", "team_id"):
+            assert col in df.columns, f"missing column {col}"
+
+
+def test_parse_game_summary_returns_named_subframes():
+    from sportsdataverse.hockeytech._parsers import parse_game_summary
+
+    out = parse_game_summary(_load("pwhl_game_summary_42"), game_id=42)
+    assert isinstance(out, dict)
+    for key in ("game", "goals", "penalties", "shots_by_period", "three_stars"):
+        assert key in out, f"missing key {key}"
+    # game frame must have at least one row (echoes game_id even when GC is empty)
+    assert out["game"].height >= 1
+
+
+def test_flat_parsers_on_synthetic_payloads():
+    from sportsdataverse.hockeytech import _parsers as P
+
+    # parse_player_search uses SiteKit.Searchplayers
+    fake = {"SiteKit": {"Searchplayers": [{"player_id": 1, "name": "A B"}]}}
+    df = P.parse_player_search(fake)
+    assert df.height == 1 and "player_id" in df.columns
+
+    # parse_streaks uses SiteKit.Streaks
+    fake2 = {"SiteKit": {"Streaks": [{"player_id": 2, "streak": "3"}]}}
+    assert P.parse_streaks(fake2).height == 1
+
+    # empty / None payloads -> zero-row frame, no raise
+    assert P.parse_transactions(None).height == 0
+
+    # parse_game_info and parse_player_box on synthetic dicts
+    fake_gi = {"SiteKit": {"Gameinfo": [{"game_id": 99, "date": "2025-01-01"}]}}
+    df_gi = P.parse_game_info(fake_gi)
+    assert df_gi.height == 1 and "game_id" in df_gi.columns
+
+    fake_pb = {"SiteKit": {"Playerbox": [{"player_id": 10, "goals": "1"}]}}
+    df_pb = P.parse_player_box(fake_pb)
+    assert df_pb.height == 1 and "player_id" in df_pb.columns

@@ -450,6 +450,224 @@ def parse_shifts(payload: Any, game_id: Any = None, return_as_pandas: bool = Fal
     return _to_frame(rows, return_as_pandas)
 
 
+def parse_player_stats(payload: Any, return_as_pandas: bool = False) -> Any:
+    """Parse a HockeyTech ``modulekit/player`` (seasonstats) JSON payload.
+
+    ``SiteKit.Player`` is a dict with keys ``regular``, ``exhibition``, and
+    ``playoff``, each holding a list of per-season stat rows.  All sub-lists
+    are concatenated; a ``stat_type`` column is added to identify the source
+    list.
+
+    Returns a :class:`polars.DataFrame` by default; pass ``return_as_pandas=True``
+    for a :class:`pandas.DataFrame`. An empty/None payload returns a zero-row
+    frame of the same type, never raises.
+    """
+    player = _sitekit(payload, "Player") or {}
+    rows: List[Dict[str, Any]] = []
+    for stat_type in ("regular", "exhibition", "playoff"):
+        sub = player.get(stat_type) if isinstance(player, dict) else None
+        for season in sub or []:
+            if not isinstance(season, dict):
+                continue
+            # Coerce all scalar values to str to avoid mixed int/str dtype errors
+            # when the "Total" summary rows use numeric types for fields that are
+            # otherwise string-valued (e.g. max_start_date, veteran_status).
+            row: Dict[str, Any] = {
+                k: (str(v) if v is not None and not isinstance(v, (list, dict)) else v) for k, v in season.items()
+            }
+            row["stat_type"] = stat_type
+            rows.append(row)
+    return _to_frame(rows, return_as_pandas)
+
+
+def parse_leaders(payload: Any, return_as_pandas: bool = False) -> Any:
+    """Parse a HockeyTech leaders payload into a flat frame.
+
+    Handles two payload shapes:
+
+    1. ``SiteKit.Statviewtype`` -- a list of flat player dicts (the standard
+       ``modulekit/statviewtype`` endpoint used by fastRhockey).
+    2. A top-level ``skaters``/``goalies`` dict of stat-category objects, each
+       carrying a ``results`` list (as seen in the captured fixture
+       ``pwhl_leaders_5.json``).
+
+    Returns a :class:`polars.DataFrame` by default. An empty/None payload or
+    a fixture with empty result lists returns a zero-row frame without raising.
+    """
+    rows: List[Dict[str, Any]] = []
+
+    # Shape 1: SiteKit.Statviewtype (standard modulekit endpoint)
+    stat_view = _sitekit(payload, "Statviewtype")
+    if stat_view is not None:
+        for p in stat_view or []:
+            if isinstance(p, dict):
+                rows.append(p)
+        return _to_frame(rows, return_as_pandas)
+
+    # Shape 2: top-level skaters/goalies categories (leadersExtended-style)
+    top = payload if isinstance(payload, dict) else {}
+    for pos_key in ("skaters", "goalies"):
+        pos_data = top.get(pos_key)
+        if not isinstance(pos_data, dict):
+            continue
+        for cat_key, cat_val in pos_data.items():
+            if not isinstance(cat_val, dict):
+                continue
+            results = cat_val.get("results") or []
+            for entry in results:
+                if not isinstance(entry, dict):
+                    continue
+                # Entry may be flat OR wrap player under a "player" key
+                player = entry.get("player", entry) if isinstance(entry, dict) else {}
+                if isinstance(player, dict):
+                    rows.append(player)
+
+    return _to_frame(rows, return_as_pandas)
+
+
+def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
+    """Parse a HockeyTech ``gc/gamesummary`` JSON payload.
+
+    Returns a dict with five :class:`polars.DataFrame` values:
+
+    - ``game`` -- one-row header (date, status, venue, attendance, scores).
+    - ``goals`` -- scoring summary (one row per goal).
+    - ``penalties`` -- penalty summary (one row per penalty).
+    - ``shots_by_period`` -- shots breakdown by period.
+    - ``three_stars`` -- post-game three-star selections.
+
+    The fastRhockey R implementation accesses ``gc$details``, ``gc$homeTeam``,
+    ``gc$visitingTeam``, ``gc$goals``, ``gc$penalties``, ``gc$shotsByPeriod``,
+    and ``gc$threeStars`` directly under the ``GC`` key.  ``GC.Gamesummary``
+    may be absent in some captured responses (the fixture contains only
+    ``GC.Undefined``).  This parser therefore tries ``GC`` first, falling back
+    to ``GC.Gamesummary``.
+
+    An empty/None payload returns the five-key dict with zero-row frames for all
+    subframes and a one-row ``game`` frame whose ``game_id`` is the supplied arg.
+    """
+    gc_root: Dict[str, Any] = (payload or {}).get("GC", {}) or {}
+
+    # Prefer direct GC keys (fastRhockey path); fall back to GC.Gamesummary
+    summary: Dict[str, Any] = {}
+    if gc_root.get("details") is not None or gc_root.get("homeTeam") is not None:
+        summary = gc_root
+    else:
+        summary = gc_root.get("Gamesummary", {}) or {}
+
+    details = summary.get("details") or {}
+    home = summary.get("homeTeam") or summary.get("home") or {}
+    away = summary.get("visitingTeam") or summary.get("visitor") or {}
+    home_info = home.get("info", home)
+    away_info = away.get("info", away)
+    home_stats = home.get("stats", {})
+    away_stats = away.get("stats", {})
+
+    total_goals = summary.get("totalGoals") or {}
+
+    game_row = {
+        "game_id": game_id,
+        "date": details.get("date") or summary.get("date_played"),
+        "status": details.get("status") or summary.get("status"),
+        "venue": details.get("venue") or summary.get("venue"),
+        "attendance": details.get("attendance") or summary.get("attendance"),
+        "home_team": home_info.get("name"),
+        "home_team_id": home_info.get("id"),
+        "home_score": home_stats.get("goals") or total_goals.get("home"),
+        "away_team": away_info.get("name"),
+        "away_team_id": away_info.get("id"),
+        "away_score": away_stats.get("goals") or total_goals.get("visitor"),
+    }
+
+    goals_raw = list(summary.get("goals", []) or [])
+    penalties_raw = list(summary.get("penalties", []) or [])
+    sbp_raw = list(summary.get("shotsByPeriod", None) or summary.get("shots_by_period", None) or [])
+    stars_raw = list(summary.get("threeStars", None) or summary.get("three_stars", None) or [])
+
+    return {
+        "game": _to_frame([game_row], False),
+        "goals": _to_frame(goals_raw, False),
+        "penalties": _to_frame(penalties_raw, False),
+        "shots_by_period": _to_frame(sbp_raw, False),
+        "three_stars": _to_frame(stars_raw, False),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Flat SiteKit extractors (long-tail parsers)
+# ---------------------------------------------------------------------------
+
+
+def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None):
+    """Factory that creates a flat SiteKit extractor for the given ``key``.
+
+    The returned parser reads ``SiteKit.<key>`` (expected to be a list of dicts),
+    optionally applies column renames, and delegates to ``_to_frame``.  An
+    empty/None payload returns a zero-row frame without raising.
+    """
+
+    def _parser(payload: Any, return_as_pandas: bool = False) -> Any:
+        raw = _sitekit(payload, key) or []
+        if rename and isinstance(raw, list):
+            raw = [{rename.get(k, k): v for k, v in r.items()} for r in raw if isinstance(r, dict)]
+        return _to_frame(list(raw), return_as_pandas)
+
+    _parser.__name__ = f"parse_{key.lower()}"
+    _parser.__doc__ = (
+        f"Parse a HockeyTech payload whose data lives under ``SiteKit.{key}``.\n\n"
+        "Returns a :class:`polars.DataFrame` by default. "
+        "An empty/None payload returns a zero-row frame, never raises."
+    )
+    return _parser
+
+
+parse_player_info = _flat_sitekit_parser("Player")
+"""Parse ``SiteKit.Player`` as a flat frame (single-player info view)."""
+
+parse_player_game_log = _flat_sitekit_parser("Player")
+"""Parse ``SiteKit.Player`` as a flat frame (game-log view).
+
+NOTE: needs a captured fixture for full column parity (Task A1.8 follow-up).
+"""
+
+parse_player_search = _flat_sitekit_parser("Searchplayers")
+"""Parse ``SiteKit.Searchplayers`` into a flat frame (player search results)."""
+
+parse_streaks = _flat_sitekit_parser("Streaks")
+"""Parse ``SiteKit.Streaks`` into a flat frame (player/team streaks)."""
+
+parse_transactions = _flat_sitekit_parser("Transactions")
+"""Parse ``SiteKit.Transactions`` into a flat frame (roster transactions)."""
+
+parse_playoff_bracket = _flat_sitekit_parser("Brackets")
+"""Parse ``SiteKit.Brackets`` into a flat frame (playoff bracket data)."""
+
+parse_scorebar = _flat_sitekit_parser("Scorebar")
+"""Parse ``SiteKit.Scorebar`` into a flat frame (live scorebar).
+
+NOTE: for a richer schedule-oriented view use :func:`parse_schedule` which
+applies the canonical ``_SCOREBAR_RENAME`` mapping.
+"""
+
+parse_stats = _flat_sitekit_parser("Statviewtype")
+"""Parse ``SiteKit.Statviewtype`` into a flat frame (stat view / leaders).
+
+NOTE: for the leaders-specific column contract see :func:`parse_leaders`.
+"""
+
+parse_game_info = _flat_sitekit_parser("Gameinfo")
+"""Parse ``SiteKit.Gameinfo`` into a flat frame (single-game metadata).
+
+NOTE: needs a captured fixture for full column parity (Task A1.8 follow-up).
+"""
+
+parse_player_box = _flat_sitekit_parser("Playerbox")
+"""Parse ``SiteKit.Playerbox`` into a flat frame (player box score).
+
+NOTE: needs a captured fixture for full column parity (Task A1.8 follow-up).
+"""
+
+
 def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
     """Parse a HockeyTech ``modulekit/seasons`` JSON payload into a flat frame.
 
