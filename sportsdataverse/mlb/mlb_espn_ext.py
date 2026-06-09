@@ -36,10 +36,6 @@ __all__ = [
     "espn_mlb_scoreboard",
     "espn_mlb_summary",
     "espn_mlb_calendar",
-    "espn_mlb_calendar_offseason",
-    "espn_mlb_calendar_regular_season",
-    "espn_mlb_calendar_postseason",
-    "espn_mlb_calendar_ondays",
     "espn_mlb_news",
     "espn_mlb_injuries",
     "espn_mlb_transactions",
@@ -135,7 +131,6 @@ __all__ = [
     "espn_mlb_venue",
     "espn_mlb_franchises",
     "espn_mlb_franchise",
-    "espn_mlb_coaches",
     "espn_mlb_coach",
     "espn_mlb_coach_record",
     "espn_mlb_coach_season",
@@ -263,138 +258,6 @@ def espn_mlb_calendar(
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_mlb_calendar_offseason(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='baseball', league='mlb'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/offseason``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/offseason
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_mlb_calendar_offseason()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/offseason",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_mlb_calendar_regular_season(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='baseball', league='mlb'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/regular-season``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/regular-season
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_mlb_calendar_regular_season()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/regular-season",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_mlb_calendar_postseason(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='baseball', league='mlb'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/postseason``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/postseason
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_mlb_calendar_postseason()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/postseason",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_mlb_calendar_ondays(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='baseball', league='mlb'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/ondays``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/ondays
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_mlb_calendar_ondays()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar/ondays",
         params={},
         **kwargs,
     )
@@ -3974,43 +3837,6 @@ def espn_mlb_franchise(
     )
     if return_parsed:
         return parse_single_entity(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_mlb_coaches(
-    limit: Optional[int] = 200,
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='baseball', league='mlb'.
-
-    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches``
-    Example URL: https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches
-
-    Args:
-        limit: limit query parameter.
-        return_parsed: parse the payload through parse_coaches -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_mlb_coaches()
-    """
-    raw = _get(
-        "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches",
-        params={
-            "limit": limit,
-        },
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_coaches(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

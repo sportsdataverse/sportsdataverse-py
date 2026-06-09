@@ -6,9 +6,9 @@ sidebar_label: CFB
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [ESPN site API (v2)](reference/site) | 29 | `https://site.api.espn.com/apis/site/v2/sports` |
+| [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 86 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 85 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 4 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 10 | hand-written wrappers, loaders & helpers |
 
@@ -30,7 +30,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`espn_cfb_calendar`](reference/site#espn_cfb_calendar) | [`espn_cfb_calendar`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_calendar.html) |
 | [`espn_cfb_coach`](reference/core#espn_cfb_coach) | [`espn_cfb_coach`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_coach.html) |
 | [`espn_cfb_coach_record`](reference/core#espn_cfb_coach_record) | [`espn_cfb_coach_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_coach_record.html) |
-| [`espn_cfb_coaches`](reference/core#espn_cfb_coaches) | [`espn_cfb_coaches`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_coaches.html) |
 | [`espn_cfb_franchise`](reference/core#espn_cfb_franchise) | [`espn_cfb_franchise`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_franchise.html) |
 | [`espn_cfb_franchises`](reference/core#espn_cfb_franchises) | [`espn_cfb_franchises`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_franchises.html) |
 | [`espn_cfb_futures`](reference/core#espn_cfb_futures) | [`espn_cfb_futures`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_futures.html) |

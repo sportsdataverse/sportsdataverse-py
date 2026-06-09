@@ -6,9 +6,9 @@ sidebar_label: NBA
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [ESPN site API (v2)](reference/site) | 28 | `https://site.api.espn.com/apis/site/v2/sports` |
+| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 81 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 9 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 7 | hand-written wrappers, loaders & helpers |
 
@@ -30,7 +30,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_coach`](reference/core#espn_nba_coach) | [`espn_nba_coach`](https://hoopR.sportsdataverse.org/reference/espn_nba_coach.html) |
 | [`espn_nba_coach_record`](reference/core#espn_nba_coach_record) | [`espn_nba_coach_record`](https://hoopR.sportsdataverse.org/reference/espn_nba_coach_record.html) |
 | [`espn_nba_coach_season`](reference/core#espn_nba_coach_season) | [`espn_nba_coach_season`](https://hoopR.sportsdataverse.org/reference/espn_nba_coach_season.html) |
-| [`espn_nba_coaches`](reference/core#espn_nba_coaches) | [`espn_nba_coaches`](https://hoopR.sportsdataverse.org/reference/espn_nba_coaches.html) |
 | [`espn_nba_conferences`](reference/site#espn_nba_conferences) | [`espn_nba_conferences`](https://hoopR.sportsdataverse.org/reference/espn_nba_conferences.html) |
 | [`espn_nba_draft`](reference/site#espn_nba_draft) | [`espn_nba_draft`](https://hoopR.sportsdataverse.org/reference/espn_nba_draft.html) |
 | [`espn_nba_franchise`](reference/core#espn_nba_franchise) | [`espn_nba_franchise`](https://hoopR.sportsdataverse.org/reference/espn_nba_franchise.html) |

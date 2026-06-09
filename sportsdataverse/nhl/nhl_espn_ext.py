@@ -36,10 +36,6 @@ __all__ = [
     "espn_nhl_scoreboard",
     "espn_nhl_summary",
     "espn_nhl_calendar",
-    "espn_nhl_calendar_offseason",
-    "espn_nhl_calendar_regular_season",
-    "espn_nhl_calendar_postseason",
-    "espn_nhl_calendar_ondays",
     "espn_nhl_news",
     "espn_nhl_injuries",
     "espn_nhl_transactions",
@@ -135,7 +131,6 @@ __all__ = [
     "espn_nhl_venue",
     "espn_nhl_franchises",
     "espn_nhl_franchise",
-    "espn_nhl_coaches",
     "espn_nhl_coach",
     "espn_nhl_coach_record",
     "espn_nhl_coach_season",
@@ -262,138 +257,6 @@ def espn_nhl_calendar(
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_nhl_calendar_offseason(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='hockey', league='nhl'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/offseason``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/offseason
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_nhl_calendar_offseason()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/offseason",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_nhl_calendar_regular_season(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='hockey', league='nhl'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/regular-season``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/regular-season
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_nhl_calendar_regular_season()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/regular-season",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_nhl_calendar_postseason(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='hockey', league='nhl'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/postseason``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/postseason
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_nhl_calendar_postseason()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/postseason",
-        params={},
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_nhl_calendar_ondays(
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='hockey', league='nhl'.
-
-    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/calendar/ondays``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/ondays
-
-    Args:
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_nhl_calendar_ondays()
-    """
-    raw = _get(
-        "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/calendar/ondays",
         params={},
         **kwargs,
     )
@@ -3979,43 +3842,6 @@ def espn_nhl_franchise(
     )
     if return_parsed:
         return parse_single_entity(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def espn_nhl_coaches(
-    limit: Optional[int] = 200,
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
-    """
-
-    Bound to sport='hockey', league='nhl'.
-
-    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches``
-    Example URL: https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/coaches
-
-    Args:
-        limit: limit query parameter.
-        return_parsed: parse the payload through parse_coaches -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
-
-    Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Example:
-        >>> espn_nhl_coaches()
-    """
-    raw = _get(
-        "https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/coaches",
-        params={
-            "limit": limit,
-        },
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_coaches(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # MBB — ESPN core API (v2)
 
-`sportsdataverse.mbb` — 84 endpoints.
+`sportsdataverse.mbb` — 83 endpoints.
 
 ## `espn_mbb_league_root`
 
@@ -1735,30 +1735,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_mbb_franchise(franchise_id='2')
-```
-
-_Last validated n/a._
-
-## `espn_mbb_coaches`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches`
-
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_mbb_coaches()
 ```
 
 _Last validated n/a._

@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # WBB — ESPN core API (v2)
 
-`sportsdataverse.wbb` — 83 endpoints.
+`sportsdataverse.wbb` — 82 endpoints.
 
 ## `espn_wbb_league_root`
 
@@ -1710,30 +1710,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_wbb_franchise(franchise_id='2')
-```
-
-_Last validated n/a._
-
-## `espn_wbb_coaches`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches`
-
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches](https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/coaches)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wbb_coaches()
 ```
 
 _Last validated n/a._

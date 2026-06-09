@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
   - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
   - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
@@ -83,6 +84,23 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### ESPN — remove always-erroring endpoint variants + NFL R-parity
+
+- **Removed dead ESPN endpoint variants (all leagues).** A live health sweep found
+  these generated wrappers 404 / `NoESPNDataError` at ESPN for every league and
+  season: the season-less `espn_*_coaches` list (`/leagues/{league}/coaches`) and
+  the four `espn_*_calendar_{offseason,regular_season,postseason,ondays}` sub-paths.
+  They are dropped from the codegen so the package no longer ships endpoints that
+  always raise. The working counterparts remain: `espn_*_season_coaches`
+  (`/seasons/{season}/coaches`), the coach-detail endpoints (`espn_*_coach`, ...),
+  and the base `espn_*_calendar`. (~40 dead functions removed across 8 leagues.)
+- **NFL Python ↔ R parity.** Added curated `r_parity_aliases.yaml` entries mapping
+  the canonical `load_nfl_*` loaders to their nflreadr equivalents (e.g.
+  `load_nfl_pbp` → `load_pbp`, `load_nfl_schedule` → `load_schedules`), so the NFL
+  parity table links both naming styles (nfl rows 26 → 49). The `load_nfl_*` /
+  bare `load_*` dual-naming itself was verified already consistent (intentional
+  nflreadpy parity; the only unaliased `load_nfl_*` are deprecated or sdv-specific).
 
 ### Documentation — per-league Python ↔ R parity tables
 

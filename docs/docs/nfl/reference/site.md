@@ -5,7 +5,7 @@ sidebar_position: 20
 ---
 # NFL — ESPN site API (v2)
 
-`sportsdataverse.nfl` — 28 endpoints.
+`sportsdataverse.nfl` — 24 endpoints.
 
 ## `espn_nfl_scoreboard`
 
@@ -490,98 +490,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_nfl_calendar()
-```
-
-_Last validated n/a._
-
-## `espn_nfl_calendar_offseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/offseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/offseason](https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/offseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_nfl_calendar_offseason()
-```
-
-_Last validated n/a._
-
-## `espn_nfl_calendar_regular_season`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/regular-season`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/regular-season](https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/regular-season)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_nfl_calendar_regular_season()
-```
-
-_Last validated n/a._
-
-## `espn_nfl_calendar_postseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/postseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/postseason](https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/postseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_nfl_calendar_postseason()
-```
-
-_Last validated n/a._
-
-## `espn_nfl_calendar_ondays`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/ondays`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/ondays](https://site.api.espn.com/apis/site/v2/sports/football/nfl/calendar/ondays)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_nfl_calendar_ondays()
 ```
 
 _Last validated n/a._

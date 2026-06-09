@@ -5,7 +5,7 @@ sidebar_position: 20
 ---
 # WBB — ESPN site API (v2)
 
-`sportsdataverse.wbb` — 29 endpoints.
+`sportsdataverse.wbb` — 25 endpoints.
 
 ## `espn_wbb_scoreboard`
 
@@ -340,98 +340,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_wbb_calendar()
-```
-
-_Last validated n/a._
-
-## `espn_wbb_calendar_offseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/offseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/offseason](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/offseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wbb_calendar_offseason()
-```
-
-_Last validated n/a._
-
-## `espn_wbb_calendar_regular_season`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/regular-season`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/regular-season](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/regular-season)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wbb_calendar_regular_season()
-```
-
-_Last validated n/a._
-
-## `espn_wbb_calendar_postseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/postseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/postseason](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/postseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wbb_calendar_postseason()
-```
-
-_Last validated n/a._
-
-## `espn_wbb_calendar_ondays`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/ondays`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/ondays](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar/ondays)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wbb_calendar_ondays()
 ```
 
 _Last validated n/a._

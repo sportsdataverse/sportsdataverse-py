@@ -6,9 +6,9 @@ sidebar_label: WBB
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [ESPN site API (v2)](reference/site) | 29 | `https://site.api.espn.com/apis/site/v2/sports` |
+| [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 83 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 11 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 10 | hand-written wrappers, loaders & helpers |
 
@@ -30,7 +30,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wbb_coach`](reference/core#espn_wbb_coach) | [`espn_wbb_coach`](https://wehoop.sportsdataverse.org/reference/espn_wbb_coach.html) |
 | [`espn_wbb_coach_record`](reference/core#espn_wbb_coach_record) | [`espn_wbb_coach_record`](https://wehoop.sportsdataverse.org/reference/espn_wbb_coach_record.html) |
 | [`espn_wbb_coach_season`](reference/core#espn_wbb_coach_season) | [`espn_wbb_coach_season`](https://wehoop.sportsdataverse.org/reference/espn_wbb_coach_season.html) |
-| [`espn_wbb_coaches`](reference/core#espn_wbb_coaches) | [`espn_wbb_coaches`](https://wehoop.sportsdataverse.org/reference/espn_wbb_coaches.html) |
 | [`espn_wbb_conferences`](reference/site#espn_wbb_conferences) | [`espn_wbb_conferences`](https://wehoop.sportsdataverse.org/reference/espn_wbb_conferences.html) |
 | [`espn_wbb_franchise`](reference/core#espn_wbb_franchise) | [`espn_wbb_franchise`](https://wehoop.sportsdataverse.org/reference/espn_wbb_franchise.html) |
 | [`espn_wbb_franchises`](reference/core#espn_wbb_franchises) | [`espn_wbb_franchises`](https://wehoop.sportsdataverse.org/reference/espn_wbb_franchises.html) |

@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # CFB — ESPN core API (v2)
 
-`sportsdataverse.cfb` — 86 endpoints.
+`sportsdataverse.cfb` — 85 endpoints.
 
 ## `espn_cfb_league_root`
 
@@ -1735,30 +1735,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_cfb_franchise(franchise_id='2')
-```
-
-_Last validated n/a._
-
-## `espn_cfb_coaches`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches`
-
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_cfb_coaches()
 ```
 
 _Last validated n/a._

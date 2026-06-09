@@ -25,14 +25,9 @@ warnings.warn(
 
 from sportsdataverse.nfl import espn_nfl_award as _raw_espn_nfl_award
 from sportsdataverse.nfl import espn_nfl_awards as _raw_espn_nfl_awards
-from sportsdataverse.nfl import espn_nfl_calendar_offseason as _raw_espn_nfl_calendar_offseason
-from sportsdataverse.nfl import espn_nfl_calendar_ondays as _raw_espn_nfl_calendar_ondays
-from sportsdataverse.nfl import espn_nfl_calendar_postseason as _raw_espn_nfl_calendar_postseason
-from sportsdataverse.nfl import espn_nfl_calendar_regular_season as _raw_espn_nfl_calendar_regular_season
 from sportsdataverse.nfl import espn_nfl_coach as _raw_espn_nfl_coach
 from sportsdataverse.nfl import espn_nfl_coach_record as _raw_espn_nfl_coach_record
 from sportsdataverse.nfl import espn_nfl_coach_season as _raw_espn_nfl_coach_season
-from sportsdataverse.nfl import espn_nfl_coaches as _raw_espn_nfl_coaches
 from sportsdataverse.nfl import espn_nfl_conferences as _raw_espn_nfl_conferences
 from sportsdataverse.nfl import espn_nfl_draft as _raw_espn_nfl_draft
 from sportsdataverse.nfl import espn_nfl_franchise as _raw_espn_nfl_franchise
@@ -236,14 +231,9 @@ __all__ = [
     "espn_nfl_award",
     "espn_nfl_awards",
     "espn_nfl_calendar",
-    "espn_nfl_calendar_offseason",
-    "espn_nfl_calendar_ondays",
-    "espn_nfl_calendar_postseason",
-    "espn_nfl_calendar_regular_season",
     "espn_nfl_coach",
     "espn_nfl_coach_record",
     "espn_nfl_coach_season",
-    "espn_nfl_coaches",
     "espn_nfl_conferences",
     "espn_nfl_draft",
     "espn_nfl_franchise",
@@ -462,62 +452,6 @@ def espn_nfl_awards(*args, **kwargs):
     return _raw_espn_nfl_awards(*args, **kwargs)
 
 
-def espn_nfl_calendar_offseason(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_calendar_offseason``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.nfl.espn_nfl_calendar_offseason` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.nfl.espn_nfl_calendar_offseason` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_nfl_calendar_offseason(*args, **kwargs)
-
-
-def espn_nfl_calendar_ondays(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_calendar_ondays``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.nfl.espn_nfl_calendar_ondays` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.nfl.espn_nfl_calendar_ondays` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_nfl_calendar_ondays(*args, **kwargs)
-
-
-def espn_nfl_calendar_postseason(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_calendar_postseason``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.nfl.espn_nfl_calendar_postseason` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.nfl.espn_nfl_calendar_postseason` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_nfl_calendar_postseason(*args, **kwargs)
-
-
-def espn_nfl_calendar_regular_season(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_calendar_regular_season``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.nfl.espn_nfl_calendar_regular_season` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.nfl.espn_nfl_calendar_regular_season` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_nfl_calendar_regular_season(*args, **kwargs)
-
-
 def espn_nfl_coach(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_coach``).
 
@@ -558,20 +492,6 @@ def espn_nfl_coach_season(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nfl_coach_season(*args, **kwargs)
-
-
-def espn_nfl_coaches(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_coaches``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.nfl.espn_nfl_coaches` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.nfl.espn_nfl_coaches` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_nfl_coaches(*args, **kwargs)
 
 
 def espn_nfl_conferences(*args, **kwargs):

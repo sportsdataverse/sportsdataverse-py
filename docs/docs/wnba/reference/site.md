@@ -5,7 +5,7 @@ sidebar_position: 20
 ---
 # WNBA — ESPN site API (v2)
 
-`sportsdataverse.wnba` — 28 endpoints.
+`sportsdataverse.wnba` — 24 endpoints.
 
 ## `espn_wnba_scoreboard`
 
@@ -386,98 +386,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_wnba_calendar()
-```
-
-_Last validated n/a._
-
-## `espn_wnba_calendar_offseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/offseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/offseason](https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/offseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wnba_calendar_offseason()
-```
-
-_Last validated n/a._
-
-## `espn_wnba_calendar_regular_season`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/regular-season`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/regular-season](https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/regular-season)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wnba_calendar_regular_season()
-```
-
-_Last validated n/a._
-
-## `espn_wnba_calendar_postseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/postseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/postseason](https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/postseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wnba_calendar_postseason()
-```
-
-_Last validated n/a._
-
-## `espn_wnba_calendar_ondays`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/ondays`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/ondays](https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar/ondays)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wnba_calendar_ondays()
 ```
 
 _Last validated n/a._

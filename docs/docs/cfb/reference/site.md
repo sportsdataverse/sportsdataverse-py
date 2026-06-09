@@ -5,7 +5,7 @@ sidebar_position: 20
 ---
 # CFB — ESPN site API (v2)
 
-`sportsdataverse.cfb` — 29 endpoints.
+`sportsdataverse.cfb` — 25 endpoints.
 
 ## `espn_cfb_scoreboard`
 
@@ -479,98 +479,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_cfb_calendar()
-```
-
-_Last validated n/a._
-
-## `espn_cfb_calendar_offseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/offseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/offseason](https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/offseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_cfb_calendar_offseason()
-```
-
-_Last validated n/a._
-
-## `espn_cfb_calendar_regular_season`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/regular-season`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/regular-season](https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/regular-season)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_cfb_calendar_regular_season()
-```
-
-_Last validated n/a._
-
-## `espn_cfb_calendar_postseason`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/postseason`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/postseason](https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/postseason)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_cfb_calendar_postseason()
-```
-
-_Last validated n/a._
-
-## `espn_cfb_calendar_ondays`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/ondays`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/ondays](https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar/ondays)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_cfb_calendar_ondays()
 ```
 
 _Last validated n/a._

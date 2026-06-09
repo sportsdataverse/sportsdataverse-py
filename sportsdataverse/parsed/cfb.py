@@ -25,14 +25,9 @@ warnings.warn(
 
 from sportsdataverse.cfb import espn_cfb_award as _raw_espn_cfb_award
 from sportsdataverse.cfb import espn_cfb_awards as _raw_espn_cfb_awards
-from sportsdataverse.cfb import espn_cfb_calendar_offseason as _raw_espn_cfb_calendar_offseason
-from sportsdataverse.cfb import espn_cfb_calendar_ondays as _raw_espn_cfb_calendar_ondays
-from sportsdataverse.cfb import espn_cfb_calendar_postseason as _raw_espn_cfb_calendar_postseason
-from sportsdataverse.cfb import espn_cfb_calendar_regular_season as _raw_espn_cfb_calendar_regular_season
 from sportsdataverse.cfb import espn_cfb_coach as _raw_espn_cfb_coach
 from sportsdataverse.cfb import espn_cfb_coach_record as _raw_espn_cfb_coach_record
 from sportsdataverse.cfb import espn_cfb_coach_season as _raw_espn_cfb_coach_season
-from sportsdataverse.cfb import espn_cfb_coaches as _raw_espn_cfb_coaches
 from sportsdataverse.cfb import espn_cfb_conferences as _raw_espn_cfb_conferences
 from sportsdataverse.cfb import espn_cfb_draft as _raw_espn_cfb_draft
 from sportsdataverse.cfb import espn_cfb_franchise as _raw_espn_cfb_franchise
@@ -171,14 +166,9 @@ __all__ = [
     "espn_cfb_award",
     "espn_cfb_awards",
     "espn_cfb_calendar",
-    "espn_cfb_calendar_offseason",
-    "espn_cfb_calendar_ondays",
-    "espn_cfb_calendar_postseason",
-    "espn_cfb_calendar_regular_season",
     "espn_cfb_coach",
     "espn_cfb_coach_record",
     "espn_cfb_coach_season",
-    "espn_cfb_coaches",
     "espn_cfb_conferences",
     "espn_cfb_draft",
     "espn_cfb_franchise",
@@ -338,62 +328,6 @@ def espn_cfb_awards(*args, **kwargs):
     return _raw_espn_cfb_awards(*args, **kwargs)
 
 
-def espn_cfb_calendar_offseason(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_calendar_offseason``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.cfb.espn_cfb_calendar_offseason` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.cfb.espn_cfb_calendar_offseason` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_cfb_calendar_offseason(*args, **kwargs)
-
-
-def espn_cfb_calendar_ondays(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_calendar_ondays``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.cfb.espn_cfb_calendar_ondays` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.cfb.espn_cfb_calendar_ondays` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_cfb_calendar_ondays(*args, **kwargs)
-
-
-def espn_cfb_calendar_postseason(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_calendar_postseason``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.cfb.espn_cfb_calendar_postseason` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.cfb.espn_cfb_calendar_postseason` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_cfb_calendar_postseason(*args, **kwargs)
-
-
-def espn_cfb_calendar_regular_season(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_calendar_regular_season``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.cfb.espn_cfb_calendar_regular_season` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.cfb.espn_cfb_calendar_regular_season` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_cfb_calendar_regular_season(*args, **kwargs)
-
-
 def espn_cfb_coach(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_coach``).
 
@@ -434,20 +368,6 @@ def espn_cfb_coach_season(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_cfb_coach_season(*args, **kwargs)
-
-
-def espn_cfb_coaches(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_coaches``).
-
-    .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.cfb.espn_cfb_coaches` directly instead;
-       that function now returns a parsed DataFrame by default.
-
-    Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.cfb.espn_cfb_coaches` for full documentation.
-    """
-    kwargs.setdefault("return_parsed", True)
-    return _raw_espn_cfb_coaches(*args, **kwargs)
 
 
 def espn_cfb_conferences(*args, **kwargs):

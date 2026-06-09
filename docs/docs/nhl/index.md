@@ -6,9 +6,9 @@ sidebar_label: NHL
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [ESPN site API (v2)](reference/site) | 28 | `https://site.api.espn.com/apis/site/v2/sports` |
+| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 81 | `https://sports.core.api.espn.com/v2/sports` |
 | [NHL Web API](reference/nhl_api_web) | 27 | `https://api-web.nhle.com` |
 | [NHL EDGE API](reference/nhl_edge) | 35 | `https://api-web.nhle.com` |
 | [NHL Stats REST API](reference/nhl_stats_rest) | 21 | `https://api.nhle.com/stats/rest` |
@@ -32,14 +32,9 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`espn_nhl_award`](reference/core#espn_nhl_award) | [`espn_nhl_award`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_award.html) |
 | [`espn_nhl_awards`](reference/core#espn_nhl_awards) | [`espn_nhl_awards`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_awards.html) |
 | [`espn_nhl_calendar`](reference/site#espn_nhl_calendar) | [`espn_nhl_calendar`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_calendar.html) |
-| [`espn_nhl_calendar_offseason`](reference/site#espn_nhl_calendar_offseason) | [`espn_nhl_calendar_offseason`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_calendar_offseason.html) |
-| [`espn_nhl_calendar_ondays`](reference/site#espn_nhl_calendar_ondays) | [`espn_nhl_calendar_ondays`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_calendar_ondays.html) |
-| [`espn_nhl_calendar_postseason`](reference/site#espn_nhl_calendar_postseason) | [`espn_nhl_calendar_postseason`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_calendar_postseason.html) |
-| [`espn_nhl_calendar_regular_season`](reference/site#espn_nhl_calendar_regular_season) | [`espn_nhl_calendar_regular_season`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_calendar_regular_season.html) |
 | [`espn_nhl_coach`](reference/core#espn_nhl_coach) | [`espn_nhl_coach`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_coach.html) |
 | [`espn_nhl_coach_record`](reference/core#espn_nhl_coach_record) | [`espn_nhl_coach_record`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_coach_record.html) |
 | [`espn_nhl_coach_season`](reference/core#espn_nhl_coach_season) | [`espn_nhl_coach_season`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_coach_season.html) |
-| [`espn_nhl_coaches`](reference/core#espn_nhl_coaches) | [`espn_nhl_coaches`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_coaches.html) |
 | [`espn_nhl_conferences`](reference/site#espn_nhl_conferences) | [`espn_nhl_conferences`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_conferences.html) |
 | [`espn_nhl_draft`](reference/site#espn_nhl_draft) | [`espn_nhl_draft`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_draft.html) |
 | [`espn_nhl_franchise`](reference/core#espn_nhl_franchise) | [`espn_nhl_franchise`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_franchise.html) |

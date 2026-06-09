@@ -934,15 +934,10 @@ endpoints:
   parser: parse_single_entity
   example_args:
     franchise_id: '2'
-- short: coaches
-  scope: universal
-  path: /{sport}/leagues/{league}/coaches
-  extra_params:
-  - name: limit
-    query_key: limit
-    type: int
-    default: 200
-  parser: parse_coaches
+# The season-less /leagues/{league}/coaches list 404s at ESPN for every league
+# (verified nfl/nba/cfb) -- removed. The season-scoped `season_coaches`
+# (/seasons/{season}/coaches) is the working coaches list; the coach-detail
+# endpoints below (coach/{coach_id}, ...) work with a valid coach id.
 - short: coach
   scope: universal
   path: /{sport}/leagues/{league}/coaches/{coach_id}

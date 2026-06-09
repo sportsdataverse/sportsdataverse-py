@@ -6,9 +6,9 @@ sidebar_label: MBB
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [ESPN site API (v2)](reference/site) | 29 | `https://site.api.espn.com/apis/site/v2/sports` |
+| [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 84 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 83 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 5 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 8 | hand-written wrappers, loaders & helpers |
 
@@ -30,7 +30,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_mbb_coach`](reference/core#espn_mbb_coach) | [`espn_mbb_coach`](https://hoopR.sportsdataverse.org/reference/espn_mbb_coach.html) |
 | [`espn_mbb_coach_record`](reference/core#espn_mbb_coach_record) | [`espn_mbb_coach_record`](https://hoopR.sportsdataverse.org/reference/espn_mbb_coach_record.html) |
 | [`espn_mbb_coach_season`](reference/core#espn_mbb_coach_season) | [`espn_mbb_coach_season`](https://hoopR.sportsdataverse.org/reference/espn_mbb_coach_season.html) |
-| [`espn_mbb_coaches`](reference/core#espn_mbb_coaches) | [`espn_mbb_coaches`](https://hoopR.sportsdataverse.org/reference/espn_mbb_coaches.html) |
 | [`espn_mbb_conferences`](reference/site#espn_mbb_conferences) | [`espn_mbb_conferences`](https://hoopR.sportsdataverse.org/reference/espn_mbb_conferences.html) |
 | [`espn_mbb_franchise`](reference/core#espn_mbb_franchise) | [`espn_mbb_franchise`](https://hoopR.sportsdataverse.org/reference/espn_mbb_franchise.html) |
 | [`espn_mbb_franchises`](reference/core#espn_mbb_franchises) | [`espn_mbb_franchises`](https://hoopR.sportsdataverse.org/reference/espn_mbb_franchises.html) |

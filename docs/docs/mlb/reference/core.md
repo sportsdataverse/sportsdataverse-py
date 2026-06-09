@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # MLB — ESPN core API (v2)
 
-`sportsdataverse.mlb` — 83 endpoints.
+`sportsdataverse.mlb` — 82 endpoints.
 
 ## `espn_mlb_league_root`
 
@@ -1735,30 +1735,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_mlb_franchise(franchise_id='2')
-```
-
-_Last validated n/a._
-
-## `espn_mlb_coaches`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches`
-
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches](https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_mlb_coaches()
 ```
 
 _Last validated n/a._

@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # WNBA — ESPN core API (v2)
 
-`sportsdataverse.wnba` — 81 endpoints.
+`sportsdataverse.wnba` — 80 endpoints.
 
 ## `espn_wnba_league_root`
 
@@ -1710,30 +1710,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_wnba_franchise(franchise_id='2')
-```
-
-_Last validated n/a._
-
-## `espn_wnba_coaches`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches`
-
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches](https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/coaches)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_wnba_coaches()
 ```
 
 _Last validated n/a._

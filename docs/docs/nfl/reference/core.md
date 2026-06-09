@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # NFL — ESPN core API (v2)
 
-`sportsdataverse.nfl` — 84 endpoints.
+`sportsdataverse.nfl` — 83 endpoints.
 
 ## `espn_nfl_league_root`
 
@@ -1735,30 +1735,6 @@ Raw JSON `Dict` (no parser registered).
 
 ```python
 espn_nfl_franchise(franchise_id='2')
-```
-
-_Last validated n/a._
-
-## `espn_nfl_coaches`
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches`
-
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches](https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
-
-### Returns
-
-Raw JSON `Dict` (no parser registered).
-
-### Example
-
-```python
-espn_nfl_coaches()
 ```
 
 _Last validated n/a._

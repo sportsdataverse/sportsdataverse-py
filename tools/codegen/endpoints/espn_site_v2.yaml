@@ -35,25 +35,13 @@ endpoints:
     type: int|str
   parser: parse_summary
   returns_schema: summary
+# Base calendar works (current-season week labels/dates). The /calendar/{offseason,
+# regular-season,postseason,ondays} sub-paths 404 at ESPN for every league/season
+# (verified nfl/cfb/nhl) -- removed so we don't ship endpoints that always raise
+# NoESPNDataError. Per-season week detail is available via the scoreboard/schedule.
 - short: calendar
   scope: universal
   path: /{sport}/{league}/calendar
-  parser: parse_items
-- short: calendar_offseason
-  scope: universal
-  path: /{sport}/{league}/calendar/offseason
-  parser: parse_items
-- short: calendar_regular_season
-  scope: universal
-  path: /{sport}/{league}/calendar/regular-season
-  parser: parse_items
-- short: calendar_postseason
-  scope: universal
-  path: /{sport}/{league}/calendar/postseason
-  parser: parse_items
-- short: calendar_ondays
-  scope: universal
-  path: /{sport}/{league}/calendar/ondays
   parser: parse_items
 - short: news
   scope: universal

@@ -1,8 +1,8 @@
 # Curated Python->R function-name equivalents where the names diverge from
 # strict identity (which generate.py handles automatically). Verified to exist in
 # the target package's r_exports.yaml. Shape: {league: {python_fn: r_fn}}.
-# The bulk here is MLB: sdv prefixes the MLB Stats API wrappers `mlb_api_*` where
-# baseballr uses `mlb_*`.
+# - MLB: sdv prefixes the MLB Stats API wrappers `mlb_api_*` where baseballr uses `mlb_*`.
+# - NFL: sdv's canonical `load_nfl_*` loaders map to nflreadr's bare `load_*` (nflreadpy-style).
 mlb:
   mlb_api_all_star_final_vote: mlb_all_star_final_vote
   mlb_api_all_star_write_ins: mlb_all_star_write_ins
@@ -40,5 +40,29 @@ mlb:
   mlb_api_teams_stats: mlb_teams_stats
   mlb_api_teams_stats_leaders: mlb_teams_stats_leaders
   mlb_api_venues: mlb_venues
+nfl:
+  load_nfl_combine: load_combine
+  load_nfl_contracts: load_contracts
+  load_nfl_depth_charts: load_depth_charts
+  load_nfl_draft_picks: load_draft_picks
+  load_nfl_ff_opportunity: load_ff_opportunity
+  load_nfl_ff_playerids: load_ff_playerids
+  load_nfl_ff_rankings: load_ff_rankings
+  load_nfl_ftn_charting: load_ftn_charting
+  load_nfl_injuries: load_injuries
+  load_nfl_nextgen_stats: load_nextgen_stats
+  load_nfl_officials: load_officials
+  load_nfl_pbp: load_pbp
+  load_nfl_pbp_participation: load_participation
+  load_nfl_pfr_advstats: load_pfr_advstats
+  load_nfl_player_stats: load_player_stats
+  load_nfl_players: load_players
+  load_nfl_rosters: load_rosters
+  load_nfl_schedule: load_schedules
+  load_nfl_snap_counts: load_snap_counts
+  load_nfl_team_stats: load_team_stats
+  load_nfl_teams: load_teams
+  load_nfl_trades: load_trades
+  load_nfl_weekly_rosters: load_rosters_weekly
 nhl:
   nhl_web_schedule: nhl_schedule

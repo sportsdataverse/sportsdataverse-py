@@ -6,9 +6,9 @@ sidebar_label: WNBA
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [ESPN site API (v2)](reference/site) | 28 | `https://site.api.espn.com/apis/site/v2/sports` |
+| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 81 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 80 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 25 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 8 | hand-written wrappers, loaders & helpers |
 
@@ -28,7 +28,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wnba_award`](reference/core#espn_wnba_award) | [`espn_wnba_award`](https://wehoop.sportsdataverse.org/reference/espn_wnba_award.html) |
 | [`espn_wnba_calendar`](reference/site#espn_wnba_calendar) | [`espn_wnba_calendar`](https://wehoop.sportsdataverse.org/reference/espn_wnba_calendar.html) |
 | [`espn_wnba_coach_season`](reference/core#espn_wnba_coach_season) | [`espn_wnba_coach_season`](https://wehoop.sportsdataverse.org/reference/espn_wnba_coach_season.html) |
-| [`espn_wnba_coaches`](reference/core#espn_wnba_coaches) | [`espn_wnba_coaches`](https://wehoop.sportsdataverse.org/reference/espn_wnba_coaches.html) |
 | [`espn_wnba_conferences`](reference/site#espn_wnba_conferences) | [`espn_wnba_conferences`](https://wehoop.sportsdataverse.org/reference/espn_wnba_conferences.html) |
 | [`espn_wnba_draft`](reference/site#espn_wnba_draft) | [`espn_wnba_draft`](https://wehoop.sportsdataverse.org/reference/espn_wnba_draft.html) |
 | [`espn_wnba_franchise`](reference/core#espn_wnba_franchise) | [`espn_wnba_franchise`](https://wehoop.sportsdataverse.org/reference/espn_wnba_franchise.html) |
