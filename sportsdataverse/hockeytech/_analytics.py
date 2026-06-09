@@ -93,9 +93,19 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
         )
 
     indexed = pbp.with_row_index("_eidx")
+    # Rename shifts player_id to avoid collision with any player_id column in pbp.
+    shifts_sel = shifts.select(
+        [
+            pl.col("player_id").alias("_shift_pid"),
+            pl.col("home"),
+            pl.col("period"),
+            pl.col("start_s"),
+            pl.col("end_s"),
+        ]
+    )
     # join all shifts in the same period, then filter to those covering the event time
     joined = indexed.join(
-        shifts.select(["player_id", "home", "period", "start_s", "end_s"]),
+        shifts_sel,
         left_on="period_of_game",
         right_on="period",
         how="inner",
@@ -106,7 +116,10 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
         side = on.filter(pl.col("home") == home_flag)
         if side.height == 0:
             return pl.DataFrame(schema={"_eidx": pl.UInt32, name: pl.Utf8})
-        return side.group_by("_eidx").agg(pl.col("player_id").cast(pl.Utf8).unique().sort().str.join(",").alias(name))
+        # Cast Int64 -> Utf8 directly (avoids Float64 intermediate and ".0" suffix).
+        return side.group_by("_eidx").agg(
+            pl.col("_shift_pid").cast(pl.Int64).cast(pl.Utf8).unique().sort().str.join(",").alias(name)
+        )
 
     home_agg = _side(1, "on_ice_home")
     away_agg = _side(0, "on_ice_away")
