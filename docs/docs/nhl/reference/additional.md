@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_nhl_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nhl_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_game_rosters}
 
 espn_nhl_game_rosters() - Pull the game by id.
 
@@ -118,7 +118,7 @@ rosters_pd = espn_nhl_game_rosters(game_id=401559395, return_as_pandas=True)
 rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
 ```
 
-### `espn_nhl_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+### `espn_nhl_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'` {#espn_nhl_pbp}
 
 espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
 
@@ -154,7 +154,7 @@ raw = espn_nhl_pbp(game_id=401559395, raw=True)
 sorted(raw.keys())[:5]
 ```
 
-### `espn_nhl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_nhl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nhl_player_stats}
 
 Pull an NHL athlete's ESPN **season** stat line as one wide row.
 
@@ -316,7 +316,7 @@ df = espn_nhl_player_stats(athlete_id=3895074, season=2023)
 df.select(["full_name", "team_display_name", "offensive_goals"])
 ```
 
-### `espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_schedule}
 
 espn_nhl_schedule - look up the NHL schedule for a given date
 
@@ -423,7 +423,7 @@ espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 
 ## NHL native
 
-### `nhl_pbp_disk(game_id, path_to_json)`
+### `nhl_pbp_disk(game_id, path_to_json)` {#nhl_pbp_disk}
 
 _No description available._
 
@@ -434,7 +434,7 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
-### `nhl_records_coach_milestone_wins(wins: 'int', playoffs: 'bool' = False, **filters) -> 'Dict'`
+### `nhl_records_coach_milestone_wins(wins: 'int', playoffs: 'bool' = False, **filters) -> 'Dict'` {#nhl_records_coach_milestone_wins}
 
 Coaches who reached a wins milestone in fewest games.
 
@@ -455,7 +455,7 @@ Supported *wins* values: `50, 100, 150, 200, 300, 400, 500, 600, 700,
 
 Coaches who hit the milestone, sorted by games needed.
 
-### `nhl_records_comeback_wins(scope: 'str' = 'league', **filters) -> 'Dict'`
+### `nhl_records_comeback_wins(scope: 'str' = 'league', **filters) -> 'Dict'` {#nhl_records_comeback_wins}
 
 Comeback wins from a multi-goal deficit.
 
@@ -473,7 +473,7 @@ Wraps:
 
 Games where the team overcame a deficit to win.
 
-### `nhl_records_consecutive_goal_seasons(goals: 'int' = 50, **filters) -> 'Dict'`
+### `nhl_records_consecutive_goal_seasons(goals: 'int' = 50, **filters) -> 'Dict'` {#nhl_records_consecutive_goal_seasons}
 
 Skaters with the most consecutive N-goal seasons.
 
@@ -494,7 +494,7 @@ Wraps one of:
 
 Skaters sorted by consecutive-season streak.
 
-### `nhl_records_fastest_goals(n_goals: 'int' = 2, **filters) -> 'Dict'`
+### `nhl_records_fastest_goals(n_goals: 'int' = 2, **filters) -> 'Dict'` {#nhl_records_fastest_goals}
 
 Fastest N goals by one team in a single game.
 
@@ -514,7 +514,7 @@ Wraps one of:
 
 Games where the milestone was set, sorted by elapsed time (fastest first).
 
-### `nhl_records_fastest_goals_both_teams(n_goals: 'int' = 2, **filters) -> 'Dict'`
+### `nhl_records_fastest_goals_both_teams(n_goals: 'int' = 2, **filters) -> 'Dict'` {#nhl_records_fastest_goals_both_teams}
 
 Fastest N goals combined (both teams) in a single game.
 
@@ -535,7 +535,7 @@ Wraps one of:
 
 Sorted by elapsed time (fastest first).
 
-### `nhl_records_games_played_streak_skaters(active_only: 'bool' = False, **filters) -> 'Dict'`
+### `nhl_records_games_played_streak_skaters(active_only: 'bool' = False, **filters) -> 'Dict'` {#nhl_records_games_played_streak_skaters}
 
 Consecutive games-played streaks for skaters.
 
@@ -552,7 +552,7 @@ Wraps `GET /games-played-streak-skaters` (career) or
 
 Skaters sorted by streak length.
 
-### `nhl_scoreboard(date: 'Optional[str]' = None, team: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'`
+### `nhl_scoreboard(date: 'Optional[str]' = None, team: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#nhl_scoreboard}
 
 In-game scoreboard payload (renamed from `nhl_web_scoreboard`).
 
@@ -636,7 +636,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ## Dataset loaders
 
-### `load_nhl_games(return_as_pandas: 'bool' = False)`
+### `load_nhl_games(return_as_pandas: 'bool' = False)` {#load_nhl_games}
 
 Load the NHL games-in-data-repo manifest (no `seasons` argument).
 
@@ -662,7 +662,7 @@ A polars (or pandas) DataFrame of all games in the data repository.
 >>> load_nhl_games()
 ```
 
-### `load_nhl_goalie_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_nhl_goalie_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_goalie_box}
 
 Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R).
 
@@ -673,7 +673,7 @@ Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_nhl_player_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_nhl_player_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_player_box}
 
 Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R).
 
@@ -684,7 +684,7 @@ Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_nhl_skater_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_nhl_skater_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_skater_box}
 
 Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R).
 
@@ -695,7 +695,7 @@ Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_nhl_team_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_nhl_team_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_team_box}
 
 Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
 
@@ -708,7 +708,7 @@ Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
 
 ## Utilities & helpers
 
-### `most_recent_nhl_season()`
+### `most_recent_nhl_season()` {#most_recent_nhl_season}
 
 most_recent_nhl_season - return the season year for "today".
 
@@ -729,7 +729,7 @@ cal = espn_nhl_calendar(season=season)
 print(season, cal.height)
 ```
 
-### `year_to_season(year)`
+### `year_to_season(year)` {#year_to_season}
 
 year_to_season - format a starting year as the canonical `YYYY-YY` season string.
 
@@ -757,7 +757,7 @@ year_to_season(1999)  # '1999-00'
 
 ## Other
 
-### `espn_nhl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nhl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_teams}
 
 espn_nhl_teams - look up NHL teams
 
@@ -808,7 +808,7 @@ teams_pd = espn_nhl_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```
 
-### `scoreboard_event_parsing(event)`
+### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
 

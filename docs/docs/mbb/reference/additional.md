@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_mbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_mbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_game_rosters}
 
 espn_mbb_game_rosters() - Pull the game by id.
 
@@ -119,7 +119,7 @@ roster_pd = espn_mbb_game_rosters(game_id=401638637, return_as_pandas=True)
 roster_pd.head()
 ```
 
-### `espn_mbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+### `espn_mbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'` {#espn_mbb_pbp}
 
 espn_mbb_pbp() - Pull the game by id. Data from API endpoints: `mens-college-basketball/playbyplay`, `mens-college-basketball/summary`
 
@@ -171,7 +171,7 @@ raw = espn_mbb_pbp(game_id=401638637, raw=True)
 sorted(raw.keys())
 ```
 
-### `espn_mbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_mbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_mbb_player_stats}
 
 Pull a men's-college-basketball athlete's ESPN **season** stat line.
 
@@ -325,7 +325,7 @@ df = espn_mbb_player_stats(athlete_id=4395624, season=2023)
 df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
-### `espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_schedule}
 
 espn_mbb_schedule - look up the men's college basketball scheduler for a given season
 
@@ -447,7 +447,7 @@ season_pd.head()
 
 ## Utilities & helpers
 
-### `most_recent_mbb_season()`
+### `most_recent_mbb_season()` {#most_recent_mbb_season}
 
 Return the most recent men's college basketball season year.
 
@@ -469,7 +469,7 @@ sched = espn_mbb_schedule(dates=season)
 
 ## Other
 
-### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_teams}
 
 espn_mbb_teams - look up the men's college basketball teams
 
@@ -520,7 +520,7 @@ d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
-### `mbb_pbp_disk(game_id, path_to_json)`
+### `mbb_pbp_disk(game_id, path_to_json)` {#mbb_pbp_disk}
 
 _No description available._
 
@@ -531,7 +531,7 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
-### `scoreboard_event_parsing(event)`
+### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
 

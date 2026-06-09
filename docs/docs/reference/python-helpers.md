@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Dataset loaders
 
-### `load_pwhl_games(return_as_pandas: 'bool' = False)`
+### `load_pwhl_games(return_as_pandas: 'bool' = False)` {#load_pwhl_games}
 
 Load the PWHL games-in-data-repo manifest (no `seasons` argument).
 
@@ -36,7 +36,7 @@ A polars (or pandas) DataFrame of all games in the data repository.
 >>> load_pwhl_games()
 ```
 
-### `load_pwhl_goalie_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_pwhl_goalie_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_goalie_box}
 
 Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R).
 
@@ -47,7 +47,7 @@ Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_player_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_pwhl_player_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_player_box}
 
 Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R).
 
@@ -58,7 +58,7 @@ Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_schedule(seasons, return_as_pandas: 'bool' = False)`
+### `load_pwhl_schedule(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_schedule}
 
 Alias of load_pwhl_schedules() for naming parity with fastRhockey (R).
 
@@ -69,7 +69,7 @@ Alias of load_pwhl_schedules() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_skater_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_pwhl_skater_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_skater_box}
 
 Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R).
 
@@ -80,7 +80,7 @@ Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_pwhl_team_box(seasons, return_as_pandas: 'bool' = False)`
+### `load_pwhl_team_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_team_box}
 
 Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
@@ -93,7 +93,7 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
 ## Other
 
-### `cache_stats() -> 'Dict[str, Any]'`
+### `cache_stats() -> 'Dict[str, Any]'` {#cache_stats}
 
 Return a snapshot of the cache for debugging / inspection.
 
@@ -101,11 +101,11 @@ Returns a dict with `mode`, `entries`, and `disk_bytes` (only
 populated when mode=filesystem). Cheap — doesn't read the cached
 bodies, just counts + sizes.
 
-### `get_cache_mode() -> 'str'`
+### `get_cache_mode() -> 'str'` {#get_cache_mode}
 
 Return the current cache mode.
 
-### `set_cache_mode(mode: 'str') -> 'None'`
+### `set_cache_mode(mode: 'str') -> 'None'` {#set_cache_mode}
 
 Switch the global cache mode.
 
@@ -115,7 +115,7 @@ Switch the global cache mode.
 |---|---|---|---|
 | `mode` | `str` |  | One of `"off"`, `"memory"`, `"filesystem"`. |
 
-### `set_default_ttl(ttl: 'Optional[Union[timedelta, int]]') -> 'None'`
+### `set_default_ttl(ttl: 'Optional[Union[timedelta, int]]') -> 'None'` {#set_default_ttl}
 
 Override the default TTL for endpoints not matched by the tier rules.
 

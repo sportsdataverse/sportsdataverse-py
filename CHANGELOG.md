@@ -6,6 +6,7 @@
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
   - [Documentation — class methods rendered on autodoc pages (CFB / NFL)](#documentation--class-methods-rendered-on-autodoc-pages-cfb--nfl)
+  - [Documentation — accuracy-audit fixes](#documentation--accuracy-audit-fixes)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
   - [Bug fixes](#bug-fixes)
@@ -140,6 +141,23 @@
 - Added a class-level docstring to `CFBPlayProcess` (it had none) mirroring
   `NFLPlayProcess`, so the class entry leads with an overview + runnable example
   instead of a `No description available.` placeholder.
+
+### Documentation — accuracy-audit fixes
+
+- **Stable autodoc anchors.** Every autodoc function/class heading now carries an
+  explicit `{#name}` id, so it is reliably deep-linkable instead of relying on a
+  signature-derived slug. This fixes a broken cross-link in `ecosystem.md`
+  (`espn_nhl_teams` now resolves to its `additional` page entry) and future-proofs
+  any reference to a hand-written wrapper.
+- **Invalid example code.** `_clean_example()` mis-handled reST literal-block
+  intros that wrap across multiple prose lines (only the line ending in `::` was
+  recognized), leaking a prose sentence into the rendered ` ```python ` block as a
+  broken statement. It now absorbs the preceding contiguous intro lines into the
+  step comment. Fixes the `NflConfig` and `espn_wbb_team_stats` examples; all
+  non-REPL doc examples now compile.
+- **Notebook reachability.** `ecosystem.md` now links all seven example notebooks
+  individually (previously only `01_quickstart` was linked; the per-sport intros
+  02–07 were an un-linked "for your league" mention).
 
 ## 0.0.55 Release: June 8, 2026
 

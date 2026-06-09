@@ -144,7 +144,7 @@ pattern holds well beyond these rows: ESPN wrappers, native league APIs, and
 | [`espn_wnba_team_roster`](wnba/reference/site.md#espn_wnba_team_roster) | [`wehoop::espn_wnba_team_roster`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_roster.html) | A team's roster |
 | [`nhl_web_pbp`](nhl/reference/nhl_api_web.md#nhl_web_pbp) | [`fastRhockey::nhl_game_pbp`](https://fastRhockey.sportsdataverse.org/reference/nhl_game_pbp.html) | NHL play-by-play for a game (api-web) |
 | [`nhl_edge_skater_detail`](nhl/reference/nhl_edge.md#nhl_edge_skater_detail) | [`fastRhockey::nhl_edge_skater_detail`](https://fastRhockey.sportsdataverse.org/reference/nhl_edge_skater_detail.html) | Per-skater EDGE tracking (speed / distance / shots) |
-| [`espn_nhl_teams`](nhl/reference/site.md#espn_nhl_teams) | [`fastRhockey::espn_nhl_teams`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams.html) | All NHL teams (ESPN) |
+| [`espn_nhl_teams`](nhl/reference/additional.md#espn_nhl_teams) | [`fastRhockey::espn_nhl_teams`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams.html) | All NHL teams (ESPN) |
 | [`mlb_api_pbp`](mlb/reference/mlb_api.md#mlb_api_pbp) | [`baseballr::mlb_pbp`](https://billpetti.github.io/baseballr/reference/mlb_pbp.html) | MLB play-by-play for a game (Stats API) |
 | [`mlb_api_draft`](mlb/reference/mlb_api.md#mlb_api_draft) | [`baseballr::mlb_draft`](https://billpetti.github.io/baseballr/reference/mlb_draft.html) | MLB amateur draft picks for a year |
 | [`load_nba_pbp`](nba/reference/loaders.md#load_nba_pbp) | [`hoopR::load_nba_pbp`](https://hoopR.sportsdataverse.org/reference/load_nba_pbp.html) | Whole-season NBA pbp from releases |
@@ -187,7 +187,14 @@ SportsDataverse builds on and complements two neighboring communities:
 ## Where to go next
 
 - New here? Start with the [quickstart notebook](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb),
-  then the per-sport notebook for your league.
+  then the per-sport intro notebook for your league:
+  [CFB](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/02_cfb_intro.ipynb) ·
+  [NFL](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/03_nfl_intro.ipynb) ·
+  [NBA](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/04_nba_intro.ipynb) ·
+  [WBB / WNBA](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/05_wbb_wnba_intro.ipynb) ·
+  [MBB](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/06_mbb_intro.ipynb) ·
+  [NHL](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/07_nhl_intro.ipynb).
+  All seven are CI-executed weekly (`nbmake`) so they stay in sync with the API.
 - Want the design details? [ESPN cross-league architecture](architecture/espn-cross-league.md)
   and the [parser layer](parsers/index.md).
 - Looking for a specific function? Each league's **Reference** section lists every

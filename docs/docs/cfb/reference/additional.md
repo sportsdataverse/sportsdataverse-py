@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_cfb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_cfb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_game_rosters}
 
 espn_cfb_game_rosters() - Pull the game by id.
 
@@ -118,7 +118,7 @@ starters = espn_cfb_game_rosters(game_id=401628334).filter(
 )
 ```
 
-### `espn_cfb_play_participants(game_id: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, resolve_missing: 'bool' = True, resolve_missing_max: 'int' = 50, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_cfb_play_participants(game_id: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, resolve_missing: 'bool' = True, resolve_missing_max: 'int' = 50, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_cfb_play_participants}
 
 Pull ESPN per-play participants for a college-football game.
 
@@ -207,7 +207,7 @@ plays = pbp["plays"]
 joined = plays.join(participants, how="left", left_on="id", right_on="play_id")
 ```
 
-### `espn_cfb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_cfb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_cfb_player_stats}
 
 Pull a college-football athlete's ESPN **season** stat line.
 
@@ -406,7 +406,7 @@ df = espn_cfb_player_stats(athlete_id=4426338, season=2023)
 df.select(["full_name", "team_display_name", "passing_passing_yards"])
 ```
 
-### `espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_cfb_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_schedule}
 
 espn_cfb_schedule - look up the college football schedule for a given season
 
@@ -527,7 +527,7 @@ finals = espn_cfb_schedule(dates=2023, week=5).filter(
 
 ## Dataset loaders
 
-### `load_cfb_betting_lines(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_cfb_betting_lines(return_as_pandas=False) -> 'pl.DataFrame'` {#load_cfb_betting_lines}
 
 Load college football betting lines information
 
@@ -580,7 +580,7 @@ consensus_2023 = load_cfb_betting_lines().filter(
 
 ## Utilities & helpers
 
-### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, **kwargs)`
+### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, **kwargs)` {#CFBPlayProcess}
 
 Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
 
@@ -794,7 +794,7 @@ game.espn_cfb_pbp()
 trimmed = game.run_processing_pipeline()
 ```
 
-### `most_recent_cfb_season()`
+### `most_recent_cfb_season()` {#most_recent_cfb_season}
 
 Return the most recent college football season year based on today's date.
 
@@ -821,7 +821,7 @@ sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 
 ## Other
 
-### `espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_teams}
 
 espn_cfb_teams - look up the college football teams
 
@@ -871,7 +871,7 @@ teams = espn_cfb_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
-### `get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'`
+### `get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#get_cfb_teams}
 
 Load college football team ID information and logos
 
@@ -919,7 +919,7 @@ teams = get_cfb_teams()
 logo_map = dict(zip(teams["team_id"], teams["logo"]))
 ```
 
-### `scoreboard_event_parsing(event)`
+### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 Internal helper that flattens an ESPN scoreboard event dict into a shape
 

@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_wbb_game_officials(game_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_wbb_game_officials(game_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_wbb_game_officials}
 
 Pull the officials assigned to a women's-college-basketball game.
 
@@ -64,7 +64,7 @@ raw = espn_wbb_game_officials(
 sorted(raw.keys())
 ```
 
-### `espn_wbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_wbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wbb_game_rosters}
 
 espn_wbb_game_rosters() - Pull the game by id.
 
@@ -173,7 +173,7 @@ roster_pd = espn_wbb_game_rosters(game_id=401587902, return_as_pandas=True)
 roster_pd.head()
 ```
 
-### `espn_wbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+### `espn_wbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'` {#espn_wbb_pbp}
 
 espn_wbb_pbp() - Pull the game by id. Data from API endpoints - `womens-college-basketball/playbyplay`,
 
@@ -217,7 +217,7 @@ raw = espn_wbb_pbp(game_id=401587902, raw=True)
 sorted(raw.keys())
 ```
 
-### `espn_wbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_wbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_wbb_player_stats}
 
 Pull a women's-college-basketball athlete's ESPN **season** stat line.
 
@@ -370,7 +370,7 @@ df = espn_wbb_player_stats(athlete_id=4433985, season=2025)
 df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
-### `espn_wbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_wbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wbb_schedule}
 
 espn_wbb_schedule - look up the women's college basketball schedule for a given season
 
@@ -490,7 +490,7 @@ season_pd = espn_wbb_schedule(dates=2024, return_as_pandas=True)
 season_pd.head()
 ```
 
-### `espn_wbb_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'`
+### `espn_wbb_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'` {#espn_wbb_team_stats}
 
 Pull ESPN team season stats for a women's-college-basketball team.
 
@@ -525,8 +525,7 @@ averages.select(["stat_name", "display_value", "value"]).head()
 for cat in ("Averages", "Totals", "Misc"):
     print(cat, frames[cat].shape)
 
-``Other`` fallback bucket (only present when ESPN ships a category
-# that does not map onto one of the three canonical keys)
+# ``Other`` fallback bucket (only present when ESPN ships a category that does not map onto one of the three canonical keys)
 
 if "Other" in frames:
     frames["Other"].select(["category", "stat_name", "value"])
@@ -541,7 +540,7 @@ frames_pd["Averages"].head()
 
 ## Utilities & helpers
 
-### `most_recent_wbb_season()`
+### `most_recent_wbb_season()` {#most_recent_wbb_season}
 
 Return the most recent women's college basketball season year.
 
@@ -563,7 +562,7 @@ sched = espn_wbb_schedule(dates=season)
 
 ## Other
 
-### `espn_wbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_wbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wbb_teams}
 
 espn_wbb_teams - look up the women's college basketball teams
 
@@ -614,7 +613,7 @@ d2_d3 = espn_wbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
-### `scoreboard_event_parsing(event)`
+### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
 
@@ -624,7 +623,7 @@ _No description available._
 |---|---|---|---|
 | `event` |  |  |  |
 
-### `wbb_pbp_disk(game_id, path_to_json)`
+### `wbb_pbp_disk(game_id, path_to_json)` {#wbb_pbp_disk}
 
 _No description available._
 

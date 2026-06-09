@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_wnba_game_officials(game_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_wnba_game_officials(game_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_wnba_game_officials}
 
 Pull the officials assigned to a WNBA game.
 
@@ -67,7 +67,7 @@ payload = espn_wnba_game_officials(game_id=401620238, season=2024, raw=True)
 list(payload.keys())[:8]
 ```
 
-### `espn_wnba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_wnba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_wnba_player_stats}
 
 Pull a WNBA athlete's ESPN **season** stat line.
 
@@ -240,7 +240,7 @@ df = espn_wnba_player_stats(athlete_id=3149391, season=2024)
 df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
-### `espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wnba_schedule}
 
 espn_wnba_schedule - look up the WNBA schedule for a given season
 
@@ -347,7 +347,7 @@ reg.group_by("status_type_description").len().sort("len", descending=True)
 espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
 ```
 
-### `espn_wnba_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'`
+### `espn_wnba_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'` {#espn_wnba_team_stats}
 
 Pull ESPN team season stats for a WNBA team.
 
@@ -392,7 +392,7 @@ frames_pd["Misc"].head()
 
 ## Utilities & helpers
 
-### `most_recent_wnba_season()`
+### `most_recent_wnba_season()` {#most_recent_wnba_season}
 
 most_recent_wnba_season - return the most recent (likely-completed) WNBA season year.
 
@@ -414,7 +414,7 @@ print(season, cal.height)
 
 ## Other
 
-### `espn_wnba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_wnba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wnba_teams}
 
 espn_wnba_teams - look up WNBA teams
 
@@ -463,7 +463,7 @@ espn_wnba_teams.cache_clear()  # cached at function-level
 teams_pd = espn_wnba_teams(return_as_pandas=True)
 ```
 
-### `scoreboard_event_parsing(event)`
+### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
 
@@ -473,7 +473,7 @@ _No description available._
 |---|---|---|---|
 | `event` |  |  |  |
 
-### `wnba_pbp_disk(game_id, path_to_json)`
+### `wnba_pbp_disk(game_id, path_to_json)` {#wnba_pbp_disk}
 
 _No description available._
 

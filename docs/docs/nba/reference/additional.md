@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_nba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_nba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nba_player_stats}
 
 Pull an NBA athlete's ESPN **season** stat line as one wide row.
 
@@ -199,7 +199,7 @@ df = espn_nba_player_stats(athlete_id=1966, season=2023)
 df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
-### `espn_nba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_schedule}
 
 espn_nba_schedule - look up the NBA schedule for a given date from ESPN
 
@@ -307,7 +307,7 @@ finals = espn_nba_schedule(dates=20230102).filter(
 
 ## Utilities & helpers
 
-### `most_recent_nba_season()`
+### `most_recent_nba_season()` {#most_recent_nba_season}
 
 Return the most recent NBA season year based on today's date.
 
@@ -332,7 +332,7 @@ from sportsdataverse.nba import load_nba_schedule, most_recent_nba_season
 sched = load_nba_schedule(seasons=[most_recent_nba_season()])
 ```
 
-### `year_to_season(year)`
+### `year_to_season(year)` {#year_to_season}
 
 Convert a season-end year (e.g. 2024) to the NBA's hyphenated label
 
@@ -365,7 +365,7 @@ print(year_to_season(1999))  # "1999-00"
 
 ## Other
 
-### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_teams}
 
 espn_nba_teams - look up NBA teams
 
@@ -414,7 +414,7 @@ teams = espn_nba_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
-### `nba_pbp_disk(game_id, path_to_json)`
+### `nba_pbp_disk(game_id, path_to_json)` {#nba_pbp_disk}
 
 Load a previously cached ESPN NBA summary JSON for a game from disk.
 
@@ -439,7 +439,7 @@ pbp = nba_pbp_disk(game_id=401585183, path_to_json="./cache")
 print(list(pbp.keys()))
 ```
 
-### `scoreboard_event_parsing(event)`
+### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 Internal helper that flattens an ESPN NBA scoreboard event dict into a
 

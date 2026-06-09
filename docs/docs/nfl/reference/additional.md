@@ -10,7 +10,7 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_nfl_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nfl_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nfl_game_rosters}
 
 espn_nfl_game_rosters() - Pull the game by id.
 
@@ -125,7 +125,7 @@ home = rosters_pd[rosters_pd["home_away"] == "home"]
 away = rosters_pd[rosters_pd["home_away"] == "away"]
 ```
 
-### `espn_nfl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+### `espn_nfl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nfl_player_stats}
 
 Pull an NFL athlete's ESPN **season** stat line as one wide row.
 
@@ -361,7 +361,7 @@ df = espn_nfl_player_stats(athlete_id=3139477, season=2023)
 df.select(["full_name", "team_display_name", "passing_passing_yards"])
 ```
 
-### `espn_nfl_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nfl_schedule(dates=None, week=None, season_type=None, groups=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nfl_schedule}
 
 espn_nfl_schedule - look up the NFL schedule for a given season
 
@@ -472,7 +472,7 @@ sched_pd = espn_nfl_schedule(dates=20240908, return_as_pandas=True)
 
 ## Dataset loaders
 
-### `load_combine(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_combine(return_as_pandas=False) -> 'pl.DataFrame'` {#load_combine}
 
 Load NFL Combine information
 
@@ -523,7 +523,7 @@ qbs_2024 = (
 )
 ```
 
-### `load_contracts(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_contracts(return_as_pandas=False) -> 'pl.DataFrame'` {#load_contracts}
 
 Load NFL Historical contracts information
 
@@ -578,7 +578,7 @@ contracts_pd = load_nfl_contracts(return_as_pandas=True)
 contracts_pd.sort_values("apy", ascending=False).head()
 ```
 
-### `load_depth_charts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_depth_charts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_depth_charts}
 
 Load NFL Depth Chart data for selected seasons
 
@@ -622,7 +622,7 @@ depth = load_nfl_depth_charts(seasons=[2024])
 depth = load_nfl_depth_charts(seasons=range(2020, 2025))
 ```
 
-### `load_draft_picks(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_draft_picks(return_as_pandas=False) -> 'pl.DataFrame'` {#load_draft_picks}
 
 Load NFL Draft picks information
 
@@ -691,7 +691,7 @@ r1_2024 = (
 )
 ```
 
-### `load_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'` {#load_ff_opportunity}
 
 Load NFL fantasy football opportunity data from ffverse/ffopportunity
 
@@ -887,7 +887,7 @@ pbp_rush = load_nfl_ff_opportunity(
 )
 ```
 
-### `load_ff_playerids(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_ff_playerids(return_as_pandas=False) -> 'pl.DataFrame'` {#load_ff_playerids}
 
 Load fantasy football player IDs from DynastyProcess.com
 
@@ -955,7 +955,7 @@ qbs = (
 )
 ```
 
-### `load_ff_rankings(type: 'str' = 'draft', kind: 'str' = None, return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_ff_rankings(type: 'str' = 'draft', kind: 'str' = None, return_as_pandas=False) -> 'pl.DataFrame'` {#load_ff_rankings}
 
 Load fantasy football rankings and projections
 
@@ -1018,7 +1018,7 @@ history = load_nfl_ff_rankings(kind="all")
 draft = load_nfl_ff_rankings(type="draft")
 ```
 
-### `load_ftn_charting(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_ftn_charting(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_ftn_charting}
 
 Load NFL FTN charting data going back to 2022
 
@@ -1084,7 +1084,7 @@ motion_plays = (
 )
 ```
 
-### `load_injuries(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_injuries(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_injuries}
 
 Load NFL injuries data for selected seasons
 
@@ -1133,7 +1133,7 @@ sf_injuries = (
 )
 ```
 
-### `load_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nextgen_stats}
 
 Load NFL NextGen Stats data going back to 2016.
 
@@ -1211,7 +1211,7 @@ ngs_pd = load_nfl_nextgen_stats(
 )
 ```
 
-### `load_nfl_combine(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_combine(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_combine}
 
 Load NFL Combine information
 
@@ -1262,7 +1262,7 @@ qbs_2024 = (
 )
 ```
 
-### `load_nfl_contracts(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_contracts(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_contracts}
 
 Load NFL Historical contracts information
 
@@ -1317,7 +1317,7 @@ contracts_pd = load_nfl_contracts(return_as_pandas=True)
 contracts_pd.sort_values("apy", ascending=False).head()
 ```
 
-### `load_nfl_depth_charts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_depth_charts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_depth_charts}
 
 Load NFL Depth Chart data for selected seasons
 
@@ -1361,7 +1361,7 @@ depth = load_nfl_depth_charts(seasons=[2024])
 depth = load_nfl_depth_charts(seasons=range(2020, 2025))
 ```
 
-### `load_nfl_draft_picks(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_draft_picks(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_draft_picks}
 
 Load NFL Draft picks information
 
@@ -1430,7 +1430,7 @@ r1_2024 = (
 )
 ```
 
-### `load_nfl_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_ff_opportunity}
 
 Load NFL fantasy football opportunity data from ffverse/ffopportunity
 
@@ -1626,7 +1626,7 @@ pbp_rush = load_nfl_ff_opportunity(
 )
 ```
 
-### `load_nfl_ff_playerids(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_ff_playerids(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_ff_playerids}
 
 Load fantasy football player IDs from DynastyProcess.com
 
@@ -1694,7 +1694,7 @@ qbs = (
 )
 ```
 
-### `load_nfl_ff_rankings(type: 'str' = 'draft', kind: 'str' = None, return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_ff_rankings(type: 'str' = 'draft', kind: 'str' = None, return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_ff_rankings}
 
 Load fantasy football rankings and projections
 
@@ -1757,7 +1757,7 @@ history = load_nfl_ff_rankings(kind="all")
 draft = load_nfl_ff_rankings(type="draft")
 ```
 
-### `load_nfl_ftn_charting(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_ftn_charting(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_ftn_charting}
 
 Load NFL FTN charting data going back to 2022
 
@@ -1823,7 +1823,7 @@ motion_plays = (
 )
 ```
 
-### `load_nfl_injuries(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_injuries(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_injuries}
 
 Load NFL injuries data for selected seasons
 
@@ -1872,7 +1872,7 @@ sf_injuries = (
 )
 ```
 
-### `load_nfl_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_nextgen_stats}
 
 Load NFL NextGen Stats data going back to 2016.
 
@@ -1950,7 +1950,7 @@ ngs_pd = load_nfl_nextgen_stats(
 )
 ```
 
-### `load_nfl_ngs_passing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_ngs_passing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_ngs_passing}
 
 Deprecated alias for `load_nfl_nextgen_stats(stat_type='passing')`.
 
@@ -2006,7 +2006,7 @@ from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
 ```
 
-### `load_nfl_ngs_receiving(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_ngs_receiving(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_ngs_receiving}
 
 Deprecated alias for `load_nfl_nextgen_stats(stat_type='receiving')`.
 
@@ -2056,7 +2056,7 @@ from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
 ```
 
-### `load_nfl_ngs_rushing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_ngs_rushing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_ngs_rushing}
 
 Deprecated alias for `load_nfl_nextgen_stats(stat_type='rushing')`.
 
@@ -2105,7 +2105,7 @@ from sportsdataverse.nfl import load_nfl_nextgen_stats
 ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
 ```
 
-### `load_nfl_officials(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_officials(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_officials}
 
 Load NFL Officials information
 
@@ -2144,7 +2144,7 @@ officials_pd = load_nfl_officials(return_as_pandas=True)
 officials_pd.head()
 ```
 
-### `load_nfl_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_pbp}
 
 Load NFL play by play data going back to 1999
 
@@ -2557,7 +2557,7 @@ pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
 pbp_pd.head()
 ```
 
-### `load_nfl_pbp_participation(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_pbp_participation(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_pbp_participation}
 
 Load NFL play-by-play participation data for selected seasons
 
@@ -2612,7 +2612,7 @@ participation = load_nfl_pbp_participation(seasons=[2022])
 participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
 
-### `load_nfl_pfr_advstats(seasons: 'List[int]', stat_type: 'str' = 'pass', summary_level: 'str' = 'week', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_advstats(seasons: 'List[int]', stat_type: 'str' = 'pass', summary_level: 'str' = 'week', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_advstats}
 
 Load Pro-Football Reference advanced statistics going back to 2018.
 
@@ -2693,7 +2693,7 @@ rec_pd = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_def(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_def(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_def}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='season')`.
 
@@ -2751,7 +2751,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_pass(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_pass(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_pass}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='season')`.
 
@@ -2816,7 +2816,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_rec(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_rec(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_rec}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='season')`.
 
@@ -2869,7 +2869,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_rush(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_rush(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_rush}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='season')`.
 
@@ -2916,7 +2916,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_weekly_def(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_weekly_def(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_weekly_def}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='week')`.
 
@@ -2974,7 +2974,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_weekly_pass(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_weekly_pass(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_weekly_pass}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='week')`.
 
@@ -3027,7 +3027,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_weekly_rec(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_weekly_rec(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_weekly_rec}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='week')`.
 
@@ -3073,7 +3073,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_pfr_weekly_rush(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_nfl_pfr_weekly_rush(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_weekly_rush}
 
 Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='week')`.
 
@@ -3118,7 +3118,7 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_player_stats}
 
 Load NFL player stats data
 
@@ -3206,7 +3206,7 @@ import polars as pl
 stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 ```
 
-### `load_nfl_players(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_players(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_players}
 
 Load NFL Player ID information
 
@@ -3245,7 +3245,7 @@ players_pd = load_nfl_players(return_as_pandas=True)
 players_pd.head()
 ```
 
-### `load_nfl_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_rosters}
 
 Load NFL roster data for all seasons
 
@@ -3315,7 +3315,7 @@ import polars as pl
 kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
 ```
 
-### `load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_schedule}
 
 Load NFL schedule data
 
@@ -3401,7 +3401,7 @@ schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
 schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```
 
-### `load_nfl_snap_counts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_snap_counts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_snap_counts}
 
 Load NFL snap counts data for selected seasons
 
@@ -3450,7 +3450,7 @@ offense = (
 )
 ```
 
-### `load_nfl_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_team_stats}
 
 Load NFL team stats data going back to 1999
 
@@ -3586,7 +3586,7 @@ reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
 ```
 
-### `load_nfl_teams(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_teams}
 
 Load NFL team ID information and logos
 
@@ -3632,7 +3632,7 @@ teams_pd = load_nfl_teams(return_as_pandas=True)
 teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
 ```
 
-### `load_nfl_trades(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_trades(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_trades}
 
 Load NFL trades data
 
@@ -3673,7 +3673,7 @@ import polars as pl
 trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
 ```
 
-### `load_nfl_weekly_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_nfl_weekly_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_weekly_rosters}
 
 Load NFL weekly roster data for selected seasons
 
@@ -3742,7 +3742,7 @@ wk1 = (
 )
 ```
 
-### `load_officials(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_officials(return_as_pandas=False) -> 'pl.DataFrame'` {#load_officials}
 
 Load NFL Officials information
 
@@ -3781,7 +3781,7 @@ officials_pd = load_nfl_officials(return_as_pandas=True)
 officials_pd.head()
 ```
 
-### `load_participation(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_participation(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_participation}
 
 Load NFL play-by-play participation data for selected seasons
 
@@ -3836,7 +3836,7 @@ participation = load_nfl_pbp_participation(seasons=[2022])
 participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
 
-### `load_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_pbp}
 
 Load NFL play by play data going back to 1999
 
@@ -4249,7 +4249,7 @@ pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
 pbp_pd.head()
 ```
 
-### `load_pfr_advstats(seasons: 'List[int]', stat_type: 'str' = 'pass', summary_level: 'str' = 'week', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+### `load_pfr_advstats(seasons: 'List[int]', stat_type: 'str' = 'pass', summary_level: 'str' = 'week', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_pfr_advstats}
 
 Load Pro-Football Reference advanced statistics going back to 2018.
 
@@ -4330,7 +4330,7 @@ rec_pd = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'` {#load_player_stats}
 
 Load NFL player stats data
 
@@ -4418,7 +4418,7 @@ import polars as pl
 stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 ```
 
-### `load_players(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_players(return_as_pandas=False) -> 'pl.DataFrame'` {#load_players}
 
 Load NFL Player ID information
 
@@ -4457,7 +4457,7 @@ players_pd = load_nfl_players(return_as_pandas=True)
 players_pd.head()
 ```
 
-### `load_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_rosters}
 
 Load NFL roster data for all seasons
 
@@ -4527,7 +4527,7 @@ import polars as pl
 kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
 ```
 
-### `load_rosters_weekly(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_rosters_weekly(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_rosters_weekly}
 
 Load NFL weekly roster data for selected seasons
 
@@ -4596,7 +4596,7 @@ wk1 = (
 )
 ```
 
-### `load_schedules(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_schedules(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_schedules}
 
 Load NFL schedule data
 
@@ -4682,7 +4682,7 @@ schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
 schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```
 
-### `load_snap_counts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_snap_counts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_snap_counts}
 
 Load NFL snap counts data for selected seasons
 
@@ -4731,7 +4731,7 @@ offense = (
 )
 ```
 
-### `load_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'` {#load_team_stats}
 
 Load NFL team stats data going back to 1999
 
@@ -4867,7 +4867,7 @@ reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
 ```
 
-### `load_teams(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#load_teams}
 
 Load NFL team ID information and logos
 
@@ -4913,7 +4913,7 @@ teams_pd = load_nfl_teams(return_as_pandas=True)
 teams_pd[["team_abbr", "team_name", "team_conf", "team_division"]].head()
 ```
 
-### `load_trades(return_as_pandas=False) -> 'pl.DataFrame'`
+### `load_trades(return_as_pandas=False) -> 'pl.DataFrame'` {#load_trades}
 
 Load NFL trades data
 
@@ -4956,7 +4956,7 @@ trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
 
 ## Utilities & helpers
 
-### `NFLPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, **kwargs)`
+### `NFLPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, **kwargs)` {#NFLPlayProcess}
 
 Process ESPN NFL play-by-play feeds into a tidy game-level dictionary.
 
@@ -5185,7 +5185,7 @@ slim = proc.run_processing_pipeline()
 sorted(slim.keys())
 ```
 
-### `get_current_nfl_season(roster: 'bool' = False) -> 'int'`
+### `get_current_nfl_season(roster: 'bool' = False) -> 'int'` {#get_current_nfl_season}
 
 Return the current NFL season year.
 
@@ -5216,7 +5216,7 @@ from sportsdataverse.nfl import load_nfl_schedule
 schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
 ```
 
-### `get_current_nfl_week(use_date: 'bool' = True, roster: 'bool' = False) -> 'int'`
+### `get_current_nfl_week(use_date: 'bool' = True, roster: 'bool' = False) -> 'int'` {#get_current_nfl_week}
 
 Return the current NFL week (1-22).
 
@@ -5257,7 +5257,7 @@ current_pbp = (
 )
 ```
 
-### `get_current_season(roster: 'bool' = False) -> 'int'`
+### `get_current_season(roster: 'bool' = False) -> 'int'` {#get_current_season}
 
 Return the current NFL season year.
 
@@ -5288,7 +5288,7 @@ from sportsdataverse.nfl import load_nfl_schedule
 schedule = load_nfl_schedule(seasons=[get_current_nfl_season()])
 ```
 
-### `get_current_week(use_date: 'bool' = True, roster: 'bool' = False) -> 'int'`
+### `get_current_week(use_date: 'bool' = True, roster: 'bool' = False) -> 'int'` {#get_current_week}
 
 Return the current NFL week (1-22).
 
@@ -5329,7 +5329,7 @@ current_pbp = (
 )
 ```
 
-### `most_recent_nfl_season(roster: 'bool' = False) -> 'int'`
+### `most_recent_nfl_season(roster: 'bool' = False) -> 'int'` {#most_recent_nfl_season}
 
 Alias for `get_current_nfl_season()` mirroring nflreadr's
 
@@ -5354,7 +5354,7 @@ roster_year = most_recent_nfl_season(roster=True)
 
 ## Other
 
-### `NflConfig(cache_mode: 'CacheMode' = 'memory', cache_dir: 'Optional[Path]' = None, cache_duration: 'int' = 86400, verbose: 'bool' = True, timeout: 'int' = 30, user_agent: 'str' = 'sportsdataverse-py-nfl') -> None`
+### `NflConfig(cache_mode: 'CacheMode' = 'memory', cache_dir: 'Optional[Path]' = None, cache_duration: 'int' = 86400, verbose: 'bool' = True, timeout: 'int' = 30, user_agent: 'str' = 'sportsdataverse-py-nfl') -> None` {#NflConfig}
 
 Runtime configuration for sdv-py NFL loaders.
 
@@ -5383,14 +5383,13 @@ cfg.cache_mode      # "memory"
 cfg.cache_duration  # 86400 (24h)
 cfg.timeout         # 30 (seconds)
 
-Construct a fresh instance directly (rarely needed -- prefer
-# ``update_config``)
+# Construct a fresh instance directly (rarely needed -- prefer ``update_config``)
 
 from sportsdataverse.nfl import NflConfig
 cfg = NflConfig(cache_mode="off", timeout=10)
 ```
 
-### `cached_loader(func: 'F') -> 'F'`
+### `cached_loader(func: 'F') -> 'F'` {#cached_loader}
 
 Decorator that adds caching to a `load_nfl_*` function.
 
@@ -5438,7 +5437,7 @@ clear_cache()                           # wipe both memory + filesystem
 update_config(cache_mode="off")         # bypass cache entirely
 ```
 
-### `clear_cache() -> 'None'`
+### `clear_cache() -> 'None'` {#clear_cache}
 
 Clear both memory and filesystem caches.
 
@@ -5462,7 +5461,7 @@ update_config(cache_mode="filesystem")
 clear_cache()  # wipe disk + memory together
 ```
 
-### `espn_nfl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+### `espn_nfl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nfl_teams}
 
 espn_nfl_teams - look up NFL teams
 
@@ -5511,7 +5510,7 @@ espn_nfl_teams.cache_clear()  # underlying lru_cache
 teams = espn_nfl_teams()
 ```
 
-### `get_config() -> 'NflConfig'`
+### `get_config() -> 'NflConfig'` {#get_config}
 
 Return the live `NflConfig` singleton.
 
@@ -5533,7 +5532,7 @@ update_config(cache_mode="off")
 assert get_config().cache_mode == "off"
 ```
 
-### `nfl_game_details(game_id=None, headers=None, raw=False) -> 'Dict'`
+### `nfl_game_details(game_id=None, headers=None, raw=False) -> 'Dict'` {#nfl_game_details}
 
 nfl_game_details() -- pull full `api.nfl.com` game details by game id.
 
@@ -5571,7 +5570,7 @@ raw = nfl_game_details(
 )
 ```
 
-### `nfl_game_schedule(season=2021, season_type='REG', week=1, headers=None, raw=False) -> 'Dict'`
+### `nfl_game_schedule(season=2021, season_type='REG', week=1, headers=None, raw=False) -> 'Dict'` {#nfl_game_schedule}
 
 nfl_game_schedule() -- list `api.nfl.com` games for a season/week slice.
 
@@ -5609,7 +5608,7 @@ for week in range(1, 19):
     )
 ```
 
-### `nfl_headers_gen()`
+### `nfl_headers_gen()` {#nfl_headers_gen}
 
 Build the full request-header dict expected by `api.nfl.com`.
 
@@ -5632,7 +5631,7 @@ week_one = nfl_game_schedule(season=2024, season_type="REG", week=1, headers=hdr
 week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdrs)
 ```
 
-### `nfl_token_gen()`
+### `nfl_token_gen()` {#nfl_token_gen}
 
 Mint a fresh `api.nfl.com` access token via the public reroute endpoint.
 
@@ -5658,7 +5657,7 @@ token = nfl_token_gen()
 headers = {"Authorization": f"Bearer {token}"}
 ```
 
-### `reset_config() -> 'NflConfig'`
+### `reset_config() -> 'NflConfig'` {#reset_config}
 
 Reset the active config to its env-var-derived defaults.
 
@@ -5674,7 +5673,7 @@ update_config(cache_mode="off", timeout=5)
 reset_config()  # back to env-derived defaults
 ```
 
-### `scoreboard_event_parsing(event)`
+### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 Normalize one ESPN scoreboard `event` into a flatter shape.
 
@@ -5706,7 +5705,7 @@ for ev in payload.get("events", []):
     ev["competitions"][0]["home"]["abbreviation"]
 ```
 
-### `update_config(**kwargs: 'object') -> 'NflConfig'`
+### `update_config(**kwargs: 'object') -> 'NflConfig'` {#update_config}
 
 Update the active config in place.
 

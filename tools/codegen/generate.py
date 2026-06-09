@@ -2074,7 +2074,24 @@ def _clean_example(text: str) -> str:
             leading_spaces = len(lines[j]) - len(lines[j].lstrip())
             looks_like_code = leading_spaces >= 4 or s.startswith(("from ", "import ", ">>>"))
             if not looks_like_code:
-                label = s[:-2].rstrip().rstrip(":").strip()
+                # A reST literal-block intro can wrap across several prose lines,
+                # only the LAST of which carries the ``::`` (e.g. "Construct a
+                # fresh instance directly (rarely needed -- prefer\n``update_config``)::").
+                # Absorb the preceding contiguous prose lines of that intro into
+                # the label so they don't leak into the code fence as a broken
+                # statement. Stop at a blank line, indented code (>=4), an
+                # import/>>> line, or an already-emitted ``# `` label.
+                parts = [s[:-2].rstrip().rstrip(":").strip()]
+                while collected:
+                    prev = collected[-1]
+                    prev_s = prev.strip()
+                    if not prev_s:
+                        break
+                    prev_indent = len(prev) - len(prev.lstrip())
+                    if prev_indent >= 4 or prev_s.startswith(("from ", "import ", ">>>", "#")):
+                        break
+                    parts.insert(0, collected.pop().strip())
+                label = " ".join(p for p in parts if p)
                 pad = " " * leading_spaces
                 collected.append(f"{pad}# {label}" if label else "")
                 continue
