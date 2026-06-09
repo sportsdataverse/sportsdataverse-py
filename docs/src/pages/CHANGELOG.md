@@ -157,7 +157,10 @@
   non-REPL doc examples now compile.
 - **Notebook reachability.** `ecosystem.md` now links all seven example notebooks
   individually (previously only `01_quickstart` was linked; the per-sport intros
-  02–07 were an un-linked "for your league" mention).
+  02–07 were an un-linked "for your league" mention). Each league's generated
+  `index.md` landing page also gained an **Examples** section linking the quickstart
+  plus that sport's intro notebook (`render_league_index` + a league→notebook map
+  in `generate.py`); mlb/pwhl show the quickstart until they get a dedicated intro.
 
 ## 0.0.55 Release: June 8, 2026
 

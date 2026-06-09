@@ -1602,6 +1602,35 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     )
 
 
+# Example notebooks live in the repo (examples/notebooks/), not the docs tree, so
+# league index pages link them on GitHub. Each league surfaces the general
+# quickstart plus its sport-specific intro (mlb/pwhl have no dedicated intro yet).
+_NOTEBOOK_GH_BASE = "https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks"
+_QUICKSTART_NB = ("01_quickstart", "Quickstart")
+_LEAGUE_NOTEBOOKS: dict[str, tuple[str, str]] = {
+    "cfb": ("02_cfb_intro", "CFB intro"),
+    "nfl": ("03_nfl_intro", "NFL intro"),
+    "nba": ("04_nba_intro", "NBA intro"),
+    "wbb": ("05_wbb_wnba_intro", "WBB / WNBA intro"),
+    "wnba": ("05_wbb_wnba_intro", "WBB / WNBA intro"),
+    "mbb": ("06_mbb_intro", "MBB intro"),
+    "nhl": ("07_nhl_intro", "NHL intro"),
+}
+
+
+def _notebooks_for(prefix: str) -> list[dict]:
+    """``[{label, url}]`` of example notebooks for a league index page.
+
+    Always the general quickstart first, then the league's sport-specific intro
+    when one exists. Returned in display order; ``label``/``url`` are ready for
+    the ``league_index.md.jinja`` ``## Examples`` block."""
+    entries = [_QUICKSTART_NB]
+    sport = _LEAGUE_NOTEBOOKS.get(prefix)
+    if sport is not None:
+        entries.append(sport)
+    return [{"label": label, "url": f"{_NOTEBOOK_GH_BASE}/{stem}.ipynb"} for stem, label in entries]
+
+
 def render_league_index(
     prefix: str,
     *,
@@ -1623,7 +1652,7 @@ def render_league_index(
         loader_count=len(loaders),
         has_additional=has_additional,
         additional_count=additional_count,
-        notebooks=[],
+        notebooks=_notebooks_for(prefix),
     )
 
 

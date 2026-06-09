@@ -15,3 +15,10 @@ sidebar_label: NHL
 | [NHL Records API](reference/nhl_records) | 44 | `https://records.nhl.com/site/api` |
 | [Dataset loaders](reference/loaders) | 23 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 21 | hand-written wrappers, loaders & helpers |
+
+## Examples
+
+Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+
+- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
+- [NHL intro](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/07_nhl_intro.ipynb)

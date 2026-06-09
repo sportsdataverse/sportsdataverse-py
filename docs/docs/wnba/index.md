@@ -11,3 +11,10 @@ sidebar_label: WNBA
 | [ESPN core API (v2)](reference/core) | 81 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 25 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 8 | hand-written wrappers, loaders & helpers |
+
+## Examples
+
+Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+
+- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
+- [WBB / WNBA intro](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/05_wbb_wnba_intro.ipynb)

@@ -15,6 +15,8 @@ sidebar_label: {{ prefix|upper }}
 
 ## Examples
 
-{% for nb in notebooks %}- [{{ nb }}](../../examples/notebooks/{{ nb }}.ipynb)
+Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+
+{% for nb in notebooks %}- [{{ nb.label }}]({{ nb.url }})
 {% endfor %}
 {% endif %}

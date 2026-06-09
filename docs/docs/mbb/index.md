@@ -11,3 +11,10 @@ sidebar_label: MBB
 | [ESPN core API (v2)](reference/core) | 84 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 5 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 8 | hand-written wrappers, loaders & helpers |
+
+## Examples
+
+Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+
+- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
+- [MBB intro](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/06_mbb_intro.ipynb)
