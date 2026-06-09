@@ -78,6 +78,42 @@ def scoring_chances(pbp: pl.DataFrame, threshold_ft: float = _SCORING_CHANCE_FT)
     )
 
 
+def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
+    """Attach ``on_ice_home``/``on_ice_away`` (comma-joined player_ids) per event.
+
+    ``pbp`` must carry integer ``period_of_game`` and ``time_s`` (seconds remaining,
+    countdown). A player is on ice iff a shift in that period has
+    ``start_s >= time_s >= end_s``. ``shifts`` carries ``home`` (1/0).
+    Returns ``pbp`` with two added columns, one row per original event, order preserved.
+    """
+    if pbp.height == 0 or shifts.height == 0:
+        return pbp.with_columns(
+            on_ice_home=pl.lit(None, dtype=pl.Utf8),
+            on_ice_away=pl.lit(None, dtype=pl.Utf8),
+        )
+
+    indexed = pbp.with_row_index("_eidx")
+    # join all shifts in the same period, then filter to those covering the event time
+    joined = indexed.join(
+        shifts.select(["player_id", "home", "period", "start_s", "end_s"]),
+        left_on="period_of_game",
+        right_on="period",
+        how="inner",
+    )
+    on = joined.filter((pl.col("start_s") >= pl.col("time_s")) & (pl.col("time_s") >= pl.col("end_s")))
+
+    def _side(home_flag: int, name: str) -> pl.DataFrame:
+        side = on.filter(pl.col("home") == home_flag)
+        if side.height == 0:
+            return pl.DataFrame(schema={"_eidx": pl.UInt32, name: pl.Utf8})
+        return side.group_by("_eidx").agg(pl.col("player_id").cast(pl.Utf8).unique().sort().str.join(",").alias(name))
+
+    home_agg = _side(1, "on_ice_home")
+    away_agg = _side(0, "on_ice_away")
+    out = indexed.join(home_agg, on="_eidx", how="left").join(away_agg, on="_eidx", how="left")
+    return out.drop("_eidx")
+
+
 def player_toi(shifts: pl.DataFrame) -> pl.DataFrame:
     """Compute per-player TOI from a parsed shifts frame.
 
