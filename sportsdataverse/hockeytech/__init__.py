@@ -7,6 +7,7 @@ building a new league family.
 
 from __future__ import annotations
 
-# Re-exports (hockeytech_api, LEAGUES, LeagueConfig, resolve_season_id) are added
-# in tasks A1.1 (_leagues.py) and A1.2 (_client.py).
-__all__: list = []
+from sportsdataverse.hockeytech._leagues import LEAGUES, LeagueConfig, resolve_season_id
+
+__all__ = ["LEAGUES", "LeagueConfig", "resolve_season_id"]
+# hockeytech_api is added to this re-export in task A1.2.
