@@ -55,15 +55,17 @@ const config: Config = {
           // release numbers without ever clashing with `current`'s label. The
           // legacy pre-codegen Sphinx docs stay archived at /docs/0.0.50/.
           lastVersion: 'current',
+          // Build only the rolling `current` tree + the most recent release
+          // snapshots. Each `yarn version:docs x.y.z` adds a full doc copy, and
+          // building every snapshot (6+) exhausts the Vercel build container's
+          // memory (OOM). Older frozen snapshots remain under versioned_docs/ in
+          // git and can be re-added here if the build budget allows.
+          onlyIncludeVersions: ['current', '0.0.56', '0.0.55', '0.0.54'],
           versions: {
             current: {
               label: 'main',
               path: '',
               banner: 'none',
-            },
-            '0.0.50': {
-              label: '0.0.50',
-              path: '0.0.50',
             },
           },
         },
