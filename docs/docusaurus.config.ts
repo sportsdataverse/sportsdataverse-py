@@ -173,11 +173,6 @@ const config: Config = {
               href: 'https://github.com/nwslR/nwslpy',
               target: '_self',
             },
-            {
-              label: 'recruitR-py',
-              href: 'https://github.com/sportsdataverse/recruitR-py/',
-              target: '_self',
-            },
             // -- R --
             {
               label: 'R Packages',
@@ -215,11 +210,6 @@ const config: Config = {
               target: '_self',
             },
             {
-              label: 'worldfootballR',
-              href: 'https://jaseziv.github.io/worldfootballR/',
-              target: '_self',
-            },
-            {
               label: 'sportyR',
               href: 'https://sportyR.sportsdataverse.org/',
               target: '_self',
@@ -237,16 +227,6 @@ const config: Config = {
             {
               label: 'oddsapiR',
               href: 'https://oddsapiR.sportsdataverse.org/',
-              target: '_self',
-            },
-            {
-              label: 'hockeyR',
-              href: 'https://hockeyR.netlify.app/',
-              target: '_self',
-            },
-            {
-              label: 'gamezoneR',
-              href: 'https://jacklich10.github.io/gamezoneR/',
               target: '_self',
             },
             {

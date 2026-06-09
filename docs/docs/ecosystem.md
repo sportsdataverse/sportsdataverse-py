@@ -163,8 +163,7 @@ Beyond the sport packages, the SportsDataverse spans languages and utilities:
   (betting odds), [recruitR](https://recruitR.sportsdataverse.org) (recruiting),
   and [sportyR](https://sportyR.sportsdataverse.org) (field/court/rink plots).
 - **Python siblings** — [sportypy](https://sportypy.sportsdataverse.org) (the
-  Python port of sportyR), [collegebaseball](https://collegebaseball.readthedocs.io),
-  and recruitR-py.
+  Python port of sportyR) and [collegebaseball](https://collegebaseball.readthedocs.io).
 - **Node.js** — [sportsdataverse.js](https://js.sportsdataverse.org).
 
 ## nflverse and the wider Python ecosystem
