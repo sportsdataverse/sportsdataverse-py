@@ -87,7 +87,6 @@ def load_fixture(category: str, stem: str) -> dict:
     path = FIXTURES_ROOT / category / f"{stem}.json"
     if not path.exists():
         raise FileNotFoundError(
-            f"Fixture not found: {path}. "
-            f"Expected category={category!r}, stem={stem!r}.",
+            f"Fixture not found: {path}. Expected category={category!r}, stem={stem!r}.",
         )
     return json.loads(path.read_text(encoding="utf-8"))

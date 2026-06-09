@@ -479,6 +479,7 @@ polars.DataFrame (or pandas if `return_as_pandas=True`) with one row per pitch, 
 | `delta_run_exp` | double | Change in run expectancy on the play. |
 | `bat_speed` | double | Bat speed at the point of contact (mph). |
 | `swing_length` | double | Length of the swing path to contact (feet). |
+| `miss_distance` | double |  |
 | `estimated_slg_using_speedangle` | double | Expected slugging based on exit velocity and launch angle. |
 | `delta_pitcher_run_exp` | double | Change in run expectancy credited to the pitcher. |
 | `hyper_speed` | double | Adjusted (90th-percentile) exit velocity (mph). |

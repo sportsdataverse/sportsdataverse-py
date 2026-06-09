@@ -1,0 +1,30 @@
+schema: ahl_season_id
+kind: dataframe
+columns:
+- name: season_id
+  type: integer
+  description: ''
+- name: season_name
+  type: character
+  description: ''
+- name: season_short
+  type: character
+  description: ''
+- name: career
+  type: character
+  description: ''
+- name: playoff
+  type: character
+  description: ''
+- name: start_date
+  type: character
+  description: ''
+- name: end_date
+  type: character
+  description: ''
+- name: season_yr
+  type: integer
+  description: ''
+- name: game_type_label
+  type: character
+  description: ''

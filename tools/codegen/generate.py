@@ -201,6 +201,14 @@ _LEAGUE_R_PACKAGE = {
     "mlb": "baseballr",
     "nhl": "fastRhockey",
     "nfl": "nflreadr",
+    # Hockey junior leagues: use fastRhockey column descriptions (sport-appropriate)
+    # so the _merged fallback (which has basketball-specific phrases like
+    # "Las Vegas Aces" and "while on court") is never used for these leagues.
+    "ahl": "fastRhockey",
+    "ohl": "fastRhockey",
+    "whl": "fastRhockey",
+    "qmjhl": "fastRhockey",
+    "pwhl": "fastRhockey",
 }
 
 
@@ -1387,7 +1395,7 @@ def check() -> int:
 # The 8 documented sport leagues. (pwhl is loader-only and has no module of its
 # own to import; its load_pwhl_* loaders surface at the package top level and are
 # checked as package-level/global names against the whole docs corpus.)
-_COVERAGE_LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"]
+_COVERAGE_LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl", "pwhl", "ahl", "ohl", "whl", "qmjhl"]
 
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
 
@@ -2661,12 +2669,16 @@ def render_packages_page() -> str | None:
 
 
 def _doc_leagues() -> list[str]:
-    """League prefixes to document: every ESPN league + any loader-only league (pwhl)."""
+    """League prefixes to document: every ESPN league + loader-only leagues (pwhl) + HockeyTech junior leagues."""
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
     rel = spec.load_releases(ENDPOINTS / "releases.yaml")
     prefixes = [lg.prefix for lg in cfg.leagues]
     extra = sorted({ld.league for ld in rel.loaders} - set(prefixes))
-    return prefixes + extra
+    # HockeyTech junior leagues have hand-written modules but no ESPN/loader entries.
+    _HOCKEYTECH_EXTRA = ["ahl", "ohl", "whl", "qmjhl"]
+    known = set(prefixes) | set(extra)
+    hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
+    return prefixes + extra + hockeytech
 
 
 def _preserved_docs_corpus() -> str:

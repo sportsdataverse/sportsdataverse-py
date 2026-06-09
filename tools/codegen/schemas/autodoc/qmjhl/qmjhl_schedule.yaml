@@ -1,0 +1,39 @@
+schema: qmjhl_schedule
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: game_date
+  type: character
+  description: ''
+- name: game_status
+  type: character
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: home_team_id
+  type: character
+  description: ''
+- name: home_score
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''
+- name: away_team_id
+  type: character
+  description: ''
+- name: away_score
+  type: character
+  description: ''
+- name: venue
+  type: character
+  description: ''
+- name: season_id
+  type: character
+  description: ''
+- name: game_type
+  type: character
+  description: ''

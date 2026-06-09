@@ -656,6 +656,44 @@ fastRhockey-data GitHub path.
 
 A polars (or pandas) DataFrame of all games in the data repository.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Unique game identifier. |
+| `season_full` | character | Full season label (e.g. 20212022). |
+| `game_type` | character | Game type the row belongs to. |
+| `game_date` | character | Game date. |
+| `game_time` | character | Scheduled start time of the game. |
+| `home_team_abbr` | character | Home team abbreviation. |
+| `away_team_abbr` | character | Away team abbreviation. |
+| `home_team_name` | character | Home team name. |
+| `away_team_name` | character | Away team name. |
+| `home_score` | integer | Home team final score. |
+| `away_score` | integer | Away team final score. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `venue` | character | Venue where the game was played. |
+| `series_letter` | character |  |
+| `playoff_round` | integer | Playoff round identifier. |
+| `series_game_number` | integer | Series game number. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_json` | logical | Whether processed game JSON is available. |
+| `game_json_url` | character | URL to the processed game JSON. |
+| `PBP` | logical | Whether play-by-play data is available. |
+| `team_box` | logical | Whether team box score data is available. |
+| `player_box` | logical | Whether player box score data is available. |
+| `skater_box` | logical | Whether skater box data is available. |
+| `goalie_box` | logical | Whether goalie box data is available. |
+| `game_info` | logical | Whether game info data is available. |
+| `game_rosters` | logical | Whether game rosters data is available. |
+| `scoring` | logical | TRUE when the play results in a score (TD, FG, safety, two-point conversion). |
+| `penalties` | logical | Penalty count. |
+| `scratches` | logical |  |
+| `linescore` | logical |  |
+| `three_stars` | logical | Whether three stars data is available. |
+| `shifts` | logical | Number of shifts. |
+| `officials` | logical | Whether officials data is available. |
+| `shots_by_period` | logical | Whether shots-by-period data is available. |
+| `shootout` | logical | Whether shootout data is available. |
+
 **Example**
 
 ```python

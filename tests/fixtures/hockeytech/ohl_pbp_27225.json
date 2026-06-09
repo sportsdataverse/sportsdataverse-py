@@ -1,0 +1,5388 @@
+[
+  {
+    "event": "goalie_change",
+    "details": {
+      "goalieComingIn": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "goalieGoingOut": null,
+      "team_id": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "0:00"
+    }
+  },
+  {
+    "event": "goalie_change",
+    "details": {
+      "goalieComingIn": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "goalieGoingOut": null,
+      "team_id": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "0:00"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "0:00",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8457,
+        "firstName": "Hunter",
+        "lastName": "Haight",
+        "jerseyNumber": 37,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8457.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "0:10",
+      "xLocation": 100,
+      "yLocation": 49,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8186,
+        "firstName": "Alex",
+        "lastName": "Christopoulos",
+        "jerseyNumber": 48,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "1:05",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 503,
+      "yLocation": 131
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8163,
+        "firstName": "Josh",
+        "lastName": "Bloom",
+        "jerseyNumber": 17,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8163.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "1:05",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "1:24",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8772,
+        "firstName": "Lincoln",
+        "lastName": "Moore",
+        "jerseyNumber": 18,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8772.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "1:54",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 519,
+      "yLocation": 195
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8600,
+        "firstName": "Jackson",
+        "lastName": "Stewart",
+        "jerseyNumber": 22,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8600.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "2:51",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 133,
+      "yLocation": 142
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 9027,
+        "firstName": "Jake",
+        "lastName": "Crawford",
+        "jerseyNumber": 16,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/9027.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "2:51",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "3:15",
+      "xLocation": 500,
+      "yLocation": 251,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "3:29",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 383,
+      "yLocation": 165
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431102",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "3:50",
+      "againstTeam": {
+        "id": 34,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "SAG",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "Cross Checking",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "servedBy": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": false
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "3:50",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8234,
+        "firstName": "Braden",
+        "lastName": "Haché",
+        "jerseyNumber": 6,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8234.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "4:18",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 335,
+      "yLocation": 38
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8388,
+        "firstName": "Colby",
+        "lastName": "Barlow",
+        "jerseyNumber": 39,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "4:55",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 186,
+      "yLocation": 237
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 9027,
+        "firstName": "Jake",
+        "lastName": "Crawford",
+        "jerseyNumber": 16,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/9027.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8769,
+        "firstName": "Michael",
+        "lastName": "Misa",
+        "jerseyNumber": 77,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8769.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "6:02",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8432,
+        "firstName": "Jorian",
+        "lastName": "Donovan",
+        "jerseyNumber": 75,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8432.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "7:08",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 483,
+      "yLocation": 83
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "7:08",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "8:21",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 102,
+      "yLocation": 168
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431104",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "8:45",
+      "againstTeam": {
+        "id": 11,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "OS",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "Hooking",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 8180,
+        "firstName": "Ethan",
+        "lastName": "Burroughs",
+        "jerseyNumber": 29,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8180.jpg"
+      },
+      "servedBy": {
+        "id": 8180,
+        "firstName": "Ethan",
+        "lastName": "Burroughs",
+        "jerseyNumber": 29,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8180.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": false
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "8:45",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "8:51",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 441,
+      "yLocation": 145
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "8:51",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "9:29",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 467,
+      "yLocation": 181
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "11:00",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8547,
+        "firstName": "Will",
+        "lastName": "Bishop",
+        "jerseyNumber": 4,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8547.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "13:11",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 423,
+      "yLocation": 232
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8769,
+        "firstName": "Michael",
+        "lastName": "Misa",
+        "jerseyNumber": 77,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8769.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "13:18",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431105",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "13:32",
+      "againstTeam": {
+        "id": 34,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "SAG",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "Slashing",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 8772,
+        "firstName": "Lincoln",
+        "lastName": "Moore",
+        "jerseyNumber": 18,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8772.jpg"
+      },
+      "servedBy": {
+        "id": 8772,
+        "firstName": "Lincoln",
+        "lastName": "Moore",
+        "jerseyNumber": 18,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8772.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": false
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "13:32",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8180,
+        "firstName": "Ethan",
+        "lastName": "Burroughs",
+        "jerseyNumber": 29,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8180.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "14:39",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 72,
+      "yLocation": 210
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "15:05",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 87,
+      "yLocation": 202
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "15:05",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8824,
+        "firstName": "Sam",
+        "lastName": "McCue",
+        "jerseyNumber": 12,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8824.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "15:29",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 118,
+      "yLocation": 209
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "15:29",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431108",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "15:53",
+      "againstTeam": {
+        "id": 11,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "OS",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "High Sticking",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "servedBy": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": false
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8163,
+        "firstName": "Josh",
+        "lastName": "Bloom",
+        "jerseyNumber": 17,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8163.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "15:53",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "16:09",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 523,
+      "yLocation": 107
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "16:09",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8475,
+        "firstName": "Rodwin",
+        "lastName": "Dionicio",
+        "jerseyNumber": 94,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8475.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "16:13",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 393,
+      "yLocation": 130
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8475,
+        "firstName": "Rodwin",
+        "lastName": "Dionicio",
+        "jerseyNumber": 94,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8475.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "17:45",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 537,
+      "yLocation": 74
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "17:45",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8386,
+        "firstName": "Madden",
+        "lastName": "Steen",
+        "jerseyNumber": 5,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8386.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "17:54",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 293,
+      "yLocation": 164
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8769,
+        "firstName": "Michael",
+        "lastName": "Misa",
+        "jerseyNumber": 77,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8769.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "18:34",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8399,
+        "firstName": "Nic",
+        "lastName": "Sima",
+        "jerseyNumber": 92,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8399.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "19:46",
+      "isGoal": true,
+      "shotQuality": "Quality goal",
+      "shotType": "Default",
+      "xLocation": 529,
+      "yLocation": 151
+    }
+  },
+  {
+    "event": "goal",
+    "details": {
+      "game_goal_id": "230612",
+      "team": {
+        "id": 34,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "SAG",
+        "logo": ""
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "19:46",
+      "scorerGoalNumber": "1",
+      "scoredBy": {
+        "id": 8399,
+        "firstName": "Nic",
+        "lastName": "Sima",
+        "jerseyNumber": 92,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8399.jpg"
+      },
+      "assists": [
+        {
+          "id": 8432,
+          "firstName": "Jorian",
+          "lastName": "Donovan",
+          "jerseyNumber": 75,
+          "position": "LD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8432.jpg"
+        },
+        {
+          "id": 8769,
+          "firstName": "Michael",
+          "lastName": "Misa",
+          "jerseyNumber": 77,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8769.jpg"
+        }
+      ],
+      "assistNumbers": [
+        "1",
+        "1"
+      ],
+      "properties": {
+        "isPowerPlay": "0",
+        "isShortHanded": "0",
+        "isEmptyNet": "0",
+        "isPenaltyShot": "0",
+        "isInsuranceGoal": "0",
+        "isGameWinningGoal": "0"
+      },
+      "plus_players": [
+        {
+          "id": 8234,
+          "firstName": "Braden",
+          "lastName": "Haché",
+          "jerseyNumber": 6,
+          "position": "LD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8234.jpg"
+        },
+        {
+          "id": 8505,
+          "firstName": "Sebastien",
+          "lastName": "Gervais",
+          "jerseyNumber": 15,
+          "position": "LW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8505.jpg"
+        },
+        {
+          "id": 8773,
+          "firstName": "Zayne",
+          "lastName": "Parekh",
+          "jerseyNumber": 19,
+          "position": "RD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+        },
+        {
+          "id": 8434,
+          "firstName": "Owen",
+          "lastName": "Beck",
+          "jerseyNumber": 62,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+        },
+        {
+          "id": 8399,
+          "firstName": "Nic",
+          "lastName": "Sima",
+          "jerseyNumber": 92,
+          "position": "RW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8399.jpg"
+        }
+      ],
+      "minus_players": [
+        {
+          "id": 8279,
+          "firstName": "Sam",
+          "lastName": "Sedley",
+          "jerseyNumber": 9,
+          "position": "RD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+        },
+        {
+          "id": 8573,
+          "firstName": "Landen",
+          "lastName": "Hookey",
+          "jerseyNumber": 10,
+          "position": "LW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8573.jpg"
+        },
+        {
+          "id": 8384,
+          "firstName": "Cedrick",
+          "lastName": "Guindon",
+          "jerseyNumber": 11,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+        },
+        {
+          "id": 8632,
+          "firstName": "Taos",
+          "lastName": "Jordan",
+          "jerseyNumber": 24,
+          "position": "LD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8632.jpg"
+        },
+        {
+          "id": 8388,
+          "firstName": "Colby",
+          "lastName": "Barlow",
+          "jerseyNumber": 39,
+          "position": "RW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+        }
+      ],
+      "xLocation": 529,
+      "yLocation": 151
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "1",
+        "shortName": "1",
+        "longName": "1st"
+      },
+      "time": "19:46",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "0:00",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8186,
+        "firstName": "Alex",
+        "lastName": "Christopoulos",
+        "jerseyNumber": 48,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "2:08",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 525,
+      "yLocation": 155
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8186,
+        "firstName": "Alex",
+        "lastName": "Christopoulos",
+        "jerseyNumber": 48,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "2:18",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 488,
+      "yLocation": 161
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 9030,
+        "firstName": "Harry",
+        "lastName": "Nansi",
+        "jerseyNumber": 21,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/9030.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "2:29",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 84,
+      "yLocation": 95
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8769,
+        "firstName": "Michael",
+        "lastName": "Misa",
+        "jerseyNumber": 77,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8769.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "2:29",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "3:54",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 465,
+      "yLocation": 84
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8505,
+        "firstName": "Sebastien",
+        "lastName": "Gervais",
+        "jerseyNumber": 15,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8505.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "4:28",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 500,
+      "yLocation": 100
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8186,
+        "firstName": "Alex",
+        "lastName": "Christopoulos",
+        "jerseyNumber": 48,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "4:53",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 530,
+      "yLocation": 105
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "5:06",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 519,
+      "yLocation": 195
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8186,
+        "firstName": "Alex",
+        "lastName": "Christopoulos",
+        "jerseyNumber": 48,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "5:40",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 455,
+      "yLocation": 194
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "5:55",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 45,
+      "yLocation": 236
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "6:46",
+      "xLocation": 100,
+      "yLocation": 206,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8279,
+        "firstName": "Sam",
+        "lastName": "Sedley",
+        "jerseyNumber": 9,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "7:02",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 177,
+      "yLocation": 109
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8279,
+        "firstName": "Sam",
+        "lastName": "Sedley",
+        "jerseyNumber": 9,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "7:07",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 109,
+      "yLocation": 107
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8769,
+        "firstName": "Michael",
+        "lastName": "Misa",
+        "jerseyNumber": 77,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8769.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "7:07",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8432,
+        "firstName": "Jorian",
+        "lastName": "Donovan",
+        "jerseyNumber": 75,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8432.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "7:39",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 416,
+      "yLocation": 48
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8772,
+        "firstName": "Lincoln",
+        "lastName": "Moore",
+        "jerseyNumber": 18,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8772.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "7:47",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 468,
+      "yLocation": 110
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "7:47",
+      "xLocation": 457,
+      "yLocation": 49,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 9027,
+        "firstName": "Jake",
+        "lastName": "Crawford",
+        "jerseyNumber": 16,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/9027.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "8:16",
+      "xLocation": 203,
+      "yLocation": 227,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8600,
+        "firstName": "Jackson",
+        "lastName": "Stewart",
+        "jerseyNumber": 22,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8600.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "8:25",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 9027,
+        "firstName": "Jake",
+        "lastName": "Crawford",
+        "jerseyNumber": 16,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/9027.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "8:59",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 63,
+      "yLocation": 239
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "8:59",
+      "xLocation": 100,
+      "yLocation": 206,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "9:40",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 507,
+      "yLocation": 146
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "9:40",
+      "xLocation": 457,
+      "yLocation": 49,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "10:06",
+      "xLocation": 100,
+      "yLocation": 206,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8457,
+        "firstName": "Hunter",
+        "lastName": "Haight",
+        "jerseyNumber": 37,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8457.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "10:18",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 496,
+      "yLocation": 171
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8770,
+        "firstName": "Joey",
+        "lastName": "Willis",
+        "jerseyNumber": 14,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8770.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "10:20",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 524,
+      "yLocation": 175
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "10:37",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 497,
+      "yLocation": 49
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "11:45",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 128,
+      "yLocation": 97
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 9027,
+        "firstName": "Jake",
+        "lastName": "Crawford",
+        "jerseyNumber": 16,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/9027.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "12:06",
+      "xLocation": 457,
+      "yLocation": 49,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "12:41",
+      "xLocation": 353,
+      "yLocation": 27,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "12:41",
+      "xLocation": 100,
+      "yLocation": 49,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "13:02",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 431,
+      "yLocation": 205
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "13:02",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "13:39",
+      "xLocation": 457,
+      "yLocation": 49,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "13:57",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 478,
+      "yLocation": 71
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "13:57",
+      "xLocation": 457,
+      "yLocation": 49,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8475,
+        "firstName": "Rodwin",
+        "lastName": "Dionicio",
+        "jerseyNumber": 94,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8475.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "13:59",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 398,
+      "yLocation": 225
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "13:59",
+      "xLocation": 457,
+      "yLocation": 206,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "14:34",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8769,
+        "firstName": "Michael",
+        "lastName": "Misa",
+        "jerseyNumber": 77,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8769.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "15:01",
+      "xLocation": 353,
+      "yLocation": 27,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431127",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "16:02",
+      "againstTeam": {
+        "id": 34,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "SAG",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "Holding",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 8352,
+        "firstName": "James",
+        "lastName": "Guo",
+        "jerseyNumber": 73,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8352.jpg"
+      },
+      "servedBy": {
+        "id": 8352,
+        "firstName": "James",
+        "lastName": "Guo",
+        "jerseyNumber": 73,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8352.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": false
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "16:02",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8279,
+        "firstName": "Sam",
+        "lastName": "Sedley",
+        "jerseyNumber": 9,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:04",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 203,
+      "yLocation": 163
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:04",
+      "xLocation": 100,
+      "yLocation": 206,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8388,
+        "firstName": "Colby",
+        "lastName": "Barlow",
+        "jerseyNumber": 39,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:18",
+      "isGoal": true,
+      "shotQuality": "Quality goal",
+      "shotType": "Default",
+      "xLocation": 68,
+      "yLocation": 119
+    }
+  },
+  {
+    "event": "goal",
+    "details": {
+      "game_goal_id": "230624",
+      "team": {
+        "id": 11,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "OS",
+        "logo": ""
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:18",
+      "scorerGoalNumber": "1",
+      "scoredBy": {
+        "id": 8388,
+        "firstName": "Colby",
+        "lastName": "Barlow",
+        "jerseyNumber": 39,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+      },
+      "assists": [
+        {
+          "id": 8279,
+          "firstName": "Sam",
+          "lastName": "Sedley",
+          "jerseyNumber": 9,
+          "position": "RD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+        },
+        {
+          "id": 8384,
+          "firstName": "Cedrick",
+          "lastName": "Guindon",
+          "jerseyNumber": 11,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+        }
+      ],
+      "assistNumbers": [
+        "2",
+        "3"
+      ],
+      "properties": {
+        "isPowerPlay": "1",
+        "isShortHanded": "0",
+        "isEmptyNet": "0",
+        "isPenaltyShot": "0",
+        "isInsuranceGoal": "0",
+        "isGameWinningGoal": "0"
+      },
+      "plus_players": [
+        {
+          "id": 8179,
+          "firstName": "Deni",
+          "lastName": "Goure",
+          "jerseyNumber": 7,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+        },
+        {
+          "id": 8279,
+          "firstName": "Sam",
+          "lastName": "Sedley",
+          "jerseyNumber": 9,
+          "position": "RD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+        },
+        {
+          "id": 8384,
+          "firstName": "Cedrick",
+          "lastName": "Guindon",
+          "jerseyNumber": 11,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+        },
+        {
+          "id": 8180,
+          "firstName": "Ethan",
+          "lastName": "Burroughs",
+          "jerseyNumber": 29,
+          "position": "RW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8180.jpg"
+        },
+        {
+          "id": 8388,
+          "firstName": "Colby",
+          "lastName": "Barlow",
+          "jerseyNumber": 39,
+          "position": "RW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+        }
+      ],
+      "minus_players": [
+        {
+          "id": 8234,
+          "firstName": "Braden",
+          "lastName": "Haché",
+          "jerseyNumber": 6,
+          "position": "LD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8234.jpg"
+        },
+        {
+          "id": 8163,
+          "firstName": "Josh",
+          "lastName": "Bloom",
+          "jerseyNumber": 17,
+          "position": "LW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8163.jpg"
+        },
+        {
+          "id": 8363,
+          "firstName": "Matyas",
+          "lastName": "Sapovaliv",
+          "jerseyNumber": 24,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+        },
+        {
+          "id": 8432,
+          "firstName": "Jorian",
+          "lastName": "Donovan",
+          "jerseyNumber": 75,
+          "position": "LD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8432.jpg"
+        }
+      ],
+      "xLocation": 68,
+      "yLocation": 119
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8457,
+        "firstName": "Hunter",
+        "lastName": "Haight",
+        "jerseyNumber": 37,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8457.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:18",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8186,
+        "firstName": "Alex",
+        "lastName": "Christopoulos",
+        "jerseyNumber": 48,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:34",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 518,
+      "yLocation": 48
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8471,
+        "firstName": "Declan",
+        "lastName": "Waddick",
+        "jerseyNumber": 27,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8471.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:34",
+      "xLocation": 457,
+      "yLocation": 206,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431129",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:46",
+      "againstTeam": {
+        "id": 11,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "OS",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "Tripping",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "servedBy": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": false
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "17:56",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 492,
+      "yLocation": 52
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "18:21",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "18:45",
+      "xLocation": 100,
+      "yLocation": 206,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8186,
+        "firstName": "Alex",
+        "lastName": "Christopoulos",
+        "jerseyNumber": 48,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "19:10",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 486,
+      "yLocation": 121
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "19:35",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 486,
+      "yLocation": 213
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "19:35",
+      "xLocation": 457,
+      "yLocation": 206,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8770,
+        "firstName": "Joey",
+        "lastName": "Willis",
+        "jerseyNumber": 14,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8770.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "19:49",
+      "isGoal": true,
+      "shotQuality": "Quality goal",
+      "shotType": "Default",
+      "xLocation": 538,
+      "yLocation": 123
+    }
+  },
+  {
+    "event": "goal",
+    "details": {
+      "game_goal_id": "230625",
+      "team": {
+        "id": 34,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "SAG",
+        "logo": ""
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "19:49",
+      "scorerGoalNumber": "2",
+      "scoredBy": {
+        "id": 8770,
+        "firstName": "Joey",
+        "lastName": "Willis",
+        "jerseyNumber": 14,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8770.jpg"
+      },
+      "assists": [
+        {
+          "id": 8186,
+          "firstName": "Alex",
+          "lastName": "Christopoulos",
+          "jerseyNumber": 48,
+          "position": "RW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+        },
+        {
+          "id": 8163,
+          "firstName": "Josh",
+          "lastName": "Bloom",
+          "jerseyNumber": 17,
+          "position": "LW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8163.jpg"
+        }
+      ],
+      "assistNumbers": [
+        "2",
+        "2"
+      ],
+      "properties": {
+        "isPowerPlay": "0",
+        "isShortHanded": "0",
+        "isEmptyNet": "0",
+        "isPenaltyShot": "0",
+        "isInsuranceGoal": "0",
+        "isGameWinningGoal": "1"
+      },
+      "plus_players": [
+        {
+          "id": 8770,
+          "firstName": "Joey",
+          "lastName": "Willis",
+          "jerseyNumber": 14,
+          "position": "LW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8770.jpg"
+        },
+        {
+          "id": 8163,
+          "firstName": "Josh",
+          "lastName": "Bloom",
+          "jerseyNumber": 17,
+          "position": "LW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8163.jpg"
+        },
+        {
+          "id": 8186,
+          "firstName": "Alex",
+          "lastName": "Christopoulos",
+          "jerseyNumber": 48,
+          "position": "RW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8186.jpg"
+        },
+        {
+          "id": 8434,
+          "firstName": "Owen",
+          "lastName": "Beck",
+          "jerseyNumber": 62,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+        },
+        {
+          "id": 8475,
+          "firstName": "Rodwin",
+          "lastName": "Dionicio",
+          "jerseyNumber": 94,
+          "position": "LD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8475.jpg"
+        }
+      ],
+      "minus_players": [
+        {
+          "id": 8179,
+          "firstName": "Deni",
+          "lastName": "Goure",
+          "jerseyNumber": 7,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+        },
+        {
+          "id": 8739,
+          "firstName": "Ben",
+          "lastName": "Cormier",
+          "jerseyNumber": 8,
+          "position": "C",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+        },
+        {
+          "id": 8279,
+          "firstName": "Sam",
+          "lastName": "Sedley",
+          "jerseyNumber": 9,
+          "position": "RD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+        },
+        {
+          "id": 8632,
+          "firstName": "Taos",
+          "lastName": "Jordan",
+          "jerseyNumber": 24,
+          "position": "LD",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8632.jpg"
+        },
+        {
+          "id": 8180,
+          "firstName": "Ethan",
+          "lastName": "Burroughs",
+          "jerseyNumber": 29,
+          "position": "RW",
+          "birthDate": "",
+          "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8180.jpg"
+        }
+      ],
+      "xLocation": 538,
+      "yLocation": 123
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 9027,
+        "firstName": "Jake",
+        "lastName": "Crawford",
+        "jerseyNumber": 16,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/9027.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "2",
+        "shortName": "2",
+        "longName": "2nd"
+      },
+      "time": "19:49",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "0:00",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8457,
+        "firstName": "Hunter",
+        "lastName": "Haight",
+        "jerseyNumber": 37,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8457.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "0:34",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 471,
+      "yLocation": 126
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "0:34",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "2:53",
+      "xLocation": 500,
+      "yLocation": 251,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "3:45",
+      "xLocation": 143,
+      "yLocation": 94,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "3:49",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 112,
+      "yLocation": 115
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "3:49",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "3:53",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 97,
+      "yLocation": 209
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "4:34",
+      "xLocation": 397,
+      "yLocation": 273,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431133",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "6:43",
+      "againstTeam": {
+        "id": 11,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "OS",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "Check from Behind",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 8553,
+        "firstName": "Konnor",
+        "lastName": "Smith",
+        "jerseyNumber": 6,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8553.jpg"
+      },
+      "servedBy": {
+        "id": 8553,
+        "firstName": "Konnor",
+        "lastName": "Smith",
+        "jerseyNumber": 6,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8553.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": false
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "6:43",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8773,
+        "firstName": "Zayne",
+        "lastName": "Parekh",
+        "jerseyNumber": 19,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8773.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "6:57",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 419,
+      "yLocation": 131
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8366,
+        "firstName": "Calem",
+        "lastName": "Mangone",
+        "jerseyNumber": 7,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8366.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "7:25",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 494,
+      "yLocation": 105
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8475,
+        "firstName": "Rodwin",
+        "lastName": "Dionicio",
+        "jerseyNumber": 94,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8475.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "8:47",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 463,
+      "yLocation": 132
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "8:47",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "9:11",
+      "xLocation": 247,
+      "yLocation": 273,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8388,
+        "firstName": "Colby",
+        "lastName": "Barlow",
+        "jerseyNumber": 39,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "9:18",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 66,
+      "yLocation": 145
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "9:18",
+      "xLocation": 143,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8234,
+        "firstName": "Braden",
+        "lastName": "Haché",
+        "jerseyNumber": 6,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8234.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "9:49",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 424,
+      "yLocation": 213
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "10:39",
+      "xLocation": 500,
+      "yLocation": 251,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8180,
+        "firstName": "Ethan",
+        "lastName": "Burroughs",
+        "jerseyNumber": 29,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8180.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "11:50",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 57,
+      "yLocation": 185
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "11:50",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8632,
+        "firstName": "Taos",
+        "lastName": "Jordan",
+        "jerseyNumber": 24,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8632.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "11:54",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 145,
+      "yLocation": 187
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8391,
+        "firstName": "Servac",
+        "lastName": "Petrovsky",
+        "jerseyNumber": 18,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8391.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8457,
+        "firstName": "Hunter",
+        "lastName": "Haight",
+        "jerseyNumber": 37,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8457.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "11:54",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8180,
+        "firstName": "Ethan",
+        "lastName": "Burroughs",
+        "jerseyNumber": 29,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8180.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "12:15",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 148,
+      "yLocation": 135
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8388,
+        "firstName": "Colby",
+        "lastName": "Barlow",
+        "jerseyNumber": 39,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "12:45",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 150,
+      "yLocation": 75
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8480,
+        "firstName": "Ethan",
+        "lastName": "Hay",
+        "jerseyNumber": 68,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8480.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "13:01",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "13:51",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8457,
+        "firstName": "Hunter",
+        "lastName": "Haight",
+        "jerseyNumber": 37,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8457.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "13:57",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 485,
+      "yLocation": 176
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8770,
+        "firstName": "Joey",
+        "lastName": "Willis",
+        "jerseyNumber": 14,
+        "position": "LW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8770.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "13:57",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 513,
+      "yLocation": 159
+    }
+  },
+  {
+    "event": "penalty",
+    "details": {
+      "game_penalty_id": "431139",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "14:58",
+      "againstTeam": {
+        "id": 11,
+        "name": "",
+        "city": "",
+        "nickname": "",
+        "abbreviation": "OS",
+        "logo": ""
+      },
+      "minutes": "2.00",
+      "description": "Too Many Men",
+      "ruleNumber": "",
+      "takenBy": {
+        "id": 0,
+        "firstName": null,
+        "lastName": null,
+        "jerseyNumber": 0,
+        "position": null,
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/0.jpg"
+      },
+      "servedBy": {
+        "id": 8739,
+        "firstName": "Ben",
+        "lastName": "Cormier",
+        "jerseyNumber": 8,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8739.jpg"
+      },
+      "isPowerPlay": true,
+      "isBench": true
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "14:58",
+      "xLocation": 500,
+      "yLocation": 94,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8179,
+        "firstName": "Deni",
+        "lastName": "Goure",
+        "jerseyNumber": 7,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8179.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "15:21",
+      "xLocation": 143,
+      "yLocation": 94,
+      "homeWin": "0"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8475,
+        "firstName": "Rodwin",
+        "lastName": "Dionicio",
+        "jerseyNumber": 94,
+        "position": "LD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8475.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "16:07",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 397,
+      "yLocation": 171
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8457,
+        "firstName": "Hunter",
+        "lastName": "Haight",
+        "jerseyNumber": 37,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8457.jpg"
+      },
+      "goalie": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "shooterTeamId": "34",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "16:40",
+      "isGoal": false,
+      "shotQuality": "Quality on net",
+      "shotType": "Default",
+      "xLocation": 465,
+      "yLocation": 209
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8279,
+        "firstName": "Sam",
+        "lastName": "Sedley",
+        "jerseyNumber": 9,
+        "position": "RD",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8279.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "17:34",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 276,
+      "yLocation": 83
+    }
+  },
+  {
+    "event": "goalie_change",
+    "details": {
+      "goalieComingIn": null,
+      "goalieGoingOut": {
+        "id": 8819,
+        "firstName": "Carter",
+        "lastName": "George",
+        "jerseyNumber": 32,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8819.jpg"
+      },
+      "team_id": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "18:48"
+    }
+  },
+  {
+    "event": "timeout",
+    "details": {
+      "game_timeout_id": 2800,
+      "period": {
+        "id": "3",
+        "shortName": null,
+        "longName": "3rd"
+      },
+      "time": "19:13",
+      "teamId": 11,
+      "timeoutLength": "00:30",
+      "description": "Timeout",
+      "injuredPlayer": null,
+      "callingCoach": {
+        "id": 256,
+        "firstName": "Darren",
+        "lastName": "Rumble",
+        "description": "Interim Coach"
+      }
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8434,
+        "firstName": "Owen",
+        "lastName": "Beck",
+        "jerseyNumber": 62,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8434.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "19:13",
+      "xLocation": 143,
+      "yLocation": 251,
+      "homeWin": "1"
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "19:43",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 190,
+      "yLocation": 257
+    }
+  },
+  {
+    "event": "shot",
+    "details": {
+      "shooter": {
+        "id": 8388,
+        "firstName": "Colby",
+        "lastName": "Barlow",
+        "jerseyNumber": 39,
+        "position": "RW",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8388.jpg"
+      },
+      "goalie": {
+        "id": 8369,
+        "firstName": "Andrew",
+        "lastName": "Oke",
+        "jerseyNumber": 29,
+        "position": "G",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8369.jpg"
+      },
+      "shooterTeamId": "11",
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "19:56",
+      "isGoal": false,
+      "shotQuality": "Non quality on net",
+      "shotType": "Default",
+      "xLocation": 159,
+      "yLocation": 47
+    }
+  },
+  {
+    "event": "faceoff",
+    "details": {
+      "homePlayer": {
+        "id": 8384,
+        "firstName": "Cedrick",
+        "lastName": "Guindon",
+        "jerseyNumber": 11,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8384.jpg"
+      },
+      "visitingPlayer": {
+        "id": 8363,
+        "firstName": "Matyas",
+        "lastName": "Sapovaliv",
+        "jerseyNumber": 24,
+        "position": "C",
+        "birthDate": "",
+        "playerImageURL": "https://assets.leaguestat.com/ohl/120x160/8363.jpg"
+      },
+      "period": {
+        "id": "3",
+        "shortName": "3",
+        "longName": "3rd"
+      },
+      "time": "19:56",
+      "xLocation": 300,
+      "yLocation": 150,
+      "homeWin": "1"
+    }
+  }
+]

@@ -132,3 +132,81 @@ nhl:
   espn_nhl_player_stats: {athlete_id: 3895074, season: 2024}
   espn_nhl_schedule: {}
   espn_nhl_teams: {}
+
+# --- HockeyTech / PWHL (hand-written API wrappers) ---
+# game_id=2 is a completed 2025 PWHL regular-season game with shifts/TOI/Corsi/PBP data.
+# pwhl_game_info and pwhl_player_box return 0 cols for older game IDs (endpoint limitation).
+# pwhl_transactions and pwhl_playoff_bracket have upstream parse errors; captured what works.
+pwhl:
+  pwhl_schedule: {season: 2025}
+  pwhl_pbp: {game_id: 2}
+  pwhl_standings: {season: 2025}
+  pwhl_teams: {season: 2025}
+  pwhl_team_roster: {team_id: 1, season: 2025}
+  pwhl_player_stats: {player_id: 27}
+  pwhl_leaders: {season: 2025}
+  pwhl_season_id: {}
+  pwhl_scorebar: {}
+  pwhl_stats: {season: 2025}
+  pwhl_game_shifts: {game_id: 2}
+  pwhl_player_toi: {game_id: 2}
+  pwhl_game_corsi: {game_id: 2}
+  pwhl_player_search: {name: "Poulin"}
+  # pwhl_game_info: returns 0-col frame for completed games (endpoint limitation)
+  # pwhl_player_info: returns 0-col frame (endpoint limitation)
+  # pwhl_player_game_log: upstream parse error (non-dict items)
+  # pwhl_streaks: returns 0-row frame (off-season)
+  # pwhl_transactions: upstream parse error (non-dict items)
+  # pwhl_playoff_bracket: upstream parse error (non-dict items)
+  # pwhl_game_summary: returns dict of frames, not a single DataFrame -- excluded
+
+# OHL game_id=27225 is a completed game with PBP data (older season, same HockeyTech format).
+# game_shifts/player_toi/game_corsi return empty for most IDs (data not available in API).
+ohl:
+  ohl_schedule: {}
+  ohl_season_id: {}
+  ohl_standings: {}
+  ohl_teams: {}
+  ohl_leaders: {}
+  ohl_player_stats: {player_id: 9385}
+  ohl_pbp: {game_id: 27225}
+  ohl_game_shifts: {game_id: 27225}
+  ohl_player_toi: {game_id: 27225}
+  ohl_game_corsi: {game_id: 27225}
+  # ohl_team_roster: returns empty for current season (off-season)
+  # ohl_game_summary: returns dict of frames -- excluded
+
+# AHL/WHL/QMJHL: schedule, season_id, standings, teams, leaders return non-empty data.
+# pbp has a polars type error for AHL/WHL/QMJHL current-season games; omitted.
+ahl:
+  ahl_schedule: {}
+  ahl_season_id: {}
+  ahl_standings: {}
+  ahl_teams: {}
+  ahl_leaders: {}
+  ahl_player_stats: {player_id: 4584}
+  # ahl_team_roster: returns empty (off-season)
+  # ahl_pbp / ahl_game_shifts / ahl_player_toi / ahl_game_corsi: polars type errors / empty
+  # ahl_game_summary: returns dict of frames -- excluded
+
+whl:
+  whl_schedule: {}
+  whl_season_id: {}
+  whl_standings: {}
+  whl_teams: {}
+  whl_leaders: {}
+  whl_player_stats: {player_id: 29468}
+  # whl_team_roster: returns empty (off-season)
+  # whl_pbp: polars type error with current-season games
+  # whl_game_shifts / whl_player_toi / whl_game_corsi: empty for available IDs
+
+qmjhl:
+  qmjhl_schedule: {}
+  qmjhl_season_id: {}
+  qmjhl_standings: {}
+  qmjhl_teams: {}
+  qmjhl_leaders: {}
+  qmjhl_player_stats: {player_id: 19517}
+  qmjhl_team_roster: {team_id: 16}
+  # qmjhl_pbp: polars type error with current-season games
+  # qmjhl_game_shifts / qmjhl_player_toi / qmjhl_game_corsi: empty for available IDs

@@ -35,7 +35,7 @@ columns:
   type: character
   description: ''
 - name: highlights
-  type: character
+  type: integer
   description: ''
 - name: notes_type
   type: character
@@ -142,6 +142,9 @@ columns:
 - name: home_score
   type: character
   description: ''
+- name: home_winner
+  type: logical
+  description: ''
 - name: home_linescores
   type: integer
   description: ''
@@ -186,6 +189,9 @@ columns:
   description: ''
 - name: away_score
   type: character
+  description: ''
+- name: away_winner
+  type: logical
   description: ''
 - name: away_linescores
   type: integer

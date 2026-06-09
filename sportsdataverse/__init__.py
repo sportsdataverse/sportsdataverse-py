@@ -57,6 +57,10 @@ from sportsdataverse.nhl import *
 from sportsdataverse.pwhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
+from sportsdataverse.ahl import *  # noqa: F401,F403,E402
+from sportsdataverse.ohl import *  # noqa: F401,F403,E402
+from sportsdataverse.qmjhl import *  # noqa: F401,F403,E402
+from sportsdataverse.whl import *  # noqa: F401,F403,E402
 
 # Top-level QoL helpers (0.0.51+).
 #   * find_team / find_athlete / find_event — name-to-ID resolvers

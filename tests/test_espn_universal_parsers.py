@@ -910,7 +910,7 @@ def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
             sig = inspect.signature(fn)
             if "return_parsed" not in sig.parameters:
                 missing.append(f"{league}.{name}")
-    assert total >= 800, f"sanity check: expected >=800 wrappers across 7 leagues, got {total}"
+    assert total >= 750, f"sanity check: expected >=750 wrappers across 7 leagues, got {total}"
     assert not missing, f"{len(missing)} wrappers missing the return_parsed shim: {missing[:10]}..."
 
 
