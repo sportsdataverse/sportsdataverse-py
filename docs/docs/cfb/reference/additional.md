@@ -582,17 +582,217 @@ consensus_2023 = load_cfb_betting_lines().filter(
 
 ### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, **kwargs)`
 
-_No description available._
+Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
+
+Wraps the ESPN `playbyplay` / `summary` endpoints (or a local JSON dump)
+and pipes the result through a chain of feature-engineering steps --
+down/distance, play-type flags, EPA, WPA, QBR, drive aggregation, and an
+advanced box score. Use `run_processing_pipeline()` for the full feature
+set or `run_cleaning_pipeline()` for a lighter clean.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `gameId` |  | `0` |  |
-| `raw` |  | `False` |  |
-| `path_to_json` |  | `'/'` |  |
-| `return_keys` |  | `None` |  |
-| `odds_override` |  | `None` |  |
+| `gameId` |  | `0` | ESPN game id. |
+| `raw` |  | `False` | if True, espn_cfb_pbp() returns the (allowlisted) summary verbatim. |
+| `path_to_json` |  | `'/'` | directory for cfb_pbp_disk() offline loads. |
+| `return_keys` |  | `None` | optional subset of result keys to return. |
+| `odds_override` |  | `None` | optional dict {gameSpread, overUnder, homeFavorite, gameSpreadAvailable} that short-circuits odds resolution (sets odds_source="injected") so offline rebuilds never hit the live core-odds endpoint or fall back to defaults. Validated + coerced here. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+proc = CFBPlayProcess(gameId=401628334)
+proc.espn_cfb_pbp()
+result = proc.run_processing_pipeline()
+len(result["plays"])
+
+# Offline replay from a JSON dump
+
+proc = CFBPlayProcess(gameId=401628334, path_to_json="./pbp_dump")
+proc.cfb_pbp_disk()
+result = proc.run_processing_pipeline()
+```
+
+**Methods**
+
+#### `CFBPlayProcess.cfb_pbp_disk()`
+
+Load a previously cached ESPN summary JSON for this game from disk.
+
+Reads `{path_to_json}/{gameId}.json` where `path_to_json` was passed
+to the `CFBPlayProcess` constructor.
+
+**Returns**
+
+Parsed JSON contents, also stored on `self.json`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334, path_to_json="./cache")
+pbp = game.cfb_pbp_disk()
+print(list(pbp.keys()))
+```
+
+#### `CFBPlayProcess.cfb_pbp_json(**kwargs)`
+
+Return the JSON payload currently attached to this `CFBPlayProcess`
+
+instance.
+
+**Returns**
+
+The cached JSON payload (`self.json`).
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+cached = game.cfb_pbp_json()
+```
+
+#### `CFBPlayProcess.corrupt_pbp_check()`
+
+Heuristic check for corrupt or incomplete play-by-play.
+
+Flags games with zero plays, fewer than 50 plays for a completed game,
+or more than 500 plays for a completed game -- all of which historically
+indicate ESPN delivered a malformed PBP payload that should not be
+processed downstream.
+
+**Returns**
+
+True if PBP looks corrupt and the processing pipeline should be skipped, False otherwise.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+if not game.corrupt_pbp_check():
+    game.run_processing_pipeline()
+```
+
+#### `CFBPlayProcess.create_box_score(play_df)`
+
+Build a per-team and per-player advanced box score from a processed
+
+plays frame.
+
+Triggers `run_processing_pipeline` first if it hasn't already run,
+so the input `play_df` is expected to be the post-pipeline plays frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `play_df` | `pl.DataFrame` |  | The plays frame produced by `run_processing_pipeline` (with EPA, WPA and play-type flags already populated). |
+
+**Returns**
+
+Box-score sections, each a list of records — `"pass"` / `"rush"` / `"receiver"` (per-player advanced + EPA lines), `"team"` and `"situational"` (per-team), `"defensive"` and `"defensive_players"` (team- and player-level havoc), `"specialists"` (kicking / punting / return players), `"turnover"`, `"drives"`, and the ESPN-sourced `"espn_team"` / `"espn_players"` totals.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+processed = game.run_processing_pipeline()
+box = game.create_box_score(game.plays_json)
+print(list(box.keys()))
+```
+
+#### `CFBPlayProcess.espn_cfb_pbp(**kwargs)`
+
+espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
+
+`college-football/summary`
+
+**Returns**
+
+Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "timeouts", "homeTeamSpread", "overUnder", "pickcenter", "againstTheSpread", "odds", "predictor", "winprobability", "espnWP", "gameInfo", "season"
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+pbp = game.espn_cfb_pbp()
+print(list(pbp.keys()))
+
+# Pull only the raw ESPN summary payload (skip cleaning)
+
+raw_pbp = CFBPlayProcess(gameId=401628334, raw=True).espn_cfb_pbp()
+
+# Pipeline next step (run the full processing pipeline for advanced features)
+
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+processed = game.run_processing_pipeline()  # adds EPA, WPA, box score
+```
+
+#### `CFBPlayProcess.run_cleaning_pipeline()`
+
+Run the lighter cleaning pipeline (no EPA/WPA/QBR/box-score).
+
+Same per-play feature engineering as `run_processing_pipeline`
+through add_spread_time`, but stops short of the modeling steps.
+Use this when you only need cleaned plays and don't need expected
+points or win probability columns.
+
+**Returns**
+
+Cleaned game payload (no `advBoxScore` key).
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+cleaned = game.run_cleaning_pipeline()
+print(len(cleaned["plays"]))
+```
+
+#### `CFBPlayProcess.run_processing_pipeline()`
+
+Run the full play-by-play processing pipeline.
+
+Applies every scoring/feature step in order: down detection, play type
+flags, rush/pass flags, team score variables, new play types, penalty
+setup, play category flags, yardage cols, player cols, after cols,
+spread time, EPA, WPA, drive data, and QBR. Also produces an advanced
+box score and stores it under `advBoxScore` on the returned dict.
+
+Idempotent -- subsequent calls return the cached `self.json`.
+
+**Returns**
+
+The fully-processed game payload. If the constructor was given `return_keys`, only those keys are returned.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+processed = game.run_processing_pipeline()
+print(processed["advBoxScore"].keys())
+
+# Pipeline next step (return only selected keys)
+
+game = CFBPlayProcess(gameId=401628334, return_keys=["plays", "advBoxScore"])
+game.espn_cfb_pbp()
+trimmed = game.run_processing_pipeline()
+```
 
 ### `most_recent_cfb_season()`
 

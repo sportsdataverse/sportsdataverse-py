@@ -5,6 +5,7 @@
 - [Unreleased](#unreleased)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
+  - [Documentation — class methods rendered on autodoc pages (CFB / NFL)](#documentation--class-methods-rendered-on-autodoc-pages-cfb--nfl)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
   - [Bug fixes](#bug-fixes)
@@ -119,6 +120,26 @@
   enlarged `_merged` union (7.3k → 8.1k columns) also backfilled previously-blank
   shared football/stat columns on the CFB and MLB reference pages
   (e.g. `passing_yards`, `receptions`, `kicker_player_name`, `name_short`).
+
+### Documentation — class methods rendered on autodoc pages (CFB / NFL)
+
+- Hand-written classes (`CFBPlayProcess`, `NFLPlayProcess`) previously rendered on
+  the `additional` reference pages as a bare constructor signature with no
+  description and an empty parameter table — their public methods, returns, and
+  examples were omitted entirely. The autodoc renderer now treats a class
+  specially: `_doc_view()` attaches a per-method doc-view list (via
+  `_augment_class_view()`), and the `autodoc_page.md.jinja` template renders each
+  public method as a nested `#### Class.method(...)` entry with its description,
+  parameters, returns, and example. Both classes now document all 7 of their
+  public methods (`espn_*_pbp`, `*_pbp_disk`, `*_pbp_json`, `corrupt_pbp_check`,
+  `create_box_score`, `run_cleaning_pipeline`, `run_processing_pipeline`).
+- Constructor parameter descriptions are backfilled from the class's `__init__`
+  docstring when the class object itself carries none (`CFBPlayProcess` documents
+  its ctor args on `__init__`), so the constructor parameter table now renders
+  with descriptions instead of blank cells.
+- Added a class-level docstring to `CFBPlayProcess` (it had none) mirroring
+  `NFLPlayProcess`, so the class entry leads with an overview + runnable example
+  instead of a `No description available.` placeholder.
 
 ## 0.0.55 Release: June 8, 2026
 

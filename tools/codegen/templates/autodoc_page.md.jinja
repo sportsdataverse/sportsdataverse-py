@@ -57,6 +57,48 @@ _No description available._
 {{ fn.example }}
 ```
 {% endif %}
+{% if fn.methods %}
+
+**Methods**
+{% for m in fn.methods %}
+
+#### `{{ fn.name }}.{{ m.name }}{{ m.signature }}`
+
+{% if m.short %}
+{{ m.short }}
+{% else %}
+_No description available._
+{% endif %}
+{% if m.long %}
+
+{{ m.long }}
+{% endif %}
+{% if m.params %}
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+{% for p in m.params %}
+| `{{ p.name }}` | {% if p.type %}`{{ p.type }}`{% endif %} | {% if p.default %}`{{ p.default }}`{% endif %} | {{ p.description }} |
+{% endfor %}
+{% endif %}
+{% if m.returns %}
+
+**Returns**
+
+{{ m.returns }}
+{% endif %}
+{% if m.example %}
+
+**Example**
+
+```python
+{{ m.example }}
+```
+{% endif %}
+{% endfor %}
+{% endif %}
 
 {% endfor %}
 {% endfor %}

@@ -250,6 +250,30 @@ def _parse_espn_player_box(boxscore):
 
 
 class CFBPlayProcess(object):
+    """Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
+
+    Wraps the ESPN ``playbyplay`` / ``summary`` endpoints (or a local JSON dump)
+    and pipes the result through a chain of feature-engineering steps --
+    down/distance, play-type flags, EPA, WPA, QBR, drive aggregation, and an
+    advanced box score. Use ``run_processing_pipeline()`` for the full feature
+    set or ``run_cleaning_pipeline()`` for a lighter clean.
+
+    Example:
+        End-to-end pipeline against the live ESPN endpoint::
+
+            from sportsdataverse.cfb import CFBPlayProcess
+            proc = CFBPlayProcess(gameId=401628334)
+            proc.espn_cfb_pbp()
+            result = proc.run_processing_pipeline()
+            len(result["plays"])
+
+        Offline replay from a JSON dump::
+
+            proc = CFBPlayProcess(gameId=401628334, path_to_json="./pbp_dump")
+            proc.cfb_pbp_disk()
+            result = proc.run_processing_pipeline()
+    """
+
     gameId = 0
     # logger = None
     ran_pipeline = False

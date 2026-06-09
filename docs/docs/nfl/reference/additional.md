@@ -4998,6 +4998,193 @@ slim = proc.run_processing_pipeline()
 sorted(slim.keys())  # ['boxscore', 'plays']
 ```
 
+**Methods**
+
+#### `NFLPlayProcess.corrupt_pbp_check()`
+
+Detect ESPN payloads that look corrupt or partial.
+
+Returns `True` when one of three guard conditions trips:
+
+* No plays at all.
+* Fewer than 50 plays for a game ESPN reports as completed.
+* More than 500 plays for a game ESPN reports as completed.
+
+`run_processing_pipeline()` and `run_cleaning_pipeline()` use
+this to skip feature engineering on obviously broken payloads.
+
+**Returns**
+
+`True` if the payload looks corrupt; `False` otherwise.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401671801)
+proc.espn_nfl_pbp()
+if not proc.corrupt_pbp_check():
+    result = proc.run_processing_pipeline()
+```
+
+#### `NFLPlayProcess.create_box_score(play_df)`
+
+Build the advanced box score (passer / rusher / receiver / team / situational / defensive / turnover / drives)
+
+from a feature-engineered plays DataFrame.
+
+This is normally called by `run_processing_pipeline()` -- it
+auto-runs the pipeline first if it hasn't been triggered yet, so
+callers can also invoke it directly on a freshly-instantiated
+processor.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `play_df` | `pl.DataFrame` |  | The plays frame produced after the full feature-engineering chain (downs, play-type flags, EPA, WPA, drive aggregation). |
+
+**Returns**
+
+Box score keyed by `"pass"`, `"rush"`, `"receiver"`, `"team"`, `"situational"`, `"defensive"`, `"turnover"`, `"drives"` -- each value a list of dicts ready to be serialized.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401671801)
+proc.espn_nfl_pbp()
+result = proc.run_processing_pipeline()
+box = result["advBoxScore"]
+sorted(box.keys())
+```
+
+#### `NFLPlayProcess.espn_nfl_pbp(**kwargs)`
+
+espn_nfl_pbp() - Pull the game by id. Data from API endpoints: `nfl/playbyplay`, `nfl/summary`
+
+**Returns**
+
+Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "timeouts", "homeTeamSpread", "overUnder", "pickcenter", "againstTheSpread", "odds", "predictor", "winprobability", "espnWP", "gameInfo", "season"
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401220403)
+payload = proc.espn_nfl_pbp()
+sorted(payload.keys())[:5]
+
+# Raw ESPN passthrough (no key normalization)
+
+proc_raw = NFLPlayProcess(gameId=401220403, raw=True)
+espn_dump = proc_raw.espn_nfl_pbp()
+
+# Chain into the full processing pipeline
+
+proc = NFLPlayProcess(gameId=401220403)
+proc.espn_nfl_pbp()
+result = proc.run_processing_pipeline()
+```
+
+#### `NFLPlayProcess.nfl_pbp_disk()`
+
+Load a previously-saved ESPN payload from `{path_to_json}/{gameId}.json`.
+
+Use this to replay an old game offline without hitting the ESPN
+endpoint -- handy for snapshot-driven tests and reproducible
+feature engineering.
+
+**Returns**
+
+The parsed JSON content; also stored on `self.json`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401220403, path_to_json="./pbp_dump")
+proc.nfl_pbp_disk()
+result = proc.run_processing_pipeline()
+```
+
+#### `NFLPlayProcess.nfl_pbp_json(**kwargs)`
+
+Set `self.json` to the imported `json` module reference (legacy stub).
+
+Retained for API compatibility. Prefer `espn_nfl_pbp()` (live)
+or `nfl_pbp_disk()` (offline) to populate `self.json` with an
+actual ESPN payload.
+
+**Returns**
+
+The Python `json` module reference (mirrors legacy behavior).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401220403)
+proc.nfl_pbp_json()  # populates `self.json` with the json module
+```
+
+#### `NFLPlayProcess.run_cleaning_pipeline()`
+
+Run the lighter cleaning pipeline against `self.json`.
+
+Identical to `run_processing_pipeline()` up through the
+add_spread_time` step but stops short of EPA / WPA / QBR /
+drive aggregation and the advanced box score. Use this when you
+want clean play structure without the modeled features.
+
+**Returns**
+
+The cleaned game dict (or the subset specified by `return_keys` at construction).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401671801)
+proc.espn_nfl_pbp()
+cleaned = proc.run_cleaning_pipeline()
+"plays" in cleaned and "advBoxScore" not in cleaned
+```
+
+#### `NFLPlayProcess.run_processing_pipeline()`
+
+Run the full feature-engineering pipeline against `self.json`.
+
+Pipes the plays frame through the chain of helpers: downs,
+play-type flags, rush/pass flags, team-score variables, new play
+types, penalties, play-category flags, yardage cols, player cols,
+post-play cols, spread time, EPA, WPA, drive data, and QBR --
+followed by the advanced box score build.
+
+**Returns**
+
+Dict | None: The full processed game dict (or the subset specified by `return_keys` at construction). Returns the partial result when `corrupt_pbp_check()` short-circuits.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess
+proc = NFLPlayProcess(gameId=401671801)
+proc.espn_nfl_pbp()
+result = proc.run_processing_pipeline()
+len(result["plays"]), len(result["drives"])
+
+# Subset returned keys for downstream serialization
+
+proc = NFLPlayProcess(
+    gameId=401671801,
+    return_keys=["plays", "advBoxScore", "winprobability"],
+)
+proc.espn_nfl_pbp()
+slim = proc.run_processing_pipeline()
+sorted(slim.keys())
+```
+
 ### `get_current_nfl_season(roster: 'bool' = False) -> 'int'`
 
 Return the current NFL season year.

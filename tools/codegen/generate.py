@@ -2099,6 +2099,84 @@ def _clean_example(text: str) -> str:
     return result
 
 
+# Default object.__init__ docstring -- carries no real constructor docs, so a
+# class whose __init__ shows only this is treated as having no __init__ docstring.
+_INIT_DOC_BOILERPLATE = "Initialize self."
+
+
+def _parse_doc_params(raw: str) -> dict:
+    """``{arg_name: {"description","type_name"}}`` parsed from a raw docstring.
+
+    Strict ``docstring_parser`` first; the lenient ``_fallback_doc_sections``
+    recovery only when the strict parse yields no params (wrapped multi-line
+    Google ``Args`` defeat the strict parser)."""
+    from docstring_parser import parse
+
+    raw = raw or ""
+    try:
+        ds = parse(raw)
+    except Exception:  # noqa: BLE001 -- AUTO parse can raise on malformed sections.
+        ds = None
+    out: dict[str, dict] = {}
+    ds_params = list(ds.params) if ds is not None else []
+    for p in ds_params:
+        if p.arg_name:
+            out[p.arg_name] = {"description": p.description or "", "type_name": p.type_name or ""}
+    if not ds_params:
+        for p in _fallback_doc_sections(raw)["params"]:
+            out.setdefault(p["arg_name"], {"description": p["description"], "type_name": p["type_name"]})
+    return out
+
+
+def _method_signature(method) -> str:
+    """``inspect.signature(method)`` as a call string with ``self``/``cls`` dropped."""
+    import inspect
+
+    try:
+        sig = inspect.signature(method)
+    except (ValueError, TypeError):
+        return "(...)"
+    params = [p for n, p in sig.parameters.items() if n not in ("self", "cls")]
+    try:
+        return str(sig.replace(parameters=params))
+    except (ValueError, TypeError):
+        return "(...)"
+
+
+def _augment_class_view(cls, view: dict) -> None:
+    """In-place: enrich a class autodoc ``view`` with constructor-doc backfill +
+    a per-method doc-view list.
+
+    A class commonly documents its constructor arguments on ``__init__`` rather
+    than on the class object that ``inspect.getdoc`` reads (e.g. CFBPlayProcess),
+    so blank constructor param cells are backfilled from ``__init__``. Each public
+    (non-underscore) method gets its own :func:`_doc_view` so the template can
+    render the method's signature, description, parameters, returns, and example."""
+    import inspect
+
+    init_raw = inspect.getdoc(cls.__init__) or ""
+    if init_raw.startswith(_INIT_DOC_BOILERPLATE):
+        init_raw = ""
+    if init_raw:
+        init_params = _parse_doc_params(init_raw)
+        for p in view["params"]:
+            if p["description"]:
+                continue
+            ip = init_params.get(p["name"])
+            if ip and ip["description"]:
+                p["description"] = _normalize_rst(" ".join(ip["description"].split()))
+                if not p["type"] and ip["type_name"]:
+                    p["type"] = ip["type_name"]
+
+    methods = []
+    for name, member in inspect.getmembers(cls, predicate=inspect.isfunction):
+        if name.startswith("_"):
+            continue
+        methods.append({"name": name, "signature": _method_signature(member), **_doc_view(member)})
+    methods.sort(key=lambda m: m["name"])
+    view["methods"] = methods
+
+
 def _doc_view(obj) -> dict:
     """Parsed docstring + signature for rich autodoc rendering of ``obj``.
 
@@ -2106,7 +2184,12 @@ def _doc_view(obj) -> dict:
     callables: every field falls back to an empty value rather than raising. Param
     descriptions come from the docstring; param *types* prefer the live annotation
     (docstrings frequently omit them) and fall back to the docstring's declared
-    type. ``self``/``cls`` and ``*args``/``**kwargs`` are dropped from the table."""
+    type. ``self``/``cls`` and ``*args``/``**kwargs`` are dropped from the table.
+
+    For a class, ``inspect.signature``/``getdoc`` resolve the constructor; the
+    returned view is then enriched by :func:`_augment_class_view` with a
+    ``methods`` list (one doc-view per public method). Non-class objects carry an
+    empty ``methods`` list."""
     import inspect
 
     from docstring_parser import parse
@@ -2176,13 +2259,17 @@ def _doc_view(obj) -> dict:
     if not raw_example and fb["example"]:
         raw_example = fb["example"]
     example = _clean_example(raw_example)
-    return {
+    result = {
         "short": _normalize_rst((ds_short or "").strip()),
         "long": long,
         "params": params,
         "returns": returns,
         "example": example,
+        "methods": [],
     }
+    if inspect.isclass(obj):
+        _augment_class_view(obj, result)
+    return result
 
 
 def _autodoc_names(league: str | None, corpus: str) -> list[str]:
@@ -2245,6 +2332,11 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         for p in view["params"]:
             for k in ("type", "default", "description"):
                 p[k] = p[k].replace("|", "\\|")
+        # Class methods (classes only): escape each method's param cells too.
+        for m in view.get("methods", []):
+            for p in m["params"]:
+                for k in ("type", "default", "description"):
+                    p[k] = p[k].replace("|", "\\|")
         # Returns column table from the committed autodoc schema (offline read);
         # empty list -> the template falls back to the docstring Returns prose.
         # Blank description cells are backfilled from the mined SDV R-package dict
