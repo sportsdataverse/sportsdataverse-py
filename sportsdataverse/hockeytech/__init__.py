@@ -9,5 +9,6 @@ from __future__ import annotations
 
 from sportsdataverse.hockeytech._client import hockeytech_api
 from sportsdataverse.hockeytech._leagues import LEAGUES, LeagueConfig, resolve_season_id
+from sportsdataverse.hockeytech._analytics import enrich_pbp
 
-__all__ = ["hockeytech_api", "LEAGUES", "LeagueConfig", "resolve_season_id"]
+__all__ = ["hockeytech_api", "LEAGUES", "LeagueConfig", "resolve_season_id", "enrich_pbp"]

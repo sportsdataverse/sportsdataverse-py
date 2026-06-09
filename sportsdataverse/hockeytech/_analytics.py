@@ -1,4 +1,4 @@
-"""Pure HockeyTech analytics: frame(s) -> frame. No network.
+"""Pure HockeyTech analytics: frame(s) -> frame. No network (by default).
 
 Corsi/Fenwick caveat: the HockeyTech feed has no missed-shot event, so shot
 attempts = shot + blocked_shot + goal. Both metrics are proxies; outputs carry
@@ -8,6 +8,7 @@ attempts = shot + blocked_shot + goal. Both metrics are proxies; outputs carry
 from __future__ import annotations
 
 import math
+from typing import Any, Optional
 
 import polars as pl
 
@@ -553,6 +554,167 @@ def corsi_fenwick_on_ice(pbp: pl.DataFrame) -> pl.DataFrame:
             }
         )
     return pl.DataFrame(rows, schema=_CORSI_FENWICK_ON_ICE_SCHEMA)
+
+
+def enrich_pbp(
+    df: pl.DataFrame,
+    league: str,
+    game_id: int,
+    *,
+    meta_payload: Optional[Any] = None,
+    shifts_payload: Optional[Any] = None,
+    return_as_pandas: bool = False,
+) -> Any:
+    """Enrich a parsed HockeyTech PBP frame — league-generic.
+
+    Applies the full enrichment pipeline:
+
+    1. Game-meta join (``game_date``, ``game_season``, ``game_season_id``,
+       ``home_team``, ``home_team_id``, ``away_team``, ``away_team_id``) from
+       ``gc/gamesummary``.
+    2. Coordinate transforms (``*_original``, ``*_neutral``, ``*_fixed``,
+       ``*_right``, ``*_vertical`` — 10 columns) via
+       :func:`add_coord_transforms`.
+    3. Clock columns (``minute_start``, ``second_start``, ``clock``,
+       ``sec_from_start``) via :func:`add_clock_columns`.
+    4. Shot geometry (``shot_distance``, ``shot_angle``, ``scoring_chance``)
+       via :func:`add_shot_distance_angle` + :func:`scoring_chances`.
+    5. On-ice player tracking (``on_ice_home``, ``on_ice_away``) from
+       ``modulekit/gameshifts`` via :func:`build_on_ice`.
+
+    This function is pure when ``meta_payload`` and ``shifts_payload`` are
+    injected (no network calls).  When either is ``None`` the corresponding
+    feed is fetched via ``hockeytech_api`` using the supplied ``league`` code.
+    Callers that need test isolation should fetch both payloads via their own
+    (patchable) ``hockeytech_api`` reference and pass them in.
+
+    Parameters
+    ----------
+    df:
+        Raw frame produced by ``parse_pbp``.
+    league:
+        HockeyTech league code (e.g. ``"pwhl"``, ``"ohl"``, ``"whl"``).
+    game_id:
+        Numeric game identifier.
+    meta_payload:
+        Optional pre-fetched ``gc/gamesummary`` JSON dict.  Fetched live when
+        ``None``.
+    shifts_payload:
+        Optional pre-fetched ``modulekit/gameshifts`` JSON dict.  Fetched live
+        when ``None``.  Pass ``{}`` to suppress on-ice computation entirely.
+    return_as_pandas:
+        When ``True`` return a ``pandas.DataFrame``; otherwise return a
+        :class:`polars.DataFrame`.
+
+    Returns
+    -------
+    polars.DataFrame | pandas.DataFrame
+        Enriched play-by-play frame.
+    """
+    # Import here to avoid top-level circular dependency risk.
+    # _analytics is imported by pwhl_api which also imports hockeytech_api;
+    # keeping this import lazy sidesteps any future circular-import issues.
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._client import hockeytech_api
+
+    # ------------------------------------------------------------------
+    # Step 1: fetch meta if not provided
+    # ------------------------------------------------------------------
+    if meta_payload is None:
+        meta_payload = hockeytech_api(league, "gc", "gamesummary", {"game_id": game_id})
+
+    # ------------------------------------------------------------------
+    # Step 2: extract game-meta fields from GC.Gamesummary
+    # ------------------------------------------------------------------
+    gs_root = (meta_payload if isinstance(meta_payload, dict) else {}).get("GC", {}) or {}
+    gs = gs_root.get("Gamesummary", gs_root) or {}
+    gs_meta = gs.get("meta") or {}
+    home_raw = gs.get("home") or {}
+    away_raw = gs.get("visitor") or {}
+
+    home_team: str = str(home_raw.get("name") or home_raw.get("city") or "")
+    home_team_id: str = str(gs_meta.get("home_team") or home_raw.get("id") or home_raw.get("team_id") or "")
+    away_team: str = str(away_raw.get("name") or away_raw.get("city") or "")
+    away_team_id: str = str(gs_meta.get("visiting_team") or away_raw.get("id") or away_raw.get("team_id") or "")
+
+    game_date: str = str(gs_meta.get("date_played") or gs.get("game_date_iso_8601") or gs.get("game_date") or "")
+    game_season_raw = game_date[:4] if game_date else None
+    game_season: Optional[int] = int(game_season_raw) if game_season_raw and game_season_raw.isdigit() else None
+    game_season_id: str = str(gs_meta.get("season_id") or "")
+
+    # ------------------------------------------------------------------
+    # Step 3: add game-meta literal columns BEFORE coord transforms
+    #   (add_coord_transforms needs home_team_id to compute right/vertical)
+    # ------------------------------------------------------------------
+    df = df.with_columns(
+        game_date=pl.lit(game_date),
+        game_season=pl.lit(game_season),
+        game_season_id=pl.lit(game_season_id),
+        home_team=pl.lit(home_team),
+        home_team_id=pl.lit(home_team_id),
+        away_team=pl.lit(away_team),
+        away_team_id=pl.lit(away_team_id),
+    )
+
+    # ------------------------------------------------------------------
+    # Step 4: coordinate transforms
+    # ------------------------------------------------------------------
+    df = add_coord_transforms(df)
+
+    # ------------------------------------------------------------------
+    # Step 5: clock columns
+    # ------------------------------------------------------------------
+    df = add_clock_columns(df)
+
+    # ------------------------------------------------------------------
+    # Step 6: shot geometry (use intermediate rink-feet frame)
+    # ------------------------------------------------------------------
+    geo = df.with_columns(
+        x_coord=(pl.col("x_coord_original") / 3.0 - 100.0),
+        y_coord=(42.5 - (pl.col("y_coord_original") * 85.0 / 300.0)),
+    )
+    geo = scoring_chances(add_shot_distance_angle(geo))
+    df = df.with_columns(
+        shot_distance=geo["shot_distance"],
+        shot_angle=geo["shot_angle"],
+        scoring_chance=geo["scoring_chance"],
+    )
+
+    # ------------------------------------------------------------------
+    # Step 7: on-ice player tracking via shifts
+    # ------------------------------------------------------------------
+    if shifts_payload is None:
+        shifts_payload = hockeytech_api(league, "modulekit", "gameshifts", {"game_id": game_id})
+
+    if isinstance(shifts_payload, dict):
+        shifts = P.parse_shifts(shifts_payload, game_id=game_id)
+    else:
+        shifts = pl.DataFrame()
+
+    if df.height > 0 and shifts.height > 0:
+        elapsed_s = pl.col("minute_start") * 60 + pl.col("second_start")
+        time_s = (1200 - elapsed_s).cast(pl.Int64, strict=False)
+
+        df_copy = df.with_columns(
+            _period_str=pl.col("period_of_game"),
+            period_of_game=pl.col("period_of_game").cast(pl.Int64, strict=False),
+            time_s=time_s,
+        )
+        result = build_on_ice(df_copy, shifts)
+        result = result.with_columns(period_of_game=pl.col("_period_str")).drop(["_period_str", "time_s"])
+        df = df.with_columns(
+            on_ice_home=result["on_ice_home"],
+            on_ice_away=result["on_ice_away"],
+        )
+    else:
+        df = df.with_columns(
+            on_ice_home=pl.lit(None, dtype=pl.Utf8),
+            on_ice_away=pl.lit(None, dtype=pl.Utf8),
+        )
+
+    if return_as_pandas:
+        return df.to_pandas()
+    return df
 
 
 def per60(value_col: str, toi_seconds_col: str = "toi_seconds") -> pl.Expr:
