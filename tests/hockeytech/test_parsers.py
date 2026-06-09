@@ -138,3 +138,39 @@ def test_parse_pbp_a_one_row_per_event_with_fastrhockey_cols():
         "short_handed",
     ):
         assert col in df.columns, f"missing parity column {col}"
+
+
+def test_parse_shifts_one_row_per_stint():
+    from sportsdataverse.hockeytech._parsers import parse_shifts
+
+    df = parse_shifts(_load("pwhl_gameshifts_42"), game_id=42)
+    import polars as pl
+
+    assert isinstance(df, pl.DataFrame) and df.height > 0
+    for col in (
+        "game_id",
+        "player_id",
+        "first_name",
+        "last_name",
+        "home",
+        "period",
+        "start_time",
+        "end_time",
+        "length",
+        "start_s",
+        "end_s",
+    ):
+        assert col in df.columns
+    # countdown clock: start_s >= end_s within a shift
+    assert (df["start_s"] >= df["end_s"]).all()
+    # game_id echoed
+    assert (df["game_id"] == 42).all()
+
+
+def test_mmss_to_seconds_roundtrip():
+    from sportsdataverse.hockeytech._parsers import mmss_to_seconds
+
+    assert mmss_to_seconds("03:16") == 196
+    assert mmss_to_seconds("00:00") == 0
+    assert mmss_to_seconds(None) is None
+    assert mmss_to_seconds("") is None

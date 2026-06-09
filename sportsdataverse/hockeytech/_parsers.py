@@ -381,6 +381,75 @@ def parse_pbp(
     return _to_frame(rows, return_as_pandas)
 
 
+def mmss_to_seconds(value: Any) -> Optional[int]:
+    """Convert a ``'MM:SS'`` clock string to total seconds.
+
+    Returns ``None`` for ``None`` or empty string inputs.  Countdown-clock
+    values (e.g. ``'03:16'``) are converted exactly as supplied -- the caller
+    is responsible for any inversion logic.
+
+    Examples:
+        >>> mmss_to_seconds("03:16")
+        196
+        >>> mmss_to_seconds("00:00")
+        0
+        >>> mmss_to_seconds(None) is None
+        True
+    """
+    if value in (None, ""):
+        return None
+    try:
+        m, s = str(value).split(":")
+        return int(m) * 60 + int(s)
+    except (ValueError, AttributeError):
+        return None
+
+
+def parse_shifts(payload: Any, game_id: Any = None, return_as_pandas: bool = False) -> Any:
+    """Parse a HockeyTech ``modulekit/gameshifts`` JSON payload into a flat frame.
+
+    One row per player-shift stint.  Returns a :class:`polars.DataFrame` by
+    default; pass ``return_as_pandas=True`` for a :class:`pandas.DataFrame`.
+    An empty/None payload returns a zero-row frame of the same type, never
+    raises.
+
+    The shift clock is a **countdown** within the period (``start_time >
+    end_time``).  ``start_s`` and ``end_s`` are the raw countdown values
+    converted to seconds -- so ``start_s >= end_s`` for every row.
+
+    Args:
+        payload: The parsed JSON dict from the HockeyTech ``gameshifts``
+            endpoint (keyed under ``SiteKit.Gameshifts``).
+        game_id: Optional game identifier echoed onto every row as ``game_id``.
+        return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
+            instead of a :class:`polars.DataFrame`.
+    """
+    gs = _sitekit(payload, "Gameshifts") or {}
+    rows: List[Dict[str, Any]] = []
+    for side in ("home", "visitor"):
+        for player in gs.get(side, []) or []:
+            for sh in player.get("shifts", []) or []:
+                rows.append(
+                    {
+                        "game_id": game_id,
+                        "player_id": player.get("player_id"),
+                        "first_name": player.get("first_name"),
+                        "last_name": player.get("last_name"),
+                        "jersey_number": player.get("jersey_number"),
+                        "home": int(player.get("home", 1 if side == "home" else 0)),
+                        "period": int(sh.get("period")) if sh.get("period") else None,
+                        "start_time": sh.get("start_time"),
+                        "end_time": sh.get("end_time"),
+                        "length": sh.get("length"),
+                        "start_s": mmss_to_seconds(sh.get("start_time")),
+                        "end_s": mmss_to_seconds(sh.get("end_time")),
+                        "goal_on_shift": int(sh.get("goal_on_shift", 0) or 0),
+                        "penalty_on_shift": int(sh.get("penalty_on_shift", 0) or 0),
+                    }
+                )
+    return _to_frame(rows, return_as_pandas)
+
+
 def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
     """Parse a HockeyTech ``modulekit/seasons`` JSON payload into a flat frame.
 
