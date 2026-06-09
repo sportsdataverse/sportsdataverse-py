@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
   - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
@@ -82,6 +83,22 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Documentation — per-league Python ↔ R parity tables
+
+- Each league's `index.md` now carries a **Python ↔ R parity** table mapping every
+  `sportsdataverse` function to its equivalent in the sister R package
+  (cfbfastR / hoopR / wehoop / baseballr / fastRhockey), linking the Python doc page
+  and the R pkgdown reference. Driven by a new `tools/codegen/build_r_exports.py`
+  miner (NAMESPACE → committed `r_exports.yaml`, so links never 404 and the offline
+  `--check` stays deterministic) plus a curated `r_parity_aliases.yaml` for
+  divergent names (e.g. `mlb_api_*` → baseballr `mlb_*`, +36 verified). Coverage:
+  nhl 202, mlb 107, wnba 83, nba/wbb 74, mbb 69, cfb 55, nfl 26, pwhl 15.
+- Fixed a self-referential codegen bug the parity table exposed: `render_autodoc_page`
+  computed "already documented" against a corpus that included the index, so the
+  index's parity table (which names autodoc functions) caused those functions to be
+  dropped from `additional.md` and their parity links to 404. It now uses the
+  reference-pages corpus only, matching the autodoc-name count used for the index.
 
 ### Documentation — example notebooks repaired, expanded, and rendered on-site
 

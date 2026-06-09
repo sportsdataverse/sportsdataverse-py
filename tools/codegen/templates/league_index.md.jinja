@@ -20,3 +20,14 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 {% for nb in notebooks %}- [{{ nb.label }}]({{ nb.url }})
 {% endfor %}
 {% endif %}
+{% if r_parity %}
+
+## Python ↔ R parity
+
+Each `sportsdataverse` function and its equivalent in the sister R package, [`{{ r_pkg }}`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
+
+| `sportsdataverse.{{ prefix }}` (Python) | `{{ r_pkg }}` (R) |
+|---|---|
+{% for row in r_parity %}| [`{{ row.py }}`]({{ row.py_url }}) | [`{{ row.r }}`]({{ row.r_url }}) |
+{% endfor %}
+{% endif %}

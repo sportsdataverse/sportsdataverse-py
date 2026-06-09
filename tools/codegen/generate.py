@@ -253,6 +253,101 @@ def _table_cell_desc(stored: str, league: str | None, col: str) -> str:
     return normalized.replace("|", "\\|")
 
 
+# ---------------------------------------------------------------------------
+# Python <-> R function parity (per-league index table).
+#
+# The sdv-py wrappers mirror the sister R packages' names, so most Python
+# functions have a same-named R function. We link each Python function to its
+# equivalent R function's pkgdown reference -- but only when that R function
+# actually exists (mined into r_exports.yaml, CI-offline-safe), so the link can't
+# 404. r_parity_aliases.yaml supplies curated equivalents where the names diverge
+# (e.g. nfl load_nfl_* -> nflreadr load_*, mlb_api_* -> baseballr mlb_*).
+# ---------------------------------------------------------------------------
+
+_R_EXPORTS_FILE = ROOT / "tools" / "codegen" / "r_exports.yaml"
+_R_PARITY_ALIASES_FILE = ROOT / "tools" / "codegen" / "r_parity_aliases.yaml"
+
+# League prefix -> R package for parity (pwhl is also fastRhockey; otherwise the
+# same mapping used for column descriptions).
+_R_PARITY_PACKAGE = {**_LEAGUE_R_PACKAGE, "pwhl": "fastRhockey"}
+
+# R package -> pkgdown reference base URL (one <fn>.html per function topic).
+_R_PKGDOWN_BASE = {
+    "cfbfastR": "https://cfbfastR.sportsdataverse.org/reference",
+    "hoopR": "https://hoopR.sportsdataverse.org/reference",
+    "wehoop": "https://wehoop.sportsdataverse.org/reference",
+    "baseballr": "https://billpetti.github.io/baseballr/reference",
+    "fastRhockey": "https://fastRhockey.sportsdataverse.org/reference",
+    "nflreadr": "https://nflreadr.nflverse.com/reference",
+    "nflfastR": "https://www.nflfastr.com/reference",
+}
+
+# Level-2 endpoint/loader function header: ``## `fn` `` (name only, no signature).
+_DOC_L2_FN = re.compile(r"(?m)^## `([A-Za-z_][A-Za-z0-9_]*)`\s*$")
+
+
+@functools.lru_cache(maxsize=1)
+def _r_exports() -> dict:
+    """``{package: [exported fn, ...]}`` mined from the R NAMESPACE files.
+
+    Cached loader of the committed ``r_exports.yaml``; empty dict if absent so the
+    parity table is a silent no-op rather than a hard failure on a fresh checkout."""
+    if not _R_EXPORTS_FILE.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(_R_EXPORTS_FILE.read_text(encoding="utf-8")) or {}
+
+
+@functools.lru_cache(maxsize=1)
+def _r_parity_aliases() -> dict:
+    """``{league: {python_fn: r_fn}}`` curated cross-name equivalents (committed)."""
+    if not _R_PARITY_ALIASES_FILE.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(_R_PARITY_ALIASES_FILE.read_text(encoding="utf-8")) or {}
+
+
+def _r_parity_rows(prefix: str, ref_pages: dict, autodoc_names: list[str]) -> list[dict]:
+    """``[{py, py_url, r, r_url}]`` linking each league function to its R equivalent.
+
+    ``ref_pages`` is ``{slug: rendered_markdown}`` for the league's reference pages
+    (used to find each endpoint/loader function's anchor); ``autodoc_names`` are the
+    hand-written functions documented on ``reference/additional``. A row is emitted
+    only when an R equivalent exists (curated alias first, else same-named export),
+    so every link resolves. Sorted by Python function name."""
+    pkg = _R_PARITY_PACKAGE.get(prefix)
+    base = _R_PKGDOWN_BASE.get(pkg or "")
+    if not pkg or not base:
+        return []
+    r_exports = set(_r_exports().get(pkg, []))
+    aliases = _r_parity_aliases().get(prefix, {})
+
+    # function name -> reference-page slug (for the Python doc link anchor)
+    name_slug: dict[str, str] = {}
+    for slug, content in ref_pages.items():
+        for m in _DOC_L2_FN.finditer(content):
+            name_slug.setdefault(m.group(1), slug)
+    for name in autodoc_names:
+        name_slug.setdefault(name, "additional")
+
+    rows = []
+    for name in sorted(name_slug):
+        r_fn = aliases.get(name) or (name if name in r_exports else None)
+        if not r_fn:
+            continue
+        rows.append(
+            {
+                "py": name,
+                "py_url": f"reference/{name_slug[name]}#{name}",
+                "r": r_fn,
+                "r_url": f"{base}/{r_fn}.html",
+            },
+        )
+    return rows
+
+
 @functools.lru_cache(maxsize=None)
 def _return_table(schema_name: str | None, league: str | None = None) -> str:
     """Markdown ``@return`` table(s) for a ``returns_schema``.
@@ -1638,13 +1733,16 @@ def render_league_index(
     *,
     has_additional: bool = False,
     additional_count: int = 0,
+    r_parity: list[dict] | None = None,
+    r_pkg: str | None = None,
 ) -> str:
     """Render a league's ``index.md`` (reference table + optional loaders link).
 
     ``has_additional`` / ``additional_count`` are supplied by :func:`_render_docs_all`
     (and :func:`_autodoc_names_by_scope`) after they compute the autodoc set for this
     league, so the index table can link the ``reference/additional`` page with an
-    accurate function count."""
+    accurate function count. ``r_parity`` / ``r_pkg`` (also from
+    :func:`_render_docs_all`) drive the Python<->R parity table."""
     loaders = _loader_doc_views(prefix)
     template = render.ENV.get_template("league_index.md.jinja")
     return template.render(
@@ -1655,6 +1753,8 @@ def render_league_index(
         has_additional=has_additional,
         additional_count=additional_count,
         notebooks=_notebooks_for(prefix),
+        r_parity=r_parity or [],
+        r_pkg=r_pkg,
     )
 
 
@@ -2627,13 +2727,28 @@ def _render_docs_all() -> dict[str, str]:
         # corpus does not change which names are "already documented".
         ref_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
         autodoc_names_list = _autodoc_names(prefix, ref_corpus)
+        # {slug: content} for this league's reference pages (already in `out`), used
+        # to anchor each Python function in the parity table to its doc page.
+        ref_prefix = f"{prefix}/reference/"
+        ref_pages = {
+            rel[len(ref_prefix) : -3]: c for rel, c in out.items() if rel.startswith(ref_prefix) and rel.endswith(".md")
+        }
         out[f"{prefix}/index.md"] = render_league_index(
             prefix,
             has_additional=bool(autodoc_names_list),
             additional_count=len(autodoc_names_list),
+            r_parity=_r_parity_rows(prefix, ref_pages, autodoc_names_list),
+            r_pkg=_R_PARITY_PACKAGE.get(prefix),
         )
-        league_corpus = ref_corpus + "\n" + out[f"{prefix}/index.md"]
-        autodoc = render_autodoc_page(prefix, league_corpus)
+        # Compute the autodoc page against the reference-pages corpus only -- the
+        # SAME corpus as autodoc_names_list above -- NOT the index. The index now
+        # carries the Python<->R parity table, which mentions autodoc function names;
+        # including it here would make render_autodoc_page consider those functions
+        # "already documented" and drop them from additional.md, breaking the parity
+        # links that point at additional#<fn>. Excluding the index keeps the autodoc
+        # page in lockstep with autodoc_names_list (the index has no function-name
+        # headers of its own, so this doesn't lose any real documentation signal).
+        autodoc = render_autodoc_page(prefix, ref_corpus)
         if autodoc is not None:
             out[f"{prefix}/reference/{_AUTODOC_PAGE}"] = autodoc
         if apis or loaders or autodoc is not None:

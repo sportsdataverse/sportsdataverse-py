@@ -1,0 +1,44 @@
+# Curated Python->R function-name equivalents where the names diverge from
+# strict identity (which generate.py handles automatically). Verified to exist in
+# the target package's r_exports.yaml. Shape: {league: {python_fn: r_fn}}.
+# The bulk here is MLB: sdv prefixes the MLB Stats API wrappers `mlb_api_*` where
+# baseballr uses `mlb_*`.
+mlb:
+  mlb_api_all_star_final_vote: mlb_all_star_final_vote
+  mlb_api_all_star_write_ins: mlb_all_star_write_ins
+  mlb_api_attendance: mlb_attendance
+  mlb_api_awards: mlb_awards
+  mlb_api_conferences: mlb_conferences
+  mlb_api_divisions: mlb_divisions
+  mlb_api_draft: mlb_draft
+  mlb_api_draft_latest: mlb_draft_latest
+  mlb_api_draft_prospects: mlb_draft_prospects
+  mlb_api_game_changes: mlb_game_changes
+  mlb_api_game_content: mlb_game_content
+  mlb_api_game_context_metrics: mlb_game_context_metrics
+  mlb_api_game_pace: mlb_game_pace
+  mlb_api_jobs: mlb_jobs
+  mlb_api_pbp: mlb_pbp
+  mlb_api_pbp_diff: mlb_pbp_diff
+  mlb_api_people: mlb_people
+  mlb_api_schedule: mlb_schedule
+  mlb_api_schedule_postseason: mlb_schedule_postseason
+  mlb_api_schedule_postseason_series: mlb_schedule_postseason_series
+  mlb_api_seasons: mlb_seasons
+  mlb_api_seasons_all: mlb_seasons_all
+  mlb_api_sports: mlb_sports
+  mlb_api_standings: mlb_standings
+  mlb_api_stats: mlb_stats
+  mlb_api_stats_leaders: mlb_stats_leaders
+  mlb_api_team_affiliates: mlb_team_affiliates
+  mlb_api_team_alumni: mlb_team_alumni
+  mlb_api_team_coaches: mlb_team_coaches
+  mlb_api_team_leaders: mlb_team_leaders
+  mlb_api_team_personnel: mlb_team_personnel
+  mlb_api_team_stats: mlb_team_stats
+  mlb_api_teams: mlb_teams
+  mlb_api_teams_stats: mlb_teams_stats
+  mlb_api_teams_stats_leaders: mlb_teams_stats_leaders
+  mlb_api_venues: mlb_venues
+nhl:
+  nhl_web_schedule: nhl_schedule
