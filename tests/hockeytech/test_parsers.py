@@ -1,6 +1,7 @@
 # tests/hockeytech/test_parsers.py
 from __future__ import annotations
 
+
 import polars as pl
 
 from tests.conftest import load_fixture
@@ -8,6 +9,14 @@ from tests.conftest import load_fixture
 
 def _load(stem):
     return load_fixture("hockeytech", stem)
+
+
+def test_derive_season_year_century_rollover():
+    from sportsdataverse.hockeytech._parsers import _derive_season_year
+
+    assert _derive_season_year("1999-00 Regular Season") == 2000
+    assert _derive_season_year("2024-25 Regular Season") == 2025
+    assert _derive_season_year("2024 Regular Season") == 2024
 
 
 def test_parse_seasons_columns_and_year_derivation():

@@ -47,7 +47,12 @@ def _sitekit(payload: Any, key: str) -> Any:
 def _derive_season_year(name: str) -> Optional[int]:
     m = re.search(r"(\d{4})-(\d{2})", name or "")
     if m:
-        return int(m.group(1)[:2]) * 100 + int(m.group(2))
+        start = int(m.group(1))
+        end2 = int(m.group(2))
+        end = (start // 100) * 100 + end2
+        if end < start:
+            end += 100
+        return end
     m2 = re.search(r"(\d{4})", name or "")
     return int(m2.group(1)) if m2 else None
 

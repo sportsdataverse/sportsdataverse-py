@@ -201,6 +201,14 @@ _LEAGUE_R_PACKAGE = {
     "mlb": "baseballr",
     "nhl": "fastRhockey",
     "nfl": "nflreadr",
+    # Hockey junior leagues: use fastRhockey column descriptions (sport-appropriate)
+    # so the _merged fallback (which has basketball-specific phrases like
+    # "Las Vegas Aces" and "while on court") is never used for these leagues.
+    "ahl": "fastRhockey",
+    "ohl": "fastRhockey",
+    "whl": "fastRhockey",
+    "qmjhl": "fastRhockey",
+    "pwhl": "fastRhockey",
 }
 
 

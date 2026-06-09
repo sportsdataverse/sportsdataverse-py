@@ -53,25 +53,6 @@ skip_if_no_live = pytest.mark.skipif(
 )
 
 
-def skip_unless_hockeytech() -> None:
-    """Skip the calling test unless ``HOCKEYTECH_TESTS=1`` is set.
-
-    Call this as the **first statement** inside a test function to gate it
-    behind the env-var opt-in::
-
-        def test_something_live():
-            skip_unless_hockeytech()
-            ...
-
-    Without the env var the test is unconditionally skipped — no network
-    calls are made.  Set ``HOCKEYTECH_TESTS=1`` to run the live suite::
-
-        HOCKEYTECH_TESTS=1 python -m pytest tests/hockeytech/test_live.py -v
-    """
-    if os.environ.get("HOCKEYTECH_TESTS") != "1":
-        pytest.skip("set HOCKEYTECH_TESTS=1 to run live HockeyTech tests")
-
-
 # ---------------------------------------------------------------------------
 # Captured-fixture loader
 # ---------------------------------------------------------------------------

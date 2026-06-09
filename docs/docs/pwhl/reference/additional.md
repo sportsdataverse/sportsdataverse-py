@@ -33,19 +33,19 @@ A polars (or pandas) DataFrame of all games in the data repository.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
-| `season` | integer | Season year. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `game_status` | character | Game status label. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_date` | character | Game date. |
+| `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Unique identifier for the home team. |
+| `home_team_id` | character | Home team identifier. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `home_score` | character | Home team score at the time of the play. |
-| `away_score` | character | Away team score at the time of the play. |
-| `winner` | character | Winner. |
-| `venue` | character | Venue name. |
+| `away_team_id` | character | Away team identifier. |
+| `home_score` | character | Home team final score. |
+| `away_score` | character | Away team final score. |
+| `winner` | character | Whether this competitor won the game. |
+| `venue` | character | Venue where the game was played. |
 | `venue_url` | character | URL for the venue. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `game_type` | character | Game type the row belongs to. |
 | `game_json` | logical | Whether processed game JSON is available. |
 | `game_json_url` | character | URL to the processed game JSON. |
 | `PBP` | logical | Whether play-by-play data is available. |
@@ -131,7 +131,7 @@ Most-recent PWHL season as an end-year integer (max `season_yr`).
 
 ## Other
 
-### `pwhl_game_corsi(game_id: 'Any', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_game_corsi}
+### `pwhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pwhl_game_corsi}
 
 Player-level on-ice Corsi and Fenwick for a single PWHL game.
 
@@ -147,7 +147,7 @@ Every output row carries `corsi_includes_missed = False`.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Any` |  | HockeyTech game identifier (integer or string). |
+| `game_id` | `int` |  | HockeyTech game identifier (integer or string). |
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame` instead of a `polars.DataFrame`. |
 
 **Returns**
@@ -167,7 +167,7 @@ One row per on-ice player with columns: - `player_id` (Utf8) - `corsi_for`, `cor
 | `toi_seconds` | double |  |
 | `corsi_for_per60` | double |  |
 
-### `pwhl_game_shifts(game_id: 'Any', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_game_shifts}
+### `pwhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pwhl_game_shifts}
 
 Parsed shift stints for a single PWHL game.
 
@@ -178,7 +178,7 @@ row per player-shift stint via `~sportsdataverse.hockeytech._parsers.parse_shift
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Any` |  | HockeyTech game identifier (integer or string). |
+| `game_id` | `int` |  | HockeyTech game identifier (integer or string). |
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame` instead of a `polars.DataFrame`. |
 
 **Returns**
@@ -189,12 +189,12 @@ Columns include `player_id`, `first_name`, `last_name`, `home`, `period`, `start
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
 | `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `home` | integer | Home. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `start_time` | character | Kickoff time in eastern time zone. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `jersey_number` | character | Jersey number. |
+| `home` | integer | Whether the player's team was home. |
+| `period` | integer | Period number. |
+| `start_time` | character | Start time (local). |
 | `end_time` | character | End time (local). |
 | `length` | character | Length of the streak in games. |
 | `start_s` | integer |  |
@@ -233,21 +233,21 @@ by season, not `season` (name string). The resolved integer is passed as the
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
+| `rank` | integer | Rank of the streak. |
 | `player_id` | character | Unique player identifier. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `name` | character | Display name. |
+| `jersey_number` | character | Jersey number. |
+| `name` | character | Team mascot name. |
 | `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_code` | character | Internal team code. |
-| `team_logo` | character | Team logo image URL. |
+| `team_name` | character | Team name. |
+| `team_code` | character | Team abbreviation. |
+| `team_logo` | character | URL to the team logo image. |
 | `team_logo_small` | character |  |
 | `stat_formatted` | character |  |
 | `type_formatted` | character |  |
 | `photo` | character | URL to the player photo. |
 | `photo_small` | character |  |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `division` | character | Team division. |
+| `position` | character | Player position. |
+| `division` | character | Division identifier. |
 
 ### `pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_box}
 
@@ -304,15 +304,15 @@ Search for PWHL players by name.
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | character | Unique player identifier (V3 endpoints). |
+| `person_id` | character | Unique person identifier. |
 | `player_id` | character | Unique player identifier. |
-| `active` | character | TRUE if the row represents an active record (player / team / season). |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
+| `active` | character | Whether athlete is currently active. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
 | `phonetic_name` | character | Phonetic spelling of the player name. |
 | `shoots` | character | Shooting hand. |
 | `catches` | character | Catching hand (goalies). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `height` | character | Player height in inches. |
 | `weight` | character | Player weight in pounds. |
 | `rawbirthdate` | character |  |
 | `birthdate` | character | Date of birth. |
@@ -320,15 +320,15 @@ Search for PWHL players by name.
 | `birthprov` | character | Player birth province/state. |
 | `birthcntry` | character | Player birth country. |
 | `team_id` | character | Unique team identifier. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | character | Jersey number. |
 | `role_id` | character |  |
-| `season_id` | character | Unique season identifier. |
+| `season_id` | character | Season identifier. |
 | `role_name` | character |  |
 | `all_roles` | character |  |
 | `last_team_name` | character |  |
 | `last_team_code` | character |  |
-| `division` | character | Team division. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
+| `division` | character | Division identifier. |
+| `position` | character | Player position. |
 | `profile_image` | character |  |
 | `score` | character | Final score string. |
 | `last_active_date` | character |  |
@@ -349,7 +349,7 @@ PWHL player season stats across all seasons.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Unique season identifier. |
+| `season_id` | character | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
@@ -358,12 +358,12 @@ PWHL player season stats across all seasons.
 | `max_start_date` | character | Latest game start date for the season. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran` | character | Whether the player is a veteran. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | character | Jersey number. |
 | `goals` | character | Goals scored. |
 | `games_played` | character | Games played. |
-| `assists` | character | Total assists. |
-| `points` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
+| `assists` | character | Assists. |
+| `points` | character | Total points (goals + assists). |
+| `plus_minus` | character | Plus/minus rating. |
 | `penalty_minutes` | character | Penalty minutes. |
 | `power_play_goals` | character | Power-play goals. |
 | `power_play_assists` | character | Power-play assists. |
@@ -382,25 +382,25 @@ PWHL player season stats across all seasons.
 | `faceoff_attempts` | character | Faceoff attempts. |
 | `faceoff_pct` | character | Faceoff win percentage. |
 | `hits` | character | Hits. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_code` | character | Internal team code. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Team name. |
+| `team_code` | character | Team abbreviation. |
+| `team_city` | character | Team city. |
 | `team_nickname` | character | Team nickname. |
 | `team_id` | character | Unique team identifier. |
-| `active` | character | TRUE if the row represents an active record (player / team / season). |
+| `active` | character | Whether athlete is currently active. |
 | `first_goals` | character | First goals of a game. |
 | `insurance_goals` | character | Insurance goals. |
 | `overtime_goals` | character | Overtime goals. |
 | `unassisted_goals` | character | Unassisted goals. |
 | `empty_net_goals` | character | Empty-net goals. |
 | `penalty_minutes_per_game` | character | Penalty minutes per game. |
-| `division` | character | Team division. |
+| `division` | character | Division identifier. |
 | `ice_time` | character | Total ice time. |
 | `ice_time_minutes_seconds` | character | Ice time in minutes and seconds. |
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
-| `stat_type` | character | Stat type code (e.g. "win", "loss"). |
+| `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
-### `pwhl_player_toi(game_id: 'Any', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_toi}
+### `pwhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pwhl_player_toi}
 
 Per-player time-on-ice totals for a single PWHL game.
 
@@ -411,7 +411,7 @@ Fetches shifts via `pwhl_game_shifts` then aggregates via
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Any` |  | HockeyTech game identifier (integer or string). |
+| `game_id` | `int` |  | HockeyTech game identifier (integer or string). |
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame` instead of a `polars.DataFrame`. |
 
 **Returns**
@@ -421,8 +421,8 @@ One row per player with `player_id`, `first_name`, `last_name`, `toi_seconds`, `
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
 | `toi_seconds` | double |  |
 | `num_shifts` | integer |  |
 | `avg_shift_s` | double |  |
@@ -457,17 +457,17 @@ PWHL schedule — one row per game (matches fastRhockey `pwhl_schedule`).
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `game_status` | character | Game status label. |
+| `game_date` | character | Game date. |
+| `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Unique identifier for the home team. |
-| `home_score` | character | Home team score at the time of the play. |
+| `home_team_id` | character | Home team identifier. |
+| `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `away_score` | character | Away team score at the time of the play. |
-| `venue` | character | Venue name. |
-| `season_id` | character | Unique season identifier. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `away_team_id` | character | Away team identifier. |
+| `away_score` | character | Away team final score. |
+| `venue` | character | Venue where the game was played. |
+| `season_id` | character | Season identifier. |
+| `game_type` | character | Game type the row belongs to. |
 
 ### `pwhl_scorebar(return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_scorebar}
 
@@ -484,23 +484,23 @@ PWHL live scorebar (today ± 3 days).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `game_number` | character | Game number within a doubleheader. |
+| `id` | character | Unique player identifier. |
+| `season_id` | character | Season identifier. |
+| `league_id` | character | League identifier of the team. |
+| `game_number` | character | Game number within the schedule. |
 | `game_letter` | character |  |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `game_type` | character | Game type the row belongs to. |
 | `quick_score` | character |  |
-| `date` | character | Date in YYYY-MM-DD format. |
+| `date` | character | Game date (ISO 8601 datetime string). |
 | `flo_core_event_id` | character |  |
 | `flo_live_event_id` | character |  |
-| `game_date` | character | Game date (YYYY-MM-DD). |
+| `game_date` | character | Game date. |
 | `game_date_iso8601` | character |  |
 | `scheduled_time` | character |  |
 | `scheduled_formatted_time` | character |  |
-| `timezone` | character | Time zone in which the venue resides (i.e. Eastern Time -> "America/New_York"). |
+| `timezone` | character | Time zone of the transaction. |
 | `ticket_url` | character |  |
-| `home_id` | character | Unique identifier for home. |
+| `home_id` | character | Home team ESPN identifier. |
 | `home_code` | character |  |
 | `home_city` | character | Hometown of the athlete. |
 | `home_nickname` | character |  |
@@ -520,12 +520,12 @@ PWHL live scorebar (today ± 3 days).
 | `visitor_audio_url` | character |  |
 | `visitor_video_url` | character |  |
 | `visitor_webcast_url` | character |  |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
+| `period` | character | Period number. |
 | `period_name_short` | character |  |
 | `period_name_long` | character |  |
 | `game_clock` | character | Game clock. |
 | `game_summary_url` | character |  |
-| `home_wins` | character | Home team's wins. |
+| `home_wins` | character | Wins at home. |
 | `home_regulation_losses` | character |  |
 | `home_ot_losses` | character | Home overtime losses. |
 | `home_shootout_losses` | character |  |
@@ -533,12 +533,12 @@ PWHL live scorebar (today ± 3 days).
 | `visitor_regulation_losses` | character |  |
 | `visitor_ot_losses` | character |  |
 | `visitor_shootout_losses` | character |  |
-| `game_status` | character | Game status label. |
+| `game_status` | character | Game status text. |
 | `intermission` | character |  |
 | `game_status_string` | character |  |
 | `game_status_string_long` | character |  |
 | `ord` | character |  |
-| `venue_name` | character | Venue name. |
+| `venue_name` | character | Name of the venue. |
 | `venue_location` | character |  |
 | `league_name` | character | League name. |
 | `league_code` | character |  |
@@ -563,13 +563,13 @@ All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Unique season identifier. |
+| `season_id` | integer | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `season_short` | character | Short season name. |
 | `career` | character | Whether this is a career-stats season. |
 | `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `end_date` | character | End date (YYYY-MM-DD). |
+| `start_date` | character | Season start date. |
+| `end_date` | character | Season end date. |
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
@@ -590,10 +590,10 @@ PWHL standings — one row per team.
 
 | col_name | type | description |
 |---|---|---|
-| `team_code` | character | Internal team code. |
-| `losses` | character | Total losses. |
+| `team_code` | character | Team abbreviation. |
+| `losses` | character | Losses. |
 | `regulation_wins` | character | Wins in regulation. |
-| `points` | character | Points scored. |
+| `points` | character | Total points (goals + assists). |
 | `goals_for` | character | Goals for. |
 | `goals_against` | character | Goals against. |
 | `non_reg_wins` | character | Non-regulation wins. |
@@ -603,8 +603,8 @@ PWHL standings — one row per team.
 | `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
-| `team` | character | Team-side label or team identifier. |
-| `wins` | integer | Total wins. |
+| `team` | character | Team name. |
+| `wins` | integer | Wins. |
 
 ### `pwhl_stats(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, position: 'str' = 'skaters', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_stats}
 
@@ -626,27 +626,27 @@ PWHL aggregate stats by season and position.
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
 | `shortname` | character | Player short name. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `name` | character | Display name. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `name` | character | Team mascot name. |
 | `phonetic_name` | character | Phonetic spelling of the player name. |
-| `active` | character | TRUE if the row represents an active record (player / team / season). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `active` | character | Whether athlete is currently active. |
+| `height` | character | Player height in inches. |
 | `weight` | character | Player weight in pounds. |
 | `last_years_club` | character | Player's club in the previous season. |
-| `age` | character | Player age (in years). |
+| `age` | character | Player age. |
 | `shoots` | character | Shooting hand. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
+| `position` | character | Player position. |
 | `suspension_games_remaining` | character | Suspension games remaining. |
 | `suspension_indefinite` | character | Whether the suspension is indefinite. |
 | `rookie` | character | Whether the player is a rookie. |
 | `veteran` | character | Whether the player is a veteran. |
 | `draft_eligible` | character | Whether the player is draft eligible. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_code` | character | Internal team code. |
+| `jersey_number` | character | Jersey number. |
+| `team_name` | character | Team name. |
+| `team_code` | character | Team abbreviation. |
 | `team_id` | character | Unique team identifier. |
-| `division` | character | Team division. |
+| `division` | character | Division identifier. |
 | `birthdate` | character | Date of birth. |
 | `birthdate_year` | character | Player birth year. |
 | `hometown` | character | Prospect hometown. |
@@ -671,15 +671,15 @@ PWHL aggregate stats by season and position.
 | `shots` | character | Shots on goal. |
 | `loose_ball_recoveries` | character | Loose ball recoveries. |
 | `caused_turnovers` | character | Turnovers caused. |
-| `turnovers` | character | Total turnovers. |
+| `turnovers` | character | Turnovers committed. |
 | `hits` | character | Hits. |
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `ice_time_minutes_seconds` | character | Ice time in minutes and seconds. |
 | `shooting_percentage` | character | Shooting percentage. |
-| `assists` | character | Total assists. |
-| `points` | character | Points scored. |
+| `assists` | character | Assists. |
+| `points` | character | Total points (goals + assists). |
 | `points_per_game` | character | Points per game. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
+| `plus_minus` | character | Plus/minus rating. |
 | `penalty_minutes` | character | Penalty minutes. |
 | `penalty_minutes_per_game` | character | Penalty minutes per game. |
 | `ice_time_per_game_avg` | character | Average ice time per game. |
@@ -704,8 +704,8 @@ PWHL aggregate stats by season and position.
 | `shootout_percentage` | character | Shootout scoring percentage. |
 | `latest_team_id` | character | Most recent team identifier. |
 | `num_teams` | character | Number of teams the player has played for. |
-| `logo` | character | Team or league logo URL. |
-| `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
+| `logo` | character | URL to the team logo. |
+| `rank` | integer | Rank of the streak. |
 | `player_page_link` | character | URL to the player page. |
 | `player_image` | character |  |
 | `namelink` | character | HTML link for the player name. |
@@ -741,13 +741,13 @@ PWHL team roster for a given team + season.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `person_id` | character | Unique player identifier (V3 endpoints). |
-| `active` | character | TRUE if the row represents an active record (player / team / season). |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
+| `id` | character | Unique player identifier. |
+| `person_id` | character | Unique person identifier. |
+| `active` | character | Whether athlete is currently active. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
 | `phonetic_name` | character | Phonetic spelling of the player name. |
-| `display_name` | character | Display name. |
+| `display_name` | character | Player display name. |
 | `shoots` | character | Shooting hand. |
 | `hometown` | character | Prospect hometown. |
 | `homeprov` | character | Player home province/state. |
@@ -757,32 +757,32 @@ PWHL team roster for a given team + season.
 | `birthprov` | character | Player birth province/state. |
 | `birthcntry` | character | Player birth country. |
 | `birthplace` | character |  |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `height` | character | Player height in inches. |
 | `weight` | character | Player weight in pounds. |
 | `height_hyphenated` | character |  |
 | `hidden` | character |  |
 | `current_team` | character |  |
 | `player_id` | character | Unique player identifier. |
-| `status` | character | Status label. |
+| `status` | character | Status string (e.g. captain markers). |
 | `birthdate` | character | Date of birth. |
 | `birthdate_year` | character | Player birth year. |
 | `rawbirthdate` | character |  |
 | `latest_team_id` | character | Most recent team identifier. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran_description` | character |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `division` | character | Team division. |
+| `team_name` | character | Team name. |
+| `division` | character | Division identifier. |
 | `tp_jersey_number` | character |  |
 | `rookie` | character | Whether the player is a rookie. |
-| `position_id` | character | Unique position identifier. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
+| `position_id` | character | Official position identifier. |
+| `position` | character | Player position. |
 | `nhlteam` | character |  |
 | `player_id_1` | character |  |
 | `is_rookie` | character | Whether the player is a rookie. |
 | `h` | character | Hits. |
 | `w` | character | Wins. |
 | `draft_status` | character |  |
-| `name` | character | Display name. |
+| `name` | character | Team mascot name. |
 | `player_image` | character |  |
 | `catches` | character | Catching hand (goalies). |
 
@@ -803,13 +803,13 @@ PWHL teams for a given season.
 
 | col_name | type | description |
 |---|---|---|
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team name. |
 | `team_id` | character | Unique team identifier. |
-| `team_code` | character | Internal team code. |
+| `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |
-| `division` | character | Team division. |
-| `team_logo` | character | Team logo image URL. |
+| `division` | character | Division identifier. |
+| `team_logo` | character | URL to the team logo image. |
 
 ### `pwhl_transactions(return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_transactions}
 

@@ -40,11 +40,12 @@ def test_build_url_gc_feed_uses_tab_not_view():
 def test_hockeytech_api_bad_status_returns_none_and_warns(monkeypatch):
     import sportsdataverse.hockeytech._client as client
 
-    class _Resp:
-        status_code = 500
-        text = ""
+    # Since Fix 4, hockeytech_api routes HTTP through dl_utils.download.
+    # Monkeypatch download to raise so the except-branch fires and cli_warn is called.
+    def _failing_download(*a, **k):
+        raise RuntimeError("HTTP 500")
 
-    monkeypatch.setattr(client.requests, "get", lambda *a, **k: _Resp())
+    monkeypatch.setattr(client, "download", _failing_download)
     monkeypatch.setattr(client.time, "sleep", lambda *_a, **_k: None)  # no real waiting
     warned = {}
     import sportsdataverse._codegen_runtime as rt

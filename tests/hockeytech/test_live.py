@@ -3,11 +3,11 @@ from __future__ import annotations
 import polars as pl
 import pytest
 
-from tests.conftest import skip_unless_hockeytech
+from tests.conftest import skip_if_no_live
 
 
+@skip_if_no_live
 def test_pwhl_schedule_live_has_games():
-    skip_unless_hockeytech()
     from sportsdataverse.pwhl import pwhl_schedule
 
     df = pwhl_schedule(season=2025)
@@ -17,8 +17,8 @@ def test_pwhl_schedule_live_has_games():
         assert col in df.columns
 
 
+@skip_if_no_live
 def test_pwhl_pbp_and_corsi_live():
-    skip_unless_hockeytech()
     from sportsdataverse.pwhl import pwhl_game_corsi, pwhl_pbp
 
     df = pwhl_pbp(game_id=42)
@@ -30,9 +30,9 @@ def test_pwhl_pbp_and_corsi_live():
     assert not corsi["corsi_includes_missed"].any()
 
 
+@skip_if_no_live
 @pytest.mark.parametrize("lg", ["ahl", "ohl", "whl", "qmjhl"])
 def test_junior_schedule_live(lg):
-    skip_unless_hockeytech()
     mod = __import__(f"sportsdataverse.{lg}", fromlist=["*"])
     df = getattr(mod, f"{lg}_schedule")()
     assert isinstance(df, pl.DataFrame)

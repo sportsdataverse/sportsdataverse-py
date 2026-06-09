@@ -9,9 +9,12 @@ metrics are proxies — every output row carries ``corsi_includes_missed = False
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Union
 
 import polars as pl
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 from sportsdataverse.hockeytech import hockeytech_api
 from sportsdataverse.hockeytech._analytics import corsi_fenwick_on_ice, per60, player_toi
@@ -22,7 +25,7 @@ __all__ = ["pwhl_game_shifts", "pwhl_player_toi", "pwhl_game_corsi"]
 _LG = "pwhl"
 
 
-def pwhl_game_shifts(game_id: Any, return_as_pandas: bool = False) -> Any:
+def pwhl_game_shifts(game_id: int, return_as_pandas: bool = False) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Parsed shift stints for a single PWHL game.
 
     Calls the HockeyTech ``modulekit/gameshifts`` endpoint and returns one
@@ -50,7 +53,7 @@ def pwhl_game_shifts(game_id: Any, return_as_pandas: bool = False) -> Any:
     return shifts
 
 
-def pwhl_player_toi(game_id: Any, return_as_pandas: bool = False) -> Any:
+def pwhl_player_toi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Per-player time-on-ice totals for a single PWHL game.
 
     Fetches shifts via :func:`pwhl_game_shifts` then aggregates via
@@ -78,7 +81,7 @@ def pwhl_player_toi(game_id: Any, return_as_pandas: bool = False) -> Any:
     return toi
 
 
-def pwhl_game_corsi(game_id: Any, return_as_pandas: bool = False) -> Any:
+def pwhl_game_corsi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Player-level on-ice Corsi and Fenwick for a single PWHL game.
 
     Computes shot-attempt counts for every player found on ice during a

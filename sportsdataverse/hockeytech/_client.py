@@ -11,14 +11,22 @@ import time
 import urllib.parse
 from typing import Any, Dict, Optional, Union
 
-import requests
-
+from sportsdataverse.dl_utils import download
 from sportsdataverse.hockeytech._leagues import get_config, resolve_api_key
 
 _UA = "Mozilla/5.0 (compatible; sportsdataverse/hockeytech)"
 _CALLBACK_RE = re.compile(r"^[A-Za-z_$][\w.$]*\(")
 _RATE_LIMIT_S = 0.4
 _last_request_ts = 0.0
+
+# League-specific Referer headers. Falls back to no Referer for unknown leagues.
+_LEAGUE_REFERER: Dict[str, str] = {
+    "pwhl": "https://www.thepwhl.com/",
+    "ahl": "https://www.theahl.com/",
+    "ohl": "https://www.ontariohockeyleague.com/",
+    "whl": "https://www.whl.ca/",
+    "qmjhl": "https://www.theqmjhl.ca/",
+}
 
 
 def _strip_jsonp(text: str) -> str:
@@ -64,29 +72,22 @@ def hockeytech_api(
     """Fetch + parse one HockeyTech feed call. Returns parsed JSON (dict/list) or None."""
     global _last_request_ts
     url = _build_url(league, feed, view, params)
-    headers = {"User-Agent": _UA, "Accept": "application/json", "Referer": "https://www.thepwhl.com/"}
-    last_exc: Optional[Exception] = None
-    for attempt in range(max_retries):
-        elapsed = time.monotonic() - _last_request_ts
-        if elapsed < _RATE_LIMIT_S:
-            time.sleep(_RATE_LIMIT_S - elapsed)
-        try:
-            resp = requests.get(url, headers=headers, timeout=timeout, **kwargs)
-            _last_request_ts = time.monotonic()
-            if resp.status_code == 200:
-                return json.loads(_strip_jsonp(resp.text))
-            if resp.status_code == 429:
-                time.sleep(2**attempt)
-                continue
-            # Unexpected status (404/500/etc.): record it so the final cli_warn
-            # fires, and back off briefly instead of spinning the retries.
-            last_exc = RuntimeError(f"HTTP {resp.status_code} for {url}")
-            time.sleep(1)
-        except (requests.RequestException, json.JSONDecodeError) as exc:
-            last_exc = exc
-            time.sleep(1)
-    if last_exc is not None:
+    referer = _LEAGUE_REFERER.get(league)
+    headers: Dict[str, str] = {"User-Agent": _UA, "Accept": "application/json"}
+    if referer:
+        headers["Referer"] = referer
+
+    elapsed = time.monotonic() - _last_request_ts
+    if elapsed < _RATE_LIMIT_S:
+        time.sleep(_RATE_LIMIT_S - elapsed)
+
+    try:
+        resp = download(url, headers=headers, timeout=timeout, num_retries=max_retries)
+        _last_request_ts = time.monotonic()
+        return json.loads(_strip_jsonp(resp.text))
+    except Exception as exc:  # noqa: BLE001
+        _last_request_ts = time.monotonic()
         from sportsdataverse._codegen_runtime import cli_warn
 
-        cli_warn(f"hockeytech_api({league}/{feed}/{view}) failed: {last_exc}")
-    return None
+        cli_warn(f"hockeytech_api({league}/{feed}/{view}) failed: {exc}")
+        return None

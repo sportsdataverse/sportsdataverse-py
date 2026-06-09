@@ -65,21 +65,21 @@ QMJHL statistical leaders for a given season.
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
+| `rank` | integer | Rank of the streak. |
 | `player_id` | character | Unique player identifier. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `name` | character | Display name. |
+| `jersey_number` | character | Jersey number. |
+| `name` | character | Team mascot name. |
 | `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_code` | character | Internal team code. |
-| `team_logo` | character | Team logo image URL. |
+| `team_name` | character | Team name. |
+| `team_code` | character | Team abbreviation. |
+| `team_logo` | character | URL to the team logo image. |
 | `team_logo_small` | character |  |
 | `stat_formatted` | character |  |
 | `type_formatted` | character |  |
 | `photo` | character | URL to the player photo. |
 | `photo_small` | character |  |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `division` | character | Team division. |
+| `position` | character | Player position. |
+| `division` | character | Division identifier. |
 
 ### `qmjhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_pbp}
 
@@ -108,7 +108,7 @@ QMJHL player season stats across all seasons.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Unique season identifier. |
+| `season_id` | character | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
@@ -117,12 +117,12 @@ QMJHL player season stats across all seasons.
 | `max_start_date` | character | Latest game start date for the season. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran` | character | Whether the player is a veteran. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | character | Jersey number. |
 | `goals` | character | Goals scored. |
 | `games_played` | character | Games played. |
-| `assists` | character | Total assists. |
-| `points` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
+| `assists` | character | Assists. |
+| `points` | character | Total points (goals + assists). |
+| `plus_minus` | character | Plus/minus rating. |
 | `penalty_minutes` | character | Penalty minutes. |
 | `power_play_goals` | character | Power-play goals. |
 | `power_play_assists` | character | Power-play assists. |
@@ -143,23 +143,23 @@ QMJHL player season stats across all seasons.
 | `hits` | character | Hits. |
 | `shots_on` | character | Shots on goal count. |
 | `shots_wide` | character |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_code` | character | Internal team code. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Team name. |
+| `team_code` | character | Team abbreviation. |
+| `team_city` | character | Team city. |
 | `team_nickname` | character | Team nickname. |
 | `team_id` | character | Unique team identifier. |
-| `active` | character | TRUE if the row represents an active record (player / team / season). |
+| `active` | character | Whether athlete is currently active. |
 | `first_goals` | character | First goals of a game. |
 | `insurance_goals` | character | Insurance goals. |
 | `overtime_goals` | character | Overtime goals. |
 | `unassisted_goals` | character | Unassisted goals. |
 | `empty_net_goals` | character | Empty-net goals. |
 | `penalty_minutes_per_game` | character | Penalty minutes per game. |
-| `division` | character | Team division. |
+| `division` | character | Division identifier. |
 | `ice_time` | character | Total ice time. |
 | `ice_time_minutes_seconds` | character | Ice time in minutes and seconds. |
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
-| `stat_type` | character | Stat type code (e.g. "win", "loss"). |
+| `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
 ### `qmjhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_player_toi}
 
@@ -190,17 +190,17 @@ QMJHL schedule — one row per game.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `game_status` | character | Game status label. |
+| `game_date` | character | Game date. |
+| `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Unique identifier for the home team. |
-| `home_score` | character | Home team score at the time of the play. |
+| `home_team_id` | character | Home team identifier. |
+| `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `away_score` | character | Away team score at the time of the play. |
-| `venue` | character | Venue name. |
-| `season_id` | character | Unique season identifier. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `away_team_id` | character | Away team identifier. |
+| `away_score` | character | Away team final score. |
+| `venue` | character | Venue where the game was played. |
+| `season_id` | character | Season identifier. |
+| `game_type` | character | Game type the row belongs to. |
 
 ### `qmjhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_season_id}
 
@@ -217,13 +217,13 @@ All QMJHL seasons with end-year + game-type labels.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Unique season identifier. |
+| `season_id` | integer | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `season_short` | character | Short season name. |
 | `career` | character | Whether this is a career-stats season. |
 | `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `end_date` | character | End date (YYYY-MM-DD). |
+| `start_date` | character | Season start date. |
+| `end_date` | character | Season end date. |
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
@@ -244,17 +244,17 @@ QMJHL standings — one row per team.
 
 | col_name | type | description |
 |---|---|---|
-| `team_code` | character | Internal team code. |
-| `wins` | character | Total wins. |
-| `losses` | character | Total losses. |
+| `team_code` | character | Team abbreviation. |
+| `wins` | character | Wins. |
+| `losses` | character | Losses. |
 | `ot_losses` | character | Overtime losses. |
 | `ot_wins` | character | Overtime wins. |
 | `shootout_wins` | character | Shootout wins. |
 | `shootout_losses` | character | Shootout losses. |
 | `row` | character | Row index within the game grouping (sequencing helper). |
-| `points` | character | Points scored. |
+| `points` | character | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
-| `streak` | character | Current streak (e.g. 'W3' for three-game win streak). |
+| `streak` | character | Current streak value. |
 | `goals_for` | character | Goals for. |
 | `goals_against` | character | Goals against. |
 | `goals_diff` | character |  |
@@ -263,7 +263,7 @@ QMJHL standings — one row per team.
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
 | `past_10` | character |  |
-| `team` | character | Team-side label or team identifier. |
+| `team` | character | Team name. |
 
 ### `qmjhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#qmjhl_team_roster}
 
@@ -283,13 +283,13 @@ QMJHL team roster for a given team + season.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `person_id` | character | Unique player identifier (V3 endpoints). |
-| `active` | character | TRUE if the row represents an active record (player / team / season). |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
+| `id` | character | Unique player identifier. |
+| `person_id` | character | Unique person identifier. |
+| `active` | character | Whether athlete is currently active. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
 | `phonetic_name` | character | Phonetic spelling of the player name. |
-| `display_name` | character | Display name. |
+| `display_name` | character | Player display name. |
 | `shoots` | character | Shooting hand. |
 | `hometown` | character | Prospect hometown. |
 | `homeprov` | character | Player home province/state. |
@@ -299,32 +299,32 @@ QMJHL team roster for a given team + season.
 | `birthprov` | character | Player birth province/state. |
 | `birthcntry` | character | Player birth country. |
 | `birthplace` | character |  |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `height` | character | Player height in inches. |
 | `weight` | character | Player weight in pounds. |
 | `height_hyphenated` | character |  |
 | `hidden` | character |  |
 | `current_team` | character |  |
 | `player_id` | character | Unique player identifier. |
-| `status` | character | Status label. |
+| `status` | character | Status string (e.g. captain markers). |
 | `birthdate` | character | Date of birth. |
 | `birthdate_year` | character | Player birth year. |
 | `rawbirthdate` | character |  |
 | `latest_team_id` | character | Most recent team identifier. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran_description` | character |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `division` | character | Team division. |
+| `team_name` | character | Team name. |
+| `division` | character | Division identifier. |
 | `tp_jersey_number` | character |  |
 | `rookie` | character | Whether the player is a rookie. |
-| `position_id` | character | Unique position identifier. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
+| `position_id` | character | Official position identifier. |
+| `position` | character | Player position. |
 | `nhlteam` | character |  |
 | `player_id_1` | character |  |
 | `is_rookie` | character | Whether the player is a rookie. |
 | `h` | character | Hits. |
 | `w` | character | Wins. |
 | `draft_status` | character |  |
-| `name` | character | Display name. |
+| `name` | character | Team mascot name. |
 | `player_image` | character |  |
 | `catches` | character | Catching hand (goalies). |
 
@@ -345,10 +345,10 @@ QMJHL teams for a given season.
 
 | col_name | type | description |
 |---|---|---|
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team name. |
 | `team_id` | character | Unique team identifier. |
-| `team_code` | character | Internal team code. |
+| `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |
-| `division` | character | Team division. |
-| `team_logo` | character | Team logo image URL. |
+| `division` | character | Division identifier. |
+| `team_logo` | character | URL to the team logo image. |
