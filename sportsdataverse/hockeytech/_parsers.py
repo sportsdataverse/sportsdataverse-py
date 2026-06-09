@@ -268,20 +268,30 @@ def _parse_pbp_a(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]
                     "goal": True,
                     "empty_net": props.get("isEmptyNet"),
                     "game_winner": props.get("isGameWinningGoal"),
+                    "penalty_shot": props.get("isPenaltyShot"),
+                    "insurance": props.get("isInsuranceGoal"),
+                    "short_handed": props.get("isShortHanded"),
+                    "power_play": props.get("isPowerPlay"),
                 }
             )
-            names = ["two", "three"]
+            # Fix 3: assist player names AND positions (player_two = primary, player_three = secondary)
+            assist_names = ["two", "three"]
             for i, a in enumerate(assists[:2]):
                 pa = _player(a)
-                base[f"player_{names[i]}_id"] = pa["id"]
-                base[f"player_{names[i]}_name_first"] = pa["first"]
-                base[f"player_{names[i]}_name_last"] = pa["last"]
+                base[f"player_{assist_names[i]}_id"] = pa["id"]
+                base[f"player_{assist_names[i]}_name_first"] = pa["first"]
+                base[f"player_{assist_names[i]}_name_last"] = pa["last"]
+                base[f"player_{assist_names[i]}_position"] = pa["pos"]
+            # Fix 1 & 2: word ordinals, include _position for each plus/minus slot, cap at 5
+            _ORDINALS = ["one", "two", "three", "four", "five"]
             for sign, key in (("plus", "plus_players"), ("minus", "minus_players")):
-                for j, p in enumerate(d.get(key) or [], start=1):
+                for j, p in enumerate((d.get(key) or [])[:5]):
+                    ord_name = _ORDINALS[j]
                     pp = _player(p)
-                    base[f"{sign}_player_{j}_id"] = pp["id"]
-                    base[f"{sign}_player_{j}_first"] = pp["first"]
-                    base[f"{sign}_player_{j}_last"] = pp["last"]
+                    base[f"{sign}_player_{ord_name}_id"] = pp["id"]
+                    base[f"{sign}_player_{ord_name}_first"] = pp["first"]
+                    base[f"{sign}_player_{ord_name}_last"] = pp["last"]
+                    base[f"{sign}_player_{ord_name}_position"] = pp["pos"]
         elif ev == "faceoff":
             hp = _player(d.get("homePlayer"))
             base.update(
@@ -305,18 +315,24 @@ def _parse_pbp_a(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]
                 }
             )
         elif ev == "penalty":
+            # Fix 5: match fastRhockey -- servedBy is primary (player_id), takenBy is secondary (player_two_*)
+            sb = _player(d.get("servedBy"))
             tb = _player(d.get("takenBy"))
             against = d.get("againstTeam") or {}
             base.update(
                 {
-                    "player_id": tb["id"],
-                    "player_name_first": tb["first"],
-                    "player_name_last": tb["last"],
-                    "player_position": tb["pos"],
+                    "player_id": sb["id"],
+                    "player_name_first": sb["first"],
+                    "player_name_last": sb["last"],
+                    "player_position": sb["pos"],
+                    "player_two_id": tb["id"],
+                    "player_two_name_first": tb["first"],
+                    "player_two_name_last": tb["last"],
+                    "player_two_position": tb["pos"],
                     "team_id": _str_or_none(against.get("id")),
                     "penalty_length": d.get("minutes"),
                     "event_type": d.get("description"),
-                    "power_play": d.get("isPowerPlay"),
+                    "power_play": "1" if d.get("isPowerPlay") else "0",
                 }
             )
         elif ev == "goalie_change":

@@ -127,3 +127,14 @@ def test_parse_pbp_a_one_row_per_event_with_fastrhockey_cols():
     shots = df.filter(pl.col("event") == "shot")
     assert shots.height > 0
     assert shots["x_coord"].null_count() < shots.height  # at least some coords present
+    # parity columns from fastRhockey pwhl_pbp
+    for col in (
+        "plus_player_one_id",
+        "plus_player_one_position",
+        "minus_player_one_id",
+        "player_two_position",
+        "penalty_shot",
+        "insurance",
+        "short_handed",
+    ):
+        assert col in df.columns, f"missing parity column {col}"
