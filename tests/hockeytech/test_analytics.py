@@ -189,3 +189,44 @@ def test_build_on_ice_real_data_multi_player_split():
     away_counts = shots["on_ice_away"].map_elements(lambda s: len(s.split(",")), return_dtype=pl.Int64)
     assert home_counts.mean() >= 5, f"Mean home players per shot too low: {home_counts.mean()}"
     assert away_counts.mean() >= 5, f"Mean away players per shot too low: {away_counts.mean()}"
+
+
+def test_corsi_fenwick_team_counts_and_flag():
+    from sportsdataverse.hockeytech._analytics import corsi_fenwick
+
+    pbp = pl.DataFrame(
+        {
+            "event": ["shot", "blocked_shot", "goal", "faceoff", "shot"],
+            "team_id": [10, 10, 20, 10, 20],
+        }
+    )
+    team = corsi_fenwick(pbp)
+    # missed-shot flag present and False
+    assert "corsi_includes_missed" in team.columns
+    assert not team["corsi_includes_missed"].any()
+    t10 = team.filter(pl.col("team_id") == 10)
+    t20 = team.filter(pl.col("team_id") == 20)
+    # team 10 corsi-for: 1 shot + 1 blocked = 2 (faceoff ignored). team 20: 1 goal + 1 shot = 2
+    assert t10["corsi_for"][0] == 2
+    assert t20["corsi_for"][0] == 2
+    # corsi_against is the other team's attempts
+    assert t10["corsi_against"][0] == 2
+    # fenwick excludes the blocked shot: team 10 fenwick_for = 1 (shot only), team 20 = 2 (goal+shot)
+    assert t10["fenwick_for"][0] == 1
+    assert t20["fenwick_for"][0] == 2
+
+
+def test_corsi_fenwick_empty():
+    from sportsdataverse.hockeytech._analytics import corsi_fenwick
+
+    out = corsi_fenwick(pl.DataFrame({"event": [], "team_id": []}))
+    assert out.height == 0 and "corsi_for" in out.columns
+
+
+def test_per60_expression():
+    from sportsdataverse.hockeytech._analytics import per60
+
+    df = pl.DataFrame({"corsi_for": [10], "toi_seconds": [1800]})
+    out = df.with_columns(per60("corsi_for"))
+    # 10 / 1800 * 3600 = 20.0
+    assert abs(out["corsi_for_per60"][0] - 20.0) < 1e-9

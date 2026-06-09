@@ -127,6 +127,94 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
     return out.drop("_eidx")
 
 
+_CORSI_EVENTS = ["shot", "blocked_shot", "goal"]
+_FENWICK_EVENTS = ["shot", "goal"]
+
+
+def corsi_fenwick(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Team-level shot-attempt counts (Corsi and Fenwick proxies).
+
+    Corsi = shot + blocked_shot + goal; Fenwick excludes blocked_shot.
+    Missed shots are unavailable from the HockeyTech feed, so both metrics
+    are proxies — every output row carries ``corsi_includes_missed = False``.
+
+    Returns one row per ``team_id`` with CF/CA/CF% and FF/FA/FF%.
+
+    Parameters
+    ----------
+    pbp:
+        Play-by-play frame with at least ``event`` and ``team_id`` columns.
+
+    Returns
+    -------
+    pl.DataFrame
+        One row per team with columns: ``team_id``, ``corsi_for``,
+        ``corsi_against``, ``corsi_for_pct``, ``fenwick_for``,
+        ``fenwick_against``, ``fenwick_for_pct``, ``corsi_includes_missed``.
+    """
+    empty_schema = {
+        "team_id": pl.Int64,
+        "corsi_for": pl.Int64,
+        "corsi_against": pl.Int64,
+        "corsi_for_pct": pl.Float64,
+        "fenwick_for": pl.Int64,
+        "fenwick_against": pl.Int64,
+        "fenwick_for_pct": pl.Float64,
+        "corsi_includes_missed": pl.Boolean,
+    }
+    if pbp.height == 0:
+        return pl.DataFrame(schema=empty_schema)
+
+    teams = [t for t in pbp.get_column("team_id").unique().to_list() if t is not None]
+    if not teams:
+        return pl.DataFrame(schema=empty_schema)
+
+    rows = []
+    for t in teams:
+        cf = pbp.filter(pl.col("event").is_in(_CORSI_EVENTS) & (pl.col("team_id") == t)).height
+        ca = pbp.filter(
+            pl.col("event").is_in(_CORSI_EVENTS) & (pl.col("team_id") != t) & pl.col("team_id").is_not_null()
+        ).height
+        ff = pbp.filter(pl.col("event").is_in(_FENWICK_EVENTS) & (pl.col("team_id") == t)).height
+        fa = pbp.filter(
+            pl.col("event").is_in(_FENWICK_EVENTS) & (pl.col("team_id") != t) & pl.col("team_id").is_not_null()
+        ).height
+        rows.append(
+            {
+                "team_id": t,
+                "corsi_for": cf,
+                "corsi_against": ca,
+                "corsi_for_pct": (cf / (cf + ca)) if (cf + ca) else None,
+                "fenwick_for": ff,
+                "fenwick_against": fa,
+                "fenwick_for_pct": (ff / (ff + fa)) if (ff + fa) else None,
+                "corsi_includes_missed": False,
+            }
+        )
+    return pl.DataFrame(rows)
+
+
+def per60(value_col: str, toi_seconds_col: str = "toi_seconds") -> pl.Expr:
+    """Per-60 rate expression.
+
+    Computes ``value / toi_seconds * 3600``, aliased as ``<value_col>_per60``.
+
+    Parameters
+    ----------
+    value_col:
+        Name of the column containing the count to rate-ify.
+    toi_seconds_col:
+        Name of the column containing time-on-ice in seconds. Default is
+        ``"toi_seconds"``.
+
+    Returns
+    -------
+    pl.Expr
+        A Polars expression suitable for use in ``with_columns`` or ``select``.
+    """
+    return (pl.col(value_col) / pl.col(toi_seconds_col) * 3600).alias(f"{value_col}_per60")
+
+
 def player_toi(shifts: pl.DataFrame) -> pl.DataFrame:
     """Compute per-player TOI from a parsed shifts frame.
 
