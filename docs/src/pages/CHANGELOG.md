@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
   - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
   - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
   - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
@@ -85,6 +86,25 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules
+
+- New `sportsdataverse/nfl/nfl_ngs.py` — **token-free** Next Gen Stats wrappers over
+  `nextgenstats.nfl.com/api` (browser session, no auth). 10 functions / 21 endpoints:
+  `nfl_ngs_statboard` (passing/receiving/rushing), `nfl_ngs_statboard_leaders`,
+  `nfl_ngs_leaders` (speed/distance/time-to-sack + completion/ery/yac expectation,
+  season & week), `nfl_ngs_league_schedule[_current]`, `nfl_ngs_league_teams`,
+  `nfl_ngs_gamecenter_overview`, `nfl_ngs_microsite_chart[_players]`,
+  `nfl_ngs_play_is_highlight`. The `/live/*` NGS endpoints are anonymous-403 (need
+  elevated auth) and are documented as omitted.
+- New `sportsdataverse/nfl/nfl_api.py` — `api.nfl.com/football/v2` + `/experience`
+  wrappers on the bearer token (reuses `nfl_headers_gen`). 11 functions:
+  `nfl_standings`, `nfl_rosters`, `nfl_teams_history`, `nfl_team`, `nfl_weeks`,
+  `nfl_weeks_by_date`, `nfl_combine_profiles`, `nfl_draft_picks`, `nfl_injuries`,
+  `nfl_game_summaries`, `nfl_weekly_game_details`.
+- Both return tidy polars DataFrames by default (`return_as_pandas` supported) and are
+  documented on the NFL reference pages. Catalogued from a full crawl of the NFL API
+  surface (api.nfl.com + NGS).
 
 ### NFL — restored the api.nfl.com game schedule + play-by-play wrappers
 

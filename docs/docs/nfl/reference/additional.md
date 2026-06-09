@@ -5532,6 +5532,66 @@ update_config(cache_mode="off")
 assert get_config().cache_mode == "off"
 ```
 
+### `nfl_combine_profiles(year: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_combine_profiles}
+
+Parsed `api.nfl.com` combine profiles -- one row per prospect (`/football/v2/combine/profiles`).
+
+Records live under the `combineProfiles` key. Each row carries `id`,
+`year`, the nested `person` object, measurables (`armLength`,
+`benchPress`, `broadJump`, `fortyYardDash`, `handSize`, `height`,
+`proFortyYardDash`, `sixtyYardShuttle`), scout scores and grades.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `int` | `2024` | combine/draft year (e.g. `2024`). |
+| `limit` | `int` | `40` | page size -- max profiles to return (paginated endpoint). |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per combine profile.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_combine_profiles
+>>> combine = nfl_combine_profiles(year=2024, limit=50)
+>>> combine.select(["id", "year", "fortyYardDash", "benchPress"]).head()
+```
+
+### `nfl_draft_picks(year: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_draft_picks}
+
+Parsed `api.nfl.com` draft pick report -- one row per pick (`/football/v2/draft/picks/report`).
+
+The payload carries draft-state scalars plus a `days` list and a `picks`
+list; the records of interest are under `picks`. Each row carries `year`,
+`draftRound`, `draftPosition`, `draftNumberOverall`, `personId`,
+`teamId`, `pickIsIn` and `tradeNote`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `int` | `2024` | draft year (e.g. `2024`). |
+| `limit` | `int` | `40` | page size -- max picks to return (paginated endpoint). |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per draft pick.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_draft_picks
+>>> picks = nfl_draft_picks(year=2024, limit=300)
+>>> picks.select(["draftRound", "draftNumberOverall", "teamId", "personId"]).head()
+```
+
 ### `nfl_game_details(game_id: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_details}
 
 Pull full `api.nfl.com` game details (drives + plays) by game id.
@@ -5621,6 +5681,37 @@ week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
 first_id = week_one["games"][0]["id"]
 ```
 
+### `nfl_game_summaries(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_game_summaries}
+
+Parsed `api.nfl.com` live game summaries -- one row per game (`/football/v2/stats/live/game-summaries`).
+
+Records live under the `data` key. Each row carries `gameId`, the live
+game-state fields (`clock`, `quarter`, `phase`, `down`, `distance`,
+`yardLine`, `isRedZone`, `isGoalToGo`), `attendance`, `weather` and
+nested `homeTeam` / `awayTeam` summary objects.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
+| `week` | `int` | `1` | week number. |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per game.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_game_summaries
+>>> summaries = nfl_game_summaries(season=2024, season_type="REG", week=1)
+>>> summaries.select(["gameId", "quarter", "phase", "homeTeam", "awayTeam"]).head()
+```
+
 ### `nfl_headers_gen(token: 'Optional[str]' = None) -> 'Dict[str, str]'` {#nfl_headers_gen}
 
 Build the request-header dict expected by `api.nfl.com`.
@@ -5646,6 +5737,469 @@ from sportsdataverse.nfl.nfl_games import nfl_headers_gen, nfl_game_schedule
 hdrs = nfl_headers_gen()
 week_one = nfl_game_schedule(season=2024, season_type="REG", week=1, headers=hdrs)
 week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdrs)
+```
+
+### `nfl_injuries(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_injuries}
+
+Parsed `api.nfl.com` injury report -- one row per player (`/football/v2/injuries`).
+
+Records live under the `injuries` key. Each row carries `season`,
+`seasonType`, `week`, `team_*`, the nested `person` object,
+`injuryStatus`, `position`, `practiceStatus` and a nested `injuries`
+list of body-part detail.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
+| `week` | `int` | `1` | week number. |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per injured player.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_injuries
+>>> inj = nfl_injuries(season=2024, season_type="REG", week=1)
+>>> inj.select(["team_abbreviation", "injuryStatus", "position"]).head()
+```
+
+### `nfl_ngs_gamecenter_overview(game_id, group: 'str' = 'passers', return_as_pandas: 'bool' = False)` {#nfl_ngs_gamecenter_overview}
+
+NGS gamecenter overview for one game -- one row per player on a side.
+
+Wraps `/api/gamecenter/overview` (keyed by NGS `gameId`). The payload
+splits each stat `group` into `home` and `visitor` entries; this function
+stacks both and tags every row with `side` (`"home"`/`"visitor"`) plus the
+game's `gameId`. Note `passers` carries a single primary QB per side (two
+rows total) while `rushers`/`receivers`/`passRushers` are full lists.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` |  |  | NGS `gameId` (e.g. `"2024090500"`) from `nfl_ngs_league_schedule`. |
+| `group` | `str` | `'passers'` | which player group -- one of `"passers"`, `"rushers"`, `"receivers"`, `"passRushers"`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` and `gameId` columns prepended.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_gamecenter_overview
+>>> ov = nfl_ngs_gamecenter_overview(game_id="2024090500", group="passers")
+>>> ov.select(["side", "playerName", "position"]).head()
+```
+
+### `nfl_ngs_leaders(category: 'str' = 'speed', season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_leaders}
+
+NGS top-N "leaders" board for a single category (one row per leader play).
+
+One parameterized wrapper over the single-list leader endpoints. Each record
+nests a `leader` (player/stat) block and a `play` (the play that produced
+the highlight) block, flattened to `leader_*` / `play_*` columns.
+
+Categories (`category=` value -> endpoint):
+
+* `"speed"` -> `/leaders/speed/ballCarrier` (fastest ball-carrier speeds)
+* `"distance_ballcarrier"` -> `/leaders/distance/ballCarrier`
+* `"distance_tackle"` -> `/leaders/distance/tackle`
+* `"time_sack"` -> `/leaders/time/sack`
+* `"completion_season"` / `"completion_week"` ->
+  `/leaders/expectation/completion/{season,week}` (most-improbable completions)
+* `"ery_season"` / `"ery_week"` -> `/leaders/expectation/ery/{season,week}`
+  (expected rush yards over expectation)
+* `"yac_season"` / `"yac_week"` -> `/leaders/expectation/yac/{season,week}`
+  (yards after catch over expectation)
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `category` | `str` | `'speed'` | one of the keys above. Defaults to `"speed"`. |
+| `season` | `int` | `2024` | season year. |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"PRE"`. |
+| `week` | `int \| None` | `None` | week filter -- required (and only used) by the `*_week` categories; ignored by season/non-expectation boards. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per leader entry.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_leaders
+>>> fast = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+>>> fast.select(["leader_playerName", "leader_maxSpeed", "play_playDescription"]).head()
+```
+
+### `nfl_ngs_league_schedule(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_league_schedule}
+
+NGS league schedule -- one row per game; source of NGS `gameId` values.
+
+Wraps `/api/league/schedule` (which returns a top-level list of games).
+Each row carries `gameId` (the `YYYYMMDDNN` id used by the game-scoped
+functions here), `gameKey`, `smartId` (the api.nfl.com uuid), team
+abbreviations/ids/names, kickoff times, `ngsGame` (tracking-data flag) and
+`season`/`seasonType`/`week`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year. |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"PRE"`. |
+| `week` | `int \| None` | `None` | optional single-week filter. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per scheduled game.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_league_schedule
+>>> sched = nfl_ngs_league_schedule(season=2024, season_type="REG", week=1)
+>>> first_game_id = sched["gameId"][0]
+```
+
+### `nfl_ngs_league_schedule_current(return_as_pandas: 'bool' = False)` {#nfl_ngs_league_schedule_current}
+
+NGS schedule for the *current* week -- one row per game.
+
+Wraps `/api/league/schedule/current`; the games are under the `games` key
+(alongside scalar `season`/`seasonType`/`week` describing the slice).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per game in the current week.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_league_schedule_current
+>>> cur = nfl_ngs_league_schedule_current()
+>>> cur.select(["gameId", "homeTeamAbbr", "visitorTeamAbbr"]).head()
+```
+
+### `nfl_ngs_league_teams(return_as_pandas: 'bool' = False)` {#nfl_ngs_league_teams}
+
+NGS team directory -- one row per team.
+
+Wraps `/api/league/teams` (top-level list). Each row carries `teamId`,
+`abbr`, `fullName`, `nick`, `conference`/`division`, `cityState`,
+`stadiumName`, `smartId`, `logo` and site/ticket URLs.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per team.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_league_teams
+>>> teams = nfl_ngs_league_teams()
+>>> teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
+```
+
+### `nfl_ngs_microsite_chart(season: 'int' = 2024, season_type: 'str' = 'REG', week=None, chart_type=None, team_id=None, limit: 'int' = 100, offset: 'int' = 0, return_as_pandas: 'bool' = False)` {#nfl_ngs_microsite_chart}
+
+NGS microsite chart catalogue -- one row per rendered player chart image.
+
+Wraps `/api/content/microsite/chart`; records live under `charts` and each
+carries the chart `imageName`/`type` (`qb-grid`, `pass`, `route`,
+`carry`) plus the player and headline stats (`passerRating`,
+`completions`, etc.) and image-size URLs. Supports server-side paging.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year. |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"PRE"`. |
+| `week` |  | `None` | optional week filter (the API accepts `"all"` by default). |
+| `chart_type` |  | `None` | optional chart-type filter (e.g. `"qb-grid"`, `"pass"`). |
+| `team_id` |  | `None` | optional team-id filter. |
+| `limit` | `int` | `100` | page size (passed as `limit`). |
+| `offset` | `int` | `0` | page offset. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per chart in the page.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_microsite_chart
+>>> charts = nfl_ngs_microsite_chart(season=2024, season_type="REG", limit=25)
+>>> charts.select(["playerName", "type", "imageName"]).head()
+```
+
+### `nfl_ngs_microsite_chart_players(season: 'int' = 2024, season_type: 'str' = 'REG', return_as_pandas: 'bool' = False)` {#nfl_ngs_microsite_chart_players}
+
+NGS microsite chart player index -- one row per player with a chart.
+
+Wraps `/api/content/microsite/chart/players`; records live under `players`
+and carry `esbId`, `firstName`, `lastName` and `playerName`. Useful as
+the lookup list of who has charts available for a given season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year. |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"PRE"`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per player.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_microsite_chart_players
+>>> who = nfl_ngs_microsite_chart_players(season=2024, season_type="REG")
+>>> who.select(["playerName", "esbId"]).head()
+```
+
+### `nfl_ngs_play_is_highlight(game_id, play_id, return_as_pandas: 'bool' = False)` {#nfl_ngs_play_is_highlight}
+
+Look up whether a single play is an NGS highlight -- one-row frame.
+
+Wraps `/api/plays/isHighlight` (keyed by NGS `gameId` + `playId`). When
+the play is a highlight, the response's nested `highlight` block (the play
+metadata, the `players` involved, season/week/team) is flattened onto the
+row alongside the top-level `gameId`/`playId`/`isHighlight` flag. Pull a
+real `(gameId, playId)` pair from `nfl_ngs_leaders` -- each leader
+entry's `play_gameId` / `play_playId` is a known highlight.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` |  |  | NGS `gameId` (e.g. `"2024111800"`). |
+| `play_id` |  |  | the play id within that game (e.g. `1214`). |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A one-row polars (or pandas) `DataFrame` with `gameId`, `playId`, `isHighlight` and (when true) flattened `highlight_*` columns.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_leaders, nfl_ngs_play_is_highlight
+>>> lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+>>> gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
+>>> hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
+>>> hl.select(["gameId", "playId", "isHighlight"]).head()
+```
+
+### `nfl_ngs_statboard(stat_type: 'str' = 'passing', season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_statboard}
+
+NGS season/week statboard leaderboard for a stat family (one row per player).
+
+Wraps `/api/statboard/{passing,receiving,rushing}`. Each record is a flat
+per-player stat line (e.g. for passing: `completionPercentageAboveExpectation`,
+`avgTimeToThrow`, `aggressiveness`, `passerRating` ...). The player's bio
+is nested under a `player` object and is flattened to `player_*` columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stat_type` | `str` | `'passing'` | one of `"passing"`, `"receiving"`, `"rushing"`. (For the cross-stat highlight board use `nfl_ngs_statboard_leaders`.) |
+| `season` | `int` | `2024` | season year, e.g. `2024`. |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"PRE"`. |
+| `week` | `int \| None` | `None` | single week to filter to; `None` returns the full-season board. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per qualifying player.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_statboard
+>>> qb = nfl_ngs_statboard(stat_type="passing", season=2024, season_type="REG")
+>>> qb.select(["playerName", "passerRating", "completionPercentageAboveExpectation"]).head()
+```
+
+### `nfl_ngs_statboard_leaders(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_statboard_leaders}
+
+NGS cross-stat "leaders" board, stacked long with a `category` column.
+
+Wraps `/api/statboard/leaders`, which bundles several short top-N lists of
+mixed shape (`fastestBallCarriers`, `fastestSacks`, `longestCompletions`,
+`highestSeparation`, `rushYardsOverExpected`, `completionPctAboveExpected`,
+`avgYACAboveExpected`). Each list is normalized separately and concatenated
+diagonally (union of columns; missing cells become null), with a `category`
+column recording which board each row came from.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year. |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"PRE"`. |
+| `week` | `int \| None` | `None` | optional single-week filter. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame` stacking every leader list, with a `category` column. Empty frame if no lists are present.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl import nfl_ngs_statboard_leaders
+>>> bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
+>>> bd["category"].unique().to_list()
+```
+
+### `nfl_rosters(season: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_rosters}
+
+Parsed `api.nfl.com` team rosters -- one row per team (`/football/v2/rosters`).
+
+Records live under the `rosters` key. Each row is one team's roster for the
+season, carrying `season`, `seasonType`, `team_*` columns and a nested
+`persons` list of players (kept as a list column).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `limit` | `int` | `40` | page size -- max rosters to return (this endpoint is paginated; default `40` covers all teams in one page). |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per team roster.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_rosters
+>>> rosters = nfl_rosters(season=2024, limit=40)
+>>> rosters.select(["team_abbreviation", "season", "seasonType"]).head()
+```
+
+### `nfl_standings(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_standings}
+
+Parsed `api.nfl.com` standings -- one row per team (`/football/v2/standings`).
+
+The payload nests records under `weeks[].standings[]`; this flattens every
+team standing across the returned week(s) into a single frame with
+`team_*`, `overall_*`, `division_*`, `conference_*`, `home_*`,
+`road_*`, `last5_*`, and `clinched` columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
+| `week` | `int` | `1` | week number whose standings snapshot to return. |
+| `limit` | `int` | `40` | max teams per page (default `40`; there are 32 teams). |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict; defaults to a fresh mint. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per team standing.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_standings
+>>> standings = nfl_standings(season=2024, season_type="REG", week=18)
+>>> standings.select(["team_abbreviation", "overall_wins", "overall_losses"]).head()
+```
+
+### `nfl_team(team_id: 'str', headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_team}
+
+Parsed `api.nfl.com` single-team detail -- one row (`/football/v2/teams/{id}`).
+
+The endpoint returns one team object (not a list); this wraps it into a
+one-row frame with `id`, `fullName`, `currentCoach_*`, `primaryColor`,
+`secondaryColor`, `yearEstablished`, `owners`, `socials` and more.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `str` |  | the uuid team id from `nfl_teams_history` (e.g. `'10403800-517c-7b8c-65a3-c61b95d86123'` for ARI). |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame` with a single team row.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_team
+>>> team = nfl_team(team_id="10403800-517c-7b8c-65a3-c61b95d86123")
+>>> team.select(["id", "fullName", "yearEstablished"]).head()
+```
+
+### `nfl_teams_history(season: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_teams_history}
+
+Parsed `api.nfl.com` teams for a season -- one row per team (`/football/v2/teams/history`).
+
+Records live under the `teams` key. Each row carries `id` (the uuid team
+id used by `nfl_team`), `abbreviation`, `fullName`, `nickName`,
+`location`, `conferenceAbbr`/`divisionFullName`, `currentLogo` and the
+nested `venues` list.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `limit` | `int` | `40` | page size (default `40`). |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per team.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_teams_history
+>>> teams = nfl_teams_history(season=2024)
+>>> teams.select(["id", "abbreviation", "fullName"]).head()
 ```
 
 ### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None) -> 'str'` {#nfl_token_gen}
@@ -5704,6 +6258,99 @@ A polars (or pandas) `DataFrame`, one row per game.
 >>> from sportsdataverse.nfl import nfl_week_games
 >>> sched = nfl_week_games(season=2024, season_type="REG", week=1)
 >>> sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
+```
+
+### `nfl_weekly_game_details(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, include_drive_chart: 'bool' = True, include_replays: 'bool' = False, include_standings: 'bool' = False, include_tagged_videos: 'bool' = False, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_weekly_game_details}
+
+Parsed `api.nfl.com` weekly game details -- one row per game.
+
+Wraps `/football/v2/experience/weekly-game-details`, which returns a **bare
+list** of game objects (no wrapper key). Each row carries `id` (uuid game
+id), nested `homeTeam` / `awayTeam`, `date`, `time`, `venue`,
+`status`, `broadcastInfo`, `externalIds`, a `summary` object and,
+when requested, `driveChart` / `replays` / `taggedVideos`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`; sent on the wire as the `type` query param. |
+| `week` | `int` | `1` | week number. |
+| `include_drive_chart` | `bool` | `True` | include the per-game `driveChart` block. |
+| `include_replays` | `bool` | `False` | include the `replays` block. |
+| `include_standings` | `bool` | `False` | include the `standings` block. |
+| `include_tagged_videos` | `bool` | `False` | include the `taggedVideos` block. |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per game.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_weekly_game_details
+>>> details = nfl_weekly_game_details(season=2024, season_type="REG", week=1)
+>>> details.select(["id", "date", "homeTeam", "awayTeam"]).head()
+```
+
+### `nfl_weeks(season: 'int' = 2024, season_type: 'str' = 'REG', headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_weeks}
+
+Parsed `api.nfl.com` week calendar -- one row per week (`/football/v2/weeks/...`).
+
+Records live under the `weeks` key. Each row carries `season`,
+`seasonType`, `week`, `weekType`, `dateBegin`, `dateEnd` and a
+`byeTeams` list.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame`, one row per week.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_weeks
+>>> weeks = nfl_weeks(season=2024, season_type="REG")
+>>> weeks.select(["week", "weekType", "dateBegin", "dateEnd"]).head()
+```
+
+### `nfl_weeks_by_date(date: 'str', headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_weeks_by_date}
+
+Parsed `api.nfl.com` week-for-a-date -- one row (`/football/v2/weeks/date/{YYYY-MM-DD}`).
+
+The endpoint returns one week object (not a list); this wraps it into a
+one-row frame with `season`, `seasonType`, `week`, `weekType`,
+`dateBegin`, `dateEnd` and `byeTeams`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `date` | `str` |  | calendar date in `YYYY-MM-DD` form (e.g. `'2024-09-08'`). |
+| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) `DataFrame` with a single week row.
+
+**Example**
+
+```python
+>>> from sportsdataverse.nfl.nfl_api import nfl_weeks_by_date
+>>> wk = nfl_weeks_by_date(date="2024-09-08")
+>>> wk.select(["season", "seasonType", "week"]).head()
 ```
 
 ### `reset_config() -> 'NflConfig'` {#reset_config}
