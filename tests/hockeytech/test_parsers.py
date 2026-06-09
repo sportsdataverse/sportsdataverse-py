@@ -36,3 +36,38 @@ def test_resolve_season_id_passthrough_explicit_id():
     from sportsdataverse.hockeytech import _leagues
 
     assert _leagues.resolve_season_id("pwhl", season_id=5) == 5
+
+
+def test_parse_schedule_one_row_per_game_with_core_cols():
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    df = parse_schedule(_load("pwhl_schedule_2025"))
+    assert isinstance(df, pl.DataFrame) and df.height > 0
+    for col in (
+        "game_id",
+        "game_date",
+        "home_team",
+        "home_team_id",
+        "away_team",
+        "away_team_id",
+        "home_score",
+        "away_score",
+    ):
+        assert col in df.columns
+
+
+def test_parse_standings_has_team_rank_and_points():
+    from sportsdataverse.hockeytech._parsers import parse_standings
+
+    df = parse_standings(_load("pwhl_standings_5"))
+    for col in ("team", "team_rank", "games_played", "points", "wins", "losses"):
+        assert col in df.columns
+
+
+def test_parse_teams_and_roster():
+    from sportsdataverse.hockeytech._parsers import parse_teams, parse_roster
+
+    teams = parse_teams(_load("pwhl_teams_5"))
+    assert "team_name" in teams.columns and "team_id" in teams.columns
+    roster = parse_roster(_load("pwhl_roster_1_5"))
+    assert roster.height > 0
