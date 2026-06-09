@@ -1,51 +1,90 @@
+"""``api.nfl.com`` game schedule + play-by-play wrappers.
+
+NFL.com retired the old ``/v1/reroute`` client-credentials token endpoint, which
+broke the previous implementation. The NFL.com web app now mints a bearer token
+from ``/identity/v3/token`` (the same flow the nflverse ``nflapi`` package uses) and
+reads game data from the modern ``/football/v2`` + ``/experience/v1`` endpoints.
+
+Auth uses the NFL.com **web client** credentials (the public ``WEB_DESKTOP`` app key
+the site ships to every browser). They are the defaults below and can be overridden
+via the ``NFL_CLIENT_KEY`` / ``NFL_CLIENT_SECRET`` environment variables (or the
+function arguments) if NFL rotates them or you have your own. No login / personal
+account is involved -- the minted token carries the anonymous ``free`` plan.
+"""
+
 from __future__ import annotations
 
-import json
-from typing import Dict
+import os
+import uuid
+from typing import Dict, Optional
 
 import requests
 
+API_HOST = "https://api.nfl.com"
 
-def nfl_token_gen():
-    """Mint a fresh ``api.nfl.com`` access token via the public reroute endpoint.
+# NFL.com web-app (WEB_DESKTOP) client credentials -- shipped publicly in the
+# site's JS bundle; overridable via env vars / args. NOT a personal account.
+_DEFAULT_CLIENT_KEY = "4cFUW6DmwJpzT9L7LrG3qRAcABG5s04g"
+_DEFAULT_CLIENT_SECRET = "CZuvCL49d9OwfGsR"
+# base64({"model":"desktop","osName":"Windows","osVersion":"10","version":"Chrome"})
+_DEFAULT_DEVICE_INFO = (
+    "eyJtb2RlbCI6ImRlc2t0b3AiLCJvc05hbWUiOiJXaW5kb3dzIiwib3NWZXJzaW9uIjoiMTAiLCJ2ZXJzaW9uIjoiQ2hyb21lIn0="
+)
+_DEFAULT_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+)
 
-    Wraps the unauthenticated ``client_credentials`` grant the NFL.com web
-    app uses. The returned bearer token is what ``nfl_headers_gen()`` puts
-    on the ``Authorization`` header.
+
+def nfl_token_gen(client_key: Optional[str] = None, client_secret: Optional[str] = None) -> str:
+    """Mint a fresh ``api.nfl.com`` access token via ``/identity/v3/token``.
+
+    Wraps the anonymous device-token grant the NFL.com web app uses. Credentials
+    resolve in this order: explicit ``client_key``/``client_secret`` args ->
+    ``NFL_CLIENT_KEY``/``NFL_CLIENT_SECRET`` env vars -> the bundled public
+    ``WEB_DESKTOP`` web-app credentials.
+
+    Args:
+        client_key: Override the client key (else env var, else the web default).
+        client_secret: Override the client secret (else env var, else the default).
 
     Returns:
-        str: The access token string.
+        str: The bearer ``accessToken`` string.
 
     Example:
         Mint a token and inspect its prefix::
 
             from sportsdataverse.nfl.nfl_games import nfl_token_gen
             token = nfl_token_gen()
-            assert isinstance(token, str)
-
-        Pair with a downstream call (``nfl_headers_gen`` does this for you)::
-
-            import requests
-            token = nfl_token_gen()
-            headers = {"Authorization": f"Bearer {token}"}
+            assert isinstance(token, str) and token.startswith("ey")
     """
-    url = "https://api.nfl.com/v1/reroute"
+    key = client_key or os.environ.get("NFL_CLIENT_KEY", _DEFAULT_CLIENT_KEY)
+    secret = client_secret or os.environ.get("NFL_CLIENT_SECRET", _DEFAULT_CLIENT_SECRET)
+    data = {
+        "clientKey": key,
+        "clientSecret": secret,
+        "deviceId": str(uuid.uuid4()),
+        "deviceInfo": _DEFAULT_DEVICE_INFO,
+        "networkType": "other",
+    }
+    resp = requests.post(
+        API_HOST + "/identity/v3/token",
+        data=data,
+        headers={"User-Agent": _DEFAULT_UA, "X-Domain-Id": "100"},
+        timeout=30,
+    )
+    resp.raise_for_status()
+    return resp.json()["accessToken"]
 
-    # TODO: resolve if DNT or x-domain-id are necessary.  pulled them from chrome inspector
-    payload = "grant_type=client_credentials"
-    headers = {"DNT": "1", "x-domain-id": "100", "Content-Type": "application/x-www-form-urlencoded"}
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+def nfl_headers_gen(token: Optional[str] = None) -> Dict[str, str]:
+    """Build the request-header dict expected by ``api.nfl.com``.
 
-    return json.loads(response.content)["access_token"]
+    Mints a fresh bearer token via :func:`nfl_token_gen` (unless ``token`` is
+    supplied) and combines it with the browser-style headers the NFL.com web app
+    sends. Reuse the returned dict across calls to avoid re-minting tokens.
 
-
-def nfl_headers_gen():
-    """Build the full request-header dict expected by ``api.nfl.com``.
-
-    Mints a fresh bearer token via :func:`nfl_token_gen` and combines it
-    with the browser-style headers (``Origin``, ``Referer``, ``User-Agent``,
-    ``Sec-Fetch-*``, etc.) the NFL.com web app sends on every request.
+    Args:
+        token: An existing access token to reuse; mints a fresh one when ``None``.
 
     Returns:
         Dict[str, str]: Header dict ready to drop into ``requests.get``.
@@ -53,193 +92,98 @@ def nfl_headers_gen():
     Example:
         Reuse one header set across many calls::
 
-            from sportsdataverse.nfl.nfl_games import (
-                nfl_headers_gen, nfl_game_schedule,
-            )
+            from sportsdataverse.nfl.nfl_games import nfl_headers_gen, nfl_game_schedule
             hdrs = nfl_headers_gen()
             week_one = nfl_game_schedule(season=2024, season_type="REG", week=1, headers=hdrs)
             week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdrs)
     """
-    token = nfl_token_gen()
+    token = token or nfl_token_gen()
     return {
-        "Host": "api.nfl.com",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
-        "Accept": "*/*",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
+        "User-Agent": _DEFAULT_UA,
+        "Accept": "application/json",
         "Referer": "https://www.nfl.com/",
-        "authorization": f"Bearer {token}",
-        "Connection": "keep-alive",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-site",
-        "Sec-Fetch-User": "?1",
-        "Pragma": "no-cache",
-        "Cache-Control": "no-cache",
+        "Origin": "https://www.nfl.com",
+        "Authorization": f"Bearer {token}",
+        "X-Domain-Id": "100",
     }
 
 
-def nfl_game_details(game_id=None, headers=None, raw=False) -> Dict:
-    """nfl_game_details() -- pull full ``api.nfl.com`` game details by game id.
-
-    Args:
-        game_id (str): UUID-style game id from ``api.nfl.com`` (e.g. ``'7ae87c4c-d24c-11ec-b23d-d15a91047884'``).
-        headers (Dict[str, str] | None): Pre-built header dict (skip the auth roundtrip).
-            Defaults to a fresh ``nfl_headers_gen()`` call.
-        raw (bool): If True, return the ESPN payload untouched. If False (default),
-            normalize keys to the expected schema (filling missing keys with
-            empty dicts/lists).
-
-    Returns:
-        Dict: Dictionary of game details (drives, plays, scoring summaries,
-        timeouts, weather, attendance, etc.).
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.nfl.nfl_games import nfl_game_details
-            details = nfl_game_details(game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884")
-            sorted(details.keys())[:5]
-
-        Reuse headers across many calls (avoids re-minting tokens)::
-
-            from sportsdataverse.nfl.nfl_games import nfl_game_details, nfl_headers_gen
-            hdrs = nfl_headers_gen()
-            details = nfl_game_details(
-                game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", headers=hdrs
-            )
-
-        Raw passthrough::
-
-            raw = nfl_game_details(
-                game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", raw=True
-            )
-    """
-    if headers is None:
-        headers = nfl_headers_gen()
-    pbp_txt = {}
-    summary_url = f"https://api.nfl.com/experience/v1/gamedetails/{game_id}"
-    summary_resp = requests.get(summary_url, headers=headers)
-    summary = summary_resp.json()
-
-    incoming_keys_expected = [
-        "attendance",
-        "distance",
-        "down",
-        "gameClock",
-        "goalToGo",
-        "homePointsOvertime",
-        "homePointsQ1",
-        "homePointsQ2",
-        "homePointsQ3",
-        "homePointsQ4",
-        "homePointsTotal",
-        "homeTeam",
-        "homeTimeoutsRemaining",
-        "homeTimeoutsUsed",
-        "id",
-        "offset",
-        "period",
-        "phase",
-        "playReview",
-        "possessionTeam",
-        "quarter",
-        "redzone",
-        "scoringSummaries",
-        "stadium",
-        "startTime",
-        "totalOffset",
-        "visitorPointsOvertime",
-        "visitorPointsQ1",
-        "visitorPointsQ2",
-        "visitorPointsQ3",
-        "visitorPointsQ4",
-        "visitorPointsTotal",
-        "visitorTeam",
-        "visitorTimeoutsRemaining",
-        "visitorTimeoutsUsed",
-        "weather",
-        "yardLine",
-        "yardsToGo",
-        "drives",
-        "plays",
-    ]
-    dict_keys_expected = ["homeTeam", "possessionTeam", "visitorTeam", "weather"]
-    array_keys_expected = ["scoringSummaries", "drives", "plays"]
-    if raw == True:
-        return summary
-
-    for k in incoming_keys_expected:
-        if k in summary.keys():
-            pbp_txt[k] = summary.get(f"{k}")
-        else:
-            pbp_txt[k] = {} if k in dict_keys_expected else []
-    return pbp_txt
-
-
-def nfl_game_schedule(season=2021, season_type="REG", week=1, headers=None, raw=False) -> Dict:
-    """nfl_game_schedule() -- list ``api.nfl.com`` games for a season/week slice.
+def nfl_game_schedule(
+    season: int = 2024,
+    season_type: str = "REG",
+    week: int = 1,
+    headers: Optional[Dict[str, str]] = None,
+    raw: bool = False,
+) -> Dict:
+    """List ``api.nfl.com`` games for a season/week slice (``/football/v2/games``).
 
     Args:
         season (int): season year (e.g. ``2024``).
-        season_type (str): season type. One of ``"REG"`` or ``"POST"``.
+        season_type (str): season type. One of ``"PRE"``, ``"REG"``, ``"POST"``.
         week (int): week number (1-18 regular season, 1-4 post-season).
-        headers (Dict[str, str] | None): Pre-built header dict.
-            Defaults to a fresh ``nfl_headers_gen()`` call.
-        raw (bool): Currently ignored -- the function always returns the
-            raw NFL.com summary payload.
+        headers (Dict[str, str] | None): Pre-built header dict (skip the auth
+            roundtrip). Defaults to a fresh :func:`nfl_headers_gen` call.
+        raw (bool): currently ignored; the function returns the parsed JSON payload.
 
     Returns:
-        Dict: Dictionary with the games list under ``"games"`` plus
-        pagination metadata.
+        Dict: payload with the games list under ``"games"`` plus ``"pagination"``.
+        Each game carries ``id`` (the uuid game id used by :func:`nfl_game_details`),
+        ``homeTeam``/``awayTeam``, ``date``, ``status``, ``externalIds`` (gsis etc.).
 
     Example:
         Week 1 of the 2024 regular season::
 
             from sportsdataverse.nfl.nfl_games import nfl_game_schedule
             week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
-
-        Wild Card weekend (post-season)::
-
-            wild_card = nfl_game_schedule(season=2023, season_type="POST", week=1)
-
-        Reuse headers across many calls::
-
-            from sportsdataverse.nfl.nfl_games import nfl_game_schedule, nfl_headers_gen
-            hdrs = nfl_headers_gen()
-            for week in range(1, 19):
-                summary = nfl_game_schedule(
-                    season=2024, season_type="REG", week=week, headers=hdrs,
-                )
+            first_id = week_one["games"][0]["id"]
     """
     if headers is None:
         headers = nfl_headers_gen()
-    params = {"season": season, "seasonType": season_type, "week": week}
-    pbp_txt = {}
-    summary_url = "https://api.nfl.com/experience/v1/games"
-    summary_resp = requests.get(summary_url, headers=headers, params=params)
-    summary = summary_resp.json()
+    url = f"{API_HOST}/football/v2/games/season/{season}/seasonType/{season_type}/week/{week}"
+    resp = requests.get(url, headers=headers, params={"withExternalIds": "true"}, timeout=30)
+    resp.raise_for_status()
+    return resp.json()
 
-    incoming_keys_expected = [
-        "id",
-        "homeTeam",
-        "awayTeam",
-        "category",
-        "date",
-        "time",
-        "broadcastInfo",
-        "neutralSite",
-        "venue",
-        "season",
-        "seasonType",
-        "status",
-        "week",
-        "weekType",
-        "externalIds",
-        "ticketUrl",
-        "ticketVendors",
-        "detail",
-    ]
-    dict_keys_expected = ["homeTeam", "possessionTeam", "visitorTeam", "weather"]
-    array_keys_expected = ["scoringSummaries", "drives", "plays"]
-    return summary
+
+def nfl_game_details(
+    game_id: Optional[str] = None, headers: Optional[Dict[str, str]] = None, raw: bool = False
+) -> Dict:
+    """Pull full ``api.nfl.com`` game details (drives + plays) by game id.
+
+    Hits ``/experience/v1/gamedetails/{game_id}``; the payload is the shield
+    ``data.viewer.gameDetail`` object (plays, drives, scoring summaries, line
+    scores, possession, weather, attendance, ...).
+
+    Args:
+        game_id (str): the uuid game id from :func:`nfl_game_schedule`
+            (e.g. ``'7d3e8f84-1312-11ef-afd1-646009f18b2e'``).
+        headers (Dict[str, str] | None): Pre-built header dict. Defaults to a fresh
+            :func:`nfl_headers_gen` call.
+        raw (bool): If True, return the full envelope (``{"data": {...}}``)
+            untouched. If False (default), unwrap to the ``gameDetail`` object.
+
+    Returns:
+        Dict: the ``gameDetail`` object (or the raw envelope when ``raw=True``).
+        Empty ``dict`` if the game has no detail payload.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_games import nfl_game_details
+            detail = nfl_game_details(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
+            len(detail["plays"]), len(detail["drives"])
+
+        Reuse headers across many calls (avoids re-minting tokens)::
+
+            from sportsdataverse.nfl.nfl_games import nfl_game_details, nfl_headers_gen
+            hdrs = nfl_headers_gen()
+            detail = nfl_game_details(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e", headers=hdrs)
+    """
+    if headers is None:
+        headers = nfl_headers_gen()
+    resp = requests.get(f"{API_HOST}/experience/v1/gamedetails/{game_id}", headers=headers, timeout=30)
+    resp.raise_for_status()
+    payload = resp.json()
+    if raw:
+        return payload
+    return ((payload or {}).get("data", {}) or {}).get("viewer", {}).get("gameDetail", {}) or {}

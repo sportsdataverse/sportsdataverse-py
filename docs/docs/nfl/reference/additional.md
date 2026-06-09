@@ -5532,89 +5532,79 @@ update_config(cache_mode="off")
 assert get_config().cache_mode == "off"
 ```
 
-### `nfl_game_details(game_id=None, headers=None, raw=False) -> 'Dict'` {#nfl_game_details}
+### `nfl_game_details(game_id: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_details}
 
-nfl_game_details() -- pull full `api.nfl.com` game details by game id.
+Pull full `api.nfl.com` game details (drives + plays) by game id.
+
+Hits `/experience/v1/gamedetails/{game_id}`; the payload is the shield
+`data.viewer.gameDetail` object (plays, drives, scoring summaries, line
+scores, possession, weather, attendance, ...).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `str` | `None` | UUID-style game id from `api.nfl.com` (e.g. `'7ae87c4c-d24c-11ec-b23d-d15a91047884'`). |
-| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict (skip the auth roundtrip). Defaults to a fresh `nfl_headers_gen()` call. |
-| `raw` | `bool` | `False` | If True, return the ESPN payload untouched. If False (default), normalize keys to the expected schema (filling missing keys with empty dicts/lists). |
+| `game_id` | `str` | `None` | the uuid game id from `nfl_game_schedule` (e.g. `'7d3e8f84-1312-11ef-afd1-646009f18b2e'`). |
+| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict. Defaults to a fresh `nfl_headers_gen` call. |
+| `raw` | `bool` | `False` | If True, return the full envelope (`{"data": {...}}`) untouched. If False (default), unwrap to the `gameDetail` object. |
 
 **Returns**
 
-Dictionary of game details (drives, plays, scoring summaries, timeouts, weather, attendance, etc.).
+the `gameDetail` object (or the raw envelope when `raw=True`). Empty `dict` if the game has no detail payload.
 
 **Example**
 
 ```python
 from sportsdataverse.nfl.nfl_games import nfl_game_details
-details = nfl_game_details(game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884")
-sorted(details.keys())[:5]
+detail = nfl_game_details(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
+len(detail["plays"]), len(detail["drives"])
 
 # Reuse headers across many calls (avoids re-minting tokens)
 
 from sportsdataverse.nfl.nfl_games import nfl_game_details, nfl_headers_gen
 hdrs = nfl_headers_gen()
-details = nfl_game_details(
-    game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", headers=hdrs
-)
-
-# Raw passthrough
-
-raw = nfl_game_details(
-    game_id="7ae87c4c-d24c-11ec-b23d-d15a91047884", raw=True
-)
+detail = nfl_game_details(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e", headers=hdrs)
 ```
 
-### `nfl_game_schedule(season=2021, season_type='REG', week=1, headers=None, raw=False) -> 'Dict'` {#nfl_game_schedule}
+### `nfl_game_schedule(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_schedule}
 
-nfl_game_schedule() -- list `api.nfl.com` games for a season/week slice.
+List `api.nfl.com` games for a season/week slice (`/football/v2/games`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` | `2021` | season year (e.g. `2024`). |
-| `season_type` | `str` | `'REG'` | season type. One of `"REG"` or `"POST"`. |
+| `season` | `int` | `2024` | season year (e.g. `2024`). |
+| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
 | `week` | `int` | `1` | week number (1-18 regular season, 1-4 post-season). |
-| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict. Defaults to a fresh `nfl_headers_gen()` call. |
-| `raw` | `bool` | `False` | Currently ignored -- the function always returns the raw NFL.com summary payload. |
+| `headers` | `Dict[str, str] \| None` | `None` | Pre-built header dict (skip the auth roundtrip). Defaults to a fresh `nfl_headers_gen` call. |
+| `raw` | `bool` | `False` | currently ignored; the function returns the parsed JSON payload. |
 
 **Returns**
 
-Dictionary with the games list under `"games"` plus pagination metadata.
+payload with the games list under `"games"` plus `"pagination"`. Each game carries `id` (the uuid game id used by `nfl_game_details`), `homeTeam`/`awayTeam`, `date`, `status`, `externalIds` (gsis etc.).
 
 **Example**
 
 ```python
 from sportsdataverse.nfl.nfl_games import nfl_game_schedule
 week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
-
-# Wild Card weekend (post-season)
-
-wild_card = nfl_game_schedule(season=2023, season_type="POST", week=1)
-
-# Reuse headers across many calls
-
-from sportsdataverse.nfl.nfl_games import nfl_game_schedule, nfl_headers_gen
-hdrs = nfl_headers_gen()
-for week in range(1, 19):
-    summary = nfl_game_schedule(
-        season=2024, season_type="REG", week=week, headers=hdrs,
-    )
+first_id = week_one["games"][0]["id"]
 ```
 
-### `nfl_headers_gen()` {#nfl_headers_gen}
+### `nfl_headers_gen(token: 'Optional[str]' = None) -> 'Dict[str, str]'` {#nfl_headers_gen}
 
-Build the full request-header dict expected by `api.nfl.com`.
+Build the request-header dict expected by `api.nfl.com`.
 
-Mints a fresh bearer token via `nfl_token_gen` and combines it
-with the browser-style headers (`Origin`, `Referer`, `User-Agent`,
-`Sec-Fetch-*`, etc.) the NFL.com web app sends on every request.
+Mints a fresh bearer token via `nfl_token_gen` (unless `token` is
+supplied) and combines it with the browser-style headers the NFL.com web app
+sends. Reuse the returned dict across calls to avoid re-minting tokens.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `token` | `Optional[str]` | `None` | An existing access token to reuse; mints a fresh one when `None`. |
 
 **Returns**
 
@@ -5623,38 +5613,38 @@ Header dict ready to drop into `requests.get`.
 **Example**
 
 ```python
-from sportsdataverse.nfl.nfl_games import (
-    nfl_headers_gen, nfl_game_schedule,
-)
+from sportsdataverse.nfl.nfl_games import nfl_headers_gen, nfl_game_schedule
 hdrs = nfl_headers_gen()
 week_one = nfl_game_schedule(season=2024, season_type="REG", week=1, headers=hdrs)
 week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdrs)
 ```
 
-### `nfl_token_gen()` {#nfl_token_gen}
+### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None) -> 'str'` {#nfl_token_gen}
 
-Mint a fresh `api.nfl.com` access token via the public reroute endpoint.
+Mint a fresh `api.nfl.com` access token via `/identity/v3/token`.
 
-Wraps the unauthenticated `client_credentials` grant the NFL.com web
-app uses. The returned bearer token is what `nfl_headers_gen()` puts
-on the `Authorization` header.
+Wraps the anonymous device-token grant the NFL.com web app uses. Credentials
+resolve in this order: explicit `client_key`/`client_secret` args ->
+`NFL_CLIENT_KEY`/`NFL_CLIENT_SECRET` env vars -> the bundled public
+`WEB_DESKTOP` web-app credentials.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `client_key` | `Optional[str]` | `None` | Override the client key (else env var, else the web default). |
+| `client_secret` | `Optional[str]` | `None` | Override the client secret (else env var, else the default). |
 
 **Returns**
 
-The access token string.
+The bearer `accessToken` string.
 
 **Example**
 
 ```python
 from sportsdataverse.nfl.nfl_games import nfl_token_gen
 token = nfl_token_gen()
-assert isinstance(token, str)
-
-# Pair with a downstream call (``nfl_headers_gen`` does this for you)
-
-import requests
-token = nfl_token_gen()
-headers = {"Authorization": f"Bearer {token}"}
+assert isinstance(token, str) and token.startswith("ey")
 ```
 
 ### `reset_config() -> 'NflConfig'` {#reset_config}

@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
   - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
   - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
   - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
@@ -84,6 +85,21 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NFL — restored the api.nfl.com game schedule + play-by-play wrappers
+
+- `nfl_game_schedule` / `nfl_game_details` were broken because NFL.com retired the
+  old `/v1/reroute` client-credentials token endpoint (404 -> `JSONDecodeError`).
+  Rebuilt `sportsdataverse/nfl/nfl_games.py` on the modern flow the NFL.com web app
+  (and nflverse's `nflapi`) now use: `nfl_token_gen()` mints a bearer token from
+  `/identity/v3/token` (form-encoded device grant, `X-Domain-Id: 100`);
+  `nfl_game_schedule()` reads `/football/v2/games/season/{s}/seasonType/{t}/week/{w}`;
+  `nfl_game_details()` reads `/experience/v1/gamedetails/{id}` and unwraps the shield
+  `data.viewer.gameDetail` object (plays, drives, scoring summaries, line scores).
+- Auth uses the NFL.com public `WEB_DESKTOP` web-client credentials as defaults,
+  overridable via `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` env vars or function args
+  (no personal account; the token carries the anonymous `free` plan). Verified live:
+  16 games for 2024 REG wk1, 194 plays / 20 drives for the opener.
 
 ### ESPN — remove always-erroring endpoint variants + NFL R-parity
 
