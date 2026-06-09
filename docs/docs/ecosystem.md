@@ -186,15 +186,11 @@ SportsDataverse builds on and complements two neighboring communities:
 
 ## Where to go next
 
-- New here? Start with the [quickstart notebook](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb),
-  then the per-sport intro notebook for your league:
-  [CFB](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/02_cfb_intro.ipynb) ·
-  [NFL](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/03_nfl_intro.ipynb) ·
-  [NBA](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/04_nba_intro.ipynb) ·
-  [WBB / WNBA](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/05_wbb_wnba_intro.ipynb) ·
-  [MBB](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/06_mbb_intro.ipynb) ·
-  [NHL](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/07_nhl_intro.ipynb).
-  All seven are CI-executed weekly (`nbmake`) so they stay in sync with the API.
+- New here? Browse the **[Tutorials](tutorials/01_quickstart.md)** — ten executed
+  example notebooks (Quickstart plus one per sport: NBA, WNBA, MBB, WBB, NFL, CFB,
+  MLB, NHL, PWHL) rendered as pages with real outputs. They are CI-executed weekly
+  (`nbmake`) so they stay in sync with the API; the source notebooks live under
+  `examples/notebooks/`.
 - Want the design details? [ESPN cross-league architecture](architecture/espn-cross-league.md)
   and the [parser layer](parsers/index.md).
 - Looking for a specific function? Each league's **Reference** section lists every

@@ -14,7 +14,7 @@ sidebar_label: MBB
 
 ## Examples
 
-Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
 
-- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
-- [MBB intro](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/06_mbb_intro.ipynb)
+- [Quickstart](../tutorials/01_quickstart.md)
+- [MBB tutorial](../tutorials/06_mbb_intro.md)

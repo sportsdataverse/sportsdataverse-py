@@ -1602,33 +1602,35 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     )
 
 
-# Example notebooks live in the repo (examples/notebooks/), not the docs tree, so
-# league index pages link them on GitHub. Each league surfaces the general
-# quickstart plus its sport-specific intro (mlb/pwhl have no dedicated intro yet).
-_NOTEBOOK_GH_BASE = "https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks"
+# Example notebooks are rendered (executed, with outputs) to on-site Tutorial pages
+# under docs/docs/tutorials/ by tools/codegen/render_notebooks.py. Each league index
+# links the general quickstart plus its sport-specific tutorial. Links are relative
+# to a league index page (docs/docs/<lg>/index.md) -> ../tutorials/<stem>.
 _QUICKSTART_NB = ("01_quickstart", "Quickstart")
 _LEAGUE_NOTEBOOKS: dict[str, tuple[str, str]] = {
-    "cfb": ("02_cfb_intro", "CFB intro"),
-    "nfl": ("03_nfl_intro", "NFL intro"),
-    "nba": ("04_nba_intro", "NBA intro"),
-    "wbb": ("05_wbb_wnba_intro", "WBB / WNBA intro"),
-    "wnba": ("05_wbb_wnba_intro", "WBB / WNBA intro"),
-    "mbb": ("06_mbb_intro", "MBB intro"),
-    "nhl": ("07_nhl_intro", "NHL intro"),
+    "cfb": ("02_cfb_intro", "CFB tutorial"),
+    "nfl": ("03_nfl_intro", "NFL tutorial"),
+    "nba": ("04_nba_intro", "NBA tutorial"),
+    "wbb": ("05_wbb_intro", "WBB tutorial"),
+    "wnba": ("08_wnba_intro", "WNBA tutorial"),
+    "mbb": ("06_mbb_intro", "MBB tutorial"),
+    "nhl": ("07_nhl_intro", "NHL tutorial"),
+    "mlb": ("09_mlb_intro", "MLB tutorial"),
+    "pwhl": ("10_pwhl_intro", "PWHL tutorial"),
 }
 
 
 def _notebooks_for(prefix: str) -> list[dict]:
-    """``[{label, url}]`` of example notebooks for a league index page.
+    """``[{label, url}]`` of example tutorials for a league index page.
 
-    Always the general quickstart first, then the league's sport-specific intro
-    when one exists. Returned in display order; ``label``/``url`` are ready for
-    the ``league_index.md.jinja`` ``## Examples`` block."""
+    Always the general quickstart first, then the league's sport-specific tutorial
+    when one exists. ``url`` is a doc-relative link to the rendered on-site Tutorial
+    page; ready for the ``league_index.md.jinja`` ``## Examples`` block."""
     entries = [_QUICKSTART_NB]
     sport = _LEAGUE_NOTEBOOKS.get(prefix)
     if sport is not None:
         entries.append(sport)
-    return [{"label": label, "url": f"{_NOTEBOOK_GH_BASE}/{stem}.ipynb"} for stem, label in entries]
+    return [{"label": label, "url": f"../tutorials/{stem}.md"} for stem, label in entries]
 
 
 def render_league_index(

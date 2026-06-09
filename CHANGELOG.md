@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
   - [Documentation — class methods rendered on autodoc pages (CFB / NFL)](#documentation--class-methods-rendered-on-autodoc-pages-cfb--nfl)
@@ -81,6 +82,30 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Documentation — example notebooks repaired, expanded, and rendered on-site
+
+- **Repaired the example notebooks.** Live execution (`nbclient`) surfaced runtime
+  schema/usage drift that import/compile checks miss: ESPN schedule team columns
+  renamed to `home_display_name`/`away_display_name`; `espn_*_pbp()['plays']` is a
+  raw list using dot-notation keys (`period.number`, `clock.displayValue`,
+  `scoringPlay`, `shootingPlay`, `coordinate.x/.y`) built via
+  `pl.DataFrame(...)`; ESPN scores are strings (cast before arithmetic);
+  `espn_cfb_schedule` takes `dates=` not `season=`; ESPN team rosters use
+  `full_name`; `espn_*_team_stats` returns a dict `{Averages, Totals, Misc}`; some
+  hardcoded dates had no games. All notebooks now execute clean end-to-end.
+- **Split + expanded the suite to ten notebooks.** The combined `wbb_wnba` notebook
+  was split into separate `05_wbb_intro` and `08_wnba_intro`, both expanded; the
+  NHL notebook gained an ESPN-NHL section alongside the native api-web surface; and
+  two new notebooks were added: `09_mlb_intro` (MLB Stats API + Statcast + ESPN MLB)
+  and `10_pwhl_intro` (PWHL loaders).
+- **On-site rendered Tutorials.** New `tools/codegen/render_notebooks.py` executes
+  each notebook and renders it (with real outputs, as clean monospace tables) to a
+  themed page under `docs/docs/tutorials/`, surfaced in a new **Tutorials** sidebar
+  section. Execution is quarantined to the weekly `live-tests-cron` workflow, which
+  now re-executes + renders and opens a refresh PR (main is branch-protected); the
+  normal offline docs build just consumes the committed pages. Each league index's
+  **Examples** section now links the on-site tutorial pages instead of GitHub.
 
 ### NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)
 

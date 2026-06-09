@@ -14,6 +14,7 @@ sidebar_label: MLB
 
 ## Examples
 
-Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
 
-- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
+- [Quickstart](../tutorials/01_quickstart.md)
+- [MLB tutorial](../tutorials/09_mlb_intro.md)

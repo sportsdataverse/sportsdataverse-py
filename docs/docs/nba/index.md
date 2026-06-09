@@ -14,7 +14,7 @@ sidebar_label: NBA
 
 ## Examples
 
-Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
 
-- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
-- [NBA intro](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/04_nba_intro.ipynb)
+- [Quickstart](../tutorials/01_quickstart.md)
+- [NBA tutorial](../tutorials/04_nba_intro.md)

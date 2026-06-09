@@ -20,8 +20,9 @@ on:
     - cron: "0 13 * * 1" # Every Monday at 13:00 UTC
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write # required to push the tutorials-refresh branch
   issues: write # required to open / update the drift tracking issue
+  pull-requests: write # required to open the tutorials-refresh PR
 concurrency:
   group: live-tests-cron
   cancel-in-progress: false
@@ -75,6 +76,42 @@ jobs:
         run: |
           set -o pipefail
           uv run --frozen pytest --nbmake examples/notebooks/ -q -rN 2>&1 | tee pytest-notebooks.log
+      - name: Render notebook tutorials and open refresh PR
+        # Re-execute the example notebooks and render them (with outputs) to
+        # docs/docs/tutorials/. main is branch-protected (PR-only), so we push a
+        # refresh branch and open/update a PR rather than committing to main.
+        # Informational: a live-API flake here shouldn't fail the cron.
+        continue-on-error: true
+        env:
+          SDV_PY_LIVE_TESTS: "1"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log
+          if git diff --quiet -- docs/docs/tutorials; then
+            echo "No tutorial changes to publish."
+            exit 0
+          fi
+          branch="auto/tutorials-refresh"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add docs/docs/tutorials
+          git commit -m "docs(tutorials): refresh executed notebook pages"
+          git push -f origin "$branch"
+          if [ -z "$(gh pr list --head "$branch" --state open --json number -q '.[0].number')" ]; then
+            gh pr create --head "$branch" --base main \
+              --title "docs(tutorials): weekly refresh of executed notebook pages" \
+              --body "Automated re-execution + render of \`examples/notebooks/\` to \`docs/docs/tutorials/\` by \`render_notebooks.py\` (live-tests-cron). Review the output diffs and merge to refresh the rendered tutorials."
+          fi
+      - name: Upload notebook render log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: render-notebooks-log
+          path: render-notebooks.log
+          if-no-files-found: warn
+          retention-days: 30
       - name: Upload notebook execution log
         if: always()
         uses: actions/upload-artifact@v7

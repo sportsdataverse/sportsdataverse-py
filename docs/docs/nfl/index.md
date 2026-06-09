@@ -13,7 +13,7 @@ sidebar_label: NFL
 
 ## Examples
 
-Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
 
-- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
-- [NFL intro](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/03_nfl_intro.ipynb)
+- [Quickstart](../tutorials/01_quickstart.md)
+- [NFL tutorial](../tutorials/03_nfl_intro.md)

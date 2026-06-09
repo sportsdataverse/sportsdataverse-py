@@ -10,6 +10,7 @@ sidebar_label: PWHL
 
 ## Examples
 
-Runnable Jupyter notebooks (CI-executed weekly so they stay in sync with the API):
+Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
 
-- [Quickstart](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/examples/notebooks/01_quickstart.ipynb)
+- [Quickstart](../tutorials/01_quickstart.md)
+- [PWHL tutorial](../tutorials/10_pwhl_intro.md)
