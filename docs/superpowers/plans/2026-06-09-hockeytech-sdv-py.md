@@ -1742,8 +1742,32 @@ git commit -m "feat(hockeytech): team Corsi/Fenwick proxies + per-60 (missed-sho
 
 **Files:**
 - Create: `sportsdataverse/pwhl/pwhl_analytics.py`
-- Modify: `sportsdataverse/pwhl/pwhl_api.py` (enrich `pwhl_pbp`), `sportsdataverse/pwhl/__init__.py`
+- Modify: `sportsdataverse/pwhl/pwhl_api.py` (enrich `pwhl_pbp`), `sportsdataverse/pwhl/__init__.py`, `sportsdataverse/hockeytech/_analytics.py` (add the parity transforms below)
 - Test: `tests/hockeytech/test_public_surface.py`
+
+> **EXPANDED SCOPE (user-confirmed full pwhl_pbp parity, 2026-06-09).** The A1.6
+> base PBP parser matches fastRhockey's base event columns. To reach FULL
+> column-for-column parity with fastRhockey `pwhl_pbp`, the enriched `pwhl_pbp`
+> here must ALSO add these three groups (port the exact logic from
+> `c:\Users\saiem\Documents\GitHub-Data\sdv-dev\hockey-dev\fastRhockey\R\pwhl_pbp.R`):
+> 1. **Game-meta join** — `game_date`, `game_season`, `game_season_id`,
+>    `home_team`, `home_team_id`, `away_team`, `away_team_id` on every play row
+>    (look up the game via `pwhl_schedule`/scorebar by `game_id`).
+> 2. **Coordinate transforms** — `x_coord_original`/`y_coord_original` (raw),
+>    plus `x_coord_neutral`/`y_coord_neutral`, `x_coord_fixed`/`y_coord_fixed`,
+>    `x_coord_right`/`y_coord_right`, `x_coord_vertical`/`y_coord_vertical` —
+>    transliterate fastRhockey's coordinate-normalization math. These also give
+>    the proper rink-frame coords that `add_shot_distance_angle` needs (replaces
+>    the raw 850×400 canvas coords), so compute `shot_distance`/`shot_angle`
+>    from the transformed (feet) coordinates, not the raw canvas values.
+> 3. **Time/clock parse** — `minute_start`, `second_start`, `clock`,
+>    `sec_from_start` (parse `time_of_period` + period length; PWHL period = 20
+>    min, OT handling per fastRhockey).
+>
+> Add a fixture-backed parity test asserting these columns exist and that
+> `shot_distance` is computed from transformed coords (sane 0–100 ft range).
+> The same transforms belong in `_analytics.py` (or a `_pbp_enrich.py`) so the
+> junior/AHL families (A3.2) and the R mirror (Part B) reuse identical logic.
 
 - [ ] **Step 1: Add failing test (offline, monkeypatched)**
 
