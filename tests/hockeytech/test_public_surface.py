@@ -148,3 +148,31 @@ def test_corsi_fenwick_on_ice_player_level():
     p20 = out.filter(pl.col("player_id") == "20")
     assert p20["corsi_for"][0] == 1 and p20["corsi_against"][0] == 2
     assert not out["corsi_includes_missed"].any()
+
+
+# ---------------------------------------------------------------------------
+# A3.2b: AHL/OHL/WHL/QMJHL family surface
+# ---------------------------------------------------------------------------
+
+import pytest
+
+
+@pytest.mark.parametrize("lg", ["ahl", "ohl", "whl", "qmjhl"])
+def test_junior_family_core_surface(lg):
+    mod = __import__(f"sportsdataverse.{lg}", fromlist=["*"])
+    for stem in (
+        "schedule",
+        "pbp",
+        "standings",
+        "teams",
+        "team_roster",
+        "player_stats",
+        "leaders",
+        "game_summary",
+        "season_id",
+        "game_shifts",
+        "player_toi",
+        "game_corsi",
+    ):
+        assert hasattr(mod, f"{lg}_{stem}"), f"missing {lg}_{stem}"
+    assert hasattr(mod, f"most_recent_{lg}_season")
