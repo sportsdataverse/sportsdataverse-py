@@ -1,9 +1,0 @@
-{
-  "label": "Tutorials",
-  "position": 7.5,
-  "link": {
-    "type": "generated-index",
-    "title": "Tutorials",
-    "description": "Runnable, executed example notebooks rendered as pages. Each is CI-executed weekly against the live APIs, so the outputs shown reflect a recent run. Source notebooks live in examples/notebooks/."
-  }
-}

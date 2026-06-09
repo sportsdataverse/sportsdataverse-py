@@ -59,17 +59,6 @@ TUTORIALS: list[tuple[str, str, int]] = [
     ("10_pwhl_intro", "PWHL", 10),
 ]
 
-_CATEGORY_JSON = """{
-  "label": "Tutorials",
-  "position": 7.5,
-  "link": {
-    "type": "generated-index",
-    "title": "Tutorials",
-    "description": "Runnable, executed example notebooks rendered as pages. Each is CI-executed weekly against the live APIs, so the outputs shown reflect a recent run. Source notebooks live in examples/notebooks/."
-  }
-}
-"""
-
 
 def _execute(nb):
     """Execute a notebook in-memory; raise on the first failing cell."""
@@ -166,7 +155,6 @@ def main() -> int:
     import nbformat
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    (OUT_DIR / "_category_.json").write_text(_CATEGORY_JSON, encoding="utf-8")
 
     tutorials = [t for t in TUTORIALS if not args.only or t[0] in args.only]
     failures = []
