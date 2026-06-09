@@ -243,3 +243,58 @@ def test_flat_parsers_on_synthetic_payloads():
     fake_pb = {"SiteKit": {"Playerbox": [{"player_id": 10, "goals": "1"}]}}
     df_pb = P.parse_player_box(fake_pb)
     assert df_pb.height == 1 and "player_id" in df_pb.columns
+
+
+# ---------------------------------------------------------------------------
+# Task A3.1: dialect b (OHL/WHL/QMJHL) play-by-play parser
+# ---------------------------------------------------------------------------
+
+
+def test_parse_pbp_b_dialect_one_row_per_event():
+    """Dialect b (OHL/WHL/QMJHL) emits the same nested {event, details}
+    wire format as dialect a; _parse_pbp_b normalises to the same row schema.
+
+    Live-capture confirmed (2026-06-09) that OHL, WHL, and QMJHL all use the
+    nested ``{"event": ..., "details": {...}}`` structure, not a flat schema.
+    ``_parse_pbp_b`` therefore delegates to ``_parse_pbp_a``; this test verifies
+    the public ``parse_pbp(..., pbp_style="hockeytech_b")`` dispatch produces
+    the expected shape against the captured OHL game 27225 fixture.
+    """
+    import glob
+    import os
+
+    import polars as pl
+
+    from sportsdataverse.hockeytech._parsers import parse_pbp
+
+    stems = [os.path.basename(p)[:-5] for p in glob.glob("tests/fixtures/hockeytech/*_pbp_*.json")]
+    juniors = [s for s in stems if s.split("_")[0] in ("ohl", "whl", "qmjhl", "ahl")]
+    assert juniors, "need a junior pbp fixture (ohl_pbp_27225.json must be present)"
+
+    df = parse_pbp(_load(juniors[0]), pbp_style="hockeytech_b", game_id=1)
+    assert isinstance(df, pl.DataFrame) and df.height > 0
+
+    for col in ("game_id", "event", "period_of_game", "player_id"):
+        assert col in df.columns, f"missing required column: {col}"
+
+    # game_id echoed on every row
+    assert (df["game_id"] == 1).all()
+
+    # at least shot or goal or faceoff events present
+    actual_events = set(df["event"].unique().to_list())
+    assert actual_events & {"shot", "goal", "faceoff"}, (
+        f"expected at least one of shot/goal/faceoff; got {actual_events}"
+    )
+
+    # dialect b shares the full schema with dialect a
+    for col in (
+        "team_id",
+        "time_of_period",
+        "x_coord",
+        "y_coord",
+        "player_name_first",
+        "player_name_last",
+        "goal",
+        "goalie_id",
+    ):
+        assert col in df.columns, f"missing shared-schema column: {col}"

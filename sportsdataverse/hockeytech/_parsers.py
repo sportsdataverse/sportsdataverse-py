@@ -349,6 +349,44 @@ def _parse_pbp_a(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]
     return rows
 
 
+def _parse_pbp_b(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]:
+    """Convert a list of raw HockeyTech dialect-b event dicts to flat row dicts.
+
+    Dialect b covers OHL, WHL, and QMJHL.  Despite the league registry marking
+    these as ``"hockeytech_b"``, live API inspection (2026-06-09) confirmed that
+    these leagues emit the **same** nested ``{"event": ..., "details": {...}}``
+    structure as dialect-a (PWHL/AHL) -- just served via their own
+    ``client_code`` / ``api_key`` / host.
+
+    Event-type coverage vs dialect a:
+
+    - ``goalie_change`` -- identical keys (``goalieComingIn``, ``goalieGoingOut``,
+      ``team_id``, ``period``, ``time``).
+    - ``faceoff`` -- identical keys (``homePlayer``, ``visitingPlayer``,
+      ``xLocation``, ``yLocation``, ``homeWin``).
+    - ``shot`` -- identical keys (``shooter``, ``goalie``, ``shooterTeamId``,
+      ``isGoal``, ``shotType``, ``shotQuality``, ``xLocation``, ``yLocation``).
+    - ``penalty`` -- identical keys (``takenBy``, ``servedBy``, ``againstTeam``,
+      ``minutes``, ``description``, ``isPowerPlay``); additionally carries
+      ``isBench`` (junior leagues).
+    - ``goal`` -- identical keys (``scoredBy``, ``assists``, ``properties``,
+      ``plus_players``, ``minus_players``, ``xLocation``, ``yLocation``).
+    - ``hit`` -- identical keys (``player``, ``teamId``); may appear in some
+      junior games.
+    - ``blocked_shot`` -- identical keys; may appear in some junior games.
+    - ``timeout`` -- junior-specific event with keys ``teamId``,
+      ``timeoutLength``, ``callingCoach``; kept with raw event name
+      ``"timeout"`` (no dialect-a equivalent).
+
+    All events are processed through :func:`_parse_pbp_a` since the wire format
+    is identical.  The ``"timeout"`` event type is handled by the default
+    (identity) branch in ``_parse_pbp_a``, which emits a row with
+    ``event="timeout"`` and ``player_id=None`` -- consistent with how
+    ``_parse_pbp_a`` handles unrecognised event types.
+    """
+    return _parse_pbp_a(events, game_id=game_id)
+
+
 def parse_pbp(
     payload: Any,
     pbp_style: str = "hockeytech_a",
@@ -362,22 +400,25 @@ def parse_pbp(
     An empty/None payload returns a zero-row frame, never raises.
 
     Args:
-        payload: A list of event dicts (dialect a) as returned by the
-            HockeyTech API ``getGamePlayByPlay`` endpoint.
-        pbp_style: Dialect flag.  Only ``"hockeytech_a"`` (PWHL/AHL) is
-            implemented here.  ``"hockeytech_b"`` (OHL/WHL/QMJHL) is
-            added in task A3.1 and raises :exc:`NotImplementedError`
-            until then.
+        payload: A list of event dicts as returned by the HockeyTech API
+            ``gameCenterPlayByPlay`` endpoint.  Both dialect-a and
+            dialect-b payloads are lists of ``{"event": ..., "details":
+            {...}}`` dicts.
+        pbp_style: Dialect flag.  ``"hockeytech_a"`` (PWHL/AHL) and
+            ``"hockeytech_b"`` (OHL/WHL/QMJHL) are both supported.
+            Dialect b uses the same nested wire format as dialect a; the
+            distinction exists at the league-registry level (different
+            client codes / API keys / hosts) but not in the JSON schema.
         game_id: Optional game identifier echoed onto every row as
             ``game_id``.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of a :class:`polars.DataFrame`.
     """
-    if pbp_style == "hockeytech_b":
-        # dialect b (OHL/WHL/QMJHL) is implemented in task A3.1
-        raise NotImplementedError("pbp dialect 'hockeytech_b' is implemented in task A3.1")
     events: List[Any] = payload if isinstance(payload, list) else []
-    rows = _parse_pbp_a(events, game_id=game_id)
+    if pbp_style == "hockeytech_b":
+        rows = _parse_pbp_b(events, game_id=game_id)
+    else:
+        rows = _parse_pbp_a(events, game_id=game_id)
     return _to_frame(rows, return_as_pandas)
 
 

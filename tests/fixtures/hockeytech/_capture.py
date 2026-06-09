@@ -46,6 +46,9 @@ CAPTURES = {
         {"season_id": 5, "team_id": 0, "playerTypes": "skaters", "skaterStatTypes": "points,goals", "activeOnly": 0},
     ),
     "pwhl_game_summary_42": ("pwhl", "gc", "gamesummary", {"game_id": 42}),
+    # OHL dialect-b fixture (OHL/WHL/QMJHL use same nested structure as dialect-a
+    # but are served via their own client_code/api_key; captured for A3.1)
+    "ohl_pbp_27225": ("ohl", "statviewfeed", "gameCenterPlayByPlay", {"game_id": 27225, "league_id": ""}),
 }
 
 
