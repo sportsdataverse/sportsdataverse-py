@@ -60,8 +60,32 @@ def test_parse_standings_has_team_rank_and_points():
     from sportsdataverse.hockeytech._parsers import parse_standings
 
     df = parse_standings(_load("pwhl_standings_5"))
-    for col in ("team", "team_rank", "games_played", "points", "wins", "losses"):
+    for col in (
+        "team",
+        "team_rank",
+        "games_played",
+        "points",
+        "wins",
+        "losses",
+        "regulation_wins",
+        "non_reg_wins",
+        "non_reg_losses",
+    ):
         assert col in df.columns
+
+    import polars as pl
+
+    df2 = df.with_columns(
+        [
+            pl.col("wins").cast(pl.Int64, strict=False),
+            pl.col("regulation_wins").cast(pl.Int64, strict=False),
+            pl.col("non_reg_wins").cast(pl.Int64, strict=False),
+        ]
+    )
+    # total wins must be >= regulation wins for every team
+    assert (df2["wins"] >= df2["regulation_wins"]).all()
+    # total wins == regulation + non-regulation
+    assert (df2["wins"] == df2["regulation_wins"] + df2["non_reg_wins"]).all()
 
 
 def test_parse_teams_and_roster():

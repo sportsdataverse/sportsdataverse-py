@@ -115,13 +115,22 @@ def parse_standings(payload: Any, return_as_pandas: bool = False) -> Any:
     # Rename raw keys -> required column names:
     # - "rank" -> "team_rank"  (standings position integer already present)
     # - "name" -> "team"       (long team name)
-    # - "regulation_wins" -> "wins"  (W column; raw key is "regulation_wins")
+    # NOTE: "regulation_wins" is intentionally NOT renamed to "wins".
+    # The PWHL uses a 3-2-1-0 points system; "wins" must be TOTAL wins
+    # (regulation + non-regulation), not just regulation wins.
     ren = {
         "rank": "team_rank",
         "name": "team",
-        "regulation_wins": "wins",
     }
     df = df.rename({k: v for k, v in ren.items() if k in df.columns})
+    # Compute total wins = regulation_wins + non_reg_wins (both are integer strings)
+    if "regulation_wins" in df.columns and "non_reg_wins" in df.columns:
+        df = df.with_columns(
+            (
+                pl.col("regulation_wins").cast(pl.Int64, strict=False)
+                + pl.col("non_reg_wins").cast(pl.Int64, strict=False)
+            ).alias("wins")
+        )
     return df.to_pandas() if return_as_pandas else df
 
 
@@ -163,6 +172,8 @@ def parse_roster(payload: Any, return_as_pandas: bool = False) -> Any:
     rows: List[Dict[str, Any]] = []
     for player in raw:
         if not isinstance(player, dict):
+            # Intentionally skip non-dict entries (e.g. the coaching-staff sub-list);
+            # the result frame contains players only.
             continue
         rows.append({k: v for k, v in player.items() if not isinstance(v, list)})
     return _to_frame(rows, return_as_pandas)
