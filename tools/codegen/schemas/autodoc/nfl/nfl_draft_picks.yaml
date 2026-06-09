@@ -1,0 +1,33 @@
+schema: nfl_draft_picks
+kind: dataframe
+columns:
+- name: year
+  type: integer
+  description: ''
+- name: draftRound
+  type: integer
+  description: ''
+- name: draftPosition
+  type: integer
+  description: ''
+- name: draftNumberOverall
+  type: integer
+  description: ''
+- name: personId
+  type: character
+  description: ''
+- name: pickIsIn
+  type: logical
+  description: ''
+- name: teamId
+  type: character
+  description: ''
+- name: tradeNote
+  type: character
+  description: ''
+- name: tweetSent
+  type: logical
+  description: ''
+- name: tweetsSent
+  type: logical
+  description: ''

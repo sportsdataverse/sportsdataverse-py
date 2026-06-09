@@ -1,0 +1,42 @@
+schema: nfl_teams_history
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: fullName
+  type: character
+  description: ''
+- name: teamType
+  type: character
+  description: ''
+- name: conferenceAbbr
+  type: character
+  description: ''
+- name: conferenceFullName
+  type: character
+  description: ''
+- name: currentLogo
+  type: character
+  description: ''
+- name: divisionFullName
+  type: character
+  description: ''
+- name: league
+  type: character
+  description: ''
+- name: location
+  type: character
+  description: ''
+- name: nickName
+  type: character
+  description: ''
+- name: venues
+  type: character
+  description: ''

@@ -211,10 +211,33 @@ from sportsdataverse.nfl import load_team_stats as load_team_stats  # noqa: F401
 from sportsdataverse.nfl import load_teams as load_teams  # noqa: F401
 from sportsdataverse.nfl import load_trades as load_trades  # noqa: F401
 from sportsdataverse.nfl import most_recent_nfl_season as most_recent_nfl_season  # noqa: F401
+from sportsdataverse.nfl import nfl_combine_profiles as nfl_combine_profiles  # noqa: F401
+from sportsdataverse.nfl import nfl_draft_picks as nfl_draft_picks  # noqa: F401
 from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F401
+from sportsdataverse.nfl import nfl_game_pbp as nfl_game_pbp  # noqa: F401
 from sportsdataverse.nfl import nfl_game_schedule as nfl_game_schedule  # noqa: F401
+from sportsdataverse.nfl import nfl_game_summaries as nfl_game_summaries  # noqa: F401
 from sportsdataverse.nfl import nfl_headers_gen as nfl_headers_gen  # noqa: F401
+from sportsdataverse.nfl import nfl_injuries as nfl_injuries  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_gamecenter_overview as nfl_ngs_gamecenter_overview  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_leaders as nfl_ngs_leaders  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_league_schedule as nfl_ngs_league_schedule  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_league_schedule_current as nfl_ngs_league_schedule_current  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_league_teams as nfl_ngs_league_teams  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_microsite_chart as nfl_ngs_microsite_chart  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_microsite_chart_players as nfl_ngs_microsite_chart_players  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_play_is_highlight as nfl_ngs_play_is_highlight  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_statboard as nfl_ngs_statboard  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_statboard_leaders as nfl_ngs_statboard_leaders  # noqa: F401
+from sportsdataverse.nfl import nfl_rosters as nfl_rosters  # noqa: F401
+from sportsdataverse.nfl import nfl_standings as nfl_standings  # noqa: F401
+from sportsdataverse.nfl import nfl_team as nfl_team  # noqa: F401
+from sportsdataverse.nfl import nfl_teams_history as nfl_teams_history  # noqa: F401
 from sportsdataverse.nfl import nfl_token_gen as nfl_token_gen  # noqa: F401
+from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
+from sportsdataverse.nfl import nfl_weekly_game_details as nfl_weekly_game_details  # noqa: F401
+from sportsdataverse.nfl import nfl_weeks as nfl_weeks  # noqa: F401
+from sportsdataverse.nfl import nfl_weeks_by_date as nfl_weeks_by_date  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nfl import reset_config as reset_config  # noqa: F401
 from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
@@ -411,10 +434,33 @@ __all__ = [
     "load_teams",
     "load_trades",
     "most_recent_nfl_season",
+    "nfl_combine_profiles",
+    "nfl_draft_picks",
     "nfl_game_details",
+    "nfl_game_pbp",
     "nfl_game_schedule",
+    "nfl_game_summaries",
     "nfl_headers_gen",
+    "nfl_injuries",
+    "nfl_ngs_gamecenter_overview",
+    "nfl_ngs_leaders",
+    "nfl_ngs_league_schedule",
+    "nfl_ngs_league_schedule_current",
+    "nfl_ngs_league_teams",
+    "nfl_ngs_microsite_chart",
+    "nfl_ngs_microsite_chart_players",
+    "nfl_ngs_play_is_highlight",
+    "nfl_ngs_statboard",
+    "nfl_ngs_statboard_leaders",
+    "nfl_rosters",
+    "nfl_standings",
+    "nfl_team",
+    "nfl_teams_history",
     "nfl_token_gen",
+    "nfl_week_games",
+    "nfl_weekly_game_details",
+    "nfl_weeks",
+    "nfl_weeks_by_date",
     "normalize_team_roster_columns",
     "reset_config",
     "scoreboard_event_parsing",

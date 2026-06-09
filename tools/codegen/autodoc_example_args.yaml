@@ -54,6 +54,31 @@ nfl:
   load_schedules: {seasons: 2024}
   load_snap_counts: {seasons: 2024}
   load_team_stats: {seasons: 2024}
+  # api.nfl.com (nfl_games / nfl_api -- bearer token) parsed wrappers
+  nfl_game_pbp: {game_id: "7d3e8f84-1312-11ef-afd1-646009f18b2e"}
+  nfl_week_games: {season: 2024, season_type: "REG", week: 1}
+  nfl_standings: {season: 2024, season_type: "REG", week: 1}
+  nfl_rosters: {season: 2024}
+  nfl_teams_history: {season: 2024}
+  nfl_team: {team_id: "10408600-77a1-8b0f-8f54-99b7e0a7d1b2"}
+  nfl_weeks: {season: 2024, season_type: "REG"}
+  nfl_weeks_by_date: {date: "2024-09-08"}
+  nfl_combine_profiles: {year: 2024}
+  nfl_draft_picks: {year: 2024}
+  nfl_injuries: {season: 2024, season_type: "REG", week: 1}
+  nfl_game_summaries: {season: 2024, season_type: "REG", week: 1}
+  nfl_weekly_game_details: {season: 2024, season_type: "REG", week: 1}
+  # Next Gen Stats (nfl_ngs -- token-free)
+  nfl_ngs_statboard: {stat_type: "passing", season: 2024, season_type: "REG"}
+  nfl_ngs_statboard_leaders: {season: 2024, season_type: "REG"}
+  nfl_ngs_leaders: {category: "speed", season: 2024, season_type: "REG"}
+  nfl_ngs_league_schedule: {season: 2024, season_type: "REG", week: 1}
+  nfl_ngs_league_schedule_current: {}
+  nfl_ngs_league_teams: {}
+  nfl_ngs_gamecenter_overview: {game_id: 2024090500, group: "passers"}
+  nfl_ngs_microsite_chart: {season: 2024, season_type: "REG", week: 1}
+  nfl_ngs_microsite_chart_players: {season: 2024, season_type: "REG"}
+  nfl_ngs_play_is_highlight: {game_id: 2024111800, play_id: 1214}
 
 nba:
   espn_nba_player_stats: {athlete_id: 3059318, season: 2024}

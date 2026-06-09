@@ -1,0 +1,15 @@
+schema: nfl_ngs_microsite_chart_players
+kind: dataframe
+columns:
+- name: esbId
+  type: character
+  description: ''
+- name: firstName
+  type: character
+  description: ''
+- name: lastName
+  type: character
+  description: ''
+- name: playerName
+  type: character
+  description: ''

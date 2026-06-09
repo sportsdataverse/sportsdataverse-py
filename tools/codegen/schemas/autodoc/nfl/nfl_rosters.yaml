@@ -1,0 +1,45 @@
+schema: nfl_rosters
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: seasonType
+  type: character
+  description: ''
+- name: persons
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team_abbreviation
+  type: character
+  description: ''
+- name: team_fullName
+  type: character
+  description: ''
+- name: team_conferenceAbbr
+  type: character
+  description: ''
+- name: team_conferenceFullName
+  type: character
+  description: ''
+- name: team_currentLogo
+  type: character
+  description: ''
+- name: team_divisionFullName
+  type: character
+  description: ''
+- name: team_league
+  type: character
+  description: ''
+- name: team_location
+  type: character
+  description: ''
+- name: team_nickName
+  type: character
+  description: ''
+- name: team_venues
+  type: character
+  description: ''

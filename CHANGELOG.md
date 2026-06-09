@@ -105,6 +105,9 @@
 - Both return tidy polars DataFrames by default (`return_as_pandas` supported) and are
   documented on the NFL reference pages. Catalogued from a full crawl of the NFL API
   surface (api.nfl.com + NGS).
+- Captured autodoc **return-column tables** for all 23 new NFL functions (live
+  introspection -> `schemas/autodoc/nfl/*.yaml` + `autodoc_example_args.yaml`), so
+  each renders a `col_name | type | description` table on its reference page.
 
 ### NFL — restored the api.nfl.com game schedule + play-by-play wrappers
 

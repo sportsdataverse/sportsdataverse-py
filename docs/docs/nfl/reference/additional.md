@@ -5554,6 +5554,65 @@ Records live under the `combineProfiles` key. Each row carries `id`,
 
 A polars (or pandas) `DataFrame`, one row per combine profile.
 
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ID of the player in the 'name' column. |
+| `year` | integer | 4-digit year. |
+| `armLength` | double |  |
+| `athleticismScore` | double |  |
+| `benchPress` | character |  |
+| `broadJump` | character |  |
+| `bio` | character |  |
+| `collegeClass` | character |  |
+| `draftGrade` | double |  |
+| `draftProjection` | character |  |
+| `fortyYardDash` | character |  |
+| `grade` | double | ESPN recruit grade (0-100; `0` = not rated). |
+| `handSize` | double |  |
+| `headshot` | character | NFL headshot url for player |
+| `height` | double | Official height, in inches |
+| `nflComparison` | character |  |
+| `overview` | character |  |
+| `productionScore` | double |  |
+| `profileAuthor` | character |  |
+| `proFortyYardDash` | character |  |
+| `sixtyYardShuttle` | character |  |
+| `sizeScore` | character |  |
+| `sourcesTellUs` | character |  |
+| `strengths` | character |  |
+| `tenYardSplit` | character |  |
+| `threeConeDrill` | character |  |
+| `twentyYardShuttle` | character |  |
+| `weaknesses` | character |  |
+| `combineAttendance` | logical |  |
+| `position` | character | Primary position as reported by NFL.com |
+| `positionGroup` | character |  |
+| `verticalJump` | character |  |
+| `weight` | double | Official weight, in pounds |
+| `person_id` | character | Unique player identifier (V3 endpoints). |
+| `person_displayName` | character |  |
+| `person_esbId` | character |  |
+| `person_firstName` | character |  |
+| `person_lastName` | character |  |
+| `person_hometown` | character |  |
+| `person_collegeNames` | character |  |
+| `proFortyYardDash_designation` | character |  |
+| `proFortyYardDash_seconds` | double |  |
+| `benchPress_designation` | character |  |
+| `benchPress_repetitions` | integer |  |
+| `broadJump_designation` | character |  |
+| `broadJump_inches` | integer |  |
+| `fortyYardDash_designation` | character |  |
+| `fortyYardDash_seconds` | double |  |
+| `tenYardSplit_designation` | character |  |
+| `tenYardSplit_seconds` | double |  |
+| `verticalJump_designation` | character |  |
+| `verticalJump_inches` | double |  |
+| `threeConeDrill_designation` | character |  |
+| `threeConeDrill_seconds` | double |  |
+| `twentyYardShuttle_designation` | character |  |
+| `twentyYardShuttle_seconds` | double |  |
+
 **Example**
 
 ```python
@@ -5583,6 +5642,19 @@ list; the records of interest are under `picks`. Each row carries `year`,
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per draft pick.
+
+| col_name | type | description |
+|---|---|---|
+| `year` | integer | 4-digit year. |
+| `draftRound` | integer |  |
+| `draftPosition` | integer |  |
+| `draftNumberOverall` | integer |  |
+| `personId` | character |  |
+| `pickIsIn` | logical |  |
+| `teamId` | character |  |
+| `tradeNote` | character |  |
+| `tweetSent` | logical |  |
+| `tweetsSent` | logical |  |
 
 **Example**
 
@@ -5647,6 +5719,66 @@ game context (`game_id`, `home_team`, `visitor_team`).
 
 A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has no play-by-play yet).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Ten digit identifier for NFL game. |
+| `home_team` | character | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
+| `visitor_team` | character |  |
+| `clockTime` | character |  |
+| `down` | integer | The down for the given play. |
+| `driveNetYards` | integer |  |
+| `drivePlayCount` | integer |  |
+| `driveSequenceNumber` | integer |  |
+| `driveTimeOfPossession` | character |  |
+| `endClockTime` | character |  |
+| `endYardLine` | character |  |
+| `firstDown` | logical |  |
+| `goalToGo` | logical |  |
+| `isBigPlay` | character |  |
+| `latestPlay` | character |  |
+| `nextPlayIsGoalToGo` | logical |  |
+| `nextPlayType` | character |  |
+| `orderSequence` | integer |  |
+| `penaltyOnPlay` | logical |  |
+| `playClock` | integer |  |
+| `playReviewStatus` | character |  |
+| `playDeleted` | logical |  |
+| `playDescription` | character |  |
+| `playDescriptionWithJerseyNumbers` | character |  |
+| `playId` | integer | Unique play event identifier (UUID). |
+| `playStats` | integer |  |
+| `playType` | character |  |
+| `prePlayByPlay` | character |  |
+| `quarter` | integer |  |
+| `scoringPlay` | logical |  |
+| `scoringPlayType` | character |  |
+| `scoringTeam` | character |  |
+| `shortDescription` | character |  |
+| `specialTeamsPlay` | logical |  |
+| `stPlayType` | character |  |
+| `timeOfDay` | character |  |
+| `yardLine` | character |  |
+| `yards` | integer | The number of receiving yards |
+| `yardsToGo` | integer |  |
+| `possessionTeam_id` | character |  |
+| `possessionTeam_abbreviation` | character |  |
+| `possessionTeam_nickName` | character |  |
+| `possessionTeam_franchise_primaryColor` | character |  |
+| `possessionTeam_franchise_secondaryColor` | character |  |
+| `possessionTeam_franchise_tertiaryColor` | character |  |
+| `possessionTeam_franchise_currentLogo` | character |  |
+| `possessionTeam_franchise_largeTypeColor` | character |  |
+| `possessionTeam_franchise_decorativeElementsColor` | character |  |
+| `scoringTeam_id` | character |  |
+| `scoringTeam_abbreviation` | character |  |
+| `scoringTeam_nickName` | character |  |
+| `scoringTeam_franchise_primaryColor` | character |  |
+| `scoringTeam_franchise_secondaryColor` | character |  |
+| `scoringTeam_franchise_tertiaryColor` | character |  |
+| `scoringTeam_franchise_currentLogo` | character |  |
+| `scoringTeam_franchise_largeTypeColor` | character |  |
+| `scoringTeam_franchise_decorativeElementsColor` | character |  |
+
 **Example**
 
 ```python
@@ -5703,6 +5835,43 @@ nested `homeTeam` / `awayTeam` summary objects.
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per game.
+
+| col_name | type | description |
+|---|---|---|
+| `gameId` | character |  |
+| `offset` | integer |  |
+| `attendance` | integer | Reported attendance. |
+| `clock` | character | Game clock value. |
+| `distance` | integer | Distance value (in feet for shot data; otherwise context-dependent). |
+| `down` | integer | The down for the given play. |
+| `gameBookUrl` | character |  |
+| `isGoalToGo` | logical |  |
+| `isRedZone` | logical |  |
+| `phase` | character | Lottery phase identifier. |
+| `quarter` | character |  |
+| `startTime` | character | Event start timestamp (ISO 8601). |
+| `weather` | character | String describing the weather including temperature, humidity and wind (direction and speed). Doesn't change during the game! |
+| `yardLine` | character |  |
+| `awayTeam_teamId` | character |  |
+| `awayTeam_hasPossession` | logical |  |
+| `awayTeam_score_q1` | integer |  |
+| `awayTeam_score_q2` | integer |  |
+| `awayTeam_score_q3` | integer |  |
+| `awayTeam_score_q4` | integer |  |
+| `awayTeam_score_ot` | integer |  |
+| `awayTeam_score_total` | integer |  |
+| `awayTeam_timeouts_remaining` | integer |  |
+| `awayTeam_timeouts_used` | integer |  |
+| `homeTeam_teamId` | character |  |
+| `homeTeam_hasPossession` | logical |  |
+| `homeTeam_score_q1` | integer |  |
+| `homeTeam_score_q2` | integer |  |
+| `homeTeam_score_q3` | integer |  |
+| `homeTeam_score_q4` | integer |  |
+| `homeTeam_score_ot` | integer |  |
+| `homeTeam_score_total` | integer |  |
+| `homeTeam_timeouts_remaining` | integer |  |
+| `homeTeam_timeouts_used` | integer |  |
 
 **Example**
 
@@ -5762,6 +5931,28 @@ list of body-part detail.
 
 A polars (or pandas) `DataFrame`, one row per injured player.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `week` | integer | Season week. |
+| `injuries` | character |  |
+| `injuryStatus` | character |  |
+| `practices` | character |  |
+| `practiceDays` | character |  |
+| `practiceStatus` | character |  |
+| `position` | character | Primary position as reported by NFL.com |
+| `team_id` | character | Unique team identifier. |
+| `team_currentLogo` | character |  |
+| `team_fullName` | character |  |
+| `person_id` | character | Unique player identifier (V3 endpoints). |
+| `person_firstName` | character |  |
+| `person_commonFirstName` | character |  |
+| `person_lastName` | character |  |
+| `person_displayName` | character |  |
+| `person_gsisId` | character |  |
+| `person_headshot` | character |  |
+
 **Example**
 
 ```python
@@ -5791,6 +5982,25 @@ rows total) while `rushers`/`receivers`/`passRushers` are full lists.
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` and `gameId` columns prepended.
+
+| col_name | type | description |
+|---|---|---|
+| `side` | character | O for offense, D for defense, S for special teams |
+| `gameId` | character |  |
+| `esbId` | character |  |
+| `teamId` | character |  |
+| `teamAbbr` | character |  |
+| `shortName` | character |  |
+| `position` | character | Primary position as reported by NFL.com |
+| `jerseyNumber` | integer |  |
+| `playerName` | character |  |
+| `zones` | integer |  |
+| `passYards` | integer |  |
+| `touchdowns` | integer |  |
+| `interceptions` | integer | The number of interceptions thrown. |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `completions` | integer | The number of completed passes. |
+| `headshot` | character | NFL headshot url for player |
 
 **Example**
 
@@ -5835,6 +6045,62 @@ Categories (`category=` value -> endpoint):
 
 A polars (or pandas) `DataFrame`, one row per leader entry.
 
+| col_name | type | description |
+|---|---|---|
+| `leader_esbId` | character |  |
+| `leader_firstName` | character |  |
+| `leader_gsisId` | character |  |
+| `leader_jerseyNumber` | integer |  |
+| `leader_lastName` | character |  |
+| `leader_playerName` | character |  |
+| `leader_position` | character |  |
+| `leader_positionGroup` | character |  |
+| `leader_shortName` | character |  |
+| `leader_teamAbbr` | character |  |
+| `leader_teamId` | character |  |
+| `leader_week` | integer |  |
+| `leader_yards` | integer |  |
+| `leader_inPlayDist` | double |  |
+| `leader_maxSpeed` | double |  |
+| `leader_headshot` | character |  |
+| `play_gameId` | integer |  |
+| `play_playId` | integer |  |
+| `play_sequence` | integer |  |
+| `play_down` | integer |  |
+| `play_gameClock` | character |  |
+| `play_gameKey` | integer |  |
+| `play_health_playerTracking` | character |  |
+| `play_health_ballTracking` | character |  |
+| `play_homeScore` | integer |  |
+| `play_isBigPlay` | logical |  |
+| `play_isEndQuarter` | logical |  |
+| `play_isGoalToGo` | logical |  |
+| `play_isPenalty` | logical |  |
+| `play_isSTPlay` | logical |  |
+| `play_isScoring` | logical |  |
+| `play_playDescription` | character |  |
+| `play_playState` | character |  |
+| `play_playStats` | integer |  |
+| `play_playType` | character |  |
+| `play_playTypeCode` | integer |  |
+| `play_possessionTeamId` | character |  |
+| `play_preSnapHomeScore` | integer |  |
+| `play_preSnapVisitorScore` | integer |  |
+| `play_quarter` | integer |  |
+| `play_timeOfDayUTC` | character |  |
+| `play_visitorScore` | integer |  |
+| `play_yardline` | character |  |
+| `play_yardlineNumber` | integer |  |
+| `play_yardlineSide` | character |  |
+| `play_yardsToGo` | integer |  |
+| `play_absoluteYardlineNumber` | integer |  |
+| `play_actualYardlineForFirstDown` | double |  |
+| `play_actualYardsToGo` | double |  |
+| `play_endGameClock` | character |  |
+| `play_isChangeOfPossession` | logical |  |
+| `play_playDirection` | character |  |
+| `play_startGameClock` | character |  |
+
 **Example**
 
 ```python
@@ -5866,6 +6132,77 @@ abbreviations/ids/names, kickoff times, `ngsGame` (tracking-data flag) and
 
 A polars (or pandas) `DataFrame`, one row per scheduled game.
 
+| col_name | type | description |
+|---|---|---|
+| `gameKey` | integer |  |
+| `gameDate` | character | Game date-time (ISO 8601, UTC). |
+| `gameId` | integer |  |
+| `gameTime` | character |  |
+| `gameTimeEastern` | character |  |
+| `gameType` | character | Game type identifier (3 for playoffs). |
+| `homeDisplayName` | character |  |
+| `homeNickname` | character |  |
+| `homeTeamAbbr` | character |  |
+| `homeTeamId` | character |  |
+| `isoTime` | integer |  |
+| `networkChannel` | character |  |
+| `ngsGame` | logical |  |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `smartId` | character |  |
+| `visitorDisplayName` | character |  |
+| `visitorNickname` | character |  |
+| `visitorTeamAbbr` | character |  |
+| `visitorTeamId` | character |  |
+| `week` | integer | Season week. |
+| `weekNameAbbr` | character |  |
+| `liveDotsGame` | logical |  |
+| `validated` | logical |  |
+| `releasedToClubs` | logical |  |
+| `homeTeam_teamId` | character |  |
+| `homeTeam_smartId` | character |  |
+| `homeTeam_logo` | character |  |
+| `homeTeam_abbr` | character |  |
+| `homeTeam_cityState` | character |  |
+| `homeTeam_fullName` | character |  |
+| `homeTeam_nick` | character |  |
+| `homeTeam_teamType` | character |  |
+| `homeTeam_conferenceAbbr` | character |  |
+| `homeTeam_divisionAbbr` | character |  |
+| `site_smartId` | character |  |
+| `site_siteId` | integer |  |
+| `site_siteFullName` | character |  |
+| `site_siteCity` | character |  |
+| `site_siteState` | character |  |
+| `site_postalCode` | character |  |
+| `site_roofType` | character |  |
+| `visitorTeam_teamId` | character |  |
+| `visitorTeam_smartId` | character |  |
+| `visitorTeam_logo` | character |  |
+| `visitorTeam_abbr` | character |  |
+| `visitorTeam_cityState` | character |  |
+| `visitorTeam_fullName` | character |  |
+| `visitorTeam_nick` | character |  |
+| `visitorTeam_teamType` | character |  |
+| `visitorTeam_conferenceAbbr` | character |  |
+| `visitorTeam_divisionAbbr` | character |  |
+| `score_time` | character |  |
+| `score_phase` | character |  |
+| `score_visitorTeamScore_pointTotal` | integer |  |
+| `score_visitorTeamScore_pointQ1` | integer |  |
+| `score_visitorTeamScore_pointQ2` | integer |  |
+| `score_visitorTeamScore_pointQ3` | integer |  |
+| `score_visitorTeamScore_pointQ4` | integer |  |
+| `score_visitorTeamScore_pointOT` | integer |  |
+| `score_visitorTeamScore_timeoutsRemaining` | integer |  |
+| `score_homeTeamScore_pointTotal` | integer |  |
+| `score_homeTeamScore_pointQ1` | integer |  |
+| `score_homeTeamScore_pointQ2` | integer |  |
+| `score_homeTeamScore_pointQ3` | integer |  |
+| `score_homeTeamScore_pointQ4` | integer |  |
+| `score_homeTeamScore_pointOT` | integer |  |
+| `score_homeTeamScore_timeoutsRemaining` | integer |  |
+
 **Example**
 
 ```python
@@ -5890,6 +6227,76 @@ Wraps `/api/league/schedule/current`; the games are under the `games` key
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per game in the current week.
+
+| col_name | type | description |
+|---|---|---|
+| `gameKey` | integer |  |
+| `gameDate` | character | Game date-time (ISO 8601, UTC). |
+| `gameId` | integer |  |
+| `gameTime` | character |  |
+| `gameTimeEastern` | character |  |
+| `gameType` | character | Game type identifier (3 for playoffs). |
+| `homeDisplayName` | character |  |
+| `homeNickname` | character |  |
+| `homeTeamAbbr` | character |  |
+| `homeTeamId` | character |  |
+| `isoTime` | integer |  |
+| `networkChannel` | character |  |
+| `ngsGame` | logical |  |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `smartId` | character |  |
+| `visitorDisplayName` | character |  |
+| `visitorNickname` | character |  |
+| `visitorTeamAbbr` | character |  |
+| `visitorTeamId` | character |  |
+| `week` | integer | Season week. |
+| `weekNameAbbr` | character |  |
+| `releasedToClubs` | logical |  |
+| `validated` | logical |  |
+| `homeTeam_teamId` | character |  |
+| `homeTeam_smartId` | character |  |
+| `homeTeam_logo` | character |  |
+| `homeTeam_abbr` | character |  |
+| `homeTeam_cityState` | character |  |
+| `homeTeam_fullName` | character |  |
+| `homeTeam_nick` | character |  |
+| `homeTeam_teamType` | character |  |
+| `homeTeam_conferenceAbbr` | character |  |
+| `homeTeam_divisionAbbr` | character |  |
+| `site_smartId` | character |  |
+| `site_siteId` | integer |  |
+| `site_siteFullName` | character |  |
+| `site_siteCity` | character |  |
+| `site_siteState` | character |  |
+| `site_postalCode` | character |  |
+| `site_roofType` | character |  |
+| `visitorTeam_teamId` | character |  |
+| `visitorTeam_smartId` | character |  |
+| `visitorTeam_logo` | character |  |
+| `visitorTeam_abbr` | character |  |
+| `visitorTeam_cityState` | character |  |
+| `visitorTeam_fullName` | character |  |
+| `visitorTeam_nick` | character |  |
+| `visitorTeam_teamType` | character |  |
+| `visitorTeam_conferenceAbbr` | character |  |
+| `visitorTeam_divisionAbbr` | character |  |
+| `score_time` | character |  |
+| `score_phase` | character |  |
+| `score_visitorTeamScore_pointTotal` | integer |  |
+| `score_visitorTeamScore_pointQ1` | integer |  |
+| `score_visitorTeamScore_pointQ2` | integer |  |
+| `score_visitorTeamScore_pointQ3` | integer |  |
+| `score_visitorTeamScore_pointQ4` | integer |  |
+| `score_visitorTeamScore_pointOT` | integer |  |
+| `score_visitorTeamScore_timeoutsRemaining` | integer |  |
+| `score_homeTeamScore_pointTotal` | integer |  |
+| `score_homeTeamScore_pointQ1` | integer |  |
+| `score_homeTeamScore_pointQ2` | integer |  |
+| `score_homeTeamScore_pointQ3` | integer |  |
+| `score_homeTeamScore_pointQ4` | integer |  |
+| `score_homeTeamScore_pointOT` | integer |  |
+| `score_homeTeamScore_timeoutsRemaining` | integer |  |
 
 **Example**
 
@@ -5916,6 +6323,31 @@ Wraps `/api/league/teams` (top-level list). Each row carries `teamId`,
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per team.
+
+| col_name | type | description |
+|---|---|---|
+| `abbr` | character |  |
+| `cityState` | character |  |
+| `conferenceAbbr` | character |  |
+| `fullName` | character | Full name of the probable starting pitcher. |
+| `logo` | character | Team or league logo URL. |
+| `nick` | character |  |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `smartId` | character |  |
+| `stadiumName` | character |  |
+| `teamId` | character |  |
+| `teamSiteTicketUrl` | character |  |
+| `teamSiteUrl` | character |  |
+| `teamType` | character |  |
+| `ticketPhoneNumber` | character |  |
+| `yearFound` | integer |  |
+| `conference_id` | character | Conference identifier. |
+| `conference_abbr` | character | Conference abbreviation. |
+| `conference_fullName` | character |  |
+| `division_id` | character | Division MLBAM ID. |
+| `division_abbr` | character | Division abbreviation. |
+| `division_fullName` | character |  |
+| `divisionAbbr` | character |  |
 
 **Example**
 
@@ -5951,6 +6383,39 @@ carries the chart `imageName`/`type` (`qb-grid`, `pass`, `route`,
 
 A polars (or pandas) `DataFrame`, one row per chart in the page.
 
+| col_name | type | description |
+|---|---|---|
+| `imageName` | character |  |
+| `esbId` | character |  |
+| `firstName` | character | Scorer first name (localized list). |
+| `gameId` | integer |  |
+| `headshot` | character | NFL headshot url for player |
+| `lastName` | character | Scorer last name (localized list). |
+| `playerName` | character |  |
+| `position` | character | Primary position as reported by NFL.com |
+| `receivingYards` | integer |  |
+| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `teamId` | character |  |
+| `timestamp` | integer | Response timestamp (ISO 8601). |
+| `touchdowns` | integer |  |
+| `type` | character | Record type / category. |
+| `week` | integer | Season week. |
+| `extraLargeImg` | character |  |
+| `playerNameSlug` | character |  |
+| `smallImg` | character |  |
+| `mediumImg` | character |  |
+| `largeImg` | character |  |
+| `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
+| `rushingYards` | integer |  |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `completionPercentage` | double |  |
+| `completions` | integer | The number of completed passes. |
+| `interceptions` | integer | The number of interceptions thrown. |
+| `passerRating` | double |  |
+| `passingYards` | integer |  |
+
 **Example**
 
 ```python
@@ -5978,6 +6443,13 @@ the lookup list of who has charts available for a given season.
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per player.
+
+| col_name | type | description |
+|---|---|---|
+| `esbId` | character |  |
+| `firstName` | character | Scorer first name (localized list). |
+| `lastName` | character | Scorer last name (localized list). |
+| `playerName` | character |  |
 
 **Example**
 
@@ -6009,6 +6481,56 @@ entry's `play_gameId` / `play_playId` is a known highlight.
 **Returns**
 
 A one-row polars (or pandas) `DataFrame` with `gameId`, `playId`, `isHighlight` and (when true) flattened `highlight_*` columns.
+
+| col_name | type | description |
+|---|---|---|
+| `gameId` | integer |  |
+| `playId` | integer | Unique play event identifier (UUID). |
+| `isHighlight` | logical |  |
+| `highlight_gameId` | integer |  |
+| `highlight_playId` | integer |  |
+| `highlight_play_playType` | character |  |
+| `highlight_play_gameId` | integer |  |
+| `highlight_play_gameKey` | integer |  |
+| `highlight_play_yardlineSide` | character |  |
+| `highlight_play_absoluteYardlineNumber` | integer |  |
+| `highlight_play_yardlineNumber` | integer |  |
+| `highlight_play_timeOfDayUTC` | character |  |
+| `highlight_play_isPenalty` | logical |  |
+| `highlight_play_homeScore` | integer |  |
+| `highlight_play_visitorScore` | integer |  |
+| `highlight_play_playStats` | integer |  |
+| `highlight_play_playId` | integer |  |
+| `highlight_play_playDescription` | character |  |
+| `highlight_play_playTypeCode` | integer |  |
+| `highlight_play_quarter` | integer |  |
+| `highlight_play_down` | integer |  |
+| `highlight_play_yardsToGo` | integer |  |
+| `highlight_play_actualYardsToGo` | double |  |
+| `highlight_play_actualYardlineForFirstDown` | double |  |
+| `highlight_play_possessionTeamId` | character |  |
+| `highlight_play_isGoalToGo` | logical |  |
+| `highlight_play_health` | character |  |
+| `highlight_play_endGameClock` | character |  |
+| `highlight_play_startGameClock` | character |  |
+| `highlight_play_playState` | character |  |
+| `highlight_play_preSnapHomeScore` | integer |  |
+| `highlight_play_preSnapVisitorScore` | integer |  |
+| `highlight_play_sequence` | integer |  |
+| `highlight_play_gameClock` | character |  |
+| `highlight_play_yardline` | character |  |
+| `highlight_play_isScoring` | logical |  |
+| `highlight_play_isEndQuarter` | logical |  |
+| `highlight_play_isSTPlay` | logical |  |
+| `highlight_play_playDirection` | character |  |
+| `highlight_play_isBigPlay` | logical |  |
+| `highlight_play_isChangeOfPossession` | logical |  |
+| `highlight_players` | integer |  |
+| `highlight_season` | integer |  |
+| `highlight_seasonType` | character |  |
+| `highlight_teamAbbr` | character |  |
+| `highlight_teamId` | character |  |
+| `highlight_week` | integer |  |
 
 **Example**
 
@@ -6043,6 +6565,52 @@ is nested under a `player` object and is flattened to `player_*` columns.
 
 A polars (or pandas) `DataFrame`, one row per qualifying player.
 
+| col_name | type | description |
+|---|---|---|
+| `aggressiveness` | double | Aggressiveness tracks the amount of passing attempts a quarterback makes that are into tight coverage, where there is a defender within 1 yard or less of the receiver at the time of completion or incompletion. AGG is shown as a % of attempts into tight windows over all passing attempts. |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `avgAirDistance` | double |  |
+| `avgAirYardsDifferential` | double |  |
+| `avgAirYardsToSticks` | double |  |
+| `avgCompletedAirYards` | double |  |
+| `avgIntendedAirYards` | double |  |
+| `avgTimeToThrow` | double |  |
+| `completionPercentage` | double |  |
+| `completionPercentageAboveExpectation` | double |  |
+| `completions` | integer | The number of completed passes. |
+| `expectedCompletionPercentage` | double |  |
+| `gamesPlayed` | integer |  |
+| `interceptions` | integer | The number of interceptions thrown. |
+| `maxAirDistance` | double |  |
+| `maxCompletedAirDistance` | double |  |
+| `passTouchdowns` | integer |  |
+| `passYards` | integer |  |
+| `passerRating` | double |  |
+| `playerName` | character |  |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `position` | character | Primary position as reported by NFL.com |
+| `teamId` | character |  |
+| `player_season` | integer |  |
+| `player_currentTeamId` | character |  |
+| `player_displayName` | character |  |
+| `player_esbId` | character |  |
+| `player_firstName` | character |  |
+| `player_footballName` | character |  |
+| `player_gsisId` | character |  |
+| `player_gsisItId` | integer |  |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_jerseyNumber` | integer |  |
+| `player_lastName` | character |  |
+| `player_position` | character | Position of the player accordinng to NGS |
+| `player_positionGroup` | character |  |
+| `player_shortName` | character |  |
+| `player_smartId` | character |  |
+| `player_status` | character |  |
+| `player_uniformNumber` | character |  |
+| `player_ngsPosition` | character |  |
+| `player_ngsPositionGroup` | character |  |
+
 **Example**
 
 ```python
@@ -6075,6 +6643,128 @@ column recording which board each row came from.
 
 A polars (or pandas) `DataFrame` stacking every leader list, with a `category` column. Empty frame if no lists are present.
 
+| col_name | type | description |
+|---|---|---|
+| `category` | character | Broader category of player positions |
+| `leader_esbId` | character |  |
+| `leader_firstName` | character |  |
+| `leader_gsisId` | character |  |
+| `leader_jerseyNumber` | integer |  |
+| `leader_lastName` | character |  |
+| `leader_playerName` | character |  |
+| `leader_position` | character |  |
+| `leader_positionGroup` | character |  |
+| `leader_shortName` | character |  |
+| `leader_teamAbbr` | character |  |
+| `leader_teamId` | character |  |
+| `leader_week` | integer |  |
+| `leader_yards` | integer |  |
+| `leader_inPlayDist` | double |  |
+| `leader_maxSpeed` | double |  |
+| `leader_headshot` | character |  |
+| `play_gameId` | integer |  |
+| `play_playId` | integer |  |
+| `play_sequence` | integer |  |
+| `play_down` | integer |  |
+| `play_gameClock` | character |  |
+| `play_gameKey` | integer |  |
+| `play_health_playerTracking` | character |  |
+| `play_health_ballTracking` | character |  |
+| `play_homeScore` | integer |  |
+| `play_isBigPlay` | logical |  |
+| `play_isEndQuarter` | logical |  |
+| `play_isGoalToGo` | logical |  |
+| `play_isPenalty` | logical |  |
+| `play_isSTPlay` | logical |  |
+| `play_isScoring` | logical |  |
+| `play_playDescription` | character |  |
+| `play_playState` | character |  |
+| `play_playStats` | integer |  |
+| `play_playType` | character |  |
+| `play_playTypeCode` | integer |  |
+| `play_possessionTeamId` | character |  |
+| `play_preSnapHomeScore` | integer |  |
+| `play_preSnapVisitorScore` | integer |  |
+| `play_quarter` | integer |  |
+| `play_timeOfDayUTC` | character |  |
+| `play_visitorScore` | integer |  |
+| `play_yardline` | character |  |
+| `play_yardlineNumber` | integer |  |
+| `play_yardlineSide` | character |  |
+| `play_yardsToGo` | integer |  |
+| `play_absoluteYardlineNumber` | integer |  |
+| `play_actualYardlineForFirstDown` | double |  |
+| `play_actualYardsToGo` | double |  |
+| `play_endGameClock` | character |  |
+| `play_isChangeOfPossession` | logical |  |
+| `play_playDirection` | character |  |
+| `play_startGameClock` | character |  |
+| `leader_time` | double |  |
+| `leader_seasonAvg` | double |  |
+| `leader_teamAvg` | double |  |
+| `aggressiveness` | double | Aggressiveness tracks the amount of passing attempts a quarterback makes that are into tight coverage, where there is a defender within 1 yard or less of the receiver at the time of completion or incompletion. AGG is shown as a % of attempts into tight windows over all passing attempts. |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `avgAirDistance` | double |  |
+| `avgAirYardsDifferential` | double |  |
+| `avgAirYardsToSticks` | double |  |
+| `avgCompletedAirYards` | double |  |
+| `avgIntendedAirYards` | double |  |
+| `avgTimeToThrow` | double |  |
+| `completionPercentage` | double |  |
+| `completionPercentageAboveExpectation` | double |  |
+| `completions` | integer | The number of completed passes. |
+| `expectedCompletionPercentage` | double |  |
+| `gamesPlayed` | integer |  |
+| `interceptions` | integer | The number of interceptions thrown. |
+| `maxAirDistance` | double |  |
+| `maxCompletedAirDistance` | double |  |
+| `passTouchdowns` | integer |  |
+| `passYards` | integer |  |
+| `passerRating` | double |  |
+| `playerName` | character |  |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `position` | character | Primary position as reported by NFL.com |
+| `teamId` | character |  |
+| `player_season` | integer |  |
+| `player_currentTeamId` | character |  |
+| `player_displayName` | character |  |
+| `player_esbId` | character |  |
+| `player_firstName` | character |  |
+| `player_footballName` | character |  |
+| `player_gsisId` | character |  |
+| `player_gsisItId` | integer |  |
+| `player_jerseyNumber` | integer |  |
+| `player_lastName` | character |  |
+| `player_position` | character | Position of the player accordinng to NGS |
+| `player_positionGroup` | character |  |
+| `player_shortName` | character |  |
+| `player_status` | character |  |
+| `player_uniformNumber` | character |  |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_smartId` | character |  |
+| `player_ngsPosition` | character |  |
+| `player_ngsPositionGroup` | character |  |
+| `avgCushion` | double |  |
+| `avgExpectedYAC` | double |  |
+| `avgSeparation` | double |  |
+| `avgYAC` | double |  |
+| `avgYACAboveExpectation` | double |  |
+| `catchPercentage` | double |  |
+| `percentShareOfIntendedAirYards` | double |  |
+| `recTouchdowns` | integer |  |
+| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
+| `yards` | integer | The number of receiving yards |
+| `avgTimeToLos` | double |  |
+| `expectedRushYards` | double |  |
+| `rushAttempts` | integer |  |
+| `rushPctOverExpected` | double |  |
+| `rushTouchdowns` | integer |  |
+| `rushYards` | integer |  |
+| `rushYardsOverExpected` | double |  |
+| `rushYardsOverExpectedPerAtt` | double |  |
+
 **Example**
 
 ```python
@@ -6103,6 +6793,23 @@ season, carrying `season`, `seasonType`, `team_*` columns and a nested
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per team roster.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `persons` | integer |  |
+| `team_id` | character | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_fullName` | character |  |
+| `team_conferenceAbbr` | character |  |
+| `team_conferenceFullName` | character |  |
+| `team_currentLogo` | character |  |
+| `team_divisionFullName` | character |  |
+| `team_league` | character |  |
+| `team_location` | character | Team city or location string. |
+| `team_nickName` | character |  |
+| `team_venues` | character |  |
 
 **Example**
 
@@ -6136,6 +6843,62 @@ team standing across the returned week(s) into a single frame with
 
 A polars (or pandas) `DataFrame`, one row per team standing.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `team_currentLogo` | character |  |
+| `team_fullName` | character |  |
+| `clinched_bye` | logical |  |
+| `clinched_division` | logical |  |
+| `clinched_eliminated` | logical |  |
+| `clinched_homeField` | logical |  |
+| `clinched_playoff` | logical |  |
+| `clinched_wildCard` | logical |  |
+| `closeGames_wins` | integer |  |
+| `closeGames_losses` | integer |  |
+| `closeGames_ties` | integer |  |
+| `conference_wins` | integer | Total conference wins. |
+| `conference_winPct` | double |  |
+| `conference_losses` | integer | Total conference losses. |
+| `conference_ties` | integer | Total conference ties. |
+| `conference_rank` | integer |  |
+| `conference_points_for` | integer |  |
+| `conference_points_against` | integer |  |
+| `division_wins` | integer |  |
+| `division_winPct` | double |  |
+| `division_losses` | integer |  |
+| `division_ties` | integer |  |
+| `division_rank` | integer |  |
+| `division_points_for` | integer |  |
+| `division_points_against` | integer |  |
+| `home_wins` | integer | Home team's wins. |
+| `home_winPct` | double |  |
+| `home_losses` | integer | Home team's losses. |
+| `home_ties` | integer | Total home ties. |
+| `home_points_for` | integer |  |
+| `home_points_against` | integer |  |
+| `last5_wins` | integer |  |
+| `last5_winPct` | double |  |
+| `last5_losses` | integer |  |
+| `last5_ties` | integer |  |
+| `last5_points_for` | integer |  |
+| `last5_points_against` | integer |  |
+| `overall_games` | integer |  |
+| `overall_wins` | integer |  |
+| `overall_winPct` | double |  |
+| `overall_losses` | integer |  |
+| `overall_ties` | integer |  |
+| `overall_points_for` | integer |  |
+| `overall_points_against` | integer |  |
+| `overall_streak_type` | character |  |
+| `overall_streak_length` | integer |  |
+| `road_wins` | integer | Road wins. |
+| `road_winPct` | double |  |
+| `road_losses` | integer | Road losses. |
+| `road_ties` | integer | Ties on the road. |
+| `road_points_for` | integer |  |
+| `road_points_against` | integer |  |
+
 **Example**
 
 ```python
@@ -6163,6 +6926,24 @@ one-row frame with `id`, `fullName`, `currentCoach_*`, `primaryColor`,
 **Returns**
 
 A polars (or pandas) `DataFrame` with a single team row.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ID of the player in the 'name' column. |
+| `bio` | character |  |
+| `currentBackground` | character |  |
+| `currentCoach` | character |  |
+| `currentLogo` | character |  |
+| `primaryColor` | character |  |
+| `secondaryColor` | character |  |
+| `yearEstablished` | integer |  |
+| `fullName` | character | Full name of the probable starting pitcher. |
+| `nflShopUrl` | character |  |
+| `officialWebsiteUrl` | character |  |
+| `owners` | character |  |
+| `teamType` | character |  |
+| `socials` | character |  |
+| `vllChannelCallsign` | character |  |
 
 **Example**
 
@@ -6193,6 +6974,22 @@ nested `venues` list.
 **Returns**
 
 A polars (or pandas) `DataFrame`, one row per team.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ID of the player in the 'name' column. |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `abbreviation` | character | Short abbreviation. |
+| `fullName` | character | Full name of the probable starting pitcher. |
+| `teamType` | character |  |
+| `conferenceAbbr` | character |  |
+| `conferenceFullName` | character |  |
+| `currentLogo` | character |  |
+| `divisionFullName` | character |  |
+| `league` | character | League slug. |
+| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
+| `nickName` | character |  |
+| `venues` | character |  |
 
 **Example**
 
@@ -6252,6 +7049,42 @@ DataFrame with `id` (uuid game id), `season`/`seasonType`/`week`,
 
 A polars (or pandas) `DataFrame`, one row per game.
 
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ID of the player in the 'name' column. |
+| `category` | character | Broader category of player positions |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
+| `gameType` | character | Game type identifier (3 for playoffs). |
+| `international` | logical |  |
+| `neutralSite` | logical | Whether the game is at a neutral site. |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `status` | character | Status label. |
+| `week` | integer | Season week. |
+| `weekType` | character |  |
+| `externalIds` | character |  |
+| `ticketUrl` | character |  |
+| `ticketVendors` | character |  |
+| `extensions` | character |  |
+| `version` | integer |  |
+| `homeTeam_id` | character |  |
+| `homeTeam_currentLogo` | character |  |
+| `homeTeam_fullName` | character |  |
+| `awayTeam_id` | character |  |
+| `awayTeam_currentLogo` | character |  |
+| `awayTeam_fullName` | character |  |
+| `broadcastInfo_homeNetworkChannels` | character |  |
+| `broadcastInfo_awayNetworkChannels` | character |  |
+| `broadcastInfo_internationalWatchOptions` | character |  |
+| `broadcastInfo_streamingNetworks` | character |  |
+| `broadcastInfo_territory` | character |  |
+| `broadcastInfo_audioNetworks` | character |  |
+| `venue_id` | character | Unique venue identifier. |
+| `venue_name` | character | Venue name. |
+| `venue_city` | character | Venue city. |
+| `venue_country` | character |  |
+
 **Example**
 
 ```python
@@ -6288,6 +7121,73 @@ when requested, `driveChart` / `replays` / `taggedVideos`.
 
 A polars (or pandas) `DataFrame`, one row per game.
 
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ID of the player in the 'name' column. |
+| `category` | character | Broader category of player positions |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
+| `gameType` | character | Game type identifier (3 for playoffs). |
+| `international` | logical |  |
+| `neutralSite` | logical | Whether the game is at a neutral site. |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `status` | character | Status label. |
+| `week` | integer | Season week. |
+| `weekType` | character |  |
+| `externalIds` | character |  |
+| `ticketUrl` | character |  |
+| `ticketVendors` | character |  |
+| `extensions` | character |  |
+| `version` | integer |  |
+| `replays` | character |  |
+| `taggedVideos` | character |  |
+| `awayTeamStandings` | character |  |
+| `homeTeamStandings` | character |  |
+| `homeTeam_id` | character |  |
+| `homeTeam_currentLogo` | character |  |
+| `homeTeam_fullName` | character |  |
+| `awayTeam_id` | character |  |
+| `awayTeam_currentLogo` | character |  |
+| `awayTeam_fullName` | character |  |
+| `broadcastInfo_homeNetworkChannels` | character |  |
+| `broadcastInfo_awayNetworkChannels` | character |  |
+| `broadcastInfo_internationalWatchOptions` | character |  |
+| `broadcastInfo_streamingNetworks` | character |  |
+| `broadcastInfo_territory` | character |  |
+| `broadcastInfo_audioNetworks` | character |  |
+| `venue_id` | character | Unique venue identifier. |
+| `venue_name` | character | Venue name. |
+| `venue_city` | character | Venue city. |
+| `venue_country` | character |  |
+| `summary_gameId` | character |  |
+| `summary_offset` | integer |  |
+| `summary_attendance` | integer |  |
+| `summary_clock` | character |  |
+| `summary_distance` | integer |  |
+| `summary_down` | integer |  |
+| `summary_gameBookUrl` | character |  |
+| `summary_isGoalToGo` | logical |  |
+| `summary_isRedZone` | logical |  |
+| `summary_phase` | character |  |
+| `summary_quarter` | character |  |
+| `summary_startTime` | character |  |
+| `summary_weather` | character |  |
+| `summary_yardLine` | character |  |
+| `summary_awayTeam_teamId` | character |  |
+| `summary_awayTeam_hasPossession` | logical |  |
+| `summary_awayTeam_score` | character |  |
+| `summary_awayTeam_timeouts` | character |  |
+| `summary_homeTeam_teamId` | character |  |
+| `summary_homeTeam_hasPossession` | logical |  |
+| `summary_homeTeam_score` | character |  |
+| `summary_homeTeam_timeouts` | character |  |
+| `driveChart_gameId` | character |  |
+| `driveChart_offset` | integer |  |
+| `driveChart_drives` | integer |  |
+| `driveChart_plays` | integer |  |
+| `driveChart_scoringSummaries` | integer |  |
+
 **Example**
 
 ```python
@@ -6317,6 +7217,16 @@ Records live under the `weeks` key. Each row carries `season`,
 
 A polars (or pandas) `DataFrame`, one row per week.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `week` | integer | Season week. |
+| `byeTeams` | character |  |
+| `dateBegin` | character |  |
+| `dateEnd` | character |  |
+| `weekType` | character |  |
+
 **Example**
 
 ```python
@@ -6344,6 +7254,16 @@ one-row frame with `season`, `seasonType`, `week`, `weekType`,
 **Returns**
 
 A polars (or pandas) `DataFrame` with a single week row.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | character |  |
+| `week` | integer | Season week. |
+| `byeTeams` | character |  |
+| `dateBegin` | character |  |
+| `dateEnd` | character |  |
+| `weekType` | character |  |
 
 **Example**
 
