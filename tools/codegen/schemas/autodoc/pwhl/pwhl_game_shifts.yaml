@@ -1,0 +1,45 @@
+schema: pwhl_game_shifts
+kind: dataframe
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: jersey_number
+  type: character
+  description: ''
+- name: home
+  type: integer
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: start_time
+  type: character
+  description: ''
+- name: end_time
+  type: character
+  description: ''
+- name: length
+  type: character
+  description: ''
+- name: start_s
+  type: integer
+  description: ''
+- name: end_s
+  type: double
+  description: ''
+- name: goal_on_shift
+  type: integer
+  description: ''
+- name: penalty_on_shift
+  type: integer
+  description: ''

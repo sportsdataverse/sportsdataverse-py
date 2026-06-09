@@ -229,7 +229,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `recent` | logical | Recent. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
-| `highlights` | character | Game highlight urls. |
+| `highlights` | integer | Game highlight urls. |
 | `notes_type` | character | Notes type. |
 | `notes_headline` | character | Notes headline. |
 | `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
@@ -265,6 +265,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_venue_id` | character | Unique identifier for home venue. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
+| `home_winner` | logical | Home team's winner. |
 | `home_linescores` | integer |  |
 | `home_records` | character |  |
 | `away_id` | character | Unique identifier for away. |
@@ -280,6 +281,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_venue_id` | character | Unique identifier for away venue. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
+| `away_winner` | logical | Away team's winner. |
 | `away_linescores` | integer |  |
 | `away_records` | character |  |
 | `game_id` | integer | Unique game identifier. |

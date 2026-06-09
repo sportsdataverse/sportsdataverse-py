@@ -277,6 +277,9 @@ columns:
 - name: swing_length
   type: double
   description: ''
+- name: miss_distance
+  type: double
+  description: ''
 - name: estimated_slg_using_speedangle
   type: double
   description: ''

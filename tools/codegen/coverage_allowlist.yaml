@@ -73,3 +73,11 @@ nhl:
   - parser_for_nhl_records   # NHL Records parser-dispatch registry; not user-facing
   - parser_for_nhl_stats_rest  # NHL Stats REST parser-dispatch registry; not user-facing
   - underscore               # dl_utils string transform leaking via import *
+ahl:
+  - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing
+ohl:
+  - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing
+whl:
+  - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing
+qmjhl:
+  - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing

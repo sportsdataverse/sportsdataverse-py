@@ -1,0 +1,33 @@
+schema: pwhl_game_corsi
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: corsi_for
+  type: integer
+  description: ''
+- name: corsi_against
+  type: integer
+  description: ''
+- name: corsi_for_pct
+  type: double
+  description: ''
+- name: fenwick_for
+  type: integer
+  description: ''
+- name: fenwick_against
+  type: integer
+  description: ''
+- name: fenwick_for_pct
+  type: double
+  description: ''
+- name: corsi_includes_missed
+  type: logical
+  description: ''
+- name: toi_seconds
+  type: double
+  description: ''
+- name: corsi_for_per60
+  type: double
+  description: ''

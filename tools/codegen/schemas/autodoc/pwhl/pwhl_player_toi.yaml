@@ -1,0 +1,21 @@
+schema: pwhl_player_toi
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: toi_seconds
+  type: double
+  description: ''
+- name: num_shifts
+  type: integer
+  description: ''
+- name: avg_shift_s
+  type: double
+  description: ''

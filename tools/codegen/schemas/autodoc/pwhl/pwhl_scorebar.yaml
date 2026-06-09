@@ -1,210 +1,192 @@
-schema: espn_nba_schedule
+schema: pwhl_scorebar
 kind: dataframe
 columns:
 - name: id
   type: character
   description: ''
-- name: uid
+- name: season_id
+  type: character
+  description: ''
+- name: league_id
+  type: character
+  description: ''
+- name: game_number
+  type: character
+  description: ''
+- name: game_letter
+  type: character
+  description: ''
+- name: game_type
+  type: character
+  description: ''
+- name: quick_score
   type: character
   description: ''
 - name: date
   type: character
   description: ''
-- name: attendance
-  type: integer
-  description: ''
-- name: time_valid
-  type: logical
-  description: ''
-- name: neutral_site
-  type: logical
-  description: ''
-- name: conference_competition
-  type: logical
-  description: ''
-- name: play_by_play_available
-  type: logical
-  description: ''
-- name: recent
-  type: logical
-  description: ''
-- name: start_date
+- name: flo_core_event_id
   type: character
   description: ''
-- name: broadcast
+- name: flo_live_event_id
   type: character
   description: ''
-- name: highlights
-  type: integer
-  description: ''
-- name: notes_type
+- name: game_date
   type: character
   description: ''
-- name: notes_headline
+- name: game_date_iso8601
   type: character
   description: ''
-- name: broadcast_market
+- name: scheduled_time
   type: character
   description: ''
-- name: broadcast_name
+- name: scheduled_formatted_time
   type: character
   description: ''
-- name: type_id
+- name: timezone
   type: character
   description: ''
-- name: type_abbreviation
+- name: ticket_url
   type: character
-  description: ''
-- name: venue_id
-  type: character
-  description: ''
-- name: venue_full_name
-  type: character
-  description: ''
-- name: venue_address_city
-  type: character
-  description: ''
-- name: venue_address_state
-  type: character
-  description: ''
-- name: venue_indoor
-  type: logical
-  description: ''
-- name: status_clock
-  type: double
-  description: ''
-- name: status_display_clock
-  type: character
-  description: ''
-- name: status_period
-  type: integer
-  description: ''
-- name: status_type_id
-  type: character
-  description: ''
-- name: status_type_name
-  type: character
-  description: ''
-- name: status_type_state
-  type: character
-  description: ''
-- name: status_type_completed
-  type: logical
-  description: ''
-- name: status_type_description
-  type: character
-  description: ''
-- name: status_type_detail
-  type: character
-  description: ''
-- name: status_type_short_detail
-  type: character
-  description: ''
-- name: format_regulation_periods
-  type: integer
   description: ''
 - name: home_id
   type: character
   description: ''
-- name: home_uid
+- name: home_code
   type: character
   description: ''
-- name: home_location
+- name: home_city
   type: character
   description: ''
-- name: home_name
+- name: home_nickname
   type: character
   description: ''
-- name: home_abbreviation
+- name: home_long_name
   type: character
   description: ''
-- name: home_display_name
+- name: home_division
   type: character
   description: ''
-- name: home_short_display_name
+- name: home_goals
   type: character
   description: ''
-- name: home_color
+- name: home_audio_url
   type: character
   description: ''
-- name: home_alternate_color
+- name: home_video_url
   type: character
   description: ''
-- name: home_is_active
-  type: logical
+- name: home_webcast_url
+  type: character
   description: ''
-- name: home_venue_id
+- name: visitor_id
+  type: character
+  description: ''
+- name: visitor_code
+  type: character
+  description: ''
+- name: visitor_city
+  type: character
+  description: ''
+- name: visitor_nickname
+  type: character
+  description: ''
+- name: visitor_long_name
+  type: character
+  description: ''
+- name: visiting_division
+  type: character
+  description: ''
+- name: visitor_goals
+  type: character
+  description: ''
+- name: visitor_audio_url
+  type: character
+  description: ''
+- name: visitor_video_url
+  type: character
+  description: ''
+- name: visitor_webcast_url
+  type: character
+  description: ''
+- name: period
+  type: character
+  description: ''
+- name: period_name_short
+  type: character
+  description: ''
+- name: period_name_long
+  type: character
+  description: ''
+- name: game_clock
+  type: character
+  description: ''
+- name: game_summary_url
+  type: character
+  description: ''
+- name: home_wins
+  type: character
+  description: ''
+- name: home_regulation_losses
+  type: character
+  description: ''
+- name: home_ot_losses
+  type: character
+  description: ''
+- name: home_shootout_losses
+  type: character
+  description: ''
+- name: visitor_wins
+  type: character
+  description: ''
+- name: visitor_regulation_losses
+  type: character
+  description: ''
+- name: visitor_ot_losses
+  type: character
+  description: ''
+- name: visitor_shootout_losses
+  type: character
+  description: ''
+- name: game_status
+  type: character
+  description: ''
+- name: intermission
+  type: character
+  description: ''
+- name: game_status_string
+  type: character
+  description: ''
+- name: game_status_string_long
+  type: character
+  description: ''
+- name: ord
+  type: character
+  description: ''
+- name: venue_name
+  type: character
+  description: ''
+- name: venue_location
+  type: character
+  description: ''
+- name: league_name
+  type: character
+  description: ''
+- name: league_code
+  type: character
+  description: ''
+- name: timezone_short
   type: character
   description: ''
 - name: home_logo
   type: character
   description: ''
-- name: home_score
+- name: visitor_logo
   type: character
   description: ''
-- name: home_winner
-  type: logical
-  description: ''
-- name: home_linescores
-  type: integer
-  description: ''
-- name: home_records
+- name: flo_hockey_url
   type: character
   description: ''
-- name: away_id
+- name: combined_client_code
   type: character
-  description: ''
-- name: away_uid
-  type: character
-  description: ''
-- name: away_location
-  type: character
-  description: ''
-- name: away_name
-  type: character
-  description: ''
-- name: away_abbreviation
-  type: character
-  description: ''
-- name: away_display_name
-  type: character
-  description: ''
-- name: away_short_display_name
-  type: character
-  description: ''
-- name: away_color
-  type: character
-  description: ''
-- name: away_alternate_color
-  type: character
-  description: ''
-- name: away_is_active
-  type: logical
-  description: ''
-- name: away_venue_id
-  type: character
-  description: ''
-- name: away_logo
-  type: character
-  description: ''
-- name: away_score
-  type: character
-  description: ''
-- name: away_winner
-  type: logical
-  description: ''
-- name: away_linescores
-  type: integer
-  description: ''
-- name: away_records
-  type: character
-  description: ''
-- name: game_id
-  type: integer
-  description: ''
-- name: season
-  type: integer
-  description: ''
-- name: season_type
-  type: integer
   description: ''
