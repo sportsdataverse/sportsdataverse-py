@@ -2,7 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.0.56 Release: June 9, 2026](#0056-release-june-9-2026)
+  - [HockeyTech — live multi-league scraper (PWHL + AHL/OHL/WHL/QMJHL) + on-ice/Corsi/TOI analytics](#hockeytech--live-multi-league-scraper-pwhl--ahlohlwhlqmjhl--on-icecorsitoi-analytics)
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
   - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
   - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
@@ -85,7 +86,34 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.0.56 Release: June 9, 2026
+
+### HockeyTech — live multi-league scraper (PWHL + AHL/OHL/WHL/QMJHL) + on-ice/Corsi/TOI analytics
+
+A new `sportsdataverse.hockeytech` core powers live wrappers over the HockeyTech
+feeds, alongside the existing offline `load_pwhl_*` loaders:
+
+- **PWHL** (`sportsdataverse.pwhl`): 20 live `pwhl_*()` functions at fastRhockey
+  output parity — `pwhl_schedule`, `pwhl_scorebar`, `pwhl_game_info`,
+  `pwhl_game_summary`, `pwhl_pbp`, `pwhl_player_box`, `pwhl_teams`,
+  `pwhl_team_roster`, `pwhl_standings`, `pwhl_player_info`, `pwhl_player_stats`,
+  `pwhl_player_game_log`, `pwhl_player_search`, `pwhl_stats`, `pwhl_leaders`,
+  `pwhl_streaks`, `pwhl_transactions`, `pwhl_playoff_bracket`, `pwhl_season_id`,
+  and `most_recent_pwhl_season`.
+- **AHL / OHL / WHL / QMJHL** (`sportsdataverse.{ahl,ohl,whl,qmjhl}`): per-league
+  families (schedule, pbp, standings, teams, team_roster, player_stats, leaders,
+  game_summary, season_id, `most_recent_<lg>_season`) over one shared core.
+- **Analytics** across all five leagues: `<lg>_game_shifts`, `<lg>_player_toi`,
+  and `<lg>_game_corsi` (player-level on-ice Corsi/Fenwick), reconstructed from
+  the shift tables via countdown-clock interval matching. `<lg>_pbp` is enriched
+  to a superset (coordinate transforms, clock columns, shot distance/angle,
+  scoring chances, on-ice players, game-meta join, `blocked_shot`/`hit` events).
+- **Corsi/Fenwick caveat**: the HockeyTech feed has no missed-shot event, so both
+  metrics are computed from shots-on-goal + blocked + goals and every analytics
+  output carries `corsi_includes_missed = False`.
+- All returned columns are snake_case; PWHL columns match fastRhockey exactly. A
+  companion fastRhockey (R) release mirrors this surface, verified by a
+  cross-language parity test pinning identical Corsi/TOI numbers.
 
 ### NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules
 
