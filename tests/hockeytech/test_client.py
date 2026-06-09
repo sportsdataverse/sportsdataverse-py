@@ -26,3 +26,21 @@ def test_build_url_includes_key_client_code_and_feed():
     assert url.startswith("https://lscluster.hockeytech.com/feed/index.php?")
     assert "feed=modulekit" in url and "view=seasons" in url
     assert "key=446521baf8c38984" in url and "client_code=pwhl" in url
+
+
+def test_hockeytech_api_bad_status_returns_none_and_warns(monkeypatch):
+    import sportsdataverse.hockeytech._client as client
+
+    class _Resp:
+        status_code = 500
+        text = ""
+
+    monkeypatch.setattr(client.requests, "get", lambda *a, **k: _Resp())
+    monkeypatch.setattr(client.time, "sleep", lambda *_a, **_k: None)  # no real waiting
+    warned = {}
+    import sportsdataverse._codegen_runtime as rt
+
+    monkeypatch.setattr(rt, "cli_warn", lambda msg: warned.setdefault("msg", msg))
+    out = client.hockeytech_api("pwhl", "modulekit", "seasons", {}, max_retries=2)
+    assert out is None
+    assert "HTTP 500" in warned.get("msg", "")

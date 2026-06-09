@@ -73,6 +73,10 @@ def hockeytech_api(
             if resp.status_code == 429:
                 time.sleep(2**attempt)
                 continue
+            # Unexpected status (404/500/etc.): record it so the final cli_warn
+            # fires, and back off briefly instead of spinning the retries.
+            last_exc = RuntimeError(f"HTTP {resp.status_code} for {url}")
+            time.sleep(1)
         except (requests.RequestException, json.JSONDecodeError) as exc:
             last_exc = exc
             time.sleep(1)
