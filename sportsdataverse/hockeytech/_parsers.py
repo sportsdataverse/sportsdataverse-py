@@ -179,6 +179,192 @@ def parse_roster(payload: Any, return_as_pandas: bool = False) -> Any:
     return _to_frame(rows, return_as_pandas)
 
 
+def _player(d: Any) -> dict:
+    """Extract a flat player dict from a raw player sub-object (or None)."""
+    d = d or {}
+    return {
+        "id": d.get("id"),
+        "first": d.get("firstName"),
+        "last": d.get("lastName"),
+        "pos": d.get("position"),
+    }
+
+
+def _str_or_none(v: Any) -> Optional[str]:
+    """Return str(v) if v is not None/empty, else None."""
+    if v is None:
+        return None
+    s = str(v)
+    return s if s else None
+
+
+def _parse_pbp_a(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]:
+    """Convert a list of raw HockeyTech dialect-a event dicts to flat row dicts."""
+    rows: List[Dict[str, Any]] = []
+    for e in events:
+        if not isinstance(e, dict):
+            continue
+        ev = e.get("event")
+        d = e.get("details") or {}
+
+        # period is always a dict {"id": "1", ...} in dialect a
+        period_raw = d.get("period")
+        if isinstance(period_raw, dict):
+            period = period_raw.get("id")
+        else:
+            period = period_raw
+
+        # Normalize team_id to string to avoid mixed int/str column dtype
+        raw_team = d.get("team_id") or d.get("shooterTeamId") or d.get("teamId")
+        base: Dict[str, Any] = {
+            "game_id": game_id,
+            "event": ev,
+            "team_id": _str_or_none(raw_team),
+            "period_of_game": period,
+            "time_of_period": d.get("time"),
+            "x_coord": d.get("xLocation"),
+            "y_coord": d.get("yLocation"),
+            # defaults — overridden below per event type
+            "player_id": None,
+            "player_name_first": None,
+            "player_name_last": None,
+            "player_position": None,
+            "goal": None,
+            "goalie_id": None,
+            "goalie_first": None,
+            "goalie_last": None,
+        }
+
+        if ev in ("shot", "blocked_shot"):
+            sh = _player(d.get("shooter"))
+            gl = _player(d.get("goalie"))
+            base.update(
+                {
+                    "player_id": sh["id"],
+                    "player_name_first": sh["first"],
+                    "player_name_last": sh["last"],
+                    "player_position": sh["pos"],
+                    "player_team_id": d.get("shooterTeamId"),
+                    "event_type": d.get("shotType"),
+                    "shot_quality": d.get("shotQuality"),
+                    "goal": bool(d.get("isGoal")) if ev == "shot" else False,
+                    "goalie_id": gl["id"],
+                    "goalie_first": gl["first"],
+                    "goalie_last": gl["last"],
+                }
+            )
+        elif ev == "goal":
+            sc = _player(d.get("scoredBy"))
+            assists = d.get("assists") or []
+            props = d.get("properties") or {}
+            team_id = _str_or_none((d.get("team") or {}).get("id")) or base["team_id"]
+            base.update(
+                {
+                    "player_id": sc["id"],
+                    "player_name_first": sc["first"],
+                    "player_name_last": sc["last"],
+                    "player_position": sc["pos"],
+                    "team_id": team_id,
+                    "goal": True,
+                    "empty_net": props.get("isEmptyNet"),
+                    "game_winner": props.get("isGameWinningGoal"),
+                }
+            )
+            names = ["two", "three"]
+            for i, a in enumerate(assists[:2]):
+                pa = _player(a)
+                base[f"player_{names[i]}_id"] = pa["id"]
+                base[f"player_{names[i]}_name_first"] = pa["first"]
+                base[f"player_{names[i]}_name_last"] = pa["last"]
+            for sign, key in (("plus", "plus_players"), ("minus", "minus_players")):
+                for j, p in enumerate(d.get(key) or [], start=1):
+                    pp = _player(p)
+                    base[f"{sign}_player_{j}_id"] = pp["id"]
+                    base[f"{sign}_player_{j}_first"] = pp["first"]
+                    base[f"{sign}_player_{j}_last"] = pp["last"]
+        elif ev == "faceoff":
+            hp = _player(d.get("homePlayer"))
+            base.update(
+                {
+                    "player_id": hp["id"],
+                    "player_name_first": hp["first"],
+                    "player_name_last": hp["last"],
+                    "player_position": hp["pos"],
+                    "home_win": d.get("homeWin"),
+                }
+            )
+        elif ev == "hit":
+            pl_info = _player(d.get("player"))
+            base.update(
+                {
+                    "player_id": pl_info["id"],
+                    "player_name_first": pl_info["first"],
+                    "player_name_last": pl_info["last"],
+                    "player_position": pl_info["pos"],
+                    "team_id": _str_or_none(d.get("teamId")) or base["team_id"],
+                }
+            )
+        elif ev == "penalty":
+            tb = _player(d.get("takenBy"))
+            against = d.get("againstTeam") or {}
+            base.update(
+                {
+                    "player_id": tb["id"],
+                    "player_name_first": tb["first"],
+                    "player_name_last": tb["last"],
+                    "player_position": tb["pos"],
+                    "team_id": _str_or_none(against.get("id")),
+                    "penalty_length": d.get("minutes"),
+                    "event_type": d.get("description"),
+                    "power_play": d.get("isPowerPlay"),
+                }
+            )
+        elif ev == "goalie_change":
+            gc = _player(d.get("goalieComingIn"))
+            base.update(
+                {
+                    "goalie_id": gc["id"],
+                    "goalie_first": gc["first"],
+                    "goalie_last": gc["last"],
+                }
+            )
+
+        rows.append(base)
+    return rows
+
+
+def parse_pbp(
+    payload: Any,
+    pbp_style: str = "hockeytech_a",
+    game_id: Any = None,
+    return_as_pandas: bool = False,
+) -> Any:
+    """Parse a HockeyTech play-by-play payload into a flat frame.
+
+    Returns a :class:`polars.DataFrame` by default (one row per event);
+    pass ``return_as_pandas=True`` for a :class:`pandas.DataFrame`.
+    An empty/None payload returns a zero-row frame, never raises.
+
+    Args:
+        payload: A list of event dicts (dialect a) as returned by the
+            HockeyTech API ``getGamePlayByPlay`` endpoint.
+        pbp_style: Dialect flag.  Only ``"hockeytech_a"`` (PWHL/AHL) is
+            implemented here.  ``"hockeytech_b"`` (OHL/WHL/QMJHL) is
+            added in task A3.1 and raises :exc:`NotImplementedError`
+            until then.
+        game_id: Optional game identifier echoed onto every row as
+            ``game_id``.
+        return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
+            instead of a :class:`polars.DataFrame`.
+    """
+    if pbp_style == "hockeytech_b":
+        # dialect b (OHL/WHL/QMJHL) is implemented in task A3.1
+        raise NotImplementedError("pbp dialect 'hockeytech_b' is implemented in task A3.1")
+    events: List[Any] = payload if isinstance(payload, list) else []
+    rows = _parse_pbp_a(events, game_id=game_id)
+    return _to_frame(rows, return_as_pandas)
+
+
 def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
     """Parse a HockeyTech ``modulekit/seasons`` JSON payload into a flat frame.
 

@@ -95,3 +95,35 @@ def test_parse_teams_and_roster():
     assert "team_name" in teams.columns and "team_id" in teams.columns
     roster = parse_roster(_load("pwhl_roster_1_5"))
     assert roster.height > 0
+
+
+def test_parse_pbp_a_one_row_per_event_with_fastrhockey_cols():
+    from sportsdataverse.hockeytech._parsers import parse_pbp
+
+    df = parse_pbp(_load("pwhl_pbp_42"), pbp_style="hockeytech_a", game_id=42)
+    import polars as pl
+
+    assert isinstance(df, pl.DataFrame) and df.height > 0
+    for col in (
+        "game_id",
+        "event",
+        "team_id",
+        "period_of_game",
+        "time_of_period",
+        "player_id",
+        "player_name_first",
+        "player_name_last",
+        "x_coord",
+        "y_coord",
+        "goal",
+        "goalie_id",
+    ):
+        assert col in df.columns, f"missing {col}"
+    events = set(df["event"].unique().to_list())
+    assert {"shot", "blocked_shot", "goal", "faceoff", "penalty"} <= events
+    # game_id echoed on every row
+    assert (df["game_id"] == 42).all()
+    # shot rows carry coords
+    shots = df.filter(pl.col("event") == "shot")
+    assert shots.height > 0
+    assert shots["x_coord"].null_count() < shots.height  # at least some coords present
