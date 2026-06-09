@@ -11,6 +11,244 @@ import math
 
 import polars as pl
 
+# ---------------------------------------------------------------------------
+# PWHL PBP enrichment: clock + coordinate transforms
+# Ported faithfully from fastRhockey R/pwhl_pbp.R
+# ---------------------------------------------------------------------------
+
+# Period-length in seconds for sec_from_start offset (PWHL: 20 min = 1200 s).
+_PERIOD_OFFSET_S = {
+    1: 0,
+    2: 1200,
+    3: 2400,
+    4: 3600,
+    5: 4800,
+}
+
+
+def add_clock_columns(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Add period-clock columns derived from ``time_of_period`` (elapsed MM:SS).
+
+    Ported from ``fastRhockey::pwhl_pbp`` (R/pwhl_pbp.R, lines 498-525).
+
+    ``time_of_period`` is ELAPSED seconds counting UP from ``"0:00"`` at the
+    start of each period.  The four columns added are:
+
+    - ``minute_start`` (Int64): elapsed minutes component of ``time_of_period``.
+    - ``second_start`` (Int64): elapsed seconds component of ``time_of_period``.
+    - ``clock`` (Utf8): remaining time in the period formatted as ``"M:SS"``.
+      Computed as ``(19 - minute_start):(60 - second_start)`` with the R
+      special-cases:
+
+      * When ``minute_start == 0`` **and** ``second_start == 0`` (start of
+        period), ``clock = "20:00"``.
+      * When ``second_start == 0`` (but not both zero), ``second = 0``.
+      * Edge: ``minute_start = 20`` produces ``minute = -1`` (faithful to R).
+
+    - ``sec_from_start`` (Int64): cumulative game-seconds elapsed since the
+      very start of the game.  Within each period it equals
+      ``minute_start * 60 + second_start``; a per-period offset is then added:
+      period 1 → +0, period 2 → +1200, period 3 → +2400, period 4 → +3600,
+      period 5 → +4800.
+
+    The function is idempotent: if the columns already exist they are
+    overwritten.  Rows with a null ``time_of_period`` or un-parseable value
+    receive null for all four columns.  The input frame is not mutated.
+
+    Parameters
+    ----------
+    pbp:
+        Play-by-play frame with at least ``time_of_period`` (Utf8, ``"M:SS"``)
+        and ``period_of_game`` (Utf8 or castable to Int64) columns.
+
+    Returns
+    -------
+    pl.DataFrame
+        Input frame with the four clock columns appended (or replaced).
+    """
+    if pbp.height == 0:
+        return pbp.with_columns(
+            minute_start=pl.lit(None, dtype=pl.Int64),
+            second_start=pl.lit(None, dtype=pl.Int64),
+            clock=pl.lit(None, dtype=pl.Utf8),
+            sec_from_start=pl.lit(None, dtype=pl.Int64),
+        )
+
+    # --- parse "M:SS" into minute_start and second_start -------------------
+    # Use str.split(":") and index into the resulting list.
+    split = pl.col("time_of_period").str.split(":")
+    minute_start = split.list.get(0).cast(pl.Int64, strict=False)
+    second_start = split.list.get(1).cast(pl.Int64, strict=False)
+
+    # --- clock (remaining time) --------------------------------------------
+    # R logic (lines 502-512):
+    #   minute = if (19 - minute_start == 19 AND 60 - second_start == 60) 20
+    #            else 19 - minute_start
+    #   second = if (60 - second_start == 60) 0 else 60 - second_start
+    #   second formatted as zero-padded 2-digit string
+    #   clock  = paste0(minute, ":", second)
+    #
+    # Equivalent conditions:
+    #   19 - m == 19  ↔  m == 0
+    #   60 - s == 60  ↔  s == 0
+    m = minute_start
+    s = second_start
+
+    clock_minute = pl.when((m == 0) & (s == 0)).then(pl.lit(20)).otherwise(pl.lit(19) - m)
+    clock_second_raw = pl.when(s == 0).then(pl.lit(0)).otherwise(pl.lit(60) - s)
+    # Zero-pad seconds to two digits: "0" + str if < 10, else str
+    clock_second_str = (
+        pl.when(clock_second_raw < 10)
+        .then(pl.lit("0") + clock_second_raw.cast(pl.Utf8))
+        .otherwise(clock_second_raw.cast(pl.Utf8))
+    )
+    clock_expr = clock_minute.cast(pl.Utf8) + pl.lit(":") + clock_second_str
+
+    # --- sec_from_start ----------------------------------------------------
+    # Base: elapsed seconds within period
+    base_sfs = m * 60 + s
+
+    # Period offset via case_when (R lines 515-521):
+    #   period 2 → +1200, period 3 → +2400, period 4 → +3600, period 5 → +4800
+    period_int = pl.col("period_of_game").cast(pl.Int64, strict=False)
+    sfs = (
+        pl.when(period_int == 2)
+        .then(base_sfs + 1200)
+        .when(period_int == 3)
+        .then(base_sfs + 2400)
+        .when(period_int == 4)
+        .then(base_sfs + 3600)
+        .when(period_int == 5)
+        .then(base_sfs + 4800)
+        .otherwise(base_sfs)
+    )
+
+    return pbp.with_columns(
+        minute_start=minute_start.alias("minute_start"),
+        second_start=second_start.alias("second_start"),
+        clock=clock_expr.alias("clock"),
+        sec_from_start=sfs.alias("sec_from_start"),
+    )
+
+
+def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Add normalized coordinate columns from raw ``x_coord``/``y_coord``.
+
+    Ported from ``fastRhockey::pwhl_pbp`` (R/pwhl_pbp.R, lines 484-496).
+
+    Raw coordinates (``x_coord``, ``y_coord``) come from the HockeyTech feed
+    on an approximately 850×400 canvas.  This function adds ten derived
+    columns that map those raw values into various normalized frames used by
+    fastRhockey.
+
+    The transform sequence (faithful to the R mutate call, where dplyr's
+    ``.data$col`` within a single ``mutate()`` sees values produced by
+    earlier assignments in the same call):
+
+    .. code-block:: text
+
+        ox, oy         = raw x_coord, y_coord
+
+        x_coord_original = ox
+        y_coord_original = oy
+
+        x_coord_neutral  = ox - 300
+        y_coord_neutral  = oy - 150
+
+        x_t  = (ox / 3) - 100                          [R: x_coord = ...]
+        y_t  = 42.5 - ((oy * 85 / 300) - 42.5) - 42.5  [R: y_coord = ...]
+             = 42.5 - (oy * 85 / 300)                  [simplified]
+
+        x_coord_fixed = x_t / 3
+        y_coord_fixed = 42.5 - ((y_t * 85 / 300) - 42.5)
+
+        x_coord_right = if team_id == home_team_id: 100 + (100 - x_t) else x_t
+        y_coord_right = if team_id == home_team_id: 42.5 - (y_t - 42.5)  else y_t
+
+        x_coord_vertical = 42.5 - (y_coord_right - 42.5)
+        y_coord_vertical = x_coord_right
+
+    Rows with null ``x_coord`` or ``y_coord`` produce null for all ten columns.
+    Rows with null ``team_id`` or ``home_team_id`` produce null for
+    ``x_coord_right``, ``y_coord_right``, ``x_coord_vertical``,
+    ``y_coord_vertical`` (the team-dependent transforms).
+
+    Parameters
+    ----------
+    pbp:
+        Play-by-play frame with at least ``x_coord`` (Float64),
+        ``y_coord`` (Float64), ``team_id`` (Utf8), and ``home_team_id``
+        (Utf8 or castable) columns.
+
+    Returns
+    -------
+    pl.DataFrame
+        Input frame with the ten coordinate columns appended (or replaced).
+    """
+    if pbp.height == 0:
+        return pbp.with_columns(
+            x_coord_original=pl.lit(None, dtype=pl.Float64),
+            y_coord_original=pl.lit(None, dtype=pl.Float64),
+            x_coord_neutral=pl.lit(None, dtype=pl.Float64),
+            y_coord_neutral=pl.lit(None, dtype=pl.Float64),
+            x_coord_fixed=pl.lit(None, dtype=pl.Float64),
+            y_coord_fixed=pl.lit(None, dtype=pl.Float64),
+            x_coord_right=pl.lit(None, dtype=pl.Float64),
+            y_coord_right=pl.lit(None, dtype=pl.Float64),
+            x_coord_vertical=pl.lit(None, dtype=pl.Float64),
+            y_coord_vertical=pl.lit(None, dtype=pl.Float64),
+        )
+
+    ox = pl.col("x_coord")
+    oy = pl.col("y_coord")
+
+    # Intermediate transformed coordinates (R lines 489-490):
+    #   x_coord = (x_coord / 3) - 100
+    #   y_coord = 42.5 - (((y_coord * 85) / 300) - 42.5) - 42.5
+    #           = 42.5 - y_coord*85/300 + 42.5 - 42.5
+    #           = 42.5 - y_coord*85/300
+    x_t = (ox / 3.0) - 100.0
+    y_t = 42.5 - (oy * 85.0 / 300.0)
+
+    # x_coord_fixed = .data$x_coord / 3  (uses x_t, the transformed value)
+    x_coord_fixed = x_t / 3.0
+
+    # y_coord_fixed = 42.5 - (((.data$y_coord * 85) / 300) - 42.5)
+    #               (uses y_t, the transformed value)
+    y_coord_fixed = 42.5 - ((y_t * 85.0 / 300.0) - 42.5)
+
+    # Team-dependent right/vertical transforms.
+    # ``home_team_id`` is only present after a meta-join (task A2.5b).
+    # When absent, treat all rows as away team (passthrough).
+    if "home_team_id" in pbp.columns:
+        is_home = pl.col("team_id").cast(pl.Utf8) == pl.col("home_team_id").cast(pl.Utf8)
+    else:
+        is_home = pl.lit(False)
+
+    x_coord_right = pl.when(is_home).then(100.0 + (100.0 - x_t)).otherwise(x_t)
+    y_coord_right = pl.when(is_home).then(42.5 - (y_t - 42.5)).otherwise(y_t)
+
+    # Vertical projection uses the right coords (computed above as intermediates)
+    # R: x_coord_vertical = 42.5 - (.data$y_coord_right - 42.5)
+    #    y_coord_vertical = .data$x_coord_right
+    # We compute these as a second with_columns pass to reference the right cols.
+    out = pbp.with_columns(
+        x_coord_original=ox,
+        y_coord_original=oy,
+        x_coord_neutral=(ox - 300.0),
+        y_coord_neutral=(oy - 150.0),
+        x_coord_fixed=x_coord_fixed,
+        y_coord_fixed=y_coord_fixed,
+        x_coord_right=x_coord_right,
+        y_coord_right=y_coord_right,
+    )
+
+    return out.with_columns(
+        x_coord_vertical=(42.5 - (pl.col("y_coord_right") - 42.5)),
+        y_coord_vertical=pl.col("x_coord_right"),
+    )
+
+
 _SCORING_CHANCE_FT = 25.0  # distance threshold from net (feet)
 _SHOT_EVENTS = ["shot", "blocked_shot", "goal"]
 

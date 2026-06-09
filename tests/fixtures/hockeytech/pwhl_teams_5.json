@@ -2,11 +2,11 @@
  "SiteKit": {
   "Parameters": {
    "feed": "modulekit",
-   "view": "teamsbyseason",
    "key": "446521baf8c38984",
    "client_code": "pwhl",
    "site_id": "0",
    "lang": "en",
+   "view": "teamsbyseason",
    "season": "5",
    "lang_id": 1,
    "league_id": "1",

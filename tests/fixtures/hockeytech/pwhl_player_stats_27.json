@@ -2,11 +2,11 @@
  "SiteKit": {
   "Parameters": {
    "feed": "modulekit",
-   "view": "player",
    "key": "446521baf8c38984",
    "client_code": "pwhl",
    "site_id": "0",
    "lang": "en",
+   "view": "player",
    "player_id": "27",
    "category": "seasonstats",
    "lang_id": 1,
