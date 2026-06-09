@@ -253,6 +253,9 @@ by season, not `season` (name string). The resolved integer is passed as the
 
 PWHL player box score for a single game.
 
+NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
+(A1.8 follow-up); not yet functional.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -274,6 +277,9 @@ PWHL player game-by-game log.
 ### `pwhl_player_info(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_player_info}
 
 PWHL player biographical info.
+
+NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
+(A1.8 follow-up); not yet functional.
 
 **Parameters**
 

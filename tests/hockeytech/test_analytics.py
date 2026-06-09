@@ -230,3 +230,102 @@ def test_per60_expression():
     out = df.with_columns(per60("corsi_for"))
     # 10 / 1800 * 3600 = 20.0
     assert abs(out["corsi_for_per60"][0] - 20.0) < 1e-9
+
+
+def test_coord_transforms_tolerate_string_coords():
+    """Regression: all-None coords infer as Utf8; add_coord_transforms / add_shot_distance_angle
+    must not raise 'division with String datatypes' after the cast(Float64, strict=False) fix."""
+    from sportsdataverse.hockeytech._analytics import add_coord_transforms, add_shot_distance_angle
+
+    # all-None coords infer as Utf8; must not raise
+    df = pl.DataFrame({"event": ["faceoff", "shot"], "x_coord": [None, None], "y_coord": [None, None]})
+    out = add_coord_transforms(df)
+    assert "x_coord_original" in out.columns
+    # null coords should produce null transforms, not errors
+    assert out["x_coord_original"][0] is None
+
+    out2 = add_shot_distance_angle(df)
+    assert "shot_distance" in out2.columns
+    # shot row with null coords yields null distance, not an exception
+    assert out2["shot_distance"][1] is None
+
+    # numeric strings also coerce cleanly
+    df2 = pl.DataFrame({"event": ["shot"], "x_coord": ["255"], "y_coord": ["150"]})
+    result = add_shot_distance_angle(df2)
+    assert result["shot_distance"][0] is not None
+
+
+def test_backfill_power_play_sets_flags_during_penalty():
+    """Shots/faceoffs during an active PP window get power_play/short_handed flags.
+
+    Synthetic scenario:
+    - Penalty at sec_from_start=100, power_play="1", penalty_length="2",
+      penalized team_id="2" (home_team_id="1", away_team_id="2").
+      Advantage team = home (id="1"). PP window [100, 220].
+    - Shot at sec=150 by team "1" -> power_play="1", short_handed="0".
+    - Faceoff at sec=160 by team "2" -> power_play="0", short_handed="1".
+    - Shot at sec=250 (after PP ends) -> unchanged (power_play=None).
+    - Zero-penalty safety: no crash when pens is empty.
+    """
+    from sportsdataverse.hockeytech._analytics import backfill_power_play
+
+    df = pl.DataFrame(
+        {
+            "event": ["penalty", "shot", "faceoff", "shot"],
+            "sec_from_start": [100, 150, 160, 250],
+            "team_id": ["2", "1", "2", "1"],
+            "home_team_id": ["1", "1", "1", "1"],
+            "away_team_id": ["2", "2", "2", "2"],
+            "power_play": ["1", None, None, None],
+            "short_handed": [None, None, None, None],
+            "penalty_length": ["2", None, None, None],
+        },
+        schema={
+            "event": pl.Utf8,
+            "sec_from_start": pl.Int64,
+            "team_id": pl.Utf8,
+            "home_team_id": pl.Utf8,
+            "away_team_id": pl.Utf8,
+            "power_play": pl.Utf8,
+            "short_handed": pl.Utf8,
+            "penalty_length": pl.Utf8,
+        },
+    )
+    out = backfill_power_play(df)
+
+    # Shot at 150 by advantage team (home "1") -> PP
+    assert out["power_play"][1] == "1", f"Expected '1', got {out['power_play'][1]}"
+    assert out["short_handed"][1] == "0", f"Expected '0', got {out['short_handed'][1]}"
+
+    # Faceoff at 160 by penalized team "2" -> SH
+    assert out["power_play"][2] == "0", f"Expected '0', got {out['power_play'][2]}"
+    assert out["short_handed"][2] == "1", f"Expected '1', got {out['short_handed'][2]}"
+
+    # Shot at 250 is after PP window ends -> unchanged
+    assert out["power_play"][3] is None, f"Expected None, got {out['power_play'][3]}"
+
+    # Zero-penalty case: no crash
+    df_no_pen = pl.DataFrame(
+        {
+            "event": ["shot"],
+            "sec_from_start": [100],
+            "team_id": ["1"],
+            "home_team_id": ["1"],
+            "away_team_id": ["2"],
+            "power_play": [None],
+            "short_handed": [None],
+            "penalty_length": [None],
+        },
+        schema={
+            "event": pl.Utf8,
+            "sec_from_start": pl.Int64,
+            "team_id": pl.Utf8,
+            "home_team_id": pl.Utf8,
+            "away_team_id": pl.Utf8,
+            "power_play": pl.Utf8,
+            "short_handed": pl.Utf8,
+            "penalty_length": pl.Utf8,
+        },
+    )
+    out_no_pen = backfill_power_play(df_no_pen)
+    assert out_no_pen["power_play"][0] is None  # unchanged

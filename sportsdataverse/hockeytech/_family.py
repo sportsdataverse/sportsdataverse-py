@@ -64,13 +64,13 @@ def build_family(league: str) -> dict[str, Any]:
     _season_id.__doc__ = f"All {cfg.name} seasons with end-year + game-type labels."
 
     def _most_recent_season() -> int:
-        """Most-recent season as an end-year integer (max ``season_yr``), or 0."""
+        """Most-recent season as an end-year integer (max ``season_yr``), or 2026."""
         df = _season_id()
-        return int(df["season_yr"].max()) if df.height else 0
+        return int(df["season_yr"].max()) if df.height else 2026
 
     _most_recent_season.__name__ = f"most_recent_{lg}_season"
     _most_recent_season.__qualname__ = f"most_recent_{lg}_season"
-    _most_recent_season.__doc__ = f"Most-recent {cfg.name} season as an end-year integer (max ``season_yr``), or 0."
+    _most_recent_season.__doc__ = f"Most-recent {cfg.name} season as an end-year integer (max ``season_yr``), or 2026."
 
     # ------------------------------------------------------------------
     # Schedule

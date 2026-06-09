@@ -12,7 +12,7 @@ not covered by the generated API-endpoint reference above.
 
 ### `most_recent_whl_season() -> 'int'` {#most_recent_whl_season}
 
-Most-recent WHL season as an end-year integer (max `season_yr`), or 0.
+Most-recent WHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 

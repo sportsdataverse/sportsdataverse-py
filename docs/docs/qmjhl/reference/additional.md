@@ -12,7 +12,7 @@ not covered by the generated API-endpoint reference above.
 
 ### `most_recent_qmjhl_season() -> 'int'` {#most_recent_qmjhl_season}
 
-Most-recent QMJHL season as an end-year integer (max `season_yr`), or 0.
+Most-recent QMJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 

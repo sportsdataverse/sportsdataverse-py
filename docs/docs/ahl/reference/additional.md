@@ -12,7 +12,7 @@ not covered by the generated API-endpoint reference above.
 
 ### `most_recent_ahl_season() -> 'int'` {#most_recent_ahl_season}
 
-Most-recent AHL season as an end-year integer (max `season_yr`), or 0.
+Most-recent AHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 

@@ -215,7 +215,11 @@ def pwhl_scorebar(return_as_pandas: bool = False) -> Any:
 
 
 def pwhl_game_info(game_id: int, return_as_pandas: bool = False) -> Any:
-    """PWHL single-game metadata."""
+    """PWHL single-game metadata.
+
+    NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
+    (A1.8 follow-up); not yet functional.
+    """
     return P.parse_game_info(
         hockeytech_api(_LG, "statviewfeed", "gameSummary", {"game_id": game_id}),
         return_as_pandas,
@@ -223,7 +227,11 @@ def pwhl_game_info(game_id: int, return_as_pandas: bool = False) -> Any:
 
 
 def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> Any:
-    """PWHL player box score for a single game."""
+    """PWHL player box score for a single game.
+
+    NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
+    (A1.8 follow-up); not yet functional.
+    """
     return P.parse_player_box(
         hockeytech_api(_LG, "statviewfeed", "gameSummary", {"game_id": game_id}),
         return_as_pandas,
@@ -231,7 +239,11 @@ def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> Any:
 
 
 def pwhl_player_info(player_id: int, return_as_pandas: bool = False) -> Any:
-    """PWHL player biographical info."""
+    """PWHL player biographical info.
+
+    NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
+    (A1.8 follow-up); not yet functional.
+    """
     return P.parse_player_info(
         hockeytech_api(_LG, "statviewfeed", "player", {"player_id": player_id}),
         return_as_pandas,

@@ -200,8 +200,13 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
             y_coord_vertical=pl.lit(None, dtype=pl.Float64),
         )
 
-    ox = pl.col("x_coord")
-    oy = pl.col("y_coord")
+    # Coerce raw coords to Float64. Incomplete/current-season games whose PBP
+    # carries no coordinate-bearing events yield an all-null column that
+    # pd.json_normalize -> pl.from_pandas infers as Utf8; dividing a String
+    # column raises ``InvalidOperationError: division with 'String' datatypes``.
+    # strict=False also rescues feeds that serialize coords as numeric strings.
+    ox = pl.col("x_coord").cast(pl.Float64, strict=False)
+    oy = pl.col("y_coord").cast(pl.Float64, strict=False)
 
     # Intermediate transformed coordinates (R lines 489-490):
     #   x_coord = (x_coord / 3) - 100
@@ -280,8 +285,10 @@ def add_shot_distance_angle(pbp: pl.DataFrame, goal_x: float = 89.0) -> pl.DataF
             shot_angle=pl.lit(None, dtype=pl.Float64),
         )
 
-    dx = pl.lit(goal_x) - pl.col("x_coord").abs()
-    dy = pl.col("y_coord")
+    # Coerce to Float64 so an all-null (Utf8-inferred) coord column does not
+    # raise on the arithmetic below — see add_coord_transforms for context.
+    dx = pl.lit(goal_x) - pl.col("x_coord").cast(pl.Float64, strict=False).abs()
+    dy = pl.col("y_coord").cast(pl.Float64, strict=False)
     dist = (dx**2 + dy**2).sqrt()
     # pl.arctan2(y, x) -> radians; convert to degrees and take absolute value
     angle = pl.arctan2(dy.abs(), dx).abs() * (180.0 / math.pi)
@@ -556,6 +563,142 @@ def corsi_fenwick_on_ice(pbp: pl.DataFrame) -> pl.DataFrame:
     return pl.DataFrame(rows, schema=_CORSI_FENWICK_ON_ICE_SCHEMA)
 
 
+def backfill_power_play(df: pl.DataFrame) -> pl.DataFrame:
+    """Back-fill ``power_play`` and ``short_handed`` for shot/faceoff events.
+
+    Ported from fastRhockey ``pwhl_pbp.R`` lines 522-565.
+
+    For each penalty event whose ``power_play`` flag is ``"1"``, a PP window
+    ``[start_sec, end_sec]`` is derived where:
+
+    - ``start_sec`` = ``sec_from_start`` of the penalty event.
+    - ``end_sec``   = ``start_sec + penalty_length * 60``, **truncated** at the
+      cumulative time of the first goal scored during that window (mirrors the
+      R power-kill-ends-on-goal logic).
+
+    For every ``shot`` or ``faceoff`` event whose ``sec_from_start`` falls
+    inside any PP window:
+
+    - If the event's ``team_id`` equals the window's ``advantage_team``,
+      ``power_play`` is set to ``"1"`` and ``short_handed`` to ``"0"``.
+    - Otherwise ``power_play`` is set to ``"0"`` and ``short_handed`` to
+      ``"1"``.
+
+    All other rows are left unchanged.  The function is safe when there are
+    zero penalty events (returns ``df`` unmodified after ensuring the two flag
+    columns exist).
+
+    Requires ``sec_from_start``, ``event``, ``power_play``,
+    ``penalty_length``, ``team_id``, ``home_team_id``, ``away_team_id``
+    columns to be present.  ``short_handed`` may be absent — it will be
+    created.
+
+    Parameters
+    ----------
+    df:
+        PBP frame **after** :func:`add_clock_columns` has run (so
+        ``sec_from_start`` is populated).
+
+    Returns
+    -------
+    pl.DataFrame
+        Input frame with ``power_play`` / ``short_handed`` back-filled for
+        shot and faceoff events that occur during an active PP window.
+    """
+    # Ensure short_handed column exists (may be absent for non-PWHL feeds).
+    if "short_handed" not in df.columns:
+        df = df.with_columns(short_handed=pl.lit(None, dtype=pl.Utf8))
+
+    # Ensure power_play exists.
+    if "power_play" not in df.columns:
+        df = df.with_columns(power_play=pl.lit(None, dtype=pl.Utf8))
+
+    if df.height == 0:
+        return df
+
+    # Extract penalty rows with power_play == "1" and valid sec_from_start.
+    pen_mask = (pl.col("event") == "penalty") & (pl.col("power_play") == "1") & pl.col("sec_from_start").is_not_null()
+    pens_df = df.filter(pen_mask)
+
+    if pens_df.height == 0:
+        # No PP penalties -- nothing to back-fill.
+        return df
+
+    # Derive advantage_team: the team NOT penalized (penalized = team_id on penalty row).
+    # advantage_team = away_team_id if penalized==home_team_id, else home_team_id.
+    pens_df = pens_df.with_columns(
+        advantage_team=pl.when(pl.col("team_id") == pl.col("home_team_id"))
+        .then(pl.col("away_team_id"))
+        .otherwise(pl.col("home_team_id"))
+    )
+
+    # Build penalty interval list: (start_sec, end_sec, advantage_team_id).
+    # penalty_length is a string (e.g. "2") representing minutes.
+    penalty_length_s = pens_df["penalty_length"].cast(pl.Float64, strict=False) * 60.0
+    starts = pens_df["sec_from_start"].cast(pl.Float64, strict=False)
+    ends = starts + penalty_length_s
+    adv_teams = pens_df["advantage_team"].to_list()
+    starts_list = starts.to_list()
+    ends_list = ends.to_list()
+
+    # Extract goal times for PP-end truncation.
+    goal_times = (
+        df.filter(pl.col("event") == "goal")
+        .filter(pl.col("sec_from_start").is_not_null())["sec_from_start"]
+        .cast(pl.Float64, strict=False)
+        .to_list()
+    )
+    goal_times_sorted = sorted(t for t in goal_times if t is not None)
+
+    # Truncate each penalty window at first goal within it.
+    # Mirrors the R loop: for each penalty find the first goal in the PP window;
+    # if found, set end_power_play = goal.sec_from_start.
+    pen_intervals: list[tuple[float, float, str]] = []
+    for i, (s, e, adv) in enumerate(zip(starts_list, ends_list, adv_teams)):
+        if s is None or e is None:
+            continue
+        # Find goals in [s, e] that are after previous penalty's end (if any).
+        prev_end = pen_intervals[i - 1][1] if i > 0 and pen_intervals else None
+        for g in goal_times_sorted:
+            if g >= s and g <= e:
+                if prev_end is None or g > prev_end:
+                    e = g
+                    break
+        pen_intervals.append((float(s), float(e), str(adv) if adv is not None else ""))
+
+    # Back-fill shot/faceoff rows using the computed intervals.
+    # We do this row-by-row via map_elements for correctness (intervals can overlap).
+    event_col = df["event"].to_list()
+    sec_col = df["sec_from_start"].cast(pl.Float64, strict=False).to_list()
+    team_col = df["team_id"].to_list()
+    pp_col = df["power_play"].to_list()
+    sh_col = df["short_handed"].to_list()
+
+    new_pp = list(pp_col)
+    new_sh = list(sh_col)
+
+    for idx, (ev, sec, team) in enumerate(zip(event_col, sec_col, team_col)):
+        if ev not in ("shot", "faceoff"):
+            continue
+        if sec is None:
+            continue
+        for ps, pe, adv in pen_intervals:
+            if ps <= sec <= pe:
+                # This event is during a PP window.
+                if str(team) == adv:
+                    new_pp[idx] = "1"
+                    new_sh[idx] = "0"
+                else:
+                    new_pp[idx] = "0"
+                    new_sh[idx] = "1"
+                break  # Use the first matching interval.
+
+    return df.with_columns(
+        power_play=pl.Series("power_play", new_pp, dtype=pl.Utf8),
+        short_handed=pl.Series("short_handed", new_sh, dtype=pl.Utf8),
+    )
+
+
 def enrich_pbp(
     df: pl.DataFrame,
     league: str,
@@ -667,6 +810,13 @@ def enrich_pbp(
     df = add_clock_columns(df)
 
     # ------------------------------------------------------------------
+    # Step 5b: PP / SH back-fill for shot & faceoff events
+    #   Ported from fastRhockey R/pwhl_pbp.R lines 522-565.
+    #   Requires sec_from_start (Step 5) and home_team_id/away_team_id (Step 3).
+    # ------------------------------------------------------------------
+    df = backfill_power_play(df)
+
+    # ------------------------------------------------------------------
     # Step 6: shot geometry (use intermediate rink-feet frame)
     # ------------------------------------------------------------------
     geo = df.with_columns(
@@ -692,8 +842,28 @@ def enrich_pbp(
         shifts = pl.DataFrame()
 
     if df.height > 0 and shifts.height > 0:
+        # Derive per-period ceiling from shifts: max(start_s) in each period.
+        # For regulation PWHL periods this is ~1200 s; for OT periods it is
+        # smaller (300 s for 5-minute OT).  Fallback to 1200 when a period has
+        # no shifts at all.
+        period_len_df = shifts.group_by("period").agg(pl.col("start_s").max().alias("plen"))
+        period_len_map: dict[int, int] = {
+            int(row["period"]): int(row["plen"])
+            for row in period_len_df.iter_rows(named=True)
+            if row["plen"] is not None
+        }
+
+        # Build a plen column on df, falling back to 1200 for unknown periods.
+        period_int_expr = pl.col("period_of_game").cast(pl.Int64, strict=False)
+        # Start with a default of 1200 then override per known period.
+        plen_cases = pl.lit(1200, dtype=pl.Int64)
+        for period_val, plen_val in period_len_map.items():
+            plen_cases = (
+                pl.when(period_int_expr == period_val).then(pl.lit(plen_val, dtype=pl.Int64)).otherwise(plen_cases)
+            )
+
         elapsed_s = pl.col("minute_start") * 60 + pl.col("second_start")
-        time_s = (1200 - elapsed_s).cast(pl.Int64, strict=False)
+        time_s = (plen_cases - elapsed_s).cast(pl.Int64, strict=False)
 
         df_copy = df.with_columns(
             _period_str=pl.col("period_of_game"),
