@@ -1,6 +1,25 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+
+// Cap which doc versions are BUILT to keep each deploy under the Vercel build
+// container's memory budget. Every `yarn version:docs x.y.z` adds a full doc
+// copy; building all of them (6+) OOMs the build. We build the rolling
+// `current` tree plus the latest 3 release snapshots, derived from
+// versions.json (which Docusaurus maintains newest-first) so this list never
+// needs manual editing at release time. Older snapshots stay under
+// versioned_docs/ in git and can be re-added by bumping the slice if the build
+// budget grows.
+const VERSIONS_TO_KEEP = 3;
+const allReleasedVersions: string[] = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'versions.json'), 'utf-8'),
+);
+const builtVersions: string[] = [
+  'current',
+  ...allReleasedVersions.slice(0, VERSIONS_TO_KEEP),
+];
 
 const config: Config = {
   title: 'sdv-py',
@@ -55,12 +74,10 @@ const config: Config = {
           // release numbers without ever clashing with `current`'s label. The
           // legacy pre-codegen Sphinx docs stay archived at /docs/0.0.50/.
           lastVersion: 'current',
-          // Build only the rolling `current` tree + the most recent release
-          // snapshots. Each `yarn version:docs x.y.z` adds a full doc copy, and
-          // building every snapshot (6+) exhausts the Vercel build container's
-          // memory (OOM). Older frozen snapshots remain under versioned_docs/ in
-          // git and can be re-added here if the build budget allows.
-          onlyIncludeVersions: ['current', '0.0.56', '0.0.55', '0.0.54'],
+          // `current` + the latest 3 release snapshots (see builtVersions above).
+          // Auto-derived from versions.json so new releases never re-break the
+          // Vercel build by accumulating versioned-docs copies.
+          onlyIncludeVersions: builtVersions,
           versions: {
             current: {
               label: 'main',
