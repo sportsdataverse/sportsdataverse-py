@@ -66,3 +66,31 @@ nfl:
   load_nfl_weekly_rosters: load_rosters_weekly
 nhl:
   nhl_web_schedule: nhl_schedule
+pwhl:
+  # Live API wrappers — sdv-py names match fastRhockey exactly; listed here
+  # so the parity table generator picks them up explicitly.
+  pwhl_schedule: pwhl_schedule
+  pwhl_pbp: pwhl_pbp
+  pwhl_standings: pwhl_standings
+  pwhl_teams: pwhl_teams
+  pwhl_team_roster: pwhl_team_roster
+  pwhl_player_stats: pwhl_player_stats
+  pwhl_leaders: pwhl_leaders
+  pwhl_game_summary: pwhl_game_summary
+  pwhl_season_id: pwhl_season_id
+  pwhl_player_info: pwhl_player_info
+  pwhl_player_game_log: pwhl_player_game_log
+  pwhl_player_search: pwhl_player_search
+  pwhl_stats: pwhl_stats
+  pwhl_streaks: pwhl_streaks
+  pwhl_transactions: pwhl_transactions
+  pwhl_playoff_bracket: pwhl_playoff_bracket
+  pwhl_scorebar: pwhl_scorebar
+  pwhl_game_info: pwhl_game_info
+  pwhl_player_box: pwhl_player_box
+  most_recent_pwhl_season: most_recent_pwhl_season
+  # Analytics functions — Part B will add these to fastRhockey; mapping to
+  # themselves for now so the table shows them as Python-only until then.
+  pwhl_game_shifts: pwhl_game_shifts
+  pwhl_player_toi: pwhl_player_toi
+  pwhl_game_corsi: pwhl_game_corsi

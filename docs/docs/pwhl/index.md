@@ -43,6 +43,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`load_pwhl_team_boxscores`](reference/loaders#load_pwhl_team_boxscores) | [`load_pwhl_team_boxscores`](https://fastRhockey.sportsdataverse.org/reference/load_pwhl_team_boxscores.html) |
 | [`load_pwhl_three_stars`](reference/loaders#load_pwhl_three_stars) | [`load_pwhl_three_stars`](https://fastRhockey.sportsdataverse.org/reference/load_pwhl_three_stars.html) |
 | [`most_recent_pwhl_season`](reference/additional#most_recent_pwhl_season) | [`most_recent_pwhl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_pwhl_season.html) |
+| [`pwhl_game_corsi`](reference/additional#pwhl_game_corsi) | [`pwhl_game_corsi`](https://fastRhockey.sportsdataverse.org/reference/pwhl_game_corsi.html) |
+| [`pwhl_game_shifts`](reference/additional#pwhl_game_shifts) | [`pwhl_game_shifts`](https://fastRhockey.sportsdataverse.org/reference/pwhl_game_shifts.html) |
 | [`pwhl_game_summary`](reference/additional#pwhl_game_summary) | [`pwhl_game_summary`](https://fastRhockey.sportsdataverse.org/reference/pwhl_game_summary.html) |
 | [`pwhl_leaders`](reference/additional#pwhl_leaders) | [`pwhl_leaders`](https://fastRhockey.sportsdataverse.org/reference/pwhl_leaders.html) |
 | [`pwhl_player_box`](reference/additional#pwhl_player_box) | [`pwhl_player_box`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_box.html) |
@@ -50,6 +52,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`pwhl_player_info`](reference/additional#pwhl_player_info) | [`pwhl_player_info`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_info.html) |
 | [`pwhl_player_search`](reference/additional#pwhl_player_search) | [`pwhl_player_search`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_search.html) |
 | [`pwhl_player_stats`](reference/additional#pwhl_player_stats) | [`pwhl_player_stats`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_stats.html) |
+| [`pwhl_player_toi`](reference/additional#pwhl_player_toi) | [`pwhl_player_toi`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_toi.html) |
 | [`pwhl_playoff_bracket`](reference/additional#pwhl_playoff_bracket) | [`pwhl_playoff_bracket`](https://fastRhockey.sportsdataverse.org/reference/pwhl_playoff_bracket.html) |
 | [`pwhl_schedule`](reference/additional#pwhl_schedule) | [`pwhl_schedule`](https://fastRhockey.sportsdataverse.org/reference/pwhl_schedule.html) |
 | [`pwhl_scorebar`](reference/additional#pwhl_scorebar) | [`pwhl_scorebar`](https://fastRhockey.sportsdataverse.org/reference/pwhl_scorebar.html) |
