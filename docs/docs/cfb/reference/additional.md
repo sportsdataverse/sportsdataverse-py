@@ -871,6 +871,177 @@ teams = espn_cfb_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
+### `fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_boxscore}
+
+Fox Sports CFB boxscore (long: one row per player-stat).
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
+(the `boxscore` block).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id (e.g. `"41616"`). |
+| `return_parsed` | `bool` | `True` | flatten the per-team stat tables to long form (default True). |
+| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+
+**Example**
+
+```python
+>>> fox_cfb_boxscore("41616")
+```
+
+### `fox_cfb_league_leaders(category: 'str' = 'passing', who: 'str' = 'player', page: 'int' = 0, group_id: 'Union[int, str]' = '2', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_league_leaders}
+
+Fox Sports CFB statistical leaders (one row per player/team).
+
+Endpoint: `GET .../bifrost/v1/cfb/league/stats-con/{who}/{category}/{page}`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `category` | `str` | `'passing'` | passing, rushing, receiving, defense, kicking, returning, scoring, yardage (team adds downs, turnovers). |
+| `who` | `str` | `'player'` | "player" or "team". page: 0-based. group_id: conference/group filter. |
+| `page` | `int` | `0` |  |
+| `group_id` | `Union[int, str]` | `'2'` |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Example**
+
+```python
+>>> fox_cfb_league_leaders("passing")
+```
+
+### `fox_cfb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_odds}
+
+Fox Sports CFB game odds six-pack (spread / to win / total per team).
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/odds`
+
+Returns an empty frame when no market is posted.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Example**
+
+```python
+>>> fox_cfb_odds("41616")
+```
+
+### `fox_cfb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_pbp}
+
+Fox Sports CFB play-by-play (one row per play).
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id (e.g. `"41616"`) -- not the ESPN id. |
+| `return_parsed` | `bool` | `True` | flatten the pbp layout to a DataFrame (default True); `False` returns the raw JSON `Dict`. |
+| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+
+**Example**
+
+```python
+>>> fox_cfb_pbp("41616")
+```
+
+### `fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_standings}
+
+Fox Sports CFB conference standings for a team's conference.
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/standings`
+(the league-wide `league/standings` endpoint returns header-only tables, so
+standings are keyed by team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Example**
+
+```python
+>>> fox_cfb_standings("11")
+```
+
+### `fox_cfb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_team_gamelog}
+
+Fox Sports CFB team game log -- tidy long: one row per (game, stat).
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/gamelog`
+The endpoint groups team per-game stats by category (passing, rushing,
+defense, ...) and season-type split; this flattens to columns
+`team_id, season_type, category, game_id, game_date, opponent, stat, value`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Example**
+
+```python
+>>> fox_cfb_team_gamelog("11")
+```
+
+### `fox_cfb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_team_roster}
+
+Fox Sports CFB team roster (one row per player).
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/roster`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `"11"` = Miami (FL)); discover via the league team directory (`cfb/league/teamnav`). |
+| `return_parsed` | `bool` | `True` | flatten the position-group tables (default True). |
+| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+
+**Example**
+
+```python
+>>> fox_cfb_team_roster("11")
+```
+
+### `fox_cfb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_team_stats}
+
+Fox Sports CFB team stat leaders (one row per category leader).
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/stats`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Example**
+
+```python
+>>> fox_cfb_team_stats("11")
+```
+
 ### `get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#get_cfb_teams}
 
 Load college football team ID information and logos
