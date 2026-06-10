@@ -142,3 +142,123 @@ def yahoo_cfb_player_season_stats(
     for r in rows:
         r["season"] = season  # self-describing
     return _frame(rows, return_as_pandas)
+
+
+def yahoo_cfb_team_season_stats(
+    season: int = 2024,
+    *,
+    league_structure: str = "ncaaf.struct.div.1",
+    count: int = 200,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Yahoo CFB team season stats (modern; one wide row per team).
+
+    Endpoint: ``GET .../shangrila/leagueStatsByTeam?leagues=ncaaf&season=...``
+
+    Example:
+        >>> yahoo_cfb_team_season_stats(season=2024)
+    """
+    raw = _shangrila_get(
+        "leagueStatsByTeam",
+        {
+            "leagues": "ncaaf",
+            "season": season,
+            "count": count,
+            "leagueStructureId": league_structure,
+        },
+        **kwargs,
+    )
+    if not return_parsed:
+        return raw
+    rows = _flatten_modern(raw, "footballStats")
+    for r in rows:
+        r["season"] = season
+    return _frame(rows, return_as_pandas)
+
+
+def yahoo_cfb_player_season_stats_legacy(
+    season: int = 2024,
+    category: str = "Passing",
+    sort_stat: str = "PASSING_YARDS",
+    *,
+    league_structure: str = "ncaaf.struct.div.1",
+    count: int = 200,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Yahoo CFB legacy per-category player leaders (one wide row per player).
+
+    Endpoint: ``GET .../shangrila/seasonStatsFootball{Category}Ncaaf``
+    ``category`` in {Passing, Rushing, Receiving, Defense, Kicking, Punting, Returns}.
+    ``sort_stat`` is a required FootballStatId (see the catalog vocab).
+
+    Example:
+        >>> yahoo_cfb_player_season_stats_legacy(season=2024, category="Rushing",
+        ...                                      sort_stat="RUSHING_YARDS")
+    """
+    if category not in LEGACY_PLAYER_CATEGORIES:
+        raise ValueError(f"category must be one of {LEGACY_PLAYER_CATEGORIES}")
+    raw = _shangrila_get(
+        f"seasonStatsFootball{category}Ncaaf",
+        {
+            "season": season,
+            "league": "ncaaf",
+            "leagueStructure": league_structure,
+            "count": count,
+            "sortStatId": sort_stat,
+        },
+        **kwargs,
+    )
+    if not return_parsed:
+        return raw
+    rows = _flatten_legacy(raw)
+    for r in rows:
+        r["season"] = season
+        r["category"] = category
+    return _frame(rows, return_as_pandas)
+
+
+def yahoo_cfb_team_season_stats_legacy(
+    season: int = 2024,
+    category: str = "Passing",
+    sort_stat: str = "PASSING_YARDS",
+    *,
+    league_structure: str = "ncaaf.struct.div.1",
+    count: int = 200,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Yahoo CFB legacy per-category team stats (one wide row per team).
+
+    Endpoint: ``GET .../shangrila/seasonTeamStatsFootball{Category}``
+    ``category`` in {Passing, Rushing, Receiving, Defense, Kicking, Punting,
+    Returns, Kickoffs, Offense}.
+
+    Example:
+        >>> yahoo_cfb_team_season_stats_legacy(season=2024, category="Rushing",
+        ...                                    sort_stat="RUSHING_YARDS")
+    """
+    if category not in LEGACY_TEAM_CATEGORIES:
+        raise ValueError(f"category must be one of {LEGACY_TEAM_CATEGORIES}")
+    raw = _shangrila_get(
+        f"seasonTeamStatsFootball{category}",
+        {
+            "season": season,
+            "league": "ncaaf",
+            "leagueStructure": league_structure,
+            "count": count,
+            "sortStatId": sort_stat,
+        },
+        **kwargs,
+    )
+    if not return_parsed:
+        return raw
+    rows = _flatten_legacy(raw)
+    for r in rows:
+        r["season"] = season
+        r["category"] = category
+    return _frame(rows, return_as_pandas)

@@ -64,3 +64,45 @@ def test_player_season_stats_uses_modern_query(monkeypatch):
     # raw passthrough
     raw = y.yahoo_cfb_player_season_stats(season=2024, return_parsed=False)
     assert "data" in raw
+
+
+LEGACY = {
+    "data": {
+        "leagues": [
+            {
+                "leaders": [
+                    {
+                        "player": {
+                            "playerId": "ncaaf.p.9",
+                            "displayName": "RB Nine",
+                            "team": {"displayName": "Team C", "abbreviation": "TC"},
+                        },
+                        "stats": [{"statId": "RUSHING_YARDS", "value": "1500"}],
+                    }
+                ]
+            }
+        ]
+    },
+    "extensions": {},
+}
+
+
+def test_team_and_legacy(monkeypatch):
+    monkeypatch.setattr(
+        y,
+        "_get",
+        lambda url, params=None, headers=None, **k: MODERN if "leagueStatsByTeam" in url else LEGACY,
+    )
+    tdf = y.yahoo_cfb_team_season_stats(season=2024, return_as_pandas=True)
+    assert len(tdf) == 2
+    pdf = y.yahoo_cfb_player_season_stats_legacy(
+        season=2024, category="Rushing", sort_stat="RUSHING_YARDS", return_as_pandas=True
+    )
+    assert pdf.iloc[0]["rushing_yards"] == "1500"
+
+
+def test_legacy_rejects_bad_category():
+    import pytest
+
+    with pytest.raises(ValueError):
+        y.yahoo_cfb_player_season_stats_legacy(season=2024, category="Bogus", sort_stat="X")
