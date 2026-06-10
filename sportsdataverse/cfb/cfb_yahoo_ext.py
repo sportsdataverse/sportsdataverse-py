@@ -104,3 +104,41 @@ def _frame(rows: List[Dict], return_as_pandas: bool):
 
         return pd.DataFrame(rows)
     return pl.DataFrame(rows)
+
+
+def yahoo_cfb_player_season_stats(
+    season: int = 2024,
+    *,
+    league_structure: str = "ncaaf.struct.div.1",
+    count: int = 200,
+    qualified: bool = False,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Yahoo CFB player season stats (modern; one wide row per player).
+
+    Endpoint: ``GET .../shangrila/leagueStatsIndividual?leagues=ncaaf&season=...``
+    Returns all stat groups (passing/rushing/receiving/...) pivoted wide. NCAAF
+    data is available 2013-present. ``return_parsed=False`` returns raw JSON.
+
+    Example:
+        >>> yahoo_cfb_player_season_stats(season=2024)
+    """
+    raw = _shangrila_get(
+        "leagueStatsIndividual",
+        {
+            "leagues": "ncaaf",
+            "season": season,
+            "count": count,
+            "leagueStructureId": league_structure,
+            "qualified": str(qualified).lower(),
+        },
+        **kwargs,
+    )
+    if not return_parsed:
+        return raw
+    rows = _flatten_modern(raw, "footballStats")
+    for r in rows:
+        r["season"] = season  # self-describing
+    return _frame(rows, return_as_pandas)

@@ -44,3 +44,23 @@ def test_flatten_modern_pivots_wide():
     assert r0["passing_touchdowns"] == "40"
     # missing stat is absent (or None) on row 2, but pivot keys exist on row 1
     assert "passing_yards" in rows[1]
+
+
+def test_player_season_stats_uses_modern_query(monkeypatch):
+    captured = {}
+
+    def fake_get(url, params=None, headers=None, **kw):
+        captured["url"] = url
+        captured["params"] = params
+        return MODERN
+
+    monkeypatch.setattr(y, "_get", fake_get)
+    df = y.yahoo_cfb_player_season_stats(season=2024, return_as_pandas=True)
+    assert captured["url"].endswith("/leagueStatsIndividual")
+    assert captured["params"]["leagues"] == "ncaaf"
+    assert captured["params"]["season"] == 2024
+    assert "passing_yards" in df.columns
+    assert len(df) == 2
+    # raw passthrough
+    raw = y.yahoo_cfb_player_season_stats(season=2024, return_parsed=False)
+    assert "data" in raw
