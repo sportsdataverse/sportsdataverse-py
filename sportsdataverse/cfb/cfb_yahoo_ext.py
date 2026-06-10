@@ -14,13 +14,16 @@ Mirrors the sibling ``cfb_fox_ext.py`` contract (``return_parsed`` /
 from __future__ import annotations
 
 import re
-from typing import Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Union
 
 import polars as pl
 
+if TYPE_CHECKING:
+    import pandas as pd
+
 from sportsdataverse._codegen_runtime import _get
 
-__all__ = [  # noqa: F822 — public functions added incrementally across tasks
+__all__ = [
     "yahoo_cfb_player_season_stats",
     "yahoo_cfb_team_season_stats",
     "yahoo_cfb_player_season_stats_legacy",
@@ -115,7 +118,7 @@ def yahoo_cfb_player_season_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
     """Yahoo CFB player season stats (modern; one wide row per player).
 
     Endpoint: ``GET .../shangrila/leagueStatsIndividual?leagues=ncaaf&season=...``
@@ -152,7 +155,7 @@ def yahoo_cfb_team_season_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
     """Yahoo CFB team season stats (modern; one wide row per team).
 
     Endpoint: ``GET .../shangrila/leagueStatsByTeam?leagues=ncaaf&season=...``
@@ -188,7 +191,7 @@ def yahoo_cfb_player_season_stats_legacy(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
     """Yahoo CFB legacy per-category player leaders (one wide row per player).
 
     Endpoint: ``GET .../shangrila/seasonStatsFootball{Category}Ncaaf``
@@ -231,7 +234,7 @@ def yahoo_cfb_team_season_stats_legacy(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
     """Yahoo CFB legacy per-category team stats (one wide row per team).
 
     Endpoint: ``GET .../shangrila/seasonTeamStatsFootball{Category}``
@@ -280,8 +283,11 @@ def yahoo_cfb_scoreboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
     """Yahoo CFB scoreboard (one row per game).
+
+    ``season`` is required — there is no meaningful default for a weekly
+    scoreboard and the API has no concept of "current season".
 
     Endpoint: ``GET .../editorial/s/scoreboard?leagues=ncaaf&week=...&season=...``
     The full payload also carries teams/leagues/odds maps (use ``return_parsed=False``).
@@ -309,7 +315,7 @@ def yahoo_cfb_boxscore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
     """Yahoo CFB boxscore (SCAFFOLD).
 
     Endpoint: ``GET .../editorial/s/boxscore/{game_id}?v=4``

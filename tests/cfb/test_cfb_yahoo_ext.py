@@ -1,3 +1,8 @@
+import os
+
+import polars as pl
+import pytest
+
 from sportsdataverse.cfb import cfb_yahoo_ext as y
 
 MODERN = {
@@ -44,6 +49,8 @@ def test_flatten_modern_pivots_wide():
     assert r0["passing_touchdowns"] == "40"
     # missing stat is absent (or None) on row 2, but pivot keys exist on row 1
     assert "passing_yards" in rows[1]
+    # polars path
+    assert isinstance(y._frame([{"a": 1}], False), pl.DataFrame)
 
 
 def test_player_season_stats_uses_modern_query(monkeypatch):
@@ -99,13 +106,24 @@ def test_team_and_legacy(monkeypatch):
         season=2024, category="Rushing", sort_stat="RUSHING_YARDS", return_as_pandas=True
     )
     assert pdf.iloc[0]["rushing_yards"] == "1500"
+    assert pdf.iloc[0]["season"] == 2024
+    assert pdf.iloc[0]["category"] == "Rushing"
 
 
 def test_legacy_rejects_bad_category():
-    import pytest
-
     with pytest.raises(ValueError):
         y.yahoo_cfb_player_season_stats_legacy(season=2024, category="Bogus", sort_stat="X")
+
+
+def test_team_legacy_and_extended_category(monkeypatch):
+    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: LEGACY)
+    df = y.yahoo_cfb_team_season_stats_legacy(
+        season=2024, category="Offense", sort_stat="GAMES_OFFENSE", return_as_pandas=True
+    )
+    assert df.iloc[0]["category"] == "Offense"
+    assert df.iloc[0]["season"] == 2024
+    with pytest.raises(ValueError):
+        y.yahoo_cfb_team_season_stats_legacy(season=2024, category="Bogus", sort_stat="X")
 
 
 SCOREBOARD = {
@@ -138,11 +156,6 @@ def test_boxscore_scaffold_returns_raw(monkeypatch):
     monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: {"service": {"boxscore": {}}})
     out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
     assert "service" in out  # scaffold passes raw through for now
-
-
-import os
-
-import pytest
 
 
 @pytest.mark.skipif(
