@@ -138,3 +138,20 @@ def test_boxscore_scaffold_returns_raw(monkeypatch):
     monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: {"service": {"boxscore": {}}})
     out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
     assert "service" in out  # scaffold passes raw through for now
+
+
+import os
+
+import pytest
+
+
+@pytest.mark.skipif(
+    os.environ.get("YAHOO_TESTS") != "1",
+    reason="set YAHOO_TESTS=1 to run live Yahoo API tests",
+)
+def test_live_player_season_stats():
+    df = y.yahoo_cfb_player_season_stats(season=2024, return_as_pandas=True)
+    # subset-direction: Yahoo may add columns over time
+    for col in ("player_id", "display_name", "team", "passing_yards", "season"):
+        assert col in df.columns
+    assert len(df) > 0
