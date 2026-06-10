@@ -106,3 +106,35 @@ def test_legacy_rejects_bad_category():
 
     with pytest.raises(ValueError):
         y.yahoo_cfb_player_season_stats_legacy(season=2024, category="Bogus", sort_stat="X")
+
+
+SCOREBOARD = {
+    "service": {
+        "scoreboard": {
+            "games": {
+                "ncaaf.g.1": {
+                    "gameid": "ncaaf.g.1",
+                    "home_team_id": "ncaaf.t.1",
+                    "away_team_id": "ncaaf.t.2",
+                    "total_home_points": "21",
+                    "total_away_points": "17",
+                    "week_number": "1",
+                }
+            }
+        }
+    }
+}
+
+
+def test_scoreboard_flattens_games_map(monkeypatch):
+    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: SCOREBOARD)
+    df = y.yahoo_cfb_scoreboard(season=2024, week=1, return_as_pandas=True)
+    assert len(df) == 1
+    assert df.iloc[0]["gameid"] == "ncaaf.g.1"
+    assert df.iloc[0]["week"] == 1  # self-describing
+
+
+def test_boxscore_scaffold_returns_raw(monkeypatch):
+    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: {"service": {"boxscore": {}}})
+    out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
+    assert "service" in out  # scaffold passes raw through for now

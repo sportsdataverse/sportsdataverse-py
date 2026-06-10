@@ -14,7 +14,7 @@ Mirrors the sibling ``cfb_fox_ext.py`` contract (``return_parsed`` /
 from __future__ import annotations
 
 import re
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import polars as pl
 
@@ -262,3 +262,68 @@ def yahoo_cfb_team_season_stats_legacy(
         r["season"] = season
         r["category"] = category
     return _frame(rows, return_as_pandas)
+
+
+def _flatten_editorial_map(payload: Dict, *keys: str) -> List[Dict]:
+    """service.<keys...> dynamic-id map -> list of its values (rows)."""
+    node = payload.get("service", {})
+    for k in keys:
+        node = node.get(k, {})
+    return list((node or {}).values())
+
+
+def yahoo_cfb_scoreboard(
+    season: int,
+    week: int = 1,
+    *,
+    count: int = 500,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Yahoo CFB scoreboard (one row per game).
+
+    Endpoint: ``GET .../editorial/s/scoreboard?leagues=ncaaf&week=...&season=...``
+    The full payload also carries teams/leagues/odds maps (use ``return_parsed=False``).
+
+    Example:
+        >>> yahoo_cfb_scoreboard(season=2024, week=1)
+    """
+    raw = _editorial_get(
+        "scoreboard",
+        {"leagues": "ncaaf", "week": week, "season": season, "count": count, "v": 2},
+        **kwargs,
+    )
+    if not return_parsed:
+        return raw
+    rows = _flatten_editorial_map(raw, "scoreboard", "games")
+    for r in rows:
+        r["season"] = season
+        r["week"] = week
+    return _frame(rows, return_as_pandas)
+
+
+def yahoo_cfb_boxscore(
+    game_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """Yahoo CFB boxscore (SCAFFOLD).
+
+    Endpoint: ``GET .../editorial/s/boxscore/{game_id}?v=4``
+
+    The editorial boxscore uses a normalized decoder-dictionary schema
+    (``player_stats[playerId][variation][stat_type]=value`` joined against
+    ``stat_types``/``stat_categories``). Full decoding is a follow-up; for now
+    this returns the raw JSON ``Dict`` so callers can access it.
+
+    TODO: implement the player_stats/team_stats decode + gameplay_by_play flatten.
+
+    Example:
+        >>> yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
+    """
+    raw = _editorial_get(f"boxscore/{game_id}", {"v": 4}, **kwargs)
+    # TODO(scaffold): decode service.boxscore.player_stats via stat_types.
+    return raw
