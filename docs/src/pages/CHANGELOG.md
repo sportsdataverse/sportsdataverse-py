@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
+  - [CFB — Fox Sports Bifrost wrappers](#cfb--fox-sports-bifrost-wrappers)
 - [0.0.56 Release: June 9, 2026](#0056-release-june-9-2026)
   - [HockeyTech — live multi-league scraper (PWHL + AHL/OHL/WHL/QMJHL) + on-ice/Corsi/TOI analytics](#hockeytech--live-multi-league-scraper-pwhl--ahlohlwhlqmjhl--on-icecorsitoi-analytics)
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
@@ -85,6 +87,23 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.57 Release: June 10, 2026
+
+### CFB — Fox Sports Bifrost wrappers
+
+Read-only Fox Sports "Bifrost" college-football wrappers (`fox_cfb_*`) over `api.foxsports.com/bifrost/v1/cfb/*`, a complement to the `espn_cfb_*` family in the `cfb` module. Eight functions flatten Fox's layout-oriented JSON (sections → tables → rows → cells) into tidy polars/pandas frames using the standard `return_parsed` / `return_as_pandas` contract:
+
+- `fox_cfb_pbp()` — play-by-play (quarters → drives → plays), one row per play.
+- `fox_cfb_boxscore()` — per-team player stat tables, tidy long.
+- `fox_cfb_odds()` — matchup six-pack (spread / to-win / total) per team.
+- `fox_cfb_team_roster()` — roster by position group.
+- `fox_cfb_team_stats()` — team stat leaders by category.
+- `fox_cfb_team_gamelog()` — per-game team stats, tidy long (game × category × stat).
+- `fox_cfb_standings()` — a team's conference standings table.
+- `fox_cfb_league_leaders()` — statistical leaderboards by category (`stats-con`).
+
+Live-tested (gated behind `SDV_PY_LIVE_TESTS=1`). Reverse-engineering notes + an OpenAPI 3.1 spec live in the `sdv-internal-refs` repo. Parallels the new cfbfastR `fox_cfb_*` family.
 
 ## 0.0.56 Release: June 9, 2026
 

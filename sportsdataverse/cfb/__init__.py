@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from sportsdataverse.cfb.cfb_espn_ext import *
+from sportsdataverse.cfb.cfb_fox_ext import *
 from sportsdataverse.cfb.cfb_game_rosters import *
 from sportsdataverse.cfb.cfb_loaders import *
 from sportsdataverse.cfb.cfb_loaders_extra import *
