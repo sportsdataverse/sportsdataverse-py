@@ -416,6 +416,104 @@ teams = espn_nba_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
+### `fox_nba_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_boxscore}
+
+NBA boxscore (long: one row per player-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_nba_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_league_leaders}
+
+NBA statistical leaders (`stats-con`); who=player|team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `category` | `str` | `'scoring'` |  |
+| `who` | `str` | `'player'` |  |
+| `page` | `int` | `0` |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_nba_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_odds}
+
+NBA game odds six-pack (spread / to-win / total per team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_nba_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_pbp}
+
+NBA play-by-play (one row per play; period-based).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_nba_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_standings}
+
+NBA standings for a team's conference/division.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_nba_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_team_gamelog}
+
+NBA team game log (long: one row per game-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_nba_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_team_roster}
+
+NBA team roster (one row per player).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_nba_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_nba_team_stats}
+
+NBA team stat leaders by category.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
 ### `nba_pbp_disk(game_id, path_to_json)` {#nba_pbp_disk}
 
 Load a previously cached ESPN NBA summary JSON for a game from disk.

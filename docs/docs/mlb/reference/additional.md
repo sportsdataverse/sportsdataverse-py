@@ -1198,3 +1198,77 @@ espn_mlb_teams.cache_clear()
 teams_pd = espn_mlb_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```
+
+### `fox_mlb_league_leaders(category: 'str' = 'batting', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mlb_league_leaders}
+
+MLB statistical leaders (`stats-con`); who=player|team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `category` | `str` | `'batting'` |  |
+| `who` | `str` | `'player'` |  |
+| `page` | `int` | `0` |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mlb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mlb_odds}
+
+MLB game odds six-pack (run line / to-win / total per team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mlb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mlb_standings}
+
+MLB standings for a team's division/league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mlb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mlb_team_gamelog}
+
+MLB team game log (long: one row per game-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mlb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mlb_team_roster}
+
+MLB team roster (one row per player).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mlb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mlb_team_stats}
+
+MLB team stat leaders by category.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |

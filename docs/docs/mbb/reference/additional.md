@@ -520,6 +520,104 @@ d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
+### `fox_mbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_boxscore}
+
+MBB boxscore (long: one row per player-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_league_leaders}
+
+MBB statistical leaders (`stats-con`); who=player|team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `category` | `str` | `'scoring'` |  |
+| `who` | `str` | `'player'` |  |
+| `page` | `int` | `0` |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mbb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_odds}
+
+MBB game odds six-pack (spread / to-win / total per team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mbb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_pbp}
+
+MBB play-by-play (one row per play; period-based).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_standings}
+
+MBB standings for a team's conference/division.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mbb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_team_gamelog}
+
+MBB team game log (long: one row per game-stat).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_team_roster}
+
+MBB team roster (one row per player).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `fox_mbb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_team_stats}
+
+MBB team stat leaders by category.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Union[int, str]` |  |  |
+| `return_parsed` | `bool` | `True` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
 ### `mbb_pbp_disk(game_id, path_to_json)` {#mbb_pbp_disk}
 
 _No description available._

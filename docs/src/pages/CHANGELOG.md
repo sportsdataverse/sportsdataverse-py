@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
-  - [CFB — Fox Sports Bifrost wrappers](#cfb--fox-sports-bifrost-wrappers)
+  - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
 - [0.0.56 Release: June 9, 2026](#0056-release-june-9-2026)
   - [HockeyTech — live multi-league scraper (PWHL + AHL/OHL/WHL/QMJHL) + on-ice/Corsi/TOI analytics](#hockeytech--live-multi-league-scraper-pwhl--ahlohlwhlqmjhl--on-icecorsitoi-analytics)
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
@@ -90,20 +90,17 @@
 
 ## 0.0.57 Release: June 10, 2026
 
-### CFB — Fox Sports Bifrost wrappers
+### Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)
 
-Read-only Fox Sports "Bifrost" college-football wrappers (`fox_cfb_*`) over `api.foxsports.com/bifrost/v1/cfb/*`, a complement to the `espn_cfb_*` family in the `cfb` module. Eight functions flatten Fox's layout-oriented JSON (sections → tables → rows → cells) into tidy polars/pandas frames using the standard `return_parsed` / `return_as_pandas` contract:
+Read-only Fox Sports "Bifrost" wrappers (`fox_<sport>_*`) over `api.foxsports.com/bifrost/v1/<sport>/*`, complementing the `espn_<sport>_*` families. The Bifrost API is a layout API (sections → tables → rows → cells) that is uniform across sports; a shared parsing layer (`sportsdataverse/_fox_layout.py`) backs every league module. Same `return_parsed` / `return_as_pandas` contract (polars by default).
 
-- `fox_cfb_pbp()` — play-by-play (quarters → drives → plays), one row per play.
-- `fox_cfb_boxscore()` — per-team player stat tables, tidy long.
-- `fox_cfb_odds()` — matchup six-pack (spread / to-win / total) per team.
-- `fox_cfb_team_roster()` — roster by position group.
-- `fox_cfb_team_stats()` — team stat leaders by category.
-- `fox_cfb_team_gamelog()` — per-game team stats, tidy long (game × category × stat).
-- `fox_cfb_standings()` — a team's conference standings table.
-- `fox_cfb_league_leaders()` — statistical leaderboards by category (`stats-con`).
+**CFB** (`cfb` module): `fox_cfb_pbp` (quarters → drives → plays), `fox_cfb_boxscore`, `fox_cfb_odds`, `fox_cfb_team_roster`, `fox_cfb_team_stats`, `fox_cfb_team_gamelog`, `fox_cfb_standings`, `fox_cfb_league_leaders`.
 
-Live-tested (gated behind `SDV_PY_LIVE_TESTS=1`). Reverse-engineering notes + an OpenAPI 3.1 spec live in the `sdv-internal-refs` repo. Parallels the new cfbfastR `fox_cfb_*` family.
+**NBA / MBB / NHL** (`nba` / `mbb` / `nhl` modules): the same eight wrappers per sport (`fox_<sport>_pbp`, `_boxscore`, `_odds`, `_team_roster`, `_team_stats`, `_team_gamelog`, `_standings`, `_league_leaders`). Play-by-play is period-based (QUARTER / HALF / PERIOD → plays); boxscore is tidy long per player-stat.
+
+**MLB** (`mlb` module): `fox_mlb_team_roster`, `fox_mlb_team_stats`, `fox_mlb_team_gamelog`, `fox_mlb_standings`, `fox_mlb_league_leaders`, `fox_mlb_odds`. Fox does not expose MLB play-by-play or boxscore via `event/{id}/data`, so those two are intentionally omitted.
+
+Live-tested (gated behind `SDV_PY_LIVE_TESTS=1`). Reverse-engineering notes + an OpenAPI 3.1 spec live in the `sdv-internal-refs` repo. Parallels the cfbfastR / hoopR / fastRhockey / baseballr `fox_*` families.
 
 ## 0.0.56 Release: June 9, 2026
 
