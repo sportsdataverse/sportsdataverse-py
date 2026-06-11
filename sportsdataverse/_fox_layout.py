@@ -16,27 +16,51 @@ repo.
 
 from __future__ import annotations
 
+import os
 import re
-from typing import Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 import polars as pl
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 from sportsdataverse._codegen_runtime import _get
 
 API = "https://api.foxsports.com/bifrost/v1"
-DATA_KEY = "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq"
+# Public data-tier key shipped in the foxsports.com web bundle. Overridable via
+# the SDV_PY_FOX_DATA_KEY env var so a key rotation does not require a release.
+DATA_KEY = os.getenv("SDV_PY_FOX_DATA_KEY", "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq")
 _HEADERS = {"Origin": "https://www.foxsports.com", "Referer": "https://www.foxsports.com/"}
 
 
-def fox_get(path: str, params: Optional[dict] = None, **kwargs) -> Dict:
-    """GET a Bifrost path with the public data-tier key + api-version."""
+def fox_get(path: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
+    """GET a Bifrost path with the public data-tier key + api-version.
+
+    Args:
+        path: Bifrost path under ``/bifrost/v1`` (e.g. ``"cbk/team/11/roster"``).
+        params: Extra query params merged on top of ``apikey`` / ``api-version``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        The parsed JSON response body as a ``dict``.
+    """
     merged = {"apikey": DATA_KEY, "api-version": "1.1"}
     if params:
         merged.update(params)
     return _get(f"{API}/{path}", params=merged, headers=_HEADERS, **kwargs)
 
 
-def frame(rows: List[Dict], return_as_pandas: bool):
+def frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Materialize parsed rows as a polars (default) or pandas DataFrame.
+
+    Args:
+        rows: Flattened row dicts produced by a ``parse_*`` function.
+        return_as_pandas: If ``True`` return a pandas DataFrame; else polars.
+
+    Returns:
+        A ``polars.DataFrame`` (default) or ``pandas.DataFrame``.
+    """
     if return_as_pandas:
         import pandas as pd
 
@@ -79,6 +103,7 @@ def _table_rows(tbl: Optional[dict], extra: Optional[dict] = None) -> List[Dict]
 
 # ---- entity/league parsers (generic across sports) ------------------------
 def parse_roster(raw: Dict, team_id) -> List[Dict]:
+    """team/{id}/roster groups -> one row per player (athletes only)."""
     rows: List[Dict] = []
     for g in raw.get("groups", []) or []:
         headers = _cells((g.get("headers") or [{}])[0].get("columns"))
@@ -98,6 +123,7 @@ def parse_roster(raw: Dict, team_id) -> List[Dict]:
 
 
 def parse_team_stats(raw: Dict, team_id) -> List[Dict]:
+    """team/{id}/stats leadersSections -> one row per category stat leader."""
     rows: List[Dict] = []
     for sec in raw.get("leadersSections", []) or []:
         for ld in sec.get("leaders", []) or []:
@@ -162,6 +188,7 @@ def parse_standings(raw: Dict, team_id=None) -> List[Dict]:
 
 
 def parse_league_leaders(raw: Dict) -> List[Dict]:
+    """league/stats-con sectionList tables -> one row per ranked entity."""
     rows: List[Dict] = []
     for sec in raw.get("sectionList", []) or []:
         rows += _table_rows(sec.get("table"))
@@ -169,6 +196,7 @@ def parse_league_leaders(raw: Dict) -> List[Dict]:
 
 
 def parse_odds(raw: Dict, game_id) -> List[Dict]:
+    """event/{id}/odds sixPack -> one row per team (spread/to-win/total)."""
     rows: List[Dict] = []
     odds = (raw.get("sixPack") or {}).get("odds")
     if odds:

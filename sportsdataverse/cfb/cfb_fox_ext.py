@@ -13,10 +13,14 @@ is added to ``tools/codegen``, this module can be regenerated.
 
 from __future__ import annotations
 
+import os
 import re
-from typing import Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Union, overload
 
 import polars as pl
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 from sportsdataverse._codegen_runtime import _get
 
@@ -32,19 +36,21 @@ __all__ = [
 ]
 
 FOX_BASE = "https://api.foxsports.com/bifrost/v1"
-FOX_DATA_KEY = "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq"
+# Public data-tier key shipped in the foxsports.com web bundle. Overridable via
+# the SDV_PY_FOX_DATA_KEY env var so a key rotation does not require a release.
+FOX_DATA_KEY = os.getenv("SDV_PY_FOX_DATA_KEY", "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq")
 
 _HEADERS = {"Origin": "https://www.foxsports.com", "Referer": "https://www.foxsports.com/"}
 
 
-def _fox_get(path: str, params: Optional[dict] = None, **kwargs) -> Dict:
+def _fox_get(path: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     merged = {"apikey": FOX_DATA_KEY, "api-version": "1.1"}
     if params:
         merged.update(params)
     return _get(f"{FOX_BASE}/{path}", params=merged, headers=_HEADERS, **kwargs)
 
 
-def _clean(name) -> str:
+def _clean(name: Any) -> str:
     return re.sub(r"\W+", "_", str(name)).strip("_").lower() or "v"
 
 
@@ -77,7 +83,7 @@ def _uri_id(uri: Optional[str]) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def _frame(rows: List[Dict], return_as_pandas: bool):
+def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
     if return_as_pandas:
         import pandas as pd
 
@@ -85,25 +91,51 @@ def _frame(rows: List[Dict], return_as_pandas: bool):
     return pl.DataFrame(rows)
 
 
+@overload
+def fox_cfb_pbp(
+    game_id: Union[int, str], *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_pbp(
+    game_id: Union[int, str], *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_pbp(
+    game_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_pbp(
     game_id: Union[int, str],
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB play-by-play (one row per play).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data``
 
     Args:
         game_id: Fox Bifrost event id (e.g. ``"41616"``) -- not the ESPN id.
-        return_parsed: flatten the pbp layout to a DataFrame (default True);
-            ``False`` returns the raw JSON ``Dict``.
-        return_as_pandas: return pandas instead of polars.
+        return_parsed: If ``True`` (default) flatten the pbp layout to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
 
     Example:
-        >>> fox_cfb_pbp("41616")
+        Fetch a game's plays as a polars frame::
+
+            from sportsdataverse.cfb import fox_cfb_pbp
+            df = fox_cfb_pbp("41616")
     """
     raw = _fox_get(f"cfb/event/{game_id}/data", **kwargs)
     if not return_parsed:
@@ -132,13 +164,29 @@ def fox_cfb_pbp(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def fox_cfb_team_roster(
+    team_id: Union[int, str], *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_team_roster(
+    team_id: Union[int, str], *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_team_roster(
+    team_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_team_roster(
     team_id: Union[int, str],
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB team roster (one row per player).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/roster``
@@ -146,11 +194,22 @@ def fox_cfb_team_roster(
     Args:
         team_id: Fox Bifrost team id (e.g. ``"11"`` = Miami (FL)); discover via
             the league team directory (``cfb/league/teamnav``).
-        return_parsed: flatten the position-group tables (default True).
-        return_as_pandas: return pandas instead of polars.
+        return_parsed: If ``True`` (default) flatten the position-group tables to
+            a DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
 
     Example:
-        >>> fox_cfb_team_roster("11")
+        Fetch a team's roster::
+
+            from sportsdataverse.cfb import fox_cfb_team_roster
+            df = fox_cfb_team_roster("11")
     """
     raw = _fox_get(f"cfb/team/{team_id}/roster", **kwargs)
     if not return_parsed:
@@ -173,13 +232,29 @@ def fox_cfb_team_roster(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def fox_cfb_boxscore(
+    game_id: Union[int, str], *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_boxscore(
+    game_id: Union[int, str], *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_boxscore(
+    game_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_boxscore(
     game_id: Union[int, str],
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB boxscore (long: one row per player-stat).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data``
@@ -187,11 +262,22 @@ def fox_cfb_boxscore(
 
     Args:
         game_id: Fox Bifrost event id (e.g. ``"41616"``).
-        return_parsed: flatten the per-team stat tables to long form (default True).
-        return_as_pandas: return pandas instead of polars.
+        return_parsed: If ``True`` (default) flatten the per-team stat tables to
+            long form; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
 
     Example:
-        >>> fox_cfb_boxscore("41616")
+        Fetch a game's boxscore in long form::
+
+            from sportsdataverse.cfb import fox_cfb_boxscore
+            df = fox_cfb_boxscore("41616")
     """
     raw = _fox_get(f"cfb/event/{game_id}/data", **kwargs)
     if not return_parsed:
@@ -225,21 +311,53 @@ def fox_cfb_boxscore(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def fox_cfb_standings(
+    team_id: Union[int, str], *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_standings(
+    team_id: Union[int, str], *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_standings(
+    team_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_standings(
     team_id: Union[int, str],
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB conference standings for a team's conference.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/standings``
     (the league-wide ``league/standings`` endpoint returns header-only tables, so
     standings are keyed by team).
 
+    Args:
+        team_id: Fox Bifrost team id (e.g. ``"11"`` = Miami (FL)).
+        return_parsed: If ``True`` (default) flatten the standings tables to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
     Example:
-        >>> fox_cfb_standings("11")
+        Fetch a team's conference standings::
+
+            from sportsdataverse.cfb import fox_cfb_standings
+            df = fox_cfb_standings("11")
     """
     raw = _fox_get(f"cfb/team/{team_id}/standings", **kwargs)
     if not return_parsed:
@@ -251,19 +369,51 @@ def fox_cfb_standings(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def fox_cfb_team_stats(
+    team_id: Union[int, str], *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_team_stats(
+    team_id: Union[int, str], *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_team_stats(
+    team_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_team_stats(
     team_id: Union[int, str],
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB team stat leaders (one row per category leader).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/stats``
 
+    Args:
+        team_id: Fox Bifrost team id (e.g. ``"11"`` = Miami (FL)).
+        return_parsed: If ``True`` (default) flatten the leader sections to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
     Example:
-        >>> fox_cfb_team_stats("11")
+        Fetch a team's stat leaders::
+
+            from sportsdataverse.cfb import fox_cfb_team_stats
+            df = fox_cfb_team_stats("11")
     """
     raw = _fox_get(f"cfb/team/{team_id}/stats", **kwargs)
     if not return_parsed:
@@ -284,13 +434,29 @@ def fox_cfb_team_stats(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def fox_cfb_team_gamelog(
+    team_id: Union[int, str], *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_team_gamelog(
+    team_id: Union[int, str], *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_team_gamelog(
+    team_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_team_gamelog(
     team_id: Union[int, str],
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB team game log -- tidy long: one row per (game, stat).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/gamelog``
@@ -298,8 +464,24 @@ def fox_cfb_team_gamelog(
     defense, ...) and season-type split; this flattens to columns
     ``team_id, season_type, category, game_id, game_date, opponent, stat, value``.
 
+    Args:
+        team_id: Fox Bifrost team id (e.g. ``"11"`` = Miami (FL)).
+        return_parsed: If ``True`` (default) flatten to long form; if ``False``
+            return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
     Example:
-        >>> fox_cfb_team_gamelog("11")
+        Fetch a team's per-game stat log::
+
+            from sportsdataverse.cfb import fox_cfb_team_gamelog
+            df = fox_cfb_team_gamelog("11")
     """
     raw = _fox_get(f"cfb/team/{team_id}/gamelog", **kwargs)
     if not return_parsed:
@@ -337,6 +519,39 @@ def fox_cfb_team_gamelog(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def fox_cfb_league_leaders(
+    category: str = ...,
+    who: str = ...,
+    page: int = ...,
+    group_id: Union[int, str] = ...,
+    *,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_league_leaders(
+    category: str = ...,
+    who: str = ...,
+    page: int = ...,
+    group_id: Union[int, str] = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_league_leaders(
+    category: str = ...,
+    who: str = ...,
+    page: int = ...,
+    group_id: Union[int, str] = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_league_leaders(
     category: str = "passing",
     who: str = "player",
@@ -345,19 +560,35 @@ def fox_cfb_league_leaders(
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB statistical leaders (one row per player/team).
 
     Endpoint: ``GET .../bifrost/v1/cfb/league/stats-con/{who}/{category}/{page}``
 
     Args:
-        category: passing, rushing, receiving, defense, kicking, returning,
-            scoring, yardage (team adds downs, turnovers).
-        who: "player" or "team". page: 0-based. group_id: conference/group filter.
+        category: Stat category -- passing, rushing, receiving, defense, kicking,
+            returning, scoring, yardage (team adds downs, turnovers). Defaults to
+            ``"passing"``.
+        who: ``"player"`` or ``"team"``. Defaults to ``"player"``.
+        page: 0-based result page. Defaults to ``0``.
+        group_id: Conference/group filter. Defaults to ``"2"``.
+        return_parsed: If ``True`` (default) flatten the leader tables to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
 
     Example:
-        >>> fox_cfb_league_leaders("passing")
+        Fetch the passing leaders::
+
+            from sportsdataverse.cfb import fox_cfb_league_leaders
+            df = fox_cfb_league_leaders("passing")
     """
     raw = _fox_get(
         f"cfb/league/stats-con/{who}/{category}/{page}",
@@ -372,21 +603,51 @@ def fox_cfb_league_leaders(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def fox_cfb_odds(
+    game_id: Union[int, str], *, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_odds(
+    game_id: Union[int, str], *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_odds(
+    game_id: Union[int, str],
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def fox_cfb_odds(
     game_id: Union[int, str],
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Dict:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Fox Sports CFB game odds six-pack (spread / to win / total per team).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/odds``
 
-    Returns an empty frame when no market is posted.
+    Args:
+        game_id: Fox Bifrost event id (e.g. ``"41616"``).
+        return_parsed: If ``True`` (default) flatten the six-pack market to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default; empty when no market is posted), a pandas
+        DataFrame when ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``.
 
     Example:
-        >>> fox_cfb_odds("41616")
+        Fetch a game's odds six-pack::
+
+            from sportsdataverse.cfb import fox_cfb_odds
+            df = fox_cfb_odds("41616")
     """
     raw = _fox_get(f"cfb/event/{game_id}/odds", **kwargs)
     if not return_parsed:

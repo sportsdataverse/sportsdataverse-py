@@ -520,7 +520,7 @@ d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
-### `fox_mbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_boxscore}
+### `fox_mbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_boxscore}
 
 MBB boxscore (long: one row per player-stat).
 
@@ -528,11 +528,22 @@ MBB boxscore (long: one row per player-stat).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the per-team stat tables to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
-### `fox_mbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_league_leaders}
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_boxscore
+df = fox_mbb_boxscore("...")
+```
+
+### `fox_mbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_league_leaders}
 
 MBB statistical leaders (`stats-con`); who=player|team.
 
@@ -540,13 +551,24 @@ MBB statistical leaders (`stats-con`); who=player|team.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `category` | `str` | `'scoring'` |  |
-| `who` | `str` | `'player'` |  |
-| `page` | `int` | `0` |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `category` | `str` | `'scoring'` | Stat category. Defaults to `"scoring"`. |
+| `who` | `str` | `'player'` | `"player"` or `"team"`. Defaults to `"player"`. |
+| `page` | `int` | `0` | 0-based result page. Defaults to `0`. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
-### `fox_mbb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_odds}
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_league_leaders
+df = fox_mbb_league_leaders("scoring")
+```
+
+### `fox_mbb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_odds}
 
 MBB game odds six-pack (spread / to-win / total per team).
 
@@ -554,11 +576,22 @@ MBB game odds six-pack (spread / to-win / total per team).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the six-pack market to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
-### `fox_mbb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_pbp}
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_odds
+df = fox_mbb_odds("...")
+```
+
+### `fox_mbb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_pbp}
 
 MBB play-by-play (one row per play; period-based).
 
@@ -566,11 +599,22 @@ MBB play-by-play (one row per play; period-based).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the pbp layout to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
-### `fox_mbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_standings}
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_pbp
+df = fox_mbb_pbp("...")
+```
+
+### `fox_mbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_standings}
 
 MBB standings for a team's conference/division.
 
@@ -578,11 +622,22 @@ MBB standings for a team's conference/division.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the standings tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
-### `fox_mbb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_team_gamelog}
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_standings
+df = fox_mbb_standings("...")
+```
+
+### `fox_mbb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_team_gamelog}
 
 MBB team game log (long: one row per game-stat).
 
@@ -590,11 +645,22 @@ MBB team game log (long: one row per game-stat).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
-### `fox_mbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_team_roster}
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_team_gamelog
+df = fox_mbb_team_gamelog("...")
+```
+
+### `fox_mbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_team_roster}
 
 MBB team roster (one row per player).
 
@@ -602,11 +668,22 @@ MBB team roster (one row per player).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the position-group tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
-### `fox_mbb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_mbb_team_stats}
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_team_roster
+df = fox_mbb_team_roster("...")
+```
+
+### `fox_mbb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_team_stats}
 
 MBB team stat leaders by category.
 
@@ -614,9 +691,20 @@ MBB team stat leaders by category.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader sections to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import fox_mbb_team_stats
+df = fox_mbb_team_stats("...")
+```
 
 ### `mbb_pbp_disk(game_id, path_to_json)` {#mbb_pbp_disk}
 

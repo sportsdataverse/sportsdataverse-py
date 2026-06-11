@@ -871,7 +871,7 @@ teams = espn_cfb_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
-### `fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_boxscore}
+### `fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_boxscore}
 
 Fox Sports CFB boxscore (long: one row per player-stat).
 
@@ -883,16 +883,21 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `Union[int, str]` |  | Fox Bifrost event id (e.g. `"41616"`). |
-| `return_parsed` | `bool` | `True` | flatten the per-team stat tables to long form (default True). |
-| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the per-team stat tables to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_boxscore("41616")
+from sportsdataverse.cfb import fox_cfb_boxscore
+df = fox_cfb_boxscore("41616")
 ```
 
-### `fox_cfb_league_leaders(category: 'str' = 'passing', who: 'str' = 'player', page: 'int' = 0, group_id: 'Union[int, str]' = '2', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_league_leaders}
+### `fox_cfb_league_leaders(category: 'str' = 'passing', who: 'str' = 'player', page: 'int' = 0, group_id: 'Union[int, str]' = '2', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_league_leaders}
 
 Fox Sports CFB statistical leaders (one row per player/team).
 
@@ -902,42 +907,50 @@ Endpoint: `GET .../bifrost/v1/cfb/league/stats-con/{who}/{category}/{page}`
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `category` | `str` | `'passing'` | passing, rushing, receiving, defense, kicking, returning, scoring, yardage (team adds downs, turnovers). |
-| `who` | `str` | `'player'` | "player" or "team". page: 0-based. group_id: conference/group filter. |
-| `page` | `int` | `0` |  |
-| `group_id` | `Union[int, str]` | `'2'` |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `category` | `str` | `'passing'` | Stat category -- passing, rushing, receiving, defense, kicking, returning, scoring, yardage (team adds downs, turnovers). Defaults to `"passing"`. |
+| `who` | `str` | `'player'` | `"player"` or `"team"`. Defaults to `"player"`. |
+| `page` | `int` | `0` | 0-based result page. Defaults to `0`. |
+| `group_id` | `Union[int, str]` | `'2'` | Conference/group filter. Defaults to `"2"`. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_league_leaders("passing")
+from sportsdataverse.cfb import fox_cfb_league_leaders
+df = fox_cfb_league_leaders("passing")
 ```
 
-### `fox_cfb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_odds}
+### `fox_cfb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_odds}
 
 Fox Sports CFB game odds six-pack (spread / to win / total per team).
 
 Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/odds`
 
-Returns an empty frame when no market is posted.
-
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `Union[int, str]` |  | Fox Bifrost event id (e.g. `"41616"`). |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the six-pack market to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default; empty when no market is posted), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_odds("41616")
+from sportsdataverse.cfb import fox_cfb_odds
+df = fox_cfb_odds("41616")
 ```
 
-### `fox_cfb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_pbp}
+### `fox_cfb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_pbp}
 
 Fox Sports CFB play-by-play (one row per play).
 
@@ -948,13 +961,18 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `Union[int, str]` |  | Fox Bifrost event id (e.g. `"41616"`) -- not the ESPN id. |
-| `return_parsed` | `bool` | `True` | flatten the pbp layout to a DataFrame (default True); `False` returns the raw JSON `Dict`. |
-| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the pbp layout to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_pbp("41616")
+from sportsdataverse.cfb import fox_cfb_pbp
+df = fox_cfb_pbp("41616")
 ```
 
 ### `fox_cfb_play_process(event_id, odds_override: 'Optional[Dict[str, Any]]' = None, process: 'bool' = True, raw: 'bool' = False, **kwargs) -> 'Dict[str, Any]'` {#fox_cfb_play_process}
@@ -991,7 +1009,7 @@ game = fox_cfb_play_process(41616)
 print(len(game["plays"]), game["source"])
 ```
 
-### `fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_standings}
+### `fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_standings}
 
 Fox Sports CFB conference standings for a team's conference.
 
@@ -1003,17 +1021,22 @@ standings are keyed by team).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `"11"` = Miami (FL)). |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the standings tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_standings("11")
+from sportsdataverse.cfb import fox_cfb_standings
+df = fox_cfb_standings("11")
 ```
 
-### `fox_cfb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_team_gamelog}
+### `fox_cfb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_team_gamelog}
 
 Fox Sports CFB team game log -- tidy long: one row per (game, stat).
 
@@ -1026,17 +1049,22 @@ defense, ...) and season-type split; this flattens to columns
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `"11"` = Miami (FL)). |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten to long form; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_team_gamelog("11")
+from sportsdataverse.cfb import fox_cfb_team_gamelog
+df = fox_cfb_team_gamelog("11")
 ```
 
-### `fox_cfb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_team_roster}
+### `fox_cfb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_team_roster}
 
 Fox Sports CFB team roster (one row per player).
 
@@ -1047,16 +1075,21 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/roster`
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `"11"` = Miami (FL)); discover via the league team directory (`cfb/league/teamnav`). |
-| `return_parsed` | `bool` | `True` | flatten the position-group tables (default True). |
-| `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the position-group tables to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_team_roster("11")
+from sportsdataverse.cfb import fox_cfb_team_roster
+df = fox_cfb_team_roster("11")
 ```
 
-### `fox_cfb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_team_stats}
+### `fox_cfb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_team_stats}
 
 Fox Sports CFB team stat leaders (one row per category leader).
 
@@ -1066,14 +1099,19 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/stats`
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `Union[int, str]` |  |  |
-| `return_parsed` | `bool` | `True` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `"11"` = Miami (FL)). |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the leader sections to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 **Example**
 
 ```python
->>> fox_cfb_team_stats("11")
+from sportsdataverse.cfb import fox_cfb_team_stats
+df = fox_cfb_team_stats("11")
 ```
 
 ### `fox_to_espn_summary(fox_data: 'Dict[str, Any]') -> 'Dict[str, Any]'` {#fox_to_espn_summary}
