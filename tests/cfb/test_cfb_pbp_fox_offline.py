@@ -6,6 +6,8 @@ asserting the full EPA/WPA/box pipeline completes and the output is
 game-consistent. No network: the Fox fetch is monkeypatched with the fixture.
 """
 
+from __future__ import annotations
+
 import json
 from pathlib import Path
 

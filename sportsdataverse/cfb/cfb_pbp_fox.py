@@ -48,7 +48,7 @@ from typing import Any, Dict, List, Optional
 from sportsdataverse.cfb.cfb_fox_ext import _fox_get
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
-__all__ = ["fox_to_espn_summary", "fox_cfb_play_process"]
+__all__ = ["fox_cfb_play_process", "fox_to_espn_summary"]
 
 # Neutral spread used when the caller supplies no odds. EPA is unaffected; the
 # WP model just sees a pick'em line (gameSpreadAvailable=False).
