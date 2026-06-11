@@ -10,7 +10,7 @@ sidebar_label: NBA
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 81 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 9 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 7 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 15 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

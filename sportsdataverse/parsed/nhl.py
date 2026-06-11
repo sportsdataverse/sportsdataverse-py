@@ -133,6 +133,14 @@ from sportsdataverse.nhl import espn_nhl_tournaments as _raw_espn_nhl_tournament
 from sportsdataverse.nhl import espn_nhl_transactions as _raw_espn_nhl_transactions
 from sportsdataverse.nhl import espn_nhl_venue as _raw_espn_nhl_venue
 from sportsdataverse.nhl import espn_nhl_venues as _raw_espn_nhl_venues
+from sportsdataverse.nhl import fox_nhl_boxscore as _raw_fox_nhl_boxscore
+from sportsdataverse.nhl import fox_nhl_league_leaders as _raw_fox_nhl_league_leaders
+from sportsdataverse.nhl import fox_nhl_odds as _raw_fox_nhl_odds
+from sportsdataverse.nhl import fox_nhl_pbp as _raw_fox_nhl_pbp
+from sportsdataverse.nhl import fox_nhl_standings as _raw_fox_nhl_standings
+from sportsdataverse.nhl import fox_nhl_team_gamelog as _raw_fox_nhl_team_gamelog
+from sportsdataverse.nhl import fox_nhl_team_roster as _raw_fox_nhl_team_roster
+from sportsdataverse.nhl import fox_nhl_team_stats as _raw_fox_nhl_team_stats
 from sportsdataverse.nhl import nhl_boxscore as _raw_nhl_boxscore
 from sportsdataverse.nhl import nhl_club_schedule_month as _raw_nhl_club_schedule_month
 from sportsdataverse.nhl import nhl_club_schedule_season as _raw_nhl_club_schedule_season
@@ -472,6 +480,14 @@ __all__ = [
     "espn_nhl_venue",
     "espn_nhl_venues",
     "flatten_json_iterative",
+    "fox_nhl_boxscore",
+    "fox_nhl_league_leaders",
+    "fox_nhl_odds",
+    "fox_nhl_pbp",
+    "fox_nhl_standings",
+    "fox_nhl_team_gamelog",
+    "fox_nhl_team_roster",
+    "fox_nhl_team_stats",
     "helper_nhl_athlete_items",
     "helper_nhl_game_data",
     "helper_nhl_game_items",
@@ -2220,6 +2236,118 @@ def espn_nhl_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nhl_venues(*args, **kwargs)
+
+
+def fox_nhl_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_boxscore(*args, **kwargs)
+
+
+def fox_nhl_league_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_league_leaders``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_league_leaders` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_league_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_league_leaders(*args, **kwargs)
+
+
+def fox_nhl_odds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_odds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_odds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_odds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_odds(*args, **kwargs)
+
+
+def fox_nhl_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_pbp(*args, **kwargs)
+
+
+def fox_nhl_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_standings(*args, **kwargs)
+
+
+def fox_nhl_team_gamelog(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_team_gamelog``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_team_gamelog` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_team_gamelog` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_team_gamelog(*args, **kwargs)
+
+
+def fox_nhl_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_team_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_team_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_team_roster(*args, **kwargs)
+
+
+def fox_nhl_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.fox_nhl_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.fox_nhl_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.fox_nhl_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nhl_team_stats(*args, **kwargs)
 
 
 def nhl_boxscore(*args, **kwargs):
