@@ -135,6 +135,14 @@ from sportsdataverse.mbb import espn_mbb_tournaments as _raw_espn_mbb_tournament
 from sportsdataverse.mbb import espn_mbb_transactions as _raw_espn_mbb_transactions
 from sportsdataverse.mbb import espn_mbb_venue as _raw_espn_mbb_venue
 from sportsdataverse.mbb import espn_mbb_venues as _raw_espn_mbb_venues
+from sportsdataverse.mbb import fox_mbb_boxscore as _raw_fox_mbb_boxscore
+from sportsdataverse.mbb import fox_mbb_league_leaders as _raw_fox_mbb_league_leaders
+from sportsdataverse.mbb import fox_mbb_odds as _raw_fox_mbb_odds
+from sportsdataverse.mbb import fox_mbb_pbp as _raw_fox_mbb_pbp
+from sportsdataverse.mbb import fox_mbb_standings as _raw_fox_mbb_standings
+from sportsdataverse.mbb import fox_mbb_team_gamelog as _raw_fox_mbb_team_gamelog
+from sportsdataverse.mbb import fox_mbb_team_roster as _raw_fox_mbb_team_roster
+from sportsdataverse.mbb import fox_mbb_team_stats as _raw_fox_mbb_team_stats
 from sportsdataverse.mbb import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
 from sportsdataverse.mbb import download as download  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_calendar as espn_mbb_calendar  # noqa: F401
@@ -285,6 +293,14 @@ __all__ = [
     "espn_mbb_venue",
     "espn_mbb_venues",
     "flatten_json_iterative",
+    "fox_mbb_boxscore",
+    "fox_mbb_league_leaders",
+    "fox_mbb_odds",
+    "fox_mbb_pbp",
+    "fox_mbb_standings",
+    "fox_mbb_team_gamelog",
+    "fox_mbb_team_roster",
+    "fox_mbb_team_stats",
     "helper_mbb_athlete_items",
     "helper_mbb_game_data",
     "helper_mbb_game_items",
@@ -1872,3 +1888,115 @@ def espn_mbb_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mbb_venues(*args, **kwargs)
+
+
+def fox_mbb_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_boxscore(*args, **kwargs)
+
+
+def fox_mbb_league_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_league_leaders``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_league_leaders` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_league_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_league_leaders(*args, **kwargs)
+
+
+def fox_mbb_odds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_odds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_odds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_odds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_odds(*args, **kwargs)
+
+
+def fox_mbb_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_pbp(*args, **kwargs)
+
+
+def fox_mbb_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_standings(*args, **kwargs)
+
+
+def fox_mbb_team_gamelog(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_team_gamelog``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_team_gamelog` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_team_gamelog` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_team_gamelog(*args, **kwargs)
+
+
+def fox_mbb_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_team_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_team_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_team_roster(*args, **kwargs)
+
+
+def fox_mbb_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.fox_mbb_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.fox_mbb_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.fox_mbb_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mbb_team_stats(*args, **kwargs)

@@ -132,6 +132,14 @@ from sportsdataverse.nba import espn_nba_tournaments as _raw_espn_nba_tournament
 from sportsdataverse.nba import espn_nba_transactions as _raw_espn_nba_transactions
 from sportsdataverse.nba import espn_nba_venue as _raw_espn_nba_venue
 from sportsdataverse.nba import espn_nba_venues as _raw_espn_nba_venues
+from sportsdataverse.nba import fox_nba_boxscore as _raw_fox_nba_boxscore
+from sportsdataverse.nba import fox_nba_league_leaders as _raw_fox_nba_league_leaders
+from sportsdataverse.nba import fox_nba_odds as _raw_fox_nba_odds
+from sportsdataverse.nba import fox_nba_pbp as _raw_fox_nba_pbp
+from sportsdataverse.nba import fox_nba_standings as _raw_fox_nba_standings
+from sportsdataverse.nba import fox_nba_team_gamelog as _raw_fox_nba_team_gamelog
+from sportsdataverse.nba import fox_nba_team_roster as _raw_fox_nba_team_roster
+from sportsdataverse.nba import fox_nba_team_stats as _raw_fox_nba_team_stats
 from sportsdataverse.nba import download as download  # noqa: F401
 from sportsdataverse.nba import espn_nba_calendar as espn_nba_calendar  # noqa: F401
 from sportsdataverse.nba import espn_nba_game_rosters as espn_nba_game_rosters  # noqa: F401
@@ -282,6 +290,14 @@ __all__ = [
     "espn_nba_venue",
     "espn_nba_venues",
     "flatten_json_iterative",
+    "fox_nba_boxscore",
+    "fox_nba_league_leaders",
+    "fox_nba_odds",
+    "fox_nba_pbp",
+    "fox_nba_standings",
+    "fox_nba_team_gamelog",
+    "fox_nba_team_roster",
+    "fox_nba_team_stats",
     "helper_nba_athlete_items",
     "helper_nba_game_data",
     "helper_nba_game_items",
@@ -1832,3 +1848,115 @@ def espn_nba_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nba_venues(*args, **kwargs)
+
+
+def fox_nba_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_boxscore(*args, **kwargs)
+
+
+def fox_nba_league_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_league_leaders``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_league_leaders` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_league_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_league_leaders(*args, **kwargs)
+
+
+def fox_nba_odds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_odds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_odds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_odds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_odds(*args, **kwargs)
+
+
+def fox_nba_pbp(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_pbp``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_pbp` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_pbp` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_pbp(*args, **kwargs)
+
+
+def fox_nba_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_standings(*args, **kwargs)
+
+
+def fox_nba_team_gamelog(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_team_gamelog``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_team_gamelog` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_team_gamelog` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_team_gamelog(*args, **kwargs)
+
+
+def fox_nba_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_team_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_team_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_team_roster(*args, **kwargs)
+
+
+def fox_nba_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.fox_nba_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.fox_nba_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.fox_nba_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_nba_team_stats(*args, **kwargs)

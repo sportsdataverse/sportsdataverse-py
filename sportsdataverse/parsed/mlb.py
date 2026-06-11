@@ -133,6 +133,12 @@ from sportsdataverse.mlb import espn_mlb_tournaments as _raw_espn_mlb_tournament
 from sportsdataverse.mlb import espn_mlb_transactions as _raw_espn_mlb_transactions
 from sportsdataverse.mlb import espn_mlb_venue as _raw_espn_mlb_venue
 from sportsdataverse.mlb import espn_mlb_venues as _raw_espn_mlb_venues
+from sportsdataverse.mlb import fox_mlb_league_leaders as _raw_fox_mlb_league_leaders
+from sportsdataverse.mlb import fox_mlb_odds as _raw_fox_mlb_odds
+from sportsdataverse.mlb import fox_mlb_standings as _raw_fox_mlb_standings
+from sportsdataverse.mlb import fox_mlb_team_gamelog as _raw_fox_mlb_team_gamelog
+from sportsdataverse.mlb import fox_mlb_team_roster as _raw_fox_mlb_team_roster
+from sportsdataverse.mlb import fox_mlb_team_stats as _raw_fox_mlb_team_stats
 from sportsdataverse.mlb import mlb_api_all_star_ballot as _raw_mlb_api_all_star_ballot
 from sportsdataverse.mlb import mlb_api_all_star_final_vote as _raw_mlb_api_all_star_final_vote
 from sportsdataverse.mlb import mlb_api_all_star_write_ins as _raw_mlb_api_all_star_write_ins
@@ -365,6 +371,12 @@ __all__ = [
     "espn_mlb_transactions",
     "espn_mlb_venue",
     "espn_mlb_venues",
+    "fox_mlb_league_leaders",
+    "fox_mlb_odds",
+    "fox_mlb_standings",
+    "fox_mlb_team_gamelog",
+    "fox_mlb_team_roster",
+    "fox_mlb_team_stats",
     "load_mlb_pbp",
     "load_mlb_player_boxscore",
     "load_mlb_rosters",
@@ -2012,6 +2024,90 @@ def espn_mlb_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mlb_venues(*args, **kwargs)
+
+
+def fox_mlb_league_leaders(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.fox_mlb_league_leaders``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.fox_mlb_league_leaders` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.fox_mlb_league_leaders` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mlb_league_leaders(*args, **kwargs)
+
+
+def fox_mlb_odds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.fox_mlb_odds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.fox_mlb_odds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.fox_mlb_odds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mlb_odds(*args, **kwargs)
+
+
+def fox_mlb_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.fox_mlb_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.fox_mlb_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.fox_mlb_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mlb_standings(*args, **kwargs)
+
+
+def fox_mlb_team_gamelog(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.fox_mlb_team_gamelog``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.fox_mlb_team_gamelog` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.fox_mlb_team_gamelog` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mlb_team_gamelog(*args, **kwargs)
+
+
+def fox_mlb_team_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.fox_mlb_team_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.fox_mlb_team_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.fox_mlb_team_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mlb_team_roster(*args, **kwargs)
+
+
+def fox_mlb_team_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.fox_mlb_team_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.fox_mlb_team_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.fox_mlb_team_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_mlb_team_stats(*args, **kwargs)
 
 
 def mlb_api_all_star_ballot(*args, **kwargs):
