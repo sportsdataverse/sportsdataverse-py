@@ -4,6 +4,7 @@
 
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
+    - [CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)](#cfb--fox-as-a-backup-source-for-the-epawpa-play-processor-fox_cfb_play_process)
 - [0.0.56 Release: June 9, 2026](#0056-release-june-9-2026)
   - [HockeyTech — live multi-league scraper (PWHL + AHL/OHL/WHL/QMJHL) + on-ice/Corsi/TOI analytics](#hockeytech--live-multi-league-scraper-pwhl--ahlohlwhlqmjhl--on-icecorsitoi-analytics)
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
@@ -101,6 +102,14 @@ Read-only Fox Sports "Bifrost" wrappers (`fox_<sport>_*`) over `api.foxsports.co
 **MLB** (`mlb` module): `fox_mlb_team_roster`, `fox_mlb_team_stats`, `fox_mlb_team_gamelog`, `fox_mlb_standings`, `fox_mlb_league_leaders`, `fox_mlb_odds`. Fox does not expose MLB play-by-play or boxscore via `event/{id}/data`, so those two are intentionally omitted.
 
 Live-tested (gated behind `SDV_PY_LIVE_TESTS=1`). Reverse-engineering notes + an OpenAPI 3.1 spec live in the `sdv-internal-refs` repo. Parallels the cfbfastR / hoopR / fastRhockey / baseballr `fox_*` families.
+
+#### CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)
+
+Where `fox_cfb_pbp` returns the raw Fox play rows, `fox_cfb_play_process` runs Fox data through the **same** `CFBPlayProcess` pipeline ESPN games use — producing EPA / WPA / advanced box score — as a backup/alternative when ESPN is unavailable. The new module `sportsdataverse.cfb.cfb_pbp_fox` adapts a Fox `cfb/event/{id}/data` payload into the ESPN-`summary` shape the processor consumes (`fox_to_espn_summary`), so the 6,000-line pipeline runs unmodified.
+
+- **`fox_cfb_play_process(event_id)`** — fetch + adapt + `run_processing_pipeline` (or `process=False` for cleaning-only, `raw=True` for the adapted summary). Returns the processed payload tagged `source="fox"`.
+- **`fox_to_espn_summary(fox_data)`** — the adapter (`modalPlay.events[].yardStart` → yards-to-goal, play title → down/distance, `events[].text` → ESPN `type.text` vocab, team logo → possession).
+- Validated offline (5 tests) on a captured blowout (FSU 66-10 → FSU +0.50 vs Kent −0.94 EPA/play — game-consistent). High fidelity on the structured/numeric path (down/distance/yards-to-goal/EPA/WPA); text-grammar features (detailed player attribution, penalty yards) degrade vs ESPN. Archive-format Fox games (no `modalPlay` geometry) are detected and rejected. A Fox event id differs from an ESPN game id; backing up a specific ESPN game needs matching by teams + date.
 
 ## 0.0.56 Release: June 9, 2026
 

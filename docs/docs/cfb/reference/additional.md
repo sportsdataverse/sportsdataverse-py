@@ -957,6 +957,40 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
 >>> fox_cfb_pbp("41616")
 ```
 
+### `fox_cfb_play_process(event_id, odds_override: 'Optional[Dict[str, Any]]' = None, process: 'bool' = True, raw: 'bool' = False, **kwargs) -> 'Dict[str, Any]'` {#fox_cfb_play_process}
+
+Build a *processed* CFB play-by-play game from FoxSports as a backup to ESPN.
+
+Where `~sportsdataverse.cfb.cfb_fox_ext.fox_cfb_pbp` returns the raw Fox
+play-by-play rows, this runs Fox data through the full ESPN play processor:
+it fetches FoxSports Bifrost `cfb/event/{event_id}/data`, adapts it into the
+ESPN-`summary` shape via `fox_to_espn_summary`, and runs the same
+`~sportsdataverse.cfb.cfb_pbp.CFBPlayProcess` pipeline ESPN games use
+-- producing EPA / WPA / advanced box score. The result carries
+`source="fox"` so downstream consumers know the provenance (and that
+text-derived columns are lower fidelity than the ESPN path).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `event_id` |  |  | FoxSports CFB event id (e.g. `41616`). |
+| `odds_override` | `Optional[Dict[str, Any]]` | `None` | Optional `{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}` dict. Fox does not expose a clean pre-game spread, so when omitted a neutral pick'em line is used (EPA is unaffected; only the WP model's spread term is neutralized). |
+| `process` | `bool` | `True` | If `True` (default) run the full `~sportsdataverse.cfb.cfb_pbp.CFBPlayProcess.run_processing_pipeline` (EPA/WPA/box). If `False` run the lighter `~sportsdataverse.cfb.cfb_pbp.CFBPlayProcess.run_cleaning_pipeline`. |
+| `raw` | `bool` | `False` | If `True` skip the processor entirely and return the adapted ESPN-summary dict (the input the processor would consume). |
+
+**Returns**
+
+The processed game payload (same keys as `CFBPlayProcess.run_processing_pipeline`) with an added `source="fox"` key. When `raw=True`, the adapted summary dict.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_play_process
+game = fox_cfb_play_process(41616)
+print(len(game["plays"]), game["source"])
+```
+
 ### `fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#fox_cfb_standings}
 
 Fox Sports CFB conference standings for a team's conference.
@@ -1041,6 +1075,20 @@ Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/team/{team_id}/stats`
 ```python
 >>> fox_cfb_team_stats("11")
 ```
+
+### `fox_to_espn_summary(fox_data: 'Dict[str, Any]') -> 'Dict[str, Any]'` {#fox_to_espn_summary}
+
+Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fox_data` | `Dict[str, Any]` |  | Parsed JSON from `api.foxsports.com/bifrost/v1/cfb/event/{id}/data`. |
+
+**Returns**
+
+A dict shaped like ESPN's `college-football/summary` response (`header` + `drives` + stub `pickcenter`/`boxscore`/...), ready to assign onto `CFBPlayProcess(...).json`.
 
 ### `get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#get_cfb_teams}
 

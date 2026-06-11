@@ -153,6 +153,8 @@ from sportsdataverse.cfb import espn_cfb_play_participants as espn_cfb_play_part
 from sportsdataverse.cfb import espn_cfb_player_stats as espn_cfb_player_stats  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_schedule as espn_cfb_schedule  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_teams as espn_cfb_teams  # noqa: F401
+from sportsdataverse.cfb import fox_cfb_play_process as fox_cfb_play_process  # noqa: F401
+from sportsdataverse.cfb import fox_to_espn_summary as fox_to_espn_summary  # noqa: F401
 from sportsdataverse.cfb import get_cfb_teams as get_cfb_teams  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_athlete_items as helper_cfb_athlete_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_game_items as helper_cfb_game_items  # noqa: F401
@@ -295,10 +297,12 @@ __all__ = [
     "fox_cfb_league_leaders",
     "fox_cfb_odds",
     "fox_cfb_pbp",
+    "fox_cfb_play_process",
     "fox_cfb_standings",
     "fox_cfb_team_gamelog",
     "fox_cfb_team_roster",
     "fox_cfb_team_stats",
+    "fox_to_espn_summary",
     "get_cfb_teams",
     "helper_cfb_athlete_items",
     "helper_cfb_game_items",
