@@ -1598,6 +1598,22 @@ _FLAT_API_DOC = {
     "nfl_api": "NFL.com API",
 }
 
+# Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
+# league index (so NFL reads "nflverse data releases", not "sportsdataverse-data
+# releases"). Unknown keys fall back to the raw key.
+_LOADER_BASE_LABEL = {
+    "sdv_releases": "sportsdataverse-data releases",
+    "raw_data": "sportsdataverse raw data",
+    "nflverse": "nflverse data releases",
+}
+
+
+def _loader_base_label(prefix: str) -> str:
+    """Human label for a league's dataset-loader source(s) (distinct bases joined)."""
+    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    bases = sorted({ld.base for ld in rel.loaders if ld.league == prefix})
+    return " / ".join(_LOADER_BASE_LABEL.get(b, b) for b in bases) or "sportsdataverse-data releases"
+
 
 def _loader_schema_table(fn: str) -> str:
     """Markdown column table for a loader from the introspected footer schemas."""
@@ -1762,6 +1778,7 @@ def render_league_index(
         api_rows=_apis_for(prefix),
         has_loaders=bool(loaders),
         loader_count=len(loaders),
+        loader_base=_loader_base_label(prefix),
         has_additional=has_additional,
         additional_count=additional_count,
         notebooks=_notebooks_for(prefix),
