@@ -14,7 +14,7 @@ Mirrors the sibling ``cfb_fox_ext.py`` contract (``return_parsed`` /
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, Union, overload
 
 import polars as pl
 
@@ -41,23 +41,26 @@ LEGACY_PLAYER_CATEGORIES = ("Passing", "Rushing", "Receiving", "Defense", "Kicki
 LEGACY_TEAM_CATEGORIES = LEGACY_PLAYER_CATEGORIES + ("Kickoffs", "Offense")
 
 
-def _clean(name) -> str:
+def _clean(name: Any) -> str:
+    """Slugify a Yahoo statId into a snake_case column name."""
     return re.sub(r"\W+", "_", str(name)).strip("_").lower() or "v"
 
 
-def _shangrila_get(query_name: str, params: dict, **kwargs) -> Dict:
+def _shangrila_get(query_name: str, params: Dict[str, Any], **kwargs: Any) -> Dict[str, Any]:
+    """GET a shangrila persisted query, merging the common locale params."""
     merged = {"lang": "en-US", "region": "US", "tz": "America/Chicago", **params}
     return _get(f"{SHANGRILA_BASE}/{query_name}", params=merged, headers=_HEADERS, **kwargs)
 
 
-def _editorial_get(path: str, params: dict, **kwargs) -> Dict:
+def _editorial_get(path: str, params: Dict[str, Any], **kwargs: Any) -> Dict[str, Any]:
+    """GET an editorial resource, merging the common locale params."""
     merged = {"lang": "en-US", "region": "US", "tz": "America/Chicago", **params}
     return _get(f"{EDITORIAL_BASE}/{path}", params=merged, headers=_HEADERS, **kwargs)
 
 
-def _entity_cols(row: Dict) -> Dict:
+def _entity_cols(row: Dict[str, Any]) -> Dict[str, Any]:
     """player|team header -> flat id/name columns."""
-    out = {}
+    out: Dict[str, Any] = {}
     ent = row.get("player") or row.get("team") or {}
     if "playerId" in ent:
         out["player_id"] = ent.get("playerId")
@@ -71,11 +74,11 @@ def _entity_cols(row: Dict) -> Dict:
     return out
 
 
-def _flatten_modern(payload: Dict, sport_key: str) -> List[Dict]:
+def _flatten_modern(payload: Dict[str, Any], sport_key: str) -> List[Dict[str, Any]]:
     """data.leagues[0].<sport_key>[] -> wide rows (one column per statId)."""
     leagues = (payload.get("data") or {}).get("leagues") or [{}]
     rows_in = leagues[0].get(sport_key, []) if leagues else []
-    out: List[Dict] = []
+    out: List[Dict[str, Any]] = []
     for row in rows_in:
         rec = _entity_cols(row)
         for s in row.get("stats", []) or []:
@@ -86,11 +89,11 @@ def _flatten_modern(payload: Dict, sport_key: str) -> List[Dict]:
     return out
 
 
-def _flatten_legacy(payload: Dict) -> List[Dict]:
+def _flatten_legacy(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     """data.leagues[0].leaders[] -> wide rows (one column per statId)."""
     leagues = (payload.get("data") or {}).get("leagues") or [{}]
     leaders = leagues[0].get("leaders", []) if leagues else []
-    out: List[Dict] = []
+    out: List[Dict[str, Any]] = []
     for row in leaders:
         rec = _entity_cols(row)
         for s in row.get("stats", []) or []:
@@ -101,7 +104,8 @@ def _flatten_legacy(payload: Dict) -> List[Dict]:
     return out
 
 
-def _frame(rows: List[Dict], return_as_pandas: bool):
+def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Materialize flattened rows as a polars (default) or pandas DataFrame."""
     if return_as_pandas:
         import pandas as pd
 
@@ -109,6 +113,39 @@ def _frame(rows: List[Dict], return_as_pandas: bool):
     return pl.DataFrame(rows)
 
 
+@overload
+def yahoo_cfb_player_season_stats(
+    season: int = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    qualified: bool = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def yahoo_cfb_player_season_stats(
+    season: int = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    qualified: bool = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def yahoo_cfb_player_season_stats(
+    season: int = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    qualified: bool = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def yahoo_cfb_player_season_stats(
     season: int = 2024,
     *,
@@ -117,16 +154,36 @@ def yahoo_cfb_player_season_stats(
     qualified: bool = False,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Yahoo CFB player season stats (modern; one wide row per player).
 
-    Endpoint: ``GET .../shangrila/leagueStatsIndividual?leagues=ncaaf&season=...``
-    Returns all stat groups (passing/rushing/receiving/...) pivoted wide. NCAAF
-    data is available 2013-present. ``return_parsed=False`` returns raw JSON.
+    Wraps the shangrila ``leagueStatsIndividual`` query, which returns every
+    stat group (passing/rushing/receiving/...) in one call, pivoted wide with
+    one column per ``statId``. NCAAF data is available 2013-present.
+
+    Args:
+        season: Season year (2013-present). Defaults to ``2024``.
+        league_structure: Yahoo league-structure id (division filter).
+            Defaults to ``"ncaaf.struct.div.1"`` (FBS).
+        count: Maximum number of players to request. Defaults to ``200``.
+        qualified: Restrict to qualified leaders only. Defaults to ``False``.
+        return_parsed: If ``True`` (default) flatten to a DataFrame; if
+            ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A wide polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``. Includes a self-describing ``season`` column.
 
     Example:
-        >>> yahoo_cfb_player_season_stats(season=2024)
+        Pull the 2024 player leaders as a polars frame::
+
+            from sportsdataverse.cfb import yahoo_cfb_player_season_stats
+            df = yahoo_cfb_player_season_stats(season=2024)
     """
     raw = _shangrila_get(
         "leagueStatsIndividual",
@@ -147,6 +204,36 @@ def yahoo_cfb_player_season_stats(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def yahoo_cfb_team_season_stats(
+    season: int = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def yahoo_cfb_team_season_stats(
+    season: int = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def yahoo_cfb_team_season_stats(
+    season: int = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def yahoo_cfb_team_season_stats(
     season: int = 2024,
     *,
@@ -154,14 +241,34 @@ def yahoo_cfb_team_season_stats(
     count: int = 200,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Yahoo CFB team season stats (modern; one wide row per team).
 
-    Endpoint: ``GET .../shangrila/leagueStatsByTeam?leagues=ncaaf&season=...``
+    Wraps the shangrila ``leagueStatsByTeam`` query (all stat groups in one
+    call, pivoted wide with one column per ``statId``).
+
+    Args:
+        season: Season year (2013-present). Defaults to ``2024``.
+        league_structure: Yahoo league-structure id (division filter).
+            Defaults to ``"ncaaf.struct.div.1"`` (FBS).
+        count: Maximum number of teams to request. Defaults to ``200``.
+        return_parsed: If ``True`` (default) flatten to a DataFrame; if
+            ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A wide polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``. Includes a self-describing ``season`` column.
 
     Example:
-        >>> yahoo_cfb_team_season_stats(season=2024)
+        Pull the 2024 team stats as a polars frame::
+
+            from sportsdataverse.cfb import yahoo_cfb_team_season_stats
+            df = yahoo_cfb_team_season_stats(season=2024)
     """
     raw = _shangrila_get(
         "leagueStatsByTeam",
@@ -181,6 +288,42 @@ def yahoo_cfb_team_season_stats(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def yahoo_cfb_player_season_stats_legacy(
+    season: int = ...,
+    category: str = ...,
+    sort_stat: str = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def yahoo_cfb_player_season_stats_legacy(
+    season: int = ...,
+    category: str = ...,
+    sort_stat: str = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def yahoo_cfb_player_season_stats_legacy(
+    season: int = ...,
+    category: str = ...,
+    sort_stat: str = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def yahoo_cfb_player_season_stats_legacy(
     season: int = 2024,
     category: str = "Passing",
@@ -190,17 +333,45 @@ def yahoo_cfb_player_season_stats_legacy(
     count: int = 200,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Yahoo CFB legacy per-category player leaders (one wide row per player).
 
-    Endpoint: ``GET .../shangrila/seasonStatsFootball{Category}Ncaaf``
-    ``category`` in {Passing, Rushing, Receiving, Defense, Kicking, Punting, Returns}.
-    ``sort_stat`` is a required FootballStatId (see the catalog vocab).
+    Wraps the legacy ``seasonStatsFootball{Category}Ncaaf`` query (one stat
+    category per call), pivoted wide with one column per ``statId``.
+
+    Args:
+        season: Season year (2013-present). Defaults to ``2024``.
+        category: Stat category, one of
+            ``{"Passing", "Rushing", "Receiving", "Defense", "Kicking",
+            "Punting", "Returns"}``. Defaults to ``"Passing"``.
+        sort_stat: Required ``FootballStatId`` to sort by (see the catalog
+            vocab). Defaults to ``"PASSING_YARDS"``.
+        league_structure: Yahoo league-structure id (division filter).
+            Defaults to ``"ncaaf.struct.div.1"`` (FBS).
+        count: Maximum number of players to request. Defaults to ``200``.
+        return_parsed: If ``True`` (default) flatten to a DataFrame; if
+            ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A wide polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``. Includes self-describing ``season`` and
+        ``category`` columns.
+
+    Raises:
+        ValueError: ``category`` is not one of ``LEGACY_PLAYER_CATEGORIES``.
 
     Example:
-        >>> yahoo_cfb_player_season_stats_legacy(season=2024, category="Rushing",
-        ...                                      sort_stat="RUSHING_YARDS")
+        Pull the 2024 rushing leaders::
+
+            from sportsdataverse.cfb import yahoo_cfb_player_season_stats_legacy
+            df = yahoo_cfb_player_season_stats_legacy(
+                season=2024, category="Rushing", sort_stat="RUSHING_YARDS"
+            )
     """
     if category not in LEGACY_PLAYER_CATEGORIES:
         raise ValueError(f"category must be one of {LEGACY_PLAYER_CATEGORIES}")
@@ -224,6 +395,42 @@ def yahoo_cfb_player_season_stats_legacy(
     return _frame(rows, return_as_pandas)
 
 
+@overload
+def yahoo_cfb_team_season_stats_legacy(
+    season: int = ...,
+    category: str = ...,
+    sort_stat: str = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def yahoo_cfb_team_season_stats_legacy(
+    season: int = ...,
+    category: str = ...,
+    sort_stat: str = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def yahoo_cfb_team_season_stats_legacy(
+    season: int = ...,
+    category: str = ...,
+    sort_stat: str = ...,
+    *,
+    league_structure: str = ...,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def yahoo_cfb_team_season_stats_legacy(
     season: int = 2024,
     category: str = "Passing",
@@ -233,17 +440,46 @@ def yahoo_cfb_team_season_stats_legacy(
     count: int = 200,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Yahoo CFB legacy per-category team stats (one wide row per team).
 
-    Endpoint: ``GET .../shangrila/seasonTeamStatsFootball{Category}``
-    ``category`` in {Passing, Rushing, Receiving, Defense, Kicking, Punting,
-    Returns, Kickoffs, Offense}.
+    Wraps the legacy ``seasonTeamStatsFootball{Category}`` query (one stat
+    category per call), pivoted wide with one column per ``statId``.
+
+    Args:
+        season: Season year (2013-present). Defaults to ``2024``.
+        category: Stat category, one of
+            ``{"Passing", "Rushing", "Receiving", "Defense", "Kicking",
+            "Punting", "Returns", "Kickoffs", "Offense"}``. Defaults to
+            ``"Passing"``.
+        sort_stat: Required ``FootballStatId`` to sort by. Defaults to
+            ``"PASSING_YARDS"``.
+        league_structure: Yahoo league-structure id (division filter).
+            Defaults to ``"ncaaf.struct.div.1"`` (FBS).
+        count: Maximum number of teams to request. Defaults to ``200``.
+        return_parsed: If ``True`` (default) flatten to a DataFrame; if
+            ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A wide polars DataFrame (default), a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``. Includes self-describing ``season`` and
+        ``category`` columns.
+
+    Raises:
+        ValueError: ``category`` is not one of ``LEGACY_TEAM_CATEGORIES``.
 
     Example:
-        >>> yahoo_cfb_team_season_stats_legacy(season=2024, category="Rushing",
-        ...                                    sort_stat="RUSHING_YARDS")
+        Pull the 2024 team rushing stats::
+
+            from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy
+            df = yahoo_cfb_team_season_stats_legacy(
+                season=2024, category="Rushing", sort_stat="RUSHING_YARDS"
+            )
     """
     if category not in LEGACY_TEAM_CATEGORIES:
         raise ValueError(f"category must be one of {LEGACY_TEAM_CATEGORIES}")
@@ -267,14 +503,44 @@ def yahoo_cfb_team_season_stats_legacy(
     return _frame(rows, return_as_pandas)
 
 
-def _flatten_editorial_map(payload: Dict, *keys: str) -> List[Dict]:
+def _flatten_editorial_map(payload: Dict[str, Any], *keys: str) -> List[Dict[str, Any]]:
     """service.<keys...> dynamic-id map -> list of its values (rows)."""
-    node = payload.get("service", {})
+    node: Any = payload.get("service", {})
     for k in keys:
         node = node.get(k, {})
     return list((node or {}).values())
 
 
+@overload
+def yahoo_cfb_scoreboard(
+    season: int,
+    week: int = ...,
+    *,
+    count: int = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def yahoo_cfb_scoreboard(
+    season: int,
+    week: int = ...,
+    *,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def yahoo_cfb_scoreboard(
+    season: int,
+    week: int = ...,
+    *,
+    count: int = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
 def yahoo_cfb_scoreboard(
     season: int,
     week: int = 1,
@@ -282,18 +548,36 @@ def yahoo_cfb_scoreboard(
     count: int = 500,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Yahoo CFB scoreboard (one row per game).
 
+    Wraps the editorial ``scoreboard`` resource and flattens the ``games`` map.
     ``season`` is required — there is no meaningful default for a weekly
-    scoreboard and the API has no concept of "current season".
+    scoreboard and the API has no concept of "current season". The full raw
+    payload also carries teams/leagues/odds maps (use ``return_parsed=False``).
 
-    Endpoint: ``GET .../editorial/s/scoreboard?leagues=ncaaf&week=...&season=...``
-    The full payload also carries teams/leagues/odds maps (use ``return_parsed=False``).
+    Args:
+        season: Season year (required).
+        week: Schedule week number. Defaults to ``1``.
+        count: Maximum number of games to request. Defaults to ``500``.
+        return_parsed: If ``True`` (default) flatten the games map to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) with one row per game, a pandas DataFrame
+        when ``return_as_pandas=True``, or the raw JSON ``dict`` when
+        ``return_parsed=False``. Includes self-describing ``season`` and
+        ``week`` columns.
 
     Example:
-        >>> yahoo_cfb_scoreboard(season=2024, week=1)
+        Pull week 1 of the 2024 season::
+
+            from sportsdataverse.cfb import yahoo_cfb_scoreboard
+            df = yahoo_cfb_scoreboard(season=2024, week=1)
     """
     raw = _editorial_get(
         "scoreboard",
@@ -312,24 +596,44 @@ def yahoo_cfb_scoreboard(
 def yahoo_cfb_boxscore(
     game_id: Union[int, str],
     *,
-    return_parsed: bool = True,
+    return_parsed: bool = False,
     return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[pl.DataFrame, "pd.DataFrame", Dict]:
-    """Yahoo CFB boxscore (SCAFFOLD).
+    **kwargs: Any,
+) -> Dict[str, Any]:
+    """Yahoo CFB boxscore — raw JSON passthrough (parsing not yet implemented).
 
-    Endpoint: ``GET .../editorial/s/boxscore/{game_id}?v=4``
+    Wraps the editorial ``boxscore/{game_id}`` resource. The payload uses a
+    normalized decoder-dictionary schema
+    (``player_stats[playerId][variation][stat_type]=value`` joined against the
+    ``stat_types``/``stat_categories`` dictionaries). Flattening that into
+    tidy frames is a follow-up; until then this returns the raw JSON ``dict``
+    and **fails fast** if a parsed frame is requested rather than silently
+    ignoring ``return_parsed``.
 
-    The editorial boxscore uses a normalized decoder-dictionary schema
-    (``player_stats[playerId][variation][stat_type]=value`` joined against
-    ``stat_types``/``stat_categories``). Full decoding is a follow-up; for now
-    this returns the raw JSON ``Dict`` so callers can access it.
+    Args:
+        game_id: Dotted Yahoo game id (e.g. ``"ncaaf.g.202509200023"``).
+        return_parsed: Must be ``False`` (the default). Passing ``True``
+            raises ``NotImplementedError`` because parsing is not implemented.
+        return_as_pandas: Accepted for signature parity with the sibling
+            wrappers; has no effect while only raw output is supported.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
-    TODO: implement the player_stats/team_stats decode + gameplay_by_play flatten.
+    Returns:
+        The raw editorial boxscore JSON as a ``dict`` (``service.boxscore``).
+
+    Raises:
+        NotImplementedError: ``return_parsed=True`` — boxscore parsing is not
+            yet implemented; call with ``return_parsed=False`` for raw JSON.
 
     Example:
-        >>> yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
+        Fetch the raw boxscore JSON for a game::
+
+            from sportsdataverse.cfb import yahoo_cfb_boxscore
+            raw = yahoo_cfb_boxscore("ncaaf.g.202509200023")
     """
-    raw = _editorial_get(f"boxscore/{game_id}", {"v": 4}, **kwargs)
+    if return_parsed:
+        raise NotImplementedError(
+            "yahoo_cfb_boxscore parsing is not yet implemented; call with return_parsed=False to get the raw JSON dict."
+        )
     # TODO(scaffold): decode service.boxscore.player_stats via stat_types.
-    return raw
+    return _editorial_get(f"boxscore/{game_id}", {"v": 4}, **kwargs)

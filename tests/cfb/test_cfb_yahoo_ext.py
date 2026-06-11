@@ -1,9 +1,8 @@
-import os
-
 import polars as pl
 import pytest
 
 from sportsdataverse.cfb import cfb_yahoo_ext as y
+from tests.conftest import skip_if_no_live
 
 MODERN = {
     "data": {
@@ -155,13 +154,13 @@ def test_scoreboard_flattens_games_map(monkeypatch):
 def test_boxscore_scaffold_returns_raw(monkeypatch):
     monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: {"service": {"boxscore": {}}})
     out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
-    assert "service" in out  # scaffold passes raw through for now
+    assert "service" in out  # default return_parsed=False -> raw passthrough
+    # parsing is not implemented yet -> explicit fail-fast, not a silent raw return
+    with pytest.raises(NotImplementedError):
+        y.yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=True)
 
 
-@pytest.mark.skipif(
-    os.environ.get("YAHOO_TESTS") != "1",
-    reason="set YAHOO_TESTS=1 to run live Yahoo API tests",
-)
+@skip_if_no_live
 def test_live_player_season_stats():
     df = y.yahoo_cfb_player_season_stats(season=2024, return_as_pandas=True)
     # subset-direction: Yahoo may add columns over time
