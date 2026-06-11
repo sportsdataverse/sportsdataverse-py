@@ -137,6 +137,12 @@ from sportsdataverse.cfb import espn_cfb_transactions as _raw_espn_cfb_transacti
 from sportsdataverse.cfb import espn_cfb_venue as _raw_espn_cfb_venue
 from sportsdataverse.cfb import espn_cfb_venues as _raw_espn_cfb_venues
 from sportsdataverse.cfb import espn_cfb_week_rankings as _raw_espn_cfb_week_rankings
+from sportsdataverse.cfb import yahoo_cfb_boxscore as _raw_yahoo_cfb_boxscore
+from sportsdataverse.cfb import yahoo_cfb_player_season_stats as _raw_yahoo_cfb_player_season_stats
+from sportsdataverse.cfb import yahoo_cfb_player_season_stats_legacy as _raw_yahoo_cfb_player_season_stats_legacy
+from sportsdataverse.cfb import yahoo_cfb_scoreboard as _raw_yahoo_cfb_scoreboard
+from sportsdataverse.cfb import yahoo_cfb_team_season_stats as _raw_yahoo_cfb_team_season_stats
+from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy as _raw_yahoo_cfb_team_season_stats_legacy
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
 from sportsdataverse.cfb import download as download  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_calendar as espn_cfb_calendar  # noqa: F401
@@ -297,6 +303,12 @@ __all__ = [
     "normalize_team_roster_columns",
     "scoreboard_event_parsing",
     "underscore",
+    "yahoo_cfb_boxscore",
+    "yahoo_cfb_player_season_stats",
+    "yahoo_cfb_player_season_stats_legacy",
+    "yahoo_cfb_scoreboard",
+    "yahoo_cfb_team_season_stats",
+    "yahoo_cfb_team_season_stats_legacy",
 ]
 
 
@@ -1894,3 +1906,87 @@ def espn_cfb_week_rankings(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_cfb_week_rankings(*args, **kwargs)
+
+
+def yahoo_cfb_boxscore(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.yahoo_cfb_boxscore``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.yahoo_cfb_boxscore` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.yahoo_cfb_boxscore` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_yahoo_cfb_boxscore(*args, **kwargs)
+
+
+def yahoo_cfb_player_season_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.yahoo_cfb_player_season_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.yahoo_cfb_player_season_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.yahoo_cfb_player_season_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_yahoo_cfb_player_season_stats(*args, **kwargs)
+
+
+def yahoo_cfb_player_season_stats_legacy(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.yahoo_cfb_player_season_stats_legacy``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.yahoo_cfb_player_season_stats_legacy` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.yahoo_cfb_player_season_stats_legacy` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_yahoo_cfb_player_season_stats_legacy(*args, **kwargs)
+
+
+def yahoo_cfb_scoreboard(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.yahoo_cfb_scoreboard``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.yahoo_cfb_scoreboard` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.yahoo_cfb_scoreboard` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_yahoo_cfb_scoreboard(*args, **kwargs)
+
+
+def yahoo_cfb_team_season_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.yahoo_cfb_team_season_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.yahoo_cfb_team_season_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.yahoo_cfb_team_season_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_yahoo_cfb_team_season_stats(*args, **kwargs)
+
+
+def yahoo_cfb_team_season_stats_legacy(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.yahoo_cfb_team_season_stats_legacy``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.yahoo_cfb_team_season_stats_legacy` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.yahoo_cfb_team_season_stats_legacy` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_yahoo_cfb_team_season_stats_legacy(*args, **kwargs)
