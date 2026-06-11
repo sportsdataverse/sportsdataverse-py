@@ -24,12 +24,12 @@ if TYPE_CHECKING:
 from sportsdataverse._codegen_runtime import _get
 
 __all__ = [
-    "yahoo_cfb_player_season_stats",
-    "yahoo_cfb_team_season_stats",
-    "yahoo_cfb_player_season_stats_legacy",
-    "yahoo_cfb_team_season_stats_legacy",
-    "yahoo_cfb_scoreboard",
     "yahoo_cfb_boxscore",
+    "yahoo_cfb_player_season_stats",
+    "yahoo_cfb_player_season_stats_legacy",
+    "yahoo_cfb_scoreboard",
+    "yahoo_cfb_team_season_stats",
+    "yahoo_cfb_team_season_stats_legacy",
 ]
 
 EDITORIAL_BASE = "https://api-secure.sports.yahoo.com/v1/editorial/s"
@@ -38,7 +38,7 @@ _HEADERS = {"Origin": "https://sports.yahoo.com", "Referer": "https://sports.yah
 
 # valid legacy categories (from sdv-internal-refs catalog crawl, Pass A)
 LEGACY_PLAYER_CATEGORIES = ("Passing", "Rushing", "Receiving", "Defense", "Kicking", "Punting", "Returns")
-LEGACY_TEAM_CATEGORIES = LEGACY_PLAYER_CATEGORIES + ("Kickoffs", "Offense")
+LEGACY_TEAM_CATEGORIES = (*LEGACY_PLAYER_CATEGORIES, "Kickoffs", "Offense")
 
 
 def _clean(name: Any) -> str:
@@ -179,6 +179,10 @@ def yahoo_cfb_player_season_stats(
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``. Includes a self-describing ``season`` column.
 
+    Raises:
+        requests.exceptions.RequestException: Propagated from the underlying
+            HTTP request on a network/transport failure.
+
     Example:
         Pull the 2024 player leaders as a polars frame::
 
@@ -263,6 +267,10 @@ def yahoo_cfb_team_season_stats(
         A wide polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``. Includes a self-describing ``season`` column.
+
+    Raises:
+        requests.exceptions.RequestException: Propagated from the underlying
+            HTTP request on a network/transport failure.
 
     Example:
         Pull the 2024 team stats as a polars frame::
@@ -572,6 +580,10 @@ def yahoo_cfb_scoreboard(
         when ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``. Includes self-describing ``season`` and
         ``week`` columns.
+
+    Raises:
+        requests.exceptions.RequestException: Propagated from the underlying
+            HTTP request on a network/transport failure.
 
     Example:
         Pull week 1 of the 2024 season::
