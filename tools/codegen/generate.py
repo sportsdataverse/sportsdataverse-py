@@ -798,6 +798,8 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,
         passthrough_query=api.passthrough_query,
+        getter_module=api.getter_module,
+        auth=api.auth,
     )
 
 
@@ -1217,6 +1219,7 @@ FLAT_APIS = [
     ("nhl_stats_rest", "nhl"),
     ("nhl_records", "nhl"),
     ("mlb_api", "mlb"),
+    ("nfl_api", "nfl"),
 ]
 
 
@@ -1592,6 +1595,7 @@ _FLAT_API_DOC = {
     "nhl_stats_rest": "NHL Stats REST API",
     "nhl_records": "NHL Records API",
     "mlb_api": "MLB Stats API",
+    "nfl_api": "NFL.com API",
 }
 
 

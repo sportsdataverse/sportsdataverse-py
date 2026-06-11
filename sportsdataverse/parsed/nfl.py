@@ -134,6 +134,17 @@ from sportsdataverse.nfl import espn_nfl_tournaments as _raw_espn_nfl_tournament
 from sportsdataverse.nfl import espn_nfl_transactions as _raw_espn_nfl_transactions
 from sportsdataverse.nfl import espn_nfl_venue as _raw_espn_nfl_venue
 from sportsdataverse.nfl import espn_nfl_venues as _raw_espn_nfl_venues
+from sportsdataverse.nfl import nfl_combine_profiles as _raw_nfl_combine_profiles
+from sportsdataverse.nfl import nfl_draft_picks as _raw_nfl_draft_picks
+from sportsdataverse.nfl import nfl_game_summaries as _raw_nfl_game_summaries
+from sportsdataverse.nfl import nfl_injuries as _raw_nfl_injuries
+from sportsdataverse.nfl import nfl_rosters as _raw_nfl_rosters
+from sportsdataverse.nfl import nfl_standings as _raw_nfl_standings
+from sportsdataverse.nfl import nfl_team as _raw_nfl_team
+from sportsdataverse.nfl import nfl_teams_history as _raw_nfl_teams_history
+from sportsdataverse.nfl import nfl_weekly_game_details as _raw_nfl_weekly_game_details
+from sportsdataverse.nfl import nfl_weeks as _raw_nfl_weeks
+from sportsdataverse.nfl import nfl_weeks_by_date as _raw_nfl_weeks_by_date
 from sportsdataverse.nfl import NFLPlayProcess as NFLPlayProcess  # noqa: F401
 from sportsdataverse.nfl import NflConfig as NflConfig  # noqa: F401
 from sportsdataverse.nfl import cached_loader as cached_loader  # noqa: F401
@@ -211,14 +222,10 @@ from sportsdataverse.nfl import load_team_stats as load_team_stats  # noqa: F401
 from sportsdataverse.nfl import load_teams as load_teams  # noqa: F401
 from sportsdataverse.nfl import load_trades as load_trades  # noqa: F401
 from sportsdataverse.nfl import most_recent_nfl_season as most_recent_nfl_season  # noqa: F401
-from sportsdataverse.nfl import nfl_combine_profiles as nfl_combine_profiles  # noqa: F401
-from sportsdataverse.nfl import nfl_draft_picks as nfl_draft_picks  # noqa: F401
 from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F401
 from sportsdataverse.nfl import nfl_game_pbp as nfl_game_pbp  # noqa: F401
 from sportsdataverse.nfl import nfl_game_schedule as nfl_game_schedule  # noqa: F401
-from sportsdataverse.nfl import nfl_game_summaries as nfl_game_summaries  # noqa: F401
 from sportsdataverse.nfl import nfl_headers_gen as nfl_headers_gen  # noqa: F401
-from sportsdataverse.nfl import nfl_injuries as nfl_injuries  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_gamecenter_overview as nfl_ngs_gamecenter_overview  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_leaders as nfl_ngs_leaders  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_league_schedule as nfl_ngs_league_schedule  # noqa: F401
@@ -229,15 +236,8 @@ from sportsdataverse.nfl import nfl_ngs_microsite_chart_players as nfl_ngs_micro
 from sportsdataverse.nfl import nfl_ngs_play_is_highlight as nfl_ngs_play_is_highlight  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard as nfl_ngs_statboard  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders as nfl_ngs_statboard_leaders  # noqa: F401
-from sportsdataverse.nfl import nfl_rosters as nfl_rosters  # noqa: F401
-from sportsdataverse.nfl import nfl_standings as nfl_standings  # noqa: F401
-from sportsdataverse.nfl import nfl_team as nfl_team  # noqa: F401
-from sportsdataverse.nfl import nfl_teams_history as nfl_teams_history  # noqa: F401
 from sportsdataverse.nfl import nfl_token_gen as nfl_token_gen  # noqa: F401
 from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
-from sportsdataverse.nfl import nfl_weekly_game_details as nfl_weekly_game_details  # noqa: F401
-from sportsdataverse.nfl import nfl_weeks as nfl_weeks  # noqa: F401
-from sportsdataverse.nfl import nfl_weeks_by_date as nfl_weeks_by_date  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nfl import reset_config as reset_config  # noqa: F401
 from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
@@ -2022,3 +2022,157 @@ def espn_nfl_venues(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nfl_venues(*args, **kwargs)
+
+
+def nfl_combine_profiles(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_combine_profiles``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_combine_profiles` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_combine_profiles` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_combine_profiles(*args, **kwargs)
+
+
+def nfl_draft_picks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_draft_picks``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_draft_picks` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_draft_picks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_draft_picks(*args, **kwargs)
+
+
+def nfl_game_summaries(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_game_summaries``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_game_summaries` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_game_summaries` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_game_summaries(*args, **kwargs)
+
+
+def nfl_injuries(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_injuries``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_injuries` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_injuries` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_injuries(*args, **kwargs)
+
+
+def nfl_rosters(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_rosters``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_rosters` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_rosters` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_rosters(*args, **kwargs)
+
+
+def nfl_standings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_standings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_standings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_standings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_standings(*args, **kwargs)
+
+
+def nfl_team(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_team``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_team` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_team` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_team(*args, **kwargs)
+
+
+def nfl_teams_history(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_teams_history``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_teams_history` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_teams_history` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_teams_history(*args, **kwargs)
+
+
+def nfl_weekly_game_details(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_weekly_game_details``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_weekly_game_details` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_weekly_game_details` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_weekly_game_details(*args, **kwargs)
+
+
+def nfl_weeks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_weeks``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_weeks` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_weeks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_weeks(*args, **kwargs)
+
+
+def nfl_weeks_by_date(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.nfl_weeks_by_date``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.nfl_weeks_by_date` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.nfl_weeks_by_date` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nfl_weeks_by_date(*args, **kwargs)

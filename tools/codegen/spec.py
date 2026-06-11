@@ -72,6 +72,13 @@ class FlatApi:
     # ``**filters`` power feature of the NHL stats-REST / records / MLB families
     # (cayenneExp/sort/hydrate/fields/...).
     passthrough_query: bool = False
+    # Dotted module the runtime helpers (``_get`` + transforms) are imported from.
+    # Defaults to the shared no-auth runtime; auth'd families (NFL.com) point this
+    # at a league runtime module that mints + threads a bearer token.
+    getter_module: str = "sportsdataverse._codegen_runtime"
+    # When True, each wrapper gains an optional ``headers`` arg threaded into the
+    # getter so callers can reuse a minted-token dict across calls (NFL.com auth).
+    auth: bool = False
 
     @property
     def prefix(self) -> str:
@@ -259,4 +266,6 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         runtime_imports=list(raw.get("runtime_imports", ["_get"])),
         qualifier=raw.get("qualifier", ""),
         passthrough_query=bool(raw.get("passthrough_query", False)),
+        getter_module=raw.get("getter_module", "sportsdataverse._codegen_runtime"),
+        auth=bool(raw.get("auth", False)),
     )
