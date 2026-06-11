@@ -232,7 +232,7 @@ leagues = **819 wrappers**.
 ## Parser Layer (0.0.51+)
 
 Every wrapper returns raw `Dict` by default. The parser layer turns
-those payloads into tidy polars / pandas DataFrames. **Five parser
+those payloads into tidy polars / pandas DataFrames. **Six parser
 modules**, one per data surface:
 
 | Module | Surface | Parsers |
@@ -242,6 +242,7 @@ modules**, one per data surface:
 | `nhl/nhl_edge_parsers.py` | `api-web.nhle.com/v1/edge/*` player tracking | 4 family + 3 sub-frame + 1 fallback |
 | `nhl/nhl_stats_rest_parsers.py` + `nhl_records_parsers.py` | `api.nhle.com/stats/rest` + `records.nhl.com` | 1 generic each (shared `{data: [...]}` shape) |
 | `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API | 5 dedicated + 1 generic |
+| `nfl/nfl_api_parsers.py` | `api.nfl.com` "Shield" data API | 11 dedicated (one per `nfl_api` endpoint) |
 
 **Parser contract (universal across all 5 modules):**
 
@@ -751,6 +752,19 @@ the wrappers, via the codegen CLI:
   per-function block) + `reference_page`/`league_index`/`loaders_page`/
   `parameter_reference`/`category_json` templates. `@return` tables come from
   `tools/codegen/schemas/*.yaml` (ESPN) and `schemas/loader_schemas.yaml` (loaders).
+- **Native (flat) API families:** non-ESPN live APIs are generated from
+  `tools/codegen/endpoints/<stem>.yaml` and registered in `FLAT_APIS` +
+  `_FLAT_API_DOC` (`generate.py`): NHL api-web/edge/stats-rest/records, MLB Stats,
+  and NFL.com (`nfl_api` → `api.nfl.com`). Each emits a
+  `sportsdataverse/<league>/<stem>.py` module (per-endpoint `parser:` → a parser
+  module) **and** its own reference grouping on the league index. **Authenticated**
+  families — NFL.com needs a `WEB_DESKTOP` bearer token — set `auth: true` +
+  `getter_module:` (a module exposing `_get`) in the YAML, so the generated
+  wrappers gain a reusable `headers=` arg and import an auth-aware `_get` (e.g.
+  `nfl/nfl_api_runtime.py`) instead of the shared no-auth `_codegen_runtime._get`.
+  Hand-written cached loaders (NFL is **not** in `_GENERATED_LOADER_LEAGUES`) can
+  still get a "Dataset loaders" docs grouping by listing them in `releases.yaml`
+  (docs-metadata only; the module is left untouched).
 - **Drift gate:** `python tools/codegen/generate.py --check` fails on stale
   generated docs (orphan-checked only within the generated league/`reference/`
   dirs). Same gate runs in CI + the `sdv-codegen` pre-commit hook. Offline tests
