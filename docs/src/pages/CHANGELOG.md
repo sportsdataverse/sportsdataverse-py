@@ -2,6 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.58 (in development)](#0058-in-development)
+  - [Yahoo Sports college football wrappers (`yahoo_cfb_*`)](#yahoo-sports-college-football-wrappers-yahoo_cfb_)
+  - [NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping](#nfl--apinflcom-wrappers-cut-over-to-generated-nflcom-api-docs-grouping)
+  - [Documentation — `api.nfl.com` OpenAPI spec](#documentation--apinflcom-openapi-spec)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
     - [CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)](#cfb--fox-as-a-backup-source-for-the-epawpa-play-processor-fox_cfb_play_process)
@@ -88,6 +92,20 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.58 (in development)
+
+### Yahoo Sports college football wrappers (`yahoo_cfb_*`)
+
+Read-only Yahoo Sports wrappers for college football over Yahoo's shangrila stats graph (`graphite-secure.sports.yahoo.com/v1/query/shangrila`) and editorial feed (`api-secure.sports.yahoo.com/v1/editorial/s`): `yahoo_cfb_player_season_stats`, `yahoo_cfb_team_season_stats`, the legacy per-category `*_season_stats_legacy` variants, `yahoo_cfb_scoreboard`, and a `yahoo_cfb_boxscore` scaffold. Same `return_parsed` / `return_as_pandas` contract (polars by default).
+
+### NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping
+
+The hand-written `sportsdataverse.nfl.nfl_api` wrappers (`nfl_standings`, `nfl_rosters`, `nfl_injuries`, …) are now **generated** from `tools/codegen/endpoints/nfl_api.yaml`, like the NHL/MLB native families. The flat-API codegen gained `getter_module` + `auth` support so an authenticated family (the NFL.com `WEB_DESKTOP` bearer token) can be generated; the auth getter lives in `nfl_api_runtime.py` and the per-endpoint record extraction in `nfl_api_parsers.py`. As a result the NFL docs index now lists a dedicated **"NFL.com API"** reference grouping (11 functions) instead of burying those wrappers in "Additional functions". Wrapper signatures gain `return_parsed` / `**kwargs`.
+
+### Documentation — `api.nfl.com` OpenAPI spec
+
+Added an OpenAPI 3.1 description of the modern NFL.com "Shield" data API (`api.nfl.com`: `/identity/v3/token` device-token auth + `/football/v2/*` + `/experience/*`) to the reference repos (`sdv-internal-refs/nfl/`, `sdv-swagger/nfl_api_openapi.yaml`).
 
 ## 0.0.57 Release: June 10, 2026
 

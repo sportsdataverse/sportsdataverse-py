@@ -38,15 +38,20 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 
 | League | Module | Surfaces covered |
 |---|---|---|
-| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) — 118 wrappers |
-| WNBA | `sportsdataverse.wnba` | ESPN — 124 wrappers |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) — 121 wrappers |
-| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only — 126 wrappers |
-| CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) — 123 wrappers |
-| NFL | `sportsdataverse.nfl` | ESPN + football-only (QBR) — 119 wrappers |
-| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast — **175 wrappers** |
-| NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site — **132 wrappers** |
-| **Total** | | **~1,030 wrappers** |
+| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + Fox Sports (Bifrost) |
+| WNBA | `sportsdataverse.wnba` | ESPN |
+| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) + Fox Sports (Bifrost) |
+| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only |
+| CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) + Fox Sports (Bifrost) + Yahoo Sports |
+| NFL | `sportsdataverse.nfl` | ESPN + **NFL.com API** (`api.nfl.com` "Shield") + **nflverse loaders** (nflreadpy parity) + football-only (QBR) |
+| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast + Fox Sports (Bifrost) |
+| NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site + Fox Sports (Bifrost) |
+
+Each league exports 150–340 public functions (ESPN wrappers + that league's
+native-API wrappers + dataset loaders + parsers); ~1,600 in total. **Fox Sports**
+adds `fox_<league>_*` Bifrost wrappers (pbp / boxscore / odds / roster / stats /
+standings / leaders) for nba, mbb, cfb, mlb, nhl; **Yahoo Sports** adds
+`yahoo_cfb_*` season-stats / scoreboard wrappers for college football.
 
 ## Polars / pandas parser layer
 
