@@ -24,6 +24,14 @@ LIVE = ROOT / "sportsdataverse"
 
 ESPN_APIS = ["espn_site_v2", "espn_web_v3", "espn_core_v2"]
 
+# Invoke ruff via the *current interpreter's* environment (``python -m ruff``)
+# rather than a bare ``ruff`` on PATH. A bare ``ruff`` can resolve to a stale
+# global install (e.g. a system 0.3.x) that ignores ``[tool.ruff.format]
+# line-ending = "lf"`` and rewrites generated files with native CRLF on Windows
+# -- which then trips ``--check`` against the all-LF committed blobs. ``-m ruff``
+# pins to the venv's ruff, matching the pre-commit hook + CI byte-for-byte.
+_RUFF = [sys.executable, "-m", "ruff"]
+
 _PATH_TOKEN = re.compile(r"\{(\w+)\}")
 
 
@@ -541,7 +549,7 @@ def _ruff_format_dir(path: Path) -> None:
     per-directory config and diverges from the hook.) No-op if ruff isn't installed.
     """
     try:
-        subprocess.run(["ruff", "format", str(path)], capture_output=True, text=True, check=False)
+        subprocess.run([*_RUFF, "format", str(path)], capture_output=True, text=True, check=False)
     except FileNotFoundError:
         pass
 
@@ -926,7 +934,7 @@ def build_loaders_live() -> list[Path]:
             init.write_text(init.read_text(encoding="utf-8").rstrip() + "\n" + line, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
     return sorted(written)
 
 
@@ -1229,7 +1237,7 @@ def build_parsed_live() -> list[Path]:
         dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
     return sorted(written)
 
 
@@ -1266,7 +1274,7 @@ def build_flat_live() -> list[Path]:
         dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
     return sorted(written)
 
 
@@ -1354,7 +1362,7 @@ def build_live() -> list[Path]:
         _ensure_init_import(prefix)
         written.append(dest)
     if written:
-        subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
     return sorted(written)
 
 
