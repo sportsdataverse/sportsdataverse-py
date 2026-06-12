@@ -88,6 +88,7 @@ _TEAM_ALIASES: Dict[str, str] = {
     "sam houston bearkats": "sam houston state bearkats",
     "fiu panthers": "florida international panthers",
     "usf bulls": "south florida bulls",
+    "north carolina state wolfpack": "nc state wolfpack",  # Fox spells it out; ESPN/Yahoo use "NC State"
     # FCS / lower-division divergences: Yahoo & Fox carry the formal school name,
     # ESPN abbreviates (drops "State"/"University", "St."->"Saint", etc.).
     # Each key is the Yahoo/Fox spelling; each value is ESPN's exact spelling

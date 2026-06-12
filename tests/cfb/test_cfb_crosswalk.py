@@ -59,6 +59,7 @@ from tests.conftest import skip_if_no_live
         ("Miami (FL) Hurricanes", "miami hurricanes"),  # alias collapse
         ("Ole Miss Rebels", "mississippi rebels"),  # alias
         ("UConn Huskies", "connecticut huskies"),  # alias
+        ("North Carolina State Wolfpack", "nc state wolfpack"),  # Fox vs ESPN/Yahoo
         ("Grambling State Tigers", "grambling tigers"),  # FCS alias (drops "State")
         ("Delaware Fightin' Blue Hens", "delaware blue hens"),  # FCS alias
         ("Tennessee-Martin Skyhawks", "ut martin skyhawks"),  # FCS alias
