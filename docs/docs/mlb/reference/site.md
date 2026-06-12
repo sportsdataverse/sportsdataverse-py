@@ -25,6 +25,7 @@ ESPN endpoint.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
@@ -78,6 +79,8 @@ ESPN endpoint.
 | `away_winner` | logical | Whether the away team won. |
 | `away_rank` | character | Away team rank (if ranked). |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -100,6 +103,7 @@ ESPN endpoint.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **boxscore_player**
 
 | col_name | type | description |
@@ -387,6 +391,8 @@ ESPN endpoint.
 | `links_api_artwork_href` | character |  |
 | `links_sportscenter_href` | character |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -408,7 +414,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -432,7 +439,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -455,7 +463,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -478,7 +487,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -501,7 +511,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -524,7 +535,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -547,7 +559,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -571,6 +584,7 @@ ESPN endpoint.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
@@ -587,6 +601,8 @@ ESPN endpoint.
 | `team_short_display_name` | character | Abbreviated display name for compact UIs. |
 | `team_slug` | character | URL slug used in ESPN web paths. |
 | `team_uid` | character | ESPN global UID (encodes sport/league/team). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -610,7 +626,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -634,6 +651,7 @@ ESPN endpoint.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
@@ -696,6 +714,8 @@ ESPN endpoint.
 | `throws_abbreviation` | character | Throws abbreviation. |
 | `throws_display_value` | character | Throws display value. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -719,7 +739,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_team_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -743,7 +764,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -767,7 +789,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -791,7 +814,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -815,7 +839,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -839,7 +864,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -864,7 +890,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -888,7 +915,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -912,7 +940,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -936,7 +965,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -960,7 +990,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -986,6 +1017,7 @@ ESPN endpoint.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `group_name` | character | Group name. |
@@ -1035,6 +1067,8 @@ ESPN endpoint.
 | `intradivision` | character | Intradivision. |
 | `intraleague` | character | Intraleague. |
 | `last ten games` | character | Last ten games. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 

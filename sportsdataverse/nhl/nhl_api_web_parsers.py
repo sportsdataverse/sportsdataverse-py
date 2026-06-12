@@ -403,6 +403,62 @@ def parse_nhl_web_draft_picks(payload: Dict, return_as_pandas: bool = False) -> 
     return _flatten_rows((payload or {}).get("picks"), return_as_pandas)
 
 
+
+
+def parse_nhl_web_player_spotlight(payload, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``nhl_web_player_spotlight()`` into one row per featured player.
+
+    The ``/v1/player-spotlight`` endpoint returns a *bare top-level JSON
+    array* of currently-spotlighted players, so this parser flattens it directly.
+    """
+    if not isinstance(payload, list):
+        return _empty_frame(return_as_pandas)
+    return _flatten_rows(payload, return_as_pandas)
+
+
+def parse_nhl_web_draft_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``nhl_web_draft_rankings()`` / ``_now()`` into one row per prospect.
+
+    Input: ``{draftYear, categoryId, categoryKey, rankings: [...]}``. Each
+    ``rankings[]`` row is flattened and prefixed with the draft-year / category
+    context so a row carries both the prospect and which board it came from.
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    base = {"draft_year": payload.get("draftYear"), "category_id": payload.get("categoryId"),
+            "category_key": payload.get("categoryKey")}
+    rows = []
+    for prospect in payload.get("rankings") or []:
+        row = dict(base)
+        for k, v in (prospect or {}).items():
+            row[k] = v
+        rows.append(row)
+    return _flatten_rows(rows, return_as_pandas)
+
+
+def parse_nhl_web_playoff_series(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``nhl_web_playoff_series()`` into one row per series game.
+
+    Input: ``{round, seriesLetter, topSeedTeam, bottomSeedTeam, games: [...]}``.
+    Emits one row per game prefixed with series context (round, series letter,
+    top/bottom seed team ids + abbrevs).
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    top = payload.get("topSeedTeam") or {}
+    bottom = payload.get("bottomSeedTeam") or {}
+    base = {"round": payload.get("round"), "series_letter": payload.get("seriesLetter"),
+            "top_seed_team_id": top.get("id"), "top_seed_team_abbrev": top.get("abbrev"),
+            "bottom_seed_team_id": bottom.get("id"), "bottom_seed_team_abbrev": bottom.get("abbrev")}
+    rows = []
+    for game in payload.get("games") or []:
+        row = dict(base)
+        for k, v in (game or {}).items():
+            row[k] = v
+        rows.append(row)
+    return _flatten_rows(rows, return_as_pandas)
+
+
 # ---------------------------------------------------------------------------
 # Registry
 # ---------------------------------------------------------------------------
@@ -442,6 +498,10 @@ NHL_API_WEB_ENDPOINT_PARSERS = {
     "nhl_draft_picks": parse_nhl_web_draft_picks,
     "nhl_draft_picks_now": parse_nhl_web_draft_picks,
     "nhl_draft_tracker_picks_now": parse_nhl_web_draft_picks,
+    "nhl_draft_rankings": parse_nhl_web_draft_rankings,
+    "nhl_draft_rankings_now": parse_nhl_web_draft_rankings,
+    "nhl_player_spotlight": parse_nhl_web_player_spotlight,
+    "nhl_playoff_series": parse_nhl_web_playoff_series,
 }
 
 

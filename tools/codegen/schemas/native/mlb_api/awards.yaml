@@ -1,0 +1,33 @@
+schema: awards
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: description
+  type: character
+  description: ''
+- name: sort_order
+  type: double
+  description: ''
+- name: active
+  type: logical
+  description: ''
+- name: sport_id
+  type: double
+  description: ''
+- name: sport_link
+  type: character
+  description: ''
+- name: league_id
+  type: double
+  description: ''
+- name: league_link
+  type: character
+  description: ''
+- name: notes
+  type: character
+  description: ''

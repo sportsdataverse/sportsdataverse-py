@@ -1,0 +1,45 @@
+schema: award_recipients
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: season
+  type: character
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: team_link
+  type: character
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: player_link
+  type: character
+  description: ''
+- name: player_primary_position_code
+  type: character
+  description: ''
+- name: player_primary_position_name
+  type: character
+  description: ''
+- name: player_primary_position_type
+  type: character
+  description: ''
+- name: player_primary_position_abbreviation
+  type: character
+  description: ''
+- name: player_name_first_last
+  type: character
+  description: ''
+- name: votes
+  type: double
+  description: ''

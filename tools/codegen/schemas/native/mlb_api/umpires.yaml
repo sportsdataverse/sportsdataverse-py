@@ -1,0 +1,24 @@
+schema: umpires
+kind: dataframe
+columns:
+- name: jersey_number
+  type: character
+  description: ''
+- name: job
+  type: character
+  description: ''
+- name: job_id
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: person_id
+  type: integer
+  description: ''
+- name: person_full_name
+  type: character
+  description: ''
+- name: person_link
+  type: character
+  description: ''

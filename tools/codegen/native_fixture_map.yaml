@@ -65,6 +65,23 @@ mlb_api:
   team_personnel.json: team_personnel
   # /api/v1/teams/147/roster/active?season=2023
   team_roster_type.json: team_roster_type
+  # --- 0.0.55: list-shaped prose endpoints ---
+  leagues.json: leagues
+  awards.json: awards
+  award_recipients_almvp.json: award_recipients
+  team_147.json: team
+  team_alumni_147_2024.json: team_alumni
+  team_affiliates_147.json: team_affiliates
+  season_2024.json: season
+  venue_3313.json: venue
+  sport_players_2024.json: sport_players
+  umpires.json: umpires
+  schedule_postseason_2024.json: schedule_postseason
+  # --- 0.0.56: dedicated game-endpoint parsers ---
+  boxscore_745282.json: boxscore
+  linescore_745282.json: linescore
+  play_by_play_745282.json: play_by_play
+  win_probability_745282.json: win_probability
 
 nhl_api_web:
   # /gamecenter/2023030417/play-by-play   -> /v1/gamecenter/{game_id}/play-by-play
@@ -99,6 +116,11 @@ nhl_api_web:
   goalie_leaders_now.json: goalie_leaders
   # /draft/picks/2024/1                   -> /v1/draft/picks/{year}/{round_}
   draft_picks_2024_r1.json: draft_picks
+  # --- 0.0.56: parser-less prose endpoints given dedicated parsers ---
+  player_spotlight.json: player_spotlight
+  draft_rankings_now.json: draft_rankings_now
+  draft_rankings_2024_1.json: draft_rankings
+  playoff_series_20232024_a.json: playoff_series
 
 nhl_edge:
   # /edge/skater-detail/8478402/20242025/2            -> /v1/edge/skater-detail/{player_id}/{season}/{game_type}

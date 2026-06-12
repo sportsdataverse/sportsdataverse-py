@@ -1,0 +1,33 @@
+schema: linescore
+kind: dataframe
+columns:
+- name: num
+  type: integer
+  description: ''
+- name: ordinal_num
+  type: character
+  description: ''
+- name: home_runs
+  type: integer
+  description: ''
+- name: home_hits
+  type: integer
+  description: ''
+- name: home_errors
+  type: integer
+  description: ''
+- name: home_left_on_base
+  type: integer
+  description: ''
+- name: away_runs
+  type: integer
+  description: ''
+- name: away_hits
+  type: integer
+  description: ''
+- name: away_errors
+  type: integer
+  description: ''
+- name: away_left_on_base
+  type: integer
+  description: ''

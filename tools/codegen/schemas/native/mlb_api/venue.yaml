@@ -1,0 +1,18 @@
+schema: venue
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: link
+  type: character
+  description: ''
+- name: active
+  type: logical
+  description: ''
+- name: season
+  type: character
+  description: ''

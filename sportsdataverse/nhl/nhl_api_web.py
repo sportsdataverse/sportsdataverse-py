@@ -12,11 +12,14 @@ from sportsdataverse.nhl.nhl_api_web_parsers import (
     parse_nhl_web_club_schedule,
     parse_nhl_web_club_stats,
     parse_nhl_web_draft_picks,
+    parse_nhl_web_draft_rankings,
     parse_nhl_web_landing,
     parse_nhl_web_leaders,
     parse_nhl_web_pbp,
     parse_nhl_web_player_game_log,
     parse_nhl_web_player_landing,
+    parse_nhl_web_player_spotlight,
+    parse_nhl_web_playoff_series,
     parse_nhl_web_right_rail,
     parse_nhl_web_roster,
     parse_nhl_web_schedule,
@@ -303,8 +306,11 @@ def nhl_schedule_calendar(
 def nhl_playoff_series(
     season: Union[int, str],
     series_letter: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a single playoff series payload.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}``
@@ -313,9 +319,11 @@ def nhl_playoff_series(
     Args:
         season: season path parameter.
         series_letter: series_letter path parameter.
+        return_parsed: parse the payload through parse_nhl_web_playoff_series -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_playoff_series(season=2025, series_letter='a')
@@ -327,6 +335,8 @@ def nhl_playoff_series(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_playoff_series(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -745,17 +755,22 @@ def nhl_player_game_log(
 
 
 def nhl_player_spotlight(
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the league's currently featured players.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/player-spotlight``
     Example URL: https://api-web.nhle.com/v1/player-spotlight
 
     Args:
+        return_parsed: parse the payload through parse_nhl_web_player_spotlight -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_player_spotlight()
@@ -765,6 +780,8 @@ def nhl_player_spotlight(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_player_spotlight(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -888,8 +905,11 @@ def nhl_draft_picks(
 def nhl_draft_rankings(
     year: Union[int, str],
     category: int = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull NHL Central Scouting rankings for a draft year.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/rankings/{year}/{category}``
@@ -898,9 +918,11 @@ def nhl_draft_rankings(
     Args:
         year: year path parameter.
         category: category path parameter.
+        return_parsed: parse the payload through parse_nhl_web_draft_rankings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_draft_rankings(year=2024)
@@ -910,6 +932,8 @@ def nhl_draft_rankings(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_draft_rankings(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -945,17 +969,22 @@ def nhl_draft_picks_now(
 
 
 def nhl_draft_rankings_now(
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the current Central Scouting rankings.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/rankings/now``
     Example URL: https://api-web.nhle.com/v1/draft/rankings/now
 
     Args:
+        return_parsed: parse the payload through parse_nhl_web_draft_rankings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_draft_rankings_now()
@@ -965,6 +994,8 @@ def nhl_draft_rankings_now(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_draft_rankings(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

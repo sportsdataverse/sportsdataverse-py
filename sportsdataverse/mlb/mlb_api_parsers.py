@@ -314,6 +314,103 @@ def parse_mlb_api_person_stats(payload: Dict, return_as_pandas: bool = False) ->
     return _flatten_rows(rows, return_as_pandas)
 
 
+def parse_mlb_api_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``mlb_api_boxscore()`` into one row per (team-side × player).
+
+    Input: ``{teams: {home: {team, teamStats, players: {ID######: {...}}},
+    away: {...}}}``. The ``players`` block is a *dict keyed by* ``ID<id>``
+    rather than a list, so this parser walks each side's players, prefixes
+    ``team_side`` / ``team_id`` / ``team_name`` onto every player row, and
+    flattens the nested ``person`` / ``position`` / ``stats.batting`` /
+    ``stats.pitching`` / ``stats.fielding`` / ``seasonStats`` sub-dicts into a
+    wide ``*_*`` column block.
+
+    Args:
+        payload: Raw JSON dict from :func:`mlb_api_boxscore`.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per player on either roster.
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    teams = payload.get("teams") or {}
+    rows = []
+    for side in ("home", "away"):
+        side_data = teams.get(side) or {}
+        team = side_data.get("team") or {}
+        team_base = {"team_side": side, "team_id": team.get("id"), "team_name": team.get("name")}
+        for player in (side_data.get("players") or {}).values():
+            row = dict(team_base)
+            for k, v in (player or {}).items():
+                row[k] = v
+            rows.append(row)
+    return _flatten_rows(rows, return_as_pandas)
+
+
+def parse_mlb_api_linescore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``mlb_api_linescore()`` into one row per inning.
+
+    Input: ``{innings: [{num, ordinalNum, home: {runs, hits, errors,
+    leftOnBase}, away: {...}}, ...]}``. Each inning row is flattened so the
+    home/away sub-dicts become ``home_runs`` / ``away_hits`` columns.
+
+    Args:
+        payload: Raw JSON dict from :func:`mlb_api_linescore`.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per inning.
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    return _flatten_rows(payload.get("innings"), return_as_pandas)
+
+
+def parse_mlb_api_play_by_play(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``mlb_api_play_by_play()`` into one row per play.
+
+    Input: ``{allPlays: [{result, about, count, matchup, ...}, ...]}``. Each
+    ``allPlays[]`` entry is flattened: nested ``result.*`` / ``about.*`` /
+    ``count.*`` / ``matchup.*`` dicts become columns, list fields are stringified.
+
+    Args:
+        payload: Raw JSON dict from :func:`mlb_api_play_by_play`.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per play (at-bat).
+    """
+    if not isinstance(payload, dict):
+        return _empty_frame(return_as_pandas)
+    return _flatten_rows(payload.get("allPlays"), return_as_pandas)
+
+
+def parse_mlb_api_win_probability(payload, return_as_pandas: bool = False) -> pl.DataFrame:
+    """Parse ``mlb_api_win_probability()`` into one row per play.
+
+    Unlike most Stats API endpoints, ``winProbability`` returns a *bare
+    top-level JSON array* of play objects carrying win-probability series
+    fields (``homeTeamWinProbability``, ``awayTeamWinProbability``,
+    ``homeTeamWinProbabilityAdded``, ``contextMetrics``). Flattened directly.
+
+    Args:
+        payload: Raw JSON list from :func:`mlb_api_win_probability`.
+        return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``pl.DataFrame`` (or pandas) with one row per play in win-prob order.
+    """
+    if not isinstance(payload, list):
+        return _empty_frame(return_as_pandas)
+    return _flatten_rows(payload, return_as_pandas)
+
+
+# ---------------------------------------------------------------------------
+# Game-level endpoints (boxscore / linescore / play-by-play / win-probability)
+# ---------------------------------------------------------------------------
+
+
 # ---------------------------------------------------------------------------
 # Single-object / scalar-list endpoints
 # ---------------------------------------------------------------------------
@@ -362,6 +459,10 @@ MLB_API_ENDPOINT_PARSERS = {
     "mlb_api_standings": parse_mlb_api_standings,
     "mlb_api_person_stats": parse_mlb_api_person_stats,
     "mlb_api_team_stats": parse_mlb_api_person_stats,
+    "mlb_api_boxscore": parse_mlb_api_boxscore,
+    "mlb_api_linescore": parse_mlb_api_linescore,
+    "mlb_api_play_by_play": parse_mlb_api_play_by_play,
+    "mlb_api_win_probability": parse_mlb_api_win_probability,
     # Generic list-shape endpoints:
     "mlb_api_people": parse_mlb_api_list,
     "mlb_api_sport_players": parse_mlb_api_list,

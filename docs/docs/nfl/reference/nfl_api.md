@@ -24,7 +24,8 @@ GET /football/v2/standings — one row per team standing across the returned wee
 
 ### Returns
 
-GET /football/v2/standings — one row per team standing across the returned week(s).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_standings`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -49,7 +50,8 @@ GET /football/v2/rosters — one row per team roster for the season.
 
 ### Returns
 
-GET /football/v2/rosters — one row per team roster for the season.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_rosters`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -74,7 +76,8 @@ GET /football/v2/teams/history — one row per team for a season.
 
 ### Returns
 
-GET /football/v2/teams/history — one row per team for a season.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_teams_history`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -98,7 +101,8 @@ GET /football/v2/teams/{team_id} — single-team detail (one row).
 
 ### Returns
 
-GET /football/v2/teams/{team_id} — single-team detail (one row).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_team`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -123,7 +127,8 @@ GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calenda
 
 ### Returns
 
-GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_weeks`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -147,7 +152,8 @@ GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row
 
 ### Returns
 
-GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_weeks_by_date`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -172,7 +178,8 @@ GET /football/v2/combine/profiles — one row per combine prospect.
 
 ### Returns
 
-GET /football/v2/combine/profiles — one row per combine prospect.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_combine_profiles`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -197,7 +204,8 @@ GET /football/v2/draft/picks/report — one row per draft pick.
 
 ### Returns
 
-GET /football/v2/draft/picks/report — one row per draft pick.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_draft_picks`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -223,7 +231,8 @@ GET /football/v2/injuries — one row per injured player.
 
 ### Returns
 
-GET /football/v2/injuries — one row per injured player.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -249,7 +258,8 @@ GET /football/v2/stats/live/game-summaries — one row per game (live state).
 
 ### Returns
 
-GET /football/v2/stats/live/game-summaries — one row per game (live state).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_game_summaries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -279,7 +289,8 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 
 ### Returns
 
-GET /football/v2/experience/weekly-game-details — one row per game (bare list).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nfl_weekly_game_details`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 

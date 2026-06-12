@@ -21,7 +21,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_overview`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -46,7 +47,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -71,7 +73,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_gamelog`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -96,7 +99,8 @@ ESPN endpoint.
 
 ### Returns
 
-Raw JSON `Dict` (no parser registered).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_splits`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -125,6 +129,7 @@ ESPN endpoint.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `athletes` | character | Athletes. |
@@ -165,6 +170,8 @@ ESPN endpoint.
 | `requested_season_type_name` | character | Requested season type name. |
 | `requested_season_type_start_date` | character | Requested season type start date. |
 | `requested_season_type_end_date` | character | Requested season type end date. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 

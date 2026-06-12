@@ -86,6 +86,8 @@ endpoints:
 - short: playoff_series
   summary: Pull a single playoff series payload.
   path: /v1/schedule/playoff-series/{season}/{series_letter}
+  parser: parse_nhl_web_playoff_series
+  returns_schema: native/nhl_api_web/playoff_series
   path_params:
   - name: season
     type: int|str
@@ -252,6 +254,8 @@ endpoints:
 - short: player_spotlight
   summary: Pull the league's currently featured players.
   path: /v1/player-spotlight
+  parser: parse_nhl_web_player_spotlight
+  returns_schema: native/nhl_api_web/player_spotlight
 - short: skater_leaders
   returns_schema: native/nhl_api_web/skater_leaders
   summary: Pull skater stat leaders.
@@ -302,6 +306,8 @@ endpoints:
 - short: draft_rankings
   summary: Pull NHL Central Scouting rankings for a draft year.
   path: /v1/draft/rankings/{year}/{category}
+  parser: parse_nhl_web_draft_rankings
+  returns_schema: native/nhl_api_web/draft_rankings
   path_params:
   - name: year
     type: int|str
@@ -319,6 +325,8 @@ endpoints:
 - short: draft_rankings_now
   summary: Pull the current Central Scouting rankings.
   path: /v1/draft/rankings/now
+  parser: parse_nhl_web_draft_rankings
+  returns_schema: native/nhl_api_web/draft_rankings_now
 - short: draft_tracker_picks_now
   summary: Pull the live draft-tracker pick list (during the draft itself).
   path: /v1/draft-tracker/picks/now

@@ -8,11 +8,15 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse.mlb.mlb_api_parsers import (
+    parse_mlb_api_boxscore,
     parse_mlb_api_draft_latest,
+    parse_mlb_api_linescore,
     parse_mlb_api_list,
+    parse_mlb_api_play_by_play,
     parse_mlb_api_schedule,
     parse_mlb_api_team_roster,
     parse_mlb_api_timecodes,
+    parse_mlb_api_win_probability,
 )
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
@@ -192,7 +196,7 @@ def mlb_api_boxscore(
         game_pk: game_pk path parameter.
         timecode: timecode query parameter.
         fields: fields query parameter.
-        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_mlb_api_boxscore -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -210,7 +214,7 @@ def mlb_api_boxscore(
         },
     )
     if return_parsed:
-        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+        return parse_mlb_api_boxscore(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -232,7 +236,7 @@ def mlb_api_linescore(
         game_pk: game_pk path parameter.
         timecode: timecode query parameter.
         fields: fields query parameter.
-        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_mlb_api_linescore -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -250,7 +254,7 @@ def mlb_api_linescore(
         },
     )
     if return_parsed:
-        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+        return parse_mlb_api_linescore(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -272,7 +276,7 @@ def mlb_api_play_by_play(
         game_pk: game_pk path parameter.
         timecode: timecode query parameter.
         fields: fields query parameter.
-        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_mlb_api_play_by_play -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -290,7 +294,7 @@ def mlb_api_play_by_play(
         },
     )
     if return_parsed:
-        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+        return parse_mlb_api_play_by_play(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -347,7 +351,7 @@ def mlb_api_win_probability(
     Args:
         game_pk: game_pk path parameter.
         fields: fields query parameter.
-        return_parsed: parse the payload through parse_mlb_api_list -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_mlb_api_win_probability -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -364,7 +368,7 @@ def mlb_api_win_probability(
         },
     )
     if return_parsed:
-        return parse_mlb_api_list(raw, return_as_pandas=return_as_pandas)
+        return parse_mlb_api_win_probability(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

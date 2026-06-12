@@ -1,0 +1,42 @@
+schema: player_spotlight
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: player_slug
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: sweater_number
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: headshot
+  type: character
+  description: ''
+- name: team_tri_code
+  type: character
+  description: ''
+- name: team_logo
+  type: character
+  description: ''
+- name: sort_id
+  type: integer
+  description: ''
+- name: name_default
+  type: character
+  description: ''
+- name: name_cs
+  type: character
+  description: ''
+- name: name_fi
+  type: character
+  description: ''
+- name: name_sk
+  type: character
+  description: ''
