@@ -22,12 +22,21 @@ from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import NoESPNDataError
 from tests._vcr import (
     _REDACTED,
+    RECORDING,
     CassetteMiss,
     _key,
     _scrub_url,
     use_cassette,
 )
 from tests.conftest import skip_if_no_live
+
+# The live-recording smoke test needs BOTH a network (live) AND record mode --
+# otherwise an SDV_PY_LIVE_TESTS=1 run would fire an extra live ESPN call and
+# cassette write on every CI pass, defeating the offline-by-default design.
+skip_if_no_record = pytest.mark.skipif(
+    not RECORDING,
+    reason="Set SDV_PY_RECORD=1 to run the live cassette-recording smoke test",
+)
 
 # ===========================================================================
 # Scrubbing + match-key (pure)
@@ -168,13 +177,16 @@ def test_replay_download_404_raises_no_espn_data() -> None:
 
 
 @skip_if_no_live
+@skip_if_no_record
 def test_record_live_espn_team(tmp_path: Path) -> None:
     """Smoke-tests the record path against live ESPN, then replays its own capture.
 
-    Runs only under ``SDV_PY_LIVE_TESTS=1`` (it hits the network). It records to
-    a throwaway ``tmp_path`` cassette -- it does NOT overwrite the committed
-    demo cassettes -- then re-opens that capture in replay mode to confirm the
-    round trip holds against a genuine payload.
+    Gated by BOTH ``SDV_PY_LIVE_TESTS=1`` (it hits the network) AND
+    ``SDV_PY_RECORD=1`` (it records) -- a plain live run stays offline-by-default
+    and never fires this extra ESPN call. It records to a throwaway ``tmp_path``
+    cassette -- it does NOT overwrite the committed demo cassettes -- then
+    re-opens that capture in replay mode to confirm the round trip holds against
+    a genuine payload.
     """
     cassette = tmp_path / "live_capture.json"
     with use_cassette(cassette, record=True):
