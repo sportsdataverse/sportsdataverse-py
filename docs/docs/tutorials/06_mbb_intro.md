@@ -47,6 +47,8 @@ no live API). Click any name for the full reference.
 | [`fox_mbb_league_leaders`](../mbb/reference/additional.md#fox_mbb_league_leaders) | Stat leaders (scoring, rebounds, …) | 🦊 Fox ⭐ |
 | [`fox_mbb_standings`](../mbb/reference/additional.md#fox_mbb_standings) | Fox conference standings for a team | 🦊 Fox ⭐ |
 | [`fox_mbb_team_roster`](../mbb/reference/additional.md#fox_mbb_team_roster) | Fox roster for a team | 🦊 Fox |
+| [`espn_mbb_team_schedule`](../mbb/reference/additional.md#espn_mbb_team_schedule) | One team's full season schedule | 🟥 ESPN ⭐ |
+| [`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) | Conference / group catalog | 🟥 ESPN ⭐ |
 | [`load_mbb_schedule`](../mbb/reference/loaders.md#load_mbb_schedule) | Whole-season schedule parquet | 📦 loader |
 | [`load_mbb_player_boxscore`](../mbb/reference/loaders.md#load_mbb_player_boxscore) | Season player box scores | 📦 loader |
 | [`load_mbb_team_boxscore`](../mbb/reference/loaders.md#load_mbb_team_boxscore) | Season team box scores | 📦 loader |
@@ -255,6 +257,175 @@ if isinstance(pbp, dict) and pbp.get("plays"):
 else:
     out = "play-by-play unavailable right now"
 out
+```
+
+### Recipe 5 — Best net scoring margin 📊 (parquet)
+
+[`load_mbb_team_boxscore`](../mbb/reference/loaders.md#load_mbb_team_boxscore) gives one row per team-game with the opponent's score attached, so a single group-by ranks every program by points scored minus points allowed — the cleanest one-number power proxy. Pure parquet, no live endpoint.
+
+
+```python
+tbox = sdv.mbb.load_mbb_team_boxscore(seasons=[2024])
+print("team box rows:", tbox.shape)
+(tbox
+    .group_by("team_display_name")
+    .agg(
+        pl.len().alias("g"),
+        pl.col("team_score").cast(pl.Float64, strict=False).mean().round(1).alias("ppg"),
+        pl.col("opponent_team_score").cast(pl.Float64, strict=False).mean().round(1).alias("opp_ppg"),
+    )
+    .with_columns((pl.col("ppg") - pl.col("opp_ppg")).round(1).alias("net_margin"))
+    .filter(pl.col("g") >= 25)
+    .sort("net_margin", descending=True)
+    .head(10))
+```
+
+### Recipe 6 — Best 3-point shooting teams 🎯 (parquet)
+
+Same team-box parquet, different question: sum makes and attempts across the season, then divide. A `min attempts` filter keeps small-sample flukes off the board so the leaders are real volume shooters.
+
+
+```python
+(tbox
+    .group_by("team_display_name")
+    .agg(
+        pl.col("three_point_field_goals_made")
+          .cast(pl.Float64, strict=False).sum().alias("tpm"),
+        pl.col("three_point_field_goals_attempted")
+          .cast(pl.Float64, strict=False).sum().alias("tpa"),
+    )
+    .with_columns((pl.col("tpm") / pl.col("tpa") * 100).round(1).alias("three_pct"))
+    .filter(pl.col("tpa") >= 500)
+    .sort("three_pct", descending=True)
+    .select(["team_display_name", "tpm", "tpa", "three_pct"])
+    .head(10))
+```
+
+### Recipe 7 — Most efficient scorers ⚡ (true shooting %)
+
+Points-per-game rewards volume; **true shooting %** rewards *efficiency* — it folds threes and free throws into one rate via `TS% = PTS / (2 · (FGA + 0.44·FTA))`. We compute it straight from [`load_mbb_player_boxscore`](../mbb/reference/loaders.md#load_mbb_player_boxscore), keeping only high-usage scorers.
+
+
+```python
+pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
+(pbox
+    .filter(pl.col("points").is_not_null())
+    .group_by(["athlete_display_name", "team_abbreviation"])
+    .agg(
+        pl.len().alias("g"),
+        pl.col("points").cast(pl.Float64, strict=False).sum().alias("pts"),
+        pl.col("field_goals_attempted").cast(pl.Float64, strict=False).sum().alias("fga"),
+        pl.col("free_throws_attempted").cast(pl.Float64, strict=False).sum().alias("fta"),
+    )
+    .with_columns(
+        (pl.col("pts") / (2 * (pl.col("fga") + 0.44 * pl.col("fta"))) * 100)
+        .round(1).alias("ts_pct"))
+    .filter((pl.col("g") >= 25) & (pl.col("pts") >= 400))
+    .sort("ts_pct", descending=True)
+    .select(["athlete_display_name", "team_abbreviation", "g", "pts", "ts_pct"])
+    .head(10))
+```
+
+### Recipe 8 — One conference's power board 🏟️ (ESPN, join)
+
+[`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) is the group catalog; [`espn_mbb_standings`](../mbb/reference/site.md#espn_mbb_standings) carries a `group_name` per team. Filter standings to a single league — here the Big 12 — to get a clean intra-conference pecking order.
+
+
+```python
+confs = safe("conferences", lambda: sdv.mbb.espn_mbb_conferences())
+if confs is not None and getattr(confs, "height", 0):
+    print("some conferences:",
+          confs.filter(pl.col("is_conference"))["name"].to_list()[:8])
+st = safe("standings 2024", lambda: sdv.mbb.espn_mbb_standings(season=2024))
+if st is not None and getattr(st, "height", 0) and "group_name" in st.columns:
+    keep = ["team_display_name", "wins", "losses", "win_percent", "point_differential"]
+    out = (st.filter(pl.col("group_name").str.contains("Big 12"))
+             .select([c for c in keep if c in st.columns])
+             .sort("win_percent", descending=True)
+             .head(12))
+    out = out if out.height else st.select(
+        [c for c in keep if c in st.columns]).sort(
+        "win_percent", descending=True).head(12)
+else:
+    out = "standings unavailable right now"
+out
+```
+
+### Recipe 9 — A team's full season schedule 🗓️ (ESPN)
+
+[`espn_mbb_team_schedule`](../mbb/reference/additional.md#espn_mbb_team_schedule) returns every game on one team's slate for a season — matchup name, week and season type — perfect for building an opponent list. We use UConn's 2024 championship run.
+
+
+```python
+tid_sched = int(row["team_id"][0]) if row.height else 41  # UConn fallback
+tsched = safe(
+    f"team schedule {tid_sched}",
+    lambda: sdv.mbb.espn_mbb_team_schedule(team_id=tid_sched, season=2024),
+)
+if tsched is not None and getattr(tsched, "height", 0):
+    keep = ["id", "short_name", "season_type_name", "week_text"]
+    out = tsched.select([c for c in keep if c in tsched.columns]).head(12)
+else:
+    out = "team schedule unavailable right now"
+out
+```
+
+### Recipe 10 — Top rebounding teams 🧲 (FoxSports)
+
+[`fox_mbb_league_leaders`](../mbb/reference/additional.md#fox_mbb_league_leaders) isn't just a player board — flip `who="team"` and pick `category="rebounds"` to rank programs on the glass straight from FoxSports. No IDs needed.
+
+
+```python
+team_reb = safe(
+    "fox team rebounds",
+    lambda: sdv.mbb.fox_mbb_league_leaders(category="rebounds", who="team"),
+)
+if team_reb is not None and getattr(team_reb, "height", 0):
+    keep = ["teams", "gp", "w", "l", "ppg", "ppg_diff"]
+    out = team_reb.select([c for c in keep if c in team_reb.columns]).head(10)
+else:
+    out = "Fox team leaders unavailable right now"
+out
+```
+
+### Recipe 11 — Crunch-time buckets 🔥 (parquet PBP)
+
+[`load_mbb_pbp`](../mbb/reference/loaders.md#load_mbb_pbp) is the whole season's play-by-play in one parquet — no live game needed. We slice it to scoring plays in the final minute of the second half: every late-game dagger across the year.
+
+
+```python
+season_pbp = sdv.mbb.load_mbb_pbp(seasons=[2024])
+print("season pbp rows:", season_pbp.shape)
+(season_pbp
+    .filter(
+        (pl.col("scoring_play") == True)  # noqa: E712
+        & (pl.col("period_number") >= 2)
+        & (pl.col("end_period_seconds_remaining").cast(pl.Float64, strict=False) <= 60)
+    )
+    .select(["game_id", "period_display_value", "clock_display_value",
+             "text", "home_score", "away_score"])
+    .head(10))
+```
+
+### Recipe 12 — Double-double leaders 🐼 (pandas interop)
+
+Prefer pandas? Pass `return_as_pandas=True` to any loader and stay in your comfort zone. Here we count games where a player hit double digits in at least two of points / rebounds / assists — the classic double-double — entirely in pandas.
+
+
+```python
+import pandas as pd
+
+pbox_pd = sdv.mbb.load_mbb_player_boxscore(seasons=[2024], return_as_pandas=True)
+for col in ["points", "rebounds", "assists"]:
+    pbox_pd[col] = pd.to_numeric(pbox_pd[col], errors="coerce")
+pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1) >= 2
+(pbox_pd[pbox_pd["is_dd"]]
+    .groupby(["athlete_display_name", "team_abbreviation"])
+    .size()
+    .reset_index(name="double_doubles")
+    .sort_values("double_doubles", ascending=False)
+    .head(10)
+    .reset_index(drop=True))
 ```
 
 ## 🧾 One call, the whole game: `espn_mbb_summary`

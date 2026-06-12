@@ -19,8 +19,11 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`espn_wbb_teams`](../wbb/reference/additional.md#espn_wbb_teams) | Every D-I program, one wide row each | ESPN |
 | [`espn_wbb_team_roster`](../wbb/reference/site.md#espn_wbb_team_roster) | A team's roster, one row per player | ESPN |
 | [`espn_wbb_schedule`](../wbb/reference/additional.md#espn_wbb_schedule) | Games for a date / date-range | ESPN |
+| [`espn_wbb_team_schedule`](../wbb/reference/site.md#espn_wbb_team_schedule) | One program's full season slate | ESPN |
 | [`espn_wbb_scoreboard`](../wbb/reference/site.md#espn_wbb_scoreboard) | ⭐ Live + final scoreboard, one row per game | ESPN |
 | [`espn_wbb_pbp`](../wbb/reference/additional.md#espn_wbb_pbp) | Full play-by-play + boxscore for a game | ESPN |
+| [`espn_wbb_player_gamelog`](../wbb/reference/web.md#espn_wbb_player_gamelog) | A player's game-by-game log | ESPN |
+| [`espn_wbb_player_splits`](../wbb/reference/web.md#espn_wbb_player_splits) | A player's situational stat splits | ESPN |
 | [`espn_wbb_team_stats`](../wbb/reference/additional.md#espn_wbb_team_stats) | A team's season stat splits | ESPN |
 | [`espn_wbb_standings`](../wbb/reference/site.md#espn_wbb_standings) | Conference standings + records | ESPN |
 | [`espn_wbb_conferences`](../wbb/reference/site.md#espn_wbb_conferences) | Conference groups + group ids | ESPN |
@@ -33,9 +36,9 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`espn_wbb_game_probabilities`](../wbb/reference/core.md#espn_wbb_game_probabilities) | ⭐ Play-by-play win-probability curve | ESPN |
 | [`espn_wbb_calendar`](../wbb/reference/site.md#espn_wbb_calendar) | Valid game dates for a season | ESPN |
 | [`load_wbb_schedule`](../wbb/reference/loaders.md#load_wbb_schedule) | Season-long schedule (parquet release) | release |
+| [`load_wbb_pbp`](../wbb/reference/loaders.md#load_wbb_pbp) | Season-long play-by-play (parquet, back to 2002) | release |
 | [`load_wbb_team_boxscore`](../wbb/reference/loaders.md#load_wbb_team_boxscore) | Season-long team boxscores (parquet) | release |
 | [`load_wbb_player_boxscore`](../wbb/reference/loaders.md#load_wbb_player_boxscore) | Season-long player boxscores (parquet) | release |
-
 
 ## 🔌 Setup
 
@@ -246,7 +249,19 @@ conferences = safe('conferences', wbb.espn_wbb_conferences)
 
 ## 🍳 Cookbook: common WBB tasks
 
-Now the fun part — real tasks you'll reach for constantly, each built on the premium functions above. The `load_wbb_*` loaders below read pre-built parquet releases from [wehoop-wbb-data](https://github.com/sportsdataverse/wehoop-wbb-data), so they're fast and reliable year-round.
+Now the fun part — real tasks you'll reach for constantly, each built on the premium functions above. The `load_wbb_*` loaders below read pre-built parquet releases from [wehoop-wbb-data](https://github.com/sportsdataverse/wehoop-wbb-data), so they're fast and reliable year-round. We base most season-wide recipes on **2024** because that release is fully published; swap the season once newer parquet drops.
+
+First, pull the three season-long parquet releases we'll lean on across the
+Cookbook — player boxscores, team boxscores, and play-by-play for 2024. One
+load, many recipes.
+
+
+```python
+player_box = wbb.load_wbb_player_boxscore(seasons=[2024])
+team_box = wbb.load_wbb_team_boxscore(seasons=[2024])
+season_pbp = wbb.load_wbb_pbp(seasons=[2024])
+print('player_box:', player_box.shape, '| team_box:', team_box.shape, '| pbp:', season_pbp.shape)
+```
 
 ### Recipe 1 — Win-probability ride of a championship 📈
 
@@ -289,11 +304,10 @@ out
 
 ### Recipe 3 — Top scorers of a full season 🥇
 
-Load the season-long player boxscore with [`load_wbb_player_boxscore`](../wbb/reference/loaders.md#load_wbb_player_boxscore), then aggregate with polars to find the highest per-game scorers (min. 20 games).
+Take the season-long player boxscore and aggregate with polars to find the highest per-game scorers (min. 20 games).
 
 
 ```python
-player_box = wbb.load_wbb_player_boxscore(seasons=[2024])
 top_scorers = (
     player_box
     .group_by(['athlete_id', 'athlete_display_name', 'team_short_display_name'])
@@ -311,11 +325,10 @@ top_scorers
 
 ### Recipe 4 — Best scoring offenses, joined to records 🤝
 
-Aggregate the team boxscore with [`load_wbb_team_boxscore`](../wbb/reference/loaders.md#load_wbb_team_boxscore) to rank programs by points per game, then attach each team's W-L from the live standings.
+Aggregate the team boxscore to rank programs by points per game, then attach each team's W-L from the live standings.
 
 
 ```python
-team_box = wbb.load_wbb_team_boxscore(seasons=[2024])
 offense = (
     team_box
     .group_by(['team_id', 'team_display_name'])
@@ -328,6 +341,184 @@ if has_rows(standings):
     recs = standings.select(['team_id', 'wins', 'losses']).with_columns(pl.col('team_id').cast(pl.Int64, strict=False))
     offense = offense.with_columns(pl.col('team_id').cast(pl.Int64, strict=False)).join(recs, on='team_id', how='left')
 offense
+```
+
+### Recipe 5 — A program's full season slate 🗓️
+
+[`espn_wbb_team_schedule`](../wbb/reference/site.md#espn_wbb_team_schedule) returns one program's complete season — every game with its date, matchup short name, and season type. Here's UConn's 2024-25 road to the title (`team_id=2509`).
+
+
+```python
+tsched = safe('UConn team schedule', lambda: wbb.espn_wbb_team_schedule(team_id=2509, season=SEASON))
+if has_rows(tsched):
+    keep = ['id', 'date', 'short_name', 'season_type_name', 'week_text']
+    out = tsched.select([c for c in keep if c in tsched.columns]).head(12)
+    print('games on the slate:', tsched.height)
+else:
+    out = 'team schedule unavailable (offseason) — try during the season'
+out
+```
+
+### Recipe 6 — Deadliest three-point shooting teams 🎯
+
+Roll the team boxscore up to season totals and compute each program's three-point percentage. Made ÷ attempted, sorted, min. 20 games.
+
+
+```python
+three_pt = (
+    team_box
+    .group_by(['team_id', 'team_display_name'])
+    .agg(
+        games=pl.len(),
+        tpm=pl.col('three_point_field_goals_made').sum(),
+        tpa=pl.col('three_point_field_goals_attempted').sum(),
+    )
+    .filter((pl.col('games') >= 20) & (pl.col('tpa') > 0))
+    .with_columns((pl.col('tpm') / pl.col('tpa') * 100).round(1).alias('three_pct'))
+    .sort('three_pct', descending=True)
+    .head(10)
+)
+three_pt
+```
+
+### Recipe 7 — Clutch shot-makers ⏱️
+
+Slice the season-long play-by-play to scoring plays in the **final two minutes of the 4th quarter (or overtime)**, total each player's clutch points, and name them via the player boxscore. Pure ice in the veins.
+
+
+```python
+name_lookup = player_box.select(
+    ['athlete_id', 'athlete_display_name', 'team_short_display_name']
+).unique(subset=['athlete_id'])
+
+clutch = (
+    season_pbp
+    .filter(
+        (pl.col('period_number') >= 4)
+        & (pl.col('scoring_play') == True)
+        & (pl.col('start_game_seconds_remaining') <= 120)
+        & pl.col('athlete_id_1').is_not_null()
+    )
+    .group_by('athlete_id_1')
+    .agg(clutch_points=pl.col('score_value').sum(), clutch_plays=pl.len())
+    .rename({'athlete_id_1': 'athlete_id'})
+    .join(name_lookup, on='athlete_id', how='left')
+    .sort('clutch_points', descending=True)
+    .select(['athlete_display_name', 'team_short_display_name', 'clutch_plays', 'clutch_points'])
+    .head(10)
+)
+clutch
+```
+
+### Recipe 8 — Where the buckets come from (shot-zone mix) 🗺️
+
+The play-by-play carries `coordinate_x` / `coordinate_y` for shots and a `score_value` (2 or 3). Bucket every made field goal into a zone and see how a season's points break down by shot location.
+
+
+```python
+shot_zones = (
+    season_pbp
+    .filter(
+        (pl.col('scoring_play') == True)
+        & (pl.col('score_value') >= 2)
+        & pl.col('coordinate_y').is_not_null()
+    )
+    .with_columns(
+        pl.when(pl.col('score_value') == 3).then(pl.lit('3-pointer'))
+          .when(pl.col('coordinate_y') <= 8).then(pl.lit('2pt — at the rim'))
+          .otherwise(pl.lit('2pt — jumper')).alias('shot_zone')
+    )
+    .group_by('shot_zone')
+    .agg(made_field_goals=pl.len(), points=pl.col('score_value').sum())
+    .with_columns(
+        (pl.col('made_field_goals') / pl.col('made_field_goals').sum() * 100).round(1).alias('share_pct')
+    )
+    .sort('made_field_goals', descending=True)
+)
+shot_zones
+```
+
+### Recipe 9 — Double-double machines 🔄
+
+Flag every player-game with at least two double-digit categories (points / rebounds / assists), then count who racked up the most double-doubles across the season.
+
+
+```python
+dd = (
+    player_box
+    .with_columns(
+        (
+            (pl.col('points') >= 10).cast(pl.Int8)
+            + (pl.col('rebounds') >= 10).cast(pl.Int8)
+            + (pl.col('assists') >= 10).cast(pl.Int8)
+        ).alias('double_digit_cats')
+    )
+    .filter(pl.col('double_digit_cats') >= 2)
+    .group_by(['athlete_id', 'athlete_display_name', 'team_short_display_name'])
+    .agg(double_doubles=pl.len())
+    .sort('double_doubles', descending=True)
+    .head(10)
+)
+dd
+```
+
+### Recipe 10 — Find the best defenses (fewest points allowed) 🛡️
+
+Every team boxscore row carries the **opponent's** score, so a single group-by yields points allowed per game. Lowest-scoring opponents = stingiest defenses.
+
+
+```python
+defense = (
+    team_box
+    .group_by(['team_id', 'team_display_name'])
+    .agg(
+        games=pl.len(),
+        opp_ppg=pl.col('opponent_team_score').mean().round(1),
+        own_ppg=pl.col('team_score').mean().round(1),
+    )
+    .filter(pl.col('games') >= 20)
+    .with_columns((pl.col('own_ppg') - pl.col('opp_ppg')).round(1).alias('net_ppg'))
+    .sort('opp_ppg')
+    .head(10)
+)
+defense
+```
+
+### Recipe 11 — Rolling form: a team's last 10 games 📊
+
+Filter the team boxscore to one program, sort by date, and take the tail — a quick "how did they finish the year?" view with the scoring margin per game. Here's UConn (`team_id=2509`).
+
+
+```python
+last10 = (
+    team_box
+    .filter(pl.col('team_id') == 2509)
+    .with_columns((pl.col('team_score') - pl.col('opponent_team_score')).alias('margin'))
+    .sort('game_date')
+    .tail(10)
+    .select(['game_date', 'opponent_team_short_display_name', 'team_score', 'opponent_team_score', 'margin'])
+)
+print('average margin over last 10:', round(last10['margin'].mean(), 1) if last10.height else 'n/a')
+last10
+```
+
+### Recipe 12 — Pandas interop: a season's play-type mix 🐼
+
+Every loader and accessor takes `return_as_pandas=True`. Pull the play-by-play
+as pandas, tally the most common play types with a one-liner `value_counts()`,
+and you're back in familiar territory for downstream tooling.
+
+
+```python
+pbp_pd = wbb.load_wbb_pbp(seasons=[2024], return_as_pandas=True)
+play_mix = (
+    pbp_pd['type_text']
+    .value_counts()
+    .head(10)
+    .rename_axis('play_type')
+    .reset_index(name='count')
+)
+play_mix
 ```
 
 ## 🎉 Where to go next

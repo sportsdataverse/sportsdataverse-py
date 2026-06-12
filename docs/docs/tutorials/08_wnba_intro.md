@@ -33,6 +33,9 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`load_wnba_player_season_stats`](../wnba/reference/loaders.md#load_wnba_player_season_stats) | Season-aggregated player stats | 📦 loader |
 | [`load_wnba_pbp`](../wnba/reference/loaders.md#load_wnba_pbp) | Whole-season play-by-play | 📦 loader |
 | [`load_wnba_shots`](../wnba/reference/loaders.md#load_wnba_shots) | Shot-location data | 📦 loader |
+| [`load_wnba_standings`](../wnba/reference/loaders.md#load_wnba_standings) | Whole-season standings (long) | 📦 loader |
+| [`load_wnba_rosters`](../wnba/reference/loaders.md#load_wnba_rosters) | Whole-season rosters | 📦 loader |
+| [`load_wnba_draft`](../wnba/reference/loaders.md#load_wnba_draft) | Whole-season draft picks | 📦 loader |
 | [`most_recent_wnba_season`](../wnba/reference/additional.md#most_recent_wnba_season) | The latest season year | 🛠️ helper |
 
 ⭐ = the **premium ESPN live API** · 📦 = bulk parquet loaders · 🛠️ = helpers.
@@ -177,7 +180,7 @@ print('categories:', list(aces_stats.keys()) if aces_stats is not None else None
 
 ## 🍳 Cookbook: common WNBA tasks
 
-Now for the fun part. These four recipes are the everyday tasks you'll reach for constantly — each blends a premium ESPN call (or a parquet loader) with a few polars expressions. They're all correct, runnable Python. 🧑‍🍳
+Now for the fun part. These twelve recipes are the everyday tasks you'll reach for constantly — each blends a premium ESPN call (or a parquet loader) with a few polars expressions. They're all correct, runnable Python. The ESPN-backed recipes wear the `safe()` seatbelt; the loader-backed ones are rock-solid and run bare. 🧑‍🍳
 
 ### Recipe 1 — Standings table 🏆
 
@@ -243,6 +246,197 @@ if refs is not None and refs.height:
 else:
     out = 'officials unavailable'
 out
+```
+
+### Recipe 5 — Best net rating in the league ⚖️
+
+[`load_wnba_team_boxscore`](../wnba/reference/loaders.md#load_wnba_team_boxscore) carries each team's score **and** its opponent's score per game. Average points for minus points against gives a quick-and-dirty net rating — the single best one-number summary of who's good. We require 20+ games to drop the All-Star exhibition noise.
+
+
+```python
+team_box = wnba.load_wnba_team_boxscore(seasons=[SEASON])
+net_rating = (
+    team_box
+    .group_by(['team_abbreviation', 'team_display_name'])
+    .agg([
+        pl.len().alias('games'),
+        pl.col('team_score').mean().round(1).alias('pts_for'),
+        pl.col('opponent_team_score').mean().round(1).alias('pts_against'),
+    ])
+    .filter(pl.col('games') >= 20)
+    .with_columns((pl.col('pts_for') - pl.col('pts_against')).round(1).alias('net'))
+    .sort('net', descending=True)
+)
+net_rating
+```
+
+### Recipe 6 — Double-double machines 🏅
+
+Count games where a player hit double digits in two of the five box-score categories (points, rebounds, assists, steals, blocks) — the classic double-double, plus triple-doubles for free. All from the player box-score loader and a little polars boolean arithmetic.
+
+
+```python
+cats = ['points', 'rebounds', 'assists', 'steals', 'blocks']
+double_doubles = (
+    box
+    .filter(~pl.col('did_not_play'))
+    .with_columns(
+        sum((pl.col(c) >= 10).cast(pl.Int8) for c in cats).alias('cats10')
+    )
+    .with_columns([
+        (pl.col('cats10') >= 2).alias('is_dd'),
+        (pl.col('cats10') >= 3).alias('is_td'),
+    ])
+    .group_by(['athlete_display_name', 'team_abbreviation'])
+    .agg([
+        pl.col('is_dd').sum().alias('double_doubles'),
+        pl.col('is_td').sum().alias('triple_doubles'),
+    ])
+    .sort(['double_doubles', 'triple_doubles'], descending=True)
+    .head(10)
+)
+double_doubles
+```
+
+### Recipe 7 — Most efficient high-volume scorers 🎯
+
+Raw points reward volume; **true shooting %** rewards efficiency. TS% = points / (2 × (FGA + 0.44 × FTA)). Aggregate the makes/attempts from the box-score loader, keep players with real workloads, and you've got the league's most efficient buckets.
+
+
+```python
+true_shooting = (
+    box
+    .filter(~pl.col('did_not_play'))
+    .group_by(['athlete_display_name', 'team_abbreviation'])
+    .agg([
+        pl.len().alias('games'),
+        pl.col('points').sum().alias('pts'),
+        pl.col('field_goals_attempted').sum().alias('fga'),
+        pl.col('free_throws_attempted').sum().alias('fta'),
+    ])
+    .filter((pl.col('games') >= 20) & (pl.col('pts') >= 300))
+    .with_columns(
+        (pl.col('pts') / (2 * (pl.col('fga') + 0.44 * pl.col('fta'))) * 100)
+        .round(1).alias('ts_pct')
+    )
+    .sort('ts_pct', descending=True)
+    .head(10)
+)
+true_shooting
+```
+
+### Recipe 8 — Where do the threes come from? 🎯
+
+[`load_wnba_shots`](../wnba/reference/loaders.md#load_wnba_shots) is event-level shot data with a `score_value` (the point value of the attempt). Tally made vs. attempted threes per team to see who lives behind the arc — and who actually makes them.
+
+
+```python
+shots = wnba.load_wnba_shots(seasons=[SEASON])
+threes = (
+    shots
+    .filter(pl.col('score_value') == 3)
+    .group_by('team_id')
+    .agg([
+        pl.len().alias('three_pt_attempts'),
+        pl.col('scoring_play').sum().alias('three_pt_makes'),
+    ])
+    .with_columns(
+        (pl.col('three_pt_makes') / pl.col('three_pt_attempts') * 100)
+        .round(1).alias('three_pt_pct')
+    )
+    .sort('three_pt_attempts', descending=True)
+)
+# attach readable team abbreviations from the team box score
+team_names = team_box.select(['team_id', 'team_abbreviation']).unique()
+threes.join(team_names, on='team_id', how='left').select(
+    ['team_abbreviation', 'three_pt_attempts', 'three_pt_makes', 'three_pt_pct']
+).head(12)
+```
+
+### Recipe 9 — Head-to-head series ⚔️
+
+Want every meeting between two clubs? Filter the team box-score loader on team + opponent abbreviations and you get the full season series — scores, dates and who won. Here's New York vs. Minnesota, the eventual 2024 Finals matchup.
+
+
+```python
+head_to_head = (
+    team_box
+    .filter(
+        (pl.col('team_abbreviation') == 'NY')
+        & (pl.col('opponent_team_abbreviation') == 'MIN')
+    )
+    .select(['game_date', 'team_score', 'opponent_team_score', 'team_winner'])
+    .sort('game_date')
+    .with_columns(
+        pl.when(pl.col('team_winner')).then(pl.lit('NY'))
+          .otherwise(pl.lit('MIN')).alias('winner')
+    )
+)
+print('NY series record vs MIN:',
+      head_to_head['team_winner'].sum(), '-',
+      head_to_head.height - head_to_head['team_winner'].sum())
+head_to_head
+```
+
+### Recipe 10 — Rolling form: hot and cold streaks 🔥
+
+A team's last-5 record tells you who's surging into the playoffs. Sort one team's games by date, then a `rolling_sum` over the win flag gives a running 5-game window — polars makes the time-series slice a one-liner.
+
+
+```python
+form = (
+    team_box
+    .filter(pl.col('team_abbreviation') == 'NY')
+    .sort('game_date')
+    .with_columns(pl.col('team_winner').cast(pl.Int8).alias('won'))
+    .with_columns(
+        pl.col('won').rolling_sum(window_size=5).alias('wins_last5')
+    )
+    .select(['game_date', 'opponent_team_abbreviation', 'team_score',
+             'opponent_team_score', 'won', 'wins_last5'])
+    .tail(12)
+)
+form
+```
+
+### Recipe 11 — Roster construction by position 👥
+
+[`load_wnba_rosters`](../wnba/reference/loaders.md#load_wnba_rosters) hands you every team's full roster. Pivot guards / forwards / centers per team to see how each front office balances its lineup — a clean join-free `pivot`.
+
+
+```python
+rosters = wnba.load_wnba_rosters(seasons=[SEASON])
+position_mix = (
+    rosters
+    .group_by(['team_abbreviation', 'position_abbreviation'])
+    .agg(pl.len().alias('n'))
+    .pivot(values='n', index='team_abbreviation', on='position_abbreviation')
+    .fill_null(0)
+    .sort('team_abbreviation')
+)
+position_mix
+```
+
+### Recipe 12 — Season scoring leaders, the pre-aggregated way 📐
+
+Don't want to roll up box scores yourself? [`load_wnba_player_season_stats`](../wnba/reference/loaders.md#load_wnba_player_season_stats) ships ESPN's own season aggregates in **long** format (`category` / `stat_name` / `value`). Filter to the `averages` category and the `avgPoints` stat for an instant scoring leaderboard — a great cross-check against Recipe 3.
+
+
+```python
+season_stats = wnba.load_wnba_player_season_stats(seasons=[SEASON])
+scoring_leaders = (
+    season_stats
+    .filter(
+        (pl.col('category') == 'averages')
+        & (pl.col('stat_name') == 'avgPoints')
+    )
+    .select(['athlete_display_name', 'team_display_name',
+             'athlete_position_abbreviation', 'value'])
+    .rename({'value': 'ppg'})
+    .sort('ppg', descending=True)
+    .head(10)
+)
+scoring_leaders
 ```
 
 ## 📦 Bulk loaders (`load_wnba_*`)

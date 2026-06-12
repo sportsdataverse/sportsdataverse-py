@@ -41,6 +41,9 @@ releases — fast and reliable. Click any name for the full reference.
 | [`load_nba_schedule`](../nba/reference/loaders.md#load_nba_pbp) | Multi-season schedule parquet | 📦 release |
 | [`load_nba_player_boxscore`](../nba/reference/loaders.md#load_nba_player_boxscore) | Player box scores, every game | 📦 release |
 | [`load_nba_standings`](../nba/reference/loaders.md#load_nba_standings) | Historical standings | 📦 release |
+| [`espn_nba_injuries`](../nba/reference/site.md#espn_nba_injuries) | League-wide injury report, one row per team | ⭐ ESPN |
+| [`load_nba_team_boxscore`](../nba/reference/loaders.md#load_nba_team_boxscore) | Team box scores, every game (off/def, shooting) | 📦 release |
+| [`load_nba_shots`](../nba/reference/loaders.md#load_nba_shots) | Every made shot with court coordinates | 📦 release |
 | [`most_recent_nba_season`](../nba/reference/additional.md#most_recent_nba_season) | The current season year helper | 🧮 util |
 
 
@@ -208,6 +211,194 @@ if box is not None and box.height:
     out = leaders
 else:
     out = 'box-score release unavailable'
+out
+```
+
+### Recipe 5 — Offense vs defense, every team 🛡️
+
+The [`load_nba_team_boxscore`](../nba/reference/loaders.md#load_nba_team_boxscore)
+release has one row per team-game with both `team_score` and
+`opponent_team_score` — so points-for, points-against and net rating are a
+single `group_by` away.
+
+
+```python
+tbox = safe('team boxscore release', lambda: sdv.nba.load_nba_team_boxscore(seasons=[SEASON]))
+if tbox is not None and tbox.height:
+    netrtg = (
+        tbox.group_by('team_abbreviation')
+        .agg(pl.len().alias('gp'),
+             pl.col('team_score').mean().round(1).alias('off_ppg'),
+             pl.col('opponent_team_score').mean().round(1).alias('def_ppg'))
+        .with_columns((pl.col('off_ppg') - pl.col('def_ppg')).round(1).alias('net'))
+        .sort('net', descending=True)
+        .head(10)
+    )
+    out = netrtg
+else:
+    out = 'team box-score release unavailable'
+out
+```
+
+### Recipe 6 — Who lived behind the arc? 🎯
+
+Sum makes and attempts across the season to get each team's true
+three-point percentage (game-level percentages can't just be averaged).
+Reuses the `tbox` frame from Recipe 5 — no second download.
+
+
+```python
+if tbox is not None and tbox.height:
+    three_pt = (
+        tbox.group_by('team_abbreviation')
+        .agg(pl.col('three_point_field_goals_made').sum().alias('made'),
+             pl.col('three_point_field_goals_attempted').sum().alias('att'))
+        .with_columns((100 * pl.col('made') / pl.col('att')).round(1).alias('three_pt_pct'))
+        .filter(pl.col('att') > 0)
+        .sort('three_pt_pct', descending=True)
+        .head(10)
+    )
+    out = three_pt
+else:
+    out = 'team box-score release unavailable'
+out
+```
+
+### Recipe 7 — Double-double machines 💪
+
+A *double-double* is double digits in two of points / rebounds / assists.
+Count the categories per player-game, keep the ones that cleared two, then
+tally them up — straight from
+[`load_nba_player_boxscore`](../nba/reference/loaders.md#load_nba_player_boxscore).
+
+
+```python
+pbox = safe('player boxscore release', lambda: sdv.nba.load_nba_player_boxscore(seasons=[SEASON]))
+if pbox is not None and pbox.height:
+    dd = (
+        pbox.filter(pl.col('minutes') > 0)
+        .with_columns(
+            ((pl.col('points') >= 10).cast(pl.Int8)
+             + (pl.col('rebounds') >= 10).cast(pl.Int8)
+             + (pl.col('assists') >= 10).cast(pl.Int8)).alias('cats10'))
+        .filter(pl.col('cats10') >= 2)
+        .group_by(['athlete_display_name', 'team_abbreviation'])
+        .agg(pl.len().alias('double_doubles'))
+        .sort('double_doubles', descending=True)
+        .head(10)
+    )
+    out = dd
+else:
+    out = 'player box-score release unavailable'
+out
+```
+
+### Recipe 8 — A tidy standings table 🏆
+
+The [`load_nba_standings`](../nba/reference/loaders.md#load_nba_standings)
+release ships in **long** format (one row per team × stat). Pivot the stats
+you care about into columns to get a classic standings grid, sorted by
+win percentage.
+
+
+```python
+stload = safe('standings release', lambda: sdv.nba.load_nba_standings(seasons=[SEASON]))
+wanted = ['wins', 'losses', 'winPercent', 'playoffSeed', 'pointDifferential']
+if stload is not None and stload.height and {'stat_name', 'value'}.issubset(stload.columns):
+    table = (
+        stload.filter(pl.col('stat_name').is_in(wanted))
+        .select(['team_abbreviation', 'group_name', 'stat_name', 'value'])
+        .pivot(values='value', index=['team_abbreviation', 'group_name'], on='stat_name')
+        .sort('winPercent', descending=True)
+        .head(12)
+    )
+    out = table
+else:
+    out = 'standings release unavailable'
+out
+```
+
+### Recipe 9 — Built on threes (shot release + a join) 🧱
+
+[`load_nba_shots`](../nba/reference/loaders.md#load_nba_shots) is one row per
+made shot with a `score_value`. Tally points from twos vs threes per team,
+then **join** team abbreviations from the box-score release to find who
+leaned hardest on the long ball.
+
+
+```python
+shots = safe('shots release', lambda: sdv.nba.load_nba_shots(seasons=[SEASON]))
+if shots is not None and shots.height and tbox is not None and tbox.height:
+    fg = shots.filter(pl.col('score_value').is_in([2, 3]))
+    reliance = (
+        fg.group_by('team_id')
+        .agg(pl.col('score_value').filter(pl.col('score_value') == 3).len().alias('threes_made'),
+             pl.col('score_value').sum().alias('points_from_fg'))
+        .with_columns((3 * pl.col('threes_made')).alias('points_from_threes'))
+        .with_columns((100 * pl.col('points_from_threes') / pl.col('points_from_fg'))
+                      .round(1).alias('pct_pts_from_3'))
+        .filter(pl.col('threes_made') >= 500)  # drop All-Star / special rosters
+    )
+    abbr = tbox.select(['team_id', 'team_abbreviation']).unique()
+    out = (reliance.join(abbr, on='team_id', how='left')
+           .select(['team_abbreviation', 'threes_made', 'pct_pts_from_3'])
+           .sort('pct_pts_from_3', descending=True).head(10))
+else:
+    out = 'shots / team box-score release unavailable'
+out
+```
+
+### Recipe 10 — Head-to-head, game by game 🤝
+
+Filter the team box-score release to one matchup and you get the full
+season series — every meeting, the score, and who won. Swap the two
+abbreviations for any rivalry you like.
+
+
+```python
+TEAM_A, TEAM_B = 'BOS', 'NY'
+if tbox is not None and tbox.height and 'opponent_team_abbreviation' in tbox.columns:
+    series = (
+        tbox.filter((pl.col('team_abbreviation') == TEAM_A)
+                    & (pl.col('opponent_team_abbreviation') == TEAM_B))
+        .select([c for c in ['game_date', 'team_home_away', 'team_score',
+                             'opponent_team_score', 'team_winner']
+                 if c in tbox.columns])
+        .sort('game_date')
+    )
+    out = series if series.height else f'no {TEAM_A} vs {TEAM_B} games in {SEASON}'
+else:
+    out = 'team box-score release unavailable'
+out
+```
+
+### Recipe 11 — Who's banged up? 🩹 (pandas interop)
+
+[`espn_nba_injuries`](../nba/reference/site.md#espn_nba_injuries) hits ESPN
+live for the league-wide injury report. Ask for a **pandas** frame with
+`return_as_pandas=True` (a handy interop point), count the listed players
+per team, then hand the result back to polars for the final sort.
+
+
+```python
+import ast
+
+inj = safe('injuries', lambda: sdv.nba.espn_nba_injuries(return_as_pandas=True))
+if inj is not None and getattr(inj, 'shape', (0,))[0] and 'injuries' in inj.columns:
+    def _n_listed(s):
+        try:
+            v = ast.literal_eval(s) if isinstance(s, str) else s
+            return len(v) if isinstance(v, list) else 0
+        except Exception:
+            return 0
+    inj = inj.copy()
+    inj['players_listed'] = inj['injuries'].apply(_n_listed)
+    out = (pl.from_pandas(inj[['display_name', 'players_listed']])
+           .filter(pl.col('players_listed') > 0)
+           .sort('players_listed', descending=True)
+           .head(12))
+else:
+    out = 'injury report unavailable (off-season or feed down)'
 out
 ```
 

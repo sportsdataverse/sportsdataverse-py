@@ -10,8 +10,8 @@ Welcome to **professional women's hockey**! The Professional Women's Hockey Leag
 
 `sportsdataverse.pwhl` gives you the whole league two ways:
 
-1. 📦 **`load_pwhl_*` release loaders** — fast, reliable parquet snapshots (schedules, boxscores, play-by-play, scoring summaries, rosters). Perfect for season-long analysis, and they work great offline.
-2. 🛰️ **`pwhl_*` live wrappers + analytics** — straight off the HockeyTech stats feed (standings, leaders, rosters, single-game PBP) **plus** derived on-ice metrics (Corsi, time-on-ice, shifts).
+1. 📦 **`load_pwhl_*` release loaders** — fast, reliable parquet snapshots (schedules, boxscores, play-by-play, scoring & penalty summaries, rosters). Perfect for season-long analysis, and they work great offline.
+2. 🛰️ **`pwhl_*` live wrappers + analytics** — straight off the HockeyTech stats feed (standings, leaders, rosters, stats, single-game PBP) **plus** derived on-ice metrics (Corsi, time-on-ice, shifts).
 
 And the best part: **no API key needed** — the public HockeyTech client key ships with the package. R companion: [fastRhockey](https://fastRhockey.sportsdataverse.org). Let's drop the puck! 🥅
 
@@ -28,6 +28,8 @@ Everything returns a tidy **polars** `DataFrame` by default — pass `return_as_
 | [`load_pwhl_team_box`](../pwhl/reference/loaders.md#load_pwhl_team_boxscores) | Team boxscore (shots, PP, faceoffs) | 📦 loader |
 | [`load_pwhl_pbp`](../pwhl/reference/loaders.md#load_pwhl_pbp) | Event-level play-by-play (wide, with coordinates) | 📦 loader |
 | [`load_pwhl_scoring_summary`](../pwhl/reference/loaders.md#load_pwhl_scoring_summary) | Tidy goal log (scorer + assists + situation flags) | 📦 loader |
+| [`load_pwhl_penalty_summary`](../pwhl/reference/loaders.md#load_pwhl_penalty_summary) | Tidy penalty log (infraction, minutes, who took it) | 📦 loader |
+| [`load_pwhl_shots_by_period`](../pwhl/reference/loaders.md#load_pwhl_shots_by_period) | Per-period shot & goal totals per game | 📦 loader |
 | [`load_pwhl_three_stars`](../pwhl/reference/loaders.md#load_pwhl_three_stars) | Post-game three-star selections | 📦 loader |
 | [`pwhl_schedule`](../pwhl/reference/additional.md#pwhl_schedule) | Live schedule, one row per game | 🛰️ live |
 | [`pwhl_standings`](../pwhl/reference/additional.md#pwhl_standings) | Live standings, one row per team | 🛰️ live |
@@ -35,6 +37,8 @@ Everything returns a tidy **polars** `DataFrame` by default — pass `return_as_
 | [`pwhl_team_roster`](../pwhl/reference/additional.md#pwhl_team_roster) | A team's roster | 🛰️ live |
 | [`pwhl_leaders`](../pwhl/reference/additional.md#pwhl_leaders) | Statistical leaders | 🛰️ live |
 | [`pwhl_stats`](../pwhl/reference/additional.md#pwhl_stats) | Aggregate skater/goalie stats | 🛰️ live |
+| [`pwhl_player_search`](../pwhl/reference/additional.md#pwhl_player_search) | Find a player_id by name | 🛰️ live |
+| [`pwhl_player_stats`](../pwhl/reference/additional.md#pwhl_player_stats) | A player's season-by-season stat lines | 🛰️ live |
 | [`pwhl_pbp`](../pwhl/reference/additional.md#pwhl_pbp) | Enriched single-game play-by-play | 🛰️ live |
 | [`pwhl_game_corsi`](../pwhl/reference/additional.md#pwhl_game_corsi) | On-ice Corsi / Fenwick per player | 🛰️ live |
 | [`pwhl_player_toi`](../pwhl/reference/additional.md#pwhl_player_toi) | Time-on-ice per player | 🛰️ live |
@@ -135,7 +139,7 @@ goalie_box.select([
 
 ## 🎬 Play-by-play (loader)
 
-[`load_pwhl_pbp`](../pwhl/reference/loaders.md#load_pwhl_pbp) returns a wide event log. The `event` column tags each row as `faceoff`, `shot`, `goal`, `penalty`, and friends — and there are several coordinate systems (`x_coord`/`y_coord` plus rink-normalized `*_fixed` / `*_right` variants) for drawing rink plots.
+[`load_pwhl_pbp`](../pwhl/reference/loaders.md#load_pwhl_pbp) returns a wide event log. The `event` column tags each row as `faceoff`, `shot`, `goal`, or `penalty` — and there are several coordinate systems (`x_coord`/`y_coord` plus rink-normalized `*_fixed` / `*_right` variants) for drawing rink plots.
 
 
 ```python
@@ -153,7 +157,7 @@ pbp.shape
 
 ## 🍳 Cookbook: common PWHL tasks
 
-Now the fun part — a handful of recipes you'll reach for constantly. The first three lean on the rock-solid 📦 loaders (great offline); the rest tour the 🛰️ live wrappers, wrapped in `safe()` so an offseason or a flaky feed never breaks your run.
+Now the fun part — a baker's dozen of recipes you'll reach for constantly. Recipes **1–11** lean on the rock-solid 📦 loaders (great offline); recipes **12–13** tour the 🛰️ live wrappers, wrapped in `safe()` so an offseason or a flaky feed never breaks your run. Every recipe ends in a tidy, ready-to-read frame.
 
 ### Recipe 1 — Standings from the schedule 🏆
 
@@ -208,9 +212,223 @@ Sum saves and shots-against from the goalie boxscore, then compute a season save
     .head(10))
 ```
 
-### Recipe 4 — A team, its roster, and a game's PBP + Corsi 🛰️
+### Recipe 4 — Biggest blowouts of the season 💥
 
-Now the live wrappers. List teams with [`pwhl_teams`](../pwhl/reference/additional.md#pwhl_teams), grab a `team_id`, pull the roster with [`pwhl_team_roster`](../pwhl/reference/additional.md#pwhl_team_roster), take a `game_id` from the loader schedule, then fetch enriched events with [`pwhl_pbp`](../pwhl/reference/additional.md#pwhl_pbp) and shot-attempt share with [`pwhl_game_corsi`](../pwhl/reference/additional.md#pwhl_game_corsi) — all from the same feed. Everything is `safe()`-wrapped, so offline this prints a friendly note instead of raising.
+Cast the string scores to integers, compute the margin, and sort — the season's most lopsided games fall right out.
+
+
+```python
+(schedule
+    .with_columns(
+        pl.col('home_score').cast(pl.Int32),
+        pl.col('away_score').cast(pl.Int32),
+    )
+    .with_columns(
+        (pl.col('home_score') - pl.col('away_score')).abs().alias('margin')
+    )
+    .sort('margin', descending=True)
+    .select(['game_date', 'home_team', 'home_score',
+             'away_score', 'away_team', 'winner', 'margin'])
+    .head(10))
+```
+
+### Recipe 5 — Team offense: shots & shooting % ⚡
+
+Roll the **team** boxscore up to the club level for a quick offensive profile — total goals, shot volume, and finishing rate.
+
+
+```python
+# Map each team_id to its abbreviation (both Int32-keyed), then roll up the
+# skater box to the club level for a quick offensive profile.
+team_lookup = (pwhl.load_pwhl_team_box(seasons=[2024])
+    .select(['team_id', 'team_abbr']).unique())
+
+(skater_box
+    .join(team_lookup, on='team_id', how='left')
+    .group_by('team_abbr')
+    .agg(
+        pl.col('goals').sum().alias('goals'),
+        pl.col('shots').sum().alias('shots'),
+    )
+    .with_columns(
+        (pl.col('goals') / pl.col('shots') * 100).round(1).alias('shooting_pct')
+    )
+    .filter(pl.col('team_abbr').is_not_null())
+    .sort('goals', descending=True))
+```
+
+### Recipe 6 — Power-play conversion leaders 🔌
+
+The team boxscore carries `pp_goals` and `pp_opportunities`, so a season power-play percentage is a single division.
+
+
+```python
+team_box = pwhl.load_pwhl_team_box(seasons=[2024])
+
+(team_box
+    .group_by('team_abbr')
+    .agg(
+        pl.col('pp_goals').sum().alias('pp_goals'),
+        pl.col('pp_opportunities').sum().alias('pp_opportunities'),
+    )
+    .with_columns(
+        (pl.col('pp_goals') / pl.col('pp_opportunities') * 100).round(1).alias('pp_pct')
+    )
+    .sort('pp_pct', descending=True))
+```
+
+### Recipe 7 — Faceoff specialists 🎯
+
+The skater boxscore tracks faceoff wins and attempts. Aggregate, gate on a minimum-draw threshold, and the dot-dominators rise to the top.
+
+
+```python
+(skater_box
+    .group_by(['first_name', 'last_name'])
+    .agg(
+        pl.col('faceoff_wins').sum().alias('fo_wins'),
+        pl.col('faceoff_attempts').sum().alias('fo_attempts'),
+    )
+    .filter(pl.col('fo_attempts') >= 200)
+    .with_columns(
+        (pl.col('fo_wins') / pl.col('fo_attempts') * 100).round(1).alias('fo_pct')
+    )
+    .sort('fo_pct', descending=True)
+    .head(10))
+```
+
+### Recipe 8 — Two-way workhorses: hits + blocks 🧱
+
+Not every contribution shows up on the scoresheet. Sum hits and blocked shots from the skater box to surface the players doing the dirty work — defenders usually own this list.
+
+
+```python
+(skater_box
+    .group_by(['first_name', 'last_name', 'position'])
+    .agg(
+        pl.col('hits').sum().alias('hits'),
+        pl.col('blocked_shots').sum().alias('blocks'),
+    )
+    .with_columns(
+        (pl.col('hits') + pl.col('blocks')).alias('hits_plus_blocks')
+    )
+    .sort('hits_plus_blocks', descending=True)
+    .head(10))
+```
+
+### Recipe 9 — The penalty box 🚨
+
+[`load_pwhl_penalty_summary`](../pwhl/reference/loaders.md#load_pwhl_penalty_summary) is a tidy per-infraction log. Two quick cuts: the most common infractions league-wide, and the players spending the most time in the box.
+
+
+```python
+penalties = pwhl.load_pwhl_penalty_summary(seasons=[2024])
+
+# Most common infractions
+top_infractions = (penalties
+    .group_by('description')
+    .agg(pl.len().alias('count'))
+    .sort('count', descending=True)
+    .head(8))
+top_infractions
+```
+
+
+```python
+# PIM leaders (players who actually took the penalty)
+(penalties
+    .filter(pl.col('taken_by_last').is_not_null())
+    .group_by(['taken_by_first', 'taken_by_last'])
+    .agg(
+        pl.col('minutes').sum().alias('pim'),
+        pl.len().alias('penalties'),
+    )
+    .sort('pim', descending=True)
+    .head(10))
+```
+
+### Recipe 10 — When do goals get scored? ⏱️
+
+Slice the goal log out of the play-by-play and bucket it by period — and pull the league's top finishers straight from the `event == 'goal'` rows while you're there.
+
+
+```python
+goal_events = pbp.filter(pl.col('event') == 'goal')
+
+# Goals by period
+goals_by_period = (goal_events
+    .group_by('period_of_game')
+    .agg(pl.len().alias('goals'))
+    .sort('period_of_game'))
+goals_by_period
+```
+
+
+```python
+# Top goal-scorers from the play-by-play feed
+(goal_events
+    .filter(pl.col('player_name_last').is_not_null())
+    .group_by(['player_name_first', 'player_name_last'])
+    .agg(pl.len().alias('goals'))
+    .sort('goals', descending=True)
+    .head(10))
+```
+
+### Recipe 11 — Three-stars honour roll ⭐ and a head-to-head series
+
+Two compact joins-on-themselves. First, who collected the most **first-star** nods ([`load_pwhl_three_stars`](../pwhl/reference/loaders.md#load_pwhl_three_stars)). Then a **head-to-head** series view from the schedule — swap in any two clubs.
+
+
+```python
+three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
+
+# First-star honour roll
+(three_stars
+    .filter(pl.col('star') == 1)
+    .group_by(['first_name', 'last_name'])
+    .agg(pl.len().alias('first_stars'))
+    .sort('first_stars', descending=True)
+    .head(10))
+```
+
+
+```python
+# Head-to-head: Boston vs. Montreal, every meeting in 2024
+A, B = 'Boston', 'Montreal'
+(schedule
+    .filter(
+        ((pl.col('home_team') == A) & (pl.col('away_team') == B)) |
+        ((pl.col('home_team') == B) & (pl.col('away_team') == A))
+    )
+    .select(['game_date', 'home_team', 'home_score',
+             'away_score', 'away_team', 'winner', 'game_status']))
+```
+
+### Recipe 12 — Find a player, then pull her career lines 🛰️🔎
+
+A classic two-step lookup off the live feed: [`pwhl_player_search`](../pwhl/reference/additional.md#pwhl_player_search) resolves a name to a `player_id`, then [`pwhl_player_stats`](../pwhl/reference/additional.md#pwhl_player_stats) returns her season-by-season stat lines. Both are `safe()`-wrapped for offseason resilience.
+
+
+```python
+hit = safe('player search: Spooner', lambda: pwhl.pwhl_player_search('Spooner'))
+if hit is not None and getattr(hit, 'height', 0):
+    pid = int(hit['player_id'][0])
+    career = safe(f'player stats {pid}', lambda: pwhl.pwhl_player_stats(player_id=pid))
+    if career is not None and career.height:
+        keep = [c for c in ['season_name', 'team_code', 'games_played',
+                            'goals', 'assists', 'points', 'points_per_game']
+                if c in career.columns]
+        out = career.select(keep)
+    else:
+        out = 'player stats feed unavailable right now'
+else:
+    out = 'player search feed unavailable right now'
+out
+```
+
+### Recipe 13 — A team, its roster, and a game's PBP + Corsi 🛰️📈
+
+The full live tour. List teams with [`pwhl_teams`](../pwhl/reference/additional.md#pwhl_teams), grab a `team_id`, pull the roster with [`pwhl_team_roster`](../pwhl/reference/additional.md#pwhl_team_roster), take a `game_id` from the loader schedule, then fetch enriched events with [`pwhl_pbp`](../pwhl/reference/additional.md#pwhl_pbp) and shot-attempt share with [`pwhl_game_corsi`](../pwhl/reference/additional.md#pwhl_game_corsi) — all from the same feed. Everything is `safe()`-wrapped, so offline this prints a friendly note instead of raising.
 
 
 ```python
@@ -302,9 +520,9 @@ else:
 out
 ```
 
-## ✨ Bonus: tidy goal log
+## ✨ Bonus: tidy goal log + pandas interop
 
-[`load_pwhl_scoring_summary`](../pwhl/reference/loaders.md#load_pwhl_scoring_summary) is a clean per-goal log — scorer plus up to two assists, with situation flags like power play, short handed, and game-winning. Pair it with [`load_pwhl_three_stars`](../pwhl/reference/loaders.md#load_pwhl_three_stars) for the post-game honours.
+[`load_pwhl_scoring_summary`](../pwhl/reference/loaders.md#load_pwhl_scoring_summary) is a clean per-goal log — scorer plus up to two assists, with situation flags like power play, short handed, and game-winning. And because every loader takes `return_as_pandas=True`, dropping into the pandas world is one keyword away.
 
 
 ```python
@@ -313,6 +531,17 @@ scoring.select([
     'game_id', 'period', 'time', 'team_abbr',
     'scorer_first', 'scorer_last', 'is_power_play', 'is_game_winning',
 ]).head()
+```
+
+
+```python
+# Same skater box, but as a pandas DataFrame — group with the pandas API.
+skater_pd = pwhl.load_pwhl_skater_box(seasons=[2024], return_as_pandas=True)
+print('type:', type(skater_pd).__name__, '| shape:', skater_pd.shape)
+(skater_pd
+    .groupby(['first_name', 'last_name'], as_index=False)['points'].sum()
+    .sort_values('points', ascending=False)
+    .head(10))
 ```
 
 ## 🎉 Where to next

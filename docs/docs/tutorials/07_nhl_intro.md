@@ -39,12 +39,18 @@ are the **premium native NHL feed** — start there.
 | [`nhl_player_landing`](../nhl/reference/nhl_api_web.md#nhl_player_landing) | A player's bio + career snapshot | ⭐ NHL api-web |
 | [`nhl_skater_leaders`](../nhl/reference/nhl_api_web.md#nhl_skater_leaders) | Season skater leaderboard | ⭐ NHL api-web |
 | [`nhl_goalie_leaders`](../nhl/reference/nhl_api_web.md#nhl_goalie_leaders) | Season goalie leaderboard | ⭐ NHL api-web |
+| [`nhl_club_stats`](../nhl/reference/nhl_api_web.md#nhl_club_stats) | A club's full skater + goalie stat lines | ⭐ NHL api-web |
+| [`nhl_player_landing`](../nhl/reference/nhl_api_web.md#nhl_player_landing) | A player's bio + career snapshot | ⭐ NHL api-web |
+| [`nhl_score`](../nhl/reference/nhl_api_web.md#nhl_score) | A day's final scores + series context | ⭐ NHL api-web |
+| [`nhl_draft_picks`](../nhl/reference/nhl_api_web.md#nhl_draft_picks) | Draft board for a year/round | ⭐ NHL api-web |
 | [`nhl_edge_skater_skating_speed_detail`](../nhl/reference/nhl_edge.md#nhl_edge_skater_skating_speed_detail) | A skater's tracked speed vs league avg + percentile | ⭐ NHL EDGE |
 | [`nhl_edge_skater_landing`](../nhl/reference/nhl_edge.md#nhl_edge_skater_landing) | EDGE skater leaderboards (hardest shot, top speed…) | ⭐ NHL EDGE |
 | [`nhl_edge_team_landing`](../nhl/reference/nhl_edge.md#nhl_edge_team_landing) | EDGE team-level tracking leaders | ⭐ NHL EDGE |
+| [`nhl_edge_goalie_landing`](../nhl/reference/nhl_edge.md#nhl_edge_goalie_landing) | EDGE goalie tracking leaders | ⭐ NHL EDGE |
 | [`nhl_stats_rest_leaders_skaters`](../nhl/reference/nhl_stats_rest.md#nhl_stats_rest_leaders_skaters) | Stats-REST top-10 skaters by attribute | ⭐ NHL stats-REST |
 | [`nhl_stats_rest_leaders_goalies`](../nhl/reference/nhl_stats_rest.md#nhl_stats_rest_leaders_goalies) | Stats-REST top-10 goalies by attribute | ⭐ NHL stats-REST |
 | [`nhl_records_franchises`](../nhl/reference/nhl_records.md#nhl_records_franchises) | Every franchise in NHL history (Records API) | ⭐ NHL records |
+| [`nhl_records_franchise_team_totals`](../nhl/reference/nhl_records.md#nhl_records_franchise_team_totals) | All-time W/L/points per franchise | ⭐ NHL records |
 | [`load_nhl_schedule`](../nhl/reference/loaders.md#load_nhl_schedule) | Pre-built schedule parquet (offline-friendly) | 📦 loader |
 | [`load_nhl_team_box`](../nhl/reference/additional.md#load_nhl_team_box) | Pre-built team box parquet | 📦 loader |
 | [`load_nhl_player_box`](../nhl/reference/additional.md#load_nhl_player_box) | Pre-built player box parquet | 📦 loader |
@@ -240,8 +246,12 @@ out
 
 ## 🍳 Cookbook: common NHL tasks
 
-Now the fun part — a few recipes you'll reach for constantly, all built on the
-premium native feed.
+Now the fun part — a dozen recipes you'll reach for constantly, almost all
+built on the **premium native feed**. Each one is a copy-paste starting
+point: a game pull, a team view, a player line, leaderboards, splits,
+joins, season-to-date aggregates, the draft board, franchise history, and
+EDGE tracking — every call wrapped in `safe()` so an offseason or a
+throttle never costs you a traceback. 🍳
 
 ### Recipe 1 — A game's boxscore + play-by-play 🎯
 
@@ -332,6 +342,233 @@ if el is not None:
     out = el.select(keep) if keep else el.head()
 else:
     out = 'EDGE leaders unavailable'
+out
+```
+
+### Recipe 5 — Who's hot? Standings by last-10 form 🔥
+
+The native [`nhl_standings`](../nhl/reference/nhl_api_web.md#nhl_standings)
+frame carries rich split columns — `l10_*` (last ten games) and `streak_*` —
+so you can rank teams by *recent* form instead of season-long points.
+
+
+```python
+hot = safe('standings as-of date',
+           lambda: nhl.nhl_standings(date='2024-04-15'))
+if hot is not None and hot.height:
+    cols = ['team_name_default', 'l10_wins', 'l10_losses', 'l10_ot_losses',
+            'l10_points', 'streak_code', 'streak_count', 'points']
+    out = (hot.select([c for c in cols if c in hot.columns])
+              .sort(['l10_points', 'points'], descending=True).head(8))
+else:
+    out = 'standings unavailable'
+out
+```
+
+### Recipe 6 — A whole team's stat lines in one call 📋
+
+[`nhl_club_stats`](../nhl/reference/nhl_api_web.md#nhl_club_stats) returns a
+**dict** with `skaters` and `goalies` frames — the entire roster's season
+totals, no looping over players. Here are the Panthers' top point-getters.
+
+
+```python
+cs = safe('FLA club stats',
+          lambda: nhl.nhl_club_stats(team='FLA', season=SEASON))
+if isinstance(cs, dict) and isinstance(cs.get('skaters'), pl.DataFrame) and cs['skaters'].height:
+    sk = cs['skaters']
+    cols = ['first_name_default', 'last_name_default', 'position_code',
+            'games_played', 'goals', 'assists', 'points', 'shots',
+            'avg_time_on_ice_per_game']
+    out = (sk.select([c for c in cols if c in sk.columns])
+             .sort('points', descending=True).head(8))
+else:
+    out = 'club stats unavailable'
+out
+```
+
+### Recipe 7 — Goalie leaderboard + a netminder's bio 🥅
+
+Pair the season-wide
+[`nhl_goalie_leaders`](../nhl/reference/nhl_api_web.md#nhl_goalie_leaders)
+board (it bundles wins, save %, GAA and shutouts in one frame, tagged by
+`category`) with a single goalie's
+[`nhl_player_landing`](../nhl/reference/nhl_api_web.md#nhl_player_landing)
+bio card.
+
+
+```python
+gboard = safe('goalie leaders', lambda: nhl.nhl_goalie_leaders(season=SEASON))
+if gboard is not None and gboard.height:
+    cols = ['category', 'first_name_default', 'last_name_default',
+            'team_abbrev', 'value']
+    out = (gboard.filter(pl.col('category') == 'wins')
+                 .select([c for c in cols if c in gboard.columns])
+                 .sort('value', descending=True).head(5)
+           if 'category' in gboard.columns else gboard.head())
+else:
+    out = 'goalie leaders unavailable'
+out
+```
+
+
+```python
+# Bobrovsky's bio card (player_id 8475683) — one wide row
+bio = safe('goalie landing', lambda: nhl.nhl_player_landing(player_id=8475683))
+if bio is not None and bio.height:
+    cols = ['first_name_default', 'last_name_default', 'position',
+            'current_team_abbrev', 'height_in_inches', 'weight_in_pounds',
+            'birth_city_default', 'birth_country', 'draft_details_year',
+            'draft_details_overall_pick']
+    out = bio.select([c for c in cols if c in bio.columns])
+else:
+    out = 'player landing unavailable'
+out
+```
+
+### Recipe 8 — Home vs road splits, derived from a schedule 🏠✈️
+
+No splits endpoint? No problem — pull a club's full season with
+[`nhl_club_schedule_season`](../nhl/reference/nhl_api_web.md#nhl_club_schedule_season),
+tag each finished game as home or road, and let **polars** roll up
+goals-for / goals-against per game. A pattern you'll reuse everywhere.
+
+
+```python
+TEAM = 'FLA'
+cs2 = safe(f'{TEAM} season schedule',
+           lambda: nhl.nhl_club_schedule_season(team=TEAM, season=SEASON))
+need = {'home_team_abbrev', 'away_team_abbrev', 'home_team_score', 'away_team_score'}
+if cs2 is not None and need.issubset(cs2.columns):
+    g = cs2.filter(pl.col('home_team_score').is_not_null())
+    if 'game_type' in g.columns:
+        g = g.filter(pl.col('game_type') == 2)  # regular season only
+    g = g.with_columns([
+        pl.when(pl.col('home_team_abbrev') == TEAM).then(pl.lit('home'))
+          .otherwise(pl.lit('road')).alias('venue'),
+        pl.when(pl.col('home_team_abbrev') == TEAM)
+          .then(pl.col('home_team_score')).otherwise(pl.col('away_team_score')).alias('gf'),
+        pl.when(pl.col('home_team_abbrev') == TEAM)
+          .then(pl.col('away_team_score')).otherwise(pl.col('home_team_score')).alias('ga'),
+    ])
+    out = (g.group_by('venue').agg([
+        pl.len().alias('gp'),
+        (pl.col('gf') > pl.col('ga')).sum().alias('wins'),
+        pl.col('gf').mean().round(2).alias('gf_per_game'),
+        pl.col('ga').mean().round(2).alias('ga_per_game'),
+    ]).sort('venue'))
+else:
+    out = 'club schedule unavailable'
+out
+```
+
+### Recipe 9 — Pull a draft board 🎟️
+
+[`nhl_draft_picks`](../nhl/reference/nhl_api_web.md#nhl_draft_picks) returns one
+row per selection for a given `year` (and optional `round_`) — overall pick,
+team, position, and the player's amateur club. Here's the 2023 first round.
+
+
+```python
+draft = safe('2023 draft round 1',
+             lambda: nhl.nhl_draft_picks(year=2023, round_=1))
+if draft is not None and draft.height:
+    cols = ['overall_pick', 'team_abbrev', 'first_name_default',
+            'last_name_default', 'position_code', 'amateur_club_name',
+            'amateur_league']
+    out = (draft.select([c for c in cols if c in draft.columns])
+                .sort('overall_pick').head(10))
+else:
+    out = 'draft board unavailable'
+out
+```
+
+### Recipe 10 — Season-to-date team aggregates (loader + pandas) 📦🐼
+
+For **multi-game** rollups, the offline-friendly
+[`load_nhl_team_box`](../nhl/reference/additional.md#load_nhl_team_box) parquet
+release is your friend: one row per team per game. Group it in polars, then
+`.to_pandas()` to hand the result to the rest of the PyData stack.
+
+
+```python
+tb = safe('team box 2024', lambda: nhl.load_nhl_team_box(seasons=[2024]))
+if tb is not None and tb.height and {'tri_code', 'shots', 'hits', 'goals'}.issubset(tb.columns):
+    agg = (tb.group_by('tri_code').agg([
+        pl.len().alias('games'),
+        pl.col('goals').cast(pl.Float64).mean().round(2).alias('goals_pg'),
+        pl.col('shots').cast(pl.Float64).mean().round(1).alias('shots_pg'),
+        pl.col('hits').cast(pl.Float64).mean().round(1).alias('hits_pg'),
+    ]).sort('goals_pg', descending=True).head(8))
+    pdf = agg.to_pandas()   # hand off to pandas for plotting/modeling
+    print('pandas frame:', type(pdf).__name__, pdf.shape)
+    out = agg
+else:
+    out = 'team box loader unavailable'
+out
+```
+
+### Recipe 11 — All-time franchise standings (Records API join) 🏛️
+
+The Records flat API never goes offseason. Join
+[`nhl_records_franchise_team_totals`](../nhl/reference/nhl_records.md#nhl_records_franchise_team_totals)
+(all-time W/L/points, regular season `game_type_id == 2`) onto
+[`nhl_records_franchises`](../nhl/reference/nhl_records.md#nhl_records_franchises)
+for the names — the winningest clubs in league history.
+
+
+```python
+totals = safe('franchise team totals',
+              lambda: nhl.nhl_records_franchise_team_totals())
+names = safe('franchises', lambda: nhl.nhl_records_franchises())
+if (totals is not None and totals.height and names is not None and names.height
+        and 'franchise_id' in totals.columns and 'id' in names.columns):
+    reg = totals.filter(pl.col('game_type_id') == 2) if 'game_type_id' in totals.columns else totals
+    keep_n = [c for c in ('id', 'full_name', 'team_abbrev') if c in names.columns]
+    out = (reg.join(names.select(keep_n), left_on='franchise_id', right_on='id', how='left')
+              .select([c for c in ('full_name', 'games_played', 'wins',
+                                   'losses', 'points', 'cups')
+                       if c in reg.columns or c == 'full_name'])
+              .sort('wins', descending=True).head(10))
+else:
+    out = 'franchise records unavailable'
+out
+```
+
+### Recipe 12 — EDGE tracking leaders: team & goalie 🛰️
+
+Round out the tour with two more EDGE *landing* boards. Each is a wide
+single-row frame of leaders; pluck the columns for one metric to see who
+tops it. Here: the team that piled up the most 90+ mph shot attempts, and
+the goalie with the best high-danger save percentage.
+
+
+```python
+tl = safe('EDGE team leaders', lambda: nhl.nhl_edge_team_landing(season=SEASON))
+if tl is not None and tl.height:
+    keep = [c for c in tl.columns
+            if c.startswith('leaders_shot_attempts_over90_')
+            and ('team_abbrev' in c or 'common_name_default' in c
+                 or c.endswith('_attempts'))]
+    out = tl.select(keep) if keep else tl.head()
+else:
+    out = 'EDGE team leaders unavailable'
+out
+```
+
+
+```python
+gl = safe('EDGE goalie leaders', lambda: nhl.nhl_edge_goalie_landing(season=SEASON))
+if gl is not None and gl.height:
+    keep = [c for c in gl.columns
+            if c.startswith('leaders_high_danger_save_pctg_')
+            and ('player_first_name_default' in c
+                 or 'player_last_name_default' in c
+                 or 'player_team_abbrev' in c
+                 or c.endswith('_save_pctg'))]
+    out = gl.select(keep) if keep else gl.head()
+else:
+    out = 'EDGE goalie leaders unavailable'
 out
 ```
 

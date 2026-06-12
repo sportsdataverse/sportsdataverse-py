@@ -35,6 +35,7 @@ Everything returns a tidy **polars** `DataFrame` by default — pass
 | [`load_cfb_rosters`](../cfb/reference/loaders.md#load_cfb_rosters) | Season **rosters** (bio, position, hometown) | ⭐ release |
 | [`load_cfb_schedule`](../cfb/reference/loaders.md#load_cfb_schedule) | Season **schedule** + results + Elo | ⭐ release |
 | [`load_cfb_team_info`](../cfb/reference/loaders.md#load_cfb_team_info) | **Team** metadata: conference, colors, venue | ⭐ release |
+| [`load_cfb_betting_lines`](../cfb/reference/additional.md#load_cfb_betting_lines) | Historical **betting market** lines (spread/total/ML) | ⭐ release |
 | [`espn_cfb_scoreboard`](../cfb/reference/site.md#espn_cfb_scoreboard) | Live + recent **scoreboard** for a date/week | ⭐ ESPN |
 | [`espn_cfb_schedule`](../cfb/reference/additional.md#espn_cfb_schedule) | ESPN **schedule** frame for a date/week | ⭐ ESPN |
 | [`espn_cfb_teams`](../cfb/reference/additional.md#espn_cfb_teams) | Every FBS/FCS **team** (grab `team_id`s) | ⭐ ESPN |
@@ -149,11 +150,23 @@ already computed. (It's a big pull, so we grab a single season and peek.) 📊
 
 
 ```python
-pbp = sdv.cfb.load_cfb_pbp(seasons=[2023])
-print('pbp shape:', pbp.shape)
-cols = ['game_id', 'pos_team', 'down', 'distance', 'play_type', 'epa', 'wpa']
+# The release serves PBP for whichever seasons are currently published.
+# Try a few recent-ish seasons and keep the first one that comes back full,
+# so the EPA recipes below always have real plays to chew on.
+pbp = pl.DataFrame()
+for yr in (2023, 2022, 2021, 2020):
+    cand = safe(f'load_cfb_pbp {yr}', lambda yr=yr: sdv.cfb.load_cfb_pbp(seasons=[yr]))
+    if cand is not None and cand.width > 0 and cand.height > 0:
+        pbp, PBP_SEASON = cand, yr
+        break
+else:
+    PBP_SEASON = None
+
+print('pbp season:', PBP_SEASON, '| pbp shape:', pbp.shape)
+cols = ['game_id', 'start.pos_team.name', 'down', 'distance',
+        'play_type', 'EPA', 'wpa']
 have = [c for c in cols if c in pbp.columns]
-pbp.select(have).head()
+pbp.select(have).head() if have else 'pbp not published for these seasons right now'
 ```
 
 ## 📡 Live from ESPN: the scoreboard
@@ -228,18 +241,20 @@ clean efficiency ranking in five lines.
 
 
 ```python
-epa_cols = {'pos_team', 'epa', 'play'}
+team_col = 'start.pos_team.name'  # human-readable offense on each play
+epa_cols = {team_col, 'EPA', 'play'}
 if epa_cols.issubset(pbp.columns):
     leaderboard = (
         pbp
-        .filter(pl.col('play') & pl.col('epa').is_not_null())
-        .group_by('pos_team')
+        .filter(pl.col('play') & pl.col('EPA').is_not_null())
+        .group_by(team_col)
         .agg(
             pl.len().alias('plays'),
-            pl.col('epa').mean().round(3).alias('epa_per_play'),
+            pl.col('EPA').mean().round(3).alias('epa_per_play'),
         )
         .filter(pl.col('plays') >= 500)
         .sort('epa_per_play', descending=True)
+        .rename({team_col: 'offense'})
         .head(15)
     )
     out = leaderboard
@@ -297,6 +312,229 @@ if participants is not None and getattr(participants, 'height', 0):
 else:
     out = 'participants feed quiet right now (offseason / rate limit)'
 out
+```
+
+### Recipe 5 — Build a standings table from the schedule 🏆
+
+No standings endpoint needed: stack each team's home and away results, count wins and losses, and you've got a win-percentage table for *any* season the loader serves.
+
+
+```python
+completed = schedule.filter(pl.col('completed') == True)
+home = completed.select(
+    pl.col('home_team').alias('team'),
+    (pl.col('home_points') > pl.col('away_points')).alias('win'),
+)
+away = completed.select(
+    pl.col('away_team').alias('team'),
+    (pl.col('away_points') > pl.col('home_points')).alias('win'),
+)
+standings_tbl = (
+    pl.concat([home, away])
+    .group_by('team')
+    .agg(
+        pl.col('win').sum().alias('wins'),
+        (~pl.col('win')).sum().alias('losses'),
+    )
+    .with_columns(
+        (pl.col('wins') / (pl.col('wins') + pl.col('losses')))
+        .round(3).alias('win_pct')
+    )
+    .sort(['wins', 'win_pct'], descending=True)
+)
+standings_tbl.head(10)
+```
+
+### Recipe 6 — End-of-season Elo power ratings ⚡
+
+Every schedule row ships pre- and post-game **Elo** ratings. Grab each team's most recent post-game Elo (sort by week, take the first) for a tidy, ready-to-rank power table — no model to fit.
+
+
+```python
+elo = (
+    pl.concat([
+        schedule.select(
+            pl.col('home_team').alias('team'),
+            pl.col('week'),
+            pl.col('home_postgame_elo').alias('elo'),
+        ),
+        schedule.select(
+            pl.col('away_team').alias('team'),
+            pl.col('week'),
+            pl.col('away_postgame_elo').alias('elo'),
+        ),
+    ])
+    .filter(pl.col('elo').is_not_null())
+    .sort('week', descending=True)
+    .group_by('team', maintain_order=True)
+    .agg(pl.first('elo').alias('final_elo'))
+    .sort('final_elo', descending=True)
+)
+elo.head(15)
+```
+
+### Recipe 7 — One team's full game log 📜
+
+Filter the schedule to a single program, then flip the home/away columns so every row reads from *that team's* perspective — opponent, points for, points against, and the margin. Swap `team` to scout anyone.
+
+
+```python
+team = 'Michigan'
+gamelog = (
+    schedule
+    .filter((pl.col('home_team') == team) | (pl.col('away_team') == team))
+    .unique(subset=['game_id'])
+    .with_columns(
+        pl.when(pl.col('home_team') == team)
+          .then(pl.col('away_team')).otherwise(pl.col('home_team'))
+          .alias('opponent'),
+        pl.when(pl.col('home_team') == team)
+          .then(pl.col('home_points')).otherwise(pl.col('away_points'))
+          .alias('pts_for'),
+        pl.when(pl.col('home_team') == team)
+          .then(pl.col('away_points')).otherwise(pl.col('home_points'))
+          .alias('pts_against'),
+    )
+    .with_columns(
+        (pl.col('pts_for') - pl.col('pts_against')).alias('margin')
+    )
+    .select(['week', 'opponent', 'pts_for', 'pts_against', 'margin',
+             'neutral_site'])
+    .sort('week')
+)
+gamelog.head(16) if gamelog.height else f'no games found for {team}'
+```
+
+### Recipe 8 — Rushing leaders, EPA included 🏃
+
+Premium play-by-play means leaderboards aren't just totals — they carry **efficiency**. Filter to designed runs, sum the yards, and average the EPA per carry to separate the bell-cows from the truly explosive backs.
+
+
+```python
+rush_cols = {'rush', 'rusher_player_name', 'statYardage', 'EPA'}
+if rush_cols.issubset(pbp.columns):
+    rushers = (
+        pbp
+        .filter((pl.col('rush') == True)
+                & pl.col('rusher_player_name').is_not_null())
+        .group_by('rusher_player_name')
+        .agg(
+            pl.len().alias('carries'),
+            pl.col('statYardage').sum().alias('rush_yds'),
+            pl.col('EPA').mean().round(3).alias('epa_per_rush'),
+        )
+        .filter(pl.col('carries') >= 100)
+        .sort('rush_yds', descending=True)
+        .head(15)
+    )
+    out = rushers
+else:
+    out = 'rushing columns not present in this pbp build'
+out
+```
+
+### Recipe 9 — The most thrilling games of the year 🎢
+
+cfbfastR's schedule ships an `excitement_index` (a win-probability swinginess score). Sort it descending and you've ranked the season's white-knuckle finishes in one line.
+
+
+```python
+thrillers = (
+    schedule
+    .filter(pl.col('excitement_index').is_not_null())
+    .sort('excitement_index', descending=True)
+    .select(['week', 'home_team', 'away_team',
+             'home_points', 'away_points', 'excitement_index'])
+    .head(10)
+)
+thrillers
+```
+
+### Recipe 10 — Where does the talent come from? 🗺️
+
+Roll the season roster up by `home_state` to map the recruiting footprint of college football — a quick reminder of just how much of the sport flows out of a handful of states.
+
+
+```python
+talent_map = (
+    rosters
+    .filter(pl.col('home_state').is_not_null())
+    .group_by('home_state')
+    .agg(pl.len().alias('players'))
+    .sort('players', descending=True)
+    .head(15)
+)
+talent_map
+```
+
+### Recipe 11 — Conference vs. non-conference, by margin 🔀
+
+The schedule's `conference_game` flag lets you split the slate. Restrict to FBS, then compare the average final margin in league play versus the out-of-conference cupcakes — group games are (predictably) tighter.
+
+
+```python
+fbs = schedule.filter(
+    (pl.col('home_division') == 'fbs') & (pl.col('completed') == True)
+)
+splits = (
+    fbs
+    .with_columns(
+        (pl.col('home_points') - pl.col('away_points')).abs().alias('margin')
+    )
+    .group_by('conference_game')
+    .agg(
+        pl.len().alias('games'),
+        pl.col('margin').mean().round(1).alias('avg_margin'),
+        pl.col('home_points').add(pl.col('away_points'))
+          .mean().round(1).alias('avg_total_points'),
+    )
+    .sort('conference_game')
+)
+splits
+```
+
+### Recipe 12 — Biggest betting favorites in history 💸
+
+[`load_cfb_betting_lines`](../cfb/reference/additional.md#load_cfb_betting_lines) is a premium release frame of historical sportsbook lines. Average the spread across books per game and sort to surface the most lopsided favorites — the mismatches Vegas saw coming a mile away.
+
+
+```python
+lines = safe('load_cfb_betting_lines', sdv.cfb.load_cfb_betting_lines)
+if lines is not None and {'season', 'market_type', 'lines',
+                          'game_desc', 'abbr'}.issubset(lines.columns):
+    target = sorted(lines['season'].drop_nulls().unique().to_list())[-1]
+    favorites = (
+        lines
+        .filter((pl.col('season') == target)
+                & (pl.col('market_type') == 'spread')
+                & pl.col('lines').is_not_null())
+        .group_by(['game_desc', 'abbr'])
+        .agg(pl.col('lines').mean().round(1).alias('avg_spread'))
+        .filter(pl.col('avg_spread') < 0)  # negative spread = favorite
+        .sort('avg_spread')
+        .head(10)
+    )
+    print(f'biggest favorites, {int(target)} season:')
+    out = favorites
+else:
+    out = 'betting-lines frame unavailable right now'
+out
+```
+
+### Recipe 13 — Hand it to pandas 🐼
+
+Every loader takes `return_as_pandas=True`, and any polars frame converts with `.to_pandas()`. Once it's a pandas DataFrame the whole pandas/`numpy`/`scikit-learn` world opens up — here, a one-call `.describe()` of scoring across the season.
+
+
+```python
+score_pd = (
+    schedule
+    .select(['home_points', 'away_points'])
+    .to_pandas()
+)
+score_pd['total_points'] = score_pd['home_points'] + score_pd['away_points']
+print(type(score_pd).__module__)
+score_pd.describe().round(1)
 ```
 
 ## 🗞️ Live tour: standings, polls, leaders & recruits

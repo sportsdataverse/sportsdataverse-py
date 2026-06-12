@@ -48,6 +48,10 @@ full reference.
 | [`load_nfl_nextgen_stats`](../nfl/reference/additional.md#load_nfl_nextgen_stats) | NextGen Stats back to 2016 (release parquet) | 📦 nflverse release |
 | [`load_nfl_rosters`](../nfl/reference/loaders.md#load_nfl_rosters) | Season rosters with IDs & bios | 📦 nflverse release |
 | [`espn_nfl_schedule`](../nfl/reference/additional.md#espn_nfl_schedule) · [`espn_nfl_scoreboard`](../nfl/reference/site.md#espn_nfl_scoreboard) | ESPN scoreboard/schedule (no auth) | 🔵 ESPN (secondary) |
+| [`load_nfl_snap_counts`](../nfl/reference/loaders.md#load_nfl_snap_counts) | Weekly snap counts & snap-share % per player | 📦 nflverse release |
+| [`load_nfl_depth_charts`](../nfl/reference/loaders.md#load_nfl_depth_charts) | Weekly depth charts, one row per slotted player | 📦 nflverse release |
+| [`load_nfl_schedule`](../nfl/reference/additional.md#load_nfl_schedule) | Game results + lines, one row per game | 📦 nflverse release |
+| [`load_nfl_draft_picks`](../nfl/reference/additional.md#load_nfl_draft_picks) | Every draft pick + career value, one row per pick | 📦 nflverse release |
 | `get_current_nfl_season` · `most_recent_nfl_season` | Season helpers | 🟢 helper |
 
 
@@ -306,8 +310,13 @@ cols = ["id", "away_display_name", "home_display_name", "away_score", "home_scor
 
 ## 🍳 Cookbook: common NFL tasks
 
-Four recipes you'll reach for constantly — all built on the **premium**
-functions, all defensive so a network blip never breaks your run.
+A full dozen recipes you'll reach for constantly — leaderboards, splits,
+team-level efficiency, snap-share workhorses, play-by-play slices, a
+schedule scan, and a quick hop into pandas. Each one leans on the
+**premium** native/NextGen feeds or the rock-solid **nflverse** release
+parquets, and every live call is wrapped so a network blip never breaks
+your run. Recipes 1–4 use the live NFL.com / NextGen endpoints; 5–12 build
+on the cached release parquets, so they run anywhere, anytime. 🏈
 
 ### Recipe 1 — This week's "Out" list 🚑
 
@@ -409,6 +418,209 @@ else:
     out = "NGS schedule unavailable"
 out
 
+```
+
+### Recipe 5 — Season rushing leaders 🏃
+
+Roll the weekly box scores in [`load_nfl_player_stats`](../nfl/reference/additional.md#load_nfl_player_stats) up to season totals and crown the ground-game kings (≥150 carries).
+
+
+```python
+ps = nfl.load_nfl_player_stats()
+rush_cols = {"season", "season_type", "carries", "rushing_yards"}
+if rush_cols.issubset(ps.columns):
+    rush_lb = (
+        ps.filter((pl.col("season") == SEASON) & (pl.col("season_type") == "REG"))
+          .group_by(["player_display_name", "recent_team"])
+          .agg(
+              pl.col("carries").sum().alias("carries"),
+              pl.col("rushing_yards").sum().alias("rush_yds"),
+              pl.col("rushing_tds").sum().alias("rush_td"),
+              pl.col("rushing_epa").sum().round(1).alias("rush_epa"),
+          )
+          .filter(pl.col("carries") >= 150)
+          .sort("rush_yds", descending=True)
+          .head(10)
+    )
+else:
+    rush_lb = "player_stats schema changed — rushing columns missing"
+rush_lb
+```
+
+### Recipe 6 — The most efficient offenses (EPA/play) 📈
+
+Expected points added is the modeller's favourite efficiency yardstick. Average `epa` over every run/pass in [`load_nfl_pbp`](../nfl/reference/loaders.md#load_nfl_pbp) to rank offenses.
+
+
+```python
+pbp = nfl.load_nfl_pbp([SEASON])
+if {"epa", "posteam", "play_type"}.issubset(pbp.columns):
+    epa_off = (
+        pbp.filter(pl.col("play_type").is_in(["run", "pass"]))
+           .group_by("posteam")
+           .agg(
+               pl.col("epa").mean().round(3).alias("epa_per_play"),
+               pl.len().alias("plays"),
+           )
+           .filter(pl.col("posteam").is_not_null())
+           .sort("epa_per_play", descending=True)
+           .head(10)
+    )
+else:
+    epa_off = "pbp schema changed — epa/posteam columns missing"
+epa_off
+```
+
+### Recipe 7 — Third-down conversion kings 🔑
+
+Move-the-chains efficiency: keep only 3rd-down run/pass snaps and divide conversions by attempts per offense — a classic play-by-play split.
+
+
+```python
+if {"down", "third_down_converted", "posteam"}.issubset(pbp.columns):
+    third = (
+        pbp.filter((pl.col("down") == 3) & (pl.col("play_type").is_in(["run", "pass"])))
+           .group_by("posteam")
+           .agg(
+               pl.col("third_down_converted").sum().alias("conversions"),
+               pl.len().alias("attempts"),
+           )
+           .filter(pl.col("posteam").is_not_null())
+           .with_columns((pl.col("conversions") / pl.col("attempts") * 100).round(1).alias("conv_pct"))
+           .sort("conv_pct", descending=True)
+           .head(10)
+    )
+else:
+    third = "pbp schema changed — third-down columns missing"
+third
+```
+
+### Recipe 8 — Red-zone touchdown efficiency 🎯
+
+Filter the play-by-play to snaps inside the opponent's 20 (`yardline_100 ≤ 20`) and see which offenses actually punch it in instead of settling for three.
+
+
+```python
+if {"yardline_100", "touchdown", "posteam"}.issubset(pbp.columns):
+    redzone = (
+        pbp.filter((pl.col("yardline_100") <= 20) & (pl.col("play_type").is_in(["run", "pass"])))
+           .group_by("posteam")
+           .agg(
+               pl.col("touchdown").sum().alias("rz_tds"),
+               pl.len().alias("rz_plays"),
+           )
+           .filter((pl.col("posteam").is_not_null()) & (pl.col("rz_plays") >= 80))
+           .with_columns((pl.col("rz_tds") / pl.col("rz_plays") * 100).round(1).alias("td_pct"))
+           .sort("td_pct", descending=True)
+           .head(10)
+    )
+else:
+    redzone = "pbp schema changed — red-zone columns missing"
+redzone
+```
+
+### Recipe 9 — Snap-share workhorse running backs 🐴
+
+[`load_nfl_snap_counts`](../nfl/reference/loaders.md#load_nfl_snap_counts) carries `offense_pct` per game — average it to find the backs their teams simply would not take off the field.
+
+
+```python
+snaps = nfl.load_nfl_snap_counts([SEASON])
+if {"position", "offense_pct", "player"}.issubset(snaps.columns):
+    workhorses = (
+        snaps.filter(pl.col("position") == "RB")
+             .group_by(["player", "team"])
+             .agg(
+                 (pl.col("offense_pct").mean() * 100).round(1).alias("avg_snap_pct"),
+                 pl.len().alias("games"),
+             )
+             .filter(pl.col("games") >= 10)
+             .sort("avg_snap_pct", descending=True)
+             .head(10)
+    )
+else:
+    workhorses = "snap_counts schema changed — offense_pct/position missing"
+workhorses
+```
+
+### Recipe 10 — Receiving leaders, then a hop into pandas 🐼
+
+Aggregate the receiving box lines, `.to_pandas()`, and add derived columns (yards-per-catch, catch rate) with familiar pandas syntax — the polars→pandas handoff is one method call.
+
+
+```python
+rec_cols = {"receptions", "receiving_yards", "targets", "season", "season_type"}
+if rec_cols.issubset(ps.columns):
+    rec = (
+        ps.filter((pl.col("season") == SEASON) & (pl.col("season_type") == "REG"))
+          .group_by(["player_display_name", "recent_team"])
+          .agg(
+              pl.col("receptions").sum().alias("rec"),
+              pl.col("receiving_yards").sum().alias("rec_yds"),
+              pl.col("targets").sum().alias("tgt"),
+          )
+          .filter(pl.col("rec") >= 70)
+    )
+    pdf = rec.to_pandas()  # <-- polars -> pandas in one call
+    pdf["yards_per_rec"] = (pdf["rec_yds"] / pdf["rec"]).round(1)
+    pdf["catch_rate"] = (pdf["rec"] / pdf["tgt"] * 100).round(1)
+    rec_out = pdf.sort_values("rec_yds", ascending=False).head(10)[
+        ["player_display_name", "recent_team", "rec", "rec_yds", "yards_per_rec", "catch_rate"]
+    ].reset_index(drop=True)
+else:
+    rec_out = "player_stats schema changed — receiving columns missing"
+rec_out
+```
+
+### Recipe 11 — Who gets open? NextGen separation 🛰️
+
+The receiving statboard exposes a tracking-only metric box scores can't: **average separation** at the catch point. Rank qualified targets (≥80) to find the route-runners defenders can't shadow.
+
+
+```python
+sepboard = safe(
+    "NGS receiving statboard",
+    lambda: nfl.nfl_ngs_statboard(stat_type="receiving", season=SEASON, season_type="REG"),
+)
+if sepboard is not None and sepboard.height and "avgSeparation" in sepboard.columns:
+    sep = (
+        sepboard.filter(pl.col("targets") >= 80)
+                .select([c for c in [
+                    "player_displayName", "player_position", "avgSeparation",
+                    "avgYACAboveExpectation", "catchPercentage", "yards",
+                ] if c in sepboard.columns])
+                .sort("avgSeparation", descending=True)
+                .head(10)
+    )
+else:
+    sep = "NGS receiving statboard unavailable"
+sep
+```
+
+### Recipe 12 — The nail-biters: closest games of the season 😬
+
+[`load_nfl_schedule`](../nfl/reference/additional.md#load_nfl_schedule) carries the final `result` (home margin). Take its absolute value and sort ascending to surface the one-score thrillers — built-in betting lines ride along too.
+
+
+```python
+sched = nfl.load_nfl_schedule([SEASON])
+if {"result", "game_type", "home_team", "away_team"}.issubset(sched.columns):
+    scored = (
+        sched.filter((pl.col("game_type") == "REG") & pl.col("result").is_not_null())
+             .with_columns(pl.col("result").abs().alias("margin"))
+    )
+    want = [
+        "week", "away_team", "away_score", "home_team", "home_score",
+        "margin", "spread_line", "total_line",
+    ]
+    nailbiters = (
+        scored.select([c for c in want if c in scored.columns])
+              .sort("margin")
+              .head(10)
+    )
+else:
+    nailbiters = "schedule schema changed — result/team columns missing"
+nailbiters
 ```
 
 ## 🗓️ Season helpers

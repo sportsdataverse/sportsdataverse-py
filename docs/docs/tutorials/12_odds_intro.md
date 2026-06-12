@@ -35,7 +35,6 @@ Here's the whole kit (click any name for the full reference):
 | [`toa_event_odds_history`](../odds/reference/additional.md#toa_event_odds_history) | Historical single-game odds | 💳 paid |
 | [`toa_usage`](../odds/reference/additional.md#toa_usage) | Your remaining quota (reads cached headers) | 🆓 free |
 
-
 ## 🔑 Setup
 
 ```sh
@@ -58,9 +57,6 @@ HAS_KEY = bool(os.environ.get("ODDS_API_KEY"))
 print("ODDS_API_KEY set:", HAS_KEY, "— live cells will" + ("" if HAS_KEY else " NOT") + " run")
 ```
 
-    ODDS_API_KEY set: True — live cells will run
-
-
 ## 🗂️ What's on the board?
 
 Start with [`toa_sports`](../odds/reference/additional.md#toa_sports) — it lists every sport/league key,
@@ -76,30 +72,6 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports(all_sports=True)"
 out
 ```
-
-
-
-
-    shape: (12, 4)
-    ┌─────────────────────────────────┬───────────────────┬───────────────────────────┬────────┐
-    │ key                             ┆ group             ┆ title                     ┆ active │
-    │ ---                             ┆ ---               ┆ ---                       ┆ ---    │
-    │ str                             ┆ str               ┆ str                       ┆ bool   │
-    ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╪════════╡
-    │ americanfootball_cfl            ┆ American Football ┆ CFL                       ┆ true   │
-    │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     ┆ true   │
-    │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner ┆ true   │
-    │ americanfootball_nfl            ┆ American Football ┆ NFL                       ┆ true   │
-    │ americanfootball_nfl_preseason  ┆ American Football ┆ NFL Preseason             ┆ true   │
-    │ …                               ┆ …                 ┆ …                         ┆ …      │
-    │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       ┆ true   │
-    │ baseball_kbo                    ┆ Baseball          ┆ KBO                       ┆ true   │
-    │ baseball_milb                   ┆ Baseball          ┆ MiLB                      ┆ false  │
-    │ baseball_mlb                    ┆ Baseball          ┆ MLB                       ┆ true   │
-    │ baseball_mlb_preseason          ┆ Baseball          ┆ MLB Preseason             ┆ false  │
-    └─────────────────────────────────┴───────────────────┴───────────────────────────┴────────┘
-
-
 
 ## 💰 The main event: live odds
 
@@ -124,44 +96,11 @@ else:
 out
 ```
 
-
-
-
-    shape: (10, 7)
-    ┌──────────────┬──────────────┬─────────────┬────────────┬─────────────┬─────────────┬─────────────┐
-    │ home_team    ┆ away_team    ┆ bookmaker_k ┆ market_key ┆ outcome_nam ┆ outcome_poi ┆ outcome_pri │
-    │ ---          ┆ ---          ┆ ey          ┆ ---        ┆ e           ┆ nt          ┆ ce          │
-    │ str          ┆ str          ┆ ---         ┆ str        ┆ ---         ┆ ---         ┆ ---         │
-    │              ┆              ┆ str         ┆            ┆ str         ┆ f64         ┆ i64         │
-    ╞══════════════╪══════════════╪═════════════╪════════════╪═════════════╪═════════════╪═════════════╡
-    │ Seattle      ┆ New England  ┆ draftkings  ┆ h2h        ┆ New England ┆ null        ┆ 170         │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ draftkings  ┆ h2h        ┆ Seattle     ┆ null        ┆ -205        │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ draftkings  ┆ spreads    ┆ New England ┆ 3.5         ┆ -105        │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ draftkings  ┆ spreads    ┆ Seattle     ┆ -3.5        ┆ -115        │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ betus       ┆ h2h        ┆ New England ┆ null        ┆ 170         │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ betus       ┆ h2h        ┆ Seattle     ┆ null        ┆ -200        │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ betus       ┆ spreads    ┆ New England ┆ 4.0         ┆ -110        │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ betus       ┆ spreads    ┆ Seattle     ┆ -4.0        ┆ -110        │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ fanduel     ┆ h2h        ┆ New England ┆ null        ┆ 172         │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
-    │ Seattle      ┆ New England  ┆ fanduel     ┆ h2h        ┆ Seattle     ┆ null        ┆ -205        │
-    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
-    └──────────────┴──────────────┴─────────────┴────────────┴─────────────┴─────────────┴─────────────┘
-
-
-
 ## 🍳 Cookbook: common odds tasks
 
 Because everything is one tidy long frame, the fun stuff is just a few polars
-expressions away. Here are three recipes you'll reach for constantly.
+expressions away. Twelve recipes you'll reach for constantly — every live
+cell is key-guarded, so the page renders fine with or without a key.
 
 ### Recipe 1 — Best available moneyline (line shopping 🛒)
 
@@ -183,29 +122,6 @@ else:
 out
 ```
 
-
-
-
-    shape: (10, 5)
-    ┌──────────────────────┬───────────────────┬───────────────────┬────────────┬────────────────┐
-    │ home_team            ┆ away_team         ┆ outcome_name      ┆ best_price ┆ best_book      │
-    │ ---                  ┆ ---               ┆ ---               ┆ ---        ┆ ---            │
-    │ str                  ┆ str               ┆ str               ┆ i64        ┆ str            │
-    ╞══════════════════════╪═══════════════════╪═══════════════════╪════════════╪════════════════╡
-    │ Los Angeles Chargers ┆ Arizona Cardinals ┆ Arizona Cardinals ┆ 475        ┆ betmgm         │
-    │ San Francisco 49ers  ┆ Arizona Cardinals ┆ Arizona Cardinals ┆ 455        ┆ draftkings     │
-    │ San Francisco 49ers  ┆ Miami Dolphins    ┆ Miami Dolphins    ┆ 425        ┆ draftkings     │
-    │ Arizona Cardinals    ┆ Seattle Seahawks  ┆ Arizona Cardinals ┆ 390        ┆ draftkings     │
-    │ Detroit Lions        ┆ New York Jets     ┆ New York Jets     ┆ 375        ┆ williamhill_us │
-    │ Jacksonville Jaguars ┆ Cleveland Browns  ┆ Cleveland Browns  ┆ 340        ┆ fanduel        │
-    │ Los Angeles Chargers ┆ Las Vegas Raiders ┆ Las Vegas Raiders ┆ 330        ┆ draftkings     │
-    │ Los Angeles Rams     ┆ New York Giants   ┆ New York Giants   ┆ 330        ┆ williamhill_us │
-    │ Baltimore Ravens     ┆ Tennessee Titans  ┆ Tennessee Titans  ┆ 330        ┆ williamhill_us │
-    │ New England Patriots ┆ Las Vegas Raiders ┆ Las Vegas Raiders ┆ 330        ┆ draftkings     │
-    └──────────────────────┴───────────────────┴───────────────────┴────────────┴────────────────┘
-
-
-
 ### Recipe 2 — Spreads & totals for a slate 📋
 
 Ask for `markets="spreads,totals"` and the `outcome_point` column carries the
@@ -226,39 +142,6 @@ else:
 out
 ```
 
-
-
-
-    shape: (10, 6)
-    ┌─────────────┬───────────────────┬────────────┬───────────────────┬───────────────┬───────────────┐
-    │ home_team   ┆ away_team         ┆ market_key ┆ outcome_name      ┆ outcome_point ┆ outcome_price │
-    │ ---         ┆ ---               ┆ ---        ┆ ---               ┆ ---           ┆ ---           │
-    │ str         ┆ str               ┆ str        ┆ str               ┆ f64           ┆ i64           │
-    ╞═════════════╪═══════════════════╪════════════╪═══════════════════╪═══════════════╪═══════════════╡
-    │ Seattle     ┆ New England       ┆ spreads    ┆ New England       ┆ 3.5           ┆ -105          │
-    │ Seahawks    ┆ Patriots          ┆            ┆ Patriots          ┆               ┆               │
-    │ Seattle     ┆ New England       ┆ spreads    ┆ Seattle Seahawks  ┆ -3.5          ┆ -115          │
-    │ Seahawks    ┆ Patriots          ┆            ┆                   ┆               ┆               │
-    │ Seattle     ┆ New England       ┆ totals     ┆ Over              ┆ 44.5          ┆ -110          │
-    │ Seahawks    ┆ Patriots          ┆            ┆                   ┆               ┆               │
-    │ Seattle     ┆ New England       ┆ totals     ┆ Under             ┆ 44.5          ┆ -110          │
-    │ Seahawks    ┆ Patriots          ┆            ┆                   ┆               ┆               │
-    │ Los Angeles ┆ San Francisco     ┆ spreads    ┆ Los Angeles Rams  ┆ -3.0          ┆ -120          │
-    │ Rams        ┆ 49ers             ┆            ┆                   ┆               ┆               │
-    │ Los Angeles ┆ San Francisco     ┆ spreads    ┆ San Francisco     ┆ 3.0           ┆ 100           │
-    │ Rams        ┆ 49ers             ┆            ┆ 49ers             ┆               ┆               │
-    │ Los Angeles ┆ San Francisco     ┆ totals     ┆ Over              ┆ 48.5          ┆ -110          │
-    │ Rams        ┆ 49ers             ┆            ┆                   ┆               ┆               │
-    │ Los Angeles ┆ San Francisco     ┆ totals     ┆ Under             ┆ 48.5          ┆ -110          │
-    │ Rams        ┆ 49ers             ┆            ┆                   ┆               ┆               │
-    │ Pittsburgh  ┆ Atlanta Falcons   ┆ spreads    ┆ Atlanta Falcons   ┆ 3.0           ┆ 100           │
-    │ Steelers    ┆                   ┆            ┆                   ┆               ┆               │
-    │ Pittsburgh  ┆ Atlanta Falcons   ┆ spreads    ┆ Pittsburgh        ┆ -3.0          ┆ -120          │
-    │ Steelers    ┆                   ┆            ┆ Steelers          ┆               ┆               │
-    └─────────────┴───────────────────┴────────────┴───────────────────┴───────────────┴───────────────┘
-
-
-
 ### Recipe 3 — Just one book 🎯
 
 Pin a single sportsbook with `bookmakers=`. Great for tracking *your* book's
@@ -274,32 +157,114 @@ else:
 out
 ```
 
+### Recipe 4 — Implied probability & the hold 🧮
+
+American moneyline prices convert to **implied win probability** with a tiny
+formula. Add up both sides and the excess over 100% is the book's *hold* (the
+vig). Pure polars math on the frame you already pulled — no extra API call.
 
 
+```python
+if HAS_KEY and board is not None:
+    h2h = board.filter(pl.col("market_key") == "h2h")
+    devig = (
+        h2h.with_columns(
+            pl.when(pl.col("outcome_price") < 0)
+            .then(-pl.col("outcome_price") / (-pl.col("outcome_price") + 100))
+            .otherwise(100 / (pl.col("outcome_price") + 100))
+            .alias("implied_prob")
+        )
+        .group_by(["home_team", "away_team", "bookmaker_key"], maintain_order=True)
+        .agg(pl.sum("implied_prob").alias("market_total"))
+        .with_columns(((pl.col("market_total") - 1) * 100).round(2).alias("hold_pct"))
+        .sort("hold_pct")
+    )
+    out = devig.head(10)
+else:
+    out = "needs ODDS_API_KEY"
+out
+```
 
-    shape: (5, 4)
-    ┌─────────────────────┬──────────────────────┬──────────────────────┬───────────────┐
-    │ home_team           ┆ away_team            ┆ outcome_name         ┆ outcome_price │
-    │ ---                 ┆ ---                  ┆ ---                  ┆ ---           │
-    │ str                 ┆ str                  ┆ str                  ┆ i64           │
-    ╞═════════════════════╪══════════════════════╪══════════════════════╪═══════════════╡
-    │ Seattle Seahawks    ┆ New England Patriots ┆ New England Patriots ┆ 170           │
-    │ Seattle Seahawks    ┆ New England Patriots ┆ Seattle Seahawks     ┆ -205          │
-    │ Los Angeles Rams    ┆ San Francisco 49ers  ┆ Los Angeles Rams     ┆ -175          │
-    │ Los Angeles Rams    ┆ San Francisco 49ers  ┆ San Francisco 49ers  ┆ 145           │
-    │ Pittsburgh Steelers ┆ Atlanta Falcons      ┆ Atlanta Falcons      ┆ 145           │
-    └─────────────────────┴──────────────────────┴──────────────────────┴───────────────┘
+### Recipe 5 — Find the biggest favorite on the board 🐻
+
+Sort the moneyline outcomes by price ascending — the most negative number is
+the heaviest chalk on the slate. A classic "find the X" one-liner.
 
 
+```python
+if HAS_KEY and board is not None:
+    faves = (
+        board.filter(pl.col("market_key") == "h2h")
+        .sort("outcome_price")
+        .select(["home_team", "away_team", "outcome_name", "outcome_price", "bookmaker_key"])
+        .head(5)
+    )
+    out = faves
+else:
+    out = "needs ODDS_API_KEY"
+out
+```
 
-## 🎯 Player props for one game
+### Recipe 6 — Consensus over/under per game 📊
+
+Books disagree by a half-point here and there. Take the **median** total
+across every book to get a stable market consensus for each matchup.
+
+
+```python
+if HAS_KEY:
+    tot = odds.toa_sports_odds(sport="americanfootball_nfl", regions="us", markets="totals")
+    if tot.height:
+        consensus = (
+            tot.filter(pl.col("outcome_name") == "Over")
+            .group_by(["home_team", "away_team"], maintain_order=True)
+            .agg(
+                pl.median("outcome_point").alias("consensus_total"),
+                pl.col("bookmaker_key").n_unique().alias("n_books"),
+            )
+            .sort("consensus_total", descending=True)
+        )
+        out = consensus.head(10)
+    else:
+        out = "no totals on the board right now"
+else:
+    out = "needs ODDS_API_KEY"
+out
+```
+
+### Recipe 7 — Just today's slate ⏰
+
+Narrow the pull to a time window with `commence_time_from` / `commence_time_to`
+(ISO-8601, UTC). Here: only games kicking off in the next 24 hours.
+
+
+```python
+from datetime import datetime, timedelta, timezone
+
+if HAS_KEY:
+    now = datetime.now(timezone.utc)
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    today = odds.toa_sports_odds(
+        sport="americanfootball_nfl",
+        regions="us",
+        markets="h2h",
+        commence_time_from=now.strftime(fmt),
+        commence_time_to=(now + timedelta(hours=24)).strftime(fmt),
+    )
+    out = (
+        today.select(["commence_time", "home_team", "away_team"]).unique(maintain_order=True).head(10)
+        if today.height else "nothing kicks off in the next 24h"
+    )
+else:
+    out = "set ODDS_API_KEY to run the commence-time filter recipe"
+out
+```
+
+### Recipe 8 — Player props for one game 🎯
 
 Event-level markets (player props!) live on [`toa_event_odds`](../odds/reference/additional.md#toa_event_odds).
 Grab an `event_id` from [`toa_sports_events`](../odds/reference/additional.md#toa_sports_events), then ask
 for a prop market like `player_pass_tds` or `player_anytime_td`.
-
-Not sure which markets a game has? [`toa_event_markets`](../odds/reference/additional.md#toa_event_markets)
-lists them (and it's free).
 
 
 ```python
@@ -317,67 +282,87 @@ else:
 out
 ```
 
+### Recipe 9 — Which markets does a game offer? 🗃️
 
-
-
-    shape: (0, 0)
-    ┌┐
-    ╞╡
-    └┘
-
-
-
-## 📊 Scores & events
-
-| Function | Use it for |
-|---|---|
-| [`toa_sports_scores`](../odds/reference/additional.md#toa_sports_scores) | live + recent final scores (`days_from=1..3`) |
-| [`toa_sports_events`](../odds/reference/additional.md#toa_sports_events) | the upcoming schedule + `event_id`s |
-| [`toa_sports_participants`](../odds/reference/additional.md#toa_sports_participants) | the teams in a league |
-
+Not sure which props are even available? [`toa_event_markets`](../odds/reference/additional.md#toa_event_markets)
+lists every market on offer per book — and it's **free**. Count them up to
+see which sportsbook posts the deepest menu.
 
 
 ```python
 if HAS_KEY:
-    out = odds.toa_sports_scores(sport="americanfootball_nfl", days_from=3).head()
+    events = odds.toa_sports_events(sport="americanfootball_nfl", return_parsed=False)
+    if events:
+        eid = events[0]["id"]
+        mk = odds.toa_event_markets(sport="americanfootball_nfl", event_id=eid)
+        out = (
+            mk.group_by("bookmaker_key").agg(pl.col("market_key").n_unique().alias("n_markets"))
+            .sort("n_markets", descending=True).head(10)
+            if mk.height else "no markets posted for this event yet"
+        )
+    else:
+        out = "no upcoming NFL events right now"
+else:
+    out = "set ODDS_API_KEY to run the event-markets recipe"
+out
+```
+
+### Recipe 10 — Recent finals & margin of victory 🏁
+
+[`toa_sports_scores`](../odds/reference/additional.md#toa_sports_scores) returns live + recently
+completed games (`days_from=1..3`, **free**). Keep the completed ones and
+show the final scoreline — handy for grading bets after the fact.
+
+
+```python
+if HAS_KEY:
+    sc = odds.toa_sports_scores(sport="americanfootball_nfl", days_from=3)
+    keep = [c for c in ["completed", "home_team", "away_team", "scores", "last_update"] if c in sc.columns]
+    if sc.height and "completed" in sc.columns:
+        out = sc.filter(pl.col("completed")).select(keep).head(10)
+    else:
+        out = sc.select(keep).head(10) if sc.height else "no recent scores right now"
 else:
     out = "set ODDS_API_KEY to run: odds.toa_sports_scores(sport='americanfootball_nfl', days_from=3)"
 out
 ```
 
+### Recipe 11 — Tour several leagues at once 🔁
+
+The `sport=` key is the only thing that changes between leagues, so one loop
+counts the upcoming events across a handful of them. `toa_sports_events` is
+**free**, so this sweep costs you nothing.
 
 
+```python
+if HAS_KEY:
+    keys = ["americanfootball_nfl", "basketball_nba", "icehockey_nhl", "baseball_mlb"]
+    rows = []
+    for k in keys:
+        evs = odds.toa_sports_events(sport=k, return_parsed=False)
+        rows.append({"sport": k, "upcoming_events": len(evs) if isinstance(evs, list) else 0})
+    out = pl.DataFrame(rows).sort("upcoming_events", descending=True)
+else:
+    out = "set ODDS_API_KEY to tour leagues with odds.toa_sports_events(sport=...)"
+out
+```
 
-    shape: (5, 9)
-    ┌────────────┬────────────┬───────────┬───────────┬───┬───────────┬───────────┬────────┬───────────┐
-    │ id         ┆ sport_key  ┆ sport_tit ┆ commence_ ┆ … ┆ home_team ┆ away_team ┆ scores ┆ last_upda │
-    │ ---        ┆ ---        ┆ le        ┆ time      ┆   ┆ ---       ┆ ---       ┆ ---    ┆ te        │
-    │ str        ┆ str        ┆ ---       ┆ ---       ┆   ┆ str       ┆ str       ┆ str    ┆ ---       │
-    │            ┆            ┆ str       ┆ str       ┆   ┆           ┆           ┆        ┆ str       │
-    ╞════════════╪════════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪════════╪═══════════╡
-    │ 8c94552d02 ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Seattle   ┆ New       ┆ null   ┆ null      │
-    │ 2acec4a045 ┆ otball_nfl ┆           ┆ 0T00:15:0 ┆   ┆ Seahawks  ┆ England   ┆        ┆           │
-    │ 8d70c19d3d ┆            ┆           ┆ 0Z        ┆   ┆           ┆ Patriots  ┆        ┆           │
-    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
-    │ acc580d743 ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Los       ┆ San       ┆ null   ┆ null      │
-    │ 44ea3b31bb ┆ otball_nfl ┆           ┆ 1T00:35:0 ┆   ┆ Angeles   ┆ Francisco ┆        ┆           │
-    │ cdd057fe6a ┆            ┆           ┆ 0Z        ┆   ┆ Rams      ┆ 49ers     ┆        ┆           │
-    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
-    │ 95c01d1bb7 ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Pittsburg ┆ Atlanta   ┆ null   ┆ null      │
-    │ 97d6df1482 ┆ otball_nfl ┆           ┆ 3T17:00:0 ┆   ┆ h         ┆ Falcons   ┆        ┆           │
-    │ 4b106c5a91 ┆            ┆           ┆ 0Z        ┆   ┆ Steelers  ┆           ┆        ┆           │
-    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
-    │ b6cfdcbafa ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Indianapo ┆ Baltimore ┆ null   ┆ null      │
-    │ 61ce220ba8 ┆ otball_nfl ┆           ┆ 3T17:00:0 ┆   ┆ lis Colts ┆ Ravens    ┆        ┆           │
-    │ 7dc2d9b80c ┆            ┆           ┆ 0Z        ┆   ┆           ┆           ┆        ┆           │
-    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
-    │ 7e09efed7e ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Houston   ┆ Buffalo   ┆ null   ┆ null      │
-    │ 12c659b827 ┆ otball_nfl ┆           ┆ 3T17:00:0 ┆   ┆ Texans    ┆ Bills     ┆        ┆           │
-    │ 40b67ce2f9 ┆            ┆           ┆ 0Z        ┆   ┆           ┆           ┆        ┆           │
-    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
-    └────────────┴────────────┴───────────┴───────────┴───┴───────────┴───────────┴────────┴───────────┘
+### Recipe 12 — Who's in the league? (participants 👥)
+
+[`toa_sports_participants`](../odds/reference/additional.md#toa_sports_participants) lists every team /
+participant for a sport — the lookup table you join odds against by name.
+Also **free**.
 
 
+```python
+if HAS_KEY:
+    parts = odds.toa_sports_participants(sport="americanfootball_nfl")
+    keep = [c for c in ["full_name", "id", "abbreviation"] if c in parts.columns]
+    out = parts.select(keep if keep else parts.columns).head(10) if parts.height else "no participants listed"
+else:
+    out = "set ODDS_API_KEY to run: odds.toa_sports_participants(sport='americanfootball_nfl')"
+out
+```
 
 ## ⛽ Mind your quota
 
@@ -390,20 +375,6 @@ request** — handy to drop at the end of a script.
 ```python
 odds.toa_usage() if HAS_KEY else "set ODDS_API_KEY to track quota with odds.toa_usage()"
 ```
-
-
-
-
-    shape: (1, 3)
-    ┌────────────────────┬───────────────┬───────────┐
-    │ requests_remaining ┆ requests_used ┆ last_cost │
-    │ ---                ┆ ---           ┆ ---       │
-    │ i64                ┆ i64           ┆ i64       │
-    ╞════════════════════╪═══════════════╪═══════════╡
-    │ 19805              ┆ 195           ┆ 2         │
-    └────────────────────┴───────────────┴───────────┘
-
-
 
 ## ⏳ Time travel: historical odds
 
