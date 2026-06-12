@@ -39,3 +39,10 @@ dist_check/
 .env
 .env.*
 !.env.example
+
+# Coverage + mypy artifacts
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.mypy_cache/

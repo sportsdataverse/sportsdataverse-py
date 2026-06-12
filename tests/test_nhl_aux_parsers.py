@@ -24,7 +24,7 @@ from tests.conftest import load_fixture
 # This file loads from two directories, hence the 2-arg ``_load``
 # signature below.
 STATS_REST_DIR = "nhl_stats_rest"
-RECORDS_DIR    = "nhl_records"
+RECORDS_DIR = "nhl_records"
 
 
 def _load(directory: str, stem: str) -> dict:
@@ -39,23 +39,24 @@ def _load(directory: str, stem: str) -> dict:
 # ===========================================================================
 
 
-@pytest.mark.parametrize("fixture,expected_min_rows", [
-    ("stats_rest_season",                108),  # every NHL season since 1917
-    ("stats_rest_franchise",              40),  # 32 active + 8 defunct
-    ("stats_rest_country",                40),  # 49 in capture
-    ("stats_rest_glossary",              200),  # 321 in capture
-    ("stats_rest_skater_summary_2024",    20),
-    ("stats_rest_goalie_summary_2024",    10),
-    ("stats_rest_team_summary_2024",      32),  # all current NHL teams
-])
+@pytest.mark.parametrize(
+    "fixture,expected_min_rows",
+    [
+        ("stats_rest_season", 108),  # every NHL season since 1917
+        ("stats_rest_franchise", 40),  # 32 active + 8 defunct
+        ("stats_rest_country", 40),  # 49 in capture
+        ("stats_rest_glossary", 200),  # 321 in capture
+        ("stats_rest_skater_summary_2024", 20),
+        ("stats_rest_goalie_summary_2024", 10),
+        ("stats_rest_team_summary_2024", 32),  # all current NHL teams
+    ],
+)
 def test_parse_nhl_stats_rest_works_on_data_endpoints(fixture, expected_min_rows):
     from sportsdataverse.nhl import parse_nhl_stats_rest
 
     df = parse_nhl_stats_rest(_load(STATS_REST_DIR, fixture))
     assert isinstance(df, pl.DataFrame)
-    assert df.height >= expected_min_rows, (
-        f"{fixture}: expected >= {expected_min_rows} rows, got {df.height}"
-    )
+    assert df.height >= expected_min_rows, f"{fixture}: expected >= {expected_min_rows} rows, got {df.height}"
 
 
 def test_parse_nhl_stats_rest_returns_zero_rows_for_meta_config():
@@ -73,22 +74,23 @@ def test_parse_nhl_stats_rest_returns_zero_rows_for_meta_config():
 # ===========================================================================
 
 
-@pytest.mark.parametrize("fixture,expected_min_rows", [
-    ("records_franchise",              40),
-    ("records_franchise_team_totals",  10),
-    ("records_coach",                  10),
-    ("records_draft",                  10),
-    ("records_player_records",         10),
-    ("records_attendance",             50),  # 80 years in capture
-])
+@pytest.mark.parametrize(
+    "fixture,expected_min_rows",
+    [
+        ("records_franchise", 40),
+        ("records_franchise_team_totals", 10),
+        ("records_coach", 10),
+        ("records_draft", 10),
+        ("records_player_records", 10),
+        ("records_attendance", 50),  # 80 years in capture
+    ],
+)
 def test_parse_nhl_records_works_on_known_endpoints(fixture, expected_min_rows):
     from sportsdataverse.nhl import parse_nhl_records
 
     df = parse_nhl_records(_load(RECORDS_DIR, fixture))
     assert isinstance(df, pl.DataFrame)
-    assert df.height >= expected_min_rows, (
-        f"{fixture}: expected >= {expected_min_rows} rows, got {df.height}"
-    )
+    assert df.height >= expected_min_rows, f"{fixture}: expected >= {expected_min_rows} rows, got {df.height}"
 
 
 # ===========================================================================
@@ -96,10 +98,13 @@ def test_parse_nhl_records_works_on_known_endpoints(fixture, expected_min_rows):
 # ===========================================================================
 
 
-@pytest.mark.parametrize("parser_name,module_attr", [
-    ("parse_nhl_stats_rest", "nhl_stats_rest_parsers"),
-    ("parse_nhl_records",    "nhl_records_parsers"),
-])
+@pytest.mark.parametrize(
+    "parser_name,module_attr",
+    [
+        ("parse_nhl_stats_rest", "nhl_stats_rest_parsers"),
+        ("parse_nhl_records", "nhl_records_parsers"),
+    ],
+)
 def test_parser_handles_empty_payload(parser_name, module_attr):
     from sportsdataverse import nhl
 

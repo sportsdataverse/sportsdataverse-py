@@ -248,3 +248,26 @@ ignore = [
 
 [tool.ruff.format]
 skip-magic-trailing-comma = false
+
+
+[tool.mypy]
+python_version = "3.10"
+# ``follow_imports = "skip"`` checks the curated files below in isolation
+# (imported symbols become ``Any``), so this gate neither reports errors in
+# legacy untyped modules nor descends into dependencies. It is a deliberate
+# ratchet: modules are added to ``files`` as they reach clean typing. Run
+# locally with ``uv run mypy`` (no args -- the file list comes from here).
+follow_imports = "skip"
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+files = [
+    "sportsdataverse/errors.py",
+    "sportsdataverse/cfb/cfb_crosswalk.py",
+    "sportsdataverse/cfb/cfb_fox_ext.py",
+    "sportsdataverse/cfb/cfb_yahoo_ext.py",
+    "sportsdataverse/nfl/config.py",
+    "sportsdataverse/nfl/utils_date.py",
+]

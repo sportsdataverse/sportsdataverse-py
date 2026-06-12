@@ -1,0 +1,41 @@
+# Static quality gate: lint (ruff), format check (ruff format), and type
+# checking (mypy on the curated, fully-typed module set configured in
+# pyproject.toml's [tool.mypy] `files`). These run on pre-commit locally, but
+# enforcing them in CI makes the bar real for every PR — not just for
+# contributors who installed the hooks. Fast (no test execution); the test
+# matrix lives in tests.yml.
+name: quality
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  lint-typecheck:
+    name: ruff + mypy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: ruff lint
+        run: uv run --frozen ruff check sportsdataverse/ tests/ tools/
+      - name: ruff format check
+        run: uv run --frozen ruff format --check sportsdataverse/ tests/ tools/
+      - name: mypy (typed-module gate)
+        # File list comes from [tool.mypy] in pyproject.toml; it is a ratchet
+        # that grows as modules reach clean typing.
+        run: uv run --frozen mypy

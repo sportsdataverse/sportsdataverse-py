@@ -4,6 +4,11 @@ Custom exceptions for sportsdataverse module
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import requests
+
 
 class SportsDataverseError(Exception):
     """Base class for every error raised by sportsdataverse.
@@ -50,7 +55,7 @@ class SeasonNotFoundError(SportsDataverseError):
     pass
 
 
-def season_not_found_error(season, min_season):
+def season_not_found_error(season: int, min_season: int) -> None:
     """Raise :class:`SeasonNotFoundError` when ``season`` predates ``min_season``.
 
     Args:
@@ -99,7 +104,7 @@ class NoESPNDataError(SportsDataverseError):
     pass
 
 
-def no_espn_data(response):
+def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoESPNDataError` if empty.
 
     Used by :func:`sportsdataverse.dl_utils.download` to normalize ESPN's
