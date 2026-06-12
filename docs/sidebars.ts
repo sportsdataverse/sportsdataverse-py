@@ -62,6 +62,13 @@ const sidebars: SidebarsConfig = {
         league('pwhl', 'PWHL'),
       ],
     },
+    // Cross-sport betting markets (The Odds API). Not tied to a single sport,
+    // so it gets its own top-level section rather than nesting under one.
+    {
+      type: 'category',
+      label: 'Betting',
+      items: [league('odds', 'Odds')],
+    },
     // Executed example notebooks, rendered to docs/docs/tutorials/ by
     // `python tools/codegen/render_notebooks.py` (refreshed weekly in
     // live-tests-cron). The whole section sits at the bottom, below the per-sport

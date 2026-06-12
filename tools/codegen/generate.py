@@ -1416,7 +1416,22 @@ def check() -> int:
 # The 8 documented sport leagues. (pwhl is loader-only and has no module of its
 # own to import; its load_pwhl_* loaders surface at the package top level and are
 # checked as package-level/global names against the whole docs corpus.)
-_COVERAGE_LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl", "pwhl", "ahl", "ohl", "whl", "qmjhl"]
+_COVERAGE_LEAGUES = [
+    "nba",
+    "wnba",
+    "mbb",
+    "wbb",
+    "cfb",
+    "nfl",
+    "mlb",
+    "nhl",
+    "pwhl",
+    "ahl",
+    "ohl",
+    "whl",
+    "qmjhl",
+    "odds",
+]
 
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
 
@@ -2726,9 +2741,13 @@ def _doc_leagues() -> list[str]:
     extra = sorted({ld.league for ld in rel.loaders} - set(prefixes))
     # HockeyTech junior leagues have hand-written modules but no ESPN/loader entries.
     _HOCKEYTECH_EXTRA = ["ahl", "ohl", "whl", "qmjhl"]
+    # Cross-sport hand-written modules that get their own docs scope but have no
+    # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
+    _NONLEAGUE_EXTRA = ["odds"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
-    return prefixes + extra + hockeytech
+    nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
+    return prefixes + extra + hockeytech + nonleague
 
 
 def _preserved_docs_corpus() -> str:
