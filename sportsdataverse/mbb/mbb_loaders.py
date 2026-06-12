@@ -477,6 +477,33 @@ def load_mbb_standings(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |season                  |Int32   |
+        |group_id                |String  |
+        |group_name              |String  |
+        |group_abbreviation      |String  |
+        |group_short_name        |String  |
+        |team_id                 |Int32   |
+        |team_uid                |String  |
+        |team_slug               |String  |
+        |team_location           |String  |
+        |team_name               |String  |
+        |team_abbreviation       |String  |
+        |team_display_name       |String  |
+        |team_short_display_name |String  |
+        |team_color              |String  |
+        |team_alternate_color    |String  |
+        |team_logo               |String  |
+        |stat_name               |String  |
+        |stat_display_name       |String  |
+        |stat_short_display_name |String  |
+        |stat_description        |String  |
+        |stat_abbreviation       |String  |
+        |stat_type               |String  |
+        |display_value           |String  |
+        |value                   |Float64 |
+
     Example:
         >>> load_mbb_standings(seasons=2025)
     """
@@ -509,6 +536,24 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name                      |type    |
+        |:-----------------------------|:-------|
+        |season                        |Int32   |
+        |athlete_id                    |Int32   |
+        |athlete_display_name          |String  |
+        |athlete_position_abbreviation |String  |
+        |athlete_jersey                |String  |
+        |team_id                       |Int32   |
+        |team_slug                     |String  |
+        |team_display_name             |String  |
+        |category                      |String  |
+        |stat_label                    |String  |
+        |stat_name                     |String  |
+        |stat_display_name             |String  |
+        |stat_description              |String  |
+        |display_value                 |String  |
+        |value                         |Float64 |
 
     Example:
         >>> load_mbb_player_season_stats(seasons=2025)
@@ -543,6 +588,45 @@ def load_mbb_rosters(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name                 |type   |
+        |:------------------------|:------|
+        |season                   |Int32  |
+        |team_id                  |Int32  |
+        |team_slug                |String |
+        |team_abbreviation        |String |
+        |team_display_name        |String |
+        |team_short_display_name  |String |
+        |team_color               |String |
+        |team_alternate_color     |String |
+        |team_logo                |String |
+        |athlete_id               |String |
+        |uid                      |String |
+        |guid                     |String |
+        |full_name                |String |
+        |display_name             |String |
+        |short_name               |String |
+        |first_name               |String |
+        |last_name                |String |
+        |jersey                   |String |
+        |position_abbreviation    |String |
+        |position_name            |String |
+        |position_id              |String |
+        |height                   |String |
+        |weight                   |String |
+        |age                      |String |
+        |date_of_birth            |String |
+        |birth_place_city         |String |
+        |birth_place_state        |String |
+        |birth_place_country      |String |
+        |experience_years         |String |
+        |experience_display_value |String |
+        |headshot_href            |String |
+        |headshot_alt             |String |
+        |link_web                 |String |
+        |status_id                |String |
+        |status_name              |String |
+        |status_type              |String |
+
     Example:
         >>> load_mbb_rosters(seasons=2025)
     """
@@ -575,6 +659,16 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type   |
+        |:---------------------|:------|
+        |season                |Int32  |
+        |game_id               |Int32  |
+        |official_full_name    |String |
+        |official_display_name |String |
+        |official_position     |String |
+        |official_position_id  |Int32  |
+        |official_order        |Int32  |
 
     Example:
         >>> load_mbb_officials(seasons=2025)
@@ -609,6 +703,31 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
+        |col_name             |type    |
+        |:--------------------|:-------|
+        |season               |Int32   |
+        |game_id              |String  |
+        |team_id              |Int32   |
+        |team_slug            |String  |
+        |team_abbreviation    |String  |
+        |team_display_name    |String  |
+        |home_away            |String  |
+        |athlete_id           |Int32   |
+        |athlete_uid          |String  |
+        |athlete_guid         |String  |
+        |athlete_display_name |String  |
+        |athlete_short_name   |String  |
+        |athlete_first_name   |String  |
+        |athlete_last_name    |String  |
+        |athlete_jersey       |String  |
+        |athlete_position     |String  |
+        |athlete_headshot     |String  |
+        |starter              |Boolean |
+        |did_not_play         |Boolean |
+        |active               |Boolean |
+        |ejected              |Boolean |
+        |reason               |String  |
+
     Example:
         >>> load_mbb_game_rosters(seasons=2025)
     """
@@ -641,6 +760,25 @@ def load_mbb_team_season_stats(seasons, return_as_pandas: bool = False):
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
+
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |season                  |Int32   |
+        |team_id                 |Int32   |
+        |team_slug               |String  |
+        |team_abbreviation       |String  |
+        |team_display_name       |String  |
+        |team_short_display_name |String  |
+        |team_color              |String  |
+        |team_alternate_color    |String  |
+        |team_logo               |String  |
+        |category                |String  |
+        |stat_label              |String  |
+        |stat_name               |String  |
+        |stat_display_name       |String  |
+        |stat_description        |String  |
+        |display_value           |String  |
+        |value                   |Float64 |
 
     Example:
         >>> load_mbb_team_season_stats(seasons=2025)

@@ -16,6 +16,7 @@ _SAMPLE = (
     "ESPN NBA Draft\t\tespn_nba_draft\t2026-05-30T11:55:57Z\n"
     "ESPN MBB Standings\t\tespn_mens_college_basketball_standings\t2026-05-30T14:51:30Z\n"
     "espn_cfb_injuries\tLatest\tespn_cfb_injuries\t2026-06-04T02:22:01Z\n"
+    "truncated\trow\n"  # < 4 columns -> ignored, never misclassified as a tag
     "\n"
 )
 
@@ -32,6 +33,8 @@ def test_parses_tag_column_not_title() -> None:
     )
     # The human title must NOT leak in as a "tag".
     assert "ESPN NBA Draft" not in tags
+    # A truncated (<4-column) row contributes nothing.
+    assert "truncated" not in tags and "row" not in tags
 
 
 def test_empty_input() -> None:

@@ -434,6 +434,26 @@ load_nba_standings(seasons=2002)
 ## `load_nba_player_season_stats`
 
 Release: [espn_nba_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_player_season_stats/player_season_stats_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `athlete_id` | Int32 |
+| `athlete_display_name` | String |
+| `athlete_position_abbreviation` | String |
+| `athlete_jersey` | String |
+| `team_id` | Int32 |
+| `team_slug` | String |
+| `team_display_name` | String |
+| `category` | String |
+| `stat_label` | String |
+| `stat_name` | String |
+| `stat_display_name` | String |
+| `stat_description` | String |
+| `display_value` | String |
+| `value` | Float64 |
+
 ```python
 load_nba_player_season_stats(seasons=2025)
 ```
@@ -441,6 +461,27 @@ load_nba_player_season_stats(seasons=2025)
 ## `load_nba_team_season_stats`
 
 Release: [espn_nba_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_team_season_stats/team_season_stats_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `team_id` | Int32 |
+| `team_slug` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `team_short_display_name` | String |
+| `team_color` | String |
+| `team_alternate_color` | String |
+| `team_logo` | String |
+| `category` | String |
+| `stat_label` | String |
+| `stat_name` | String |
+| `stat_display_name` | String |
+| `stat_description` | String |
+| `display_value` | String |
+| `value` | Float64 |
+
 ```python
 load_nba_team_season_stats(seasons=2025)
 ```
@@ -448,6 +489,46 @@ load_nba_team_season_stats(seasons=2025)
 ## `load_nba_draft`
 
 Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_draft/draft_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `round` | Int32 |
+| `round_display_name` | String |
+| `pick` | Int32 |
+| `overall_pick` | Int32 |
+| `pick_traded` | String |
+| `pick_notes` | String |
+| `athlete_id` | Int32 |
+| `athlete_uid` | String |
+| `athlete_guid` | String |
+| `athlete_first_name` | String |
+| `athlete_last_name` | String |
+| `athlete_full_name` | String |
+| `athlete_display_name` | String |
+| `athlete_short_name` | String |
+| `athlete_height` | String |
+| `athlete_weight` | String |
+| `athlete_position_abbreviation` | String |
+| `athlete_position_name` | String |
+| `athlete_headshot_href` | String |
+| `college_id` | Int32 |
+| `college_name` | String |
+| `college_short_name` | String |
+| `college_abbreviation` | String |
+| `team_id` | Int32 |
+| `team_uid` | String |
+| `team_slug` | String |
+| `team_location` | String |
+| `team_name` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `team_short_display_name` | String |
+| `team_color` | String |
+| `team_alternate_color` | String |
+| `team_logo` | String |
+
 ```python
 load_nba_draft(seasons=2025)
 ```
@@ -455,6 +536,47 @@ load_nba_draft(seasons=2025)
 ## `load_nba_rosters`
 
 Release: [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_rosters/rosters_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `team_id` | Int32 |
+| `team_slug` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `team_short_display_name` | String |
+| `team_color` | String |
+| `team_alternate_color` | String |
+| `team_logo` | String |
+| `athlete_id` | String |
+| `uid` | String |
+| `guid` | String |
+| `full_name` | String |
+| `display_name` | String |
+| `short_name` | String |
+| `first_name` | String |
+| `last_name` | String |
+| `jersey` | String |
+| `position_abbreviation` | String |
+| `position_name` | String |
+| `position_id` | String |
+| `height` | String |
+| `weight` | String |
+| `age` | String |
+| `date_of_birth` | String |
+| `birth_place_city` | String |
+| `birth_place_state` | String |
+| `birth_place_country` | String |
+| `experience_years` | String |
+| `experience_display_value` | String |
+| `headshot_href` | String |
+| `headshot_alt` | String |
+| `link_web` | String |
+| `status_id` | String |
+| `status_name` | String |
+| `status_type` | String |
+
 ```python
 load_nba_rosters(seasons=2025)
 ```

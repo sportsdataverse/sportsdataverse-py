@@ -994,8 +994,11 @@ def _parse_release_tags(text: str) -> list[str]:
     tags: set[str] = set()
     for line in text.splitlines():
         parts = line.split("\t")
-        if len(parts) >= 2 and parts[-2].strip():
-            tags.add(parts[-2].strip())
+        # gh release list columns: TITLE \t TYPE \t TAG \t PUBLISHED. Require the
+        # full 4-column shape and read the explicit TAG column (index 2), so a
+        # blank/truncated row can't misclassify TITLE or TYPE as a tag.
+        if len(parts) >= 4 and parts[2].strip():
+            tags.add(parts[2].strip())
     return sorted(tags)
 
 
