@@ -23,7 +23,71 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
 ### Returns
 
-GET /api/v1/schedule/postseason — postseason-only schedule for a season.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `schedule_date` | character |  |
+| `game_pk` | integer | Unique game identifier. |
+| `game_guid` | character | Globally unique game identifier (GUID). |
+| `link` | character | API link to the game feed. |
+| `game_type` | character | Game type code (R, P, etc.). |
+| `season` | character | Season year. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `official_date` | character | Official game date (YYYY-MM-DD). |
+| `is_tie` | logical | Whether the game ended in a tie. |
+| `is_featured_game` | logical | Whether the game is a featured game. |
+| `game_number` | integer | Game number within a doubleheader. |
+| `public_facing` | logical | Whether the game is public-facing. |
+| `double_header` | character | Doubleheader indicator ('N', 'S', 'Y'). |
+| `gameday_type` | character | Gameday data feed type. |
+| `tiebreaker` | character | Whether the game is a tiebreaker. |
+| `calendar_event_id` | character | Calendar event identifier. |
+| `season_display` | character | Display string for the season. |
+| `day_night` | character | Day or night game indicator. |
+| `description` | character | Long-form description text. |
+| `scheduled_innings` | integer | Scheduled number of innings. |
+| `reverse_home_away_status` | logical | Whether home/away teams are reversed. |
+| `inning_break_length` | integer | Length of inning breaks in seconds. |
+| `games_in_series` | integer | Number of games in the series. |
+| `series_game_number` | integer | Game number within the series. |
+| `series_description` | character | Description of the series. |
+| `record_source` | character | Source of the schedule record. |
+| `if_necessary` | character | Whether the game is played only if necessary. |
+| `if_necessary_description` | character | Description of the if-necessary status. |
+| `status_abstract_game_state` | character | Abstract game state (e.g. 'Final'). |
+| `status_coded_game_state` | character | Coded game state. |
+| `status_detailed_state` | character | Detailed game state. |
+| `status_status_code` | character | Status code for the game. |
+| `status_start_time_tbd` | logical | Whether the start time is TBD. |
+| `status_abstract_game_code` | character | Abstract game state code. |
+| `teams_away_team_id` | integer | Away team MLBAM ID. |
+| `teams_away_team_name` | character | Away team name. |
+| `teams_away_team_link` | character | API link to the away team. |
+| `teams_away_league_record_wins` | integer | Away team league-record wins. |
+| `teams_away_league_record_losses` | integer | Away team league-record losses. |
+| `teams_away_league_record_ties` | integer | Away team league-record ties. |
+| `teams_away_league_record_pct` | character | Away team winning percentage. |
+| `teams_away_score` | integer | Away team score. |
+| `teams_away_is_winner` | logical | Whether the away team won. |
+| `teams_away_split_squad` | logical | Whether the away team is a split squad. |
+| `teams_away_series_number` | integer | Away team's series number. |
+| `teams_home_team_id` | integer | Home team MLBAM ID. |
+| `teams_home_team_name` | character | Home team name. |
+| `teams_home_team_link` | character | API link to the home team. |
+| `teams_home_league_record_wins` | integer | Home team league-record wins. |
+| `teams_home_league_record_losses` | integer | Home team league-record losses. |
+| `teams_home_league_record_ties` | integer | Home team league-record ties. |
+| `teams_home_league_record_pct` | character | Home team winning percentage. |
+| `teams_home_score` | integer | Home team score. |
+| `teams_home_is_winner` | logical | Whether the home team won. |
+| `teams_home_split_squad` | logical | Whether the home team is a split squad. |
+| `teams_home_series_number` | integer | Home team's series number. |
+| `venue_id` | integer | MLBAM venue ID. |
+| `venue_name` | character | Venue name. |
+| `venue_link` | character | API link to the venue. |
+| `content_link` | character | API link to the game content. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -51,7 +115,8 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
 ### Returns
 
-GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -77,7 +142,242 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
 ### Returns
 
-GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_side` | character | Home or away indicator. |
+| `team_id` | integer | Unique ESPN team identifier. |
+| `team_name` | character | Team name. |
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `parent_team_id` | integer |  |
+| `batting_order` | character | Spot in the batting order (1-9). |
+| `all_positions` | character |  |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
+| `person_boxscore_name` | character | Name as shown in box scores. |
+| `position_code` | character | Numeric scorekeeping position code. |
+| `position_name` | character | Position name. |
+| `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
+| `position_abbreviation` | character | Position abbreviation. |
+| `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
+| `status_description` | character | Roster status description (e.g. 'Active'). |
+| `stats_batting_summary` | character |  |
+| `stats_batting_games_played` | double |  |
+| `stats_batting_fly_outs` | double |  |
+| `stats_batting_ground_outs` | double |  |
+| `stats_batting_air_outs` | double |  |
+| `stats_batting_runs` | double |  |
+| `stats_batting_doubles` | double |  |
+| `stats_batting_triples` | double |  |
+| `stats_batting_home_runs` | double |  |
+| `stats_batting_strike_outs` | double |  |
+| `stats_batting_base_on_balls` | double |  |
+| `stats_batting_intentional_walks` | double |  |
+| `stats_batting_hits` | double |  |
+| `stats_batting_hit_by_pitch` | double |  |
+| `stats_batting_at_bats` | double |  |
+| `stats_batting_caught_stealing` | double |  |
+| `stats_batting_stolen_bases` | double |  |
+| `stats_batting_stolen_base_percentage` | character |  |
+| `stats_batting_ground_into_double_play` | double |  |
+| `stats_batting_ground_into_triple_play` | double |  |
+| `stats_batting_plate_appearances` | double |  |
+| `stats_batting_total_bases` | double |  |
+| `stats_batting_rbi` | double |  |
+| `stats_batting_left_on_base` | double |  |
+| `stats_batting_sac_bunts` | double |  |
+| `stats_batting_sac_flies` | double |  |
+| `stats_batting_catchers_interference` | double |  |
+| `stats_batting_pickoffs` | double |  |
+| `stats_batting_at_bats_per_home_run` | character |  |
+| `stats_batting_pop_outs` | double |  |
+| `stats_batting_line_outs` | double |  |
+| `stats_fielding_caught_stealing` | double |  |
+| `stats_fielding_stolen_bases` | double |  |
+| `stats_fielding_stolen_base_percentage` | character |  |
+| `stats_fielding_caught_stealing_percentage` | character |  |
+| `stats_fielding_assists` | double |  |
+| `stats_fielding_put_outs` | double |  |
+| `stats_fielding_errors` | double |  |
+| `stats_fielding_chances` | double |  |
+| `stats_fielding_fielding` | character |  |
+| `stats_fielding_passed_ball` | double |  |
+| `stats_fielding_pickoffs` | double |  |
+| `season_stats_batting_games_played` | integer |  |
+| `season_stats_batting_fly_outs` | integer |  |
+| `season_stats_batting_ground_outs` | integer |  |
+| `season_stats_batting_air_outs` | integer |  |
+| `season_stats_batting_runs` | integer |  |
+| `season_stats_batting_doubles` | integer |  |
+| `season_stats_batting_triples` | integer |  |
+| `season_stats_batting_home_runs` | integer |  |
+| `season_stats_batting_strike_outs` | integer |  |
+| `season_stats_batting_base_on_balls` | integer |  |
+| `season_stats_batting_intentional_walks` | integer |  |
+| `season_stats_batting_hits` | integer |  |
+| `season_stats_batting_hit_by_pitch` | integer |  |
+| `season_stats_batting_avg` | character |  |
+| `season_stats_batting_at_bats` | integer |  |
+| `season_stats_batting_obp` | character |  |
+| `season_stats_batting_slg` | character |  |
+| `season_stats_batting_ops` | character |  |
+| `season_stats_batting_caught_stealing` | integer |  |
+| `season_stats_batting_stolen_bases` | integer |  |
+| `season_stats_batting_stolen_base_percentage` | character |  |
+| `season_stats_batting_caught_stealing_percentage` | character |  |
+| `season_stats_batting_ground_into_double_play` | integer |  |
+| `season_stats_batting_ground_into_triple_play` | integer |  |
+| `season_stats_batting_plate_appearances` | integer |  |
+| `season_stats_batting_total_bases` | integer |  |
+| `season_stats_batting_rbi` | integer |  |
+| `season_stats_batting_left_on_base` | integer |  |
+| `season_stats_batting_sac_bunts` | integer |  |
+| `season_stats_batting_sac_flies` | integer |  |
+| `season_stats_batting_babip` | character |  |
+| `season_stats_batting_ground_outs_to_airouts` | character |  |
+| `season_stats_batting_catchers_interference` | integer |  |
+| `season_stats_batting_pickoffs` | integer |  |
+| `season_stats_batting_at_bats_per_home_run` | character |  |
+| `season_stats_batting_pop_outs` | integer |  |
+| `season_stats_batting_line_outs` | integer |  |
+| `season_stats_pitching_games_played` | integer |  |
+| `season_stats_pitching_games_started` | integer |  |
+| `season_stats_pitching_fly_outs` | integer |  |
+| `season_stats_pitching_ground_outs` | integer |  |
+| `season_stats_pitching_air_outs` | integer |  |
+| `season_stats_pitching_runs` | integer |  |
+| `season_stats_pitching_doubles` | integer |  |
+| `season_stats_pitching_triples` | integer |  |
+| `season_stats_pitching_home_runs` | integer |  |
+| `season_stats_pitching_strike_outs` | integer |  |
+| `season_stats_pitching_base_on_balls` | integer |  |
+| `season_stats_pitching_intentional_walks` | integer |  |
+| `season_stats_pitching_hits` | integer |  |
+| `season_stats_pitching_hit_by_pitch` | integer |  |
+| `season_stats_pitching_at_bats` | integer |  |
+| `season_stats_pitching_obp` | character |  |
+| `season_stats_pitching_caught_stealing` | integer |  |
+| `season_stats_pitching_stolen_bases` | integer |  |
+| `season_stats_pitching_stolen_base_percentage` | character |  |
+| `season_stats_pitching_caught_stealing_percentage` | character |  |
+| `season_stats_pitching_number_of_pitches` | integer |  |
+| `season_stats_pitching_era` | character |  |
+| `season_stats_pitching_innings_pitched` | character |  |
+| `season_stats_pitching_wins` | integer |  |
+| `season_stats_pitching_losses` | integer |  |
+| `season_stats_pitching_saves` | integer |  |
+| `season_stats_pitching_save_opportunities` | integer |  |
+| `season_stats_pitching_holds` | integer |  |
+| `season_stats_pitching_blown_saves` | integer |  |
+| `season_stats_pitching_earned_runs` | integer |  |
+| `season_stats_pitching_whip` | character |  |
+| `season_stats_pitching_batters_faced` | integer |  |
+| `season_stats_pitching_outs` | integer |  |
+| `season_stats_pitching_games_pitched` | integer |  |
+| `season_stats_pitching_complete_games` | integer |  |
+| `season_stats_pitching_shutouts` | integer |  |
+| `season_stats_pitching_balls` | integer |  |
+| `season_stats_pitching_strikes` | integer |  |
+| `season_stats_pitching_strike_percentage` | character |  |
+| `season_stats_pitching_hit_batsmen` | integer |  |
+| `season_stats_pitching_balks` | integer |  |
+| `season_stats_pitching_wild_pitches` | integer |  |
+| `season_stats_pitching_pickoffs` | integer |  |
+| `season_stats_pitching_ground_outs_to_airouts` | character |  |
+| `season_stats_pitching_rbi` | integer |  |
+| `season_stats_pitching_win_percentage` | character |  |
+| `season_stats_pitching_pitches_per_inning` | character |  |
+| `season_stats_pitching_games_finished` | integer |  |
+| `season_stats_pitching_strikeout_walk_ratio` | character |  |
+| `season_stats_pitching_strikeouts_per9_inn` | character |  |
+| `season_stats_pitching_walks_per9_inn` | character |  |
+| `season_stats_pitching_hits_per9_inn` | character |  |
+| `season_stats_pitching_runs_scored_per9` | character |  |
+| `season_stats_pitching_home_runs_per9` | character |  |
+| `season_stats_pitching_inherited_runners` | integer |  |
+| `season_stats_pitching_inherited_runners_scored` | integer |  |
+| `season_stats_pitching_catchers_interference` | integer |  |
+| `season_stats_pitching_sac_bunts` | integer |  |
+| `season_stats_pitching_sac_flies` | integer |  |
+| `season_stats_pitching_passed_ball` | integer |  |
+| `season_stats_pitching_pop_outs` | integer |  |
+| `season_stats_pitching_line_outs` | integer |  |
+| `season_stats_fielding_caught_stealing` | integer |  |
+| `season_stats_fielding_stolen_bases` | integer |  |
+| `season_stats_fielding_stolen_base_percentage` | character |  |
+| `season_stats_fielding_caught_stealing_percentage` | character |  |
+| `season_stats_fielding_assists` | integer |  |
+| `season_stats_fielding_put_outs` | integer |  |
+| `season_stats_fielding_errors` | integer |  |
+| `season_stats_fielding_chances` | integer |  |
+| `season_stats_fielding_fielding` | character |  |
+| `season_stats_fielding_passed_ball` | integer |  |
+| `season_stats_fielding_pickoffs` | integer |  |
+| `game_status_is_current_batter` | logical |  |
+| `game_status_is_current_pitcher` | logical |  |
+| `game_status_is_on_bench` | logical |  |
+| `game_status_is_substitute` | logical |  |
+| `stats_fielding_games_started` | double |  |
+| `season_stats_fielding_games_started` | double |  |
+| `season_stats_pitching_pitches_thrown` | double |  |
+| `stats_pitching_summary` | character |  |
+| `stats_pitching_games_played` | double |  |
+| `stats_pitching_games_started` | double |  |
+| `stats_pitching_fly_outs` | double |  |
+| `stats_pitching_ground_outs` | double |  |
+| `stats_pitching_air_outs` | double |  |
+| `stats_pitching_runs` | double |  |
+| `stats_pitching_doubles` | double |  |
+| `stats_pitching_triples` | double |  |
+| `stats_pitching_home_runs` | double |  |
+| `stats_pitching_strike_outs` | double |  |
+| `stats_pitching_base_on_balls` | double |  |
+| `stats_pitching_intentional_walks` | double |  |
+| `stats_pitching_hits` | double |  |
+| `stats_pitching_hit_by_pitch` | double |  |
+| `stats_pitching_at_bats` | double |  |
+| `stats_pitching_caught_stealing` | double |  |
+| `stats_pitching_stolen_bases` | double |  |
+| `stats_pitching_stolen_base_percentage` | character |  |
+| `stats_pitching_number_of_pitches` | double |  |
+| `stats_pitching_innings_pitched` | character |  |
+| `stats_pitching_wins` | double |  |
+| `stats_pitching_losses` | double |  |
+| `stats_pitching_saves` | double |  |
+| `stats_pitching_save_opportunities` | double |  |
+| `stats_pitching_holds` | double |  |
+| `stats_pitching_blown_saves` | double |  |
+| `stats_pitching_earned_runs` | double |  |
+| `stats_pitching_batters_faced` | double |  |
+| `stats_pitching_outs` | double |  |
+| `stats_pitching_games_pitched` | double |  |
+| `stats_pitching_complete_games` | double |  |
+| `stats_pitching_shutouts` | double |  |
+| `stats_pitching_pitches_thrown` | double |  |
+| `stats_pitching_balls` | double |  |
+| `stats_pitching_strikes` | double |  |
+| `stats_pitching_strike_percentage` | character |  |
+| `stats_pitching_hit_batsmen` | double |  |
+| `stats_pitching_balks` | double |  |
+| `stats_pitching_wild_pitches` | double |  |
+| `stats_pitching_pickoffs` | double |  |
+| `stats_pitching_rbi` | double |  |
+| `stats_pitching_games_finished` | double |  |
+| `stats_pitching_runs_scored_per9` | character |  |
+| `stats_pitching_home_runs_per9` | character |  |
+| `stats_pitching_inherited_runners` | double |  |
+| `stats_pitching_inherited_runners_scored` | double |  |
+| `stats_pitching_catchers_interference` | double |  |
+| `stats_pitching_sac_bunts` | double |  |
+| `stats_pitching_sac_flies` | double |  |
+| `stats_pitching_passed_ball` | double |  |
+| `stats_pitching_pop_outs` | double |  |
+| `stats_pitching_line_outs` | double |  |
+| `stats_pitching_note` | character |  |
+| `stats_batting_note` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -103,7 +403,21 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 
 ### Returns
 
-GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `num` | integer | Inning number. |
+| `ordinal_num` | character | Inning ordinal label (e.g. 1st). |
+| `home_runs` | integer | Home runs. |
+| `home_hits` | integer | Home hits in the inning. |
+| `home_errors` | integer | Home errors in the inning. |
+| `home_left_on_base` | integer | Home runners left on base in the inning. |
+| `away_runs` | integer | Away runs scored in the inning. |
+| `away_hits` | integer | Away hits in the inning. |
+| `away_errors` | integer | Away errors in the inning. |
+| `away_left_on_base` | integer | Away runners left on base in the inning. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -129,7 +443,68 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 
 ### Returns
 
-GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `pitch_index` | character |  |
+| `action_index` | character |  |
+| `runner_index` | character |  |
+| `runners` | character |  |
+| `play_events` | character |  |
+| `play_end_time` | character |  |
+| `at_bat_index` | integer | Zero-based index of the at-bat within the game. |
+| `result_type` | character |  |
+| `result_event` | character |  |
+| `result_event_type` | character |  |
+| `result_description` | character |  |
+| `result_rbi` | integer |  |
+| `result_away_score` | integer |  |
+| `result_home_score` | integer |  |
+| `result_is_out` | logical |  |
+| `about_at_bat_index` | integer |  |
+| `about_half_inning` | character |  |
+| `about_is_top_inning` | logical |  |
+| `about_inning` | integer |  |
+| `about_start_time` | character |  |
+| `about_end_time` | character |  |
+| `about_is_complete` | logical |  |
+| `about_is_scoring_play` | logical |  |
+| `about_has_review` | logical |  |
+| `about_has_out` | logical |  |
+| `about_captivating_index` | integer |  |
+| `count_balls` | integer |  |
+| `count_strikes` | integer |  |
+| `count_outs` | integer |  |
+| `matchup_batter_id` | integer |  |
+| `matchup_batter_full_name` | character |  |
+| `matchup_batter_link` | character |  |
+| `matchup_bat_side_code` | character |  |
+| `matchup_bat_side_description` | character |  |
+| `matchup_pitcher_id` | integer |  |
+| `matchup_pitcher_full_name` | character |  |
+| `matchup_pitcher_link` | character |  |
+| `matchup_pitch_hand_code` | character |  |
+| `matchup_pitch_hand_description` | character |  |
+| `matchup_post_on_first_id` | double |  |
+| `matchup_post_on_first_full_name` | character |  |
+| `matchup_post_on_first_link` | character |  |
+| `matchup_batter_hot_cold_zones` | character |  |
+| `matchup_pitcher_hot_cold_zones` | character |  |
+| `matchup_splits_batter` | character |  |
+| `matchup_splits_pitcher` | character |  |
+| `matchup_splits_men_on_base` | character |  |
+| `matchup_post_on_second_id` | double |  |
+| `matchup_post_on_second_full_name` | character |  |
+| `matchup_post_on_second_link` | character |  |
+| `matchup_post_on_third_id` | double |  |
+| `matchup_post_on_third_full_name` | character |  |
+| `matchup_post_on_third_link` | character |  |
+| `review_details_is_overturned` | logical |  |
+| `review_details_in_progress` | logical |  |
+| `review_details_review_type` | character |  |
+| `review_details_challenge_team_id` | double |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -154,7 +529,8 @@ GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context
 
 ### Returns
 
-GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -179,7 +555,75 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 
 ### Returns
 
-GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `pitch_index` | character |  |
+| `action_index` | character |  |
+| `runner_index` | character |  |
+| `runners` | character |  |
+| `play_events` | character |  |
+| `credits` | character |  |
+| `flags` | character |  |
+| `home_team_win_probability` | double | Home team win probability (percent) entering the at-bat. |
+| `away_team_win_probability` | double | Away team win probability (percent) entering the at-bat. |
+| `home_team_win_probability_added` | double | Change in home team win probability attributed to the at-bat. |
+| `play_end_time` | character |  |
+| `at_bat_index` | integer | Zero-based index of the at-bat within the game. |
+| `result_type` | character |  |
+| `result_event` | character |  |
+| `result_event_type` | character |  |
+| `result_description` | character |  |
+| `result_rbi` | integer |  |
+| `result_away_score` | integer |  |
+| `result_home_score` | integer |  |
+| `result_is_out` | logical |  |
+| `about_at_bat_index` | integer |  |
+| `about_half_inning` | character |  |
+| `about_is_top_inning` | logical |  |
+| `about_inning` | integer |  |
+| `about_start_time` | character |  |
+| `about_end_time` | character |  |
+| `about_is_complete` | logical |  |
+| `about_is_scoring_play` | logical |  |
+| `about_has_review` | logical |  |
+| `about_has_out` | logical |  |
+| `about_captivating_index` | integer |  |
+| `count_balls` | integer |  |
+| `count_strikes` | integer |  |
+| `count_outs` | integer |  |
+| `matchup_batter_id` | integer |  |
+| `matchup_batter_full_name` | character |  |
+| `matchup_batter_link` | character |  |
+| `matchup_bat_side_code` | character |  |
+| `matchup_bat_side_description` | character |  |
+| `matchup_pitcher_id` | integer |  |
+| `matchup_pitcher_full_name` | character |  |
+| `matchup_pitcher_link` | character |  |
+| `matchup_pitch_hand_code` | character |  |
+| `matchup_pitch_hand_description` | character |  |
+| `matchup_post_on_first_id` | double |  |
+| `matchup_post_on_first_full_name` | character |  |
+| `matchup_post_on_first_link` | character |  |
+| `matchup_batter_hot_cold_zones` | character |  |
+| `matchup_pitcher_hot_cold_zones` | character |  |
+| `matchup_splits_batter` | character |  |
+| `matchup_splits_pitcher` | character |  |
+| `matchup_splits_men_on_base` | character |  |
+| `leverage_index` | double | Leverage index quantifying the importance of the at-bat situation. |
+| `drama_index` | double |  |
+| `matchup_post_on_second_id` | double |  |
+| `matchup_post_on_second_full_name` | character |  |
+| `matchup_post_on_second_link` | character |  |
+| `matchup_post_on_third_id` | double |  |
+| `matchup_post_on_third_full_name` | character |  |
+| `matchup_post_on_third_link` | character |  |
+| `review_details_is_overturned` | logical |  |
+| `review_details_in_progress` | logical |  |
+| `review_details_review_type` | character |  |
+| `review_details_challenge_team_id` | double |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -203,7 +647,8 @@ GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 
 ### Returns
 
-GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -231,7 +676,44 @@ GET /api/v1/teams/{teamId} — single team detail.
 
 ### Returns
 
-GET /api/v1/teams/{teamId} — single team detail.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `all_star_status` | character | All-star status flag. |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `season` | integer | Season year. |
+| `team_code` | character | Internal team code. |
+| `file_code` | character | File code abbreviation. |
+| `abbreviation` | character | Short abbreviation. |
+| `team_name` | character | Team name. |
+| `location_name` | character | Team location (city). |
+| `first_year_of_play` | character | First year the franchise played. |
+| `short_name` | character | Short display name. |
+| `franchise_name` | character | Franchise name. |
+| `club_name` | character | Club name. |
+| `active` | logical | Whether the player is currently active. |
+| `spring_league_id` | integer | Spring league MLBAM ID. |
+| `spring_league_name` | character | Spring league name. |
+| `spring_league_link` | character | API link to the spring league. |
+| `spring_league_abbreviation` | character | Spring league abbreviation. |
+| `venue_id` | integer | MLBAM venue ID. |
+| `venue_name` | character | Venue name. |
+| `venue_link` | character | API link to the venue. |
+| `spring_venue_id` | integer | Spring training venue MLBAM ID. |
+| `spring_venue_link` | character | API link to the spring venue. |
+| `league_id` | integer | League MLBAM ID. |
+| `league_name` | character | League name. |
+| `league_link` | character | API link to the league. |
+| `division_id` | integer | Division MLBAM ID. |
+| `division_name` | character | Division name. |
+| `division_link` | character | API link to the division. |
+| `sport_id` | integer | Sport MLBAM ID. |
+| `sport_link` | character | API link to the sport. |
+| `sport_name` | character | Sport name (e.g., Major League Baseball). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -260,6 +742,7 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -272,6 +755,8 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 | `position_abbreviation` | character | Position abbreviation. |
 | `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
 | `status_description` | character | Roster status description (e.g. 'Active'). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -298,7 +783,57 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 
 ### Returns
 
-GET /api/v1/teams/{teamId}/alumni — players who played for this team in a season.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `primary_number` | character | Player uniform number. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `middle_name` | character | Player middle name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `nick_name` | character | Player nickname. |
+| `gender` | character | Player gender. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
+| `alumni_last_season` | character | Last season the player was with the team. |
+| `primary_position_code` | character | Primary position code. |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_type` | character | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `birth_state_province` | character | State or province of birth. |
+| `draft_year` | double | Year the player was drafted. |
+| `last_played_date` | character | Date of last MLB game played. |
+| `name_matrilineal` | character | Maternal family name. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -325,7 +860,46 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 
 ### Returns
 
-GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league chain).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `all_star_status` | character | All-star status flag. |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `season` | integer | Season year. |
+| `team_code` | character | Internal team code. |
+| `file_code` | character | File code abbreviation. |
+| `abbreviation` | character | Short abbreviation. |
+| `team_name` | character | Team name. |
+| `location_name` | character | Team location (city). |
+| `first_year_of_play` | character | First year the franchise played. |
+| `short_name` | character | Short display name. |
+| `franchise_name` | character | Franchise name. |
+| `club_name` | character | Club name. |
+| `active` | logical | Whether the player is currently active. |
+| `spring_league_id` | double | Spring league MLBAM ID. |
+| `spring_league_name` | character | Spring league name. |
+| `spring_league_link` | character | API link to the spring league. |
+| `spring_league_abbreviation` | character | Spring league abbreviation. |
+| `venue_id` | integer | MLBAM venue ID. |
+| `venue_name` | character | Venue name. |
+| `venue_link` | character | API link to the venue. |
+| `spring_venue_id` | double | Spring training venue MLBAM ID. |
+| `spring_venue_link` | character | API link to the spring venue. |
+| `league_id` | double | League MLBAM ID. |
+| `league_name` | character | League name. |
+| `league_link` | character | API link to the league. |
+| `division_id` | double | Division MLBAM ID. |
+| `division_name` | character | Division name. |
+| `division_link` | character | API link to the division. |
+| `sport_id` | integer | Sport MLBAM ID. |
+| `sport_link` | character | API link to the sport. |
+| `sport_name` | character | Sport name (e.g., Major League Baseball). |
+| `parent_org_name` | character | Parent organization name. |
+| `parent_org_id` | double | Parent organization MLBAM ID. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -351,7 +925,8 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 
 ### Returns
 
-GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -378,7 +953,8 @@ GET /api/v1/people/{personId} — single person detail.
 
 ### Returns
 
-GET /api/v1/people/{personId} — single person detail.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -404,7 +980,8 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 
 ### Returns
 
-GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -431,7 +1008,61 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
 ### Returns
 
-GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Id. |
+| `full_name` | character | Player's full name. |
+| `link` | character | API link to the game feed. |
+| `first_name` | character | Player first name. |
+| `last_name` | character | Player last name. |
+| `primary_number` | character | Player uniform number. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `current_age` | integer | Current age in years. |
+| `birth_city` | character | City of birth. |
+| `birth_state_province` | character | State or province of birth. |
+| `birth_country` | character | Country of birth. |
+| `height` | character | Height (feet and inches). |
+| `weight` | integer | Weight in pounds. |
+| `active` | logical | Whether the player is currently active. |
+| `use_name` | character | Preferred first name. |
+| `use_last_name` | character | Preferred last name. |
+| `middle_name` | character | Player middle name. |
+| `boxscore_name` | character | Name as shown in box scores. |
+| `gender` | character | Player gender. |
+| `is_player` | logical | Whether the person is a player. |
+| `is_verified` | logical | Whether the player profile is verified. |
+| `draft_year` | double | Year the player was drafted. |
+| `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
+| `name_first_last` | character | Name in first-last order. |
+| `name_slug` | character | URL-friendly name slug. |
+| `first_last_name` | character | First and last name. |
+| `last_first_name` | character | Name in last, first order. |
+| `last_init_name` | character | Last name with first initial. |
+| `init_last_name` | character | First initial with last name. |
+| `full_fml_name` | character | Full name (first-middle-last). |
+| `full_lfm_name` | character | Full name (last-first-middle). |
+| `strike_zone_top` | double | Top of the player's strike zone (feet). |
+| `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
+| `current_team_id` | integer | Current team MLBAM ID. |
+| `current_team_name` | character | Current team name. |
+| `current_team_link` | character | API link to the current team. |
+| `primary_position_code` | character | Primary position code. |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_type` | character | Primary position type (e.g. Infielder). |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `bat_side_code` | character | Batting side code (L/R/S). |
+| `bat_side_description` | character | Batting side description. |
+| `pitch_hand_code` | character | Throwing hand code (L/R). |
+| `pitch_hand_description` | character | Throwing hand description. |
+| `name_matrilineal` | character | Maternal family name. |
+| `nick_name` | character | Player nickname. |
+| `pronunciation` | character | Phonetic name pronunciation. |
+| `last_played_date` | character | Date of last MLB game played. |
+| `name_title` | character | Name title. |
+| `name_suffix` | character | Name suffix (e.g. Jr., Sr., III). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -455,6 +1086,7 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -464,6 +1096,8 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 | `abbreviation` | character | Short abbreviation. |
 | `sort_order` | integer | Display sort order for the sport. |
 | `active_status` | logical | Whether the sport/level is active. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -489,7 +1123,51 @@ GET /api/v1/leagues — list leagues.
 
 ### Returns
 
-GET /api/v1/leagues — list leagues.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `abbreviation` | character | Short abbreviation. |
+| `name_short` | character | Short name of player (First Initial, Last Name) |
+| `season_state` | character |  |
+| `has_wild_card` | logical |  |
+| `has_split_season` | logical |  |
+| `num_games` | double |  |
+| `has_playoff_points` | logical |  |
+| `num_teams` | double | Number of teams the player appeared for. |
+| `num_wildcard_teams` | double |  |
+| `season` | character | Season year. |
+| `org_code` | character |  |
+| `conferences_in_use` | logical | Whether conferences were in use that season. |
+| `divisions_in_use` | logical | Whether divisions were in use that season. |
+| `sort_order` | integer | Display sort order for the sport. |
+| `active` | logical | Whether the player is currently active. |
+| `season_date_info_season_id` | character | Season identifier for the date info block. |
+| `season_date_info_pre_season_start_date` | character | Preseason start date (YYYY-MM-DD). |
+| `season_date_info_pre_season_end_date` | character | Preseason end date (YYYY-MM-DD). |
+| `season_date_info_season_start_date` | character | Season start date (YYYY-MM-DD). |
+| `season_date_info_spring_start_date` | character | Spring training start date (YYYY-MM-DD). |
+| `season_date_info_spring_end_date` | character | Spring training end date (YYYY-MM-DD). |
+| `season_date_info_regular_season_start_date` | character | Regular season start date (YYYY-MM-DD). |
+| `season_date_info_last_date1st_half` | character | Last date of the first half (YYYY-MM-DD). |
+| `season_date_info_all_star_date` | character | All-Star Game date (YYYY-MM-DD). |
+| `season_date_info_first_date2nd_half` | character | First date of the second half (YYYY-MM-DD). |
+| `season_date_info_regular_season_end_date` | character | Regular season end date (YYYY-MM-DD). |
+| `season_date_info_post_season_start_date` | character | Postseason start date (YYYY-MM-DD). |
+| `season_date_info_post_season_end_date` | character | Postseason end date (YYYY-MM-DD). |
+| `season_date_info_season_end_date` | character | Season end date (YYYY-MM-DD). |
+| `season_date_info_offseason_start_date` | character | Offseason start date (YYYY-MM-DD). |
+| `season_date_info_off_season_end_date` | character | Offseason end date (YYYY-MM-DD). |
+| `season_date_info_season_level_gameday_type` | character | Season-level Gameday data type code. |
+| `season_date_info_game_level_gameday_type` | character | Game-level Gameday data type code. |
+| `season_date_info_qualifier_plate_appearances` | double | Plate appearances per game needed to qualify. |
+| `season_date_info_qualifier_outs_pitched` | double | Outs pitched per game needed to qualify. |
+| `sport_id` | double | Sport MLBAM ID. |
+| `sport_link` | character | API link to the sport. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -514,7 +1192,32 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 
 ### Returns
 
-GET /api/v1/seasons/{seasonId} — single season detail.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Season year identifier. |
+| `has_wildcard` | logical | Whether the season has a wild card round. |
+| `pre_season_start_date` | character | Pre-season start date. |
+| `pre_season_end_date` | character | Pre-season end date. |
+| `season_start_date` | character | Season start date. |
+| `spring_start_date` | character | Spring training start date. |
+| `spring_end_date` | character | Spring training end date. |
+| `regular_season_start_date` | character | Regular season start date. |
+| `last_date1st_half` | character | Last date of the first half. |
+| `all_star_date` | character | All-Star Game date. |
+| `first_date2nd_half` | character | First date of the second half. |
+| `regular_season_end_date` | character | Regular season end date. |
+| `post_season_start_date` | character | Post-season start date. |
+| `post_season_end_date` | character | Post-season end date. |
+| `season_end_date` | character | Season end date. |
+| `offseason_start_date` | character | Off-season start date. |
+| `off_season_end_date` | character | Off-season end date. |
+| `season_level_gameday_type` | character | Season-level Gameday data feed type. |
+| `game_level_gameday_type` | character | Game-level Gameday data feed type. |
+| `qualifier_plate_appearances` | double | Plate appearances per team game to qualify. |
+| `qualifier_outs_pitched` | double | Outs pitched per team game to qualify. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -540,6 +1243,7 @@ GET /api/v1/venues — list venues.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -547,6 +1251,8 @@ GET /api/v1/venues — list venues.
 | `link` | character | API link to the game feed. |
 | `active` | logical | Whether the player is currently active. |
 | `season` | character | Season year. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -572,7 +1278,16 @@ GET /api/v1/venues/{venueId} — single venue detail.
 
 ### Returns
 
-GET /api/v1/venues/{venueId} — single venue detail.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `link` | character | API link to the game feed. |
+| `active` | logical | Whether the player is currently active. |
+| `season` | character | Season year. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -596,7 +1311,8 @@ GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 
 ### Returns
 
-GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -620,7 +1336,21 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 
 ### Returns
 
-GET /api/v1/awards — list award IDs (call with no params to enumerate).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | Id. |
+| `name` | character | Display name. |
+| `description` | character | Long-form description text. |
+| `sort_order` | double | Display sort order for the sport. |
+| `active` | logical | Whether the player is currently active. |
+| `sport_id` | double | Sport MLBAM ID. |
+| `sport_link` | character | API link to the sport. |
+| `league_id` | double | League MLBAM ID. |
+| `league_link` | character | API link to the league. |
+| `notes` | character | Notes. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -647,7 +1377,25 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
 ### Returns
 
-GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | Id. |
+| `name` | character | Display name. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `season` | character | Season year. |
+| `team_id` | integer | Unique ESPN team identifier. |
+| `team_link` | character | API link to the team. |
+| `player_id` | integer | MLBAM player ID. |
+| `player_link` | character | API relative link to the player. |
+| `player_primary_position_code` | character | Recipient primary fielding position code. |
+| `player_primary_position_name` | character | Recipient primary fielding position name. |
+| `player_primary_position_type` | character | Participant primary position type (e.g. 'Hitter'). |
+| `player_primary_position_abbreviation` | character | Participant primary position abbreviation (e.g. 'DH'). |
+| `player_name_first_last` | character | Participant name in first-last order. |
+| `votes` | double | Number of votes received. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -675,7 +1423,8 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
 ### Returns
 
-GET /api/v1/draft/{year} — draft results for a year (optionally one round).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -698,7 +1447,18 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 
 ### Returns
 
-GET /api/v1/jobs/umpires — current umpire crew assignments.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | character | Job title (e.g. 'Umpire'). |
+| `job_id` | character | Job code identifier. |
+| `title` | character | Specific role title for the assignment. |
+| `person_id` | integer | MLB player ID. |
+| `person_full_name` | character | Player full name. |
+| `person_link` | character | API relative link to the person. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -724,6 +1484,7 @@ View all PCL conferences.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -736,6 +1497,8 @@ View all PCL conferences.
 | `league_link` | character | API link to the league. |
 | `sport_id` | integer | Sport MLBAM ID. |
 | `sport_link` | character | API link to the sport. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -761,6 +1524,7 @@ View PCL conferences by conferenceId.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -773,6 +1537,8 @@ View PCL conferences by conferenceId.
 | `league_link` | character | API link to the league. |
 | `sport_id` | integer | Sport MLBAM ID. |
 | `sport_link` | character | API link to the sport. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -796,6 +1562,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `number` | integer | Week number as returned by the API. |
@@ -893,6 +1660,8 @@ View latest player drafted, endpoint best used when draft is currently open.
 | `pick_is_pass` | logical |  |
 | `pick_year` | character |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -915,9 +1684,12 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `timecode` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -943,6 +1715,7 @@ View corrected non Statcast information for games
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character |  |
@@ -1010,6 +1783,8 @@ View corrected non Statcast information for games
 | `resumed_from` | character | Original date-time if the game was resumed. |
 | `resumed_from_date` | character | Original date if the game was resumed. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -1038,7 +1813,8 @@ View timestamps of most recent data corrections made to games.
 
 ### Returns
 
-View timestamps of most recent data corrections made to games.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1068,7 +1844,8 @@ View timestamps of most recent data corrections made to GUIDs.
 
 ### Returns
 
-View timestamps of most recent data corrections made to GUIDs.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1100,7 +1877,8 @@ View Statcast data for a specific game.
 
 ### Returns
 
-View Statcast data for a specific game.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1127,7 +1905,8 @@ View Statcast data for a specific play.
 
 ### Returns
 
-View Statcast data for a specific play.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1153,7 +1932,8 @@ View Statcast contextMetrics data for a specific play.
 
 ### Returns
 
-View Statcast contextMetrics data for a specific play.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1179,7 +1959,8 @@ View game color commentary info.
 
 ### Returns
 
-View game color commentary info.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1205,7 +1986,8 @@ View game color feed.
 
 ### Returns
 
-View game color feed.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1229,7 +2011,8 @@ View all of the color timecodes for a game.
 
 ### Returns
 
-View all of the color timecodes for a game.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_timecodes`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1264,6 +2047,7 @@ View time of game info.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `hits_per9_inn` | double |  |
@@ -1316,6 +2100,8 @@ View time of game info.
 | `total7_inn_games_without_extra_inn` | double |  |
 | `total7_inn_games_completed_early` | double |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -1347,6 +2133,7 @@ View high/low stats by player or team.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | integer | Total number of splits in the leaderboard. |
@@ -1367,6 +2154,8 @@ View high/low stats by player or team.
 | `sort_stat_org_types` | character |  |
 | `sort_stat_high_low_types` | character |  |
 | `sort_stat_streak_levels` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1391,6 +2180,7 @@ View a home run derby object based on gamePk.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -1474,6 +2264,8 @@ View a home run derby object based on gamePk.
 | `name_matrilineal` | character | Maternal family name. |
 | `current_team_parent_org_name` | character |  |
 | `current_team_parent_org_id` | double |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1498,6 +2290,7 @@ View a home run derby object based on bracket.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -1581,6 +2374,8 @@ View a home run derby object based on bracket.
 | `name_matrilineal` | character | Maternal family name. |
 | `current_team_parent_org_name` | character |  |
 | `current_team_parent_org_id` | double |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1605,6 +2400,7 @@ View a home run derby object based on pool.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -1688,6 +2484,8 @@ View a home run derby object based on pool.
 | `name_matrilineal` | character | Maternal family name. |
 | `current_team_parent_org_name` | character |  |
 | `current_team_parent_org_id` | double |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1713,6 +2511,7 @@ View All-Star Ballots per league.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -1762,6 +2561,8 @@ View All-Star Ballots per league.
 | `draft_year` | double | Year the player was drafted. |
 | `name_title` | character | Name title. |
 | `name_suffix` | character | Name suffix (e.g. Jr., Sr., III). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1787,6 +2588,7 @@ View All-Star Write-ins per league.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -1833,6 +2635,8 @@ View All-Star Write-ins per league.
 | `name_title` | character | Name title. |
 | `name_suffix` | character | Name suffix (e.g. Jr., Sr., III). |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -1857,6 +2661,7 @@ View All-Star Final Vote per league.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -1906,6 +2711,8 @@ View All-Star Final Vote per league.
 | `middle_name` | character | Player middle name. |
 | `draft_year` | double | Year the player was drafted. |
 | `last_played_date` | character | Date of last MLB game played. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1932,6 +2739,7 @@ View biographical information and stats for Free Agents.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `notes` | character | Notes. |
@@ -1951,6 +2759,8 @@ View biographical information and stats for Free Agents.
 | `new_team_id` | double | Team id the player signed with. |
 | `new_team_name` | character | Name of the team the player signed with. |
 | `sort_order` | double | Display sort order for the sport. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1977,6 +2787,7 @@ View directory by jobType.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -1986,6 +2797,8 @@ View directory by jobType.
 | `person_id` | integer | MLB player ID. |
 | `person_full_name` | character | Player full name. |
 | `person_link` | character | API relative link to the person. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2012,6 +2825,7 @@ View datacasters directory.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -2021,6 +2835,8 @@ View datacasters directory.
 | `person_id` | integer | MLB player ID. |
 | `person_full_name` | character | Player full name. |
 | `person_link` | character | API relative link to the person. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2047,6 +2863,7 @@ View official scorer directory.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -2056,6 +2873,8 @@ View official scorer directory.
 | `person_id` | integer | MLB player ID. |
 | `person_full_name` | character | Player full name. |
 | `person_link` | character | API relative link to the person. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2082,7 +2901,8 @@ Get umpires and associated game for umpireId.
 
 ### Returns
 
-Get umpires and associated game for umpireId.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2109,6 +2929,7 @@ View tied game schedule info.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character |  |
@@ -2169,6 +2990,8 @@ View tied game schedule info.
 | `venue_link` | character | API link to the venue. |
 | `content_link` | character | API link to the game content. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -2196,6 +3019,7 @@ View schedule info for postseason based on series.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `total_items` | integer | Total schedule items on the date. |
@@ -2207,6 +3031,8 @@ View schedule info for postseason based on series.
 | `series_sort_number` | integer | Sort number for the series. |
 | `series_is_default` | logical | Whether the series is the default series. |
 | `series_game_type` | character | Game type code for the series. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2234,7 +3060,8 @@ View schedule info for the tuneIn application.
 
 ### Returns
 
-View schedule info for the tuneIn application.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2262,6 +3089,7 @@ View information for all seasons based on id.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Season year identifier. |
@@ -2286,6 +3114,8 @@ View information for all seasons based on id.
 | `spring_start_date` | character | Spring training start date. |
 | `spring_end_date` | character | Spring training end date. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -2309,6 +3139,7 @@ View information for any given sportId.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -2318,6 +3149,8 @@ View information for any given sportId.
 | `abbreviation` | character | Short abbreviation. |
 | `sort_order` | integer | Display sort order for the sport. |
 | `active_status` | logical | Whether the sport/level is active. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2355,7 +3188,8 @@ View Statcast stats.
 
 ### Returns
 
-View Statcast stats.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2382,6 +3216,7 @@ View historical records for a list of teams.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `all_star_status` | character | All-star status flag. |
@@ -2410,6 +3245,8 @@ View historical records for a list of teams.
 | `sport_id` | integer | Sport MLBAM ID. |
 | `sport_link` | character | API link to the sport. |
 | `sport_name` | character | Sport name (e.g., Major League Baseball). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2440,6 +3277,7 @@ View team stats.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | integer | Total number of splits in the leaderboard. |
@@ -2449,6 +3287,8 @@ View team stats.
 | `splits_tied_with_limit` | character | Players tied at the limit boundary. |
 | `type_display_name` | character | Stat type display name. |
 | `group_display_name` | character | Stat group display name. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2483,6 +3323,7 @@ View leaders for a statistic.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `leader_category` | character | Team leader category (e.g., homeRuns). |
@@ -2492,6 +3333,8 @@ View leaders for a statistic.
 | `total_splits` | integer | Total number of splits in the leaderboard. |
 | `game_type_id` | character | Game type code (e.g., R for regular season). |
 | `game_type_description` | character | Game type description. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2518,6 +3361,7 @@ View biographical  information on all coaches for a given club.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -2527,6 +3371,8 @@ View biographical  information on all coaches for a given club.
 | `person_id` | integer | MLB player ID. |
 | `person_full_name` | character | Player full name. |
 | `person_link` | character | API relative link to the person. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2552,6 +3398,7 @@ View biographical  information on all personnel for a given club.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -2561,6 +3408,8 @@ View biographical  information on all personnel for a given club.
 | `person_id` | integer | MLB player ID. |
 | `person_full_name` | character | Player full name. |
 | `person_link` | character | API relative link to the person. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -2589,6 +3438,7 @@ View biographical and statistical information for a club's roster based on roste
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -2601,6 +3451,8 @@ View biographical and statistical information for a club's roster based on roste
 | `position_abbreviation` | character | Position abbreviation. |
 | `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
 | `status_description` | character | Roster status description (e.g. 'Active'). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 

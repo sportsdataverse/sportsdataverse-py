@@ -23,6 +23,7 @@ endpoints:
     query_key: hydrate
     type: str
   parser: parse_mlb_api_schedule
+  returns_schema: native/mlb_api/schedule_postseason
 - short: pbp
   summary: "GET /api/v1.1/game/{gamePk}/feed/live \u2014 live firehose (v1.1)."
   path: /api/v1.1/game/{game_pk}/feed/live
@@ -62,7 +63,8 @@ endpoints:
     type: str
   example_args:
     game_pk: 716390
-  parser: parse_mlb_api_list
+  parser: parse_mlb_api_boxscore
+  returns_schema: native/mlb_api/boxscore
 - short: linescore
   summary: "GET /api/v1/game/{gamePk}/linescore \u2014 inning-by-inning + current game state."
   path: /api/v1/game/{game_pk}/linescore
@@ -79,7 +81,8 @@ endpoints:
     type: str
   example_args:
     game_pk: 716390
-  parser: parse_mlb_api_list
+  parser: parse_mlb_api_linescore
+  returns_schema: native/mlb_api/linescore
 - short: play_by_play
   summary: "GET /api/v1/game/{gamePk}/playByPlay \u2014 play-by-play with at-bat detail."
   path: /api/v1/game/{game_pk}/playByPlay
@@ -96,7 +99,8 @@ endpoints:
     type: str
   example_args:
     game_pk: 716390
-  parser: parse_mlb_api_list
+  parser: parse_mlb_api_play_by_play
+  returns_schema: native/mlb_api/play_by_play
 - short: game_context_metrics
   summary: "GET /api/v1/game/{gamePk}/contextMetrics \u2014 WP, leverage index, in-game context."
   path: /api/v1/game/{game_pk}/contextMetrics
@@ -124,7 +128,8 @@ endpoints:
     type: str
   example_args:
     game_pk: 716390
-  parser: parse_mlb_api_list
+  parser: parse_mlb_api_win_probability
+  returns_schema: native/mlb_api/win_probability
 - short: game_content
   summary: "GET /api/v1/game/{gamePk}/content \u2014 articles, highlights, editorial content."
   path: /api/v1/game/{game_pk}/content
@@ -159,6 +164,7 @@ endpoints:
   example_args:
     team_id: 10
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/team
 - short: team_roster
   summary: "GET /api/v1/teams/{teamId}/roster \u2014 team roster."
   path: /api/v1/teams/{team_id}/roster
@@ -208,6 +214,7 @@ endpoints:
   example_args:
     team_id: 10
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/team_alumni
 - short: team_affiliates
   summary: "GET /api/v1/teams/affiliates \u2014 org affiliates (MLB parent \u2192 minor league chain)."
   path: /api/v1/teams/affiliates
@@ -226,6 +233,7 @@ endpoints:
     query_key: hydrate
     type: str
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/team_affiliates
 - short: people
   summary: "GET /api/v1/people?personIds=... \u2014 bulk person lookup by MLBAM id."
   path: /api/v1/people
@@ -297,6 +305,7 @@ endpoints:
     query_key: fields
     type: str
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/sport_players
 - short: sports
   summary: "GET /api/v1/sports \u2014 list known sports (MLB, MiLB, KBO, NPB, \u2026)."
   path: /api/v1/sports
@@ -321,6 +330,7 @@ endpoints:
     query_key: leagueIds
     type: int|List[int]
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/leagues
 - short: season
   summary: "GET /api/v1/seasons/{seasonId} \u2014 single season detail."
   path: /api/v1/seasons/{season_id}
@@ -336,6 +346,7 @@ endpoints:
   example_args:
     season_id: X
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/season
 - short: venues
   summary: "GET /api/v1/venues \u2014 list venues."
   path: /api/v1/venues
@@ -368,6 +379,7 @@ endpoints:
   example_args:
     venue_id: 15
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/venue
 - short: meta
   summary: "GET /api/v1/{metaType} \u2014 enum lookup (the API's self-describing surface)."
   path: /api/v1/{meta_type}
@@ -386,6 +398,7 @@ endpoints:
     query_key: sportId
     type: int
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/awards
 - short: award_recipients
   summary: "GET /api/v1/awards/{awardId}/recipients \u2014 historical winners of one award."
   path: /api/v1/awards/{award_id}/recipients
@@ -407,6 +420,7 @@ endpoints:
   example_args:
     award_id: MLBHOF
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/award_recipients
 - short: draft
   summary: "GET /api/v1/draft/{year} \u2014 draft results for a year (optionally one round)."
   path: /api/v1/draft/{year}
@@ -435,6 +449,7 @@ endpoints:
   summary: "GET /api/v1/jobs/umpires \u2014 current umpire crew assignments."
   path: /api/v1/jobs/umpires
   parser: parse_mlb_api_list
+  returns_schema: native/mlb_api/umpires
 - short: conferences
   summary: View all PCL conferences.
   path: /api/v1/conferences

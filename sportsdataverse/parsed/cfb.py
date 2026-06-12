@@ -141,17 +141,24 @@ from sportsdataverse.cfb import fox_cfb_boxscore as _raw_fox_cfb_boxscore
 from sportsdataverse.cfb import fox_cfb_league_leaders as _raw_fox_cfb_league_leaders
 from sportsdataverse.cfb import fox_cfb_odds as _raw_fox_cfb_odds
 from sportsdataverse.cfb import fox_cfb_pbp as _raw_fox_cfb_pbp
+from sportsdataverse.cfb import fox_cfb_schedule as _raw_fox_cfb_schedule
 from sportsdataverse.cfb import fox_cfb_standings as _raw_fox_cfb_standings
 from sportsdataverse.cfb import fox_cfb_team_gamelog as _raw_fox_cfb_team_gamelog
 from sportsdataverse.cfb import fox_cfb_team_roster as _raw_fox_cfb_team_roster
 from sportsdataverse.cfb import fox_cfb_team_stats as _raw_fox_cfb_team_stats
+from sportsdataverse.cfb import fox_cfb_teams as _raw_fox_cfb_teams
 from sportsdataverse.cfb import yahoo_cfb_boxscore as _raw_yahoo_cfb_boxscore
 from sportsdataverse.cfb import yahoo_cfb_player_season_stats as _raw_yahoo_cfb_player_season_stats
 from sportsdataverse.cfb import yahoo_cfb_player_season_stats_legacy as _raw_yahoo_cfb_player_season_stats_legacy
 from sportsdataverse.cfb import yahoo_cfb_scoreboard as _raw_yahoo_cfb_scoreboard
 from sportsdataverse.cfb import yahoo_cfb_team_season_stats as _raw_yahoo_cfb_team_season_stats
 from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy as _raw_yahoo_cfb_team_season_stats_legacy
+from sportsdataverse.cfb import yahoo_cfb_teams as _raw_yahoo_cfb_teams
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
+from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import download as download  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_calendar as espn_cfb_calendar  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_game_rosters as espn_cfb_game_rosters  # noqa: F401
@@ -178,6 +185,10 @@ from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 
 __all__ = [
     "CFBPlayProcess",
+    "cfb_odds_events_crosswalk",
+    "cfb_rosters_crosswalk",
+    "cfb_schedule_crosswalk",
+    "cfb_teams_crosswalk",
     "download",
     "espn_cfb_award",
     "espn_cfb_awards",
@@ -304,10 +315,12 @@ __all__ = [
     "fox_cfb_odds",
     "fox_cfb_pbp",
     "fox_cfb_play_process",
+    "fox_cfb_schedule",
     "fox_cfb_standings",
     "fox_cfb_team_gamelog",
     "fox_cfb_team_roster",
     "fox_cfb_team_stats",
+    "fox_cfb_teams",
     "fox_to_espn_summary",
     "get_cfb_teams",
     "helper_cfb_athlete_items",
@@ -329,6 +342,7 @@ __all__ = [
     "yahoo_cfb_scoreboard",
     "yahoo_cfb_team_season_stats",
     "yahoo_cfb_team_season_stats_legacy",
+    "yahoo_cfb_teams",
 ]
 
 
@@ -1984,6 +1998,20 @@ def fox_cfb_pbp(*args, **kwargs):
     return _raw_fox_cfb_pbp(*args, **kwargs)
 
 
+def fox_cfb_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.fox_cfb_schedule``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.fox_cfb_schedule` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.fox_cfb_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_cfb_schedule(*args, **kwargs)
+
+
 def fox_cfb_standings(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``cfb.fox_cfb_standings``).
 
@@ -2038,6 +2066,20 @@ def fox_cfb_team_stats(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_cfb_team_stats(*args, **kwargs)
+
+
+def fox_cfb_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.fox_cfb_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.fox_cfb_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.fox_cfb_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_cfb_teams(*args, **kwargs)
 
 
 def yahoo_cfb_boxscore(*args, **kwargs):
@@ -2122,3 +2164,17 @@ def yahoo_cfb_team_season_stats_legacy(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_yahoo_cfb_team_season_stats_legacy(*args, **kwargs)
+
+
+def yahoo_cfb_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.yahoo_cfb_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.yahoo_cfb_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.yahoo_cfb_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_yahoo_cfb_teams(*args, **kwargs)

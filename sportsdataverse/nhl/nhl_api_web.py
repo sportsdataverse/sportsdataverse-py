@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get, format_nhl_season
 from sportsdataverse.nhl.nhl_api_web_parsers import (
@@ -12,11 +12,14 @@ from sportsdataverse.nhl.nhl_api_web_parsers import (
     parse_nhl_web_club_schedule,
     parse_nhl_web_club_stats,
     parse_nhl_web_draft_picks,
+    parse_nhl_web_draft_rankings,
     parse_nhl_web_landing,
     parse_nhl_web_leaders,
     parse_nhl_web_pbp,
     parse_nhl_web_player_game_log,
     parse_nhl_web_player_landing,
+    parse_nhl_web_player_spotlight,
+    parse_nhl_web_playoff_series,
     parse_nhl_web_right_rail,
     parse_nhl_web_roster,
     parse_nhl_web_schedule,
@@ -24,6 +27,10 @@ from sportsdataverse.nhl.nhl_api_web_parsers import (
     parse_nhl_web_standings,
     parse_nhl_web_standings_season,
 )
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "nhl_web_pbp",
@@ -62,7 +69,7 @@ def nhl_web_pbp(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the play-by-play feed for one NHL game.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/gamecenter/{game_id}/play-by-play``
@@ -95,7 +102,7 @@ def nhl_boxscore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the boxscore for one NHL game.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore``
@@ -128,7 +135,7 @@ def nhl_landing(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the gamecenter landing payload for one NHL game.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/gamecenter/{game_id}/landing``
@@ -161,7 +168,7 @@ def nhl_right_rail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the gamecenter right-rail payload (in-game widgets).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/gamecenter/{game_id}/right-rail``
@@ -194,7 +201,7 @@ def nhl_web_schedule(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the week-of NHL schedule rooted at ``date``.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/schedule/{date}``
@@ -230,7 +237,7 @@ def nhl_score(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the single-day scoreboard for ``date``.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/score/{date}``
@@ -264,7 +271,7 @@ def nhl_schedule_calendar(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the calendar of game-days for the season.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/schedule-calendar/{date}``
@@ -299,8 +306,11 @@ def nhl_schedule_calendar(
 def nhl_playoff_series(
     season: Union[int, str],
     series_letter: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a single playoff series payload.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}``
@@ -309,9 +319,11 @@ def nhl_playoff_series(
     Args:
         season: season path parameter.
         series_letter: series_letter path parameter.
+        return_parsed: parse the payload through parse_nhl_web_playoff_series -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_playoff_series(season=2025, series_letter='a')
@@ -323,6 +335,8 @@ def nhl_playoff_series(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_playoff_series(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -332,7 +346,7 @@ def nhl_standings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the NHL standings.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/standings/{date}``
@@ -367,7 +381,7 @@ def nhl_standings_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the per-season standings cutover dates.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/standings-season``
@@ -400,7 +414,7 @@ def nhl_club_schedule_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a team's full-season schedule.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-schedule-season/{team}/{season}``
@@ -441,7 +455,7 @@ def nhl_club_schedule_month(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a team's schedule for one month.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-schedule/{team}/month/{month}``
@@ -481,7 +495,7 @@ def nhl_club_schedule_week(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a team's schedule for one week.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-schedule/{team}/week/{date}``
@@ -517,12 +531,12 @@ def nhl_club_schedule_week(
 def nhl_club_stats(
     team: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a team's season stat block.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-stats/{team}/{season}/{game_type}``
@@ -563,7 +577,7 @@ def nhl_club_stats_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the seasons a team has stats for.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-stats-season/{team}``
@@ -597,7 +611,7 @@ def nhl_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a team's roster.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/roster/{team}/{season}``
@@ -637,7 +651,7 @@ def nhl_roster_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull every season a team has had on file.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/roster-season/{team}``
@@ -670,7 +684,7 @@ def nhl_player_landing(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the player profile / overview.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/player/{player_id}/landing``
@@ -700,12 +714,12 @@ def nhl_player_landing(
 def nhl_player_game_log(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull a player's game-by-game log.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/player/{player_id}/game-log/{season}/{game_type}``
@@ -741,17 +755,22 @@ def nhl_player_game_log(
 
 
 def nhl_player_spotlight(
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the league's currently featured players.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/player-spotlight``
     Example URL: https://api-web.nhle.com/v1/player-spotlight
 
     Args:
+        return_parsed: parse the payload through parse_nhl_web_player_spotlight -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_player_spotlight()
@@ -761,17 +780,19 @@ def nhl_player_spotlight(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_player_spotlight(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
 def nhl_skater_leaders(
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull skater stat leaders.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/skater-stats-leaders/{season}/{game_type}``
@@ -807,12 +828,12 @@ def nhl_skater_leaders(
 
 def nhl_goalie_leaders(
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull goalie stat leaders.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/goalie-stats-leaders/{season}/{game_type}``
@@ -848,12 +869,12 @@ def nhl_goalie_leaders(
 
 def nhl_draft_picks(
     year: Union[int, str],
-    round_: Optional[Union[int, str]] = "all",
+    round_: Union[int, str] = "all",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull NHL draft picks for a year (and optionally one round).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/picks/{year}/{round_}``
@@ -883,9 +904,12 @@ def nhl_draft_picks(
 
 def nhl_draft_rankings(
     year: Union[int, str],
-    category: Optional[int] = 1,
+    category: int = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull NHL Central Scouting rankings for a draft year.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/rankings/{year}/{category}``
@@ -894,9 +918,11 @@ def nhl_draft_rankings(
     Args:
         year: year path parameter.
         category: category path parameter.
+        return_parsed: parse the payload through parse_nhl_web_draft_rankings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_draft_rankings(year=2024)
@@ -906,6 +932,8 @@ def nhl_draft_rankings(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_draft_rankings(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -914,7 +942,7 @@ def nhl_draft_picks_now(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the current / most recent draft pick set.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/picks/now``
@@ -941,17 +969,22 @@ def nhl_draft_picks_now(
 
 
 def nhl_draft_rankings_now(
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the current Central Scouting rankings.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/rankings/now``
     Example URL: https://api-web.nhle.com/v1/draft/rankings/now
 
     Args:
+        return_parsed: parse the payload through parse_nhl_web_draft_rankings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
-        The raw JSON ``Dict``.
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         >>> nhl_draft_rankings_now()
@@ -961,6 +994,8 @@ def nhl_draft_rankings_now(
         params={},
         **kwargs,
     )
+    if return_parsed:
+        return parse_nhl_web_draft_rankings(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -969,7 +1004,7 @@ def nhl_draft_tracker_picks_now(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the live draft-tracker pick list (during the draft itself).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft-tracker/picks/now``

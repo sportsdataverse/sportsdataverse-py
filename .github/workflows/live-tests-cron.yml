@@ -73,6 +73,11 @@ jobs:
         continue-on-error: true
         env:
           SDV_PY_LIVE_TESTS: "1"
+          # Optional: when the ODDS_API_KEY repo secret is set, the betting-odds
+          # notebook executes against The Odds API; when unset it resolves to an
+          # empty string and the notebook's key-guard renders a "set ODDS_API_KEY"
+          # note instead (still passes). No key is ever committed.
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           set -o pipefail
           uv run --frozen pytest --nbmake examples/notebooks/ -q -rN 2>&1 | tee pytest-notebooks.log
@@ -85,6 +90,11 @@ jobs:
         env:
           SDV_PY_LIVE_TESTS: "1"
           GH_TOKEN: ${{ github.token }}
+          # Optional: set the ODDS_API_KEY repo secret to refresh the betting-odds
+          # tutorial with live outputs; unset -> it re-renders the key-guarded
+          # fallback. The step is continue-on-error, so a quota/transient odds
+          # failure can't break the weekly refresh of the other tutorials.
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           set -o pipefail
           uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log

@@ -2,6 +2,14 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.58 (in development)](#0058-in-development)
+  - [The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)](#the-odds-api-wrappers-sportsdataverseodds-toa_)
+  - [Yahoo Sports college football wrappers (`yahoo_cfb_*`)](#yahoo-sports-college-football-wrappers-yahoo_cfb_)
+  - [NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping](#nfl--apinflcom-wrappers-cut-over-to-generated-nflcom-api-docs-grouping)
+  - [NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override](#nfl--automatic-apinflcom-token-caching--nfl_access_token-override)
+  - [Documentation — `api.nfl.com` OpenAPI spec](#documentation--apinflcom-openapi-spec)
+  - [Bug fixes](#bug-fixes)
+  - [Internal — Fox data key single-sourced](#internal--fox-data-key-single-sourced)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
     - [CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)](#cfb--fox-as-a-backup-source-for-the-epawpa-play-processor-fox_cfb_play_process)
@@ -18,7 +26,7 @@
   - [Documentation — accuracy-audit fixes](#documentation--accuracy-audit-fixes)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
-  - [Bug fixes](#bug-fixes)
+  - [Bug fixes](#bug-fixes-1)
 - [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
   - [Per-sport return schemas (correctness)](#per-sport-return-schemas-correctness)
   - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
@@ -53,7 +61,7 @@
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
   - [New: NHL api-web parser layer](#new-nhl-api-web-parser-layer)
-  - [Bug fixes](#bug-fixes-1)
+  - [Bug fixes](#bug-fixes-2)
   - [New: NFL drive-plays parser (true PBP parity)](#new-nfl-drive-plays-parser-true-pbp-parity)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
@@ -74,7 +82,7 @@
   - [CFB — `cfb_play_participants` and `__add_player_cols` collapse](#cfb--cfb_play_participants-and-__add_player_cols-collapse)
   - [CFB — pandas → polars 1.x bug-fix reconciliation (`0.36-live` → `main`)](#cfb--pandas-%E2%86%92-polars-1x-bug-fix-reconciliation-036-live-%E2%86%92-main)
   - [Infrastructure and tooling](#infrastructure-and-tooling)
-  - [Bug fixes](#bug-fixes-2)
+  - [Bug fixes](#bug-fixes-3)
   - [Deprecations](#deprecations-1)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
@@ -88,6 +96,37 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.58 (in development)
+
+### The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)
+
+New `sportsdataverse.odds` module wrapping [The Odds API](https://the-odds-api.com) v4 — live + historical sports betting odds, scores, events, markets and participants across a wide range of bookmakers. Mirrors the sister R package [oddsapiR](https://oddsapir.sportsdataverse.org)'s `toa_*` surface: `toa_sports`, `toa_sports_odds`, `toa_sports_scores`, `toa_sports_events`, `toa_event_odds`, `toa_event_markets`, `toa_sports_participants`, the three `*_history` snapshot variants, and `toa_usage` (cached quota, no network). The odds endpoints return tidy **long-format** frames (one row per event × bookmaker × market × outcome). Auth resolves from the `ODDS_API_KEY` env var (same variable as `oddsapiR`) or an `api_key=` argument; the call routes through the shared `dl_utils.download()` gateway. Same `return_parsed` / `return_as_pandas` contract (polars by default). Built from the `the_odds_api` OpenAPI spec.
+
+### Yahoo Sports college football wrappers (`yahoo_cfb_*`)
+
+Read-only Yahoo Sports wrappers for college football over Yahoo's shangrila stats graph (`graphite-secure.sports.yahoo.com/v1/query/shangrila`) and editorial feed (`api-secure.sports.yahoo.com/v1/editorial/s`): `yahoo_cfb_player_season_stats`, `yahoo_cfb_team_season_stats`, the legacy per-category `*_season_stats_legacy` variants, `yahoo_cfb_scoreboard`, and a `yahoo_cfb_boxscore` scaffold. Same `return_parsed` / `return_as_pandas` contract (polars by default).
+
+### NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping
+
+The hand-written `sportsdataverse.nfl.nfl_api` wrappers (`nfl_standings`, `nfl_rosters`, `nfl_injuries`, …) are now **generated** from `tools/codegen/endpoints/nfl_api.yaml`, like the NHL/MLB native families. The flat-API codegen gained `getter_module` + `auth` support so an authenticated family (the NFL.com `WEB_DESKTOP` bearer token) can be generated; the auth getter lives in `nfl_api_runtime.py` and the per-endpoint record extraction in `nfl_api_parsers.py`. As a result the NFL docs index now lists a dedicated **"NFL.com API"** reference grouping (11 functions) instead of burying those wrappers in "Additional functions". Wrapper signatures gain `return_parsed` / `**kwargs`.
+
+### NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override
+
+The `api.nfl.com` bearer token is now minted once and cached in-process, then auto-renewed just before its JWT `exp` — so back-to-back `nfl_*` / `nfl_api_*` calls reuse a single token instead of POSTing to `/identity/v3/token` on every call, with no setup and no manual refresh. A new optional `NFL_ACCESS_TOKEN` env var injects a pre-minted bearer token verbatim (skipping the mint + cache); the existing `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` credential overrides still apply. `nfl_clear_token_cache()` forces a fresh mint, and `nfl_token_gen(force_refresh=True)` re-mints on demand.
+
+### Documentation — `api.nfl.com` OpenAPI spec
+
+Added an OpenAPI 3.1 description of the modern NFL.com "Shield" data API (`api.nfl.com`: `/identity/v3/token` device-token auth + `/football/v2/*` + `/experience/*`) to the reference repos (`sdv-internal-refs/nfl/`, `sdv-swagger/nfl_api_openapi.yaml`).
+
+### Bug fixes
+
+- `load_nfl_players()` now reads the nflverse **players** release (`players/players.parquet`) on both the polars and pandas paths; the default polars path previously returned the **officials** dataset by mistake.
+- The generated `api.nfl.com` wrappers route their HTTP call through the shared `sportsdataverse.dl_utils.download()` gateway (retries + cache + ESPN-aware error handling) like every other wrapper, instead of calling `requests.get()` directly. Boolean query flags and the `nfl_weeks` `season` / `season_type` path params are hardened so `None` can no longer leak onto the wire.
+
+### Internal — Fox data key single-sourced
+
+`sportsdataverse.cfb.cfb_fox_ext.FOX_DATA_KEY` is now imported from `sportsdataverse._fox_layout.DATA_KEY` so the bundled public Fox key and its `SDV_PY_FOX_DATA_KEY` env override live in exactly one place instead of being duplicated.
 
 ## 0.0.57 Release: June 10, 2026
 

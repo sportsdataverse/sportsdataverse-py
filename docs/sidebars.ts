@@ -62,6 +62,13 @@ const sidebars: SidebarsConfig = {
         league('pwhl', 'PWHL'),
       ],
     },
+    // Cross-sport betting markets (The Odds API). Not tied to a single sport,
+    // so it gets its own top-level section rather than nesting under one.
+    {
+      type: 'category',
+      label: 'Betting',
+      items: [league('odds', 'Odds')],
+    },
     // Executed example notebooks, rendered to docs/docs/tutorials/ by
     // `python tools/codegen/render_notebooks.py` (refreshed weekly in
     // live-tests-cron). The whole section sits at the bottom, below the per-sport
@@ -74,8 +81,9 @@ const sidebars: SidebarsConfig = {
         type: 'generated-index',
         title: 'Tutorials',
         description:
-          'Executed example notebooks rendered as pages — a cross-sport Quickstart ' +
-          'plus one per sport (NBA, WNBA, MBB, WBB, NFL, CFB, MLB, NHL, PWHL). ' +
+          'Executed example notebooks rendered as pages — a cross-sport Quickstart, ' +
+          'one per sport (NBA, WNBA, MBB, WBB, NFL, CFB, MLB, NHL, PWHL), a combined ' +
+          'junior & minor hockey tour (AHL/OHL/WHL/QMJHL), and a betting-odds intro. ' +
           'Refreshed weekly against the live APIs; source notebooks live in ' +
           'examples/notebooks/.',
       },

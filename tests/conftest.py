@@ -90,3 +90,36 @@ def load_fixture(category: str, stem: str) -> dict:
             f"Fixture not found: {path}. Expected category={category!r}, stem={stem!r}.",
         )
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def fetch_pbp_or_skip(proc):
+    """Run a CFB/NFL ``*PlayProcess`` live ESPN fetch, gating + skipping cleanly.
+
+    This is the single live-fetch chokepoint for the PBP test modules, so it owns
+    the live gate: it ``skip``s unless ``SDV_PY_LIVE_TESTS=1`` (same contract as
+    :data:`skip_if_no_live`) -- meaning every fixture / test that fetches through
+    it is gated, with no per-test decorator to forget.
+
+    When live, ESPN's summary endpoint intermittently returns a body with no
+    ``header.competitions`` (offseason / a game not yet ingested). The PBP
+    processors raise :class:`~sportsdataverse.errors.NoESPNDataError` for that case
+    instead of a bare ``KeyError``; we treat it as a transient gap and ``skip``
+    rather than fail. The guard fires inside ``run_processing_pipeline()`` (not the
+    fetch), so this helper runs **both** the fetch and the pipeline under one
+    ``try`` -- ``run_processing_pipeline`` is idempotent, so a test/fixture calling
+    it again afterward just gets the cached result. ``proc`` is an ``NFLPlayProcess``
+    / ``CFBPlayProcess`` (the league ``espn_*_pbp`` method is auto-detected).
+    Returns ``proc`` for chaining.
+    """
+    if not LIVE:
+        pytest.skip("Live ESPN PBP fetch — set SDV_PY_LIVE_TESTS=1 to run.")
+
+    from sportsdataverse.errors import NoESPNDataError
+
+    fetch = getattr(proc, "espn_cfb_pbp", None) or getattr(proc, "espn_nfl_pbp", None)
+    try:
+        fetch()
+        proc.run_processing_pipeline()
+    except NoESPNDataError as exc:
+        pytest.skip(f"ESPN returned incomplete data for game {getattr(proc, 'gameId', '?')}: {exc}")
+    return proc

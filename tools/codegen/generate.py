@@ -66,12 +66,15 @@ def _build_docstring(
     example_url: str,
     example_call: str,
     flat: bool = False,
+    auth: bool = False,
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
     Shared renderer (Python, not a Jinja macro) so every generated family emits the
     same docstring contract without Jinja whitespace-control fragility. ``flat`` omits
-    the sport/league binding line for the non-sport/league NHL/MLB APIs.
+    the sport/league binding line for the non-sport/league NHL/MLB APIs. ``auth``
+    documents the extra ``headers`` arg the template adds for token-authed families
+    (NFL.com), keeping the public ``Args`` block complete.
     """
     lines = [f'"""{ep.summary}', ""]
     if not flat:
@@ -86,6 +89,12 @@ def _build_docstring(
         lines.append(f"    {p.python_name}: {p.api} path parameter.")
     for p in ep.query_params:
         lines.append(f"    {p.python_name}: {p.api} query parameter.")
+    if auth:
+        lines.append(
+            "    headers: optional pre-minted auth headers dict (e.g. from "
+            "nfl_headers_gen()) to reuse across calls; a fresh anonymous token is "
+            "minted when omitted."
+        )
     if ep.parser:
         lines.append(
             f"    return_parsed: parse the payload through {ep.parser} -> polars DataFrame "
@@ -409,7 +418,15 @@ class _EndpointView:
       assign ``__url``, and ``url_literal`` is the bare name ``__url``.
     """
 
-    def __init__(self, ep: spec.Endpoint, fn_name: str, ep_host: str, league: spec.League, flat: bool = False):
+    def __init__(
+        self,
+        ep: spec.Endpoint,
+        fn_name: str,
+        ep_host: str,
+        league: spec.League,
+        flat: bool = False,
+        auth: bool = False,
+    ):
         self.fn_name = fn_name
         self.short = ep.short
         self.summary = _normalize_rst(ep.summary or "")
@@ -457,6 +474,7 @@ class _EndpointView:
             self.example_url,
             self.example_call,
             flat=flat,
+            auth=auth,
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
@@ -766,7 +784,7 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
             fn_name = api.name_pattern.format(short=ep.short)
         used.add(fn_name)
         ep_host = ep.host or api.host
-        views.append(_EndpointView(ep, fn_name, ep_host, stub_league, flat=True))
+        views.append(_EndpointView(ep, fn_name, ep_host, stub_league, flat=True, auth=api.auth))
     return views
 
 
@@ -798,6 +816,8 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,
         passthrough_query=api.passthrough_query,
+        getter_module=api.getter_module,
+        auth=api.auth,
     )
 
 
@@ -1217,6 +1237,7 @@ FLAT_APIS = [
     ("nhl_stats_rest", "nhl"),
     ("nhl_records", "nhl"),
     ("mlb_api", "mlb"),
+    ("nfl_api", "nfl"),
 ]
 
 
@@ -1395,7 +1416,22 @@ def check() -> int:
 # The 8 documented sport leagues. (pwhl is loader-only and has no module of its
 # own to import; its load_pwhl_* loaders surface at the package top level and are
 # checked as package-level/global names against the whole docs corpus.)
-_COVERAGE_LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl", "pwhl", "ahl", "ohl", "whl", "qmjhl"]
+_COVERAGE_LEAGUES = [
+    "nba",
+    "wnba",
+    "mbb",
+    "wbb",
+    "cfb",
+    "nfl",
+    "mlb",
+    "nhl",
+    "pwhl",
+    "ahl",
+    "ohl",
+    "whl",
+    "qmjhl",
+    "odds",
+]
 
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
 
@@ -1592,7 +1628,24 @@ _FLAT_API_DOC = {
     "nhl_stats_rest": "NHL Stats REST API",
     "nhl_records": "NHL Records API",
     "mlb_api": "MLB Stats API",
+    "nfl_api": "NFL.com API",
 }
+
+# Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
+# league index (so NFL reads "nflverse data releases", not "sportsdataverse-data
+# releases"). Unknown keys fall back to the raw key.
+_LOADER_BASE_LABEL = {
+    "sdv_releases": "sportsdataverse-data releases",
+    "raw_data": "sportsdataverse raw data",
+    "nflverse": "nflverse data releases",
+}
+
+
+def _loader_base_label(prefix: str) -> str:
+    """Human label for a league's dataset-loader source(s) (distinct bases joined)."""
+    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    bases = sorted({ld.base for ld in rel.loaders if ld.league == prefix})
+    return " / ".join(_LOADER_BASE_LABEL.get(b, b) for b in bases) or "sportsdataverse-data releases"
 
 
 def _loader_schema_table(fn: str) -> str:
@@ -1615,10 +1668,21 @@ def _loader_doc_views(prefix: str) -> list[dict]:
         if ld.league != prefix:
             continue
         auto = ld.automation or {}
+        # Release-tag page URL: for GitHub-releases-hosted assets, derive it from
+        # the SAME repo the asset download comes from (download -> tag) so an
+        # nflverse-hosted loader links nflverse tags. Non-releases bases (e.g.
+        # raw.githubusercontent) still tag their provenance in the
+        # sportsdataverse-data releases repo, so fall back to that historical URL.
+        base_dl = rel.bases.get(ld.base, "")
+        if "/releases/download/" in base_dl:
+            tag_base = base_dl.replace("/releases/download/", "/releases/tag/")
+        else:
+            tag_base = "https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/"
         out.append(
             {
                 "fn": ld.fn,
                 "tag": ld.tag,
+                "tag_url": f"{tag_base}{ld.tag}",
                 "url": "" if ld.stub else f"{rel.bases[ld.base]}{ld.url}",
                 "automation": {"repo": auto.get("repo", ""), "workflow": auto.get("workflow", "")},
                 "return_table": _return_table(ld.returns_schema) if ld.returns_schema else _loader_schema_table(ld.fn),
@@ -1720,6 +1784,12 @@ _LEAGUE_NOTEBOOKS: dict[str, tuple[str, str]] = {
     "nhl": ("07_nhl_intro", "NHL tutorial"),
     "mlb": ("09_mlb_intro", "MLB tutorial"),
     "pwhl": ("10_pwhl_intro", "PWHL tutorial"),
+    # AHL + the three CHL major-junior loops share one combined HockeyTech tutorial.
+    "ahl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "ohl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "whl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "qmjhl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "odds": ("12_odds_intro", "Betting odds tutorial"),
 }
 
 
@@ -1758,6 +1828,7 @@ def render_league_index(
         api_rows=_apis_for(prefix),
         has_loaders=bool(loaders),
         loader_count=len(loaders),
+        loader_base=_loader_base_label(prefix),
         has_additional=has_additional,
         additional_count=additional_count,
         notebooks=_notebooks_for(prefix),
@@ -2676,9 +2747,13 @@ def _doc_leagues() -> list[str]:
     extra = sorted({ld.league for ld in rel.loaders} - set(prefixes))
     # HockeyTech junior leagues have hand-written modules but no ESPN/loader entries.
     _HOCKEYTECH_EXTRA = ["ahl", "ohl", "whl", "qmjhl"]
+    # Cross-sport hand-written modules that get their own docs scope but have no
+    # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
+    _NONLEAGUE_EXTRA = ["odds"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
-    return prefixes + extra + hockeytech
+    nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
+    return prefixes + extra + hockeytech + nonleague
 
 
 def _preserved_docs_corpus() -> str:

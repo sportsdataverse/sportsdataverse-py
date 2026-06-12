@@ -1317,50 +1317,6 @@ contracts_pd = load_nfl_contracts(return_as_pandas=True)
 contracts_pd.sort_values("apy", ascending=False).head()
 ```
 
-### `load_nfl_depth_charts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_depth_charts}
-
-Load NFL Depth Chart data for selected seasons
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2001 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing depth chart data available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `club_code` | character |  |
-| `week` | integer | Season week. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `depth_team` | character |  |
-| `last_name` | character | Last name of player |
-| `first_name` | character | First name of player |
-| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
-| `formation` | character |  |
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `elias_id` | character |  |
-| `depth_position` | character |  |
-| `full_name` | character | Full name as per NFL.com |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_depth_charts
-depth = load_nfl_depth_charts(seasons=[2024])
-
-# Multi-season range
-
-depth = load_nfl_depth_charts(seasons=range(2020, 2025))
-```
-
 ### `load_nfl_draft_picks(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_draft_picks}
 
 Load NFL Draft picks information
@@ -1757,121 +1713,6 @@ history = load_nfl_ff_rankings(kind="all")
 draft = load_nfl_ff_rankings(type="draft")
 ```
 
-### `load_nfl_ftn_charting(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_ftn_charting}
-
-Load NFL FTN charting data going back to 2022
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2022 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing FTN charting data available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `ftn_game_id` | integer | FTN game ID |
-| `nflverse_game_id` | character | nflverse identifier for games. Format is season, week, away_team, home_team |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `week` | integer | Season week. |
-| `ftn_play_id` | integer | FTN play ID |
-| `nflverse_play_id` | integer | Play ID used by nflverse, corresponds to GSIS play ID |
-| `starting_hash` | character | hash the ball was place(L = left, M = middle, R = right) |
-| `qb_location` | character | pre-snap position of quarterback(U = under center, S = shotgun, P = pistol) |
-| `n_offense_backfield` | integer | number of players in the backfield at the snap |
-| `n_defense_box` | integer |  |
-| `is_no_huddle` | logical | no huddle |
-| `is_motion` | logical | motion occurred on the play before or at the time of the snap |
-| `is_play_action` | logical | play-action pass |
-| `is_screen_pass` | logical | screen pass |
-| `is_rpo` | logical | play is considered run-pass option |
-| `is_trick_play` | logical | trick play |
-| `is_qb_out_of_pocket` | logical | quarterback moved out of pocket |
-| `is_interception_worthy` | logical | interception worthy pass |
-| `is_throw_away` | logical | quarterback thrown away |
-| `read_thrown` | character | read the ball was thrown |
-| `is_catchable_ball` | logical | catchable ball(defined by throws that are generally on target that are not defended away) |
-| `is_contested_ball` | logical | contested ball(defined by whether or not the receiver is facing physical contact at the time of the catch) |
-| `is_created_reception` | logical | created reception(defined by a reception that only occurs due to an exceptional play by the receiver) |
-| `is_drop` | logical | receiver drop |
-| `is_qb_sneak` | logical | quarterback sneak |
-| `n_blitzers` | integer | number of blitzers |
-| `n_pass_rushers` | integer | number of pass rushers |
-| `is_qb_fault_sack` | logical | sack that is the fault of the quarterback |
-| `date_pulled` | character | Date the data was retrieved from the FTN Data API by nflverse jobs |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_ftn_charting
-charting = load_nfl_ftn_charting(seasons=[2024])
-
-# Multi-season range
-
-charting = load_nfl_ftn_charting(seasons=range(2022, 2025))
-
-# Filter to plays with motion
-
-import polars as pl
-motion_plays = (
-    load_nfl_ftn_charting(seasons=[2024])
-    .filter(pl.col("is_motion") == 1)
-)
-```
-
-### `load_nfl_injuries(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_injuries}
-
-Load NFL injuries data for selected seasons
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2009 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing injuries data available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `week` | integer | Season week. |
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `position` | character | Primary position as reported by NFL.com |
-| `full_name` | character | Full name as per NFL.com |
-| `first_name` | character | First name of player |
-| `last_name` | character | Last name of player |
-| `report_primary_injury` | character | Primary injury listed on official injury report |
-| `report_secondary_injury` | character | Secondary injury listed on official injury report |
-| `report_status` | character | Player's status for game on official injury report |
-| `practice_primary_injury` | character | Primary injury listed on practice injury report |
-| `practice_secondary_injury` | character | Secondary injury listed on practice injury report |
-| `practice_status` | character | Player's participation in practice |
-| `date_modified` | character | Date and time that injury information was updated |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_injuries
-injuries = load_nfl_injuries(seasons=[2024])
-
-# Multi-season range with team filter
-
-import polars as pl
-sf_injuries = (
-    load_nfl_injuries(seasons=range(2020, 2025))
-    .filter(pl.col("team") == "SF")
-)
-```
-
 ### `load_nfl_nextgen_stats(seasons: 'List[int]', stat_type: 'str' = 'passing', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_nextgen_stats}
 
 Load NFL NextGen Stats data going back to 2016.
@@ -2142,474 +1983,6 @@ officials.shape
 
 officials_pd = load_nfl_officials(return_as_pandas=True)
 officials_pd.head()
-```
-
-### `load_nfl_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_pbp}
-
-Load NFL play by play data going back to 1999
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing the play-by-plays available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `play_id` | double | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `old_game_id` | character | Legacy NFL game ID. |
-| `home_team` | character | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
-| `away_team` | character | String abbreviation for the away team. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
-| `posteam` | character | String abbreviation for the team with possession. |
-| `posteam_type` | character | String indicating whether the posteam team is home or away. |
-| `defteam` | character | String abbreviation for the team on defense. |
-| `side_of_field` | character | String abbreviation for which team's side of the field the team with possession is currently on. |
-| `yardline_100` | double | Numeric distance in the number of yards from the opponent's endzone for the posteam. |
-| `game_date` | character | Date of the game. |
-| `quarter_seconds_remaining` | double | Numeric seconds remaining in the quarter. |
-| `half_seconds_remaining` | double | Numeric seconds remaining in the half. |
-| `game_seconds_remaining` | double | Numeric seconds remaining in the game. |
-| `game_half` | character | String indicating which half the play is in, either Half1, Half2, or Overtime. |
-| `quarter_end` | double | Binary indicator for whether or not the row of the data is marking the end of a quarter. |
-| `drive` | double | Numeric drive number in the game. |
-| `sp` | double | Binary indicator for whether or not a score occurred on the play. |
-| `qtr` | double | Quarter of the game (5 is overtime). |
-| `down` | double | The down for the given play. |
-| `goal_to_go` | integer | Binary indicator for whether or not the posteam is in a goal down situation. |
-| `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
-| `yrdln` | character | String indicating the current field position for a given play. |
-| `ydstogo` | double | Numeric yards in distance from either the first down marker or the endzone in goal down situations. |
-| `ydsnet` | double | Numeric value for total yards gained on the given drive. |
-| `desc` | character | Detailed string description for the given play. |
-| `play_type` | character | String indicating the type of play: pass (includes sacks), run (includes scrambles), punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play (timeouts and penalties), and missing for rows indicating end of play. |
-| `yards_gained` | double | Numeric yards gained (or lost) by the possessing team, excluding yards gained via fumble recoveries and laterals. |
-| `shotgun` | double | Binary indicator for whether or not the play was in shotgun formation. |
-| `no_huddle` | double | Binary indicator for whether or not the play was in no_huddle formation. |
-| `qb_dropback` | double | Binary indicator for whether or not the QB dropped back on the play (pass attempt, sack, or scrambled). |
-| `qb_kneel` | double | Binary indicator for whether or not the QB took a knee. |
-| `qb_spike` | double | Binary indicator for whether or not the QB spiked the ball. |
-| `qb_scramble` | double | Binary indicator for whether or not the QB scrambled. |
-| `pass_length` | character | String indicator for pass length: short or deep. |
-| `pass_location` | character | String indicator for pass location: left, middle, or right. |
-| `air_yards` | double | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
-| `yards_after_catch` | double | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `run_location` | character | String indicator for location of run: left, middle, or right. |
-| `run_gap` | character | String indicator for line gap of run: end, guard, or tackle |
-| `field_goal_result` | character | String indicator for result of field goal attempt: made, missed, or blocked. |
-| `kick_distance` | double | Numeric distance in yards for kickoffs, field goals, and punts. |
-| `extra_point_result` | character | String indicator for the result of the extra point attempt: good, failed, blocked, safety (touchback in defensive endzone is 1 point apparently), or aborted. |
-| `two_point_conv_result` | character | String indicator for result of two point conversion attempt: success, failure, safety (touchback in defensive endzone is 1 point apparently), or return. |
-| `home_timeouts_remaining` | double | Numeric timeouts remaining in the half for the home team. |
-| `away_timeouts_remaining` | double | Numeric timeouts remaining in the half for the away team. |
-| `timeout` | double | Binary indicator for whether or not a timeout was called by either team. |
-| `timeout_team` | character | String abbreviation for which team called the timeout. |
-| `td_team` | character | String abbreviation for which team scored the touchdown. |
-| `td_player_name` | character | String name of the player who scored a touchdown. |
-| `td_player_id` | character | Unique identifier of the player who scored a touchdown. |
-| `posteam_timeouts_remaining` | double | Number of timeouts remaining for the possession team. |
-| `defteam_timeouts_remaining` | double | Number of timeouts remaining for the team on defense. |
-| `total_home_score` | double | Score for the home team at the start of the play. |
-| `total_away_score` | double | Score for the away team at the start of the play. |
-| `posteam_score` | double | Score the posteam at the start of the play. |
-| `defteam_score` | double | Score the defteam at the start of the play. |
-| `score_differential` | double | Score differential between the posteam and defteam at the start of the play. |
-| `posteam_score_post` | double | Score for the posteam at the end of the play. |
-| `defteam_score_post` | double | Score for the defteam at the end of the play. |
-| `score_differential_post` | double | Score differential between the posteam and defteam at the end of the play. |
-| `no_score_prob` | double | Predicted probability of no score occurring for the rest of the half based on the expected points model. |
-| `opp_fg_prob` | double | Predicted probability of the defteam scoring a FG next. 'Next' in this context means the next score in the same game half. |
-| `opp_safety_prob` | double | Predicted probability of the defteam scoring a safety next. 'Next' in this context means the next score in the same game half. |
-| `opp_td_prob` | double | Predicted probability of the defteam scoring a TD next. 'Next' in this context means the next score in the same game half. |
-| `fg_prob` | double | Predicted probability of the posteam scoring a FG next. 'Next' in this context means the next score in the same game half. |
-| `safety_prob` | double | Predicted probability of the posteam scoring a safety next. 'Next' in this context means the next score in the same game half. |
-| `td_prob` | double | Predicted probability of the posteam scoring a TD next. 'Next' in this context means the next score in the same game half. |
-| `extra_point_prob` | double | Predicted probability of the posteam scoring an extra point. |
-| `two_point_conversion_prob` | double | Predicted probability of the posteam scoring the two point conversion. |
-| `ep` | double | Using the scoring event probabilities, the estimated expected points with respect to the possession team for the given play. |
-| `epa` | double | Expected points added (EPA) by the posteam for the given play. |
-| `total_home_epa` | double | Cumulative total EPA for the home team in the game so far. |
-| `total_away_epa` | double | Cumulative total EPA for the away team in the game so far. |
-| `total_home_rush_epa` | double | Cumulative total rushing EPA for the home team in the game so far. |
-| `total_away_rush_epa` | double | Cumulative total rushing EPA for the away team in the game so far. |
-| `total_home_pass_epa` | double | Cumulative total passing EPA for the home team in the game so far. |
-| `total_away_pass_epa` | double | Cumulative total passing EPA for the away team in the game so far. |
-| `air_epa` | double | EPA from the air yards alone. For completions this represents the actual value provided through the air. For incompletions this represents the hypothetical value that could've been added through the air if the pass was completed. |
-| `yac_epa` | double | EPA from the yards after catch alone. For completions this represents the actual value provided after the catch. For incompletions this represents the difference between the hypothetical air_epa and the play's raw observed EPA (how much the incomplete pass cost the posteam). |
-| `comp_air_epa` | double | EPA from the air yards alone only for completions. |
-| `comp_yac_epa` | double | EPA from the yards after catch alone only for completions. |
-| `total_home_comp_air_epa` | double | Cumulative total completions air EPA for the home team in the game so far. |
-| `total_away_comp_air_epa` | double | Cumulative total completions air EPA for the away team in the game so far. |
-| `total_home_comp_yac_epa` | double | Cumulative total completions yac EPA for the home team in the game so far. |
-| `total_away_comp_yac_epa` | double | Cumulative total completions yac EPA for the away team in the game so far. |
-| `total_home_raw_air_epa` | double | Cumulative total raw air EPA for the home team in the game so far. |
-| `total_away_raw_air_epa` | double | Cumulative total raw air EPA for the away team in the game so far. |
-| `total_home_raw_yac_epa` | double | Cumulative total raw yac EPA for the home team in the game so far. |
-| `total_away_raw_yac_epa` | double | Cumulative total raw yac EPA for the away team in the game so far. |
-| `wp` | double | Estimated win probabiity for the posteam given the current situation at the start of the given play. |
-| `def_wp` | double | Estimated win probability for the defteam. |
-| `home_wp` | double | Estimated win probability for the home team. |
-| `away_wp` | double | Estimated win probability for the away team. |
-| `wpa` | double | Win probability added (WPA) for the posteam. |
-| `vegas_wpa` | double | Win probability added (WPA) for the posteam: spread_adjusted model. |
-| `vegas_home_wpa` | double | Win probability added (WPA) for the home team: spread_adjusted model. |
-| `home_wp_post` | double | Estimated win probability for the home team at the end of the play. |
-| `away_wp_post` | double | Estimated win probability for the away team at the end of the play. |
-| `vegas_wp` | double | Estimated win probabiity for the posteam given the current situation at the start of the given play, incorporating pre-game Vegas line. |
-| `vegas_home_wp` | double | Estimated win probability for the home team incorporating pre-game Vegas line. |
-| `total_home_rush_wpa` | double | Cumulative total rushing WPA for the home team in the game so far. |
-| `total_away_rush_wpa` | double | Cumulative total rushing WPA for the away team in the game so far. |
-| `total_home_pass_wpa` | double | Cumulative total passing WPA for the home team in the game so far. |
-| `total_away_pass_wpa` | double | Cumulative total passing WPA for the away team in the game so far. |
-| `air_wpa` | double | WPA through the air (same logic as air_epa). |
-| `yac_wpa` | double | WPA from yards after the catch (same logic as yac_epa). |
-| `comp_air_wpa` | double | The air_wpa for completions only. |
-| `comp_yac_wpa` | double | The yac_wpa for completions only. |
-| `total_home_comp_air_wpa` | double | Cumulative total completions air WPA for the home team in the game so far. |
-| `total_away_comp_air_wpa` | double | Cumulative total completions air WPA for the away team in the game so far. |
-| `total_home_comp_yac_wpa` | double | Cumulative total completions yac WPA for the home team in the game so far. |
-| `total_away_comp_yac_wpa` | double | Cumulative total completions yac WPA for the away team in the game so far. |
-| `total_home_raw_air_wpa` | double | Cumulative total raw air WPA for the home team in the game so far. |
-| `total_away_raw_air_wpa` | double | Cumulative total raw air WPA for the away team in the game so far. |
-| `total_home_raw_yac_wpa` | double | Cumulative total raw yac WPA for the home team in the game so far. |
-| `total_away_raw_yac_wpa` | double | Cumulative total raw yac WPA for the away team in the game so far. |
-| `punt_blocked` | double | Binary indicator for if the punt was blocked. |
-| `first_down_rush` | double | Binary indicator for if a running play converted the first down. |
-| `first_down_pass` | double | Binary indicator for if a passing play converted the first down. |
-| `first_down_penalty` | double | Binary indicator for if a penalty converted the first down. |
-| `third_down_converted` | double | Binary indicator for if the first down was converted on third down. |
-| `third_down_failed` | double | Binary indicator for if the posteam failed to convert first down on third down. |
-| `fourth_down_converted` | double | Binary indicator for if the first down was converted on fourth down. |
-| `fourth_down_failed` | double | Binary indicator for if the posteam failed to convert first down on fourth down. |
-| `incomplete_pass` | double | Binary indicator for if the pass was incomplete. |
-| `touchback` | double | Binary indicator for if a touchback occurred on the play. |
-| `interception` | double | Binary indicator for if the pass was intercepted. |
-| `punt_inside_twenty` | double | Binary indicator for if the punt ended inside the twenty yard line. |
-| `punt_in_endzone` | double | Binary indicator for if the punt was in the endzone. |
-| `punt_out_of_bounds` | double | Binary indicator for if the punt went out of bounds. |
-| `punt_downed` | double | Binary indicator for if the punt was downed. |
-| `punt_fair_catch` | double | Binary indicator for if the punt was caught with a fair catch. |
-| `kickoff_inside_twenty` | double | Binary indicator for if the kickoff ended inside the twenty yard line. |
-| `kickoff_in_endzone` | double | Binary indicator for if the kickoff was in the endzone. |
-| `kickoff_out_of_bounds` | double | Binary indicator for if the kickoff went out of bounds. |
-| `kickoff_downed` | double | Binary indicator for if the kickoff was downed. |
-| `kickoff_fair_catch` | double | Binary indicator for if the kickoff was caught with a fair catch. |
-| `fumble_forced` | double | Binary indicator for if the fumble was forced. |
-| `fumble_not_forced` | double | Binary indicator for if the fumble was not forced. |
-| `fumble_out_of_bounds` | double | Binary indicator for if the fumble went out of bounds. |
-| `solo_tackle` | double | Binary indicator if the play had a solo tackle (could be multiple due to fumbles). |
-| `safety` | double | Binary indicator for whether or not a safety occurred. |
-| `penalty` | double | Binary indicator for whether or not a penalty occurred. |
-| `tackled_for_loss` | double | Binary indicator for whether or not a tackle for loss on a run play occurred. |
-| `fumble_lost` | double | Binary indicator for if the fumble was lost. |
-| `own_kickoff_recovery` | double | Binary indicator for if the kicking team recovered the kickoff. |
-| `own_kickoff_recovery_td` | double | Binary indicator for if the kicking team recovered the kickoff and scored a TD. |
-| `qb_hit` | double | Binary indicator if the QB was hit on the play. |
-| `rush_attempt` | double | Binary indicator for if the play was a run. |
-| `pass_attempt` | double | Binary indicator for if the play was a pass attempt (includes sacks). |
-| `sack` | double | Binary indicator for if the play ended in a sack. |
-| `touchdown` | double | Binary indicator for if the play resulted in a TD. |
-| `pass_touchdown` | double | Binary indicator for if the play resulted in a passing TD. |
-| `rush_touchdown` | double | Binary indicator for if the play resulted in a rushing TD. |
-| `return_touchdown` | double | Binary indicator for if the play resulted in a return TD. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `extra_point_attempt` | double | Binary indicator for extra point attempt. |
-| `two_point_attempt` | double | Binary indicator for two point conversion attempt. |
-| `field_goal_attempt` | double | Binary indicator for field goal attempt. |
-| `kickoff_attempt` | double | Binary indicator for kickoff. |
-| `punt_attempt` | double | Binary indicator for punts. |
-| `fumble` | double | Binary indicator for if a fumble occurred. |
-| `complete_pass` | double | Binary indicator for if the pass was completed. |
-| `assist_tackle` | double | Binary indicator for if an assist tackle occurred. |
-| `lateral_reception` | double | Binary indicator for if a lateral occurred on the reception. |
-| `lateral_rush` | double | Binary indicator for if a lateral occurred on a run. |
-| `lateral_return` | double | Binary indicator for if a lateral occurred on a return. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `lateral_recovery` | double | Binary indicator for if a lateral occurred on a fumble recovery. |
-| `passer_player_id` | character | Unique identifier for the player that attempted the pass. |
-| `passer_player_name` | character | String name for the player that attempted the pass. |
-| `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
-| `receiver_player_id` | character | Unique identifier for the receiver that was targeted on the pass. |
-| `receiver_player_name` | character | String name for the targeted receiver. |
-| `receiving_yards` | double | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
-| `rusher_player_id` | character | Unique identifier for the player that attempted the run. |
-| `rusher_player_name` | character | String name for the player that attempted the run. |
-| `rushing_yards` | double | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
-| `lateral_receiver_player_id` | character | Unique identifier for the player that received the last(!) lateral on a pass play. |
-| `lateral_receiver_player_name` | character | String name for the player that received the last(!) lateral on a pass play. If there were multiple laterals in the same play, this will only be the last player who received a lateral. Please see <https://github.com/mrcaseb/nfl-data/tree/master/data/lateral_yards> for a list of plays where multiple players recorded lateral receiving yards. |
-| `lateral_receiving_yards` | double | Numeric yards by the `lateral_receiver_player_name` in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
-| `lateral_rusher_player_id` | character | Unique identifier for the player that received the last(!) lateral on a run play. |
-| `lateral_rusher_player_name` | character | String name for the player that received the last(!) lateral on a run play. If there were multiple laterals in the same play, this will only be the last player who received a lateral. Please see <https://github.com/mrcaseb/nfl-data/tree/master/data/lateral_yards> for a list of plays where multiple players recorded lateral rushing yards. |
-| `lateral_rushing_yards` | double | Numeric yards by the `lateral_rusher_player_name` in run plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
-| `lateral_sack_player_id` | character | Unique identifier for the player that received the lateral on a sack. |
-| `lateral_sack_player_name` | character | String name for the player that received the lateral on a sack. |
-| `interception_player_id` | character | Unique identifier for the player that intercepted the pass. |
-| `interception_player_name` | character | String name for the player that intercepted the pass. |
-| `lateral_interception_player_id` | character | Unique indentifier for the player that received the lateral on an interception. |
-| `lateral_interception_player_name` | character | String name for the player that received the lateral on an interception. |
-| `punt_returner_player_id` | character | Unique identifier for the punt returner. |
-| `punt_returner_player_name` | character | String name for the punt returner. |
-| `lateral_punt_returner_player_id` | character | Unique identifier for the player that received the lateral on a punt return. |
-| `lateral_punt_returner_player_name` | character | String name for the player that received the lateral on a punt return. |
-| `kickoff_returner_player_name` | character | String name for the kickoff returner. |
-| `kickoff_returner_player_id` | character | Unique identifier for the kickoff returner. |
-| `lateral_kickoff_returner_player_id` | character | Unique identifier for the player that received the lateral on a kickoff return. |
-| `lateral_kickoff_returner_player_name` | character | String name for the player that received the lateral on a kickoff return. |
-| `punter_player_id` | character | Unique identifier for the punter. |
-| `punter_player_name` | character | String name for the punter. |
-| `kicker_player_name` | character | String name for the kicker on FG or kickoff. |
-| `kicker_player_id` | character | Unique identifier for the kicker on FG or kickoff. |
-| `own_kickoff_recovery_player_id` | character | Unique identifier for the player that recovered their own kickoff. |
-| `own_kickoff_recovery_player_name` | character | String name for the player that recovered their own kickoff. |
-| `blocked_player_id` | character | Unique identifier for the player that blocked the punt or FG. |
-| `blocked_player_name` | character | String name for the player that blocked the punt or FG. |
-| `tackle_for_loss_1_player_id` | character | Unique identifier for one of the potential players with the tackle for loss. |
-| `tackle_for_loss_1_player_name` | character | String name for one of the potential players with the tackle for loss. |
-| `tackle_for_loss_2_player_id` | character | Unique identifier for one of the potential players with the tackle for loss. |
-| `tackle_for_loss_2_player_name` | character | String name for one of the potential players with the tackle for loss. |
-| `qb_hit_1_player_id` | character | Unique identifier for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
-| `qb_hit_1_player_name` | character | String name for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
-| `qb_hit_2_player_id` | character | Unique identifier for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
-| `qb_hit_2_player_name` | character | String name for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
-| `forced_fumble_player_1_team` | character | Team of one of the players with a forced fumble. |
-| `forced_fumble_player_1_player_id` | character | Unique identifier of one of the players with a forced fumble. |
-| `forced_fumble_player_1_player_name` | character | String name of one of the players with a forced fumble. |
-| `forced_fumble_player_2_team` | character | Team of one of the players with a forced fumble. |
-| `forced_fumble_player_2_player_id` | character | Unique identifier of one of the players with a forced fumble. |
-| `forced_fumble_player_2_player_name` | character | String name of one of the players with a forced fumble. |
-| `solo_tackle_1_team` | character | Team of one of the players with a solo tackle. |
-| `solo_tackle_2_team` | character | Team of one of the players with a solo tackle. |
-| `solo_tackle_1_player_id` | character | Unique identifier of one of the players with a solo tackle. |
-| `solo_tackle_2_player_id` | character | Unique identifier of one of the players with a solo tackle. |
-| `solo_tackle_1_player_name` | character | String name of one of the players with a solo tackle. |
-| `solo_tackle_2_player_name` | character | String name of one of the players with a solo tackle. |
-| `assist_tackle_1_player_id` | character | Unique identifier of one of the players with a tackle assist. |
-| `assist_tackle_1_player_name` | character | String name of one of the players with a tackle assist. |
-| `assist_tackle_1_team` | character | Team of one of the players with a tackle assist. |
-| `assist_tackle_2_player_id` | character | Unique identifier of one of the players with a tackle assist. |
-| `assist_tackle_2_player_name` | character | String name of one of the players with a tackle assist. |
-| `assist_tackle_2_team` | character | Team of one of the players with a tackle assist. |
-| `assist_tackle_3_player_id` | character | Unique identifier of one of the players with a tackle assist. |
-| `assist_tackle_3_player_name` | character | String name of one of the players with a tackle assist. |
-| `assist_tackle_3_team` | character | Team of one of the players with a tackle assist. |
-| `assist_tackle_4_player_id` | character | Unique identifier of one of the players with a tackle assist. |
-| `assist_tackle_4_player_name` | character | String name of one of the players with a tackle assist. |
-| `assist_tackle_4_team` | character | Team of one of the players with a tackle assist. |
-| `tackle_with_assist` | double | Binary indicator for if there has been a tackle with assist. |
-| `tackle_with_assist_1_player_id` | character | Unique identifier of one of the players with a tackle with assist. |
-| `tackle_with_assist_1_player_name` | character | String name of one of the players with a tackle with assist. |
-| `tackle_with_assist_1_team` | character | Team of one of the players with a tackle with assist. |
-| `tackle_with_assist_2_player_id` | character | Unique identifier of one of the players with a tackle with assist. |
-| `tackle_with_assist_2_player_name` | character | String name of one of the players with a tackle with assist. |
-| `tackle_with_assist_2_team` | character | Team of one of the players with a tackle with assist. |
-| `pass_defense_1_player_id` | character | Unique identifier of one of the players with a pass defense. |
-| `pass_defense_1_player_name` | character | String name of one of the players with a pass defense. |
-| `pass_defense_2_player_id` | character | Unique identifier of one of the players with a pass defense. |
-| `pass_defense_2_player_name` | character | String name of one of the players with a pass defense. |
-| `fumbled_1_team` | character | Team of one of the first player with a fumble. |
-| `fumbled_1_player_id` | character | Unique identifier of the first player who fumbled on the play. |
-| `fumbled_1_player_name` | character | String name of one of the first player who fumbled on the play. |
-| `fumbled_2_player_id` | character | Unique identifier of the second player who fumbled on the play. |
-| `fumbled_2_player_name` | character | String name of one of the second player who fumbled on the play. |
-| `fumbled_2_team` | character | Team of one of the second player with a fumble. |
-| `fumble_recovery_1_team` | character | Team of one of the players with a fumble recovery. |
-| `fumble_recovery_1_yards` | double | Yards gained by one of the players with a fumble recovery. |
-| `fumble_recovery_1_player_id` | character | Unique identifier of one of the players with a fumble recovery. |
-| `fumble_recovery_1_player_name` | character | String name of one of the players with a fumble recovery. |
-| `fumble_recovery_2_team` | character | Team of one of the players with a fumble recovery. |
-| `fumble_recovery_2_yards` | double | Yards gained by one of the players with a fumble recovery. |
-| `fumble_recovery_2_player_id` | character | Unique identifier of one of the players with a fumble recovery. |
-| `fumble_recovery_2_player_name` | character | String name of one of the players with a fumble recovery. |
-| `sack_player_id` | character | Unique identifier of the player who recorded a solo sack. |
-| `sack_player_name` | character | String name of the player who recorded a solo sack. |
-| `half_sack_1_player_id` | character | Unique identifier of the first player who recorded half a sack. |
-| `half_sack_1_player_name` | character | String name of the first player who recorded half a sack. |
-| `half_sack_2_player_id` | character | Unique identifier of the second player who recorded half a sack. |
-| `half_sack_2_player_name` | character | String name of the second player who recorded half a sack. |
-| `return_team` | character | String abbreviation of the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `return_yards` | double | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `penalty_team` | character | String abbreviation of the team with the penalty. |
-| `penalty_player_id` | character | Unique identifier for the player with the penalty. |
-| `penalty_player_name` | character | String name for the player with the penalty. |
-| `penalty_yards` | double | Yards gained (or lost) by the posteam from the penalty. |
-| `replay_or_challenge` | double | Binary indicator for whether or not a replay or challenge. |
-| `replay_or_challenge_result` | character | String indicating the result of the replay or challenge. |
-| `penalty_type` | character | String indicating the penalty type of the first penalty in the given play. Will be `NA` if `desc` is missing the type. |
-| `defensive_two_point_attempt` | double | Binary indicator whether or not the defense was able to have an attempt on a two point conversion, this results following a turnover. |
-| `defensive_two_point_conv` | double | Binary indicator whether or not the defense successfully scored on the two point conversion. |
-| `defensive_extra_point_attempt` | double | Binary indicator whether or not the defense was able to have an attempt on an extra point attempt, this results following a blocked attempt that the defense recovers the ball. |
-| `defensive_extra_point_conv` | double | Binary indicator whether or not the defense successfully scored on an extra point attempt. |
-| `safety_player_name` | character | String name for the player who scored a safety. |
-| `safety_player_id` | character | Unique identifier for the player who scored a safety. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `cp` | double | Numeric value indicating the probability for a complete pass based on comparable game situations. |
-| `cpoe` | double | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
-| `series` | double | Starts at 1, each new first down increments, numbers shared across both teams NA: kickoffs, extra point/two point conversion attempts, non-plays, no posteam |
-| `series_success` | double | 1: scored touchdown, gained enough yards for first down. |
-| `series_result` | character | Possible values: First down, Touchdown, Opp touchdown, Field goal, Missed field goal, Safety, Turnover, Punt, Turnover on downs, QB kneel, End of half |
-| `order_sequence` | double | Column provided by NFL to fix out-of-order plays. Available 2011 and beyond with source "nfl". |
-| `start_time` | character | Kickoff time in eastern time zone. |
-| `time_of_day` | character | Time of day of play in UTC "HH:MM:SS" format. Available 2011 and beyond with source "nfl". |
-| `stadium` | character | Name of the stadium |
-| `weather` | character | String describing the weather including temperature, humidity and wind (direction and speed). Doesn't change during the game! |
-| `nfl_api_id` | character | UUID of the game in the new NFL API. |
-| `play_clock` | character | Time on the playclock when the ball was snapped. |
-| `play_deleted` | double | Binary indicator for deleted plays. |
-| `play_type_nfl` | character | Play type as listed in the NFL source. Slightly different to the regular play_type variable. |
-| `special_teams_play` | double | Binary indicator for whether play is special teams play from NFL source. Available 2011 and beyond with source "nfl". |
-| `st_play_type` | character | Type of special teams play from NFL source. Available 2011 and beyond with source "nfl". |
-| `end_clock_time` | character | Game time at the end of a given play. |
-| `end_yard_line` | character | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
-| `fixed_drive` | double | Manually created drive number in a game. |
-| `fixed_drive_result` | character | Manually created drive result. |
-| `drive_real_start_time` | character | Local day time when the drive started (currently not used by the NFL and therefore mostly 'NA'). |
-| `drive_play_count` | double | Numeric value of how many regular plays happened in a given drive. |
-| `drive_time_of_possession` | character | Time of possession in a given drive. |
-| `drive_first_downs` | double | Number of first downs in a given drive. |
-| `drive_inside20` | double | Binary indicator if the offense was able to get inside the opponents 20 yard line. |
-| `drive_ended_with_score` | double | Binary indicator the drive ended with a score. |
-| `drive_quarter_start` | double | Numeric value indicating in which quarter the given drive has started. |
-| `drive_quarter_end` | double | Numeric value indicating in which quarter the given drive has ended. |
-| `drive_yards_penalized` | double | Numeric value of how many yards the offense gained or lost through penalties in the given drive. |
-| `drive_start_transition` | character | String indicating how the offense got the ball. |
-| `drive_end_transition` | character | String indicating how the offense lost the ball. |
-| `drive_game_clock_start` | character | Game time at the beginning of a given drive. |
-| `drive_game_clock_end` | character | Game time at the end of a given drive. |
-| `drive_start_yard_line` | character | String indicating where a given drive started consisting of team half and yard line number. |
-| `drive_end_yard_line` | character | String indicating where a given drive ended consisting of team half and yard line number. |
-| `drive_play_id_started` | double | Play_id of the first play in the given drive. |
-| `drive_play_id_ended` | double | Play_id of the last play in the given drive. |
-| `away_score` | integer | The number of points the away team scored. Is NA for games which haven't yet been played. |
-| `home_score` | integer | The number of points the home team scored. Is NA for games which haven't yet been played. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `result` | integer | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
-| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
-| `spread_line` | double | The closing spread line for the game. A positive number means the home team was favored by that many points, a negative number means the away team was favored by that many points. (Source: Pro-Football-Reference) |
-| `total_line` | double | The closing total line for the game. (Source: Pro-Football-Reference) |
-| `div_game` | integer | Binary indicator of whether or not game was played by 2 teams in the same division. |
-| `roof` | character | One of 'dome', 'outdoors', 'closed', 'open' indicating indicating the roof status of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `surface` | character | What type of ground the game was played on. (Source: Pro-Football-Reference) |
-| `temp` | integer | The temperature at the stadium only for 'roof' = 'outdoors' or 'open'.(Source: Pro-Football-Reference) |
-| `wind` | integer | The speed of the wind in miles/hour only for 'roof' = 'outdoors' or 'open'. (Source: Pro-Football-Reference) |
-| `home_coach` | character | First and last name of the home team coach. (Source: Pro-Football-Reference) |
-| `away_coach` | character | First and last name of the away team coach. (Source: Pro-Football-Reference) |
-| `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `game_stadium` | character | Name of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `aborted_play` | double | Binary indicator if the play description indicates "Aborted". |
-| `success` | double | Binary indicator wheter epa > 0 in the given play. |
-| `passer` | character | Name of the dropback player (scrambles included) including plays with penalties. |
-| `passer_jersey_number` | integer | Jersey number of the passer. |
-| `rusher` | character | Name of the rusher (no scrambles) including plays with penalties. |
-| `rusher_jersey_number` | integer | Jersey number of the rusher. |
-| `receiver` | character | Name of the receiver including plays with penalties. |
-| `receiver_jersey_number` | integer | Jersey number of the receiver. |
-| `pass` | double | Binary indicator if the play was a pass play (sacks and scrambles included). |
-| `rush` | double | Binary indicator if the play was a rushing play. |
-| `first_down` | double | Binary indicator if the play ended in a first down. |
-| `special` | double | Binary indicator if "play_type" is one of "extra_point", "field_goal", "kickoff", or "punt". |
-| `play` | double | Binary indicator: 1 if the play was a 'normal' play (including penalties), 0 otherwise. |
-| `passer_id` | character | ID of the player in the 'passer' column. |
-| `rusher_id` | character | ID of the player in the 'rusher' column. |
-| `receiver_id` | character | ID of the player in the 'receiver' column. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `id` | character | ID of the player in the 'name' column. |
-| `fantasy_player_name` | character | Name of the rusher on rush plays or receiver on pass plays (from official stats). |
-| `fantasy_player_id` | character | ID of the rusher on rush plays or receiver on pass plays (from official stats). |
-| `fantasy` | character | Name of the rusher on rush plays or receiver on pass plays. |
-| `fantasy_id` | character | ID of the rusher on rush plays or receiver on pass plays. |
-| `out_of_bounds` | double | 1 if play description contains ran ob, pushed ob, or sacked ob; 0 otherwise. |
-| `home_opening_kickoff` | double | 1 if the home team received the opening kickoff, 0 otherwise. |
-| `qb_epa` | double | Gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
-| `xyac_epa` | double | Expected value of EPA gained after the catch, starting from where the catch was made. Zero yards after the catch would be listed as zero EPA. |
-| `xyac_mean_yardage` | double | Average expected yards after the catch based on where the ball was caught. |
-| `xyac_median_yardage` | integer | Median expected yards after the catch based on where the ball was caught. |
-| `xyac_success` | double | Probability play earns positive EPA (relative to where play started) based on where ball was caught. |
-| `xyac_fd` | double | Probability play earns a first down based on where the ball was caught. |
-| `xpass` | double | Probability of dropback scaled from 0 to 1. |
-| `pass_oe` | double | Dropback percent over expected on a given play scaled from 0 to 100. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_pbp
-pbp = load_nfl_pbp(seasons=[2024])
-print(pbp.shape)
-
-# Multi-season range
-
-pbp = load_nfl_pbp(seasons=range(2020, 2025))
-
-# With cache off (development workflow)
-
-from sportsdataverse.nfl import load_nfl_pbp, update_config
-update_config(cache_mode="off")
-pbp = load_nfl_pbp(seasons=[2024])
-
-# Pandas round-trip
-
-pbp_pd = load_nfl_pbp(seasons=[2024], return_as_pandas=True)
-pbp_pd.head()
-```
-
-### `load_nfl_pbp_participation(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_pbp_participation}
-
-Load NFL play-by-play participation data for selected seasons
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2016 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing play-by-play participation data available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `nflverse_game_id` | character | nflverse identifier for games. Format is season, week, away_team, home_team |
-| `old_game_id` | character | Legacy NFL game ID. |
-| `play_id` | double | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
-| `possession_team` | character | String abbreviation for the team with possession. |
-| `offense_formation` | character | Formation the offense lines up in to snap the ball. |
-| `offense_personnel` | character | The positions of the offensive personnel lined up on the field for a play. |
-| `defenders_in_box` | integer | Number of defensive players lined up in the box at the snap. |
-| `defense_personnel` | character | The positions of the defensive personnel lined up on the field for a play. |
-| `number_of_pass_rushers` | integer | Number of defensive player who rushed the passer. |
-| `players_on_play` | character | A list of every player on the field for the play, by gsis_id |
-| `offense_players` | character | A list of every offensive player on the field for the play, by gsis_id |
-| `defense_players` | character | A list of every defensive player on the field for the play, by gsis_id |
-| `n_offense` | integer | Number of offensive players on the field for the play |
-| `n_defense` | integer | Number of defensive players on the field for the play |
-| `ngs_air_yards` | double | Legacy column. For 2023 and prior years, reflects the distance (in yards) that the ball traveled in the air on a given passing play as tracked by NGS. Is NA for 2024 on--we advise instead using the air_yards column from nflreadr::load_pbp() moving forward. |
-| `time_to_throw` | double | Duration (in seconds) between the time of the ball being snapped and the time of release of a pass attempt |
-| `was_pressure` | logical | A boolean indicating whether or not the QB was pressured on a play |
-| `route` | character | A string indicating the route the primary receiver on a play took. Has the following possible values: "CORNER", "DEEP OUT", "GO", "HITCH/CURL", "IN/DIG", "POST", "QUICK OUT", "SCREEN", "SHALLOW CROSS/DRAG", "SLANT", "SWING", "TEXAS/ANGLE", "WHEEL". |
-| `defense_man_zone_type` | character | A string indicating whether the defense was in man or zone coverage on a play |
-| `defense_coverage_type` | character | A string indicating what type of cover the defense was in on a play. Has one of the following values: "COVER_0", "COVER_1", "COVER_2", "2_MAN", "COVER_3", "COVER_4", "COVER_6", "COVER_9", "COMBO", "BLOWN". |
-| `offense_names` | character | A string listing all of the names of offensive players in the order of their gsis_ids in offense_players. |
-| `defense_names` | character | A string listing all of the names of defensive players in the order of their gsis_ids in defense_players. |
-| `offense_positions` | character | A string listing all of the positions of offensive players in the order of their gsis_ids in offense_players. |
-| `defense_positions` | character | A string listing all of the positions of defensive players in the order of their gsis_ids in defense_players. |
-| `offense_numbers` | character | A string listing all of the numbers of offensive players in the order of their gsis_ids in offense_players. |
-| `defense_numbers` | character | A string listing all of the numbers of defensive players in the order of their gsis_ids in defense_players. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_pbp_participation
-participation = load_nfl_pbp_participation(seasons=[2022])
-
-# Multi-season range
-
-participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
 
 ### `load_nfl_pfr_advstats(seasons: 'List[int]', stat_type: 'str' = 'pass', summary_level: 'str' = 'week', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_nfl_pfr_advstats}
@@ -3222,15 +2595,45 @@ Polars dataframe containing players available.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `game_key` | character |  |
-| `official_name` | character | Official name. |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `display_name` | character | Full name of player |
+| `common_first_name` | character | Common first name of player |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `short_name` | character | Player short name (i.e. "F.Last") |
+| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
+| `suffix` | character | Name suffix of player |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `otc_id` | character | Over the Cap ID for player |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `position_group` | character | Postion group of player as listed by NFL |
 | `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `official_id` | character | Unique official / referee identifier. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
+| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
+| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
+| `height` | integer | Official height, in inches |
+| `weight` | integer | Official weight, in pounds |
+| `headshot` | character | NFL headshot url for player |
+| `college_name` | character | Official college (usually the last one attended) |
+| `college_conference` | character | Conference of college |
+| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `rookie_season` | integer | 4 digit number indicating which season the player was a rookie |
+| `last_season` | integer | 4 digit number indicating which season the player was active the last time |
+| `latest_team` | character | Latest team the player was listed in |
+| `status` | character | Status label. |
+| `ngs_status` | character | Next Gen Stats variant of status |
+| `ngs_status_short_description` | character | Next Gen Stats status description |
+| `years_of_experience` | integer | Years played in league |
+| `pff_position` | character | Position of player as listed by PFF |
+| `pff_status` | character | Roster status as listed by PFF |
+| `draft_year` | integer | Year that player was drafted |
+| `draft_round` | integer | Round that player was drafted in |
+| `draft_pick` | integer | Draft pick within round, i.e. 32nd pick of second round. |
+| `draft_team` | character | Team that drafted player |
 
 **Example**
 
@@ -3243,76 +2646,6 @@ players.shape
 
 players_pd = load_nfl_players(return_as_pandas=True)
 players_pd.head()
-```
-
-### `load_nfl_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_rosters}
-
-Load NFL roster data for all seasons
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 1920 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing rosters available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `position` | character | Primary position as reported by NFL.com |
-| `depth_chart_position` | character | Position assigned on depth chart. Not always accurate! |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `status` | character | Status label. |
-| `full_name` | character | Full name as per NFL.com |
-| `first_name` | character | First name of player |
-| `last_name` | character | Last name of player |
-| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
-| `height` | double | Official height, in inches |
-| `weight` | integer | Official weight, in pounds |
-| `college` | character | Official college (usually the last one attended) |
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
-| `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
-| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
-| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
-| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
-| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
-| `years_exp` | integer | Years played in league |
-| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `week` | integer | Season week. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `status_description_abbr` | character | A code corresponding to a particular NFL status. |
-| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
-| `esb_id` | character | Player ID for Elias Sports Bureau |
-| `gsis_it_id` | character | Player ID for the GSIS IT API |
-| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
-| `entry_year` | integer | The year a player first became eligible to play in the NFL. |
-| `rookie_year` | integer | The year a player lost their rookie eligibility. |
-| `draft_club` | character | The team that originally drafted a player. NA if a player went undrafted in their draft-eligible year. |
-| `draft_number` | integer | The number pick that was used to select a given player. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_rosters
-rosters = load_nfl_rosters(seasons=[2024])
-
-# Multi-season range
-
-rosters = load_nfl_rosters(seasons=range(2020, 2025))
-
-# Filter to a single team
-
-import polars as pl
-kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
 ```
 
 ### `load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_schedule}
@@ -3399,55 +2732,6 @@ week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
 
 schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
 schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
-```
-
-### `load_nfl_snap_counts(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_snap_counts}
-
-Load NFL snap counts data for selected seasons
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2012 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing snap counts available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `pfr_game_id` | character | PFR game ID |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `week` | integer | Season week. |
-| `player` | character | Player name |
-| `pfr_player_id` | character | ID from Pro Football Reference |
-| `position` | character | Primary position as reported by NFL.com |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `opponent` | character | Opposing team of player |
-| `offense_snaps` | double | Number of snaps on offense |
-| `offense_pct` | double | Percent of offensive snaps taken |
-| `defense_snaps` | double | Number of snaps on defense |
-| `defense_pct` | double | Percent of defensive snaps taken |
-| `st_snaps` | double | Number of snaps on special teams |
-| `st_pct` | double | Percent of special teams snaps taken |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_snap_counts
-snaps = load_nfl_snap_counts(seasons=[2024])
-
-# Multi-season range with offense-only filter
-
-import polars as pl
-offense = (
-    load_nfl_snap_counts(seasons=range(2022, 2025))
-    .filter(pl.col("offense_snaps") > 0)
-)
 ```
 
 ### `load_nfl_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_team_stats}
@@ -3671,75 +2955,6 @@ trades.shape
 
 import polars as pl
 trades_2024 = load_nfl_trades().filter(pl.col("season") == 2024)
-```
-
-### `load_nfl_weekly_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_weekly_rosters}
-
-Load NFL weekly roster data for selected seasons
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2002 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing weekly rosters available for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `position` | character | Primary position as reported by NFL.com |
-| `depth_chart_position` | character | Position assigned on depth chart. Not always accurate! |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `status` | character | Status label. |
-| `full_name` | character | Full name as per NFL.com |
-| `first_name` | character | First name of player |
-| `last_name` | character | Last name of player |
-| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
-| `height` | double | Official height, in inches |
-| `weight` | integer | Official weight, in pounds |
-| `college` | character | Official college (usually the last one attended) |
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
-| `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
-| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
-| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
-| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
-| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
-| `years_exp` | integer | Years played in league |
-| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `week` | integer | Season week. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `status_description_abbr` | character | A code corresponding to a particular NFL status. |
-| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
-| `esb_id` | character | Player ID for Elias Sports Bureau |
-| `gsis_it_id` | character | Player ID for the GSIS IT API |
-| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
-| `entry_year` | integer | The year a player first became eligible to play in the NFL. |
-| `rookie_year` | integer | The year a player lost their rookie eligibility. |
-| `draft_club` | character | The team that originally drafted a player. NA if a player went undrafted in their draft-eligible year. |
-| `draft_number` | integer | The number pick that was used to select a given player. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_weekly_rosters
-weekly = load_nfl_weekly_rosters(seasons=[2024])
-
-# Multi-season range with a follow-up week filter
-
-import polars as pl
-wk1 = (
-    load_nfl_weekly_rosters(seasons=range(2022, 2025))
-    .filter(pl.col("week") == 1)
-)
 ```
 
 ### `load_officials(return_as_pandas=False) -> 'pl.DataFrame'` {#load_officials}
@@ -4434,15 +3649,45 @@ Polars dataframe containing players available.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `game_key` | character |  |
-| `official_name` | character | Official name. |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `display_name` | character | Full name of player |
+| `common_first_name` | character | Common first name of player |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `short_name` | character | Player short name (i.e. "F.Last") |
+| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
+| `suffix` | character | Name suffix of player |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `otc_id` | character | Over the Cap ID for player |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `position_group` | character | Postion group of player as listed by NFL |
 | `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `official_id` | character | Unique official / referee identifier. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
+| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
+| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
+| `height` | integer | Official height, in inches |
+| `weight` | integer | Official weight, in pounds |
+| `headshot` | character | NFL headshot url for player |
+| `college_name` | character | Official college (usually the last one attended) |
+| `college_conference` | character | Conference of college |
+| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `rookie_season` | integer | 4 digit number indicating which season the player was a rookie |
+| `last_season` | integer | 4 digit number indicating which season the player was active the last time |
+| `latest_team` | character | Latest team the player was listed in |
+| `status` | character | Status label. |
+| `ngs_status` | character | Next Gen Stats variant of status |
+| `ngs_status_short_description` | character | Next Gen Stats status description |
+| `years_of_experience` | integer | Years played in league |
+| `pff_position` | character | Position of player as listed by PFF |
+| `pff_status` | character | Roster status as listed by PFF |
+| `draft_year` | integer | Year that player was drafted |
+| `draft_round` | integer | Round that player was drafted in |
+| `draft_pick` | integer | Draft pick within round, i.e. 32nd pick of second round. |
+| `draft_team` | character | Team that drafted player |
 
 **Example**
 
@@ -5532,137 +4777,9 @@ update_config(cache_mode="off")
 assert get_config().cache_mode == "off"
 ```
 
-### `nfl_combine_profiles(year: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_combine_profiles}
+### `nfl_clear_token_cache() -> 'None'` {#nfl_clear_token_cache}
 
-Parsed `api.nfl.com` combine profiles -- one row per prospect (`/football/v2/combine/profiles`).
-
-Records live under the `combineProfiles` key. Each row carries `id`,
-`year`, the nested `person` object, measurables (`armLength`,
-`benchPress`, `broadJump`, `fortyYardDash`, `handSize`, `height`,
-`proFortyYardDash`, `sixtyYardShuttle`), scout scores and grades.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `year` | `int` | `2024` | combine/draft year (e.g. `2024`). |
-| `limit` | `int` | `40` | page size -- max profiles to return (paginated endpoint). |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per combine profile.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `year` | integer | 4-digit year. |
-| `armLength` | double |  |
-| `athleticismScore` | double |  |
-| `benchPress` | character |  |
-| `broadJump` | character |  |
-| `bio` | character |  |
-| `collegeClass` | character |  |
-| `draftGrade` | double |  |
-| `draftProjection` | character |  |
-| `fortyYardDash` | character |  |
-| `grade` | double | ESPN recruit grade (0-100; `0` = not rated). |
-| `handSize` | double |  |
-| `headshot` | character | NFL headshot url for player |
-| `height` | double | Official height, in inches |
-| `nflComparison` | character |  |
-| `overview` | character |  |
-| `productionScore` | double |  |
-| `profileAuthor` | character |  |
-| `proFortyYardDash` | character |  |
-| `sixtyYardShuttle` | character |  |
-| `sizeScore` | character |  |
-| `sourcesTellUs` | character |  |
-| `strengths` | character |  |
-| `tenYardSplit` | character |  |
-| `threeConeDrill` | character |  |
-| `twentyYardShuttle` | character |  |
-| `weaknesses` | character |  |
-| `combineAttendance` | logical |  |
-| `position` | character | Primary position as reported by NFL.com |
-| `positionGroup` | character |  |
-| `verticalJump` | character |  |
-| `weight` | double | Official weight, in pounds |
-| `person_id` | character | Unique player identifier (V3 endpoints). |
-| `person_displayName` | character |  |
-| `person_esbId` | character |  |
-| `person_firstName` | character |  |
-| `person_lastName` | character |  |
-| `person_hometown` | character |  |
-| `person_collegeNames` | character |  |
-| `proFortyYardDash_designation` | character |  |
-| `proFortyYardDash_seconds` | double |  |
-| `benchPress_designation` | character |  |
-| `benchPress_repetitions` | integer |  |
-| `broadJump_designation` | character |  |
-| `broadJump_inches` | integer |  |
-| `fortyYardDash_designation` | character |  |
-| `fortyYardDash_seconds` | double |  |
-| `tenYardSplit_designation` | character |  |
-| `tenYardSplit_seconds` | double |  |
-| `verticalJump_designation` | character |  |
-| `verticalJump_inches` | double |  |
-| `threeConeDrill_designation` | character |  |
-| `threeConeDrill_seconds` | double |  |
-| `twentyYardShuttle_designation` | character |  |
-| `twentyYardShuttle_seconds` | double |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_combine_profiles
->>> combine = nfl_combine_profiles(year=2024, limit=50)
->>> combine.select(["id", "year", "fortyYardDash", "benchPress"]).head()
-```
-
-### `nfl_draft_picks(year: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_draft_picks}
-
-Parsed `api.nfl.com` draft pick report -- one row per pick (`/football/v2/draft/picks/report`).
-
-The payload carries draft-state scalars plus a `days` list and a `picks`
-list; the records of interest are under `picks`. Each row carries `year`,
-`draftRound`, `draftPosition`, `draftNumberOverall`, `personId`,
-`teamId`, `pickIsIn` and `tradeNote`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `year` | `int` | `2024` | draft year (e.g. `2024`). |
-| `limit` | `int` | `40` | page size -- max picks to return (paginated endpoint). |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per draft pick.
-
-| col_name | type | description |
-|---|---|---|
-| `year` | integer | 4-digit year. |
-| `draftRound` | integer |  |
-| `draftPosition` | integer |  |
-| `draftNumberOverall` | integer |  |
-| `personId` | character |  |
-| `pickIsIn` | logical |  |
-| `teamId` | character |  |
-| `tradeNote` | character |  |
-| `tweetSent` | logical |  |
-| `tweetsSent` | logical |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_draft_picks
->>> picks = nfl_draft_picks(year=2024, limit=300)
->>> picks.select(["draftRound", "draftNumberOverall", "teamId", "personId"]).head()
-```
+Drop the cached `api.nfl.com` token (forces a fresh mint on the next call).
 
 ### `nfl_game_details(game_id: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_details}
 
@@ -5813,87 +4930,20 @@ week_one = nfl_game_schedule(season=2024, season_type="REG", week=1)
 first_id = week_one["games"][0]["id"]
 ```
 
-### `nfl_game_summaries(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_game_summaries}
-
-Parsed `api.nfl.com` live game summaries -- one row per game (`/football/v2/stats/live/game-summaries`).
-
-Records live under the `data` key. Each row carries `gameId`, the live
-game-state fields (`clock`, `quarter`, `phase`, `down`, `distance`,
-`yardLine`, `isRedZone`, `isGoalToGo`), `attendance`, `weather` and
-nested `homeTeam` / `awayTeam` summary objects.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` | `2024` | season year (e.g. `2024`). |
-| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
-| `week` | `int` | `1` | week number. |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per game.
-
-| col_name | type | description |
-|---|---|---|
-| `gameId` | character |  |
-| `offset` | integer |  |
-| `attendance` | integer | Reported attendance. |
-| `clock` | character | Game clock value. |
-| `distance` | integer | Distance value (in feet for shot data; otherwise context-dependent). |
-| `down` | integer | The down for the given play. |
-| `gameBookUrl` | character |  |
-| `isGoalToGo` | logical |  |
-| `isRedZone` | logical |  |
-| `phase` | character | Lottery phase identifier. |
-| `quarter` | character |  |
-| `startTime` | character | Event start timestamp (ISO 8601). |
-| `weather` | character | String describing the weather including temperature, humidity and wind (direction and speed). Doesn't change during the game! |
-| `yardLine` | character |  |
-| `awayTeam_teamId` | character |  |
-| `awayTeam_hasPossession` | logical |  |
-| `awayTeam_score_q1` | integer |  |
-| `awayTeam_score_q2` | integer |  |
-| `awayTeam_score_q3` | integer |  |
-| `awayTeam_score_q4` | integer |  |
-| `awayTeam_score_ot` | integer |  |
-| `awayTeam_score_total` | integer |  |
-| `awayTeam_timeouts_remaining` | integer |  |
-| `awayTeam_timeouts_used` | integer |  |
-| `homeTeam_teamId` | character |  |
-| `homeTeam_hasPossession` | logical |  |
-| `homeTeam_score_q1` | integer |  |
-| `homeTeam_score_q2` | integer |  |
-| `homeTeam_score_q3` | integer |  |
-| `homeTeam_score_q4` | integer |  |
-| `homeTeam_score_ot` | integer |  |
-| `homeTeam_score_total` | integer |  |
-| `homeTeam_timeouts_remaining` | integer |  |
-| `homeTeam_timeouts_used` | integer |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_game_summaries
->>> summaries = nfl_game_summaries(season=2024, season_type="REG", week=1)
->>> summaries.select(["gameId", "quarter", "phase", "homeTeam", "awayTeam"]).head()
-```
-
 ### `nfl_headers_gen(token: 'Optional[str]' = None) -> 'Dict[str, str]'` {#nfl_headers_gen}
 
 Build the request-header dict expected by `api.nfl.com`.
 
-Mints a fresh bearer token via `nfl_token_gen` (unless `token` is
-supplied) and combines it with the browser-style headers the NFL.com web app
-sends. Reuse the returned dict across calls to avoid re-minting tokens.
+Obtains a bearer token via `nfl_token_gen` (which caches + auto-renews,
+or honors `NFL_ACCESS_TOKEN`) unless `token` is supplied, and combines it
+with the browser-style headers the NFL.com web app sends. Token caching already
+avoids re-minting, so callers rarely need to thread `token`/`headers` by hand.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `token` | `Optional[str]` | `None` | An existing access token to reuse; mints a fresh one when `None`. |
+| `token` | `Optional[str]` | `None` | An existing access token to reuse; uses the cached/minted one when `None`. |
 
 **Returns**
 
@@ -5906,59 +4956,6 @@ from sportsdataverse.nfl.nfl_games import nfl_headers_gen, nfl_game_schedule
 hdrs = nfl_headers_gen()
 week_one = nfl_game_schedule(season=2024, season_type="REG", week=1, headers=hdrs)
 week_two = nfl_game_schedule(season=2024, season_type="REG", week=2, headers=hdrs)
-```
-
-### `nfl_injuries(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_injuries}
-
-Parsed `api.nfl.com` injury report -- one row per player (`/football/v2/injuries`).
-
-Records live under the `injuries` key. Each row carries `season`,
-`seasonType`, `week`, `team_*`, the nested `person` object,
-`injuryStatus`, `position`, `practiceStatus` and a nested `injuries`
-list of body-part detail.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` | `2024` | season year (e.g. `2024`). |
-| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
-| `week` | `int` | `1` | week number. |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per injured player.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `week` | integer | Season week. |
-| `injuries` | character |  |
-| `injuryStatus` | character |  |
-| `practices` | character |  |
-| `practiceDays` | character |  |
-| `practiceStatus` | character |  |
-| `position` | character | Primary position as reported by NFL.com |
-| `team_id` | character | Unique team identifier. |
-| `team_currentLogo` | character |  |
-| `team_fullName` | character |  |
-| `person_id` | character | Unique player identifier (V3 endpoints). |
-| `person_firstName` | character |  |
-| `person_commonFirstName` | character |  |
-| `person_lastName` | character |  |
-| `person_displayName` | character |  |
-| `person_gsisId` | character |  |
-| `person_headshot` | character |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_injuries
->>> inj = nfl_injuries(season=2024, season_type="REG", week=1)
->>> inj.select(["team_abbreviation", "injuryStatus", "position"]).head()
 ```
 
 ### `nfl_ngs_gamecenter_overview(game_id, group: 'str' = 'passers', return_as_pandas: 'bool' = False)` {#nfl_ngs_gamecenter_overview}
@@ -5985,7 +4982,7 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 
 | col_name | type | description |
 |---|---|---|
-| `side` | character | O for offense, D for defense, S for special teams |
+| `side` | character | "home" or "visitor" -- which team's roster the row belongs to. |
 | `gameId` | character |  |
 | `esbId` | character |  |
 | `teamId` | character |  |
@@ -6773,240 +5770,23 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 >>> bd["category"].unique().to_list()
 ```
 
-### `nfl_rosters(season: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_rosters}
+### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None, force_refresh: 'bool' = False) -> 'str'` {#nfl_token_gen}
 
-Parsed `api.nfl.com` team rosters -- one row per team (`/football/v2/rosters`).
+Return a valid `api.nfl.com` bearer token, minting + caching as needed.
 
-Records live under the `rosters` key. Each row is one team's roster for the
-season, carrying `season`, `seasonType`, `team_*` columns and a nested
-`persons` list of players (kept as a list column).
+The token is cached in-process and reused until ~2 min before its own JWT
+`exp`, then transparently re-minted -- so callers never have to think about
+expiry or refresh. The first call (or any call after expiry / `force_refresh`)
+mints a fresh token via the anonymous device-token grant at `/identity/v3/token`.
 
-**Parameters**
+Resolution order (all overrides optional):
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` | `2024` | season year (e.g. `2024`). |
-| `limit` | `int` | `40` | page size -- max rosters to return (this endpoint is paginated; default `40` covers all teams in one page). |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per team roster.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `persons` | integer |  |
-| `team_id` | character | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_fullName` | character |  |
-| `team_conferenceAbbr` | character |  |
-| `team_conferenceFullName` | character |  |
-| `team_currentLogo` | character |  |
-| `team_divisionFullName` | character |  |
-| `team_league` | character |  |
-| `team_location` | character | Team city or location string. |
-| `team_nickName` | character |  |
-| `team_venues` | character |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_rosters
->>> rosters = nfl_rosters(season=2024, limit=40)
->>> rosters.select(["team_abbreviation", "season", "seasonType"]).head()
-```
-
-### `nfl_standings(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_standings}
-
-Parsed `api.nfl.com` standings -- one row per team (`/football/v2/standings`).
-
-The payload nests records under `weeks[].standings[]`; this flattens every
-team standing across the returned week(s) into a single frame with
-`team_*`, `overall_*`, `division_*`, `conference_*`, `home_*`,
-`road_*`, `last5_*`, and `clinched` columns.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` | `2024` | season year (e.g. `2024`). |
-| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
-| `week` | `int` | `1` | week number whose standings snapshot to return. |
-| `limit` | `int` | `40` | max teams per page (default `40`; there are 32 teams). |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict; defaults to a fresh mint. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per team standing.
-
-| col_name | type | description |
-|---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `team_currentLogo` | character |  |
-| `team_fullName` | character |  |
-| `clinched_bye` | logical |  |
-| `clinched_division` | logical |  |
-| `clinched_eliminated` | logical |  |
-| `clinched_homeField` | logical |  |
-| `clinched_playoff` | logical |  |
-| `clinched_wildCard` | logical |  |
-| `closeGames_wins` | integer |  |
-| `closeGames_losses` | integer |  |
-| `closeGames_ties` | integer |  |
-| `conference_wins` | integer | Total conference wins. |
-| `conference_winPct` | double |  |
-| `conference_losses` | integer | Total conference losses. |
-| `conference_ties` | integer | Total conference ties. |
-| `conference_rank` | integer |  |
-| `conference_points_for` | integer |  |
-| `conference_points_against` | integer |  |
-| `division_wins` | integer |  |
-| `division_winPct` | double |  |
-| `division_losses` | integer |  |
-| `division_ties` | integer |  |
-| `division_rank` | integer |  |
-| `division_points_for` | integer |  |
-| `division_points_against` | integer |  |
-| `home_wins` | integer | Home team's wins. |
-| `home_winPct` | double |  |
-| `home_losses` | integer | Home team's losses. |
-| `home_ties` | integer | Total home ties. |
-| `home_points_for` | integer |  |
-| `home_points_against` | integer |  |
-| `last5_wins` | integer |  |
-| `last5_winPct` | double |  |
-| `last5_losses` | integer |  |
-| `last5_ties` | integer |  |
-| `last5_points_for` | integer |  |
-| `last5_points_against` | integer |  |
-| `overall_games` | integer |  |
-| `overall_wins` | integer |  |
-| `overall_winPct` | double |  |
-| `overall_losses` | integer |  |
-| `overall_ties` | integer |  |
-| `overall_points_for` | integer |  |
-| `overall_points_against` | integer |  |
-| `overall_streak_type` | character |  |
-| `overall_streak_length` | integer |  |
-| `road_wins` | integer | Road wins. |
-| `road_winPct` | double |  |
-| `road_losses` | integer | Road losses. |
-| `road_ties` | integer | Ties on the road. |
-| `road_points_for` | integer |  |
-| `road_points_against` | integer |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_standings
->>> standings = nfl_standings(season=2024, season_type="REG", week=18)
->>> standings.select(["team_abbreviation", "overall_wins", "overall_losses"]).head()
-```
-
-### `nfl_team(team_id: 'str', headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_team}
-
-Parsed `api.nfl.com` single-team detail -- one row (`/football/v2/teams/{id}`).
-
-The endpoint returns one team object (not a list); this wraps it into a
-one-row frame with `id`, `fullName`, `currentCoach_*`, `primaryColor`,
-`secondaryColor`, `yearEstablished`, `owners`, `socials` and more.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `str` |  | the uuid team id from `nfl_teams_history` (e.g. `'10403800-517c-7b8c-65a3-c61b95d86123'` for ARI). |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame` with a single team row.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `bio` | character |  |
-| `currentBackground` | character |  |
-| `currentCoach` | character |  |
-| `currentLogo` | character |  |
-| `primaryColor` | character |  |
-| `secondaryColor` | character |  |
-| `yearEstablished` | integer |  |
-| `fullName` | character | Full name of the probable starting pitcher. |
-| `nflShopUrl` | character |  |
-| `officialWebsiteUrl` | character |  |
-| `owners` | character |  |
-| `teamType` | character |  |
-| `socials` | character |  |
-| `vllChannelCallsign` | character |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_team
->>> team = nfl_team(team_id="10403800-517c-7b8c-65a3-c61b95d86123")
->>> team.select(["id", "fullName", "yearEstablished"]).head()
-```
-
-### `nfl_teams_history(season: 'int' = 2024, limit: 'int' = 40, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_teams_history}
-
-Parsed `api.nfl.com` teams for a season -- one row per team (`/football/v2/teams/history`).
-
-Records live under the `teams` key. Each row carries `id` (the uuid team
-id used by `nfl_team`), `abbreviation`, `fullName`, `nickName`,
-`location`, `conferenceAbbr`/`divisionFullName`, `currentLogo` and the
-nested `venues` list.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` | `2024` | season year (e.g. `2024`). |
-| `limit` | `int` | `40` | page size (default `40`). |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per team.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `abbreviation` | character | Short abbreviation. |
-| `fullName` | character | Full name of the probable starting pitcher. |
-| `teamType` | character |  |
-| `conferenceAbbr` | character |  |
-| `conferenceFullName` | character |  |
-| `currentLogo` | character |  |
-| `divisionFullName` | character |  |
-| `league` | character | League slug. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `nickName` | character |  |
-| `venues` | character |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_teams_history
->>> teams = nfl_teams_history(season=2024)
->>> teams.select(["id", "abbreviation", "fullName"]).head()
-```
-
-### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None) -> 'str'` {#nfl_token_gen}
-
-Mint a fresh `api.nfl.com` access token via `/identity/v3/token`.
-
-Wraps the anonymous device-token grant the NFL.com web app uses. Credentials
-resolve in this order: explicit `client_key`/`client_secret` args ->
-`NFL_CLIENT_KEY`/`NFL_CLIENT_SECRET` env vars -> the bundled public
-`WEB_DESKTOP` web-app credentials.
+1. `NFL_ACCESS_TOKEN` env var -- returned verbatim, skipping minting and
+   caching (you supply + manage the token). Ignored if explicit credentials
+   are passed.
+2. Credentials: explicit `client_key`/`client_secret` args ->
+   `NFL_CLIENT_KEY`/`NFL_CLIENT_SECRET` env vars -> the bundled public
+   `WEB_DESKTOP` web-app pair.
 
 **Parameters**
 
@@ -7014,6 +5794,7 @@ resolve in this order: explicit `client_key`/`client_secret` args ->
 |---|---|---|---|
 | `client_key` | `Optional[str]` | `None` | Override the client key (else env var, else the web default). |
 | `client_secret` | `Optional[str]` | `None` | Override the client secret (else env var, else the default). |
+| `force_refresh` | `bool` | `False` | Mint a new token even if a cached one is still valid. |
 
 **Returns**
 
@@ -7023,7 +5804,8 @@ The bearer `accessToken` string.
 
 ```python
 from sportsdataverse.nfl.nfl_games import nfl_token_gen
-token = nfl_token_gen()
+token = nfl_token_gen()                # mints + caches
+assert nfl_token_gen() == token        # served from cache
 assert isinstance(token, str) and token.startswith("ey")
 ```
 
@@ -7091,186 +5873,6 @@ A polars (or pandas) `DataFrame`, one row per game.
 >>> from sportsdataverse.nfl import nfl_week_games
 >>> sched = nfl_week_games(season=2024, season_type="REG", week=1)
 >>> sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
-```
-
-### `nfl_weekly_game_details(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, include_drive_chart: 'bool' = True, include_replays: 'bool' = False, include_standings: 'bool' = False, include_tagged_videos: 'bool' = False, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_weekly_game_details}
-
-Parsed `api.nfl.com` weekly game details -- one row per game.
-
-Wraps `/football/v2/experience/weekly-game-details`, which returns a **bare
-list** of game objects (no wrapper key). Each row carries `id` (uuid game
-id), nested `homeTeam` / `awayTeam`, `date`, `time`, `venue`,
-`status`, `broadcastInfo`, `externalIds`, a `summary` object and,
-when requested, `driveChart` / `replays` / `taggedVideos`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` | `2024` | season year (e.g. `2024`). |
-| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`; sent on the wire as the `type` query param. |
-| `week` | `int` | `1` | week number. |
-| `include_drive_chart` | `bool` | `True` | include the per-game `driveChart` block. |
-| `include_replays` | `bool` | `False` | include the `replays` block. |
-| `include_standings` | `bool` | `False` | include the `standings` block. |
-| `include_tagged_videos` | `bool` | `False` | include the `taggedVideos` block. |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per game.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `category` | character | Broader category of player positions |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
-| `gameType` | character | Game type identifier (3 for playoffs). |
-| `international` | logical |  |
-| `neutralSite` | logical | Whether the game is at a neutral site. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `status` | character | Status label. |
-| `week` | integer | Season week. |
-| `weekType` | character |  |
-| `externalIds` | character |  |
-| `ticketUrl` | character |  |
-| `ticketVendors` | character |  |
-| `extensions` | character |  |
-| `version` | integer |  |
-| `replays` | character |  |
-| `taggedVideos` | character |  |
-| `awayTeamStandings` | character |  |
-| `homeTeamStandings` | character |  |
-| `homeTeam_id` | character |  |
-| `homeTeam_currentLogo` | character |  |
-| `homeTeam_fullName` | character |  |
-| `awayTeam_id` | character |  |
-| `awayTeam_currentLogo` | character |  |
-| `awayTeam_fullName` | character |  |
-| `broadcastInfo_homeNetworkChannels` | character |  |
-| `broadcastInfo_awayNetworkChannels` | character |  |
-| `broadcastInfo_internationalWatchOptions` | character |  |
-| `broadcastInfo_streamingNetworks` | character |  |
-| `broadcastInfo_territory` | character |  |
-| `broadcastInfo_audioNetworks` | character |  |
-| `venue_id` | character | Unique venue identifier. |
-| `venue_name` | character | Venue name. |
-| `venue_city` | character | Venue city. |
-| `venue_country` | character |  |
-| `summary_gameId` | character |  |
-| `summary_offset` | integer |  |
-| `summary_attendance` | integer |  |
-| `summary_clock` | character |  |
-| `summary_distance` | integer |  |
-| `summary_down` | integer |  |
-| `summary_gameBookUrl` | character |  |
-| `summary_isGoalToGo` | logical |  |
-| `summary_isRedZone` | logical |  |
-| `summary_phase` | character |  |
-| `summary_quarter` | character |  |
-| `summary_startTime` | character |  |
-| `summary_weather` | character |  |
-| `summary_yardLine` | character |  |
-| `summary_awayTeam_teamId` | character |  |
-| `summary_awayTeam_hasPossession` | logical |  |
-| `summary_awayTeam_score` | character |  |
-| `summary_awayTeam_timeouts` | character |  |
-| `summary_homeTeam_teamId` | character |  |
-| `summary_homeTeam_hasPossession` | logical |  |
-| `summary_homeTeam_score` | character |  |
-| `summary_homeTeam_timeouts` | character |  |
-| `driveChart_gameId` | character |  |
-| `driveChart_offset` | integer |  |
-| `driveChart_drives` | integer |  |
-| `driveChart_plays` | integer |  |
-| `driveChart_scoringSummaries` | integer |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_weekly_game_details
->>> details = nfl_weekly_game_details(season=2024, season_type="REG", week=1)
->>> details.select(["id", "date", "homeTeam", "awayTeam"]).head()
-```
-
-### `nfl_weeks(season: 'int' = 2024, season_type: 'str' = 'REG', headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_weeks}
-
-Parsed `api.nfl.com` week calendar -- one row per week (`/football/v2/weeks/...`).
-
-Records live under the `weeks` key. Each row carries `season`,
-`seasonType`, `week`, `weekType`, `dateBegin`, `dateEnd` and a
-`byeTeams` list.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` | `2024` | season year (e.g. `2024`). |
-| `season_type` | `str` | `'REG'` | season type. One of `"PRE"`, `"REG"`, `"POST"`. |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame`, one row per week.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `week` | integer | Season week. |
-| `byeTeams` | character |  |
-| `dateBegin` | character |  |
-| `dateEnd` | character |  |
-| `weekType` | character |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_weeks
->>> weeks = nfl_weeks(season=2024, season_type="REG")
->>> weeks.select(["week", "weekType", "dateBegin", "dateEnd"]).head()
-```
-
-### `nfl_weeks_by_date(date: 'str', headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_weeks_by_date}
-
-Parsed `api.nfl.com` week-for-a-date -- one row (`/football/v2/weeks/date/{YYYY-MM-DD}`).
-
-The endpoint returns one week object (not a list); this wraps it into a
-one-row frame with `season`, `seasonType`, `week`, `weekType`,
-`dateBegin`, `dateEnd` and `byeTeams`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `date` | `str` |  | calendar date in `YYYY-MM-DD` form (e.g. `'2024-09-08'`). |
-| `headers` | `Dict[str, str] \| None` | `None` | reuse a `nfl_headers_gen` dict. |
-| `return_as_pandas` | `bool` | `False` | return a pandas frame instead of polars. |
-
-**Returns**
-
-A polars (or pandas) `DataFrame` with a single week row.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `week` | integer | Season week. |
-| `byeTeams` | character |  |
-| `dateBegin` | character |  |
-| `dateEnd` | character |  |
-| `weekType` | character |  |
-
-**Example**
-
-```python
->>> from sportsdataverse.nfl.nfl_api import nfl_weeks_by_date
->>> wk = nfl_weeks_by_date(date="2024-09-08")
->>> wk.select(["season", "seasonType", "week"]).head()
 ```
 
 ### `reset_config() -> 'NflConfig'` {#reset_config}

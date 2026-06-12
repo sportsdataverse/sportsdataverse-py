@@ -136,6 +136,14 @@ either return a usable `requests.Response` or raise
 | Bulk loaders | `load_<sport>_<dataset>` | `load_wbb_pbp()` |
 | NFL nflreadpy aliases | bare `load_*` inside `sportsdataverse.nfl` only | `nfl.load_pbp([2024])` |
 
+**Source families** (orthogonal to the sport prefix above): `espn_<sport>_*` is
+the default; `fox_<sport>_*` wraps Fox Sports Bifrost (cfb/nba/mbb/nhl/mlb),
+`yahoo_cfb_*` wraps Yahoo Sports, and native-site APIs use their own prefixes
+(`nfl_*` → `api.nfl.com`, `nhl_*` / `mlb_api_*` → the league sites). Native API
+families are **codegen-generated** from `tools/codegen/endpoints/<stem>.yaml`
+(authenticated ones like NFL.com set `auth: true` + `getter_module:`); see
+`CLAUDE.md` → "Reference-docs build toolchain (codegen)".
+
 ## NFL — nflreadpy Parity
 
 `sportsdataverse.nfl` is a near drop-in replacement for nflreadpy.

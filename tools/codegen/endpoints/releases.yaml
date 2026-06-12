@@ -1,6 +1,7 @@
 bases:
   sdv_releases: https://github.com/sportsdataverse/sportsdataverse-data/releases/download/
   raw_data: https://raw.githubusercontent.com/sportsdataverse/
+  nflverse: https://github.com/nflverse/nflverse-data/releases/download/
 loaders:
 - fn: load_cfb_pbp
   league: cfb
@@ -738,3 +739,73 @@ loaders:
   min_season: 2026
   example_args:
     seasons: 2026
+# --- NFL nflverse loaders (docs metadata only; nfl_loaders.py stays hand-written
+# + @cached_loader, NFL is NOT in _GENERATED_LOADER_LEAGUES). Surfaces the
+# "Dataset loaders" reference grouping on the NFL index. Only the uniform
+# per-season loaders are listed; season-less / extra-param / alias loaders
+# (player_stats, nextgen_stats, pfr_advstats, teams, players, ff_*, ...) stay
+# under "Additional functions". ---
+- fn: load_nfl_pbp
+  league: nfl
+  base: nflverse
+  url: pbp/play_by_play_{season}.parquet
+  tag: pbp
+  min_season: 1999
+  example_args:
+    seasons: 2024
+- fn: load_nfl_rosters
+  league: nfl
+  base: nflverse
+  url: rosters/roster_{season}.parquet
+  tag: rosters
+  min_season: 1920
+  example_args:
+    seasons: 2024
+- fn: load_nfl_weekly_rosters
+  league: nfl
+  base: nflverse
+  url: weekly_rosters/roster_weekly_{season}.parquet
+  tag: weekly_rosters
+  min_season: 2002
+  example_args:
+    seasons: 2024
+- fn: load_nfl_depth_charts
+  league: nfl
+  base: nflverse
+  url: depth_charts/depth_charts_{season}.parquet
+  tag: depth_charts
+  min_season: 2001
+  example_args:
+    seasons: 2024
+- fn: load_nfl_injuries
+  league: nfl
+  base: nflverse
+  url: injuries/injuries_{season}.parquet
+  tag: injuries
+  min_season: 2009
+  example_args:
+    seasons: 2024
+- fn: load_nfl_snap_counts
+  league: nfl
+  base: nflverse
+  url: snap_counts/snap_counts_{season}.parquet
+  tag: snap_counts
+  min_season: 2012
+  example_args:
+    seasons: 2024
+- fn: load_nfl_pbp_participation
+  league: nfl
+  base: nflverse
+  url: pbp_participation/pbp_participation_{season}.parquet
+  tag: pbp_participation
+  min_season: 2016
+  example_args:
+    seasons: 2024
+- fn: load_nfl_ftn_charting
+  league: nfl
+  base: nflverse
+  url: ftn_charting/ftn_charting_{season}.parquet
+  tag: ftn_charting
+  min_season: 2022
+  example_args:
+    seasons: 2024

@@ -21,6 +21,7 @@ Pull the play-by-play feed for one NHL game.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `event_id` | integer | ESPN event id (echoed from arg). |
@@ -72,6 +73,8 @@ Pull the play-by-play feed for one NHL game.
 | `details_highlight_clip_fr` | double |  |
 | `details_secondary_reason` | character |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -94,6 +97,7 @@ Pull the boxscore for one NHL game.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `home_away` | character | Home or away indicator. |
@@ -133,6 +137,8 @@ Pull the boxscore for one NHL game.
 | `name_fi` | character | Player name (Finnish localization). |
 | `name_sk` | character | Player name (Slovak localization). |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -155,6 +161,7 @@ Pull the gamecenter landing payload for one NHL game.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -207,6 +214,8 @@ Pull the gamecenter landing payload for one NHL game.
 | `clock_running` | logical |  |
 | `clock_in_intermission` | logical |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -229,7 +238,8 @@ Pull the gamecenter right-rail payload (in-game widgets).
 
 ### Returns
 
-Pull the gamecenter right-rail payload (in-game widgets).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_right_rail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -253,6 +263,7 @@ Pull the week-of NHL schedule rooted at `date`.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character |  |
@@ -316,6 +327,8 @@ Pull the week-of NHL schedule rooted at `date`.
 | `series_status_bottom_seed_wins` | integer |  |
 | `series_status_game_number_of_series` | integer |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -338,6 +351,7 @@ Pull the single-day scoreboard for `date`.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -389,6 +403,8 @@ Pull the single-day scoreboard for `date`.
 | `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
 | `game_outcome_last_period_type` | character | Period type in which the game ended. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -411,7 +427,8 @@ Pull the calendar of game-days for the season.
 
 ### Returns
 
-Pull the calendar of game-days for the season.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -436,7 +453,55 @@ Pull a single playoff series payload.
 
 ### Returns
 
-Pull a single playoff series payload.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `round` | integer | Shootout round number. |
+| `series_letter` | character |  |
+| `top_seed_team_id` | integer |  |
+| `top_seed_team_abbrev` | character |  |
+| `bottom_seed_team_id` | integer |  |
+| `bottom_seed_team_abbrev` | character |  |
+| `id` | integer | Unique player identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_type` | integer | Game type the row belongs to. |
+| `game_number` | integer | Game number within the schedule. |
+| `if_necessary` | logical | If necessary. |
+| `neutral_site` | logical | Whether the game is at a neutral site. |
+| `start_time_utc` | character | Scheduled start time in UTC. |
+| `eastern_utc_offset` | character | Eastern time UTC offset. |
+| `venue_utc_offset` | character | Venue UTC offset. |
+| `venue_timezone` | character | Venue time zone. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `game_schedule_state` | character | Schedule state of the game. |
+| `tv_broadcasts` | character | Nested list of TV broadcast details. |
+| `game_center_link` | character | Link to the NHL game center page. |
+| `venue_default` | character | Venue name (default language). |
+| `away_team_id` | integer | Away team identifier. |
+| `away_team_common_name_default` | character | Away team common name (default language). |
+| `away_team_place_name_default` | character | Away team place name (default language). |
+| `away_team_place_name_with_preposition_default` | character | Away team place name with preposition (default). |
+| `away_team_place_name_with_preposition_fr` | character | Away team place name with preposition (French). |
+| `away_team_abbrev` | character | Away team abbreviation. |
+| `away_team_score` | integer | Away team final score. |
+| `home_team_id` | integer | Home team identifier. |
+| `home_team_common_name_default` | character | Home team common name (default language). |
+| `home_team_place_name_default` | character | Home team place name (default language). |
+| `home_team_place_name_fr` | character | Home team place name (French). |
+| `home_team_place_name_with_preposition_default` | character | Home team place name with preposition (default). |
+| `home_team_place_name_with_preposition_fr` | character | Home team place name with preposition (French). |
+| `home_team_abbrev` | character | Home team abbreviation. |
+| `home_team_score` | integer | Home team final score. |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+| `series_status_top_seed_wins` | integer |  |
+| `series_status_bottom_seed_wins` | integer |  |
+| `game_outcome_last_period_type` | character | Period type in which the game ended. |
+| `game_outcome_ot_periods` | double |  |
+| `away_team_place_name_fr` | character | Away team place name (French). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -460,6 +525,7 @@ Pull the NHL standings.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `clinch_indicator` | character | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
@@ -547,6 +613,8 @@ Pull the NHL standings.
 | `place_name_fr` | character |  |
 | `team_common_name_fr` | character | Team common name (French localization). |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -568,6 +636,7 @@ Pull the per-season standings cutover dates.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -580,6 +649,8 @@ Pull the per-season standings cutover dates.
 | `standings_start` | character | Start date of the standings period. |
 | `ties_in_use` | logical | Whether ties were in use that season. |
 | `wildcard_in_use` | logical | Whether the wild-card playoff format was in use this season. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -604,6 +675,7 @@ Pull a team's full-season schedule.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `club_previous_season` | integer |  |
@@ -686,6 +758,8 @@ Pull a team's full-season schedule.
 | `series_status_bottom_seed_wins` | double |  |
 | `series_status_game_number_of_series` | double |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -709,7 +783,8 @@ Pull a team's schedule for one month.
 
 ### Returns
 
-Pull a team's schedule for one month.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -734,7 +809,8 @@ Pull a team's schedule for one week.
 
 ### Returns
 
-Pull a team's schedule for one week.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -760,7 +836,8 @@ Pull a team's season stat block.
 
 ### Returns
 
-Pull a team's season stat block.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -784,7 +861,8 @@ Pull the seasons a team has stats for.
 
 ### Returns
 
-Pull the seasons a team has stats for.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -809,6 +887,7 @@ Pull a team's roster.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `position_group` | character | Position group name (e.g. Centers). |
@@ -833,6 +912,8 @@ Pull a team's roster.
 | `birth_city_sk` | character | Birth city (Slovak localization). |
 | `birth_city_sv` | character | Birth city (Swedish localization). |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -855,7 +936,8 @@ Pull every season a team has had on file.
 
 ### Returns
 
-Pull every season a team has had on file.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_roster`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -879,6 +961,7 @@ Pull the player profile / overview.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -1012,6 +1095,8 @@ Pull the player profile / overview.
 | `career_totals_playoffs_shorthanded_points` | integer |  |
 | `career_totals_playoffs_shots` | integer |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -1036,6 +1121,7 @@ Pull a player's game-by-game log.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
@@ -1061,6 +1147,8 @@ Pull a player's game-by-game log.
 | `opponent_common_name_default` | character | Opponent team common name. |
 | `opponent_common_name_fr` | character |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -1082,7 +1170,24 @@ Pull the league's currently featured players.
 
 ### Returns
 
-Pull the league's currently featured players.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_slug` | character | URL slug for the player. |
+| `position` | character | Player position. |
+| `sweater_number` | integer | Jersey number. |
+| `team_id` | integer | Unique team identifier. |
+| `headshot` | character | URL to the player headshot image. |
+| `team_tri_code` | character | Team tri-code abbreviation. |
+| `team_logo` | character | URL to the team logo image. |
+| `sort_id` | integer | Sort order identifier for the spotlight. |
+| `name_default` | character | Player name (default localization). |
+| `name_cs` | character | Player name (Czech localization). |
+| `name_fi` | character | Player name (Finnish localization). |
+| `name_sk` | character | Player name (Slovak localization). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1107,6 +1212,7 @@ Pull skater stat leaders.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Stat leader category. |
@@ -1129,6 +1235,8 @@ Pull skater stat leaders.
 | `last_name_cs` | character | Player last name (Czech localization). |
 | `last_name_fi` | character | Player last name (Finnish localization). |
 | `last_name_sk` | character | Player last name (Slovak localization). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1153,6 +1261,7 @@ Pull goalie stat leaders.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Stat leader category. |
@@ -1171,6 +1280,8 @@ Pull goalie stat leaders.
 | `last_name_cs` | character | Player last name (Czech localization). |
 | `last_name_sk` | character | Player last name (Slovak localization). |
 | `last_name_fi` | character | Player last name (Finnish localization). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1195,6 +1306,7 @@ Pull NHL draft picks for a year (and optionally one round).
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `round` | integer | Shootout round number. |
@@ -1221,6 +1333,8 @@ Pull NHL draft picks for a year (and optionally one round).
 | `last_name_default` | character | Player last name (default language). |
 | `team_common_name_fr` | character | Team common name (French localization). |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -1244,7 +1358,28 @@ Pull NHL Central Scouting rankings for a draft year.
 
 ### Returns
 
-Pull NHL Central Scouting rankings for a draft year.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `draft_year` | integer | Draft year the lottery applies to. |
+| `category_id` | integer | Prospect category identifier. |
+| `category_key` | character |  |
+| `last_name` | character | Player last name. |
+| `first_name` | character | Player first name. |
+| `position_code` | character | Player position code. |
+| `shoots_catches` | character | Handedness (shoots/catches). |
+| `height_in_inches` | integer | Height in inches. |
+| `weight_in_pounds` | integer | Weight in pounds. |
+| `last_amateur_club` | character | Prospect's most recent amateur club. |
+| `last_amateur_league` | character | Prospect's most recent amateur league. |
+| `birth_date` | character | Player birth date. |
+| `birth_city` | character | Birth city. |
+| `birth_state_province` | character | Birth state or province of the player. |
+| `birth_country` | character | Player birth country. |
+| `midterm_rank` | double | Prospect's midterm draft ranking. |
+| `final_rank` | double | Prospect's final draft ranking. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1267,7 +1402,8 @@ Pull the current / most recent draft pick set.
 
 ### Returns
 
-Pull the current / most recent draft pick set.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_draft_picks`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1290,7 +1426,28 @@ Pull the current Central Scouting rankings.
 
 ### Returns
 
-Pull the current Central Scouting rankings.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `draft_year` | integer | Draft year the lottery applies to. |
+| `category_id` | integer | Prospect category identifier. |
+| `category_key` | character |  |
+| `last_name` | character | Player last name. |
+| `first_name` | character | Player first name. |
+| `position_code` | character | Player position code. |
+| `shoots_catches` | character | Handedness (shoots/catches). |
+| `height_in_inches` | integer | Height in inches. |
+| `weight_in_pounds` | integer | Weight in pounds. |
+| `last_amateur_club` | character | Prospect's most recent amateur club. |
+| `last_amateur_league` | character | Prospect's most recent amateur league. |
+| `birth_date` | character | Player birth date. |
+| `birth_city` | character | Birth city. |
+| `birth_state_province` | character | Birth state or province of the player. |
+| `birth_country` | character | Player birth country. |
+| `midterm_rank` | double | Prospect's midterm draft ranking. |
+| `final_rank` | double | Prospect's final draft ranking. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1313,7 +1470,8 @@ Pull the live draft-tracker pick list (during the draft itself).
 
 ### Returns
 
-Pull the live draft-tracker pick list (during the draft itself).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_draft_picks`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 

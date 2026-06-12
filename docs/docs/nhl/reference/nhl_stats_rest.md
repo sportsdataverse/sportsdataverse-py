@@ -117,6 +117,7 @@ Retrieve the list of countries used in NHL data.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Unique player identifier. |
@@ -130,6 +131,8 @@ Retrieve the list of countries used in NHL data.
 | `nationality_name` | character |  |
 | `olympic_url` | character |  |
 | `thumbnail_url` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -153,7 +156,8 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 
 ### Returns
 
-Retrieve draft data, optionally filtered with Cayenne expressions.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -177,12 +181,15 @@ Retrieve franchise data.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
 | `full_name` | character | Player full name. |
 | `team_common_name` | character | Team common (nickname) name. |
 | `team_place_name` | character | Team place (city/location) name. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -206,7 +213,8 @@ Retrieve game-level data.
 
 ### Returns
 
-Retrieve game-level data.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -230,6 +238,7 @@ Retrieve the NHL Stats glossary of stat definitions.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -239,6 +248,8 @@ Retrieve the NHL Stats glossary of stat definitions.
 | `full_name` | character | Player full name. |
 | `language_code` | character | Language code of the entry. |
 | `last_updated` | character | Timestamp the entry was last updated. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -263,6 +274,7 @@ Retrieve a goalie statistical report.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `assists` | integer | Assists. |
@@ -289,6 +301,8 @@ Retrieve a goalie statistical report.
 | `time_on_ice` | integer | Time on ice in seconds. |
 | `wins` | integer | Wins. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -312,7 +326,8 @@ Retrieve league leaders for a goalie statistical attribute.
 
 ### Returns
 
-Retrieve league leaders for a goalie statistical attribute.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -337,7 +352,8 @@ Retrieve league leaders for a skater statistical attribute.
 
 ### Returns
 
-Retrieve league leaders for a skater statistical attribute.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -361,7 +377,8 @@ Retrieve milestone data for goalies.
 
 ### Returns
 
-Retrieve milestone data for goalies.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -385,7 +402,8 @@ Retrieve milestone data for skaters.
 
 ### Returns
 
-Retrieve milestone data for skaters.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -409,7 +427,8 @@ Retrieve the NHL player registry.
 
 ### Returns
 
-Retrieve the NHL player registry.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -433,6 +452,7 @@ Retrieve the list of all NHL seasons.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -459,6 +479,8 @@ Retrieve the list of all NHL seasons.
 | `total_regular_season_games` | integer | Total number of regular-season games this season. |
 | `wildcard_in_use` | integer | Whether the wild-card playoff format was in use this season. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -481,7 +503,8 @@ Retrieve shift-chart data.
 
 ### Returns
 
-Retrieve shift-chart data.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -506,6 +529,7 @@ Retrieve a skater statistical report.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `assists` | integer | Assists. |
@@ -535,6 +559,8 @@ Retrieve a skater statistical report.
 | `team_abbrevs` | character | Team abbreviation(s). |
 | `time_on_ice_per_game` | double | Average time on ice per game. |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -557,7 +583,8 @@ Retrieve the list of all NHL teams.
 
 ### Returns
 
-Retrieve the list of all NHL teams.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -582,7 +609,8 @@ Retrieve a single team by its numeric ID.
 
 ### Returns
 
-Retrieve a single team by its numeric ID.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -607,6 +635,7 @@ Retrieve a team statistical report.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `faceoff_win_pct` | double | Faceoff win percentage. |
@@ -634,6 +663,8 @@ Retrieve a team statistical report.
 | `wins` | integer | Wins. |
 | `wins_in_regulation` | integer | Wins in regulation. |
 | `wins_in_shootout` | integer | Wins in shootout. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 

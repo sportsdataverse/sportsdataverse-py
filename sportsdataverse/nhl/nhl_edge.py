@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get, format_nhl_season
 from sportsdataverse.nhl.nhl_edge_parsers import (
@@ -13,6 +13,10 @@ from sportsdataverse.nhl.nhl_edge_parsers import (
     parse_edge_top10,
     parse_edge_zone_time,
 )
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "nhl_edge_skater_detail",
@@ -56,12 +60,12 @@ __all__ = [
 def nhl_edge_skater_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE detail stats for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-detail/{player_id}/{season}/{game_type}``
@@ -99,12 +103,12 @@ def nhl_edge_skater_detail(
 def nhl_edge_skater_comparison(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE comparison data for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-comparison/{player_id}/{season}/{game_type}``
@@ -142,12 +146,12 @@ def nhl_edge_skater_comparison(
 def nhl_edge_skater_shot_location_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE shot-location detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-location-detail/{player_id}/{season}/{game_type}``
@@ -187,12 +191,12 @@ def nhl_edge_skater_shot_location_top_10(
     category: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 skaters for a shot-location category.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/{position}/{category}/{sort_by}/{season}/{game_type}``
@@ -232,12 +236,12 @@ def nhl_edge_skater_shot_location_top_10(
 def nhl_edge_skater_shot_speed_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE shot-speed detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/{player_id}/{season}/{game_type}``
@@ -276,12 +280,12 @@ def nhl_edge_skater_shot_speed_top_10(
     positions: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 skaters by shot speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
@@ -320,12 +324,12 @@ def nhl_edge_skater_shot_speed_top_10(
 def nhl_edge_skater_skating_distance_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE skating-distance detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/{player_id}/{season}/{game_type}``
@@ -363,12 +367,12 @@ def nhl_edge_skater_skating_distance_detail(
 def nhl_edge_skater_skating_speed_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE skating-speed detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/{player_id}/{season}/{game_type}``
@@ -407,12 +411,12 @@ def nhl_edge_skater_speed_top_10(
     positions: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 skaters by skating speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
@@ -453,12 +457,12 @@ def nhl_edge_skater_distance_top_10(
     strength: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 skaters by skating distance.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
@@ -498,12 +502,12 @@ def nhl_edge_skater_distance_top_10(
 def nhl_edge_skater_zone_time(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE zone-time detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/{season}/{game_type}``
@@ -543,12 +547,12 @@ def nhl_edge_skater_zone_time_top_10(
     strength: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 skaters by zone time.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
@@ -587,12 +591,12 @@ def nhl_edge_skater_zone_time_top_10(
 
 def nhl_edge_skater_landing(
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE skater landing page (summary across all skaters).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-landing/{season}/{game_type}``
@@ -629,12 +633,12 @@ def nhl_edge_skater_landing(
 def nhl_edge_goalie_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE detail stats for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-detail/{player_id}/{season}/{game_type}``
@@ -672,12 +676,12 @@ def nhl_edge_goalie_detail(
 def nhl_edge_goalie_5v5_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE 5-on-5 detail stats for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-5v5-detail/{player_id}/{season}/{game_type}``
@@ -715,12 +719,12 @@ def nhl_edge_goalie_5v5_detail(
 def nhl_edge_goalie_5v5_top_10(
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/{season}/{game_type}``
@@ -758,12 +762,12 @@ def nhl_edge_goalie_5v5_top_10(
 def nhl_edge_goalie_comparison(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE comparison data for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-comparison/{player_id}/{season}/{game_type}``
@@ -801,12 +805,12 @@ def nhl_edge_goalie_comparison(
 def nhl_edge_goalie_save_percentage_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE save-percentage detail for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/{player_id}/{season}/{game_type}``
@@ -844,12 +848,12 @@ def nhl_edge_goalie_save_percentage_detail(
 def nhl_edge_goalie_edge_save_pctg_top_10(
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 goalies by save-percentage.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/{sort_by}/{season}/{game_type}``
@@ -887,12 +891,12 @@ def nhl_edge_goalie_edge_save_pctg_top_10(
 def nhl_edge_goalie_shot_location_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE shot-location detail for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}``
@@ -931,12 +935,12 @@ def nhl_edge_goalie_shot_location_top_10(
     category: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 goalies for a shot-location category.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/{category}/{sort_by}/{season}/{game_type}``
@@ -974,12 +978,12 @@ def nhl_edge_goalie_shot_location_top_10(
 
 def nhl_edge_goalie_landing(
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE goalie landing page (summary across all goalies).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-landing/{season}/{game_type}``
@@ -1016,12 +1020,12 @@ def nhl_edge_goalie_landing(
 def nhl_edge_team_detail(
     team_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE detail stats for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-detail/{team_id}/{season}/{game_type}``
@@ -1058,12 +1062,12 @@ def nhl_edge_team_detail(
 
 def nhl_edge_team_landing(
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE team landing page (summary across all teams).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-landing/{season}/{game_type}``
@@ -1100,12 +1104,12 @@ def nhl_edge_team_landing(
 def nhl_edge_team_shot_location_detail(
     team_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE shot-location detail for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-shot-location-detail/{team_id}/{season}/{game_type}``
@@ -1145,12 +1149,12 @@ def nhl_edge_team_shot_location_top_10(
     category: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 teams for a shot-location category.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-shot-location-top-10/{position}/{category}/{sort_by}/{season}/{game_type}``
@@ -1190,12 +1194,12 @@ def nhl_edge_team_shot_location_top_10(
 def nhl_edge_team_shot_speed_detail(
     team_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE shot-speed detail for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-shot-speed-detail/{team_id}/{season}/{game_type}``
@@ -1233,7 +1237,7 @@ def nhl_edge_team_shot_speed_detail(
 def nhl_edge_team_skating_distance_detail(
     team_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     **kwargs,
 ) -> Dict:
     """Pull EDGE skating-distance detail for a single team.
@@ -1271,12 +1275,12 @@ def nhl_edge_team_skating_distance_top_10(
     strength: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 teams by skating distance.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
@@ -1316,7 +1320,7 @@ def nhl_edge_team_skating_distance_top_10(
 def nhl_edge_team_skating_speed_detail(
     team_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     **kwargs,
 ) -> Dict:
     """Pull EDGE skating-speed detail for a single team.
@@ -1353,12 +1357,12 @@ def nhl_edge_team_skating_speed_top_10(
     positions: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 teams by skating speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
@@ -1397,12 +1401,12 @@ def nhl_edge_team_skating_speed_top_10(
 def nhl_edge_team_zone_time_details(
     team_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull EDGE zone-time details for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-zone-time-details/{team_id}/{season}/{game_type}``
@@ -1441,12 +1445,12 @@ def nhl_edge_team_zone_time_top_10(
     strength: str,
     sort_by: str,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull the EDGE top-10 teams by zone time.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/{season}/{game_type}``
@@ -1485,12 +1489,12 @@ def nhl_edge_team_zone_time_top_10(
 def nhl_edge_cat_skater_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull categorized (cat) EDGE detail stats for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/cat/edge/skater-detail/{player_id}/{season}/{game_type}``
@@ -1528,12 +1532,12 @@ def nhl_edge_cat_skater_detail(
 def nhl_edge_cat_goalie_detail(
     player_id: int,
     season: Optional[Union[int, str]] = None,
-    game_type: Optional[int] = 2,
+    game_type: int = 2,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Pull categorized (cat) EDGE detail stats for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/cat/edge/goalie-detail/{player_id}/{season}/{game_type}``

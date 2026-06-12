@@ -149,6 +149,8 @@ from sportsdataverse.nhl import nhl_club_stats as _raw_nhl_club_stats
 from sportsdataverse.nhl import nhl_club_stats_season as _raw_nhl_club_stats_season
 from sportsdataverse.nhl import nhl_draft_picks as _raw_nhl_draft_picks
 from sportsdataverse.nhl import nhl_draft_picks_now as _raw_nhl_draft_picks_now
+from sportsdataverse.nhl import nhl_draft_rankings as _raw_nhl_draft_rankings
+from sportsdataverse.nhl import nhl_draft_rankings_now as _raw_nhl_draft_rankings_now
 from sportsdataverse.nhl import nhl_draft_tracker_picks_now as _raw_nhl_draft_tracker_picks_now
 from sportsdataverse.nhl import nhl_edge_cat_goalie_detail as _raw_nhl_edge_cat_goalie_detail
 from sportsdataverse.nhl import nhl_edge_cat_skater_detail as _raw_nhl_edge_cat_skater_detail
@@ -187,6 +189,8 @@ from sportsdataverse.nhl import nhl_goalie_leaders as _raw_nhl_goalie_leaders
 from sportsdataverse.nhl import nhl_landing as _raw_nhl_landing
 from sportsdataverse.nhl import nhl_player_game_log as _raw_nhl_player_game_log
 from sportsdataverse.nhl import nhl_player_landing as _raw_nhl_player_landing
+from sportsdataverse.nhl import nhl_player_spotlight as _raw_nhl_player_spotlight
+from sportsdataverse.nhl import nhl_playoff_series as _raw_nhl_playoff_series
 from sportsdataverse.nhl import (
     nhl_records_all_time_record_vs_franchise as _raw_nhl_records_all_time_record_vs_franchise,
 )
@@ -310,13 +314,9 @@ from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore
 from sportsdataverse.nhl import load_nhl_team_boxscores as load_nhl_team_boxscores  # noqa: F401
 from sportsdataverse.nhl import load_nhl_three_stars as load_nhl_three_stars  # noqa: F401
 from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season  # noqa: F401
-from sportsdataverse.nhl import nhl_draft_rankings as nhl_draft_rankings  # noqa: F401
-from sportsdataverse.nhl import nhl_draft_rankings_now as nhl_draft_rankings_now  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_distance_detail as nhl_edge_team_skating_distance_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_speed_detail as nhl_edge_team_skating_speed_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
-from sportsdataverse.nhl import nhl_player_spotlight as nhl_player_spotlight  # noqa: F401
-from sportsdataverse.nhl import nhl_playoff_series as nhl_playoff_series  # noqa: F401
 from sportsdataverse.nhl import nhl_records_coach_milestone_wins as nhl_records_coach_milestone_wins  # noqa: F401
 from sportsdataverse.nhl import nhl_records_comeback_wins as nhl_records_comeback_wins  # noqa: F401
 from sportsdataverse.nhl import nhl_records_consecutive_goal_seasons as nhl_records_consecutive_goal_seasons  # noqa: F401
@@ -2462,6 +2462,34 @@ def nhl_draft_picks_now(*args, **kwargs):
     return _raw_nhl_draft_picks_now(*args, **kwargs)
 
 
+def nhl_draft_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_draft_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.nhl_draft_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_draft_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_draft_rankings(*args, **kwargs)
+
+
+def nhl_draft_rankings_now(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_draft_rankings_now``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.nhl_draft_rankings_now` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_draft_rankings_now` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_draft_rankings_now(*args, **kwargs)
+
+
 def nhl_draft_tracker_picks_now(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_draft_tracker_picks_now``).
 
@@ -2992,6 +3020,34 @@ def nhl_player_landing(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_nhl_player_landing(*args, **kwargs)
+
+
+def nhl_player_spotlight(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_player_spotlight``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.nhl_player_spotlight` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_player_spotlight` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_player_spotlight(*args, **kwargs)
+
+
+def nhl_playoff_series(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nhl.nhl_playoff_series``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nhl.nhl_playoff_series` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nhl.nhl_playoff_series` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nhl_playoff_series(*args, **kwargs)
 
 
 def nhl_records_all_time_record_vs_franchise(*args, **kwargs):

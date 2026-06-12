@@ -13,7 +13,6 @@ is added to ``tools/codegen``, this module can be regenerated.
 
 from __future__ import annotations
 
-import os
 import re
 from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Union, overload
 
@@ -23,8 +22,11 @@ if TYPE_CHECKING:
     import pandas as pd
 
 from sportsdataverse._codegen_runtime import _get
+from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY  # single source of truth for the public Fox key
 
 __all__ = [
+    "fox_cfb_teams",
+    "fox_cfb_schedule",
     "fox_cfb_pbp",
     "fox_cfb_team_roster",
     "fox_cfb_boxscore",
@@ -36,9 +38,9 @@ __all__ = [
 ]
 
 FOX_BASE = "https://api.foxsports.com/bifrost/v1"
-# Public data-tier key shipped in the foxsports.com web bundle. Overridable via
-# the SDV_PY_FOX_DATA_KEY env var so a key rotation does not require a release.
-FOX_DATA_KEY = os.getenv("SDV_PY_FOX_DATA_KEY", "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq")
+# FOX_DATA_KEY (the public foxsports.com data-tier key, env-overridable via
+# SDV_PY_FOX_DATA_KEY) is imported from sportsdataverse._fox_layout above so the
+# bundled default and its env override live in exactly one place.
 
 _HEADERS = {"Origin": "https://www.foxsports.com", "Referer": "https://www.foxsports.com/"}
 
@@ -89,6 +91,260 @@ def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataF
 
         return pd.DataFrame(rows)
     return pl.DataFrame(rows)
+
+
+@overload
+def fox_cfb_teams(*, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_teams(
+    *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_teams(
+    *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[False] = ..., **kwargs: Any
+) -> pl.DataFrame: ...
+def fox_cfb_teams(
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """Fox Sports CFB team directory (one row per team).
+
+    Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/league/teamnav``
+
+    The team-nav payload is the canonical Fox directory: it maps every team's
+    Bifrost id to its abbreviation, full name, and web slug. This is the lookup
+    you need to translate a human team name into the numeric ``team_id`` the
+    other ``fox_cfb_*`` wrappers expect, and it is the Fox side of
+    :func:`sportsdataverse.cfb.cfb_teams_crosswalk`.
+
+    Args:
+        return_parsed: If ``True`` (default) flatten the nav items to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) with columns ``fox_team_id``,
+        ``abbreviation``, ``name``, ``slug``, ``color``, ``logo_url``; a pandas
+        DataFrame when ``return_as_pandas=True``; or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
+    Example:
+        Build an abbreviation -> Fox id lookup::
+
+            from sportsdataverse.cfb import fox_cfb_teams
+            teams = fox_cfb_teams()
+            fox_id = dict(zip(teams["abbreviation"], teams["fox_team_id"]))
+    """
+    raw = _fox_get("cfb/league/teamnav", **kwargs)
+    if not return_parsed:
+        return raw
+    rows: List[Dict] = []
+    for it in raw.get("navItems", []) or []:
+        link = it.get("entityLink") or {}
+        m = re.search(r"teams/(\d+)", link.get("contentUri") or "")
+        if not m:  # skip non-team nav entries (conference headers, etc.)
+            continue
+        slug = re.sub(r"-team$", "", re.sub(r"^/college-football/", "", link.get("webUrl") or "")) or None
+        rows.append(
+            {
+                "fox_team_id": m.group(1),
+                "abbreviation": it.get("title"),
+                "name": link.get("title"),
+                "slug": slug,
+                "color": link.get("color"),
+                "logo_url": it.get("logoUrl"),
+            }
+        )
+    return _frame(rows, return_as_pandas)
+
+
+def _fox_team_fullname(team: Optional[dict]) -> Optional[str]:
+    """A Fox scoreboard team block -> ``"Location Nickname"`` full name."""
+    if not team:
+        return None
+    stacked = f"{team.get('stackedNameTop') or ''} {team.get('stackedNameBottom') or ''}".strip()
+    return stacked or team.get("longName") or team.get("name")
+
+
+def _parse_fox_segment(raw: Dict[str, Any], segment_id: str) -> List[Dict[str, Any]]:
+    """A Fox ``scores-segment`` payload -> one tidy row per game."""
+    rows: List[Dict[str, Any]] = []
+    for sec in raw.get("sectionList", []) or []:
+        week_label = sec.get("title")
+        for ev in sec.get("events", []) or []:
+            tokens = ((ev.get("entityLink") or {}).get("layout") or {}).get("tokens") or {}
+            home_uri, away_uri = tokens.get("homeUri"), tokens.get("awayUri")
+            upper, lower = ev.get("upperTeam") or {}, ev.get("lowerTeam") or {}
+            by_uri = {t.get("uri"): t for t in (upper, lower) if t.get("uri")}
+            # explicit home/away uri wins; else the US convention (away on top).
+            home_team = by_uri.get(home_uri) if home_uri else lower
+            away_team = by_uri.get(away_uri) if away_uri else upper
+            rows.append(
+                {
+                    "game_id": tokens.get("id") or _uri_id(ev.get("contentUri")),
+                    "date": ev.get("eventTime"),
+                    "status": ev.get("statusLine"),
+                    "week_label": week_label,
+                    "home_team": _fox_team_fullname(home_team),
+                    "home_team_id": _uri_id(home_uri),
+                    "away_team": _fox_team_fullname(away_team),
+                    "away_team_id": _uri_id(away_uri),
+                    "segment_id": segment_id,
+                }
+            )
+    return rows
+
+
+def _fox_segment_ids(season: int, group_id: Union[int, str], **kwargs: Any) -> List[str]:
+    """Every Fox scoreboard segment id for a season (regular weeks + postseason).
+
+    Enumerated from the live ``selectionGroupList`` for both the requested group
+    and the ``cfp`` group, with each id's season prefix remapped to ``season`` so
+    historical seasons resolve too (the CFB segment scheme — ``{season}-{week}-1``
+    for regular weeks, ``{season}-bowls-2`` / ``{season}-cfp-2`` for the
+    postseason — is stable year to year).
+    """
+    mains = [_fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)]
+    try:
+        # The CFP lives under its own group; it is supplemental (the bowls segment
+        # already carries CFP games), so a failure here must not abort enumeration.
+        mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
+    except Exception:
+        pass
+    ids: List[str] = []
+    seen: set[str] = set()
+    for main in mains:
+        for grp in main.get("selectionGroupList") or []:
+            for sel in grp.get("selectionList") or []:
+                sid = sel.get("id")
+                if not sid:
+                    continue
+                head, _, tail = sid.partition("-")
+                remapped = f"{season}-{tail}" if tail and head.isdigit() else sid
+                if remapped not in seen:
+                    seen.add(remapped)
+                    ids.append(remapped)
+    return ids
+
+
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
+def fox_cfb_schedule(
+    season: Optional[int] = None,
+    *,
+    segment_id: Optional[str] = None,
+    group_id: Union[int, str] = "2",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """Fox Sports CFB full-season schedule (one row per game).
+
+    Fox lists games behind a two-step *selector -> segment* flow: ``scoreboard/main``
+    enumerates the season's segments (its ``selectionGroupList``), and
+    ``league/scores-segment/{segmentId}`` returns the games for one segment.
+    Pass a ``season`` to scrape the **whole season** -- every regular week plus
+    conference championships, bowls, and every College Football Playoff round --
+    enumerated from the live selector and unioned, deduplicated by ``game_id``.
+
+    Segment ids encode the phase, not an ESPN-style integer week:
+    ``"{season}-{week}-1"`` for a regular-season week, ``"{season}-bowls-2"`` for
+    the bowls, ``"{season}-cfp-2"`` for the CFP (conference championships fall in
+    the final regular-season week). Pass ``segment_id`` to fetch just one of them.
+
+    The numeric ``game_id`` is the Fox Bifrost event id that :func:`fox_cfb_pbp` /
+    :func:`fox_cfb_odds` accept; ``week_label`` is the section title.
+
+    Args:
+        season: Season year -> scrape the full season. Ignored when ``segment_id``
+            is given; if both are ``None`` the current segment is returned.
+        segment_id: Explicit Fox segment id (e.g. ``"2025-5-1"``, ``"2025-cfp-2"``)
+            -> fetch just that segment.
+        group_id: Conference/division group filter. Defaults to ``"2"`` (FBS).
+        return_parsed: If ``True`` (default) flatten to a DataFrame; if ``False``
+            return the raw JSON (a single segment's ``dict``, or a
+            ``{segment_id: dict}`` map in full-season mode).
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) with columns ``game_id``, ``date``,
+        ``status``, ``week_label``, ``home_team``, ``home_team_id``,
+        ``away_team``, ``away_team_id``, ``segment_id``; a pandas DataFrame when
+        ``return_as_pandas=True``; or raw JSON when ``return_parsed=False``.
+
+    Example:
+        Scrape a whole season (regular + conf championships + bowls + CFP)::
+
+            from sportsdataverse.cfb import fox_cfb_schedule
+            season = fox_cfb_schedule(2025)
+
+        Fetch just one segment (a week, or the playoff)::
+
+            wk5 = fox_cfb_schedule(segment_id="2025-5-1")
+            cfp = fox_cfb_schedule(segment_id="2025-cfp-2")
+    """
+    if segment_id is not None:
+        seg_ids = [segment_id]
+    elif season is not None:
+        seg_ids = _fox_segment_ids(season, group_id, **kwargs)  # full season
+    else:
+        main = _fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)
+        cur = main.get("currentSelectionId")
+        seg_ids = [cur] if cur else []
+
+    raws: Dict[str, Any] = {}
+    for sid in seg_ids:
+        raws[sid] = _fox_get(f"cfb/league/scores-segment/{sid}", params={"groupId": group_id}, **kwargs)
+    if not return_parsed:
+        if not raws:
+            return {}
+        return next(iter(raws.values())) if len(raws) == 1 else raws
+
+    rows: List[Dict[str, Any]] = []
+    seen_games: set[Any] = set()
+    for sid, raw in raws.items():
+        for row in _parse_fox_segment(raw, sid):
+            gid = row.get("game_id")
+            if gid is not None and gid in seen_games:  # dedup overlap (bowls vs cfp)
+                continue
+            if gid is not None:
+                seen_games.add(gid)
+            rows.append(row)
+    return _frame(rows, return_as_pandas)
 
 
 @overload

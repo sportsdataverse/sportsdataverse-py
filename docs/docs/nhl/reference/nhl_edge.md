@@ -23,6 +23,7 @@ Pull EDGE detail stats for a single skater.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character |  |
@@ -122,6 +123,8 @@ Pull EDGE detail stats for a single skater.
 | `zone_time_details_defensive_zone_percentile` | double |  |
 | `zone_time_details_defensive_zone_league_avg` | double |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -146,7 +149,8 @@ Pull EDGE comparison data for a single skater.
 
 ### Returns
 
-Pull EDGE comparison data for a single skater.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -172,7 +176,8 @@ Pull EDGE shot-location detail for a single skater.
 
 ### Returns
 
-Pull EDGE shot-location detail for a single skater.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_shot_location`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -200,7 +205,8 @@ Pull the EDGE top-10 skaters for a shot-location category.
 
 ### Returns
 
-Pull the EDGE top-10 skaters for a shot-location category.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -226,6 +232,7 @@ Pull EDGE shot-speed detail for a single skater.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `hardest_shots` | character |  |
@@ -265,6 +272,8 @@ Pull EDGE shot-speed detail for a single skater.
 | `shot_speed_details_shot_attempts70_to80_percentile` | double |  |
 | `shot_speed_details_shot_attempts70_to80_league_avg` | double |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -290,7 +299,8 @@ Pull the EDGE top-10 skaters by shot speed.
 
 ### Returns
 
-Pull the EDGE top-10 skaters by shot speed.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -316,7 +326,8 @@ Pull EDGE skating-distance detail for a single skater.
 
 ### Returns
 
-Pull EDGE skating-distance detail for a single skater.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -342,7 +353,8 @@ Pull EDGE skating-speed detail for a single skater.
 
 ### Returns
 
-Pull EDGE skating-speed detail for a single skater.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -369,7 +381,8 @@ Pull the EDGE top-10 skaters by skating speed.
 
 ### Returns
 
-Pull the EDGE top-10 skaters by skating speed.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -397,7 +410,8 @@ Pull the EDGE top-10 skaters by skating distance.
 
 ### Returns
 
-Pull the EDGE top-10 skaters by skating distance.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -423,6 +437,7 @@ Pull EDGE zone-time detail for a single skater.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
@@ -435,6 +450,8 @@ Pull EDGE zone-time detail for a single skater.
 | `defensive_zone_pctg` | double | Percentage of time spent in the defensive zone. |
 | `defensive_zone_percentile` | double | League percentile rank for defensive-zone time. |
 | `defensive_zone_league_avg` | double | League average defensive-zone time percentage. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -462,7 +479,8 @@ Pull the EDGE top-10 skaters by zone time.
 
 ### Returns
 
-Pull the EDGE top-10 skaters by zone time.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -487,7 +505,8 @@ Pull the EDGE skater landing page (summary across all skaters).
 
 ### Returns
 
-Pull the EDGE skater landing page (summary across all skaters).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -513,6 +532,7 @@ Pull EDGE detail stats for a single goalie.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character |  |
@@ -554,6 +574,8 @@ Pull EDGE detail stats for a single goalie.
 | `stats_point_pctg_percentile` | double |  |
 | `stats_point_pctg_league_avg` | double |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -578,7 +600,8 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 
 ### Returns
 
-Pull EDGE 5-on-5 detail stats for a single goalie.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -604,7 +627,8 @@ Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
 ### Returns
 
-Pull the EDGE top-10 goalies by 5-on-5 metrics.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -630,7 +654,8 @@ Pull EDGE comparison data for a single goalie.
 
 ### Returns
 
-Pull EDGE comparison data for a single goalie.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -656,7 +681,8 @@ Pull EDGE save-percentage detail for a single goalie.
 
 ### Returns
 
-Pull EDGE save-percentage detail for a single goalie.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -682,7 +708,8 @@ Pull the EDGE top-10 goalies by save-percentage.
 
 ### Returns
 
-Pull the EDGE top-10 goalies by save-percentage.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -708,6 +735,7 @@ Pull EDGE shot-location detail for a single goalie.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `area` | character | Net/ice zone the shots were taken from. |
@@ -719,6 +747,8 @@ Pull EDGE shot-location detail for a single goalie.
 | `saves_percentile` | double | League percentile rank for saves. |
 | `goals_against_percentile` | double | League percentile rank for goals against. |
 | `save_pctg_percentile` | double | League percentile rank for save percentage. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -745,7 +775,8 @@ Pull the EDGE top-10 goalies for a shot-location category.
 
 ### Returns
 
-Pull the EDGE top-10 goalies for a shot-location category.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -770,7 +801,8 @@ Pull the EDGE goalie landing page (summary across all goalies).
 
 ### Returns
 
-Pull the EDGE goalie landing page (summary across all goalies).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -796,6 +828,7 @@ Pull EDGE detail stats for a single team.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character |  |
@@ -878,6 +911,8 @@ Pull EDGE detail stats for a single team.
 | `zone_time_details_defensive_zone_rank` | integer |  |
 | `zone_time_details_defensive_zone_league_avg` | double |  |
 
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
 ### Example
 
 ```python
@@ -901,7 +936,8 @@ Pull the EDGE team landing page (summary across all teams).
 
 ### Returns
 
-Pull the EDGE team landing page (summary across all teams).
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -927,6 +963,7 @@ Pull EDGE shot-location detail for a single team.
 
 ### Returns
 
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
 | `area` | character | Net/ice zone the shots were taken from. |
@@ -936,6 +973,8 @@ Pull EDGE shot-location detail for a single team.
 | `goals_rank` | integer | League rank for goals scored from the area. |
 | `shooting_pctg` | double | Shooting percentage from the area. |
 | `shooting_pctg_rank` | integer | League rank for shooting percentage from the area. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -963,7 +1002,8 @@ Pull the EDGE top-10 teams for a shot-location category.
 
 ### Returns
 
-Pull the EDGE top-10 teams for a shot-location category.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -989,7 +1029,8 @@ Pull EDGE shot-speed detail for a single team.
 
 ### Returns
 
-Pull EDGE shot-speed detail for a single team.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1043,7 +1084,8 @@ Pull the EDGE top-10 teams by skating distance.
 
 ### Returns
 
-Pull the EDGE top-10 teams by skating distance.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1096,7 +1138,8 @@ Pull the EDGE top-10 teams by skating speed.
 
 ### Returns
 
-Pull the EDGE top-10 teams by skating speed.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1122,7 +1165,8 @@ Pull EDGE zone-time details for a single team.
 
 ### Returns
 
-Pull EDGE zone-time details for a single team.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_zone_time`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1149,7 +1193,8 @@ Pull the EDGE top-10 teams by zone time.
 
 ### Returns
 
-Pull the EDGE top-10 teams by zone time.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1175,7 +1220,8 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 
 ### Returns
 
-Pull categorized (cat) EDGE detail stats for a single skater.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
@@ -1201,7 +1247,8 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 
 ### Returns
 
-Pull categorized (cat) EDGE detail stats for a single goalie.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 

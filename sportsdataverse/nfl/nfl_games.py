@@ -10,11 +10,24 @@ the site ships to every browser). They are the defaults below and can be overrid
 via the ``NFL_CLIENT_KEY`` / ``NFL_CLIENT_SECRET`` environment variables (or the
 function arguments) if NFL rotates them or you have your own. No login / personal
 account is involved -- the minted token carries the anonymous ``free`` plan.
+
+Token handling is fully automatic: a minted token is cached in-process and reused
+until just before its JWT ``exp``, then transparently re-minted -- no setup, no
+manual refresh. Everything is overridable by env var when desired (all optional):
+
+* ``NFL_ACCESS_TOKEN`` -- use this bearer token verbatim (skips minting + caching;
+  you manage its lifetime). Highest precedence.
+* ``NFL_CLIENT_KEY`` / ``NFL_CLIENT_SECRET`` -- mint tokens with these credentials
+  instead of the bundled public web-app pair.
 """
 
 from __future__ import annotations
 
+import base64
+import json
 import os
+import threading
+import time
 import uuid
 from typing import Dict, Optional
 
@@ -34,31 +47,37 @@ _DEFAULT_UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 )
 
+# In-process token cache so back-to-back wrapper calls share one minted token
+# instead of POSTing to /identity/v3/token every time. Keyed by the resolving
+# client key so swapping credentials never serves a stale token. Guarded by a lock
+# for thread-safe minting.
+_TOKEN_LOCK = threading.Lock()
+_TOKEN_CACHE: Dict[str, object] = {}  # {"token": str, "key": str, "secret": str, "exp": float}
+# Renew this many seconds before the JWT's own ``exp`` so a call never races expiry.
+_TOKEN_SKEW_SECONDS = 120
+# Conservative lifetime used only when a token's ``exp`` claim can't be parsed.
+_TOKEN_FALLBACK_TTL = 300
 
-def nfl_token_gen(client_key: Optional[str] = None, client_secret: Optional[str] = None) -> str:
-    """Mint a fresh ``api.nfl.com`` access token via ``/identity/v3/token``.
 
-    Wraps the anonymous device-token grant the NFL.com web app uses. Credentials
-    resolve in this order: explicit ``client_key``/``client_secret`` args ->
-    ``NFL_CLIENT_KEY``/``NFL_CLIENT_SECRET`` env vars -> the bundled public
-    ``WEB_DESKTOP`` web-app credentials.
+def _jwt_exp(token: str) -> Optional[float]:
+    """Best-effort read of a JWT's ``exp`` (unix seconds); ``None`` if unparseable.
 
-    Args:
-        client_key: Override the client key (else env var, else the web default).
-        client_secret: Override the client secret (else env var, else the default).
-
-    Returns:
-        str: The bearer ``accessToken`` string.
-
-    Example:
-        Mint a token and inspect its prefix::
-
-            from sportsdataverse.nfl.nfl_games import nfl_token_gen
-            token = nfl_token_gen()
-            assert isinstance(token, str) and token.startswith("ey")
+    The token is ``header.payload.signature``; the payload segment is base64url
+    decoded and its ``exp`` claim returned. No signature verification -- only the
+    expiry is needed to schedule renewal.
     """
-    key = client_key or os.environ.get("NFL_CLIENT_KEY", _DEFAULT_CLIENT_KEY)
-    secret = client_secret or os.environ.get("NFL_CLIENT_SECRET", _DEFAULT_CLIENT_SECRET)
+    try:
+        payload_b64 = token.split(".")[1]
+        payload_b64 += "=" * (-len(payload_b64) % 4)  # restore base64 padding
+        claims = json.loads(base64.urlsafe_b64decode(payload_b64))
+        exp = claims.get("exp")
+        return float(exp) if exp is not None else None
+    except Exception:  # noqa: BLE001 -- any decode/parse failure -> unknown expiry
+        return None
+
+
+def _mint_token(key: str, secret: str) -> str:
+    """POST the anonymous device-token grant and return the bearer ``accessToken``."""
     data = {
         "clientKey": key,
         "clientSecret": secret,
@@ -76,15 +95,93 @@ def nfl_token_gen(client_key: Optional[str] = None, client_secret: Optional[str]
     return resp.json()["accessToken"]
 
 
+def nfl_clear_token_cache() -> None:
+    """Drop the cached ``api.nfl.com`` token (forces a fresh mint on the next call)."""
+    with _TOKEN_LOCK:
+        _TOKEN_CACHE.clear()
+
+
+def nfl_token_gen(
+    client_key: Optional[str] = None,
+    client_secret: Optional[str] = None,
+    force_refresh: bool = False,
+) -> str:
+    """Return a valid ``api.nfl.com`` bearer token, minting + caching as needed.
+
+    The token is cached in-process and reused until ~2 min before its own JWT
+    ``exp``, then transparently re-minted -- so callers never have to think about
+    expiry or refresh. The first call (or any call after expiry / ``force_refresh``)
+    mints a fresh token via the anonymous device-token grant at ``/identity/v3/token``.
+
+    Resolution order (all overrides optional):
+
+    1. ``NFL_ACCESS_TOKEN`` env var -- returned verbatim, skipping minting and
+       caching (you supply + manage the token). Ignored if explicit credentials
+       are passed.
+    2. Credentials: explicit ``client_key``/``client_secret`` args ->
+       ``NFL_CLIENT_KEY``/``NFL_CLIENT_SECRET`` env vars -> the bundled public
+       ``WEB_DESKTOP`` web-app pair.
+
+    Args:
+        client_key: Override the client key (else env var, else the web default).
+        client_secret: Override the client secret (else env var, else the default).
+        force_refresh: Mint a new token even if a cached one is still valid.
+
+    Returns:
+        str: The bearer ``accessToken`` string.
+
+    Example:
+        Token is minted once and reused across calls::
+
+            from sportsdataverse.nfl.nfl_games import nfl_token_gen
+            token = nfl_token_gen()                # mints + caches
+            assert nfl_token_gen() == token        # served from cache
+            assert isinstance(token, str) and token.startswith("ey")
+    """
+    # 1. A user-supplied token via env wins outright (their own / paid-plan token),
+    #    unless explicit credentials were passed (which mean "mint with these").
+    if client_key is None and client_secret is None:
+        env_token = os.environ.get("NFL_ACCESS_TOKEN")
+        if env_token:
+            return env_token
+
+    # 2. Resolve credentials, then serve a cached token or mint a fresh one.
+    key = client_key or os.environ.get("NFL_CLIENT_KEY", _DEFAULT_CLIENT_KEY)
+    secret = client_secret or os.environ.get("NFL_CLIENT_SECRET", _DEFAULT_CLIENT_SECRET)
+    now = time.time()
+    with _TOKEN_LOCK:
+        if (
+            not force_refresh
+            and _TOKEN_CACHE.get("token")
+            and _TOKEN_CACHE.get("key") == key
+            and _TOKEN_CACHE.get("secret") == secret
+            and float(_TOKEN_CACHE.get("exp", 0)) - _TOKEN_SKEW_SECONDS > now
+        ):
+            return str(_TOKEN_CACHE["token"])
+        token = _mint_token(key, secret)
+        exp = _jwt_exp(token)
+        _TOKEN_CACHE.clear()
+        _TOKEN_CACHE.update(
+            {
+                "token": token,
+                "key": key,
+                "secret": secret,
+                "exp": exp if exp is not None else now + _TOKEN_FALLBACK_TTL,
+            },
+        )
+        return token
+
+
 def nfl_headers_gen(token: Optional[str] = None) -> Dict[str, str]:
     """Build the request-header dict expected by ``api.nfl.com``.
 
-    Mints a fresh bearer token via :func:`nfl_token_gen` (unless ``token`` is
-    supplied) and combines it with the browser-style headers the NFL.com web app
-    sends. Reuse the returned dict across calls to avoid re-minting tokens.
+    Obtains a bearer token via :func:`nfl_token_gen` (which caches + auto-renews,
+    or honors ``NFL_ACCESS_TOKEN``) unless ``token`` is supplied, and combines it
+    with the browser-style headers the NFL.com web app sends. Token caching already
+    avoids re-minting, so callers rarely need to thread ``token``/``headers`` by hand.
 
     Args:
-        token: An existing access token to reuse; mints a fresh one when ``None``.
+        token: An existing access token to reuse; uses the cached/minted one when ``None``.
 
     Returns:
         Dict[str, str]: Header dict ready to drop into ``requests.get``.

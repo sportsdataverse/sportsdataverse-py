@@ -28,6 +28,7 @@ __all__ = [
     "yahoo_cfb_player_season_stats",
     "yahoo_cfb_player_season_stats_legacy",
     "yahoo_cfb_scoreboard",
+    "yahoo_cfb_teams",
     "yahoo_cfb_team_season_stats",
     "yahoo_cfb_team_season_stats_legacy",
 ]
@@ -105,12 +106,18 @@ def _flatten_legacy(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Materialize flattened rows as a polars (default) or pandas DataFrame."""
+    """Materialize flattened rows as a polars (default) or pandas DataFrame.
+
+    ``strict=False`` is required because Yahoo's scoreboard mixes value types
+    within a field across games (e.g. ``last_updated`` is a timestamp string for
+    played games but ``False`` for unplayed ones); strict construction raises
+    ``unexpected value while building Series`` on that bool/str mix.
+    """
     if return_as_pandas:
         import pandas as pd
 
         return pd.DataFrame(rows)
-    return pl.DataFrame(rows)
+    return pl.DataFrame(rows, strict=False)
 
 
 @overload
@@ -602,6 +609,114 @@ def yahoo_cfb_scoreboard(
     for r in rows:
         r["season"] = season
         r["week"] = week
+    return _frame(rows, return_as_pandas)
+
+
+_YAHOO_TEAM_FIELDS = (
+    ("team_id", "team_id"),
+    ("abbreviation", "abbr"),
+    ("display_name", "display_name"),
+    ("full_name", "full_name"),
+    ("location", "first_name"),
+    ("nickname", "last_name"),
+    ("conference", "conference"),
+    ("conference_abbreviation", "conference_abbr"),
+    ("conference_id", "conference_id"),
+    ("division", "division"),
+    ("division_id", "division_id"),
+    ("seatgeek_id", "seatgeek_id"),
+)
+
+
+@overload
+def yahoo_cfb_teams(
+    season: int,
+    week: int = ...,
+    *,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def yahoo_cfb_teams(
+    season: int,
+    week: int = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def yahoo_cfb_teams(
+    season: int,
+    week: int = ...,
+    *,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
+def yahoo_cfb_teams(
+    season: int,
+    week: int = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """Yahoo CFB team directory (one row per team).
+
+    Yahoo has no standalone teams resource (the documented
+    ``sports.league.teams`` resource 404s without auth). Instead the editorial
+    ``scoreboard`` payload is "fat": one call embeds the full ~186-team
+    directory under ``service.scoreboard.teams`` keyed by the dotted
+    ``ncaaf.t.<id>`` team id. This wrapper pulls that map for the requested
+    ``(season, week)`` and projects it to the directory columns -- it is the
+    Yahoo side of :func:`sportsdataverse.cfb.cfb_teams_crosswalk`.
+
+    Args:
+        season: Season year (required; the scoreboard is fetched to obtain the
+            embedded teams map).
+        week: Schedule week used to fetch the scoreboard. Defaults to ``1``.
+            The embedded directory is the full league list regardless of week.
+        return_parsed: If ``True`` (default) flatten the teams map to a
+            DataFrame; if ``False`` return the raw scoreboard JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) with one row per team -- columns
+        ``team_id``, ``abbreviation``, ``display_name``, ``full_name``,
+        ``location``, ``nickname``, ``conference``,
+        ``conference_abbreviation``, ``conference_id``, ``division``,
+        ``division_id``, ``seatgeek_id`` -- a pandas DataFrame when
+        ``return_as_pandas=True``, or the raw scoreboard JSON ``dict`` when
+        ``return_parsed=False``.
+
+    Raises:
+        requests.exceptions.RequestException: Propagated from the underlying
+            HTTP request on a network/transport failure.
+
+    Example:
+        Build a dotted-id -> abbreviation lookup::
+
+            from sportsdataverse.cfb import yahoo_cfb_teams
+            teams = yahoo_cfb_teams(season=2024)
+            abbr = dict(zip(teams["team_id"], teams["abbreviation"]))
+    """
+    raw = _editorial_get(
+        "scoreboard",
+        {"leagues": "ncaaf", "week": week, "season": season, "count": 500, "v": 2},
+        **kwargs,
+    )
+    if not return_parsed:
+        return raw
+    teams_map = ((raw.get("service") or {}).get("scoreboard") or {}).get("teams") or {}
+    rows: List[Dict[str, Any]] = []
+    for tid, team in teams_map.items():
+        row = {out: team.get(src) for out, src in _YAHOO_TEAM_FIELDS}
+        row["team_id"] = team.get("team_id") or tid  # fall back to the map key
+        rows.append(row)
     return _frame(rows, return_as_pandas)
 
 

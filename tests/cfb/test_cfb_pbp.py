@@ -4,13 +4,23 @@ import polars as pl
 import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
-from tests.conftest import skip_if_no_live
+from tests.conftest import fetch_pbp_or_skip, skip_if_no_live
+
+
+def test_cfb_pbp_missing_competitions_raises_noespndata():
+    """Guard (offline): an ESPN summary with no ``header.competitions`` raises a
+    clean ``NoESPNDataError`` instead of a bare ``KeyError: 'competitions'``."""
+    from sportsdataverse.errors import NoESPNDataError
+
+    proc = CFBPlayProcess(gameId=401301025)
+    with pytest.raises(NoESPNDataError):
+        proc._CFBPlayProcess__helper_cfb_pbp({"header": {}})
 
 
 @pytest.fixture()
 def generated_cfb_data():
     test = CFBPlayProcess(gameId=401301025)
-    test.espn_cfb_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()
     yield test
 
@@ -65,7 +75,7 @@ def test_havoc_rate(cfb_box_score):
 @pytest.fixture()
 def dupe_fsu_play_base():
     test = CFBPlayProcess(gameId=401411109)
-    test.espn_cfb_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()
     yield pl.DataFrame(test.plays_json, infer_schema_length=400)
 
@@ -124,7 +134,7 @@ def test_fsu_play_dedupe(dupe_fsu_play_base):
 @pytest.fixture()
 def iu_play_base():
     test = CFBPlayProcess(gameId=401426563)
-    test.espn_cfb_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()
     yield test
 
@@ -229,7 +239,7 @@ def test_pbp_handles_python_float_overUnder():
     Python scalar shapes for ``overUnder`` / ``gameSpread`` / ``homeFavorite``.
     """
     test = CFBPlayProcess(gameId=401628334)
-    test.espn_cfb_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()  # must not raise
     assert test.ran_pipeline is True
     assert len(test.plays_json) > 0
@@ -246,7 +256,7 @@ def test_modern_2024_game_gets_real_spread_not_default():
     should pull a real spread / total instead of the defaults.
     """
     test = CFBPlayProcess(gameId=401628334)
-    test.espn_cfb_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()
     assert test.ran_pipeline is True
     assert len(test.plays_json) > 0
@@ -268,7 +278,7 @@ def test_old_2014_game_still_uses_legacy_pickcenter_when_available():
     older games while restoring the modern ones.
     """
     test = CFBPlayProcess(gameId=400547765)
-    test.espn_cfb_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()
     assert test.ran_pipeline is True
     assert len(test.plays_json) > 0

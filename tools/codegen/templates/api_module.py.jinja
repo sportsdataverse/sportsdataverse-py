@@ -3,11 +3,15 @@
 """{{ api }} wrappers (host {{ host }}). Generated."""
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import {{ runtime_imports|join(", ") }}
+from {{ getter_module }} import {{ runtime_imports|join(", ") }}
 {% if parser_imports %}
 from sportsdataverse.{{ parser_module }} import {{ parser_imports|join(", ") }}
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 {% endif %}
 
 __all__ = [
@@ -22,17 +26,26 @@ def {{ ep.fn_name }}(
 {% for p in ep.signature_params %}
 {% if p.required and p.default_from is none %}
     {{ p.python_name }}: {{ p.type|type_hint }},
+{% elif not p.is_query and p.default is not none and p.default_from is none and not p.optional_segment %}
+    {{ p.python_name }}: {{ p.type|type_hint }} = {{ p.default|py_repr }},
 {% else %}
     {{ p.python_name }}: Optional[{{ p.type|type_hint }}] = {{ p.default|py_repr }},
 {% endif %}
 {% endfor %}
+{% if auth %}
+    headers: Optional[Dict[str, str]] = None,
+{% endif %}
 {% if ep.parser %}
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
 {% endif %}
     **kwargs,
+{% if ep.parser %}
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+{% else %}
 ) -> Dict:
+{% endif %}
 {{ ep.docstring }}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}
@@ -54,6 +67,9 @@ def {{ ep.fn_name }}(
             **{_k: _v for _k, _v in kwargs.items() if _v is not None},
 {% endif %}
         },
+{% if auth %}
+        headers=headers,
+{% endif %}
 {% if not passthrough_query %}
         **kwargs,
 {% endif %}

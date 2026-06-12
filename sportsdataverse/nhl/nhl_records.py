@@ -4,10 +4,14 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse.nhl.nhl_records_parsers import parse_nhl_records
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "nhl_records_awards",
@@ -62,7 +66,7 @@ def nhl_records_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """List all NHL award / trophy records.
 
     Endpoint: ``GET https://records.nhl.com/site/api/award-details``
@@ -95,7 +99,7 @@ def nhl_records_awards_by_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """List award records for a single franchise.
 
     Endpoint: ``GET https://records.nhl.com/site/api/award-details/{franchise_id}``
@@ -130,7 +134,7 @@ def nhl_records_awards_trophy_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve the trophy winner for a specific season.
 
     Endpoint: ``GET https://records.nhl.com/site/api/award-details/trophy/{trophy_id}/season/{season_id}``
@@ -164,7 +168,7 @@ def nhl_records_coaches(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """List NHL head coaches.
 
     Endpoint: ``GET https://records.nhl.com/site/api/coach``
@@ -197,7 +201,7 @@ def nhl_records_coach(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve one coach by their numeric ID.
 
     Endpoint: ``GET https://records.nhl.com/site/api/coach/{coach_id}``
@@ -231,7 +235,7 @@ def nhl_records_coach_career(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Coach career-records (regular season).
 
     Endpoint: ``GET https://records.nhl.com/site/api/coach-career-records/{coach_id}``
@@ -269,7 +273,7 @@ def nhl_records_coach_career_with_playoffs(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Coach career records inclusive of regular season + playoffs.
 
     Endpoint: ``GET https://records.nhl.com/site/api/coach-career-records-regular-plus-playoffs``
@@ -302,7 +306,7 @@ def nhl_records_coach_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Coach records scoped to individual franchise stints.
 
     Endpoint: ``GET https://records.nhl.com/site/api/coach-franchise-records/{coach_id}``
@@ -340,7 +344,7 @@ def nhl_records_coach_stanley_cup(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Coach Stanley Cup Final win streak and consecutive-cup records.
 
     Endpoint: ``GET https://records.nhl.com/site/api/coach-stanley-cup-streak``
@@ -372,7 +376,7 @@ def nhl_records_franchises(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """List all NHL franchises (historical and active).
 
     Endpoint: ``GET https://records.nhl.com/site/api/franchise``
@@ -404,7 +408,7 @@ def nhl_records_franchise_detail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Franchise detail records (extended metadata per franchise).
 
     Endpoint: ``GET https://records.nhl.com/site/api/franchise-detail``
@@ -436,7 +440,7 @@ def nhl_records_franchise_team_totals(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-time team totals per franchise (regular season).
 
     Endpoint: ``GET https://records.nhl.com/site/api/franchise-team-totals``
@@ -468,7 +472,7 @@ def nhl_records_franchise_season_results(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Season-by-season results for each franchise.
 
     Endpoint: ``GET https://records.nhl.com/site/api/franchise-season-results``
@@ -500,7 +504,7 @@ def nhl_records_franchise_playoff_appearances(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Franchise playoff appearance counts and streak information.
 
     Endpoint: ``GET https://records.nhl.com/site/api/franchise-playoff-appearances``
@@ -532,7 +536,7 @@ def nhl_records_franchise_totals(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """League-wide franchise totals (all-time aggregate per franchise).
 
     Endpoint: ``GET https://records.nhl.com/site/api/franchise-totals``
@@ -564,7 +568,7 @@ def nhl_records_all_time_record_vs_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-time head-to-head records between every franchise pairing.
 
     Endpoint: ``GET https://records.nhl.com/site/api/all-time-record-vs-franchise``
@@ -596,7 +600,7 @@ def nhl_records_skater_career_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Skater career statistics (all-time, regular season).
 
     Endpoint: ``GET https://records.nhl.com/site/api/skater-career-statistics``
@@ -628,7 +632,7 @@ def nhl_records_skater_career_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-time skater career leaderboards.
 
     Endpoint: ``GET https://records.nhl.com/site/api/skater-career-leaders``
@@ -660,7 +664,7 @@ def nhl_records_consecutive_100pt_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Skaters with the most consecutive 100-point seasons.
 
     Endpoint: ``GET https://records.nhl.com/site/api/consecutive-100-point-seasons``
@@ -692,7 +696,7 @@ def nhl_records_goalie_career_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltender career statistics (regular season).
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie-career-stats``
@@ -724,7 +728,7 @@ def nhl_records_goalie_career_stats_with_playoffs(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltender career stats inclusive of regular season and playoffs.
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie_career_stats_incl_playoffs``
@@ -756,7 +760,7 @@ def nhl_records_goalie_season_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltender single-season statistics.
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie-season-stats``
@@ -788,7 +792,7 @@ def nhl_records_goalie_win_streak(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltenders with the longest consecutive-win streaks.
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie-win-streak``
@@ -820,7 +824,7 @@ def nhl_records_goalie_shutout_streak(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltenders with the longest consecutive-shutout streaks.
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie-shutout-streak``
@@ -852,7 +856,7 @@ def nhl_records_goalie_win_plateaus(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltenders who reached each win plateau (100, 200, 300 …).
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie-win-plateaus``
@@ -884,7 +888,7 @@ def nhl_records_goalie_playoff_streak(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltender consecutive playoff-win streaks.
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie-playoff-streak``
@@ -916,7 +920,7 @@ def nhl_records_goalie_undefeated_streak(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Goaltender longest undefeated streaks (wins + ties).
 
     Endpoint: ``GET https://records.nhl.com/site/api/goalie-undefeated-streak``
@@ -949,7 +953,7 @@ def nhl_records_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve NHL Entry Draft picks.
 
     Endpoint: ``GET https://records.nhl.com/site/api/draft/{draft_id}``
@@ -988,7 +992,7 @@ def nhl_records_draft_by_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All draft picks made by a single team.
 
     Endpoint: ``GET https://records.nhl.com/site/api/draft/byTeam/{team_id}``
@@ -1022,7 +1026,7 @@ def nhl_records_draft_prospect(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Draft prospect records.
 
     Endpoint: ``GET https://records.nhl.com/site/api/draft-prospect/{prospect_id}``
@@ -1060,7 +1064,7 @@ def nhl_records_draft_lottery_odds(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Draft lottery odds (current year or filtered by season).
 
     Endpoint: ``GET https://records.nhl.com/site/api/draft-lottery-odds``
@@ -1092,7 +1096,7 @@ def nhl_records_expansion_draft_picks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 
     Endpoint: ``GET https://records.nhl.com/site/api/expansion-draft-picks``
@@ -1124,7 +1128,7 @@ def nhl_records_allstar_skater_career(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-Star Game career statistics for skaters.
 
     Endpoint: ``GET https://records.nhl.com/site/api/all-star-skater-career-stats``
@@ -1156,7 +1160,7 @@ def nhl_records_allstar_goalie_career(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-Star Game career statistics for goaltenders.
 
     Endpoint: ``GET https://records.nhl.com/site/api/all-star-goaltender-career-stats``
@@ -1188,7 +1192,7 @@ def nhl_records_allstar_coach_career(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-Star Game career records for coaches.
 
     Endpoint: ``GET https://records.nhl.com/site/api/all-star-coach-career-stats``
@@ -1220,7 +1224,7 @@ def nhl_records_allstar_skater_game(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-Star Game single-game scoring records for skaters.
 
     Endpoint: ``GET https://records.nhl.com/site/api/all-star-skater-game-stats``
@@ -1252,7 +1256,7 @@ def nhl_records_allstar_goalie_game(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """All-Star Game single-game stats for goaltenders.
 
     Endpoint: ``GET https://records.nhl.com/site/api/all-star-goaltender-game-stats``
@@ -1284,7 +1288,7 @@ def nhl_records_attendance(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """NHL arena attendance records.
 
     Endpoint: ``GET https://records.nhl.com/site/api/attendance``
@@ -1316,7 +1320,7 @@ def nhl_records_hof_players(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Hockey Hall of Fame player inductees.
 
     Endpoint: ``GET https://records.nhl.com/site/api/hof/players``
@@ -1349,7 +1353,7 @@ def nhl_records_hof_players_by_office(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Hall of Fame players for a specific induction office/category.
 
     Endpoint: ``GET https://records.nhl.com/site/api/hof/players/{office_id}``
@@ -1383,7 +1387,7 @@ def nhl_records_gm_career(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """General Manager career records.
 
     Endpoint: ``GET https://records.nhl.com/site/api/general-manager/{gm_id}``
@@ -1421,7 +1425,7 @@ def nhl_records_gm_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """General Manager records scoped to franchise stints.
 
     Endpoint: ``GET https://records.nhl.com/site/api/general-manager-franchise-records``
@@ -1453,7 +1457,7 @@ def nhl_records_home_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """League-wide home-team win/loss record by season.
 
     Endpoint: ``GET https://records.nhl.com/site/api/home-team-record``
@@ -1485,7 +1489,7 @@ def nhl_records_away_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """League-wide away-team win/loss record by season.
 
     Endpoint: ``GET https://records.nhl.com/site/api/away-team-record``

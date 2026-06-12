@@ -4,13 +4,23 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess
-from tests.conftest import skip_if_no_live
+from tests.conftest import fetch_pbp_or_skip, skip_if_no_live
+
+
+def test_nfl_pbp_missing_competitions_raises_noespndata():
+    """Guard (offline): an ESPN summary with no ``header.competitions`` raises a
+    clean ``NoESPNDataError`` instead of a bare ``KeyError: 'competitions'``."""
+    from sportsdataverse.errors import NoESPNDataError
+
+    proc = NFLPlayProcess(gameId=401220403)
+    with pytest.raises(NoESPNDataError):
+        proc._NFLPlayProcess__helper_nfl_pbp({"header": {}})
 
 
 @pytest.fixture()
 def generated_nfl_data():
     test = NFLPlayProcess(gameId=401220403)
-    test.espn_nfl_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()
     yield test
 
@@ -78,7 +88,7 @@ def test_modern_nfl_game_gets_real_spread_not_default():
     when the legacy ``pickcenter`` array is empty.
     """
     test = NFLPlayProcess(gameId=401547500)
-    test.espn_nfl_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()
     assert test.ran_pipeline is True
     assert len(test.plays_json) > 0
@@ -98,7 +108,7 @@ def test_modern_nfl_game_pbp_handles_python_float_overUnder():
     running the full pipeline on a recent game must not raise.
     """
     test = NFLPlayProcess(gameId=401547500)
-    test.espn_nfl_pbp()
+    fetch_pbp_or_skip(test)
     test.run_processing_pipeline()  # must not raise
     assert test.ran_pipeline is True
     assert len(test.plays_json) > 0

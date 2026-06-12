@@ -32,3 +32,10 @@ dev/
 
 # Local PEP 517 build outputs from `python -m build --outdir dist_check`.
 dist_check/
+
+# Local environment / API-key secrets — NEVER commit. Keep real keys here and
+# load them into the shell (e.g. `set -a; source .env; set +a`). A committed,
+# value-free template may live at `.env.example`.
+.env
+.env.*
+!.env.example
