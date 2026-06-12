@@ -31,6 +31,9 @@ HAS_KEY = bool(os.environ.get("ODDS_API_KEY"))
 print("ODDS_API_KEY set:", HAS_KEY)
 ```
 
+    ODDS_API_KEY set: True
+
+
 ## What sports are available?
 
 `toa_sports()` lists every in-season sport/league key (the value you pass as
@@ -45,6 +48,29 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports(all_sports=True)"
 out
 ```
+
+
+
+
+    shape: (10, 4)
+    ┌─────────────────────────────────┬───────────────────┬───────────────────────────┬────────┐
+    │ key                             ┆ group             ┆ title                     ┆ active │
+    │ ---                             ┆ ---               ┆ ---                       ┆ ---    │
+    │ str                             ┆ str               ┆ str                       ┆ bool   │
+    ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╪════════╡
+    │ americanfootball_cfl            ┆ American Football ┆ CFL                       ┆ true   │
+    │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     ┆ true   │
+    │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner ┆ true   │
+    │ americanfootball_nfl            ┆ American Football ┆ NFL                       ┆ true   │
+    │ americanfootball_nfl_preseason  ┆ American Football ┆ NFL Preseason             ┆ true   │
+    │ americanfootball_nfl_super_bow… ┆ American Football ┆ NFL Super Bowl Winner     ┆ true   │
+    │ americanfootball_ufl            ┆ American Football ┆ UFL                       ┆ true   │
+    │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       ┆ true   │
+    │ baseball_kbo                    ┆ Baseball          ┆ KBO                       ┆ true   │
+    │ baseball_milb                   ┆ Baseball          ┆ MiLB                      ┆ false  │
+    └─────────────────────────────────┴───────────────────┴───────────────────────────┴────────┘
+
+
 
 ## Current odds - long format
 
@@ -64,6 +90,29 @@ else:
 out
 ```
 
+
+
+
+    shape: (5, 6)
+    ┌───────────┬─────────────┬───────────────┬────────────┬──────────────────────┬───────────────┐
+    │ home_team ┆ away_team   ┆ bookmaker_key ┆ market_key ┆ outcome_name         ┆ outcome_price │
+    │ ---       ┆ ---         ┆ ---           ┆ ---        ┆ ---                  ┆ ---           │
+    │ str       ┆ str         ┆ str           ┆ str        ┆ str                  ┆ i64           │
+    ╞═══════════╪═════════════╪═══════════════╪════════════╪══════════════════════╪═══════════════╡
+    │ Seattle   ┆ New England ┆ draftkings    ┆ h2h        ┆ New England Patriots ┆ 170           │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ draftkings    ┆ h2h        ┆ Seattle Seahawks     ┆ -205          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ draftkings    ┆ spreads    ┆ New England Patriots ┆ -105          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ draftkings    ┆ spreads    ┆ Seattle Seahawks     ┆ -115          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ betus         ┆ h2h        ┆ New England Patriots ┆ 170           │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    └───────────┴─────────────┴───────────────┴────────────┴──────────────────────┴───────────────┘
+
+
+
 ## Scores & events
 
 `toa_sports_scores(...)` for live/recent scores, `toa_sports_events(...)` for
@@ -77,6 +126,40 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports_scores(sport='americanfootball_nfl', days_from=3)"
 out
 ```
+
+
+
+
+    shape: (5, 9)
+    ┌────────────┬────────────┬───────────┬───────────┬───┬───────────┬───────────┬────────┬───────────┐
+    │ id         ┆ sport_key  ┆ sport_tit ┆ commence_ ┆ … ┆ home_team ┆ away_team ┆ scores ┆ last_upda │
+    │ ---        ┆ ---        ┆ le        ┆ time      ┆   ┆ ---       ┆ ---       ┆ ---    ┆ te        │
+    │ str        ┆ str        ┆ ---       ┆ ---       ┆   ┆ str       ┆ str       ┆ str    ┆ ---       │
+    │            ┆            ┆ str       ┆ str       ┆   ┆           ┆           ┆        ┆ str       │
+    ╞════════════╪════════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪════════╪═══════════╡
+    │ 8c94552d02 ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Seattle   ┆ New       ┆ null   ┆ null      │
+    │ 2acec4a045 ┆ otball_nfl ┆           ┆ 0T00:15:0 ┆   ┆ Seahawks  ┆ England   ┆        ┆           │
+    │ 8d70c19d3d ┆            ┆           ┆ 0Z        ┆   ┆           ┆ Patriots  ┆        ┆           │
+    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
+    │ acc580d743 ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Los       ┆ San       ┆ null   ┆ null      │
+    │ 44ea3b31bb ┆ otball_nfl ┆           ┆ 1T00:35:0 ┆   ┆ Angeles   ┆ Francisco ┆        ┆           │
+    │ cdd057fe6a ┆            ┆           ┆ 0Z        ┆   ┆ Rams      ┆ 49ers     ┆        ┆           │
+    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
+    │ 95c01d1bb7 ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Pittsburg ┆ Atlanta   ┆ null   ┆ null      │
+    │ 97d6df1482 ┆ otball_nfl ┆           ┆ 3T17:00:0 ┆   ┆ h         ┆ Falcons   ┆        ┆           │
+    │ 4b106c5a91 ┆            ┆           ┆ 0Z        ┆   ┆ Steelers  ┆           ┆        ┆           │
+    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
+    │ b6cfdcbafa ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Indianapo ┆ Baltimore ┆ null   ┆ null      │
+    │ 61ce220ba8 ┆ otball_nfl ┆           ┆ 3T17:00:0 ┆   ┆ lis Colts ┆ Ravens    ┆        ┆           │
+    │ 7dc2d9b80c ┆            ┆           ┆ 0Z        ┆   ┆           ┆           ┆        ┆           │
+    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
+    │ 7e09efed7e ┆ americanfo ┆ NFL       ┆ 2026-09-1 ┆ … ┆ Houston   ┆ Buffalo   ┆ null   ┆ null      │
+    │ 12c659b827 ┆ otball_nfl ┆           ┆ 3T17:00:0 ┆   ┆ Texans    ┆ Bills     ┆        ┆           │
+    │ 40b67ce2f9 ┆            ┆           ┆ 0Z        ┆   ┆           ┆           ┆        ┆           │
+    │ …          ┆            ┆           ┆           ┆   ┆           ┆           ┆        ┆           │
+    └────────────┴────────────┴───────────┴───────────┴───┴───────────┴───────────┴────────┴───────────┘
+
+
 
 ## Player props for one event
 
@@ -99,6 +182,21 @@ else:
 out
 ```
 
+
+
+
+    shape: (1, 6)
+    ┌───────────────────┬───────────────────┬─────────────┬──────────────────┬───────────┬─────────────┐
+    │ event_id          ┆ sport_key         ┆ sport_title ┆ commence_time    ┆ home_team ┆ away_team   │
+    │ ---               ┆ ---               ┆ ---         ┆ ---              ┆ ---       ┆ ---         │
+    │ str               ┆ str               ┆ str         ┆ str              ┆ str       ┆ str         │
+    ╞═══════════════════╪═══════════════════╪═════════════╪══════════════════╪═══════════╪═════════════╡
+    │ 8c94552d022acec4a ┆ americanfootball_ ┆ NFL         ┆ 2026-09-10T00:15 ┆ Seattle   ┆ New England │
+    │ 0458d70c19d3d…    ┆ nfl               ┆             ┆ :00Z             ┆ Seahawks  ┆ Patriots    │
+    └───────────────────┴───────────────────┴─────────────┴──────────────────┴───────────┴─────────────┘
+
+
+
 ## Quota usage
 
 Every call returns `x-requests-remaining` / `x-requests-used` headers;
@@ -108,6 +206,20 @@ Every call returns `x-requests-remaining` / `x-requests-used` headers;
 ```python
 odds.toa_usage() if HAS_KEY else "set ODDS_API_KEY to track quota with odds.toa_usage()"
 ```
+
+
+
+
+    shape: (1, 3)
+    ┌────────────────────┬───────────────┬───────────┐
+    │ requests_remaining ┆ requests_used ┆ last_cost │
+    │ ---                ┆ ---           ┆ ---       │
+    │ i64                ┆ i64           ┆ i64       │
+    ╞════════════════════╪═══════════════╪═══════════╡
+    │ 19812              ┆ 188           ┆ 0         │
+    └────────────────────┴───────────────┴───────────┘
+
+
 
 ## Historical odds
 
