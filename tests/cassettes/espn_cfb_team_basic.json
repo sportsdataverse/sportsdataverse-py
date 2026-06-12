@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "interactions": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/194",
+        "params": "{}"
+      },
+      "response": {
+        "status_code": 200,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/194",
+        "body": "{\"team\": {\"id\": \"194\", \"displayName\": \"Ohio State Buckeyes\", \"abbreviation\": \"OSU\", \"location\": \"Ohio State\", \"nickname\": \"Ohio State\"}}",
+        "content_type": "application/json"
+      }
+    }
+  ]
+}
