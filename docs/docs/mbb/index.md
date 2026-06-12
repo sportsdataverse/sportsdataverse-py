@@ -9,7 +9,7 @@ sidebar_label: MBB
 | [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 83 | `https://sports.core.api.espn.com/v2/sports` |
-| [Dataset loaders](reference/loaders) | 5 | sportsdataverse-data releases |
+| [Dataset loaders](reference/loaders) | 10 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 16 | hand-written wrappers, loaders & helpers |
 
 ## Examples
@@ -90,6 +90,10 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_mbb_teams`](reference/additional#espn_mbb_teams) | [`espn_mbb_teams`](https://hoopR.sportsdataverse.org/reference/espn_mbb_teams.html) |
 | [`espn_mbb_tournaments`](reference/core#espn_mbb_tournaments) | [`espn_mbb_tournaments`](https://hoopR.sportsdataverse.org/reference/espn_mbb_tournaments.html) |
 | [`espn_mbb_venues`](reference/core#espn_mbb_venues) | [`espn_mbb_venues`](https://hoopR.sportsdataverse.org/reference/espn_mbb_venues.html) |
+| [`load_mbb_game_rosters`](reference/loaders#load_mbb_game_rosters) | [`load_mbb_game_rosters`](https://hoopR.sportsdataverse.org/reference/load_mbb_game_rosters.html) |
+| [`load_mbb_officials`](reference/loaders#load_mbb_officials) | [`load_mbb_officials`](https://hoopR.sportsdataverse.org/reference/load_mbb_officials.html) |
 | [`load_mbb_pbp`](reference/loaders#load_mbb_pbp) | [`load_mbb_pbp`](https://hoopR.sportsdataverse.org/reference/load_mbb_pbp.html) |
+| [`load_mbb_rosters`](reference/loaders#load_mbb_rosters) | [`load_mbb_rosters`](https://hoopR.sportsdataverse.org/reference/load_mbb_rosters.html) |
 | [`load_mbb_schedule`](reference/loaders#load_mbb_schedule) | [`load_mbb_schedule`](https://hoopR.sportsdataverse.org/reference/load_mbb_schedule.html) |
+| [`load_mbb_standings`](reference/loaders#load_mbb_standings) | [`load_mbb_standings`](https://hoopR.sportsdataverse.org/reference/load_mbb_standings.html) |
 | [`most_recent_mbb_season`](reference/additional#most_recent_mbb_season) | [`most_recent_mbb_season`](https://hoopR.sportsdataverse.org/reference/most_recent_mbb_season.html) |

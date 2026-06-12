@@ -203,6 +203,46 @@ loaders:
   min_season: 2025
   example_args:
     seasons: 2025
+- fn: load_mbb_standings
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_standings/standings_{season}.parquet
+  tag: espn_mens_college_basketball_standings
+  min_season: 2003
+  example_args:
+    seasons: 2025
+- fn: load_mbb_player_season_stats
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet
+  tag: espn_mens_college_basketball_player_season_stats
+  min_season: 2025
+  example_args:
+    seasons: 2025
+- fn: load_mbb_rosters
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_rosters/rosters_{season}.parquet
+  tag: espn_mens_college_basketball_rosters
+  min_season: 2025
+  example_args:
+    seasons: 2025
+- fn: load_mbb_officials
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_officials/officials_{season}.parquet
+  tag: espn_mens_college_basketball_officials
+  min_season: 2025
+  example_args:
+    seasons: 2025
+- fn: load_mbb_game_rosters
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet
+  tag: espn_mens_college_basketball_game_rosters
+  min_season: 2025
+  example_args:
+    seasons: 2025
 - fn: load_nba_game_rosters
   league: nba
   base: sdv_releases
@@ -235,6 +275,38 @@ loaders:
   min_season: 2002
   example_args:
     seasons: 2002
+- fn: load_nba_player_season_stats
+  league: nba
+  base: sdv_releases
+  url: espn_nba_player_season_stats/player_season_stats_{season}.parquet
+  tag: espn_nba_player_season_stats
+  min_season: 2002
+  example_args:
+    seasons: 2025
+- fn: load_nba_team_season_stats
+  league: nba
+  base: sdv_releases
+  url: espn_nba_team_season_stats/team_season_stats_{season}.parquet
+  tag: espn_nba_team_season_stats
+  min_season: 2002
+  example_args:
+    seasons: 2025
+- fn: load_nba_draft
+  league: nba
+  base: sdv_releases
+  url: espn_nba_draft/draft_{season}.parquet
+  tag: espn_nba_draft
+  min_season: 2003
+  example_args:
+    seasons: 2025
+- fn: load_nba_rosters
+  league: nba
+  base: sdv_releases
+  url: espn_nba_rosters/rosters_{season}.parquet
+  tag: espn_nba_rosters
+  min_season: 2025
+  example_args:
+    seasons: 2025
 - fn: load_wnba_draft
   league: wnba
   base: sdv_releases

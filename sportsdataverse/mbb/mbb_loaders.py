@@ -19,6 +19,11 @@ __all__ = [
     "load_mbb_schedule",
     "load_mbb_team_boxscore",
     "load_mbb_shots",
+    "load_mbb_standings",
+    "load_mbb_player_season_stats",
+    "load_mbb_rosters",
+    "load_mbb_officials",
+    "load_mbb_game_rosters",
 ]
 
 
@@ -454,5 +459,170 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_shots: no data for season(s) {missing} (skipped)".format(missing=missing))
+    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_standings(seasons, return_as_pandas: bool = False):
+    """Load espn_mens_college_basketball_standings (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_standings
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2003).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Example:
+        >>> load_mbb_standings(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_standings/standings_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_standings: no data for season(s) {missing} (skipped)".format(missing=missing))
+    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
+    """Load espn_mens_college_basketball_player_season_stats (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Example:
+        >>> load_mbb_player_season_stats(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_player_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
+    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_rosters(seasons, return_as_pandas: bool = False):
+    """Load espn_mens_college_basketball_rosters (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_rosters
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Example:
+        >>> load_mbb_rosters(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_rosters/rosters_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
+    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_officials(seasons, return_as_pandas: bool = False):
+    """Load espn_mens_college_basketball_officials (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Example:
+        >>> load_mbb_officials(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_officials/officials_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_officials: no data for season(s) {missing} (skipped)".format(missing=missing))
+    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
+    """Load espn_mens_college_basketball_game_rosters (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_game_rosters
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2025).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+    Example:
+        >>> load_mbb_game_rosters(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2025:
+            raise SeasonNotFoundError("season cannot be less than 2025")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mbb_game_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
     out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

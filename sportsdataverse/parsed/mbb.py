@@ -160,10 +160,15 @@ from sportsdataverse.mbb import helper_mbb_pbp_features as helper_mbb_pbp_featur
 from sportsdataverse.mbb import helper_mbb_pickcenter as helper_mbb_pickcenter  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_roster_items as helper_mbb_roster_items  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_team_items as helper_mbb_team_items  # noqa: F401
+from sportsdataverse.mbb import load_mbb_game_rosters as load_mbb_game_rosters  # noqa: F401
+from sportsdataverse.mbb import load_mbb_officials as load_mbb_officials  # noqa: F401
 from sportsdataverse.mbb import load_mbb_pbp as load_mbb_pbp  # noqa: F401
 from sportsdataverse.mbb import load_mbb_player_boxscore as load_mbb_player_boxscore  # noqa: F401
+from sportsdataverse.mbb import load_mbb_player_season_stats as load_mbb_player_season_stats  # noqa: F401
+from sportsdataverse.mbb import load_mbb_rosters as load_mbb_rosters  # noqa: F401
 from sportsdataverse.mbb import load_mbb_schedule as load_mbb_schedule  # noqa: F401
 from sportsdataverse.mbb import load_mbb_shots as load_mbb_shots  # noqa: F401
+from sportsdataverse.mbb import load_mbb_standings as load_mbb_standings  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
@@ -309,10 +314,15 @@ __all__ = [
     "helper_mbb_pickcenter",
     "helper_mbb_roster_items",
     "helper_mbb_team_items",
+    "load_mbb_game_rosters",
+    "load_mbb_officials",
     "load_mbb_pbp",
     "load_mbb_player_boxscore",
+    "load_mbb_player_season_stats",
+    "load_mbb_rosters",
     "load_mbb_schedule",
     "load_mbb_shots",
+    "load_mbb_standings",
     "load_mbb_team_boxscore",
     "mbb_pbp_disk",
     "most_recent_mbb_season",
