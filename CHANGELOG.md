@@ -6,6 +6,7 @@
   - [Yahoo Sports college football wrappers (`yahoo_cfb_*`)](#yahoo-sports-college-football-wrappers-yahoo_cfb_)
   - [NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping](#nfl--apinflcom-wrappers-cut-over-to-generated-nflcom-api-docs-grouping)
   - [Documentation — `api.nfl.com` OpenAPI spec](#documentation--apinflcom-openapi-spec)
+  - [Bug fixes](#bug-fixes)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
     - [CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)](#cfb--fox-as-a-backup-source-for-the-epawpa-play-processor-fox_cfb_play_process)
@@ -22,7 +23,7 @@
   - [Documentation — accuracy-audit fixes](#documentation--accuracy-audit-fixes)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
-  - [Bug fixes](#bug-fixes)
+  - [Bug fixes](#bug-fixes-1)
 - [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
   - [Per-sport return schemas (correctness)](#per-sport-return-schemas-correctness)
   - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
@@ -57,7 +58,7 @@
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
   - [New: NHL api-web parser layer](#new-nhl-api-web-parser-layer)
-  - [Bug fixes](#bug-fixes-1)
+  - [Bug fixes](#bug-fixes-2)
   - [New: NFL drive-plays parser (true PBP parity)](#new-nfl-drive-plays-parser-true-pbp-parity)
   - [Test infrastructure](#test-infrastructure)
   - [Documentation](#documentation)
@@ -78,7 +79,7 @@
   - [CFB — `cfb_play_participants` and `__add_player_cols` collapse](#cfb--cfb_play_participants-and-__add_player_cols-collapse)
   - [CFB — pandas → polars 1.x bug-fix reconciliation (`0.36-live` → `main`)](#cfb--pandas-%E2%86%92-polars-1x-bug-fix-reconciliation-036-live-%E2%86%92-main)
   - [Infrastructure and tooling](#infrastructure-and-tooling)
-  - [Bug fixes](#bug-fixes-2)
+  - [Bug fixes](#bug-fixes-3)
   - [Deprecations](#deprecations-1)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
@@ -106,6 +107,11 @@ The hand-written `sportsdataverse.nfl.nfl_api` wrappers (`nfl_standings`, `nfl_r
 ### Documentation — `api.nfl.com` OpenAPI spec
 
 Added an OpenAPI 3.1 description of the modern NFL.com "Shield" data API (`api.nfl.com`: `/identity/v3/token` device-token auth + `/football/v2/*` + `/experience/*`) to the reference repos (`sdv-internal-refs/nfl/`, `sdv-swagger/nfl_api_openapi.yaml`).
+
+### Bug fixes
+
+- `load_nfl_players()` now reads the nflverse **players** release (`players/players.parquet`) on both the polars and pandas paths; the default polars path previously returned the **officials** dataset by mistake.
+- The generated `api.nfl.com` wrappers route their HTTP call through the shared `sportsdataverse.dl_utils.download()` gateway (retries + cache + ESPN-aware error handling) like every other wrapper, instead of calling `requests.get()` directly. Boolean query flags and the `nfl_weeks` `season` / `season_type` path params are hardened so `None` can no longer leak onto the wire.
 
 ## 0.0.57 Release: June 10, 2026
 

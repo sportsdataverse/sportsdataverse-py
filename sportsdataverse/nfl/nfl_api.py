@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse.nfl.nfl_api_runtime import _get, _bool_str
 from sportsdataverse.nfl.nfl_api_parsers import (
@@ -20,6 +20,10 @@ from sportsdataverse.nfl.nfl_api_parsers import (
     parse_nfl_weeks,
     parse_nfl_weeks_by_date,
 )
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "nfl_standings",
@@ -46,7 +50,7 @@ def nfl_standings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/standings — one row per team standing across the returned week(s).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/standings``
@@ -57,6 +61,7 @@ def nfl_standings(
         season_type: seasonType query parameter.
         week: week query parameter.
         limit: limit query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -90,7 +95,7 @@ def nfl_rosters(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/rosters — one row per team roster for the season.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/rosters``
@@ -99,6 +104,7 @@ def nfl_rosters(
     Args:
         season: season query parameter.
         limit: limit query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_rosters -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -130,7 +136,7 @@ def nfl_teams_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/teams/history — one row per team for a season.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/teams/history``
@@ -139,6 +145,7 @@ def nfl_teams_history(
     Args:
         season: season query parameter.
         limit: limit query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_teams_history -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -169,14 +176,15 @@ def nfl_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
-    """GET /football/v2/teams/{id} — single-team detail (one row).
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /football/v2/teams/{team_id} — single-team detail (one row).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/teams/{team_id}``
     Example URL: https://api.nfl.com/football/v2/teams/10403800-517c-7b8c-65a3-c61b95d86123
 
     Args:
         team_id: team_id path parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_team -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -198,15 +206,15 @@ def nfl_team(
 
 
 def nfl_weeks(
-    season: Optional[int] = 2024,
-    season_type: Optional[str] = "REG",
+    season: int = 2024,
+    season_type: str = "REG",
     headers: Optional[Dict[str, str]] = None,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
-    """GET /football/v2/weeks/season/{season}/seasonType/{type} — week calendar (one row per week).
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/weeks/season/{season}/seasonType/{season_type}``
     Example URL: https://api.nfl.com/football/v2/weeks/season/2024/seasonType/REG
@@ -214,6 +222,7 @@ def nfl_weeks(
     Args:
         season: season path parameter.
         season_type: season_type path parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_weeks -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -241,7 +250,7 @@ def nfl_weeks_by_date(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/weeks/date/{date}``
@@ -249,6 +258,7 @@ def nfl_weeks_by_date(
 
     Args:
         date: date path parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_weeks_by_date -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -277,7 +287,7 @@ def nfl_combine_profiles(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/combine/profiles — one row per combine prospect.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/combine/profiles``
@@ -286,6 +296,7 @@ def nfl_combine_profiles(
     Args:
         year: year query parameter.
         limit: limit query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_combine_profiles -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -317,7 +328,7 @@ def nfl_draft_picks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/draft/picks/report — one row per draft pick.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/draft/picks/report``
@@ -326,6 +337,7 @@ def nfl_draft_picks(
     Args:
         year: year query parameter.
         limit: limit query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_draft_picks -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -358,7 +370,7 @@ def nfl_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/injuries — one row per injured player.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/injuries``
@@ -368,6 +380,7 @@ def nfl_injuries(
         season: season query parameter.
         season_type: seasonType query parameter.
         week: week query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_injuries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -401,7 +414,7 @@ def nfl_game_summaries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/stats/live/game-summaries — one row per game (live state).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/stats/live/game-summaries``
@@ -411,6 +424,7 @@ def nfl_game_summaries(
         season: season query parameter.
         season_type: seasonType query parameter.
         week: week query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_game_summaries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -448,7 +462,7 @@ def nfl_weekly_game_details(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /football/v2/experience/weekly-game-details — one row per game (bare list).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/experience/weekly-game-details``
@@ -462,6 +476,7 @@ def nfl_weekly_game_details(
         include_replays: includeReplays query parameter.
         include_standings: includeStandings query parameter.
         include_tagged_videos: includeTaggedVideos query parameter.
+        headers: optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted.
         return_parsed: parse the payload through parse_nfl_weekly_game_details -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 

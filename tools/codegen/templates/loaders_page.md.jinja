@@ -14,13 +14,13 @@ flowchart LR
 
 | Dataset | Release tag | Pipeline |
 |---|---|---|
-{% for ld in loaders %}| `{{ ld.fn }}` | [{{ ld.tag }}](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{{ ld.tag }}) | {% if ld.automation.repo %}![status](https://github.com/{{ ld.automation.repo }}/actions/workflows/{{ ld.automation.workflow }}/badge.svg){% else %}—{% endif %} |
+{% for ld in loaders %}| `{{ ld.fn }}` | {% if ld.tag_url %}[{{ ld.tag }}]({{ ld.tag_url }}){% else %}`{{ ld.tag }}`{% endif %} | {% if ld.automation.repo %}![status](https://github.com/{{ ld.automation.repo }}/actions/workflows/{{ ld.automation.workflow }}/badge.svg){% else %}—{% endif %} |
 {% endfor %}
 
 {% for ld in loaders %}
 ## `{{ ld.fn }}`
 
-Release: [{{ ld.tag }}](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/{{ ld.tag }}){% if ld.url %} · asset `{{ ld.url }}`{% endif %}
+Release: {% if ld.tag_url %}[{{ ld.tag }}]({{ ld.tag_url }}){% else %}`{{ ld.tag }}`{% endif %}{% if ld.url %} · asset `{{ ld.url }}`{% endif %}
 
 {% if ld.return_table %}### Returns
 

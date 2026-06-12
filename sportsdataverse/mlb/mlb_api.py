@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse.mlb.mlb_api_parsers import (
@@ -14,6 +14,10 @@ from sportsdataverse.mlb.mlb_api_parsers import (
     parse_mlb_api_team_roster,
     parse_mlb_api_timecodes,
 )
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "mlb_api_schedule_postseason",
@@ -91,7 +95,7 @@ def mlb_api_schedule_postseason(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/postseason``
@@ -134,7 +138,7 @@ def mlb_api_pbp(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live``
@@ -178,7 +182,7 @@ def mlb_api_boxscore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/boxscore``
@@ -218,7 +222,7 @@ def mlb_api_linescore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/linescore``
@@ -258,7 +262,7 @@ def mlb_api_play_by_play(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/playByPlay``
@@ -297,7 +301,7 @@ def mlb_api_game_context_metrics(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/contextMetrics``
@@ -334,7 +338,7 @@ def mlb_api_win_probability(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/winProbability``
@@ -370,7 +374,7 @@ def mlb_api_game_content(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/content``
@@ -408,7 +412,7 @@ def mlb_api_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/teams/{teamId} — single team detail.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}``
@@ -455,7 +459,7 @@ def mlb_api_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/teams/{teamId}/roster — team roster.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/roster``
@@ -502,7 +506,7 @@ def mlb_api_team_alumni(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/teams/{teamId}/alumni — players who played for this team in a season.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/alumni``
@@ -545,7 +549,7 @@ def mlb_api_team_affiliates(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league chain).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/affiliates``
@@ -588,7 +592,7 @@ def mlb_api_people(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/people``
@@ -630,7 +634,7 @@ def mlb_api_person(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/people/{personId} — single person detail.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/people/{person_id}``
@@ -672,7 +676,7 @@ def mlb_api_person_game_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/people/{person_id}/stats/game/{game_pk}``
@@ -704,7 +708,7 @@ def mlb_api_person_game_stats(
 
 
 def mlb_api_sport_players(
-    sport_id: Optional[int] = 1,
+    sport_id: int = 1,
     season: Optional[Union[int, str]] = None,
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
@@ -712,7 +716,7 @@ def mlb_api_sport_players(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/sports/{sport_id}/players``
@@ -752,7 +756,7 @@ def mlb_api_sports(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/sports``
@@ -789,7 +793,7 @@ def mlb_api_leagues(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/leagues — list leagues.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/leagues``
@@ -829,7 +833,7 @@ def mlb_api_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/seasons/{seasonId} — single season detail.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/seasons/{season_id}``
@@ -867,7 +871,7 @@ def mlb_api_venues(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/venues — list venues.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/venues``
@@ -908,7 +912,7 @@ def mlb_api_venue(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/venues/{venueId} — single venue detail.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/venues/{venue_id}``
@@ -946,7 +950,7 @@ def mlb_api_meta(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/{meta_type}``
@@ -980,7 +984,7 @@ def mlb_api_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/awards — list award IDs (call with no params to enumerate).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/awards``
@@ -1018,7 +1022,7 @@ def mlb_api_award_recipients(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/awards/{award_id}/recipients``
@@ -1062,7 +1066,7 @@ def mlb_api_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/draft/{year}``
@@ -1103,7 +1107,7 @@ def mlb_api_umpires(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """GET /api/v1/jobs/umpires — current umpire crew assignments.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs/umpires``
@@ -1138,7 +1142,7 @@ def mlb_api_conferences(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View all PCL conferences.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/conferences``
@@ -1179,7 +1183,7 @@ def mlb_api_conference(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View PCL conferences by conferenceId.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/conferences/{conference_id}``
@@ -1217,7 +1221,7 @@ def mlb_api_draft_latest(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View latest player drafted, endpoint best used when draft is currently open.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/draft/{year}/latest``
@@ -1251,7 +1255,7 @@ def mlb_api_game_timestamps(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve all of the play timecodes for a game in GUMBO feed.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live/timestamps``
@@ -1287,7 +1291,7 @@ def mlb_api_game_changes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View corrected non Statcast information for games
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/changes``
@@ -1332,7 +1336,7 @@ def mlb_api_analytics_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View timestamps of most recent data corrections made to games.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/analytics/game``
@@ -1385,7 +1389,7 @@ def mlb_api_analytics_guids(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View timestamps of most recent data corrections made to GUIDs.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/analytics/guids``
@@ -1440,7 +1444,7 @@ def mlb_api_game_guids(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View Statcast data for a specific game.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/guids``
@@ -1493,7 +1497,7 @@ def mlb_api_play_analytics(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View Statcast data for a specific play.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/analytics``
@@ -1534,7 +1538,7 @@ def mlb_api_play_context_metrics_averages(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View Statcast contextMetrics data for a specific play.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/contextMetricsAverages``
@@ -1573,7 +1577,7 @@ def mlb_api_game_color(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View game color commentary info.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color``
@@ -1613,7 +1617,7 @@ def mlb_api_game_color_diff(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View game color feed.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/diffPatch``
@@ -1651,7 +1655,7 @@ def mlb_api_game_color_timestamps(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View all of the color timecodes for a game.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/timestamps``
@@ -1696,7 +1700,7 @@ def mlb_api_game_pace(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View time of game info.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/gamePace``
@@ -1762,7 +1766,7 @@ def mlb_api_high_low(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View high/low stats by player or team.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/highLow/{org_type}``
@@ -1815,7 +1819,7 @@ def mlb_api_home_run_derby(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View a home run derby object based on gamePk.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}``
@@ -1852,7 +1856,7 @@ def mlb_api_home_run_derby_bracket(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View a home run derby object based on bracket.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/bracket``
@@ -1889,7 +1893,7 @@ def mlb_api_home_run_derby_pool(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View a home run derby object based on pool.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/pool``
@@ -1927,7 +1931,7 @@ def mlb_api_all_star_ballot(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View All-Star Ballots per league.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarBallot``
@@ -1967,7 +1971,7 @@ def mlb_api_all_star_write_ins(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View All-Star Write-ins per league.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarWriteIns``
@@ -2007,7 +2011,7 @@ def mlb_api_all_star_final_vote(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View All-Star Final Vote per league.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/league/{league_id}/allStarFinalVote``
@@ -2048,7 +2052,7 @@ def mlb_api_free_agents(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View biographical information and stats for Free Agents.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/people/freeAgents``
@@ -2092,7 +2096,7 @@ def mlb_api_jobs(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View directory by jobType.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs``
@@ -2136,7 +2140,7 @@ def mlb_api_datacasters(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View datacasters directory.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs/datacasters``
@@ -2180,7 +2184,7 @@ def mlb_api_official_scorers(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View official scorer directory.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs/officialScorers``
@@ -2224,7 +2228,7 @@ def mlb_api_umpire_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Get umpires and associated game for umpireId.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/jobs/umpires/games/{umpire_id}``
@@ -2267,7 +2271,7 @@ def mlb_api_schedule_tied(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View tied game schedule info.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/games/tied``
@@ -2313,7 +2317,7 @@ def mlb_api_schedule_postseason_series(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View schedule info for postseason based on series.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/postseason/series``
@@ -2362,7 +2366,7 @@ def mlb_api_schedule_postseason_tunein(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View schedule info for the tuneIn application.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn``
@@ -2409,7 +2413,7 @@ def mlb_api_seasons_all(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View information for all seasons based on id.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/seasons/all``
@@ -2453,7 +2457,7 @@ def mlb_api_sport(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View information for any given sportId.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/sports/{sport_id}``
@@ -2503,7 +2507,7 @@ def mlb_api_stats_metrics(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View Statcast stats.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/stats/metrics``
@@ -2569,7 +2573,7 @@ def mlb_api_teams_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View historical records for a list of teams.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/history``
@@ -2617,7 +2621,7 @@ def mlb_api_teams_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View team stats.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/stats``
@@ -2677,7 +2681,7 @@ def mlb_api_teams_stats_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View leaders for a statistic.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/stats/leaders``
@@ -2737,7 +2741,7 @@ def mlb_api_team_coaches(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View biographical  information on all coaches for a given club.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/coaches``
@@ -2779,7 +2783,7 @@ def mlb_api_team_personnel(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View biographical  information on all personnel for a given club.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/personnel``
@@ -2822,7 +2826,7 @@ def mlb_api_team_roster_type(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """View biographical and statistical information for a club's roster based on roster type.
 
     Endpoint: ``GET https://statsapi.mlb.com/api/v1/teams/{team_id}/roster/{roster_type}``

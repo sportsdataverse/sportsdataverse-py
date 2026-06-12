@@ -160,8 +160,9 @@ For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
 
 Every public function ships a runnable `Example:` block in its docstring
 showing a quick-start call, common parameter combinations, and a one-line
-pipeline next-step. Render the API reference locally with
-`bash create_docs.sh` or browse the live docs at
+pipeline next-step. Regenerate the API reference locally with
+`uv run python tools/codegen/generate.py --docs` (then `cd docs && yarn build`
+to preview the Docusaurus site) or browse the live docs at
 [py.sportsdataverse.org](https://py.sportsdataverse.org).
 
 For longer-form walkthroughs, see the intro/intermediate Jupyter notebooks

@@ -244,7 +244,7 @@ modules**, one per data surface:
 | `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API | 5 dedicated + 1 generic |
 | `nfl/nfl_api_parsers.py` | `api.nfl.com` "Shield" data API | 11 dedicated (one per `nfl_api` endpoint) |
 
-**Parser contract (universal across all 5 modules):**
+**Parser contract (universal across all 6 modules):**
 
 - Return `polars.DataFrame` by default; pandas via
   `return_as_pandas=True`.

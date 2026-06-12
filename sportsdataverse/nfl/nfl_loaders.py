@@ -841,7 +841,7 @@ def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
     return (
         pl.read_parquet(NFL_PLAYER_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
         if return_as_pandas
-        else pl.read_parquet(NFL_OFFICIALS_URL, use_pyarrow=True, columns=None)
+        else pl.read_parquet(NFL_PLAYER_URL, use_pyarrow=True, columns=None)
     )
 
 

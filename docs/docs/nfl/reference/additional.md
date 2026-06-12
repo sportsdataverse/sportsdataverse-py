@@ -2595,15 +2595,45 @@ Polars dataframe containing players available.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `game_key` | character |  |
-| `official_name` | character | Official name. |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `display_name` | character | Full name of player |
+| `common_first_name` | character | Common first name of player |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `short_name` | character | Player short name (i.e. "F.Last") |
+| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
+| `suffix` | character | Name suffix of player |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `otc_id` | character | Over the Cap ID for player |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `position_group` | character | Postion group of player as listed by NFL |
 | `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `official_id` | character | Unique official / referee identifier. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
+| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
+| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
+| `height` | integer | Official height, in inches |
+| `weight` | integer | Official weight, in pounds |
+| `headshot` | character | NFL headshot url for player |
+| `college_name` | character | Official college (usually the last one attended) |
+| `college_conference` | character | Conference of college |
+| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `rookie_season` | integer | 4 digit number indicating which season the player was a rookie |
+| `last_season` | integer | 4 digit number indicating which season the player was active the last time |
+| `latest_team` | character | Latest team the player was listed in |
+| `status` | character | Status label. |
+| `ngs_status` | character | Next Gen Stats variant of status |
+| `ngs_status_short_description` | character | Next Gen Stats status description |
+| `years_of_experience` | integer | Years played in league |
+| `pff_position` | character | Position of player as listed by PFF |
+| `pff_status` | character | Roster status as listed by PFF |
+| `draft_year` | integer | Year that player was drafted |
+| `draft_round` | integer | Round that player was drafted in |
+| `draft_pick` | integer | Draft pick within round, i.e. 32nd pick of second round. |
+| `draft_team` | character | Team that drafted player |
 
 **Example**
 
@@ -3619,15 +3649,45 @@ Polars dataframe containing players available.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `game_key` | character |  |
-| `official_name` | character | Official name. |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `display_name` | character | Full name of player |
+| `common_first_name` | character | Common first name of player |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `short_name` | character | Player short name (i.e. "F.Last") |
+| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
+| `suffix` | character | Name suffix of player |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `otc_id` | character | Over the Cap ID for player |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `position_group` | character | Postion group of player as listed by NFL |
 | `position` | character | Primary position as reported by NFL.com |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `official_id` | character | Unique official / referee identifier. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
+| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
+| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
+| `height` | integer | Official height, in inches |
+| `weight` | integer | Official weight, in pounds |
+| `headshot` | character | NFL headshot url for player |
+| `college_name` | character | Official college (usually the last one attended) |
+| `college_conference` | character | Conference of college |
+| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `rookie_season` | integer | 4 digit number indicating which season the player was a rookie |
+| `last_season` | integer | 4 digit number indicating which season the player was active the last time |
+| `latest_team` | character | Latest team the player was listed in |
+| `status` | character | Status label. |
+| `ngs_status` | character | Next Gen Stats variant of status |
+| `ngs_status_short_description` | character | Next Gen Stats status description |
+| `years_of_experience` | integer | Years played in league |
+| `pff_position` | character | Position of player as listed by PFF |
+| `pff_status` | character | Roster status as listed by PFF |
+| `draft_year` | integer | Year that player was drafted |
+| `draft_round` | integer | Round that player was drafted in |
+| `draft_pick` | integer | Draft pick within round, i.e. 32nd pick of second round. |
+| `draft_team` | character | Team that drafted player |
 
 **Example**
 
@@ -4917,7 +4977,7 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 
 | col_name | type | description |
 |---|---|---|
-| `side` | character | O for offense, D for defense, S for special teams |
+| `side` | character | "home" or "visitor" -- which team's roster the row belongs to. |
 | `gameId` | character |  |
 | `esbId` | character |  |
 | `teamId` | character |  |

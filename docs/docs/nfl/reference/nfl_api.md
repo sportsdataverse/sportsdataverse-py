@@ -18,7 +18,7 @@ GET /football/v2/standings — one row per team standing across the returned wee
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `seasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
 | `week` | `week` |  |  | `Y` | Week number within the season (football). |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
@@ -86,7 +86,7 @@ _Last validated n/a._
 
 ## `nfl_team`
 
-GET /football/v2/teams/{id} — single-team detail (one row).
+GET /football/v2/teams/{team_id} — single-team detail (one row).
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/teams/{team_id}`
 
@@ -98,7 +98,7 @@ GET /football/v2/teams/{id} — single-team detail (one row).
 
 ### Returns
 
-GET /football/v2/teams/{id} — single-team detail (one row).
+GET /football/v2/teams/{team_id} — single-team detail (one row).
 
 ### Example
 
@@ -110,7 +110,7 @@ _Last validated n/a._
 
 ## `nfl_weeks`
 
-GET /football/v2/weeks/season/{season}/seasonType/{type} — week calendar (one row per week).
+GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week).
 
 **Endpoint URL:** `GET https://api.nfl.com/football/v2/weeks/season/{season}/seasonType/{season_type}`
 
@@ -119,11 +119,11 @@ GET /football/v2/weeks/season/{season}/seasonType/{type} — week calendar (one 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | season path parameter. |
-| `season_type` | `season_type` |  |  | `Y` | season_type path parameter. |
+| `season_type` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
 
 ### Returns
 
-GET /football/v2/weeks/season/{season}/seasonType/{type} — week calendar (one row per week).
+GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week).
 
 ### Example
 
@@ -218,7 +218,7 @@ GET /football/v2/injuries — one row per injured player.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `seasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
 | `week` | `week` |  |  | `Y` | Week number within the season (football). |
 
 ### Returns
@@ -244,7 +244,7 @@ GET /football/v2/stats/live/game-summaries — one row per game (live state).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `seasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `seasonType` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3. |
 | `week` | `week` |  |  | `Y` | Week number within the season (football). |
 
 ### Returns
@@ -270,7 +270,7 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `type` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `type` | `season_type` |  |  | `Y` | Season type code (string): PRE, REG, or POST (sent as the `type` query param) -- not ESPN's numeric 1/2/3. |
 | `week` | `week` |  |  | `Y` | Week number within the season (football). |
 | `includeDriveChart` | `include_drive_chart` |  |  | `Y` | includeDriveChart query parameter. |
 | `includeReplays` | `include_replays` |  |  | `Y` | includeReplays query parameter. |

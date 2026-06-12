@@ -3,7 +3,7 @@ kind: dataframe
 columns:
 - name: side
   type: character
-  description: ''
+  description: '"home" or "visitor" -- which team''s roster the row belongs to.'
 - name: gameId
   type: character
   description: ''

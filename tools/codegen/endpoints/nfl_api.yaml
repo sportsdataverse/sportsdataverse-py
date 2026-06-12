@@ -6,9 +6,13 @@ parser_module: nfl.nfl_api_parsers
 qualifier: api
 # api.nfl.com requires a bearer token: import the auth-aware getter (mints/threads
 # a WEB_DESKTOP token) instead of the shared no-auth runtime, and give every
-# wrapper a reusable `headers` arg.
+# wrapper a reusable `headers` arg. The getter still routes the HTTP call through
+# sportsdataverse.dl_utils.download() like every other wrapper in the package.
 getter_module: sportsdataverse.nfl.nfl_api_runtime
 auth: true
+# api.nfl.com season_type uses STRING codes (PRE/REG/POST), unlike the shared
+# parameters.yaml `season_type` (ESPN's numeric 1/2/3) -- so every season_type
+# below carries an explicit description override to keep the generated docs honest.
 endpoints:
 - short: standings
   summary: "GET /football/v2/standings — one row per team standing across the returned week(s)."
@@ -16,7 +20,7 @@ endpoints:
   parser: parse_nfl_standings
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
-  - {name: season_type, query_key: seasonType, type: str, default: REG}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
   - {name: week, query_key: week, type: int, default: 1}
   - {name: limit, query_key: limit, type: int, default: 40}
   example_args: {season: 2024, season_type: REG, week: 18}
@@ -37,19 +41,19 @@ endpoints:
   - {name: limit, query_key: limit, type: int, default: 40}
   example_args: {season: 2024}
 - short: team
-  summary: "GET /football/v2/teams/{id} — single-team detail (one row)."
+  summary: "GET /football/v2/teams/{team_id} — single-team detail (one row)."
   path: /football/v2/teams/{team_id}
   parser: parse_nfl_team
   path_params:
   - {name: team_id, type: str, required: true}
   example_args: {team_id: 10403800-517c-7b8c-65a3-c61b95d86123}
 - short: weeks
-  summary: "GET /football/v2/weeks/season/{season}/seasonType/{type} — week calendar (one row per week)."
+  summary: "GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week)."
   path: /football/v2/weeks/season/{season}/seasonType/{season_type}
   parser: parse_nfl_weeks
   path_params:
   - {name: season, type: int, required: false, default: 2024}
-  - {name: season_type, type: str, required: false, default: REG}
+  - {name: season_type, type: str, required: false, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
   example_args: {season: 2024, season_type: REG}
 - short: weeks_by_date
   summary: "GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row)."
@@ -80,7 +84,7 @@ endpoints:
   parser: parse_nfl_injuries
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
-  - {name: season_type, query_key: seasonType, type: str, default: REG}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
   - {name: week, query_key: week, type: int, default: 1}
   example_args: {season: 2024, season_type: REG, week: 1}
 - short: game_summaries
@@ -89,7 +93,7 @@ endpoints:
   parser: parse_nfl_game_summaries
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
-  - {name: season_type, query_key: seasonType, type: str, default: REG}
+  - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
   - {name: week, query_key: week, type: int, default: 1}
   example_args: {season: 2024, season_type: REG, week: 1}
 - short: weekly_game_details
@@ -98,7 +102,7 @@ endpoints:
   parser: parse_nfl_weekly_game_details
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
-  - {name: season_type, query_key: type, type: str, default: REG}
+  - {name: season_type, query_key: type, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST (sent as the `type` query param) -- not ESPN's numeric 1/2/3."}
   - {name: week, query_key: week, type: int, default: 1}
   - {name: include_drive_chart, query_key: includeDriveChart, type: bool, default: true, transform: _bool_str}
   - {name: include_replays, query_key: includeReplays, type: bool, default: false, transform: _bool_str}

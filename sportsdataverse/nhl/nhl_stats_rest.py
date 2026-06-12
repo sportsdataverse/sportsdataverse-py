@@ -4,10 +4,14 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse.nhl.nhl_stats_rest_parsers import parse_nhl_stats_rest
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "nhl_stats_rest_ping",
@@ -60,7 +64,7 @@ def nhl_stats_rest_ping(
 
 
 def nhl_stats_rest_component_season(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     **kwargs,
 ) -> Dict:
     """Retrieve the component-season configuration.
@@ -87,7 +91,7 @@ def nhl_stats_rest_component_season(
 
 
 def nhl_stats_rest_config(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     **kwargs,
 ) -> Dict:
     """Retrieve the Stats REST API configuration payload.
@@ -115,7 +119,7 @@ def nhl_stats_rest_config(
 
 def nhl_stats_rest_content_module(
     template_key: str,
-    lang: Optional[str] = "en",
+    lang: str = "en",
     **kwargs,
 ) -> Dict:
     """Retrieve a content module by template key.
@@ -143,12 +147,12 @@ def nhl_stats_rest_content_module(
 
 
 def nhl_stats_rest_country(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve the list of countries used in NHL data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/country``
@@ -177,12 +181,12 @@ def nhl_stats_rest_country(
 
 
 def nhl_stats_rest_draft(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve draft data, optionally filtered with Cayenne expressions.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/draft``
@@ -211,12 +215,12 @@ def nhl_stats_rest_draft(
 
 
 def nhl_stats_rest_franchise(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve franchise data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/franchise``
@@ -245,12 +249,12 @@ def nhl_stats_rest_franchise(
 
 
 def nhl_stats_rest_game(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve game-level data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/game``
@@ -279,12 +283,12 @@ def nhl_stats_rest_game(
 
 
 def nhl_stats_rest_glossary(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve the NHL Stats glossary of stat definitions.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/glossary``
@@ -314,12 +318,12 @@ def nhl_stats_rest_glossary(
 
 def nhl_stats_rest_goalie_report(
     report: str,
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve a goalie statistical report.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/goalie/{report}``
@@ -350,12 +354,12 @@ def nhl_stats_rest_goalie_report(
 
 def nhl_stats_rest_leaders_goalies(
     attribute: str,
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve league leaders for a goalie statistical attribute.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/leaders/goalies/{attribute}``
@@ -386,12 +390,12 @@ def nhl_stats_rest_leaders_goalies(
 
 def nhl_stats_rest_leaders_skaters(
     attribute: str,
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve league leaders for a skater statistical attribute.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/leaders/skaters/{attribute}``
@@ -421,12 +425,12 @@ def nhl_stats_rest_leaders_skaters(
 
 
 def nhl_stats_rest_milestones_goalies(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve milestone data for goalies.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/milestones/goalies``
@@ -455,12 +459,12 @@ def nhl_stats_rest_milestones_goalies(
 
 
 def nhl_stats_rest_milestones_skaters(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve milestone data for skaters.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/milestones/skaters``
@@ -489,12 +493,12 @@ def nhl_stats_rest_milestones_skaters(
 
 
 def nhl_stats_rest_players(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve the NHL player registry.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/players``
@@ -523,12 +527,12 @@ def nhl_stats_rest_players(
 
 
 def nhl_stats_rest_season(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve the list of all NHL seasons.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/season``
@@ -557,12 +561,12 @@ def nhl_stats_rest_season(
 
 
 def nhl_stats_rest_shiftcharts(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve shift-chart data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/shiftcharts``
@@ -592,12 +596,12 @@ def nhl_stats_rest_shiftcharts(
 
 def nhl_stats_rest_skater_report(
     report: str,
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve a skater statistical report.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/skater/{report}``
@@ -627,12 +631,12 @@ def nhl_stats_rest_skater_report(
 
 
 def nhl_stats_rest_team(
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve the list of all NHL teams.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/team``
@@ -662,12 +666,12 @@ def nhl_stats_rest_team(
 
 def nhl_stats_rest_team_by_id(
     team_id: int,
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve a single team by its numeric ID.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/team/id/{team_id}``
@@ -698,12 +702,12 @@ def nhl_stats_rest_team_by_id(
 
 def nhl_stats_rest_team_report(
     report: str,
-    lang: Optional[str] = "en",
+    lang: str = "en",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """Retrieve a team statistical report.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/team/{report}``
