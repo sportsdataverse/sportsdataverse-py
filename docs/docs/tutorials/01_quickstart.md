@@ -4,15 +4,53 @@ sidebar_label: Quickstart
 sidebar_position: 1
 ---
 
-# sportsdataverse-py quickstart
+# 🏟️ Welcome to `sportsdataverse-py` — the cross-sport quickstart
 
-A cross-sport tour of the package — its layout, naming, and return types. Start here, then jump to the notebook for your sport.
+One `pip install`, **every** major league. `sportsdataverse` is a single
+Python package that speaks to the *premium native* data feeds across the
+sporting world — the same official endpoints the leagues use to power their
+own apps — and hands you back tidy **polars** DataFrames ready to model. 🚀
 
-**The shape of the package.** Every wrapper returns a raw `Dict` by default; opt into a tidy polars (or pandas) DataFrame with `return_parsed=True` (ESPN wrappers), a matching `parse_*` function (native NHL/MLB APIs), or by importing from the `sportsdataverse.parsed.<league>` mirror. Names follow a predictable pattern: `espn_<league>_<entity>()` for ESPN, `<league>_*` for a league's native API (NHL/MLB), and `load_<league>_*()` for pre-built parquet releases.
+- 🏈 **NFL** via `api.nfl.com` (`nfl_*`) + the nflverse parquet releases (`load_*`)
+- ⚾ **MLB** via the MLB Stats API (`mlb_api_*`) **and** Baseball Savant / Statcast (`statcast_*`)
+- 🏒 **NHL** via the new `api-web` feed (`nhl_*`) **and** NHL EDGE tracking (`nhl_edge_*`)
+- 🏒 **PWHL** women's pro hockey via the HockeyTech feed (`pwhl_*`, `load_pwhl_*`)
+- 🎲 **Betting odds** across a whole market of sportsbooks (`sportsdataverse.odds`, `toa_*`)
+- 🏀⚾🏈 **ESPN** cross-league families (`espn_<league>_*`) for the sports ESPN covers best
 
-Part of the **[SportsDataverse](https://www.sportsdataverse.org)** — the names here mirror the R sisters (hoopR, wehoop, cfbfastR, baseballr, fastRhockey). See [Ecosystem & philosophy](https://py.sportsdataverse.org/docs/ecosystem) for the full picture.
+If you've used the R sisters — **hoopR, wehoop, cfbfastR, baseballr,
+fastRhockey, oddsapiR** — the names here will feel like home. Let's take the
+tour! 😊
 
-## Setup
+## 🧰 The toolbox
+
+Here's a hand-picked slice of the **premium** surface — one or two headline
+functions per sport. Everything returns a tidy **polars** `DataFrame` by
+default; pass `return_as_pandas=True` for pandas, or `return_parsed=False`
+(native APIs) for the raw JSON `Dict`. Click any name for its full reference.
+
+| Function | Source | What it gives you |
+|---|---|---|
+| [`nfl.nfl_standings`](../nfl/reference/nfl_api.md#nfl_standings) | 🏈 **api.nfl.com** | League standings, one row per team |
+| [`nfl.nfl_ngs_leaders`](../nfl/reference/additional.md#nfl_ngs_leaders) | 🏈 **NFL Next Gen Stats** | Tracking-stat leaderboards (speed, etc.) |
+| [`nfl.load_injuries`](../nfl/reference/loaders.md#load_nfl_injuries) | 🏈 nflverse release | Weekly injury reports (parquet) |
+| [`nfl.load_nextgen_stats`](../nfl/reference/loaders.md#load_nfl_nextgen_stats) | 🏈 nflverse release | Season NGS passing/rushing/receiving |
+| [`mlb.mlb_api_standings`](../mlb/reference/additional.md#mlb_api_standings) | ⚾ **MLB Stats API** | Division standings (parse with `parse_mlb_api_standings`) |
+| [`mlb.mlb_api_team_roster`](../mlb/reference/additional.md#mlb_api_team_roster) | ⚾ **MLB Stats API** | A team's roster |
+| [`mlb.statcast_leaderboard_expected_statistics`](../mlb/reference/additional.md#statcast_leaderboard_expected_statistics) | ⚾ **Statcast** | xBA / xSLG / xwOBA expected-stats board |
+| [`mlb.statcast_search`](../mlb/reference/additional.md#statcast_search) | ⚾ **Statcast** | Pitch-level search (the raw tracking data) |
+| [`nhl.nhl_standings`](../nhl/reference/nhl_api_web.md#nhl_standings) | 🏒 **NHL api-web** | League standings |
+| [`nhl.nhl_skater_leaders`](../nhl/reference/nhl_api_web.md#nhl_skater_leaders) | 🏒 **NHL api-web** | Skater statistical leaders |
+| [`nhl.nhl_edge_skater_speed_top_10`](../nhl/reference/nhl_edge.md#nhl_edge_skater_speed_top_10) | 🏒 **NHL EDGE** | Player-tracking top-speed leaderboard |
+| [`pwhl.load_pwhl_schedules`](../pwhl/reference/loaders.md#load_pwhl_schedules) | 🏒 PWHL release | Women's pro schedule + results |
+| [`pwhl.pwhl_standings`](../pwhl/reference/additional.md#pwhl_standings) | 🏒 **PWHL HockeyTech** | PWHL standings |
+| [`odds.toa_sports`](../odds/reference/additional.md#toa_sports) | 🎲 **The Odds API** | Every in-season sport/league key |
+| [`odds.toa_sports_odds`](../odds/reference/additional.md#toa_sports_odds) | 🎲 **The Odds API** | Live moneylines / spreads / totals |
+
+Many more live in each sport's reference pages and its dedicated tutorial
+notebook (linked at the very bottom). 👇
+
+## 🔌 Setup
 
 ```sh
 pip install sportsdataverse
@@ -20,1128 +58,273 @@ pip install sportsdataverse
 uv add sportsdataverse
 ```
 
+Every sport is a submodule of the umbrella package. No API key is needed for
+the league feeds (NFL / MLB / NHL / PWHL / ESPN); only the betting-odds module
+wants a (free) `ODDS_API_KEY`. Let's import the umbrella and the odds module.
+
 
 ```python
 import polars as pl
 import sportsdataverse as sdv
+import sportsdataverse.odds as odds
+
+# Every league hangs off the top-level package:
+[m for m in dir(sdv) if m in
+ ("cfb", "nfl", "nba", "wnba", "mbb", "wbb", "nhl", "mlb", "pwhl",
+  "ahl", "ohl", "whl", "qmjhl", "odds")]
 ```
 
-## Package layout
-
-Each sport lives in its own submodule:
-
-| Submodule | Coverage |
-|-----------|----------|
-| `sdv.cfb` | NCAA football: PBP, schedule, teams, play participants |
-| `sdv.nfl` | NFL: nflverse parquet (PBP, schedules, NextGen, PFR) |
-| `sdv.mbb` | NCAA men's basketball: PBP, schedule, rosters |
-| `sdv.wbb` | NCAA women's basketball: PBP, schedule, rosters, stats, standings |
-| `sdv.nba` | NBA: PBP, schedule, teams, rosters |
-| `sdv.wnba` | WNBA: PBP, schedule, rosters, stats, standings, draft |
-| `sdv.nhl` | NHL: PBP, schedule, teams |
+Live league endpoints are seasonal and occasionally rate-limited, so a tiny
+`safe()` helper runs each network call defensively. You get the frame when the
+feed is up, and a friendly one-liner when it isn't — never a scary traceback.
+That keeps this whole page runnable offline or in the off-season. 🛟
 
 
 ```python
-[m for m in dir(sdv) if not m.startswith('_')]
+def safe(label, thunk):
+    """Run a live call; return its result, or print a one-liner and return None."""
+    try:
+        out = thunk()
+        print(f"✅ {label}")
+        return out
+    except Exception as e:  # noqa: BLE001 -- demo resilience
+        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+        return None
 ```
 
+## 🧭 The naming contract
 
+Once you learn the pattern, you can *guess* function names across every sport:
+`<league>_*` is the native premium API (`nhl_standings()`, `mlb_api_schedule()`);
+the tracking feeds are `<league>_edge_*` / `statcast_*` / `<league>_ngs_*`;
+`espn_<league>_*` is the ESPN mirror; and `load_<league>_*()` reads a pre-built
+parquet release (fast and reliable). The return-type knobs never change:
+**polars by default**, `return_as_pandas=True` for pandas, and
+`return_parsed=False` (native APIs) for the raw JSON `Dict`.
 
+## 🏈 NFL — straight from `api.nfl.com`
 
-    ['Any',
-     'Booster',
-     'CFBPlayProcess',
-     'DMatrix',
-     'Dict',
-     'EDGE_ENDPOINT_PARSERS',
-     'EDGE_SUBFRAME_PARSERS',
-     'Iterable',
-     'List',
-     'Literal',
-     'MLB_API_ENDPOINT_PARSERS',
-     'NFLPlayProcess',
-     'NFL_BASE_URL',
-     'NFL_COMBINE_URL',
-     'NFL_CONTRACTS_URL',
-     'NFL_DEPTH_CHARTS_URL',
-     'NFL_DRAFT_PICKS_URL',
-     'NFL_FF_OPPORTUNITY_URL',
-     'NFL_FF_PLAYERIDS_URL',
-     'NFL_FF_RANKINGS_ALL_URL',
-     'NFL_FF_RANKINGS_DRAFT_URL',
-     'NFL_FF_RANKINGS_WEEK_URL',
-     'NFL_FTN_CHARTING_URL',
-     'NFL_INJURIES_URL',
-     'NFL_NGS_PASSING_URL',
-     'NFL_NGS_RECEIVING_URL',
-     'NFL_NGS_RUSHING_URL',
-     'NFL_OFFICIALS_URL',
-     'NFL_PBP_PARTICIPATION_URL',
-     'NFL_PFR_SEASON_DEF_URL',
-     'NFL_PFR_SEASON_PASS_URL',
-     'NFL_PFR_SEASON_REC_URL',
-     'NFL_PFR_SEASON_RUSH_URL',
-     'NFL_PFR_WEEK_DEF_URL',
-     'NFL_PFR_WEEK_PASS_URL',
-     'NFL_PFR_WEEK_REC_URL',
-     'NFL_PFR_WEEK_RUSH_URL',
-     'NFL_PLAYER_KICKING_STATS_URL',
-     'NFL_PLAYER_STATS_URL',
-     'NFL_PLAYER_URL',
-     'NFL_ROSTER_URL',
-     'NFL_SNAP_COUNTS_URL',
-     'NFL_TEAM_LOGO_URL',
-     'NFL_TEAM_SCHEDULE_URL',
-     'NFL_TEAM_STATS_URL',
-     'NFL_TRADES_URL',
-     'NFL_WEEKLY_ROSTER_URL',
-     'NHL_API_WEB_ENDPOINT_PARSERS',
-     'NHL_STATS_REST_ENDPOINT_PARSERS',
-     'NflConfig',
-     'Optional',
-     'STATCAST_EMPTY',
-     'SeasonNotFoundError',
-     'StringIO',
-     'Union',
-     'annotations',
-     'cache',
-     'cache_stats',
-     'cached_loader',
-     'cfb',
-     'cfb_espn_ext',
-     'cfb_game_rosters',
-     'cfb_loaders',
-     'cfb_loaders_extra',
-     'cfb_pbp',
-     'cfb_play_participants',
-     'cfb_player_stats',
-     'cfb_schedule',
-     'cfb_teams',
-     'clear_cache',
-     'clear_team_cache',
-     'config',
-     'datasets',
-     'datetime',
-     'defense_score_vec',
-     'discover',
-     'dl_utils',
-     'download',
-     'end_change_vec',
-     'ep_class_to_score_mapping',
-     'ep_end_columns',
-     'ep_final_names',
-     'ep_model',
-     'ep_model_file',
-     'ep_start_columns',
-     'ep_start_touchback_columns',
-     'errors',
-     'espn_cfb_award',
-     'espn_cfb_awards',
-     'espn_cfb_calendar',
-     'espn_cfb_calendar_offseason',
-     'espn_cfb_calendar_ondays',
-     'espn_cfb_calendar_postseason',
-     'espn_cfb_calendar_regular_season',
-     'espn_cfb_coach',
-     'espn_cfb_coach_record',
-     'espn_cfb_coach_season',
-     'espn_cfb_coaches',
-     'espn_cfb_conferences',
-     'espn_cfb_draft',
-     'espn_cfb_franchise',
-     'espn_cfb_franchises',
-     'espn_cfb_futures',
-     'espn_cfb_game',
-     'espn_cfb_game_broadcasts',
-     'espn_cfb_game_competition',
-     'espn_cfb_game_leaders',
-     'espn_cfb_game_odds',
-     'espn_cfb_game_official_detail',
-     'espn_cfb_game_officials',
-     'espn_cfb_game_play',
-     'espn_cfb_game_play_personnel',
-     'espn_cfb_game_plays',
-     'espn_cfb_game_powerindex',
-     'espn_cfb_game_predictor',
-     'espn_cfb_game_probabilities',
-     'espn_cfb_game_propbets',
-     'espn_cfb_game_rosters',
-     'espn_cfb_game_scoringplays',
-     'espn_cfb_game_situation',
-     'espn_cfb_game_status',
-     'espn_cfb_game_team',
-     'espn_cfb_game_team_leaders',
-     'espn_cfb_game_team_linescores',
-     'espn_cfb_game_team_record',
-     'espn_cfb_game_team_roster',
-     'espn_cfb_game_team_statistics',
-     'espn_cfb_game_teams',
-     'espn_cfb_games',
-     'espn_cfb_groups',
-     'espn_cfb_injuries',
-     'espn_cfb_leaders',
-     'espn_cfb_leaders_core',
-     'espn_cfb_league_notes',
-     'espn_cfb_league_root',
-     'espn_cfb_news',
-     'espn_cfb_play_participants',
-     'espn_cfb_player_awards',
-     'espn_cfb_player_bio',
-     'espn_cfb_player_career_stats',
-     'espn_cfb_player_contracts',
-     'espn_cfb_player_core',
-     'espn_cfb_player_eventlog',
-     'espn_cfb_player_gamelog',
-     'espn_cfb_player_info',
-     'espn_cfb_player_injuries',
-     'espn_cfb_player_news',
-     'espn_cfb_player_notes',
-     'espn_cfb_player_overview',
-     'espn_cfb_player_records',
-     'espn_cfb_player_seasons',
-     'espn_cfb_player_splits',
-     'espn_cfb_player_statisticslog',
-     'espn_cfb_player_stats',
-     'espn_cfb_player_stats_v3',
-     'espn_cfb_player_vs_player',
-     'espn_cfb_players_index',
-     'espn_cfb_position',
-     'espn_cfb_positions',
-     'espn_cfb_rankings',
-     'espn_cfb_recruits',
-     'espn_cfb_schedule',
-     'espn_cfb_scoreboard',
-     'espn_cfb_season_awards',
-     'espn_cfb_season_coaches',
-     'espn_cfb_season_draft',
-     'espn_cfb_season_draft_round_picks',
-     'espn_cfb_season_freeagents',
-     'espn_cfb_season_group',
-     'espn_cfb_season_group_children',
-     'espn_cfb_season_group_teams',
-     'espn_cfb_season_info',
-     'espn_cfb_season_players',
-     'espn_cfb_season_pointer',
-     'espn_cfb_season_powerindex_leaders',
-     'espn_cfb_season_qbr',
-     'espn_cfb_season_qbr_week',
-     'espn_cfb_season_team',
-     'espn_cfb_season_teams',
-     'espn_cfb_season_type',
-     'espn_cfb_season_type_corrections',
-     'espn_cfb_season_type_leaders',
-     'espn_cfb_season_types',
-     'espn_cfb_season_week',
-     'espn_cfb_season_week_games',
-     'espn_cfb_season_weeks',
-     'espn_cfb_seasons',
-     'espn_cfb_standings',
-     'espn_cfb_standings_core',
-     'espn_cfb_statistics_league',
-     'espn_cfb_summary',
-     'espn_cfb_talentpicks',
-     'espn_cfb_team',
-     'espn_cfb_team_core',
-     'espn_cfb_team_depthcharts',
-     'espn_cfb_team_history',
-     'espn_cfb_team_injuries',
-     'espn_cfb_team_leaders',
-     'espn_cfb_team_news',
-     'espn_cfb_team_powerindex',
-     'espn_cfb_team_record',
-     'espn_cfb_team_roster',
-     'espn_cfb_team_schedule',
-     'espn_cfb_team_transactions',
-     'espn_cfb_teams',
-     'espn_cfb_teams_core',
-     'espn_cfb_teams_site',
-     'espn_cfb_tournaments',
-     'espn_cfb_transactions',
-     'espn_cfb_venue',
-     'espn_cfb_venues',
-     'espn_cfb_week_rankings',
-     'espn_mbb_award',
-     'espn_mbb_awards',
-     'espn_mbb_calendar',
-     'espn_mbb_calendar_offseason',
-     'espn_mbb_calendar_ondays',
-     'espn_mbb_calendar_postseason',
-     'espn_mbb_calendar_regular_season',
-     'espn_mbb_coach',
-     'espn_mbb_coach_record',
-     'espn_mbb_coach_season',
-     'espn_mbb_coaches',
-     'espn_mbb_conferences',
-     'espn_mbb_draft',
-     'espn_mbb_franchise',
-     'espn_mbb_franchises',
-     'espn_mbb_game',
-     'espn_mbb_game_broadcasts',
-     'espn_mbb_game_competition',
-     'espn_mbb_game_leaders',
-     'espn_mbb_game_odds',
-     'espn_mbb_game_official_detail',
-     'espn_mbb_game_officials',
-     'espn_mbb_game_play',
-     'espn_mbb_game_play_personnel',
-     'espn_mbb_game_plays',
-     'espn_mbb_game_powerindex',
-     'espn_mbb_game_predictor',
-     'espn_mbb_game_probabilities',
-     'espn_mbb_game_propbets',
-     'espn_mbb_game_rosters',
-     'espn_mbb_game_scoringplays',
-     'espn_mbb_game_situation',
-     'espn_mbb_game_status',
-     'espn_mbb_game_team',
-     'espn_mbb_game_team_leaders',
-     'espn_mbb_game_team_linescores',
-     'espn_mbb_game_team_record',
-     'espn_mbb_game_team_roster',
-     'espn_mbb_game_team_statistics',
-     'espn_mbb_game_teams',
-     'espn_mbb_games',
-     'espn_mbb_injuries',
-     'espn_mbb_leaders',
-     'espn_mbb_leaders_core',
-     'espn_mbb_league_notes',
-     'espn_mbb_league_root',
-     'espn_mbb_news',
-     'espn_mbb_pbp',
-     'espn_mbb_player_awards',
-     'espn_mbb_player_bio',
-     'espn_mbb_player_career_stats',
-     'espn_mbb_player_contracts',
-     'espn_mbb_player_core',
-     'espn_mbb_player_eventlog',
-     'espn_mbb_player_gamelog',
-     'espn_mbb_player_info',
-     'espn_mbb_player_injuries',
-     'espn_mbb_player_news',
-     'espn_mbb_player_notes',
-     'espn_mbb_player_overview',
-     'espn_mbb_player_records',
-     'espn_mbb_player_seasons',
-     'espn_mbb_player_splits',
-     'espn_mbb_player_statisticslog',
-     'espn_mbb_player_stats',
-     'espn_mbb_player_stats_v3',
-     'espn_mbb_player_vs_player',
-     'espn_mbb_players_index',
-     'espn_mbb_position',
-     'espn_mbb_positions',
-     'espn_mbb_rankings',
-     'espn_mbb_schedule',
-     'espn_mbb_scoreboard',
-     'espn_mbb_season_awards',
-     'espn_mbb_season_coaches',
-     'espn_mbb_season_draft',
-     'espn_mbb_season_draft_round_picks',
-     'espn_mbb_season_freeagents',
-     'espn_mbb_season_futures',
-     'espn_mbb_season_group',
-     'espn_mbb_season_group_children',
-     'espn_mbb_season_group_teams',
-     'espn_mbb_season_groups',
-     'espn_mbb_season_info',
-     'espn_mbb_season_players',
-     'espn_mbb_season_pointer',
-     'espn_mbb_season_powerindex',
-     'espn_mbb_season_powerindex_leaders',
-     'espn_mbb_season_recruits',
-     'espn_mbb_season_team',
-     'espn_mbb_season_teams',
-     'espn_mbb_season_type',
-     'espn_mbb_season_type_corrections',
-     'espn_mbb_season_type_leaders',
-     'espn_mbb_season_types',
-     'espn_mbb_season_week',
-     'espn_mbb_season_week_games',
-     'espn_mbb_season_week_rankings',
-     'espn_mbb_season_weeks',
-     'espn_mbb_seasons',
-     'espn_mbb_standings',
-     'espn_mbb_standings_core',
-     'espn_mbb_statistics_league',
-     'espn_mbb_summary',
-     'espn_mbb_talentpicks',
-     'espn_mbb_team',
-     'espn_mbb_team_core',
-     'espn_mbb_team_depthcharts',
-     'espn_mbb_team_history',
-     'espn_mbb_team_injuries',
-     'espn_mbb_team_leaders',
-     'espn_mbb_team_news',
-     'espn_mbb_team_record',
-     'espn_mbb_team_roster',
-     'espn_mbb_team_schedule',
-     'espn_mbb_team_transactions',
-     'espn_mbb_teams',
-     'espn_mbb_teams_core',
-     'espn_mbb_teams_site',
-     'espn_mbb_tournaments',
-     'espn_mbb_transactions',
-     'espn_mbb_venue',
-     'espn_mbb_venues',
-     'espn_mlb_award',
-     'espn_mlb_awards',
-     'espn_mlb_calendar',
-     'espn_mlb_calendar_offseason',
-     'espn_mlb_calendar_ondays',
-     'espn_mlb_calendar_postseason',
-     'espn_mlb_calendar_regular_season',
-     'espn_mlb_coach',
-     'espn_mlb_coach_record',
-     'espn_mlb_coach_season',
-     'espn_mlb_coaches',
-     'espn_mlb_conferences',
-     'espn_mlb_draft',
-     'espn_mlb_franchise',
-     'espn_mlb_franchises',
-     'espn_mlb_game',
-     'espn_mlb_game_broadcasts',
-     'espn_mlb_game_competition',
-     'espn_mlb_game_leaders',
-     'espn_mlb_game_odds',
-     'espn_mlb_game_official_detail',
-     'espn_mlb_game_officials',
-     'espn_mlb_game_play',
-     'espn_mlb_game_play_personnel',
-     'espn_mlb_game_plays',
-     'espn_mlb_game_powerindex',
-     'espn_mlb_game_predictor',
-     'espn_mlb_game_probabilities',
-     'espn_mlb_game_propbets',
-     'espn_mlb_game_rosters',
-     'espn_mlb_game_scoringplays',
-     'espn_mlb_game_situation',
-     'espn_mlb_game_status',
-     'espn_mlb_game_team',
-     'espn_mlb_game_team_leaders',
-     'espn_mlb_game_team_linescores',
-     'espn_mlb_game_team_record',
-     'espn_mlb_game_team_roster',
-     'espn_mlb_game_team_statistics',
-     'espn_mlb_game_teams',
-     'espn_mlb_games',
-     'espn_mlb_injuries',
-     'espn_mlb_leaders',
-     'espn_mlb_leaders_core',
-     'espn_mlb_league_notes',
-     'espn_mlb_league_root',
-     'espn_mlb_news',
-     'espn_mlb_pbp',
-     'espn_mlb_player_awards',
-     'espn_mlb_player_bio',
-     'espn_mlb_player_career_stats',
-     'espn_mlb_player_contracts',
-     'espn_mlb_player_core',
-     'espn_mlb_player_eventlog',
-     'espn_mlb_player_gamelog',
-     'espn_mlb_player_hotzones',
-     'espn_mlb_player_info',
-     'espn_mlb_player_injuries',
-     'espn_mlb_player_news',
-     'espn_mlb_player_notes',
-     'espn_mlb_player_overview',
-     'espn_mlb_player_records',
-     'espn_mlb_player_seasons',
-     'espn_mlb_player_splits',
-     'espn_mlb_player_statisticslog',
-     'espn_mlb_player_stats',
-     'espn_mlb_player_stats_v3',
-     'espn_mlb_player_vs_player',
-     'espn_mlb_players_index',
-     'espn_mlb_position',
-     'espn_mlb_positions',
-     'espn_mlb_schedule',
-     'espn_mlb_scoreboard',
-     'espn_mlb_season_awards',
-     'espn_mlb_season_coaches',
-     'espn_mlb_season_draft',
-     'espn_mlb_season_draft_round_picks',
-     'espn_mlb_season_freeagents',
-     'espn_mlb_season_futures',
-     'espn_mlb_season_group',
-     'espn_mlb_season_group_children',
-     'espn_mlb_season_group_teams',
-     'espn_mlb_season_groups',
-     'espn_mlb_season_info',
-     'espn_mlb_season_players',
-     'espn_mlb_season_pointer',
-     'espn_mlb_season_powerindex',
-     'espn_mlb_season_powerindex_leaders',
-     'espn_mlb_season_team',
-     'espn_mlb_season_teams',
-     'espn_mlb_season_type',
-     'espn_mlb_season_type_corrections',
-     'espn_mlb_season_type_leaders',
-     'espn_mlb_season_types',
-     'espn_mlb_season_week',
-     'espn_mlb_season_week_games',
-     'espn_mlb_season_weeks',
-     'espn_mlb_seasons',
-     'espn_mlb_standings',
-     'espn_mlb_standings_core',
-     'espn_mlb_statistics_league',
-     'espn_mlb_summary',
-     'espn_mlb_talentpicks',
-     'espn_mlb_team',
-     'espn_mlb_team_core',
-     'espn_mlb_team_depthcharts',
-     'espn_mlb_team_history',
-     'espn_mlb_team_injuries',
-     'espn_mlb_team_leaders',
-     'espn_mlb_team_news',
-     'espn_mlb_team_record',
-     'espn_mlb_team_roster',
-     'espn_mlb_team_schedule',
-     'espn_mlb_team_transactions',
-     'espn_mlb_teams',
-     'espn_mlb_teams_core',
-     'espn_mlb_teams_site',
-     'espn_mlb_tournaments',
-     'espn_mlb_transactions',
-     'espn_mlb_venue',
-     'espn_mlb_venues',
-     'espn_nba_award',
-     'espn_nba_awards',
-     'espn_nba_calendar',
-     'espn_nba_calendar_offseason',
-     'espn_nba_calendar_ondays',
-     'espn_nba_calendar_postseason',
-     'espn_nba_calendar_regular_season',
-     'espn_nba_coach',
-     'espn_nba_coach_record',
-     'espn_nba_coach_season',
-     'espn_nba_coaches',
-     'espn_nba_conferences',
-     'espn_nba_draft',
-     'espn_nba_franchise',
-     'espn_nba_franchises',
-     'espn_nba_game',
-     'espn_nba_game_broadcasts',
-     'espn_nba_game_competition',
-     'espn_nba_game_leaders',
-     'espn_nba_game_odds',
-     'espn_nba_game_official_detail',
-     'espn_nba_game_officials',
-     'espn_nba_game_play',
-     'espn_nba_game_play_personnel',
-     'espn_nba_game_plays',
-     'espn_nba_game_powerindex',
-     'espn_nba_game_predictor',
-     'espn_nba_game_probabilities',
-     'espn_nba_game_propbets',
-     'espn_nba_game_rosters',
-     'espn_nba_game_scoringplays',
-     'espn_nba_game_situation',
-     'espn_nba_game_status',
-     'espn_nba_game_team',
-     'espn_nba_game_team_leaders',
-     'espn_nba_game_team_linescores',
-     'espn_nba_game_team_record',
-     'espn_nba_game_team_roster',
-     'espn_nba_game_team_statistics',
-     'espn_nba_game_teams',
-     'espn_nba_games',
-     'espn_nba_injuries',
-     'espn_nba_leaders',
-     'espn_nba_leaders_core',
-     'espn_nba_league_notes',
-     'espn_nba_league_root',
-     'espn_nba_news',
-     'espn_nba_pbp',
-     'espn_nba_player_awards',
-     'espn_nba_player_bio',
-     'espn_nba_player_career_stats',
-     'espn_nba_player_contracts',
-     'espn_nba_player_core',
-     'espn_nba_player_eventlog',
-     'espn_nba_player_gamelog',
-     'espn_nba_player_info',
-     'espn_nba_player_injuries',
-     'espn_nba_player_news',
-     'espn_nba_player_notes',
-     'espn_nba_player_overview',
-     'espn_nba_player_records',
-     'espn_nba_player_seasons',
-     'espn_nba_player_splits',
-     'espn_nba_player_statisticslog',
-     'espn_nba_player_stats',
-     'espn_nba_player_stats_v3',
-     'espn_nba_player_vs_player',
-     'espn_nba_players_index',
-     'espn_nba_position',
-     'espn_nba_positions',
-     'espn_nba_schedule',
-     'espn_nba_scoreboard',
-     'espn_nba_season_awards',
-     'espn_nba_season_coaches',
-     'espn_nba_season_draft',
-     'espn_nba_season_draft_round_picks',
-     'espn_nba_season_freeagents',
-     'espn_nba_season_futures',
-     'espn_nba_season_group',
-     'espn_nba_season_group_children',
-     'espn_nba_season_group_teams',
-     'espn_nba_season_groups',
-     'espn_nba_season_info',
-     'espn_nba_season_players',
-     'espn_nba_season_pointer',
-     'espn_nba_season_powerindex',
-     'espn_nba_season_powerindex_leaders',
-     'espn_nba_season_team',
-     'espn_nba_season_teams',
-     'espn_nba_season_type',
-     'espn_nba_season_type_corrections',
-     'espn_nba_season_type_leaders',
-     'espn_nba_season_types',
-     'espn_nba_season_week',
-     'espn_nba_season_week_games',
-     'espn_nba_season_weeks',
-     'espn_nba_seasons',
-     'espn_nba_standings',
-     'espn_nba_standings_core',
-     'espn_nba_statistics_league',
-     'espn_nba_summary',
-     'espn_nba_talentpicks',
-     'espn_nba_team',
-     'espn_nba_team_core',
-     'espn_nba_team_depthcharts',
-     'espn_nba_team_history',
-     'espn_nba_team_injuries',
-     'espn_nba_team_leaders',
-     'espn_nba_team_news',
-     'espn_nba_team_record',
-     'espn_nba_team_roster',
-     'espn_nba_team_schedule',
-     'espn_nba_team_transactions',
-     'espn_nba_teams',
-     'espn_nba_teams_core',
-     'espn_nba_teams_site',
-     'espn_nba_tournaments',
-     'espn_nba_transactions',
-     'espn_nba_venue',
-     'espn_nba_venues',
-     'espn_nfl_award',
-     'espn_nfl_awards',
-     'espn_nfl_calendar',
-     'espn_nfl_calendar_offseason',
-     'espn_nfl_calendar_ondays',
-     'espn_nfl_calendar_postseason',
-     'espn_nfl_calendar_regular_season',
-     'espn_nfl_coach',
-     'espn_nfl_coach_record',
-     'espn_nfl_coach_season',
-     'espn_nfl_coaches',
-     'espn_nfl_conferences',
-     'espn_nfl_draft',
-     'espn_nfl_franchise',
-     'espn_nfl_franchises',
-     'espn_nfl_game',
-     'espn_nfl_game_broadcasts',
-     'espn_nfl_game_competition',
-     'espn_nfl_game_leaders',
-     'espn_nfl_game_odds',
-     'espn_nfl_game_official_detail',
-     'espn_nfl_game_officials',
-     'espn_nfl_game_play',
-     'espn_nfl_game_play_personnel',
-     'espn_nfl_game_plays',
-     'espn_nfl_game_powerindex',
-     'espn_nfl_game_predictor',
-     'espn_nfl_game_probabilities',
-     'espn_nfl_game_propbets',
-     'espn_nfl_game_rosters',
-     'espn_nfl_game_scoringplays',
-     'espn_nfl_game_situation',
-     'espn_nfl_game_status',
-     'espn_nfl_game_team',
-     'espn_nfl_game_team_leaders',
-     'espn_nfl_game_team_linescores',
-     'espn_nfl_game_team_record',
-     'espn_nfl_game_team_roster',
-     'espn_nfl_game_team_statistics',
-     'espn_nfl_game_teams',
-     'espn_nfl_games',
-     'espn_nfl_injuries',
-     'espn_nfl_leaders',
-     'espn_nfl_leaders_core',
-     'espn_nfl_league_notes',
-     'espn_nfl_league_root',
-     'espn_nfl_news',
-     'espn_nfl_player_awards',
-     'espn_nfl_player_bio',
-     'espn_nfl_player_career_stats',
-     'espn_nfl_player_contracts',
-     'espn_nfl_player_core',
-     'espn_nfl_player_eventlog',
-     'espn_nfl_player_gamelog',
-     'espn_nfl_player_info',
-     'espn_nfl_player_injuries',
-     'espn_nfl_player_news',
-     'espn_nfl_player_notes',
-     'espn_nfl_player_overview',
-     'espn_nfl_player_records',
-     'espn_nfl_player_seasons',
-     'espn_nfl_player_splits',
-     'espn_nfl_player_statisticslog',
-     'espn_nfl_player_stats',
-     'espn_nfl_player_stats_v3',
-     'espn_nfl_player_vs_player',
-     'espn_nfl_players_index',
-     'espn_nfl_position',
-     'espn_nfl_positions',
-     'espn_nfl_schedule',
-     'espn_nfl_scoreboard',
-     'espn_nfl_season_awards',
-     'espn_nfl_season_coaches',
-     'espn_nfl_season_draft',
-     'espn_nfl_season_draft_round_picks',
-     'espn_nfl_season_freeagents',
-     'espn_nfl_season_futures',
-     'espn_nfl_season_group',
-     'espn_nfl_season_group_children',
-     'espn_nfl_season_group_teams',
-     'espn_nfl_season_groups',
-     'espn_nfl_season_info',
-     'espn_nfl_season_players',
-     'espn_nfl_season_pointer',
-     'espn_nfl_season_powerindex',
-     'espn_nfl_season_powerindex_leaders',
-     'espn_nfl_season_qbr',
-     'espn_nfl_season_qbr_week',
-     'espn_nfl_season_team',
-     'espn_nfl_season_teams',
-     'espn_nfl_season_type',
-     'espn_nfl_season_type_corrections',
-     'espn_nfl_season_type_leaders',
-     'espn_nfl_season_types',
-     'espn_nfl_season_week',
-     'espn_nfl_season_week_games',
-     'espn_nfl_season_weeks',
-     'espn_nfl_seasons',
-     'espn_nfl_standings',
-     'espn_nfl_standings_core',
-     'espn_nfl_statistics_league',
-     'espn_nfl_summary',
-     'espn_nfl_talentpicks',
-     'espn_nfl_team',
-     'espn_nfl_team_core',
-     'espn_nfl_team_depthcharts',
-     'espn_nfl_team_history',
-     'espn_nfl_team_injuries',
-     'espn_nfl_team_leaders',
-     'espn_nfl_team_news',
-     'espn_nfl_team_record',
-     'espn_nfl_team_roster',
-     'espn_nfl_team_schedule',
-     'espn_nfl_team_transactions',
-     'espn_nfl_teams',
-     'espn_nfl_teams_core',
-     'espn_nfl_teams_site',
-     'espn_nfl_tournaments',
-     'espn_nfl_transactions',
-     'espn_nfl_venue',
-     'espn_nfl_venues',
-     'espn_nhl_award',
-     'espn_nhl_awards',
-     'espn_nhl_calendar',
-     'espn_nhl_calendar_offseason',
-     'espn_nhl_calendar_ondays',
-     'espn_nhl_calendar_postseason',
-     'espn_nhl_calendar_regular_season',
-     'espn_nhl_coach',
-     'espn_nhl_coach_record',
-     'espn_nhl_coach_season',
-     'espn_nhl_coaches',
-     'espn_nhl_conferences',
-     'espn_nhl_draft',
-     'espn_nhl_franchise',
-     'espn_nhl_franchises',
-     'espn_nhl_game',
-     'espn_nhl_game_broadcasts',
-     'espn_nhl_game_competition',
-     'espn_nhl_game_leaders',
-     'espn_nhl_game_odds',
-     'espn_nhl_game_official_detail',
-     'espn_nhl_game_officials',
-     'espn_nhl_game_play',
-     'espn_nhl_game_play_personnel',
-     'espn_nhl_game_plays',
-     'espn_nhl_game_powerindex',
-     'espn_nhl_game_predictor',
-     'espn_nhl_game_probabilities',
-     'espn_nhl_game_propbets',
-     'espn_nhl_game_rosters',
-     'espn_nhl_game_scoringplays',
-     'espn_nhl_game_situation',
-     'espn_nhl_game_status',
-     'espn_nhl_game_team',
-     'espn_nhl_game_team_leaders',
-     'espn_nhl_game_team_linescores',
-     'espn_nhl_game_team_record',
-     'espn_nhl_game_team_roster',
-     'espn_nhl_game_team_statistics',
-     'espn_nhl_game_teams',
-     'espn_nhl_games',
-     'espn_nhl_injuries',
-     'espn_nhl_leaders',
-     'espn_nhl_leaders_core',
-     'espn_nhl_league_notes',
-     'espn_nhl_league_root',
-     'espn_nhl_news',
-     'espn_nhl_pbp',
-     'espn_nhl_player_awards',
-     'espn_nhl_player_bio',
-     'espn_nhl_player_career_stats',
-     'espn_nhl_player_contracts',
-     'espn_nhl_player_core',
-     'espn_nhl_player_eventlog',
-     'espn_nhl_player_gamelog',
-     'espn_nhl_player_info',
-     'espn_nhl_player_injuries',
-     'espn_nhl_player_news',
-     'espn_nhl_player_notes',
-     'espn_nhl_player_overview',
-     'espn_nhl_player_records',
-     'espn_nhl_player_seasons',
-     'espn_nhl_player_splits',
-     'espn_nhl_player_statisticslog',
-     'espn_nhl_player_stats',
-     'espn_nhl_player_stats_v3',
-     'espn_nhl_player_vs_player',
-     'espn_nhl_players_index',
-     'espn_nhl_position',
-     'espn_nhl_positions',
-     'espn_nhl_schedule',
-     'espn_nhl_scoreboard',
-     'espn_nhl_season_awards',
-     'espn_nhl_season_coaches',
-     'espn_nhl_season_draft',
-     'espn_nhl_season_draft_round_picks',
-     'espn_nhl_season_freeagents',
-     'espn_nhl_season_futures',
-     'espn_nhl_season_group',
-     'espn_nhl_season_group_children',
-     'espn_nhl_season_group_teams',
-     'espn_nhl_season_groups',
-     'espn_nhl_season_info',
-     'espn_nhl_season_players',
-     'espn_nhl_season_pointer',
-     'espn_nhl_season_powerindex',
-     'espn_nhl_season_powerindex_leaders',
-     'espn_nhl_season_team',
-     'espn_nhl_season_teams',
-     'espn_nhl_season_type',
-     'espn_nhl_season_type_corrections',
-     'espn_nhl_season_type_leaders',
-     'espn_nhl_season_types',
-     'espn_nhl_season_week',
-     'espn_nhl_season_week_games',
-     'espn_nhl_season_weeks',
-     'espn_nhl_seasons',
-     'espn_nhl_standings',
-     'espn_nhl_standings_core',
-     'espn_nhl_statistics_league',
-     'espn_nhl_summary',
-     'espn_nhl_talentpicks',
-     'espn_nhl_team',
-     'espn_nhl_team_core',
-     'espn_nhl_team_depthcharts',
-     'espn_nhl_team_history',
-     'espn_nhl_team_injuries',
-     'espn_nhl_team_leaders',
-     'espn_nhl_team_news',
-     'espn_nhl_team_record',
-     'espn_nhl_team_roster',
-     'espn_nhl_team_schedule',
-     'espn_nhl_team_transactions',
-     'espn_nhl_teams',
-     'espn_nhl_teams_core',
-     'espn_nhl_teams_site',
-     'espn_nhl_tournaments',
-     'espn_nhl_transactions',
-     'espn_nhl_venue',
-     'espn_nhl_venues',
-     'espn_wbb_award',
-     'espn_wbb_awards',
-     'espn_wbb_calendar',
-     'espn_wbb_calendar_offseason',
-     'espn_wbb_calendar_ondays',
-     'espn_wbb_calendar_postseason',
-     'espn_wbb_calendar_regular_season',
-     'espn_wbb_coach',
-     'espn_wbb_coach_record',
-     'espn_wbb_coach_season',
-     'espn_wbb_coaches',
-     'espn_wbb_conferences',
-     'espn_wbb_draft',
-     'espn_wbb_franchise',
-     'espn_wbb_franchises',
-     'espn_wbb_game',
-     'espn_wbb_game_broadcasts',
-     'espn_wbb_game_competition',
-     'espn_wbb_game_leaders',
-     'espn_wbb_game_odds',
-     'espn_wbb_game_official_detail',
-     'espn_wbb_game_officials',
-     'espn_wbb_game_play',
-     'espn_wbb_game_play_personnel',
-     'espn_wbb_game_plays',
-     'espn_wbb_game_powerindex',
-     'espn_wbb_game_predictor',
-     'espn_wbb_game_probabilities',
-     'espn_wbb_game_propbets',
-     'espn_wbb_game_rosters',
-     'espn_wbb_game_scoringplays',
-     'espn_wbb_game_situation',
-     'espn_wbb_game_status',
-     'espn_wbb_game_team',
-     'espn_wbb_game_team_leaders',
-     'espn_wbb_game_team_linescores',
-     'espn_wbb_game_team_record',
-     'espn_wbb_game_team_roster',
-     'espn_wbb_game_team_statistics',
-     'espn_wbb_game_teams',
-     'espn_wbb_games',
-     'espn_wbb_injuries',
-     'espn_wbb_leaders',
-     'espn_wbb_leaders_core',
-     'espn_wbb_league_notes',
-     'espn_wbb_league_root',
-     'espn_wbb_news',
-     'espn_wbb_pbp',
-     'espn_wbb_player_awards',
-     'espn_wbb_player_bio',
-     'espn_wbb_player_career_stats',
-     'espn_wbb_player_contracts',
-     'espn_wbb_player_core',
-     'espn_wbb_player_eventlog',
-     'espn_wbb_player_gamelog',
-     'espn_wbb_player_info',
-     'espn_wbb_player_injuries',
-     'espn_wbb_player_news',
-     'espn_wbb_player_notes',
-     'espn_wbb_player_overview',
-     'espn_wbb_player_records',
-     'espn_wbb_player_seasons',
-     'espn_wbb_player_splits',
-     'espn_wbb_player_statisticslog',
-     'espn_wbb_player_stats',
-     'espn_wbb_player_stats_v3',
-     'espn_wbb_player_vs_player',
-     'espn_wbb_players_index',
-     'espn_wbb_position',
-     'espn_wbb_positions',
-     'espn_wbb_rankings',
-     'espn_wbb_schedule',
-     'espn_wbb_scoreboard',
-     'espn_wbb_season_awards',
-     'espn_wbb_season_coaches',
-     'espn_wbb_season_draft',
-     'espn_wbb_season_draft_round_picks',
-     'espn_wbb_season_freeagents',
-     'espn_wbb_season_futures',
-     'espn_wbb_season_group',
-     'espn_wbb_season_group_children',
-     'espn_wbb_season_group_teams',
-     'espn_wbb_season_groups',
-     'espn_wbb_season_info',
-     'espn_wbb_season_players',
-     'espn_wbb_season_pointer',
-     'espn_wbb_season_powerindex',
-     'espn_wbb_season_powerindex_leaders',
-     'espn_wbb_season_recruits',
-     'espn_wbb_season_team',
-     'espn_wbb_season_teams',
-     'espn_wbb_season_type',
-     'espn_wbb_season_type_corrections',
-     'espn_wbb_season_type_leaders',
-     'espn_wbb_season_types',
-     'espn_wbb_season_week',
-     'espn_wbb_season_week_games',
-     'espn_wbb_season_week_rankings',
-     'espn_wbb_season_weeks',
-     'espn_wbb_seasons',
-     'espn_wbb_standings',
-     'espn_wbb_standings_core',
-     'espn_wbb_statistics_league',
-     'espn_wbb_summary',
-     'espn_wbb_talentpicks',
-     'espn_wbb_team',
-     'espn_wbb_team_core',
-     'espn_wbb_team_depthcharts',
-     'espn_wbb_team_history',
-     'espn_wbb_team_injuries',
-     'espn_wbb_team_leaders',
-     'espn_wbb_team_news',
-     'espn_wbb_team_record',
-     'espn_wbb_team_roster',
-     'espn_wbb_team_schedule',
-     'espn_wbb_team_stats',
-     'espn_wbb_team_transactions',
-     'espn_wbb_teams',
-     'espn_wbb_teams_core',
-     'espn_wbb_teams_site',
-     'espn_wbb_tournaments',
-     'espn_wbb_transactions',
-     'espn_wbb_venue',
-     'espn_wbb_venues',
-     'espn_wnba_award',
-     'espn_wnba_awards',
-     'espn_wnba_calendar',
-     'espn_wnba_calendar_offseason',
-     'espn_wnba_calendar_ondays',
-     'espn_wnba_calendar_postseason',
-     'espn_wnba_calendar_regular_season',
-     'espn_wnba_coach',
-     'espn_wnba_coach_record',
-     'espn_wnba_coach_season',
-     'espn_wnba_coaches',
-     'espn_wnba_conferences',
-     'espn_wnba_draft',
-     'espn_wnba_franchise',
-     'espn_wnba_franchises',
-     'espn_wnba_game',
-     'espn_wnba_game_broadcasts',
-     'espn_wnba_game_competition',
-     'espn_wnba_game_leaders',
-     'espn_wnba_game_odds',
-     'espn_wnba_game_official_detail',
-     'espn_wnba_game_officials',
-     'espn_wnba_game_play',
-     'espn_wnba_game_play_personnel',
-     'espn_wnba_game_plays',
-     'espn_wnba_game_powerindex',
-     'espn_wnba_game_predictor',
-     'espn_wnba_game_probabilities',
-     'espn_wnba_game_propbets',
-     'espn_wnba_game_rosters',
-     'espn_wnba_game_scoringplays',
-     'espn_wnba_game_situation',
-     'espn_wnba_game_status',
-     'espn_wnba_game_team',
-     'espn_wnba_game_team_leaders',
-     'espn_wnba_game_team_linescores',
-     'espn_wnba_game_team_record',
-     'espn_wnba_game_team_roster',
-     'espn_wnba_game_team_statistics',
-     'espn_wnba_game_teams',
-     'espn_wnba_games',
-     'espn_wnba_injuries',
-     'espn_wnba_leaders',
-     'espn_wnba_leaders_core',
-     'espn_wnba_league_notes',
-     'espn_wnba_league_root',
-     'espn_wnba_news',
-     'espn_wnba_pbp',
-     'espn_wnba_player_awards',
-     'espn_wnba_player_bio',
-     'espn_wnba_player_career_stats',
-     'espn_wnba_player_contracts',
-     'espn_wnba_player_core',
-     'espn_wnba_player_eventlog',
-     'espn_wnba_player_gamelog',
-     'espn_wnba_player_info',
-     'espn_wnba_player_injuries',
-     'espn_wnba_player_news',
-     'espn_wnba_player_notes',
-     ...]
-
-
-
-## Polars vs pandas
-
-Every loader returns a polars `DataFrame` by default. Pass `return_as_pandas=True` to get a pandas frame instead — useful when downstream code (sklearn, statsmodels) expects pandas.
+`nfl_standings()` hits the league's own API and returns one tidy row per team.
+It's parsed to polars by default; the same `return_parsed=False` knob hands
+you the raw payload.
 
 
 ```python
-teams_pl = sdv.wnba.espn_wnba_teams()
-type(teams_pl).__name__, teams_pl.shape
+standings = safe("NFL standings (api.nfl.com)",
+                 lambda: sdv.nfl.nfl_standings(season=2024, week=18))
+cols = ["team_abbr", "team_full_name", "overall_wins", "overall_losses",
+        "overall_ties", "division_name", "conference_name"]
+(standings.select([c for c in cols if c in standings.columns]).head(8)
+ if standings is not None else "NFL standings unavailable right now")
 ```
 
+## ⚾ MLB — the Stats API + Statcast
 
-
-
-    ('DataFrame', (15, 14))
-
-
+The MLB Stats API wrappers (`mlb_api_*`) return the raw `Dict`; pair them with
+the matching `parse_mlb_api_*` to get a tidy frame. Here's the division
+standings, parsed.
 
 
 ```python
-teams_pd = sdv.wnba.espn_wnba_teams(return_as_pandas=True)
-type(teams_pd).__name__, teams_pd.shape
+def mlb_standings():
+    raw = sdv.mlb.mlb_api_standings(league_id="103,104", season=2024)
+    return sdv.mlb.parse_mlb_api_standings(raw)
+
+mlb_st = safe("MLB standings (MLB Stats API)", mlb_standings)
+keep = ["standings_division_name", "team_name", "wins", "losses",
+        "winning_percentage", "games_back"]
+(mlb_st.select([c for c in keep if c in mlb_st.columns]).head(10)
+ if mlb_st is not None else "MLB standings unavailable right now")
 ```
 
-
-
-
-    ('DataFrame', (15, 14))
-
-
-
-## The `download()` retry layer
-
-All HTTP traffic goes through `sportsdataverse.dl_utils.download()` — a thin wrapper around `requests` with an exponential-style retry loop and ESPN-404 awareness. You can call it directly when you need a one-off endpoint that doesn't have a wrapper yet.
+And the *premium* part of baseball — **Statcast**. The expected-statistics
+leaderboard gives you xBA / xSLG / xwOBA (the tracking-derived "deserved"
+numbers) for a season, straight from Baseball Savant.
 
 
 ```python
-from sportsdataverse.dl_utils import download
-
-url = 'https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams'
-resp = download(url, num_retries=3)
-resp.status_code, len(resp.content)
+xstats = safe("Statcast expected-stats leaderboard",
+              lambda: sdv.mlb.statcast_leaderboard_expected_statistics(year=2024, type_="batter"))
+show = [c for c in ["last_name, first_name", "player_id", "pa", "ba", "est_ba",
+                    "slg", "est_slg", "woba", "est_woba"]
+        if xstats is not None and c in xstats.columns]
+(xstats.select(show).head(8) if xstats is not None else "Statcast unavailable right now")
 ```
 
+## 🏒 NHL — `api-web` + EDGE tracking
 
-
-
-    (200, 56312)
-
-
-
-## Pipeline example: schedule -> first 5 games
-
-Fetch a schedule, then pull the first PBP frame to confirm the round-trip works end-to-end.
+`nhl_standings()` reads the modern NHL `api-web` feed. The headline *premium*
+extra is **NHL EDGE** — the league's player- and puck-tracking system — exposed
+through the `nhl_edge_*` family.
 
 
 ```python
-schedule = sdv.wnba.espn_wnba_schedule(dates=20240601)
-schedule.select(['id', 'home_display_name', 'away_display_name', 'status_type_completed']).head()
+nhl_st = safe("NHL standings (api-web)", lambda: sdv.nhl.nhl_standings())
+keep = ["team_abbrev", "team_name", "wins", "losses", "ot_losses", "points",
+        "conference_name", "division_name"]
+(nhl_st.select([c for c in keep if c in nhl_st.columns]).head(8)
+ if nhl_st is not None else "NHL standings unavailable right now")
 ```
 
+## 🏒 PWHL — women's pro hockey
+
+The Professional Women's Hockey League rides the same HockeyTech feed as the
+junior/minor loops. The `load_pwhl_*` **release loaders** read pre-built
+parquet and are the most reliable way to grab a whole season at once.
 
 
+```python
+pwhl_sched = safe("PWHL schedule (release parquet)",
+                  lambda: sdv.pwhl.load_pwhl_schedules(seasons=[2024]))
+cols = ["game_id", "game_date", "home_team", "away_team",
+        "home_goal_count", "visiting_goal_count"]
+(pwhl_sched.select([c for c in cols if c in pwhl_sched.columns]).head()
+ if pwhl_sched is not None else "PWHL schedule unavailable right now")
+```
 
-    shape: (1, 4)
-    ┌───────────┬───────────────────┬───────────────────┬───────────────────────┐
-    │ id        ┆ home_display_name ┆ away_display_name ┆ status_type_completed │
-    │ ---       ┆ ---               ┆ ---               ┆ ---                   │
-    │ str       ┆ str               ┆ str               ┆ bool                  │
-    ╞═══════════╪═══════════════════╪═══════════════════╪═══════════════════════╡
-    │ 401620261 ┆ Indiana Fever     ┆ Chicago Sky       ┆ true                  │
-    └───────────┴───────────────────┴───────────────────┴───────────────────────┘
+## 🎲 Betting odds — a whole market in one call
+
+`sportsdataverse.odds` wraps [The Odds API](https://the-odds-api.com) and
+returns **long-format** odds (one row per event × book × market × outcome).
+Set a free `ODDS_API_KEY` env var to light up the live cells; without one,
+this section just prints a friendly note.
 
 
+```python
+import os
+HAS_ODDS_KEY = bool(os.environ.get("ODDS_API_KEY"))
+print("ODDS_API_KEY set:", HAS_ODDS_KEY,
+      "— odds cells will" + ("" if HAS_ODDS_KEY else " NOT") + " run live")
 
-## Cross-references
+if HAS_ODDS_KEY:
+    sports = safe("Odds: in-season sports", lambda: odds.toa_sports(all_sports=False))
+    out = (sports.select([c for c in ["key", "group", "title"] if c in sports.columns]).head(10)
+           if sports is not None else "no sports returned")
+else:
+    out = "set ODDS_API_KEY to run: odds.toa_sports()  (free, doesn't touch quota)"
+out
+```
 
-- R companion (umbrella): <https://www.sportsdataverse.org>
-- Polars docs: <https://docs.pola.rs>
-- pandas docs: <https://pandas.pydata.org/docs/>
+## 🍳 Cookbook — one premium task per sport
 
-## Where to go next
+These four recipes are the kind of thing you'll reach for constantly. Each one
+calls a **premium** feed and is fully runnable (and defensively guarded, so a
+flaky network or off-season just prints a note).
 
-- `02_cfb_intro.ipynb` — college football
-- `03_nfl_intro.ipynb` — NFL (nflverse parity surface)
-- `04_nba_intro.ipynb` — NBA
-- `05_wbb_intro.ipynb` — NCAA women's basketball
-- `06_mbb_intro.ipynb` — NCAA men's basketball
-- `07_nhl_intro.ipynb` — NHL (native api-web + ESPN)
-- `08_wnba_intro.ipynb` — WNBA
-- `09_mlb_intro.ipynb` — MLB (Stats API, Statcast, ESPN)
-- `10_pwhl_intro.ipynb` — PWHL
+### Recipe 1 — 🏈 NFL weekly injury report
 
-Each notebook links back to its rendered API page under `docs/docs/<sport>/index.md`.
+`load_injuries()` pulls the nflverse injury-report parquet. Filter to one week
+and you've got the practice-status board for the whole league.
+
+
+```python
+inj = safe("NFL injuries (nflverse release)",
+           lambda: sdv.nfl.load_injuries(seasons=[2024]))
+if inj is not None and inj.height:
+    wk = (inj.filter((pl.col("week") == 1) & (pl.col("report_status").is_not_null()))
+          if "week" in inj.columns and "report_status" in inj.columns else inj)
+    cols = ["season", "week", "team", "position", "full_name", "report_status"]
+    out = wk.select([c for c in cols if c in wk.columns]).head(10)
+else:
+    out = "injuries unavailable right now"
+out
+```
+
+### Recipe 2 — ⚾ MLB Statcast pitch-level slice
+
+`statcast_search()` is the raw tracking firehose — one row per pitch. Grab a
+single day and pull a few of the most useful tracking columns.
+
+
+```python
+pitches = safe("Statcast pitch search (1 day)",
+               lambda: sdv.mlb.statcast_search(start_date="2024-07-01", end_date="2024-07-01"))
+show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
+                    "launch_speed", "launch_angle", "events", "description"]
+        if pitches is not None and c in pitches.columns]
+(pitches.select(show).head(10)
+ if pitches is not None and pitches.height else "no Statcast rows for that day right now")
+```
+
+### Recipe 3 — 🏒 NHL EDGE top-speed leaderboard
+
+NHL EDGE tracking, distilled to a leaderboard: the fastest skating bursts of
+the season. `positions=` filters by position group and `sort_by=` picks the
+metric.
+
+
+```python
+edge = safe("NHL EDGE skater top-speed top-10",
+            lambda: sdv.nhl.nhl_edge_skater_speed_top_10(positions="forwards",
+                                                         sort_by="maxskatingspeed"))
+(edge.head(10) if edge is not None and getattr(edge, "height", 0)
+ else "NHL EDGE leaderboard unavailable right now")
+```
+
+### Recipe 4 — 🏒 PWHL standings + a team roster
+
+Stack two PWHL native calls: the live `pwhl_standings()` for the table, then
+`pwhl_teams()` → `pwhl_team_roster()` to pull a roster for the first team.
+
+
+```python
+pwhl_st = safe("PWHL standings (HockeyTech)",
+               lambda: sdv.pwhl.pwhl_standings(season=sdv.pwhl.most_recent_pwhl_season()))
+teams = safe("PWHL teams", lambda: sdv.pwhl.pwhl_teams(season=sdv.pwhl.most_recent_pwhl_season()))
+
+roster = None
+if teams is not None and getattr(teams, "height", 0):
+    tid_col = next((c for c in ("team_id", "id") if c in teams.columns), None)
+    if tid_col is not None:
+        tid = int(teams[tid_col][0])
+        roster = safe(f"PWHL roster (team {tid})", lambda: sdv.pwhl.pwhl_team_roster(team_id=tid))
+
+print("standings rows:", None if pwhl_st is None else getattr(pwhl_st, "height", None),
+      "| roster rows:", None if roster is None else getattr(roster, "height", None))
+(pwhl_st.head() if pwhl_st is not None and getattr(pwhl_st, "height", 0)
+ else "PWHL standings unavailable right now")
+```
+
+## 🐼 polars ↔ pandas in one keyword
+
+Every wrapper honors `return_as_pandas=True`. Same data, different frame —
+handy when the next step in your pipeline (sklearn, statsmodels, seaborn)
+expects pandas. Here's the round-trip on an ESPN call that always works.
+
+
+```python
+teams_pl = safe("ESPN WNBA teams (polars)", lambda: sdv.wnba.espn_wnba_teams())
+teams_pd = safe("ESPN WNBA teams (pandas)",
+                lambda: sdv.wnba.espn_wnba_teams(return_as_pandas=True))
+print("polars:", type(teams_pl).__name__, None if teams_pl is None else teams_pl.shape)
+print("pandas:", type(teams_pd).__name__, None if teams_pd is None else teams_pd.shape)
+```
+
+## 🎉 Where to next
+
+You've now touched the premium native feed for every major sport in the
+package. Dive deeper in the per-sport tutorials — each leads with that sport's
+premium endpoints:
+
+- `02_cfb_intro.ipynb` — 🏈 college football
+- `03_nfl_intro.ipynb` — 🏈 NFL (`api.nfl.com` + nflverse parity)
+- `04_nba_intro.ipynb` — 🏀 NBA
+- `05_wbb_intro.ipynb` — 🏀 NCAA women's basketball
+- `06_mbb_intro.ipynb` — 🏀 NCAA men's basketball
+- `07_nhl_intro.ipynb` — 🏒 NHL (`api-web` + EDGE + ESPN)
+- `08_wnba_intro.ipynb` — 🏀 WNBA
+- `09_mlb_intro.ipynb` — ⚾ MLB (Stats API + Statcast + ESPN)
+- `10_pwhl_intro.ipynb` — 🏒 PWHL
+- `11_junior_hockey_intro.ipynb` — 🏒 AHL / OHL / WHL / QMJHL
+- `12_odds_intro.ipynb` — 🎲 Betting odds (The Odds API)
+
+**Reference pages** for everything you saw:
+[NFL](../nfl/reference/nfl_api.md) ·
+[MLB](../mlb/reference/additional.md) ·
+[NHL](../nhl/reference/nhl_api_web.md) ·
+[NHL EDGE](../nhl/reference/nhl_edge.md) ·
+[PWHL](../pwhl/reference/additional.md) ·
+[Odds](../odds/reference/additional.md).
+
+Part of the **[SportsDataverse](https://www.sportsdataverse.org)** — the names
+here mirror the R sisters. Now go build something great! 🏆
