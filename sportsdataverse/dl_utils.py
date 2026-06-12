@@ -39,12 +39,12 @@ def _parse_retry_after(value: str) -> float | None:
     """Parse a ``Retry-After`` value into seconds, or ``None`` if unparseable.
 
     Per RFC 7231 the header is either a non-negative integer count of seconds or
-    an HTTP-date. Numeric form is returned as-is; an HTTP-date is converted to
-    the number of seconds from now until that instant (clamped at 0 for dates
-    already in the past).
+    an HTTP-date. Both forms are clamped at 0 — a numeric ``-5`` or an HTTP-date
+    already in the past yields ``0.0`` rather than a negative sleep (which would
+    raise ``ValueError`` in ``time.sleep`` and crash the retry loop).
     """
     try:
-        return float(value)
+        return max(0.0, float(value))
     except (TypeError, ValueError):
         pass
     try:

@@ -45,6 +45,13 @@ class TestRetryDelay:
         past = datetime.now(timezone.utc) - timedelta(seconds=60)
         assert _parse_retry_after(format_datetime(past, usegmt=True)) == 0.0
 
+    def test_negative_retry_after_is_clamped_to_zero(self):
+        # RFC 7231 disallows negatives; clamp to 0 instead of returning -5.0,
+        # which would crash time.sleep(-5.0) and take down the retry loop.
+        resp = types.SimpleNamespace(headers={"Retry-After": "-5"})
+        assert _retry_delay(resp, 0) == 0.0
+        assert _parse_retry_after("-5") == 0.0
+
     def test_bad_retry_after_falls_back_to_backoff(self):
         resp = types.SimpleNamespace(headers={"Retry-After": "soon"})
         assert _retry_delay(resp, 2) == 2.0  # unparseable -> exponential

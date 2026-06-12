@@ -370,8 +370,11 @@ shared basketball helper.
    ESPN ships a non-canonical category name. Empty frames carry the
    documented schema so callers always see a stable column set.
 6. Snake-case columns via `sportsdataverse.dl_utils.underscore`.
-7. Append the new module to the consolidated `[[tool.mypy.overrides]] module = [...]`
-   list in `pyproject.toml`. Do NOT create a new override block per module.
+7. Append the new module's path to the `[tool.mypy] files = [...]` ratchet in
+   `pyproject.toml` once it types cleanly. That list scopes *which* modules the
+   gate checks (with `follow_imports = "skip"`); do NOT switch to a whole-package
+   `[[tool.mypy.overrides]]` model — the legacy surface isn't typed yet and would
+   make the gate permanently red.
 
 ### NFL — nflreadpy parity
 
@@ -567,8 +570,9 @@ Use the modern API surface:
 
 ### Type hints
 
-New modules MUST be fully typed (params + returns). Append to the strict
-mypy override list in `pyproject.toml`. Legacy modules remain un-typed.
+New modules MUST be fully typed (params + returns). Append the module path to
+the `[tool.mypy] files` ratchet in `pyproject.toml`. Legacy modules remain
+un-typed and stay out of the gate's `files` scope until cleaned.
 
 ### Test gating
 

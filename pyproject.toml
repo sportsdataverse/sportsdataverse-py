@@ -255,11 +255,16 @@ line-ending = "lf"
 
 [tool.mypy]
 python_version = "3.10"
-# ``follow_imports = "skip"`` checks the curated files below in isolation
-# (imported symbols become ``Any``), so this gate neither reports errors in
-# legacy untyped modules nor descends into dependencies. It is a deliberate
-# ratchet: modules are added to ``files`` as they reach clean typing. Run
-# locally with ``uv run mypy`` (no args -- the file list comes from here).
+# Strict-typing ratchet via ``files`` (NOT ``[[tool.mypy.overrides]]``): the gate
+# checks ONLY the curated modules listed below, in isolation. This is deliberate
+# and load-bearing -- ``files`` scopes *which* modules are checked, whereas
+# ``[[tool.mypy.overrides]]`` only tunes per-module strictness and cannot keep the
+# legacy surface out of scope. A whole-package run (what an overrides-based gate
+# would do) surfaces ~95 genuine pre-existing type errors plus ~2800 missing
+# annotations in not-yet-typed modules, which would make the gate permanently red.
+# ``follow_imports = "skip"`` makes imported symbols ``Any`` so a checked module
+# never drags an unchecked one into scope. Promote a module by appending it here
+# once it types cleanly. Run locally with ``uv run mypy`` (no args -- list is here).
 follow_imports = "skip"
 ignore_missing_imports = true
 disallow_untyped_defs = true

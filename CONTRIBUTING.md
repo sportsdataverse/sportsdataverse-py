@@ -118,9 +118,15 @@ are intentionally migrating).
   uv run ruff check sportsdataverse/<your_module>.py
   ```
 
-  Per-module strict overrides live in a single `[[tool.mypy.overrides]]`
-  block in `pyproject.toml` — append your module's dotted path to the
-  `module` list there rather than creating a new override block.
+  The strict-typing gate is a **ratchet** keyed on `[tool.mypy] files`
+  in `pyproject.toml` — append your module's path to that `files` list
+  once it type-checks cleanly. The gate checks *only* the listed modules
+  (with `follow_imports = "skip"`), so it stays green while the
+  not-yet-typed legacy surface is left untouched. We intentionally do
+  **not** use `[[tool.mypy.overrides]]` for this: that mechanism tunes
+  per-module strictness but can't scope the gate, so it would pull the
+  whole package into checking (~95 pre-existing legacy errors) and the
+  gate would never be green.
 - **Polars 1.x.** Runtime is pinned to `polars>=1.0,<2.0`. New code uses
   the modern API surface (`group_by`, `with_row_index`, `map_elements`,
   varargs `pl.struct(*cols)`, etc.). The 0.18 → 1.x migration of the
