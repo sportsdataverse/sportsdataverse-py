@@ -912,7 +912,7 @@ def build_loaders_live() -> list[Path]:
         pkg = LIVE / lg
         pkg.mkdir(parents=True, exist_ok=True)
         dest = pkg / f"{lg}_loaders.py"
-        dest.write_text(src, encoding="utf-8")
+        dest.write_text(src, encoding="utf-8", newline="\n")
         init = pkg / "__init__.py"
         line = f"from sportsdataverse.{lg}.{lg}_loaders import *\n"
         if not init.exists():
@@ -920,9 +920,10 @@ def build_loaders_live() -> list[Path]:
                 f'"""sportsdataverse.{lg} -- {lg.upper()} data loaders."""\n\nfrom __future__ import annotations\n\n'
                 + line,
                 encoding="utf-8",
+                newline="\n",
             )
         elif line not in init.read_text(encoding="utf-8"):
-            init.write_text(init.read_text(encoding="utf-8").rstrip() + "\n" + line, encoding="utf-8")
+            init.write_text(init.read_text(encoding="utf-8").rstrip() + "\n" + line, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
         subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
@@ -938,7 +939,7 @@ def _loaders_stale() -> list[str]:
     try:
         rendered = _render_loaders_all()
         for lg, src in rendered.items():
-            (tmp / f"{lg}_loaders.py").write_text(src, encoding="utf-8")
+            (tmp / f"{lg}_loaders.py").write_text(src, encoding="utf-8", newline="\n")
         _ruff_format_dir(tmp)
         stale = []
         for lg in rendered:
@@ -1059,7 +1060,9 @@ def refresh_return_schemas() -> int:
             else:
                 df = parser(payload)
                 doc = {"schema": name, "kind": "dataframe", "columns": _cols_from_frame(df, descs)}
-            (outdir / f"{league}.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8")
+            (outdir / f"{league}.yaml").write_text(
+                yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
+            )
             written += 1
 
     # --- natives ---
@@ -1084,7 +1087,9 @@ def refresh_return_schemas() -> int:
                 continue
             outdir = ROOT / "tools" / "codegen" / "schemas" / "native" / api
             outdir.mkdir(parents=True, exist_ok=True)
-            (outdir / f"{short}.yaml").write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8")
+            (outdir / f"{short}.yaml").write_text(
+                yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
+            )
             written += 1
 
     print(f"return schemas: {written} per-league written, {skipped} skipped (no fixture)")
@@ -1118,7 +1123,7 @@ def refresh_loader_schemas() -> int:
             out[ld.fn] = got
     dest = ENDPOINTS.parent / "schemas" / "loader_schemas.yaml"
     dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(yaml.safe_dump(out, sort_keys=True, width=120), encoding="utf-8")
+    dest.write_text(yaml.safe_dump(out, sort_keys=True, width=120), encoding="utf-8", newline="\n")
     _loader_schemas.cache_clear()
     print(f"loader schemas: {len(out)} introspected" + (f"; {len(failed)} failed: {failed}" if failed else ""))
     return 0
@@ -1221,7 +1226,7 @@ def build_parsed_live() -> list[Path]:
     pdir = LIVE / "parsed"
     for name, src in _render_parsed_all().items():
         dest = pdir / name
-        dest.write_text(src, encoding="utf-8")
+        dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
         subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
@@ -1258,7 +1263,7 @@ def build_flat_live() -> list[Path]:
     written = []
     for module, (prefix, src) in _render_flat_all().items():
         dest = LIVE / prefix / f"{module}.py"
-        dest.write_text(src, encoding="utf-8")
+        dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
         subprocess.run(["ruff", "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
@@ -1275,7 +1280,7 @@ def _flat_stale() -> list[str]:
         rendered = _render_flat_all()
         prefixes = {}
         for module, (prefix, src) in rendered.items():
-            (tmp / f"{module}.py").write_text(src, encoding="utf-8")
+            (tmp / f"{module}.py").write_text(src, encoding="utf-8", newline="\n")
             prefixes[module] = prefix
         _ruff_format_dir(tmp)
         stale = []
@@ -1299,7 +1304,7 @@ def _parsed_stale() -> list[str]:
     try:
         rendered = _render_parsed_all()
         for name, src in rendered.items():
-            (tmp / name).write_text(src, encoding="utf-8")
+            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
         _ruff_format_dir(tmp)
         stale = []
         for name in rendered:
@@ -1322,9 +1327,9 @@ def _render_all() -> dict[str, str]:
 
 def build() -> list[Path]:
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "__init__.py").write_text("", encoding="utf-8")
+    (OUT / "__init__.py").write_text("", encoding="utf-8", newline="\n")
     for name, src in _render_all().items():
-        (OUT / name).write_text(src, encoding="utf-8")
+        (OUT / name).write_text(src, encoding="utf-8", newline="\n")
     _ruff_format_dir(OUT)
     return sorted(OUT.glob("*_espn_ext.py"))
 
@@ -1336,7 +1341,7 @@ def _ensure_init_import(prefix: str) -> None:
     if f"{prefix}_espn_ext import *" in text:
         return
     line = f"from sportsdataverse.{prefix}.{prefix}_espn_ext import *\n"
-    init.write_text(text.rstrip() + "\n" + line, encoding="utf-8")
+    init.write_text(text.rstrip() + "\n" + line, encoding="utf-8", newline="\n")
 
 
 def build_live() -> list[Path]:
@@ -1345,7 +1350,7 @@ def build_live() -> list[Path]:
     for name, src in _render_all().items():
         prefix = name[: -len("_espn_ext.py")]
         dest = LIVE / prefix / f"{prefix}_espn_ext.py"
-        dest.write_text(src, encoding="utf-8")
+        dest.write_text(src, encoding="utf-8", newline="\n")
         _ensure_init_import(prefix)
         written.append(dest)
     if written:
@@ -1362,7 +1367,7 @@ def _live_stale() -> list[str]:
     try:
         rendered = _render_all()
         for name, src in rendered.items():
-            (tmp / name).write_text(src, encoding="utf-8")
+            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
         _ruff_format_dir(tmp)
         stale = []
         for name in rendered:
@@ -1387,7 +1392,7 @@ def check() -> int:
     try:
         rendered = _render_all()
         for name, src in rendered.items():
-            (tmp / name).write_text(src, encoding="utf-8")
+            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
         _ruff_format_dir(tmp)
         stale = [
             name
@@ -2701,7 +2706,7 @@ def refresh_autodoc_schemas() -> int:
             outdir = _AUTODOC_SCHEMA_DIR / scope_key
             outdir.mkdir(parents=True, exist_ok=True)
             dest = outdir / f"{fn}.yaml"
-            dest.write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8")
+            dest.write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n")
             written_paths.add(dest.resolve())
             captured += 1
     # Prune stale schema files (a function that no longer captures) so the

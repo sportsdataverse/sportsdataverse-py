@@ -248,6 +248,9 @@ ignore = [
 
 [tool.ruff.format]
 skip-magic-trailing-comma = false
+# Always emit LF so generated/formatted files are byte-identical across
+# platforms (Windows runs otherwise produced CRLF, showing as phantom diffs).
+line-ending = "lf"
 
 
 [tool.mypy]
