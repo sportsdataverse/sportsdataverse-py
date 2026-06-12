@@ -2,7 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0.0.58 (in development)](#0058-in-development)
+- [0.0.58 Release: June 12, 2026](#0058-release-june-12-2026)
+  - [Loaders — NHL core + new NBA/MBB datasets aligned to `sportsdataverse-data` releases](#loaders--nhl-core--new-nbambb-datasets-aligned-to-sportsdataverse-data-releases)
+  - [Robustness & infrastructure — typing, CI gates, HTTP, deprecation policy](#robustness--infrastructure--typing-ci-gates-http-deprecation-policy)
   - [The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)](#the-odds-api-wrappers-sportsdataverseodds-toa_)
   - [Yahoo Sports college football wrappers (`yahoo_cfb_*`)](#yahoo-sports-college-football-wrappers-yahoo_cfb_)
   - [NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping](#nfl--apinflcom-wrappers-cut-over-to-generated-nflcom-api-docs-grouping)
@@ -97,7 +99,22 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 0.0.58 (in development)
+## 0.0.58 Release: June 12, 2026
+
+### Loaders — NHL core + new NBA/MBB datasets aligned to `sportsdataverse-data` releases
+
+The four core NHL loaders (`load_nhl_pbp`, `load_nhl_player_boxscore`, `load_nhl_team_boxscore`, `load_nhl_schedule`) now read the SDV-native `sportsdataverse-data` releases (`nhl_pbp_full`, `nhl_player_boxscores`, `nhl_team_boxscores`, `nhl_schedules`) instead of the legacy R `fastRhockey-data` branch — gaining the 2010 season (`min_season` 2011 → 2010). Added loaders for NBA/MBB datasets that were already published but had no loader, bringing them to parity with the WBB/WNBA surface: `load_nba_player_season_stats`, `load_nba_team_season_stats`, `load_nba_draft`, `load_nba_rosters`, and `load_mbb_standings`, `load_mbb_player_season_stats`, `load_mbb_team_season_stats`, `load_mbb_rosters`, `load_mbb_officials`, `load_mbb_game_rosters` — each with a generated return-schema table. Also fixed the `--audit-releases` drift check to key on the release **tag** (it parsed the human-readable title), which had been falsely flagging valid releases as missing.
+
+### Robustness & infrastructure — typing, CI gates, HTTP, deprecation policy
+
+A package-wide hardening pass with no change to public data outputs:
+
+- **Typing + CI:** ships a PEP 561 `py.typed` marker; a new `quality.yml` CI gate runs `ruff` + `ruff format --check` + `mypy` on every PR, with a `[tool.mypy] files` ratchet (modules join the strict gate as they reach clean typing), and the test workflow now emits coverage.
+- **Errors + logging:** a `SportsDataverseError` base class (with `SeasonNotFoundError` / `NoESPNDataError` re-parented under it) and a package logger with a `NullHandler`; previously-silent `except` paths now log.
+- **HTTP layer:** `dl_utils.download()` reuses a module-level pooled `requests.Session` and backs off honoring `Retry-After` (numeric **and** RFC 7231 HTTP-date, clamped non-negative, 120s ceiling) instead of a fixed sleep.
+- **Deprecation policy:** a centralized `sportsdataverse._deprecation` (`warn_deprecated` + `@deprecated`) with a documented removal window; the 11 per-type NFL loader aliases migrated to it.
+- **Codegen determinism:** generator output is LF-only on every platform and the ruff format pass is pinned to the project's ruff (no CRLF phantom diffs); idempotency tests lock it in.
+- **Tests:** a VCR-style record/replay harness (committed cassettes, secret-scrubbing) exercises the real `download()` → parser call path offline.
 
 ### The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)
 

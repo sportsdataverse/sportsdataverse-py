@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sportsdataverse"
-version = "0.0.57"
+version = "0.0.58"
 description = "Retrieve Sports data in Python"
 readme = "README.md"
 license = "MIT"
