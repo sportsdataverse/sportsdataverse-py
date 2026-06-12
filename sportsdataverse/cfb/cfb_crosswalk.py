@@ -41,11 +41,13 @@ Public surface:
 
 from __future__ import annotations
 
+import logging
 import re
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from email.utils import parsedate_to_datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Mapping, Optional, Sequence, TypeVar, Union
 
 import polars as pl
 
@@ -71,6 +73,27 @@ __all__ = [
 ]
 
 DataFrameT = Union[pl.DataFrame, "pd.DataFrame"]
+
+logger = logging.getLogger(__name__)
+
+_T = TypeVar("_T")
+
+
+def _thread_map(fn: Callable[[Any], _T], items: Sequence[Any], max_workers: int = 8) -> List[_T]:
+    """Apply ``fn`` to ``items`` concurrently, preserving input order.
+
+    The full-season crosswalk fires dozens of independent per-week fetches; a
+    small thread pool over the shared (connection-pooled, GET-thread-safe) HTTP
+    session turns those serial round trips into parallel ones. ``fn`` is expected
+    to be self-guarding (return ``[]`` on failure) so one slow/failed item never
+    sinks the batch.
+    """
+    items = list(items)
+    if len(items) <= 1:
+        return [fn(x) for x in items]
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(items))) as pool:
+        return list(pool.map(fn, items))
+
 
 # ---------------------------------------------------------------------------
 # Normalization layer (pure)
@@ -345,17 +368,24 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     try:
         cal = espn_cfb_calendar(season=season, **kwargs)
         slots = [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
-    except Exception:
+    except Exception as exc:
+        logger.warning("ESPN calendar fetch failed for %s; using default week slots: %s", season, exc)
         slots = []
     if not slots:  # calendar unavailable -> sensible default coverage
         slots = [(str(w), "2") for w in range(1, 17)] + [("1", "3"), ("999", "3")]
-    for week, stype in slots:
-        if str(stype) not in ("2", "3") or week is None:
-            continue
+    valid = [(w, st) for (w, st) in slots if w is not None and str(st) in ("2", "3")]
+
+    def _fetch(slot: tuple[Any, Any]) -> List[Dict[str, Any]]:
+        week, stype = slot
         try:
-            rows = _project_espn(espn_cfb_schedule(dates=season, week=int(week), season_type=int(stype), **kwargs))
-        except Exception:
-            continue
+            return _project_espn(espn_cfb_schedule(dates=season, week=int(week), season_type=int(stype), **kwargs))
+        except Exception as exc:
+            logger.warning("ESPN schedule fetch failed for %s week %s (st %s): %s", season, week, stype, exc)
+            return []
+
+    # Fetch weeks concurrently; dedup sequentially (order preserved) so "first
+    # wins" stays deterministic.
+    for rows in _thread_map(_fetch, valid):
         for row in rows:
             gid = row.get("game_id")
             if gid is not None and gid in seen:
@@ -414,7 +444,8 @@ def _fox_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # broad guard returning an empty list.
     try:
         return _project_fox(fox_cfb_schedule(segment_id=f"{season}-{week}-1", **kwargs))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Fox schedule fetch failed for %s week %s: %s", season, week, exc)
         return []
 
 
@@ -424,7 +455,8 @@ def _fox_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # offseason -- those simply fail to match and fall through as null Fox ids.
     try:
         return _project_fox(fox_cfb_schedule(season, **kwargs))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Fox full-season fetch failed for %s: %s", season, exc)
         return []
 
 
@@ -435,11 +467,16 @@ def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # the whole season. Dedup by game id across weeks.
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    for week in range(1, 24):
+
+    def _fetch(week: int) -> List[Dict[str, Any]]:
         try:
-            rows = _yahoo_games(season, week, **kwargs)
-        except Exception:
-            continue
+            return _yahoo_games(season, week, **kwargs)
+        except Exception as exc:
+            logger.warning("Yahoo scoreboard fetch/parse failed for %s week %s: %s", season, week, exc)
+            return []
+
+    # Fetch weeks concurrently; dedup sequentially (order preserved).
+    for rows in _thread_map(_fetch, list(range(1, 24))):
         for row in rows:
             gid = row.get("game_id")
             if gid is not None and gid in seen:

@@ -197,7 +197,9 @@ where = ["."]
 exclude = ["tests*", "docs*", "examples*", "archive*"]
 
 [tool.setuptools.package-data]
-sportsdataverse = ["cfb/models/*", "nfl/models/*"]
+# ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
+# package ships inline type information.
+sportsdataverse = ["cfb/models/*", "nfl/models/*", "py.typed"]
 
 
 [tool.isort]
@@ -246,3 +248,35 @@ ignore = [
 
 [tool.ruff.format]
 skip-magic-trailing-comma = false
+# Always emit LF so generated/formatted files are byte-identical across
+# platforms (Windows runs otherwise produced CRLF, showing as phantom diffs).
+line-ending = "lf"
+
+
+[tool.mypy]
+python_version = "3.10"
+# Strict-typing ratchet via ``files`` (NOT ``[[tool.mypy.overrides]]``): the gate
+# checks ONLY the curated modules listed below, in isolation. This is deliberate
+# and load-bearing -- ``files`` scopes *which* modules are checked, whereas
+# ``[[tool.mypy.overrides]]`` only tunes per-module strictness and cannot keep the
+# legacy surface out of scope. A whole-package run (what an overrides-based gate
+# would do) surfaces ~95 genuine pre-existing type errors plus ~2800 missing
+# annotations in not-yet-typed modules, which would make the gate permanently red.
+# ``follow_imports = "skip"`` makes imported symbols ``Any`` so a checked module
+# never drags an unchecked one into scope. Promote a module by appending it here
+# once it types cleanly. Run locally with ``uv run mypy`` (no args -- list is here).
+follow_imports = "skip"
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+files = [
+    "sportsdataverse/_deprecation.py",
+    "sportsdataverse/errors.py",
+    "sportsdataverse/cfb/cfb_crosswalk.py",
+    "sportsdataverse/cfb/cfb_fox_ext.py",
+    "sportsdataverse/cfb/cfb_yahoo_ext.py",
+    "sportsdataverse/nfl/config.py",
+    "sportsdataverse/nfl/utils_date.py",
+]

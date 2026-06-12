@@ -35,8 +35,7 @@ def test_parse_nhl_web_pbp_returns_one_row_per_play():
     assert isinstance(df, pl.DataFrame)
     # 2024 SCF G7 has 331 plays in the capture
     assert df.height >= 100, f"expected >=100 plays, got {df.height}"
-    for col in ("event_id", "type_code", "type_desc_key",
-                "time_in_period", "sort_order"):
+    for col in ("event_id", "type_code", "type_desc_key", "time_in_period", "sort_order"):
         assert col in df.columns, f"missing column {col!r}"
 
 
@@ -53,14 +52,10 @@ def test_parse_nhl_web_boxscore_unrolls_team_x_position_groups():
     assert "player_id" in df.columns
     # Verify both teams are present
     home_aways = set(df["home_away"].to_list())
-    assert home_aways == {"home", "away"}, (
-        f"expected both home and away rows, got {home_aways}"
-    )
+    assert home_aways == {"home", "away"}, f"expected both home and away rows, got {home_aways}"
     # Verify all 3 position groups present
     pos_groups = set(df["position_group"].to_list())
-    assert pos_groups == {"forwards", "defense", "goalies"}, (
-        f"expected all 3 position groups, got {pos_groups}"
-    )
+    assert pos_groups == {"forwards", "defense", "goalies"}, f"expected all 3 position groups, got {pos_groups}"
 
 
 def test_parse_nhl_web_landing_returns_single_row():
@@ -84,14 +79,16 @@ def test_parse_nhl_web_right_rail_returns_six_section_dict():
     out = parse_nhl_web_right_rail(payload)
     assert isinstance(out, dict)
     assert set(out) == {
-        "season_series", "shots_by_period", "team_game_stats",
-        "game_info", "linescore_by_period", "season_series_wins",
+        "season_series",
+        "shots_by_period",
+        "team_game_stats",
+        "game_info",
+        "linescore_by_period",
+        "season_series_wins",
     }
     # Each sub-frame should be a polars DataFrame, several should have rows
     for name, frame in out.items():
-        assert isinstance(frame, pl.DataFrame), (
-            f"{name}: returned {type(frame)}"
-        )
+        assert isinstance(frame, pl.DataFrame), f"{name}: returned {type(frame)}"
     # Specific row-count checks for sections that should always have data
     assert out["shots_by_period"].height == 3, "expected 3 periods"
     assert out["linescore_by_period"].height >= 3
@@ -213,9 +210,7 @@ def test_parse_nhl_web_roster_merges_three_position_groups():
     assert df.height >= 20
     assert "position_group" in df.columns
     pg = set(df["position_group"].to_list())
-    assert pg == {"forwards", "defensemen", "goalies"}, (
-        f"expected all 3 position groups, got {pg}"
-    )
+    assert pg == {"forwards", "defensemen", "goalies"}, f"expected all 3 position groups, got {pg}"
 
 
 def test_parse_nhl_web_player_landing_returns_rich_profile():
@@ -272,22 +267,25 @@ def test_parse_nhl_web_draft_picks_returns_one_row_per_pick():
 # ===========================================================================
 
 
-@pytest.mark.parametrize("parser_name", [
-    "parse_nhl_web_pbp",
-    "parse_nhl_web_boxscore",
-    "parse_nhl_web_landing",
-    "parse_nhl_web_schedule",
-    "parse_nhl_web_score",
-    "parse_nhl_web_scoreboard",
-    "parse_nhl_web_club_schedule",
-    "parse_nhl_web_standings",
-    "parse_nhl_web_standings_season",
-    "parse_nhl_web_roster",
-    "parse_nhl_web_player_landing",
-    "parse_nhl_web_player_game_log",
-    "parse_nhl_web_leaders",
-    "parse_nhl_web_draft_picks",
-])
+@pytest.mark.parametrize(
+    "parser_name",
+    [
+        "parse_nhl_web_pbp",
+        "parse_nhl_web_boxscore",
+        "parse_nhl_web_landing",
+        "parse_nhl_web_schedule",
+        "parse_nhl_web_score",
+        "parse_nhl_web_scoreboard",
+        "parse_nhl_web_club_schedule",
+        "parse_nhl_web_standings",
+        "parse_nhl_web_standings_season",
+        "parse_nhl_web_roster",
+        "parse_nhl_web_player_landing",
+        "parse_nhl_web_player_game_log",
+        "parse_nhl_web_leaders",
+        "parse_nhl_web_draft_picks",
+    ],
+)
 def test_parser_handles_empty_payload(parser_name):
     from sportsdataverse import nhl
 
@@ -316,9 +314,7 @@ def test_nhl_api_web_endpoint_parsers_registry_references_real_wrappers():
     from sportsdataverse.nhl import NHL_API_WEB_ENDPOINT_PARSERS
 
     for fn_name in NHL_API_WEB_ENDPOINT_PARSERS:
-        assert hasattr(nhl, fn_name), (
-            f"NHL_API_WEB_ENDPOINT_PARSERS references missing wrapper {fn_name!r}"
-        )
+        assert hasattr(nhl, fn_name), f"NHL_API_WEB_ENDPOINT_PARSERS references missing wrapper {fn_name!r}"
 
 
 def test_parser_for_nhl_api_web_returns_callable_or_none():

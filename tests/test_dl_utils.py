@@ -1,9 +1,60 @@
 from __future__ import annotations
 
+import types
+from datetime import datetime, timedelta, timezone
+from email.utils import format_datetime
+
 import pytest
 import requests
 
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import _MAX_RETRY_AFTER, _parse_retry_after, _retry_delay, download
+
+
+class TestRetryDelay:
+    """Offline tests for the retry backoff helper (no network)."""
+
+    def test_exponential_backoff_capped(self):
+        # base=0.5: 0.5, 1, 2, 4, then capped at 4.
+        assert _retry_delay(None, 0) == 0.5
+        assert _retry_delay(None, 1) == 1.0
+        assert _retry_delay(None, 3) == 4.0
+        assert _retry_delay(None, 10) == 4.0  # capped
+
+    def test_honors_numeric_retry_after_header(self):
+        resp = types.SimpleNamespace(headers={"Retry-After": "7"})
+        assert _retry_delay(resp, 0) == 7.0  # server's ask beats the exponential 0.5
+
+    def test_honors_long_retry_after_up_to_cap(self):
+        # >16s legitimate waits are honored now (not clipped to the old cap*4).
+        resp = types.SimpleNamespace(headers={"Retry-After": "45"})
+        assert _retry_delay(resp, 0) == 45.0
+
+    def test_retry_after_bounded_by_max(self):
+        # An outsized value is clamped so a stray header can't park us for minutes.
+        resp = types.SimpleNamespace(headers={"Retry-After": "100000"})
+        assert _retry_delay(resp, 0) == _MAX_RETRY_AFTER
+
+    def test_honors_http_date_retry_after(self):
+        # RFC 7231 also allows an HTTP-date; we convert it to seconds-from-now.
+        future = datetime.now(timezone.utc) + timedelta(seconds=30)
+        resp = types.SimpleNamespace(headers={"Retry-After": format_datetime(future, usegmt=True)})
+        delay = _retry_delay(resp, 0)
+        assert 25 <= delay <= 30  # ~30s, with slack for elapsed test time
+
+    def test_http_date_in_past_is_zero(self):
+        past = datetime.now(timezone.utc) - timedelta(seconds=60)
+        assert _parse_retry_after(format_datetime(past, usegmt=True)) == 0.0
+
+    def test_negative_retry_after_is_clamped_to_zero(self):
+        # RFC 7231 disallows negatives; clamp to 0 instead of returning -5.0,
+        # which would crash time.sleep(-5.0) and take down the retry loop.
+        resp = types.SimpleNamespace(headers={"Retry-After": "-5"})
+        assert _retry_delay(resp, 0) == 0.0
+        assert _parse_retry_after("-5") == 0.0
+
+    def test_bad_retry_after_falls_back_to_backoff(self):
+        resp = types.SimpleNamespace(headers={"Retry-After": "soon"})
+        assert _retry_delay(resp, 2) == 2.0  # unparseable -> exponential
 
 
 class TestDownload:

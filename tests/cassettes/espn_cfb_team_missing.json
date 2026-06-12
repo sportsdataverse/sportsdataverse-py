@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "interactions": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/99999999",
+        "params": "{}"
+      },
+      "response": {
+        "status_code": 404,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/99999999",
+        "body": "{\"code\": 404, \"detail\": \"no data found\", \"message\": \"no instance found\"}",
+        "content_type": "application/json"
+      }
+    }
+  ]
+}

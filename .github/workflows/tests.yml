@@ -91,4 +91,6 @@ jobs:
           # The workflow_dispatch input can override with live_tests: "false"
           # to skip live tests for a one-off run when upstream APIs are flaky.
           SDV_PY_LIVE_TESTS: ${{ github.event.inputs.live_tests != 'false' && '1' || '' }}
-        run: uv run --frozen pytest --maxfail=10
+        # --cov reports coverage (term-missing) without a hard fail-under floor
+        # yet; once a baseline is established a ratchet floor can be added.
+        run: uv run --frozen pytest --maxfail=10 --cov=sportsdataverse --cov-report=term-missing:skip-covered

@@ -55,8 +55,7 @@ def test_parse_mlb_api_team_roster_returns_one_row_per_player():
     df = parse_mlb_api_team_roster(_load("team_roster_yankees_2024"))
     # 40-man roster + injured / minor reserves can push past 50
     assert df.height >= 40, f"expected >=40 players, got {df.height}"
-    for col in ("jersey_number", "person_id", "person_full_name",
-                "position_code"):
+    for col in ("jersey_number", "person_id", "person_full_name", "position_code"):
         assert col in df.columns, f"missing column {col!r}"
 
 
@@ -69,8 +68,7 @@ def test_parse_mlb_api_standings_unrolls_divisions_to_teams():
     df = parse_mlb_api_standings(_load("standings_2024"))
     assert df.height >= 30, f"expected >=30 team-standings rows, got {df.height}"
     # Division context columns (namespaced)
-    for col in ("standings_division_id", "standings_division_name",
-                "standings_league_id"):
+    for col in ("standings_division_id", "standings_division_name", "standings_league_id"):
         assert col in df.columns, f"missing division context column {col!r}"
     # Team record columns from the unrolled teamRecords[]
     for col in ("team_id", "games_played", "league_rank"):
@@ -88,9 +86,7 @@ def test_parse_mlb_api_person_stats_unrolls_splits():
     assert "stats_type" in df.columns
     assert "stats_group" in df.columns
     # Stat columns from the inner ``stat`` block (flattened with stat_*)
-    assert any(c.startswith("stat_") for c in df.columns), (
-        f"no stat_* columns: {df.columns[:10]}"
-    )
+    assert any(c.startswith("stat_") for c in df.columns), f"no stat_* columns: {df.columns[:10]}"
 
 
 # ===========================================================================
@@ -98,18 +94,19 @@ def test_parse_mlb_api_person_stats_unrolls_splits():
 # ===========================================================================
 
 
-@pytest.mark.parametrize("fixture,expected_min", [
-    ("venues_active",  20),    # 1,646 venues in the capture
-    ("sports",          5),    # 20 sports
-    ("divisions",       6),    # 61 divisions across all sport IDs
-])
+@pytest.mark.parametrize(
+    "fixture,expected_min",
+    [
+        ("venues_active", 20),  # 1,646 venues in the capture
+        ("sports", 5),  # 20 sports
+        ("divisions", 6),  # 61 divisions across all sport IDs
+    ],
+)
 def test_parse_mlb_api_list_works_on_known_list_endpoints(fixture, expected_min):
     from sportsdataverse.mlb import parse_mlb_api_list
 
     df = parse_mlb_api_list(_load(fixture))
-    assert df.height >= expected_min, (
-        f"{fixture}: expected >= {expected_min} rows, got {df.height}"
-    )
+    assert df.height >= expected_min, f"{fixture}: expected >= {expected_min} rows, got {df.height}"
 
 
 # ===========================================================================
@@ -117,14 +114,17 @@ def test_parse_mlb_api_list_works_on_known_list_endpoints(fixture, expected_min)
 # ===========================================================================
 
 
-@pytest.mark.parametrize("parser_name", [
-    "parse_mlb_api_schedule",
-    "parse_mlb_api_teams",
-    "parse_mlb_api_team_roster",
-    "parse_mlb_api_standings",
-    "parse_mlb_api_person_stats",
-    "parse_mlb_api_list",
-])
+@pytest.mark.parametrize(
+    "parser_name",
+    [
+        "parse_mlb_api_schedule",
+        "parse_mlb_api_teams",
+        "parse_mlb_api_team_roster",
+        "parse_mlb_api_standings",
+        "parse_mlb_api_person_stats",
+        "parse_mlb_api_list",
+    ],
+)
 def test_parser_handles_empty_payload(parser_name):
     from sportsdataverse.mlb import mlb_api_parsers
 
@@ -177,7 +177,5 @@ def test_mlb_api_endpoint_parsers_registry_references_real_wrappers():
     from sportsdataverse.mlb import MLB_API_ENDPOINT_PARSERS
 
     for fn_name in MLB_API_ENDPOINT_PARSERS:
-        assert hasattr(mlb, fn_name), (
-            f"MLB_API_ENDPOINT_PARSERS references missing wrapper {fn_name!r}"
-        )
+        assert hasattr(mlb, fn_name), f"MLB_API_ENDPOINT_PARSERS references missing wrapper {fn_name!r}"
         assert callable(getattr(mlb, fn_name))

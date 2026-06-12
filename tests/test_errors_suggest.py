@@ -4,7 +4,23 @@ from __future__ import annotations
 
 import pytest
 
-from sportsdataverse.errors import _format_404, suggest_next_action
+from sportsdataverse.errors import (
+    NoESPNDataError,
+    SeasonNotFoundError,
+    SportsDataverseError,
+    _format_404,
+    suggest_next_action,
+)
+
+
+def test_error_hierarchy_under_base() -> None:
+    # Every package error is catchable via the single SportsDataverseError base,
+    # while remaining catchable individually (backwards compatible).
+    assert issubclass(SeasonNotFoundError, SportsDataverseError)
+    assert issubclass(NoESPNDataError, SportsDataverseError)
+    assert issubclass(SportsDataverseError, Exception)
+    with pytest.raises(SportsDataverseError):
+        raise NoESPNDataError("no data")
 
 
 @pytest.mark.parametrize(

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import warnings
 from typing import List
 
 import polars as pl
 from tqdm import tqdm
 
+from sportsdataverse._deprecation import warn_deprecated as _warn_deprecated
 from sportsdataverse.config import (
     NFL_BASE_URL,
     NFL_COMBINE_URL,
@@ -300,10 +300,10 @@ def load_nfl_ngs_passing(seasons: List[int] = None, return_as_pandas: bool = Fal
             from sportsdataverse.nfl import load_nfl_nextgen_stats
             ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
     """
-    warnings.warn(
-        "load_nfl_ngs_passing is deprecated; use load_nfl_nextgen_stats(stat_type='passing') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_ngs_passing",
+        replacement="load_nfl_nextgen_stats(stat_type='passing')",
+        removed_in="0.1.0",
     )
     if seasons is None:
         # Preserve the legacy "load every season" behavior of the original alias.
@@ -325,10 +325,10 @@ def load_nfl_ngs_rushing(seasons: List[int] = None, return_as_pandas: bool = Fal
             from sportsdataverse.nfl import load_nfl_nextgen_stats
             ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
     """
-    warnings.warn(
-        "load_nfl_ngs_rushing is deprecated; use load_nfl_nextgen_stats(stat_type='rushing') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_ngs_rushing",
+        replacement="load_nfl_nextgen_stats(stat_type='rushing')",
+        removed_in="0.1.0",
     )
     if seasons is None:
         data = pl.read_parquet(NFL_NGS_RUSHING_URL, use_pyarrow=True, columns=None)
@@ -349,10 +349,10 @@ def load_nfl_ngs_receiving(seasons: List[int] = None, return_as_pandas: bool = F
             from sportsdataverse.nfl import load_nfl_nextgen_stats
             ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
     """
-    warnings.warn(
-        "load_nfl_ngs_receiving is deprecated; use load_nfl_nextgen_stats(stat_type='receiving') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_ngs_receiving",
+        replacement="load_nfl_nextgen_stats(stat_type='receiving')",
+        removed_in="0.1.0",
     )
     if seasons is None:
         data = pl.read_parquet(NFL_NGS_RECEIVING_URL, use_pyarrow=True, columns=None)
@@ -510,10 +510,10 @@ def load_nfl_pfr_pass(return_as_pandas: bool = False) -> pl.DataFrame:
                 seasons=[2024], stat_type="pass", summary_level="season"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_pass is deprecated; use load_nfl_pfr_advstats(stat_type='pass', summary_level='season') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_pass",
+        replacement="load_nfl_pfr_advstats(stat_type='pass', summary_level='season')",
+        removed_in="0.1.0",
     )
     # Preserve the legacy "no seasons filter" behavior — read the full combined parquet.
     data = pl.read_parquet(NFL_PFR_SEASON_PASS_URL, use_pyarrow=True, columns=None)
@@ -535,11 +535,10 @@ def load_nfl_pfr_weekly_pass(seasons: List[int], return_as_pandas: bool = False)
                 seasons=[2024], stat_type="pass", summary_level="week"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_weekly_pass is deprecated; "
-        "use load_nfl_pfr_advstats(stat_type='pass', summary_level='week') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_weekly_pass",
+        replacement="load_nfl_pfr_advstats(stat_type='pass', summary_level='week')",
+        removed_in="0.1.0",
     )
     return load_nfl_pfr_advstats(seasons, stat_type="pass", summary_level="week", return_as_pandas=return_as_pandas)
 
@@ -559,10 +558,10 @@ def load_nfl_pfr_rush(return_as_pandas: bool = False) -> pl.DataFrame:
                 seasons=[2024], stat_type="rush", summary_level="season"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_rush is deprecated; use load_nfl_pfr_advstats(stat_type='rush', summary_level='season') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_rush",
+        replacement="load_nfl_pfr_advstats(stat_type='rush', summary_level='season')",
+        removed_in="0.1.0",
     )
     data = pl.read_parquet(NFL_PFR_SEASON_RUSH_URL, use_pyarrow=True, columns=None)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
@@ -583,11 +582,10 @@ def load_nfl_pfr_weekly_rush(seasons: List[int], return_as_pandas: bool = False)
                 seasons=[2024], stat_type="rush", summary_level="week"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_weekly_rush is deprecated; "
-        "use load_nfl_pfr_advstats(stat_type='rush', summary_level='week') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_weekly_rush",
+        replacement="load_nfl_pfr_advstats(stat_type='rush', summary_level='week')",
+        removed_in="0.1.0",
     )
     return load_nfl_pfr_advstats(seasons, stat_type="rush", summary_level="week", return_as_pandas=return_as_pandas)
 
@@ -607,10 +605,10 @@ def load_nfl_pfr_rec(return_as_pandas: bool = False) -> pl.DataFrame:
                 seasons=[2024], stat_type="rec", summary_level="season"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_rec is deprecated; use load_nfl_pfr_advstats(stat_type='rec', summary_level='season') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_rec",
+        replacement="load_nfl_pfr_advstats(stat_type='rec', summary_level='season')",
+        removed_in="0.1.0",
     )
     data = pl.read_parquet(NFL_PFR_SEASON_REC_URL, use_pyarrow=True, columns=None)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
@@ -631,11 +629,10 @@ def load_nfl_pfr_weekly_rec(seasons: List[int], return_as_pandas: bool = False) 
                 seasons=[2024], stat_type="rec", summary_level="week"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_weekly_rec is deprecated; "
-        "use load_nfl_pfr_advstats(stat_type='rec', summary_level='week') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_weekly_rec",
+        replacement="load_nfl_pfr_advstats(stat_type='rec', summary_level='week')",
+        removed_in="0.1.0",
     )
     return load_nfl_pfr_advstats(seasons, stat_type="rec", summary_level="week", return_as_pandas=return_as_pandas)
 
@@ -655,10 +652,10 @@ def load_nfl_pfr_def(return_as_pandas: bool = False) -> pl.DataFrame:
                 seasons=[2024], stat_type="def", summary_level="season"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_def is deprecated; use load_nfl_pfr_advstats(stat_type='def', summary_level='season') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_def",
+        replacement="load_nfl_pfr_advstats(stat_type='def', summary_level='season')",
+        removed_in="0.1.0",
     )
     data = pl.read_parquet(NFL_PFR_SEASON_DEF_URL, use_pyarrow=True, columns=None)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
@@ -679,11 +676,10 @@ def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas: bool = False) 
                 seasons=[2024], stat_type="def", summary_level="week"
             )
     """
-    warnings.warn(
-        "load_nfl_pfr_weekly_def is deprecated; "
-        "use load_nfl_pfr_advstats(stat_type='def', summary_level='week') instead",
-        DeprecationWarning,
-        stacklevel=2,
+    _warn_deprecated(
+        "load_nfl_pfr_weekly_def",
+        replacement="load_nfl_pfr_advstats(stat_type='def', summary_level='week')",
+        removed_in="0.1.0",
     )
     return load_nfl_pfr_advstats(seasons, stat_type="def", summary_level="week", return_as_pandas=return_as_pandas)
 

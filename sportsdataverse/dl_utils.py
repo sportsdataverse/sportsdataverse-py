@@ -4,16 +4,85 @@ import json
 import logging
 import re
 import time
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from itertools import chain, starmap
 
 import numpy as np
 import polars as pl
 import requests
+from requests.adapters import HTTPAdapter
 
 from sportsdataverse.errors import no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
+
+# Module-level pooled session: reuses TCP connections across the many small
+# requests a single workflow makes (e.g. a season crosswalk fires ~50). The
+# larger pool sizes support concurrent fetching. urllib3's connection pool is
+# thread-safe for concurrent GETs; callers needing isolation pass their own
+# ``session=``.
+_SHARED_SESSION = requests.Session()
+for _scheme in ("https://", "http://"):
+    _SHARED_SESSION.mount(_scheme, HTTPAdapter(pool_connections=16, pool_maxsize=32))
+
+
+# Hard ceiling (seconds) on an honored ``Retry-After``. RFC 7231 lets a server
+# name an arbitrarily long wait; we cap it so a stray (or hostile) header can't
+# park a request in ``time.sleep`` for minutes. 120s comfortably covers real
+# rate-limit windows while bounding worst-case latency.
+_MAX_RETRY_AFTER = 120.0
+
+
+def _parse_retry_after(value: str) -> float | None:
+    """Parse a ``Retry-After`` value into seconds, or ``None`` if unparseable.
+
+    Per RFC 7231 the header is either a non-negative integer count of seconds or
+    an HTTP-date. Both forms are clamped at 0 — a numeric ``-5`` or an HTTP-date
+    already in the past yields ``0.0`` rather than a negative sleep (which would
+    raise ``ValueError`` in ``time.sleep`` and crash the retry loop).
+    """
+    try:
+        return max(0.0, float(value))
+    except (TypeError, ValueError):
+        pass
+    try:
+        when = parsedate_to_datetime(value)
+    except (TypeError, ValueError):
+        return None
+    if when is None:
+        return None
+    if when.tzinfo is None:  # RFC dates are GMT; tolerate a naive parse
+        when = when.replace(tzinfo=timezone.utc)
+    return max(0.0, (when - datetime.now(timezone.utc)).total_seconds())
+
+
+def _retry_delay(
+    response: object,
+    attempt: int,
+    *,
+    base: float = 0.5,
+    cap: float = 4.0,
+    max_retry_after: float = _MAX_RETRY_AFTER,
+) -> float:
+    """Seconds to wait before the next retry.
+
+    Honors a ``Retry-After`` header (429 / 503 rate limiting) when present so we
+    back off exactly as the server asks -- both the numeric-seconds and
+    HTTP-date forms RFC 7231 permits -- bounded by ``max_retry_after`` so an
+    outsized value can't park the request in ``time.sleep`` indefinitely. When
+    the header is absent or unparseable, falls back to capped exponential
+    backoff (gentler than a fixed sleep on quick-recovery transients, politer
+    than hammering on persistent ones).
+    """
+    headers = getattr(response, "headers", None)
+    retry_after = headers.get("Retry-After") if headers else None
+    if retry_after:
+        secs = _parse_retry_after(retry_after)
+        if secs is not None:
+            return min(max_retry_after, secs)
+    return min(cap, base * (2**attempt))
 
 
 def download(
@@ -44,8 +113,11 @@ def download(
             (e.g. ``{"http": "http://host:port", "https": "http://host:port"}``).
         timeout: Per-request timeout in seconds. Defaults to ``30``.
         num_retries: Maximum retries before giving up. Defaults to ``15``.
-        session: Optional ``requests.Session`` to reuse. A fresh session
-            is constructed when ``None``.
+        session: Optional ``requests.Session`` to reuse. Defaults to the
+            module-level pooled ``_SHARED_SESSION`` when ``None`` — its
+            connection pool *and cookie jar* are shared across all calls that
+            don't pass their own session. Pass an explicit ``requests.Session``
+            when you need isolation (separate cookies / auth / proxy lifecycle).
         logger: Optional ``logging.Logger``. Defaults to the package
             logger ``"sdv.dl_utils"``.
 
@@ -170,7 +242,7 @@ def download(
                     attempt + 1,
                     num_retries,
                 )
-            time.sleep(2)
+            time.sleep(_retry_delay(response, attempt))
 
     # Retry budget exhausted. Re-raise the last captured exception so
     # callers can react (and the test suite can assert on the failure
@@ -185,7 +257,7 @@ def init_request_settings(params, session, logger):
         params = {}
 
     if session is None:
-        session = requests.Session()
+        session = _SHARED_SESSION
 
     if logger is None:
         logger = logging.getLogger("sdv.dl_utils")

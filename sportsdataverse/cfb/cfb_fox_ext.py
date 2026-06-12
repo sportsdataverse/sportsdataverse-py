@@ -13,6 +13,7 @@ is added to ``tools/codegen``, this module can be regenerated.
 
 from __future__ import annotations
 
+import logging
 import re
 from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Union, overload
 
@@ -23,6 +24,8 @@ if TYPE_CHECKING:
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY  # single source of truth for the public Fox key
+
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "fox_cfb_teams",
@@ -74,7 +77,7 @@ def _table_rows(tbl: Optional[dict], extra: Optional[dict] = None) -> List[Dict]
     return out
 
 
-def _cells(columns) -> List[Optional[str]]:
+def _cells(columns: Any) -> List[Optional[str]]:
     return [c.get("text") if isinstance(c, dict) else c for c in (columns or [])]
 
 
@@ -213,8 +216,8 @@ def _fox_segment_ids(season: int, group_id: Union[int, str], **kwargs: Any) -> L
         # The CFP lives under its own group; it is supplemental (the bowls segment
         # already carries CFP games), so a failure here must not abort enumeration.
         mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("Fox CFP group enumeration failed for %s (continuing without it): %s", season, exc)
     ids: List[str] = []
     seen: set[str] = set()
     for main in mains:
@@ -749,7 +752,8 @@ def fox_cfb_team_gamelog(
             headers = _cells((tbl.get("headers") or [{}])[0].get("columns"))
             season_type = headers[0] if headers else None  # first header = split label
             raw_stats = headers[2:]  # skip date + opponent columns
-            stat_names, seen = [], {}
+            stat_names: List[str] = []
+            seen: Dict[str, int] = {}
             for h in raw_stats:  # dedupe repeated names (e.g. two "YDS")
                 base = _clean(h)
                 seen[base] = seen.get(base, 0) + 1
