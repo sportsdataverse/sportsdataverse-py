@@ -854,15 +854,24 @@ xwalk = cfb_odds_events_crosswalk(season=2024, week=5)
 matched = xwalk.filter(pl.col("espn_game_id").is_not_null())
 ```
 
-### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
+### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
 
-Build the ESPN x Fox player-id crosswalk for one team.
+Build the ESPN x Fox x Yahoo player-id crosswalk for one team.
 
-Fetches both providers' rosters for the given team, matches players on
+Fetches the selected providers' players for the team, matches them on
 normalized name (with jersey as a confidence signal), and returns each
-player's ESPN and Fox athlete ids side by side. Use
+player's ESPN, Fox, and Yahoo athlete ids side by side. Use
 `cfb_teams_crosswalk` first to translate an ESPN team id into the
-matching Fox team id. Yahoo is excluded — it ships no roster endpoint.
+matching Fox team id.
+
+ESPN and Fox provide full rosters, so the default is `("espn", "fox")`.
+**Yahoo is opt-in** (pass `providers=("espn", "fox", "yahoo")`) because it
+has no roster endpoint — its only player feed is the season stat-leaderboard
+(`sportsdataverse.cfb.yahoo_cfb_player_season_stats`), which is the
+league's top ~200 players (roughly one per team) and frequently includes no
+player for a given team at all. When selected, the team is resolved by
+matching Yahoo's (abbreviated) team name against the ESPN team's name; if it
+can't be resolved, the Yahoo columns are simply null.
 
 **Parameters**
 
@@ -870,21 +879,27 @@ matching Fox team id. Yahoo is excluded — it ships no roster endpoint.
 |---|---|---|---|
 | `espn_team_id` | `Union[int, str]` |  | ESPN team id (e.g. `194` for Ohio State). |
 | `fox_team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `25` for Ohio State). |
+| `season` | `Optional[int]` | `None` | Season year for the Yahoo player-stats leg. Defaults to the most recent CFB season. Unused when Yahoo isn't selected. |
+| `providers` | `Optional[Sequence[str]]` | `None` | Which sources to include — any of `"espn"`, `"fox"`, `"yahoo"`. `None` (default) uses `("espn", "fox")`; add `"yahoo"` explicitly for its (sparse) leg, or pass a single source. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
 
 **Returns**
 
-A polars DataFrame (pandas when `return_as_pandas=True`) with columns `person_key`, `espn_athlete_id`, `fox_athlete_id`, `name`, `espn_jersey`, `fox_jersey`, `espn_position`, `fox_position`, `match_method`, `matched_sources`. `match_method` is one of `name_jersey` (name + jersey agree), `name` (name only), `name_jersey_conflict` (name matches but jerseys differ — review), or `unmatched`.
+A polars DataFrame (pandas when `return_as_pandas=True`) with columns `person_key`, `espn_athlete_id`, `fox_athlete_id`, `yahoo_athlete_id`, `name`, `espn_jersey`, `fox_jersey`, `espn_position`, `fox_position`, `yahoo_position`, `match_method`, `matched_sources`. `match_method` reflects the ESPN/Fox jersey agreement: `name_jersey` (agree), `name` (name only), `name_jersey_conflict` (jerseys differ — review), or `unmatched`.
 
 **Example**
 
 ```python
 from sportsdataverse.cfb import cfb_rosters_crosswalk
-xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25)
+xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25, season=2024)
 matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
+
+# Just ESPN vs Fox (skip Yahoo's partial leg)
+
+espn_fox = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox"))
 ```
 
-### `cfb_schedule_crosswalk(season: 'int', week: 'Optional[int]' = None, *, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_schedule_crosswalk}
+### `cfb_schedule_crosswalk(season: 'int', week: 'Optional[int]' = None, *, season_type: 'int' = 2, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_schedule_crosswalk}
 
 Build the ESPN x Fox x Yahoo CFB game-id crosswalk.
 
@@ -915,6 +930,7 @@ provider's columns null rather than failing the call.
 | `season` | `int` |  | Season year (e.g. `2024`). |
 | `week` | `Optional[int]` | `None` | Schedule week number for single-week mode; omit (`None`) for the whole season. |
 | `season_type` | `int` | `2` | ESPN season type for single-week mode — `2` regular, `3` post-season (`week=1` bowls, `week=999` CFP). Ignored in full-season mode. Defaults to `2`. |
+| `providers` | `Optional[Sequence[str]]` | `None` | Which sources to include — any of `"espn"`, `"fox"`, `"yahoo"`. `None` (default) uses all three; pass a subset for a pairwise crosswalk (e.g. `("espn", "fox")`) or a single source. Unselected providers are not fetched and surface as null columns. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
 
 **Returns**
@@ -933,12 +949,12 @@ all_three = full.filter(pl.col("matched_sources") == "espn+fox+yahoo")
 wk5 = cfb_schedule_crosswalk(2024, 5)
 ```
 
-### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
+### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
 
 Build the ESPN x Fox x Yahoo CFB team-id crosswalk.
 
-Fetches all three provider team directories, normalizes each team name to a
-shared key, and full-outer-joins them so every row carries each provider's
+Fetches the selected provider team directories, normalizes each team name to
+a shared key, and full-outer-joins them so every row carries each provider's
 id, name, and abbreviation (`None` where a provider has no match). The
 `matched_sources` column records which providers contributed.
 
@@ -948,6 +964,7 @@ id, name, and abbreviation (`None` where a provider has no match). The
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Season year used only to fetch Yahoo's embedded team directory (Yahoo has no standalone teams endpoint). Defaults to the most recent CFB season. |
 | `week` | `int` | `1` | Schedule week used for the Yahoo scoreboard fetch. Defaults to `1`. The embedded directory is the full league list regardless. |
+| `providers` | `Optional[Sequence[str]]` | `None` | Which sources to include — any of `"espn"`, `"fox"`, `"yahoo"`. `None` (default) uses all three; pass a subset for a pairwise crosswalk (e.g. `("espn", "fox")`) or a single source. Unselected providers are not fetched and surface as null columns. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
 
 **Returns**
@@ -961,12 +978,9 @@ from sportsdataverse.cfb import cfb_teams_crosswalk
 xwalk = cfb_teams_crosswalk(season=2024)
 row = xwalk.filter(pl.col("espn_team_id") == 194)  # Ohio State
 
-# Find teams only one provider knows about
+# Pairwise — just ESPN vs Fox
 
-import polars as pl
-gaps = cfb_teams_crosswalk(season=2024).filter(
-    pl.col("matched_sources") != "espn+fox+yahoo"
-)
+espn_fox = cfb_teams_crosswalk(providers=("espn", "fox"))
 ```
 
 ### `espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_teams}

@@ -57,7 +57,11 @@ from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_team_roster
 from sportsdataverse.cfb.cfb_fox_ext import fox_cfb_schedule, fox_cfb_team_roster, fox_cfb_teams
 from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
 from sportsdataverse.cfb.cfb_teams import espn_cfb_teams
-from sportsdataverse.cfb.cfb_yahoo_ext import yahoo_cfb_scoreboard, yahoo_cfb_teams
+from sportsdataverse.cfb.cfb_yahoo_ext import (
+    yahoo_cfb_player_season_stats,
+    yahoo_cfb_scoreboard,
+    yahoo_cfb_teams,
+)
 
 __all__ = [
     "cfb_teams_crosswalk",
@@ -140,8 +144,9 @@ def _norm_person(name: Optional[str]) -> str:
     """Normalize a player name for cross-provider roster matching.
 
     Handles the ``"Last, First"`` form (some feeds invert), ASCII-folds, drops
-    punctuation (so ``"C.J. Stroud"`` -> ``"c j stroud"``), and collapses
-    whitespace.
+    punctuation, collapses whitespace, and **merges runs of single-letter
+    tokens** so initials match regardless of spacing/dots: ``"C.J. Stroud"`` and
+    ``"CJ Stroud"`` both -> ``"cj stroud"``.
 
     Args:
         name: A player's displayed name from any provider.
@@ -156,8 +161,21 @@ def _norm_person(name: Optional[str]) -> str:
         last, _, first = text.partition(",")
         text = f"{first.strip()} {last.strip()}"
     folded = _ascii_fold(text).lower()
-    cleaned = re.sub(r"[^a-z0-9]+", " ", folded)
-    return re.sub(r"\s+", " ", cleaned).strip()
+    parts = re.sub(r"[^a-z0-9]+", " ", folded).split()
+    # merge consecutive single-character tokens ("c j" -> "cj") so "C.J."=="CJ"
+    merged: List[str] = []
+    i = 0
+    while i < len(parts):
+        if len(parts[i]) == 1:
+            run, j = parts[i], i + 1
+            while j < len(parts) and len(parts[j]) == 1:
+                run, j = run + parts[j], j + 1
+            merged.append(run)
+            i = j
+        else:
+            merged.append(parts[i])
+            i += 1
+    return " ".join(merged)
 
 
 def _norm_jersey(value: Any) -> str:
@@ -207,6 +225,25 @@ def _pick(row: Mapping[str, Any], *candidates: str) -> Any:
         if key in row and row[key] is not None:
             return row[key]
     return None
+
+
+def _resolve_providers(providers: Optional[Sequence[str]], allowed: Sequence[str]) -> set[str]:
+    """Validate/normalize a ``providers`` selection against the allowed set.
+
+    ``None`` selects every allowed provider (the full cross-provider join);
+    a subset selects just those (e.g. ``("espn", "fox")`` for a pairwise
+    crosswalk, or ``("fox",)`` for that source alone). Unselected providers are
+    simply not fetched and surface as null columns.
+    """
+    if providers is None:
+        return set(allowed)
+    selected = {str(p).lower() for p in providers}
+    unknown = selected - set(allowed)
+    if unknown:
+        raise ValueError(f"unknown providers {sorted(unknown)}; allowed: {sorted(allowed)}")
+    if not selected:
+        raise ValueError("providers must select at least one source")
+    return selected
 
 
 # ---------------------------------------------------------------------------
@@ -470,6 +507,58 @@ def _fox_roster(team_id: Union[int, str], **kwargs: Any) -> List[Dict[str, Any]]
     return out
 
 
+def _espn_team_name_keys(espn_team_id: Union[int, str], **kwargs: Any) -> set[str]:
+    """Normalized name keys for an ESPN team id (location + display + name).
+
+    Used to filter Yahoo's league-wide player list down to one team, since
+    Yahoo tags each player only with a team *name* (often the location, e.g.
+    ``"Ohio State"``), not an id.
+    """
+    keys: set[str] = set()
+    target = str(espn_team_id)
+    for r in _rows(espn_cfb_teams(**kwargs)):
+        if str(_pick(r, "team_id")) != target:
+            continue
+        for k in ("team_location", "team_display_name", "team_name", "team_nickname"):
+            nk = _norm_team(_pick(r, k))
+            if nk:
+                keys.add(nk)
+        break
+    return keys
+
+
+def _yahoo_roster(season: int, team_keys: set[str], **kwargs: Any) -> List[Dict[str, Any]]:
+    """Yahoo players for one team, from the season player-stats leaderboard.
+
+    Yahoo has no roster endpoint, so this is the season stat-leaders
+    (``yahoo_cfb_player_season_stats``) filtered to the target team -- i.e.
+    **very partial** coverage: that endpoint returns only the league's top ~200
+    players (roughly one per team), not full rosters. Yahoo also abbreviates
+    team names ("Ohio St." vs ESPN "Ohio State"), so the trailing ``st`` token is
+    expanded to ``state`` before matching. Empty ``team_keys`` yields no players.
+    """
+    if not team_keys:
+        return []
+    out: List[Dict[str, Any]] = []
+    for r in _rows(yahoo_cfb_player_season_stats(season, **kwargs)):
+        team_norm = _norm_team(_pick(r, "team"))
+        team_norm_state = re.sub(r" st$", " state", team_norm)  # "ohio st" -> "ohio state"
+        if team_norm not in team_keys and team_norm_state not in team_keys:
+            continue
+        name = _pick(r, "display_name")
+        out.append(
+            {
+                "person_key": _norm_person(name),
+                "jersey_key": "",  # Yahoo player stats carry no jersey
+                "athlete_id": _pick(r, "player_id"),
+                "name": name,
+                "jersey": None,
+                "position": _pick(r, "position", "positions"),
+            }
+        )
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Pure merge builders (no network) -> list[dict]
 # ---------------------------------------------------------------------------
@@ -580,6 +669,12 @@ def _merge_schedule(
         key = y.get("matchup_key")
         if key and key not in espn_keys:
             out.append(_schedule_row(None, fox_by.get(key) if key else None, y))
+    if not espn:  # no ESPN anchor (Fox-only/Fox+Yahoo selection) -> surface Fox games too
+        yahoo_keys = {r["matchup_key"] for r in yahoo if r.get("matchup_key")}
+        for f in fox:
+            key = f.get("matchup_key")
+            if key and key not in yahoo_keys:
+                out.append(_schedule_row(None, f, None))
     return out
 
 
@@ -650,6 +745,12 @@ def _merge_schedule_full(
         if key and key not in espn_keys:
             f = _pick_match(fox_idx.get(key, []), y.get("date"))
             out.append(_schedule_row(None, f, y))
+    if not espn:  # no ESPN anchor (Fox-only/Fox+Yahoo selection) -> surface Fox games too
+        yahoo_keys = {r["matchup_key"] for r in yahoo if r.get("matchup_key")}
+        for f in fox:
+            key = f.get("matchup_key")
+            if key and key not in yahoo_keys:
+                out.append(_schedule_row(None, f, None))
     return out
 
 
@@ -681,15 +782,20 @@ def _merge_odds(
 def _merge_rosters(
     espn: Sequence[Mapping[str, Any]],
     fox: Sequence[Mapping[str, Any]],
+    yahoo: Sequence[Mapping[str, Any]],
 ) -> List[Dict[str, Any]]:
-    """Full-outer-join ESPN + Fox rosters on normalized name (pure).
+    """Full-outer-join ESPN + Fox + Yahoo rosters on normalized name (pure).
 
-    Matches on ``person_key`` (normalized name); when the same name appears on
-    both sides with conflicting jerseys the row is still emitted but tagged
-    ``match_method="name_jersey_conflict"`` so the caller can review it.
+    Matches on ``person_key`` (normalized name). ``match_method`` reflects the
+    ESPN/Fox jersey agreement (Yahoo player stats carry no jersey): ``name_jersey``
+    when both jerseys agree, ``name_jersey_conflict`` when they differ (review),
+    ``name`` for a name-only match, ``unmatched`` otherwise. Players appearing on
+    only one source surface with that source's columns and the rest null.
     """
     fox_by = _index_by(fox, "person_key")
+    yahoo_by = _index_by(yahoo, "person_key")
     espn_keys = {r["person_key"] for r in espn if r.get("person_key")}
+    fox_keys = {r["person_key"] for r in fox if r.get("person_key")}
 
     def method(e: Optional[Mapping[str, Any]], f: Optional[Mapping[str, Any]]) -> str:
         if e is None or f is None:
@@ -699,29 +805,41 @@ def _merge_rosters(
             return "name_jersey_conflict"
         return "name_jersey" if ej and fj and ej == fj else "name"
 
-    def row(e: Optional[Mapping[str, Any]], f: Optional[Mapping[str, Any]]) -> Dict[str, Any]:
-        anchor = e or f or {}
+    def row(
+        e: Optional[Mapping[str, Any]],
+        f: Optional[Mapping[str, Any]],
+        y: Optional[Mapping[str, Any]],
+    ) -> Dict[str, Any]:
+        anchor = e or f or y or {}
         return {
             "person_key": anchor.get("person_key"),
             "espn_athlete_id": e.get("athlete_id") if e else None,
             "fox_athlete_id": f.get("athlete_id") if f else None,
-            "name": (e or {}).get("name") or (f or {}).get("name"),
+            "yahoo_athlete_id": y.get("athlete_id") if y else None,
+            "name": (e or {}).get("name") or (f or {}).get("name") or (y or {}).get("name"),
             "espn_jersey": e.get("jersey") if e else None,
             "fox_jersey": f.get("jersey") if f else None,
             "espn_position": e.get("position") if e else None,
             "fox_position": f.get("position") if f else None,
+            "yahoo_position": y.get("position") if y else None,
             "match_method": method(e, f),
-            "matched_sources": _matched_sources([("espn", e is not None), ("fox", f is not None)]),
+            "matched_sources": _matched_sources(
+                [("espn", e is not None), ("fox", f is not None), ("yahoo", y is not None)]
+            ),
         }
 
     out: List[Dict[str, Any]] = []
     for e in espn:
         key = e.get("person_key")
-        out.append(row(e, fox_by.get(key) if key else None))
-    for f in fox:
+        out.append(row(e, fox_by.get(key) if key else None, yahoo_by.get(key) if key else None))
+    for f in fox:  # Fox players ESPN didn't list
         key = f.get("person_key")
         if key and key not in espn_keys:
-            out.append(row(None, f))
+            out.append(row(None, f, yahoo_by.get(key)))
+    for y in yahoo:  # Yahoo players neither ESPN nor Fox listed
+        key = y.get("person_key")
+        if key and key not in espn_keys and key not in fox_keys:
+            out.append(row(None, None, y))
     return out
 
 
@@ -772,11 +890,13 @@ _ROSTER_SCHEMA: Dict[str, "PolarsDataType"] = {
     "person_key": pl.Utf8,
     "espn_athlete_id": pl.Int64,
     "fox_athlete_id": pl.Utf8,
+    "yahoo_athlete_id": pl.Utf8,
     "name": pl.Utf8,
     "espn_jersey": pl.Utf8,
     "fox_jersey": pl.Utf8,
     "espn_position": pl.Utf8,
     "fox_position": pl.Utf8,
+    "yahoo_position": pl.Utf8,
     "match_method": pl.Utf8,
     "matched_sources": pl.Utf8,
 }
@@ -825,13 +945,14 @@ def cfb_teams_crosswalk(
     *,
     season: Optional[int] = None,
     week: int = 1,
+    providers: Optional[Sequence[str]] = None,
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> DataFrameT:
     """Build the ESPN x Fox x Yahoo CFB team-id crosswalk.
 
-    Fetches all three provider team directories, normalizes each team name to a
-    shared key, and full-outer-joins them so every row carries each provider's
+    Fetches the selected provider team directories, normalizes each team name to
+    a shared key, and full-outer-joins them so every row carries each provider's
     id, name, and abbreviation (``None`` where a provider has no match). The
     ``matched_sources`` column records which providers contributed.
 
@@ -841,6 +962,10 @@ def cfb_teams_crosswalk(
             recent CFB season.
         week: Schedule week used for the Yahoo scoreboard fetch. Defaults to
             ``1``. The embedded directory is the full league list regardless.
+        providers: Which sources to include — any of ``"espn"``, ``"fox"``,
+            ``"yahoo"``. ``None`` (default) uses all three; pass a subset for a
+            pairwise crosswalk (e.g. ``("espn", "fox")``) or a single source.
+            Unselected providers are not fetched and surface as null columns.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars.
         **kwargs: Forwarded to the underlying provider HTTP getters.
@@ -858,22 +983,20 @@ def cfb_teams_crosswalk(
             xwalk = cfb_teams_crosswalk(season=2024)
             row = xwalk.filter(pl.col("espn_team_id") == 194)  # Ohio State
 
-        Find teams only one provider knows about::
+        Pairwise — just ESPN vs Fox::
 
-            import polars as pl
-            gaps = cfb_teams_crosswalk(season=2024).filter(
-                pl.col("matched_sources") != "espn+fox+yahoo"
-            )
+            espn_fox = cfb_teams_crosswalk(providers=("espn", "fox"))
 
         See Also:
             * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB data
     """
+    sel = _resolve_providers(providers, ("espn", "fox", "yahoo"))
     if season is None:
         season = most_recent_cfb_season()
     rows = _merge_teams(
-        _espn_team_dir(**kwargs),
-        _fox_team_dir(**kwargs),
-        _yahoo_team_dir(season, week, **kwargs),
+        _espn_team_dir(**kwargs) if "espn" in sel else [],
+        _fox_team_dir(**kwargs) if "fox" in sel else [],
+        _yahoo_team_dir(season, week, **kwargs) if "yahoo" in sel else [],
     )
     return _materialize(rows, _TEAMS_SCHEMA, return_as_pandas)
 
@@ -883,6 +1006,7 @@ def cfb_schedule_crosswalk(
     week: Optional[int] = None,
     *,
     season_type: int = 2,
+    providers: Optional[Sequence[str]] = None,
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> DataFrameT:
@@ -915,6 +1039,10 @@ def cfb_schedule_crosswalk(
         season_type: ESPN season type for single-week mode — ``2`` regular,
             ``3`` post-season (``week=1`` bowls, ``week=999`` CFP). Ignored in
             full-season mode. Defaults to ``2``.
+        providers: Which sources to include — any of ``"espn"``, ``"fox"``,
+            ``"yahoo"``. ``None`` (default) uses all three; pass a subset for a
+            pairwise crosswalk (e.g. ``("espn", "fox")``) or a single source.
+            Unselected providers are not fetched and surface as null columns.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars.
         **kwargs: Forwarded to the underlying provider HTTP getters.
@@ -939,17 +1067,18 @@ def cfb_schedule_crosswalk(
         See Also:
             * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB schedules
     """
+    sel = _resolve_providers(providers, ("espn", "fox", "yahoo"))
     if week is None:  # whole season: match by team + date
         rows = _merge_schedule_full(
-            _espn_season_games(season, **kwargs),
-            _fox_season_games(season, **kwargs),
-            _yahoo_season_games(season, **kwargs),
+            _espn_season_games(season, **kwargs) if "espn" in sel else [],
+            _fox_season_games(season, **kwargs) if "fox" in sel else [],
+            _yahoo_season_games(season, **kwargs) if "yahoo" in sel else [],
         )
     else:  # single week: match by team
         rows = _merge_schedule(
-            _espn_games(season, week, season_type, **kwargs),
-            _fox_games(season, week, **kwargs),
-            _yahoo_games(season, week, **kwargs),
+            _espn_games(season, week, season_type, **kwargs) if "espn" in sel else [],
+            _fox_games(season, week, **kwargs) if "fox" in sel else [],
+            _yahoo_games(season, week, **kwargs) if "yahoo" in sel else [],
         )
     return _materialize(rows, _SCHEDULE_SCHEMA, return_as_pandas)
 
@@ -958,46 +1087,74 @@ def cfb_rosters_crosswalk(
     espn_team_id: Union[int, str],
     fox_team_id: Union[int, str],
     *,
+    season: Optional[int] = None,
+    providers: Optional[Sequence[str]] = None,
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> DataFrameT:
-    """Build the ESPN x Fox player-id crosswalk for one team.
+    """Build the ESPN x Fox x Yahoo player-id crosswalk for one team.
 
-    Fetches both providers' rosters for the given team, matches players on
+    Fetches the selected providers' players for the team, matches them on
     normalized name (with jersey as a confidence signal), and returns each
-    player's ESPN and Fox athlete ids side by side. Use
+    player's ESPN, Fox, and Yahoo athlete ids side by side. Use
     :func:`cfb_teams_crosswalk` first to translate an ESPN team id into the
-    matching Fox team id. Yahoo is excluded — it ships no roster endpoint.
+    matching Fox team id.
+
+    ESPN and Fox provide full rosters, so the default is ``("espn", "fox")``.
+    **Yahoo is opt-in** (pass ``providers=("espn", "fox", "yahoo")``) because it
+    has no roster endpoint — its only player feed is the season stat-leaderboard
+    (:func:`sportsdataverse.cfb.yahoo_cfb_player_season_stats`), which is the
+    league's top ~200 players (roughly one per team) and frequently includes no
+    player for a given team at all. When selected, the team is resolved by
+    matching Yahoo's (abbreviated) team name against the ESPN team's name; if it
+    can't be resolved, the Yahoo columns are simply null.
 
     Args:
         espn_team_id: ESPN team id (e.g. ``194`` for Ohio State).
         fox_team_id: Fox Bifrost team id (e.g. ``25`` for Ohio State).
+        season: Season year for the Yahoo player-stats leg. Defaults to the most
+            recent CFB season. Unused when Yahoo isn't selected.
+        providers: Which sources to include — any of ``"espn"``, ``"fox"``,
+            ``"yahoo"``. ``None`` (default) uses ``("espn", "fox")``; add
+            ``"yahoo"`` explicitly for its (sparse) leg, or pass a single source.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars.
         **kwargs: Forwarded to the underlying provider HTTP getters.
 
     Returns:
         A polars DataFrame (pandas when ``return_as_pandas=True``) with columns
-        ``person_key``, ``espn_athlete_id``, ``fox_athlete_id``, ``name``,
-        ``espn_jersey``, ``fox_jersey``, ``espn_position``, ``fox_position``,
-        ``match_method``, ``matched_sources``. ``match_method`` is one of
-        ``name_jersey`` (name + jersey agree), ``name`` (name only),
-        ``name_jersey_conflict`` (name matches but jerseys differ — review),
-        or ``unmatched``.
+        ``person_key``, ``espn_athlete_id``, ``fox_athlete_id``,
+        ``yahoo_athlete_id``, ``name``, ``espn_jersey``, ``fox_jersey``,
+        ``espn_position``, ``fox_position``, ``yahoo_position``,
+        ``match_method``, ``matched_sources``. ``match_method`` reflects the
+        ESPN/Fox jersey agreement: ``name_jersey`` (agree), ``name`` (name only),
+        ``name_jersey_conflict`` (jerseys differ — review), or ``unmatched``.
 
     Example:
-        Crosswalk Ohio State's roster across ESPN and Fox::
+        Crosswalk Ohio State's roster across all three::
 
             from sportsdataverse.cfb import cfb_rosters_crosswalk
-            xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25)
+            xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25, season=2024)
             matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
+
+        Just ESPN vs Fox (skip Yahoo's partial leg)::
+
+            espn_fox = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox"))
 
         See Also:
             * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB rosters
     """
+    # Yahoo is opt-in for rosters (no roster endpoint); default is ESPN + Fox.
+    sel = _resolve_providers(providers or ("espn", "fox"), ("espn", "fox", "yahoo"))
+    yahoo: List[Dict[str, Any]] = []
+    if "yahoo" in sel:
+        if season is None:
+            season = most_recent_cfb_season()
+        yahoo = _yahoo_roster(season, _espn_team_name_keys(espn_team_id, **kwargs), **kwargs)
     rows = _merge_rosters(
-        _espn_roster(espn_team_id, **kwargs),
-        _fox_roster(fox_team_id, **kwargs),
+        _espn_roster(espn_team_id, **kwargs) if "espn" in sel else [],
+        _fox_roster(fox_team_id, **kwargs) if "fox" in sel else [],
+        yahoo,
     )
     return _materialize(rows, _ROSTER_SCHEMA, return_as_pandas)
 

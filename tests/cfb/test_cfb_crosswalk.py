@@ -83,8 +83,9 @@ def test_norm_team_aliases_are_non_colliding() -> None:
 @pytest.mark.parametrize(
     "raw,expected",
     [
-        ("C.J. Stroud", "c j stroud"),
-        ("Stroud, C.J.", "c j stroud"),  # inverted "Last, First"
+        ("C.J. Stroud", "cj stroud"),  # initials collapsed
+        ("Stroud, C.J.", "cj stroud"),  # inverted "Last, First" + initials collapsed
+        ("CJ Stroud", "cj stroud"),  # matches the dotted form
         ("Marvin Harrison Jr.", "marvin harrison jr"),
         ("Kenneth Walker III", "kenneth walker iii"),
         (None, ""),
@@ -320,7 +321,7 @@ def test_merge_rosters_name_jersey_and_conflict() -> None:
             "position": "OL",
         },
     ]
-    rows = _merge_rosters(espn, fox)
+    rows = _merge_rosters(espn, fox, [])
     by = {r["person_key"]: r for r in rows}
     assert by["c j stroud"]["match_method"] == "name_jersey"
     assert by["c j stroud"]["matched_sources"] == "espn+fox"
@@ -351,7 +352,7 @@ def test_merge_rosters_name_only_when_no_jersey() -> None:
             "position": "OL",
         }
     ]
-    rows = _merge_rosters(espn, fox)
+    rows = _merge_rosters(espn, fox, [])
     assert rows[0]["match_method"] == "name"
 
 
@@ -692,7 +693,7 @@ def test_espn_roster_projection(monkeypatch: pytest.MonkeyPatch) -> None:
     out = cw._espn_roster(194)
     assert out == [
         {
-            "person_key": "c j stroud",
+            "person_key": "cj stroud",
             "jersey_key": "7",
             "athlete_id": 4432,
             "name": "C.J. Stroud",
@@ -777,6 +778,61 @@ def test_cfb_teams_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None
     row = df.row(0, named=True)
     assert row["espn_team_id"] == 194 and row["fox_team_id"] == "25" and row["yahoo_team_id"] == "ncaaf.t.194"
     assert row["matched_sources"] == "espn+fox+yahoo"
+
+
+def test_resolve_providers() -> None:
+    assert cw._resolve_providers(None, ("espn", "fox", "yahoo")) == {"espn", "fox", "yahoo"}
+    assert cw._resolve_providers(("ESPN", "Fox"), ("espn", "fox", "yahoo")) == {"espn", "fox"}  # case-insensitive
+    with pytest.raises(ValueError):
+        cw._resolve_providers(("espn", "nbc"), ("espn", "fox", "yahoo"))  # unknown
+    with pytest.raises(ValueError):
+        cw._resolve_providers((), ("espn", "fox", "yahoo"))  # empty selection
+
+
+def test_cfb_teams_crosswalk_providers_pairwise(monkeypatch: pytest.MonkeyPatch) -> None:
+    # providers=("espn","fox") must NOT fetch Yahoo, and yields espn<->fox only.
+    monkeypatch.setattr(
+        cw,
+        "espn_cfb_teams",
+        lambda **k: pl.DataFrame(
+            {"team_id": [194], "team_abbreviation": ["OSU"], "team_display_name": ["Ohio State Buckeyes"]}
+        ),
+    )
+    monkeypatch.setattr(
+        cw,
+        "fox_cfb_teams",
+        lambda **k: pl.DataFrame({"fox_team_id": ["25"], "abbreviation": ["OSU"], "name": ["OHIO STATE BUCKEYES"]}),
+    )
+
+    def boom_yahoo(season: int, week: int, **k: Any) -> pl.DataFrame:
+        raise AssertionError("Yahoo must not be fetched when not selected")
+
+    monkeypatch.setattr(cw, "yahoo_cfb_teams", boom_yahoo)
+    df = cfb_teams_crosswalk(season=2024, providers=("espn", "fox"))
+    row = df.row(0, named=True)
+    assert row["matched_sources"] == "espn+fox"  # Yahoo absent
+    assert row["yahoo_team_id"] is None
+
+
+def test_cfb_schedule_crosswalk_providers_fox_only(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Fox-only (no ESPN anchor) must still surface Fox games via the no-anchor path.
+    monkeypatch.setattr(
+        cw,
+        "fox_cfb_schedule",
+        lambda **k: pl.DataFrame(
+            {
+                "game_id": ["41999"],
+                "date": ["2024-08-31T20:00Z"],
+                "home_team": ["Ohio State Buckeyes"],
+                "away_team": ["Akron Zips"],
+            }
+        ),
+    )
+    df = cfb_schedule_crosswalk(2024, 5, providers=("fox",))
+    assert df.height == 1
+    row = df.row(0, named=True)
+    assert row["fox_game_id"] == "41999" and row["matched_sources"] == "fox"
+    assert row["espn_game_id"] is None and row["yahoo_game_id"] is None
 
 
 def test_cfb_teams_crosswalk_default_season(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -953,11 +1009,51 @@ def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> No
         "fox_cfb_team_roster",
         lambda tid, **k: pl.DataFrame({"athlete_id": ["f7"], "player": ["C.J. Stroud"], "pos": ["QB"], "cls": ["JR"]}),
     )
-    df = cfb_rosters_crosswalk(194, 25)
+    # providers=("espn","fox") keeps this offline (no Yahoo player-stats fetch)
+    df = cfb_rosters_crosswalk(194, 25, providers=("espn", "fox"))
     assert df.height == 1
     row = df.row(0, named=True)
     assert row["espn_athlete_id"] == 4432 and row["fox_athlete_id"] == "f7"
     assert row["match_method"] == "name"  # Fox has no jersey -> name-only
+
+
+def test_cfb_rosters_crosswalk_three_way(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        cw,
+        "espn_cfb_team_roster",
+        lambda tid, **k: pl.DataFrame(
+            {"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]}
+        ),
+    )
+    monkeypatch.setattr(
+        cw,
+        "fox_cfb_team_roster",
+        lambda tid, **k: pl.DataFrame({"athlete_id": ["f7"], "player": ["CJ Stroud"], "pos": ["QB"]}),
+    )
+    # _espn_team_name_keys -> espn_cfb_teams; _yahoo_roster -> player season stats
+    monkeypatch.setattr(
+        cw,
+        "espn_cfb_teams",
+        lambda **k: pl.DataFrame(
+            {"team_id": [194], "team_location": ["Ohio State"], "team_display_name": ["Ohio State Buckeyes"]}
+        ),
+    )
+    monkeypatch.setattr(
+        cw,
+        "yahoo_cfb_player_season_stats",
+        lambda season, **k: pl.DataFrame(
+            {"player_id": ["ncaaf.p.1"], "display_name": ["C.J. Stroud"], "team": ["Ohio State"]}
+        ),
+    )
+    df = cfb_rosters_crosswalk(194, 25, season=2024, providers=("espn", "fox", "yahoo"))
+    assert df.height == 1
+    row = df.row(0, named=True)
+    # Fox writes "CJ" vs ESPN "C.J." -> still name-matched after normalization;
+    # all three providers present
+    assert row["espn_athlete_id"] == 4432
+    assert row["fox_athlete_id"] == "f7"
+    assert row["yahoo_athlete_id"] == "ncaaf.p.1"
+    assert row["matched_sources"] == "espn+fox+yahoo"
 
 
 def test_cfb_odds_events_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
