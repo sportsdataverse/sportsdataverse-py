@@ -97,7 +97,13 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           set -o pipefail
-          uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log
+          # render_notebooks.py exits 1 if ANY of the 12 live notebooks flakes, but
+          # it still writes the pages that DID render. `|| true` keeps that partial
+          # failure from aborting the step here (under `set -o pipefail`) so the
+          # commit/PR below still publishes the refreshed pages — failed notebooks
+          # simply keep their prior page (no diff). Without this, one weekly flake
+          # (near-certain across 12 live notebooks) skips the refresh entirely.
+          uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log || true
           if git diff --quiet -- docs/docs/tutorials; then
             echo "No tutorial changes to publish."
             exit 0

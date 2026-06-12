@@ -177,7 +177,9 @@ def main() -> int:
                 continue
         _clean_outputs(nb)
         body = _fix_links(_to_markdown(nb, stem))
-        (OUT_DIR / f"{stem}.md").write_text(_normalize_md(_frontmatter(label, position) + body), encoding="utf-8")
+        (OUT_DIR / f"{stem}.md").write_text(
+            _normalize_md(_frontmatter(label, position) + body), encoding="utf-8", newline="\n"
+        )
         print(f"  wrote {OUT_DIR / f'{stem}.md'}")
 
     if failures:
