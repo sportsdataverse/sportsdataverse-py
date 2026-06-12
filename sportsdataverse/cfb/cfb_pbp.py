@@ -49,6 +49,7 @@ from sportsdataverse.cfb.model_vars import (
     wp_start_touchback_columns,
 )
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import NoESPNDataError
 
 ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
 wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
@@ -1154,6 +1155,14 @@ class CFBPlayProcess(object):
         }
 
     def __helper_cfb_game_data(self, pbp_txt, init):
+        # ESPN's summary endpoint intermittently returns a payload with no
+        # `header.competitions` (transient gap / a game not yet ingested). Fail
+        # with a clear, catchable NoESPNDataError instead of a deep
+        # `KeyError: 'competitions'` so callers can handle the no-data case.
+        if not ((pbp_txt.get("header") or {}).get("competitions") or []):
+            raise NoESPNDataError(
+                f"ESPN summary for game {self.gameId} has no header.competitions; cannot build play-by-play.",
+            )
         pbp_txt["timeouts"] = {}
         pbp_txt["teamInfo"] = pbp_txt["header"]["competitions"][0]
         pbp_txt["season"] = pbp_txt["header"]["season"]

@@ -90,3 +90,24 @@ def load_fixture(category: str, stem: str) -> dict:
             f"Fixture not found: {path}. Expected category={category!r}, stem={stem!r}.",
         )
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def fetch_pbp_or_skip(proc):
+    """Run a CFB/NFL ``*PlayProcess`` live ESPN fetch, skipping on a transient gap.
+
+    ESPN's summary endpoint intermittently returns a body with no
+    ``header.competitions`` (offseason / a game not yet ingested). The PBP
+    processors now raise :class:`~sportsdataverse.errors.NoESPNDataError` for that
+    case instead of a bare ``KeyError``; in live CI we treat it as a transient
+    gap and ``skip`` the test rather than fail it. ``proc`` is an
+    ``NFLPlayProcess`` / ``CFBPlayProcess`` (the league ``espn_*_pbp`` method is
+    auto-detected). Returns ``proc`` for convenient chaining.
+    """
+    from sportsdataverse.errors import NoESPNDataError
+
+    fetch = getattr(proc, "espn_cfb_pbp", None) or getattr(proc, "espn_nfl_pbp", None)
+    try:
+        fetch()
+    except NoESPNDataError as exc:
+        pytest.skip(f"ESPN returned incomplete data for game {getattr(proc, 'gameId', '?')}: {exc}")
+    return proc

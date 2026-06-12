@@ -24,6 +24,7 @@ def _nfl_resource_filename(package: str, resource: str) -> str:
 
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import NoESPNDataError
 from sportsdataverse.nfl.model_vars import (
     defense_score_vec,
     end_change_vec,
@@ -904,6 +905,14 @@ class NFLPlayProcess(object):
         }
 
     def __helper_nfl_game_data(self, pbp_txt, init):
+        # ESPN's summary endpoint intermittently returns a payload with no
+        # `header.competitions` (transient gap / a game not yet ingested). Fail
+        # with a clear, catchable NoESPNDataError instead of a deep
+        # `KeyError: 'competitions'` so callers can handle the no-data case.
+        if not ((pbp_txt.get("header") or {}).get("competitions") or []):
+            raise NoESPNDataError(
+                f"ESPN summary for game {self.gameId} has no header.competitions; cannot build play-by-play.",
+            )
         pbp_txt["timeouts"] = {}
         pbp_txt["teamInfo"] = pbp_txt["header"]["competitions"][0]
         pbp_txt["season"] = pbp_txt["header"]["season"]
