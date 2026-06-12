@@ -86,12 +86,45 @@ sched = safe("AHL schedule", lambda: ahl.ahl_schedule(season=ahl.most_recent_ahl
 sched.shape if sched is not None else None
 ```
 
+    ✅ AHL schedule
+
+
+
+
+
+    (10000, 12)
+
+
+
 
 ```python
 cols = ["game_id", "game_date", "home_team", "away_team", "home_score", "away_score"]
 (sched.select([c for c in cols if c in sched.columns]).head()
  if sched is not None else "schedule unavailable")
 ```
+
+
+
+
+    shape: (5, 6)
+    ┌─────────┬──────────────────────────┬────────────────────┬──────────────┬────────────┬────────────┐
+    │ game_id ┆ game_date                ┆ home_team          ┆ away_team    ┆ home_score ┆ away_score │
+    │ ---     ┆ ---                      ┆ ---                ┆ ---          ┆ ---        ┆ ---        │
+    │ str     ┆ str                      ┆ str                ┆ str          ┆ str        ┆ str        │
+    ╞═════════╪══════════════════════════╪════════════════════╪══════════════╪════════════╪════════════╡
+    │ 1005950 ┆ 1995-01-17T20:00:00-05:0 ┆ U.S. AHL All-Stars ┆ Canadian AHL ┆ 4          ┆ 6          │
+    │         ┆ 0                        ┆                    ┆ All-Stars    ┆            ┆            │
+    │ 1005949 ┆ 1996-01-16T19:30:00-05:0 ┆ U.S. AHL All-Stars ┆ Canadian AHL ┆ 6          ┆ 5          │
+    │         ┆ 0                        ┆                    ┆ All-Stars    ┆            ┆            │
+    │ 1005948 ┆ 1997-01-16T20:30:00-04:0 ┆ Canadian AHL       ┆ World AHL    ┆ 2          ┆ 3          │
+    │         ┆ 0                        ┆ All-Stars          ┆ All-Stars    ┆            ┆            │
+    │ 1005947 ┆ 1998-02-11T19:30:00-05:0 ┆ PlanetUSA AHL      ┆ Canadian AHL ┆ 10         ┆ 11         │
+    │         ┆ 0                        ┆ All-Stars          ┆ All-Stars    ┆            ┆            │
+    │ 1005946 ┆ 1999-01-25T20:00:00-05:0 ┆ PlanetUSA AHL      ┆ Canadian AHL ┆ 5          ┆ 4          │
+    │         ┆ 0                        ┆ All-Stars          ┆ All-Stars    ┆            ┆            │
+    └─────────┴──────────────────────────┴────────────────────┴──────────────┴────────────┴────────────┘
+
+
 
 ## 🍳 Cookbook: common hockey tasks
 
@@ -111,6 +144,26 @@ cols = ["team", "games_played", "wins", "losses", "ot_losses", "points", "goals_
  if standings is not None and standings.height else "standings unavailable")
 ```
 
+    ✅ OHL standings
+
+
+
+
+
+    shape: (2, 8)
+    ┌───────────────┬──────────────┬──────┬────────┬───────────┬────────┬───────────┬───────────────┐
+    │ team          ┆ games_played ┆ wins ┆ losses ┆ ot_losses ┆ points ┆ goals_for ┆ goals_against │
+    │ ---           ┆ ---          ┆ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---       ┆ ---           │
+    │ str           ┆ str          ┆ str  ┆ str    ┆ str       ┆ i64    ┆ str       ┆ str           │
+    ╞═══════════════╪══════════════╪══════╪════════╪═══════════╪════════╪═══════════╪═══════════════╡
+    │ Top Prospects ┆ 1            ┆ 1    ┆ 0      ┆ 0         ┆ 2      ┆ 4         ┆ 3             │
+    │ West          ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Top Prospects ┆ 1            ┆ 0    ┆ 1      ┆ 0         ┆ 0      ┆ 3         ┆ 4             │
+    │ East          ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    └───────────────┴──────────────┴──────┴────────┴───────────┴────────┴───────────┴───────────────┘
+
+
+
 ### Recipe 2 — A team and its roster 👥
 
 List teams with [`whl_teams`](../ahl/reference/additional.md#ahl_teams), grab a `team_id`, then pull the
@@ -128,6 +181,40 @@ else:
     out = "teams unavailable"
 out
 ```
+
+    ✅ WHL teams
+
+
+    ✅ WHL roster 201
+
+
+
+
+
+    shape: (5, 7)
+    ┌──────────────────┬─────────┬───────────┬───────────────┬────────────┬──────────┬─────────────────┐
+    │ team_name        ┆ team_id ┆ team_code ┆ team_nickname ┆ team_label ┆ division ┆ team_logo       │
+    │ ---              ┆ ---     ┆ ---       ┆ ---           ┆ ---        ┆ ---      ┆ ---             │
+    │ str              ┆ str     ┆ str       ┆ str           ┆ str        ┆ str      ┆ str             │
+    ╞══════════════════╪═════════╪═══════════╪═══════════════╪════════════╪══════════╪═════════════════╡
+    │ Brandon Wheat    ┆ 201     ┆ BDN       ┆ Wheat Kings   ┆ Brandon    ┆ 1        ┆ https://assets. │
+    │ Kings            ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
+    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
+    │ Calgary Hitmen   ┆ 202     ┆ CGY       ┆ Hitmen        ┆ Calgary    ┆ 3        ┆ https://assets. │
+    │                  ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
+    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
+    │ Edmonton Oil     ┆ 228     ┆ EDM       ┆ Oil Kings     ┆ Edmonton   ┆ 3        ┆ https://assets. │
+    │ Kings            ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
+    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
+    │ Everett          ┆ 226     ┆ EVT       ┆ Silvertips    ┆ Everett    ┆ 6        ┆ https://assets. │
+    │ Silvertips       ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
+    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
+    │ Kamloops Blazers ┆ 203     ┆ KAM       ┆ Blazers       ┆ Kamloops   ┆ 2        ┆ https://assets. │
+    │                  ┆         ┆           ┆               ┆            ┆          ┆ leaguestat.com/ │
+    │                  ┆         ┆           ┆               ┆            ┆          ┆ …               │
+    └──────────────────┴─────────┴───────────┴───────────────┴────────────┴──────────┴─────────────────┘
+
+
 
 ### Recipe 3 — A game's play-by-play + shot attempts 📈
 
@@ -154,6 +241,13 @@ else:
     print("no schedule rows to pick a game_id from")
 ```
 
+    ✅ AHL pbp 1020900
+
+
+    ✅ AHL corsi 1020900
+    pbp rows: 37 | corsi rows: 0
+
+
 ### Recipe 4 — Compare all four leagues at once 🔁
 
 Because the surface is identical, one loop tours every league.
@@ -167,6 +261,47 @@ for lg, mod in LEAGUES.items():
     rows.append({"league": lg.upper(), "season": season, "games": None if sch is None else sch.height})
 pl.DataFrame(rows)
 ```
+
+    ✅ ahl season
+
+
+    ✅ ahl schedule
+
+
+    ✅ ohl season
+
+
+    ✅ ohl schedule
+
+
+    ✅ whl season
+
+
+    ✅ whl schedule
+
+
+    ✅ qmjhl season
+
+
+    ✅ qmjhl schedule
+
+
+
+
+
+    shape: (4, 3)
+    ┌────────┬────────┬───────┐
+    │ league ┆ season ┆ games │
+    │ ---    ┆ ---    ┆ ---   │
+    │ str    ┆ i64    ┆ i64   │
+    ╞════════╪════════╪═══════╡
+    │ AHL    ┆ 2026   ┆ 10000 │
+    │ OHL    ┆ 2026   ┆ 10000 │
+    │ WHL    ┆ 2026   ┆ 10000 │
+    │ QMJHL  ┆ 2027   ┆ 10000 │
+    └────────┴────────┴───────┘
+
+
 
 ### Recipe 5 — The scoring race 🥇
 
@@ -182,6 +317,16 @@ cols = ["rank", "name", "team_code", "position", "stat_formatted", "type_formatt
 (leaders.select([c for c in cols if c in leaders.columns]).head(10)
  if leaders is not None and leaders.height else "leaders unavailable (offseason?)")
 ```
+
+    ✅ QMJHL leaders
+
+
+
+
+
+    'leaders unavailable (offseason?)'
+
+
 
 ### Recipe 6 — Who's hot, who's not 🌡️
 
@@ -208,6 +353,26 @@ else:
 out
 ```
 
+    ✅ AHL standings
+
+
+
+
+
+    shape: (4, 5)
+    ┌─────────────────────────────┬────────┬───────────┬───────────────┬───────────┐
+    │ team                        ┆ points ┆ goals_for ┆ goals_against ┆ goal_diff │
+    │ ---                         ┆ ---    ┆ ---       ┆ ---           ┆ ---       │
+    │ str                         ┆ i64    ┆ str       ┆ str           ┆ i64       │
+    ╞═════════════════════════════╪════════╪═══════════╪═══════════════╪═══════════╡
+    │ Pacific Division All-Stars  ┆ 6      ┆ 10        ┆ 8             ┆ 2         │
+    │ Atlantic Division All-Stars ┆ 3      ┆ 7         ┆ 4             ┆ 3         │
+    │ Central Division All-Stars  ┆ 3      ┆ 8         ┆ 7             ┆ 1         │
+    │ North Division All-Stars    ┆ 2      ┆ 4         ┆ 10            ┆ -6        │
+    └─────────────────────────────┴────────┴───────────┴───────────────┴───────────┘
+
+
+
 ### Recipe 7 — A player's career stat line 📊
 
 Grab any `player_id` (the leaderboard is a handy source) and
@@ -228,6 +393,33 @@ else:
     out = "leaders unavailable to source a player_id"
 out
 ```
+
+    ✅ WHL leaders
+
+
+    ✅ WHL stats for Carson Carels
+
+
+
+
+
+    shape: (5, 7)
+    ┌───────────────────────────┬───────────────┬──────────────┬───────┬─────────┬────────┬────────────┐
+    │ season_name               ┆ team_name     ┆ games_played ┆ goals ┆ assists ┆ points ┆ stat_type  │
+    │ ---                       ┆ ---           ┆ ---          ┆ ---   ┆ ---     ┆ ---    ┆ ---        │
+    │ str                       ┆ str           ┆ str          ┆ str   ┆ str     ┆ str    ┆ str        │
+    ╞═══════════════════════════╪═══════════════╪══════════════╪═══════╪═════════╪════════╪════════════╡
+    │ 2025 - 26 Regular Season  ┆ Prince George ┆ 58           ┆ 20    ┆ 53      ┆ 73     ┆ regular    │
+    │                           ┆ Cougars       ┆              ┆       ┆         ┆        ┆            │
+    │ 2024 - 25 Regular Season  ┆ Prince George ┆ 60           ┆ 6     ┆ 29      ┆ 35     ┆ regular    │
+    │                           ┆ Cougars       ┆              ┆       ┆         ┆        ┆            │
+    │ 2023 - 24 Regular Season  ┆ Prince George ┆ 7            ┆ 0     ┆ 3       ┆ 3      ┆ regular    │
+    │                           ┆ Cougars       ┆              ┆       ┆         ┆        ┆            │
+    │ Total                     ┆ null          ┆ 125          ┆ 26    ┆ 85      ┆ 111    ┆ regular    │
+    │ WHL Prospects Game 2026   ┆ West          ┆ 1            ┆ 0     ┆ 4       ┆ 4      ┆ exhibition │
+    └───────────────────────────┴───────────────┴──────────────┴───────┴─────────┴────────┴────────────┘
+
+
 
 ### Recipe 8 — The box score: goals & three stars 🌟
 
@@ -254,6 +446,31 @@ else:
 out
 ```
 
+    ✅ OHL schedule
+
+
+    ✅ OHL game summary 16968
+
+
+
+
+
+    shape: (5, 7)
+    ┌───────────┬───────┬─────────────────┬─────────────────┬─────────────────┬────────────┬───────────┐
+    │ period_id ┆ time  ┆ goal_scorer_tea ┆ goal_scorer_fir ┆ goal_scorer_las ┆ power_play ┆ empty_net │
+    │ ---       ┆ ---   ┆ m_code          ┆ st_name         ┆ t_name          ┆ ---        ┆ ---       │
+    │ str       ┆ str   ┆ ---             ┆ ---             ┆ ---             ┆ str        ┆ str       │
+    │           ┆       ┆ str             ┆ str             ┆ str             ┆            ┆           │
+    ╞═══════════╪═══════╪═════════════════╪═════════════════╪═════════════════╪════════════╪═══════════╡
+    │ 1         ┆ 4:33  ┆ SAG             ┆ Brandon         ┆ Saad            ┆ 0          ┆ 0         │
+    │ 1         ┆ 15:47 ┆ SAG             ┆ Brad            ┆ Walch           ┆ 1          ┆ 0         │
+    │ 2         ┆ 2:02  ┆ SAR             ┆ Craig           ┆ Hottot          ┆ 0          ┆ 0         │
+    │ 2         ┆ 15:44 ┆ SAG             ┆ Michael         ┆ Sgarbossa       ┆ 0          ┆ 0         │
+    │ 3         ┆ 10:05 ┆ SAR             ┆ Brett           ┆ Ritchie         ┆ 0          ┆ 0         │
+    └───────────┴───────┴─────────────────┴─────────────────┴─────────────────┴────────────┴───────────┘
+
+
+
 And the three-star selections from the same dict — no extra call needed:
 
 
@@ -267,6 +484,22 @@ else:
     out = "summary unavailable"
 out
 ```
+
+
+
+
+    shape: (3, 4)
+    ┌────────────┬────────────┬───────────────┬──────┐
+    │ first_name ┆ last_name  ┆ jersey_number ┆ home │
+    │ ---        ┆ ---        ┆ ---           ┆ ---  │
+    │ str        ┆ str        ┆ str           ┆ i64  │
+    ╞════════════╪════════════╪═══════════════╪══════╡
+    │ Craig      ┆ Hottot     ┆ 16            ┆ 1    │
+    │ Michael    ┆ Sgarbossa  ┆ 93            ┆ 0    │
+    │ Alex       ┆ Galchenyuk ┆ 94            ┆ 1    │
+    └────────────┴────────────┴───────────────┴──────┘
+
+
 
 ### Recipe 9 — Slice the play-by-play: just the goals ⛳
 
@@ -290,6 +523,29 @@ else:
 out
 ```
 
+    ✅ AHL pbp 1020900
+
+
+
+
+
+    shape: (7, 5)
+    ┌────────────────┬───────┬─────────┬───────────────────┬──────────────────┐
+    │ period_of_game ┆ clock ┆ team_id ┆ player_name_first ┆ player_name_last │
+    │ ---            ┆ ---   ┆ ---     ┆ ---               ┆ ---              │
+    │ str            ┆ str   ┆ str     ┆ str               ┆ str              │
+    ╞════════════════╪═══════╪═════════╪═══════════════════╪══════════════════╡
+    │ 2              ┆ 14:28 ┆ 313     ┆ Patrick           ┆ Sharp            │
+    │ 2              ┆ 7:18  ┆ 313     ┆ Jon               ┆ Sim              │
+    │ 2              ┆ 1:55  ┆ 313     ┆ Ben               ┆ Stafford         │
+    │ 2              ┆ 0:13  ┆ 313     ┆ Jon               ┆ Sim              │
+    │ 3              ┆ 15:23 ┆ 330     ┆ Steve             ┆ Maltais          │
+    │ 3              ┆ 11:11 ┆ 313     ┆ Patrick           ┆ Sharp            │
+    │ 3              ┆ 3:53  ┆ 330     ┆ Lonny             ┆ Bohonos          │
+    └────────────────┴───────┴─────────┴───────────────────┴──────────────────┘
+
+
+
 ### Recipe 10 — Head-to-head history 🤝
 
 The schedule is just a frame, so a rivalry view is two `str.contains` filters.
@@ -310,6 +566,32 @@ else:
     out = "schedule unavailable"
 out
 ```
+
+    Wilkes-Barre/Scranton Penguins hosting Hershey Bears:
+
+
+
+
+
+    shape: (5, 5)
+    ┌───────────────────────────┬───────────────────────┬───────────────┬────────────┬────────────┐
+    │ game_date                 ┆ home_team             ┆ away_team     ┆ home_score ┆ away_score │
+    │ ---                       ┆ ---                   ┆ ---           ┆ ---        ┆ ---        │
+    │ str                       ┆ str                   ┆ str           ┆ str        ┆ str        │
+    ╞═══════════════════════════╪═══════════════════════╪═══════════════╪════════════╪════════════╡
+    │ 2005-01-28T19:05:00-05:00 ┆ Wilkes-Barre/Scranton ┆ Hershey Bears ┆ 2          ┆ 4          │
+    │                           ┆ Penguins              ┆               ┆            ┆            │
+    │ 2005-02-04T19:05:00-05:00 ┆ Wilkes-Barre/Scranton ┆ Hershey Bears ┆ 8          ┆ 2          │
+    │                           ┆ Penguins              ┆               ┆            ┆            │
+    │ 2005-02-11T19:05:00-05:00 ┆ Wilkes-Barre/Scranton ┆ Hershey Bears ┆ 0          ┆ 2          │
+    │                           ┆ Penguins              ┆               ┆            ┆            │
+    │ 2005-03-30T19:05:00-05:00 ┆ Wilkes-Barre/Scranton ┆ Hershey Bears ┆ 2          ┆ 3          │
+    │                           ┆ Penguins              ┆               ┆            ┆            │
+    │ 2005-04-08T19:05:00-04:00 ┆ Wilkes-Barre/Scranton ┆ Hershey Bears ┆ 3          ┆ 2          │
+    │                           ┆ Penguins              ┆               ┆            ┆            │
+    └───────────────────────────┴───────────────────────┴───────────────┴────────────┴────────────┘
+
+
 
 ### Recipe 11 — Scout the roster: shooters & positions 🔍
 
@@ -334,6 +616,19 @@ else:
 out
 ```
 
+    ✅ WHL teams
+
+
+    ✅ WHL roster 201
+
+
+
+
+
+    'roster empty for this team/season'
+
+
+
 ### Recipe 12 — Hand off to pandas 🐼
 
 Every accessor takes `return_as_pandas=True`, so the whole toolkit drops
@@ -354,6 +649,22 @@ else:
     out = "season list unavailable"
 out
 ```
+
+    ✅ AHL season_id
+    pandas
+
+
+
+
+
+       season_id               season_name  season_yr game_type_label
+    0         92  2026 Calder Cup Playoffs       2026        playoffs
+    1         91   2026 All-Star Challenge       2026         regular
+    2         90    2025-26 Regular Season       2026         regular
+    3         88  2025 Calder Cup Playoffs       2025        playoffs
+    4         87   2025 All-Star Challenge       2025         regular
+
+
 
 ## 🥅 On-ice analytics
 
