@@ -26,6 +26,7 @@ from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY  # single sourc
 
 __all__ = [
     "fox_cfb_teams",
+    "fox_cfb_schedule",
     "fox_cfb_pbp",
     "fox_cfb_team_roster",
     "fox_cfb_boxscore",
@@ -158,6 +159,142 @@ def fox_cfb_teams(
                 "logo_url": it.get("logoUrl"),
             }
         )
+    return _frame(rows, return_as_pandas)
+
+
+def _fox_team_fullname(team: Optional[dict]) -> Optional[str]:
+    """A Fox scoreboard team block -> ``"Location Nickname"`` full name."""
+    if not team:
+        return None
+    stacked = f"{team.get('stackedNameTop') or ''} {team.get('stackedNameBottom') or ''}".strip()
+    return stacked or team.get("longName") or team.get("name")
+
+
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    week: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    week: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    week: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
+def fox_cfb_schedule(
+    season: Optional[int] = None,
+    week: Optional[int] = None,
+    *,
+    segment_id: Optional[str] = None,
+    group_id: Union[int, str] = "2",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """Fox Sports CFB scoreboard / schedule (one row per game).
+
+    Fox lists games behind a two-step *selector -> segment* flow rather than by
+    integer week: ``scoreboard/main`` returns the available segments, and
+    ``league/scores-segment/{segmentId}`` returns the games. Segment ids are
+    opaque strings (``"2025-bowls-2"``, ``"2025-cfp-2"``,
+    ``"{season}-{phase}-{groupId}"``) that do **not** map 1:1 onto the ESPN/Yahoo
+    integer ``week``. This wrapper resolves a segment three ways, in order:
+
+    1. an explicit ``segment_id`` (most reliable),
+    2. a best-effort ``f"{season}-{week}-{group_id}"`` when both are given, or
+    3. the ``currentSelectionId`` from ``scoreboard/main`` when neither is.
+
+    Because a Fox segment spans a whole phase, the returned frame can carry more
+    than one week; use the ``week_label`` column (the section title, e.g.
+    ``"WEEK 5"``) to subset, or match by team + date downstream. The numeric
+    ``game_id`` is the Fox Bifrost event id that :func:`fox_cfb_pbp` /
+    :func:`fox_cfb_odds` accept.
+
+    Args:
+        season: Season year (used only to build a best-effort segment id).
+        week: Week number (used only to build a best-effort segment id).
+        segment_id: Explicit Fox segment id; bypasses ``season``/``week``.
+        group_id: Conference/division group filter. Defaults to ``"2"`` (FBS).
+        return_parsed: If ``True`` (default) flatten the segment to a DataFrame;
+            if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) with columns ``game_id``, ``date``,
+        ``status``, ``week_label``, ``home_team``, ``home_team_id``,
+        ``away_team``, ``away_team_id``, ``segment_id``; a pandas DataFrame when
+        ``return_as_pandas=True``; or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
+    Example:
+        List the current segment's games::
+
+            from sportsdataverse.cfb import fox_cfb_schedule
+            games = fox_cfb_schedule()
+
+        Pull a specific segment explicitly::
+
+            bowls = fox_cfb_schedule(segment_id="2025-bowls-2")
+    """
+    if segment_id is None:
+        if season is not None and week is not None:
+            segment_id = f"{season}-{week}-{group_id}"
+        else:
+            main = _fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)
+            segment_id = main.get("currentSelectionId")
+    if not segment_id:
+        return {} if not return_parsed else _frame([], return_as_pandas)
+    raw = _fox_get(f"cfb/league/scores-segment/{segment_id}", params={"groupId": group_id}, **kwargs)
+    if not return_parsed:
+        return raw
+    rows: List[Dict] = []
+    for sec in raw.get("sectionList", []) or []:
+        week_label = sec.get("title")
+        for ev in sec.get("events", []) or []:
+            tokens = ((ev.get("entityLink") or {}).get("layout") or {}).get("tokens") or {}
+            home_uri, away_uri = tokens.get("homeUri"), tokens.get("awayUri")
+            upper, lower = ev.get("upperTeam") or {}, ev.get("lowerTeam") or {}
+            by_uri = {t.get("uri"): t for t in (upper, lower) if t.get("uri")}
+            # explicit home/away uri wins; else US convention (away on top).
+            home_team = by_uri.get(home_uri) if home_uri else lower
+            away_team = by_uri.get(away_uri) if away_uri else upper
+            rows.append(
+                {
+                    "game_id": tokens.get("id") or _uri_id(ev.get("contentUri")),
+                    "date": ev.get("eventTime"),
+                    "status": ev.get("statusLine"),
+                    "week_label": week_label,
+                    "home_team": _fox_team_fullname(home_team),
+                    "home_team_id": _uri_id(home_uri),
+                    "away_team": _fox_team_fullname(away_team),
+                    "away_team_id": _uri_id(away_uri),
+                    "segment_id": segment_id,
+                }
+            )
     return _frame(rows, return_as_pandas)
 
 

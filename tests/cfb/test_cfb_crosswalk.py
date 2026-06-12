@@ -182,16 +182,17 @@ def _game(mk: str, gid: Any, home: str, away: str, date: str, **extra: Any) -> D
 
 
 def test_merge_schedule_matches_on_unordered_pair() -> None:
-    # ESPN lists OSU as home; Yahoo lists Akron as home. Each side derives its
-    # own key from its own (oppositely-ordered) names -> the keys must still be
-    # equal for the merge to join them, which is the property under test.
+    # ESPN lists OSU as home; Fox & Yahoo list Akron as home. Each side derives
+    # its own key from its own (oppositely-ordered) names -> the keys must still
+    # be equal for the three-way merge to join them, which is the property tested.
     espn_mk = _matchup_key(_norm_team("Ohio State Buckeyes"), _norm_team("Akron Zips"))
-    yahoo_mk = _matchup_key(_norm_team("Akron Zips"), _norm_team("Ohio State Buckeyes"))
-    assert espn_mk == yahoo_mk, "order-independent key precondition"
+    other_mk = _matchup_key(_norm_team("Akron Zips"), _norm_team("Ohio State Buckeyes"))
+    assert espn_mk == other_mk, "order-independent key precondition"
     espn = [_game(espn_mk, 401752687, "Ohio State Buckeyes", "Akron Zips", "2024-08-31")]
+    fox = [_game(other_mk, "41999", "Akron Zips", "Ohio State Buckeyes", "2024-08-31")]
     yahoo = [
         _game(
-            yahoo_mk,
+            other_mk,
             "ncaaf.g.202408310194",
             "Akron Zips",
             "Ohio State Buckeyes",
@@ -199,20 +200,26 @@ def test_merge_schedule_matches_on_unordered_pair() -> None:
             global_game_id="ncaaf.g.123",
         )
     ]
-    rows = _merge_schedule(espn, yahoo)
+    rows = _merge_schedule(espn, fox, yahoo)
     assert len(rows) == 1
-    assert rows[0]["matched_sources"] == "espn+yahoo"
+    assert rows[0]["matched_sources"] == "espn+fox+yahoo"
     assert rows[0]["espn_game_id"] == 401752687
+    assert rows[0]["fox_game_id"] == "41999"
     assert rows[0]["yahoo_game_id"] == "ncaaf.g.202408310194"
     assert rows[0]["yahoo_global_game_id"] == "ncaaf.g.123"
 
 
-def test_merge_schedule_unmatched_both_sides() -> None:
+def test_merge_schedule_fox_only_games_are_dropped() -> None:
+    # A Fox segment spans a whole phase, so a fox-only game (no ESPN/Yahoo match)
+    # is a different week's game -> it must NOT be appended. Yahoo-only games ARE.
     espn = [_game("a|b", 1, "A", "B", "2024-01-01")]
+    fox = [_game("a|b", "f1", "A", "B", "2024-01-01"), _game("x|z", "f2", "X", "Z", "2024-01-01")]
     yahoo = [_game("c|d", "y", "C", "D", "2024-01-01")]
-    rows = _merge_schedule(espn, yahoo)
-    methods = sorted(r["matched_sources"] for r in rows)
-    assert methods == ["espn", "yahoo"]
+    rows = _merge_schedule(espn, fox, yahoo)
+    by_src = sorted(r["matched_sources"] for r in rows)
+    assert by_src == ["espn+fox", "yahoo"]  # fox-only "x|z" dropped; yahoo-only "c|d" kept
+    espn_row = next(r for r in rows if r["espn_game_id"] == 1)
+    assert espn_row["fox_game_id"] == "f1"
 
 
 def test_merge_rosters_name_jersey_and_conflict() -> None:
@@ -479,6 +486,77 @@ def test_yahoo_games_team_id_missing_from_map(monkeypatch: pytest.MonkeyPatch) -
     assert out[0]["matchup_key"] == "ohio state buckeyes"
 
 
+def test_fox_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
+    fake = pl.DataFrame(
+        {
+            "game_id": ["41999"],
+            "date": ["2024-08-31T20:00:00Z"],
+            "home_team": ["Ohio State Buckeyes"],
+            "away_team": ["Akron Zips"],
+        }
+    )
+    monkeypatch.setattr(cw, "fox_cfb_schedule", lambda season, week, **k: fake)
+    out = cw._fox_games(2024, 1)
+    assert out[0]["game_id"] == "41999"
+    assert out[0]["date"] == "2024-08-31"
+    assert out[0]["matchup_key"] == _matchup_key("ohio state buckeyes", "akron zips")
+
+
+def test_fox_games_swallows_errors(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Fox is best-effort: a failure must yield [] so the ESPN/Yahoo core survives.
+    def boom(season: int, week: int, **k: Any) -> pl.DataFrame:
+        raise RuntimeError("fox is down")
+
+    monkeypatch.setattr(cw, "fox_cfb_schedule", boom)
+    assert cw._fox_games(2024, 1) == []
+
+
+def test_fox_cfb_schedule_parses_segment(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Exercise the real fox_cfb_schedule parser (home/away resolved via tokens).
+    import sportsdataverse.cfb.cfb_fox_ext as fox
+
+    payload = {
+        "sectionList": [
+            {
+                "title": "WEEK 1",
+                "events": [
+                    {
+                        "contentUri": "football/cfb/events/42816",
+                        "eventTime": "2025-12-13T20:00:00Z",
+                        "statusLine": "FINAL",
+                        "entityLink": {
+                            "layout": {
+                                "tokens": {
+                                    "id": "42816",
+                                    "homeUri": "football/cfb/teams/62",
+                                    "awayUri": "football/cfb/teams/47",
+                                }
+                            }
+                        },
+                        "upperTeam": {
+                            "uri": "football/cfb/teams/47",
+                            "stackedNameTop": "Army",
+                            "stackedNameBottom": "Black Knights",
+                        },
+                        "lowerTeam": {
+                            "uri": "football/cfb/teams/62",
+                            "stackedNameTop": "Navy",
+                            "stackedNameBottom": "Midshipmen",
+                        },
+                    }
+                ],
+            }
+        ]
+    }
+    monkeypatch.setattr(fox, "_fox_get", lambda path, **k: payload)
+    df = fox.fox_cfb_schedule(segment_id="2025-bowls-2")
+    row = df.row(0, named=True)
+    assert row["game_id"] == "42816"
+    assert row["home_team"] == "Navy Midshipmen" and row["home_team_id"] == "62"
+    assert row["away_team"] == "Army Black Knights" and row["away_team_id"] == "47"
+    assert row["week_label"] == "WEEK 1" and row["segment_id"] == "2025-bowls-2"
+
+
 def test_espn_roster_projection(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = pl.DataFrame({"id": [4432], "full_name": ["C.J. Stroud"], "jersey": ["7"], "position_abbreviation": ["QB"]})
     monkeypatch.setattr(cw, "espn_cfb_team_roster", lambda tid, **k: fake)
@@ -624,9 +702,23 @@ def test_cfb_schedule_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> N
         }
     }
     monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", lambda season, week, **k: raw)
+    monkeypatch.setattr(
+        cw,
+        "fox_cfb_schedule",
+        lambda season, week, **k: pl.DataFrame(
+            {
+                "game_id": ["41999"],
+                "date": ["2024-08-31T20:00:00Z"],
+                "home_team": ["Akron Zips"],
+                "away_team": ["Ohio State Buckeyes"],
+            }
+        ),
+    )
     df = cfb_schedule_crosswalk(2024, 1)
     assert df.height == 1
-    assert df.row(0, named=True)["matched_sources"] == "espn+yahoo"
+    row = df.row(0, named=True)
+    assert row["matched_sources"] == "espn+fox+yahoo"
+    assert row["espn_game_id"] == 401752687 and row["fox_game_id"] == "41999"
 
 
 def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -718,8 +810,18 @@ def test_live_cfb_teams_crosswalk_matches_majority() -> None:
 
 
 @skip_if_no_live
+def test_live_fox_cfb_schedule() -> None:
+    df = cw.fox_cfb_schedule()  # current segment
+    assert isinstance(df, pl.DataFrame) and df.height > 0
+    assert {"game_id", "date", "home_team", "away_team", "segment_id"}.issubset(df.columns)
+
+
+@skip_if_no_live
 def test_live_cfb_schedule_crosswalk_week() -> None:
     df = cfb_schedule_crosswalk(2024, 5)
     assert df.height > 0
-    both = df.filter(pl.col("matched_sources") == "espn+yahoo")
+    assert "fox_game_id" in df.columns
+    # ESPN<->Yahoo is the reliable core; Fox is best-effort (its phase-segment
+    # model may not resolve a given historical week), so only assert on it.
+    both = df.filter(pl.col("matched_sources").str.contains("espn") & pl.col("matched_sources").str.contains("yahoo"))
     assert both.height > 0

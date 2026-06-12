@@ -886,13 +886,19 @@ matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
 
 ### `cfb_schedule_crosswalk(season: 'int', week: 'int', *, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_schedule_crosswalk}
 
-Build the ESPN x Yahoo CFB game-id crosswalk for one week.
+Build the ESPN x Fox x Yahoo CFB game-id crosswalk for one week.
 
-Pulls the ESPN scoreboard and the Yahoo scoreboard for `(season, week)`,
-keys each game by its order-independent team matchup, and joins them so each
-row pairs the ESPN `event` id with the Yahoo dotted game id. Fox is not
-included because Fox has no public schedule lister (Fox event ids are
-reached per-game through `sportsdataverse.cfb.fox_cfb_pbp`).
+ESPN's `(season, week)` slate is the spine: each ESPN game is keyed by its
+order-independent team matchup, and the Fox and Yahoo games for that week are
+mapped onto it, so each row pairs the ESPN `event` id with the Fox Bifrost
+event id and the Yahoo dotted game id.
+
+Fox is a **best-effort** leg. Fox lists games by opaque phase "segments"
+rather than integer weeks (see `sportsdataverse.cfb.fox_cfb_schedule`),
+so its games are matched onto ESPN's week by team rather than by week number;
+a Fox game that doesn't match an ESPN game is dropped (it belongs to a
+different week), and a Fox outage leaves the Fox columns null without
+affecting the ESPN/Yahoo result.
 
 **Parameters**
 
@@ -905,14 +911,14 @@ reached per-game through `sportsdataverse.cfb.fox_cfb_pbp`).
 
 **Returns**
 
-A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_key`, `espn_game_id`, `yahoo_game_id`, `yahoo_global_game_id`, `home_team`, `away_team`, `espn_date`, `yahoo_date`, `matched_sources`.
+A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_key`, `espn_game_id`, `fox_game_id`, `yahoo_game_id`, `yahoo_global_game_id`, `home_team`, `away_team`, `espn_date`, `fox_date`, `yahoo_date`, `matched_sources`.
 
 **Example**
 
 ```python
 from sportsdataverse.cfb import cfb_schedule_crosswalk
 xwalk = cfb_schedule_crosswalk(2024, 5)
-both = xwalk.filter(pl.col("matched_sources") == "espn+yahoo")
+all_three = xwalk.filter(pl.col("matched_sources") == "espn+fox+yahoo")
 ```
 
 ### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
@@ -1137,6 +1143,53 @@ The processed game payload (same keys as `CFBPlayProcess.run_processing_pipeline
 from sportsdataverse.cfb import fox_cfb_play_process
 game = fox_cfb_play_process(41616)
 print(len(game["plays"]), game["source"])
+```
+
+### `fox_cfb_schedule(season: 'Optional[int]' = None, week: 'Optional[int]' = None, *, segment_id: 'Optional[str]' = None, group_id: 'Union[int, str]' = '2', return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_schedule}
+
+Fox Sports CFB scoreboard / schedule (one row per game).
+
+Fox lists games behind a two-step *selector -> segment* flow rather than by
+integer week: `scoreboard/main` returns the available segments, and
+`league/scores-segment/{segmentId}` returns the games. Segment ids are
+opaque strings (`"2025-bowls-2"`, `"2025-cfp-2"`,
+`"{season}-{phase}-{groupId}"`) that do **not** map 1:1 onto the ESPN/Yahoo
+integer `week`. This wrapper resolves a segment three ways, in order:
+
+1. an explicit `segment_id` (most reliable),
+2. a best-effort `f"{season}-{week}-{group_id}"` when both are given, or
+3. the `currentSelectionId` from `scoreboard/main` when neither is.
+
+Because a Fox segment spans a whole phase, the returned frame can carry more
+than one week; use the `week_label` column (the section title, e.g.
+`"WEEK 5"`) to subset, or match by team + date downstream. The numeric
+`game_id` is the Fox Bifrost event id that `fox_cfb_pbp` /
+`fox_cfb_odds` accept.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year (used only to build a best-effort segment id). |
+| `week` | `Optional[int]` | `None` | Week number (used only to build a best-effort segment id). |
+| `segment_id` | `Optional[str]` | `None` | Explicit Fox segment id; bypasses `season`/`week`. |
+| `group_id` | `Union[int, str]` | `'2'` | Conference/division group filter. Defaults to `"2"` (FBS). |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the segment to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default) with columns `game_id`, `date`, `status`, `week_label`, `home_team`, `home_team_id`, `away_team`, `away_team_id`, `segment_id`; a pandas DataFrame when `return_as_pandas=True`; or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_schedule
+games = fox_cfb_schedule()
+
+# Pull a specific segment explicitly
+
+bowls = fox_cfb_schedule(segment_id="2025-bowls-2")
 ```
 
 ### `fox_cfb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_standings}

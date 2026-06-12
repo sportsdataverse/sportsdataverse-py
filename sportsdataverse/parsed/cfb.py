@@ -141,6 +141,7 @@ from sportsdataverse.cfb import fox_cfb_boxscore as _raw_fox_cfb_boxscore
 from sportsdataverse.cfb import fox_cfb_league_leaders as _raw_fox_cfb_league_leaders
 from sportsdataverse.cfb import fox_cfb_odds as _raw_fox_cfb_odds
 from sportsdataverse.cfb import fox_cfb_pbp as _raw_fox_cfb_pbp
+from sportsdataverse.cfb import fox_cfb_schedule as _raw_fox_cfb_schedule
 from sportsdataverse.cfb import fox_cfb_standings as _raw_fox_cfb_standings
 from sportsdataverse.cfb import fox_cfb_team_gamelog as _raw_fox_cfb_team_gamelog
 from sportsdataverse.cfb import fox_cfb_team_roster as _raw_fox_cfb_team_roster
@@ -314,6 +315,7 @@ __all__ = [
     "fox_cfb_odds",
     "fox_cfb_pbp",
     "fox_cfb_play_process",
+    "fox_cfb_schedule",
     "fox_cfb_standings",
     "fox_cfb_team_gamelog",
     "fox_cfb_team_roster",
@@ -1994,6 +1996,20 @@ def fox_cfb_pbp(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_cfb_pbp(*args, **kwargs)
+
+
+def fox_cfb_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.fox_cfb_schedule``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.fox_cfb_schedule` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.fox_cfb_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_fox_cfb_schedule(*args, **kwargs)
 
 
 def fox_cfb_standings(*args, **kwargs):
