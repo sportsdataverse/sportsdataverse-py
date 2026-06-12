@@ -16,10 +16,10 @@ CFB_TEAM_SCHEDULE_URL = SGITHUB + "cfbfastR-data/main/schedules/parquet/cfb_sche
 CFB_TEAM_INFO_URL = SGITHUB + "cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet"
 CFB_BETTING_LINES_URL = f"{SGITHUB}cfbfastR-data/main/betting/parquet/cfb_line_odds.parquet"
 
-NHL_BASE_URL = SGITHUB + "fastRhockey-data/main/nhl/pbp/parquet/play_by_play_{season}.parquet"
-NHL_PLAYER_BOX_URL = SGITHUB + "fastRhockey-data/main/nhl/player_box/parquet/player_box_{season}.parquet"
-NHL_TEAM_BOX_URL = SGITHUB + "fastRhockey-data/main/nhl/team_box/parquet/team_box_{season}.parquet"
-NHL_TEAM_SCHEDULE_URL = SGITHUB + "fastRhockey-data/main/nhl/schedules/parquet/nhl_schedule_{season}.parquet"
+NHL_BASE_URL = SDVRELEASES + "nhl_pbp_full/play_by_play_{season}.parquet"
+NHL_PLAYER_BOX_URL = SDVRELEASES + "nhl_player_boxscores/player_box_{season}.parquet"
+NHL_TEAM_BOX_URL = SDVRELEASES + "nhl_team_boxscores/team_box_{season}.parquet"
+NHL_TEAM_SCHEDULE_URL = SDVRELEASES + "nhl_schedules/nhl_schedule_{season}.parquet"
 NHL_TEAM_LOGO_URL = f"{SGITHUB}fastRhockey-data/main/nhl/nhl_teams_colors_logos.csv"
 
 PHF_BASE_URL = SGITHUB + "fastRhockey-data/main/phf/pbp/parquet/play_by_play_{season}.parquet"
