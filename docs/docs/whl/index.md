@@ -13,3 +13,4 @@ sidebar_label: WHL
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
 
 - [Quickstart](../tutorials/01_quickstart.md)
+- [Junior & minor hockey tutorial](../tutorials/11_junior_hockey_intro.md)

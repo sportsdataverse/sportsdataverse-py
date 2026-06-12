@@ -13,3 +13,4 @@ sidebar_label: ODDS
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
 
 - [Quickstart](../tutorials/01_quickstart.md)
+- [Betting odds tutorial](../tutorials/12_odds_intro.md)

@@ -1784,6 +1784,12 @@ _LEAGUE_NOTEBOOKS: dict[str, tuple[str, str]] = {
     "nhl": ("07_nhl_intro", "NHL tutorial"),
     "mlb": ("09_mlb_intro", "MLB tutorial"),
     "pwhl": ("10_pwhl_intro", "PWHL tutorial"),
+    # AHL + the three CHL major-junior loops share one combined HockeyTech tutorial.
+    "ahl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "ohl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "whl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "qmjhl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
+    "odds": ("12_odds_intro", "Betting odds tutorial"),
 }
 
 
