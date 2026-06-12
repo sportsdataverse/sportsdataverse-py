@@ -14,7 +14,7 @@ def test_cfb_pbp_missing_competitions_raises_noespndata():
 
     proc = CFBPlayProcess(gameId=401301025)
     with pytest.raises(NoESPNDataError):
-        proc._CFBPlayProcess__helper_cfb_game_data({"header": {}}, {})
+        proc._CFBPlayProcess__helper_cfb_pbp({"header": {}})
 
 
 @pytest.fixture()

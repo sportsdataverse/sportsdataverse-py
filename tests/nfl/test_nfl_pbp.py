@@ -14,7 +14,7 @@ def test_nfl_pbp_missing_competitions_raises_noespndata():
 
     proc = NFLPlayProcess(gameId=401220403)
     with pytest.raises(NoESPNDataError):
-        proc._NFLPlayProcess__helper_nfl_game_data({"header": {}}, {})
+        proc._NFLPlayProcess__helper_nfl_pbp({"header": {}})
 
 
 @pytest.fixture()

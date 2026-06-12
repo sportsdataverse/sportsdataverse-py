@@ -799,6 +799,19 @@ class NFLPlayProcess(object):
         return pbp_txt
 
     def __helper_nfl_pbp(self, pbp_txt):
+        # ESPN's summary endpoint intermittently returns a payload with no
+        # `header.competitions` (transient gap / a game not yet ingested).
+        # Short-circuit with a clear, catchable NoESPNDataError *before* pickcenter
+        # resolution (which would otherwise make a fallback odds network hop) and
+        # before the deep `KeyError: 'competitions'` in __helper_nfl_game_data.
+        # Local import so the error class doesn't leak into the package namespace
+        # (it is not a public wrapper) and trip the codegen autodoc/parsed gates.
+        from sportsdataverse.errors import NoESPNDataError
+
+        if not ((pbp_txt.get("header") or {}).get("competitions") or []):
+            raise NoESPNDataError(
+                f"ESPN summary for game {self.gameId} has no header.competitions; cannot build play-by-play.",
+            )
         init = self.__helper_nfl_pickcenter(pbp_txt)
         return self.__helper_nfl_game_data(pbp_txt, init)
 
@@ -904,18 +917,6 @@ class NFLPlayProcess(object):
         }
 
     def __helper_nfl_game_data(self, pbp_txt, init):
-        # ESPN's summary endpoint intermittently returns a payload with no
-        # `header.competitions` (transient gap / a game not yet ingested). Fail
-        # with a clear, catchable NoESPNDataError instead of a deep
-        # `KeyError: 'competitions'` so callers can handle the no-data case.
-        # Local import so the error class doesn't leak into the package namespace
-        # (it is not a public wrapper) and trip the codegen autodoc/parsed gates.
-        from sportsdataverse.errors import NoESPNDataError
-
-        if not ((pbp_txt.get("header") or {}).get("competitions") or []):
-            raise NoESPNDataError(
-                f"ESPN summary for game {self.gameId} has no header.competitions; cannot build play-by-play.",
-            )
         pbp_txt["timeouts"] = {}
         pbp_txt["teamInfo"] = pbp_txt["header"]["competitions"][0]
         pbp_txt["season"] = pbp_txt["header"]["season"]
