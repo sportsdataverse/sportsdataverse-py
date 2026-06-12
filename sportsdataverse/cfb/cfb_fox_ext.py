@@ -13,7 +13,6 @@ is added to ``tools/codegen``, this module can be regenerated.
 
 from __future__ import annotations
 
-import os
 import re
 from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Union, overload
 
@@ -23,6 +22,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 from sportsdataverse._codegen_runtime import _get
+from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY  # single source of truth for the public Fox key
 
 __all__ = [
     "fox_cfb_pbp",
@@ -36,9 +36,9 @@ __all__ = [
 ]
 
 FOX_BASE = "https://api.foxsports.com/bifrost/v1"
-# Public data-tier key shipped in the foxsports.com web bundle. Overridable via
-# the SDV_PY_FOX_DATA_KEY env var so a key rotation does not require a release.
-FOX_DATA_KEY = os.getenv("SDV_PY_FOX_DATA_KEY", "jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq")
+# FOX_DATA_KEY (the public foxsports.com data-tier key, env-overridable via
+# SDV_PY_FOX_DATA_KEY) is imported from sportsdataverse._fox_layout above so the
+# bundled default and its env override live in exactly one place.
 
 _HEADERS = {"Origin": "https://www.foxsports.com", "Referer": "https://www.foxsports.com/"}
 

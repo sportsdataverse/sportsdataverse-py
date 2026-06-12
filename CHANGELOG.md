@@ -2,6 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.58 (in development)](#0058-in-development)
+  - [NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override](#nfl--automatic-apinflcom-token-caching--nfl_access_token-override)
+  - [Internal — Fox data key single-sourced](#internal--fox-data-key-single-sourced)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
     - [CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)](#cfb--fox-as-a-backup-source-for-the-epawpa-play-processor-fox_cfb_play_process)
@@ -88,6 +91,16 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.58 (in development)
+
+### NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override
+
+The `api.nfl.com` bearer token is now minted once and cached in-process, then auto-renewed just before its JWT `exp` — so back-to-back `nfl_*` / `nfl_api_*` calls reuse a single token instead of POSTing to `/identity/v3/token` on every call, with no setup and no manual refresh. A new optional `NFL_ACCESS_TOKEN` env var injects a pre-minted bearer token verbatim (skipping the mint + cache); the existing `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` credential overrides still apply. `nfl_clear_token_cache()` forces a fresh mint, and `nfl_token_gen(force_refresh=True)` re-mints on demand.
+
+### Internal — Fox data key single-sourced
+
+`sportsdataverse.cfb.cfb_fox_ext.FOX_DATA_KEY` is now imported from `sportsdataverse._fox_layout.DATA_KEY` so the bundled public Fox key and its `SDV_PY_FOX_DATA_KEY` env override live in exactly one place instead of being duplicated.
 
 ## 0.0.57 Release: June 10, 2026
 
