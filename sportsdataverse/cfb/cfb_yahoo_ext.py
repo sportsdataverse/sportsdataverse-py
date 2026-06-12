@@ -106,12 +106,18 @@ def _flatten_legacy(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Materialize flattened rows as a polars (default) or pandas DataFrame."""
+    """Materialize flattened rows as a polars (default) or pandas DataFrame.
+
+    ``strict=False`` is required because Yahoo's scoreboard mixes value types
+    within a field across games (e.g. ``last_updated`` is a timestamp string for
+    played games but ``False`` for unplayed ones); strict construction raises
+    ``unexpected value while building Series`` on that bool/str mix.
+    """
     if return_as_pandas:
         import pandas as pd
 
         return pd.DataFrame(rows)
-    return pl.DataFrame(rows)
+    return pl.DataFrame(rows, strict=False)
 
 
 @overload

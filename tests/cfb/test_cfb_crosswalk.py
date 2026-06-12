@@ -531,6 +531,28 @@ def test_yahoo_games_team_id_missing_from_map(monkeypatch: pytest.MonkeyPatch) -
     assert out[0]["matchup_key"] == "ohio state buckeyes"
 
 
+def test_yahoo_scoreboard_parses_mixed_type_fields(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Regression: Yahoo's scoreboard mixes value types within a field across
+    # games (last_updated is a timestamp str for played games, False for unplayed
+    # ones). Strict polars construction raised "unexpected value while building
+    # Series"; _frame must build it (strict=False) instead of erroring out.
+    import sportsdataverse.cfb.cfb_yahoo_ext as yahoo
+
+    payload = {
+        "service": {
+            "scoreboard": {
+                "games": {
+                    "ncaaf.g.1": {"gameid": "ncaaf.g.1", "last_updated": "2025-12-26 22:02:34", "is_rank_upset": False},
+                    "ncaaf.g.2": {"gameid": "ncaaf.g.2", "last_updated": False, "is_rank_upset": None},
+                }
+            }
+        }
+    }
+    monkeypatch.setattr(yahoo, "_editorial_get", lambda path, params, **k: payload)
+    df = yahoo.yahoo_cfb_scoreboard(2025, 18)  # must not raise on the bool/str mix
+    assert isinstance(df, pl.DataFrame) and df.height == 2
+
+
 def test_fox_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = pl.DataFrame(
         {

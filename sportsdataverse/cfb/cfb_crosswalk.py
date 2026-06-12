@@ -392,12 +392,13 @@ def _fox_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
 
 
 def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
-    # Yahoo scoreboard is per-week; loop the regular season + postseason weeks,
+    # Yahoo scoreboard is per-week; loop the regular season + postseason weeks
+    # (bowls/CFP run into the low 20s -- the national championship is ~week 21),
     # swallowing the occasional per-week parser error so one bad week can't sink
     # the whole season. Dedup by game id across weeks.
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    for week in range(1, 21):
+    for week in range(1, 24):
         try:
             rows = _yahoo_games(season, week, **kwargs)
         except Exception:
