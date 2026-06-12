@@ -197,7 +197,9 @@ where = ["."]
 exclude = ["tests*", "docs*", "examples*", "archive*"]
 
 [tool.setuptools.package-data]
-sportsdataverse = ["cfb/models/*", "nfl/models/*"]
+# ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
+# package ships inline type information.
+sportsdataverse = ["cfb/models/*", "nfl/models/*", "py.typed"]
 
 
 [tool.isort]

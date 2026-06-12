@@ -37,6 +37,15 @@ See Also:
 
 from __future__ import annotations
 
+import logging as _logging
+
+# Library logging convention (PEP 282): attach a NullHandler at the package
+# root so merely importing sportsdataverse never emits log output unless the
+# host application configures logging. Modules obtain their logger via
+# ``logging.getLogger(__name__)`` and use it (notably) to make best-effort /
+# graceful-degradation paths observable instead of silently swallowing errors.
+_logging.getLogger("sportsdataverse").addHandler(_logging.NullHandler())
+
 # isort: off
 # IMPORT ORDER IS LOAD-BEARING — do not let isort/ruff re-sort this block.
 # League wildcards MUST run before the top-level QoL imports because:

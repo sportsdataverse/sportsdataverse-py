@@ -5,7 +5,26 @@ Custom exceptions for sportsdataverse module
 from __future__ import annotations
 
 
-class SeasonNotFoundError(Exception):
+class SportsDataverseError(Exception):
+    """Base class for every error raised by sportsdataverse.
+
+    Catch this to handle any package-specific failure with one ``except``
+    clause, while still being able to catch the narrower subclasses
+    (:class:`SeasonNotFoundError`, :class:`NoESPNDataError`) individually::
+
+        from sportsdataverse.errors import SportsDataverseError
+
+        try:
+            df = some_loader(...)
+        except SportsDataverseError as exc:
+            ...  # any sportsdataverse-originated failure
+
+    Re-parenting the existing errors under this base is backwards compatible:
+    code catching ``Exception`` or the specific subclasses keeps working.
+    """
+
+
+class SeasonNotFoundError(SportsDataverseError):
     """Raised when a caller requests a season earlier than the loader supports.
 
     Each sport submodule has a per-source minimum season (e.g. CFB PBP
@@ -56,7 +75,7 @@ def season_not_found_error(season, min_season):
         raise SeasonNotFoundError(f"Season {season} not found, season cannot be less than {min_season}")
 
 
-class NoESPNDataError(Exception):
+class NoESPNDataError(SportsDataverseError):
     """Raised when an ESPN endpoint has no payload for the request.
 
     Triggered both by a raw HTTP 404 and by the legacy ESPN convention of

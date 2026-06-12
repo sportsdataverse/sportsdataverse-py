@@ -41,6 +41,7 @@ Public surface:
 
 from __future__ import annotations
 
+import logging
 import re
 import unicodedata
 from datetime import date
@@ -71,6 +72,8 @@ __all__ = [
 ]
 
 DataFrameT = Union[pl.DataFrame, "pd.DataFrame"]
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Normalization layer (pure)
@@ -345,7 +348,8 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     try:
         cal = espn_cfb_calendar(season=season, **kwargs)
         slots = [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
-    except Exception:
+    except Exception as exc:
+        logger.warning("ESPN calendar fetch failed for %s; using default week slots: %s", season, exc)
         slots = []
     if not slots:  # calendar unavailable -> sensible default coverage
         slots = [(str(w), "2") for w in range(1, 17)] + [("1", "3"), ("999", "3")]
@@ -354,7 +358,8 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
             continue
         try:
             rows = _project_espn(espn_cfb_schedule(dates=season, week=int(week), season_type=int(stype), **kwargs))
-        except Exception:
+        except Exception as exc:
+            logger.warning("ESPN schedule fetch failed for %s week %s (st %s): %s", season, week, stype, exc)
             continue
         for row in rows:
             gid = row.get("game_id")
@@ -414,7 +419,8 @@ def _fox_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # broad guard returning an empty list.
     try:
         return _project_fox(fox_cfb_schedule(segment_id=f"{season}-{week}-1", **kwargs))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Fox schedule fetch failed for %s week %s: %s", season, week, exc)
         return []
 
 
@@ -424,7 +430,8 @@ def _fox_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # offseason -- those simply fail to match and fall through as null Fox ids.
     try:
         return _project_fox(fox_cfb_schedule(season, **kwargs))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Fox full-season fetch failed for %s: %s", season, exc)
         return []
 
 
@@ -438,7 +445,8 @@ def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     for week in range(1, 24):
         try:
             rows = _yahoo_games(season, week, **kwargs)
-        except Exception:
+        except Exception as exc:
+            logger.warning("Yahoo scoreboard fetch/parse failed for %s week %s: %s", season, week, exc)
             continue
         for row in rows:
             gid = row.get("game_id")
