@@ -10,6 +10,14 @@ not covered by the generated API-endpoint reference above.
 
 ## Other
 
+### `cache_stats() -> 'Dict[str, Any]'` {#cache_stats}
+
+Return a snapshot of the cache for debugging / inspection.
+
+Returns a dict with `mode`, `entries`, and `disk_bytes` (only
+populated when mode=filesystem). Cheap — doesn't read the cached
+bodies, just counts + sizes.
+
 ### `get_cache_mode() -> 'str'` {#get_cache_mode}
 
 Return the current cache mode.
