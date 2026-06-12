@@ -65,7 +65,10 @@ def espn_cfb_schedule(
     params = {
         "week": week,
         "dates": dates,
-        "seasonType": season_type,
+        # ESPN's scoreboard expects the lowercase ``seasontype`` query key; the
+        # camelCase form is silently ignored (so season_type never filtered).
+        # 2 = regular, 3 = postseason (week=1 -> bowls, week=999 -> CFP).
+        "seasontype": season_type,
         "groups": groups if groups is not None else "80",
         "limit": limit,
     }
