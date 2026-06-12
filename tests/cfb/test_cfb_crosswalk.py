@@ -30,6 +30,7 @@ from sportsdataverse.cfb.cfb_crosswalk import (
     _norm_person,
     _norm_team,
     _pick,
+    _thread_map,
     _yahoo_date,
     cfb_odds_events_crosswalk,
     cfb_rosters_crosswalk,
@@ -125,6 +126,41 @@ def test_ascii_fold_and_pick_and_matched_sources() -> None:
     assert _pick({"a": None, "b": 2}, "a", "b") == 2
     assert _pick({"a": None}, "a", "missing") is None
     assert _matched_sources([("espn", True), ("fox", False), ("yahoo", True)]) == "espn+yahoo"
+
+
+def test_thread_map_empty_and_single_take_serial_path() -> None:
+    # 0/1 items skip the pool entirely (the <= 1 short-circuit) but must still
+    # return a list with fn applied — same contract as the concurrent path.
+    assert _thread_map(lambda x: x * 2, []) == []
+    assert _thread_map(lambda x: x * 2, [7]) == [14]
+
+
+def test_thread_map_preserves_input_order_despite_reverse_completion() -> None:
+    # The crosswalk relies on _thread_map returning results positionally aligned
+    # with the inputs (each slot's rows land where that slot sat). Prove that
+    # holds even when items finish in the *opposite* order they were submitted:
+    # a release-chain forces item N-1 to complete first, then N-2, ... then 0,
+    # with no sleeps (fully deterministic, no timing flakiness).
+    import threading
+
+    n = 5
+    gates = [threading.Event() for _ in range(n)]
+    completion_order: list[int] = []
+    lock = threading.Lock()
+
+    def fn(i: int) -> int:
+        gates[i].wait(timeout=5)
+        with lock:
+            completion_order.append(i)
+        if i > 0:
+            gates[i - 1].set()  # release the previous item -> reverse cascade
+        return i * 10
+
+    gates[n - 1].set()  # kick off the highest index first
+    out = _thread_map(fn, list(range(n)))
+
+    assert out == [i * 10 for i in range(n)]  # results stay in INPUT order
+    assert completion_order == list(reversed(range(n)))  # ...though they finished reversed
 
 
 # ===========================================================================
