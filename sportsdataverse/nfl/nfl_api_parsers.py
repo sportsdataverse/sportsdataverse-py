@@ -4,7 +4,10 @@ Each ``parse_nfl_*`` here flattens one :mod:`sportsdataverse.nfl.nfl_api` wrappe
 raw payload into a tidy frame. The records of interest live under a different key
 per endpoint (``weeks[].standings``, ``rosters``, ``teams``, ``picks``, ``data``,
 or a bare list / single object), so each parser does its own record extraction and
-then flattens with ``pl.json_normalize(..., separator="_", max_level=2)``.
+funnels through :func:`_to_frame`, which follows the shared parser contract used
+across every ``*_parsers.py`` module: ``pandas.json_normalize(..., sep="_")`` for
+one-pass flattening, list-valued cells stringified so polars can ingest the frame,
+and columns snake-cased via :func:`sportsdataverse.dl_utils.underscore`.
 
 Every parser returns a ``polars.DataFrame`` by default; pass
 ``return_as_pandas=True`` for a ``pandas.DataFrame`` instead.
@@ -39,20 +42,47 @@ __all__ = [
 def _to_frame(records: List, return_as_pandas: bool) -> DataFrameT:
     """Flatten a list of nested dicts into a polars (or pandas) DataFrame.
 
+    Follows the shared ``*_parsers.py`` contract: ``pandas.json_normalize`` for
+    one-pass nested flattening, list-valued cells stringified so polars accepts
+    the frame, and column names snake-cased via
+    :func:`sportsdataverse.dl_utils.underscore`.
+
     Args:
-        records: A list of (possibly nested) JSON record dicts. ``None`` / empty
-            yields an empty frame rather than raising.
+        records: A list of (possibly nested) JSON record dicts. ``None`` / empty /
+            malformed yields a zero-row frame rather than raising.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``; otherwise a
             ``polars.DataFrame``.
 
     Returns:
         A ``polars.DataFrame`` (default) or ``pandas.DataFrame`` with nested keys
-        flattened up to two levels deep (``separator="_"``).
+        flattened (``sep="_"``) and snake-cased columns.
     """
+    import pandas as pd
     import polars as pl
 
-    df = pl.json_normalize(records or [], separator="_", max_level=2, infer_schema_length=None)
-    return df.to_pandas() if return_as_pandas else df
+    from sportsdataverse.dl_utils import underscore
+
+    if not records:
+        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
+    try:
+        df = pd.json_normalize(records, sep="_")
+    except Exception:  # noqa: BLE001 -- malformed payload -> zero-row frame, never raise
+        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
+    # Stringify list-valued cells so polars can ingest the frame.
+    for col in df.columns:
+        if df[col].apply(lambda v: isinstance(v, list)).any():
+            df[col] = df[col].apply(lambda v: str(v) if isinstance(v, list) else v)
+    # Snake-case columns (underscore + flatten any residual dotted keys).
+    df.columns = [underscore(c).replace(".", "_") for c in df.columns]
+    if return_as_pandas:
+        return df
+    try:
+        return pl.from_pandas(df)
+    except Exception:  # noqa: BLE001 -- fall back to all-string object cols
+        df2 = df.copy()
+        for col in [c for c in df2.columns if df2[c].dtype == "object"]:
+            df2[col] = df2[col].astype(str)
+        return pl.from_pandas(df2)
 
 
 def parse_nfl_standings(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
