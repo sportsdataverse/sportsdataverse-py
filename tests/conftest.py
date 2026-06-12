@@ -104,8 +104,12 @@ def fetch_pbp_or_skip(proc):
     ``header.competitions`` (offseason / a game not yet ingested). The PBP
     processors raise :class:`~sportsdataverse.errors.NoESPNDataError` for that case
     instead of a bare ``KeyError``; we treat it as a transient gap and ``skip``
-    rather than fail. ``proc`` is an ``NFLPlayProcess`` / ``CFBPlayProcess`` (the
-    league ``espn_*_pbp`` method is auto-detected). Returns ``proc`` for chaining.
+    rather than fail. The guard fires inside ``run_processing_pipeline()`` (not the
+    fetch), so this helper runs **both** the fetch and the pipeline under one
+    ``try`` -- ``run_processing_pipeline`` is idempotent, so a test/fixture calling
+    it again afterward just gets the cached result. ``proc`` is an ``NFLPlayProcess``
+    / ``CFBPlayProcess`` (the league ``espn_*_pbp`` method is auto-detected).
+    Returns ``proc`` for chaining.
     """
     if not LIVE:
         pytest.skip("Live ESPN PBP fetch — set SDV_PY_LIVE_TESTS=1 to run.")
@@ -115,6 +119,7 @@ def fetch_pbp_or_skip(proc):
     fetch = getattr(proc, "espn_cfb_pbp", None) or getattr(proc, "espn_nfl_pbp", None)
     try:
         fetch()
+        proc.run_processing_pipeline()
     except NoESPNDataError as exc:
         pytest.skip(f"ESPN returned incomplete data for game {getattr(proc, 'gameId', '?')}: {exc}")
     return proc
