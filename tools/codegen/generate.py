@@ -979,7 +979,24 @@ def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: i
         text=True,
         check=True,
     ).stdout
-    return sorted({line.split("\t")[0].strip() for line in out.splitlines() if line.strip()})
+    return _parse_release_tags(out)
+
+
+def _parse_release_tags(text: str) -> list[str]:
+    """Parse ``gh release list`` tab output -> sorted unique release **tags**.
+
+    The columns are ``TITLE\\tTYPE\\tTAG\\tPUBLISHED``, so the tag is the
+    second-to-last field. Reading the FIRST field grabs the *title* instead, which
+    silently diverges whenever a release has a human-friendly title (e.g. title
+    "ESPN NBA Draft" vs tag ``espn_nba_draft``) — making the audit falsely report
+    that loader's tag as a dead release.
+    """
+    tags: set[str] = set()
+    for line in text.splitlines():
+        parts = line.split("\t")
+        if len(parts) >= 2 and parts[-2].strip():
+            tags.add(parts[-2].strip())
+    return sorted(tags)
 
 
 # returns_schema name -> (parser callable, "frames" | "dataframe").

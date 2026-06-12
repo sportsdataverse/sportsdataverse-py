@@ -243,6 +243,14 @@ loaders:
   min_season: 2025
   example_args:
     seasons: 2025
+- fn: load_mbb_team_season_stats
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_team_season_stats/team_season_stats_{season}.parquet
+  tag: espn_mens_college_basketball_team_season_stats
+  min_season: 2003
+  example_args:
+    seasons: 2025
 - fn: load_nba_game_rosters
   league: nba
   base: sdv_releases
