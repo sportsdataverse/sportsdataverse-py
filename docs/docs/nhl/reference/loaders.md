@@ -14,10 +14,10 @@ flowchart LR
 
 | Dataset | Release tag | Pipeline |
 |---|---|---|
-| `load_nhl_pbp` | [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) | — |
-| `load_nhl_player_boxscore` | [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) | — |
-| `load_nhl_schedule` | [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) | — |
-| `load_nhl_team_boxscore` | [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) | — |
+| `load_nhl_pbp` | [nhl_pbp_full](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_full) | — |
+| `load_nhl_player_boxscore` | [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_player_boxscores) | — |
+| `load_nhl_schedule` | [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_schedules) | — |
+| `load_nhl_team_boxscore` | [nhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_team_boxscores) | — |
 | `load_nhl_game_info` | [nhl_game_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_game_info) | — |
 | `load_nhl_game_rosters` | [nhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_game_rosters) | — |
 | `load_nhl_goalie_boxscores` | [nhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_goalie_boxscores) | — |
@@ -40,7 +40,7 @@ flowchart LR
 
 ## `load_nhl_pbp`
 
-Release: [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) · asset `https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/pbp/parquet/play_by_play_{season}.parquet`
+Release: [nhl_pbp_full](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_full) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_full/play_by_play_{season}.parquet`
 ### Returns
 
 | col_name | type |
@@ -155,7 +155,7 @@ load_nhl_pbp(seasons=2024)
 
 ## `load_nhl_player_boxscore`
 
-Release: [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) · asset `https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/player_box/parquet/player_box_{season}.parquet`
+Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_player_boxscores/player_box_{season}.parquet`
 ### Returns
 
 | col_name | type |
@@ -217,7 +217,7 @@ load_nhl_player_boxscore(seasons=2024)
 
 ## `load_nhl_schedule`
 
-Release: [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) · asset `https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/schedules/parquet/nhl_schedule_{season}.parquet`
+Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_schedules/nhl_schedule_{season}.parquet`
 ### Returns
 
 | col_name | type |
@@ -257,7 +257,7 @@ load_nhl_schedule(seasons=2024)
 
 ## `load_nhl_team_boxscore`
 
-Release: [fastRhockey-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data) · asset `https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/team_box/parquet/team_box_{season}.parquet`
+Release: [nhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_team_boxscores/team_box_{season}.parquet`
 ### Returns
 
 | col_name | type |

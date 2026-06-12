@@ -19,6 +19,12 @@ flowchart LR
 | `load_mbb_schedule` | [espn_mens_college_basketball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_schedules) | — |
 | `load_mbb_team_boxscore` | [espn_mens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_boxscores) | — |
 | `load_mbb_shots` | [espn_mens_college_basketball_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_shots) | — |
+| `load_mbb_standings` | [espn_mens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_standings) | — |
+| `load_mbb_player_season_stats` | [espn_mens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats) | — |
+| `load_mbb_rosters` | [espn_mens_college_basketball_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_rosters) | — |
+| `load_mbb_officials` | [espn_mens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials) | — |
+| `load_mbb_game_rosters` | [espn_mens_college_basketball_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_game_rosters) | — |
+| `load_mbb_team_season_stats` | [espn_mens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_season_stats) | — |
 
 ## `load_mbb_pbp`
 
@@ -334,4 +340,196 @@ Release: [espn_mens_college_basketball_shots](https://github.com/sportsdataverse
 
 ```python
 load_mbb_shots(seasons=2025)
+```
+
+## `load_mbb_standings`
+
+Release: [espn_mens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_standings/standings_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `group_id` | String |
+| `group_name` | String |
+| `group_abbreviation` | String |
+| `group_short_name` | String |
+| `team_id` | Int32 |
+| `team_uid` | String |
+| `team_slug` | String |
+| `team_location` | String |
+| `team_name` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `team_short_display_name` | String |
+| `team_color` | String |
+| `team_alternate_color` | String |
+| `team_logo` | String |
+| `stat_name` | String |
+| `stat_display_name` | String |
+| `stat_short_display_name` | String |
+| `stat_description` | String |
+| `stat_abbreviation` | String |
+| `stat_type` | String |
+| `display_value` | String |
+| `value` | Float64 |
+
+```python
+load_mbb_standings(seasons=2025)
+```
+
+## `load_mbb_player_season_stats`
+
+Release: [espn_mens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `athlete_id` | Int32 |
+| `athlete_display_name` | String |
+| `athlete_position_abbreviation` | String |
+| `athlete_jersey` | String |
+| `team_id` | Int32 |
+| `team_slug` | String |
+| `team_display_name` | String |
+| `category` | String |
+| `stat_label` | String |
+| `stat_name` | String |
+| `stat_display_name` | String |
+| `stat_description` | String |
+| `display_value` | String |
+| `value` | Float64 |
+
+```python
+load_mbb_player_season_stats(seasons=2025)
+```
+
+## `load_mbb_rosters`
+
+Release: [espn_mens_college_basketball_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_rosters/rosters_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `team_id` | Int32 |
+| `team_slug` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `team_short_display_name` | String |
+| `team_color` | String |
+| `team_alternate_color` | String |
+| `team_logo` | String |
+| `athlete_id` | String |
+| `uid` | String |
+| `guid` | String |
+| `full_name` | String |
+| `display_name` | String |
+| `short_name` | String |
+| `first_name` | String |
+| `last_name` | String |
+| `jersey` | String |
+| `position_abbreviation` | String |
+| `position_name` | String |
+| `position_id` | String |
+| `height` | String |
+| `weight` | String |
+| `age` | String |
+| `date_of_birth` | String |
+| `birth_place_city` | String |
+| `birth_place_state` | String |
+| `birth_place_country` | String |
+| `experience_years` | String |
+| `experience_display_value` | String |
+| `headshot_href` | String |
+| `headshot_alt` | String |
+| `link_web` | String |
+| `status_id` | String |
+| `status_name` | String |
+| `status_type` | String |
+
+```python
+load_mbb_rosters(seasons=2025)
+```
+
+## `load_mbb_officials`
+
+Release: [espn_mens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_officials/officials_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `game_id` | Int32 |
+| `official_full_name` | String |
+| `official_display_name` | String |
+| `official_position` | String |
+| `official_position_id` | Int32 |
+| `official_order` | Int32 |
+
+```python
+load_mbb_officials(seasons=2025)
+```
+
+## `load_mbb_game_rosters`
+
+Release: [espn_mens_college_basketball_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `game_id` | String |
+| `team_id` | Int32 |
+| `team_slug` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `home_away` | String |
+| `athlete_id` | Int32 |
+| `athlete_uid` | String |
+| `athlete_guid` | String |
+| `athlete_display_name` | String |
+| `athlete_short_name` | String |
+| `athlete_first_name` | String |
+| `athlete_last_name` | String |
+| `athlete_jersey` | String |
+| `athlete_position` | String |
+| `athlete_headshot` | String |
+| `starter` | Boolean |
+| `did_not_play` | Boolean |
+| `active` | Boolean |
+| `ejected` | Boolean |
+| `reason` | String |
+
+```python
+load_mbb_game_rosters(seasons=2025)
+```
+
+## `load_mbb_team_season_stats`
+
+Release: [espn_mens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_team_season_stats/team_season_stats_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int32 |
+| `team_id` | Int32 |
+| `team_slug` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `team_short_display_name` | String |
+| `team_color` | String |
+| `team_alternate_color` | String |
+| `team_logo` | String |
+| `category` | String |
+| `stat_label` | String |
+| `stat_name` | String |
+| `stat_display_name` | String |
+| `stat_description` | String |
+| `display_value` | String |
+| `value` | Float64 |
+
+```python
+load_mbb_team_season_stats(seasons=2025)
 ```

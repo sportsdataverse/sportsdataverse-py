@@ -9,7 +9,7 @@ sidebar_label: NBA
 | [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 81 | `https://sports.core.api.espn.com/v2/sports` |
-| [Dataset loaders](reference/loaders) | 9 | sportsdataverse-data releases |
+| [Dataset loaders](reference/loaders) | 13 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 15 | hand-written wrappers, loaders & helpers |
 
 ## Examples
@@ -91,9 +91,11 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`espn_nba_tournaments`](reference/core#espn_nba_tournaments) | [`espn_nba_tournaments`](https://hoopR.sportsdataverse.org/reference/espn_nba_tournaments.html) |
 | [`espn_nba_transactions`](reference/site#espn_nba_transactions) | [`espn_nba_transactions`](https://hoopR.sportsdataverse.org/reference/espn_nba_transactions.html) |
 | [`espn_nba_venues`](reference/core#espn_nba_venues) | [`espn_nba_venues`](https://hoopR.sportsdataverse.org/reference/espn_nba_venues.html) |
+| [`load_nba_draft`](reference/loaders#load_nba_draft) | [`load_nba_draft`](https://hoopR.sportsdataverse.org/reference/load_nba_draft.html) |
 | [`load_nba_game_rosters`](reference/loaders#load_nba_game_rosters) | [`load_nba_game_rosters`](https://hoopR.sportsdataverse.org/reference/load_nba_game_rosters.html) |
 | [`load_nba_officials`](reference/loaders#load_nba_officials) | [`load_nba_officials`](https://hoopR.sportsdataverse.org/reference/load_nba_officials.html) |
 | [`load_nba_pbp`](reference/loaders#load_nba_pbp) | [`load_nba_pbp`](https://hoopR.sportsdataverse.org/reference/load_nba_pbp.html) |
+| [`load_nba_rosters`](reference/loaders#load_nba_rosters) | [`load_nba_rosters`](https://hoopR.sportsdataverse.org/reference/load_nba_rosters.html) |
 | [`load_nba_schedule`](reference/loaders#load_nba_schedule) | [`load_nba_schedule`](https://hoopR.sportsdataverse.org/reference/load_nba_schedule.html) |
 | [`load_nba_standings`](reference/loaders#load_nba_standings) | [`load_nba_standings`](https://hoopR.sportsdataverse.org/reference/load_nba_standings.html) |
 | [`most_recent_nba_season`](reference/additional#most_recent_nba_season) | [`most_recent_nba_season`](https://hoopR.sportsdataverse.org/reference/most_recent_nba_season.html) |

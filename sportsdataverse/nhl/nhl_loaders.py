@@ -41,12 +41,12 @@ __all__ = [
 
 
 def load_nhl_pbp(seasons, return_as_pandas: bool = False):
-    """Load fastRhockey-data (sportsdataverse-data release).
+    """Load nhl_pbp_full (sportsdataverse-data release).
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_full
 
     Args:
-        seasons: an int or iterable of seasons (>= 2011).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -164,10 +164,10 @@ def load_nhl_pbp(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2011:
-            raise SeasonNotFoundError("season cannot be less than 2011")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
-            f"https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/pbp/parquet/play_by_play_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_full/play_by_play_{season}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -180,12 +180,12 @@ def load_nhl_pbp(seasons, return_as_pandas: bool = False):
 
 
 def load_nhl_player_boxscore(seasons, return_as_pandas: bool = False):
-    """Load fastRhockey-data (sportsdataverse-data release).
+    """Load nhl_player_boxscores (sportsdataverse-data release).
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_player_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2011).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -250,10 +250,10 @@ def load_nhl_player_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2011:
-            raise SeasonNotFoundError("season cannot be less than 2011")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
-            f"https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/player_box/parquet/player_box_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_player_boxscores/player_box_{season}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -266,12 +266,12 @@ def load_nhl_player_boxscore(seasons, return_as_pandas: bool = False):
 
 
 def load_nhl_schedule(seasons, return_as_pandas: bool = False):
-    """Load fastRhockey-data (sportsdataverse-data release).
+    """Load nhl_schedules (sportsdataverse-data release).
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_schedules
 
     Args:
-        seasons: an int or iterable of seasons (>= 2011).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -314,10 +314,10 @@ def load_nhl_schedule(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2011:
-            raise SeasonNotFoundError("season cannot be less than 2011")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
-            f"https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/schedules/parquet/nhl_schedule_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_schedules/nhl_schedule_{season}.parquet"
         )
         if df is None:
             missing.append(season)
@@ -330,12 +330,12 @@ def load_nhl_schedule(seasons, return_as_pandas: bool = False):
 
 
 def load_nhl_team_boxscore(seasons, return_as_pandas: bool = False):
-    """Load fastRhockey-data (sportsdataverse-data release).
+    """Load nhl_team_boxscores (sportsdataverse-data release).
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/fastRhockey-data
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_team_boxscores
 
     Args:
-        seasons: an int or iterable of seasons (>= 2011).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -368,10 +368,10 @@ def load_nhl_team_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2011:
-            raise SeasonNotFoundError("season cannot be less than 2011")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
-            f"https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/nhl/team_box/parquet/team_box_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_team_boxscores/team_box_{season}.parquet"
         )
         if df is None:
             missing.append(season)

@@ -101,34 +101,34 @@ loaders:
     seasons: 2024
 - fn: load_nhl_pbp
   league: nhl
-  base: raw_data
-  url: fastRhockey-data/main/nhl/pbp/parquet/play_by_play_{season}.parquet
-  tag: fastRhockey-data
-  min_season: 2011
+  base: sdv_releases
+  url: nhl_pbp_full/play_by_play_{season}.parquet
+  tag: nhl_pbp_full
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_player_boxscore
   league: nhl
-  base: raw_data
-  url: fastRhockey-data/main/nhl/player_box/parquet/player_box_{season}.parquet
-  tag: fastRhockey-data
-  min_season: 2011
+  base: sdv_releases
+  url: nhl_player_boxscores/player_box_{season}.parquet
+  tag: nhl_player_boxscores
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_schedule
   league: nhl
-  base: raw_data
-  url: fastRhockey-data/main/nhl/schedules/parquet/nhl_schedule_{season}.parquet
-  tag: fastRhockey-data
-  min_season: 2011
+  base: sdv_releases
+  url: nhl_schedules/nhl_schedule_{season}.parquet
+  tag: nhl_schedules
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_nhl_team_boxscore
   league: nhl
-  base: raw_data
-  url: fastRhockey-data/main/nhl/team_box/parquet/team_box_{season}.parquet
-  tag: fastRhockey-data
-  min_season: 2011
+  base: sdv_releases
+  url: nhl_team_boxscores/team_box_{season}.parquet
+  tag: nhl_team_boxscores
+  min_season: 2010
   example_args:
     seasons: 2024
 - fn: load_wbb_pbp
@@ -203,6 +203,54 @@ loaders:
   min_season: 2025
   example_args:
     seasons: 2025
+- fn: load_mbb_standings
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_standings/standings_{season}.parquet
+  tag: espn_mens_college_basketball_standings
+  min_season: 2003
+  example_args:
+    seasons: 2025
+- fn: load_mbb_player_season_stats
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet
+  tag: espn_mens_college_basketball_player_season_stats
+  min_season: 2025
+  example_args:
+    seasons: 2025
+- fn: load_mbb_rosters
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_rosters/rosters_{season}.parquet
+  tag: espn_mens_college_basketball_rosters
+  min_season: 2025
+  example_args:
+    seasons: 2025
+- fn: load_mbb_officials
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_officials/officials_{season}.parquet
+  tag: espn_mens_college_basketball_officials
+  min_season: 2025
+  example_args:
+    seasons: 2025
+- fn: load_mbb_game_rosters
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet
+  tag: espn_mens_college_basketball_game_rosters
+  min_season: 2025
+  example_args:
+    seasons: 2025
+- fn: load_mbb_team_season_stats
+  league: mbb
+  base: sdv_releases
+  url: espn_mens_college_basketball_team_season_stats/team_season_stats_{season}.parquet
+  tag: espn_mens_college_basketball_team_season_stats
+  min_season: 2003
+  example_args:
+    seasons: 2025
 - fn: load_nba_game_rosters
   league: nba
   base: sdv_releases
@@ -235,6 +283,38 @@ loaders:
   min_season: 2002
   example_args:
     seasons: 2002
+- fn: load_nba_player_season_stats
+  league: nba
+  base: sdv_releases
+  url: espn_nba_player_season_stats/player_season_stats_{season}.parquet
+  tag: espn_nba_player_season_stats
+  min_season: 2002
+  example_args:
+    seasons: 2025
+- fn: load_nba_team_season_stats
+  league: nba
+  base: sdv_releases
+  url: espn_nba_team_season_stats/team_season_stats_{season}.parquet
+  tag: espn_nba_team_season_stats
+  min_season: 2002
+  example_args:
+    seasons: 2025
+- fn: load_nba_draft
+  league: nba
+  base: sdv_releases
+  url: espn_nba_draft/draft_{season}.parquet
+  tag: espn_nba_draft
+  min_season: 2003
+  example_args:
+    seasons: 2025
+- fn: load_nba_rosters
+  league: nba
+  base: sdv_releases
+  url: espn_nba_rosters/rosters_{season}.parquet
+  tag: espn_nba_rosters
+  min_season: 2025
+  example_args:
+    seasons: 2025
 - fn: load_wnba_draft
   league: wnba
   base: sdv_releases
