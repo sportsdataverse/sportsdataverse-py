@@ -1,9 +1,30 @@
 from __future__ import annotations
 
+import types
+
 import pytest
 import requests
 
-from sportsdataverse.dl_utils import download
+from sportsdataverse.dl_utils import _retry_delay, download
+
+
+class TestRetryDelay:
+    """Offline tests for the retry backoff helper (no network)."""
+
+    def test_exponential_backoff_capped(self):
+        # base=0.5: 0.5, 1, 2, 4, then capped at 4.
+        assert _retry_delay(None, 0) == 0.5
+        assert _retry_delay(None, 1) == 1.0
+        assert _retry_delay(None, 3) == 4.0
+        assert _retry_delay(None, 10) == 4.0  # capped
+
+    def test_honors_retry_after_header(self):
+        resp = types.SimpleNamespace(headers={"Retry-After": "7"})
+        assert _retry_delay(resp, 0) == 7.0  # server's ask beats the exponential 0.5
+
+    def test_bad_retry_after_falls_back_to_backoff(self):
+        resp = types.SimpleNamespace(headers={"Retry-After": "soon"})
+        assert _retry_delay(resp, 2) == 2.0  # unparseable -> exponential
 
 
 class TestDownload:

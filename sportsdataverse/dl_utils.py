@@ -9,11 +9,39 @@ from itertools import chain, starmap
 import numpy as np
 import polars as pl
 import requests
+from requests.adapters import HTTPAdapter
 
 from sportsdataverse.errors import no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
+
+# Module-level pooled session: reuses TCP connections across the many small
+# requests a single workflow makes (e.g. a season crosswalk fires ~50). The
+# larger pool sizes support concurrent fetching. urllib3's connection pool is
+# thread-safe for concurrent GETs; callers needing isolation pass their own
+# ``session=``.
+_SHARED_SESSION = requests.Session()
+for _scheme in ("https://", "http://"):
+    _SHARED_SESSION.mount(_scheme, HTTPAdapter(pool_connections=16, pool_maxsize=32))
+
+
+def _retry_delay(response: object, attempt: int, *, base: float = 0.5, cap: float = 4.0) -> float:
+    """Seconds to wait before the next retry.
+
+    Honors a ``Retry-After`` header (429 / 503 rate limiting) when present so we
+    back off as the server asks; otherwise uses capped exponential backoff
+    (gentler than a fixed sleep on quick-recovery transients, politer than
+    hammering on persistent ones).
+    """
+    headers = getattr(response, "headers", None)
+    retry_after = headers.get("Retry-After") if headers else None
+    if retry_after:
+        try:
+            return min(cap * 4, float(retry_after))  # allow a longer explicit wait
+        except (TypeError, ValueError):
+            pass
+    return min(cap, base * (2**attempt))
 
 
 def download(
@@ -170,7 +198,7 @@ def download(
                     attempt + 1,
                     num_retries,
                 )
-            time.sleep(2)
+            time.sleep(_retry_delay(response, attempt))
 
     # Retry budget exhausted. Re-raise the last captured exception so
     # callers can react (and the test suite can assert on the failure
@@ -185,7 +213,7 @@ def init_request_settings(params, session, logger):
         params = {}
 
     if session is None:
-        session = requests.Session()
+        session = _SHARED_SESSION
 
     if logger is None:
         logger = logging.getLogger("sdv.dl_utils")
