@@ -7,12 +7,18 @@ import type * as Preset from '@docusaurus/preset-classic';
 // Cap which doc versions are BUILT to keep each deploy under the Vercel build
 // container's memory budget. Every `yarn version:docs x.y.z` adds a full doc
 // copy; building all of them (6+) OOMs the build. We build the rolling
-// `current` tree plus the latest 3 release snapshots, derived from
+// `current` tree plus the latest N release snapshots, derived from
 // versions.json (which Docusaurus maintains newest-first) so this list never
 // needs manual editing at release time. Older snapshots stay under
 // versioned_docs/ in git and can be re-added by bumping the slice if the build
 // budget grows.
-const VERSIONS_TO_KEEP = 3;
+//
+// Dropped 3 -> 2: each release tree keeps growing (0.0.58 carries the full Fox /
+// Yahoo / NFL-native / odds surface), and `current` now ships executed tutorial
+// outputs, so `current + latest 3` OOMed the Vercel build. `current + latest 2`
+// (0.0.58 + 0.0.56) restores headroom; 0.0.55 stays archived in git, re-buildable
+// by bumping this back if the budget allows.
+const VERSIONS_TO_KEEP = 2;
 const allReleasedVersions: string[] = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'versions.json'), 'utf-8'),
 );
