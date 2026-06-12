@@ -6,6 +6,7 @@
   - [Development setup](#development-setup)
   - [Python version support](#python-version-support)
   - [Code standards for new modules](#code-standards-for-new-modules)
+  - [Deprecating a public API](#deprecating-a-public-api)
   - [Documentation & the docs site](#documentation--the-docs-site)
     - [Updating docs (everyday — including a commit after a release)](#updating-docs-everyday--including-a-commit-after-a-release)
     - [At release time](#at-release-time)
@@ -137,6 +138,45 @@ are intentionally migrating).
   `sportsdataverse-data` GitHub release. Match the column shape of the
   R-side loader the dataset is mirroring so downstream users can swap
   engines without changing call sites.
+
+## Deprecating a public API
+
+Public APIs are **never removed without warning**. The policy lives in
+`sportsdataverse/_deprecation.py` and is enforced through one helper so the
+message format and `stacklevel` stay consistent package-wide.
+
+- **Window:** a deprecated API keeps working, unchanged, for **at least two
+  minor releases** (deprecated in `0.0.57` → removable no earlier than `0.1.0`).
+- **Every call warns:** for the whole window the API emits a
+  `DeprecationWarning` that names *both* the replacement *and* the target
+  removal version, so downstream users get an actionable, time-boxed migration
+  path. Removal happens only in the named release and is called out in the
+  changelog.
+- **Emit via the helper, never hand-rolled `warnings.warn`:**
+
+  ```python
+  # In-body — when the function preserves custom legacy behavior:
+  from sportsdataverse._deprecation import warn_deprecated
+
+  def load_nfl_ngs_passing(...):
+      warn_deprecated(
+          "load_nfl_ngs_passing",
+          replacement="load_nfl_nextgen_stats(stat_type='passing')",
+          removed_in="0.1.0",
+      )
+      ...
+
+  # Decorator — for a plain forwarding alias:
+  from sportsdataverse._deprecation import deprecated
+
+  @deprecated(replacement="new_fn", removed_in="0.1.0")
+  def old_fn(*args, **kwargs):
+      return new_fn(*args, **kwargs)
+  ```
+
+  Generated `sportsdataverse.parsed.*` alias modules carry their own
+  codegen-emitted deprecation banner (template-driven, since `0.0.54`) — don't
+  hand-edit those; change the codegen template instead.
 
 ## Documentation & the docs site
 
