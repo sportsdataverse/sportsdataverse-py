@@ -90,6 +90,16 @@ def test_distinct_credentials_invalidate_cache(monkeypatch):
     assert calls[1] == ("other-key", "other-secret")
 
 
+def test_changed_secret_same_key_invalidates_cache(monkeypatch):
+    # Same key, different secret -> the cache identity must change and re-mint,
+    # otherwise an explicit credential override would be silently ineffective.
+    calls = _patch_mint(monkeypatch)
+    nfl_games.nfl_token_gen(client_key="k", client_secret="s1")
+    nfl_games.nfl_token_gen(client_key="k", client_secret="s2")
+    assert len(calls) == 2
+    assert calls[1] == ("k", "s2")
+
+
 def test_env_access_token_short_circuits(monkeypatch):
     calls = _patch_mint(monkeypatch)
     monkeypatch.setenv("NFL_ACCESS_TOKEN", "user-supplied-token")

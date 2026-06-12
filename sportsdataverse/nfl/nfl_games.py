@@ -52,7 +52,7 @@ _DEFAULT_UA = (
 # client key so swapping credentials never serves a stale token. Guarded by a lock
 # for thread-safe minting.
 _TOKEN_LOCK = threading.Lock()
-_TOKEN_CACHE: Dict[str, object] = {}  # {"token": str, "key": str, "exp": float}
+_TOKEN_CACHE: Dict[str, object] = {}  # {"token": str, "key": str, "secret": str, "exp": float}
 # Renew this many seconds before the JWT's own ``exp`` so a call never races expiry.
 _TOKEN_SKEW_SECONDS = 120
 # Conservative lifetime used only when a token's ``exp`` claim can't be parsed.
@@ -154,6 +154,7 @@ def nfl_token_gen(
             not force_refresh
             and _TOKEN_CACHE.get("token")
             and _TOKEN_CACHE.get("key") == key
+            and _TOKEN_CACHE.get("secret") == secret
             and float(_TOKEN_CACHE.get("exp", 0)) - _TOKEN_SKEW_SECONDS > now
         ):
             return str(_TOKEN_CACHE["token"])
@@ -161,7 +162,12 @@ def nfl_token_gen(
         exp = _jwt_exp(token)
         _TOKEN_CACHE.clear()
         _TOKEN_CACHE.update(
-            {"token": token, "key": key, "exp": exp if exp is not None else now + _TOKEN_FALLBACK_TTL},
+            {
+                "token": token,
+                "key": key,
+                "secret": secret,
+                "exp": exp if exp is not None else now + _TOKEN_FALLBACK_TTL,
+            },
         )
         return token
 
