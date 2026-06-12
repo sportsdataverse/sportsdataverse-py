@@ -25,6 +25,7 @@ from sportsdataverse._codegen_runtime import _get
 from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY  # single source of truth for the public Fox key
 
 __all__ = [
+    "fox_cfb_teams",
     "fox_cfb_pbp",
     "fox_cfb_team_roster",
     "fox_cfb_boxscore",
@@ -89,6 +90,75 @@ def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataF
 
         return pd.DataFrame(rows)
     return pl.DataFrame(rows)
+
+
+@overload
+def fox_cfb_teams(*, return_parsed: Literal[False], return_as_pandas: bool = ..., **kwargs: Any) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_teams(
+    *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[True], **kwargs: Any
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_teams(
+    *, return_parsed: Literal[True] = ..., return_as_pandas: Literal[False] = ..., **kwargs: Any
+) -> pl.DataFrame: ...
+def fox_cfb_teams(
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """Fox Sports CFB team directory (one row per team).
+
+    Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/league/teamnav``
+
+    The team-nav payload is the canonical Fox directory: it maps every team's
+    Bifrost id to its abbreviation, full name, and web slug. This is the lookup
+    you need to translate a human team name into the numeric ``team_id`` the
+    other ``fox_cfb_*`` wrappers expect, and it is the Fox side of
+    :func:`sportsdataverse.cfb.cfb_teams_crosswalk`.
+
+    Args:
+        return_parsed: If ``True`` (default) flatten the nav items to a
+            DataFrame; if ``False`` return the raw JSON ``dict``.
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) with columns ``fox_team_id``,
+        ``abbreviation``, ``name``, ``slug``, ``color``, ``logo_url``; a pandas
+        DataFrame when ``return_as_pandas=True``; or the raw JSON ``dict`` when
+        ``return_parsed=False``.
+
+    Example:
+        Build an abbreviation -> Fox id lookup::
+
+            from sportsdataverse.cfb import fox_cfb_teams
+            teams = fox_cfb_teams()
+            fox_id = dict(zip(teams["abbreviation"], teams["fox_team_id"]))
+    """
+    raw = _fox_get("cfb/league/teamnav", **kwargs)
+    if not return_parsed:
+        return raw
+    rows: List[Dict] = []
+    for it in raw.get("navItems", []) or []:
+        link = it.get("entityLink") or {}
+        m = re.search(r"teams/(\d+)", link.get("contentUri") or "")
+        if not m:  # skip non-team nav entries (conference headers, etc.)
+            continue
+        slug = re.sub(r"-team$", "", re.sub(r"^/college-football/", "", link.get("webUrl") or "")) or None
+        rows.append(
+            {
+                "fox_team_id": m.group(1),
+                "abbreviation": it.get("title"),
+                "name": link.get("title"),
+                "slug": slug,
+                "color": link.get("color"),
+                "logo_url": it.get("logoUrl"),
+            }
+        )
+    return _frame(rows, return_as_pandas)
 
 
 @overload

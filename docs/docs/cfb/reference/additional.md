@@ -821,6 +821,136 @@ sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 
 ## Other
 
+### `cfb_odds_events_crosswalk(season: 'Optional[int]' = None, week: 'Optional[int]' = None, *, sport: 'str' = 'americanfootball_ncaaf', api_key: 'Optional[str]' = None, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_odds_events_crosswalk}
+
+Match The Odds API CFB events to ESPN game ids.
+
+Pulls the upcoming/live events for `sport` from The Odds API and the ESPN
+scoreboard for `(season, week)`, then joins them on the order-independent
+team matchup so each odds event id maps to its ESPN `event` id. Because
+The Odds API only lists near-term events, this is most useful for the
+current/upcoming week.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | ESPN season year for the schedule side. Defaults to the most recent CFB season. |
+| `week` | `Optional[int]` | `None` | ESPN schedule week. When `None`, ESPN returns its default (current) slate. |
+| `sport` | `str` | `'americanfootball_ncaaf'` | The Odds API sport key. Defaults to `"americanfootball_ncaaf"`. |
+| `api_key` | `Optional[str]` | `None` | The Odds API key; falls back to the `ODDS_API_KEY` env var. |
+| `season_type` | `int` | `2` | ESPN season type (`2` regular, `3` post-season). Defaults to `2`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A polars DataFrame (pandas when `return_as_pandas=True`), one row per odds event, with columns `matchup_key`, `odds_event_id`, `espn_game_id`, `home_team`, `away_team`, `commence_time`, `espn_date`, `matched_sources`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_odds_events_crosswalk
+xwalk = cfb_odds_events_crosswalk(season=2024, week=5)
+matched = xwalk.filter(pl.col("espn_game_id").is_not_null())
+```
+
+### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
+
+Build the ESPN x Fox player-id crosswalk for one team.
+
+Fetches both providers' rosters for the given team, matches players on
+normalized name (with jersey as a confidence signal), and returns each
+player's ESPN and Fox athlete ids side by side. Use
+`cfb_teams_crosswalk` first to translate an ESPN team id into the
+matching Fox team id. Yahoo is excluded — it ships no roster endpoint.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `espn_team_id` | `Union[int, str]` |  | ESPN team id (e.g. `194` for Ohio State). |
+| `fox_team_id` | `Union[int, str]` |  | Fox Bifrost team id (e.g. `25` for Ohio State). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A polars DataFrame (pandas when `return_as_pandas=True`) with columns `person_key`, `espn_athlete_id`, `fox_athlete_id`, `name`, `espn_jersey`, `fox_jersey`, `espn_position`, `fox_position`, `match_method`, `matched_sources`. `match_method` is one of `name_jersey` (name + jersey agree), `name` (name only), `name_jersey_conflict` (name matches but jerseys differ — review), or `unmatched`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_rosters_crosswalk
+xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25)
+matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
+```
+
+### `cfb_schedule_crosswalk(season: 'int', week: 'int', *, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_schedule_crosswalk}
+
+Build the ESPN x Yahoo CFB game-id crosswalk for one week.
+
+Pulls the ESPN scoreboard and the Yahoo scoreboard for `(season, week)`,
+keys each game by its order-independent team matchup, and joins them so each
+row pairs the ESPN `event` id with the Yahoo dotted game id. Fox is not
+included because Fox has no public schedule lister (Fox event ids are
+reached per-game through `sportsdataverse.cfb.fox_cfb_pbp`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season year (e.g. `2024`). |
+| `week` | `int` |  | Schedule week number. |
+| `season_type` | `int` | `2` | ESPN season type — `2` regular, `3` post-season, `4` off-season. Defaults to `2`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_key`, `espn_game_id`, `yahoo_game_id`, `yahoo_global_game_id`, `home_team`, `away_team`, `espn_date`, `yahoo_date`, `matched_sources`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_schedule_crosswalk
+xwalk = cfb_schedule_crosswalk(2024, 5)
+both = xwalk.filter(pl.col("matched_sources") == "espn+yahoo")
+```
+
+### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
+
+Build the ESPN x Fox x Yahoo CFB team-id crosswalk.
+
+Fetches all three provider team directories, normalizes each team name to a
+shared key, and full-outer-joins them so every row carries each provider's
+id, name, and abbreviation (`None` where a provider has no match). The
+`matched_sources` column records which providers contributed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season year used only to fetch Yahoo's embedded team directory (Yahoo has no standalone teams endpoint). Defaults to the most recent CFB season. |
+| `week` | `int` | `1` | Schedule week used for the Yahoo scoreboard fetch. Defaults to `1`. The embedded directory is the full league list regardless. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A polars DataFrame (pandas when `return_as_pandas=True`) with columns `norm_key`, `espn_team_id`, `espn_team`, `espn_abbreviation`, `fox_team_id`, `fox_team`, `fox_abbreviation`, `yahoo_team_id`, `yahoo_team`, `yahoo_abbreviation`, `matched_sources`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_teams_crosswalk
+xwalk = cfb_teams_crosswalk(season=2024)
+row = xwalk.filter(pl.col("espn_team_id") == 194)  # Ohio State
+
+# Find teams only one provider knows about
+
+import polars as pl
+gaps = cfb_teams_crosswalk(season=2024).filter(
+    pl.col("matched_sources") != "espn+fox+yahoo"
+)
+```
+
 ### `espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_teams}
 
 espn_cfb_teams - look up the college football teams
@@ -1114,6 +1244,37 @@ from sportsdataverse.cfb import fox_cfb_team_stats
 df = fox_cfb_team_stats("11")
 ```
 
+### `fox_cfb_teams(*, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_teams}
+
+Fox Sports CFB team directory (one row per team).
+
+Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/league/teamnav`
+
+The team-nav payload is the canonical Fox directory: it maps every team's
+Bifrost id to its abbreviation, full name, and web slug. This is the lookup
+you need to translate a human team name into the numeric `team_id` the
+other `fox_cfb_*` wrappers expect, and it is the Fox side of
+`sportsdataverse.cfb.cfb_teams_crosswalk`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the nav items to a DataFrame; if `False` return the raw JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default) with columns `fox_team_id`, `abbreviation`, `name`, `slug`, `color`, `logo_url`; a pandas DataFrame when `return_as_pandas=True`; or the raw JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import fox_cfb_teams
+teams = fox_cfb_teams()
+fox_id = dict(zip(teams["abbreviation"], teams["fox_team_id"]))
+```
+
 ### `fox_to_espn_summary(fox_data: 'Dict[str, Any]') -> 'Dict[str, Any]'` {#fox_to_espn_summary}
 
 Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
@@ -1380,4 +1541,37 @@ from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy
 df = yahoo_cfb_team_season_stats_legacy(
     season=2024, category="Rushing", sort_stat="RUSHING_YARDS"
 )
+```
+
+### `yahoo_cfb_teams(season: 'int', week: 'int' = 1, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#yahoo_cfb_teams}
+
+Yahoo CFB team directory (one row per team).
+
+Yahoo has no standalone teams resource (the documented
+`sports.league.teams` resource 404s without auth). Instead the editorial
+`scoreboard` payload is "fat": one call embeds the full ~186-team
+directory under `service.scoreboard.teams` keyed by the dotted
+`ncaaf.t.<id>` team id. This wrapper pulls that map for the requested
+`(season, week)` and projects it to the directory columns -- it is the
+Yahoo side of `sportsdataverse.cfb.cfb_teams_crosswalk`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season year (required; the scoreboard is fetched to obtain the embedded teams map). |
+| `week` | `int` | `1` | Schedule week used to fetch the scoreboard. Defaults to `1`. The embedded directory is the full league list regardless of week. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the teams map to a DataFrame; if `False` return the raw scoreboard JSON `dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
+
+**Returns**
+
+A polars DataFrame (default) with one row per team -- columns `team_id`, `abbreviation`, `display_name`, `full_name`, `location`, `nickname`, `conference`, `conference_abbreviation`, `conference_id`, `division`, `division_id`, `seatgeek_id` -- a pandas DataFrame when `return_as_pandas=True`, or the raw scoreboard JSON `dict` when `return_parsed=False`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import yahoo_cfb_teams
+teams = yahoo_cfb_teams(season=2024)
+abbr = dict(zip(teams["team_id"], teams["abbreviation"]))
 ```
