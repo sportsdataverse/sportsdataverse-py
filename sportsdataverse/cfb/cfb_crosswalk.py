@@ -314,14 +314,12 @@ def _yahoo_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
 
 
 def _fox_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
-    # Fox is a best-effort third leg: its scoreboard is keyed by opaque phase
-    # "segments" (not integer weeks), so it may return a wider/narrower set than
-    # the requested ESPN week. We fetch best-effort and rely on the matchup_key
-    # join to map Fox games onto ESPN's canonical week; a Fox outage or an
-    # unresolvable segment must never break the ESPN<->Yahoo core, hence the
-    # deliberate broad guard.
+    # Fetch just the regular-season week segment ("{season}-{week}-1") -- one HTTP
+    # call -- and match its games onto ESPN's week by team. Fox is best-effort: a
+    # Fox outage must never break the ESPN<->Yahoo core, hence the deliberate
+    # broad guard returning an empty list.
     try:
-        df = fox_cfb_schedule(season=season, week=week, **kwargs)
+        df = fox_cfb_schedule(segment_id=f"{season}-{week}-1", **kwargs)
     except Exception:
         return []
     out: List[Dict[str, Any]] = []
@@ -748,12 +746,12 @@ def cfb_schedule_crosswalk(
     mapped onto it, so each row pairs the ESPN ``event`` id with the Fox Bifrost
     event id and the Yahoo dotted game id.
 
-    Fox is a **best-effort** leg. Fox lists games by opaque phase "segments"
-    rather than integer weeks (see :func:`sportsdataverse.cfb.fox_cfb_schedule`),
-    so its games are matched onto ESPN's week by team rather than by week number;
-    a Fox game that doesn't match an ESPN game is dropped (it belongs to a
-    different week), and a Fox outage leaves the Fox columns null without
-    affecting the ESPN/Yahoo result.
+    The Fox leg resolves the regular-season segment ``"{season}-{week}-1"`` (see
+    :func:`sportsdataverse.cfb.fox_cfb_schedule`) and maps its games onto ESPN's
+    week by team. It is best-effort: a Fox game that doesn't match an ESPN game
+    is dropped, and a Fox outage leaves the Fox columns null without affecting
+    the ESPN/Yahoo result. Fox's postseason data (CFP quarterfinals onward) can
+    be lower fidelity, so a regular-season ``season_type=2`` week matches best.
 
     Args:
         season: Season year (e.g. ``2024``).

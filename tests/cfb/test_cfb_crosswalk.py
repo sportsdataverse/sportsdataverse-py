@@ -495,8 +495,16 @@ def test_fox_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
             "away_team": ["Akron Zips"],
         }
     )
-    monkeypatch.setattr(cw, "fox_cfb_schedule", lambda season, week, **k: fake)
-    out = cw._fox_games(2024, 1)
+    captured: dict[str, Any] = {}
+
+    def fake_sched(*, segment_id: str, **k: Any) -> pl.DataFrame:
+        captured["segment_id"] = segment_id
+        return fake
+
+    monkeypatch.setattr(cw, "fox_cfb_schedule", fake_sched)
+    out = cw._fox_games(2024, 5)
+    # the adapter fetches exactly the regular-season week segment ("-1" suffix)
+    assert captured["segment_id"] == "2024-5-1"
     assert out[0]["game_id"] == "41999"
     assert out[0]["date"] == "2024-08-31"
     assert out[0]["matchup_key"] == _matchup_key("ohio state buckeyes", "akron zips")
@@ -504,7 +512,7 @@ def test_fox_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_fox_games_swallows_errors(monkeypatch: pytest.MonkeyPatch) -> None:
     # Fox is best-effort: a failure must yield [] so the ESPN/Yahoo core survives.
-    def boom(season: int, week: int, **k: Any) -> pl.DataFrame:
+    def boom(**k: Any) -> pl.DataFrame:
         raise RuntimeError("fox is down")
 
     monkeypatch.setattr(cw, "fox_cfb_schedule", boom)
@@ -555,6 +563,60 @@ def test_fox_cfb_schedule_parses_segment(monkeypatch: pytest.MonkeyPatch) -> Non
     assert row["home_team"] == "Navy Midshipmen" and row["home_team_id"] == "62"
     assert row["away_team"] == "Army Black Knights" and row["away_team_id"] == "47"
     assert row["week_label"] == "WEEK 1" and row["segment_id"] == "2025-bowls-2"
+
+
+def test_fox_segment_ids_enumerates_and_remaps_season(monkeypatch: pytest.MonkeyPatch) -> None:
+    import sportsdataverse.cfb.cfb_fox_ext as fox
+
+    main = {
+        "selectionGroupList": [
+            {"title": "REGULAR SEASON", "selectionList": [{"id": "2030-1-1"}, {"id": "2030-2-1"}]},
+            {"title": "Bowls", "selectionList": [{"id": "2030-bowls-2"}]},
+        ]
+    }
+    cfp_main = {"selectionGroupList": [{"title": "Bowls", "selectionList": [{"id": "2030-cfp-2"}]}]}
+    monkeypatch.setattr(
+        fox, "_fox_get", lambda path, params=None, **k: cfp_main if (params or {}).get("groupId") == "cfp" else main
+    )
+    # enumerated for a *different* season -> prefix remapped to 2024, deduped, ordered
+    ids = fox._fox_segment_ids(2024, "2")
+    assert ids == ["2024-1-1", "2024-2-1", "2024-bowls-2", "2024-cfp-2"]
+
+
+def test_fox_cfb_schedule_full_season_unions_and_dedups(monkeypatch: pytest.MonkeyPatch) -> None:
+    import sportsdataverse.cfb.cfb_fox_ext as fox
+
+    main = {"selectionGroupList": [{"selectionList": [{"id": "2025-1-1"}, {"id": "2025-bowls-2"}]}]}
+    cfp_main = {"selectionGroupList": [{"selectionList": [{"id": "2025-cfp-2"}]}]}
+
+    def seg(gid: str, *ids: str) -> Dict[str, Any]:
+        return {
+            "sectionList": [
+                {
+                    "title": "S",
+                    "events": [
+                        {"entityLink": {"layout": {"tokens": {"id": i}}}, "eventTime": "2025-01-01T00:00Z"} for i in ids
+                    ],
+                }
+            ]
+        }
+
+    payloads = {
+        "cfb/league/scores-segment/2025-1-1": seg("w1", "100", "101"),
+        "cfb/league/scores-segment/2025-bowls-2": seg("b", "900", "901"),
+        "cfb/league/scores-segment/2025-cfp-2": seg("c", "900"),  # 900 overlaps bowls -> deduped
+    }
+
+    def fake_get(path: str, params: Any = None, **k: Any) -> Dict[str, Any]:
+        if path == "cfb/scoreboard/main":
+            return cfp_main if (params or {}).get("groupId") == "cfp" else main
+        return payloads[path]
+
+    monkeypatch.setattr(fox, "_fox_get", fake_get)
+    df = fox.fox_cfb_schedule(2025)
+    ids = df["game_id"].to_list()
+    assert ids == ["100", "101", "900", "901"]  # cfp's duplicate 900 dropped
+    assert df["game_id"].n_unique() == df.height
 
 
 def test_espn_roster_projection(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -705,7 +767,7 @@ def test_cfb_schedule_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> N
     monkeypatch.setattr(
         cw,
         "fox_cfb_schedule",
-        lambda season, week, **k: pl.DataFrame(
+        lambda **k: pl.DataFrame(
             {
                 "game_id": ["41999"],
                 "date": ["2024-08-31T20:00:00Z"],
@@ -810,18 +872,30 @@ def test_live_cfb_teams_crosswalk_matches_majority() -> None:
 
 
 @skip_if_no_live
-def test_live_fox_cfb_schedule() -> None:
-    df = cw.fox_cfb_schedule()  # current segment
+def test_live_fox_cfb_schedule_regular_week() -> None:
+    df = cw.fox_cfb_schedule(segment_id="2025-5-1")  # regular-season week 5
     assert isinstance(df, pl.DataFrame) and df.height > 0
     assert {"game_id", "date", "home_team", "away_team", "segment_id"}.issubset(df.columns)
+    # the "-1" suffix must yield real September dates, not relabeled postseason
+    assert all(d.startswith("2025-09") for d in df["date"].str.slice(0, 7).to_list())
+
+
+@skip_if_no_live
+def test_live_fox_cfb_schedule_full_season() -> None:
+    df = cw.fox_cfb_schedule(2025)  # full season: regular + conf champs + bowls + CFP
+    assert df.height > 700, f"expected a full season, got {df.height}"
+    assert df["game_id"].n_unique() == df.height, "game_ids must be deduped across segments"
+    dates = df["date"].str.slice(0, 10)
+    assert dates.min() < "2025-09-15"  # opens in (Aug) regular season
+    assert dates.max() > "2026-01-01"  # runs through the bowls/CFP
 
 
 @skip_if_no_live
 def test_live_cfb_schedule_crosswalk_week() -> None:
-    df = cfb_schedule_crosswalk(2024, 5)
+    df = cfb_schedule_crosswalk(2025, 5)
     assert df.height > 0
     assert "fox_game_id" in df.columns
-    # ESPN<->Yahoo is the reliable core; Fox is best-effort (its phase-segment
-    # model may not resolve a given historical week), so only assert on it.
-    both = df.filter(pl.col("matched_sources").str.contains("espn") & pl.col("matched_sources").str.contains("yahoo"))
-    assert both.height > 0
+    # With the "-1" regular-season fix, Fox now resolves the week, so the three
+    # providers should agree on most games.
+    fox_matched = df.filter(pl.col("fox_game_id").is_not_null())
+    assert fox_matched.height > 0, "Fox should match regular-season games"

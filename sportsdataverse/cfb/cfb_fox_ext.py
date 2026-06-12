@@ -170,108 +170,9 @@ def _fox_team_fullname(team: Optional[dict]) -> Optional[str]:
     return stacked or team.get("longName") or team.get("name")
 
 
-@overload
-def fox_cfb_schedule(
-    season: Optional[int] = ...,
-    week: Optional[int] = ...,
-    *,
-    segment_id: Optional[str] = ...,
-    group_id: Union[int, str] = ...,
-    return_parsed: Literal[False],
-    return_as_pandas: bool = ...,
-    **kwargs: Any,
-) -> Dict[str, Any]: ...
-@overload
-def fox_cfb_schedule(
-    season: Optional[int] = ...,
-    week: Optional[int] = ...,
-    *,
-    segment_id: Optional[str] = ...,
-    group_id: Union[int, str] = ...,
-    return_parsed: Literal[True] = ...,
-    return_as_pandas: Literal[True],
-    **kwargs: Any,
-) -> "pd.DataFrame": ...
-@overload
-def fox_cfb_schedule(
-    season: Optional[int] = ...,
-    week: Optional[int] = ...,
-    *,
-    segment_id: Optional[str] = ...,
-    group_id: Union[int, str] = ...,
-    return_parsed: Literal[True] = ...,
-    return_as_pandas: Literal[False] = ...,
-    **kwargs: Any,
-) -> pl.DataFrame: ...
-def fox_cfb_schedule(
-    season: Optional[int] = None,
-    week: Optional[int] = None,
-    *,
-    segment_id: Optional[str] = None,
-    group_id: Union[int, str] = "2",
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs: Any,
-) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
-    """Fox Sports CFB scoreboard / schedule (one row per game).
-
-    Fox lists games behind a two-step *selector -> segment* flow rather than by
-    integer week: ``scoreboard/main`` returns the available segments, and
-    ``league/scores-segment/{segmentId}`` returns the games. Segment ids are
-    opaque strings (``"2025-bowls-2"``, ``"2025-cfp-2"``,
-    ``"{season}-{phase}-{groupId}"``) that do **not** map 1:1 onto the ESPN/Yahoo
-    integer ``week``. This wrapper resolves a segment three ways, in order:
-
-    1. an explicit ``segment_id`` (most reliable),
-    2. a best-effort ``f"{season}-{week}-{group_id}"`` when both are given, or
-    3. the ``currentSelectionId`` from ``scoreboard/main`` when neither is.
-
-    Because a Fox segment spans a whole phase, the returned frame can carry more
-    than one week; use the ``week_label`` column (the section title, e.g.
-    ``"WEEK 5"``) to subset, or match by team + date downstream. The numeric
-    ``game_id`` is the Fox Bifrost event id that :func:`fox_cfb_pbp` /
-    :func:`fox_cfb_odds` accept.
-
-    Args:
-        season: Season year (used only to build a best-effort segment id).
-        week: Week number (used only to build a best-effort segment id).
-        segment_id: Explicit Fox segment id; bypasses ``season``/``week``.
-        group_id: Conference/division group filter. Defaults to ``"2"`` (FBS).
-        return_parsed: If ``True`` (default) flatten the segment to a DataFrame;
-            if ``False`` return the raw JSON ``dict``.
-        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
-            polars. Ignored when ``return_parsed=False``.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A polars DataFrame (default) with columns ``game_id``, ``date``,
-        ``status``, ``week_label``, ``home_team``, ``home_team_id``,
-        ``away_team``, ``away_team_id``, ``segment_id``; a pandas DataFrame when
-        ``return_as_pandas=True``; or the raw JSON ``dict`` when
-        ``return_parsed=False``.
-
-    Example:
-        List the current segment's games::
-
-            from sportsdataverse.cfb import fox_cfb_schedule
-            games = fox_cfb_schedule()
-
-        Pull a specific segment explicitly::
-
-            bowls = fox_cfb_schedule(segment_id="2025-bowls-2")
-    """
-    if segment_id is None:
-        if season is not None and week is not None:
-            segment_id = f"{season}-{week}-{group_id}"
-        else:
-            main = _fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)
-            segment_id = main.get("currentSelectionId")
-    if not segment_id:
-        return {} if not return_parsed else _frame([], return_as_pandas)
-    raw = _fox_get(f"cfb/league/scores-segment/{segment_id}", params={"groupId": group_id}, **kwargs)
-    if not return_parsed:
-        return raw
-    rows: List[Dict] = []
+def _parse_fox_segment(raw: Dict[str, Any], segment_id: str) -> List[Dict[str, Any]]:
+    """A Fox ``scores-segment`` payload -> one tidy row per game."""
+    rows: List[Dict[str, Any]] = []
     for sec in raw.get("sectionList", []) or []:
         week_label = sec.get("title")
         for ev in sec.get("events", []) or []:
@@ -279,7 +180,7 @@ def fox_cfb_schedule(
             home_uri, away_uri = tokens.get("homeUri"), tokens.get("awayUri")
             upper, lower = ev.get("upperTeam") or {}, ev.get("lowerTeam") or {}
             by_uri = {t.get("uri"): t for t in (upper, lower) if t.get("uri")}
-            # explicit home/away uri wins; else US convention (away on top).
+            # explicit home/away uri wins; else the US convention (away on top).
             home_team = by_uri.get(home_uri) if home_uri else lower
             away_team = by_uri.get(away_uri) if away_uri else upper
             rows.append(
@@ -295,6 +196,154 @@ def fox_cfb_schedule(
                     "segment_id": segment_id,
                 }
             )
+    return rows
+
+
+def _fox_segment_ids(season: int, group_id: Union[int, str], **kwargs: Any) -> List[str]:
+    """Every Fox scoreboard segment id for a season (regular weeks + postseason).
+
+    Enumerated from the live ``selectionGroupList`` for both the requested group
+    and the ``cfp`` group, with each id's season prefix remapped to ``season`` so
+    historical seasons resolve too (the CFB segment scheme — ``{season}-{week}-1``
+    for regular weeks, ``{season}-bowls-2`` / ``{season}-cfp-2`` for the
+    postseason — is stable year to year).
+    """
+    mains = [_fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)]
+    try:
+        # The CFP lives under its own group; it is supplemental (the bowls segment
+        # already carries CFP games), so a failure here must not abort enumeration.
+        mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
+    except Exception:
+        pass
+    ids: List[str] = []
+    seen: set[str] = set()
+    for main in mains:
+        for grp in main.get("selectionGroupList") or []:
+            for sel in grp.get("selectionList") or []:
+                sid = sel.get("id")
+                if not sid:
+                    continue
+                head, _, tail = sid.partition("-")
+                remapped = f"{season}-{tail}" if tail and head.isdigit() else sid
+                if remapped not in seen:
+                    seen.add(remapped)
+                    ids.append(remapped)
+    return ids
+
+
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[False],
+    return_as_pandas: bool = ...,
+    **kwargs: Any,
+) -> Dict[str, Any]: ...
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[True],
+    **kwargs: Any,
+) -> "pd.DataFrame": ...
+@overload
+def fox_cfb_schedule(
+    season: Optional[int] = ...,
+    *,
+    segment_id: Optional[str] = ...,
+    group_id: Union[int, str] = ...,
+    return_parsed: Literal[True] = ...,
+    return_as_pandas: Literal[False] = ...,
+    **kwargs: Any,
+) -> pl.DataFrame: ...
+def fox_cfb_schedule(
+    season: Optional[int] = None,
+    *,
+    segment_id: Optional[str] = None,
+    group_id: Union[int, str] = "2",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs: Any,
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
+    """Fox Sports CFB full-season schedule (one row per game).
+
+    Fox lists games behind a two-step *selector -> segment* flow: ``scoreboard/main``
+    enumerates the season's segments (its ``selectionGroupList``), and
+    ``league/scores-segment/{segmentId}`` returns the games for one segment.
+    Pass a ``season`` to scrape the **whole season** -- every regular week plus
+    conference championships, bowls, and every College Football Playoff round --
+    enumerated from the live selector and unioned, deduplicated by ``game_id``.
+
+    Segment ids encode the phase, not an ESPN-style integer week:
+    ``"{season}-{week}-1"`` for a regular-season week, ``"{season}-bowls-2"`` for
+    the bowls, ``"{season}-cfp-2"`` for the CFP (conference championships fall in
+    the final regular-season week). Pass ``segment_id`` to fetch just one of them.
+
+    The numeric ``game_id`` is the Fox Bifrost event id that :func:`fox_cfb_pbp` /
+    :func:`fox_cfb_odds` accept; ``week_label`` is the section title.
+
+    Args:
+        season: Season year -> scrape the full season. Ignored when ``segment_id``
+            is given; if both are ``None`` the current segment is returned.
+        segment_id: Explicit Fox segment id (e.g. ``"2025-5-1"``, ``"2025-cfp-2"``)
+            -> fetch just that segment.
+        group_id: Conference/division group filter. Defaults to ``"2"`` (FBS).
+        return_parsed: If ``True`` (default) flatten to a DataFrame; if ``False``
+            return the raw JSON (a single segment's ``dict``, or a
+            ``{segment_id: dict}`` map in full-season mode).
+        return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
+            polars. Ignored when ``return_parsed=False``.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars DataFrame (default) with columns ``game_id``, ``date``,
+        ``status``, ``week_label``, ``home_team``, ``home_team_id``,
+        ``away_team``, ``away_team_id``, ``segment_id``; a pandas DataFrame when
+        ``return_as_pandas=True``; or raw JSON when ``return_parsed=False``.
+
+    Example:
+        Scrape a whole season (regular + conf championships + bowls + CFP)::
+
+            from sportsdataverse.cfb import fox_cfb_schedule
+            season = fox_cfb_schedule(2025)
+
+        Fetch just one segment (a week, or the playoff)::
+
+            wk5 = fox_cfb_schedule(segment_id="2025-5-1")
+            cfp = fox_cfb_schedule(segment_id="2025-cfp-2")
+    """
+    if segment_id is not None:
+        seg_ids = [segment_id]
+    elif season is not None:
+        seg_ids = _fox_segment_ids(season, group_id, **kwargs)  # full season
+    else:
+        main = _fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)
+        cur = main.get("currentSelectionId")
+        seg_ids = [cur] if cur else []
+
+    raws: Dict[str, Any] = {}
+    for sid in seg_ids:
+        raws[sid] = _fox_get(f"cfb/league/scores-segment/{sid}", params={"groupId": group_id}, **kwargs)
+    if not return_parsed:
+        if not raws:
+            return {}
+        return next(iter(raws.values())) if len(raws) == 1 else raws
+
+    rows: List[Dict[str, Any]] = []
+    seen_games: set[Any] = set()
+    for sid, raw in raws.items():
+        for row in _parse_fox_segment(raw, sid):
+            gid = row.get("game_id")
+            if gid is not None and gid in seen_games:  # dedup overlap (bowls vs cfp)
+                continue
+            if gid is not None:
+                seen_games.add(gid)
+            rows.append(row)
     return _frame(rows, return_as_pandas)
 
 
