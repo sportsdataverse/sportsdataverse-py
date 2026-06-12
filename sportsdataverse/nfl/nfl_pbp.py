@@ -24,7 +24,6 @@ def _nfl_resource_filename(package: str, resource: str) -> str:
 
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import NoESPNDataError
 from sportsdataverse.nfl.model_vars import (
     defense_score_vec,
     end_change_vec,
@@ -909,6 +908,10 @@ class NFLPlayProcess(object):
         # `header.competitions` (transient gap / a game not yet ingested). Fail
         # with a clear, catchable NoESPNDataError instead of a deep
         # `KeyError: 'competitions'` so callers can handle the no-data case.
+        # Local import so the error class doesn't leak into the package namespace
+        # (it is not a public wrapper) and trip the codegen autodoc/parsed gates.
+        from sportsdataverse.errors import NoESPNDataError
+
         if not ((pbp_txt.get("header") or {}).get("competitions") or []):
             raise NoESPNDataError(
                 f"ESPN summary for game {self.gameId} has no header.competitions; cannot build play-by-play.",
