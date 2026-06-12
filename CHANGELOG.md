@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [0.0.58 (in development)](#0058-in-development)
+  - [The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)](#the-odds-api-wrappers-sportsdataverseodds-toa_)
   - [Yahoo Sports college football wrappers (`yahoo_cfb_*`)](#yahoo-sports-college-football-wrappers-yahoo_cfb_)
   - [NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping](#nfl--apinflcom-wrappers-cut-over-to-generated-nflcom-api-docs-grouping)
   - [NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override](#nfl--automatic-apinflcom-token-caching--nfl_access_token-override)
@@ -97,6 +98,10 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 0.0.58 (in development)
+
+### The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)
+
+New `sportsdataverse.odds` module wrapping [The Odds API](https://the-odds-api.com) v4 — live + historical sports betting odds, scores, events, markets and participants across a wide range of bookmakers. Mirrors the sister R package [oddsapiR](https://oddsapir.sportsdataverse.org)'s `toa_*` surface: `toa_sports`, `toa_sports_odds`, `toa_sports_scores`, `toa_sports_events`, `toa_event_odds`, `toa_event_markets`, `toa_sports_participants`, the three `*_history` snapshot variants, and `toa_usage` (cached quota, no network). The odds endpoints return tidy **long-format** frames (one row per event × bookmaker × market × outcome). Auth resolves from the `ODDS_API_KEY` env var (same variable as `oddsapiR`) or an `api_key=` argument; the call routes through the shared `dl_utils.download()` gateway. Same `return_parsed` / `return_as_pandas` contract (polars by default). Built from the `the_odds_api` OpenAPI spec.
 
 ### Yahoo Sports college football wrappers (`yahoo_cfb_*`)
 
