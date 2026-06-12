@@ -5,8 +5,10 @@
 - [0.0.58 (in development)](#0058-in-development)
   - [Yahoo Sports college football wrappers (`yahoo_cfb_*`)](#yahoo-sports-college-football-wrappers-yahoo_cfb_)
   - [NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping](#nfl--apinflcom-wrappers-cut-over-to-generated-nflcom-api-docs-grouping)
+  - [NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override](#nfl--automatic-apinflcom-token-caching--nfl_access_token-override)
   - [Documentation — `api.nfl.com` OpenAPI spec](#documentation--apinflcom-openapi-spec)
   - [Bug fixes](#bug-fixes)
+  - [Internal — Fox data key single-sourced](#internal--fox-data-key-single-sourced)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
     - [CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)](#cfb--fox-as-a-backup-source-for-the-epawpa-play-processor-fox_cfb_play_process)
@@ -104,6 +106,10 @@ Read-only Yahoo Sports wrappers for college football over Yahoo's shangrila stat
 
 The hand-written `sportsdataverse.nfl.nfl_api` wrappers (`nfl_standings`, `nfl_rosters`, `nfl_injuries`, …) are now **generated** from `tools/codegen/endpoints/nfl_api.yaml`, like the NHL/MLB native families. The flat-API codegen gained `getter_module` + `auth` support so an authenticated family (the NFL.com `WEB_DESKTOP` bearer token) can be generated; the auth getter lives in `nfl_api_runtime.py` and the per-endpoint record extraction in `nfl_api_parsers.py`. As a result the NFL docs index now lists a dedicated **"NFL.com API"** reference grouping (11 functions) instead of burying those wrappers in "Additional functions". Wrapper signatures gain `return_parsed` / `**kwargs`.
 
+### NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override
+
+The `api.nfl.com` bearer token is now minted once and cached in-process, then auto-renewed just before its JWT `exp` — so back-to-back `nfl_*` / `nfl_api_*` calls reuse a single token instead of POSTing to `/identity/v3/token` on every call, with no setup and no manual refresh. A new optional `NFL_ACCESS_TOKEN` env var injects a pre-minted bearer token verbatim (skipping the mint + cache); the existing `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` credential overrides still apply. `nfl_clear_token_cache()` forces a fresh mint, and `nfl_token_gen(force_refresh=True)` re-mints on demand.
+
 ### Documentation — `api.nfl.com` OpenAPI spec
 
 Added an OpenAPI 3.1 description of the modern NFL.com "Shield" data API (`api.nfl.com`: `/identity/v3/token` device-token auth + `/football/v2/*` + `/experience/*`) to the reference repos (`sdv-internal-refs/nfl/`, `sdv-swagger/nfl_api_openapi.yaml`).
@@ -112,6 +118,10 @@ Added an OpenAPI 3.1 description of the modern NFL.com "Shield" data API (`api.n
 
 - `load_nfl_players()` now reads the nflverse **players** release (`players/players.parquet`) on both the polars and pandas paths; the default polars path previously returned the **officials** dataset by mistake.
 - The generated `api.nfl.com` wrappers route their HTTP call through the shared `sportsdataverse.dl_utils.download()` gateway (retries + cache + ESPN-aware error handling) like every other wrapper, instead of calling `requests.get()` directly. Boolean query flags and the `nfl_weeks` `season` / `season_type` path params are hardened so `None` can no longer leak onto the wire.
+
+### Internal — Fox data key single-sourced
+
+`sportsdataverse.cfb.cfb_fox_ext.FOX_DATA_KEY` is now imported from `sportsdataverse._fox_layout.DATA_KEY` so the bundled public Fox key and its `SDV_PY_FOX_DATA_KEY` env override live in exactly one place instead of being duplicated.
 
 ## 0.0.57 Release: June 10, 2026
 

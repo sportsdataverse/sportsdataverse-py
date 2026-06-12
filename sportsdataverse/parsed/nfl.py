@@ -222,6 +222,7 @@ from sportsdataverse.nfl import load_team_stats as load_team_stats  # noqa: F401
 from sportsdataverse.nfl import load_teams as load_teams  # noqa: F401
 from sportsdataverse.nfl import load_trades as load_trades  # noqa: F401
 from sportsdataverse.nfl import most_recent_nfl_season as most_recent_nfl_season  # noqa: F401
+from sportsdataverse.nfl import nfl_clear_token_cache as nfl_clear_token_cache  # noqa: F401
 from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F401
 from sportsdataverse.nfl import nfl_game_pbp as nfl_game_pbp  # noqa: F401
 from sportsdataverse.nfl import nfl_game_schedule as nfl_game_schedule  # noqa: F401
@@ -434,6 +435,7 @@ __all__ = [
     "load_teams",
     "load_trades",
     "most_recent_nfl_season",
+    "nfl_clear_token_cache",
     "nfl_combine_profiles",
     "nfl_draft_picks",
     "nfl_game_details",

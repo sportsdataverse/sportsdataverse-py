@@ -4777,6 +4777,10 @@ update_config(cache_mode="off")
 assert get_config().cache_mode == "off"
 ```
 
+### `nfl_clear_token_cache() -> 'None'` {#nfl_clear_token_cache}
+
+Drop the cached `api.nfl.com` token (forces a fresh mint on the next call).
+
 ### `nfl_game_details(game_id: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_details}
 
 Pull full `api.nfl.com` game details (drives + plays) by game id.
@@ -4930,15 +4934,16 @@ first_id = week_one["games"][0]["id"]
 
 Build the request-header dict expected by `api.nfl.com`.
 
-Mints a fresh bearer token via `nfl_token_gen` (unless `token` is
-supplied) and combines it with the browser-style headers the NFL.com web app
-sends. Reuse the returned dict across calls to avoid re-minting tokens.
+Obtains a bearer token via `nfl_token_gen` (which caches + auto-renews,
+or honors `NFL_ACCESS_TOKEN`) unless `token` is supplied, and combines it
+with the browser-style headers the NFL.com web app sends. Token caching already
+avoids re-minting, so callers rarely need to thread `token`/`headers` by hand.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `token` | `Optional[str]` | `None` | An existing access token to reuse; mints a fresh one when `None`. |
+| `token` | `Optional[str]` | `None` | An existing access token to reuse; uses the cached/minted one when `None`. |
 
 **Returns**
 
@@ -5765,14 +5770,23 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 >>> bd["category"].unique().to_list()
 ```
 
-### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None) -> 'str'` {#nfl_token_gen}
+### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None, force_refresh: 'bool' = False) -> 'str'` {#nfl_token_gen}
 
-Mint a fresh `api.nfl.com` access token via `/identity/v3/token`.
+Return a valid `api.nfl.com` bearer token, minting + caching as needed.
 
-Wraps the anonymous device-token grant the NFL.com web app uses. Credentials
-resolve in this order: explicit `client_key`/`client_secret` args ->
-`NFL_CLIENT_KEY`/`NFL_CLIENT_SECRET` env vars -> the bundled public
-`WEB_DESKTOP` web-app credentials.
+The token is cached in-process and reused until ~2 min before its own JWT
+`exp`, then transparently re-minted -- so callers never have to think about
+expiry or refresh. The first call (or any call after expiry / `force_refresh`)
+mints a fresh token via the anonymous device-token grant at `/identity/v3/token`.
+
+Resolution order (all overrides optional):
+
+1. `NFL_ACCESS_TOKEN` env var -- returned verbatim, skipping minting and
+   caching (you supply + manage the token). Ignored if explicit credentials
+   are passed.
+2. Credentials: explicit `client_key`/`client_secret` args ->
+   `NFL_CLIENT_KEY`/`NFL_CLIENT_SECRET` env vars -> the bundled public
+   `WEB_DESKTOP` web-app pair.
 
 **Parameters**
 
@@ -5780,6 +5794,7 @@ resolve in this order: explicit `client_key`/`client_secret` args ->
 |---|---|---|---|
 | `client_key` | `Optional[str]` | `None` | Override the client key (else env var, else the web default). |
 | `client_secret` | `Optional[str]` | `None` | Override the client secret (else env var, else the default). |
+| `force_refresh` | `bool` | `False` | Mint a new token even if a cached one is still valid. |
 
 **Returns**
 
@@ -5789,7 +5804,8 @@ The bearer `accessToken` string.
 
 ```python
 from sportsdataverse.nfl.nfl_games import nfl_token_gen
-token = nfl_token_gen()
+token = nfl_token_gen()                # mints + caches
+assert nfl_token_gen() == token        # served from cache
 assert isinstance(token, str) and token.startswith("ey")
 ```
 
