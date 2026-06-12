@@ -223,6 +223,50 @@ def test_merge_schedule_fox_only_games_are_dropped() -> None:
     assert espn_row["fox_game_id"] == "f1"
 
 
+# ---- full-season (date-aware) merge -------------------------------------------------
+
+
+def test_date_dist() -> None:
+    assert cw._date_dist("2024-09-28", "2024-09-30") == 2
+    assert cw._date_dist("2024-09-28T20:00Z", "2024-09-28") == 0  # tolerates ISO suffix
+    assert cw._date_dist(None, "2024-01-01") == 10**6
+    assert cw._date_dist("garbage", "2024-01-01") == 10**6
+
+
+def test_pick_match_prefers_exact_then_nearest() -> None:
+    cands = [{"date": "2024-09-28", "game_id": "a"}, {"date": "2024-12-07", "game_id": "b"}]
+    assert cw._pick_match(cands, "2024-12-07")["game_id"] == "b"  # exact date
+    assert cw._pick_match(cands, "2024-12-05")["game_id"] == "b"  # nearest date
+    assert cw._pick_match([], "x") is None
+    assert cw._pick_match([{"game_id": "z"}], None)["game_id"] == "z"  # sole candidate
+
+
+def test_merge_schedule_full_rematch_disambiguated_by_date() -> None:
+    # Georgia and Alabama meet twice (regular game + SEC championship). The
+    # date-aware merge must pair each ESPN game with the same-date Fox/Yahoo game.
+    mk = _matchup_key("alabama crimson tide", "georgia bulldogs")
+    espn = [
+        _game(mk, 1, "Alabama Crimson Tide", "Georgia Bulldogs", "2024-09-28"),
+        _game(mk, 2, "Georgia Bulldogs", "Alabama Crimson Tide", "2024-12-07"),
+    ]
+    fox = [_game(mk, "f1", "A", "B", "2024-09-28"), _game(mk, "f2", "B", "A", "2024-12-07")]
+    yahoo = [_game(mk, "y1", "A", "B", "2024-09-28"), _game(mk, "y2", "B", "A", "2024-12-07")]
+    rows = cw._merge_schedule_full(espn, fox, yahoo)
+    by_espn = {r["espn_game_id"]: r for r in rows if r["espn_game_id"] is not None}
+    assert by_espn[1]["fox_game_id"] == "f1" and by_espn[1]["yahoo_game_id"] == "y1"
+    assert by_espn[2]["fox_game_id"] == "f2" and by_espn[2]["yahoo_game_id"] == "y2"
+
+
+def test_merge_schedule_full_graceful_and_yahoo_only() -> None:
+    espn = [_game("a|b", 1, "A", "B", "2024-09-01")]  # no Fox match -> graceful null
+    fox = [_game("x|z", "f9", "X", "Z", "2024-12-30")]  # fox-only -> dropped
+    yahoo = [_game("a|b", "y1", "A", "B", "2024-09-01"), _game("c|d", "y2", "C", "D", "2024-09-01")]
+    rows = cw._merge_schedule_full(espn, fox, yahoo)
+    by_src = sorted(r["matched_sources"] for r in rows)
+    assert by_src == ["espn+yahoo", "yahoo"]  # espn game (fox null) + yahoo-only "c|d"; fox-only dropped
+    assert next(r for r in rows if r["espn_game_id"] == 1)["fox_game_id"] is None
+
+
 def test_merge_rosters_name_jersey_and_conflict() -> None:
     espn = [
         {
@@ -784,6 +828,96 @@ def test_cfb_schedule_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> N
     assert row["espn_game_id"] == 401752687 and row["fox_game_id"] == "41999"
 
 
+def test_yahoo_season_games_swallows_week_errors(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_week(season: int, week: int, **k: Any) -> list:
+        if week in (3, 5):  # a per-week parser hiccup must not sink the season
+            raise RuntimeError("yahoo parser bug")
+        if week > 2:
+            return []
+        return [
+            {"matchup_key": f"k{week}", "game_id": f"g{week}", "date": "2024-09-01", "home_team": "A", "away_team": "B"}
+        ]
+
+    monkeypatch.setattr(cw, "_yahoo_games", fake_week)
+    out = cw._yahoo_season_games(2024)
+    assert sorted(r["game_id"] for r in out) == ["g1", "g2"]
+
+
+def test_espn_season_games_default_slots_when_calendar_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list = []
+
+    def boom_cal(season: int, **k: Any) -> pl.DataFrame:
+        raise RuntimeError("no calendar")
+
+    def fake_sched(dates: int, week: int, season_type: int, **k: Any) -> pl.DataFrame:
+        calls.append((week, season_type))
+        if week == 1 and season_type == 2:
+            return pl.DataFrame(
+                {
+                    "game_id": [1],
+                    "date": ["2024-08-31"],
+                    "home_display_name": ["Ohio State Buckeyes"],
+                    "away_display_name": ["Akron Zips"],
+                }
+            )
+        return pl.DataFrame({"game_id": [], "date": [], "home_display_name": [], "away_display_name": []})
+
+    monkeypatch.setattr(cw, "espn_cfb_calendar", boom_cal)
+    monkeypatch.setattr(cw, "espn_cfb_schedule", fake_sched)
+    out = cw._espn_season_games(2024)
+    # default slots cover regular weeks + bowls (week 1, st 3) + CFP (week 999, st 3)
+    assert (16, 2) in calls and (1, 3) in calls and (999, 3) in calls
+    assert any(r["game_id"] == 1 for r in out)
+
+
+def test_cfb_schedule_crosswalk_full_season_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
+    mk = _matchup_key("ohio state buckeyes", "akron zips")
+    monkeypatch.setattr(
+        cw,
+        "_espn_season_games",
+        lambda season, **k: [
+            {
+                "matchup_key": mk,
+                "game_id": 100,
+                "date": "2024-08-31",
+                "home_team": "Ohio State Buckeyes",
+                "away_team": "Akron Zips",
+            }
+        ],
+    )
+    monkeypatch.setattr(
+        cw,
+        "_fox_season_games",
+        lambda season, **k: [
+            {
+                "matchup_key": mk,
+                "game_id": "f",
+                "date": "2024-08-31",
+                "home_team": "Akron Zips",
+                "away_team": "Ohio State Buckeyes",
+            }
+        ],
+    )
+    monkeypatch.setattr(
+        cw,
+        "_yahoo_season_games",
+        lambda season, **k: [
+            {
+                "matchup_key": mk,
+                "game_id": "y",
+                "date": "2024-08-31",
+                "home_team": "Akron Zips",
+                "away_team": "Ohio State Buckeyes",
+            }
+        ],
+    )
+    df = cfb_schedule_crosswalk(2024)  # week omitted -> full season
+    assert df.height == 1
+    row = df.row(0, named=True)
+    assert row["matched_sources"] == "espn+fox+yahoo"
+    assert row["espn_game_id"] == 100 and row["fox_game_id"] == "f" and row["yahoo_game_id"] == "y"
+
+
 def test_cfb_rosters_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         cw,
@@ -900,3 +1034,17 @@ def test_live_cfb_schedule_crosswalk_week() -> None:
     # providers should agree on most games.
     fox_matched = df.filter(pl.col("fox_game_id").is_not_null())
     assert fox_matched.height > 0, "Fox should match regular-season games"
+
+
+@skip_if_no_live
+def test_live_cfb_schedule_crosswalk_full_season() -> None:
+    df = cfb_schedule_crosswalk(2025)  # whole season: regular + bowls + CFP
+    espn = df.filter(pl.col("espn_game_id").is_not_null())
+    assert espn.height > 800, f"expected a full ESPN season, got {espn.height}"
+    # date span proves regular season + postseason are both present
+    dates = df["espn_date"].drop_nulls().str.slice(0, 10)
+    assert dates.min() < "2025-09-15" and dates.max() > "2026-01-01"
+    # postseason bowls should match all three providers (ESPN's resolved bracket
+    # + Fox bowls segment + Yahoo postseason weeks)
+    jan = espn.filter(pl.col("espn_date").str.slice(0, 7) >= "2025-12")
+    assert jan.filter(pl.col("matched_sources") == "espn+fox+yahoo").height > 10

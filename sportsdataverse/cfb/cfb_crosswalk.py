@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from datetime import date
 from email.utils import parsedate_to_datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Sequence, Union
 
@@ -54,7 +55,7 @@ if TYPE_CHECKING:
 
 from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_team_roster
 from sportsdataverse.cfb.cfb_fox_ext import fox_cfb_schedule, fox_cfb_team_roster, fox_cfb_teams
-from sportsdataverse.cfb.cfb_schedule import espn_cfb_schedule, most_recent_cfb_season
+from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
 from sportsdataverse.cfb.cfb_teams import espn_cfb_teams
 from sportsdataverse.cfb.cfb_yahoo_ext import yahoo_cfb_scoreboard, yahoo_cfb_teams
 
@@ -268,26 +269,63 @@ def _yahoo_team_dir(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any
     return out
 
 
-def _espn_games(season: int, week: Optional[int], season_type: int, **kwargs: Any) -> List[Dict[str, Any]]:
-    # week=None is intentional: espn_cfb_schedule returns ESPN's current/default
-    # slate when no week is supplied (used by the odds crosswalk).
-    df = espn_cfb_schedule(dates=season, week=week, season_type=season_type, **kwargs)
+def _project_espn(df: DataFrameT) -> List[Dict[str, Any]]:
+    """ESPN schedule frame -> uniform game records."""
     out: List[Dict[str, Any]] = []
     for r in _rows(df):
         home = _pick(r, "home_display_name", "home_name", "home_location")
         away = _pick(r, "away_display_name", "away_name", "away_location")
-        home_norm, away_norm = _norm_team(home), _norm_team(away)
         out.append(
             {
-                "matchup_key": _matchup_key(home_norm, away_norm),
+                "matchup_key": _matchup_key(_norm_team(home), _norm_team(away)),
                 "game_id": _pick(r, "game_id", "id"),
                 "date": _iso_date(_pick(r, "start_date", "date")),
                 "home_team": home,
                 "away_team": away,
-                "home_norm": home_norm,
-                "away_norm": away_norm,
             }
         )
+    return out
+
+
+def _espn_games(season: int, week: Optional[int], season_type: int, **kwargs: Any) -> List[Dict[str, Any]]:
+    # week=None is intentional: espn_cfb_schedule returns ESPN's current/default
+    # slate when no week is supplied (used by the odds crosswalk).
+    return _project_espn(espn_cfb_schedule(dates=season, week=week, season_type=season_type, **kwargs))
+
+
+def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
+    """Every ESPN game for a season -- regular weeks + bowls + CFP.
+
+    Driven by the ESPN calendar so the exact (week, season_type) slots are used:
+    regular weeks (season_type 2), bowls (season_type 3, week 1), and the CFP
+    (season_type 3, week 999). season_type 4 (all-star) is skipped. Each weekly
+    pull is best-effort -- an empty/failed week contributes nothing rather than
+    aborting the season.
+    """
+    out: List[Dict[str, Any]] = []
+    seen: set[Any] = set()
+    slots: List[tuple[Any, Any]] = []
+    try:
+        cal = espn_cfb_calendar(season=season, **kwargs)
+        slots = [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
+    except Exception:
+        slots = []
+    if not slots:  # calendar unavailable -> sensible default coverage
+        slots = [(str(w), "2") for w in range(1, 17)] + [("1", "3"), ("999", "3")]
+    for week, stype in slots:
+        if str(stype) not in ("2", "3") or week is None:
+            continue
+        try:
+            rows = _project_espn(espn_cfb_schedule(dates=season, week=int(week), season_type=int(stype), **kwargs))
+        except Exception:
+            continue
+        for row in rows:
+            gid = row.get("game_id")
+            if gid is not None and gid in seen:
+                continue
+            if gid is not None:
+                seen.add(gid)
+            out.append(row)
     return out
 
 
@@ -314,15 +352,8 @@ def _yahoo_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
     return out
 
 
-def _fox_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
-    # Fetch just the regular-season week segment ("{season}-{week}-1") -- one HTTP
-    # call -- and match its games onto ESPN's week by team. Fox is best-effort: a
-    # Fox outage must never break the ESPN<->Yahoo core, hence the deliberate
-    # broad guard returning an empty list.
-    try:
-        df = fox_cfb_schedule(segment_id=f"{season}-{week}-1", **kwargs)
-    except Exception:
-        return []
+def _project_fox(df: DataFrameT) -> List[Dict[str, Any]]:
+    """Fox schedule frame -> uniform game records."""
     out: List[Dict[str, Any]] = []
     for r in _rows(df):
         home = _pick(r, "home_team")
@@ -336,6 +367,48 @@ def _fox_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
                 "away_team": away,
             }
         )
+    return out
+
+
+def _fox_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
+    # Fetch just the regular-season week segment ("{season}-{week}-1") -- one HTTP
+    # call -- and match its games onto ESPN's week by team. Fox is best-effort: a
+    # Fox outage must never break the ESPN<->Yahoo core, hence the deliberate
+    # broad guard returning an empty list.
+    try:
+        return _project_fox(fox_cfb_schedule(segment_id=f"{season}-{week}-1", **kwargs))
+    except Exception:
+        return []
+
+
+def _fox_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
+    # Fox's full season (regular weeks + conf championships + bowls + every CFP
+    # round), best-effort. Fox postseason matchups can be projections in the
+    # offseason -- those simply fail to match and fall through as null Fox ids.
+    try:
+        return _project_fox(fox_cfb_schedule(season, **kwargs))
+    except Exception:
+        return []
+
+
+def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
+    # Yahoo scoreboard is per-week; loop the regular season + postseason weeks,
+    # swallowing the occasional per-week parser error so one bad week can't sink
+    # the whole season. Dedup by game id across weeks.
+    out: List[Dict[str, Any]] = []
+    seen: set[Any] = set()
+    for week in range(1, 21):
+        try:
+            rows = _yahoo_games(season, week, **kwargs)
+        except Exception:
+            continue
+        for row in rows:
+            gid = row.get("game_id")
+            if gid is not None and gid in seen:
+                continue
+            if gid is not None:
+                seen.add(gid)
+            out.append(row)
     return out
 
 
@@ -457,6 +530,30 @@ def _merge_teams(
     return out
 
 
+def _schedule_row(
+    e: Optional[Mapping[str, Any]],
+    f: Optional[Mapping[str, Any]],
+    y: Optional[Mapping[str, Any]],
+) -> Dict[str, Any]:
+    """One ESPN/Fox/Yahoo schedule-crosswalk row from the matched game records."""
+    anchor = e or y or f or {}
+    return {
+        "matchup_key": anchor.get("matchup_key"),
+        "espn_game_id": e.get("game_id") if e else None,
+        "fox_game_id": f.get("game_id") if f else None,
+        "yahoo_game_id": y.get("game_id") if y else None,
+        "yahoo_global_game_id": y.get("global_game_id") if y else None,
+        "home_team": _pick(e or {}, "home_team") or _pick(f or {}, "home_team") or _pick(y or {}, "home_team"),
+        "away_team": _pick(e or {}, "away_team") or _pick(f or {}, "away_team") or _pick(y or {}, "away_team"),
+        "espn_date": e.get("date") if e else None,
+        "fox_date": f.get("date") if f else None,
+        "yahoo_date": y.get("date") if y else None,
+        "matched_sources": _matched_sources(
+            [("espn", e is not None), ("fox", f is not None), ("yahoo", y is not None)]
+        ),
+    }
+
+
 def _merge_schedule(
     espn: Sequence[Mapping[str, Any]],
     fox: Sequence[Mapping[str, Any]],
@@ -464,7 +561,7 @@ def _merge_schedule(
 ) -> List[Dict[str, Any]]:
     """Join ESPN + Fox + Yahoo games on ``matchup_key``, anchored on ESPN (pure).
 
-    ESPN's ``(season, week)`` slate is the spine; Fox and Yahoo games are mapped
+    For a single week: ESPN's slate is the spine; Fox and Yahoo games are mapped
     onto it by team matchup. Yahoo games with no ESPN match are appended (Yahoo's
     feed is week-scoped, so they are real same-week games). Fox games with no
     ESPN match are **not** appended — a Fox segment spans a whole phase, so a
@@ -474,36 +571,84 @@ def _merge_schedule(
     yahoo_by = _index_by(yahoo, "matchup_key")
     espn_keys = {r["matchup_key"] for r in espn if r.get("matchup_key")}
 
-    def row(
-        e: Optional[Mapping[str, Any]],
-        f: Optional[Mapping[str, Any]],
-        y: Optional[Mapping[str, Any]],
-    ) -> Dict[str, Any]:
-        anchor = e or y or f or {}
-        return {
-            "matchup_key": anchor.get("matchup_key"),
-            "espn_game_id": e.get("game_id") if e else None,
-            "fox_game_id": f.get("game_id") if f else None,
-            "yahoo_game_id": y.get("game_id") if y else None,
-            "yahoo_global_game_id": y.get("global_game_id") if y else None,
-            "home_team": _pick(e or {}, "home_team") or _pick(f or {}, "home_team") or _pick(y or {}, "home_team"),
-            "away_team": _pick(e or {}, "away_team") or _pick(f or {}, "away_team") or _pick(y or {}, "away_team"),
-            "espn_date": e.get("date") if e else None,
-            "fox_date": f.get("date") if f else None,
-            "yahoo_date": y.get("date") if y else None,
-            "matched_sources": _matched_sources(
-                [("espn", e is not None), ("fox", f is not None), ("yahoo", y is not None)]
-            ),
-        }
-
     out: List[Dict[str, Any]] = []
     for e in espn:
         key = e.get("matchup_key")
-        out.append(row(e, fox_by.get(key) if key else None, yahoo_by.get(key) if key else None))
+        out.append(_schedule_row(e, fox_by.get(key) if key else None, yahoo_by.get(key) if key else None))
     for y in yahoo:  # same-week Yahoo games ESPN didn't list
         key = y.get("matchup_key")
         if key and key not in espn_keys:
-            out.append(row(None, fox_by.get(key) if key else None, y))
+            out.append(_schedule_row(None, fox_by.get(key) if key else None, y))
+    return out
+
+
+def _date_dist(a: Optional[str], b: Optional[str]) -> int:
+    """Absolute day distance between two ISO ``YYYY-MM-DD`` dates (large if N/A)."""
+    if not a or not b:
+        return 10**6
+    try:
+        return abs((date.fromisoformat(a[:10]) - date.fromisoformat(b[:10])).days)
+    except (ValueError, TypeError):
+        return 10**6
+
+
+def _index_multi(records: Sequence[Mapping[str, Any]], key: str) -> Dict[str, List[Mapping[str, Any]]]:
+    """Group records into ``{key: [records...]}`` (keeps rematches separable)."""
+    index: Dict[str, List[Mapping[str, Any]]] = {}
+    for rec in records:
+        value = rec.get(key)
+        if value:
+            index.setdefault(value, []).append(rec)
+    return index
+
+
+def _pick_match(candidates: List[Mapping[str, Any]], when: Optional[str]) -> Optional[Mapping[str, Any]]:
+    """From same-matchup candidates, pick the one nearest ``when`` (date-aware).
+
+    A team pair can meet more than once a season (regular game, conference
+    championship, CFP rematch), so date disambiguates: an exact-date match wins,
+    else the closest by date, else the only/first candidate.
+    """
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+    exact = [c for c in candidates if c.get("date") == when]
+    if exact:
+        return exact[0]
+    return min(candidates, key=lambda c: _date_dist(c.get("date"), when))
+
+
+def _merge_schedule_full(
+    espn: Sequence[Mapping[str, Any]],
+    fox: Sequence[Mapping[str, Any]],
+    yahoo: Sequence[Mapping[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Whole-season ESPN x Fox x Yahoo join, anchored on ESPN, matched by team +
+    date (pure).
+
+    Unlike the per-week merge, a matchup can recur across the season, so Fox and
+    Yahoo are indexed as lists per ``matchup_key`` and the date-nearest game is
+    chosen. Yahoo games ESPN never lists (e.g. non-FBS) are appended; Fox-only
+    games are dropped. Missing matches fall through as null ids — the graceful
+    degradation that lets regular season, conf championships, bowls, and CFP all
+    flow through one call even when a provider lacks a game.
+    """
+    fox_idx = _index_multi(fox, "matchup_key")
+    yahoo_idx = _index_multi(yahoo, "matchup_key")
+    espn_keys = {r["matchup_key"] for r in espn if r.get("matchup_key")}
+
+    out: List[Dict[str, Any]] = []
+    for e in espn:
+        key, when = e.get("matchup_key"), e.get("date")
+        f = _pick_match(fox_idx.get(key, []), when) if key else None
+        y = _pick_match(yahoo_idx.get(key, []), when) if key else None
+        out.append(_schedule_row(e, f, y))
+    for y in yahoo:  # Yahoo games ESPN never listed (broader division coverage)
+        key = y.get("matchup_key")
+        if key and key not in espn_keys:
+            f = _pick_match(fox_idx.get(key, []), y.get("date"))
+            out.append(_schedule_row(None, f, y))
     return out
 
 
@@ -734,31 +879,41 @@ def cfb_teams_crosswalk(
 
 def cfb_schedule_crosswalk(
     season: int,
-    week: int,
+    week: Optional[int] = None,
     *,
     season_type: int = 2,
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> DataFrameT:
-    """Build the ESPN x Fox x Yahoo CFB game-id crosswalk for one week.
+    """Build the ESPN x Fox x Yahoo CFB game-id crosswalk.
 
-    ESPN's ``(season, week)`` slate is the spine: each ESPN game is keyed by its
-    order-independent team matchup, and the Fox and Yahoo games for that week are
-    mapped onto it, so each row pairs the ESPN ``event`` id with the Fox Bifrost
-    event id and the Yahoo dotted game id.
+    Each ESPN game is keyed by its order-independent team matchup, and the Fox
+    and Yahoo games are mapped onto it, so each row pairs the ESPN ``event`` id
+    with the Fox Bifrost event id and the Yahoo dotted game id. Where a provider
+    has no game, its columns are ``None`` and ``matched_sources`` records who
+    contributed — so regular season, conference championships, bowls, and the
+    CFP all flow through the same call, degrading gracefully when a source lacks
+    a game.
 
-    The Fox leg resolves the regular-season segment ``"{season}-{week}-1"`` (see
-    :func:`sportsdataverse.cfb.fox_cfb_schedule`) and maps its games onto ESPN's
-    week by team. It is best-effort: a Fox game that doesn't match an ESPN game
-    is dropped, and a Fox outage leaves the Fox columns null without affecting
-    the ESPN/Yahoo result. Fox's postseason data (CFP quarterfinals onward) can
-    be lower fidelity, so a regular-season ``season_type=2`` week matches best.
+    Two modes:
+
+    * **Full season** (``week`` omitted): pulls every ESPN game (regular weeks +
+      bowls + CFP), Fox's full season, and Yahoo's full season, and matches on
+      team **+ date** (date disambiguates rematches — a regular-season game vs a
+      conference-championship or CFP rematch of the same teams).
+    * **Single week** (``week`` given): just that week's slate, matched on team.
+
+    Each provider leg is best-effort: a Fox outage, a Yahoo per-week parser
+    hiccup, or Fox's offseason-projected CFP matchups simply leave that
+    provider's columns null rather than failing the call.
 
     Args:
         season: Season year (e.g. ``2024``).
-        week: Schedule week number.
-        season_type: ESPN season type — ``2`` regular, ``3`` post-season,
-            ``4`` off-season. Defaults to ``2``.
+        week: Schedule week number for single-week mode; omit (``None``) for the
+            whole season.
+        season_type: ESPN season type for single-week mode — ``2`` regular,
+            ``3`` post-season (``week=1`` bowls, ``week=999`` CFP). Ignored in
+            full-season mode. Defaults to ``2``.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars.
         **kwargs: Forwarded to the underlying provider HTTP getters.
@@ -770,20 +925,31 @@ def cfb_schedule_crosswalk(
         ``fox_date``, ``yahoo_date``, ``matched_sources``.
 
     Example:
-        Pair ESPN, Fox, and Yahoo game ids for a week::
+        Crosswalk the whole season (regular + bowls + CFP)::
 
             from sportsdataverse.cfb import cfb_schedule_crosswalk
-            xwalk = cfb_schedule_crosswalk(2024, 5)
-            all_three = xwalk.filter(pl.col("matched_sources") == "espn+fox+yahoo")
+            full = cfb_schedule_crosswalk(2024)
+            all_three = full.filter(pl.col("matched_sources") == "espn+fox+yahoo")
+
+        Or just one week::
+
+            wk5 = cfb_schedule_crosswalk(2024, 5)
 
         See Also:
             * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB schedules
     """
-    rows = _merge_schedule(
-        _espn_games(season, week, season_type, **kwargs),
-        _fox_games(season, week, **kwargs),
-        _yahoo_games(season, week, **kwargs),
-    )
+    if week is None:  # whole season: match by team + date
+        rows = _merge_schedule_full(
+            _espn_season_games(season, **kwargs),
+            _fox_season_games(season, **kwargs),
+            _yahoo_season_games(season, **kwargs),
+        )
+    else:  # single week: match by team
+        rows = _merge_schedule(
+            _espn_games(season, week, season_type, **kwargs),
+            _fox_games(season, week, **kwargs),
+            _yahoo_games(season, week, **kwargs),
+        )
     return _materialize(rows, _SCHEDULE_SCHEMA, return_as_pandas)
 
 

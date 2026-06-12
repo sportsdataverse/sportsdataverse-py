@@ -884,29 +884,37 @@ xwalk = cfb_rosters_crosswalk(espn_team_id=194, fox_team_id=25)
 matched = xwalk.filter(pl.col("matched_sources") == "espn+fox")
 ```
 
-### `cfb_schedule_crosswalk(season: 'int', week: 'int', *, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_schedule_crosswalk}
+### `cfb_schedule_crosswalk(season: 'int', week: 'Optional[int]' = None, *, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_schedule_crosswalk}
 
-Build the ESPN x Fox x Yahoo CFB game-id crosswalk for one week.
+Build the ESPN x Fox x Yahoo CFB game-id crosswalk.
 
-ESPN's `(season, week)` slate is the spine: each ESPN game is keyed by its
-order-independent team matchup, and the Fox and Yahoo games for that week are
-mapped onto it, so each row pairs the ESPN `event` id with the Fox Bifrost
-event id and the Yahoo dotted game id.
+Each ESPN game is keyed by its order-independent team matchup, and the Fox
+and Yahoo games are mapped onto it, so each row pairs the ESPN `event` id
+with the Fox Bifrost event id and the Yahoo dotted game id. Where a provider
+has no game, its columns are `None` and `matched_sources` records who
+contributed — so regular season, conference championships, bowls, and the
+CFP all flow through the same call, degrading gracefully when a source lacks
+a game.
 
-The Fox leg resolves the regular-season segment `"{season}-{week}-1"` (see
-`sportsdataverse.cfb.fox_cfb_schedule`) and maps its games onto ESPN's
-week by team. It is best-effort: a Fox game that doesn't match an ESPN game
-is dropped, and a Fox outage leaves the Fox columns null without affecting
-the ESPN/Yahoo result. Fox's postseason data (CFP quarterfinals onward) can
-be lower fidelity, so a regular-season `season_type=2` week matches best.
+Two modes:
+
+* **Full season** (`week` omitted): pulls every ESPN game (regular weeks +
+  bowls + CFP), Fox's full season, and Yahoo's full season, and matches on
+  team **+ date** (date disambiguates rematches — a regular-season game vs a
+  conference-championship or CFP rematch of the same teams).
+* **Single week** (`week` given): just that week's slate, matched on team.
+
+Each provider leg is best-effort: a Fox outage, a Yahoo per-week parser
+hiccup, or Fox's offseason-projected CFP matchups simply leave that
+provider's columns null rather than failing the call.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `int` |  | Season year (e.g. `2024`). |
-| `week` | `int` |  | Schedule week number. |
-| `season_type` | `int` | `2` | ESPN season type — `2` regular, `3` post-season, `4` off-season. Defaults to `2`. |
+| `week` | `Optional[int]` | `None` | Schedule week number for single-week mode; omit (`None`) for the whole season. |
+| `season_type` | `int` | `2` | ESPN season type for single-week mode — `2` regular, `3` post-season (`week=1` bowls, `week=999` CFP). Ignored in full-season mode. Defaults to `2`. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
 
 **Returns**
@@ -917,8 +925,12 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_k
 
 ```python
 from sportsdataverse.cfb import cfb_schedule_crosswalk
-xwalk = cfb_schedule_crosswalk(2024, 5)
-all_three = xwalk.filter(pl.col("matched_sources") == "espn+fox+yahoo")
+full = cfb_schedule_crosswalk(2024)
+all_three = full.filter(pl.col("matched_sources") == "espn+fox+yahoo")
+
+# Or just one week
+
+wk5 = cfb_schedule_crosswalk(2024, 5)
 ```
 
 ### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
