@@ -583,15 +583,17 @@ class NFLPlayProcess(object):
                     3
                     - pl.struct("id", "period.number").map_elements(
                         lambda x: (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] <= 2)
-                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
+                            (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] <= 2)
+                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["1"]
+                                )
                             )
-                        )
-                        | (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] > 2)
-                                for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
+                            | (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] > 2)
+                                    for i in pbp_txt["timeouts"][int(init["homeTeamId"])]["2"]
+                                )
                             )
                         ),
                         return_dtype=pl.Int64,
@@ -601,15 +603,17 @@ class NFLPlayProcess(object):
                     3
                     - pl.struct("id", "period.number").map_elements(
                         lambda x: (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] <= 2)
-                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
+                            (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] <= 2)
+                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["1"]
+                                )
                             )
-                        )
-                        | (
-                            sum(
-                                (i <= x["id"]) & (x["period.number"] > 2)
-                                for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
+                            | (
+                                sum(
+                                    (i <= x["id"]) & (x["period.number"] > 2)
+                                    for i in pbp_txt["timeouts"][int(init["awayTeamId"])]["2"]
+                                )
                             )
                         ),
                         return_dtype=pl.Int64,
@@ -2707,11 +2711,13 @@ class NFLPlayProcess(object):
             )
             .with_columns(
                 punt_block_return_player=pl.struct("punt_block_player", "punt_block_return_player").map_elements(
-                    lambda cols: cols["punt_block_return_player"]
-                    .replace(r"(?i)(.+)blocked by", "")
-                    .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
-                    if cols["punt_block_return_player"] is not None
-                    else None,
+                    lambda cols: (
+                        cols["punt_block_return_player"]
+                        .replace(r"(?i)(.+)blocked by", "")
+                        .replace(str(pl.format(r"(?i)blocked by {}", cols["punt_block_player"])), "")
+                        if cols["punt_block_return_player"] is not None
+                        else None
+                    ),
                     return_dtype=pl.Utf8,
                 ),
             )
