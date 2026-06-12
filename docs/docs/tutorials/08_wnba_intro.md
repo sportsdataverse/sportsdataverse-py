@@ -58,6 +58,9 @@ SEASON = 2024  # a complete season, so every cell has data to show
 print('most recent WNBA season:', wnba.most_recent_wnba_season())
 ```
 
+    most recent WNBA season: 2026
+
+
 ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny `safe()` helper runs each risky call defensively — you get the frame when the feed is up, and a friendly one-liner when it isn't (never a scary traceback). The `load_wnba_*` loaders read static parquet releases and are rock-solid, so we let those run bare. 🛟
 
 
@@ -86,6 +89,34 @@ print('shape:', None if teams is None else teams.shape)
  if teams is not None else 'teams unavailable')
 ```
 
+    ✅ WNBA teams
+    shape: (15, 14)
+
+
+
+
+
+    shape: (15, 5)
+    ┌─────────┬───────────────┬───────────┬───────────────────┬────────────────────────┐
+    │ team_id ┆ team_location ┆ team_name ┆ team_abbreviation ┆ team_display_name      │
+    │ ---     ┆ ---           ┆ ---       ┆ ---               ┆ ---                    │
+    │ str     ┆ str           ┆ str       ┆ str               ┆ str                    │
+    ╞═════════╪═══════════════╪═══════════╪═══════════════════╪════════════════════════╡
+    │ 20      ┆ Atlanta       ┆ Dream     ┆ ATL               ┆ Atlanta Dream          │
+    │ 19      ┆ Chicago       ┆ Sky       ┆ CHI               ┆ Chicago Sky            │
+    │ 18      ┆ Connecticut   ┆ Sun       ┆ CON               ┆ Connecticut Sun        │
+    │ 3       ┆ Dallas        ┆ Wings     ┆ DAL               ┆ Dallas Wings           │
+    │ 129689  ┆ Golden State  ┆ Valkyries ┆ GS                ┆ Golden State Valkyries │
+    │ …       ┆ …             ┆ …         ┆ …                 ┆ …                      │
+    │ 11      ┆ Phoenix       ┆ Mercury   ┆ PHX               ┆ Phoenix Mercury        │
+    │ 132052  ┆ Portland      ┆ Fire      ┆ POR               ┆ Portland Fire          │
+    │ 14      ┆ Seattle       ┆ Storm     ┆ SEA               ┆ Seattle Storm          │
+    │ 131935  ┆ Toronto       ┆ Tempo     ┆ TOR               ┆ Toronto Tempo          │
+    │ 16      ┆ Washington    ┆ Mystics   ┆ WSH               ┆ Washington Mystics     │
+    └─────────┴───────────────┴───────────┴───────────────────┴────────────────────────┘
+
+
+
 ## 👥 Team roster — Las Vegas Aces
 
 [`espn_wnba_team_roster`](../wnba/reference/site.md#espn_wnba_team_roster) lists active players for one team in a season. The back-to-back champion Aces are `team_id=17`. Player columns are unprefixed (`athlete_id`, `full_name`, `jersey`, `position_abbreviation`).
@@ -97,6 +128,33 @@ aces = safe('Aces roster', lambda: wnba.espn_wnba_team_roster(team_id=17, season
               'position_abbreviation', 'display_height', 'age']).head(12)
  if aces is not None else 'roster unavailable')
 ```
+
+    ✅ Aces roster
+
+
+
+
+
+    shape: (12, 6)
+    ┌────────────┬──────────────────┬────────┬───────────────────────┬────────────────┬─────┐
+    │ athlete_id ┆ full_name        ┆ jersey ┆ position_abbreviation ┆ display_height ┆ age │
+    │ ---        ┆ ---              ┆ ---    ┆ ---                   ┆ ---            ┆ --- │
+    │ str        ┆ str              ┆ str    ┆ str                   ┆ str            ┆ i64 │
+    ╞════════════╪══════════════════╪════════╪═══════════════════════╪════════════════╪═════╡
+    │ 4565501    ┆ Janiah Barker    ┆ 2      ┆ F                     ┆ 6' 4"          ┆ 22  │
+    │ 4433633    ┆ Kierstan Bell    ┆ 1      ┆ F                     ┆ 6' 1"          ┆ 26  │
+    │ 4280892    ┆ Chennedy Carter  ┆ 23     ┆ G                     ┆ 5' 9"          ┆ 27  │
+    │ 4281190    ┆ Dana Evans       ┆ 11     ┆ G                     ┆ 5' 6"          ┆ 27  │
+    │ 2529122    ┆ Chelsea Gray     ┆ 12     ┆ G                     ┆ 5' 11"         ┆ 33  │
+    │ …          ┆ …                ┆ …      ┆ …                     ┆ …              ┆ …   │
+    │ 4398776    ┆ NaLyssa Smith    ┆ 3      ┆ F                     ┆ 6' 4"          ┆ 25  │
+    │ 3099736    ┆ Stephanie Talbot ┆ 7      ┆ F                     ┆ 6' 2"          ┆ 31  │
+    │ 3142086    ┆ Brianna Turner   ┆ 21     ┆ F                     ┆ 6' 3"          ┆ 29  │
+    │ 3149391    ┆ A'ja Wilson      ┆ 22     ┆ C                     ┆ 6' 4"          ┆ 29  │
+    │ 4065870    ┆ Jackie Young     ┆ 0      ┆ G                     ┆ 6' 0"          ┆ 28  │
+    └────────────┴──────────────────┴────────┴───────────────────────┴────────────────┴─────┘
+
+
 
 ## 📅 Schedule
 
@@ -122,6 +180,30 @@ else:
 out
 ```
 
+    ✅ 2024 Finals schedule
+
+
+
+
+
+    shape: (3, 9)
+    ┌───────────┬────────────┬────────────┬────────────┬───┬────────────┬──────────┬──────────┬────────┐
+    │ id        ┆ home_displ ┆ away_displ ┆ home_score ┆ … ┆ status_typ ┆ home_pts ┆ away_pts ┆ margin │
+    │ ---       ┆ ay_name    ┆ ay_name    ┆ ---        ┆   ┆ e_descript ┆ ---      ┆ ---      ┆ ---    │
+    │ str       ┆ ---        ┆ ---        ┆ str        ┆   ┆ ion        ┆ i64      ┆ i64      ┆ i64    │
+    │           ┆ str        ┆ str        ┆            ┆   ┆ ---        ┆          ┆          ┆        │
+    │           ┆            ┆            ┆            ┆   ┆ str        ┆          ┆          ┆        │
+    ╞═══════════╪════════════╪════════════╪════════════╪═══╪════════════╪══════════╪══════════╪════════╡
+    │ 401726990 ┆ Minnesota  ┆ New York   ┆ 77         ┆ … ┆ Final      ┆ 77       ┆ 80       ┆ 3      │
+    │           ┆ Lynx       ┆ Liberty    ┆            ┆   ┆            ┆          ┆          ┆        │
+    │ 401726991 ┆ Minnesota  ┆ New York   ┆ 82         ┆ … ┆ Final      ┆ 82       ┆ 80       ┆ 2      │
+    │           ┆ Lynx       ┆ Liberty    ┆            ┆   ┆            ┆          ┆          ┆        │
+    │ 401726992 ┆ New York   ┆ Minnesota  ┆ 67         ┆ … ┆ Final      ┆ 67       ┆ 62       ┆ 5      │
+    │           ┆ Liberty    ┆ Lynx       ┆            ┆   ┆            ┆          ┆          ┆        │
+    └───────────┴────────────┴────────────┴────────────┴───┴────────────┴──────────┴──────────┴────────┘
+
+
+
 ## 🎬 Play-by-play — 2024 Finals Game 5
 
 [`espn_wnba_pbp`](../wnba/reference/additional.md#play-by-play-schedule--rosters) returns a **dict** of component pieces (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` entry is a list of raw ESPN dicts; build a frame with `pl.DataFrame(..., infer_schema_length=None)`. Its columns use raw **dot-notation** (`period.number`, `clock.displayValue`, `scoringPlay`, `type.text`).
@@ -140,6 +222,44 @@ else:
 out
 ```
 
+    ✅ Game 5 pbp
+    dict keys: ['gameId', 'plays', 'winprobability', 'boxscore', 'header', 'format', 'broadcasts', 'videos']
+
+
+
+
+
+    shape: (10, 5)
+    ┌───────────────┬────────────────────┬───────────────────────┬───────────────────────┬─────────────┐
+    │ period.number ┆ clock.displayValue ┆ type.text             ┆ text                  ┆ scoringPlay │
+    │ ---           ┆ ---                ┆ ---                   ┆ ---                   ┆ ---         │
+    │ i64           ┆ str                ┆ str                   ┆ str                   ┆ bool        │
+    ╞═══════════════╪════════════════════╪═══════════════════════╪═══════════════════════╪═════════════╡
+    │ 1             ┆ 10:00              ┆ Jumpball              ┆ Napheesa Collier vs.  ┆ false       │
+    │               ┆                    ┆                       ┆ Jonquel J…            ┆             │
+    │ 1             ┆ 9:35               ┆ Cutting Layup Shot    ┆ Napheesa Collier      ┆ true        │
+    │               ┆                    ┆                       ┆ makes 3-foot …        ┆             │
+    │ 1             ┆ 9:12               ┆ Pullup Jump Shot      ┆ Sabrina Ionescu       ┆ false       │
+    │               ┆                    ┆                       ┆ misses 24-foot…       ┆             │
+    │ 1             ┆ 9:09               ┆ Defensive Rebound     ┆ Bridget Carleton      ┆ false       │
+    │               ┆                    ┆                       ┆ defensive reb…        ┆             │
+    │ 1             ┆ 8:55               ┆ Personal Foul         ┆ Betnijah              ┆ false       │
+    │               ┆                    ┆                       ┆ Laney-Hamilton        ┆             │
+    │               ┆                    ┆                       ┆ person…               ┆             │
+    │ 1             ┆ 8:50               ┆ Out of Bounds - Lost  ┆ Courtney Williams out ┆ false       │
+    │               ┆                    ┆ Ball Turn…            ┆ of bound…             ┆             │
+    │ 1             ┆ 8:31               ┆ Jump Shot             ┆ Breanna Stewart       ┆ false       │
+    │               ┆                    ┆                       ┆ misses 13-foot…       ┆             │
+    │ 1             ┆ 8:28               ┆ Defensive Rebound     ┆ Napheesa Collier      ┆ false       │
+    │               ┆                    ┆                       ┆ defensive reb…        ┆             │
+    │ 1             ┆ 8:07               ┆ Cutting Layup Shot    ┆ Napheesa Collier      ┆ true        │
+    │               ┆                    ┆                       ┆ makes 3-foot …        ┆             │
+    │ 1             ┆ 8:00               ┆ Lost Ball Turnover    ┆ Breanna Stewart lost  ┆ false       │
+    │               ┆                    ┆                       ┆ ball turn…            ┆             │
+    └───────────────┴────────────────────┴───────────────────────┴───────────────────────┴─────────────┘
+
+
+
 Filter to scoring plays only to watch the lead change down the stretch.
 
 
@@ -150,6 +270,27 @@ Filter to scoring plays only to watch the lead change down the stretch.
     .tail(8)
  if plays is not None else 'pbp unavailable')
 ```
+
+
+
+
+    shape: (8, 5)
+    ┌───────────────┬────────────────────┬───────────┬───────────┬─────────────────────────────────┐
+    │ period.number ┆ clock.displayValue ┆ homeScore ┆ awayScore ┆ text                            │
+    │ ---           ┆ ---                ┆ ---       ┆ ---       ┆ ---                             │
+    │ i64           ┆ str                ┆ i64       ┆ i64       ┆ str                             │
+    ╞═══════════════╪════════════════════╪═══════════╪═══════════╪═════════════════════════════════╡
+    │ 4             ┆ 0:5.0              ┆ 59        ┆ 60        ┆ Breanna Stewart makes free thr… │
+    │ 4             ┆ 0:5.0              ┆ 60        ┆ 60        ┆ Breanna Stewart makes free thr… │
+    │ 5             ┆ 4:52               ┆ 63        ┆ 60        ┆ Leonie Fiebich makes 23-foot t… │
+    │ 5             ┆ 3:14               ┆ 65        ┆ 60        ┆ Nyara Sabally makes two point … │
+    │ 5             ┆ 1:51               ┆ 65        ┆ 61        ┆ Kayla McBride makes free throw… │
+    │ 5             ┆ 1:51               ┆ 65        ┆ 62        ┆ Kayla McBride makes free throw… │
+    │ 5             ┆ 0:10.0             ┆ 66        ┆ 62        ┆ Breanna Stewart makes free thr… │
+    │ 5             ┆ 0:10.0             ┆ 67        ┆ 62        ┆ Breanna Stewart makes free thr… │
+    └───────────────┴────────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+
 
 ## 🌟 Player season stats — Caitlin Clark
 
@@ -165,6 +306,26 @@ cc = safe('Caitlin Clark stats',
  if cc is not None else 'player stats unavailable')
 ```
 
+    ✅ Caitlin Clark stats
+
+
+
+
+
+    shape: (1, 7)
+    ┌──────────────┬─────────────┬─────────────┬─────────────┬─────────────┬─────────────┬─────────────┐
+    │ full_name    ┆ team_abbrev ┆ general_gam ┆ offensive_a ┆ offensive_a ┆ general_avg ┆ offensive_t │
+    │ ---          ┆ iation      ┆ es_played   ┆ vg_points   ┆ vg_assists  ┆ _rebounds   ┆ hree_point_ │
+    │ str          ┆ ---         ┆ ---         ┆ ---         ┆ ---         ┆ ---         ┆ field_go…   │
+    │              ┆ str         ┆ f64         ┆ f64         ┆ f64         ┆ f64         ┆ ---         │
+    │              ┆             ┆             ┆             ┆             ┆             ┆ f64         │
+    ╞══════════════╪═════════════╪═════════════╪═════════════╪═════════════╪═════════════╪═════════════╡
+    │ Caitlin      ┆ IND         ┆ 40.0        ┆ 19.225      ┆ 8.425       ┆ 5.675       ┆ 34.366196   │
+    │ Clark        ┆             ┆             ┆             ┆             ┆             ┆             │
+    └──────────────┴─────────────┴─────────────┴─────────────┴─────────────┴─────────────┴─────────────┘
+
+
+
 ## 📊 Team season stats
 
 [`espn_wnba_team_stats`](../wnba/reference/additional.md#espn_wnba_team_stats) returns a **dict** keyed by category — `{'Averages', 'Totals', 'Misc'}`. Each value is a long frame of `stat_name` / `display_value` rows, so index into the dict rather than calling `.head()` on the return directly.
@@ -177,6 +338,31 @@ print('categories:', list(aces_stats.keys()) if aces_stats is not None else None
 (aces_stats['Averages'].select(['stat_name', 'abbreviation', 'display_value']).head(10)
  if aces_stats is not None else 'team stats unavailable')
 ```
+
+    ✅ Aces team stats
+    categories: ['Averages', 'Totals', 'Misc']
+
+
+
+
+
+    shape: (8, 3)
+    ┌──────────────────────────┬──────────────┬───────────────┐
+    │ stat_name                ┆ abbreviation ┆ display_value │
+    │ ---                      ┆ ---          ┆ ---           │
+    │ str                      ┆ str          ┆ str           │
+    ╞══════════════════════════╪══════════════╪═══════════════╡
+    │ Rebounds Per Game        ┆ REB          ┆ 34.1          │
+    │ Assist To Turnover Ratio ┆ AST/TO       ┆ 1.9           │
+    │ Fouls Per Game           ┆ PF           ┆ 16.5          │
+    │ Games Played             ┆ GP           ┆ 40            │
+    │ Games Started            ┆ GS           ┆ 0             │
+    │ Minutes Per Game         ┆ MIN          ┆ 0.0           │
+    │ Rebounds                 ┆ REB          ┆ 1364          │
+    │ Rebounds                 ┆ REB          ┆ 1364          │
+    └──────────────────────────┴──────────────┴───────────────┘
+
+
 
 ## 🍳 Cookbook: common WNBA tasks
 
@@ -196,6 +382,30 @@ standings = safe('2024 standings', lambda: wnba.espn_wnba_standings(season=SEASO
  if standings is not None else 'standings unavailable')
 ```
 
+    ✅ 2024 standings
+
+
+
+
+
+    shape: (8, 5)
+    ┌───────────────────┬──────┬────────┬─────────────┬────────────────────┐
+    │ team_display_name ┆ wins ┆ losses ┆ win_percent ┆ point_differential │
+    │ ---               ┆ ---  ┆ ---    ┆ ---         ┆ ---                │
+    │ str               ┆ i64  ┆ i64    ┆ f64         ┆ f64                │
+    ╞═══════════════════╪══════╪════════╪═════════════╪════════════════════╡
+    │ New York Liberty  ┆ 32   ┆ 8      ┆ 0.8         ┆ 366.0              │
+    │ Minnesota Lynx    ┆ 30   ┆ 10     ┆ 0.75        ┆ 255.0              │
+    │ Connecticut Sun   ┆ 28   ┆ 12     ┆ 0.7         ┆ 260.0              │
+    │ Las Vegas Aces    ┆ 27   ┆ 13     ┆ 0.675       ┆ 219.0              │
+    │ Seattle Storm     ┆ 25   ┆ 15     ┆ 0.625       ┆ 179.0              │
+    │ Indiana Fever     ┆ 20   ┆ 20     ┆ 0.5         ┆ -107.0             │
+    │ Phoenix Mercury   ┆ 19   ┆ 21     ┆ 0.475       ┆ -132.0             │
+    │ Atlanta Dream     ┆ 15   ┆ 25     ┆ 0.375       ┆ -110.0             │
+    └───────────────────┴──────┴────────┴─────────────┴────────────────────┘
+
+
+
 ### Recipe 2 — Draft board 🎓
 
 [`espn_wnba_draft`](../wnba/reference/site.md#espn_wnba_draft) lists every pick for a season. The 2024 draft headlined with Caitlin Clark going first overall to the Indiana Fever.
@@ -207,6 +417,33 @@ draft = safe('2024 draft', lambda: wnba.espn_wnba_draft(season=SEASON))
                'athlete_position_abbreviation', 'school_name']).head(10)
  if draft is not None else 'draft unavailable')
 ```
+
+    ✅ 2024 draft
+
+
+
+
+
+    shape: (10, 5)
+    ┌──────────────┬───────────────────┬──────────────────────┬──────────────────────┬─────────────────┐
+    │ overall_pick ┆ team_display_name ┆ athlete_display_name ┆ athlete_position_abb ┆ school_name     │
+    │ ---          ┆ ---               ┆ ---                  ┆ reviation            ┆ ---             │
+    │ i64          ┆ str               ┆ str                  ┆ ---                  ┆ str             │
+    │              ┆                   ┆                      ┆ str                  ┆                 │
+    ╞══════════════╪═══════════════════╪══════════════════════╪══════════════════════╪═════════════════╡
+    │ 1            ┆ null              ┆ Caitlin Clark        ┆ null                 ┆ Hawkeyes        │
+    │ 2            ┆ null              ┆ Cameron Brink        ┆ null                 ┆ Cardinal        │
+    │ 3            ┆ null              ┆ Kamilla Cardoso      ┆ null                 ┆ Gamecocks       │
+    │ 4            ┆ null              ┆ Rickea Jackson       ┆ null                 ┆ Lady Volunteers │
+    │ 5            ┆ null              ┆ Jacy Sheldon         ┆ null                 ┆ Buckeyes        │
+    │ 6            ┆ null              ┆ Aaliyah Edwards      ┆ null                 ┆ Huskies         │
+    │ 7            ┆ null              ┆ Angel Reese          ┆ null                 ┆ Tigers          │
+    │ 8            ┆ null              ┆ Alissa Pili          ┆ null                 ┆ Utes            │
+    │ 9            ┆ null              ┆ Carla Leite          ┆ null                 ┆ France          │
+    │ 10           ┆ null              ┆ Leila Lacan          ┆ null                 ┆ France          │
+    └──────────────┴───────────────────┴──────────────────────┴──────────────────────┴─────────────────┘
+
+
 
 ### Recipe 3 — Top 10 scorers of the season 📈
 
@@ -232,6 +469,29 @@ top_scorers = (
 top_scorers
 ```
 
+
+
+
+    shape: (10, 6)
+    ┌──────────────────────┬───────────────────┬───────┬──────────────┬──────┬─────┐
+    │ athlete_display_name ┆ team_abbreviation ┆ games ┆ total_points ┆ ppg  ┆ apg │
+    │ ---                  ┆ ---               ┆ ---   ┆ ---          ┆ ---  ┆ --- │
+    │ str                  ┆ str               ┆ u32   ┆ i32          ┆ f64  ┆ f64 │
+    ╞══════════════════════╪═══════════════════╪═══════╪══════════════╪══════╪═════╡
+    │ A'ja Wilson          ┆ LV                ┆ 44    ┆ 1149         ┆ 26.1 ┆ 2.4 │
+    │ Arike Ogunbowale     ┆ DAL               ┆ 38    ┆ 845          ┆ 22.2 ┆ 5.1 │
+    │ Napheesa Collier     ┆ MIN               ┆ 47    ┆ 1000         ┆ 21.3 ┆ 3.4 │
+    │ Kahleah Copper       ┆ PHX               ┆ 39    ┆ 811          ┆ 20.8 ┆ 2.3 │
+    │ Breanna Stewart      ┆ NY                ┆ 50    ┆ 1014         ┆ 20.3 ┆ 3.5 │
+    │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
+    │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
+    │ Jewell Loyd          ┆ SEA               ┆ 39    ┆ 744          ┆ 19.1 ┆ 3.6 │
+    │ Sabrina Ionescu      ┆ NY                ┆ 50    ┆ 900          ┆ 18.0 ┆ 5.9 │
+    │ Brittney Griner      ┆ PHX               ┆ 32    ┆ 568          ┆ 17.8 ┆ 2.2 │
+    └──────────────────────┴───────────────────┴───────┴──────────────┴──────┴─────┘
+
+
+
 ### Recipe 4 — Who worked the whistle? 👀
 
 [`espn_wnba_game_officials`](../wnba/reference/additional.md#espn_wnba_game_officials) returns the referees assigned to a game — handy for officiating studies. Pair a `game_id` from the schedule with this call.
@@ -247,6 +507,26 @@ else:
     out = 'officials unavailable'
 out
 ```
+
+    ✅ Game 5 officials
+
+
+
+
+
+    shape: (4, 3)
+    ┌───────────────┬───────────────┬───────┐
+    │ full_name     ┆ display_name  ┆ order │
+    │ ---           ┆ ---           ┆ ---   │
+    │ str           ┆ str           ┆ i32   │
+    ╞═══════════════╪═══════════════╪═══════╡
+    │ Roy Gulbeyan  ┆ Roy Gulbeyan  ┆ 1     │
+    │ Maj Forsberg  ┆ Maj Forsberg  ┆ 2     │
+    │ Tim Greene    ┆ Tim Greene    ┆ 3     │
+    │ Isaac Barnett ┆ Isaac Barnett ┆ 4     │
+    └───────────────┴───────────────┴───────┘
+
+
 
 ### Recipe 5 — Best net rating in the league ⚖️
 
@@ -269,6 +549,30 @@ net_rating = (
 )
 net_rating
 ```
+
+
+
+
+    shape: (12, 6)
+    ┌───────────────────┬────────────────────┬───────┬─────────┬─────────────┬──────┐
+    │ team_abbreviation ┆ team_display_name  ┆ games ┆ pts_for ┆ pts_against ┆ net  │
+    │ ---               ┆ ---                ┆ ---   ┆ ---     ┆ ---         ┆ ---  │
+    │ str               ┆ str                ┆ u32   ┆ f64     ┆ f64         ┆ f64  │
+    ╞═══════════════════╪════════════════════╪═══════╪═════════╪═════════════╪══════╡
+    │ NY                ┆ New York Liberty   ┆ 52    ┆ 85.0    ┆ 77.0        ┆ 8.0  │
+    │ CON               ┆ Connecticut Sun    ┆ 47    ┆ 80.4    ┆ 74.5        ┆ 5.9  │
+    │ MIN               ┆ Minnesota Lynx     ┆ 53    ┆ 82.4    ┆ 77.2        ┆ 5.2  │
+    │ LV                ┆ Las Vegas Aces     ┆ 46    ┆ 85.5    ┆ 80.7        ┆ 4.8  │
+    │ SEA               ┆ Seattle Storm      ┆ 42    ┆ 82.7    ┆ 78.8        ┆ 3.9  │
+    │ …                 ┆ …                  ┆ …     ┆ …       ┆ …           ┆ …    │
+    │ IND               ┆ Indiana Fever      ┆ 42    ┆ 84.5    ┆ 87.8        ┆ -3.3 │
+    │ PHX               ┆ Phoenix Mercury    ┆ 42    ┆ 81.9    ┆ 85.5        ┆ -3.6 │
+    │ CHI               ┆ Chicago Sky        ┆ 40    ┆ 77.4    ┆ 82.5        ┆ -5.1 │
+    │ LA                ┆ Los Angeles Sparks ┆ 40    ┆ 78.4    ┆ 85.6        ┆ -7.2 │
+    │ DAL               ┆ Dallas Wings       ┆ 40    ┆ 84.2    ┆ 92.1        ┆ -7.9 │
+    └───────────────────┴────────────────────┴───────┴─────────┴─────────────┴──────┘
+
+
 
 ### Recipe 6 — Double-double machines 🏅
 
@@ -298,6 +602,29 @@ double_doubles = (
 double_doubles
 ```
 
+
+
+
+    shape: (10, 4)
+    ┌──────────────────────┬───────────────────┬────────────────┬────────────────┐
+    │ athlete_display_name ┆ team_abbreviation ┆ double_doubles ┆ triple_doubles │
+    │ ---                  ┆ ---               ┆ ---            ┆ ---            │
+    │ str                  ┆ str               ┆ u32            ┆ u32            │
+    ╞══════════════════════╪═══════════════════╪════════════════╪════════════════╡
+    │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
+    │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
+    │ Breanna Stewart      ┆ NY                ┆ 22             ┆ 0              │
+    │ Tina Charles         ┆ ATL               ┆ 21             ┆ 1              │
+    │ Napheesa Collier     ┆ MIN               ┆ 21             ┆ 0              │
+    │ Alyssa Thomas        ┆ CON               ┆ 19             ┆ 4              │
+    │ Dearica Hamby        ┆ LA                ┆ 16             ┆ 0              │
+    │ Aliyah Boston        ┆ IND               ┆ 15             ┆ 0              │
+    │ Caitlin Clark        ┆ IND               ┆ 14             ┆ 2              │
+    │ Jonquel Jones        ┆ NY                ┆ 14             ┆ 0              │
+    └──────────────────────┴───────────────────┴────────────────┴────────────────┘
+
+
+
 ### Recipe 7 — Most efficient high-volume scorers 🎯
 
 Raw points reward volume; **true shooting %** rewards efficiency. TS% = points / (2 × (FGA + 0.44 × FTA)). Aggregate the makes/attempts from the box-score loader, keep players with real workloads, and you've got the league's most efficient buckets.
@@ -324,6 +651,29 @@ true_shooting = (
 )
 true_shooting
 ```
+
+
+
+
+    shape: (10, 7)
+    ┌──────────────────────┬───────────────────┬───────┬──────┬─────┬─────┬────────┐
+    │ athlete_display_name ┆ team_abbreviation ┆ games ┆ pts  ┆ fga ┆ fta ┆ ts_pct │
+    │ ---                  ┆ ---               ┆ ---   ┆ ---  ┆ --- ┆ --- ┆ ---    │
+    │ str                  ┆ str               ┆ u32   ┆ i32  ┆ i32 ┆ i32 ┆ f64    │
+    ╞══════════════════════╪═══════════════════╪═══════╪══════╪═════╪═════╪════════╡
+    │ Leonie Fiebich       ┆ NY                ┆ 52    ┆ 395  ┆ 287 ┆ 38  ┆ 65.0   │
+    │ Jonquel Jones        ┆ NY                ┆ 51    ┆ 726  ┆ 497 ┆ 145 ┆ 64.7   │
+    │ Bridget Carleton     ┆ MIN               ┆ 52    ┆ 508  ┆ 379 ┆ 58  ┆ 62.8   │
+    │ Brittney Griner      ┆ PHX               ┆ 32    ┆ 568  ┆ 403 ┆ 122 ┆ 62.2   │
+    │ Stefanie Dolson      ┆ WSH               ┆ 39    ┆ 371  ┆ 280 ┆ 42  ┆ 62.1   │
+    │ Sophie Cunningham    ┆ PHX               ┆ 42    ┆ 347  ┆ 250 ┆ 69  ┆ 61.9   │
+    │ Tiffany Hayes        ┆ LV                ┆ 39    ┆ 376  ┆ 263 ┆ 100 ┆ 61.2   │
+    │ Teaira McCowan       ┆ DAL               ┆ 39    ┆ 458  ┆ 323 ┆ 124 ┆ 60.7   │
+    │ Kayla McBride        ┆ MIN               ┆ 52    ┆ 782  ┆ 572 ┆ 183 ┆ 59.9   │
+    │ A'ja Wilson          ┆ LV                ┆ 44    ┆ 1149 ┆ 842 ┆ 299 ┆ 59.0   │
+    └──────────────────────┴───────────────────┴───────┴──────┴─────┴─────┴────────┘
+
+
 
 ### Recipe 8 — Where do the threes come from? 🎯
 
@@ -353,6 +703,30 @@ threes.join(team_names, on='team_id', how='left').select(
 ).head(12)
 ```
 
+
+
+
+    shape: (12, 4)
+    ┌───────────────────┬───────────────────┬────────────────┬──────────────┐
+    │ team_abbreviation ┆ three_pt_attempts ┆ three_pt_makes ┆ three_pt_pct │
+    │ ---               ┆ ---               ┆ ---            ┆ ---          │
+    │ str               ┆ u32               ┆ u32            ┆ f64          │
+    ╞═══════════════════╪═══════════════════╪════════════════╪══════════════╡
+    │ NY                ┆ 517               ┆ 517            ┆ 100.0        │
+    │ MIN               ┆ 488               ┆ 488            ┆ 100.0        │
+    │ LV                ┆ 429               ┆ 429            ┆ 100.0        │
+    │ WSH               ┆ 389               ┆ 389            ┆ 100.0        │
+    │ IND               ┆ 382               ┆ 382            ┆ 100.0        │
+    │ …                 ┆ …                 ┆ …              ┆ …            │
+    │ CON               ┆ 282               ┆ 282            ┆ 100.0        │
+    │ SEA               ┆ 254               ┆ 254            ┆ 100.0        │
+    │ DAL               ┆ 250               ┆ 250            ┆ 100.0        │
+    │ ATL               ┆ 249               ┆ 249            ┆ 100.0        │
+    │ CHI               ┆ 193               ┆ 193            ┆ 100.0        │
+    └───────────────────┴───────────────────┴────────────────┴──────────────┘
+
+
+
 ### Recipe 9 — Head-to-head series ⚔️
 
 Want every meeting between two clubs? Filter the team box-score loader on team + opponent abbreviations and you get the full season series — scores, dates and who won. Here's New York vs. Minnesota, the eventual 2024 Finals matchup.
@@ -378,6 +752,31 @@ print('NY series record vs MIN:',
 head_to_head
 ```
 
+    NY series record vs MIN: 4 - 5
+
+
+
+
+
+    shape: (9, 5)
+    ┌────────────┬────────────┬─────────────────────┬─────────────┬────────┐
+    │ game_date  ┆ team_score ┆ opponent_team_score ┆ team_winner ┆ winner │
+    │ ---        ┆ ---        ┆ ---                 ┆ ---         ┆ ---    │
+    │ date       ┆ i32        ┆ i32                 ┆ bool        ┆ str    │
+    ╞════════════╪════════════╪═════════════════════╪═════════════╪════════╡
+    │ 2024-05-25 ┆ 67         ┆ 84                  ┆ false       ┆ MIN    │
+    │ 2024-06-25 ┆ 89         ┆ 94                  ┆ false       ┆ MIN    │
+    │ 2024-07-02 ┆ 76         ┆ 67                  ┆ true        ┆ NY     │
+    │ 2024-09-15 ┆ 79         ┆ 88                  ┆ false       ┆ MIN    │
+    │ 2024-10-10 ┆ 93         ┆ 95                  ┆ false       ┆ MIN    │
+    │ 2024-10-13 ┆ 80         ┆ 66                  ┆ true        ┆ NY     │
+    │ 2024-10-16 ┆ 80         ┆ 77                  ┆ true        ┆ NY     │
+    │ 2024-10-18 ┆ 80         ┆ 82                  ┆ false       ┆ MIN    │
+    │ 2024-10-20 ┆ 67         ┆ 62                  ┆ true        ┆ NY     │
+    └────────────┴────────────┴─────────────────────┴─────────────┴────────┘
+
+
+
 ### Recipe 10 — Rolling form: hot and cold streaks 🔥
 
 A team's last-5 record tells you who's surging into the playoffs. Sort one team's games by date, then a `rolling_sum` over the win flag gives a running 5-game window — polars makes the time-series slice a one-liner.
@@ -399,6 +798,30 @@ form = (
 form
 ```
 
+
+
+
+    shape: (12, 6)
+    ┌────────────┬────────────────────────────┬────────────┬─────────────────────┬─────┬────────────┐
+    │ game_date  ┆ opponent_team_abbreviation ┆ team_score ┆ opponent_team_score ┆ won ┆ wins_last5 │
+    │ ---        ┆ ---                        ┆ ---        ┆ ---                 ┆ --- ┆ ---        │
+    │ date       ┆ str                        ┆ i32        ┆ i32                 ┆ i8  ┆ i64        │
+    ╞════════════╪════════════════════════════╪════════════╪═════════════════════╪═════╪════════════╡
+    │ 2024-09-19 ┆ ATL                        ┆ 67         ┆ 78                  ┆ 0   ┆ 3          │
+    │ 2024-09-22 ┆ ATL                        ┆ 83         ┆ 69                  ┆ 1   ┆ 3          │
+    │ 2024-09-24 ┆ ATL                        ┆ 91         ┆ 82                  ┆ 1   ┆ 3          │
+    │ 2024-09-29 ┆ LV                         ┆ 87         ┆ 77                  ┆ 1   ┆ 4          │
+    │ 2024-10-01 ┆ LV                         ┆ 88         ┆ 84                  ┆ 1   ┆ 4          │
+    │ …          ┆ …                          ┆ …          ┆ …                   ┆ …   ┆ …          │
+    │ 2024-10-10 ┆ MIN                        ┆ 93         ┆ 95                  ┆ 0   ┆ 3          │
+    │ 2024-10-13 ┆ MIN                        ┆ 80         ┆ 66                  ┆ 1   ┆ 3          │
+    │ 2024-10-16 ┆ MIN                        ┆ 80         ┆ 77                  ┆ 1   ┆ 3          │
+    │ 2024-10-18 ┆ MIN                        ┆ 80         ┆ 82                  ┆ 0   ┆ 3          │
+    │ 2024-10-20 ┆ MIN                        ┆ 67         ┆ 62                  ┆ 1   ┆ 3          │
+    └────────────┴────────────────────────────┴────────────┴─────────────────────┴─────┴────────────┘
+
+
+
 ### Recipe 11 — Roster construction by position 👥
 
 [`load_wnba_rosters`](../wnba/reference/loaders.md#load_wnba_rosters) hands you every team's full roster. Pivot guards / forwards / centers per team to see how each front office balances its lineup — a clean join-free `pivot`.
@@ -416,6 +839,30 @@ position_mix = (
 )
 position_mix
 ```
+
+
+
+
+    shape: (12, 4)
+    ┌───────────────────┬─────┬─────┬─────┐
+    │ team_abbreviation ┆ F   ┆ G   ┆ C   │
+    │ ---               ┆ --- ┆ --- ┆ --- │
+    │ str               ┆ u32 ┆ u32 ┆ u32 │
+    ╞═══════════════════╪═════╪═════╪═════╡
+    │ ATL               ┆ 4   ┆ 7   ┆ 1   │
+    │ CHI               ┆ 3   ┆ 9   ┆ 2   │
+    │ CONNECTICU        ┆ 5   ┆ 8   ┆ 2   │
+    │ DALLAS            ┆ 6   ┆ 7   ┆ 1   │
+    │ IND               ┆ 3   ┆ 8   ┆ 2   │
+    │ …                 ┆ …   ┆ …   ┆ …   │
+    │ MIN               ┆ 8   ┆ 5   ┆ 1   │
+    │ NY                ┆ 5   ┆ 8   ┆ 2   │
+    │ PHX               ┆ 7   ┆ 7   ┆ 1   │
+    │ SEA               ┆ 5   ┆ 6   ┆ 3   │
+    │ WSH               ┆ 3   ┆ 9   ┆ 2   │
+    └───────────────────┴─────┴─────┴─────┘
+
+
 
 ### Recipe 12 — Season scoring leaders, the pre-aggregated way 📐
 
@@ -438,6 +885,29 @@ scoring_leaders = (
 )
 scoring_leaders
 ```
+
+
+
+
+    shape: (10, 4)
+    ┌──────────────────────┬───────────────────┬───────────────────────────────┬──────┐
+    │ athlete_display_name ┆ team_display_name ┆ athlete_position_abbreviation ┆ ppg  │
+    │ ---                  ┆ ---               ┆ ---                           ┆ ---  │
+    │ str                  ┆ str               ┆ str                           ┆ f64  │
+    ╞══════════════════════╪═══════════════════╪═══════════════════════════════╪══════╡
+    │ A'ja Wilson          ┆ Las Vegas Aces    ┆ C                             ┆ 21.4 │
+    │ Olivia Miles         ┆ Minnesota Lynx    ┆ G                             ┆ 21.0 │
+    │ Breanna Stewart      ┆ Seattle Storm     ┆ F                             ┆ 20.5 │
+    │ Arike Ogunbowale     ┆ Dallas Wings      ┆ G                             ┆ 19.9 │
+    │ Paige Bueckers       ┆ Dallas Wings      ┆ G                             ┆ 19.2 │
+    │ Caitlin Clark        ┆ Indiana Fever     ┆ G                             ┆ 18.6 │
+    │ Napheesa Collier     ┆ Minnesota Lynx    ┆ F                             ┆ 18.4 │
+    │ Jovana Nogic         ┆ Phoenix Mercury   ┆ G                             ┆ 17.5 │
+    │ Kelsey Mitchell      ┆ Indiana Fever     ┆ G                             ┆ 17.4 │
+    │ Rhyne Howard         ┆ Atlanta Dream     ┆ G                             ┆ 17.1 │
+    └──────────────────────┴───────────────────┴───────────────────────────────┴──────┘
+
+
 
 ## 📦 Bulk loaders (`load_wnba_*`)
 
@@ -463,6 +933,31 @@ box_2024.select(['game_id', 'game_date', 'athlete_display_name',
                  'team_abbreviation', 'minutes', 'points',
                  'rebounds', 'assists']).head()
 ```
+
+    schedule rows: (264, 77)
+
+
+
+
+
+    shape: (5, 8)
+    ┌───────────┬────────────┬────────────────┬────────────────┬─────────┬────────┬──────────┬─────────┐
+    │ game_id   ┆ game_date  ┆ athlete_displa ┆ team_abbreviat ┆ minutes ┆ points ┆ rebounds ┆ assists │
+    │ ---       ┆ ---        ┆ y_name         ┆ ion            ┆ ---     ┆ ---    ┆ ---      ┆ ---     │
+    │ i32       ┆ date       ┆ ---            ┆ ---            ┆ f64     ┆ i32    ┆ i32      ┆ i32     │
+    │           ┆            ┆ str            ┆ str            ┆         ┆        ┆          ┆         │
+    ╞═══════════╪════════════╪════════════════╪════════════════╪═════════╪════════╪══════════╪═════════╡
+    │ 401726992 ┆ 2024-10-20 ┆ Bridget        ┆ MIN            ┆ 41.0    ┆ 3      ┆ 6        ┆ 2       │
+    │           ┆            ┆ Carleton       ┆                ┆         ┆        ┆          ┆         │
+    │ 401726992 ┆ 2024-10-20 ┆ Alanna Smith   ┆ MIN            ┆ 36.0    ┆ 6      ┆ 8        ┆ 2       │
+    │ 401726992 ┆ 2024-10-20 ┆ Napheesa       ┆ MIN            ┆ 44.0    ┆ 22     ┆ 7        ┆ 2       │
+    │           ┆            ┆ Collier        ┆                ┆         ┆        ┆          ┆         │
+    │ 401726992 ┆ 2024-10-20 ┆ Kayla McBride  ┆ MIN            ┆ 43.0    ┆ 21     ┆ 5        ┆ 5       │
+    │ 401726992 ┆ 2024-10-20 ┆ Courtney       ┆ MIN            ┆ 30.0    ┆ 4      ┆ 4        ┆ 3       │
+    │           ┆            ┆ Williams       ┆                ┆         ┆        ┆          ┆         │
+    └───────────┴────────────┴────────────────┴────────────────┴─────────┴────────┴──────────┴─────────┘
+
+
 
 ## 🎉 Where to next
 

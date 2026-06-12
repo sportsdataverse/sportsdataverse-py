@@ -70,6 +70,9 @@ SEASON = most_recent_cfb_season()
 print('most recent CFB season:', SEASON)
 ```
 
+    most recent CFB season: 2025
+
+
 ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny
 `safe()` helper runs the riskier calls defensively — you get the frame when
 the feed is up, and a friendly one-liner when it isn't (never a scary
@@ -109,6 +112,32 @@ schedule.select([
 ]).head()
 ```
 
+    schedule shape: (3734, 31)
+
+
+
+
+
+    shape: (5, 8)
+    ┌───────────┬──────┬─────────────┬─────────────┬────────────┬────────────┬────────────┬────────────┐
+    │ game_id   ┆ week ┆ home_team   ┆ away_team   ┆ home_point ┆ away_point ┆ home_confe ┆ neutral_si │
+    │ ---       ┆ ---  ┆ ---         ┆ ---         ┆ s          ┆ s          ┆ rence      ┆ te         │
+    │ i32       ┆ i32  ┆ str         ┆ str         ┆ ---        ┆ ---        ┆ ---        ┆ ---        │
+    │           ┆      ┆             ┆             ┆ i32        ┆ i32        ┆ str        ┆ bool       │
+    ╞═══════════╪══════╪═════════════╪═════════════╪════════════╪════════════╪════════════╪════════════╡
+    │ 401525434 ┆ 1    ┆ Notre Dame  ┆ Navy        ┆ 42         ┆ 3          ┆ FBS Indepe ┆ true       │
+    │           ┆      ┆             ┆             ┆            ┆            ┆ ndents     ┆            │
+    │ 401540199 ┆ 1    ┆ Mercer      ┆ North       ┆ 17         ┆ 7          ┆ Southern   ┆ true       │
+    │           ┆      ┆             ┆ Alabama     ┆            ┆            ┆            ┆            │
+    │ 401520145 ┆ 1    ┆ Jacksonvill ┆ UTEP        ┆ 17         ┆ 14         ┆ Conference ┆ false      │
+    │           ┆      ┆ e State     ┆             ┆            ┆            ┆ USA        ┆            │
+    │ 401532392 ┆ 1    ┆ San Diego   ┆ Ohio        ┆ 20         ┆ 13         ┆ Mountain   ┆ false      │
+    │           ┆      ┆ State       ┆             ┆            ┆            ┆ West       ┆            │
+    │ 401540628 ┆ 1    ┆ UAlbany     ┆ Fordham     ┆ 34         ┆ 13         ┆ CAA        ┆ false      │
+    └───────────┴──────┴─────────────┴─────────────┴────────────┴────────────┴────────────┴────────────┘
+
+
+
 ## 👥 Premium loaders: rosters
 
 [`load_cfb_rosters`](../cfb/reference/loaders.md#load_cfb_rosters) gives you
@@ -125,6 +154,27 @@ rosters.select([
 ]).head()
 ```
 
+    rosters shape: (22467, 18)
+
+
+
+
+
+    shape: (5, 7)
+    ┌────────────┬────────────┬───────────┬───────────────────┬──────────┬────────┬────────────┐
+    │ athlete_id ┆ first_name ┆ last_name ┆ team              ┆ position ┆ jersey ┆ home_state │
+    │ ---        ┆ ---        ┆ ---       ┆ ---               ┆ ---      ┆ ---    ┆ ---        │
+    │ str        ┆ str        ┆ str       ┆ str               ┆ str      ┆ i32    ┆ str        │
+    ╞════════════╪════════════╪═══════════╪═══════════════════╪══════════╪════════╪════════════╡
+    │ 102597     ┆ Will       ┆ Rogers    ┆ Mississippi State ┆ QB       ┆ 7      ┆ MS         │
+    │ 107494     ┆ Trey       ┆ Sanders   ┆ TCU               ┆ RB       ┆ 2      ┆ FL         │
+    │ 146583     ┆ John       ┆ Adams     ┆ Temple            ┆ WR       ┆ 17     ┆ NJ         │
+    │ 160900     ┆ Will       ┆ Johnson   ┆ Michigan          ┆ null     ┆ null   ┆ null       │
+    │ 169499     ┆ Ryan       ┆ Johnson   ┆ Akron             ┆ DL       ┆ 4      ┆ MS         │
+    └────────────┴────────────┴───────────┴───────────────────┴──────────┴────────┴────────────┘
+
+
+
 ## 🏟️ Premium loaders: team info
 
 [`load_cfb_team_info`](../cfb/reference/loaders.md#load_cfb_team_info)
@@ -140,6 +190,35 @@ team_info.select([
     'venue_name', 'city', 'state', 'dome',
 ]).head()
 ```
+
+    team_info shape: (1840, 28)
+
+
+
+
+
+    shape: (5, 8)
+    ┌─────────┬───────────────┬───────────────┬──────────────┬──────────────┬──────────┬───────┬───────┐
+    │ team_id ┆ school        ┆ conference    ┆ classificati ┆ venue_name   ┆ city     ┆ state ┆ dome  │
+    │ ---     ┆ ---           ┆ ---           ┆ on           ┆ ---          ┆ ---      ┆ ---   ┆ ---   │
+    │ i32     ┆ str           ┆ str           ┆ ---          ┆ str          ┆ str      ┆ str   ┆ bool  │
+    │         ┆               ┆               ┆ str          ┆              ┆          ┆       ┆       │
+    ╞═════════╪═══════════════╪═══════════════╪══════════════╪══════════════╪══════════╪═══════╪═══════╡
+    │ 2000    ┆ Abilene       ┆ UAC           ┆ fcs          ┆ Wildcat      ┆ Abilene  ┆ TX    ┆ false │
+    │         ┆ Christian     ┆               ┆              ┆ Stadium (TX) ┆          ┆       ┆       │
+    │ 2001    ┆ Adams State   ┆ Rocky         ┆ ii           ┆ Rex Stadium  ┆ Alamosa  ┆ CO    ┆ false │
+    │         ┆               ┆ Mountain      ┆              ┆              ┆          ┆       ┆       │
+    │ 2003    ┆ Adrian        ┆ Michigan      ┆ iii          ┆ Docking      ┆ Adrian   ┆ MI    ┆ false │
+    │         ┆               ┆               ┆              ┆ Stadium      ┆          ┆       ┆       │
+    │ 2005    ┆ Air Force     ┆ Mountain West ┆ fbs          ┆ Falcon       ┆ Colorado ┆ CO    ┆ false │
+    │         ┆               ┆               ┆              ┆ Stadium      ┆ Springs  ┆       ┆       │
+    │ 2006    ┆ Akron         ┆ Mid-American  ┆ fbs          ┆ Summa Field  ┆ Akron    ┆ OH    ┆ false │
+    │         ┆               ┆               ┆              ┆ at           ┆          ┆       ┆       │
+    │         ┆               ┆               ┆              ┆ InfoCision   ┆          ┆       ┆       │
+    │         ┆               ┆               ┆              ┆ Stad…        ┆          ┆       ┆       │
+    └─────────┴───────────────┴───────────────┴──────────────┴──────────────┴──────────┴───────┴───────┘
+
+
 
 ## 🎬 Premium loaders: play-by-play with EPA
 
@@ -169,6 +248,34 @@ have = [c for c in cols if c in pbp.columns]
 pbp.select(have).head() if have else 'pbp not published for these seasons right now'
 ```
 
+    ✅ load_cfb_pbp 2023
+
+
+    ✅ load_cfb_pbp 2022
+
+
+    ✅ load_cfb_pbp 2021
+    pbp season: 2021 | pbp shape: (137046, 370)
+
+
+
+
+
+    shape: (5, 6)
+    ┌───────────┬─────────────────────┬──────┬──────────┬───────────┬───────────┐
+    │ game_id   ┆ start.pos_team.name ┆ down ┆ distance ┆ EPA       ┆ wpa       │
+    │ ---       ┆ ---                 ┆ ---  ┆ ---      ┆ ---       ┆ ---       │
+    │ i64       ┆ str                 ┆ f64  ┆ f64      ┆ f64       ┆ f64       │
+    ╞═══════════╪═════════════════════╪══════╪══════════╪═══════════╪═══════════╡
+    │ 401281942 ┆ Miami               ┆ null ┆ null     ┆ -1.024319 ┆ -0.605042 │
+    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.345141 ┆ -0.434851 │
+    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.666759 ┆ -0.000523 │
+    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.298288 ┆ -0.000052 │
+    │ 401281942 ┆ Alabama             ┆ null ┆ null     ┆ -0.20101  ┆ -0.000039 │
+    └───────────┴─────────────────────┴──────┴──────────┴───────────┴───────────┘
+
+
+
 ## 📡 Live from ESPN: the scoreboard
 
 When you need *today's* slate (or a specific date), the ESPN wrappers shine.
@@ -192,6 +299,27 @@ else:
 out
 ```
 
+    ✅ ESPN scoreboard
+
+
+
+
+
+    shape: (5, 4)
+    ┌───────────┬─────────────────────────────────┬────────────┬─────────────────────────┐
+    │ game_id   ┆ name                            ┆ short_name ┆ status_type_description │
+    │ ---       ┆ ---                             ┆ ---        ┆ ---                     │
+    │ str       ┆ str                             ┆ str        ┆ str                     │
+    ╞═══════════╪═════════════════════════════════╪════════════╪═════════════════════════╡
+    │ 401520430 ┆ Georgia Bulldogs at Georgia Te… ┆ UGA @ GT   ┆ Final                   │
+    │ 401520434 ┆ Ohio State Buckeyes at Michiga… ┆ OSU @ MICH ┆ Final                   │
+    │ 401524068 ┆ Washington State Cougars at Wa… ┆ WSU @ WASH ┆ Final                   │
+    │ 401520429 ┆ Florida State Seminoles at Flo… ┆ FSU @ FLA  ┆ Final                   │
+    │ 401520427 ┆ Alabama Crimson Tide at Auburn… ┆ ALA @ AUB  ┆ Final                   │
+    └───────────┴─────────────────────────────────┴────────────┴─────────────────────────┘
+
+
+
 ## 🏫 Live from ESPN: teams (and their `team_id`s)
 
 [`espn_cfb_teams`](../cfb/reference/additional.md#espn_cfb_teams) lists every
@@ -209,6 +337,30 @@ else:
     out = 'teams unavailable right now'
 out
 ```
+
+    ✅ ESPN teams
+
+
+
+
+
+    shape: (8, 4)
+    ┌─────────┬───────────────────┬──────────────┬───────────────────┐
+    │ team_id ┆ team_location     ┆ team_name    ┆ team_abbreviation │
+    │ ---     ┆ ---               ┆ ---          ┆ ---               │
+    │ str     ┆ str               ┆ str          ┆ str               │
+    ╞═════════╪═══════════════════╪══════════════╪═══════════════════╡
+    │ 2000    ┆ Abilene Christian ┆ Wildcats     ┆ ACU               │
+    │ 2001    ┆ Adams State       ┆ Grizzlies    ┆ ADSU              │
+    │ 2003    ┆ Adrian            ┆ Bulldogs     ┆ ADR               │
+    │ 2005    ┆ Air Force         ┆ Falcons      ┆ AF                │
+    │ 2006    ┆ Akron             ┆ Zips         ┆ AKR               │
+    │ 2010    ┆ Alabama A&M       ┆ Bulldogs     ┆ AAMU              │
+    │ 333     ┆ Alabama           ┆ Crimson Tide ┆ ALA               │
+    │ 2011    ┆ Alabama State     ┆ Hornets      ┆ ALST              │
+    └─────────┴───────────────────┴──────────────┴───────────────────┘
+
+
 
 ## 🍳 Cookbook: common CFB tasks
 
@@ -232,6 +384,29 @@ needed — the release frame already stores points as integers.
              'home_points', 'away_points', 'total_points'])
     .head(10))
 ```
+
+
+
+
+    shape: (10, 6)
+    ┌──────┬──────────────────────┬────────────────────┬─────────────┬─────────────┬──────────────┐
+    │ week ┆ home_team            ┆ away_team          ┆ home_points ┆ away_points ┆ total_points │
+    │ ---  ┆ ---                  ┆ ---                ┆ ---         ┆ ---         ┆ ---          │
+    │ i32  ┆ str                  ┆ str                ┆ i32         ┆ i32         ┆ i32          │
+    ╞══════╪══════════════════════╪════════════════════╪═════════════╪═════════════╪══════════════╡
+    │ 9    ┆ Colby College        ┆ Middlebury         ┆ null        ┆ null        ┆ null         │
+    │ 9    ┆ Bowdoin              ┆ Trinity (CT)       ┆ null        ┆ null        ┆ null         │
+    │ 9    ┆ Bates                ┆ Williams           ┆ null        ┆ null        ┆ null         │
+    │ 11   ┆ Worcester St         ┆ Framingham State   ┆ null        ┆ null        ┆ null         │
+    │ 10   ┆ Defiance College     ┆ Rose-Hulman        ┆ 54          ┆ 78          ┆ 132          │
+    │ 10   ┆ Muskingum University ┆ Wilmington (OH)    ┆ 64          ┆ 63          ┆ 127          │
+    │ 2    ┆ Coast Guard          ┆ Anna Maria College ┆ 93          ┆ 24          ┆ 117          │
+    │ 13   ┆ Oklahoma             ┆ TCU                ┆ 69          ┆ 45          ┆ 114          │
+    │ 3    ┆ Texas State          ┆ Jackson State      ┆ 77          ┆ 34          ┆ 111          │
+    │ 10   ┆ Cornell College (IA) ┆ Illinois College   ┆ 34          ┆ 76          ┆ 110          │
+    └──────┴──────────────────────┴────────────────────┴─────────────┴─────────────┴──────────────┘
+
+
 
 ### Recipe 2 — Team offensive EPA/play leaderboard 📈
 
@@ -263,6 +438,30 @@ else:
 out
 ```
 
+
+
+
+    shape: (15, 3)
+    ┌──────────────────┬───────┬──────────────┐
+    │ offense          ┆ plays ┆ epa_per_play │
+    │ ---              ┆ ---   ┆ ---          │
+    │ str              ┆ u32   ┆ f64          │
+    ╞══════════════════╪═══════╪══════════════╡
+    │ Ohio State       ┆ 972   ┆ 0.28         │
+    │ Western Kentucky ┆ 1021  ┆ 0.195        │
+    │ Virginia         ┆ 914   ┆ 0.178        │
+    │ Oregon State     ┆ 897   ┆ 0.17         │
+    │ Oklahoma         ┆ 970   ┆ 0.154        │
+    │ …                ┆ …     ┆ …            │
+    │ Wake Forest      ┆ 1071  ┆ 0.121        │
+    │ Alabama          ┆ 1202  ┆ 0.115        │
+    │ Nevada           ┆ 980   ┆ 0.114        │
+    │ Missouri         ┆ 906   ┆ 0.113        │
+    │ TCU              ┆ 730   ┆ 0.112        │
+    └──────────────────┴───────┴──────────────┘
+
+
+
 ### Recipe 3 — A team's roster, sorted by position 🧩
 
 Join the loaded roster against `team_info` to resolve a school name to its
@@ -287,6 +486,32 @@ else:
     out = f'no roster rows for {team_name} (try another school string)'
 out
 ```
+
+    Michigan: 144 players
+
+
+
+
+
+    shape: (10, 2)
+    ┌──────────┬─────────┐
+    │ position ┆ players │
+    │ ---      ┆ ---     │
+    │ str      ┆ u32     │
+    ╞══════════╪═════════╡
+    │ DB       ┆ 23      │
+    │ OL       ┆ 21      │
+    │ WR       ┆ 19      │
+    │ LB       ┆ 18      │
+    │ DE       ┆ 12      │
+    │ DL       ┆ 12      │
+    │ RB       ┆ 11      │
+    │ TE       ┆ 11      │
+    │ QB       ┆ 6       │
+    │ PK       ┆ 6       │
+    └──────────┴─────────┘
+
+
 
 ### Recipe 4 — Who was on the field? Per-play participants 🕵️
 
@@ -313,6 +538,33 @@ else:
     out = 'participants feed quiet right now (offseason / rate limit)'
 out
 ```
+
+    ✅ play participants 401628334
+
+
+
+
+
+    shape: (5, 5)
+    ┌───────────────────┬───────────────────┬───────────────────┬───────────────────┬──────────────────┐
+    │ play_id           ┆ kicker_player_nam ┆ returner_player_n ┆ passer_player_nam ┆ receiver_player_ │
+    │ ---               ┆ e                 ┆ ame               ┆ e                 ┆ name             │
+    │ i64               ┆ ---               ┆ ---               ┆ ---               ┆ ---              │
+    │                   ┆ str               ┆ str               ┆ str               ┆ str              │
+    ╞═══════════════════╪═══════════════════╪═══════════════════╪═══════════════════╪══════════════════╡
+    │ 40162833410184990 ┆ Michael Lantz     ┆ Zavion Thomas     ┆ null              ┆ null             │
+    │ 2                 ┆                   ┆                   ┆                   ┆                  │
+    │ 40162833410185440 ┆ null              ┆ null              ┆ Garrett Nussmeier ┆ Kyren Lacy       │
+    │ 1                 ┆                   ┆                   ┆                   ┆                  │
+    │ 40162833410185750 ┆ null              ┆ null              ┆ Garrett Nussmeier ┆ Kyren Lacy       │
+    │ 1                 ┆                   ┆                   ┆                   ┆                  │
+    │ 40162833410185960 ┆ null              ┆ null              ┆ null              ┆ null             │
+    │ 1                 ┆                   ┆                   ┆                   ┆                  │
+    │ 40162833410186700 ┆ null              ┆ null              ┆ Garrett Nussmeier ┆ CJ Daniels       │
+    │ 1                 ┆                   ┆                   ┆                   ┆                  │
+    └───────────────────┴───────────────────┴───────────────────┴───────────────────┴──────────────────┘
+
+
 
 ### Recipe 5 — Build a standings table from the schedule 🏆
 
@@ -345,6 +597,29 @@ standings_tbl = (
 standings_tbl.head(10)
 ```
 
+
+
+
+    shape: (10, 4)
+    ┌──────────────────────────┬──────┬────────┬─────────┐
+    │ team                     ┆ wins ┆ losses ┆ win_pct │
+    │ ---                      ┆ ---  ┆ ---    ┆ ---     │
+    │ str                      ┆ u32  ┆ u32    ┆ f64     │
+    ╞══════════════════════════╪══════╪════════╪═════════╡
+    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
+    │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Colorado School Of Mines ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Cortland                 ┆ 14   ┆ 1      ┆ 0.933   │
+    │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Randolph-Macon           ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
+    └──────────────────────────┴──────┴────────┴─────────┘
+
+
+
 ### Recipe 6 — End-of-season Elo power ratings ⚡
 
 Every schedule row ships pre- and post-game **Elo** ratings. Grab each team's most recent post-game Elo (sort by week, take the first) for a tidy, ready-to-rank power table — no model to fit.
@@ -372,6 +647,30 @@ elo = (
 )
 elo.head(15)
 ```
+
+
+
+
+    shape: (15, 2)
+    ┌───────────────┬───────────┐
+    │ team          ┆ final_elo │
+    │ ---           ┆ ---       │
+    │ str           ┆ i32       │
+    ╞═══════════════╪═══════════╡
+    │ Michigan      ┆ 2174      │
+    │ Georgia       ┆ 2111      │
+    │ Ohio State    ┆ 2108      │
+    │ Penn State    ┆ 2061      │
+    │ Texas         ┆ 2050      │
+    │ …             ┆ …         │
+    │ Florida State ┆ 1951      │
+    │ Kansas State  ┆ 1942      │
+    │ Washington    ┆ 1883      │
+    │ SMU           ┆ 1861      │
+    │ James Madison ┆ 1835      │
+    └───────────────┴───────────┘
+
+
 
 ### Recipe 7 — One team's full game log 📜
 
@@ -405,6 +704,30 @@ gamelog = (
 gamelog.head(16) if gamelog.height else f'no games found for {team}'
 ```
 
+
+
+
+    shape: (15, 6)
+    ┌──────┬───────────────┬─────────┬─────────────┬────────┬──────────────┐
+    │ week ┆ opponent      ┆ pts_for ┆ pts_against ┆ margin ┆ neutral_site │
+    │ ---  ┆ ---           ┆ ---     ┆ ---         ┆ ---    ┆ ---          │
+    │ i32  ┆ str           ┆ i32     ┆ i32         ┆ i32    ┆ bool         │
+    ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
+    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
+    │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
+    │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
+    │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
+    │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
+    │ …    ┆ …             ┆ …       ┆ …           ┆ …      ┆ …            │
+    │ 10   ┆ Purdue        ┆ 41      ┆ 13          ┆ 28     ┆ false        │
+    │ 11   ┆ Penn State    ┆ 24      ┆ 15          ┆ 9      ┆ false        │
+    │ 12   ┆ Maryland      ┆ 31      ┆ 24          ┆ 7      ┆ false        │
+    │ 13   ┆ Ohio State    ┆ 30      ┆ 24          ┆ 6      ┆ false        │
+    │ 14   ┆ Iowa          ┆ 26      ┆ 0           ┆ 26     ┆ true         │
+    └──────┴───────────────┴─────────┴─────────────┴────────┴──────────────┘
+
+
+
 ### Recipe 8 — Rushing leaders, EPA included 🏃
 
 Premium play-by-play means leaderboards aren't just totals — they carry **efficiency**. Filter to designed runs, sum the yards, and average the EPA per carry to separate the bell-cows from the truly explosive backs.
@@ -433,6 +756,30 @@ else:
 out
 ```
 
+
+
+
+    shape: (15, 4)
+    ┌────────────────────┬─────────┬──────────┬──────────────┐
+    │ rusher_player_name ┆ carries ┆ rush_yds ┆ epa_per_rush │
+    │ ---                ┆ ---     ┆ ---      ┆ ---          │
+    │ str                ┆ u32     ┆ i64      ┆ f64          │
+    ╞════════════════════╪═════════╪══════════╪══════════════╡
+    │ Lew Nichols III    ┆ 315     ┆ 1765     ┆ -0.022       │
+    │ Abram Smith        ┆ 257     ┆ 1599     ┆ 0.165        │
+    │ Tyler Allgeier     ┆ 272     ┆ 1592     ┆ 0.127        │
+    │ Kenneth Walker III ┆ 251     ┆ 1576     ┆ 0.062        │
+    │ Sincere McCormick  ┆ 288     ┆ 1480     ┆ -0.035       │
+    │ …                  ┆ …       ┆ …        ┆ …            │
+    │ Rasheen Ali        ┆ 237     ┆ 1365     ┆ 0.049        │
+    │ Brian Robinson Jr. ┆ 271     ┆ 1361     ┆ 0.004        │
+    │ Breece Hall        ┆ 222     ┆ 1336     ┆ 0.095        │
+    │ B.J. Baylor        ┆ 222     ┆ 1336     ┆ 0.145        │
+    │ Hassan Haskins     ┆ 268     ┆ 1324     ┆ 0.134        │
+    └────────────────────┴─────────┴──────────┴──────────────┘
+
+
+
 ### Recipe 9 — The most thrilling games of the year 🎢
 
 cfbfastR's schedule ships an `excitement_index` (a win-probability swinginess score). Sort it descending and you've ranked the season's white-knuckle finishes in one line.
@@ -450,6 +797,29 @@ thrillers = (
 thrillers
 ```
 
+
+
+
+    shape: (10, 6)
+    ┌──────┬──────────────────┬────────────────┬─────────────┬─────────────┬──────────────────┐
+    │ week ┆ home_team        ┆ away_team      ┆ home_points ┆ away_points ┆ excitement_index │
+    │ ---  ┆ ---              ┆ ---            ┆ ---         ┆ ---         ┆ ---              │
+    │ i32  ┆ str              ┆ str            ┆ i32         ┆ i32         ┆ f64              │
+    ╞══════╪══════════════════╪════════════════╪═════════════╪═════════════╪══════════════════╡
+    │ 7    ┆ Southern         ┆ Lincoln (CA)   ┆ 45          ┆ 18          ┆ 14.267416        │
+    │ 9    ┆ Western Carolina ┆ Mercer         ┆ 38          ┆ 45          ┆ 13.938438        │
+    │ 11   ┆ Bucknell         ┆ Georgetown     ┆ 47          ┆ 50          ┆ 12.731991        │
+    │ 3    ┆ Tennessee State  ┆ Gardner-Webb   ┆ 27          ┆ 25          ┆ 12.041674        │
+    │ 6    ┆ Brown            ┆ Rhode Island   ┆ 30          ┆ 34          ┆ 11.825262        │
+    │ 3    ┆ Eastern Illinois ┆ Illinois State ┆ 14          ┆ 13          ┆ 11.431072        │
+    │ 5    ┆ Robert Morris    ┆ Howard         ┆ 10          ┆ 35          ┆ 11.33141         │
+    │ 6    ┆ Lindenwood       ┆ Tennessee Tech ┆ 23          ┆ 0           ┆ 11.198615        │
+    │ 10   ┆ New Hampshire    ┆ Villanova      ┆ 33          ┆ 45          ┆ 11.10256         │
+    │ 4    ┆ Eastern Illinois ┆ McNeese        ┆ 31          ┆ 28          ┆ 10.873191        │
+    └──────┴──────────────────┴────────────────┴─────────────┴─────────────┴──────────────────┘
+
+
+
 ### Recipe 10 — Where does the talent come from? 🗺️
 
 Roll the season roster up by `home_state` to map the recruiting footprint of college football — a quick reminder of just how much of the sport flows out of a handful of states.
@@ -466,6 +836,30 @@ talent_map = (
 )
 talent_map
 ```
+
+
+
+
+    shape: (15, 2)
+    ┌────────────┬─────────┐
+    │ home_state ┆ players │
+    │ ---        ┆ ---     │
+    │ str        ┆ u32     │
+    ╞════════════╪═════════╡
+    │ TX         ┆ 2526    │
+    │ FL         ┆ 1853    │
+    │ CA         ┆ 1748    │
+    │ GA         ┆ 1584    │
+    │ OH         ┆ 825     │
+    │ …          ┆ …       │
+    │ PA         ┆ 574     │
+    │ TN         ┆ 559     │
+    │ NJ         ┆ 534     │
+    │ MD         ┆ 512     │
+    │ SC         ┆ 472     │
+    └────────────┴─────────┘
+
+
 
 ### Recipe 11 — Conference vs. non-conference, by margin 🔀
 
@@ -492,6 +886,21 @@ splits = (
 )
 splits
 ```
+
+
+
+
+    shape: (2, 4)
+    ┌─────────────────┬───────┬────────────┬──────────────────┐
+    │ conference_game ┆ games ┆ avg_margin ┆ avg_total_points │
+    │ ---             ┆ ---   ┆ ---        ┆ ---              │
+    │ bool            ┆ u32   ┆ f64        ┆ f64              │
+    ╞═════════════════╪═══════╪════════════╪══════════════════╡
+    │ false           ┆ 362   ┆ 22.2       ┆ 54.0             │
+    │ true            ┆ 548   ┆ 15.2       ┆ 53.5             │
+    └─────────────────┴───────┴────────────┴──────────────────┘
+
+
 
 ### Recipe 12 — Biggest betting favorites in history 💸
 
@@ -521,6 +930,33 @@ else:
 out
 ```
 
+    ✅ load_cfb_betting_lines
+    biggest favorites, 2019 season:
+
+
+
+
+
+    shape: (10, 3)
+    ┌─────────────────────────────────┬──────┬────────────┐
+    │ game_desc                       ┆ abbr ┆ avg_spread │
+    │ ---                             ┆ ---  ┆ ---        │
+    │ str                             ┆ str  ┆ f64        │
+    ╞═════════════════════════════════╪══════╪════════════╡
+    │ Western Carolina@Alabama        ┆ BAMA ┆ -58.0      │
+    │ New Mexico State@Alabama        ┆ BAMA ┆ -54.9      │
+    │ Arkansas-Pine Bluff@TCU         ┆ TCU  ┆ -54.0      │
+    │ Ohio State@Rutgers              ┆ OSU  ┆ -52.2      │
+    │ Northwestern State@LSU          ┆ LSU  ┆ -51.6      │
+    │ Murray State@Georgia            ┆ UGA  ┆ -49.2      │
+    │ Wofford@Clemson                 ┆ CLE  ┆ -48.5      │
+    │ Oklahoma Panhandle State@Sam H… ┆ SHS  ┆ -47.5      │
+    │ Butler@North Dakota State       ┆ NDS  ┆ -47.5      │
+    │ Idaho@Penn State                ┆ PSU  ┆ -47.3      │
+    └─────────────────────────────────┴──────┴────────────┘
+
+
+
 ### Recipe 13 — Hand it to pandas 🐼
 
 Every loader takes `return_as_pandas=True`, and any polars frame converts with `.to_pandas()`. Once it's a pandas DataFrame the whole pandas/`numpy`/`scikit-learn` world opens up — here, a one-call `.describe()` of scoring across the season.
@@ -536,6 +972,24 @@ score_pd['total_points'] = score_pd['home_points'] + score_pd['away_points']
 print(type(score_pd).__module__)
 score_pd.describe().round(1)
 ```
+
+    pandas
+
+
+
+
+
+           home_points  away_points  total_points
+    count       3730.0       3730.0        3730.0
+    mean          28.9         24.3          53.1
+    std           16.0         15.0          17.8
+    min            0.0          0.0           0.0
+    25%           17.0         14.0          41.0
+    50%           28.0         23.0          52.0
+    75%           38.0         34.0          65.0
+    max           96.0         91.0         132.0
+
+
 
 ## 🗞️ Live tour: standings, polls, leaders & recruits
 
@@ -561,6 +1015,37 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
        else 'standings & rankings unavailable right now'))
 ```
 
+    ✅ ESPN standings
+
+
+    ✅ ESPN rankings (polls)
+
+
+
+
+
+    shape: (5, 26)
+    ┌────────────┬────────────┬─────────┬────────────┬───┬────────────┬───────────┬───────────┬────────┐
+    │ group_name ┆ group_abbr ┆ team_id ┆ team_name  ┆ … ┆ vs         ┆ vs. conf. ┆ vs ap top ┆ vs usa │
+    │ ---        ┆ eviation   ┆ ---     ┆ ---        ┆   ┆ division   ┆ ---       ┆ 25        ┆ ranked │
+    │ str        ┆ ---        ┆ str     ┆ str        ┆   ┆ ---        ┆ str       ┆ ---       ┆ teams  │
+    │            ┆ str        ┆         ┆            ┆   ┆ str        ┆           ┆ str       ┆ ---    │
+    │            ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆ str    │
+    ╞════════════╪════════════╪═════════╪════════════╪═══╪════════════╪═══════════╪═══════════╪════════╡
+    │ American   ┆ American   ┆ 249     ┆ Mean Green ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 2655    ┆ Green Wave ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 151     ┆ Pirates    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 58      ┆ Bulls      ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 235     ┆ Tigers     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    └────────────┴────────────┴─────────┴────────────┴───┴────────────┴───────────┴───────────┴────────┘
+
+
+
 
 ```python
 leaders = safe(
@@ -577,6 +1062,24 @@ recruits = safe(
        if recruits is not None and getattr(recruits, 'height', 0)
        else 'leaders & recruits unavailable right now'))
 ```
+
+    ✅ ESPN passing leaders
+    ✅ ESPN recruiting class
+
+
+
+
+
+    shape: (1, 2)
+    ┌──────┬─────────────────────────────────┐
+    │ code ┆ message                         │
+    │ ---  ┆ ---                             │
+    │ i64  ┆ str                             │
+    ╞══════╪═════════════════════════════════╡
+    │ 400  ┆ http://sports.core.api.espn.pv… │
+    └──────┴─────────────────────────────────┘
+
+
 
 ## 🧪 Bonus: process one game from scratch with `CFBPlayProcess`
 
@@ -605,6 +1108,27 @@ else:
     out = 'live PBP pipeline quiet right now'
 out
 ```
+
+    ✅ CFBPlayProcess 401628334
+
+
+
+
+
+    shape: (5, 5)
+    ┌────────┬──────────┬──────┬──────────┬───────────┐
+    │ period ┆ pos_team ┆ down ┆ distance ┆ EPA       │
+    │ ---    ┆ ---      ┆ ---  ┆ ---      ┆ ---       │
+    │ i64    ┆ i64      ┆ i64  ┆ i64      ┆ f64       │
+    ╞════════╪══════════╪══════╪══════════╪═══════════╡
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -1.309487 │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.130336  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 0.963541  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.674958 │
+    │ 1      ┆ 99       ┆ 2    ┆ 8        ┆ 0.250361  │
+    └────────┴──────────┴──────┴──────────┴───────────┘
+
+
 
 ## 🎉 Where to next
 

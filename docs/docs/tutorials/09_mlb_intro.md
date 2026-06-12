@@ -65,6 +65,9 @@ pl.Config.set_tbl_rows(12)
 print("most recent MLB season:", mlb.most_recent_mlb_season())
 ```
 
+    most recent MLB season: 2026
+
+
 The MLB Stats API and Savant are public and reliable, but they're still
 **live network calls** — a date with no games, an offseason day, or a blip can
 make a call come back empty. So we use a tiny `safe()` helper: you get the
@@ -115,6 +118,29 @@ cols = ["game_pk", "status_detailed_state",
  if schedule is not None else "schedule unavailable right now")
 ```
 
+    ✅ schedule
+
+
+
+
+
+    shape: (3, 6)
+    ┌─────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┬────────────────┐
+    │ game_pk ┆ status_detailed ┆ teams_away_team ┆ teams_away_scor ┆ teams_home_team ┆ teams_home_sco │
+    │ ---     ┆ _state          ┆ _name           ┆ e               ┆ _name           ┆ re             │
+    │ i64     ┆ ---             ┆ ---             ┆ ---             ┆ ---             ┆ ---            │
+    │         ┆ str             ┆ str             ┆ i64             ┆ str             ┆ i64            │
+    ╞═════════╪═════════════════╪═════════════════╪═════════════════╪═════════════════╪════════════════╡
+    │ 744914  ┆ Final           ┆ Houston Astros  ┆ 3               ┆ Toronto Blue    ┆ 1              │
+    │         ┆                 ┆                 ┆                 ┆ Jays            ┆                │
+    │ 744840  ┆ Final           ┆ New York Mets   ┆ 9               ┆ Washington      ┆ 7              │
+    │         ┆                 ┆                 ┆                 ┆ Nationals       ┆                │
+    │ 746535  ┆ Final           ┆ Milwaukee       ┆ 7               ┆ Colorado        ┆ 8              │
+    │         ┆                 ┆ Brewers         ┆                 ┆ Rockies         ┆                │
+    └─────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┴────────────────┘
+
+
+
 ## 🏆 Standings (MLB Stats API)
 
 [`mlb_api_standings`](../mlb/reference/additional.md#mlb_api_standings) covers
@@ -136,6 +162,32 @@ keep = ["team_name", "standings_division_name", "wins", "losses",
  if standings is not None else "standings unavailable right now")
 ```
 
+    ✅ standings
+
+
+
+
+
+    shape: (10, 6)
+    ┌───────────┬─────────────────────────┬──────┬────────┬────────────────────┬───────────────┐
+    │ team_name ┆ standings_division_name ┆ wins ┆ losses ┆ winning_percentage ┆ division_rank │
+    │ ---       ┆ ---                     ┆ ---  ┆ ---    ┆ ---                ┆ ---           │
+    │ str       ┆ str                     ┆ i64  ┆ i64    ┆ str                ┆ str           │
+    ╞═══════════╪═════════════════════════╪══════╪════════╪════════════════════╪═══════════════╡
+    │ Dodgers   ┆ null                    ┆ 98   ┆ 64     ┆ .605               ┆ 1             │
+    │ Phillies  ┆ null                    ┆ 95   ┆ 67     ┆ .586               ┆ 1             │
+    │ Yankees   ┆ null                    ┆ 94   ┆ 68     ┆ .580               ┆ 1             │
+    │ Brewers   ┆ null                    ┆ 93   ┆ 69     ┆ .574               ┆ 1             │
+    │ Padres    ┆ null                    ┆ 93   ┆ 69     ┆ .574               ┆ 2             │
+    │ Guardians ┆ null                    ┆ 92   ┆ 69     ┆ .571               ┆ 1             │
+    │ Orioles   ┆ null                    ┆ 91   ┆ 71     ┆ .562               ┆ 2             │
+    │ Braves    ┆ null                    ┆ 89   ┆ 73     ┆ .549               ┆ 2             │
+    │ Mets      ┆ null                    ┆ 89   ┆ 73     ┆ .549               ┆ 3             │
+    │ D-backs   ┆ null                    ┆ 89   ┆ 73     ┆ .549               ┆ 3             │
+    └───────────┴─────────────────────────┴──────┴────────┴────────────────────┴───────────────┘
+
+
+
 ## 🧢 Teams & rosters (MLB Stats API)
 
 [`mlb_api_teams`](../mlb/reference/additional.md#mlb_api_teams) +
@@ -154,6 +206,29 @@ teams = safe(
  if teams is not None else "teams unavailable right now")
 ```
 
+    ✅ teams
+
+
+
+
+
+
+
+    shape: (5, 5)
+    ┌─────┬──────────────────────┬──────────────┬───────────────┬───────────┐
+    │ id  ┆ name                 ┆ abbreviation ┆ location_name ┆ team_name │
+    │ --- ┆ ---                  ┆ ---          ┆ ---           ┆ ---       │
+    │ i64 ┆ str                  ┆ str          ┆ str           ┆ str       │
+    ╞═════╪══════════════════════╪══════════════╪═══════════════╪═══════════╡
+    │ 133 ┆ Oakland Athletics    ┆ OAK          ┆ Oakland       ┆ Athletics │
+    │ 134 ┆ Pittsburgh Pirates   ┆ PIT          ┆ Pittsburgh    ┆ Pirates   │
+    │ 135 ┆ San Diego Padres     ┆ SD           ┆ San Diego     ┆ Padres    │
+    │ 136 ┆ Seattle Mariners     ┆ SEA          ┆ Seattle       ┆ Mariners  │
+    │ 137 ┆ San Francisco Giants ┆ SF           ┆ San Francisco ┆ Giants    │
+    └─────┴──────────────────────┴──────────────┴───────────────┴───────────┘
+
+
+
 
 ```python
 roster = safe(
@@ -165,6 +240,27 @@ rcols = ["jersey_number", "person_id", "person_full_name",
 (roster.select([c for c in rcols if c in roster.columns]).head()
  if roster is not None else "roster unavailable right now")
 ```
+
+    ✅ Yankees roster
+
+
+
+
+
+    shape: (5, 5)
+    ┌───────────────┬───────────┬──────────────────┬───────────────────────┬───────────────────────┐
+    │ jersey_number ┆ person_id ┆ person_full_name ┆ position_abbreviation ┆ status_description    │
+    │ ---           ┆ ---       ┆ ---              ┆ ---                   ┆ ---                   │
+    │ str           ┆ i64       ┆ str              ┆ str                   ┆ str                   │
+    ╞═══════════════╪═══════════╪══════════════════╪═══════════════════════╪═══════════════════════╡
+    │ 74            ┆ 677076    ┆ Clayton Andrews  ┆ P                     ┆ Minor League Contract │
+    │ 85            ┆ 690925    ┆ Clayton Beeter   ┆ P                     ┆ Forty Man             │
+    │ 19            ┆ 542932    ┆ Jon Berti        ┆ 3B                    ┆ Forty Man             │
+    │ 53            ┆ 641360    ┆ Phil Bickford    ┆ P                     ┆ Minor League Contract │
+    │ 57            ┆ 595897    ┆ Nick Burdi       ┆ P                     ┆ Minor League Contract │
+    └───────────────┴───────────┴──────────────────┴───────────────────────┴───────────────────────┘
+
+
 
 ## 🧍 Player bio & season stats (MLB Stats API)
 
@@ -183,6 +279,23 @@ bcols = ["id", "full_name", "primary_number", "birth_date",
  if bio is not None else "bio unavailable right now")
 ```
 
+    ✅ Judge bio
+
+
+
+
+
+    shape: (1, 7)
+    ┌────────┬─────────────┬────────────────┬────────────┬────────┬────────┬────────────────┐
+    │ id     ┆ full_name   ┆ primary_number ┆ birth_date ┆ height ┆ weight ┆ mlb_debut_date │
+    │ ---    ┆ ---         ┆ ---            ┆ ---        ┆ ---    ┆ ---    ┆ ---            │
+    │ i64    ┆ str         ┆ str            ┆ str        ┆ str    ┆ i64    ┆ str            │
+    ╞════════╪═════════════╪════════════════╪════════════╪════════╪════════╪════════════════╡
+    │ 592450 ┆ Aaron Judge ┆ 99             ┆ 1992-04-26 ┆ 6' 7"  ┆ 282    ┆ 2016-08-13     │
+    └────────┴─────────────┴────────────────┴────────────┴────────┴────────┴────────────────┘
+
+
+
 
 ```python
 hitting = safe(
@@ -197,6 +310,24 @@ scols = ["season", "stat_games_played", "stat_home_runs", "stat_rbi",
 (hitting.select([c for c in scols if c in hitting.columns])
  if hitting is not None else "stats unavailable right now")
 ```
+
+    ✅ Judge 2024 hitting
+
+
+
+
+
+    shape: (1, 8)
+    ┌────────┬─────────────────┬────────────────┬──────────┬──────────┬──────────┬──────────┬──────────┐
+    │ season ┆ stat_games_play ┆ stat_home_runs ┆ stat_rbi ┆ stat_avg ┆ stat_obp ┆ stat_slg ┆ stat_ops │
+    │ ---    ┆ ed              ┆ ---            ┆ ---      ┆ ---      ┆ ---      ┆ ---      ┆ ---      │
+    │ str    ┆ ---             ┆ i64            ┆ i64      ┆ str      ┆ str      ┆ str      ┆ str      │
+    │        ┆ i64             ┆                ┆          ┆          ┆          ┆          ┆          │
+    ╞════════╪═════════════════╪════════════════╪══════════╪══════════╪══════════╪══════════╪══════════╡
+    │ 2024   ┆ 158             ┆ 58             ┆ 144      ┆ .322     ┆ .458     ┆ .701     ┆ 1.159    │
+    └────────┴─────────────────┴────────────────┴──────────┴──────────┴──────────┴──────────┴──────────┘
+
+
 
 ## 🎯 Pitch-level Statcast (Baseball Savant)
 
@@ -222,6 +353,34 @@ else:
     out = "no pitches in that window right now"
 out
 ```
+
+    ✅ Judge pitches (2-day)
+    shape: (11, 119)
+
+
+
+
+
+    shape: (5, 8)
+    ┌────────────┬────────────┬────────────┬───────────┬───────────┬───────────┬───────────┬───────────┐
+    │ game_date  ┆ player_nam ┆ pitch_type ┆ release_s ┆ launch_sp ┆ launch_an ┆ events    ┆ descripti │
+    │ ---        ┆ e          ┆ ---        ┆ peed      ┆ eed       ┆ gle       ┆ ---       ┆ on        │
+    │ str        ┆ ---        ┆ str        ┆ ---       ┆ ---       ┆ ---       ┆ str       ┆ ---       │
+    │            ┆ str        ┆            ┆ f64       ┆ f64       ┆ i64       ┆           ┆ str       │
+    ╞════════════╪════════════╪════════════╪═══════════╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ 2024-07-02 ┆ Judge,     ┆ FC         ┆ 97.1      ┆ 91.0      ┆ 19        ┆ single    ┆ hit_into_ │
+    │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆ play      │
+    │ 2024-07-02 ┆ Judge,     ┆ FC         ┆ 97.2      ┆ null      ┆ null      ┆ null      ┆ swinging_ │
+    │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆ strike    │
+    │ 2024-07-02 ┆ Judge,     ┆ SL         ┆ 87.5      ┆ 94.3      ┆ 42        ┆ field_out ┆ hit_into_ │
+    │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆ play      │
+    │ 2024-07-02 ┆ Judge,     ┆ FC         ┆ 96.3      ┆ null      ┆ null      ┆ null      ┆ ball      │
+    │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ 2024-07-02 ┆ Judge,     ┆ SL         ┆ 90.1      ┆ null      ┆ null      ┆ null      ┆ foul      │
+    │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆           │
+    └────────────┴────────────┴────────────┴───────────┴───────────┴───────────┴───────────┴───────────┘
+
+
 
 ## 🍳 Cookbook: common baseball tasks
 
@@ -259,6 +418,43 @@ print(rank)
 games
 ```
 
+    ✅ Yankees July schedule
+    shape: (1, 4)
+    ┌───────────┬──────┬────────┬───────────────┐
+    │ team_name ┆ wins ┆ losses ┆ division_rank │
+    │ ---       ┆ ---  ┆ ---    ┆ ---           │
+    │ str       ┆ i64  ┆ i64    ┆ str           │
+    ╞═══════════╪══════╪════════╪═══════════════╡
+    │ Yankees   ┆ 94   ┆ 68     ┆ 1             │
+    └───────────┴──────┴────────┴───────────────┘
+
+
+
+
+
+    shape: (6, 6)
+    ┌─────────┬───────────────┬──────────────────┬─────────────────┬─────────────────┬─────────────────┐
+    │ game_pk ┆ official_date ┆ teams_away_team_ ┆ teams_home_team ┆ teams_away_scor ┆ teams_home_scor │
+    │ ---     ┆ ---           ┆ name             ┆ _name           ┆ e               ┆ e               │
+    │ i64     ┆ str           ┆ ---              ┆ ---             ┆ ---             ┆ ---             │
+    │         ┆               ┆ str              ┆ str             ┆ i64             ┆ i64             │
+    ╞═════════╪═══════════════╪══════════════════╪═════════════════╪═════════════════╪═════════════════╡
+    │ 745730  ┆ 2024-07-02    ┆ Cincinnati Reds  ┆ New York        ┆ 5               ┆ 4               │
+    │         ┆               ┆                  ┆ Yankees         ┆                 ┆                 │
+    │ 745728  ┆ 2024-07-03    ┆ Cincinnati Reds  ┆ New York        ┆ 3               ┆ 2               │
+    │         ┆               ┆                  ┆ Yankees         ┆                 ┆                 │
+    │ 745726  ┆ 2024-07-04    ┆ Cincinnati Reds  ┆ New York        ┆ 8               ┆ 4               │
+    │         ┆               ┆                  ┆ Yankees         ┆                 ┆                 │
+    │ 745725  ┆ 2024-07-05    ┆ Boston Red Sox   ┆ New York        ┆ 5               ┆ 3               │
+    │         ┆               ┆                  ┆ Yankees         ┆                 ┆                 │
+    │ 745724  ┆ 2024-07-06    ┆ Boston Red Sox   ┆ New York        ┆ 4               ┆ 14              │
+    │         ┆               ┆                  ┆ Yankees         ┆                 ┆                 │
+    │ 745723  ┆ 2024-07-07    ┆ Boston Red Sox   ┆ New York        ┆ 3               ┆ 0               │
+    │         ┆               ┆                  ┆ Yankees         ┆                 ┆                 │
+    └─────────┴───────────────┴──────────────────┴─────────────────┴─────────────────┴─────────────────┘
+
+
+
 ### Recipe 2 — A Statcast leaderboard 🏃
 
 The `statcast_leaderboard_*` family wraps Savant's *pre-aggregated* season
@@ -276,6 +472,32 @@ spcols = ["last_name, first_name", "team", "position", "competitive_runs", "spri
        .sort("sprint_speed", descending=True).head(10)
  if sprint is not None and sprint.height else "leaderboard unavailable right now")
 ```
+
+    ✅ sprint speed leaderboard
+
+
+
+
+
+    shape: (10, 5)
+    ┌───────────────────────┬──────┬──────────┬──────────────────┬──────────────┐
+    │ last_name, first_name ┆ team ┆ position ┆ competitive_runs ┆ sprint_speed │
+    │ ---                   ┆ ---  ┆ ---      ┆ ---              ┆ ---          │
+    │ str                   ┆ str  ┆ str      ┆ i64              ┆ f64          │
+    ╞═══════════════════════╪══════╪══════════╪══════════════════╪══════════════╡
+    │ Witt Jr., Bobby       ┆ KC   ┆ SS       ┆ 298              ┆ 30.5         │
+    │ Rojas, Johan          ┆ PHI  ┆ CF       ┆ 176              ┆ 30.1         │
+    │ De La Cruz, Elly      ┆ CIN  ┆ SS       ┆ 249              ┆ 30.0         │
+    │ Fitzgerald, Tyler     ┆ SF   ┆ SS       ┆ 99               ┆ 30.0         │
+    │ Clase, Jonatan        ┆ TOR  ┆ LF       ┆ 20               ┆ 30.0         │
+    │ Crow-Armstrong, Pete  ┆ CHC  ┆ CF       ┆ 149              ┆ 30.0         │
+    │ Scott II, Victor      ┆ STL  ┆ CF       ┆ 62               ┆ 30.0         │
+    │ Mateo, Jorge          ┆ BAL  ┆ 2B       ┆ 77               ┆ 29.9         │
+    │ Siri, Jose            ┆ TB   ┆ CF       ┆ 116              ┆ 29.9         │
+    │ Hampson, Garrett      ┆ KC   ┆ CF       ┆ 89               ┆ 29.8         │
+    └───────────────────────┴──────┴──────────┴──────────────────┴──────────────┘
+
+
 
 ### Recipe 3 — Box score for one game 📊
 
@@ -304,6 +526,24 @@ out = box_df if box_df is not None else "boxscore unavailable right now"
 out
 ```
 
+    ✅ boxscore 744914
+
+
+
+
+
+    shape: (2, 7)
+    ┌──────┬───────────────────┬──────┬──────┬───────────┬─────┬──────┐
+    │ side ┆ team              ┆ runs ┆ hits ┆ home_runs ┆ rbi ┆ avg  │
+    │ ---  ┆ ---               ┆ ---  ┆ ---  ┆ ---       ┆ --- ┆ ---  │
+    │ str  ┆ str               ┆ i64  ┆ i64  ┆ i64       ┆ i64 ┆ str  │
+    ╞══════╪═══════════════════╪══════╪══════╪═══════════╪═════╪══════╡
+    │ away ┆ Houston Astros    ┆ 3    ┆ 4    ┆ 2         ┆ 3   ┆ .264 │
+    │ home ┆ Toronto Blue Jays ┆ 1    ┆ 4    ┆ 1         ┆ 1   ┆ .234 │
+    └──────┴───────────────────┴──────┴──────┴───────────┴─────┴──────┘
+
+
+
 ### Recipe 4 — Plate-appearance play-by-play + outcome mix ⚾
 
 [`mlb_api_play_by_play`](../mlb/reference/mlb_api.md#mlb_api_play_by_play)
@@ -327,6 +567,28 @@ else:
 out
 ```
 
+    ✅ play-by-play 744914
+
+
+
+
+
+    shape: (5, 5)
+    ┌──────────────┬──────────────────┬────────────────────────┬────────────────────────┬──────────────┐
+    │ about.inning ┆ about.halfInning ┆ matchup.batter.fullNam ┆ matchup.pitcher.fullNa ┆ result.event │
+    │ ---          ┆ ---              ┆ e                      ┆ me                     ┆ ---          │
+    │ i64          ┆ str              ┆ ---                    ┆ ---                    ┆ str          │
+    │              ┆                  ┆ str                    ┆ str                    ┆              │
+    ╞══════════════╪══════════════════╪════════════════════════╪════════════════════════╪══════════════╡
+    │ 1            ┆ top              ┆ Alex Bregman           ┆ Yariel Rodríguez       ┆ Flyout       │
+    │ 1            ┆ top              ┆ Jake Meyers            ┆ Yariel Rodríguez       ┆ Strikeout    │
+    │ 1            ┆ top              ┆ Yordan Alvarez         ┆ Yariel Rodríguez       ┆ Groundout    │
+    │ 1            ┆ bottom           ┆ Bo Bichette            ┆ Hunter Brown           ┆ Groundout    │
+    │ 1            ┆ bottom           ┆ Spencer Horwitz        ┆ Hunter Brown           ┆ Lineout      │
+    └──────────────┴──────────────────┴────────────────────────┴────────────────────────┴──────────────┘
+
+
+
 
 ```python
 # Outcome mix for the game — the shape of every plate appearance.
@@ -338,6 +600,29 @@ else:
     out = "no play-by-play to summarize right now"
 out
 ```
+
+
+
+
+    shape: (10, 2)
+    ┌──────────────┬───────┐
+    │ result.event ┆ count │
+    │ ---          ┆ ---   │
+    │ str          ┆ u32   │
+    ╞══════════════╪═══════╡
+    │ Strikeout    ┆ 16    │
+    │ Groundout    ┆ 14    │
+    │ Pop Out      ┆ 10    │
+    │ Flyout       ┆ 7     │
+    │ Walk         ┆ 6     │
+    │ Lineout      ┆ 4     │
+    │ Home Run     ┆ 3     │
+    │ Single       ┆ 3     │
+    │ Double       ┆ 2     │
+    │ Hit By Pitch ┆ 1     │
+    └──────────────┴───────┘
+
+
 
 ### Recipe 5 — League leaders for any stat 🥇
 
@@ -362,6 +647,32 @@ leaders = safe("2024 HR leaders",
                lambda: hr_leaders(SAMPLE_SEASON, "homeRuns", "hitting", 10))
 leaders if leaders is not None else "leaders unavailable right now"
 ```
+
+    ✅ 2024 HR leaders
+
+
+
+
+
+    shape: (10, 4)
+    ┌──────┬───────────────────┬───────────────────────┬───────┐
+    │ rank ┆ player            ┆ team                  ┆ value │
+    │ ---  ┆ ---               ┆ ---                   ┆ ---   │
+    │ i64  ┆ str               ┆ str                   ┆ str   │
+    ╞══════╪═══════════════════╪═══════════════════════╪═══════╡
+    │ 1    ┆ Aaron Judge       ┆ New York Yankees      ┆ 58    │
+    │ 2    ┆ Shohei Ohtani     ┆ Los Angeles Dodgers   ┆ 54    │
+    │ 3    ┆ Anthony Santander ┆ Baltimore Orioles     ┆ 44    │
+    │ 4    ┆ Juan Soto         ┆ New York Yankees      ┆ 41    │
+    │ 5    ┆ Marcell Ozuna     ┆ Atlanta Braves        ┆ 39    │
+    │ 5    ┆ José Ramírez      ┆ Cleveland Guardians   ┆ 39    │
+    │ 5    ┆ Brent Rooker      ┆ Oakland Athletics     ┆ 39    │
+    │ 8    ┆ Kyle Schwarber    ┆ Philadelphia Phillies ┆ 38    │
+    │ 9    ┆ Gunnar Henderson  ┆ Baltimore Orioles     ┆ 37    │
+    │ 10   ┆ Ketel Marte       ┆ Arizona Diamondbacks  ┆ 36    │
+    └──────┴───────────────────┴───────────────────────┴───────┘
+
+
 
 ### Recipe 6 — Who's beating their expected stats? 🎲
 
@@ -389,6 +700,32 @@ else:
 out
 ```
 
+    ✅ expected stats
+
+
+
+
+
+    shape: (10, 5)
+    ┌───────────────────────┬─────┬───────┬──────────┬──────────────────────────┐
+    │ last_name, first_name ┆ pa  ┆ woba  ┆ est_woba ┆ est_woba_minus_woba_diff │
+    │ ---                   ┆ --- ┆ ---   ┆ ---      ┆ ---                      │
+    │ str                   ┆ i64 ┆ f64   ┆ f64      ┆ f64                      │
+    ╞═══════════════════════╪═════╪═══════╪══════════╪══════════════════════════╡
+    │ Drury, Brandon        ┆ 360 ┆ 0.217 ┆ 0.264    ┆ -0.047                   │
+    │ Soto, Juan            ┆ 713 ┆ 0.421 ┆ 0.463    ┆ -0.042                   │
+    │ Bailey, Patrick       ┆ 448 ┆ 0.281 ┆ 0.322    ┆ -0.041                   │
+    │ Sosa, Lenyn           ┆ 369 ┆ 0.28  ┆ 0.321    ┆ -0.041                   │
+    │ Morel, Christopher    ┆ 611 ┆ 0.28  ┆ 0.316    ┆ -0.036                   │
+    │ Garcia, Maikel        ┆ 626 ┆ 0.27  ┆ 0.305    ┆ -0.035                   │
+    │ Martinez, J.D.        ┆ 495 ┆ 0.318 ┆ 0.353    ┆ -0.035                   │
+    │ Harris II, Michael    ┆ 470 ┆ 0.312 ┆ 0.346    ┆ -0.034                   │
+    │ Margot, Manuel        ┆ 343 ┆ 0.276 ┆ 0.31     ┆ -0.034                   │
+    │ Kirk, Alejandro       ┆ 386 ┆ 0.297 ┆ 0.329    ┆ -0.032                   │
+    └───────────────────────┴─────┴───────┴──────────┴──────────────────────────┘
+
+
+
 ### Recipe 7 — The fastest bats in baseball 💨
 
 Bat tracking is one of Statcast's newest toys.
@@ -411,6 +748,32 @@ else:
     out = "bat-tracking leaderboard unavailable right now"
 out
 ```
+
+    ✅ bat tracking
+
+
+
+
+
+    shape: (10, 5)
+    ┌────────────────────┬────────────────────┬───────────────┬─────────────────┬──────────────┐
+    │ name               ┆ swings_competitive ┆ avg_bat_speed ┆ hard_swing_rate ┆ swing_length │
+    │ ---                ┆ ---                ┆ ---           ┆ ---             ┆ ---          │
+    │ str                ┆ i64                ┆ f64           ┆ f64             ┆ f64          │
+    ╞════════════════════╪════════════════════╪═══════════════╪═════════════════╪══════════════╡
+    │ Caminero, Junior   ┆ 406                ┆ 79.947173     ┆ 0.891626        ┆ 8.55445      │
+    │ Stanton, Giancarlo ┆ 155                ┆ 79.335078     ┆ 0.929032        ┆ 8.440819     │
+    │ Walker, Jordan     ┆ 471                ┆ 79.051274     ┆ 0.857749        ┆ 8.310408     │
+    │ Cruz, Oneil        ┆ 447                ┆ 78.461902     ┆ 0.780761        ┆ 7.622225     │
+    │ Kurtz, Nick        ┆ 451                ┆ 78.099293     ┆ 0.802661        ┆ 7.770633     │
+    │ Jones, Spencer     ┆ 89                 ┆ 77.835442     ┆ 0.797753        ┆ 7.768163     │
+    │ Adell, Jo          ┆ 541                ┆ 77.258055     ┆ 0.698706        ┆ 7.744954     │
+    │ Clarke, Denzel     ┆ 88                 ┆ 77.159528     ┆ 0.738636        ┆ 7.621649     │
+    │ Smith, Cam         ┆ 436                ┆ 77.064606     ┆ 0.724771        ┆ 7.703723     │
+    │ Bolte, Henry       ┆ 126                ┆ 77.04431      ┆ 0.753968        ┆ 7.871587     │
+    └────────────────────┴────────────────────┴───────────────┴─────────────────┴──────────────┘
+
+
 
 ### Recipe 8 — The best gloves: Outs Above Average 🧤
 
@@ -435,6 +798,33 @@ else:
     out = "OAA leaderboard unavailable right now"
 out
 ```
+
+    ✅ outs above average
+
+
+
+
+
+    shape: (10, 5)
+    ┌───────────────────┬───────────────────┬───────────────────┬───────────────────┬──────────────────┐
+    │ last_name,        ┆ display_team_name ┆ primary_pos_forma ┆ outs_above_averag ┆ fielding_runs_pr │
+    │ first_name        ┆ ---               ┆ tted              ┆ e                 ┆ evented          │
+    │ ---               ┆ str               ┆ ---               ┆ ---               ┆ ---              │
+    │ str               ┆                   ┆ str               ┆ i64               ┆ i64              │
+    ╞═══════════════════╪═══════════════════╪═══════════════════╪═══════════════════╪══════════════════╡
+    │ Giménez, Andrés   ┆ Guardians         ┆ 2B                ┆ 20                ┆ 15               │
+    │ Young, Jacob      ┆ Nationals         ┆ CF                ┆ 20                ┆ 18               │
+    │ Semien, Marcus    ┆ Rangers           ┆ 2B                ┆ 19                ┆ 14               │
+    │ Swanson, Dansby   ┆ Cubs              ┆ SS                ┆ 17                ┆ 13               │
+    │ Siani, Michael    ┆ Cardinals         ┆ CF                ┆ 16                ┆ 14               │
+    │ Siri, Jose        ┆ Rays              ┆ CF                ┆ 16                ┆ 14               │
+    │ Witt Jr., Bobby   ┆ Royals            ┆ SS                ┆ 16                ┆ 12               │
+    │ Lindor, Francisco ┆ Mets              ┆ SS                ┆ 15                ┆ 11               │
+    │ Santana, Carlos   ┆ Twins             ┆ 1B                ┆ 15                ┆ 11               │
+    │ Tovar, Ezequiel   ┆ Rockies           ┆ SS                ┆ 15                ┆ 11               │
+    └───────────────────┴───────────────────┴───────────────────┴───────────────────┴──────────────────┘
+
+
 
 ### Recipe 9 — Find the X: the hardest-hit homers 🚀
 
@@ -461,6 +851,33 @@ else:
 out
 ```
 
+    ✅ home runs (2-day)
+    homers in window: 51
+
+
+
+
+
+    shape: (10, 5)
+    ┌────────────┬────────────────────┬──────────────┬──────────────┬─────────────────┐
+    │ game_date  ┆ player_name        ┆ launch_speed ┆ launch_angle ┆ hit_distance_sc │
+    │ ---        ┆ ---                ┆ ---          ┆ ---          ┆ ---             │
+    │ str        ┆ str                ┆ f64          ┆ i64          ┆ i64             │
+    ╞════════════╪════════════════════╪══════════════╪══════════════╪═════════════════╡
+    │ 2024-07-02 ┆ De La Cruz, Elly   ┆ 114.1        ┆ 21           ┆ 425             │
+    │ 2024-07-02 ┆ Judge, Aaron       ┆ 112.5        ┆ 25           ┆ 381             │
+    │ 2024-07-02 ┆ Sánchez, Jesús     ┆ 112.5        ┆ 24           ┆ 448             │
+    │ 2024-07-02 ┆ Ohtani, Shohei     ┆ 112.0        ┆ 37           ┆ 433             │
+    │ 2024-07-02 ┆ Soler, Jorge       ┆ 109.0        ┆ 21           ┆ 394             │
+    │ 2024-07-02 ┆ Rooker, Brent      ┆ 108.7        ┆ 34           ┆ 405             │
+    │ 2024-07-02 ┆ Turner, Trea       ┆ 108.5        ┆ 20           ┆ 422             │
+    │ 2024-07-02 ┆ Schneemann, Daniel ┆ 108.3        ┆ 28           ┆ 408             │
+    │ 2024-07-02 ┆ Riley, Austin      ┆ 108.3        ┆ 36           ┆ 407             │
+    │ 2024-07-02 ┆ Witt Jr., Bobby    ┆ 108.0        ┆ 24           ┆ 399             │
+    └────────────┴────────────────────┴──────────────┴──────────────┴─────────────────┘
+
+
+
 ### Recipe 10 — The biggest swings of a game (WPA) 📈
 
 [`mlb_api_win_probability`](../mlb/reference/mlb_api.md#mlb_api_win_probability)
@@ -486,6 +903,39 @@ def wpa_swings(game_pk, n=8):
 wpa = safe(f"WPA swings {gid}", lambda: wpa_swings(gid))
 wpa if wpa is not None else "win-probability unavailable right now"
 ```
+
+    ✅ WPA swings 744914
+
+
+
+
+
+    shape: (8, 5)
+    ┌──────────────┬──────────────────┬──────────────────┬──────────────────────┬──────────────────────┐
+    │ about.inning ┆ about.halfInning ┆ result.event     ┆ result.description   ┆ homeTeamWinProbabili │
+    │ ---          ┆ ---              ┆ ---              ┆ ---                  ┆ tyAdded              │
+    │ i64          ┆ str              ┆ str              ┆ str                  ┆ ---                  │
+    │              ┆                  ┆                  ┆                      ┆ f64                  │
+    ╞══════════════╪══════════════════╪══════════════════╪══════════════════════╪══════════════════════╡
+    │ 8            ┆ bottom           ┆ Double           ┆ Spencer Horwitz      ┆ 23.7                 │
+    │              ┆                  ┆                  ┆ doubles (3) on…      ┆                      │
+    │ 8            ┆ bottom           ┆ Groundout        ┆ Daulton Varsho       ┆ -20.4                │
+    │              ┆                  ┆                  ┆ grounds out sha…     ┆                      │
+    │ 8            ┆ bottom           ┆ Lineout          ┆ George Springer      ┆ -19.3                │
+    │              ┆                  ┆                  ┆ lines out to t…      ┆                      │
+    │ 5            ┆ top              ┆ Home Run         ┆ Jeremy Peña homers   ┆ -14.8                │
+    │              ┆                  ┆                  ┆ (6) on a fl…         ┆                      │
+    │ 9            ┆ top              ┆ Home Run         ┆ Yordan Alvarez       ┆ -12.6                │
+    │              ┆                  ┆                  ┆ homers (17) on …     ┆                      │
+    │ 8            ┆ bottom           ┆ Walk             ┆ Addison Barger       ┆ 9.8                  │
+    │              ┆                  ┆                  ┆ walks.               ┆                      │
+    │ 8            ┆ bottom           ┆ Strikeout        ┆ Bo Bichette strikes  ┆ -9.0                 │
+    │              ┆                  ┆                  ┆ out swingi…          ┆                      │
+    │ 7            ┆ top              ┆ Grounded Into DP ┆ Yainer Diaz grounds  ┆ 8.1                  │
+    │              ┆                  ┆                  ┆ into a dou…          ┆                      │
+    └──────────────┴──────────────────┴──────────────────┴──────────────────────┴──────────────────────┘
+
+
 
 ### Recipe 11 — Season award winners (MVP, Cy Young) 🏅
 
@@ -516,6 +966,26 @@ board = safe("2024 award winners", lambda: award_board(SAMPLE_SEASON, AWARDS))
 board if (board is not None and board.height) else "awards unavailable right now"
 ```
 
+    ✅ 2024 award winners
+
+
+
+
+
+    shape: (4, 3)
+    ┌─────────────┬────────┬───────────────┐
+    │ award       ┆ season ┆ winner        │
+    │ ---         ┆ ---    ┆ ---           │
+    │ str         ┆ str    ┆ str           │
+    ╞═════════════╪════════╪═══════════════╡
+    │ AL MVP      ┆ 2024   ┆ Aaron Judge   │
+    │ NL MVP      ┆ 2024   ┆ Shohei Ohtani │
+    │ AL Cy Young ┆ 2024   ┆ Tarik Skubal  │
+    │ NL Cy Young ┆ 2024   ┆ Chris Sale    │
+    └─────────────┴────────┴───────────────┘
+
+
+
 ### Recipe 12 — The first-round draft board 🎓
 
 [`mlb_api_draft`](../mlb/reference/mlb_api.md#mlb_api_draft) returns the amateur
@@ -538,6 +1008,34 @@ def draft_board(year, round_=1):
 draft = safe("2024 first round", lambda: draft_board(2024, round_=1))
 draft.head(12) if (draft is not None and draft.height) else "draft unavailable right now"
 ```
+
+    ✅ 2024 first round
+
+
+
+
+
+    shape: (12, 4)
+    ┌──────┬───────────────────┬──────────────────────┬─────────────────────┐
+    │ pick ┆ player            ┆ team                 ┆ school              │
+    │ ---  ┆ ---               ┆ ---                  ┆ ---                 │
+    │ i64  ┆ str               ┆ str                  ┆ str                 │
+    ╞══════╪═══════════════════╪══════════════════════╪═════════════════════╡
+    │ 1    ┆ Travis Bazzana    ┆ Cleveland Guardians  ┆ Oregon State        │
+    │ 2    ┆ Chase Burns       ┆ Cincinnati Reds      ┆ Wake Forest         │
+    │ 3    ┆ Charlie Condon    ┆ Colorado Rockies     ┆ Georgia             │
+    │ 4    ┆ Nick Kurtz        ┆ Athletics            ┆ Wake Forest         │
+    │ 5    ┆ Hagen Smith       ┆ Chicago White Sox    ┆ Arkansas            │
+    │ 6    ┆ Jac Caglianone    ┆ Kansas City Royals   ┆ Florida             │
+    │ 7    ┆ JJ Wetherholt     ┆ St. Louis Cardinals  ┆ West Virginia       │
+    │ 8    ┆ Christian Moore   ┆ Los Angeles Angels   ┆ Tennessee           │
+    │ 9    ┆ Konnor Griffin    ┆ Pittsburgh Pirates   ┆ Jackson Prep School │
+    │ 10   ┆ Seaver King       ┆ Washington Nationals ┆ Wake Forest         │
+    │ 11   ┆ Bryce Rainer      ┆ Detroit Tigers       ┆ Harvard-Westlake HS │
+    │ 12   ┆ Braden Montgomery ┆ Boston Red Sox       ┆ Texas A&M           │
+    └──────┴───────────────────┴──────────────────────┴─────────────────────┘
+
+
 
 ## 📅 A whole season's schedule via ESPN
 
@@ -564,6 +1062,32 @@ else:
 out
 ```
 
+    ✅ ESPN 2024 season schedule
+    games: 500
+
+
+
+
+
+    shape: (5, 6)
+    ┌───────────┬────────────────────┬────────────┬───────────────────┬────────────┬───────────────────┐
+    │ game_id   ┆ away_display_name  ┆ away_score ┆ home_display_name ┆ home_score ┆ status_type_compl │
+    │ ---       ┆ ---                ┆ ---        ┆ ---               ┆ ---        ┆ eted              │
+    │ str       ┆ str                ┆ str        ┆ str               ┆ str        ┆ ---               │
+    │           ┆                    ┆            ┆                   ┆            ┆ bool              │
+    ╞═══════════╪════════════════════╪════════════╪═══════════════════╪════════════╪═══════════════════╡
+    │ 401576167 ┆ Los Angeles        ┆ 14         ┆ San Diego Padres  ┆ 1          ┆ true              │
+    │           ┆ Dodgers            ┆            ┆                   ┆            ┆                   │
+    │ 401576169 ┆ Kansas City Royals ┆ 4          ┆ Texas Rangers     ┆ 5          ┆ true              │
+    │ 401576643 ┆ Chicago White Sox  ┆ 1          ┆ Chicago Cubs      ┆ 8          ┆ true              │
+    │ 401576170 ┆ San Diego Padres   ┆ 1          ┆ Los Angeles       ┆ 4          ┆ true              │
+    │           ┆                    ┆            ┆ Dodgers           ┆            ┆                   │
+    │ 401576168 ┆ Arizona            ┆ 0          ┆ Colorado Rockies  ┆ 3          ┆ true              │
+    │           ┆ Diamondbacks       ┆            ┆                   ┆            ┆                   │
+    └───────────┴────────────────────┴────────────┴───────────────────┴────────────┴───────────────────┘
+
+
+
 ## ⚪ Secondary path: ESPN teams (`espn_mlb_*`)
 
 [`espn_mlb_teams`](../mlb/reference/additional.md#espn_mlb_teams) returns one
@@ -577,6 +1101,27 @@ ecols = ["team_id", "team_location", "team_name", "team_abbreviation", "team_dis
 (espn_teams.select([c for c in ecols if c in espn_teams.columns]).head()
  if espn_teams is not None else "ESPN teams unavailable right now")
 ```
+
+    ✅ ESPN teams
+
+
+
+
+
+    shape: (5, 5)
+    ┌─────────┬───────────────┬──────────────┬───────────────────┬──────────────────────┐
+    │ team_id ┆ team_location ┆ team_name    ┆ team_abbreviation ┆ team_display_name    │
+    │ ---     ┆ ---           ┆ ---          ┆ ---               ┆ ---                  │
+    │ str     ┆ str           ┆ str          ┆ str               ┆ str                  │
+    ╞═════════╪═══════════════╪══════════════╪═══════════════════╪══════════════════════╡
+    │ 29      ┆ Arizona       ┆ Diamondbacks ┆ ARI               ┆ Arizona Diamondbacks │
+    │ 11      ┆ Athletics     ┆ Athletics    ┆ ATH               ┆ Athletics            │
+    │ 15      ┆ Atlanta       ┆ Braves       ┆ ATL               ┆ Atlanta Braves       │
+    │ 1       ┆ Baltimore     ┆ Orioles      ┆ BAL               ┆ Baltimore Orioles    │
+    │ 2       ┆ Boston        ┆ Red Sox      ┆ BOS               ┆ Boston Red Sox       │
+    └─────────┴───────────────┴──────────────┴───────────────────┴──────────────────────┘
+
+
 
 ## 🎉 Where to next
 

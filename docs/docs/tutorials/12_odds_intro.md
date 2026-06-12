@@ -57,6 +57,9 @@ HAS_KEY = bool(os.environ.get("ODDS_API_KEY"))
 print("ODDS_API_KEY set:", HAS_KEY, "— live cells will" + ("" if HAS_KEY else " NOT") + " run")
 ```
 
+    ODDS_API_KEY set: False — live cells will NOT run
+
+
 ## 🗂️ What's on the board?
 
 Start with [`toa_sports`](../odds/reference/additional.md#toa_sports) — it lists every sport/league key,
@@ -72,6 +75,13 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports(all_sports=True)"
 out
 ```
+
+
+
+
+    'set ODDS_API_KEY to run: odds.toa_sports(all_sports=True)'
+
+
 
 ## 💰 The main event: live odds
 
@@ -95,6 +105,13 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports_odds(sport='americanfootball_nfl', regions='us')"
 out
 ```
+
+
+
+
+    "set ODDS_API_KEY to run: odds.toa_sports_odds(sport='americanfootball_nfl', regions='us')"
+
+
 
 ## 🍳 Cookbook: common odds tasks
 
@@ -122,6 +139,13 @@ else:
 out
 ```
 
+
+
+
+    'needs ODDS_API_KEY'
+
+
+
 ### Recipe 2 — Spreads & totals for a slate 📋
 
 Ask for `markets="spreads,totals"` and the `outcome_point` column carries the
@@ -142,6 +166,13 @@ else:
 out
 ```
 
+
+
+
+    'needs ODDS_API_KEY'
+
+
+
 ### Recipe 3 — Just one book 🎯
 
 Pin a single sportsbook with `bookmakers=`. Great for tracking *your* book's
@@ -156,6 +187,13 @@ else:
     out = "needs ODDS_API_KEY"
 out
 ```
+
+
+
+
+    'needs ODDS_API_KEY'
+
+
 
 ### Recipe 4 — Implied probability & the hold 🧮
 
@@ -185,6 +223,13 @@ else:
 out
 ```
 
+
+
+
+    'needs ODDS_API_KEY'
+
+
+
 ### Recipe 5 — Find the biggest favorite on the board 🐻
 
 Sort the moneyline outcomes by price ascending — the most negative number is
@@ -204,6 +249,13 @@ else:
     out = "needs ODDS_API_KEY"
 out
 ```
+
+
+
+
+    'needs ODDS_API_KEY'
+
+
 
 ### Recipe 6 — Consensus over/under per game 📊
 
@@ -231,6 +283,13 @@ else:
     out = "needs ODDS_API_KEY"
 out
 ```
+
+
+
+
+    'needs ODDS_API_KEY'
+
+
 
 ### Recipe 7 — Just today's slate ⏰
 
@@ -260,6 +319,13 @@ else:
 out
 ```
 
+
+
+
+    'set ODDS_API_KEY to run the commence-time filter recipe'
+
+
+
 ### Recipe 8 — Player props for one game 🎯
 
 Event-level markets (player props!) live on [`toa_event_odds`](../odds/reference/additional.md#toa_event_odds).
@@ -281,6 +347,13 @@ else:
     out = "set ODDS_API_KEY to run the player-props recipe"
 out
 ```
+
+
+
+
+    'set ODDS_API_KEY to run the player-props recipe'
+
+
 
 ### Recipe 9 — Which markets does a game offer? 🗃️
 
@@ -307,6 +380,13 @@ else:
 out
 ```
 
+
+
+
+    'set ODDS_API_KEY to run the event-markets recipe'
+
+
+
 ### Recipe 10 — Recent finals & margin of victory 🏁
 
 [`toa_sports_scores`](../odds/reference/additional.md#toa_sports_scores) returns live + recently
@@ -326,6 +406,13 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports_scores(sport='americanfootball_nfl', days_from=3)"
 out
 ```
+
+
+
+
+    "set ODDS_API_KEY to run: odds.toa_sports_scores(sport='americanfootball_nfl', days_from=3)"
+
+
 
 ### Recipe 11 — Tour several leagues at once 🔁
 
@@ -347,6 +434,13 @@ else:
 out
 ```
 
+
+
+
+    'set ODDS_API_KEY to tour leagues with odds.toa_sports_events(sport=...)'
+
+
+
 ### Recipe 12 — Who's in the league? (participants 👥)
 
 [`toa_sports_participants`](../odds/reference/additional.md#toa_sports_participants) lists every team /
@@ -364,6 +458,13 @@ else:
 out
 ```
 
+
+
+
+    "set ODDS_API_KEY to run: odds.toa_sports_participants(sport='americanfootball_nfl')"
+
+
+
 ## ⛽ Mind your quota
 
 Paid calls cost credits (every 10 bookmakers × market ≈ 1 credit). After any
@@ -375,6 +476,13 @@ request** — handy to drop at the end of a script.
 ```python
 odds.toa_usage() if HAS_KEY else "set ODDS_API_KEY to track quota with odds.toa_usage()"
 ```
+
+
+
+
+    'set ODDS_API_KEY to track quota with odds.toa_usage()'
+
+
 
 ## ⏳ Time travel: historical odds
 

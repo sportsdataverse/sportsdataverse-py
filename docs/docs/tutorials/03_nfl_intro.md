@@ -74,6 +74,13 @@ pl.Config.set_tbl_cols(8)  # keep wide frames readable in the notebook
 
 ```
 
+
+
+
+    polars.config.Config
+
+
+
 Native NFL.com / NextGen endpoints and ESPN are *live* services — great
 in-season, occasionally grumpy in the offseason or behind a flaky network. A
 tiny `safe()` helper runs each live call defensively: you get the frame when
@@ -116,6 +123,16 @@ standings.shape if standings is not None else "standings unavailable"
 
 ```
 
+    ✅ NFL.com standings
+
+
+
+
+
+    (32, 53)
+
+
+
 
 ```python
 cols = [
@@ -129,6 +146,43 @@ cols = [
  if standings is not None else "standings unavailable")
 
 ```
+
+
+
+
+    shape: (10, 8)
+    ┌────────────┬────────────┬────────────┬───────────┬───────────┬───────────┬───────────┬───────────┐
+    │ team_full_ ┆ conference ┆ division_r ┆ overall_w ┆ overall_l ┆ overall_t ┆ division_ ┆ division_ │
+    │ name       ┆ _rank      ┆ ank        ┆ ins       ┆ osses     ┆ ies       ┆ wins      ┆ losses    │
+    │ ---        ┆ ---        ┆ ---        ┆ ---       ┆ ---       ┆ ---       ┆ ---       ┆ ---       │
+    │ str        ┆ i64        ┆ i64        ┆ i64       ┆ i64       ┆ i64       ┆ i64       ┆ i64       │
+    ╞════════════╪════════════╪════════════╪═══════════╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ Detroit    ┆ 1          ┆ 1          ┆ 15        ┆ 2         ┆ 0         ┆ 6         ┆ 0         │
+    │ Lions      ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Kansas     ┆ 1          ┆ 1          ┆ 15        ┆ 2         ┆ 0         ┆ 5         ┆ 1         │
+    │ City       ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Chiefs     ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Buffalo    ┆ 2          ┆ 1          ┆ 13        ┆ 4         ┆ 0         ┆ 5         ┆ 1         │
+    │ Bills      ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Philadelph ┆ 2          ┆ 1          ┆ 14        ┆ 3         ┆ 0         ┆ 5         ┆ 1         │
+    │ ia Eagles  ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Baltimore  ┆ 3          ┆ 1          ┆ 12        ┆ 5         ┆ 0         ┆ 4         ┆ 2         │
+    │ Ravens     ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Tampa Bay  ┆ 3          ┆ 1          ┆ 10        ┆ 7         ┆ 0         ┆ 4         ┆ 2         │
+    │ Buccaneers ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Houston    ┆ 4          ┆ 1          ┆ 10        ┆ 7         ┆ 0         ┆ 5         ┆ 1         │
+    │ Texans     ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Los        ┆ 4          ┆ 1          ┆ 10        ┆ 7         ┆ 0         ┆ 4         ┆ 2         │
+    │ Angeles    ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Rams       ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Los        ┆ 5          ┆ 2          ┆ 11        ┆ 6         ┆ 0         ┆ 4         ┆ 2         │
+    │ Angeles    ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Chargers   ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    │ Minnesota  ┆ 5          ┆ 2          ┆ 14        ┆ 3         ┆ 0         ┆ 4         ┆ 2         │
+    │ Vikings    ┆            ┆            ┆           ┆           ┆           ┆           ┆           │
+    └────────────┴────────────┴────────────┴───────────┴───────────┴───────────┴───────────┴───────────┘
+
+
 
 ## 👥 Rosters & the week calendar
 
@@ -152,6 +206,30 @@ cols = ["team_abbreviation", "team_full_name", "team_conference_abbr", "team_div
 
 ```
 
+    ✅ NFL.com rosters
+
+
+
+
+
+    shape: (8, 4)
+    ┌───────────────────┬────────────────────┬──────────────────────┬─────────────────────────┐
+    │ team_abbreviation ┆ team_full_name     ┆ team_conference_abbr ┆ team_division_full_name │
+    │ ---               ┆ ---                ┆ ---                  ┆ ---                     │
+    │ str               ┆ str                ┆ str                  ┆ str                     │
+    ╞═══════════════════╪════════════════════╪══════════════════════╪═════════════════════════╡
+    │ ARI               ┆ Arizona Cardinals  ┆ NFC                  ┆ NFC West                │
+    │ ATL               ┆ Atlanta Falcons    ┆ NFC                  ┆ NFC South               │
+    │ BAL               ┆ Baltimore Ravens   ┆ AFC                  ┆ AFC North               │
+    │ BUF               ┆ Buffalo Bills      ┆ AFC                  ┆ AFC East                │
+    │ CAR               ┆ Carolina Panthers  ┆ NFC                  ┆ NFC South               │
+    │ CHI               ┆ Chicago Bears      ┆ NFC                  ┆ NFC North               │
+    │ CIN               ┆ Cincinnati Bengals ┆ AFC                  ┆ AFC North               │
+    │ CLE               ┆ Cleveland Browns   ┆ AFC                  ┆ AFC North               │
+    └───────────────────┴────────────────────┴──────────────────────┴─────────────────────────┘
+
+
+
 
 ```python
 weeks = safe("NFL.com weeks", lambda: nfl.nfl_weeks(season=SEASON, season_type="REG"))
@@ -160,6 +238,30 @@ cols = ["season", "week", "week_type", "date_begin", "date_end", "bye_teams"]
  if weeks is not None else "weeks unavailable")
 
 ```
+
+    ✅ NFL.com weeks
+
+
+
+
+
+    shape: (8, 6)
+    ┌────────┬──────┬───────────┬────────────┬────────────┬─────────────────────────────────┐
+    │ season ┆ week ┆ week_type ┆ date_begin ┆ date_end   ┆ bye_teams                       │
+    │ ---    ┆ ---  ┆ ---       ┆ ---        ┆ ---        ┆ ---                             │
+    │ i64    ┆ i64  ┆ str       ┆ str        ┆ str        ┆ str                             │
+    ╞════════╪══════╪═══════════╪════════════╪════════════╪═════════════════════════════════╡
+    │ 2024   ┆ 18   ┆ REG       ┆ 2025-01-01 ┆ 2025-01-08 ┆ []                              │
+    │ 2024   ┆ 17   ┆ REG       ┆ 2024-12-24 ┆ 2025-01-01 ┆ []                              │
+    │ 2024   ┆ 16   ┆ REG       ┆ 2024-12-18 ┆ 2024-12-24 ┆ []                              │
+    │ 2024   ┆ 15   ┆ REG       ┆ 2024-12-11 ┆ 2024-12-18 ┆ []                              │
+    │ 2024   ┆ 14   ┆ REG       ┆ 2024-12-04 ┆ 2024-12-11 ┆ [{'id': '10400325-48de-3d6a-be… │
+    │ 2024   ┆ 13   ┆ REG       ┆ 2024-11-27 ┆ 2024-12-04 ┆ []                              │
+    │ 2024   ┆ 12   ┆ REG       ┆ 2024-11-20 ┆ 2024-11-27 ┆ [{'id': '10400200-f401-4e53-51… │
+    │ 2024   ┆ 11   ┆ REG       ┆ 2024-11-13 ┆ 2024-11-20 ┆ [{'id': '10403800-517c-7b8c-65… │
+    └────────┴──────┴───────────┴────────────┴────────────┴─────────────────────────────────┘
+
+
 
 ## 🏥 The weekly injury report
 
@@ -183,6 +285,37 @@ cols = [
 
 ```
 
+    ✅ NFL.com injuries
+
+
+
+
+
+    shape: (10, 6)
+    ┌─────────────────┬─────────────────┬──────────┬─────────────────┬───────────────┬─────────────────┐
+    │ team_full_name  ┆ person_display_ ┆ position ┆ injuries        ┆ injury_status ┆ practice_status │
+    │ ---             ┆ name            ┆ ---      ┆ ---             ┆ ---           ┆ ---             │
+    │ str             ┆ ---             ┆ str      ┆ str             ┆ str           ┆ str             │
+    │                 ┆ str             ┆          ┆                 ┆               ┆                 │
+    ╞═════════════════╪═════════════════╪══════════╪═════════════════╪═══════════════╪═════════════════╡
+    │ Atlanta Falcons ┆ Ta'Quon Graham  ┆ DE       ┆ []              ┆ null          ┆ LIMITED         │
+    │ Atlanta Falcons ┆ Antonio         ┆ CB       ┆ ['Groin']       ┆ OUT           ┆ DIDNOT          │
+    │                 ┆ Hamilton        ┆          ┆                 ┆               ┆                 │
+    │ Atlanta Falcons ┆ Grady Jarrett   ┆ DT       ┆ []              ┆ null          ┆ DIDNOT          │
+    │ Atlanta Falcons ┆ Nate Landman    ┆ LB       ┆ []              ┆ null          ┆ FULL            │
+    │ Atlanta Falcons ┆ Chris Lindstrom ┆ G        ┆ ['Evaluated for ┆ null          ┆ null            │
+    │                 ┆                 ┆          ┆ a possible hea… ┆               ┆                 │
+    │ Atlanta Falcons ┆ Jake Matthews   ┆ T        ┆ []              ┆ null          ┆ LIMITED         │
+    │ Atlanta Falcons ┆ David Onyemata  ┆ DT       ┆ []              ┆ null          ┆ DIDNOT          │
+    │ Atlanta Falcons ┆ Kyle Pitts      ┆ TE       ┆ []              ┆ null          ┆ FULL            │
+    │ Baltimore       ┆ Rasheen Ali     ┆ RB       ┆ ['Neck']        ┆ DOUBTFUL      ┆ LIMITED         │
+    │ Ravens          ┆                 ┆          ┆                 ┆               ┆                 │
+    │ Baltimore       ┆ Adisa Isaac     ┆ LB       ┆ ['Hamstring']   ┆ OUT           ┆ DIDNOT          │
+    │ Ravens          ┆                 ┆          ┆                 ┆               ┆                 │
+    └─────────────────┴─────────────────┴──────────┴─────────────────┴───────────────┴─────────────────┘
+
+
+
 ## 📋 Per-game details for a week
 
 Need the full slate with drive charts, broadcast info and embedded standings?
@@ -203,6 +336,30 @@ cols = ["week", "date", "game_type", "away_team_full_name", "home_team_full_name
  if wgd is not None else "weekly game details unavailable")
 
 ```
+
+    ✅ NFL.com weekly game details
+
+
+
+
+
+    shape: (8, 6)
+    ┌──────┬────────────┬─────────────┬──────────────────────┬─────────────────────┬───────────┐
+    │ week ┆ date       ┆ game_type   ┆ away_team_full_name  ┆ home_team_full_name ┆ status    │
+    │ ---  ┆ ---        ┆ ---         ┆ ---                  ┆ ---                 ┆ ---       │
+    │ i64  ┆ str        ┆ str         ┆ str                  ┆ str                 ┆ str       │
+    ╞══════╪════════════╪═════════════╪══════════════════════╪═════════════════════╪═══════════╡
+    │ 1    ┆ 2024-09-06 ┆ UNSPECIFIED ┆ Baltimore Ravens     ┆ Kansas City Chiefs  ┆ SCHEDULED │
+    │ 1    ┆ 2024-09-07 ┆ UNSPECIFIED ┆ Green Bay Packers    ┆ Philadelphia Eagles ┆ SCHEDULED │
+    │ 1    ┆ 2024-09-08 ┆ UNSPECIFIED ┆ Pittsburgh Steelers  ┆ Atlanta Falcons     ┆ SCHEDULED │
+    │ 1    ┆ 2024-09-08 ┆ UNSPECIFIED ┆ Arizona Cardinals    ┆ Buffalo Bills       ┆ SCHEDULED │
+    │ 1    ┆ 2024-09-08 ┆ UNSPECIFIED ┆ Tennessee Titans     ┆ Chicago Bears       ┆ SCHEDULED │
+    │ 1    ┆ 2024-09-08 ┆ UNSPECIFIED ┆ New England Patriots ┆ Cincinnati Bengals  ┆ SCHEDULED │
+    │ 1    ┆ 2024-09-08 ┆ UNSPECIFIED ┆ Houston Texans       ┆ Indianapolis Colts  ┆ SCHEDULED │
+    │ 1    ┆ 2024-09-08 ┆ UNSPECIFIED ┆ Jacksonville Jaguars ┆ Miami Dolphins      ┆ SCHEDULED │
+    └──────┴────────────┴─────────────┴──────────────────────┴─────────────────────┴───────────┘
+
+
 
 ## ⚡ NextGen Stats: the tracking layer
 
@@ -232,6 +389,38 @@ cols = [
 
 ```
 
+    ✅ NGS passing statboard
+
+
+
+
+
+    shape: (10, 7)
+    ┌──────────────┬──────────────┬──────────────┬─────────────┬─────────────┬───────────┬─────────────┐
+    │ playerName   ┆ passerRating ┆ completionPe ┆ avgTimeToTh ┆ aggressiven ┆ passYards ┆ passTouchdo │
+    │ ---          ┆ ---          ┆ rcentageAbov ┆ row         ┆ ess         ┆ ---       ┆ wns         │
+    │ str          ┆ f64          ┆ eExpec…      ┆ ---         ┆ ---         ┆ i64       ┆ ---         │
+    │              ┆              ┆ ---          ┆ f64         ┆ f64         ┆           ┆ i64         │
+    │              ┆              ┆ f64          ┆             ┆             ┆           ┆             │
+    ╞══════════════╪══════════════╪══════════════╪═════════════╪═════════════╪═══════════╪═════════════╡
+    │ Lamar        ┆ 119.629044   ┆ -0.194641    ┆ 3.144269    ┆ 10.970464   ┆ 4172      ┆ 41          │
+    │ Jackson      ┆              ┆              ┆             ┆             ┆           ┆             │
+    │ Jared Goff   ┆ 111.769481   ┆ 5.054879     ┆ 2.787295    ┆ 11.502783   ┆ 4629      ┆ 37          │
+    │ Joe Burrow   ┆ 108.537832   ┆ 4.521902     ┆ 2.710951    ┆ 15.797546   ┆ 4918      ┆ 43          │
+    │ Baker        ┆ 106.761696   ┆ 2.17107      ┆ 2.6982      ┆ 10.877193   ┆ 4500      ┆ 41          │
+    │ Mayfield     ┆              ┆              ┆             ┆             ┆           ┆             │
+    │ Jalen Hurts  ┆ 103.687673   ┆ 6.305457     ┆ 3.1313      ┆ 16.34349    ┆ 2903      ┆ 18          │
+    │ Sam Darnold  ┆ 102.534404   ┆ 2.799064     ┆ 3.083395    ┆ 13.944954   ┆ 4319      ┆ 35          │
+    │ Justin       ┆ 101.703042   ┆ 2.391567     ┆ 2.910539    ┆ 15.873016   ┆ 3870      ┆ 23          │
+    │ Herbert      ┆              ┆              ┆             ┆             ┆           ┆             │
+    │ Josh Allen   ┆ 101.384576   ┆ 0.781139     ┆ 2.886884    ┆ 16.770186   ┆ 3731      ┆ 28          │
+    │ Tua          ┆ 101.362782   ┆ 1.696667     ┆ 2.416476    ┆ 12.280702   ┆ 2867      ┆ 19          │
+    │ Tagovailoa   ┆              ┆              ┆             ┆             ┆           ┆             │
+    │ Derek Carr   ┆ 101.022999   ┆ 3.222724     ┆ 2.758918    ┆ 11.111111   ┆ 2145      ┆ 15          │
+    └──────────────┴──────────────┴──────────────┴─────────────┴─────────────┴───────────┴─────────────┘
+
+
+
 And [`nfl_ngs_leaders`](../nfl/reference/additional.md#nfl_ngs_leaders)
 serves the highlight-reel top-N boards — each row is the *play* that earned
 the leader their spot. Categories include `"speed"` (fastest ball carriers),
@@ -249,6 +438,38 @@ cols = ["leader_playerName", "leader_teamAbbr", "leader_maxSpeed", "leader_yards
  if fast is not None else "NGS leaders unavailable")
 
 ```
+
+    ✅ NGS fastest ball carriers
+
+
+
+
+
+    shape: (8, 5)
+    ┌───────────────────┬─────────────────┬─────────────────┬──────────────┬───────────────────────────┐
+    │ leader_playerName ┆ leader_teamAbbr ┆ leader_maxSpeed ┆ leader_yards ┆ play_playDescription      │
+    │ ---               ┆ ---             ┆ ---             ┆ ---          ┆ ---                       │
+    │ str               ┆ str             ┆ f64             ┆ i64          ┆ str                       │
+    ╞═══════════════════╪═════════════════╪═════════════════╪══════════════╪═══════════════════════════╡
+    │ KaVontae Turpin   ┆ DAL             ┆ 22.356818       ┆ 64           ┆ (15:00) (Shotgun) C.Rush  │
+    │                   ┆                 ┆                 ┆              ┆ pass …                    │
+    │ Brian Thomas Jr.  ┆ JAX             ┆ 22.152273       ┆ 85           ┆ (7:12) (Shotgun)          │
+    │                   ┆                 ┆                 ┆              ┆ T.Lawrence pa…            │
+    │ Jahmyr Gibbs      ┆ DET             ┆ 22.029546       ┆ 70           ┆ (4:07) (Shotgun) J.Gibbs  │
+    │                   ┆                 ┆                 ┆              ┆ left …                    │
+    │ Saquon Barkley    ┆ PHI             ┆ 21.927273       ┆ 55           ┆ (11:04) (No Huddle,       │
+    │                   ┆                 ┆                 ┆              ┆ Shotgun) S…               │
+    │ Saquon Barkley    ┆ PHI             ┆ 21.906818       ┆ 72           ┆ (2:54) (Shotgun)          │
+    │                   ┆                 ┆                 ┆              ┆ S.Barkley lef…            │
+    │ Nico Collins      ┆ HOU             ┆ 21.886364       ┆ 55           ┆ (12:56) C.Stroud pass     │
+    │                   ┆                 ┆                 ┆              ┆ deep mid…                 │
+    │ James Cook        ┆ BUF             ┆ 21.845455       ┆ 65           ┆ (8:48) A.Anderson         │
+    │                   ┆                 ┆                 ┆              ┆ reported in …             │
+    │ KaVontae Turpin   ┆ DAL             ┆ 21.845455       ┆ 18           ┆ J.Elliott kicks 60 yards  │
+    │                   ┆                 ┆                 ┆              ┆ from …                    │
+    └───────────────────┴─────────────────┴─────────────────┴──────────────┴───────────────────────────┘
+
+
 
 ## 📦 nflverse loaders: the bulk-data workhorses
 
@@ -271,6 +492,13 @@ pbp.shape
 ```
 
 
+
+
+    (49492, 372)
+
+
+
+
 ```python
 (pbp
     .filter(pl.col("play_type").is_not_null())
@@ -278,6 +506,43 @@ pbp.shape
     .head(8))
 
 ```
+
+
+
+
+    shape: (8, 9)
+    ┌────────────────┬─────┬──────┬─────────┬───┬───────────┬──────────────┬───────────┬───────────────┐
+    │ game_id        ┆ qtr ┆ down ┆ ydstogo ┆ … ┆ play_type ┆ yards_gained ┆ epa       ┆ desc          │
+    │ ---            ┆ --- ┆ ---  ┆ ---     ┆   ┆ ---       ┆ ---          ┆ ---       ┆ ---           │
+    │ str            ┆ f64 ┆ f64  ┆ f64     ┆   ┆ str       ┆ f64          ┆ f64       ┆ str           │
+    ╞════════════════╪═════╪══════╪═════════╪═══╪═══════════╪══════════════╪═══════════╪═══════════════╡
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ null ┆ 0.0     ┆ … ┆ kickoff   ┆ 0.0          ┆ 0.257819  ┆ 2-T.Bass      │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ kicks 65      │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ yards from B… │
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ 1.0  ┆ 10.0    ┆ … ┆ run       ┆ 3.0          ┆ -0.200602 ┆ (15:00)       │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ 6-J.Conner up │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ the midd…     │
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ 2.0  ┆ 7.0     ┆ … ┆ pass      ┆ 22.0         ┆ 2.028874  ┆ (14:27)       │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ 1-K.Murray    │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ pass short …  │
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ 1.0  ┆ 10.0    ┆ … ┆ pass      ┆ 9.0          ┆ 0.754242  ┆ (13:43)       │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ (Shotgun)     │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ 1-K.Murray p… │
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ 2.0  ┆ 1.0     ┆ … ┆ run       ┆ 2.0          ┆ -0.029602 ┆ (13:02)       │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ 6-J.Conner up │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ the midd…     │
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ 1.0  ┆ 10.0    ┆ … ┆ run       ┆ 2.0          ┆ -0.247749 ┆ (12:26)       │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ (Shotgun)     │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ 6-J.Conner l… │
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ 2.0  ┆ 8.0     ┆ … ┆ run       ┆ 2.0          ┆ -0.530139 ┆ (11:51)       │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ 6-J.Conner    │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ left end to…  │
+    │ 2024_01_ARI_BU ┆ 1.0 ┆ 3.0  ┆ 6.0     ┆ … ┆ pass      ┆ 8.0          ┆ 1.6808    ┆ (11:08)       │
+    │ F              ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ (Shotgun)     │
+    │                ┆     ┆      ┆         ┆   ┆           ┆              ┆           ┆ 1-K.Murray p… │
+    └────────────────┴─────┴──────┴─────────┴───┴───────────┴──────────────┴───────────┴───────────────┘
+
+
 
 
 ```python
@@ -290,6 +555,28 @@ ngs_release = nfl.load_nfl_nextgen_stats([SEASON], stat_type="passing")
     .head(8))
 
 ```
+
+
+
+
+    shape: (8, 6)
+    ┌─────────────────────┬───────────┬──────────┬────────────┬────────────────────────┬───────────────┐
+    │ player_display_name ┆ team_abbr ┆ attempts ┆ pass_yards ┆ completion_percentage_ ┆ passer_rating │
+    │ ---                 ┆ ---       ┆ ---      ┆ ---        ┆ above_ex…              ┆ ---           │
+    │ str                 ┆ str       ┆ i32      ┆ i32        ┆ ---                    ┆ f64           │
+    │                     ┆           ┆          ┆            ┆ f64                    ┆               │
+    ╞═════════════════════╪═══════════╪══════════╪════════════╪════════════════════════╪═══════════════╡
+    │ Lamar Jackson       ┆ BAL       ┆ 474      ┆ 4172       ┆ -0.194641              ┆ 119.629044    │
+    │ Jared Goff          ┆ DET       ┆ 539      ┆ 4629       ┆ 5.054879               ┆ 111.769481    │
+    │ Joe Burrow          ┆ CIN       ┆ 652      ┆ 4918       ┆ 4.521902               ┆ 108.537832    │
+    │ Baker Mayfield      ┆ TB        ┆ 570      ┆ 4500       ┆ 2.17107                ┆ 106.761696    │
+    │ Jalen Hurts         ┆ PHI       ┆ 361      ┆ 2903       ┆ 6.305457               ┆ 103.687673    │
+    │ Sam Darnold         ┆ MIN       ┆ 545      ┆ 4319       ┆ 2.799064               ┆ 102.534404    │
+    │ Justin Herbert      ┆ LAC       ┆ 504      ┆ 3870       ┆ 2.391567               ┆ 101.703042    │
+    │ Josh Allen          ┆ BUF       ┆ 483      ┆ 3731       ┆ 0.781139               ┆ 101.384576    │
+    └─────────────────────┴───────────┴──────────┴────────────┴────────────────────────┴───────────────┘
+
+
 
 ## 🔵 Secondary path: ESPN (quick & no-auth)
 
@@ -307,6 +594,36 @@ cols = ["id", "away_display_name", "home_display_name", "away_score", "home_scor
  if espn_sched is not None else "ESPN schedule unavailable")
 
 ```
+
+    ✅ ESPN schedule
+
+
+
+
+
+    shape: (8, 6)
+    ┌───────────┬────────────────────┬───────────────────┬────────────┬────────────┬───────────────────┐
+    │ id        ┆ away_display_name  ┆ home_display_name ┆ away_score ┆ home_score ┆ status_type_descr │
+    │ ---       ┆ ---                ┆ ---               ┆ ---        ┆ ---        ┆ iption            │
+    │ str       ┆ str                ┆ str               ┆ str        ┆ str        ┆ ---               │
+    │           ┆                    ┆                   ┆            ┆            ┆ str               │
+    ╞═══════════╪════════════════════╪═══════════════════╪════════════╪════════════╪═══════════════════╡
+    │ 401671744 ┆ Pittsburgh         ┆ Atlanta Falcons   ┆ 18         ┆ 10         ┆ Final             │
+    │           ┆ Steelers           ┆                   ┆            ┆            ┆                   │
+    │ 401671617 ┆ Arizona Cardinals  ┆ Buffalo Bills     ┆ 28         ┆ 34         ┆ Final             │
+    │ 401671719 ┆ Tennessee Titans   ┆ Chicago Bears     ┆ 17         ┆ 24         ┆ Final             │
+    │ 401671628 ┆ New England        ┆ Cincinnati        ┆ 16         ┆ 10         ┆ Final             │
+    │           ┆ Patriots           ┆ Bengals           ┆            ┆            ┆                   │
+    │ 401671861 ┆ Houston Texans     ┆ Indianapolis      ┆ 29         ┆ 27         ┆ Final             │
+    │           ┆                    ┆ Colts             ┆            ┆            ┆                   │
+    │ 401671849 ┆ Jacksonville       ┆ Miami Dolphins    ┆ 17         ┆ 20         ┆ Final             │
+    │           ┆ Jaguars            ┆                   ┆            ┆            ┆                   │
+    │ 401671734 ┆ Carolina Panthers  ┆ New Orleans       ┆ 10         ┆ 47         ┆ Final             │
+    │           ┆                    ┆ Saints            ┆            ┆            ┆                   │
+    │ 401671712 ┆ Minnesota Vikings  ┆ New York Giants   ┆ 28         ┆ 6          ┆ Final             │
+    └───────────┴────────────────────┴───────────────────┴────────────┴────────────┴───────────────────┘
+
+
 
 ## 🍳 Cookbook: common NFL tasks
 
@@ -342,6 +659,27 @@ out
 
 ```
 
+    ✅ injury report
+
+
+
+
+
+    shape: (5, 4)
+    ┌──────────────────┬─────────────────────┬──────────┬─────────────────────────────────┐
+    │ team_full_name   ┆ person_display_name ┆ position ┆ injuries                        │
+    │ ---              ┆ ---                 ┆ ---      ┆ ---                             │
+    │ str              ┆ str                 ┆ str      ┆ str                             │
+    ╞══════════════════╪═════════════════════╪══════════╪═════════════════════════════════╡
+    │ Atlanta Falcons  ┆ Antonio Hamilton    ┆ CB       ┆ ['Groin']                       │
+    │ Baltimore Ravens ┆ Adisa Isaac         ┆ LB       ┆ ['Hamstring']                   │
+    │ Baltimore Ravens ┆ Kyle Van Noy        ┆ LB       ┆ ['gameday concussion protocol … │
+    │ Buffalo Bills    ┆ Taron Johnson       ┆ CB       ┆ ['Forearm']                     │
+    │ Buffalo Bills    ┆ Javon Solomon       ┆ DE       ┆ ['Oblique']                     │
+    └──────────────────┴─────────────────────┴──────────┴─────────────────────────────────┘
+
+
+
 ### Recipe 2 — CPOE leaderboard from NextGen Stats 🎯
 
 Who's beating expectation as a passer? Rank qualified QBs by **completion
@@ -367,6 +705,33 @@ cpoe
 
 ```
 
+    ✅ NGS passing board
+
+
+
+
+
+    shape: (10, 5)
+    ┌────────────────┬──────────┬──────────────────────┬────────────────────────────────┬──────────────┐
+    │ playerName     ┆ attempts ┆ completionPercentage ┆ completionPercentageAboveExpec ┆ passerRating │
+    │ ---            ┆ ---      ┆ ---                  ┆ …                              ┆ ---          │
+    │ str            ┆ i64      ┆ f64                  ┆ ---                            ┆ f64          │
+    │                ┆          ┆                      ┆ f64                            ┆              │
+    ╞════════════════╪══════════╪══════════════════════╪════════════════════════════════╪══════════════╡
+    │ Jalen Hurts    ┆ 361      ┆ 68.698061            ┆ 6.305457                       ┆ 103.687673   │
+    │ Jared Goff     ┆ 539      ┆ 72.356215            ┆ 5.054879                       ┆ 111.769481   │
+    │ Joe Burrow     ┆ 652      ┆ 70.552147            ┆ 4.521902                       ┆ 108.537832   │
+    │ Geno Smith     ┆ 578      ┆ 70.415225            ┆ 3.854464                       ┆ 93.202134    │
+    │ Kirk Cousins   ┆ 453      ┆ 66.887417            ┆ 3.442009                       ┆ 88.61755     │
+    │ Derek Carr     ┆ 279      ┆ 67.741935            ┆ 3.222724                       ┆ 101.022999   │
+    │ Drake Maye     ┆ 338      ┆ 66.568047            ┆ 2.986893                       ┆ 88.079389    │
+    │ Brock Purdy    ┆ 455      ┆ 65.934066            ┆ 2.983077                       ┆ 96.076007    │
+    │ Sam Darnold    ┆ 545      ┆ 66.238532            ┆ 2.799064                       ┆ 102.534404   │
+    │ Justin Herbert ┆ 504      ┆ 65.873016            ┆ 2.391567                       ┆ 101.703042   │
+    └────────────────┴──────────┴──────────────────────┴────────────────────────────────┴──────────────┘
+
+
+
 ### Recipe 3 — Standings → division winners 🏆
 
 Take the premium standings and pull the team that tops each division. One
@@ -391,6 +756,30 @@ else:
 winners
 
 ```
+
+    ✅ standings
+
+
+
+
+
+    shape: (8, 3)
+    ┌──────────────────────┬──────────────┬────────────────┐
+    │ team_full_name       ┆ overall_wins ┆ overall_losses │
+    │ ---                  ┆ ---          ┆ ---            │
+    │ str                  ┆ i64          ┆ i64            │
+    ╞══════════════════════╪══════════════╪════════════════╡
+    │ Baltimore Ravens     ┆ 12           ┆ 5              │
+    │ Buffalo Bills        ┆ 13           ┆ 4              │
+    │ Detroit Lions        ┆ 15           ┆ 2              │
+    │ Houston Texans       ┆ 10           ┆ 7              │
+    │ Kansas City Chiefs   ┆ 15           ┆ 2              │
+    │ Los Angeles Rams     ┆ 10           ┆ 7              │
+    │ Philadelphia Eagles  ┆ 14           ┆ 3              │
+    │ Tampa Bay Buccaneers ┆ 10           ┆ 7              │
+    └──────────────────────┴──────────────┴────────────────┘
+
+
 
 ### Recipe 4 — A game's NextGen passer splits 🔬
 
@@ -420,6 +809,28 @@ out
 
 ```
 
+    ✅ NGS schedule
+
+
+    ✅ NGS gamecenter 2024090500
+
+
+
+
+
+    shape: (2, 8)
+    ┌─────────┬──────────┬────────────────┬──────────┬─────────────┬──────────┬───────────┬────────────┐
+    │ side    ┆ teamAbbr ┆ playerName     ┆ position ┆ completions ┆ attempts ┆ passYards ┆ touchdowns │
+    │ ---     ┆ ---      ┆ ---            ┆ ---      ┆ ---         ┆ ---      ┆ ---       ┆ ---        │
+    │ str     ┆ str      ┆ str            ┆ str      ┆ i64         ┆ i64      ┆ i64       ┆ i64        │
+    ╞═════════╪══════════╪════════════════╪══════════╪═════════════╪══════════╪═══════════╪════════════╡
+    │ home    ┆ KC       ┆ Patrick        ┆ QB       ┆ 20          ┆ 28       ┆ 291       ┆ 1          │
+    │         ┆          ┆ Mahomes        ┆          ┆             ┆          ┆           ┆            │
+    │ visitor ┆ BAL      ┆ Lamar Jackson  ┆ QB       ┆ 26          ┆ 41       ┆ 273       ┆ 1          │
+    └─────────┴──────────┴────────────────┴──────────┴─────────────┴──────────┴───────────┴────────────┘
+
+
+
 ### Recipe 5 — Season rushing leaders 🏃
 
 Roll the weekly box scores in [`load_nfl_player_stats`](../nfl/reference/additional.md#load_nfl_player_stats) up to season totals and crown the ground-game kings (≥150 carries).
@@ -447,6 +858,29 @@ else:
 rush_lb
 ```
 
+
+
+
+    shape: (10, 6)
+    ┌─────────────────────┬─────────────┬─────────┬──────────┬─────────┬──────────┐
+    │ player_display_name ┆ recent_team ┆ carries ┆ rush_yds ┆ rush_td ┆ rush_epa │
+    │ ---                 ┆ ---         ┆ ---     ┆ ---      ┆ ---     ┆ ---      │
+    │ str                 ┆ str         ┆ i32     ┆ f64      ┆ i32     ┆ f64      │
+    ╞═════════════════════╪═════════════╪═════════╪══════════╪═════════╪══════════╡
+    │ Saquon Barkley      ┆ PHI         ┆ 345     ┆ 2005.0   ┆ 13      ┆ 34.1     │
+    │ Derrick Henry       ┆ BAL         ┆ 325     ┆ 1921.0   ┆ 16      ┆ 40.6     │
+    │ Bijan Robinson      ┆ ATL         ┆ 304     ┆ 1456.0   ┆ 14      ┆ 16.9     │
+    │ Jonathan Taylor     ┆ IND         ┆ 303     ┆ 1431.0   ┆ 11      ┆ -21.0    │
+    │ Jahmyr Gibbs        ┆ DET         ┆ 250     ┆ 1412.0   ┆ 16      ┆ 35.1     │
+    │ Josh Jacobs         ┆ GB          ┆ 301     ┆ 1329.0   ┆ 15      ┆ -18.3    │
+    │ Kyren Williams      ┆ LA          ┆ 316     ┆ 1299.0   ┆ 14      ┆ -23.5    │
+    │ Chuba Hubbard       ┆ CAR         ┆ 250     ┆ 1195.0   ┆ 10      ┆ 9.7      │
+    │ Aaron Jones         ┆ MIN         ┆ 255     ┆ 1138.0   ┆ 5       ┆ -13.4    │
+    │ Bucky Irving        ┆ TB          ┆ 207     ┆ 1122.0   ┆ 8       ┆ 20.9     │
+    └─────────────────────┴─────────────┴─────────┴──────────┴─────────┴──────────┘
+
+
+
 ### Recipe 6 — The most efficient offenses (EPA/play) 📈
 
 Expected points added is the modeller's favourite efficiency yardstick. Average `epa` over every run/pass in [`load_nfl_pbp`](../nfl/reference/loaders.md#load_nfl_pbp) to rank offenses.
@@ -470,6 +904,29 @@ else:
     epa_off = "pbp schema changed — epa/posteam columns missing"
 epa_off
 ```
+
+
+
+
+    shape: (10, 3)
+    ┌─────────┬──────────────┬───────┐
+    │ posteam ┆ epa_per_play ┆ plays │
+    │ ---     ┆ ---          ┆ ---   │
+    │ str     ┆ f64          ┆ u32   │
+    ╞═════════╪══════════════╪═══════╡
+    │ BAL     ┆ 0.219        ┆ 1167  │
+    │ BUF     ┆ 0.19         ┆ 1202  │
+    │ DET     ┆ 0.165        ┆ 1164  │
+    │ WAS     ┆ 0.132        ┆ 1308  │
+    │ TB      ┆ 0.129        ┆ 1128  │
+    │ PHI     ┆ 0.119        ┆ 1341  │
+    │ CIN     ┆ 0.09         ┆ 1069  │
+    │ GB      ┆ 0.071        ┆ 1081  │
+    │ SF      ┆ 0.069        ┆ 1014  │
+    │ ARI     ┆ 0.067        ┆ 1031  │
+    └─────────┴──────────────┴───────┘
+
+
 
 ### Recipe 7 — Third-down conversion kings 🔑
 
@@ -495,6 +952,29 @@ else:
 third
 ```
 
+
+
+
+    shape: (10, 4)
+    ┌─────────┬─────────────┬──────────┬──────────┐
+    │ posteam ┆ conversions ┆ attempts ┆ conv_pct │
+    │ ---     ┆ ---         ┆ ---      ┆ ---      │
+    │ str     ┆ f64         ┆ u32      ┆ f64      │
+    ╞═════════╪═════════════╪══════════╪══════════╡
+    │ TB      ┆ 115.0       ┆ 226      ┆ 50.9     │
+    │ BAL     ┆ 109.0       ┆ 214      ┆ 50.9     │
+    │ KC      ┆ 123.0       ┆ 255      ┆ 48.2     │
+    │ DET     ┆ 101.0       ┆ 213      ┆ 47.4     │
+    │ CIN     ┆ 100.0       ┆ 214      ┆ 46.7     │
+    │ BUF     ┆ 107.0       ┆ 237      ┆ 45.1     │
+    │ WAS     ┆ 118.0       ┆ 262      ┆ 45.0     │
+    │ ARI     ┆ 83.0        ┆ 192      ┆ 43.2     │
+    │ SF      ┆ 84.0        ┆ 196      ┆ 42.9     │
+    │ PHI     ┆ 114.0       ┆ 278      ┆ 41.0     │
+    └─────────┴─────────────┴──────────┴──────────┘
+
+
+
 ### Recipe 8 — Red-zone touchdown efficiency 🎯
 
 Filter the play-by-play to snaps inside the opponent's 20 (`yardline_100 ≤ 20`) and see which offenses actually punch it in instead of settling for three.
@@ -519,6 +999,29 @@ else:
 redzone
 ```
 
+
+
+
+    shape: (10, 4)
+    ┌─────────┬────────┬──────────┬────────┐
+    │ posteam ┆ rz_tds ┆ rz_plays ┆ td_pct │
+    │ ---     ┆ ---    ┆ ---      ┆ ---    │
+    │ str     ┆ f64    ┆ u32      ┆ f64    │
+    ╞═════════╪════════╪══════════╪════════╡
+    │ BAL     ┆ 55.0   ┆ 178      ┆ 30.9   │
+    │ TB      ┆ 47.0   ┆ 175      ┆ 26.9   │
+    │ BUF     ┆ 55.0   ┆ 232      ┆ 23.7   │
+    │ DEN     ┆ 36.0   ┆ 157      ┆ 22.9   │
+    │ DET     ┆ 54.0   ┆ 239      ┆ 22.6   │
+    │ GB      ┆ 43.0   ┆ 195      ┆ 22.1   │
+    │ SEA     ┆ 27.0   ┆ 125      ┆ 21.6   │
+    │ NO      ┆ 25.0   ┆ 120      ┆ 20.8   │
+    │ NYJ     ┆ 31.0   ┆ 150      ┆ 20.7   │
+    │ WAS     ┆ 52.0   ┆ 255      ┆ 20.4   │
+    └─────────┴────────┴──────────┴────────┘
+
+
+
 ### Recipe 9 — Snap-share workhorse running backs 🐴
 
 [`load_nfl_snap_counts`](../nfl/reference/loaders.md#load_nfl_snap_counts) carries `offense_pct` per game — average it to find the backs their teams simply would not take off the field.
@@ -542,6 +1045,29 @@ else:
     workhorses = "snap_counts schema changed — offense_pct/position missing"
 workhorses
 ```
+
+
+
+
+    shape: (10, 4)
+    ┌─────────────────┬──────┬──────────────┬───────┐
+    │ player          ┆ team ┆ avg_snap_pct ┆ games │
+    │ ---             ┆ ---  ┆ ---          ┆ ---   │
+    │ str             ┆ str  ┆ f64          ┆ u32   │
+    ╞═════════════════╪══════╪══════════════╪═══════╡
+    │ Kyren Williams  ┆ LA   ┆ 87.2         ┆ 18    │
+    │ Jonathan Taylor ┆ IND  ┆ 80.3         ┆ 14    │
+    │ Chuba Hubbard   ┆ CAR  ┆ 77.3         ┆ 15    │
+    │ Bijan Robinson  ┆ ATL  ┆ 75.4         ┆ 17    │
+    │ Saquon Barkley  ┆ PHI  ┆ 75.1         ┆ 20    │
+    │ Breece Hall     ┆ NYJ  ┆ 72.4         ┆ 16    │
+    │ Alvin Kamara    ┆ NO   ┆ 70.9         ┆ 14    │
+    │ Tony Pollard    ┆ TEN  ┆ 67.8         ┆ 16    │
+    │ D'Andre Swift   ┆ CHI  ┆ 66.8         ┆ 17    │
+    │ Aaron Jones     ┆ MIN  ┆ 63.7         ┆ 18    │
+    └─────────────────┴──────┴──────────────┴───────┘
+
+
 
 ### Recipe 10 — Receiving leaders, then a hop into pandas 🐼
 
@@ -572,6 +1098,23 @@ else:
 rec_out
 ```
 
+
+
+
+      player_display_name recent_team  rec  rec_yds  yards_per_rec  catch_rate
+    0       Ja'Marr Chase         CIN  127   1708.0           13.4        72.6
+    1    Justin Jefferson         MIN  103   1533.0           14.9        66.9
+    2        Brian Thomas         JAX   87   1282.0           14.7        65.4
+    3        Drake London         ATL  100   1271.0           12.7        63.3
+    4   Amon-Ra St. Brown         DET  115   1263.0           11.0        81.6
+    5         Jerry Jeudy         CLE   90   1229.0           13.7        62.1
+    6        Malik Nabers         NYG  109   1204.0           11.0        64.1
+    7         CeeDee Lamb         DAL  101   1194.0           11.8        66.4
+    8        Brock Bowers          LV  112   1194.0           10.7        73.2
+    9       Ladd McConkey         LAC   82   1149.0           14.0        73.2
+
+
+
 ### Recipe 11 — Who gets open? NextGen separation 🛰️
 
 The receiving statboard exposes a tracking-only metric box scores can't: **average separation** at the catch point. Rank qualified targets (≥80) to find the route-runners defenders can't shadow.
@@ -596,6 +1139,33 @@ else:
     sep = "NGS receiving statboard unavailable"
 sep
 ```
+
+    ✅ NGS receiving statboard
+
+
+
+
+
+    shape: (10, 6)
+    ┌───────────────────┬─────────────────┬───────────────┬──────────────────┬─────────────────┬───────┐
+    │ player_displayNam ┆ player_position ┆ avgSeparation ┆ avgYACAboveExpec ┆ catchPercentage ┆ yards │
+    │ e                 ┆ ---             ┆ ---           ┆ tation           ┆ ---             ┆ ---   │
+    │ ---               ┆ str             ┆ f64           ┆ ---              ┆ f64             ┆ i64   │
+    │ str               ┆                 ┆               ┆ f64              ┆                 ┆       │
+    ╞═══════════════════╪═════════════════╪═══════════════╪══════════════════╪═════════════════╪═══════╡
+    │ Khalil Shakir     ┆ WR              ┆ 4.253744      ┆ 1.420359         ┆ 76.0            ┆ 821   │
+    │ Demario Douglas   ┆ WR              ┆ 4.010062      ┆ 0.298947         ┆ 75.862069       ┆ 621   │
+    │ Zay Flowers       ┆ WR              ┆ 3.9155        ┆ 1.636763         ┆ 63.793103       ┆ 1059  │
+    │ Xavier Worthy     ┆ WR              ┆ 3.773458      ┆ 0.445979         ┆ 60.204082       ┆ 638   │
+    │ Zach Ertz         ┆ TE              ┆ 3.631374      ┆ -0.207435        ┆ 72.527473       ┆ 654   │
+    │ George Kittle     ┆ TE              ┆ 3.582076      ┆ 2.110873         ┆ 82.978723       ┆ 1106  │
+    │ Sam LaPorta       ┆ TE              ┆ 3.529115      ┆ 1.433347         ┆ 72.289157       ┆ 726   │
+    │ Brock Bowers      ┆ TE              ┆ 3.515527      ┆ 0.982977         ┆ 73.202614       ┆ 1194  │
+    │ Trey McBride      ┆ TE              ┆ 3.511888      ┆ 0.637703         ┆ 75.510204       ┆ 1146  │
+    │ Jonnu Smith       ┆ TE              ┆ 3.49632       ┆ 0.848143         ┆ 79.279279       ┆ 884   │
+    └───────────────────┴─────────────────┴───────────────┴──────────────────┴─────────────────┴───────┘
+
+
 
 ### Recipe 12 — The nail-biters: closest games of the season 😬
 
@@ -623,6 +1193,29 @@ else:
 nailbiters
 ```
 
+
+
+
+    shape: (10, 8)
+    ┌──────┬───────────┬────────────┬───────────┬────────────┬────────┬─────────────┬────────────┐
+    │ week ┆ away_team ┆ away_score ┆ home_team ┆ home_score ┆ margin ┆ spread_line ┆ total_line │
+    │ ---  ┆ ---       ┆ ---        ┆ ---       ┆ ---        ┆ ---    ┆ ---         ┆ ---        │
+    │ i32  ┆ str       ┆ i32        ┆ str       ┆ i32        ┆ i32    ┆ f64         ┆ f64        │
+    ╞══════╪═══════════╪════════════╪═══════════╪════════════╪════════╪═════════════╪════════════╡
+    │ 2    ┆ CIN       ┆ 25         ┆ KC        ┆ 26         ┆ 1      ┆ 6.5         ┆ 47.5       │
+    │ 2    ┆ ATL       ┆ 22         ┆ PHI       ┆ 21         ┆ 1      ┆ 5.5         ┆ 46.5       │
+    │ 4    ┆ DEN       ┆ 10         ┆ NYJ       ┆ 9          ┆ 1      ┆ 7.5         ┆ 39.5       │
+    │ 5    ┆ ARI       ┆ 24         ┆ SF        ┆ 23         ┆ 1      ┆ 7.0         ┆ 48.5       │
+    │ 8    ┆ ARI       ┆ 28         ┆ MIA       ┆ 27         ┆ 1      ┆ 4.0         ┆ 46.5       │
+    │ 9    ┆ NO        ┆ 22         ┆ CAR       ┆ 23         ┆ 1      ┆ -7.0        ┆ 43.5       │
+    │ 10   ┆ CIN       ┆ 34         ┆ BAL       ┆ 35         ┆ 1      ┆ 6.0         ┆ 53.0       │
+    │ 10   ┆ PIT       ┆ 28         ┆ WAS       ┆ 27         ┆ 1      ┆ 1.5         ┆ 45.0       │
+    │ 11   ┆ GB        ┆ 20         ┆ CHI       ┆ 19         ┆ 1      ┆ -6.0        ┆ 41.0       │
+    │ 11   ┆ IND       ┆ 28         ┆ NYJ       ┆ 27         ┆ 1      ┆ 4.0         ┆ 43.0       │
+    └──────┴───────────┴────────────┴───────────┴────────────┴────────┴─────────────┴────────────┘
+
+
+
 ## 🗓️ Season helpers
 
 Handy when you want "the current/most-recent season" instead of hard-coding a
@@ -638,6 +1231,13 @@ calendar; `most_recent_nfl_season()` gives the latest season with data.
 }
 
 ```
+
+
+
+
+    {'current_season': 2025, 'current_week': 22, 'most_recent_season': 2025}
+
+
 
 ## 🎉 Where to next
 

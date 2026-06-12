@@ -63,6 +63,9 @@ import sportsdataverse.pwhl as pwhl
 print("most recent PWHL season:", pwhl.most_recent_pwhl_season())
 ```
 
+    most recent PWHL season: 2027
+
+
 The 🛰️ **live** HockeyTech feed is seasonal and occasionally rate-limited, so a tiny `safe()` helper runs those calls defensively — you get the frame when the feed is up, and a friendly one-liner when it isn't (never a scary traceback). The 📦 **loaders** read release parquets and are rock-solid, so they don't need the wrapper. 🛟
 
 
@@ -88,12 +91,37 @@ schedule.shape
 ```
 
 
+
+
+    (85, 29)
+
+
+
+
 ```python
 schedule.select([
     'game_id', 'game_date', 'home_team', 'away_team',
     'home_score', 'away_score', 'winner', 'game_type',
 ]).head()
 ```
+
+
+
+
+    shape: (5, 8)
+    ┌─────────┬─────────────┬───────────┬───────────┬────────────┬────────────┬───────────┬───────────┐
+    │ game_id ┆ game_date   ┆ home_team ┆ away_team ┆ home_score ┆ away_score ┆ winner    ┆ game_type │
+    │ ---     ┆ ---         ┆ ---       ┆ ---       ┆ ---        ┆ ---        ┆ ---       ┆ ---       │
+    │ str     ┆ str         ┆ str       ┆ str       ┆ str        ┆ str        ┆ str       ┆ str       │
+    ╞═════════╪═════════════╪═══════════╪═══════════╪════════════╪════════════╪═══════════╪═══════════╡
+    │ 84      ┆ Wed, May 8  ┆ Toronto   ┆ Minnesota ┆ 4          ┆ 0          ┆ Toronto   ┆ playoffs  │
+    │ 98      ┆ Wed, May 29 ┆ Boston    ┆ Minnesota ┆ 0          ┆ 3          ┆ Minnesota ┆ playoffs  │
+    │ 90      ┆ Wed, May 15 ┆ Minnesota ┆ Toronto   ┆ 1          ┆ 0          ┆ Minnesota ┆ playoffs  │
+    │ 63      ┆ Wed, May 1  ┆ Toronto   ┆ Minnesota ┆ 4          ┆ 1          ┆ Toronto   ┆ regular   │
+    │ 45      ┆ Wed, Mar 6  ┆ Toronto   ┆ Boston    ┆ 3          ┆ 1          ┆ Toronto   ┆ regular   │
+    └─────────┴─────────────┴───────────┴───────────┴────────────┴────────────┴───────────┴───────────┘
+
+
 
 ## 👥 Rosters (loader)
 
@@ -107,6 +135,24 @@ rosters.select([
     'jersey_number', 'position',
 ]).head()
 ```
+
+
+
+
+    shape: (5, 7)
+    ┌──────────────┬───────────┬─────────────┬────────────┬───────────┬───────────────┬──────────┐
+    │ team         ┆ team_abbr ┆ player_type ┆ first_name ┆ last_name ┆ jersey_number ┆ position │
+    │ ---          ┆ ---       ┆ ---         ┆ ---        ┆ ---       ┆ ---           ┆ ---      │
+    │ str          ┆ str       ┆ str         ┆ str        ┆ str       ┆ i32           ┆ str      │
+    ╞══════════════╪═══════════╪═════════════╪════════════╪═══════════╪═══════════════╪══════════╡
+    │ PWHL Toronto ┆ TOR       ┆ skater      ┆ Jocelyne   ┆ Larocque  ┆ 3             ┆ LD       │
+    │ PWHL Toronto ┆ TOR       ┆ skater      ┆ Lauriane   ┆ Rougeau   ┆ 5             ┆ LD       │
+    │ PWHL Toronto ┆ TOR       ┆ skater      ┆ Kali       ┆ Flanagan  ┆ 6             ┆ RD       │
+    │ PWHL Toronto ┆ TOR       ┆ skater      ┆ Olivia     ┆ Knowles   ┆ 7             ┆ RD       │
+    │ PWHL Toronto ┆ TOR       ┆ skater      ┆ Alexa      ┆ Vasko     ┆ 10            ┆ C        │
+    └──────────────┴───────────┴─────────────┴────────────┴───────────┴───────────────┴──────────┘
+
+
 
 ## 📊 Boxscores (loader)
 
@@ -129,6 +175,24 @@ skater_box.select([
 ```
 
 
+
+
+    shape: (5, 10)
+    ┌─────────┬────────────┬───────────┬──────────┬───┬────────┬───────┬────────────┬─────────────┐
+    │ game_id ┆ first_name ┆ last_name ┆ position ┆ … ┆ points ┆ shots ┆ plus_minus ┆ time_on_ice │
+    │ ---     ┆ ---        ┆ ---       ┆ ---      ┆   ┆ ---    ┆ ---   ┆ ---        ┆ ---         │
+    │ i32     ┆ str        ┆ str       ┆ str      ┆   ┆ i32    ┆ i32   ┆ i32        ┆ f64         │
+    ╞═════════╪════════════╪═══════════╪══════════╪═══╪════════╪═══════╪════════════╪═════════════╡
+    │ 2       ┆ Jocelyne   ┆ Larocque  ┆ LD       ┆ … ┆ 0      ┆ 2     ┆ -2         ┆ 26.7        │
+    │ 2       ┆ Lauriane   ┆ Rougeau   ┆ LD       ┆ … ┆ 0      ┆ 0     ┆ 0          ┆ 12.1        │
+    │ 2       ┆ Kali       ┆ Flanagan  ┆ RD       ┆ … ┆ 0      ┆ 1     ┆ -1         ┆ 21.6        │
+    │ 2       ┆ Olivia     ┆ Knowles   ┆ RD       ┆ … ┆ 0      ┆ 0     ┆ 0          ┆ 9.7         │
+    │ 2       ┆ Alexa      ┆ Vasko     ┆ C        ┆ … ┆ 0      ┆ 3     ┆ 0          ┆ 10.5        │
+    └─────────┴────────────┴───────────┴──────────┴───┴────────┴───────┴────────────┴─────────────┘
+
+
+
+
 ```python
 goalie_box = pwhl.load_pwhl_goalie_box(seasons=[2024])
 goalie_box.select([
@@ -136,6 +200,24 @@ goalie_box.select([
     'saves', 'shots_against', 'goals_against', 'time_on_ice',
 ]).head()
 ```
+
+
+
+
+    shape: (5, 7)
+    ┌─────────┬────────────┬────────────┬───────┬───────────────┬───────────────┬─────────────┐
+    │ game_id ┆ first_name ┆ last_name  ┆ saves ┆ shots_against ┆ goals_against ┆ time_on_ice │
+    │ ---     ┆ ---        ┆ ---        ┆ ---   ┆ ---           ┆ ---           ┆ ---         │
+    │ i32     ┆ str        ┆ str        ┆ i32   ┆ i32           ┆ i32           ┆ f64         │
+    ╞═════════╪════════════╪════════════╪═══════╪═══════════════╪═══════════════╪═════════════╡
+    │ 2       ┆ Erica      ┆ Howe       ┆ 0     ┆ 0             ┆ 0             ┆ null        │
+    │ 2       ┆ Kristen    ┆ Campbell   ┆ 24    ┆ 28            ┆ 4             ┆ 60.0        │
+    │ 2       ┆ Corinne    ┆ Schroeder  ┆ 29    ┆ 29            ┆ 0             ┆ 60.0        │
+    │ 2       ┆ Abbey      ┆ Levy       ┆ 0     ┆ 0             ┆ 0             ┆ null        │
+    │ 3       ┆ Sandra     ┆ Abstreiter ┆ 0     ┆ 0             ┆ 0             ┆ null        │
+    └─────────┴────────────┴────────────┴───────┴───────────────┴───────────────┴─────────────┘
+
+
 
 ## 🎬 Play-by-play (loader)
 
@@ -148,12 +230,36 @@ pbp.shape
 ```
 
 
+
+
+    (10456, 95)
+
+
+
+
 ```python
 (pbp
     .group_by('event')
     .agg(pl.len().alias('events'))
     .sort('events', descending=True))
 ```
+
+
+
+
+    shape: (4, 2)
+    ┌─────────┬────────┐
+    │ event   ┆ events │
+    │ ---     ┆ ---    │
+    │ str     ┆ u32    │
+    ╞═════════╪════════╡
+    │ shot    ┆ 4922   │
+    │ faceoff ┆ 4631   │
+    │ penalty ┆ 518    │
+    │ goal    ┆ 385    │
+    └─────────┴────────┘
+
+
 
 ## 🍳 Cookbook: common PWHL tasks
 
@@ -172,6 +278,25 @@ No loader is needed for a quick standings table: the schedule's `winner` column 
     .sort('wins', descending=True))
 ```
 
+
+
+
+    shape: (6, 2)
+    ┌───────────┬──────┐
+    │ winner    ┆ wins │
+    │ ---       ┆ ---  │
+    │ str       ┆ u32  │
+    ╞═══════════╪══════╡
+    │ Toronto   ┆ 17   │
+    │ Montreal  ┆ 13   │
+    │ Boston    ┆ 12   │
+    │ Minnesota ┆ 12   │
+    │ New York  ┆ 9    │
+    │ Ottawa    ┆ 9    │
+    └───────────┴──────┘
+
+
+
 ### Recipe 2 — Season scoring leaders 🥇
 
 Aggregate the skater boxscore across every game to build a points leaderboard — the inaugural-season top of the table.
@@ -189,6 +314,29 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
     .select(['first_name', 'last_name', 'goals', 'assists', 'points'])
     .head(10))
 ```
+
+
+
+
+    shape: (10, 5)
+    ┌──────────────┬───────────┬───────┬─────────┬────────┐
+    │ first_name   ┆ last_name ┆ goals ┆ assists ┆ points │
+    │ ---          ┆ ---       ┆ ---   ┆ ---     ┆ ---    │
+    │ str          ┆ str       ┆ i32   ┆ i32     ┆ i32    │
+    ╞══════════════╪═══════════╪═══════╪═════════╪════════╡
+    │ Natalie      ┆ Spooner   ┆ 21    ┆ 8       ┆ 29     │
+    │ Marie-Philip ┆ Poulin    ┆ 11    ┆ 14      ┆ 25     │
+    │ Sarah        ┆ Nurse     ┆ 11    ┆ 13      ┆ 24     │
+    │ Alex         ┆ Carpenter ┆ 8     ┆ 15      ┆ 23     │
+    │ Emma         ┆ Maltais   ┆ 5     ┆ 16      ┆ 21     │
+    │ Taylor       ┆ Heise     ┆ 9     ┆ 12      ┆ 21     │
+    │ Ella         ┆ Shelton   ┆ 7     ┆ 14      ┆ 21     │
+    │ Brianne      ┆ Jenner    ┆ 9     ┆ 11      ┆ 20     │
+    │ Erin         ┆ Ambrose   ┆ 4     ┆ 16      ┆ 20     │
+    │ Grace        ┆ Zumwinkle ┆ 12    ┆ 8       ┆ 20     │
+    └──────────────┴───────────┴───────┴─────────┴────────┘
+
+
 
 ### Recipe 3 — Goalie save-percentage leaders 🧤
 
@@ -212,6 +360,29 @@ Sum saves and shots-against from the goalie boxscore, then compute a season save
     .head(10))
 ```
 
+
+
+
+    shape: (10, 5)
+    ┌────────────┬────────────┬───────────────┬───────────────┬──────────┐
+    │ first_name ┆ last_name  ┆ shots_against ┆ goals_against ┆ save_pct │
+    │ ---        ┆ ---        ┆ ---           ┆ ---           ┆ ---      │
+    │ str        ┆ str        ┆ i32           ┆ i32           ┆ f64      │
+    ╞════════════╪════════════╪═══════════════╪═══════════════╪══════════╡
+    │ Elaine     ┆ Chuli      ┆ 253           ┆ 13            ┆ 0.949    │
+    │ Aerin      ┆ Frankel    ┆ 790           ┆ 49            ┆ 0.938    │
+    │ Kristen    ┆ Campbell   ┆ 718           ┆ 48            ┆ 0.933    │
+    │ Corinne    ┆ Schroeder  ┆ 511           ┆ 36            ┆ 0.93     │
+    │ Nicole     ┆ Hensley    ┆ 492           ┆ 37            ┆ 0.925    │
+    │ Maddie     ┆ Rooney     ┆ 362           ┆ 27            ┆ 0.925    │
+    │ Ann-Renée  ┆ Desbiens   ┆ 580           ┆ 44            ┆ 0.924    │
+    │ Emerance   ┆ Maschmeyer ┆ 599           ┆ 51            ┆ 0.915    │
+    │ Abbey      ┆ Levy       ┆ 254           ┆ 24            ┆ 0.906    │
+    │ Emma       ┆ Söderberg  ┆ 170           ┆ 17            ┆ 0.9      │
+    └────────────┴────────────┴───────────────┴───────────────┴──────────┘
+
+
+
 ### Recipe 4 — Biggest blowouts of the season 💥
 
 Cast the string scores to integers, compute the margin, and sort — the season's most lopsided games fall right out.
@@ -231,6 +402,29 @@ Cast the string scores to integers, compute the margin, and sort — the season'
              'away_score', 'away_team', 'winner', 'margin'])
     .head(10))
 ```
+
+
+
+
+    shape: (10, 7)
+    ┌─────────────┬───────────┬────────────┬────────────┬───────────┬───────────┬────────┐
+    │ game_date   ┆ home_team ┆ home_score ┆ away_score ┆ away_team ┆ winner    ┆ margin │
+    │ ---         ┆ ---       ┆ ---        ┆ ---        ┆ ---       ┆ ---       ┆ ---    │
+    │ str         ┆ str       ┆ i32        ┆ i32        ┆ str       ┆ str       ┆ i32    │
+    ╞═════════════╪═══════════╪════════════╪════════════╪═══════════╪═══════════╪════════╡
+    │ Wed, May 8  ┆ Toronto   ┆ 4          ┆ 0          ┆ Minnesota ┆ Toronto   ┆ 4      │
+    │ Wed, Mar 13 ┆ Minnesota ┆ 4          ┆ 0          ┆ Boston    ┆ Minnesota ┆ 4      │
+    │ Sun, Apr 28 ┆ New York  ┆ 2          ┆ 6          ┆ Toronto   ┆ Toronto   ┆ 4      │
+    │ Sat, Mar 16 ┆ Minnesota ┆ 5          ┆ 1          ┆ New York  ┆ Minnesota ┆ 4      │
+    │ Sat, Jan 13 ┆ Toronto   ┆ 1          ┆ 5          ┆ Ottawa    ┆ Ottawa    ┆ 4      │
+    │ Sat, Apr 20 ┆ Ottawa    ┆ 4          ┆ 0          ┆ Minnesota ┆ Ottawa    ┆ 4      │
+    │ Mon, Jan 1  ┆ Toronto   ┆ 0          ┆ 4          ┆ New York  ┆ New York  ┆ 4      │
+    │ Wed, May 29 ┆ Boston    ┆ 0          ┆ 3          ┆ Minnesota ┆ Minnesota ┆ 3      │
+    │ Wed, May 1  ┆ Toronto   ┆ 4          ┆ 1          ┆ Minnesota ┆ Toronto   ┆ 3      │
+    │ Wed, Mar 20 ┆ New York  ┆ 0          ┆ 3          ┆ Ottawa    ┆ Ottawa    ┆ 3      │
+    └─────────────┴───────────┴────────────┴────────────┴───────────┴───────────┴────────┘
+
+
 
 ### Recipe 5 — Team offense: shots & shooting % ⚡
 
@@ -257,6 +451,25 @@ team_lookup = (pwhl.load_pwhl_team_box(seasons=[2024])
     .sort('goals', descending=True))
 ```
 
+
+
+
+    shape: (6, 4)
+    ┌───────────┬───────┬───────┬──────────────┐
+    │ team_abbr ┆ goals ┆ shots ┆ shooting_pct │
+    │ ---       ┆ ---   ┆ ---   ┆ ---          │
+    │ str       ┆ i32   ┆ i32   ┆ f64          │
+    ╞═══════════╪═══════╪═══════╪══════════════╡
+    │ TOR       ┆ 74    ┆ 790   ┆ 9.4          │
+    │ MIN       ┆ 72    ┆ 1025  ┆ 7.0          │
+    │ MTL       ┆ 64    ┆ 814   ┆ 7.9          │
+    │ BOS       ┆ 62    ┆ 907   ┆ 6.8          │
+    │ OTT       ┆ 61    ┆ 721   ┆ 8.5          │
+    │ NY        ┆ 52    ┆ 667   ┆ 7.8          │
+    └───────────┴───────┴───────┴──────────────┘
+
+
+
 ### Recipe 6 — Power-play conversion leaders 🔌
 
 The team boxscore carries `pp_goals` and `pp_opportunities`, so a season power-play percentage is a single division.
@@ -276,6 +489,25 @@ team_box = pwhl.load_pwhl_team_box(seasons=[2024])
     )
     .sort('pp_pct', descending=True))
 ```
+
+
+
+
+    shape: (6, 4)
+    ┌───────────┬──────────┬──────────────────┬────────┐
+    │ team_abbr ┆ pp_goals ┆ pp_opportunities ┆ pp_pct │
+    │ ---       ┆ ---      ┆ ---              ┆ ---    │
+    │ str       ┆ i32      ┆ i32              ┆ f64    │
+    ╞═══════════╪══════════╪══════════════════╪════════╡
+    │ OTT       ┆ 16       ┆ 64               ┆ 25.0   │
+    │ NY        ┆ 19       ┆ 78               ┆ 24.4   │
+    │ MTL       ┆ 16       ┆ 94               ┆ 17.0   │
+    │ TOR       ┆ 11       ┆ 80               ┆ 13.8   │
+    │ MIN       ┆ 7        ┆ 87               ┆ 8.0    │
+    │ BOS       ┆ 4        ┆ 68               ┆ 5.9    │
+    └───────────┴──────────┴──────────────────┴────────┘
+
+
 
 ### Recipe 7 — Faceoff specialists 🎯
 
@@ -297,6 +529,29 @@ The skater boxscore tracks faceoff wins and attempts. Aggregate, gate on a minim
     .head(10))
 ```
 
+
+
+
+    shape: (10, 5)
+    ┌──────────────┬───────────────┬─────────┬─────────────┬────────┐
+    │ first_name   ┆ last_name     ┆ fo_wins ┆ fo_attempts ┆ fo_pct │
+    │ ---          ┆ ---           ┆ ---     ┆ ---         ┆ ---    │
+    │ str          ┆ str           ┆ i32     ┆ i32         ┆ f64    │
+    ╞══════════════╪═══════════════╪═════════╪═════════════╪════════╡
+    │ Abby         ┆ Roque         ┆ 205     ┆ 339         ┆ 60.5   │
+    │ Marie-Philip ┆ Poulin        ┆ 326     ┆ 546         ┆ 59.7   │
+    │ Alex         ┆ Carpenter     ┆ 245     ┆ 415         ┆ 59.0   │
+    │ Kelly        ┆ Pannek        ┆ 344     ┆ 630         ┆ 54.6   │
+    │ Brianne      ┆ Jenner        ┆ 125     ┆ 230         ┆ 54.3   │
+    │ Taylor       ┆ Heise         ┆ 264     ┆ 495         ┆ 53.3   │
+    │ Hannah       ┆ Brandt        ┆ 270     ┆ 510         ┆ 52.9   │
+    │ Kristin      ┆ O'Neill       ┆ 240     ┆ 460         ┆ 52.2   │
+    │ Jade         ┆ Downie-Landry ┆ 116     ┆ 225         ┆ 51.6   │
+    │ Jesse        ┆ Compher       ┆ 119     ┆ 233         ┆ 51.1   │
+    └──────────────┴───────────────┴─────────┴─────────────┴────────┘
+
+
+
 ### Recipe 8 — Two-way workhorses: hits + blocks 🧱
 
 Not every contribution shows up on the scoresheet. Sum hits and blocked shots from the skater box to surface the players doing the dirty work — defenders usually own this list.
@@ -316,6 +571,29 @@ Not every contribution shows up on the scoresheet. Sum hits and blocked shots fr
     .head(10))
 ```
 
+
+
+
+    shape: (10, 6)
+    ┌────────────┬────────────┬──────────┬──────┬────────┬──────────────────┐
+    │ first_name ┆ last_name  ┆ position ┆ hits ┆ blocks ┆ hits_plus_blocks │
+    │ ---        ┆ ---        ┆ ---      ┆ ---  ┆ ---    ┆ ---              │
+    │ str        ┆ str        ┆ str      ┆ i32  ┆ i32    ┆ i32              │
+    ╞════════════╪════════════╪══════════╪══════╪════════╪══════════════════╡
+    │ Renata     ┆ Fast       ┆ RD       ┆ 77   ┆ 23     ┆ 100              │
+    │ Megan      ┆ Keller     ┆ LD       ┆ 64   ┆ 33     ┆ 97               │
+    │ Kaleigh    ┆ Fratkin    ┆ RD       ┆ 65   ┆ 19     ┆ 84               │
+    │ Blayre     ┆ Turnbull   ┆ C        ┆ 62   ┆ 14     ┆ 76               │
+    │ Allie      ┆ Munroe     ┆ LD       ┆ 44   ┆ 25     ┆ 69               │
+    │ Jessica    ┆ DiGirolamo ┆ LD       ┆ 36   ┆ 31     ┆ 67               │
+    │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
+    │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
+    │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
+    │ Kelly      ┆ Pannek     ┆ C        ┆ 28   ┆ 30     ┆ 58               │
+    └────────────┴────────────┴──────────┴──────┴────────┴──────────────────┘
+
+
+
 ### Recipe 9 — The penalty box 🚨
 
 [`load_pwhl_penalty_summary`](../pwhl/reference/loaders.md#load_pwhl_penalty_summary) is a tidy per-infraction log. Two quick cuts: the most common infractions league-wide, and the players spending the most time in the box.
@@ -334,6 +612,27 @@ top_infractions
 ```
 
 
+
+
+    shape: (8, 2)
+    ┌────────────────┬───────┐
+    │ description    ┆ count │
+    │ ---            ┆ ---   │
+    │ str            ┆ u32   │
+    ╞════════════════╪═══════╡
+    │ Tripping       ┆ 106   │
+    │ Hooking        ┆ 91    │
+    │ Roughing       ┆ 64    │
+    │ Interference   ┆ 53    │
+    │ Slashing       ┆ 35    │
+    │ Boarding       ┆ 30    │
+    │ Cross Checking ┆ 26    │
+    │ Holding        ┆ 26    │
+    └────────────────┴───────┘
+
+
+
+
 ```python
 # PIM leaders (players who actually took the penalty)
 (penalties
@@ -346,6 +645,29 @@ top_infractions
     .sort('pim', descending=True)
     .head(10))
 ```
+
+
+
+
+    shape: (10, 4)
+    ┌────────────────┬───────────────┬─────┬───────────┐
+    │ taken_by_first ┆ taken_by_last ┆ pim ┆ penalties │
+    │ ---            ┆ ---           ┆ --- ┆ ---       │
+    │ str            ┆ str           ┆ i32 ┆ u32       │
+    ╞════════════════╪═══════════════╪═════╪═══════════╡
+    │ Tereza         ┆ Vanišová      ┆ 37  ┆ 13        │
+    │ Kaleigh        ┆ Fratkin       ┆ 36  ┆ 18        │
+    │ Abby           ┆ Roque         ┆ 31  ┆ 10        │
+    │ Jesse          ┆ Compher       ┆ 25  ┆ 7         │
+    │ Megan          ┆ Keller        ┆ 22  ┆ 11        │
+    │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
+    │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
+    │ Sarah          ┆ Nurse         ┆ 18  ┆ 9         │
+    │ Jade           ┆ Downie-Landry ┆ 18  ┆ 9         │
+    │ Lee            ┆ Stecklein     ┆ 18  ┆ 9         │
+    └────────────────┴───────────────┴─────┴───────────┘
+
+
 
 ### Recipe 10 — When do goals get scored? ⏱️
 
@@ -364,6 +686,25 @@ goals_by_period
 ```
 
 
+
+
+    shape: (6, 2)
+    ┌────────────────┬───────┐
+    │ period_of_game ┆ goals │
+    │ ---            ┆ ---   │
+    │ str            ┆ u32   │
+    ╞════════════════╪═══════╡
+    │ 1              ┆ 109   │
+    │ 2              ┆ 120   │
+    │ 3              ┆ 138   │
+    │ 4              ┆ 15    │
+    │ 5              ┆ 2     │
+    │ 6              ┆ 1     │
+    └────────────────┴───────┘
+
+
+
+
 ```python
 # Top goal-scorers from the play-by-play feed
 (goal_events
@@ -373,6 +714,29 @@ goals_by_period
     .sort('goals', descending=True)
     .head(10))
 ```
+
+
+
+
+    shape: (10, 3)
+    ┌───────────────────┬──────────────────┬───────┐
+    │ player_name_first ┆ player_name_last ┆ goals │
+    │ ---               ┆ ---              ┆ ---   │
+    │ str               ┆ str              ┆ u32   │
+    ╞═══════════════════╪══════════════════╪═══════╡
+    │ Natalie           ┆ Spooner          ┆ 21    │
+    │ Grace             ┆ Zumwinkle        ┆ 12    │
+    │ Sarah             ┆ Nurse            ┆ 11    │
+    │ Marie-Philip      ┆ Poulin           ┆ 11    │
+    │ Daryl             ┆ Watts            ┆ 10    │
+    │ Laura             ┆ Stacey           ┆ 10    │
+    │ Michela           ┆ Cava             ┆ 9     │
+    │ Gabbie            ┆ Hughes           ┆ 9     │
+    │ Taylor            ┆ Heise            ┆ 9     │
+    │ Brianne           ┆ Jenner           ┆ 9     │
+    └───────────────────┴──────────────────┴───────┘
+
+
 
 ### Recipe 11 — Three-stars honour roll ⭐ and a head-to-head series
 
@@ -392,6 +756,29 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
 ```
 
 
+
+
+    shape: (10, 3)
+    ┌──────────────┬───────────┬─────────────┐
+    │ first_name   ┆ last_name ┆ first_stars │
+    │ ---          ┆ ---       ┆ ---         │
+    │ str          ┆ str       ┆ u32         │
+    ╞══════════════╪═══════════╪═════════════╡
+    │ Natalie      ┆ Spooner   ┆ 7           │
+    │ Kristen      ┆ Campbell  ┆ 4           │
+    │ Nicole       ┆ Hensley   ┆ 4           │
+    │ Sarah        ┆ Nurse     ┆ 3           │
+    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Gabbie       ┆ Hughes    ┆ 3           │
+    │ Hilary       ┆ Knight    ┆ 3           │
+    │ Susanna      ┆ Tapani    ┆ 3           │
+    │ Alex         ┆ Carpenter ┆ 3           │
+    │ Michela      ┆ Cava      ┆ 2           │
+    └──────────────┴───────────┴─────────────┘
+
+
+
+
 ```python
 # Head-to-head: Boston vs. Montreal, every meeting in 2024
 A, B = 'Boston', 'Montreal'
@@ -403,6 +790,26 @@ A, B = 'Boston', 'Montreal'
     .select(['game_date', 'home_team', 'home_score',
              'away_score', 'away_team', 'winner', 'game_status']))
 ```
+
+
+
+
+    shape: (7, 7)
+    ┌─────────────┬───────────┬────────────┬────────────┬───────────┬──────────┬─────────────┐
+    │ game_date   ┆ home_team ┆ home_score ┆ away_score ┆ away_team ┆ winner   ┆ game_status │
+    │ ---         ┆ ---       ┆ ---        ┆ ---        ┆ ---       ┆ ---      ┆ ---         │
+    │ str         ┆ str       ┆ str        ┆ str        ┆ str       ┆ str      ┆ str         │
+    ╞═════════════╪═══════════╪════════════╪════════════╪═══════════╪══════════╪═════════════╡
+    │ Tue, May 14 ┆ Boston    ┆ 3          ┆ 2          ┆ Montreal  ┆ Boston   ┆ Final OT    │
+    │ Thu, May 9  ┆ Montreal  ┆ 1          ┆ 2          ┆ Boston    ┆ Boston   ┆ Final OT    │
+    │ Sun, Feb 4  ┆ Boston    ┆ 1          ┆ 2          ┆ Montreal  ┆ Montreal ┆ Final OT    │
+    │ Sat, May 4  ┆ Boston    ┆ 4          ┆ 3          ┆ Montreal  ┆ Boston   ┆ Final       │
+    │ Sat, May 11 ┆ Montreal  ┆ 1          ┆ 2          ┆ Boston    ┆ Boston   ┆ Final OT3   │
+    │ Sat, Mar 2  ┆ Montreal  ┆ 3          ┆ 1          ┆ Boston    ┆ Montreal ┆ Final       │
+    │ Sat, Jan 13 ┆ Montreal  ┆ 2          ┆ 3          ┆ Boston    ┆ Boston   ┆ Final OT    │
+    └─────────────┴───────────┴────────────┴────────────┴───────────┴──────────┴─────────────┘
+
+
 
 ### Recipe 12 — Find a player, then pull her career lines 🛰️🔎
 
@@ -426,6 +833,35 @@ else:
 out
 ```
 
+    ✅ player search: Spooner
+
+
+    ✅ player stats 100
+
+
+
+
+
+    shape: (10, 7)
+    ┌────────────────────────┬───────────┬──────────────┬───────┬─────────┬────────┬─────────────────┐
+    │ season_name            ┆ team_code ┆ games_played ┆ goals ┆ assists ┆ points ┆ points_per_game │
+    │ ---                    ┆ ---       ┆ ---          ┆ ---   ┆ ---     ┆ ---    ┆ ---             │
+    │ str                    ┆ str       ┆ str          ┆ str   ┆ str     ┆ str    ┆ str             │
+    ╞════════════════════════╪═══════════╪══════════════╪═══════╪═════════╪════════╪═════════════════╡
+    │ 2025-26 Regular Season ┆ TOR       ┆ 30           ┆ 3     ┆ 5       ┆ 8      ┆ 0.27            │
+    │ 2024-25 Regular Season ┆ TOR       ┆ 14           ┆ 3     ┆ 2       ┆ 5      ┆ 0.36            │
+    │ 2024 Regular Season    ┆ TOR       ┆ 24           ┆ 20    ┆ 7       ┆ 27     ┆ 1.13            │
+    │ Total                  ┆ null      ┆ 68           ┆ 26    ┆ 14      ┆ 40     ┆ 0.59            │
+    │ 2025-26 Preseason      ┆ TOR       ┆ 1            ┆ 0     ┆ 1       ┆ 1      ┆ 1.00            │
+    │ 2024 Preseason         ┆ TOR       ┆ 1            ┆ 0     ┆ 0       ┆ 0      ┆ 0.00            │
+    │ Total                  ┆ null      ┆ 2            ┆ 0     ┆ 1       ┆ 1      ┆ 0.50            │
+    │ 2025 Playoffs          ┆ TOR       ┆ 4            ┆ 0     ┆ 1       ┆ 1      ┆ 0.25            │
+    │ 2024 Playoffs          ┆ TOR       ┆ 3            ┆ 1     ┆ 1       ┆ 2      ┆ 0.67            │
+    │ Total                  ┆ null      ┆ 7            ┆ 1     ┆ 2       ┆ 3      ┆ 0.43            │
+    └────────────────────────┴───────────┴──────────────┴───────┴─────────┴────────┴─────────────────┘
+
+
+
 ### Recipe 13 — A team, its roster, and a game's PBP + Corsi 🛰️📈
 
 The full live tour. List teams with [`pwhl_teams`](../pwhl/reference/additional.md#pwhl_teams), grab a `team_id`, pull the roster with [`pwhl_team_roster`](../pwhl/reference/additional.md#pwhl_team_roster), take a `game_id` from the loader schedule, then fetch enriched events with [`pwhl_pbp`](../pwhl/reference/additional.md#pwhl_pbp) and shot-attempt share with [`pwhl_game_corsi`](../pwhl/reference/additional.md#pwhl_game_corsi) — all from the same feed. Everything is `safe()`-wrapped, so offline this prints a friendly note instead of raising.
@@ -444,6 +880,30 @@ else:
 out
 ```
 
+    ✅ PWHL teams
+
+
+    ✅ PWHL roster 1
+
+
+
+
+
+    shape: (5, 3)
+    ┌────────────┬───────────┬──────────┐
+    │ first_name ┆ last_name ┆ position │
+    │ ---        ┆ ---       ┆ ---      │
+    │ str        ┆ str       ┆ str      │
+    ╞════════════╪═══════════╪══════════╡
+    │ Emily      ┆ Brown     ┆ D        │
+    │ Megan      ┆ Keller    ┆ D        │
+    │ Sidney     ┆ Morin     ┆ D        │
+    │ Lexie      ┆ Adzija    ┆ F        │
+    │ Sophie     ┆ Shirley   ┆ F        │
+    └────────────┴───────────┴──────────┘
+
+
+
 
 ```python
 # A game_id from the loader schedule (offline-safe), then enrich it live.
@@ -453,6 +913,13 @@ corsi = safe(f'PWHL corsi {gid}', lambda: pwhl.pwhl_game_corsi(game_id=gid))
 print('live pbp rows:', None if pbp_live is None else pbp_live.height,
       '| corsi rows:', None if corsi is None else corsi.height)
 ```
+
+    ✅ PWHL pbp 84
+
+
+    ✅ PWHL corsi 84
+    live pbp rows: 188 | corsi rows: 39
+
 
 ## 🛰️ Live standings & leaders
 
@@ -470,6 +937,28 @@ else:
 out
 ```
 
+    ✅ PWHL standings
+
+
+
+
+
+    shape: (6, 6)
+    ┌────────────────────┬───────────┬──────────────┬──────┬────────┬────────┐
+    │ team               ┆ team_code ┆ games_played ┆ wins ┆ losses ┆ points │
+    │ ---                ┆ ---       ┆ ---          ┆ ---  ┆ ---    ┆ ---    │
+    │ str                ┆ str       ┆ str          ┆ i64  ┆ str    ┆ i64    │
+    ╞════════════════════╪═══════════╪══════════════╪══════╪════════╪════════╡
+    │ x - PWHL Toronto   ┆ x - TOR   ┆ 24           ┆ 17   ┆ 7      ┆ 47     │
+    │ x - PWHL Montreal  ┆ x - MTL   ┆ 24           ┆ 13   ┆ 6      ┆ 41     │
+    │ x - PWHL Boston    ┆ x - BOS   ┆ 24           ┆ 12   ┆ 9      ┆ 35     │
+    │ x - PWHL Minnesota ┆ x - MIN   ┆ 24           ┆ 12   ┆ 9      ┆ 35     │
+    │ e - PWHL Ottawa    ┆ e - OTT   ┆ 24           ┆ 9    ┆ 9      ┆ 32     │
+    │ e - PWHL New York  ┆ e - NY    ┆ 24           ┆ 9    ┆ 12     ┆ 26     │
+    └────────────────────┴───────────┴──────────────┴──────┴────────┴────────┘
+
+
+
 
 ```python
 leaders = safe('PWHL leaders', lambda: pwhl.pwhl_leaders(season=2024))
@@ -481,6 +970,32 @@ else:
     out = 'leaders feed unavailable right now'
 out
 ```
+
+    ✅ PWHL leaders
+
+
+
+
+
+    shape: (10, 5)
+    ┌──────┬─────────────────────┬───────────┬────────────────┬────────────────┐
+    │ rank ┆ name                ┆ team_code ┆ stat_formatted ┆ type_formatted │
+    │ ---  ┆ ---                 ┆ ---       ┆ ---            ┆ ---            │
+    │ i64  ┆ str                 ┆ str       ┆ str            ┆ str            │
+    ╞══════╪═════════════════════╪═══════════╪════════════════╪════════════════╡
+    │ 1    ┆ Natalie Spooner     ┆ TOR       ┆ 27             ┆ Points         │
+    │ 2    ┆ Sarah Nurse         ┆ TOR       ┆ 23             ┆ Points         │
+    │ 3    ┆ Marie-Philip Poulin ┆ MTL       ┆ 23             ┆ Points         │
+    │ 4    ┆ Alex Carpenter      ┆ NY        ┆ 23             ┆ Points         │
+    │ 5    ┆ Ella Shelton        ┆ NY        ┆ 21             ┆ Points         │
+    │ 1    ┆ Natalie Spooner     ┆ TOR       ┆ 20             ┆ Goals          │
+    │ 2    ┆ Sarah Nurse         ┆ TOR       ┆ 11             ┆ Goals          │
+    │ 3    ┆ Grace Zumwinkle     ┆ MIN       ┆ 11             ┆ Goals          │
+    │ 4    ┆ Marie-Philip Poulin ┆ MTL       ┆ 10             ┆ Goals          │
+    │ 5    ┆ Laura Stacey        ┆ MTL       ┆ 10             ┆ Goals          │
+    └──────┴─────────────────────┴───────────┴────────────────┴────────────────┘
+
+
 
 ## 🥅 On-ice analytics
 
@@ -506,6 +1021,27 @@ else:
 out
 ```
 
+    ✅ PWHL TOI 84
+
+
+
+
+
+    shape: (5, 4)
+    ┌────────────┬───────────┬─────────────┬────────────┐
+    │ first_name ┆ last_name ┆ toi_seconds ┆ num_shifts │
+    │ ---        ┆ ---       ┆ ---         ┆ ---        │
+    │ str        ┆ str       ┆ i64         ┆ u32        │
+    ╞════════════╪═══════════╪═════════════╪════════════╡
+    │ Kristen    ┆ Campbell  ┆ 3600        ┆ 3          │
+    │ Nicole     ┆ Hensley   ┆ 3600        ┆ 3          │
+    │ Jocelyne   ┆ Larocque  ┆ 1677        ┆ 29         │
+    │ Renata     ┆ Fast      ┆ 1674        ┆ 28         │
+    │ Sophie     ┆ Jaques    ┆ 1402        ┆ 26         │
+    └────────────┴───────────┴─────────────┴────────────┘
+
+
+
 
 ```python
 if corsi is not None and corsi.height:
@@ -519,6 +1055,24 @@ else:
     out = 'corsi feed unavailable right now'
 out
 ```
+
+
+
+
+    shape: (5, 4)
+    ┌───────────┬───────────┬───────────────┬─────────────────┐
+    │ player_id ┆ corsi_for ┆ corsi_against ┆ corsi_for_per60 │
+    │ ---       ┆ ---       ┆ ---           ┆ ---             │
+    │ str       ┆ i64       ┆ i64           ┆ f64             │
+    ╞═══════════╪═══════════╪═══════════════╪═════════════════╡
+    │ 115       ┆ 18        ┆ 5             ┆ 84.155844       │
+    │ 76        ┆ 20        ┆ 5             ┆ 78.26087        │
+    │ 89        ┆ 17        ┆ 7             ┆ 72.943981       │
+    │ 100       ┆ 19        ┆ 10            ┆ 66.86217        │
+    │ 20        ┆ 20        ┆ 17            ┆ 64.228368       │
+    └───────────┴───────────┴───────────────┴─────────────────┘
+
+
 
 ## ✨ Bonus: tidy goal log + pandas interop
 
@@ -534,6 +1088,25 @@ scoring.select([
 ```
 
 
+
+
+    shape: (5, 8)
+    ┌─────────┬────────┬───────┬───────────┬──────────────┬─────────────┬───────────────┬──────────────┐
+    │ game_id ┆ period ┆ time  ┆ team_abbr ┆ scorer_first ┆ scorer_last ┆ is_power_play ┆ is_game_winn │
+    │ ---     ┆ ---    ┆ ---   ┆ ---       ┆ ---          ┆ ---         ┆ ---           ┆ ing          │
+    │ i32     ┆ str    ┆ str   ┆ str       ┆ str          ┆ str         ┆ i32           ┆ ---          │
+    │         ┆        ┆       ┆           ┆              ┆             ┆               ┆ i32          │
+    ╞═════════╪════════╪═══════╪═══════════╪══════════════╪═════════════╪═══════════════╪══════════════╡
+    │ 2       ┆ 1st    ┆ 10:43 ┆ NY        ┆ Ella         ┆ Shelton     ┆ 0             ┆ 1            │
+    │ 2       ┆ 3rd    ┆ 2:53  ┆ NY        ┆ Alex         ┆ Carpenter   ┆ 0             ┆ 0            │
+    │ 2       ┆ 3rd    ┆ 4:57  ┆ NY        ┆ Jill         ┆ Saulnier    ┆ 0             ┆ 0            │
+    │ 2       ┆ 3rd    ┆ 7:42  ┆ NY        ┆ Kayla        ┆ Vespa       ┆ 0             ┆ 0            │
+    │ 3       ┆ 2nd    ┆ 16:24 ┆ OTT       ┆ Hayley       ┆ Scamurra    ┆ 1             ┆ 0            │
+    └─────────┴────────┴───────┴───────────┴──────────────┴─────────────┴───────────────┴──────────────┘
+
+
+
+
 ```python
 # Same skater box, but as a pandas DataFrame — group with the pandas API.
 skater_pd = pwhl.load_pwhl_skater_box(seasons=[2024], return_as_pandas=True)
@@ -543,6 +1116,26 @@ print('type:', type(skater_pd).__name__, '| shape:', skater_pd.shape)
     .sort_values('points', ascending=False)
     .head(10))
 ```
+
+    type: DataFrame | shape: (3205, 22)
+
+
+
+
+
+           first_name  last_name  points
+    101       Natalie    Spooner      29
+    90   Marie-Philip     Poulin      25
+    114         Sarah      Nurse      24
+    4            Alex  Carpenter      23
+    35           Ella    Shelton      21
+    40           Emma    Maltais      21
+    126        Taylor      Heise      21
+    18        Brianne     Jenner      20
+    42           Erin    Ambrose      20
+    47          Grace  Zumwinkle      20
+
+
 
 ## 🎉 Where to next
 
