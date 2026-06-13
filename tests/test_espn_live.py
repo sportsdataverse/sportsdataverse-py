@@ -901,3 +901,18 @@ def test_espn_nhl_schedule_known_date_returns_games():
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0, "expected >=1 NHL game on 2023-06-13 (Stanley Cup Final)"
     assert "game_id" in df.columns, "schedule frame missing game_id column"
+
+
+def test_espn_mch_teams_site_returns_many_teams():
+    from sportsdataverse.mch.mch_espn_ext import espn_mch_teams_site
+
+    payload = espn_mch_teams_site(return_parsed=False)
+    teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
+    assert len(teams) >= 40, f"expected >=40 NCAA M hockey teams, got {len(teams)}"
+
+
+def test_espn_wch_scoreboard_answers():
+    from sportsdataverse.wch.wch_espn_ext import espn_wch_scoreboard
+
+    payload = espn_wch_scoreboard(return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload

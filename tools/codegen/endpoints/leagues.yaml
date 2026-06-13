@@ -12,3 +12,5 @@ leagues:
   - {prefix: nfl, sport: football, league: nfl, scopes: [universal, football]}
   - {prefix: mlb, sport: baseball, league: mlb, scopes: [universal, mlb]}
   - {prefix: nhl, sport: hockey, league: nhl, scopes: [universal]}
+  - {prefix: mch, sport: hockey, league: mens-college-hockey, scopes: [universal, ncaa]}
+  - {prefix: wch, sport: hockey, league: womens-college-hockey, scopes: [universal, ncaa]}
