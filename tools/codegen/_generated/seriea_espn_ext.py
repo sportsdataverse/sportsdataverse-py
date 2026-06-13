@@ -30,7 +30,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_team_schedule,
     parse_teams,
 )
-from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_scoreboard
+from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_scoreboard, parse_soccer_standings
 
 __all__ = [
     "espn_seriea_scoreboard",
@@ -1006,7 +1006,7 @@ def espn_seriea_standings(
         **kwargs,
     )
     if return_parsed:
-        return parse_standings(raw, return_as_pandas=return_as_pandas)
+        return parse_soccer_standings(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

@@ -645,6 +645,7 @@ _ESPN_COLLISION_VERSIONED: dict[str, str] = {
 _SPORT_PARSER_OVERRIDES: dict[str, dict[str, str]] = {
     "soccer": {
         "scoreboard": "parse_soccer_scoreboard",
+        "standings": "parse_soccer_standings",
     },
 }
 

@@ -38,3 +38,26 @@ def test_parse_soccer_scoreboard_pandas_flag():
 
     out = parse_soccer_scoreboard(_load("eng.1", "site-v2", "scoreboard"), return_as_pandas=True)
     assert isinstance(out, pd.DataFrame)
+
+
+def test_parse_soccer_standings_flattens_table_with_group_column():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_standings
+
+    df = parse_soccer_standings(_load("eng.1", "site-v2", "standings"))
+    assert isinstance(df, pl.DataFrame)
+    assert {"team", "group"} <= set(df.columns)
+    assert df.height >= 18  # 20 EPL clubs (>=18 tolerates a mid-season capture)
+    assert any(c in df.columns for c in ("points", "rank", "games_played", "overall"))
+
+
+def test_parse_soccer_standings_multi_group_mls_has_two_groups():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_standings
+
+    df = parse_soccer_standings(_load("usa.1", "site-v2", "standings"))
+    assert df["group"].n_unique() >= 2  # Eastern + Western conferences
+
+
+def test_parse_soccer_standings_empty_zero_rows():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_standings
+
+    assert parse_soccer_standings({}).height == 0
