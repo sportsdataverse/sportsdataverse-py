@@ -84,7 +84,7 @@ def test_soccer_module_routes_scoreboard_to_soccer_parser():
     lg = spec.League(prefix="soccer", sport="soccer", league="eng.1", scopes=["universal"], league_param=True)
     src = gen._league_module_source(lg, apis, hosts)
     assert "return parse_soccer_scoreboard(raw" in src
-    assert "return parse_summary(raw" in src  # summary not overridden yet
+    assert "return parse_soccer_summary(raw" in src
 
 
 def test_nba_module_unaffected_by_soccer_override():

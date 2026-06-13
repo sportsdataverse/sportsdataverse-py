@@ -25,12 +25,15 @@ from sportsdataverse._common_espn_parsers import (
     parse_news,
     parse_single_entity,
     parse_standings,
-    parse_summary,
     parse_team_roster,
     parse_team_schedule,
     parse_teams,
 )
-from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_scoreboard, parse_soccer_standings
+from sportsdataverse.soccer.soccer_espn_parsers import (
+    parse_soccer_scoreboard,
+    parse_soccer_standings,
+    parse_soccer_summary,
+)
 
 __all__ = [
     "espn_laliga_scoreboard",
@@ -228,7 +231,7 @@ def espn_laliga_summary(
         **kwargs,
     )
     if return_parsed:
-        return parse_summary(raw, return_as_pandas=return_as_pandas)
+        return parse_soccer_summary(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
