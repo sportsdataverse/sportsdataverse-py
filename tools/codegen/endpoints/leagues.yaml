@@ -16,3 +16,6 @@ leagues:
   - {prefix: wch, sport: hockey, league: womens-college-hockey, scopes: [universal, ncaa]}
   - {prefix: college_baseball, sport: baseball, league: college-baseball, scopes: [universal, ncaa]}
   - {prefix: college_softball, sport: baseball, league: college-softball, scopes: [universal, ncaa]}
+  - {prefix: ufl, sport: football, league: ufl, scopes: [universal]}
+  - {prefix: xfl, sport: football, league: xfl, scopes: [universal]}
+  - {prefix: cfl, sport: football, league: cfl, scopes: [universal]}

@@ -931,3 +931,18 @@ def test_espn_college_softball_scoreboard_answers():
 
     payload = espn_college_softball_scoreboard(return_parsed=False)
     assert isinstance(payload, dict) and "leagues" in payload
+
+
+def test_espn_cfl_teams_site_returns_teams():
+    from sportsdataverse.cfl.cfl_espn_ext import espn_cfl_teams_site
+
+    payload = espn_cfl_teams_site(return_parsed=False)
+    teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
+    assert len(teams) >= 8, f"expected >=8 CFL teams, got {len(teams)}"
+
+
+def test_espn_ufl_scoreboard_answers():
+    from sportsdataverse.ufl.ufl_espn_ext import espn_ufl_scoreboard
+
+    payload = espn_ufl_scoreboard(return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload
