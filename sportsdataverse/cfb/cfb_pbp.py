@@ -2629,6 +2629,47 @@ class CFBPlayProcess(object):
             )
         )
 
+        # --- nflfastR-compatible scoring event result columns ---
+        # field_goal_result is always derivable; extra_point_result and
+        # two_point_conv_result require pointAfterAttempt.* from the ESPN API
+        # (present on TD plays in modern data; absent for very old seasons).
+        scoring_exprs: list = [
+            pl.when(pl.col("fg_attempt") == True)
+            .then(
+                pl.when(pl.col("fg_made") == True)
+                .then(pl.lit("made"))
+                .when(pl.col("type.text").str.contains(r"(?i)blocked"))
+                .then(pl.lit("blocked"))
+                .otherwise(pl.lit("missed"))
+            )
+            .otherwise(None)
+            .alias("field_goal_result"),
+        ]
+        if "pointAfterAttempt.abbreviation" in play_df.columns and "pointAfterAttempt.value" in play_df.columns:
+            scoring_exprs += [
+                # extra_point_result: "good" | "blocked" | "failed" | null (non-TD plays)
+                pl.when(pl.col("pointAfterAttempt.abbreviation").str.contains(r"(?i)extra point"))
+                .then(
+                    pl.when(pl.col("pointAfterAttempt.value") == 1.0)
+                    .then(pl.lit("good"))
+                    .when(pl.col("pointAfterAttempt.abbreviation").str.contains(r"(?i)block"))
+                    .then(pl.lit("blocked"))
+                    .otherwise(pl.lit("failed"))
+                )
+                .otherwise(None)
+                .alias("extra_point_result"),
+                # two_point_conv_result: "success" | "failure" | null (non-TD plays)
+                pl.when(pl.col("pointAfterAttempt.abbreviation").str.contains(r"(?i)two.?point"))
+                .then(
+                    pl.when(pl.col("pointAfterAttempt.value") == 2.0)
+                    .then(pl.lit("success"))
+                    .otherwise(pl.lit("failure"))
+                )
+                .otherwise(None)
+                .alias("two_point_conv_result"),
+            ]
+        play_df = play_df.with_columns(scoring_exprs)
+
         return play_df
 
     def __add_yardage_cols(self, play_df):
