@@ -25,11 +25,17 @@ def _nfl_resource_filename(package: str, resource: str) -> str:
 
 from sportsdataverse.dl_utils import download
 from sportsdataverse.nfl.ep_wp import (
+    CP_FEATURES,
     EP_FEATURES,
     WP_SPREAD_FEATURES,
+    XYAC_FEATURES,
     _EP_POINT_VALUES,
+    _XYAC_MODEL_FILES,
+    _XYAC_OUT_COLS,
+    _espn_cp_features,
     _espn_ep_features,
     _espn_wp_features,
+    _espn_xyac_features,
     _load_model as _ep_wp_load_model,
 )
 from sportsdataverse.nfl.model_vars import (
@@ -4052,6 +4058,95 @@ class NFLPlayProcess(object):
         )
         return play_df
 
+    def __process_cp(self, play_df):
+        """Score completion probability and CPOE for pass plays.
+
+        Requires an ``air_yards`` column (e.g. merged from NGS data).  When
+        the column is absent all rows receive null ``cp`` / ``cpoe`` values so
+        downstream steps always find those columns present.
+        """
+        if "air_yards" not in play_df.columns:
+            return play_df.with_columns(
+                pl.lit(None, dtype=pl.Float64).alias("cp"),
+                pl.lit(None, dtype=pl.Float64).alias("cpoe"),
+            )
+
+        _cp_model = _ep_wp_load_model("cp_model.ubj")
+
+        play_df = play_df.with_row_index("_cp_row_idx")
+        pass_df = play_df.filter(pl.col("air_yards").is_not_null())
+
+        if len(pass_df) > 0:
+            X_cp = _espn_cp_features(
+                pass_df,
+                air_yards_col="air_yards",
+                yardline_col="start.yardsToEndzone",
+                ydstogo_col="start.distance",
+                down1_col="down_1",
+                down2_col="down_2",
+                down3_col="down_3",
+                down4_col="down_4",
+                home_col="start.is_home",
+            )
+            cp_preds = _cp_model.predict(DMatrix(X_cp, feature_names=CP_FEATURES))
+            cp_frame = pass_df.select("_cp_row_idx").with_columns(pl.Series("cp", cp_preds.tolist(), dtype=pl.Float64))
+        else:
+            cp_frame = pl.DataFrame(
+                {"_cp_row_idx": pl.Series([], dtype=pl.UInt32), "cp": pl.Series([], dtype=pl.Float64)}
+            )
+
+        play_df = play_df.join(cp_frame, on="_cp_row_idx", how="left").drop("_cp_row_idx")
+
+        # cpoe = actual completion - predicted completion probability
+        if "completion" in play_df.columns:
+            play_df = play_df.with_columns((pl.col("completion").cast(pl.Float64) - pl.col("cp")).alias("cpoe"))
+        else:
+            play_df = play_df.with_columns(pl.lit(None, dtype=pl.Float64).alias("cpoe"))
+
+        return play_df
+
+    def __process_xyac(self, play_df):
+        """Score XYAC sub-models (mean/median/sd yardage + prob_complete).
+
+        Requires ``air_yards``, ``cp``, and ``EP_start`` to be present with
+        non-null values.  All four output columns are always added; rows that
+        don't meet the filter receive nulls.
+        """
+        xyac_nulls = [pl.lit(None, dtype=pl.Float64).alias(c) for c in _XYAC_OUT_COLS]
+
+        if "air_yards" not in play_df.columns:
+            return play_df.with_columns(xyac_nulls)
+
+        play_df = play_df.with_row_index("_xyac_row_idx")
+        pass_df = play_df.filter(
+            pl.col("air_yards").is_not_null() & pl.col("cp").is_not_null() & pl.col("EP_start").is_not_null()
+        )
+
+        if len(pass_df) > 0:
+            X_xyac = _espn_xyac_features(
+                pass_df,
+                air_yards_col="air_yards",
+                yardline_col="start.yardsToEndzone",
+                ydstogo_col="start.distance",
+                down_col="start.down",
+                half_sec_col="start.TimeSecsRem",
+                home_col="start.is_home",
+                cp_col="cp",
+                ep_col="EP_start",
+            )
+            dmat = DMatrix(X_xyac, feature_names=XYAC_FEATURES)
+            xyac_frame = pass_df.select("_xyac_row_idx")
+            for col, model_file in zip(_XYAC_OUT_COLS, _XYAC_MODEL_FILES):
+                preds = _ep_wp_load_model(model_file).predict(dmat)
+                xyac_frame = xyac_frame.with_columns(pl.Series(col, preds.tolist(), dtype=pl.Float64))
+        else:
+            xyac_frame = pl.DataFrame(
+                {"_xyac_row_idx": pl.Series([], dtype=pl.UInt32)}
+                | {c: pl.Series([], dtype=pl.Float64) for c in _XYAC_OUT_COLS}
+            )
+
+        return play_df.join(xyac_frame, on="_xyac_row_idx", how="left").drop("_xyac_row_idx")
+
     def __add_drive_data(self, play_df):
         play_df = (
             play_df.with_columns(
@@ -4957,6 +5052,8 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_spread_time)
                     .pipe(self.__process_epa)
                     .pipe(self.__process_wpa)
+                    .pipe(self.__process_cp)
+                    .pipe(self.__process_xyac)
                     .pipe(self.__add_drive_data)
                     .pipe(self.__process_qbr)
                 )
