@@ -5,6 +5,7 @@
 - [Unreleased](#unreleased)
   - [CFB — cross-source crosswalk loaders (`load_cfb_*_crosswalk`)](#cfb--cross-source-crosswalk-loaders-load_cfb__crosswalk)
   - [ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)](#espn--ncaa-mens--womens-college-hockey-espn_mch_-espn_wch_)
+  - [ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)](#espn--ncaa-college-baseball--softball-espn_college_baseball_-espn_college_softball_)
 - [0.0.58 Release: June 12, 2026](#0058-release-june-12-2026)
   - [Loaders — NHL core + new NBA/MBB datasets aligned to `sportsdataverse-data` releases](#loaders--nhl-core--new-nbambb-datasets-aligned-to-sportsdataverse-data-releases)
   - [Robustness & infrastructure — typing, CI gates, HTTP, deprecation policy](#robustness--infrastructure--typing-ci-gates-http-deprecation-policy)
@@ -111,6 +112,10 @@ New 404-safe dataset loaders read pre-built CFB identity crosswalks from the `cf
 ### ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)
 
 - feat(espn): add NCAA men's & women's college hockey (espn_mch_*, espn_wch_*)
+
+### ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)
+
+- feat(espn): add NCAA college baseball + softball (espn_college_baseball_*, espn_college_softball_*)
 
 - **`load_cfb_teams_crosswalk(seasons=)`** and **`load_cfb_schedule_crosswalk(seasons=)`** are **per-season** (`min_season` 2014) — teams and schedules are genuinely historical, published per year for 2014–2025.
 - **`load_cfb_rosters_crosswalk()`** is **season-less**: ESPN's and Fox's team-roster endpoints expose only the *current* roster, so the artifact is a single snapshot (no `seasons=` argument) rather than a misleading per-season series.

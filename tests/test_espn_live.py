@@ -916,3 +916,18 @@ def test_espn_wch_scoreboard_answers():
 
     payload = espn_wch_scoreboard(return_parsed=False)
     assert isinstance(payload, dict) and "leagues" in payload
+
+
+def test_espn_college_baseball_teams_site_returns_many_teams():
+    from sportsdataverse.college_baseball.college_baseball_espn_ext import espn_college_baseball_teams_site
+
+    payload = espn_college_baseball_teams_site(return_parsed=False)
+    teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
+    assert len(teams) >= 100, f"expected >=100 NCAA baseball teams, got {len(teams)}"
+
+
+def test_espn_college_softball_scoreboard_answers():
+    from sportsdataverse.college_softball.college_softball_espn_ext import espn_college_softball_scoreboard
+
+    payload = espn_college_softball_scoreboard(return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload
