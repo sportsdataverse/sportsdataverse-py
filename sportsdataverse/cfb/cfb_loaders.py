@@ -18,6 +18,8 @@ __all__ = [
     "load_cfb_rosters",
     "load_cfb_schedule",
     "load_cfb_team_info",
+    "load_cfb_teams_crosswalk",
+    "load_cfb_schedule_crosswalk",
 ]
 
 
@@ -604,5 +606,99 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_team_info: no data for season(s) {missing} (skipped)".format(missing=missing))
+    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load cfb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2014).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name           |type   |
+        |:------------------|:------|
+        |norm_key           |String |
+        |espn_team_id       |Int64  |
+        |espn_team          |String |
+        |espn_abbreviation  |String |
+        |fox_team_id        |String |
+        |fox_team           |String |
+        |fox_abbreviation   |String |
+        |yahoo_team_id      |String |
+        |yahoo_team         |String |
+        |yahoo_abbreviation |String |
+        |matched_sources    |String |
+
+    Example:
+        >>> load_cfb_teams_crosswalk(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2014:
+            raise SeasonNotFoundError("season cannot be less than 2014")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_teams_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
+    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
+    """Load cfb_crosswalk (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2014).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name             |type   |
+        |:--------------------|:------|
+        |matchup_key          |String |
+        |espn_game_id         |Int64  |
+        |fox_game_id          |String |
+        |yahoo_game_id        |String |
+        |yahoo_global_game_id |String |
+        |home_team            |String |
+        |away_team            |String |
+        |espn_date            |String |
+        |fox_date             |String |
+        |yahoo_date           |String |
+        |matched_sources      |String |
+
+    Example:
+        >>> load_cfb_schedule_crosswalk(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2014:
+            raise SeasonNotFoundError("season cannot be less than 2014")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_schedule_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
     out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

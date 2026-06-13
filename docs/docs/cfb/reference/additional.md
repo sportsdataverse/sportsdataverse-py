@@ -578,6 +578,46 @@ consensus_2023 = load_cfb_betting_lines().filter(
 )
 ```
 
+### `load_cfb_rosters_crosswalk(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_cfb_rosters_crosswalk}
+
+Load the current ESPN x Fox CFB rosters crosswalk (single snapshot).
+
+Unlike the per-season `load_cfb_teams_crosswalk` / `load_cfb_schedule_crosswalk`
+loaders, this one is **season-less**: ESPN's and Fox's team-roster endpoints
+only expose the *current* roster, so the published artifact is a single
+snapshot rather than a historical per-season series. It is built by
+`cfbfastR-cfb-data`'s `scripts/build_cfb_crosswalk.py` (which fans the
+per-team `sportsdataverse.cfb.cfb_rosters_crosswalk` builder out over
+the current season's ESPN<->Fox team-id pairs) and refreshed on that repo's
+cadence.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+one row per matched player, carrying `espn_team_id` / `fox_team_id` provenance plus each provider's athlete id, name, jersey, position, and the `match_method` / `matched_sources` flags.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import load_cfb_rosters_crosswalk
+xwalk = load_cfb_rosters_crosswalk()
+print(xwalk.shape)
+
+# Pandas round-trip
+
+xwalk_pd = load_cfb_rosters_crosswalk(return_as_pandas=True)
+
+# Pipeline next step (one team's ESPN<->Fox athlete map)
+
+import polars as pl
+osu = load_cfb_rosters_crosswalk().filter(pl.col("espn_team_id") == 194)
+```
+
 ## Utilities & helpers
 
 ### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, **kwargs)` {#CFBPlayProcess}

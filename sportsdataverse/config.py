@@ -15,6 +15,9 @@ CFB_TEAM_LOGO_URL = f"{SGITHUB}cfbfastR-data/main/teams/teams_colors_logos.parqu
 CFB_TEAM_SCHEDULE_URL = SGITHUB + "cfbfastR-data/main/schedules/parquet/cfb_schedules_{season}.parquet"
 CFB_TEAM_INFO_URL = SGITHUB + "cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet"
 CFB_BETTING_LINES_URL = f"{SGITHUB}cfbfastR-data/main/betting/parquet/cfb_line_odds.parquet"
+# Rosters crosswalk is a single current snapshot (ESPN/Fox roster endpoints are
+# current-only), not a per-season historical asset -- hence no {season} token.
+CFB_ROSTERS_CROSSWALK_URL = f"{SDVRELEASES}cfb_crosswalk/cfb_rosters_crosswalk.parquet"
 
 NHL_BASE_URL = SDVRELEASES + "nhl_pbp_full/play_by_play_{season}.parquet"
 NHL_PLAYER_BOX_URL = SDVRELEASES + "nhl_player_boxscores/player_box_{season}.parquet"
