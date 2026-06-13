@@ -74,3 +74,25 @@ def test_param_mode_module_source_has_leading_league_param():
     assert "soccer/{league}/scoreboard" in src
     # league must NOT be forwarded as a query param
     assert '"league": league' not in src
+
+
+def test_soccer_module_routes_scoreboard_to_soccer_parser():
+    endpoints = gen.ENDPOINTS
+    params = spec.load_parameters(endpoints / "parameters.yaml")
+    apis = [spec.load_espn_api(endpoints / f"{a}.yaml", params) for a in gen.ESPN_APIS]
+    hosts = spec.load_leagues(endpoints / "leagues.yaml").hosts
+    lg = spec.League(prefix="soccer", sport="soccer", league="eng.1", scopes=["universal"], league_param=True)
+    src = gen._league_module_source(lg, apis, hosts)
+    assert "return parse_soccer_scoreboard(raw" in src
+    assert "return parse_summary(raw" in src  # summary not overridden yet
+
+
+def test_nba_module_unaffected_by_soccer_override():
+    endpoints = gen.ENDPOINTS
+    params = spec.load_parameters(endpoints / "parameters.yaml")
+    apis = [spec.load_espn_api(endpoints / f"{a}.yaml", params) for a in gen.ESPN_APIS]
+    hosts = spec.load_leagues(endpoints / "leagues.yaml").hosts
+    lg = spec.League(prefix="nba", sport="basketball", league="nba", scopes=["universal"])
+    src = gen._league_module_source(lg, apis, hosts)
+    assert "return parse_scoreboard(raw" in src
+    assert "parse_soccer_scoreboard" not in src

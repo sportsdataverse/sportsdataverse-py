@@ -1,0 +1,620 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1?lang=en&region=us",
+  "id": "770",
+  "guid": "d9d3698e-67b3-3ca5-9eb4-f23b8e19a464",
+  "uid": "s:600~l:770",
+  "alternateId": "19",
+  "name": "MLS",
+  "displayName": "MLS",
+  "abbreviation": "MLS",
+  "shortName": "MLS",
+  "midsizeName": "USA.1",
+  "slug": "usa.1",
+  "isTournament": false,
+  "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026?lang=en&region=us",
+    "year": 2026,
+    "startDate": "2026-01-01T10:00Z",
+    "endDate": "2026-12-31T04:59Z",
+    "displayName": "2026 MLS",
+    "shortDisplayName": "2026 MLS",
+    "abbreviation": "2026",
+    "type": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/1?lang=en&region=us",
+      "id": "1",
+      "type": 13846,
+      "name": "Regular Season",
+      "abbreviation": "2026 MLS",
+      "startDate": "2026-01-01T05:00Z",
+      "endDate": "2026-11-09T04:59Z",
+      "hasGroups": true,
+      "hasStandings": true,
+      "hasLiveStandings": false,
+      "hasLegs": false,
+      "hasStats": true,
+      "isFinal": false,
+      "isThirdPlace": false,
+      "groups": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/1/groups?lang=en&region=us"
+      },
+      "slug": "regular-season"
+    },
+    "types": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types?lang=en&region=us",
+      "count": 18,
+      "pageIndex": 1,
+      "pageSize": 18,
+      "pageCount": 1,
+      "items": [
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/0?lang=en&region=us",
+          "id": "0",
+          "type": 13847,
+          "name": "Combined",
+          "abbreviation": "2026 MLS",
+          "startDate": "2026-01-01T05:00Z",
+          "endDate": "2026-01-02T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/0/groups?lang=en&region=us"
+          },
+          "slug": "combined"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/1?lang=en&region=us",
+          "id": "1",
+          "type": 13846,
+          "name": "Regular Season",
+          "abbreviation": "2026 MLS",
+          "startDate": "2026-01-01T05:00Z",
+          "endDate": "2026-11-09T04:59Z",
+          "hasGroups": true,
+          "hasStandings": true,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": true,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/1/groups?lang=en&region=us"
+          },
+          "slug": "regular-season"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/2?lang=en&region=us",
+          "id": "2",
+          "type": 13845,
+          "name": "All-Star Game",
+          "abbreviation": "All-Star Game",
+          "startDate": "2026-07-23T04:00Z",
+          "endDate": "2026-07-24T03:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/2/groups?lang=en&region=us"
+          },
+          "slug": "all-star-game"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/3?lang=en&region=us",
+          "id": "3",
+          "type": 13844,
+          "name": "Eastern Conference Playoffs - Wild Card",
+          "abbreviation": "2026 MLS Playoffs",
+          "startDate": "2026-10-20T04:00Z",
+          "endDate": "2026-10-23T03:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": true,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/3/groups?lang=en&region=us"
+          },
+          "slug": "eastern-conference-playoffs---wild-card"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/4?lang=en&region=us",
+          "id": "4",
+          "type": 13843,
+          "name": "Western Conference Playoffs - Wild Card",
+          "abbreviation": "WC - Wild Card",
+          "startDate": "2026-10-20T04:00Z",
+          "endDate": "2026-10-23T03:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/4/groups?lang=en&region=us"
+          },
+          "slug": "western-conference-playoffs---wild-card"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/5?lang=en&region=us",
+          "id": "5",
+          "type": 13842,
+          "name": "Eastern Conference Playoffs - Round One",
+          "abbreviation": "EC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/5/groups?lang=en&region=us"
+          },
+          "slug": "eastern-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/6?lang=en&region=us",
+          "id": "6",
+          "type": 13841,
+          "name": "Eastern Conference Playoffs - Round One",
+          "abbreviation": "EC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/6/groups?lang=en&region=us"
+          },
+          "slug": "eastern-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/7?lang=en&region=us",
+          "id": "7",
+          "type": 13840,
+          "name": "Eastern Conference Playoffs - Round One",
+          "abbreviation": "EC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/7/groups?lang=en&region=us"
+          },
+          "slug": "eastern-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/8?lang=en&region=us",
+          "id": "8",
+          "type": 13839,
+          "name": "Eastern Conference Playoffs - Round One",
+          "abbreviation": "EC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/8/groups?lang=en&region=us"
+          },
+          "slug": "eastern-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/9?lang=en&region=us",
+          "id": "9",
+          "type": 13838,
+          "name": "Western Conference Playoffs - Round One",
+          "abbreviation": "WC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/9/groups?lang=en&region=us"
+          },
+          "slug": "western-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/10?lang=en&region=us",
+          "id": "10",
+          "type": 13837,
+          "name": "Western Conference Playoffs - Round One",
+          "abbreviation": "WC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/10/groups?lang=en&region=us"
+          },
+          "slug": "western-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/11?lang=en&region=us",
+          "id": "11",
+          "type": 13836,
+          "name": "Western Conference Playoffs - Round One",
+          "abbreviation": "WC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/11/groups?lang=en&region=us"
+          },
+          "slug": "western-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/12?lang=en&region=us",
+          "id": "12",
+          "type": 13835,
+          "name": "Western Conference Playoffs - Round One",
+          "abbreviation": "WC - Round One",
+          "startDate": "2026-10-23T04:00Z",
+          "endDate": "2026-11-10T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/12/groups?lang=en&region=us"
+          },
+          "slug": "western-conference-playoffs---round-one"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/13?lang=en&region=us",
+          "id": "13",
+          "type": 13834,
+          "name": "Eastern Conference Playoffs - Semifinals",
+          "abbreviation": "EC - Semifinals",
+          "startDate": "2026-11-10T05:00Z",
+          "endDate": "2026-11-24T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/13/groups?lang=en&region=us"
+          },
+          "slug": "eastern-conference-playoffs---semifinals"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/14?lang=en&region=us",
+          "id": "14",
+          "type": 13833,
+          "name": "Western Conference Playoffs - Semifinals",
+          "abbreviation": "WC - Semifinals",
+          "startDate": "2026-11-10T05:00Z",
+          "endDate": "2026-11-24T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/14/groups?lang=en&region=us"
+          },
+          "slug": "western-conference-playoffs---semifinals"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/15?lang=en&region=us",
+          "id": "15",
+          "type": 13832,
+          "name": "Eastern Conference Playoffs - Final",
+          "abbreviation": "EC - Final",
+          "startDate": "2026-11-24T05:00Z",
+          "endDate": "2026-12-01T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/15/groups?lang=en&region=us"
+          },
+          "slug": "eastern-conference-playoffs---final"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/16?lang=en&region=us",
+          "id": "16",
+          "type": 13831,
+          "name": "Western Conference Playoffs - Final",
+          "abbreviation": "WC - Final",
+          "startDate": "2026-11-24T05:00Z",
+          "endDate": "2026-12-01T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/16/groups?lang=en&region=us"
+          },
+          "slug": "western-conference-playoffs---final"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/17?lang=en&region=us",
+          "id": "17",
+          "type": 13830,
+          "name": "MLS Cup",
+          "abbreviation": "MLS Cup",
+          "startDate": "2026-12-01T05:00Z",
+          "endDate": "2027-01-01T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": true,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/17/groups?lang=en&region=us"
+          },
+          "slug": "mls-cup"
+        }
+      ]
+    },
+    "athletes": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/athletes?lang=en&region=us"
+    }
+  },
+  "seasons": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons?lang=en&region=us"
+  },
+  "franchises": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/franchises?lang=en&region=us"
+  },
+  "teams": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/teams?lang=en&region=us"
+  },
+  "group": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/1/groups/770?lang=en&region=us"
+  },
+  "groups": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/1/groups?lang=en&region=us"
+  },
+  "events": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/events?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/notes?lang=en&region=us"
+  },
+  "rankings": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/rankings?lang=en&region=us"
+  },
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "index",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/league/_/name/usa.1",
+      "text": "Index",
+      "shortText": "Index",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "index",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770",
+      "text": "Index",
+      "shortText": "Index",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "schedule",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/schedule/_/league/usa.1",
+      "text": "Schedule",
+      "shortText": "Schedule",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "schedule",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=scores",
+      "text": "Schedule",
+      "shortText": "Schedule",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "standings",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/table/_/league/usa.1",
+      "text": "Standings",
+      "shortText": "Standings",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "standings",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=standings",
+      "text": "Standings",
+      "shortText": "Standings",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "scores",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/scoreboard/_/league/usa.1",
+      "text": "Scores",
+      "shortText": "Scores",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "scores",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=scores",
+      "text": "Scores",
+      "shortText": "Scores",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/stats/_/league/usa.1",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "teams",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/teams/_/league/usa.1",
+      "text": "Teams",
+      "shortText": "Teams",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "logos": [
+    {
+      "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/19.png",
+      "width": 500,
+      "height": 500,
+      "alt": "",
+      "rel": [
+        "full",
+        "default"
+      ],
+      "lastUpdated": "2019-05-08T16:07Z"
+    },
+    {
+      "href": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/19.png",
+      "width": 500,
+      "height": 500,
+      "alt": "",
+      "rel": [
+        "full",
+        "dark"
+      ],
+      "lastUpdated": "2019-05-08T16:07Z"
+    }
+  ],
+  "calendar": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/calendar?lang=en&region=us"
+  },
+  "transactions": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/transactions?lang=en&region=us"
+  },
+  "gender": "MALE"
+}

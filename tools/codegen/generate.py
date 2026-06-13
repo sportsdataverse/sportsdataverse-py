@@ -638,6 +638,22 @@ _ESPN_COLLISION_VERSIONED: dict[str, str] = {
     "athlete_stats": "player_stats_v3",
 }
 
+# Per-sport parser-name overrides: when rendering a league of sport S, endpoint short K
+# has its baked parser swapped to the sport-specific parser.  The parser is imported
+# from the sport's own parser module (see _SPORT_PARSER_MODULE) to avoid a circular
+# import through sportsdataverse._common_espn_parsers.
+_SPORT_PARSER_OVERRIDES: dict[str, dict[str, str]] = {
+    "soccer": {
+        "scoreboard": "parse_soccer_scoreboard",
+    },
+}
+
+# Maps sport slug -> dotted import path for that sport's parser module.
+# Used by _league_module_source to emit a second import line for sport-specific parsers.
+_SPORT_PARSER_MODULE: dict[str, str] = {
+    "soccer": "sportsdataverse.soccer.soccer_espn_parsers",
+}
+
 
 def _versioned_on_collision(short: str, prefix: str) -> str | None:
     """Version-qualified ``espn_<prefix>_*`` name for ``short`` on collision, else None."""
@@ -715,13 +731,24 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         view = _EndpointView(ep, fn_name, ep_host, league)
         view.api_name = api_name
         views.append(view)
+    overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})
+    if overrides:
+        for v in views:
+            if v.short in overrides:
+                v.parser = overrides[v.short]
     return views
 
 
 def _league_module_source(league: spec.League, apis, hosts) -> str:
     """Render the (unformatted) module source; ruff formatting happens at write time."""
     views = _espn_league_views(league, apis, hosts)
-    parser_imports = {v.parser for v in views if v.parser}
+    all_parser_names = {v.parser for v in views if v.parser}
+    # Split parsers: sport-specific ones are imported from their own module (to avoid a
+    # circular import through _common_espn_parsers); the rest come from _common_espn_parsers.
+    sport_override_names = set((_SPORT_PARSER_OVERRIDES.get(league.sport) or {}).values())
+    sport_parser_imports = sorted(all_parser_names & sport_override_names)
+    common_parser_imports = sorted(all_parser_names - sport_override_names)
+    sport_parser_module = _SPORT_PARSER_MODULE.get(league.sport, "") if sport_parser_imports else ""
     transforms: set[str] = set()
     for v in views:
         for p in (*v.path_params, *v.query_params):
@@ -734,7 +761,9 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         sport=league.sport,
         league=league.league,
         endpoints=views,
-        parser_imports=sorted(parser_imports),
+        parser_imports=common_parser_imports,
+        sport_parser_imports=sport_parser_imports,
+        sport_parser_module=sport_parser_module,
         runtime_imports=runtime_imports,
     )
 

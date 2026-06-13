@@ -23,7 +23,6 @@ from sportsdataverse._common_espn_parsers import (
     parse_items,
     parse_leaders,
     parse_news,
-    parse_scoreboard,
     parse_single_entity,
     parse_standings,
     parse_summary,
@@ -31,6 +30,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_team_schedule,
     parse_teams,
 )
+from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_scoreboard
 
 __all__ = [
     "espn_wwc_scoreboard",
@@ -191,7 +191,7 @@ def espn_wwc_scoreboard(
         **kwargs,
     )
     if return_parsed:
-        return parse_scoreboard(raw, return_as_pandas=return_as_pandas)
+        return parse_soccer_scoreboard(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

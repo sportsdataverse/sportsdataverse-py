@@ -1,0 +1,11 @@
+{
+  "count": 25,
+  "pageIndex": 1,
+  "pageSize": 1,
+  "pageCount": 25,
+  "items": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025?lang=en&region=us"
+    }
+  ]
+}

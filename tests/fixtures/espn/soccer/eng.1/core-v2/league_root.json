@@ -1,0 +1,297 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1?lang=en&region=us",
+  "id": "700",
+  "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+  "uid": "s:600~l:700",
+  "alternateId": "23",
+  "name": "English Premier League",
+  "displayName": "Premier League",
+  "abbreviation": "Premier League",
+  "shortName": "Premier League",
+  "midsizeName": "ENG.1",
+  "slug": "eng.1",
+  "isTournament": false,
+  "country": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/countries/31?lang=en&region=us",
+    "id": "31",
+    "slug": "england",
+    "name": "England",
+    "abbreviation": "ENG",
+    "flag": {
+      "href": "https://a.espncdn.com/i/teamlogos/countries/500/eng.png",
+      "alt": "England",
+      "rel": [
+        "country-flag"
+      ]
+    },
+    "athletes": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/countries/31/athletes?lang=en&region=us"
+    }
+  },
+  "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025?lang=en&region=us",
+    "year": 2025,
+    "startDate": "2025-06-01T04:00Z",
+    "endDate": "2026-06-01T03:59Z",
+    "displayName": "2025-26 English Premier League",
+    "shortDisplayName": "2025-26 English Premier League",
+    "abbreviation": "2025-26",
+    "type": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1?lang=en&region=us",
+      "id": "1",
+      "type": 13481,
+      "name": "2025-26 English Premier League",
+      "abbreviation": "2025-26 English Premier League",
+      "startDate": "2025-06-01T04:00Z",
+      "endDate": "2026-06-01T03:59Z",
+      "hasGroups": false,
+      "hasStandings": true,
+      "hasLiveStandings": false,
+      "hasLegs": false,
+      "hasStats": true,
+      "isFinal": false,
+      "isThirdPlace": false,
+      "groups": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1/groups?lang=en&region=us"
+      },
+      "slug": "2025-26-english-premier-league"
+    },
+    "types": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types?lang=en&region=us",
+      "count": 1,
+      "pageIndex": 1,
+      "pageSize": 1,
+      "pageCount": 1,
+      "items": [
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1?lang=en&region=us",
+          "id": "1",
+          "type": 13481,
+          "name": "2025-26 English Premier League",
+          "abbreviation": "2025-26 English Premier League",
+          "startDate": "2025-06-01T04:00Z",
+          "endDate": "2026-06-01T03:59Z",
+          "hasGroups": false,
+          "hasStandings": true,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": true,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1/groups?lang=en&region=us"
+          },
+          "slug": "2025-26-english-premier-league"
+        }
+      ]
+    },
+    "athletes": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/athletes?lang=en&region=us"
+    }
+  },
+  "seasons": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons?lang=en&region=us"
+  },
+  "franchises": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises?lang=en&region=us"
+  },
+  "teams": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/teams?lang=en&region=us"
+  },
+  "group": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1/groups/700?lang=en&region=us"
+  },
+  "groups": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1/groups?lang=en&region=us"
+  },
+  "events": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/notes?lang=en&region=us"
+  },
+  "rankings": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/rankings?lang=en&region=us"
+  },
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "index",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/league/_/name/eng.1",
+      "text": "Index",
+      "shortText": "Index",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "index",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700",
+      "text": "Index",
+      "shortText": "Index",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "schedule",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/schedule/_/league/eng.1",
+      "text": "Schedule",
+      "shortText": "Schedule",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "schedule",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=scores",
+      "text": "Schedule",
+      "shortText": "Schedule",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "standings",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/table/_/league/eng.1",
+      "text": "Standings",
+      "shortText": "Standings",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "standings",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=standings",
+      "text": "Standings",
+      "shortText": "Standings",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "scores",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/scoreboard/_/league/eng.1",
+      "text": "Scores",
+      "shortText": "Scores",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "scores",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=scores",
+      "text": "Scores",
+      "shortText": "Scores",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/stats/_/league/eng.1",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "teams",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/teams/_/league/eng.1",
+      "text": "Teams",
+      "shortText": "Teams",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "logos": [
+    {
+      "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/23.png",
+      "width": 500,
+      "height": 500,
+      "alt": "",
+      "rel": [
+        "full",
+        "default"
+      ],
+      "lastUpdated": "2019-05-08T16:07Z"
+    },
+    {
+      "href": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/23.png",
+      "width": 500,
+      "height": 500,
+      "alt": "",
+      "rel": [
+        "full",
+        "dark"
+      ],
+      "lastUpdated": "2021-08-10T20:43Z"
+    }
+  ],
+  "calendar": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/calendar?lang=en&region=us"
+  },
+  "transactions": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/transactions?lang=en&region=us"
+  },
+  "gender": "MALE"
+}

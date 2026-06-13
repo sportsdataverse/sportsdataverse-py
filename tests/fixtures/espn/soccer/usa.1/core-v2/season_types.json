@@ -1,0 +1,62 @@
+{
+  "count": 18,
+  "pageIndex": 1,
+  "pageSize": 25,
+  "pageCount": 1,
+  "items": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/0?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/1?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/2?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/3?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/4?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/5?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/6?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/7?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/8?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/9?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/10?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/11?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/12?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/13?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/14?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/15?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/16?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026/types/17?lang=en&region=us"
+    }
+  ]
+}

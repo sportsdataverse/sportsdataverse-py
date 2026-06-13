@@ -1,0 +1,1707 @@
+{
+  "sports": [
+    {
+      "id": "600",
+      "leagues": [
+        {
+          "abbreviation": "Premier League",
+          "id": "700",
+          "name": "English Premier League",
+          "season": {
+            "displayName": "2025",
+            "year": 2025
+          },
+          "shortName": "English Premier League",
+          "slug": "eng.1",
+          "teams": [
+            {
+              "team": {
+                "abbreviation": "BOU",
+                "alternateColor": "0000CC",
+                "color": "f42727",
+                "displayName": "AFC Bournemouth",
+                "id": "349",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/349/afc-bournemouth",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/349/afc-bournemouth",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/349/afc-bournemouth",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "AFC Bournemouth",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/349.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/349.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "AFC Bournemouth",
+                "nickname": "Bournemouth",
+                "shortDisplayName": "Bournemouth",
+                "slug": "eng.bournemouth",
+                "uid": "s:600~t:349"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "ARS",
+                "alternateColor": "003399",
+                "color": "e20520",
+                "displayName": "Arsenal",
+                "id": "359",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/359/arsenal",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/359/arsenal",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/359/arsenal",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Arsenal",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/359.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/359.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Arsenal",
+                "nickname": "Gunners",
+                "shortDisplayName": "Arsenal",
+                "slug": "eng.arsenal",
+                "uid": "s:600~t:359"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "AVL",
+                "alternateColor": "333333",
+                "color": "660e36",
+                "displayName": "Aston Villa",
+                "id": "362",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/362/aston-villa",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/362/aston-villa",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/362/aston-villa",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Aston Villa",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/362.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/362.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Aston Villa",
+                "nickname": "Aston Villa",
+                "shortDisplayName": "Aston Villa",
+                "slug": "eng.aston_villa",
+                "uid": "s:600~t:362"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "BRE",
+                "alternateColor": "f8ced9",
+                "color": "f42727",
+                "displayName": "Brentford",
+                "id": "337",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/337/brentford",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/337/brentford",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/337/brentford",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Brentford",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/337.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/337.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Brentford",
+                "nickname": "Brentford",
+                "shortDisplayName": "Brentford",
+                "slug": "eng.brentford",
+                "uid": "s:600~t:337"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "BHA",
+                "alternateColor": "ffdd00",
+                "color": "0606fa",
+                "displayName": "Brighton & Hove Albion",
+                "id": "331",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/331/brighton-hove-albion",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/331/brighton-hove-albion",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/331/brighton-hove-albion",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Brighton & Hove Albion",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/331.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/331.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Brighton & Hove Albion",
+                "nickname": "Seagulls",
+                "shortDisplayName": "Brighton",
+                "slug": "eng.brighton",
+                "uid": "s:600~t:331"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "BUR",
+                "alternateColor": "00FFFF",
+                "color": "6C1D45",
+                "displayName": "Burnley",
+                "id": "379",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/379/burnley",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/379/burnley",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/379/burnley",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Burnley",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/379.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/379.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Burnley",
+                "nickname": "Burnley",
+                "shortDisplayName": "Burnley",
+                "slug": "eng.burnley",
+                "uid": "s:600~t:379"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "CHE",
+                "alternateColor": "FFFFFF",
+                "color": "144992",
+                "displayName": "Chelsea",
+                "id": "363",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/363/chelsea",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/363/chelsea",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/363/chelsea",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Chelsea",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/363.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/363.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Chelsea",
+                "nickname": "Blues",
+                "shortDisplayName": "Chelsea",
+                "slug": "eng.chelsea",
+                "uid": "s:600~t:363"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "CRY",
+                "alternateColor": "ffdd00",
+                "color": "0202fb",
+                "displayName": "Crystal Palace",
+                "id": "384",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/384/crystal-palace",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/384/crystal-palace",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/384/crystal-palace",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Crystal Palace",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/384.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/384.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Crystal Palace",
+                "nickname": "Eagles",
+                "shortDisplayName": "C Palace",
+                "slug": "eng.crystal_palace",
+                "uid": "s:600~t:384"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "EVE",
+                "alternateColor": "132257",
+                "color": "0606fa",
+                "displayName": "Everton",
+                "id": "368",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/368/everton",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/368/everton",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/368/everton",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Everton",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/368.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/368.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Everton",
+                "nickname": "Toffees",
+                "shortDisplayName": "Everton",
+                "slug": "eng.everton",
+                "uid": "s:600~t:368"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "FUL",
+                "alternateColor": "00CC00",
+                "color": "ffffff",
+                "displayName": "Fulham",
+                "id": "370",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/370/fulham",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/370/fulham",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/370/fulham",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Fulham",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/370.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/370.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Fulham",
+                "nickname": "Fulham",
+                "shortDisplayName": "Fulham",
+                "slug": "eng.fulham",
+                "uid": "s:600~t:370"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "LEE",
+                "alternateColor": "0000FF",
+                "color": "ffffff",
+                "displayName": "Leeds United",
+                "id": "357",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/357/leeds-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/357/leeds-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/357/leeds-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Leeds United",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/357.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/357.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Leeds United",
+                "nickname": "Leeds",
+                "shortDisplayName": "Leeds",
+                "slug": "eng.leeds",
+                "uid": "s:600~t:357"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "LIV",
+                "alternateColor": "FFFFFF",
+                "color": "d11317",
+                "displayName": "Liverpool",
+                "id": "364",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/364/liverpool",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/364/liverpool",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/364/liverpool",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Liverpool",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/364.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/364.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 4096,
+                    "href": "https://a.espncdn.com/guid/a47fbcec-c948-cf4c-9e41-3dfa37588c9c/logos/primary_logo_on_primary_color.png",
+                    "rel": [
+                      "full",
+                      "primary_logo_on_primary_color"
+                    ],
+                    "width": 4096
+                  },
+                  {
+                    "alt": "",
+                    "height": 4096,
+                    "href": "https://a.espncdn.com/guid/a47fbcec-c948-cf4c-9e41-3dfa37588c9c/logos/primary_logo_on_secondary_color.png",
+                    "rel": [
+                      "full",
+                      "primary_logo_on_secondary_color"
+                    ],
+                    "width": 4096
+                  }
+                ],
+                "name": "Liverpool",
+                "nickname": "Reds",
+                "shortDisplayName": "Liverpool",
+                "slug": "eng.liverpool",
+                "uid": "s:600~t:364"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "MNC",
+                "alternateColor": "000000",
+                "color": "99c5ea",
+                "displayName": "Manchester City",
+                "id": "382",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/382/manchester-city",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/382/manchester-city",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/382/manchester-city",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Manchester City",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/382.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/382.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Manchester City",
+                "nickname": "Sky Blues",
+                "shortDisplayName": "Man City",
+                "slug": "eng.man_city",
+                "uid": "s:600~t:382"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "MAN",
+                "alternateColor": "FFFFFF",
+                "color": "da020e",
+                "displayName": "Manchester United",
+                "id": "360",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/360/manchester-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/360/manchester-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Manchester United",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/360.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/360.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Manchester United",
+                "nickname": "Red Devils",
+                "shortDisplayName": "Man United",
+                "slug": "eng.man_utd",
+                "uid": "s:600~t:360"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "NEW",
+                "alternateColor": "ffffff",
+                "color": "000000",
+                "displayName": "Newcastle United",
+                "id": "361",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/361/newcastle-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/361/newcastle-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/361/newcastle-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Newcastle United",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/361.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/361.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Newcastle United",
+                "nickname": "Magpies/Toon",
+                "shortDisplayName": "Newcastle",
+                "slug": "eng.newcastle",
+                "uid": "s:600~t:361"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "NFO",
+                "alternateColor": "132257",
+                "color": "c8102e",
+                "displayName": "Nottingham Forest",
+                "id": "393",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/393/nottingham-forest",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/393/nottingham-forest",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/393/nottingham-forest",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Nottingham Forest",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/393.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/393.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Nottingham Forest",
+                "nickname": "Nottingham F.",
+                "shortDisplayName": "Nottm Forest",
+                "slug": "eng.nottm_forest",
+                "uid": "s:600~t:393"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "SUN",
+                "alternateColor": "87cced",
+                "color": "EB172B",
+                "displayName": "Sunderland",
+                "id": "366",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/366/sunderland",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/366/sunderland",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/366/sunderland",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Sunderland",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/366.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/366.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Sunderland",
+                "nickname": "Black Cats/Wearsiders",
+                "shortDisplayName": "Sunderland",
+                "slug": "eng.sunderland",
+                "uid": "s:600~t:366"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "TOT",
+                "alternateColor": "000000",
+                "color": "ffffff",
+                "displayName": "Tottenham Hotspur",
+                "id": "367",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/367/tottenham-hotspur",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/367/tottenham-hotspur",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/367/tottenham-hotspur",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Tottenham Hotspur",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/367.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Tottenham Hotspur",
+                "nickname": "Spurs",
+                "shortDisplayName": "Spurs",
+                "slug": "eng.tottenham",
+                "uid": "s:600~t:367"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "WHU",
+                "alternateColor": "F1E7E0",
+                "color": "7c2c3b",
+                "displayName": "West Ham United",
+                "id": "371",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/371/west-ham-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/371/west-ham-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/371/west-ham-united",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "West Ham United",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/371.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/371.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "West Ham United",
+                "nickname": "Hammers/Iron",
+                "shortDisplayName": "West Ham",
+                "slug": "eng.west_ham",
+                "uid": "s:600~t:371"
+              }
+            },
+            {
+              "team": {
+                "abbreviation": "WOL",
+                "alternateColor": "32A8DD",
+                "color": "fdb913",
+                "displayName": "Wolverhampton Wanderers",
+                "id": "380",
+                "isActive": true,
+                "isAllStar": false,
+                "links": [
+                  {
+                    "href": "https://www.espn.com/soccer/club/_/id/380/wolverhampton-wanderers",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Clubhouse",
+                    "text": "Clubhouse"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/380/wolverhampton-wanderers",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Stats",
+                    "text": "Stats"
+                  },
+                  {
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/380/wolverhampton-wanderers",
+                    "isExternal": false,
+                    "isHidden": false,
+                    "isPremium": false,
+                    "language": "en-US",
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "shortText": "Fixtures",
+                    "text": "Fixtures"
+                  }
+                ],
+                "location": "Wolverhampton Wanderers",
+                "logos": [
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500/380.png",
+                    "rel": [
+                      "full",
+                      "default"
+                    ],
+                    "width": 500
+                  },
+                  {
+                    "alt": "",
+                    "height": 500,
+                    "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/380.png",
+                    "rel": [
+                      "full",
+                      "dark"
+                    ],
+                    "width": 500
+                  }
+                ],
+                "name": "Wolverhampton Wanderers",
+                "nickname": "Wolves",
+                "shortDisplayName": "Wolves",
+                "slug": "eng.wolverhampton",
+                "uid": "s:600~t:380"
+              }
+            }
+          ],
+          "uid": "s:600~l:700",
+          "year": 2025
+        }
+      ],
+      "name": "Soccer",
+      "slug": "soccer",
+      "uid": "s:600"
+    }
+  ]
+}

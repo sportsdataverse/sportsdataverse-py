@@ -1,0 +1,1619 @@
+{
+  "header": "UEFA Champions League News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/football/league/_/name/uefa.champions",
+    "text": "All UEFA Champions League News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 49034272,
+      "nowId": "1-49034272",
+      "contentKey": "49034272-1-6-1",
+      "dataSourceIdentifier": "76b34dcf965bd",
+      "type": "Story",
+      "headline": "Morocco's FIFA World Cup run could define Achraf Hakimi's legacy",
+      "description": "Fresh from another Champions League triumph with Paris Saint-Germain -- with the rightback returning from injury to excel in the final -- Hakimi is the captain of the most accomplished Morocco side ever assembled.",
+      "lastModified": "2026-06-12T14:46:33Z",
+      "published": "2026-06-12T14:46:33Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "7375d008b2862",
+          "id": 49034603,
+          "type": "header",
+          "name": "Achraf Hakimi [1296x729]",
+          "caption": "Achraf Hakimi: Footballing royalty.",
+          "credit": "Leonardo MUNOZ / AFP via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0611/r1671608_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "cd0396d4a23c8",
+          "id": 48907703,
+          "type": "header",
+          "name": "Achraf Hakimi UCL trophy [1296x729]",
+          "caption": "At just 27, can Achraf Hakimi overtake Samuel Eto'o as Africa's greatest player in terms of plaudits, especially if he adds another UEFA Champions League title to his name against Arsenal?",
+          "credit": "Daniela Porcelli/Sports Press Photo/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0529/r1665239_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Enrique: PSG already working on the future after Champions League win",
+          "caption": "Luis Enrique speaks about his plans for the PSG squad after their penalty shootout win over Arsenal in the Champions League final.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0530/dm_260530_COM_SOC_Presser_Enrique_PSG_already_working_on_the_future_after_Champions_League_win_20260530_G/dm_260530_COM_SOC_Presser_Enrique_PSG_already_working_on_the_future_after_Champions_League_win_20260530_G.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 33303,
+          "type": "league",
+          "uid": "s:600~l:606",
+          "guid": "34f478c4-cf9a-35da-abd5-33db021e09d2",
+          "description": "FIFA World Cup",
+          "sportId": 600,
+          "leagueId": 4,
+          "league": {
+            "id": 606,
+            "description": "FIFA World Cup",
+            "abbreviation": "FIFA World Cup",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/worldcup/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/worldcup/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142317,
+          "type": "team",
+          "uid": "s:600~t:2869",
+          "guid": "a6945df8-27b1-9615-af13-7379154954b9",
+          "description": "Morocco",
+          "sportId": 600,
+          "teamId": 2869,
+          "team": {
+            "id": 2869,
+            "description": "Morocco",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/2869/morocco"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/2869/morocco"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 72571,
+          "type": "team",
+          "uid": "s:600~t:205",
+          "guid": "2a051c42-4444-8263-799a-6cdd866bd8f7",
+          "description": "Brazil",
+          "sportId": 600,
+          "teamId": 205,
+          "team": {
+            "id": 205,
+            "description": "Brazil",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/205/brazil"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/205/brazil"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 249749,
+          "type": "athlete",
+          "uid": "s:600~a:240233",
+          "guid": "5c8662cd-474c-892f-369c-15544105fe99",
+          "description": "Achraf Hakimi",
+          "sportId": 600,
+          "athleteId": 240233,
+          "athlete": {
+            "id": 240233,
+            "description": "Achraf Hakimi",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/240233/achraf-hakimi"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/240233/achraf-hakimi"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137793,
+          "type": "league",
+          "uid": "s:600~l:775",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d",
+          "description": "UEFA Champions League",
+          "sportId": 600,
+          "leagueId": 2,
+          "league": {
+            "id": 775,
+            "description": "UEFA Champions League",
+            "abbreviation": "UEFA Champions League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142617,
+          "type": "team",
+          "uid": "s:600~t:160",
+          "guid": "79843c9e-0fe0-63b4-b591-9affc0dbd517",
+          "description": "Paris Saint-Germain",
+          "sportId": 600,
+          "teamId": 160,
+          "team": {
+            "id": 160,
+            "description": "Paris Saint-Germain",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/160/paris-saint-germain"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/160/paris-saint-germain"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 702571,
+          "type": "contributor",
+          "guid": "f13d8b66-caf7-3a9a-ada3-7e83964ffbbc",
+          "description": "180530 COLUMNIST PROFILE Ed Dove",
+          "slug": "180530-columnist-profile-ed-dove",
+          "contributor": {
+            "id": 3335,
+            "description": "180530 COLUMNIST PROFILE Ed Dove"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "34f478c4-cf9a-35da-abd5-33db021e09d2"
+        },
+        {
+          "type": "guid",
+          "guid": "a6945df8-27b1-9615-af13-7379154954b9"
+        },
+        {
+          "type": "guid",
+          "guid": "2a051c42-4444-8263-799a-6cdd866bd8f7"
+        },
+        {
+          "type": "guid",
+          "guid": "5c8662cd-474c-892f-369c-15544105fe99"
+        },
+        {
+          "type": "guid",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d"
+        },
+        {
+          "type": "guid",
+          "guid": "79843c9e-0fe0-63b4-b591-9affc0dbd517"
+        },
+        {
+          "type": "guid",
+          "guid": "f13d8b66-caf7-3a9a-ada3-7e83964ffbbc"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/espn/story/_/id/49034272/morocco-fifa-world-cup-run-define-achraf-hakimi-legacy"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/wireless/story?storyId=49034272"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/49034272"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=49034272"
+          }
+        }
+      },
+      "byline": "Ed Dove"
+    },
+    {
+      "id": 49023132,
+      "nowId": "1-49023132",
+      "contentKey": "49023132-1-293-1",
+      "dataSourceIdentifier": "13914d169b9ab",
+      "type": "Media",
+      "headline": "Could Marcus Rashford play for Man United next season?",
+      "description": "Mark Ogden shares details on Marcus Rashford future as reports emerge he could return to play for Man United.",
+      "lastModified": "2026-06-10T23:06:10Z",
+      "published": "2026-06-10T23:06:10Z",
+      "images": [
+        {
+          "name": "Could Marcus Rashford play for Man United next season?",
+          "caption": "Mark Ogden shares details on Marcus Rashford future as reports emerge he could return to play for Man United.",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0610/dm_260610_COM_SOC_ANALYSIS_Could_Marcus_Rashford_play_for_Man_United_next_season_2026_6_10/dm_260610_COM_SOC_ANALYSIS_Could_Marcus_Rashford_play_for_Man_United_next_season_2026_6_10.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 142473,
+          "type": "team",
+          "uid": "s:600~t:83",
+          "guid": "58f7c4a9-c991-4ed4-fe5c-1f833cba75b8",
+          "description": "Barcelona",
+          "sportId": 600,
+          "teamId": 83,
+          "team": {
+            "id": 83,
+            "description": "Barcelona",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/83/barcelona"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/83/barcelona"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 72576,
+          "type": "team",
+          "uid": "s:600~t:448",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9",
+          "description": "England",
+          "sportId": 600,
+          "teamId": 448,
+          "team": {
+            "id": 448,
+            "description": "England",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137809,
+          "type": "league",
+          "uid": "s:600~l:3920",
+          "guid": "7d7df547-a8c6-37a7-947d-7b661c801ff5",
+          "description": "English Carabao Cup",
+          "sportId": 600,
+          "leagueId": 41,
+          "league": {
+            "id": 3920,
+            "description": "English Carabao Cup",
+            "abbreviation": "Carabao Cup",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.league_cup"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.league_cup"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137779,
+          "type": "league",
+          "uid": "s:600~l:3918",
+          "guid": "332e6880-b05d-4315-ae73-defad8bc3920",
+          "description": "English FA Cup",
+          "sportId": 600,
+          "leagueId": 40,
+          "league": {
+            "id": 3918,
+            "description": "English FA Cup",
+            "abbreviation": "English FA Cup",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.fa"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.fa"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137781,
+          "type": "league",
+          "uid": "s:600~l:700",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+          "description": "English Premier League",
+          "sportId": 600,
+          "leagueId": 23,
+          "league": {
+            "id": 700,
+            "description": "English Premier League",
+            "abbreviation": "Premier League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 33303,
+          "type": "league",
+          "uid": "s:600~l:606",
+          "guid": "34f478c4-cf9a-35da-abd5-33db021e09d2",
+          "description": "FIFA World Cup",
+          "sportId": 600,
+          "leagueId": 4,
+          "league": {
+            "id": 606,
+            "description": "FIFA World Cup",
+            "abbreviation": "FIFA World Cup",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/worldcup/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/worldcup/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142292,
+          "type": "team",
+          "uid": "s:600~t:360",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9",
+          "description": "Manchester United",
+          "sportId": 600,
+          "teamId": 360,
+          "team": {
+            "id": 360,
+            "description": "Manchester United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 275645,
+          "type": "athlete",
+          "uid": "s:600~a:230945",
+          "guid": "73bfa01e-2ac7-2124-a245-7af746308a53",
+          "description": "Marcus Rashford",
+          "sportId": 600,
+          "athleteId": 230945,
+          "athlete": {
+            "id": 230945,
+            "description": "Marcus Rashford",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/230945/marcus-rashford"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/230945/marcus-rashford"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137787,
+          "type": "league",
+          "uid": "s:600~l:740",
+          "guid": "cf7b0c51-7c48-3e9a-8abb-0c01b1a973a0",
+          "description": "Spanish LALIGA",
+          "sportId": 600,
+          "leagueId": 15,
+          "league": {
+            "id": 740,
+            "description": "Spanish LALIGA",
+            "abbreviation": "LALIGA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/esp.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/esp.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137793,
+          "type": "league",
+          "uid": "s:600~l:775",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d",
+          "description": "UEFA Champions League",
+          "sportId": 600,
+          "leagueId": 2,
+          "league": {
+            "id": 775,
+            "description": "UEFA Champions League",
+            "abbreviation": "UEFA Champions League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "58f7c4a9-c991-4ed4-fe5c-1f833cba75b8"
+        },
+        {
+          "type": "guid",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9"
+        },
+        {
+          "type": "guid",
+          "guid": "7d7df547-a8c6-37a7-947d-7b661c801ff5"
+        },
+        {
+          "type": "guid",
+          "guid": "332e6880-b05d-4315-ae73-defad8bc3920"
+        },
+        {
+          "type": "guid",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38"
+        },
+        {
+          "type": "guid",
+          "guid": "34f478c4-cf9a-35da-abd5-33db021e09d2"
+        },
+        {
+          "type": "guid",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9"
+        },
+        {
+          "type": "guid",
+          "guid": "73bfa01e-2ac7-2124-a245-7af746308a53"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "cf7b0c51-7c48-3e9a-8abb-0c01b1a973a0"
+        },
+        {
+          "type": "guid",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/49023132/could-marcus-rashford-play-man-united-next-season",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/49023132/could-marcus-rashford-play-man-united-next-season",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=13914d169b9ab"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/49023132"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/389d9297-6b84-4538-a6b1-6e8fa164e640"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=49023132&videoDSI=13914d169b9ab"
+        }
+      }
+    },
+    {
+      "id": 48964047,
+      "nowId": "1-48964047",
+      "contentKey": "48964047-1-293-1",
+      "dataSourceIdentifier": "2caa1da319bc9",
+      "type": "Media",
+      "headline": "Marquinhos reveals message to Gabriel after UCL heartbreak",
+      "description": "Marquinhos shares what he said to Brazil teammate Gabriel after his penalty miss during Arsenal's Champions League defeat to PSG.",
+      "lastModified": "2026-06-04T10:34:21Z",
+      "published": "2026-06-04T10:34:21Z",
+      "images": [
+        {
+          "name": "Marquinhos reveals message to Gabriel after UCL heartbreak",
+          "caption": "Marquinhos shares what he said to Brazil teammate Gabriel after his penalty miss during Arsenal's Champions League defeat to PSG.",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0604/dm_260604_COM_SOC_Presser_Marquinhos_reveals_message_to_Gabriel_after_UCL_heartbreak_20260604_GLOBAL/dm_260604_COM_SOC_Presser_Marquinhos_reveals_message_to_Gabriel_after_UCL_heartbreak_20260604_GLOBAL.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 142299,
+          "type": "team",
+          "uid": "s:600~t:359",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4",
+          "description": "Arsenal",
+          "sportId": 600,
+          "teamId": 359,
+          "team": {
+            "id": 359,
+            "description": "Arsenal",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 260605,
+          "type": "athlete",
+          "uid": "s:600~a:236322",
+          "guid": "e28f3d6c-6496-eba0-4290-6909278d1145",
+          "description": "Gabriel Magalhães",
+          "sportId": 600,
+          "athleteId": 236322,
+          "athlete": {
+            "id": 236322,
+            "description": "Gabriel Magalhães",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/236322/gabriel-magalhaes"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/236322/gabriel-magalhaes"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 266466,
+          "type": "athlete",
+          "uid": "s:600~a:159047",
+          "guid": "40fa13b8-6b74-b153-7fb1-5e2857c21ba3",
+          "description": "Marquinhos",
+          "sportId": 600,
+          "athleteId": 159047,
+          "athlete": {
+            "id": 159047,
+            "description": "Marquinhos",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/159047/marquinhos"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/159047/marquinhos"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142617,
+          "type": "team",
+          "uid": "s:600~t:160",
+          "guid": "79843c9e-0fe0-63b4-b591-9affc0dbd517",
+          "description": "Paris Saint-Germain",
+          "sportId": 600,
+          "teamId": 160,
+          "team": {
+            "id": 160,
+            "description": "Paris Saint-Germain",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/160/paris-saint-germain"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/160/paris-saint-germain"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137793,
+          "type": "league",
+          "uid": "s:600~l:775",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d",
+          "description": "UEFA Champions League",
+          "sportId": 600,
+          "leagueId": 2,
+          "league": {
+            "id": 775,
+            "description": "UEFA Champions League",
+            "abbreviation": "UEFA Champions League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "event",
+          "uid": "s:600~l:775~e:401862897",
+          "guid": "9b7bd016-7a3f-33b7-a4f5-cf8b00d846ca",
+          "description": "Arsenal @ Paris Saint-Germain",
+          "eventId": 401862897,
+          "event": {
+            "id": 401862897,
+            "sport": "soccer",
+            "league": "uefa.champions",
+            "description": "Arsenal @ Paris Saint-Germain"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4"
+        },
+        {
+          "type": "guid",
+          "guid": "e28f3d6c-6496-eba0-4290-6909278d1145"
+        },
+        {
+          "type": "guid",
+          "guid": "40fa13b8-6b74-b153-7fb1-5e2857c21ba3"
+        },
+        {
+          "type": "guid",
+          "guid": "79843c9e-0fe0-63b4-b591-9affc0dbd517"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d"
+        },
+        {
+          "type": "guid",
+          "guid": "9b7bd016-7a3f-33b7-a4f5-cf8b00d846ca"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48964047/marquinhos-reveals-message-gabriel-ucl-heartbreak",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48964047/marquinhos-reveals-message-gabriel-ucl-heartbreak",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=2caa1da319bc9"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48964047"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/482957e0-5a44-44fc-bb31-167330d2610a"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48964047&videoDSI=2caa1da319bc9"
+        }
+      }
+    },
+    {
+      "id": 48951284,
+      "nowId": "1-48951284",
+      "contentKey": "48951284-1-293-1",
+      "dataSourceIdentifier": "1dda1c3d6fa2f",
+      "type": "Media",
+      "headline": "Nicol: Real Madrid only want Konaté because he's a free agent",
+      "description": "Sid Lowe and Steve Nicol react to Ibrahima Konaté's potential move to Real Madrid.",
+      "lastModified": "2026-06-02T22:14:20Z",
+      "published": "2026-06-02T22:14:20Z",
+      "images": [
+        {
+          "name": "Nicol: Real Madrid only want Konaté because he's a free agent",
+          "caption": "Sid Lowe and Steve Nicol react to Ibrahima Konaté's potential move to Real Madrid.",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0602/dm_260602_COM_SOC_Analysis_Nicol_Real_Madrid_only_want_Konate_because_hes_a_free_agent_20260602_GLOBAL/dm_260602_COM_SOC_Analysis_Nicol_Real_Madrid_only_want_Konate_because_hes_a_free_agent_20260602_GLOBAL.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 72584,
+          "type": "team",
+          "uid": "s:600~t:478",
+          "guid": "81be996c-0f98-eec4-6284-c6be0d186360",
+          "description": "France",
+          "sportId": 600,
+          "teamId": 478,
+          "team": {
+            "id": 478,
+            "description": "France",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/478/france"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/478/france"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 232301,
+          "type": "athlete",
+          "uid": "s:600~a:251634",
+          "guid": "ffcffb8d-afa2-bae4-621c-ee7296909896",
+          "description": "Ibrahima Konaté",
+          "sportId": 600,
+          "athleteId": 251634,
+          "athlete": {
+            "id": 251634,
+            "description": "Ibrahima Konaté",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/251634/ibrahima-konate"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/251634/ibrahima-konate"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142295,
+          "type": "team",
+          "uid": "s:600~t:364",
+          "guid": "a47fbcec-c948-cf4c-9e41-3dfa37588c9c",
+          "description": "Liverpool",
+          "sportId": 600,
+          "teamId": 364,
+          "team": {
+            "id": 364,
+            "description": "Liverpool",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/364/liverpool"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/364/liverpool"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142464,
+          "type": "team",
+          "uid": "s:600~t:86",
+          "guid": "66434654-a8ba-a04c-98e5-6bbd0dbbb780",
+          "description": "Real Madrid",
+          "sportId": 600,
+          "teamId": 86,
+          "team": {
+            "id": 86,
+            "description": "Real Madrid",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/86/real-madrid"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/86/real-madrid"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 518441,
+          "type": "topic",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0",
+          "description": "soccer transfers",
+          "sportId": 0,
+          "topicId": 3
+        },
+        {
+          "id": 137787,
+          "type": "league",
+          "uid": "s:600~l:740",
+          "guid": "cf7b0c51-7c48-3e9a-8abb-0c01b1a973a0",
+          "description": "Spanish LALIGA",
+          "sportId": 600,
+          "leagueId": 15,
+          "league": {
+            "id": 740,
+            "description": "Spanish LALIGA",
+            "abbreviation": "LALIGA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/esp.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/esp.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137793,
+          "type": "league",
+          "uid": "s:600~l:775",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d",
+          "description": "UEFA Champions League",
+          "sportId": 600,
+          "leagueId": 2,
+          "league": {
+            "id": 775,
+            "description": "UEFA Champions League",
+            "abbreviation": "UEFA Champions League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "81be996c-0f98-eec4-6284-c6be0d186360"
+        },
+        {
+          "type": "guid",
+          "guid": "ffcffb8d-afa2-bae4-621c-ee7296909896"
+        },
+        {
+          "type": "guid",
+          "guid": "a47fbcec-c948-cf4c-9e41-3dfa37588c9c"
+        },
+        {
+          "type": "guid",
+          "guid": "66434654-a8ba-a04c-98e5-6bbd0dbbb780"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0"
+        },
+        {
+          "type": "guid",
+          "guid": "cf7b0c51-7c48-3e9a-8abb-0c01b1a973a0"
+        },
+        {
+          "type": "guid",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48951284/real-madrid-only-want-konate-free-agent",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48951284/real-madrid-only-want-konate-free-agent",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=1dda1c3d6fa2f"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48951284"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/1969ebf2-d189-4673-b913-d2892f6873f1"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48951284&videoDSI=1dda1c3d6fa2f"
+        }
+      }
+    },
+    {
+      "id": 48951208,
+      "nowId": "1-48951208",
+      "contentKey": "48951208-1-293-1",
+      "dataSourceIdentifier": "6dcd0a0a7181a",
+      "type": "Media",
+      "headline": "Could Harry Kane join Barcelona if they fail to sign Julián Alvarez?",
+      "description": "Sid Lowe reacts to rumours linking Barcelona with a move for Harry Kane.",
+      "lastModified": "2026-06-02T22:04:22Z",
+      "published": "2026-06-02T22:04:22Z",
+      "images": [
+        {
+          "name": "Could Harry Kane join Barcelona if they fail to sign Julián Alvarez?",
+          "caption": "Sid Lowe reacts to rumours linking Barcelona with a move for Harry Kane.",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0602/dm_260602_COM_SOC_Analysis_Could_Harry_Kane_join_Barcelona_if_they_fail_to_sign_Julian_Alvarez_20260602_G/dm_260602_COM_SOC_Analysis_Could_Harry_Kane_join_Barcelona_if_they_fail_to_sign_Julian_Alvarez_20260602_G.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 142473,
+          "type": "team",
+          "uid": "s:600~t:83",
+          "guid": "58f7c4a9-c991-4ed4-fe5c-1f833cba75b8",
+          "description": "Barcelona",
+          "sportId": 600,
+          "teamId": 83,
+          "team": {
+            "id": 83,
+            "description": "Barcelona",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/83/barcelona"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/83/barcelona"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142490,
+          "type": "team",
+          "uid": "s:600~t:132",
+          "guid": "25b5e432-d3d2-939f-f73b-6e531a6fbd91",
+          "description": "Bayern Munich",
+          "sportId": 600,
+          "teamId": 132,
+          "team": {
+            "id": 132,
+            "description": "Bayern Munich",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/132/bayern-munich"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/132/bayern-munich"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 72576,
+          "type": "team",
+          "uid": "s:600~t:448",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9",
+          "description": "England",
+          "sportId": 600,
+          "teamId": 448,
+          "team": {
+            "id": 448,
+            "description": "England",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137790,
+          "type": "league",
+          "uid": "s:600~l:720",
+          "guid": "30244926-00c4-3f69-8946-f8421c97ff71",
+          "description": "German Bundesliga",
+          "sportId": 600,
+          "leagueId": 10,
+          "league": {
+            "id": 720,
+            "description": "German Bundesliga",
+            "abbreviation": "Bundesliga",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/ger.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/ger.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 250037,
+          "type": "athlete",
+          "uid": "s:600~a:142200",
+          "guid": "66b16016-7a3a-434f-ae82-e767fc5fac88",
+          "description": "Harry Kane",
+          "sportId": 600,
+          "athleteId": 142200,
+          "athlete": {
+            "id": 142200,
+            "description": "Harry Kane",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/142200/harry-kane"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/142200/harry-kane"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 518441,
+          "type": "topic",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0",
+          "description": "soccer transfers",
+          "sportId": 0,
+          "topicId": 3
+        },
+        {
+          "id": 137787,
+          "type": "league",
+          "uid": "s:600~l:740",
+          "guid": "cf7b0c51-7c48-3e9a-8abb-0c01b1a973a0",
+          "description": "Spanish LALIGA",
+          "sportId": 600,
+          "leagueId": 15,
+          "league": {
+            "id": 740,
+            "description": "Spanish LALIGA",
+            "abbreviation": "LALIGA",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/esp.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/esp.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137793,
+          "type": "league",
+          "uid": "s:600~l:775",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d",
+          "description": "UEFA Champions League",
+          "sportId": 600,
+          "leagueId": 2,
+          "league": {
+            "id": 775,
+            "description": "UEFA Champions League",
+            "abbreviation": "UEFA Champions League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "58f7c4a9-c991-4ed4-fe5c-1f833cba75b8"
+        },
+        {
+          "type": "guid",
+          "guid": "25b5e432-d3d2-939f-f73b-6e531a6fbd91"
+        },
+        {
+          "type": "guid",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9"
+        },
+        {
+          "type": "guid",
+          "guid": "30244926-00c4-3f69-8946-f8421c97ff71"
+        },
+        {
+          "type": "guid",
+          "guid": "66b16016-7a3a-434f-ae82-e767fc5fac88"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0"
+        },
+        {
+          "type": "guid",
+          "guid": "cf7b0c51-7c48-3e9a-8abb-0c01b1a973a0"
+        },
+        {
+          "type": "guid",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48951208/could-harry-kane-join-barcelona-fail-sign-julian-alvarez",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48951208/could-harry-kane-join-barcelona-fail-sign-julian-alvarez",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=6dcd0a0a7181a"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48951208"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/6e357253-5b0a-47a1-9b22-a8bb806e3468"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48951208&videoDSI=6dcd0a0a7181a"
+        }
+      }
+    },
+    {
+      "id": 48941359,
+      "nowId": "1-48941359",
+      "contentKey": "48941359-1-293-1",
+      "dataSourceIdentifier": "d5673fc30c98f",
+      "type": "Media",
+      "headline": "Burley: Arsenal Champions League tactics 'very disappointing'",
+      "description": "ESPN FC's Craig Burley says Arsenal's time wasting in the Champions League final against PSG was \"disappointing.\"",
+      "lastModified": "2026-06-01T22:00:23Z",
+      "published": "2026-06-01T22:00:23Z",
+      "images": [
+        {
+          "name": "Burley: Arsenal Champions League tactics 'very disappointing'",
+          "caption": "ESPN FC's Craig Burley says Arsenal's time wasting in the Champions League final against PSG was \"disappointing.\"",
+          "alt": "",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0601/dm_260601_Burley_Arsenal_Champions_League_tactics_very_disappointing/dm_260601_Burley_Arsenal_Champions_League_tactics_very_disappointing.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 142299,
+          "type": "team",
+          "uid": "s:600~t:359",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4",
+          "description": "Arsenal",
+          "sportId": 600,
+          "teamId": 359,
+          "team": {
+            "id": 359,
+            "description": "Arsenal",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137793,
+          "type": "league",
+          "uid": "s:600~l:775",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d",
+          "description": "UEFA Champions League",
+          "sportId": 600,
+          "leagueId": 2,
+          "league": {
+            "id": 775,
+            "description": "UEFA Champions League",
+            "abbreviation": "UEFA Champions League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/uefa.champions"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "event",
+          "uid": "s:600~l:775~e:401862897",
+          "guid": "9b7bd016-7a3f-33b7-a4f5-cf8b00d846ca",
+          "description": "Arsenal @ Paris Saint-Germain",
+          "eventId": 401862897,
+          "event": {
+            "id": 401862897,
+            "sport": "soccer",
+            "league": "uefa.champions",
+            "description": "Arsenal @ Paris Saint-Germain"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "da52796f-2621-3351-8e77-955da92ea82d"
+        },
+        {
+          "type": "guid",
+          "guid": "9b7bd016-7a3f-33b7-a4f5-cf8b00d846ca"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/video/clip/_/id/48941359/arsenal-champions-league-tactics-very-disappointing",
+          "self": {
+            "href": "https://www.espn.com/video/clip/_/id/48941359/arsenal-champions-league-tactics-very-disappointing",
+            "dsi": {
+              "href": "https://www.espn.com/video/clip?id=d5673fc30c98f"
+            }
+          }
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/video/clips/48941359"
+          },
+          "artwork": {
+            "href": "https://artwork.api.espn.com/artwork/collections/media/01c6a817-1f95-491b-8cb1-b393968dcda9"
+          }
+        },
+        "sportscenter": {
+          "href": "sportscenter://x-callback-url/showVideo?videoID=48941359&videoDSI=d5673fc30c98f"
+        }
+      }
+    }
+  ]
+}

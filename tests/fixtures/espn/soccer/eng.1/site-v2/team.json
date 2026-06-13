@@ -1,0 +1,499 @@
+{
+  "team": {
+    "id": "349",
+    "uid": "s:600~t:349",
+    "slug": "eng.bournemouth",
+    "location": "AFC Bournemouth",
+    "name": "AFC Bournemouth",
+    "nickname": "Bournemouth",
+    "abbreviation": "BOU",
+    "displayName": "AFC Bournemouth",
+    "shortDisplayName": "Bournemouth",
+    "color": "f42727",
+    "alternateColor": "0000CC",
+    "isActive": true,
+    "logos": [
+      {
+        "href": "https://a.espncdn.com/i/teamlogos/soccer/500/349.png",
+        "width": 500,
+        "height": 500,
+        "alt": "",
+        "rel": [
+          "full",
+          "default"
+        ],
+        "lastUpdated": "2019-05-08T16:07Z"
+      },
+      {
+        "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/349.png",
+        "width": 500,
+        "height": 500,
+        "alt": "",
+        "rel": [
+          "full",
+          "dark"
+        ],
+        "lastUpdated": "2019-05-08T16:07Z"
+      }
+    ],
+    "record": {
+      "items": [
+        {
+          "description": "Overall Record",
+          "type": "total",
+          "summary": "13-18-7",
+          "stats": [
+            {
+              "name": "gamesPlayed",
+              "value": 38.0
+            },
+            {
+              "name": "losses",
+              "value": 7.0
+            },
+            {
+              "name": "pointDifferential",
+              "value": 4.0
+            },
+            {
+              "name": "points",
+              "value": 57.0
+            },
+            {
+              "name": "pointsAgainst",
+              "value": 54.0
+            },
+            {
+              "name": "pointsFor",
+              "value": 58.0
+            },
+            {
+              "name": "streak",
+              "value": 0.0
+            },
+            {
+              "name": "ties",
+              "value": 18.0
+            },
+            {
+              "name": "wins",
+              "value": 13.0
+            },
+            {
+              "name": "advanced",
+              "value": 0.0
+            },
+            {
+              "name": "awayGamesPlayed",
+              "value": 19.0
+            },
+            {
+              "name": "awayLosses",
+              "value": 5.0
+            },
+            {
+              "name": "awayPointsAgainst",
+              "value": 34.0
+            },
+            {
+              "name": "awayPointsFor",
+              "value": 29.0
+            },
+            {
+              "name": "awayTies",
+              "value": 8.0
+            },
+            {
+              "name": "awayWins",
+              "value": 6.0
+            },
+            {
+              "name": "deductions",
+              "value": 0.0
+            },
+            {
+              "name": "homeGamesPlayed",
+              "value": 19.0
+            },
+            {
+              "name": "homeLosses",
+              "value": 2.0
+            },
+            {
+              "name": "homePointsAgainst",
+              "value": 20.0
+            },
+            {
+              "name": "homePointsFor",
+              "value": 29.0
+            },
+            {
+              "name": "homeTies",
+              "value": 10.0
+            },
+            {
+              "name": "homeWins",
+              "value": 7.0
+            },
+            {
+              "name": "ppg",
+              "value": 0.0
+            },
+            {
+              "name": "rank",
+              "value": 6.0
+            },
+            {
+              "name": "rankChange",
+              "value": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    "groups": {
+      "id": "1"
+    },
+    "links": [
+      {
+        "language": "en-US",
+        "rel": [
+          "clubhouse",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/club/_/id/349/afc-bournemouth",
+        "text": "Clubhouse",
+        "shortText": "Clubhouse",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "stats",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/stats/_/id/349/afc-bournemouth",
+        "text": "Stats",
+        "shortText": "Stats",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "stats",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:349&section=stats",
+        "text": "Stats",
+        "shortText": "Stats",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "schedule",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/fixtures/_/id/349/afc-bournemouth",
+        "text": "Fixtures",
+        "shortText": "Fixtures",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "schedule",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:349&section=scores",
+        "text": "Fixtures",
+        "shortText": "Fixtures",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "results",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/results/_/id/349/afc-bournemouth",
+        "text": "Results",
+        "shortText": "Results",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "results",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:349&section=scores",
+        "text": "Results",
+        "shortText": "Results",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "standings",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/standings/_/league/eng.1",
+        "text": "Standings",
+        "shortText": "Standings",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "standings",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:349&section=standings",
+        "text": "Standings",
+        "shortText": "Standings",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "squad",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/squad/_/id/349/afc-bournemouth",
+        "text": "Squad",
+        "shortText": "Squad",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "squad",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:349&section=squad",
+        "text": "Squad",
+        "shortText": "Squad",
+        "isExternal": false,
+        "isPremium": false
+      }
+    ],
+    "defaultLeague": {
+      "id": "700",
+      "alternateId": "23",
+      "name": "English Premier League",
+      "abbreviation": "Premier League",
+      "shortName": "Premier League",
+      "midsizeName": "ENG.1",
+      "slug": "eng.1",
+      "season": {
+        "type": {
+          "hasStandings": true
+        }
+      },
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "index",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/league/_/name/eng.1",
+          "text": "Index",
+          "shortText": "Index",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "index",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700",
+          "text": "Index",
+          "shortText": "Index",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "schedule",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/schedule/_/league/eng.1",
+          "text": "Schedule",
+          "shortText": "Schedule",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "schedule",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=scores",
+          "text": "Schedule",
+          "shortText": "Schedule",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "standings",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/table/_/league/eng.1",
+          "text": "Standings",
+          "shortText": "Standings",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "standings",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=standings",
+          "text": "Standings",
+          "shortText": "Standings",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "scores",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/scoreboard/_/league/eng.1",
+          "text": "Scores",
+          "shortText": "Scores",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "scores",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=scores",
+          "text": "Scores",
+          "shortText": "Scores",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/stats/_/league/eng.1",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:700&section=stats",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "teams",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/teams/_/league/eng.1",
+          "text": "Teams",
+          "shortText": "Teams",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/23.png",
+          "width": 500,
+          "height": 500,
+          "alt": "",
+          "rel": [
+            "full",
+            "default"
+          ],
+          "lastUpdated": "2019-05-08T16:07Z"
+        },
+        {
+          "href": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/23.png",
+          "width": 500,
+          "height": 500,
+          "alt": "",
+          "rel": [
+            "full",
+            "dark"
+          ],
+          "lastUpdated": "2021-08-10T20:43Z"
+        }
+      ]
+    },
+    "leagueAbbrev": "eng.1",
+    "nextEvent": [],
+    "standingSummary": "6th in English Premier League"
+  }
+}

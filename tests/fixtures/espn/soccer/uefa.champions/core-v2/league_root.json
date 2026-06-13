@@ -1,0 +1,383 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions?lang=en&region=us",
+  "id": "775",
+  "guid": "da52796f-2621-3351-8e77-955da92ea82d",
+  "uid": "s:600~l:775",
+  "alternateId": "2",
+  "name": "UEFA Champions League",
+  "displayName": "UEFA Champions League",
+  "abbreviation": "UEFA Champions League",
+  "shortName": "UEFA Champions League",
+  "midsizeName": "UEFA.CHAMPIONS",
+  "slug": "uefa.champions",
+  "isTournament": true,
+  "season": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025?lang=en&region=us",
+    "year": 2025,
+    "startDate": "2025-07-01T04:00Z",
+    "endDate": "2026-07-01T03:59Z",
+    "displayName": "2025-26 UEFA Champions League",
+    "shortDisplayName": "2025-26 Champions League",
+    "abbreviation": "2025-26",
+    "type": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/6?lang=en&region=us",
+      "id": "6",
+      "type": 13677,
+      "name": "Final",
+      "abbreviation": "Final",
+      "startDate": "2026-05-08T04:00Z",
+      "endDate": "2026-07-01T03:59Z",
+      "hasGroups": false,
+      "hasStandings": false,
+      "hasLiveStandings": false,
+      "hasLegs": false,
+      "hasStats": false,
+      "isFinal": true,
+      "isThirdPlace": false,
+      "groups": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/6/groups?lang=en&region=us"
+      },
+      "slug": "final"
+    },
+    "types": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types?lang=en&region=us",
+      "count": 6,
+      "pageIndex": 1,
+      "pageSize": 6,
+      "pageCount": 1,
+      "items": [
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/1?lang=en&region=us",
+          "id": "1",
+          "type": 13682,
+          "name": "League Phase",
+          "abbreviation": "League Phase",
+          "startDate": "2025-08-28T04:00Z",
+          "endDate": "2026-01-30T04:59Z",
+          "hasGroups": false,
+          "hasStandings": true,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": true,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/1/groups?lang=en&region=us"
+          },
+          "slug": "league-phase"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/2?lang=en&region=us",
+          "id": "2",
+          "type": 13681,
+          "name": "Knockout Round Playoffs",
+          "abbreviation": "Knockout Round Playoffs",
+          "startDate": "2026-01-30T05:00Z",
+          "endDate": "2026-02-27T04:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": true,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/2/groups?lang=en&region=us"
+          },
+          "slug": "knockout-round-playoffs"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/3?lang=en&region=us",
+          "id": "3",
+          "type": 13680,
+          "name": "Round of 16",
+          "abbreviation": "Round of 16",
+          "startDate": "2026-02-27T05:00Z",
+          "endDate": "2026-03-20T03:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": true,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/3/groups?lang=en&region=us"
+          },
+          "slug": "round-of-16"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/4?lang=en&region=us",
+          "id": "4",
+          "type": 13679,
+          "name": "Quarterfinals",
+          "abbreviation": "Quarterfinals",
+          "startDate": "2026-03-20T04:00Z",
+          "endDate": "2026-04-17T03:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": true,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/4/groups?lang=en&region=us"
+          },
+          "slug": "quarterfinals"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/5?lang=en&region=us",
+          "id": "5",
+          "type": 13678,
+          "name": "Semifinals",
+          "abbreviation": "Semifinals",
+          "startDate": "2026-04-17T04:00Z",
+          "endDate": "2026-05-08T03:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": true,
+          "hasStats": false,
+          "isFinal": false,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/5/groups?lang=en&region=us"
+          },
+          "slug": "semifinals"
+        },
+        {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/6?lang=en&region=us",
+          "id": "6",
+          "type": 13677,
+          "name": "Final",
+          "abbreviation": "Final",
+          "startDate": "2026-05-08T04:00Z",
+          "endDate": "2026-07-01T03:59Z",
+          "hasGroups": false,
+          "hasStandings": false,
+          "hasLiveStandings": false,
+          "hasLegs": false,
+          "hasStats": false,
+          "isFinal": true,
+          "isThirdPlace": false,
+          "groups": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/6/groups?lang=en&region=us"
+          },
+          "slug": "final"
+        }
+      ]
+    },
+    "athletes": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/athletes?lang=en&region=us"
+    },
+    "tournament": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/tournaments/2/seasons/2025?lang=en&region=us"
+    }
+  },
+  "seasons": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons?lang=en&region=us"
+  },
+  "franchises": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/franchises?lang=en&region=us"
+  },
+  "teams": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/teams?lang=en&region=us"
+  },
+  "group": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/1/groups/775?lang=en&region=us"
+  },
+  "groups": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/types/1/groups?lang=en&region=us"
+  },
+  "events": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/notes?lang=en&region=us"
+  },
+  "rankings": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/rankings?lang=en&region=us"
+  },
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "index",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/league/_/name/uefa.champions",
+      "text": "Index",
+      "shortText": "Index",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "index",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:775",
+      "text": "Index",
+      "shortText": "Index",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "schedule",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/schedule/_/league/uefa.champions",
+      "text": "Schedule",
+      "shortText": "Schedule",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "schedule",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:775&section=scores",
+      "text": "Schedule",
+      "shortText": "Schedule",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "standings",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/table/_/league/uefa.champions",
+      "text": "Standings",
+      "shortText": "Standings",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "standings",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:775&section=standings",
+      "text": "Standings",
+      "shortText": "Standings",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "scores",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/scoreboard/_/league/uefa.champions",
+      "text": "Scores",
+      "shortText": "Scores",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "scores",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:775&section=scores",
+      "text": "Scores",
+      "shortText": "Scores",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/stats/_/league/uefa.champions",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "league"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:775&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "teams",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/soccer/teams/_/league/uefa.champions",
+      "text": "Teams",
+      "shortText": "Teams",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "logos": [
+    {
+      "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/2.png",
+      "width": 500,
+      "height": 500,
+      "alt": "",
+      "rel": [
+        "full",
+        "default"
+      ],
+      "lastUpdated": "2019-05-08T16:07Z"
+    },
+    {
+      "href": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2.png",
+      "width": 500,
+      "height": 500,
+      "alt": "",
+      "rel": [
+        "full",
+        "dark"
+      ],
+      "lastUpdated": "2019-05-08T16:07Z"
+    }
+  ],
+  "calendar": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/calendar?lang=en&region=us"
+  },
+  "transactions": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/2025/transactions?lang=en&region=us"
+  },
+  "gender": "MALE"
+}

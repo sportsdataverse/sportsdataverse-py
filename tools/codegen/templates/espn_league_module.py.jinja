@@ -9,6 +9,9 @@ from sportsdataverse._codegen_runtime import {{ runtime_imports|join(", ") }}
 {% if parser_imports %}
 from sportsdataverse._common_espn_parsers import {{ parser_imports|join(", ") }}
 {% endif %}
+{% if sport_parser_imports and sport_parser_module %}
+from {{ sport_parser_module }} import {{ sport_parser_imports|join(", ") }}
+{% endif %}
 
 __all__ = [
 {% for ep in endpoints %}

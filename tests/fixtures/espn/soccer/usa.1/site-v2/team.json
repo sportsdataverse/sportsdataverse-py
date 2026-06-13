@@ -1,0 +1,1445 @@
+{
+  "team": {
+    "id": "18418",
+    "uid": "s:600~t:18418",
+    "slug": "usa.atlanta_united_fc",
+    "location": "Atlanta United FC",
+    "name": "Atlanta United FC",
+    "abbreviation": "ATL",
+    "displayName": "Atlanta United FC",
+    "shortDisplayName": "Atlanta",
+    "color": "9d2235",
+    "alternateColor": "aa9767",
+    "isActive": true,
+    "logos": [
+      {
+        "href": "https://a.espncdn.com/i/teamlogos/soccer/500/18418.png",
+        "width": 500,
+        "height": 500,
+        "alt": "",
+        "rel": [
+          "full",
+          "default"
+        ],
+        "lastUpdated": "2023-11-29T16:33Z"
+      },
+      {
+        "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/18418.png",
+        "width": 500,
+        "height": 500,
+        "alt": "",
+        "rel": [
+          "full",
+          "dark"
+        ],
+        "lastUpdated": "2023-11-29T16:35Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_white_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "primary_logo_on_white_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_black_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "primary_logo_on_black_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_primary_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "primary_logo_on_primary_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_secondary_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "primary_logo_on_secondary_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_black.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "primary_logo_black"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_white.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "primary_logo_white"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_white_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "secondary_logo_on_white_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_black_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "secondary_logo_on_black_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_primary_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "secondary_logo_on_primary_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_secondary_color.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "secondary_logo_on_secondary_color"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_black.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "secondary_logo_black"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      },
+      {
+        "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_white.png",
+        "width": 4096,
+        "height": 4096,
+        "alt": "",
+        "rel": [
+          "full",
+          "secondary_logo_white"
+        ],
+        "lastUpdated": "2026-02-13T04:06Z"
+      }
+    ],
+    "record": {
+      "items": [
+        {
+          "description": "Overall Record",
+          "type": "total",
+          "summary": "3-2-9",
+          "stats": [
+            {
+              "name": "gamesPlayed",
+              "value": 14.0
+            },
+            {
+              "name": "losses",
+              "value": 9.0
+            },
+            {
+              "name": "pointDifferential",
+              "value": -9.0
+            },
+            {
+              "name": "points",
+              "value": 11.0
+            },
+            {
+              "name": "pointsAgainst",
+              "value": 23.0
+            },
+            {
+              "name": "pointsFor",
+              "value": 14.0
+            },
+            {
+              "name": "streak",
+              "value": 0.0
+            },
+            {
+              "name": "ties",
+              "value": 2.0
+            },
+            {
+              "name": "wins",
+              "value": 3.0
+            },
+            {
+              "name": "advanced",
+              "value": 0.0
+            },
+            {
+              "name": "awayGamesPlayed",
+              "value": 6.0
+            },
+            {
+              "name": "awayLosses",
+              "value": 4.0
+            },
+            {
+              "name": "awayPointsAgainst",
+              "value": 9.0
+            },
+            {
+              "name": "awayPointsFor",
+              "value": 3.0
+            },
+            {
+              "name": "awayTies",
+              "value": 1.0
+            },
+            {
+              "name": "awayWins",
+              "value": 1.0
+            },
+            {
+              "name": "deductions",
+              "value": 0.0
+            },
+            {
+              "name": "homeGamesPlayed",
+              "value": 8.0
+            },
+            {
+              "name": "homeLosses",
+              "value": 5.0
+            },
+            {
+              "name": "homePointsAgainst",
+              "value": 14.0
+            },
+            {
+              "name": "homePointsFor",
+              "value": 11.0
+            },
+            {
+              "name": "homeTies",
+              "value": 1.0
+            },
+            {
+              "name": "homeWins",
+              "value": 2.0
+            },
+            {
+              "name": "ppg",
+              "value": 0.79
+            },
+            {
+              "name": "rank",
+              "value": 14.0
+            },
+            {
+              "name": "rankChange",
+              "value": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    "groups": {
+      "id": "1"
+    },
+    "links": [
+      {
+        "language": "en-US",
+        "rel": [
+          "clubhouse",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/club/_/id/18418/atlanta-united-fc",
+        "text": "Clubhouse",
+        "shortText": "Clubhouse",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "stats",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/stats/_/id/18418/atlanta-united-fc",
+        "text": "Stats",
+        "shortText": "Stats",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "stats",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=stats",
+        "text": "Stats",
+        "shortText": "Stats",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "schedule",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/fixtures/_/id/18418/atlanta-united-fc",
+        "text": "Fixtures",
+        "shortText": "Fixtures",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "schedule",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=scores",
+        "text": "Fixtures",
+        "shortText": "Fixtures",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "results",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/results/_/id/18418/atlanta-united-fc",
+        "text": "Results",
+        "shortText": "Results",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "results",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=scores",
+        "text": "Results",
+        "shortText": "Results",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "standings",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/standings/_/league/usa.1",
+        "text": "Standings",
+        "shortText": "Standings",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "standings",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=standings",
+        "text": "Standings",
+        "shortText": "Standings",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "squad",
+          "desktop",
+          "team"
+        ],
+        "href": "https://www.espn.com/soccer/team/squad/_/id/18418/atlanta-united-fc",
+        "text": "Squad",
+        "shortText": "Squad",
+        "isExternal": false,
+        "isPremium": false
+      },
+      {
+        "language": "en-US",
+        "rel": [
+          "squad",
+          "sportscenter",
+          "app",
+          "team"
+        ],
+        "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=squad",
+        "text": "Squad",
+        "shortText": "Squad",
+        "isExternal": false,
+        "isPremium": false
+      }
+    ],
+    "defaultLeague": {
+      "id": "770",
+      "alternateId": "19",
+      "name": "MLS",
+      "abbreviation": "MLS",
+      "shortName": "MLS",
+      "midsizeName": "USA.1",
+      "slug": "usa.1",
+      "season": {
+        "type": {
+          "hasStandings": true
+        }
+      },
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "index",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/league/_/name/usa.1",
+          "text": "Index",
+          "shortText": "Index",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "index",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770",
+          "text": "Index",
+          "shortText": "Index",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "schedule",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/schedule/_/league/usa.1",
+          "text": "Schedule",
+          "shortText": "Schedule",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "schedule",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=scores",
+          "text": "Schedule",
+          "shortText": "Schedule",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "standings",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/table/_/league/usa.1",
+          "text": "Standings",
+          "shortText": "Standings",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "standings",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=standings",
+          "text": "Standings",
+          "shortText": "Standings",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "scores",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/scoreboard/_/league/usa.1",
+          "text": "Scores",
+          "shortText": "Scores",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "scores",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=scores",
+          "text": "Scores",
+          "shortText": "Scores",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/stats/_/league/usa.1",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~l:770&section=stats",
+          "text": "Stats",
+          "shortText": "Stats",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "teams",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/soccer/teams/_/league/usa.1",
+          "text": "Teams",
+          "shortText": "Teams",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/19.png",
+          "width": 500,
+          "height": 500,
+          "alt": "",
+          "rel": [
+            "full",
+            "default"
+          ],
+          "lastUpdated": "2019-05-08T16:07Z"
+        },
+        {
+          "href": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/19.png",
+          "width": 500,
+          "height": 500,
+          "alt": "",
+          "rel": [
+            "full",
+            "dark"
+          ],
+          "lastUpdated": "2019-05-08T16:07Z"
+        }
+      ]
+    },
+    "leagueAbbrev": "usa.1",
+    "nextEvent": [
+      {
+        "id": "761663",
+        "date": "2026-07-18T00:00Z",
+        "name": "Atlanta United FC at Nashville SC",
+        "shortName": "ATL @ NSH",
+        "season": {
+          "year": 2026,
+          "displayName": "2026 MLS"
+        },
+        "seasonType": {
+          "id": "1",
+          "type": 13846,
+          "name": "Regular Season",
+          "abbreviation": "2026 MLS"
+        },
+        "timeValid": true,
+        "competitions": [
+          {
+            "id": "761663",
+            "date": "2026-07-18T00:00Z",
+            "attendance": 0,
+            "timeValid": true,
+            "neutralSite": false,
+            "boxscoreAvailable": true,
+            "ticketsAvailable": true,
+            "venue": {
+              "fullName": "GEODIS Park",
+              "address": {
+                "city": "Nashville, Tennessee",
+                "country": "USA"
+              }
+            },
+            "competitors": [
+              {
+                "id": "18986",
+                "type": "team",
+                "order": 0,
+                "homeAway": "home",
+                "winner": false,
+                "team": {
+                  "id": "18986",
+                  "location": "Nashville SC",
+                  "abbreviation": "NSH",
+                  "displayName": "Nashville SC",
+                  "shortDisplayName": "Nashville",
+                  "logos": [
+                    {
+                      "href": "https://a.espncdn.com/i/teamlogos/soccer/500/18986.png",
+                      "width": 500,
+                      "height": 500,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "default"
+                      ],
+                      "lastUpdated": "2019-11-25T20:58Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/18986.png",
+                      "width": 500,
+                      "height": 500,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "dark"
+                      ],
+                      "lastUpdated": "2019-11-25T20:59Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/primary_logo_on_white_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_white_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/primary_logo_on_black_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_black_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/primary_logo_on_primary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_primary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/primary_logo_on_secondary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_secondary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/primary_logo_black.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_black"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/primary_logo_white.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_white"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/secondary_logo_on_white_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_white_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/secondary_logo_on_black_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_black_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/secondary_logo_on_primary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_primary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/secondary_logo_on_secondary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_secondary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/secondary_logo_black.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_black"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/0673d2cd-1105-f5c1-26db-5b9c4e23b989/logos/secondary_logo_white.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_white"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    }
+                  ],
+                  "links": [
+                    {
+                      "rel": [
+                        "clubhouse",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/club/_/id/18986/nashville-sc",
+                      "text": "Clubhouse"
+                    },
+                    {
+                      "rel": [
+                        "stats",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/stats/_/id/18986/nashville-sc",
+                      "text": "Stats"
+                    },
+                    {
+                      "rel": [
+                        "stats",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18986&section=stats",
+                      "text": "Stats"
+                    },
+                    {
+                      "rel": [
+                        "schedule",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/fixtures/_/id/18986/nashville-sc",
+                      "text": "Fixtures"
+                    },
+                    {
+                      "rel": [
+                        "schedule",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18986&section=scores",
+                      "text": "Fixtures"
+                    },
+                    {
+                      "rel": [
+                        "results",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/results/_/id/18986/nashville-sc",
+                      "text": "Results"
+                    },
+                    {
+                      "rel": [
+                        "results",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18986&section=scores",
+                      "text": "Results"
+                    },
+                    {
+                      "rel": [
+                        "standings",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/standings/_/league/usa.1",
+                      "text": "Standings"
+                    },
+                    {
+                      "rel": [
+                        "standings",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18986&section=standings",
+                      "text": "Standings"
+                    },
+                    {
+                      "rel": [
+                        "squad",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/squad/_/id/18986/nashville-sc",
+                      "text": "Squad"
+                    },
+                    {
+                      "rel": [
+                        "squad",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18986&section=squad",
+                      "text": "Squad"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "18418",
+                "type": "team",
+                "order": 1,
+                "homeAway": "away",
+                "winner": false,
+                "team": {
+                  "id": "18418",
+                  "location": "Atlanta United FC",
+                  "abbreviation": "ATL",
+                  "displayName": "Atlanta United FC",
+                  "shortDisplayName": "Atlanta",
+                  "logos": [
+                    {
+                      "href": "https://a.espncdn.com/i/teamlogos/soccer/500/18418.png",
+                      "width": 500,
+                      "height": 500,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "default"
+                      ],
+                      "lastUpdated": "2023-11-29T16:33Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/i/teamlogos/soccer/500-dark/18418.png",
+                      "width": 500,
+                      "height": 500,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "dark"
+                      ],
+                      "lastUpdated": "2023-11-29T16:35Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_white_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_white_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_black_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_black_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_primary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_primary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_on_secondary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_on_secondary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_black.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_black"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/primary_logo_white.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "primary_logo_white"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_white_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_white_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_black_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_black_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_primary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_primary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_on_secondary_color.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_on_secondary_color"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_black.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_black"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    },
+                    {
+                      "href": "https://a.espncdn.com/guid/7d8fa0c3-e69d-bffb-5d8b-c45f998f4a2b/logos/secondary_logo_white.png",
+                      "width": 4096,
+                      "height": 4096,
+                      "alt": "",
+                      "rel": [
+                        "full",
+                        "secondary_logo_white"
+                      ],
+                      "lastUpdated": "2026-02-13T04:06Z"
+                    }
+                  ],
+                  "links": [
+                    {
+                      "rel": [
+                        "clubhouse",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/club/_/id/18418/atlanta-united-fc",
+                      "text": "Clubhouse"
+                    },
+                    {
+                      "rel": [
+                        "stats",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/stats/_/id/18418/atlanta-united-fc",
+                      "text": "Stats"
+                    },
+                    {
+                      "rel": [
+                        "stats",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=stats",
+                      "text": "Stats"
+                    },
+                    {
+                      "rel": [
+                        "schedule",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/fixtures/_/id/18418/atlanta-united-fc",
+                      "text": "Fixtures"
+                    },
+                    {
+                      "rel": [
+                        "schedule",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=scores",
+                      "text": "Fixtures"
+                    },
+                    {
+                      "rel": [
+                        "results",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/results/_/id/18418/atlanta-united-fc",
+                      "text": "Results"
+                    },
+                    {
+                      "rel": [
+                        "results",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=scores",
+                      "text": "Results"
+                    },
+                    {
+                      "rel": [
+                        "standings",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/standings/_/league/usa.1",
+                      "text": "Standings"
+                    },
+                    {
+                      "rel": [
+                        "standings",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=standings",
+                      "text": "Standings"
+                    },
+                    {
+                      "rel": [
+                        "squad",
+                        "desktop",
+                        "team"
+                      ],
+                      "href": "https://www.espn.com/soccer/team/squad/_/id/18418/atlanta-united-fc",
+                      "text": "Squad"
+                    },
+                    {
+                      "rel": [
+                        "squad",
+                        "sportscenter",
+                        "app",
+                        "team"
+                      ],
+                      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:600~t:18418&section=squad",
+                      "text": "Squad"
+                    }
+                  ]
+                }
+              }
+            ],
+            "notes": [],
+            "broadcasts": [
+              {
+                "type": {
+                  "id": "1",
+                  "shortName": "TV"
+                },
+                "media": {
+                  "shortName": "FOX"
+                },
+                "lang": "en",
+                "region": "us"
+              },
+              {
+                "type": {
+                  "id": "4",
+                  "shortName": "STREAMING"
+                },
+                "media": {
+                  "shortName": "Apple TV"
+                },
+                "lang": "en",
+                "region": "us"
+              }
+            ],
+            "tickets": [
+              {
+                "id": "6325236",
+                "summary": "Tickets as low as $24",
+                "description": "Atlanta United at Nashville SC",
+                "maxPrice": 1004.47,
+                "startingPrice": 24.75,
+                "numberAvailable": 2422,
+                "totalPostings": 601,
+                "links": [
+                  {
+                    "rel": [
+                      "tickets",
+                      "desktop",
+                      "event"
+                    ],
+                    "href": "https://www.vividseats.com/nashville-sc-tickets-geodis-park-7-17-2026--sports-mls/production/6325236?wsUser=717"
+                  },
+                  {
+                    "rel": [
+                      "tickets",
+                      "desktop",
+                      "venue"
+                    ],
+                    "href": "https://www.vividseats.com/venues/geodis-park-tickets.html?wsUser=717"
+                  }
+                ]
+              }
+            ],
+            "status": {
+              "clock": 0.0,
+              "addedClock": 0.0,
+              "displayClock": "0'",
+              "period": 0,
+              "type": {
+                "id": "1",
+                "name": "STATUS_SCHEDULED",
+                "state": "pre",
+                "completed": false,
+                "description": "Scheduled",
+                "detail": "Fri, July 17th at 8:00 PM EDT",
+                "shortDetail": "7/17 - 8:00 PM EDT"
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "language": "en-US",
+            "rel": [
+              "summary",
+              "desktop",
+              "event"
+            ],
+            "href": "https://www.espn.com/soccer/match/_/gameId/761663/atlanta-united-fc-nashville-sc",
+            "text": "Summary",
+            "shortText": "Summary",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "summary",
+              "mobile",
+              "event"
+            ],
+            "href": "https://m.espn.com/soccer/match?gameId=761663&action=summary",
+            "text": "Summary",
+            "shortText": "Summary",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "summary",
+              "sportscenter",
+              "app",
+              "event"
+            ],
+            "href": "sportscenter://x-callback-url/showGame?sportName=soccer&leagueAbbrev=usa.1&gameId=761663",
+            "text": "Summary",
+            "shortText": "Summary",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "videos",
+              "desktop",
+              "event"
+            ],
+            "href": "https://www.espn.com/soccer/video/_/gameId/761663",
+            "text": "Videos",
+            "shortText": "Videos",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "standings",
+              "desktop",
+              "event"
+            ],
+            "href": "https://www.espn.com/soccer/table/_/league/usa.1",
+            "text": "Table",
+            "shortText": "Table",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "odds",
+              "desktop",
+              "event"
+            ],
+            "href": "https://www.espn.com/soccer/odds/_/gameId/761663",
+            "text": "Odds",
+            "shortText": "Odds",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "odds",
+              "mobile",
+              "event"
+            ],
+            "href": "https://m.espn.com/soccer/odds/_/gameId/761663",
+            "text": "Odds",
+            "shortText": "Odds",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "livestandings",
+              "desktop",
+              "event"
+            ],
+            "href": "https://www.espn.com/soccer/table/_/gameId/761663",
+            "text": "Live Table",
+            "shortText": "Live Table",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "stats",
+              "desktop",
+              "event"
+            ],
+            "href": "https://www.espn.com/soccer/matchstats/_/gameId/761663",
+            "text": "Statistics",
+            "shortText": "Statistics",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "commentary",
+              "desktop",
+              "event"
+            ],
+            "href": "https://www.espn.com/soccer/commentary/_/gameId/761663",
+            "text": "Commentary",
+            "shortText": "Commentary",
+            "isExternal": false,
+            "isPremium": false
+          },
+          {
+            "language": "en-US",
+            "rel": [
+              "bet365",
+              "desktop",
+              "event"
+            ],
+            "href": "http://www.bet365.com/home/?affiliate=365_351846",
+            "text": "Bet 365",
+            "shortText": "Bet 365",
+            "isExternal": true,
+            "isPremium": false
+          }
+        ],
+        "league": {
+          "id": "770",
+          "alternateId": "19",
+          "name": "MLS",
+          "abbreviation": "MLS",
+          "shortName": "MLS",
+          "midsizeName": "USA.1",
+          "slug": "usa.1",
+          "isTournament": false
+        }
+      }
+    ],
+    "standingSummary": "14th in MLS"
+  }
+}

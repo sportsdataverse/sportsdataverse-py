@@ -1,0 +1,11 @@
+{
+  "count": 31,
+  "pageIndex": 1,
+  "pageSize": 1,
+  "pageCount": 31,
+  "items": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/usa.1/seasons/2026?lang=en&region=us"
+    }
+  ]
+}

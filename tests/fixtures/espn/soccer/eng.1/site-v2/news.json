@@ -1,0 +1,2519 @@
+{
+  "header": "Premier League News",
+  "link": {
+    "language": "en",
+    "rel": [
+      "index",
+      "desktop",
+      "league"
+    ],
+    "href": "https://www.espn.com/football/league/_/name/eng.1",
+    "text": "All Premier League News",
+    "shortText": "All News",
+    "isExternal": false,
+    "isPremium": false
+  },
+  "articles": [
+    {
+      "id": 49047880,
+      "nowId": "1-49047880",
+      "contentKey": "49047880-1-6-1",
+      "dataSourceIdentifier": "c9b41d15b86f3",
+      "type": "Story",
+      "headline": "Transfer rumors, news: Arsenal shortlist three young wingers",
+      "description": "Arsenal have been linked to three different wingers by three different outlets, while not impacting their interest in signing Aston Villa forward Morgan Rogers. Transfer Talk has the latest.",
+      "lastModified": "2026-06-13T09:54:15Z",
+      "published": "2026-06-13T09:54:15Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "78fa7b2e10981",
+          "id": 47998548,
+          "type": "header",
+          "name": "Paris Saint-Germain's French forward #29 Bradley Barcola [1296x729]",
+          "alt": "Paris Saint-Germain's French forward #29 Bradley Barcola (C-L) celebrates after scoring his team's second goal with Paris Saint-Germain's Portuguese forward #09 Goncalo Ramos (L), Paris Saint-Germain's French midfielder #14 Desire Doue (C-R) and Paris Sai",
+          "credit": "Bertrand GUAY / AFP via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0221/r1618271_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "How can USMNT use Christian Pulisic at the World Cup?",
+          "caption": "How can USMNT use Christian Pulisic at the World Cup?",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0612/dm_260612_COM_SOC_Analysis_How_can_USMNT_utilise_Christian_Pulisic_at_the_World_Cup_20260612_GLOBAL_FIFA/dm_260612_COM_SOC_Analysis_How_can_USMNT_utilise_Christian_Pulisic_at_the_World_Cup_20260612_GLOBAL_FIFA.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 518441,
+          "type": "topic",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0",
+          "description": "soccer transfers",
+          "sportId": 0,
+          "topicId": 3
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 597355,
+          "type": "topic",
+          "guid": "f9197630-65d3-54d8-60b3-72182b25d2ef",
+          "description": "blog - transfer talk",
+          "sportId": 0,
+          "topicId": 79
+        },
+        {
+          "id": 137781,
+          "type": "league",
+          "uid": "s:600~l:700",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+          "description": "English Premier League",
+          "sportId": 600,
+          "leagueId": 23,
+          "league": {
+            "id": 700,
+            "description": "English Premier League",
+            "abbreviation": "Premier League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142299,
+          "type": "team",
+          "uid": "s:600~t:359",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4",
+          "description": "Arsenal",
+          "sportId": 600,
+          "teamId": 359,
+          "team": {
+            "id": 359,
+            "description": "Arsenal",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "f9197630-65d3-54d8-60b3-72182b25d2ef"
+        },
+        {
+          "type": "guid",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38"
+        },
+        {
+          "type": "guid",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/49047880/transfer-rumors-news-arsenal-shortlist-three-young-wingers"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=49047880"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/49047880"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=49047880"
+          }
+        }
+      },
+      "byline": "ESPN"
+    },
+    {
+      "id": 48944912,
+      "nowId": "1-48944912",
+      "contentKey": "48944912-1-5-1",
+      "dataSourceIdentifier": "f5b050e52fc2d",
+      "type": "HeadlineNews",
+      "headline": "Premier League, EFL summer transfer window 2026 dates: When does it open, when is Deadline Day?",
+      "description": "Everything that Premier League and EFL supporters need to know about the 2026 summer transfer window, and key dates around it.",
+      "lastModified": "2026-06-13T07:03:37Z",
+      "published": "2026-06-13T07:03:37Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "53c4ba04ad716",
+          "id": 41241994,
+          "type": "header",
+          "name": " Liverpool's Harvey Elliott during the Premier League match between Liverpool FC and Brentford FC [1296x729]",
+          "credit": "Photo by Dave Howarth - CameraSport via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2024/0913/r1385766_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Olley: Tottenham have to go 'all-in' to back De Zerbi in transfer window",
+          "caption": "James Olley looks ahead to Tottenham's summer transfer window with Roberto De Zerbi.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0526/dm_260526_COM_SOC_Analysis_Olley_Tottenham_have_to_go_all_in_to_back_De_Zerbi_in_transfer_window_202605/dm_260526_COM_SOC_Analysis_Olley_Tottenham_have_to_go_all_in_to_back_De_Zerbi_in_transfer_window_202605.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 137781,
+          "type": "league",
+          "uid": "s:600~l:700",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+          "description": "English Premier League",
+          "sportId": 600,
+          "leagueId": 23,
+          "league": {
+            "id": 700,
+            "description": "English Premier League",
+            "abbreviation": "Premier League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137794,
+          "type": "league",
+          "uid": "s:600~l:3914",
+          "guid": "5fa5be09-2f07-39bc-9269-5fee4c86fb56",
+          "description": "English League Championship",
+          "sportId": 600,
+          "leagueId": 24,
+          "league": {
+            "id": 3914,
+            "description": "English League Championship",
+            "abbreviation": "EFL Championship",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.2"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.2"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137775,
+          "type": "league",
+          "uid": "s:600~l:3915",
+          "guid": "e2d57f0e-ef1c-375e-9e1e-2cc4b664879b",
+          "description": "English League One",
+          "sportId": 600,
+          "leagueId": 25,
+          "league": {
+            "id": 3915,
+            "description": "English League One",
+            "abbreviation": "EFL League One",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.3"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.3"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137778,
+          "type": "league",
+          "uid": "s:600~l:3916",
+          "guid": "6d283bd9-9f5d-42b1-b06e-2b3a18e5f746",
+          "description": "English League Two",
+          "sportId": 600,
+          "leagueId": 26,
+          "league": {
+            "id": 3916,
+            "description": "English League Two",
+            "abbreviation": "EFL League Two",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.4"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.4"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142299,
+          "type": "team",
+          "uid": "s:600~t:359",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4",
+          "description": "Arsenal",
+          "sportId": 600,
+          "teamId": 359,
+          "team": {
+            "id": 359,
+            "description": "Arsenal",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142293,
+          "type": "team",
+          "uid": "s:600~t:362",
+          "guid": "610557ff-e870-ea0e-a3b2-8244df325d22",
+          "description": "Aston Villa",
+          "sportId": 600,
+          "teamId": 362,
+          "team": {
+            "id": 362,
+            "description": "Aston Villa",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/362/aston-villa"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/362/aston-villa"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142305,
+          "type": "team",
+          "uid": "s:600~t:349",
+          "guid": "1e76c2fe-68a5-3950-8881-47e916c0c115",
+          "description": "AFC Bournemouth",
+          "sportId": 600,
+          "teamId": 349,
+          "team": {
+            "id": 349,
+            "description": "AFC Bournemouth",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/349/afc-bournemouth"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/349/afc-bournemouth"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142540,
+          "type": "team",
+          "uid": "s:600~t:337",
+          "guid": "0446e7fd-7655-f17a-d282-8c401b808d1f",
+          "description": "Brentford",
+          "sportId": 600,
+          "teamId": 337,
+          "team": {
+            "id": 337,
+            "description": "Brentford",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/337/brentford"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/337/brentford"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142530,
+          "type": "team",
+          "uid": "s:600~t:331",
+          "guid": "78c91a3f-9e5e-c8fe-8fca-778e97cb021a",
+          "description": "Brighton & Hove Albion",
+          "sportId": 600,
+          "teamId": 331,
+          "team": {
+            "id": 331,
+            "description": "Brighton & Hove Albion",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/331/brighton-hove-albion"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/331/brighton-hove-albion"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142296,
+          "type": "team",
+          "uid": "s:600~t:363",
+          "guid": "c43a00b9-2826-72b3-77a0-62730abc936e",
+          "description": "Chelsea",
+          "sportId": 600,
+          "teamId": 363,
+          "team": {
+            "id": 363,
+            "description": "Chelsea",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/363/chelsea"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/363/chelsea"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142289,
+          "type": "team",
+          "uid": "s:600~t:384",
+          "guid": "e8703d92-a160-9bbf-cb81-1be6f3fd7969",
+          "description": "Crystal Palace",
+          "sportId": 600,
+          "teamId": 384,
+          "team": {
+            "id": 384,
+            "description": "Crystal Palace",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/384/crystal-palace"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/384/crystal-palace"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142550,
+          "type": "team",
+          "uid": "s:600~t:370",
+          "guid": "14acbd22-f709-1525-c5ab-1cb3ec8d1696",
+          "description": "Fulham",
+          "sportId": 600,
+          "teamId": 370,
+          "team": {
+            "id": 370,
+            "description": "Fulham",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/370/fulham"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/370/fulham"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142528,
+          "type": "team",
+          "uid": "s:600~t:357",
+          "guid": "231a0077-e0f5-f148-974b-82b9ec5f304e",
+          "description": "Leeds United",
+          "sportId": 600,
+          "teamId": 357,
+          "team": {
+            "id": 357,
+            "description": "Leeds United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/357/leeds-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/357/leeds-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142287,
+          "type": "team",
+          "uid": "s:600~t:382",
+          "guid": "94fd5d7e-35b1-9d52-c9f2-4a37259bea36",
+          "description": "Manchester City",
+          "sportId": 600,
+          "teamId": 382,
+          "team": {
+            "id": 382,
+            "description": "Manchester City",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/382/manchester-city"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/382/manchester-city"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142292,
+          "type": "team",
+          "uid": "s:600~t:360",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9",
+          "description": "Manchester United",
+          "sportId": 600,
+          "teamId": 360,
+          "team": {
+            "id": 360,
+            "description": "Manchester United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142294,
+          "type": "team",
+          "uid": "s:600~t:361",
+          "guid": "ec6b4352-98d3-424d-6214-778d79b47a01",
+          "description": "Newcastle United",
+          "sportId": 600,
+          "teamId": 361,
+          "team": {
+            "id": 361,
+            "description": "Newcastle United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/361/newcastle-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/361/newcastle-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142546,
+          "type": "team",
+          "uid": "s:600~t:393",
+          "guid": "ad9ef79b-ca27-077e-8a6f-335e0d220b27",
+          "description": "Nottingham Forest",
+          "sportId": 600,
+          "teamId": 393,
+          "team": {
+            "id": 393,
+            "description": "Nottingham Forest",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/393/nottingham-forest"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/393/nottingham-forest"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142297,
+          "type": "team",
+          "uid": "s:600~t:366",
+          "guid": "479e0b8f-fbeb-4a27-ce19-2c6ab31ac811",
+          "description": "Sunderland",
+          "sportId": 600,
+          "teamId": 366,
+          "team": {
+            "id": 366,
+            "description": "Sunderland",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/366/sunderland"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/366/sunderland"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142250,
+          "type": "team",
+          "uid": "s:600~t:388",
+          "guid": "05650a8f-d953-4acc-dd85-260d59aa4c8f",
+          "description": "Coventry City",
+          "sportId": 600,
+          "teamId": 388,
+          "team": {
+            "id": 388,
+            "description": "Coventry City",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/388/coventry-city"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/388/coventry-city"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142535,
+          "type": "team",
+          "uid": "s:600~t:306",
+          "guid": "0b8849a3-b74b-fb8a-d14b-e8a6b8022c7d",
+          "description": "Hull City",
+          "sportId": 600,
+          "teamId": 306,
+          "team": {
+            "id": 306,
+            "description": "Hull City",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/306/hull-city"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/306/hull-city"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 133852,
+          "type": "topic",
+          "guid": "4a692b96-9c7a-6b07-4a8b-7f0c0e64e7fe",
+          "description": "news - uk football",
+          "sportId": 0,
+          "topicId": 156
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38"
+        },
+        {
+          "type": "guid",
+          "guid": "5fa5be09-2f07-39bc-9269-5fee4c86fb56"
+        },
+        {
+          "type": "guid",
+          "guid": "e2d57f0e-ef1c-375e-9e1e-2cc4b664879b"
+        },
+        {
+          "type": "guid",
+          "guid": "6d283bd9-9f5d-42b1-b06e-2b3a18e5f746"
+        },
+        {
+          "type": "guid",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4"
+        },
+        {
+          "type": "guid",
+          "guid": "610557ff-e870-ea0e-a3b2-8244df325d22"
+        },
+        {
+          "type": "guid",
+          "guid": "1e76c2fe-68a5-3950-8881-47e916c0c115"
+        },
+        {
+          "type": "guid",
+          "guid": "0446e7fd-7655-f17a-d282-8c401b808d1f"
+        },
+        {
+          "type": "guid",
+          "guid": "78c91a3f-9e5e-c8fe-8fca-778e97cb021a"
+        },
+        {
+          "type": "guid",
+          "guid": "c43a00b9-2826-72b3-77a0-62730abc936e"
+        },
+        {
+          "type": "guid",
+          "guid": "e8703d92-a160-9bbf-cb81-1be6f3fd7969"
+        },
+        {
+          "type": "guid",
+          "guid": "14acbd22-f709-1525-c5ab-1cb3ec8d1696"
+        },
+        {
+          "type": "guid",
+          "guid": "231a0077-e0f5-f148-974b-82b9ec5f304e"
+        },
+        {
+          "type": "guid",
+          "guid": "94fd5d7e-35b1-9d52-c9f2-4a37259bea36"
+        },
+        {
+          "type": "guid",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9"
+        },
+        {
+          "type": "guid",
+          "guid": "ec6b4352-98d3-424d-6214-778d79b47a01"
+        },
+        {
+          "type": "guid",
+          "guid": "ad9ef79b-ca27-077e-8a6f-335e0d220b27"
+        },
+        {
+          "type": "guid",
+          "guid": "479e0b8f-fbeb-4a27-ce19-2c6ab31ac811"
+        },
+        {
+          "type": "guid",
+          "guid": "05650a8f-d953-4acc-dd85-260d59aa4c8f"
+        },
+        {
+          "type": "guid",
+          "guid": "0b8849a3-b74b-fb8a-d14b-e8a6b8022c7d"
+        },
+        {
+          "type": "guid",
+          "guid": "4a692b96-9c7a-6b07-4a8b-7f0c0e64e7fe"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/48944912/premier-league-efl-summer-transfer-window-2026-dates-does-open-deadline-day"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=48944912"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48944912"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48944912"
+          }
+        }
+      },
+      "byline": "ESPN"
+    },
+    {
+      "id": 48709856,
+      "nowId": "1-48709856",
+      "contentKey": "48709856-1-6-1",
+      "dataSourceIdentifier": "759ae80fc8525",
+      "type": "Story",
+      "headline": "World Cup 2026: Which players from your Premier League team are going?",
+      "description": "Which Premier League players from your team are representing their country at the 2026 World Cup in the United States, Canada and Mexico?",
+      "lastModified": "2026-06-13T07:01:37Z",
+      "published": "2026-06-13T07:01:37Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "68d6040586a8a",
+          "id": 48870468,
+          "type": "header",
+          "name": "Saka England [1296x729]",
+          "caption": "Bukayo Saka heads to the World Cup fresh off winning the Premier League with Arsenal.",
+          "alt": "Bukayo Saka with England manager Thomas Tuchel.",
+          "credit": "Photo by Catherine Ivill - AMA/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663354_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "3926c12755ea4",
+          "id": 48870495,
+          "type": "header",
+          "name": "John McGinn [1296x729]",
+          "caption": "John McGinn in action for Scotland.",
+          "alt": "John McGinn in action for Scotland.",
+          "credit": "Photo by Molly Darlington/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663356_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "3ddb3782d05b5",
+          "id": 48870541,
+          "type": "header",
+          "name": "Christie Scotland [1296x729]",
+          "caption": "Ryan Christie has been named in the Scotland squad.",
+          "alt": "Ryan Christie in action for Scotland.",
+          "credit": "Photo by Craig Williamson/SNS Group via Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663359_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "c17d17c58a42b",
+          "id": 48870589,
+          "type": "header",
+          "name": "Igor Thiago in action for Brazil.  [1296x729]",
+          "caption": "Igor Thiago in action for Brazil.",
+          "alt": "Igor Thiago in action for Brazil.",
+          "credit": "Photo by Richard Callis/Sports Press Photo/Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663361_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "b4911b2656a73",
+          "id": 48870604,
+          "type": "header",
+          "name": "Pascal Gross [1296x729]",
+          "caption": "Brighton's Pascal Gross will travel with Germany.",
+          "alt": "Pascal Gross in action for Germany.",
+          "credit": "Photo by Ralf Ibing - firo sportphoto/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663362_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "d17c87a0aaef3",
+          "id": 48870654,
+          "type": "header",
+          "name": "Enzo Fernandez [1296x729]",
+          "caption": "Enzo Fernandez in action for Argentina.",
+          "alt": "Enzo Fernandez in action for Argentina.",
+          "credit": "Photo by Marcelo Endelli/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663364_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "6f651fdd4acb6",
+          "id": 48870688,
+          "type": "header",
+          "name": "Mateta France [1296x729]",
+          "caption": "Crystal Palace striker Jean-Philippe Mateta will be part of the French squad.",
+          "alt": "Jean-Philippe Mateta in action for France.",
+          "credit": "Photo by Franck FIFE / AFP via Getty Images,",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663366_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "3090e36a096f1",
+          "id": 49026478,
+          "type": "header",
+          "name": "Wright [1296x729]",
+          "credit": "Getty",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0611/r1671152_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "918da0fef7cc8",
+          "id": 48870723,
+          "type": "header",
+          "name": "Jordan Pickford [1296x729]",
+          "caption": "Thomas Tuchel with England goalkeeper Jordan Pickford.",
+          "alt": "Thomas Tuchel with England goalkeeper Jordan Pickford.",
+          "credit": "Photo by Julian Finney/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663367_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "701a62814180f",
+          "id": 49026449,
+          "type": "header",
+          "name": "Antonee Robinson [1296x729]",
+          "credit": "Getty",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0611/r1671151_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "5bdbfb49f6d76",
+          "id": 48870801,
+          "type": "header",
+          "name": "Ivor Pandur [1296x729]",
+          "caption": "Ivor Pandur in action for Croatia.",
+          "alt": "Ivor Pandur in action for Croatia.",
+          "credit": "Photo by Peter Joneleit/Icon Sportswire via Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663371_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "68000f379e73c",
+          "id": 48870828,
+          "type": "header",
+          "name": "George Hirst [1296x729]",
+          "caption": "Newly promoted Ipswich are sending George Hirst to the World Cup with Scotland.",
+          "alt": "George Hirst in action for Scotland.",
+          "credit": "Photo by Carl Recine/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663373_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "9083d080df078",
+          "id": 48870853,
+          "type": "header",
+          "name": "Leeds' Ao Tanaka in action for Japan.  [1296x729]",
+          "caption": "Leeds' Ao Tanaka in action for Japan.",
+          "alt": "Leeds' Ao Tanaka in action for Japan.",
+          "credit": "Photo by Catherine Ivill - AMA/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663374_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "e4bd85636e5e7",
+          "id": 48870885,
+          "type": "header",
+          "name": "Alexis Mac Allister [1296x729]",
+          "caption": "Liverpool's Alexis Mac Allister in action for Argentina.",
+          "alt": "Liverpool's Alexis Mac Allister in action for Argentina.",
+          "credit": "Photo by Marcelo Endelli/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663375_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "f1cc79be788be",
+          "id": 48870915,
+          "type": "header",
+          "name": "Haaland [1296x729]",
+          "caption": "Erling Haaland is in Norway's squad.",
+          "alt": "Erling Haaland in action for Norway.",
+          "credit": "Photo by Stuart Franklin/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663377_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "bc414daf1018d",
+          "id": 48870968,
+          "type": "header",
+          "name": "Bruno  [1296x729]",
+          "caption": "Bruno Fernandes in action for Portugal.",
+          "alt": "Bruno Fernandes in action for Portugal.",
+          "credit": "Photo by Agustin Cuevas/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663381_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "5b998d6fcb6c2",
+          "id": 48870996,
+          "type": "header",
+          "name": "Bruno Guimaraes [1296x729]",
+          "caption": "Bruno Guimaraes is in the Brazil squad.",
+          "alt": "Bruno Guimaraes in action for Brazil.",
+          "credit": "Photo by Harry Murphy/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663382_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "e394cfd9d8b50",
+          "id": 48871026,
+          "type": "header",
+          "name": "Chris Wood of New Nottingham Forest and New Zealand.  [1296x729]",
+          "caption": "Chris Wood of New Nottingham Forest and New Zealand.",
+          "alt": "Chris Wood of New Nottingham Forest and New Zealand.",
+          "credit": "Photo by Phil Walter/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663383_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "7f9bbef1de3af",
+          "id": 48871059,
+          "type": "header",
+          "name": "Xhaka Switzerland [1296x729]",
+          "caption": "Granit Xhaka in action for Switzerland.",
+          "alt": "Granit Xhaka in action for Switzerland.",
+          "credit": "Photo by Alex Grimm/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663385_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "69603264f519d",
+          "id": 48871090,
+          "type": "header",
+          "name": "Pape Matar Sarr of Senegal and Tottenham.  [1296x729]",
+          "caption": "Pape Matar Sarr of Senegal and Tottenham.",
+          "alt": "Pape Matar Sarr of Senegal and Tottenham.",
+          "credit": "Photo by Catherine Ivill - AMA/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0525/r1663386_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Olley: Tuchel has taken Southgate's England approach even further",
+          "caption": "James Olley discusses Thomas Tuchel's England squad selections, arguing that Tuchel has taken Gareth Southgate's approach even further by leaving out several high-profile players.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0522/dm_260522_Olley_Tuchel_has_taken_Southgates_England_approach_even_further/dm_260522_Olley_Tuchel_has_taken_Southgates_England_approach_even_further.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137781,
+          "type": "league",
+          "uid": "s:600~l:700",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+          "description": "English Premier League",
+          "sportId": 600,
+          "leagueId": 23,
+          "league": {
+            "id": 700,
+            "description": "English Premier League",
+            "abbreviation": "Premier League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142299,
+          "type": "team",
+          "uid": "s:600~t:359",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4",
+          "description": "Arsenal",
+          "sportId": 600,
+          "teamId": 359,
+          "team": {
+            "id": 359,
+            "description": "Arsenal",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142296,
+          "type": "team",
+          "uid": "s:600~t:363",
+          "guid": "c43a00b9-2826-72b3-77a0-62730abc936e",
+          "description": "Chelsea",
+          "sportId": 600,
+          "teamId": 363,
+          "team": {
+            "id": 363,
+            "description": "Chelsea",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/363/chelsea"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/363/chelsea"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142294,
+          "type": "team",
+          "uid": "s:600~t:361",
+          "guid": "ec6b4352-98d3-424d-6214-778d79b47a01",
+          "description": "Newcastle United",
+          "sportId": 600,
+          "teamId": 361,
+          "team": {
+            "id": 361,
+            "description": "Newcastle United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/361/newcastle-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/361/newcastle-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142305,
+          "type": "team",
+          "uid": "s:600~t:349",
+          "guid": "1e76c2fe-68a5-3950-8881-47e916c0c115",
+          "description": "AFC Bournemouth",
+          "sportId": 600,
+          "teamId": 349,
+          "team": {
+            "id": 349,
+            "description": "AFC Bournemouth",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/349/afc-bournemouth"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/349/afc-bournemouth"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142303,
+          "type": "team",
+          "uid": "s:600~t:367",
+          "guid": "f987a4b2-f3f9-e7f6-eb7d-eda43893be5a",
+          "description": "Tottenham Hotspur",
+          "sportId": 600,
+          "teamId": 367,
+          "team": {
+            "id": 367,
+            "description": "Tottenham Hotspur",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/367/tottenham-hotspur"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/367/tottenham-hotspur"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142287,
+          "type": "team",
+          "uid": "s:600~t:382",
+          "guid": "94fd5d7e-35b1-9d52-c9f2-4a37259bea36",
+          "description": "Manchester City",
+          "sportId": 600,
+          "teamId": 382,
+          "team": {
+            "id": 382,
+            "description": "Manchester City",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/382/manchester-city"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/382/manchester-city"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142297,
+          "type": "team",
+          "uid": "s:600~t:366",
+          "guid": "479e0b8f-fbeb-4a27-ce19-2c6ab31ac811",
+          "description": "Sunderland",
+          "sportId": 600,
+          "teamId": 366,
+          "team": {
+            "id": 366,
+            "description": "Sunderland",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/366/sunderland"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/366/sunderland"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142293,
+          "type": "team",
+          "uid": "s:600~t:362",
+          "guid": "610557ff-e870-ea0e-a3b2-8244df325d22",
+          "description": "Aston Villa",
+          "sportId": 600,
+          "teamId": 362,
+          "team": {
+            "id": 362,
+            "description": "Aston Villa",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/362/aston-villa"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/362/aston-villa"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142292,
+          "type": "team",
+          "uid": "s:600~t:360",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9",
+          "description": "Manchester United",
+          "sportId": 600,
+          "teamId": 360,
+          "team": {
+            "id": 360,
+            "description": "Manchester United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142295,
+          "type": "team",
+          "uid": "s:600~t:364",
+          "guid": "a47fbcec-c948-cf4c-9e41-3dfa37588c9c",
+          "description": "Liverpool",
+          "sportId": 600,
+          "teamId": 364,
+          "team": {
+            "id": 364,
+            "description": "Liverpool",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/364/liverpool"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/364/liverpool"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142289,
+          "type": "team",
+          "uid": "s:600~t:384",
+          "guid": "e8703d92-a160-9bbf-cb81-1be6f3fd7969",
+          "description": "Crystal Palace",
+          "sportId": 600,
+          "teamId": 384,
+          "team": {
+            "id": 384,
+            "description": "Crystal Palace",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/384/crystal-palace"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/384/crystal-palace"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142530,
+          "type": "team",
+          "uid": "s:600~t:331",
+          "guid": "78c91a3f-9e5e-c8fe-8fca-778e97cb021a",
+          "description": "Brighton & Hove Albion",
+          "sportId": 600,
+          "teamId": 331,
+          "team": {
+            "id": 331,
+            "description": "Brighton & Hove Albion",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/331/brighton-hove-albion"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/331/brighton-hove-albion"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142540,
+          "type": "team",
+          "uid": "s:600~t:337",
+          "guid": "0446e7fd-7655-f17a-d282-8c401b808d1f",
+          "description": "Brentford",
+          "sportId": 600,
+          "teamId": 337,
+          "team": {
+            "id": 337,
+            "description": "Brentford",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/337/brentford"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/337/brentford"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142300,
+          "type": "team",
+          "uid": "s:600~t:368",
+          "guid": "c531d4dd-ea53-c1fc-9c91-c7f8f31b5a40",
+          "description": "Everton",
+          "sportId": 600,
+          "teamId": 368,
+          "team": {
+            "id": 368,
+            "description": "Everton",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/368/everton"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/368/everton"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142550,
+          "type": "team",
+          "uid": "s:600~t:370",
+          "guid": "14acbd22-f709-1525-c5ab-1cb3ec8d1696",
+          "description": "Fulham",
+          "sportId": 600,
+          "teamId": 370,
+          "team": {
+            "id": 370,
+            "description": "Fulham",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/370/fulham"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/370/fulham"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142528,
+          "type": "team",
+          "uid": "s:600~t:357",
+          "guid": "231a0077-e0f5-f148-974b-82b9ec5f304e",
+          "description": "Leeds United",
+          "sportId": 600,
+          "teamId": 357,
+          "team": {
+            "id": 357,
+            "description": "Leeds United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/357/leeds-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/357/leeds-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142546,
+          "type": "team",
+          "uid": "s:600~t:393",
+          "guid": "ad9ef79b-ca27-077e-8a6f-335e0d220b27",
+          "description": "Nottingham Forest",
+          "sportId": 600,
+          "teamId": 393,
+          "team": {
+            "id": 393,
+            "description": "Nottingham Forest",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/393/nottingham-forest"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/393/nottingham-forest"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142250,
+          "type": "team",
+          "uid": "s:600~t:388",
+          "guid": "05650a8f-d953-4acc-dd85-260d59aa4c8f",
+          "description": "Coventry City",
+          "sportId": 600,
+          "teamId": 388,
+          "team": {
+            "id": 388,
+            "description": "Coventry City",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/388/coventry-city"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/388/coventry-city"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142548,
+          "type": "team",
+          "uid": "s:600~t:373",
+          "guid": "136dc14e-288f-bbc3-d2c4-3a51d1a84cd1",
+          "description": "Ipswich Town",
+          "sportId": 600,
+          "teamId": 373,
+          "team": {
+            "id": 373,
+            "description": "Ipswich Town",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/373/ipswich-town"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/373/ipswich-town"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142535,
+          "type": "team",
+          "uid": "s:600~t:306",
+          "guid": "0b8849a3-b74b-fb8a-d14b-e8a6b8022c7d",
+          "description": "Hull City",
+          "sportId": 600,
+          "teamId": 306,
+          "team": {
+            "id": 306,
+            "description": "Hull City",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/306/hull-city"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/306/hull-city"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 33303,
+          "type": "league",
+          "uid": "s:600~l:606",
+          "guid": "34f478c4-cf9a-35da-abd5-33db021e09d2",
+          "description": "FIFA World Cup",
+          "sportId": 600,
+          "leagueId": 4,
+          "league": {
+            "id": 606,
+            "description": "FIFA World Cup",
+            "abbreviation": "FIFA World Cup",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/worldcup/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/worldcup/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38"
+        },
+        {
+          "type": "guid",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4"
+        },
+        {
+          "type": "guid",
+          "guid": "c43a00b9-2826-72b3-77a0-62730abc936e"
+        },
+        {
+          "type": "guid",
+          "guid": "ec6b4352-98d3-424d-6214-778d79b47a01"
+        },
+        {
+          "type": "guid",
+          "guid": "1e76c2fe-68a5-3950-8881-47e916c0c115"
+        },
+        {
+          "type": "guid",
+          "guid": "f987a4b2-f3f9-e7f6-eb7d-eda43893be5a"
+        },
+        {
+          "type": "guid",
+          "guid": "94fd5d7e-35b1-9d52-c9f2-4a37259bea36"
+        },
+        {
+          "type": "guid",
+          "guid": "479e0b8f-fbeb-4a27-ce19-2c6ab31ac811"
+        },
+        {
+          "type": "guid",
+          "guid": "610557ff-e870-ea0e-a3b2-8244df325d22"
+        },
+        {
+          "type": "guid",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9"
+        },
+        {
+          "type": "guid",
+          "guid": "a47fbcec-c948-cf4c-9e41-3dfa37588c9c"
+        },
+        {
+          "type": "guid",
+          "guid": "e8703d92-a160-9bbf-cb81-1be6f3fd7969"
+        },
+        {
+          "type": "guid",
+          "guid": "78c91a3f-9e5e-c8fe-8fca-778e97cb021a"
+        },
+        {
+          "type": "guid",
+          "guid": "0446e7fd-7655-f17a-d282-8c401b808d1f"
+        },
+        {
+          "type": "guid",
+          "guid": "c531d4dd-ea53-c1fc-9c91-c7f8f31b5a40"
+        },
+        {
+          "type": "guid",
+          "guid": "14acbd22-f709-1525-c5ab-1cb3ec8d1696"
+        },
+        {
+          "type": "guid",
+          "guid": "231a0077-e0f5-f148-974b-82b9ec5f304e"
+        },
+        {
+          "type": "guid",
+          "guid": "ad9ef79b-ca27-077e-8a6f-335e0d220b27"
+        },
+        {
+          "type": "guid",
+          "guid": "05650a8f-d953-4acc-dd85-260d59aa4c8f"
+        },
+        {
+          "type": "guid",
+          "guid": "136dc14e-288f-bbc3-d2c4-3a51d1a84cd1"
+        },
+        {
+          "type": "guid",
+          "guid": "0b8849a3-b74b-fb8a-d14b-e8a6b8022c7d"
+        },
+        {
+          "type": "guid",
+          "guid": "34f478c4-cf9a-35da-abd5-33db021e09d2"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/48709856/world-cup-2026-which-players-your-premier-league-team-going"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=48709856"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/48709856"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=48709856"
+          }
+        }
+      },
+      "byline": "ESPN"
+    },
+    {
+      "id": 49041439,
+      "nowId": "1-49041439",
+      "contentKey": "49041439-1-5-1",
+      "dataSourceIdentifier": "b3a67e17d80d1",
+      "type": "HeadlineNews",
+      "headline": "Sir David Beckham honoured with star on Hollywood Walk of Fame",
+      "description": "Sir David Beckham has become the first footballer to receive a star on the Hollywood Walk of Fame.",
+      "lastModified": "2026-06-13T00:27:42Z",
+      "published": "2026-06-13T00:27:42Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "f3b597be36953",
+          "id": 49044736,
+          "type": "header",
+          "name": "David Beckham [1296x729]",
+          "caption": "David Beckham has become the first football player to be given a star on the Hollywood Walk of Fame.",
+          "credit": "Photo by Frazer Harrison/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0612/r1672129_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "154dea508a7b1",
+          "id": 48497886,
+          "type": "header",
+          "name": "Beckham [1296x729]",
+          "credit": "Nathan Ray Seebeck-Imagn Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0415/r1644219_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Could Tuchel drop Bellingham?",
+          "caption": "Mark Ogden and Craig Burley discuss Thomas Tuchel's stance on Jude Bellingham.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0611/dm_260611_England_StudioShow_16x9/dm_260611_England_StudioShow_16x9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142292,
+          "type": "team",
+          "uid": "s:600~t:360",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9",
+          "description": "Manchester United",
+          "sportId": 600,
+          "teamId": 360,
+          "team": {
+            "id": 360,
+            "description": "Manchester United",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/360/manchester-united"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 133852,
+          "type": "topic",
+          "guid": "4a692b96-9c7a-6b07-4a8b-7f0c0e64e7fe",
+          "description": "news - uk football",
+          "sportId": 0,
+          "topicId": 156
+        },
+        {
+          "id": 72576,
+          "type": "team",
+          "uid": "s:600~t:448",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9",
+          "description": "England",
+          "sportId": 600,
+          "teamId": 448,
+          "team": {
+            "id": 448,
+            "description": "England",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137781,
+          "type": "league",
+          "uid": "s:600~l:700",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+          "description": "English Premier League",
+          "sportId": 600,
+          "leagueId": 23,
+          "league": {
+            "id": 700,
+            "description": "English Premier League",
+            "abbreviation": "Premier League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 420195,
+          "type": "team",
+          "uid": "s:600~t:20232",
+          "guid": "68c59d9b-7197-356f-8418-52c0d216852c",
+          "description": "Inter Miami CF",
+          "sportId": 600,
+          "teamId": 20232,
+          "team": {
+            "id": 20232,
+            "description": "Inter Miami CF",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/20232/inter-miami-cf"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/20232/inter-miami-cf"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "6ebc2fd0-35d3-733b-5666-b75035a3bce9"
+        },
+        {
+          "type": "guid",
+          "guid": "4a692b96-9c7a-6b07-4a8b-7f0c0e64e7fe"
+        },
+        {
+          "type": "guid",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9"
+        },
+        {
+          "type": "guid",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38"
+        },
+        {
+          "type": "guid",
+          "guid": "68c59d9b-7197-356f-8418-52c0d216852c"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/49041439/england-sir-david-beckham-honoured-hollywood-walk-fame"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=49041439"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/49041439"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=49041439"
+          }
+        }
+      },
+      "byline": "Shivam Pathak"
+    },
+    {
+      "id": 49038387,
+      "nowId": "1-49038387",
+      "contentKey": "49038387-1-6-1",
+      "dataSourceIdentifier": "6fb286ca69747",
+      "type": "Story",
+      "headline": "Transfer rumors, news: Could Roma's Koné make move to Arsenal?",
+      "description": "Arsenal are reportedly interested in a move for AS Roma midfielder Manu Koné. Transfer Talk has the latest.",
+      "lastModified": "2026-06-12T22:51:26Z",
+      "published": "2026-06-12T22:51:26Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "caa528814a016",
+          "id": 49044448,
+          "type": "header",
+          "name": "Kone [1296x729]",
+          "credit": "(Photo by Image Photo Agency/Getty Images)",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0612/r1672114_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Could Marcus Rashford play for Man United next season?",
+          "caption": "Mark Ogden shares details on Marcus Rashford future as reports emerge he could return to play for Man United.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0610/dm_260610_COM_SOC_ANALYSIS_Could_Marcus_Rashford_play_for_Man_United_next_season_2026_6_10/dm_260610_COM_SOC_ANALYSIS_Could_Marcus_Rashford_play_for_Man_United_next_season_2026_6_10.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 518441,
+          "type": "topic",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0",
+          "description": "soccer transfers",
+          "sportId": 0,
+          "topicId": 3
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 597355,
+          "type": "topic",
+          "guid": "f9197630-65d3-54d8-60b3-72182b25d2ef",
+          "description": "blog - transfer talk",
+          "sportId": 0,
+          "topicId": 79
+        },
+        {
+          "id": 137781,
+          "type": "league",
+          "uid": "s:600~l:700",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+          "description": "English Premier League",
+          "sportId": 600,
+          "leagueId": 23,
+          "league": {
+            "id": 700,
+            "description": "English Premier League",
+            "abbreviation": "Premier League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 344158,
+          "type": "athlete",
+          "uid": "s:600~a:285226",
+          "guid": "47a15b5e-fa9b-b70a-31b0-6c3db9bb139b",
+          "description": "Manu Koné",
+          "sportId": 600,
+          "athleteId": 285226,
+          "athlete": {
+            "id": 285226,
+            "description": "Manu Koné",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/285226/manu-kone"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/285226/manu-kone"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142587,
+          "type": "team",
+          "uid": "s:600~t:104",
+          "guid": "154c1cfa-e721-b7dd-9a1b-9b9762936b76",
+          "description": "AS Roma",
+          "sportId": 600,
+          "teamId": 104,
+          "team": {
+            "id": 104,
+            "description": "AS Roma",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/104/as-roma"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/104/as-roma"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142299,
+          "type": "team",
+          "uid": "s:600~t:359",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4",
+          "description": "Arsenal",
+          "sportId": 600,
+          "teamId": 359,
+          "team": {
+            "id": 359,
+            "description": "Arsenal",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/359/arsenal"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "f9197630-65d3-54d8-60b3-72182b25d2ef"
+        },
+        {
+          "type": "guid",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38"
+        },
+        {
+          "type": "guid",
+          "guid": "47a15b5e-fa9b-b70a-31b0-6c3db9bb139b"
+        },
+        {
+          "type": "guid",
+          "guid": "154c1cfa-e721-b7dd-9a1b-9b9762936b76"
+        },
+        {
+          "type": "guid",
+          "guid": "feb44e87-58fa-9597-2691-b3c32768ebe4"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/49038387/transfer-rumors-news-man-united-eye-usmnt-robinson-england-hall"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=49038387"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/49038387"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=49038387"
+          }
+        }
+      },
+      "byline": "ESPN"
+    },
+    {
+      "id": 49041224,
+      "nowId": "1-49041224",
+      "contentKey": "49041224-1-5-1",
+      "dataSourceIdentifier": "5e8a4749e927f",
+      "type": "HeadlineNews",
+      "headline": "Brighton make £30m offer  for Tottenham defender Luka Vuskovic - sources",
+      "description": "Brighton & Hove Albion have made a £30 million ($40.2m) offer for Tottenham Hotspur defender Luka Vuskovic, sources have told ESPN.",
+      "lastModified": "2026-06-12T16:18:18Z",
+      "published": "2026-06-12T16:18:18Z",
+      "images": [
+        {
+          "dataSourceIdentifier": "7d253528b1aa9",
+          "id": 49041243,
+          "type": "header",
+          "name": "Vuskovic  [1296x729]",
+          "caption": "Luka Vuskovic is subject to a £30m bid from Brighton.",
+          "alt": "Defender Luka Vuskovic in action for Hamburger SV.",
+          "credit": "Photo by Lars Baron/Getty Images.",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0612/r1671919_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Olley: Tottenham have to go 'all-in' to back De Zerbi in transfer window",
+          "caption": "James Olley looks ahead to Tottenham's summer transfer window with Roberto De Zerbi.",
+          "height": 324,
+          "width": 576,
+          "url": "https://a.espncdn.com/media/motion/2026/0526/dm_260526_COM_SOC_Analysis_Olley_Tottenham_have_to_go_all_in_to_back_De_Zerbi_in_transfer_window_202605/dm_260526_COM_SOC_Analysis_Olley_Tottenham_have_to_go_all_in_to_back_De_Zerbi_in_transfer_window_202605.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 137781,
+          "type": "league",
+          "uid": "s:600~l:700",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38",
+          "description": "English Premier League",
+          "sportId": 600,
+          "leagueId": 23,
+          "league": {
+            "id": 700,
+            "description": "English Premier League",
+            "abbreviation": "Premier League",
+            "links": {
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              },
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/league/_/name/eng.1"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 655411,
+          "type": "athlete",
+          "uid": "s:600~a:364962",
+          "guid": "fcf06342-caa5-35b4-bc6e-2f642d2c7fad",
+          "description": "Luka Vuskovic",
+          "sportId": 600,
+          "athleteId": 364962,
+          "athlete": {
+            "id": 364962,
+            "description": "Luka Vuskovic",
+            "links": {
+              "web": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/364962/luka-vuskovic"
+                }
+              },
+              "mobile": {
+                "athletes": {
+                  "href": "https://www.espn.com/soccer/player/_/id/364962/luka-vuskovic"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142303,
+          "type": "team",
+          "uid": "s:600~t:367",
+          "guid": "f987a4b2-f3f9-e7f6-eb7d-eda43893be5a",
+          "description": "Tottenham Hotspur",
+          "sportId": 600,
+          "teamId": 367,
+          "team": {
+            "id": 367,
+            "description": "Tottenham Hotspur",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/367/tottenham-hotspur"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/367/tottenham-hotspur"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 142530,
+          "type": "team",
+          "uid": "s:600~t:331",
+          "guid": "78c91a3f-9e5e-c8fe-8fca-778e97cb021a",
+          "description": "Brighton & Hove Albion",
+          "sportId": 600,
+          "teamId": 331,
+          "team": {
+            "id": 331,
+            "description": "Brighton & Hove Albion",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/331/brighton-hove-albion"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/331/brighton-hove-albion"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 518441,
+          "type": "topic",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0",
+          "description": "soccer transfers",
+          "sportId": 0,
+          "topicId": 3
+        },
+        {
+          "id": 135134,
+          "type": "team",
+          "uid": "s:600~t:477",
+          "guid": "9bf5c1f7-c89d-c7c8-3cbb-18e8caa7abb4",
+          "description": "Croatia",
+          "sportId": 600,
+          "teamId": 477,
+          "team": {
+            "id": 477,
+            "description": "Croatia",
+            "links": {
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/477/croatia"
+                }
+              },
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/477/croatia"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 696285,
+          "type": "contributor",
+          "guid": "a1a120f9-cadb-3124-93ed-c3f8c7ac3a6b",
+          "description": "James Olley",
+          "slug": "james-olley",
+          "contributor": {
+            "id": 3853,
+            "description": "James Olley"
+          }
+        },
+        {
+          "type": "guid",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe"
+        },
+        {
+          "type": "guid",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259"
+        },
+        {
+          "type": "guid",
+          "guid": "6949f3af-300c-35f1-beab-b95669eedd38"
+        },
+        {
+          "type": "guid",
+          "guid": "fcf06342-caa5-35b4-bc6e-2f642d2c7fad"
+        },
+        {
+          "type": "guid",
+          "guid": "f987a4b2-f3f9-e7f6-eb7d-eda43893be5a"
+        },
+        {
+          "type": "guid",
+          "guid": "78c91a3f-9e5e-c8fe-8fca-778e97cb021a"
+        },
+        {
+          "type": "guid",
+          "guid": "c20f7f80-f88e-4084-6567-d1bf00c52bf0"
+        },
+        {
+          "type": "guid",
+          "guid": "9bf5c1f7-c89d-c7c8-3cbb-18e8caa7abb4"
+        },
+        {
+          "type": "guid",
+          "guid": "a1a120f9-cadb-3124-93ed-c3f8c7ac3a6b"
+        }
+      ],
+      "premium": false,
+      "links": {
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/49041224/luka-vuskovic-brighton-30m-bid-spurs-defender-tottenham-croatia"
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=49041224"
+        },
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/49041224"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=49041224"
+          }
+        }
+      },
+      "byline": "James Olley"
+    }
+  ]
+}
