@@ -389,11 +389,32 @@ def test_function_count_per_league():
 
     counts = function_count()
     assert isinstance(counts, dict)
-    assert set(counts) == {"cfb", "mbb", "mlb", "nba", "nfl", "nhl", "wbb", "wnba"}
+    # core 8 leagues must always be present
+    core = {"cfb", "mbb", "mlb", "nba", "nfl", "nhl", "wbb", "wnba"}
+    assert core <= set(counts), f"Missing core leagues: {core - set(counts)}"
+    # ESPN additional leagues (0.0.59+)
+    additional = {
+        "ahl",
+        "ohl",
+        "qmjhl",
+        "whl",
+        "soccer",
+        "cricket",
+        "ufl",
+        "xfl",
+        "cfl",
+        "college_baseball",
+        "college_softball",
+        "mch",
+        "wch",
+    }
+    assert additional <= set(counts), f"Missing additional leagues: {additional - set(counts)}"
     # MLB has the largest surface post-0.0.51 (ESPN + Stats API + Statcast)
     assert counts["mlb"] >= 150
     # NHL second-largest (api-web + EDGE + Stats REST + Records + ESPN)
     assert counts["nhl"] >= 150
+    # soccer param-mode catch-all has ≥100 wrappers
+    assert counts["soccer"] >= 100
 
 
 def test_function_count_single_league_returns_int():

@@ -7,6 +7,7 @@
   - [ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)](#espn--ncaa-mens--womens-college-hockey-espn_mch_-espn_wch_)
   - [ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)](#espn--ncaa-college-baseball--softball-espn_college_baseball_-espn_college_softball_)
   - [ESPN — UFL, XFL, and CFL (`espn_ufl_*`, `espn_xfl_*`, `espn_cfl_*`)](#espn--ufl-xfl-and-cfl-espn_ufl_-espn_xfl_-espn_cfl_)
+  - [ESPN — soccer/cricket param families + soccer headline aliases (`espn_soccer_*(league=)`, `espn_cricket_*(league=)`, `espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...)](#espn--soccercricket-param-families--soccer-headline-aliases-espn_soccer_league-espn_cricket_league-espn_epl_-espn_ucl_-espn_mls_-)
 - [0.0.58 Release: June 12, 2026](#0058-release-june-12-2026)
   - [Loaders — NHL core + new NBA/MBB datasets aligned to `sportsdataverse-data` releases](#loaders--nhl-core--new-nbambb-datasets-aligned-to-sportsdataverse-data-releases)
   - [Robustness & infrastructure — typing, CI gates, HTTP, deprecation policy](#robustness--infrastructure--typing-ci-gates-http-deprecation-policy)
@@ -121,6 +122,10 @@ New 404-safe dataset loaders read pre-built CFB identity crosswalks from the `cf
 ### ESPN — UFL, XFL, and CFL (`espn_ufl_*`, `espn_xfl_*`, `espn_cfl_*`)
 
 - feat(espn): add UFL, XFL, and CFL (espn_ufl_*, espn_xfl_*, espn_cfl_*)
+
+### ESPN — soccer/cricket param families + soccer headline aliases (`espn_soccer_*(league=)`, `espn_cricket_*(league=)`, `espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...)
+
+- feat(espn): add league-parameterized soccer + cricket families (espn_soccer_*(league=), espn_cricket_*(league=)) + soccer headline aliases (espn_epl_*, espn_ucl_*, espn_mls_*, ...)
 
 - **`load_cfb_teams_crosswalk(seasons=)`** and **`load_cfb_schedule_crosswalk(seasons=)`** are **per-season** (`min_season` 2014) — teams and schedules are genuinely historical, published per year for 2014–2025.
 - **`load_cfb_rosters_crosswalk()`** is **season-less**: ESPN's and Fox's team-roster endpoints expose only the *current* roster, so the artifact is a single snapshot (no `seasons=` argument) rather than a misleading per-season series.

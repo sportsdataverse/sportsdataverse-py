@@ -19,3 +19,19 @@ leagues:
   - {prefix: ufl, sport: football, league: ufl, scopes: [universal]}
   - {prefix: xfl, sport: football, league: xfl, scopes: [universal]}
   - {prefix: cfl, sport: football, league: cfl, scopes: [universal]}
+  # --- Soccer: one league-parameterized catch-all family + curated headline aliases ---
+  - {prefix: soccer, sport: soccer, league: eng.1, league_param: true, scopes: [universal]}
+  - {prefix: epl, sport: soccer, league: eng.1, scopes: [universal]}
+  - {prefix: laliga, sport: soccer, league: esp.1, scopes: [universal]}
+  - {prefix: bundesliga, sport: soccer, league: ger.1, scopes: [universal]}
+  - {prefix: seriea, sport: soccer, league: ita.1, scopes: [universal]}
+  - {prefix: ligue1, sport: soccer, league: fra.1, scopes: [universal]}
+  - {prefix: mls, sport: soccer, league: usa.1, scopes: [universal]}
+  - {prefix: ligamx, sport: soccer, league: mex.1, scopes: [universal]}
+  - {prefix: ucl, sport: soccer, league: uefa.champions, scopes: [universal]}
+  - {prefix: uel, sport: soccer, league: uefa.europa, scopes: [universal]}
+  - {prefix: nwsl, sport: soccer, league: usa.nwsl, scopes: [universal]}
+  - {prefix: wwc, sport: soccer, league: fifa.wwc, scopes: [universal]}
+  - {prefix: wc, sport: soccer, league: fifa.world, scopes: [universal]}
+  # --- Cricket: param-mode catch-all (headline cricket aliases land later after slug discovery) ---
+  - {prefix: cricket, sport: cricket, league: eng.1, league_param: true, scopes: [universal]}
