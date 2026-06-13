@@ -19,6 +19,9 @@ __all__ = [
 
 
 def {{ ep.fn_name }}(
+{% if ep.league_param %}
+    league: str,
+{% endif %}
 {% for p in ep.signature_params %}
 {% if p.required and p.default_from is none %}
     {{ p.python_name }}: {{ p.type|type_hint }},

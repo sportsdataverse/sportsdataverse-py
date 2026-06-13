@@ -55,3 +55,22 @@ def test_fixed_mode_scoreboard_url_bakes_both_slugs():
     assert v.league_param is False
     assert "basketball/nba/scoreboard" in v.url_literal
     assert "{league}" not in v.url_literal
+
+
+def test_param_mode_module_source_has_leading_league_param():
+    endpoints = gen.ENDPOINTS
+    params = spec.load_parameters(endpoints / "parameters.yaml")
+    apis = [spec.load_espn_api(endpoints / f"{a}.yaml", params) for a in gen.ESPN_APIS]
+    hosts = spec.load_leagues(endpoints / "leagues.yaml").hosts
+    lg = spec.League(prefix="soccer", sport="soccer", league="eng.1", scopes=["universal"], league_param=True)
+    src = gen._league_module_source(lg, apis, hosts)
+    # the generated scoreboard wrapper takes league as its FIRST parameter
+    assert "def espn_soccer_scoreboard(" in src
+    sig_start = src.index("def espn_soccer_scoreboard(")
+    head = src[sig_start : sig_start + 200]
+    assert "league: str," in head, head
+    assert head.index("league: str,") < (head.index("dates") if "dates" in head else len(head))
+    # the URL interpolates league at runtime
+    assert "soccer/{league}/scoreboard" in src
+    # league must NOT be forwarded as a query param
+    assert '"league": league' not in src

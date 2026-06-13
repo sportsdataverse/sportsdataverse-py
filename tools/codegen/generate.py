@@ -75,6 +75,7 @@ def _build_docstring(
     example_call: str,
     flat: bool = False,
     auth: bool = False,
+    league_param: bool = False,
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -86,7 +87,10 @@ def _build_docstring(
     """
     lines = [f'"""{ep.summary}', ""]
     if not flat:
-        lines.append(f"Bound to sport={sport!r}, league={league!r}.")
+        if league_param:
+            lines.append(f"Bound to sport={sport!r}; ``league`` is a required argument (e.g. {league!r}).")
+        else:
+            lines.append(f"Bound to sport={sport!r}, league={league!r}.")
         lines.append("")
     lines.append(f"Endpoint: ``GET {host_url}{ep.path}``")
     if example_url:
@@ -489,6 +493,7 @@ class _EndpointView:
             self.example_call,
             flat=flat,
             auth=auth,
+            league_param=league.league_param,
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
