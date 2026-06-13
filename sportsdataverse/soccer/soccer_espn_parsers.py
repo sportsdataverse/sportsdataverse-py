@@ -249,11 +249,260 @@ def _build_team_stats(payload: dict) -> pl.DataFrame:
         return pl.DataFrame()
 
 
+def _build_commentary(payload: dict) -> pl.DataFrame:
+    try:
+        items = payload.get("commentary") or []
+        rows = []
+        for item in items:
+            time_block = item.get("time") or {}
+            rows.append(
+                {
+                    "sequence": item.get("sequence"),
+                    "time_display": time_block.get("displayValue"),
+                    "time_value": time_block.get("value"),
+                    "text": item.get("text"),
+                }
+            )
+        if not rows:
+            return pl.DataFrame()
+        return pl.DataFrame(_stringify_lists(rows))
+    except Exception:
+        return pl.DataFrame()
+
+
+def _build_leaders(payload: dict) -> pl.DataFrame:
+    """Flatten payload["leaders"] — a 2-element list (one per team).
+
+    Each element: {team: {...}, leaders: [{name, displayName, leaders: [athlete entries]}]}.
+    Emits one row per (team, category, athlete) triple.
+    """
+    try:
+        team_leaders = payload.get("leaders") or []
+        rows = []
+        for team_entry in team_leaders:
+            team_block = team_entry.get("team") or {}
+            team_id = team_block.get("id")
+            team_name = team_block.get("displayName")
+            for category in team_entry.get("leaders") or []:
+                cat_name = category.get("displayName")
+                cat_slug = category.get("name")
+                for leader in category.get("leaders") or []:
+                    athlete = leader.get("athlete") or {}
+                    main_stat = leader.get("mainStat") or {}
+                    rows.append(
+                        {
+                            "team_id": team_id,
+                            "team_name": team_name,
+                            "category": cat_name,
+                            "category_slug": cat_slug,
+                            "athlete_id": athlete.get("id"),
+                            "athlete": athlete.get("displayName"),
+                            "athlete_position": (athlete.get("position") or {}).get("abbreviation"),
+                            "value": leader.get("displayValue"),
+                            "main_stat_label": main_stat.get("label"),
+                            "main_stat_value": main_stat.get("value"),
+                            "summary": leader.get("summary"),
+                        }
+                    )
+        if not rows:
+            return pl.DataFrame()
+        return pl.DataFrame(_stringify_lists(rows))
+    except Exception:
+        return pl.DataFrame()
+
+
+def _build_standings_summary(payload: dict) -> pl.DataFrame:
+    """Flatten the ``standings`` block embedded in a summary payload.
+
+    The summary standings shape differs from the standalone endpoint:
+    it has ``{fullViewLink, header, groups}`` where each group has
+    ``{standings: {entries: [...]}, header, href}``.
+    Each entry: ``{team (str), link, id, uid, stats [...], logo}``.
+    """
+    try:
+        st = payload.get("standings") or {}
+        groups = st.get("groups") or []
+        rows = []
+        for group in groups:
+            group_header = group.get("header")
+            entries = (group.get("standings") or {}).get("entries") or []
+            for entry in entries:
+                row: dict = {
+                    "group": group_header,
+                    "team": entry.get("team"),
+                    "team_id": entry.get("id"),
+                    "team_uid": entry.get("uid"),
+                }
+                for stat in entry.get("stats") or []:
+                    col = underscore(stat.get("name", ""))
+                    val = stat.get("value")
+                    if val is None:
+                        val = stat.get("displayValue")
+                    row[col] = val
+                rows.append(row)
+        if not rows:
+            return pl.DataFrame()
+        return pl.DataFrame(_stringify_lists(rows))
+    except Exception:
+        return pl.DataFrame()
+
+
+def _build_head_to_head(payload: dict) -> pl.DataFrame:
+    """Flatten payload["headToHeadGames"] — list of {team, events[]} per team perspective."""
+    try:
+        h2h = payload.get("headToHeadGames") or []
+        rows = []
+        seen: set = set()
+        for team_entry in h2h:
+            team_block = team_entry.get("team") or {}
+            team_id = team_block.get("id")
+            for ev in team_entry.get("events") or []:
+                ev_id = ev.get("id")
+                # deduplicate — same event appears once per team perspective
+                if ev_id in seen:
+                    continue
+                seen.add(ev_id)
+                rows.append(
+                    {
+                        "event_id": ev_id,
+                        "game_date": ev.get("gameDate"),
+                        "at_vs": ev.get("atVs"),
+                        "score": ev.get("score"),
+                        "home_team_id": ev.get("homeTeamId"),
+                        "away_team_id": ev.get("awayTeamId"),
+                        "home_team_score": ev.get("homeTeamScore"),
+                        "away_team_score": ev.get("awayTeamScore"),
+                        "home_aggregate_score": ev.get("homeAggregateScore"),
+                        "away_aggregate_score": ev.get("awayAggregateScore"),
+                        "home_shootout_score": ev.get("homeShootoutScore"),
+                        "away_shootout_score": ev.get("awayShootoutScore"),
+                        "game_result": ev.get("gameResult"),
+                        "match_note": ev.get("matchNote"),
+                        "competition_name": ev.get("competitionName"),
+                        "round_name": ev.get("roundName"),
+                        "league_name": ev.get("leagueName"),
+                        "league_abbreviation": ev.get("leagueAbbreviation"),
+                        "opponent": ev.get("opponent"),
+                        "perspective_team_id": team_id,
+                    }
+                )
+        if not rows:
+            return pl.DataFrame()
+        return pl.DataFrame(_stringify_lists(rows))
+    except Exception:
+        return pl.DataFrame()
+
+
+def _build_last_five(payload: dict) -> pl.DataFrame:
+    """Flatten payload["lastFiveGames"] — list of {team, events[]} per team."""
+    try:
+        l5 = payload.get("lastFiveGames") or []
+        rows = []
+        for team_entry in l5:
+            team_block = team_entry.get("team") or {}
+            team_id = team_block.get("id")
+            team_name = team_block.get("displayName")
+            display_order = team_entry.get("displayOrder")
+            for ev in team_entry.get("events") or []:
+                rows.append(
+                    {
+                        "team_id": team_id,
+                        "team_name": team_name,
+                        "display_order": display_order,
+                        "event_id": ev.get("id"),
+                        "game_date": ev.get("gameDate"),
+                        "at_vs": ev.get("atVs"),
+                        "score": ev.get("score"),
+                        "home_team_id": ev.get("homeTeamId"),
+                        "away_team_id": ev.get("awayTeamId"),
+                        "home_team_score": ev.get("homeTeamScore"),
+                        "away_team_score": ev.get("awayTeamScore"),
+                        "game_result": ev.get("gameResult"),
+                        "competition_name": ev.get("competitionName"),
+                        "league_name": ev.get("leagueName"),
+                        "league_abbreviation": ev.get("leagueAbbreviation"),
+                        "opponent": ev.get("opponent"),
+                    }
+                )
+        if not rows:
+            return pl.DataFrame()
+        return pl.DataFrame(_stringify_lists(rows))
+    except Exception:
+        return pl.DataFrame()
+
+
+def _build_game_info(payload: dict) -> pl.DataFrame:
+    """Flatten payload["gameInfo"] into a single-row frame.
+
+    Shape: {venue: {id, fullName, shortName, address, images}, attendance, officials: [...]}.
+    Officials list is stringified (may be multiple referees).
+    """
+    try:
+        gi = payload.get("gameInfo")
+        if not gi or not isinstance(gi, dict):
+            return pl.DataFrame()
+        venue = gi.get("venue") or {}
+        address = venue.get("address") or {}
+        officials = gi.get("officials") or []
+        # stringify officials list
+        officials_str = str(officials) if officials else None
+        row: dict = {
+            "venue_id": venue.get("id"),
+            "venue_full_name": venue.get("fullName"),
+            "venue_short_name": venue.get("shortName"),
+            "venue_city": address.get("city"),
+            "venue_country": address.get("country"),
+            "attendance": gi.get("attendance"),
+            "officials": officials_str,
+        }
+        return pl.DataFrame([row])
+    except Exception:
+        return pl.DataFrame()
+
+
+def _build_shootout(payload: dict) -> pl.DataFrame:
+    """Flatten payload["shootout"] — list of {id, team, shots[]}.
+
+    One row per shot across both teams. Present only for knockout games
+    that go to penalties; returns zero-row frame when absent.
+    """
+    try:
+        items = payload.get("shootout") or []
+        rows = []
+        for team_entry in items:
+            team_name = team_entry.get("team")
+            entry_id = team_entry.get("id")
+            for shot in team_entry.get("shots") or []:
+                rows.append(
+                    {
+                        "team_entry_id": entry_id,
+                        "team_name": team_name,
+                        "shot_id": shot.get("id"),
+                        "player_id": shot.get("playerId"),
+                        "player": shot.get("player"),
+                        "shot_number": shot.get("shotNumber"),
+                        "did_score": shot.get("didScore"),
+                    }
+                )
+        if not rows:
+            return pl.DataFrame()
+        return pl.DataFrame(_stringify_lists(rows))
+    except Exception:
+        return pl.DataFrame()
+
+
 _SOCCER_SUMMARY_BUILDERS: Dict[str, Any] = {
     "header": _build_header,
     "lineups": _build_lineups,
     "key_events": _build_key_events,
     "team_stats": _build_team_stats,
+    "commentary": _build_commentary,
+    "leaders": _build_leaders,
+    "standings": _build_standings_summary,
+    "head_to_head": _build_head_to_head,
+    "last_five": _build_last_five,
+    "game_info": _build_game_info,
+    "shootout": _build_shootout,
 }
 
 
@@ -270,7 +519,9 @@ def parse_soccer_summary(
     just that one frame. Unknown section names return a zero-row frame
     (never raise).
 
-    Sections: ``header``, ``lineups``, ``key_events``, ``team_stats``.
+    Sections: ``header``, ``lineups``, ``key_events``, ``team_stats``,
+    ``commentary``, ``leaders``, ``standings``, ``head_to_head``,
+    ``last_five``, ``game_info``, ``shootout``.
 
     Args:
         payload: Raw dict from an ESPN ``summary`` endpoint response.

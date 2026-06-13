@@ -100,3 +100,25 @@ def test_parse_soccer_summary_empty_payload():
 
     out = parse_soccer_summary({})
     assert isinstance(out, dict) and out["key_events"].height == 0
+
+
+def test_parse_soccer_summary_remaining_sections_present():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    out = parse_soccer_summary(_load("eng.1", "site-v2", "summary"))
+    for sec in ("commentary", "leaders", "standings", "head_to_head", "last_five", "game_info"):
+        assert sec in out and isinstance(out[sec], pl.DataFrame), sec
+
+
+def test_parse_soccer_summary_commentary_has_rows():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    c = parse_soccer_summary(_load("eng.1", "site-v2", "summary"), section="commentary")
+    assert c.height >= 1 and "text" in c.columns
+
+
+def test_parse_soccer_summary_shootout_section_for_knockout():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    out = parse_soccer_summary(_load("uefa.champions", "site-v2", "summary"))
+    assert "shootout" in out and isinstance(out["shootout"], pl.DataFrame)
