@@ -2101,6 +2101,20 @@ class NFLPlayProcess(object):
                 .when((pl.col("rush") == True).and_(pl.col("td_play") == True))
                 .then(True)
                 .otherwise(False),
+                # --- Pass depth/direction + rush direction (Game on Paper matrix fields) ---
+                # Extracted from ESPN play description text; null when the pattern is absent
+                # (sacks, screens, and pre-2025 plays that omit depth/direction).
+                # Depth: "short" (0-12 air yards) | "deep" (12+ air yards)
+                # Direction: "left" | "middle" | "right"
+                pass_depth=pl.when(pl.col("pass") == True)
+                .then(pl.col("text").str.extract(r"\s(short|deep)\s", 1))
+                .otherwise(None),
+                pass_direction=pl.when(pl.col("pass") == True)
+                .then(pl.col("text").str.extract(r"\s(left|middle|right)\s", 1))
+                .otherwise(None),
+                rush_direction=pl.when(pl.col("rush") == True)
+                .then(pl.col("text").str.extract(r"\s(left|middle|right)\s", 1))
+                .otherwise(None),
                 # --- Change of possession via turnover
                 turnover_vec=pl.col("type.text").is_in(turnover_vec),
                 offense_score_play=pl.col("type.text").is_in(offense_score_vec),
