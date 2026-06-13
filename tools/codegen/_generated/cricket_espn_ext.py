@@ -23,13 +23,16 @@ from sportsdataverse._common_espn_parsers import (
     parse_items,
     parse_leaders,
     parse_news,
-    parse_scoreboard,
     parse_single_entity,
     parse_standings,
-    parse_summary,
     parse_team_roster,
     parse_team_schedule,
     parse_teams,
+)
+from sportsdataverse.cricket.cricket_espn_parsers import (
+    parse_cricket_scoreboard,
+    parse_cricket_standings,
+    parse_cricket_summary,
 )
 
 __all__ = [
@@ -192,7 +195,7 @@ def espn_cricket_scoreboard(
         **kwargs,
     )
     if return_parsed:
-        return parse_scoreboard(raw, return_as_pandas=return_as_pandas)
+        return parse_cricket_scoreboard(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -230,7 +233,7 @@ def espn_cricket_summary(
         **kwargs,
     )
     if return_parsed:
-        return parse_summary(raw, return_as_pandas=return_as_pandas)
+        return parse_cricket_summary(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -1030,7 +1033,7 @@ def espn_cricket_standings(
         **kwargs,
     )
     if return_parsed:
-        return parse_standings(raw, return_as_pandas=return_as_pandas)
+        return parse_cricket_standings(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

@@ -1,0 +1,1748 @@
+{
+  "uid": "s:200~l:1510719~g:0",
+  "id": "0",
+  "name": "Indian Premier League",
+  "abbreviation": "IPL",
+  "children": [
+    {
+      "uid": "s:200~l:1510719~g:1",
+      "id": "1",
+      "name": "",
+      "abbreviation": "",
+      "standings": {
+        "id": "1",
+        "name": "overall",
+        "displayName": "Overall Standings",
+        "season": 2026,
+        "seasonType": 1,
+        "entries": [
+          {
+            "team": {
+              "id": "335970",
+              "uid": "s:200~t:335970",
+              "location": "India",
+              "name": "Royal Challengers Bengaluru",
+              "abbreviation": "RCB",
+              "displayName": "Royal Challengers Bengaluru",
+              "shortDisplayName": "RCB",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335970.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/335970/royal-challengers-bengaluru",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 1,
+                "displayValue": "1"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 9,
+                "displayValue": "9"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 5,
+                "displayValue": "5"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 18,
+                "displayValue": "18"
+              },
+              {
+                "name": "qualified",
+                "displayName": "Qualified",
+                "shortDisplayName": "Qualified",
+                "description": "Qualified",
+                "abbreviation": "QUAL",
+                "type": "qualified",
+                "value": 1,
+                "displayValue": "Y"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": 0.783,
+                "displayValue": "0.783"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 10.393,
+                "displayValue": "2642/254.2"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 9.615,
+                "displayValue": "2619/272.4"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "1298769",
+              "uid": "s:200~t:1298769",
+              "location": "India",
+              "name": "Gujarat Titans",
+              "abbreviation": "GT",
+              "displayName": "Gujarat Titans",
+              "shortDisplayName": "GT",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/1298769.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/1298769/gujarat-titans",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 2,
+                "displayValue": "2"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 9,
+                "displayValue": "9"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 5,
+                "displayValue": "5"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 18,
+                "displayValue": "18"
+              },
+              {
+                "name": "qualified",
+                "displayName": "Qualified",
+                "shortDisplayName": "Qualified",
+                "description": "Qualified",
+                "abbreviation": "QUAL",
+                "type": "qualified",
+                "value": 1,
+                "displayValue": "Y"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": 0.695,
+                "displayValue": "0.695"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 9.46,
+                "displayValue": "2558/270.4"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 8.755,
+                "displayValue": "2434/278.0"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "628333",
+              "uid": "s:200~t:628333",
+              "location": "India",
+              "name": "Sunrisers Hyderabad",
+              "abbreviation": "SRH",
+              "displayName": "Sunrisers Hyderabad",
+              "shortDisplayName": "SRH",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/628333.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/628333/sunrisers-hyderabad",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 3,
+                "displayValue": "3"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 9,
+                "displayValue": "9"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 5,
+                "displayValue": "5"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 18,
+                "displayValue": "18"
+              },
+              {
+                "name": "qualified",
+                "displayName": "Qualified",
+                "shortDisplayName": "Qualified",
+                "description": "Qualified",
+                "abbreviation": "QUAL",
+                "type": "qualified",
+                "value": 1,
+                "displayValue": "Y"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": 0.524,
+                "displayValue": "0.524"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 10.337,
+                "displayValue": "2854/276.1"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 9.82,
+                "displayValue": "2675/272.4"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "335977",
+              "uid": "s:200~t:335977",
+              "location": "India",
+              "name": "Rajasthan Royals",
+              "abbreviation": "RR",
+              "displayName": "Rajasthan Royals",
+              "shortDisplayName": "RR",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335977.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/335977/rajasthan-royals",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 4,
+                "displayValue": "4"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 8,
+                "displayValue": "8"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 6,
+                "displayValue": "6"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 16,
+                "displayValue": "16"
+              },
+              {
+                "name": "qualified",
+                "displayName": "Qualified",
+                "shortDisplayName": "Qualified",
+                "description": "Qualified",
+                "abbreviation": "QUAL",
+                "type": "qualified",
+                "value": 1,
+                "displayValue": "Y"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": 0.189,
+                "displayValue": "0.189"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 10.096,
+                "displayValue": "2619/259.4"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 9.907,
+                "displayValue": "2649/267.4"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "335973",
+              "uid": "s:200~t:335973",
+              "location": "India",
+              "name": "Punjab Kings",
+              "abbreviation": "PBKS",
+              "displayName": "Punjab Kings",
+              "shortDisplayName": "PBKS",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335973.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/335973/punjab-kings",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 5,
+                "displayValue": "5"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 7,
+                "displayValue": "7"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 6,
+                "displayValue": "6"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 1,
+                "displayValue": "1"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 15,
+                "displayValue": "15"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": 0.309,
+                "displayValue": "0.309"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 10.844,
+                "displayValue": "2711/250.0"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 10.535,
+                "displayValue": "2718/258.0"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "335975",
+              "uid": "s:200~t:335975",
+              "location": "India",
+              "name": "Delhi Capitals",
+              "abbreviation": "DC",
+              "displayName": "Delhi Capitals",
+              "shortDisplayName": "DC",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335975.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/335975/delhi-capitals",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 6,
+                "displayValue": "6"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 7,
+                "displayValue": "7"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 7,
+                "displayValue": "7"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": -0.651,
+                "displayValue": "-0.651"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 9.394,
+                "displayValue": "2559/272.4"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 10.039,
+                "displayValue": "2581/257.1"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "335971",
+              "uid": "s:200~t:335971",
+              "location": "India",
+              "name": "Kolkata Knight Riders",
+              "abbreviation": "KKR",
+              "displayName": "Kolkata Knight Riders",
+              "shortDisplayName": "KKR",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335971.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/335971/kolkata-knight-riders",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 7,
+                "displayValue": "7"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 6,
+                "displayValue": "6"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 7,
+                "displayValue": "7"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 1,
+                "displayValue": "1"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 13,
+                "displayValue": "13"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": -0.147,
+                "displayValue": "-0.147"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 9.096,
+                "displayValue": "2284/251.1"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 9.24,
+                "displayValue": "2384/258.0"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "335974",
+              "uid": "s:200~t:335974",
+              "location": "India",
+              "name": "Chennai Super Kings",
+              "abbreviation": "CSK",
+              "displayName": "Chennai Super Kings",
+              "shortDisplayName": "CSK",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335974.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/335974/chennai-super-kings",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 8,
+                "displayValue": "8"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 6,
+                "displayValue": "6"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 8,
+                "displayValue": "8"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 12,
+                "displayValue": "12"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": -0.345,
+                "displayValue": "-0.345"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 9.2,
+                "displayValue": "2530/275.0"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 9.548,
+                "displayValue": "2512/263.1"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "335978",
+              "uid": "s:200~t:335978",
+              "location": "India",
+              "name": "Mumbai Indians",
+              "abbreviation": "MI",
+              "displayName": "Mumbai Indians",
+              "shortDisplayName": "MI",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335978.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/335978/mumbai-indians",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 9,
+                "displayValue": "9"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 4,
+                "displayValue": "4"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 10,
+                "displayValue": "10"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 8,
+                "displayValue": "8"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": -0.584,
+                "displayValue": "-0.584"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 9.512,
+                "displayValue": "2553/268.4"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 10.092,
+                "displayValue": "2636/261.2"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          },
+          {
+            "team": {
+              "id": "1298768",
+              "uid": "s:200~t:1298768",
+              "location": "India",
+              "name": "Lucknow Super Giants",
+              "abbreviation": "LSG",
+              "displayName": "Lucknow Super Giants",
+              "shortDisplayName": "LSG",
+              "isNational": false,
+              "isActive": true,
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/i/teamlogos/cricket/500/1298768.png",
+                  "rel": [
+                    "full",
+                    "default"
+                  ]
+                }
+              ],
+              "links": [
+                {
+                  "language": "en",
+                  "rel": [
+                    "clubhouse",
+                    "desktop"
+                  ],
+                  "href": "https://www.espn.in/cricket/team/_/id/1298768/lucknow-super-giants",
+                  "text": "Clubhouse",
+                  "shortText": "Clubhouse",
+                  "isExternal": false,
+                  "isPremium": false
+                }
+              ]
+            },
+            "stats": [
+              {
+                "name": "rank",
+                "displayName": "rank",
+                "shortDisplayName": "R",
+                "description": "Rank",
+                "abbreviation": "R",
+                "type": "rank",
+                "value": 10,
+                "displayValue": "10"
+              },
+              {
+                "name": "matchesPlayed",
+                "displayName": "Matches Played",
+                "shortDisplayName": "Mat",
+                "description": "The number of matches played.",
+                "abbreviation": "M",
+                "type": "matchesplayed",
+                "value": 14,
+                "displayValue": "14"
+              },
+              {
+                "name": "matchesWon",
+                "displayName": "Matches Won",
+                "shortDisplayName": "Won",
+                "description": "The number of matches won.",
+                "abbreviation": "W",
+                "type": "matcheswon",
+                "value": 4,
+                "displayValue": "4"
+              },
+              {
+                "name": "matchesLost",
+                "displayName": "Matches Lost",
+                "shortDisplayName": "Lost",
+                "description": "The number of matches lost.",
+                "abbreviation": "L",
+                "type": "matcheslost",
+                "value": 10,
+                "displayValue": "10"
+              },
+              {
+                "name": "noresult",
+                "displayName": "No Result",
+                "shortDisplayName": "N/R",
+                "description": "The number of matches abandoned.",
+                "abbreviation": "N/R",
+                "type": "noresult",
+                "value": 0,
+                "displayValue": "0"
+              },
+              {
+                "name": "matchPoints",
+                "displayName": "Points",
+                "shortDisplayName": "Pts",
+                "description": "Number of points awarded.",
+                "abbreviation": "PT",
+                "type": "matchpoints",
+                "value": 8,
+                "displayValue": "8"
+              },
+              {
+                "name": "netrr",
+                "displayName": "Net RR",
+                "shortDisplayName": "NET RR",
+                "description": "Net Run Rate",
+                "abbreviation": "NRR",
+                "type": "nrr",
+                "value": -0.74,
+                "displayValue": "-0.74"
+              },
+              {
+                "name": "for",
+                "displayName": "For",
+                "shortDisplayName": "FOR",
+                "description": "For",
+                "abbreviation": "FOR",
+                "type": "for",
+                "value": 9.132,
+                "displayValue": "2514/275.3"
+              },
+              {
+                "name": "against",
+                "displayName": "Against",
+                "shortDisplayName": "Against",
+                "description": "Against",
+                "abbreviation": "Against",
+                "type": "against",
+                "value": 9.868,
+                "displayValue": "2616/265.1"
+              },
+              {
+                "id": "1",
+                "name": "Total",
+                "abbreviation": "Total",
+                "displayName": "Overall",
+                "shortDisplayName": "OVER",
+                "description": "Overall Record",
+                "type": "total",
+                "summary": "",
+                "displayValue": ""
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "season": {
+    "year": 2026,
+    "startDate": "2026-03-28T00:00Z",
+    "endDate": "2026-05-31T23:59Z"
+  },
+  "rules": {
+    "Story": ""
+  },
+  "seasons": [
+    {
+      "year": 2026,
+      "startDate": "2026-03-28T00:00Z",
+      "endDate": "2026-05-31T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2026-03-28T00:00Z",
+          "endDate": "2026-05-31T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2025,
+      "startDate": "2025-03-21T00:00Z",
+      "endDate": "2025-06-03T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2025-03-21T00:00Z",
+          "endDate": "2025-06-03T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "startDate": "2024-03-22T00:00Z",
+      "endDate": "2024-05-26T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2024-03-22T00:00Z",
+          "endDate": "2024-05-26T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "startDate": "2023-03-31T00:00Z",
+      "endDate": "2023-05-28T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2023-03-31T00:00Z",
+          "endDate": "2023-05-28T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "startDate": "2022-03-26T00:00Z",
+      "endDate": "2022-05-22T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2022-03-26T00:00Z",
+          "endDate": "2022-05-22T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2021,
+      "startDate": "2021-04-09T00:00Z",
+      "endDate": "2021-10-15T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2021-04-09T00:00Z",
+          "endDate": "2021-10-15T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2020,
+      "startDate": "2020-09-19T00:00Z",
+      "endDate": "2020-11-08T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2020-09-19T00:00Z",
+          "endDate": "2020-11-08T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2019,
+      "startDate": "2019-03-01T00:00Z",
+      "endDate": "2019-05-12T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2019-03-01T00:00Z",
+          "endDate": "2019-05-12T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2018,
+      "startDate": "2018-04-01T00:00Z",
+      "endDate": "2018-06-01T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2018-04-01T00:00Z",
+          "endDate": "2018-06-01T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2017,
+      "startDate": "2017-04-05T00:00Z",
+      "endDate": "2017-05-21T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2017-04-05T00:00Z",
+          "endDate": "2017-05-21T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2016,
+      "startDate": "2016-04-09T00:00Z",
+      "endDate": "2016-05-29T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2016-04-09T00:00Z",
+          "endDate": "2016-05-29T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2015,
+      "startDate": "2015-04-08T00:00Z",
+      "endDate": "2015-05-24T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Pepsi Indian Premier League",
+          "startDate": "2015-04-08T00:00Z",
+          "endDate": "2015-05-24T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2014,
+      "startDate": "2014-04-16T00:00Z",
+      "endDate": "2014-06-01T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Pepsi Indian Premier League",
+          "startDate": "2014-04-16T00:00Z",
+          "endDate": "2014-06-01T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2013,
+      "startDate": "2013-04-03T00:00Z",
+      "endDate": "2013-05-26T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2013-04-03T00:00Z",
+          "endDate": "2013-05-26T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2012,
+      "startDate": "2012-04-04T00:00Z",
+      "endDate": "2012-05-27T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2012-04-04T00:00Z",
+          "endDate": "2012-05-27T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2011,
+      "startDate": "2011-04-08T00:00Z",
+      "endDate": "2011-05-28T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2011-04-08T00:00Z",
+          "endDate": "2011-05-28T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2010,
+      "startDate": "2010-03-12T00:00Z",
+      "endDate": "2010-04-25T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2010-03-12T00:00Z",
+          "endDate": "2010-04-25T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2009,
+      "startDate": "2009-04-18T00:00Z",
+      "endDate": "2009-05-24T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2009-04-18T00:00Z",
+          "endDate": "2009-05-24T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    },
+    {
+      "year": 2008,
+      "startDate": "2008-04-18T00:00Z",
+      "endDate": "2008-06-01T23:59Z",
+      "types": [
+        {
+          "id": "1",
+          "name": "Regular Season",
+          "abbreviation": "Indian Premier League",
+          "startDate": "2008-04-18T00:00Z",
+          "endDate": "2008-06-01T23:59Z",
+          "hasStandings": true
+        }
+      ]
+    }
+  ]
+}

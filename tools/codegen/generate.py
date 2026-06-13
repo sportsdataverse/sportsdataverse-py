@@ -650,12 +650,18 @@ _SPORT_PARSER_OVERRIDES: dict[str, dict[str, str]] = {
         "teams_site": "parse_soccer_teams",
         "team_roster": "parse_soccer_team_roster",
     },
+    "cricket": {
+        "scoreboard": "parse_cricket_scoreboard",
+        "standings": "parse_cricket_standings",
+        "summary": "parse_cricket_summary",
+    },
 }
 
 # Maps sport slug -> dotted import path for that sport's parser module.
 # Used by _league_module_source to emit a second import line for sport-specific parsers.
 _SPORT_PARSER_MODULE: dict[str, str] = {
     "soccer": "sportsdataverse.soccer.soccer_espn_parsers",
+    "cricket": "sportsdataverse.cricket.cricket_espn_parsers",
 }
 
 
