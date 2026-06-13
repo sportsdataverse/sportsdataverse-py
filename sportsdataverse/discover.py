@@ -1,6 +1,6 @@
 """sportsdataverse.discover — searchable function index.
 
-The package exposes ~1,000 wrappers across 8 leagues + 5 sibling APIs
+The package exposes 2,000+ wrappers across 17 leagues + 5 sibling APIs
 (MLB Stats API, Baseball Savant, NHL api-web, NHL EDGE, NHL Stats REST,
 NHL Records). ``dir(sportsdataverse.nba)`` produces a 100+ item flat
 list that's hard to scan. This module gives users a grouped + filterable
@@ -37,8 +37,32 @@ from __future__ import annotations
 import importlib
 from typing import Dict, List, Optional, Union
 
-# All 8 league sub-modules under sportsdataverse.{league}.
-_LEAGUES = ("cfb", "mbb", "mlb", "nba", "nfl", "nhl", "wbb", "wnba")
+# All league sub-modules under sportsdataverse.{league}.
+_LEAGUES = (
+    "cfb",
+    "mbb",
+    "mlb",
+    "nba",
+    "nfl",
+    "nhl",
+    "wbb",
+    "wnba",
+    # minor / additional leagues (0.0.51+)
+    "ahl",
+    "ohl",
+    "qmjhl",
+    "whl",
+    # ESPN additional leagues (0.0.59+)
+    "soccer",
+    "cricket",
+    "ufl",
+    "xfl",
+    "cfl",
+    "college_baseball",
+    "college_softball",
+    "mch",
+    "wch",
+)
 
 
 def _list_module(mod, prefix: Optional[str] = None) -> List[str]:

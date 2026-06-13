@@ -831,6 +831,29 @@ load_cfb_schedule:
   type: Boolean
 - name: notes
   type: String
+load_cfb_schedule_crosswalk:
+- name: matchup_key
+  type: String
+- name: espn_game_id
+  type: Int64
+- name: fox_game_id
+  type: String
+- name: yahoo_game_id
+  type: String
+- name: yahoo_global_game_id
+  type: String
+- name: home_team
+  type: String
+- name: away_team
+  type: String
+- name: espn_date
+  type: String
+- name: fox_date
+  type: String
+- name: yahoo_date
+  type: String
+- name: matched_sources
+  type: String
 load_cfb_team_info:
 - name: team_id
   type: Int32
@@ -888,6 +911,29 @@ load_cfb_team_info:
   type: Boolean
 - name: dome
   type: Boolean
+load_cfb_teams_crosswalk:
+- name: norm_key
+  type: String
+- name: espn_team_id
+  type: Int64
+- name: espn_team
+  type: String
+- name: espn_abbreviation
+  type: String
+- name: fox_team_id
+  type: String
+- name: fox_team
+  type: String
+- name: fox_abbreviation
+  type: String
+- name: yahoo_team_id
+  type: String
+- name: yahoo_team
+  type: String
+- name: yahoo_abbreviation
+  type: String
+- name: matched_sources
+  type: String
 load_mbb_pbp:
 - name: game_play_number
   type: Int32

@@ -901,3 +901,106 @@ def test_espn_nhl_schedule_known_date_returns_games():
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0, "expected >=1 NHL game on 2023-06-13 (Stanley Cup Final)"
     assert "game_id" in df.columns, "schedule frame missing game_id column"
+
+
+def test_espn_mch_teams_site_returns_many_teams():
+    from sportsdataverse.mch.mch_espn_ext import espn_mch_teams_site
+
+    payload = espn_mch_teams_site(return_parsed=False)
+    teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
+    assert len(teams) >= 40, f"expected >=40 NCAA M hockey teams, got {len(teams)}"
+
+
+def test_espn_wch_scoreboard_answers():
+    from sportsdataverse.wch.wch_espn_ext import espn_wch_scoreboard
+
+    payload = espn_wch_scoreboard(return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload
+
+
+def test_espn_college_baseball_teams_site_returns_many_teams():
+    from sportsdataverse.college_baseball.college_baseball_espn_ext import espn_college_baseball_teams_site
+
+    payload = espn_college_baseball_teams_site(return_parsed=False)
+    teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
+    assert len(teams) >= 100, f"expected >=100 NCAA baseball teams, got {len(teams)}"
+
+
+def test_espn_college_softball_scoreboard_answers():
+    from sportsdataverse.college_softball.college_softball_espn_ext import espn_college_softball_scoreboard
+
+    payload = espn_college_softball_scoreboard(return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload
+
+
+def test_espn_cfl_teams_site_returns_teams():
+    from sportsdataverse.cfl.cfl_espn_ext import espn_cfl_teams_site
+
+    payload = espn_cfl_teams_site(return_parsed=False)
+    teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
+    assert len(teams) >= 8, f"expected >=8 CFL teams, got {len(teams)}"
+
+
+def test_espn_ufl_scoreboard_answers():
+    from sportsdataverse.ufl.ufl_espn_ext import espn_ufl_scoreboard
+
+    payload = espn_ufl_scoreboard(return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload
+
+
+def test_espn_soccer_scoreboard_param_league_answers():
+    from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_scoreboard
+
+    # league is a runtime arg; raw Dict via return_parsed=False
+    payload = espn_soccer_scoreboard(league="eng.1", return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload
+
+
+def test_espn_soccer_teams_param_league_answers():
+    from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_teams_site
+
+    payload = espn_soccer_teams_site(league="eng.1", return_parsed=False)
+    teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
+    assert len(teams) >= 18, f"expected >=18 EPL teams, got {len(teams)}"
+
+
+def test_espn_epl_alias_scoreboard_answers():
+    from sportsdataverse.epl.epl_espn_ext import espn_epl_scoreboard
+
+    # fixed-league alias: NO league arg
+    payload = espn_epl_scoreboard(return_parsed=False)
+    assert isinstance(payload, dict) and "leagues" in payload
+
+
+def test_espn_cricket_scoreboard_param_league_answers():
+    from sportsdataverse.cricket.cricket_espn_ext import espn_cricket_scoreboard
+
+    # a broadly-available cricket league slug; raw Dict
+    payload = espn_cricket_scoreboard(league="8048", return_parsed=False)  # 8048 = IPL on ESPN
+    assert isinstance(payload, dict)
+
+
+def test_espn_soccer_scoreboard_parsed_is_dataframe():
+    import polars as pl
+    from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_scoreboard
+
+    df = espn_soccer_scoreboard(league="eng.1")  # return_parsed=True default -> soccer matches frame
+    assert isinstance(df, pl.DataFrame)
+    assert {"home_team", "away_team"} <= set(df.columns)
+
+
+def test_espn_soccer_standings_parsed_table():
+    import polars as pl
+    from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_standings
+
+    df = espn_soccer_standings(league="eng.1")
+    assert isinstance(df, pl.DataFrame) and "group" in df.columns and df.height >= 18
+
+
+def test_espn_epl_alias_scoreboard_parsed():
+    import polars as pl
+    from sportsdataverse.epl.epl_espn_ext import espn_epl_scoreboard
+
+    df = espn_epl_scoreboard()  # fixed-league alias, no league arg, parsed
+    assert isinstance(df, pl.DataFrame)
+    assert {"home_team", "away_team"} <= set(df.columns)

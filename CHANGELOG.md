@@ -2,6 +2,12 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [CFB — cross-source crosswalk loaders (`load_cfb_*_crosswalk`)](#cfb--cross-source-crosswalk-loaders-load_cfb__crosswalk)
+  - [ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)](#espn--ncaa-mens--womens-college-hockey-espn_mch_-espn_wch_)
+  - [ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)](#espn--ncaa-college-baseball--softball-espn_college_baseball_-espn_college_softball_)
+  - [ESPN — UFL, XFL, and CFL (`espn_ufl_*`, `espn_xfl_*`, `espn_cfl_*`)](#espn--ufl-xfl-and-cfl-espn_ufl_-espn_xfl_-espn_cfl_)
+  - [ESPN — soccer/cricket param families + soccer headline aliases (`espn_soccer_*(league=)`, `espn_cricket_*(league=)`, `espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...)](#espn--soccercricket-param-families--soccer-headline-aliases-espn_soccer_league-espn_cricket_league-espn_epl_-espn_ucl_-espn_mls_-)
 - [0.0.58 Release: June 12, 2026](#0058-release-june-12-2026)
   - [Loaders — NHL core + new NBA/MBB datasets aligned to `sportsdataverse-data` releases](#loaders--nhl-core--new-nbambb-datasets-aligned-to-sportsdataverse-data-releases)
   - [Robustness & infrastructure — typing, CI gates, HTTP, deprecation policy](#robustness--infrastructure--typing-ci-gates-http-deprecation-policy)
@@ -98,6 +104,34 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### CFB — cross-source crosswalk loaders (`load_cfb_*_crosswalk`)
+
+New 404-safe dataset loaders read pre-built CFB identity crosswalks from the `cfb_crosswalk` release tag on `sportsdataverse-data`, so callers can translate ids across providers without re-scraping every source. They cache the output of the live `cfb_teams_crosswalk` / `cfb_schedule_crosswalk` / `cfb_rosters_crosswalk` builders (ESPN × Fox × Yahoo, keyed on an aggressively-normalized team name; see `sportsdataverse.cfb.cfb_crosswalk`) — a full-season schedule build otherwise fans out hundreds of requests across three providers.
+
+### ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)
+
+- feat(espn): add NCAA men's & women's college hockey (espn_mch_*, espn_wch_*)
+
+### ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)
+
+- feat(espn): add NCAA college baseball + softball (espn_college_baseball_*, espn_college_softball_*)
+
+### ESPN — UFL, XFL, and CFL (`espn_ufl_*`, `espn_xfl_*`, `espn_cfl_*`)
+
+- feat(espn): add UFL, XFL, and CFL (espn_ufl_*, espn_xfl_*, espn_cfl_*)
+
+### ESPN — soccer/cricket param families + soccer headline aliases (`espn_soccer_*(league=)`, `espn_cricket_*(league=)`, `espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...)
+
+- feat(espn): add league-parameterized soccer + cricket families (espn_soccer_*(league=), espn_cricket_*(league=)) + soccer headline aliases (espn_epl_*, espn_ucl_*, espn_mls_*, ...)
+- feat(soccer): full-parity soccer parsers — scoreboard→matches, standings→league table (group column), summary→11-section dispatcher (header/lineups/key_events/team_stats/commentary/leaders/standings/head_to_head/last_five/game_info/shootout), teams, roster — routed via per-sport codegen overrides; feat(cricket): cricket parsers — scoreboard, standings, summary→8-section matchcard dispatcher (batting/bowling/partnerships)
+
+- **`load_cfb_teams_crosswalk(seasons=)`** and **`load_cfb_schedule_crosswalk(seasons=)`** are **per-season** (`min_season` 2014) — teams and schedules are genuinely historical, published per year for 2014–2025.
+- **`load_cfb_rosters_crosswalk()`** is **season-less**: ESPN's and Fox's team-roster endpoints expose only the *current* roster, so the artifact is a single snapshot (no `seasons=` argument) rather than a misleading per-season series.
+
+All accept `return_as_pandas=`. Artifacts are produced by `cfbfastR-cfb-data/scripts/build_cfb_crosswalk.py` (the rosters table fans the per-team `cfb_rosters_crosswalk` out over the current season's ESPN↔Fox team-id pairs and concatenates them with `espn_team_id` / `fox_team_id` provenance). The companion on-demand builder `cfb_odds_events_crosswalk` (The Odds API event-id ↔ ESPN game-id) remains live-only — near-term events aren't worth caching.
 
 ## 0.0.58 Release: June 12, 2026
 

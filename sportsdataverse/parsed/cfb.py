@@ -176,8 +176,11 @@ from sportsdataverse.cfb import helper_cfb_team_items as helper_cfb_team_items  
 from sportsdataverse.cfb import load_cfb_betting_lines as load_cfb_betting_lines  # noqa: F401
 from sportsdataverse.cfb import load_cfb_pbp as load_cfb_pbp  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F401
+from sportsdataverse.cfb import load_cfb_rosters_crosswalk as load_cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: F401
+from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
+from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
@@ -330,8 +333,11 @@ __all__ = [
     "load_cfb_betting_lines",
     "load_cfb_pbp",
     "load_cfb_rosters",
+    "load_cfb_rosters_crosswalk",
     "load_cfb_schedule",
+    "load_cfb_schedule_crosswalk",
     "load_cfb_team_info",
+    "load_cfb_teams_crosswalk",
     "most_recent_cfb_season",
     "normalize_team_roster_columns",
     "scoreboard_event_parsing",

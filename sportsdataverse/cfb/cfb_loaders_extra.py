@@ -11,10 +11,11 @@ import polars as pl
 
 from sportsdataverse.config import (
     CFB_BETTING_LINES_URL,
+    CFB_ROSTERS_CROSSWALK_URL,
     CFB_TEAM_LOGO_URL,
 )
 
-__all__ = ["load_cfb_betting_lines", "get_cfb_teams"]
+__all__ = ["load_cfb_betting_lines", "get_cfb_teams", "load_cfb_rosters_crosswalk"]
 
 
 def load_cfb_betting_lines(return_as_pandas=False) -> pl.DataFrame:
@@ -93,4 +94,53 @@ def get_cfb_teams(return_as_pandas=False) -> pl.DataFrame:
         pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
         if return_as_pandas
         else pl.read_parquet(CFB_TEAM_LOGO_URL, use_pyarrow=True, columns=None)
+    )
+
+
+def load_cfb_rosters_crosswalk(return_as_pandas: bool = False) -> pl.DataFrame:
+    """Load the current ESPN x Fox CFB rosters crosswalk (single snapshot).
+
+    Unlike the per-season ``load_cfb_teams_crosswalk`` / ``load_cfb_schedule_crosswalk``
+    loaders, this one is **season-less**: ESPN's and Fox's team-roster endpoints
+    only expose the *current* roster, so the published artifact is a single
+    snapshot rather than a historical per-season series. It is built by
+    ``cfbfastR-cfb-data``'s ``scripts/build_cfb_crosswalk.py`` (which fans the
+    per-team :func:`sportsdataverse.cfb.cfb_rosters_crosswalk` builder out over
+    the current season's ESPN<->Fox team-id pairs) and refreshed on that repo's
+    cadence.
+
+    Args:
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+
+    Returns:
+        pl.DataFrame: one row per matched player, carrying ``espn_team_id`` /
+        ``fox_team_id`` provenance plus each provider's athlete id, name, jersey,
+        position, and the ``match_method`` / ``matched_sources`` flags.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import load_cfb_rosters_crosswalk
+            xwalk = load_cfb_rosters_crosswalk()
+            print(xwalk.shape)
+
+        Pandas round-trip::
+
+            xwalk_pd = load_cfb_rosters_crosswalk(return_as_pandas=True)
+
+        Pipeline next step (one team's ESPN<->Fox athlete map)::
+
+            import polars as pl
+            osu = load_cfb_rosters_crosswalk().filter(pl.col("espn_team_id") == 194)
+
+        See Also:
+            * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- R sister package for CFB rosters
+    """
+
+    return (
+        pl.read_parquet(CFB_ROSTERS_CROSSWALK_URL, use_pyarrow=True, columns=None).to_pandas(
+            use_pyarrow_extension_array=True,
+        )
+        if return_as_pandas
+        else pl.read_parquet(CFB_ROSTERS_CROSSWALK_URL, use_pyarrow=True, columns=None)
     )

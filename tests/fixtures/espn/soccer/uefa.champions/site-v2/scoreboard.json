@@ -1,0 +1,1230 @@
+{
+  "leagues": [
+    {
+      "id": "775",
+      "uid": "s:600~l:775",
+      "name": "UEFA Champions League",
+      "abbreviation": "UEFA Champions League",
+      "midsizeName": "UEFA.CHAMPIONS",
+      "slug": "uefa.champions",
+      "season": {
+        "year": 2025,
+        "startDate": "2025-07-01T04:00Z",
+        "endDate": "2026-07-01T03:59Z",
+        "displayName": "2025-26 UEFA Champions League",
+        "type": {
+          "id": "6",
+          "type": 13677,
+          "name": "Final",
+          "abbreviation": "Final"
+        }
+      },
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/leaguelogos/soccer/500/2.png",
+          "width": 500,
+          "height": 500,
+          "alt": "",
+          "rel": [
+            "full",
+            "default"
+          ],
+          "lastUpdated": "2019-05-08T16:07Z"
+        },
+        {
+          "href": "https://a.espncdn.com/i/leaguelogos/soccer/500-dark/2.png",
+          "width": 500,
+          "height": 500,
+          "alt": "",
+          "rel": [
+            "full",
+            "dark"
+          ],
+          "lastUpdated": "2019-05-08T16:07Z"
+        }
+      ],
+      "calendarType": "list",
+      "calendarIsWhitelist": true,
+      "calendarStartDate": "2025-07-01T04:00Z",
+      "calendarEndDate": "2026-07-01T03:59Z",
+      "calendar": [
+        {
+          "label": "UEFA Champions League",
+          "startDate": "2025-07-01T04:00Z",
+          "endDate": "2026-07-01T03:59Z",
+          "entries": [
+            {
+              "label": "League Phase",
+              "detail": "Sep 16-Jan 28",
+              "value": "1",
+              "startDate": "2025-08-28T07:00Z",
+              "endDate": "2026-01-30T07:59Z"
+            },
+            {
+              "label": "Knockout Round Playoffs",
+              "detail": "Feb 17-25",
+              "value": "2",
+              "startDate": "2026-01-30T08:00Z",
+              "endDate": "2026-02-27T07:59Z"
+            },
+            {
+              "label": "Rd of 16",
+              "detail": "Mar 10-18",
+              "value": "3",
+              "startDate": "2026-02-27T08:00Z",
+              "endDate": "2026-03-20T06:59Z"
+            },
+            {
+              "label": "Quarterfinals",
+              "detail": "Apr 7-15",
+              "value": "4",
+              "startDate": "2026-03-20T07:00Z",
+              "endDate": "2026-04-17T06:59Z"
+            },
+            {
+              "label": "Semifinals",
+              "detail": "Apr 28-May 6",
+              "value": "5",
+              "startDate": "2026-04-17T07:00Z",
+              "endDate": "2026-05-08T06:59Z"
+            },
+            {
+              "label": "Final",
+              "detail": "May 30",
+              "value": "6",
+              "startDate": "2026-05-08T07:00Z",
+              "endDate": "2026-07-01T06:59Z"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "season": {
+    "type": 13677,
+    "year": 2025
+  },
+  "day": {
+    "date": "2026-05-30"
+  },
+  "events": [
+    {
+      "id": "401862897",
+      "uid": "s:600~l:775~e:401862897",
+      "date": "2026-05-30T16:00Z",
+      "name": "Arsenal at Paris Saint-Germain",
+      "shortName": "ARS @ PSG",
+      "season": {
+        "year": 2025,
+        "type": 13677,
+        "slug": "final"
+      },
+      "competitions": [
+        {
+          "id": "401862897",
+          "uid": "s:600~l:775~e:401862897~c:401862897",
+          "date": "2026-05-30T16:00Z",
+          "startDate": "2026-05-30T16:00Z",
+          "attendance": 0,
+          "timeValid": true,
+          "recent": false,
+          "status": {
+            "clock": 7200.0,
+            "displayClock": "120'",
+            "period": 5,
+            "type": {
+              "id": "47",
+              "name": "STATUS_FINAL_PEN",
+              "state": "post",
+              "completed": true,
+              "description": "Final Score - After Penalties",
+              "detail": "FT-Pens",
+              "shortDetail": "FT-Pens"
+            }
+          },
+          "venue": {
+            "id": "8121",
+            "fullName": "Puskás Aréna",
+            "address": {
+              "city": "Budapest",
+              "country": "Hungary"
+            }
+          },
+          "format": {
+            "regulation": {
+              "periods": 2
+            }
+          },
+          "altGameNote": "UEFA Champions League",
+          "notes": [
+            {
+              "text": "Paris Saint-Germain win 4-3 on penalties",
+              "headline": "Paris Saint-Germain win 4-3 on penalties",
+              "type": "event"
+            }
+          ],
+          "geoBroadcasts": [
+            {
+              "type": {
+                "id": "1",
+                "shortName": "TV"
+              },
+              "market": {
+                "id": "1",
+                "type": "National"
+              },
+              "media": {
+                "shortName": "CBS"
+              },
+              "lang": "en",
+              "region": "us"
+            },
+            {
+              "type": {
+                "id": "4",
+                "shortName": "STREAMING"
+              },
+              "market": {
+                "id": "1",
+                "type": "National"
+              },
+              "media": {
+                "shortName": "Paramount+"
+              },
+              "lang": "en",
+              "region": "us"
+            }
+          ],
+          "broadcasts": [
+            {
+              "market": "national",
+              "names": [
+                "CBS",
+                "Paramount+"
+              ]
+            }
+          ],
+          "broadcast": "",
+          "competitors": [
+            {
+              "id": "160",
+              "uid": "s:600~t:160",
+              "type": "team",
+              "order": 0,
+              "homeAway": "home",
+              "winner": true,
+              "form": "WLWWD",
+              "score": "1",
+              "shootoutScore": 4,
+              "team": {
+                "id": "160",
+                "uid": "s:600~t:160",
+                "abbreviation": "PSG",
+                "displayName": "Paris Saint-Germain",
+                "shortDisplayName": "PSG",
+                "name": "Paris Saint-Germain",
+                "location": "Paris Saint-Germain",
+                "color": "011F68",
+                "alternateColor": "ffffff",
+                "isActive": true,
+                "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/160.png",
+                "links": [
+                  {
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/club/_/id/160/paris-saint-germain",
+                    "text": "Clubhouse",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  },
+                  {
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/160/paris-saint-germain",
+                    "text": "Stats",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  },
+                  {
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/160/paris-saint-germain",
+                    "text": "Fixtures",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  },
+                  {
+                    "rel": [
+                      "squad",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/team/squad/_/id/160/paris-saint-germain",
+                    "text": "Squad",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  }
+                ],
+                "venue": {
+                  "id": "2271"
+                }
+              },
+              "statistics": [
+                {
+                  "name": "appearances",
+                  "abbreviation": "APP",
+                  "displayValue": "0"
+                },
+                {
+                  "name": "foulsCommitted",
+                  "abbreviation": "FC",
+                  "displayValue": "11"
+                },
+                {
+                  "name": "wonCorners",
+                  "abbreviation": "CW",
+                  "displayValue": "11"
+                },
+                {
+                  "name": "goalAssists",
+                  "abbreviation": "A",
+                  "displayValue": "0"
+                },
+                {
+                  "name": "possessionPct",
+                  "abbreviation": "PP",
+                  "displayValue": "75.3"
+                },
+                {
+                  "name": "shotAssists",
+                  "abbreviation": "SHAST",
+                  "displayValue": "15"
+                },
+                {
+                  "name": "shotsOnTarget",
+                  "abbreviation": "SOG",
+                  "displayValue": "4"
+                },
+                {
+                  "name": "totalGoals",
+                  "abbreviation": "G",
+                  "displayValue": "1"
+                },
+                {
+                  "name": "totalShots",
+                  "abbreviation": "SHOT",
+                  "displayValue": "21"
+                }
+              ]
+            },
+            {
+              "id": "359",
+              "uid": "s:600~t:359",
+              "type": "team",
+              "order": 1,
+              "homeAway": "away",
+              "winner": false,
+              "form": "LWWWW",
+              "score": "1",
+              "shootoutScore": 3,
+              "team": {
+                "id": "359",
+                "uid": "s:600~t:359",
+                "abbreviation": "ARS",
+                "displayName": "Arsenal",
+                "shortDisplayName": "Arsenal",
+                "name": "Arsenal",
+                "location": "Arsenal",
+                "color": "e20520",
+                "alternateColor": "003399",
+                "isActive": true,
+                "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/359.png",
+                "links": [
+                  {
+                    "rel": [
+                      "clubhouse",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/club/_/id/359/arsenal",
+                    "text": "Clubhouse",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  },
+                  {
+                    "rel": [
+                      "stats",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/team/stats/_/id/359/arsenal",
+                    "text": "Stats",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  },
+                  {
+                    "rel": [
+                      "schedule",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/team/fixtures/_/id/359/arsenal",
+                    "text": "Fixtures",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  },
+                  {
+                    "rel": [
+                      "squad",
+                      "desktop",
+                      "team"
+                    ],
+                    "href": "https://www.espn.com/soccer/team/squad/_/id/359/arsenal",
+                    "text": "Squad",
+                    "isExternal": false,
+                    "isPremium": false,
+                    "isHidden": false
+                  }
+                ],
+                "venue": {
+                  "id": "2267"
+                }
+              },
+              "statistics": [
+                {
+                  "name": "appearances",
+                  "abbreviation": "APP",
+                  "displayValue": "0"
+                },
+                {
+                  "name": "foulsCommitted",
+                  "abbreviation": "FC",
+                  "displayValue": "17"
+                },
+                {
+                  "name": "wonCorners",
+                  "abbreviation": "CW",
+                  "displayValue": "4"
+                },
+                {
+                  "name": "goalAssists",
+                  "abbreviation": "A",
+                  "displayValue": "1"
+                },
+                {
+                  "name": "possessionPct",
+                  "abbreviation": "PP",
+                  "displayValue": "24.7"
+                },
+                {
+                  "name": "shotAssists",
+                  "abbreviation": "SHAST",
+                  "displayValue": "7"
+                },
+                {
+                  "name": "shotsOnTarget",
+                  "abbreviation": "SOG",
+                  "displayValue": "1"
+                },
+                {
+                  "name": "totalGoals",
+                  "abbreviation": "G",
+                  "displayValue": "1"
+                },
+                {
+                  "name": "totalShots",
+                  "abbreviation": "SHOT",
+                  "displayValue": "7"
+                }
+              ]
+            }
+          ],
+          "details": [
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 302.0,
+                "displayValue": "6'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "231182",
+                  "displayName": "Kai Havertz",
+                  "shortName": "K. Havertz",
+                  "fullName": "Kai Havertz",
+                  "jersey": "29",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/231182/kai-havertz",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "F"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 2760.0,
+                "displayValue": "46'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "328497",
+                  "displayName": "Cristhian Mosquera",
+                  "shortName": "C. Mosquera",
+                  "fullName": "Cristhian Mosquera",
+                  "jersey": "3",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/328497/cristhian-mosquera",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "RB"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 3210.0,
+                "displayValue": "54'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "280555",
+                  "displayName": "Bukayo Saka",
+                  "shortName": "B. Saka",
+                  "fullName": "Bukayo Saka",
+                  "jersey": "7",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/280555/bukayo-saka",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "AM"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "98",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 3855.0,
+                "displayValue": "65'"
+              },
+              "team": {
+                "id": "160"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "229744",
+                  "displayName": "Ousmane Dembélé",
+                  "shortName": "O. Dembélé",
+                  "fullName": "Ousmane Dembélé",
+                  "jersey": "10",
+                  "team": {
+                    "id": "160"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/229744/ousmane-dembele",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "F"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 5400.0,
+                "displayValue": "90'+6'"
+              },
+              "team": {
+                "id": "160"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "355061",
+                  "displayName": "João Neves",
+                  "shortName": "J. Neves",
+                  "fullName": "João Neves",
+                  "jersey": "87",
+                  "team": {
+                    "id": "160"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/355061/joao-neves",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "RM"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 5865.0,
+                "displayValue": "98'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "258906",
+                  "displayName": "Viktor Gyökeres",
+                  "shortName": "V. Gyökeres",
+                  "fullName": "Viktor Gyökeres",
+                  "jersey": "14",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/258906/viktor-gyokeres",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "SUB"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 6166.0,
+                "displayValue": "103'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "238262",
+                  "displayName": "Declan Rice",
+                  "shortName": "D. Rice",
+                  "fullName": "Declan Rice",
+                  "jersey": "41",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/238262/declan-rice",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "LM"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 7021.0,
+                "displayValue": "118'"
+              },
+              "team": {
+                "id": "160"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "290591",
+                  "displayName": "Nuno Mendes",
+                  "shortName": "N. Mendes",
+                  "fullName": "Nuno Mendes",
+                  "jersey": "25",
+                  "team": {
+                    "id": "160"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/290591/nuno-mendes",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "LB"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "104",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 7200.0,
+                "displayValue": "120'"
+              },
+              "team": {
+                "id": "160"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": true,
+              "athletesInvolved": [
+                {
+                  "id": "288896",
+                  "displayName": "Gonçalo Ramos",
+                  "shortName": "G. Ramos",
+                  "fullName": "Gonçalo Ramos",
+                  "jersey": "9",
+                  "team": {
+                    "id": "160"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/288896/goncalo-ramos",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "SUB"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "104",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 7200.0,
+                "displayValue": "120'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": true,
+              "athletesInvolved": [
+                {
+                  "id": "258906",
+                  "displayName": "Viktor Gyökeres",
+                  "shortName": "V. Gyökeres",
+                  "fullName": "Viktor Gyökeres",
+                  "jersey": "14",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/258906/viktor-gyokeres",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "SUB"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "104",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 7200.0,
+                "displayValue": "120'"
+              },
+              "team": {
+                "id": "160"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": true,
+              "athletesInvolved": [
+                {
+                  "id": "336388",
+                  "displayName": "Désiré Doué",
+                  "shortName": "D. Doué",
+                  "fullName": "Désiré Doué",
+                  "jersey": "14",
+                  "team": {
+                    "id": "160"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/336388/desire-doue",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "RF"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "104",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 7200.0,
+                "displayValue": "120'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": true,
+              "athletesInvolved": [
+                {
+                  "id": "238262",
+                  "displayName": "Declan Rice",
+                  "shortName": "D. Rice",
+                  "fullName": "Declan Rice",
+                  "jersey": "41",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/238262/declan-rice",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "LM"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "104",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 7200.0,
+                "displayValue": "120'"
+              },
+              "team": {
+                "id": "160"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": true,
+              "athletesInvolved": [
+                {
+                  "id": "240233",
+                  "displayName": "Achraf Hakimi",
+                  "shortName": "A. Hakimi",
+                  "fullName": "Achraf Hakimi",
+                  "jersey": "2",
+                  "team": {
+                    "id": "160"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/240233/achraf-hakimi",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "RB"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "104",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 7200.0,
+                "displayValue": "120'"
+              },
+              "team": {
+                "id": "359"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": true,
+              "athletesInvolved": [
+                {
+                  "id": "269844",
+                  "displayName": "Gabriel Martinelli",
+                  "shortName": "G. Martinelli",
+                  "fullName": "Gabriel Martinelli",
+                  "jersey": "11",
+                  "team": {
+                    "id": "359"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/269844/gabriel-martinelli",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "SUB"
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "104",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 7200.0,
+                "displayValue": "120'"
+              },
+              "team": {
+                "id": "160"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": true,
+              "athletesInvolved": [
+                {
+                  "id": "316128",
+                  "displayName": "Lucas Beraldo",
+                  "shortName": "L. Beraldo",
+                  "fullName": "Lucas Beraldo",
+                  "jersey": "4",
+                  "team": {
+                    "id": "160"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "href": "https://www.espn.com/soccer/player/_/id/316128/lucas-beraldo",
+                      "isHidden": false
+                    }
+                  ],
+                  "position": "SUB"
+                }
+              ]
+            }
+          ],
+          "headlines": [
+            {
+              "description": "Arsenal's bid to win the Champions League for the first time in their 140-year history ended in heartbreak after a penalty shootout defeat to Paris Saint-Germain.",
+              "type": "Recap",
+              "shortLinkText": "PSG beat Arsenal on penalties to defend Champions League title"
+            }
+          ],
+          "odds": [
+            null
+          ],
+          "wasSuspended": false,
+          "playByPlayAvailable": true,
+          "playByPlayAthletes": true
+        }
+      ],
+      "status": {
+        "clock": 7200.0,
+        "displayClock": "120'",
+        "period": 5,
+        "type": {
+          "id": "47",
+          "name": "STATUS_FINAL_PEN",
+          "state": "post",
+          "completed": true,
+          "description": "Final Score - After Penalties",
+          "detail": "FT-Pens",
+          "shortDetail": "FT-Pens"
+        }
+      },
+      "venue": {
+        "displayName": "Puskás Aréna"
+      },
+      "links": [
+        {
+          "language": "en-US",
+          "rel": [
+            "summary",
+            "desktop",
+            "event"
+          ],
+          "href": "https://www.espn.com/soccer/match/_/gameId/401862897/arsenal-paris-saint-germain",
+          "text": "Summary",
+          "shortText": "Summary",
+          "isExternal": false,
+          "isPremium": false,
+          "isHidden": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "highlights",
+            "desktop"
+          ],
+          "href": "https://www.espn.com/soccer/video/_/gameId/401862897",
+          "text": "Highlights",
+          "shortText": "Highlights",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "recap",
+            "desktop",
+            "event"
+          ],
+          "href": "https://www.espn.com/soccer/report/_/gameId/401862897",
+          "text": "Report",
+          "shortText": "Report",
+          "isExternal": false,
+          "isPremium": false,
+          "isHidden": false
+        },
+        {
+          "language": "en-US",
+          "rel": [
+            "stats",
+            "desktop",
+            "event"
+          ],
+          "href": "https://www.espn.com/soccer/matchstats/_/gameId/401862897",
+          "text": "Statistics",
+          "shortText": "Statistics",
+          "isExternal": false,
+          "isPremium": false,
+          "isHidden": false
+        }
+      ]
+    }
+  ],
+  "provider": {
+    "id": "100",
+    "name": "Draft Kings",
+    "displayName": "Draft Kings",
+    "priority": 1,
+    "logos": [
+      {
+        "href": "https://a.espncdn.com/i/betting/Draftkings_Light.svg",
+        "rel": [
+          "light"
+        ]
+      },
+      {
+        "href": "https://a.espncdn.com/i/betting/Draftkings_Dark.svg",
+        "rel": [
+          "dark"
+        ]
+      }
+    ]
+  }
+}

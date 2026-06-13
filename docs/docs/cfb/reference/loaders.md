@@ -18,6 +18,8 @@ flowchart LR
 | `load_cfb_rosters` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_schedule` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_team_info` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
+| `load_cfb_teams_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
+| `load_cfb_schedule_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
 
 ## `load_cfb_pbp`
 
@@ -508,4 +510,50 @@ Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data
 
 ```python
 load_cfb_team_info(seasons=2024)
+```
+
+## `load_cfb_teams_crosswalk`
+
+Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `norm_key` | String |
+| `espn_team_id` | Int64 |
+| `espn_team` | String |
+| `espn_abbreviation` | String |
+| `fox_team_id` | String |
+| `fox_team` | String |
+| `fox_abbreviation` | String |
+| `yahoo_team_id` | String |
+| `yahoo_team` | String |
+| `yahoo_abbreviation` | String |
+| `matched_sources` | String |
+
+```python
+load_cfb_teams_crosswalk(seasons=2024)
+```
+
+## `load_cfb_schedule_crosswalk`
+
+Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `matchup_key` | String |
+| `espn_game_id` | Int64 |
+| `fox_game_id` | String |
+| `yahoo_game_id` | String |
+| `yahoo_global_game_id` | String |
+| `home_team` | String |
+| `away_team` | String |
+| `espn_date` | String |
+| `fox_date` | String |
+| `yahoo_date` | String |
+| `matched_sources` | String |
+
+```python
+load_cfb_schedule_crosswalk(seasons=2024)
 ```

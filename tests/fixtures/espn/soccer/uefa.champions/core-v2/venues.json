@@ -1,0 +1,14 @@
+{
+  "count": 10250,
+  "pageIndex": 1,
+  "pageSize": 2,
+  "pageCount": 5125,
+  "items": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/venues/4?lang=en&region=us"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/venues/5?lang=en&region=us"
+    }
+  ]
+}

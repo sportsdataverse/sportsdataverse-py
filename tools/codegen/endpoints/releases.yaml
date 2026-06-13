@@ -35,6 +35,22 @@ loaders:
   min_season: 2003
   example_args:
     seasons: 2024
+- fn: load_cfb_teams_crosswalk
+  league: cfb
+  base: sdv_releases
+  url: cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet
+  tag: cfb_crosswalk
+  min_season: 2014
+  example_args:
+    seasons: 2024
+- fn: load_cfb_schedule_crosswalk
+  league: cfb
+  base: sdv_releases
+  url: cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet
+  tag: cfb_crosswalk
+  min_season: 2014
+  example_args:
+    seasons: 2024
 - fn: load_mbb_pbp
   league: mbb
   base: sdv_releases

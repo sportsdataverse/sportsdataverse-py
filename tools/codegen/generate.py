@@ -75,6 +75,7 @@ def _build_docstring(
     example_call: str,
     flat: bool = False,
     auth: bool = False,
+    league_param: bool = False,
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -86,7 +87,10 @@ def _build_docstring(
     """
     lines = [f'"""{ep.summary}', ""]
     if not flat:
-        lines.append(f"Bound to sport={sport!r}, league={league!r}.")
+        if league_param:
+            lines.append(f"Bound to sport={sport!r}; ``league`` is a required argument (e.g. {league!r}).")
+        else:
+            lines.append(f"Bound to sport={sport!r}, league={league!r}.")
         lines.append("")
     lines.append(f"Endpoint: ``GET {host_url}{ep.path}``")
     if example_url:
@@ -453,8 +457,11 @@ class _EndpointView:
         opt_q = [p for p in ep.query_params if not p.required]
         self.signature_params = req_path + req_q + opt_path + opt_q
 
+        self.league_param = league.league_param
+        # In param mode, keep {league} as a runtime f-string token (sport still baked).
+        lg_slug = "{league}" if league.league_param else league.league
         bare = ep.path.replace("[", "").replace("]", "")
-        url = f"{ep_host}{_sub_slugs(bare, league.sport, league.league)}"
+        url = f"{ep_host}{_sub_slugs(bare, league.sport, lg_slug)}"
         self.url_fstring = url
         self.full_url = url  # back-compat alias
 
@@ -470,7 +477,10 @@ class _EndpointView:
             self.url_literal = "__url"
         else:
             self.path_build_expr = ""
-            self.url_literal = ('f"' + url + '"') if ep.path_params else ('"' + url + '"')
+            # f-string whenever a runtime token is present: an endpoint path param OR
+            # (param mode) the {league} token.
+            needs_fstring = bool(ep.path_params) or league.league_param
+            self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
 
         self.example_url = _example_url(ep_host, ep, league.sport, league.league)
         self.example_call = _example_call(ep, fn_name)
@@ -483,6 +493,7 @@ class _EndpointView:
             self.example_call,
             flat=flat,
             auth=auth,
+            league_param=league.league_param,
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
@@ -500,7 +511,8 @@ class _EndpointView:
     @staticmethod
     def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League) -> str:
         """Emit Python statements (newline+4-space joined) that assign ``__url``."""
-        sport, lg = league.sport, league.league
+        sport = league.sport
+        lg = "{league}" if league.league_param else league.league
         lines: list[str] = []
         for p in ep.path_params:
             if p.default_from:
@@ -626,6 +638,32 @@ _ESPN_COLLISION_VERSIONED: dict[str, str] = {
     "athlete_stats": "player_stats_v3",
 }
 
+# Per-sport parser-name overrides: when rendering a league of sport S, endpoint short K
+# has its baked parser swapped to the sport-specific parser.  The parser is imported
+# from the sport's own parser module (see _SPORT_PARSER_MODULE) to avoid a circular
+# import through sportsdataverse._common_espn_parsers.
+_SPORT_PARSER_OVERRIDES: dict[str, dict[str, str]] = {
+    "soccer": {
+        "scoreboard": "parse_soccer_scoreboard",
+        "standings": "parse_soccer_standings",
+        "summary": "parse_soccer_summary",
+        "teams_site": "parse_soccer_teams",
+        "team_roster": "parse_soccer_team_roster",
+    },
+    "cricket": {
+        "scoreboard": "parse_cricket_scoreboard",
+        "standings": "parse_cricket_standings",
+        "summary": "parse_cricket_summary",
+    },
+}
+
+# Maps sport slug -> dotted import path for that sport's parser module.
+# Used by _league_module_source to emit a second import line for sport-specific parsers.
+_SPORT_PARSER_MODULE: dict[str, str] = {
+    "soccer": "sportsdataverse.soccer.soccer_espn_parsers",
+    "cricket": "sportsdataverse.cricket.cricket_espn_parsers",
+}
+
 
 def _versioned_on_collision(short: str, prefix: str) -> str | None:
     """Version-qualified ``espn_<prefix>_*`` name for ``short`` on collision, else None."""
@@ -703,13 +741,24 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         view = _EndpointView(ep, fn_name, ep_host, league)
         view.api_name = api_name
         views.append(view)
+    overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})
+    if overrides:
+        for v in views:
+            if v.short in overrides:
+                v.parser = overrides[v.short]
     return views
 
 
 def _league_module_source(league: spec.League, apis, hosts) -> str:
     """Render the (unformatted) module source; ruff formatting happens at write time."""
     views = _espn_league_views(league, apis, hosts)
-    parser_imports = {v.parser for v in views if v.parser}
+    all_parser_names = {v.parser for v in views if v.parser}
+    # Split parsers: sport-specific ones are imported from their own module (to avoid a
+    # circular import through _common_espn_parsers); the rest come from _common_espn_parsers.
+    sport_override_names = set((_SPORT_PARSER_OVERRIDES.get(league.sport) or {}).values())
+    sport_parser_imports = sorted(all_parser_names & sport_override_names)
+    common_parser_imports = sorted(all_parser_names - sport_override_names)
+    sport_parser_module = _SPORT_PARSER_MODULE.get(league.sport, "") if sport_parser_imports else ""
     transforms: set[str] = set()
     for v in views:
         for p in (*v.path_params, *v.query_params):
@@ -722,7 +771,9 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         sport=league.sport,
         league=league.league,
         endpoints=views,
-        parser_imports=sorted(parser_imports),
+        parser_imports=common_parser_imports,
+        sport_parser_imports=sport_parser_imports,
+        sport_parser_module=sport_parser_module,
         runtime_imports=runtime_imports,
     )
 

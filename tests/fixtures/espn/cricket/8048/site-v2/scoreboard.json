@@ -1,0 +1,873 @@
+{
+  "leagues": [
+    {
+      "id": "8048",
+      "uid": "s:200~l:8048",
+      "name": "Indian Premier League",
+      "abbreviation": "IPL",
+      "slug": "8048",
+      "classId": [
+        6
+      ],
+      "mappings": {
+        "contentlink": "8048",
+        "cricinfo": 1510719
+      },
+      "season": {},
+      "links": [
+        {
+          "language": "en",
+          "rel": [
+            "serieshome",
+            "desktop"
+          ],
+          "href": "https://www.espn.in/cricket/series/_/id/8048/season/2026/8048",
+          "text": "Series Home",
+          "shortText": "Series Home",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "squads",
+            "desktop"
+          ],
+          "href": "https://www.espncricinfo.com/ci/content/squad/index.html?object=1510719",
+          "text": "Squads",
+          "shortText": "Squads",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "table",
+            "desktop"
+          ],
+          "href": "https://www.espn.in/cricket/table/series/8048/season/2026/8048",
+          "text": "Table",
+          "shortText": "Table",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "records",
+            "desktop"
+          ],
+          "href": "https://www.espncricinfo.com/ci/engine/records/index.html?id=117;type=trophy",
+          "text": "Records",
+          "shortText": "Records",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "fixtures",
+            "desktop"
+          ],
+          "href": "https://www.espn.in/cricket/scores/series/8048/season/2026/8048",
+          "text": "Fixtures",
+          "shortText": "Fixtures",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "statistics",
+            "desktop"
+          ],
+          "href": "https://www.espncricinfo.com/ci/engine/series/1510719.html?view=records",
+          "text": "Statistics",
+          "shortText": "Statistics",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "videos",
+            "desktop"
+          ],
+          "href": "https://www.espncricinfo.com/ci/content/video_audio/index.html?class=series;object=1510719",
+          "text": "Videos",
+          "shortText": "Videos",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "season",
+            "desktop"
+          ],
+          "href": "https://www.espncricinfo.com/ci/engine/series/index.html?search=Indian+Premier+League;view=season",
+          "text": "Season",
+          "shortText": "Season",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "calendarType": "day",
+      "calendarIsWhitelist": true,
+      "calendarStartDate": "2026-03-28T00:00:00Z",
+      "calendarEndDate": "2026-05-31T00:00:00Z",
+      "calendar": [
+        "2026-03-28T00:00:00Z",
+        "2026-03-29T00:00:00Z",
+        "2026-03-30T00:00:00Z",
+        "2026-03-31T00:00:00Z",
+        "2026-04-01T00:00:00Z",
+        "2026-04-02T00:00:00Z",
+        "2026-04-03T00:00:00Z",
+        "2026-04-04T00:00:00Z",
+        "2026-04-05T00:00:00Z",
+        "2026-04-06T00:00:00Z",
+        "2026-04-07T00:00:00Z",
+        "2026-04-08T00:00:00Z",
+        "2026-04-09T00:00:00Z",
+        "2026-04-10T00:00:00Z",
+        "2026-04-11T00:00:00Z",
+        "2026-04-12T00:00:00Z",
+        "2026-04-13T00:00:00Z",
+        "2026-04-14T00:00:00Z",
+        "2026-04-15T00:00:00Z",
+        "2026-04-16T00:00:00Z",
+        "2026-04-17T00:00:00Z",
+        "2026-04-18T00:00:00Z",
+        "2026-04-19T00:00:00Z",
+        "2026-04-20T00:00:00Z",
+        "2026-04-21T00:00:00Z",
+        "2026-04-22T00:00:00Z",
+        "2026-04-23T00:00:00Z",
+        "2026-04-24T00:00:00Z",
+        "2026-04-25T00:00:00Z",
+        "2026-04-26T00:00:00Z",
+        "2026-04-27T00:00:00Z",
+        "2026-04-28T00:00:00Z",
+        "2026-04-29T00:00:00Z",
+        "2026-04-30T00:00:00Z",
+        "2026-05-01T00:00:00Z",
+        "2026-05-02T00:00:00Z",
+        "2026-05-03T00:00:00Z",
+        "2026-05-04T00:00:00Z",
+        "2026-05-05T00:00:00Z",
+        "2026-05-06T00:00:00Z",
+        "2026-05-07T00:00:00Z",
+        "2026-05-08T00:00:00Z",
+        "2026-05-09T00:00:00Z",
+        "2026-05-10T00:00:00Z",
+        "2026-05-11T00:00:00Z",
+        "2026-05-12T00:00:00Z",
+        "2026-05-13T00:00:00Z",
+        "2026-05-14T00:00:00Z",
+        "2026-05-15T00:00:00Z",
+        "2026-05-16T00:00:00Z",
+        "2026-05-17T00:00:00Z",
+        "2026-05-18T00:00:00Z",
+        "2026-05-19T00:00:00Z",
+        "2026-05-20T00:00:00Z",
+        "2026-05-21T00:00:00Z",
+        "2026-05-22T00:00:00Z",
+        "2026-05-23T00:00:00Z",
+        "2026-05-24T00:00:00Z",
+        "2026-05-26T00:00:00Z",
+        "2026-05-27T00:00:00Z",
+        "2026-05-29T00:00:00Z",
+        "2026-05-31T00:00:00Z"
+      ]
+    }
+  ],
+  "teams": [
+    {
+      "id": "335974",
+      "uid": "s:200~t:335974",
+      "location": "India",
+      "name": "Chennai Super Kings",
+      "nickname": "Chennai Super Kings",
+      "abbreviation": "CSK",
+      "displayName": "Chennai Super Kings",
+      "shortDisplayName": "CSK",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335974.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "335975",
+      "uid": "s:200~t:335975",
+      "location": "India",
+      "name": "Delhi Capitals",
+      "nickname": "Delhi Capitals",
+      "abbreviation": "DC",
+      "displayName": "Delhi Capitals",
+      "shortDisplayName": "DC",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335975.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1298769",
+      "uid": "s:200~t:1298769",
+      "location": "India",
+      "name": "Gujarat Titans",
+      "nickname": "Gujarat Titans",
+      "abbreviation": "GT",
+      "displayName": "Gujarat Titans",
+      "shortDisplayName": "GT",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/1298769.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "335971",
+      "uid": "s:200~t:335971",
+      "location": "India",
+      "name": "Kolkata Knight Riders",
+      "nickname": "Kolkata Knight Riders",
+      "abbreviation": "KKR",
+      "displayName": "Kolkata Knight Riders",
+      "shortDisplayName": "KKR",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335971.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1298768",
+      "uid": "s:200~t:1298768",
+      "location": "India",
+      "name": "Lucknow Super Giants",
+      "nickname": "Lucknow Super Giants",
+      "abbreviation": "LSG",
+      "displayName": "Lucknow Super Giants",
+      "shortDisplayName": "LSG",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/1298768.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "335978",
+      "uid": "s:200~t:335978",
+      "location": "India",
+      "name": "Mumbai Indians",
+      "nickname": "Mumbai Indians",
+      "abbreviation": "MI",
+      "displayName": "Mumbai Indians",
+      "shortDisplayName": "MI",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335978.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "335973",
+      "uid": "s:200~t:335973",
+      "location": "India",
+      "name": "Punjab Kings",
+      "nickname": "Punjab Kings",
+      "abbreviation": "PBKS",
+      "displayName": "Punjab Kings",
+      "shortDisplayName": "PBKS",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335973.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "335977",
+      "uid": "s:200~t:335977",
+      "location": "India",
+      "name": "Rajasthan Royals",
+      "nickname": "Rajasthan Royals",
+      "abbreviation": "RR",
+      "displayName": "Rajasthan Royals",
+      "shortDisplayName": "RR",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335977.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "335970",
+      "uid": "s:200~t:335970",
+      "location": "India",
+      "name": "Royal Challengers Bengaluru",
+      "nickname": "Royal Challengers Bengaluru",
+      "abbreviation": "RCB",
+      "displayName": "Royal Challengers Bengaluru",
+      "shortDisplayName": "RCB",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335970.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "628333",
+      "uid": "s:200~t:628333",
+      "location": "India",
+      "name": "Sunrisers Hyderabad",
+      "nickname": "Sunrisers Hyderabad",
+      "abbreviation": "SRH",
+      "displayName": "Sunrisers Hyderabad",
+      "shortDisplayName": "SRH",
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/i/teamlogos/cricket/500/628333.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        }
+      ]
+    }
+  ],
+  "standings": [
+    {
+      "team": {
+        "id": "335970",
+        "uid": "s:200~t:335970",
+        "location": "India",
+        "name": "Royal Challengers Bengaluru",
+        "abbreviation": "RCB",
+        "displayName": "Royal Challengers Bengaluru",
+        "shortDisplayName": "RCB",
+        "isNational": false,
+        "isActive": true,
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/cricket/500/335970.png",
+            "rel": [
+              "full",
+              "default"
+            ]
+          }
+        ],
+        "links": [
+          {
+            "language": "en",
+            "rel": [
+              "clubhouse",
+              "desktop"
+            ],
+            "href": "https://www.espn.in/cricket/team/_/id/335970/royal-challengers-bengaluru",
+            "text": "Clubhouse",
+            "shortText": "Clubhouse",
+            "isExternal": false,
+            "isPremium": false
+          }
+        ]
+      },
+      "stats": [
+        {
+          "name": "rank",
+          "displayName": "rank",
+          "shortDisplayName": "R",
+          "description": "Rank",
+          "abbreviation": "R",
+          "type": "rank",
+          "value": 1,
+          "displayValue": "1"
+        },
+        {
+          "name": "matchPoints",
+          "displayName": "Points",
+          "shortDisplayName": "Pts",
+          "description": "Number of points awarded.",
+          "abbreviation": "PT",
+          "type": "matchpoints",
+          "value": 18,
+          "displayValue": "18"
+        }
+      ]
+    },
+    {
+      "team": {
+        "id": "1298769",
+        "uid": "s:200~t:1298769",
+        "location": "India",
+        "name": "Gujarat Titans",
+        "abbreviation": "GT",
+        "displayName": "Gujarat Titans",
+        "shortDisplayName": "GT",
+        "isNational": false,
+        "isActive": true,
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/i/teamlogos/cricket/500/1298769.png",
+            "rel": [
+              "full",
+              "default"
+            ]
+          }
+        ],
+        "links": [
+          {
+            "language": "en",
+            "rel": [
+              "clubhouse",
+              "desktop"
+            ],
+            "href": "https://www.espn.in/cricket/team/_/id/1298769/gujarat-titans",
+            "text": "Clubhouse",
+            "shortText": "Clubhouse",
+            "isExternal": false,
+            "isPremium": false
+          }
+        ]
+      },
+      "stats": [
+        {
+          "name": "rank",
+          "displayName": "rank",
+          "shortDisplayName": "R",
+          "description": "Rank",
+          "abbreviation": "R",
+          "type": "rank",
+          "value": 2,
+          "displayValue": "2"
+        },
+        {
+          "name": "matchPoints",
+          "displayName": "Points",
+          "shortDisplayName": "Pts",
+          "description": "Number of points awarded.",
+          "abbreviation": "PT",
+          "type": "matchpoints",
+          "value": 18,
+          "displayValue": "18"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "1535465",
+      "uid": "s:200~e:1535465",
+      "date": "2026-05-31T14:00Z",
+      "endDate": "2026-06-01T23:59Z",
+      "name": "Royal Challengers Bengaluru v Gujarat Titans",
+      "shortName": "RCB v GT",
+      "description": "Final (N), Indian Premier League at Ahmedabad, May 31 2026",
+      "season": {
+        "year": 2026,
+        "type": 8048
+      },
+      "competitions": [
+        {
+          "id": "1535465",
+          "uid": "s:200~e:1535465~c:1535465",
+          "description": "Final",
+          "shortDescription": "Final,  (N) at Ahmedabad",
+          "date": "2026-05-31T14:00Z",
+          "endDate": "2026-06-01T23:59Z",
+          "timeValid": true,
+          "neutralSite": true,
+          "attendance": 0,
+          "conferenceCompetition": false,
+          "playByPlayAvailable": false,
+          "fastcastAvailable": false,
+          "recent": false,
+          "class": {
+            "internationalClassId": "0",
+            "generalClassId": "6",
+            "generalClassCard": "Twenty20",
+            "name": "Twenty20 matches",
+            "eventType": "T20"
+          },
+          "venue": {
+            "id": "57851",
+            "fullName": "Narendra Modi Stadium, Motera, Ahmedabad",
+            "address": {
+              "city": "Ahmedabad",
+              "state": "",
+              "country": "India",
+              "summary": ""
+            },
+            "capacity": 132000,
+            "indoor": false
+          },
+          "competitors": [
+            {
+              "id": "335970",
+              "uid": "s:200~e:1535465~c:1535465~t:335970",
+              "type": "team",
+              "order": 2,
+              "homeAway": "home",
+              "winner": "true",
+              "score": "161/5 (18/20 ov, target 156)",
+              "team": {
+                "id": "335970",
+                "uid": "s:200~t:335970",
+                "location": "India",
+                "name": "Royal Challengers Bengaluru",
+                "abbreviation": "RCB",
+                "displayName": "Royal Challengers Bengaluru",
+                "shortDisplayName": "RCB",
+                "isActive": true,
+                "countryCode": "IN",
+                "color": "#f10920",
+                "links": [
+                  {
+                    "rel": [
+                      "clubhouse",
+                      "desktop"
+                    ],
+                    "href": "https://www.espn.in/cricket/team/_/id/335970/royal-challengers-bengaluru",
+                    "text": "Clubhouse",
+                    "isExternal": false,
+                    "isPremium": false
+                  }
+                ],
+                "logo": "https://a.espncdn.com/i/teamlogos/cricket/500/335970.png"
+              },
+              "linescores": [
+                {
+                  "period": 1,
+                  "value": 1,
+                  "displayValue": 1,
+                  "wickets": 0,
+                  "runs": 0,
+                  "overs": 20.0,
+                  "isBatting": false,
+                  "description": "complete",
+                  "isCurrent": 0
+                },
+                {
+                  "period": 2,
+                  "value": 2,
+                  "displayValue": 2,
+                  "wickets": 5,
+                  "runs": 161,
+                  "overs": 18.0,
+                  "isBatting": true,
+                  "description": "target reached",
+                  "isCurrent": 1
+                }
+              ],
+              "leaders": {
+                "$ref": "http://new.core.espnuk.org/v2/sports/cricket/leagues/8048/events/1535465/competitions/1535465/competitors/335970/leaders"
+              },
+              "statistics": [],
+              "records": [
+                {
+                  "name": "Total",
+                  "abbreviation": "Total",
+                  "type": "total",
+                  "summary": ""
+                }
+              ]
+            },
+            {
+              "id": "1298769",
+              "uid": "s:200~e:1535465~c:1535465~t:1298769",
+              "type": "team",
+              "order": 1,
+              "homeAway": "away",
+              "winner": "false",
+              "score": "155/8",
+              "team": {
+                "id": "1298769",
+                "uid": "s:200~t:1298769",
+                "location": "India",
+                "name": "Gujarat Titans",
+                "abbreviation": "GT",
+                "displayName": "Gujarat Titans",
+                "shortDisplayName": "GT",
+                "isActive": true,
+                "countryCode": "IN",
+                "color": "#334779",
+                "links": [
+                  {
+                    "rel": [
+                      "clubhouse",
+                      "desktop"
+                    ],
+                    "href": "https://www.espn.in/cricket/team/_/id/1298769/gujarat-titans",
+                    "text": "Clubhouse",
+                    "isExternal": false,
+                    "isPremium": false
+                  }
+                ],
+                "logo": "https://a.espncdn.com/i/teamlogos/cricket/500/1298769.png"
+              },
+              "linescores": [
+                {
+                  "period": 1,
+                  "value": 1,
+                  "displayValue": 1,
+                  "wickets": 8,
+                  "runs": 155,
+                  "overs": 20.0,
+                  "isBatting": true,
+                  "description": "complete",
+                  "isCurrent": 0
+                },
+                {
+                  "period": 2,
+                  "value": 2,
+                  "displayValue": 2,
+                  "wickets": 0,
+                  "runs": 0,
+                  "overs": 18.0,
+                  "isBatting": false,
+                  "description": "target reached",
+                  "isCurrent": 1
+                }
+              ],
+              "leaders": {
+                "$ref": "http://new.core.espnuk.org/v2/sports/cricket/leagues/8048/events/1535465/competitions/1535465/competitors/1298769/leaders"
+              },
+              "statistics": [],
+              "records": [
+                {
+                  "name": "Total",
+                  "abbreviation": "Total",
+                  "type": "total",
+                  "summary": ""
+                }
+              ]
+            }
+          ],
+          "status": {
+            "clock": 0,
+            "displayClock": "0'",
+            "period": 2,
+            "featuredAthletes": [
+              {
+                "abbreviation": "POTM",
+                "athlete": {
+                  "id": "253802",
+                  "name": "Virat Kohli",
+                  "shortName": "Kohli",
+                  "fullName": "Virat Kohli",
+                  "displayName": "Virat Kohli",
+                  "position": "TBT",
+                  "headshot": "https://a.espncdn.com/i/headshots/cricket/players/full/253802.png",
+                  "team": {
+                    "id": "6"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop"
+                      ],
+                      "href": "https://www.espncricinfo.com/ci/content/player/253802.html"
+                    }
+                  ]
+                },
+                "displayName": "Player Of The Match",
+                "linescores": {
+                  "$ref": "http://new.core.espnuk.org/v2/sports/cricket/leagues/8048/events/1535465/competitions/1535465/competitors/335970/roster/253802/linescores"
+                },
+                "name": "playerOfTheMatch",
+                "playerId": 253802,
+                "shortDisplayName": "POTM",
+                "team": {
+                  "id": "335970"
+                },
+                "statistics": []
+              },
+              {
+                "abbreviation": "POTS",
+                "athlete": {
+                  "id": "1408688",
+                  "name": "Vaibhav Sooryavanshi",
+                  "shortName": "Sooryavanshi",
+                  "fullName": "Vaibhav Sooryavanshi",
+                  "displayName": "Vaibhav Sooryavanshi",
+                  "position": "TBT",
+                  "headshot": "https://a.espncdn.com/i/headshots/cricket/players/default-player-logo-500.png",
+                  "team": {
+                    "id": "6"
+                  },
+                  "links": [
+                    {
+                      "rel": [
+                        "playercard",
+                        "desktop"
+                      ],
+                      "href": "https://www.espncricinfo.com/ci/content/player/1408688.html"
+                    }
+                  ]
+                },
+                "displayName": "Player Of The Series",
+                "linescores": {
+                  "$ref": "http://new.core.espnuk.org/v2/sports/cricket/leagues/8048/events/1535465/competitions/1535465/competitors/335977/roster/1408688/linescores"
+                },
+                "name": "playerOfTheSeries",
+                "playerId": 1408688,
+                "shortDisplayName": "POTS",
+                "team": {
+                  "id": "335977"
+                },
+                "statistics": []
+              }
+            ],
+            "summary": "RCB won by 5 wkts (12b rem)",
+            "type": {
+              "id": "1",
+              "description": "Result",
+              "detail": "Final",
+              "shortDetail": "Final",
+              "state": "post"
+            }
+          },
+          "broadcasts": [],
+          "notes": [],
+          "startDate": "2026-05-31T14:00Z",
+          "broadcast": "",
+          "geoBroadcasts": [],
+          "highlights": []
+        }
+      ],
+      "links": [
+        {
+          "language": "en",
+          "rel": [
+            "event",
+            "boxscore",
+            "scorecard",
+            "match",
+            "desktop"
+          ],
+          "href": "https://www.espn.in/cricket/series/8048/scorecard/1535465/royal-challengers-bengaluru-vs-gujarat-titans-final-indian-premier-league-2026",
+          "text": "Scorecard",
+          "shortText": "Scorecard",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "event",
+            "recap",
+            "report",
+            "desktop"
+          ],
+          "href": "https://www.espn.in/cricket/series/8048/report/1535465/royal-challengers-bengaluru-vs-gujarat-titans-final-indian-premier-league-2026",
+          "text": "Report",
+          "shortText": "Report",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "event",
+            "boxscore",
+            "match",
+            "live",
+            "summary",
+            "desktop"
+          ],
+          "href": "https://www.espn.in/cricket/series/8048/game/1535465/royal-challengers-bengaluru-vs-gujarat-titans-final-indian-premier-league-2026",
+          "text": "Summary",
+          "shortText": "Summary",
+          "isExternal": false,
+          "isPremium": false
+        },
+        {
+          "language": "en",
+          "rel": [
+            "event",
+            "league",
+            "serieshome",
+            "desktop"
+          ],
+          "href": "https://www.espn.in/cricket/series/_/id/8048/season/2026/indian-premier-league",
+          "text": "Series Home",
+          "shortText": "Series Home",
+          "isExternal": false,
+          "isPremium": false
+        }
+      ],
+      "status": {
+        "clock": 0,
+        "displayClock": "0'",
+        "period": 2,
+        "summary": "RCB won by 5 wkts (12b rem)",
+        "type": {
+          "id": "1",
+          "description": "Result",
+          "detail": "Final",
+          "shortDetail": "Final",
+          "state": "post"
+        }
+      }
+    }
+  ],
+  "provider": {
+    "id": "100",
+    "name": "Draft Kings",
+    "displayName": "Draft Kings",
+    "priority": 1,
+    "logos": [
+      {
+        "href": "https://a.espncdn.com/i/betting/Draftkings_Light.svg",
+        "rel": [
+          "light"
+        ]
+      },
+      {
+        "href": "https://a.espncdn.com/i/betting/Draftkings_Dark.svg",
+        "rel": [
+          "dark"
+        ]
+      }
+    ]
+  }
+}

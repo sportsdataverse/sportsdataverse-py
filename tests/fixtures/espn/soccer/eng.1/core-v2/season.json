@@ -1,0 +1,61 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025?lang=en&region=us",
+  "year": 2025,
+  "startDate": "2025-06-01T04:00Z",
+  "endDate": "2026-06-01T03:59Z",
+  "displayName": "2025-26 English Premier League",
+  "shortDisplayName": "2025-26 English Premier League",
+  "abbreviation": "2025-26",
+  "type": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1?lang=en&region=us",
+    "id": "1",
+    "type": 13481,
+    "name": "2025-26 English Premier League",
+    "abbreviation": "2025-26 English Premier League",
+    "startDate": "2025-06-01T04:00Z",
+    "endDate": "2026-06-01T03:59Z",
+    "hasGroups": false,
+    "hasStandings": true,
+    "hasLiveStandings": false,
+    "hasLegs": false,
+    "hasStats": true,
+    "isFinal": false,
+    "isThirdPlace": false,
+    "groups": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1/groups?lang=en&region=us"
+    },
+    "slug": "2025-26-english-premier-league"
+  },
+  "types": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types?lang=en&region=us",
+    "count": 1,
+    "pageIndex": 1,
+    "pageSize": 1,
+    "pageCount": 1,
+    "items": [
+      {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1?lang=en&region=us",
+        "id": "1",
+        "type": 13481,
+        "name": "2025-26 English Premier League",
+        "abbreviation": "2025-26 English Premier League",
+        "startDate": "2025-06-01T04:00Z",
+        "endDate": "2026-06-01T03:59Z",
+        "hasGroups": false,
+        "hasStandings": true,
+        "hasLiveStandings": false,
+        "hasLegs": false,
+        "hasStats": true,
+        "isFinal": false,
+        "isThirdPlace": false,
+        "groups": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/types/1/groups?lang=en&region=us"
+        },
+        "slug": "2025-26-english-premier-league"
+      }
+    ]
+  },
+  "athletes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2025/athletes?lang=en&region=us"
+  }
+}
