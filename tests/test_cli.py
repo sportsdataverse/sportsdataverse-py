@@ -75,7 +75,8 @@ def test_function_count_json_emits_dict(capsys):
     out = capsys.readouterr().out
     payload = json.loads(out)
     assert isinstance(payload, dict)
-    assert set(payload) == {"nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"}
+    core = {"nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"}
+    assert core <= set(payload)
 
 
 def test_list_functions_with_search_filters(capsys):

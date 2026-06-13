@@ -122,3 +122,25 @@ def test_parse_soccer_summary_shootout_section_for_knockout():
 
     out = parse_soccer_summary(_load("uefa.champions", "site-v2", "summary"))
     assert "shootout" in out and isinstance(out["shootout"], pl.DataFrame)
+
+
+def test_parse_soccer_teams_one_row_per_team():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_teams
+
+    df = parse_soccer_teams(_load("eng.1", "site-v2", "teams"))
+    assert {"team_id", "display_name", "abbreviation"} <= set(df.columns)
+    assert df.height >= 18
+
+
+def test_parse_soccer_team_roster_one_row_per_player():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_team_roster
+
+    df = parse_soccer_team_roster(_load("eng.1", "site-v2", "team_roster"))
+    assert isinstance(df, pl.DataFrame)
+    assert "athlete_id" in df.columns or "id" in df.columns
+
+
+def test_parse_soccer_teams_empty_zero_rows():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_teams
+
+    assert parse_soccer_teams({}).height == 0

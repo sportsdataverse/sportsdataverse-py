@@ -491,6 +491,125 @@ def _build_shootout(payload: dict) -> pl.DataFrame:
         return pl.DataFrame()
 
 
+def parse_soccer_teams(payload: Any, *, return_as_pandas: bool = False):
+    """Parse an ESPN soccer teams payload into a tidy flat DataFrame.
+
+    Each row is one team in the league. The ``team_id``, ``display_name``,
+    and ``abbreviation`` columns are always present; additional metadata
+    columns (``location``, ``name``, ``short_display_name``, ``is_active``)
+    are included when available.
+
+    Args:
+        payload: Raw dict from an ESPN ``teams`` endpoint response.
+        return_as_pandas: When True, return a :class:`pandas.DataFrame` instead.
+
+    Returns:
+        pl.DataFrame or pd.DataFrame — zero rows when payload is empty/malformed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.soccer import espn_epl_teams_site
+            df = espn_epl_teams_site(return_parsed=True)
+            print(df.shape)
+    """
+    try:
+        sports = (payload or {}).get("sports") if isinstance(payload, dict) else None
+        if not sports:
+            return _out(pl.DataFrame(), return_as_pandas)
+        leagues = (sports[0] or {}).get("leagues") or []
+        if not leagues:
+            return _out(pl.DataFrame(), return_as_pandas)
+        teams_list = (leagues[0] or {}).get("teams") or []
+        rows = []
+        for item in teams_list:
+            team = item.get("team") or {}
+            rows.append(
+                {
+                    "team_id": team.get("id"),
+                    "display_name": team.get("displayName"),
+                    "abbreviation": team.get("abbreviation"),
+                    "location": team.get("location"),
+                    "name": team.get("name"),
+                    "short_display_name": team.get("shortDisplayName"),
+                    "nickname": team.get("nickname"),
+                    "slug": team.get("slug"),
+                    "uid": team.get("uid"),
+                    "color": team.get("color"),
+                    "alternate_color": team.get("alternateColor"),
+                    "is_active": team.get("isActive"),
+                    "is_all_star": team.get("isAllStar"),
+                }
+            )
+        if not rows:
+            return _out(pl.DataFrame(), return_as_pandas)
+        return _out(pl.DataFrame(_stringify_lists(rows)), return_as_pandas)
+    except Exception:
+        return _out(pl.DataFrame(), return_as_pandas)
+
+
+def parse_soccer_team_roster(payload: Any, *, return_as_pandas: bool = False):
+    """Parse an ESPN soccer team roster payload into a tidy flat DataFrame.
+
+    Each row is one athlete on the roster. The ``athlete_id`` and
+    ``display_name`` columns are always present; position, jersey, age,
+    and birth metadata are included when available.
+
+    Args:
+        payload: Raw dict from an ESPN ``team_roster`` endpoint response.
+        return_as_pandas: When True, return a :class:`pandas.DataFrame` instead.
+
+    Returns:
+        pl.DataFrame or pd.DataFrame — zero rows when payload is empty/malformed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.soccer import espn_epl_team_roster
+            df = espn_epl_team_roster(team_id=364, return_parsed=True)
+            print(df.shape)
+    """
+    try:
+        athletes = (payload or {}).get("athletes") if isinstance(payload, dict) else None
+        if not athletes or not isinstance(athletes, list):
+            return _out(pl.DataFrame(), return_as_pandas)
+        rows = []
+        for a in athletes:
+            pos = a.get("position") or {}
+            birth_place = a.get("birthPlace") or {}
+            status = a.get("status") or {}
+            rows.append(
+                {
+                    "athlete_id": a.get("id"),
+                    "uid": a.get("uid"),
+                    "first_name": a.get("firstName"),
+                    "last_name": a.get("lastName"),
+                    "display_name": a.get("displayName"),
+                    "short_name": a.get("shortName"),
+                    "jersey": a.get("jersey"),
+                    "age": a.get("age"),
+                    "date_of_birth": a.get("dateOfBirth"),
+                    "height": a.get("height"),
+                    "display_height": a.get("displayHeight"),
+                    "weight": a.get("weight"),
+                    "display_weight": a.get("displayWeight"),
+                    "position": pos.get("abbreviation"),
+                    "position_name": pos.get("name"),
+                    "birth_city": birth_place.get("city"),
+                    "birth_country": birth_place.get("country"),
+                    "citizenship": a.get("citizenship"),
+                    "gender": a.get("gender"),
+                    "slug": a.get("slug"),
+                    "status": status.get("name") if isinstance(status, dict) else status,
+                }
+            )
+        if not rows:
+            return _out(pl.DataFrame(), return_as_pandas)
+        return _out(pl.DataFrame(_stringify_lists(rows)), return_as_pandas)
+    except Exception:
+        return _out(pl.DataFrame(), return_as_pandas)
+
+
 _SOCCER_SUMMARY_BUILDERS: Dict[str, Any] = {
     "header": _build_header,
     "lineups": _build_lineups,

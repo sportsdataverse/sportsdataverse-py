@@ -25,7 +25,6 @@ from sportsdataverse._common_espn_parsers import (
     parse_news,
     parse_single_entity,
     parse_standings,
-    parse_team_roster,
     parse_team_schedule,
     parse_teams,
 )
@@ -33,6 +32,8 @@ from sportsdataverse.soccer.soccer_espn_parsers import (
     parse_soccer_scoreboard,
     parse_soccer_standings,
     parse_soccer_summary,
+    parse_soccer_team_roster,
+    parse_soccer_teams,
 )
 
 __all__ = [
@@ -513,7 +514,7 @@ def espn_soccer_teams_site(
         **kwargs,
     )
     if return_parsed:
-        return parse_teams(raw, return_as_pandas=return_as_pandas)
+        return parse_soccer_teams(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -585,7 +586,7 @@ def espn_soccer_team_roster(
         **kwargs,
     )
     if return_parsed:
-        return parse_team_roster(raw, return_as_pandas=return_as_pandas)
+        return parse_soccer_team_roster(raw, return_as_pandas=return_as_pandas)
     return raw
 
 

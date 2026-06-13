@@ -647,6 +647,8 @@ _SPORT_PARSER_OVERRIDES: dict[str, dict[str, str]] = {
         "scoreboard": "parse_soccer_scoreboard",
         "standings": "parse_soccer_standings",
         "summary": "parse_soccer_summary",
+        "teams_site": "parse_soccer_teams",
+        "team_roster": "parse_soccer_team_roster",
     },
 }
 
