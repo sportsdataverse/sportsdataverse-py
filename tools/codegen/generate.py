@@ -453,8 +453,11 @@ class _EndpointView:
         opt_q = [p for p in ep.query_params if not p.required]
         self.signature_params = req_path + req_q + opt_path + opt_q
 
+        self.league_param = league.league_param
+        # In param mode, keep {league} as a runtime f-string token (sport still baked).
+        lg_slug = "{league}" if league.league_param else league.league
         bare = ep.path.replace("[", "").replace("]", "")
-        url = f"{ep_host}{_sub_slugs(bare, league.sport, league.league)}"
+        url = f"{ep_host}{_sub_slugs(bare, league.sport, lg_slug)}"
         self.url_fstring = url
         self.full_url = url  # back-compat alias
 
@@ -470,7 +473,10 @@ class _EndpointView:
             self.url_literal = "__url"
         else:
             self.path_build_expr = ""
-            self.url_literal = ('f"' + url + '"') if ep.path_params else ('"' + url + '"')
+            # f-string whenever a runtime token is present: an endpoint path param OR
+            # (param mode) the {league} token.
+            needs_fstring = bool(ep.path_params) or league.league_param
+            self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
 
         self.example_url = _example_url(ep_host, ep, league.sport, league.league)
         self.example_call = _example_call(ep, fn_name)
@@ -500,7 +506,8 @@ class _EndpointView:
     @staticmethod
     def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League) -> str:
         """Emit Python statements (newline+4-space joined) that assign ``__url``."""
-        sport, lg = league.sport, league.league
+        sport = league.sport
+        lg = "{league}" if league.league_param else league.league
         lines: list[str] = []
         for p in ep.path_params:
             if p.default_from:

@@ -27,3 +27,31 @@ def test_load_leagues_reads_league_param_flag(tmp_path):
     by_prefix = {lg.prefix: lg for lg in cfg.leagues}
     assert by_prefix["soccer"].league_param is True
     assert by_prefix["epl"].league_param is False  # defaults False when key absent
+
+
+import tools.codegen.generate as gen
+
+
+def _load_apis_and_view(prefix, sport, league, league_param, short):
+    """Build one _EndpointView for the named endpoint short under a (param/fixed) league."""
+    endpoints = gen.ENDPOINTS
+    params = spec.load_parameters(endpoints / "parameters.yaml")
+    apis = [spec.load_espn_api(endpoints / f"{a}.yaml", params) for a in gen.ESPN_APIS]
+    lg = spec.League(prefix=prefix, sport=sport, league=league, scopes=["universal"], league_param=league_param)
+    views = gen._espn_league_views(lg, apis, spec.load_leagues(endpoints / "leagues.yaml").hosts)
+    return next(v for v in views if v.short == short)
+
+
+def test_param_mode_scoreboard_url_keeps_runtime_league_token():
+    v = _load_apis_and_view("soccer", "soccer", "eng.1", True, "scoreboard")
+    # sport is baked, league stays a runtime f-string token, and it's an f-string literal.
+    assert v.league_param is True
+    assert "soccer/{league}/scoreboard" in v.url_literal
+    assert v.url_literal.startswith('f"')
+
+
+def test_fixed_mode_scoreboard_url_bakes_both_slugs():
+    v = _load_apis_and_view("nba", "basketball", "nba", False, "scoreboard")
+    assert v.league_param is False
+    assert "basketball/nba/scoreboard" in v.url_literal
+    assert "{league}" not in v.url_literal
