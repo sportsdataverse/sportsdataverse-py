@@ -978,3 +978,29 @@ def test_espn_cricket_scoreboard_param_league_answers():
     # a broadly-available cricket league slug; raw Dict
     payload = espn_cricket_scoreboard(league="8048", return_parsed=False)  # 8048 = IPL on ESPN
     assert isinstance(payload, dict)
+
+
+def test_espn_soccer_scoreboard_parsed_is_dataframe():
+    import polars as pl
+    from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_scoreboard
+
+    df = espn_soccer_scoreboard(league="eng.1")  # return_parsed=True default -> soccer matches frame
+    assert isinstance(df, pl.DataFrame)
+    assert {"home_team", "away_team"} <= set(df.columns)
+
+
+def test_espn_soccer_standings_parsed_table():
+    import polars as pl
+    from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_standings
+
+    df = espn_soccer_standings(league="eng.1")
+    assert isinstance(df, pl.DataFrame) and "group" in df.columns and df.height >= 18
+
+
+def test_espn_epl_alias_scoreboard_parsed():
+    import polars as pl
+    from sportsdataverse.epl.epl_espn_ext import espn_epl_scoreboard
+
+    df = espn_epl_scoreboard()  # fixed-league alias, no league arg, parsed
+    assert isinstance(df, pl.DataFrame)
+    assert {"home_team", "away_team"} <= set(df.columns)

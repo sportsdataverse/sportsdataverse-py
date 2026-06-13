@@ -126,6 +126,7 @@ New 404-safe dataset loaders read pre-built CFB identity crosswalks from the `cf
 ### ESPN — soccer/cricket param families + soccer headline aliases (`espn_soccer_*(league=)`, `espn_cricket_*(league=)`, `espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...)
 
 - feat(espn): add league-parameterized soccer + cricket families (espn_soccer_*(league=), espn_cricket_*(league=)) + soccer headline aliases (espn_epl_*, espn_ucl_*, espn_mls_*, ...)
+- feat(soccer): full-parity soccer parsers — scoreboard→matches, standings→league table (group column), summary→11-section dispatcher (header/lineups/key_events/team_stats/commentary/leaders/standings/head_to_head/last_five/game_info/shootout), teams, roster — routed via per-sport codegen overrides; feat(cricket): cricket parsers — scoreboard, standings, summary→8-section matchcard dispatcher (batting/bowling/partnerships)
 
 - **`load_cfb_teams_crosswalk(seasons=)`** and **`load_cfb_schedule_crosswalk(seasons=)`** are **per-season** (`min_season` 2014) — teams and schedules are genuinely historical, published per year for 2014–2025.
 - **`load_cfb_rosters_crosswalk()`** is **season-less**: ESPN's and Fox's team-roster endpoints expose only the *current* roster, so the artifact is a single snapshot (no `seasons=` argument) rather than a misleading per-season series.
