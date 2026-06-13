@@ -116,6 +116,7 @@ class League:
     sport: str
     league: str
     scopes: List[str]
+    league_param: bool = False
 
 
 @dataclass(frozen=True)
@@ -151,7 +152,13 @@ def load_parameters(path: Path) -> Dict[str, Param]:
 def load_leagues(path: Path) -> LeaguesConfig:
     raw = _read_yaml(path)
     leagues = [
-        League(prefix=lg["prefix"], sport=lg["sport"], league=lg["league"], scopes=list(lg["scopes"]))
+        League(
+            prefix=lg["prefix"],
+            sport=lg["sport"],
+            league=lg["league"],
+            scopes=list(lg["scopes"]),
+            league_param=bool(lg.get("league_param", False)),
+        )
         for lg in raw["leagues"]
     ]
     return LeaguesConfig(hosts=dict(raw["hosts"]), leagues=leagues)
