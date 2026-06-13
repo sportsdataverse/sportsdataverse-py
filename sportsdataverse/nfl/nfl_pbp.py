@@ -24,14 +24,18 @@ def _nfl_resource_filename(package: str, resource: str) -> str:
 
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.nfl.ep_wp import (
+    EP_FEATURES,
+    WP_SPREAD_FEATURES,
+    _EP_POINT_VALUES,
+    _espn_ep_features,
+    _espn_wp_features,
+    _load_model as _ep_wp_load_model,
+)
 from sportsdataverse.nfl.model_vars import (
     defense_score_vec,
     end_change_vec,
     ep_class_to_score_mapping,
-    ep_end_columns,
-    ep_final_names,
-    ep_start_columns,
-    ep_start_touchback_columns,
     int_vec,
     kickoff_turnovers,
     kickoff_vec,
@@ -42,10 +46,6 @@ from sportsdataverse.nfl.model_vars import (
     qbr_vars,
     scores_vec,
     turnover_vec,
-    wp_end_columns,
-    wp_final_names,
-    wp_start_columns,
-    wp_start_touchback_columns,
 )
 
 # "td" : float(p[0]),
@@ -55,18 +55,11 @@ from sportsdataverse.nfl.model_vars import (
 # "safety" : float(p[4]),
 # "opp_safety" : float(p[5]),
 # "no_score" : float(p[6])
-ep_model_file = _nfl_resource_filename("sportsdataverse", "nfl/models/ep_model.ubj")
-wp_spread_file = _nfl_resource_filename("sportsdataverse", "nfl/models/wp_spread.ubj")
 qbr_model_file = _nfl_resource_filename("sportsdataverse", "nfl/models/qbr_model.ubj")
-
-ep_model = Booster({"nthread": 4})  # init model
-ep_model.load_model(ep_model_file)
-
-wp_model = Booster({"nthread": 4})  # init model
-wp_model.load_model(wp_spread_file)
-
-qbr_model = Booster({"nthread": 4})  # init model
+qbr_model = Booster({"nthread": 4})
 qbr_model.load_model(qbr_model_file)
+# ep_model and wp_model are loaded lazily via _ep_wp_load_model() (lru_cache)
+# so that import succeeds even when .ubj files are absent.
 
 logger = logging.getLogger("sdv.nfl_pbp")
 logger.addHandler(logging.NullHandler())
@@ -3377,22 +3370,39 @@ class NFLPlayProcess(object):
             )
         )
 
-        start_touchback_data = play_df[ep_start_touchback_columns]
+        _ep_model = _ep_wp_load_model("ep_model.ubj")
 
-        start_touchback_data.columns = ep_final_names
-        # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
+        X_ep_tb = _espn_ep_features(
+            play_df,
+            half_sec_col="start.TimeSecsRem",
+            yardline_col="start.yardsToEndzone.touchback",
+            home_col="start.is_home",
+            ydstogo_col="distance",
+            down1_col="down_1",
+            down2_col="down_2",
+            down3_col="down_3",
+            down4_col="down_4",
+            pos_timeouts_col="start.posTeamTimeouts",
+            def_timeouts_col="start.defPosTeamTimeouts",
+        )
+        _probs_tb = _ep_model.predict(DMatrix(X_ep_tb, feature_names=EP_FEATURES)).reshape(-1, 7)
+        EP_start_touchback = np.clip(_probs_tb @ _EP_POINT_VALUES, -10.0, 10.0)
 
-        dtest_start_touchback = DMatrix(start_touchback_data)
-        EP_start_touchback_parts = ep_model.predict(dtest_start_touchback)
-        EP_start_touchback = self.__calculate_ep_exp_val(EP_start_touchback_parts)
-
-        start_data = play_df[ep_start_columns]
-        start_data.columns = ep_final_names
-        # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
-
-        dtest_start = DMatrix(start_data)
-        EP_start_parts = ep_model.predict(dtest_start)
-        EP_start = self.__calculate_ep_exp_val(EP_start_parts)
+        X_ep_start = _espn_ep_features(
+            play_df,
+            half_sec_col="start.TimeSecsRem",
+            yardline_col="start.yardsToEndzone",
+            home_col="start.is_home",
+            ydstogo_col="start.distance",
+            down1_col="down_1",
+            down2_col="down_2",
+            down3_col="down_3",
+            down4_col="down_4",
+            pos_timeouts_col="start.posTeamTimeouts",
+            def_timeouts_col="start.defPosTeamTimeouts",
+        )
+        _probs_start = _ep_model.predict(DMatrix(X_ep_start, feature_names=EP_FEATURES)).reshape(-1, 7)
+        EP_start = np.clip(_probs_start @ _EP_POINT_VALUES, -10.0, 10.0)
 
         play_df = (
             play_df.with_columns(
@@ -3453,13 +3463,21 @@ class NFLPlayProcess(object):
             )
         )
 
-        end_data = play_df[ep_end_columns]
-        end_data.columns = ep_final_names
-        # self.logger.info(end_data.iloc[[36]].to_json(orient="records"))
-        dtest_end = DMatrix(end_data)
-        EP_end_parts = ep_model.predict(dtest_end)
-
-        EP_end = self.__calculate_ep_exp_val(EP_end_parts)
+        X_ep_end = _espn_ep_features(
+            play_df,
+            half_sec_col="end.TimeSecsRem",
+            yardline_col="end.yardsToEndzone",
+            home_col="end.is_home",
+            ydstogo_col="end.distance",
+            down1_col="down_1_end",
+            down2_col="down_2_end",
+            down3_col="down_3_end",
+            down4_col="down_4_end",
+            pos_timeouts_col="end.posTeamTimeouts",
+            def_timeouts_col="end.defPosTeamTimeouts",
+        )
+        _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
+        EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
 
         play_df = play_df.with_columns(
             EP_start_touchback=pl.lit(EP_start_touchback),
@@ -3879,23 +3897,56 @@ class NFLPlayProcess(object):
         )
 
         # ---- wp_before ----
-        start_touchback_data = play_df[wp_start_touchback_columns]
-        start_touchback_data.columns = wp_final_names
-        # self.logger.info(start_touchback_data.iloc[[36]].to_json(orient="records"))
-        dtest_start_touchback = DMatrix(start_touchback_data)
-        WP_start_touchback = wp_model.predict(dtest_start_touchback)
-        start_data = play_df[wp_start_columns]
-        start_data.columns = wp_final_names
-        # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
-        dtest_start = DMatrix(start_data)
-        WP_start = wp_model.predict(dtest_start)
+        _wp_model = _ep_wp_load_model("wp_spread.ubj")
+
+        X_wp_tb = _espn_wp_features(
+            play_df,
+            receive_ko_col="start.pos_team_receives_2H_kickoff",
+            spread_time_col="start.spread_time",
+            home_col="start.is_home",
+            half_sec_col="start.TimeSecsRem",
+            game_sec_col="start.adj_TimeSecsRem",
+            score_diff_col="pos_score_diff_start",
+            down_col="start.down",
+            ydstogo_col="start.distance",
+            yardline_col="start.yardsToEndzone.touchback",
+            pos_timeouts_col="start.posTeamTimeouts",
+            def_timeouts_col="start.defPosTeamTimeouts",
+        )
+        WP_start_touchback = _wp_model.predict(DMatrix(X_wp_tb, feature_names=WP_SPREAD_FEATURES))
+
+        X_wp_start = _espn_wp_features(
+            play_df,
+            receive_ko_col="start.pos_team_receives_2H_kickoff",
+            spread_time_col="start.spread_time",
+            home_col="start.is_home",
+            half_sec_col="start.TimeSecsRem",
+            game_sec_col="start.adj_TimeSecsRem",
+            score_diff_col="pos_score_diff_start",
+            down_col="start.down",
+            ydstogo_col="start.distance",
+            yardline_col="start.yardsToEndzone",
+            pos_timeouts_col="start.posTeamTimeouts",
+            def_timeouts_col="start.defPosTeamTimeouts",
+        )
+        WP_start = _wp_model.predict(DMatrix(X_wp_start, feature_names=WP_SPREAD_FEATURES))
 
         # ---- wp_after ----
-        end_data = play_df[wp_end_columns]
-        end_data.columns = wp_final_names
-        # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
-        dtest_end = DMatrix(end_data)
-        WP_end = wp_model.predict(dtest_end)
+        X_wp_end = _espn_wp_features(
+            play_df,
+            receive_ko_col="end.pos_team_receives_2H_kickoff",
+            spread_time_col="end.spread_time",
+            home_col="end.is_home",
+            half_sec_col="end.TimeSecsRem",
+            game_sec_col="end.adj_TimeSecsRem",
+            score_diff_col="end.pos_score_diff",
+            down_col="end.down",
+            ydstogo_col="end.distance",
+            yardline_col="end.yardsToEndzone",
+            pos_timeouts_col="end.posTeamTimeouts",
+            def_timeouts_col="end.defPosTeamTimeouts",
+        )
+        WP_end = _wp_model.predict(DMatrix(X_wp_end, feature_names=WP_SPREAD_FEATURES))
 
         play_df = (
             play_df.with_columns(

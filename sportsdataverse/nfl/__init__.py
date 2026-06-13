@@ -88,6 +88,12 @@ from sportsdataverse.nfl.nfl_loaders import load_nfl_trades as load_trades
 from sportsdataverse.nfl.nfl_loaders import (
     load_nfl_weekly_rosters as load_rosters_weekly,
 )
+from sportsdataverse.nfl.ep_wp import (
+    calculate_completion_probability,
+    calculate_expected_points,
+    calculate_win_probability,
+    calculate_xyac,
+)
 from sportsdataverse.nfl.nfl_pbp import *
 from sportsdataverse.nfl.nfl_player_stats import *
 from sportsdataverse.nfl.nfl_schedule import *
