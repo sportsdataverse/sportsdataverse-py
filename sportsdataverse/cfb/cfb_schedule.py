@@ -90,6 +90,12 @@ def espn_cfb_schedule(
         return None
 
     for event in events:
+        # Some ESPN scoreboards (e.g. 2010, 2014) include placeholder events with
+        # null competitions/competitors. scoreboard_event_parsing subscripts those
+        # unguarded, so skip them here rather than fail the whole season.
+        _comps = event.get("competitions") or []
+        if not _comps or not (_comps[0].get("competitors") or []):
+            continue
         event = scoreboard_event_parsing(event)
         x = pl.from_pandas(pd.json_normalize(event.get("competitions")[0], sep="_"))
         x = x.with_columns(

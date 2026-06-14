@@ -56,3 +56,14 @@ def week_1_cfb_schedule():
 def test_week_1_cfb_schedule_check(week_1_cfb_schedule):
     assert isinstance(week_1_cfb_schedule, pl.DataFrame)
     assert len(week_1_cfb_schedule) > 0
+
+
+@pytest.mark.parametrize("year", [2010, 2014])
+def test_cfb_schedule_placeholder_event_years(year):
+    """Regression: the 2010/2014 ESPN scoreboards include placeholder events with
+    null competitions/competitors. espn_cfb_schedule must skip those events instead
+    of raising ``TypeError: 'NoneType' object is not subscriptable`` for the season.
+    """
+    sched = espn_cfb_schedule(dates=year, return_as_pandas=False)
+    assert isinstance(sched, pl.DataFrame)
+    assert len(sched) > 0
