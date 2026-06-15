@@ -2,7 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.0.60 Release: June 15, 2026](#0060-release-june-15-2026)
+  - [NFL — expected points, win probability, completion probability (CP/CPOE), and expected YAC (XYAC) models](#nfl--expected-points-win-probability-completion-probability-cpcpoe-and-expected-yac-xyac-models)
+  - [CFB — `espn_cfb_schedule` guards null-competitor placeholder events](#cfb--espn_cfb_schedule-guards-null-competitor-placeholder-events)
+- [0.0.59 Release: June 13, 2026](#0059-release-june-13-2026)
   - [CFB — cross-source crosswalk loaders (`load_cfb_*_crosswalk`)](#cfb--cross-source-crosswalk-loaders-load_cfb__crosswalk)
   - [ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)](#espn--ncaa-mens--womens-college-hockey-espn_mch_-espn_wch_)
   - [ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)](#espn--ncaa-college-baseball--softball-espn_college_baseball_-espn_college_softball_)
@@ -105,7 +108,17 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.0.60 Release: June 15, 2026
+
+### NFL — expected points, win probability, completion probability (CP/CPOE), and expected YAC (XYAC) models
+
+`sportsdataverse.nfl.ep_wp` gains nflfastR-parity modeling functions — `calculate_expected_points`, `calculate_win_probability`, `calculate_completion_probability` (CP + CPOE), and `calculate_xyac` (four XYAC sub-models: mean/median/SD yardage + completion probability) — fed by ESPN-adapter feature builders and wired into `NFLPlayProcess`. Ships the bundled XGBoost `.ubj` model files.
+
+### CFB — `espn_cfb_schedule` guards null-competitor placeholder events
+
+ESPN's 2010 and 2014 college-football scoreboards include placeholder events with null `competitions`/`competitors`. `espn_cfb_schedule` now skips those events instead of raising `TypeError: 'NoneType' object is not subscriptable` and failing the entire season.
+
+## 0.0.59 Release: June 13, 2026
 
 ### CFB — cross-source crosswalk loaders (`load_cfb_*_crosswalk`)
 
