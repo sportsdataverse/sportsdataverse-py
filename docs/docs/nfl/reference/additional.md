@@ -4682,6 +4682,141 @@ clear_cache()                           # wipe both memory + filesystem
 update_config(cache_mode="off")         # bypass cache entirely
 ```
 
+### `calculate_completion_probability(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_completion_probability}
+
+Compute completion probability (CP) and CPOE for pass plays.
+
+Mirrors nflfastR's `helper_add_cp_cpoe.R`.  Scores only intended pass
+plays (where `air_yards` is not null); non-pass plays receive null in
+the `cp` column.  When `complete_pass` is present,
+`cpoe = complete_pass - cp` is also added.
+
+Drops and recomputes any existing `cp` / `cpoe` columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_data` | `DataFrame` |  | nflverse-format play-by-play DataFrame. Required: `air_yards`, `season`, `ydstogo`, `down`, `posteam`, `home_team`. Optional: `roof`, `pass_location` (for `pass_middle`), `qb_hit`, `complete_pass` (to derive `cpoe`). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+DataFrame with the original columns plus `cp` (null for non-pass plays) and `cpoe` (null when `complete_pass` absent).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.ep_wp import calculate_completion_probability
+
+pbp = load_nfl_pbp([2023])
+pbp_cp = calculate_completion_probability(pbp)
+print(pbp_cp.select("cp", "cpoe").head())
+```
+
+### `calculate_expected_points(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_expected_points}
+
+Compute expected points for provided plays.
+
+Mirrors nflfastR's `calculate_expected_points()`.  Drops and recomputes
+any existing `ep` / `*_prob` columns so the output is always fresh.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_data` | `DataFrame` |  | Play-by-play DataFrame with nflverse columns. Required: `season`, `posteam`, `home_team`, `roof`, `half_seconds_remaining`, `yardline_100`, `down`, `ydstogo`, `posteam_timeouts_remaining`, `defteam_timeouts_remaining`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+DataFrame with the original columns plus: `td_prob`, `opp_td_prob`, `fg_prob`, `opp_fg_prob`, `safety_prob`, `opp_safety_prob`, `no_score_prob`, and `ep` (expected points, clipped to [-10, 10]).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.ep_wp import calculate_expected_points
+
+pbp = load_nfl_pbp([2023])
+pbp_ep = calculate_expected_points(pbp)
+print(pbp_ep.select("ep").head())
+```
+
+### `calculate_win_probability(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_win_probability}
+
+Compute win probability for provided plays.
+
+Mirrors nflfastR's `calculate_win_probability()`.  Uses the
+spread-adjusted model (`wp_spread.ubj`) when `spread_line` is
+non-null, and falls back to the naive model (`wp_naive.ubj`) for plays
+with a missing spread line.  Drops and recomputes any existing `wp` /
+`vegas_wp` columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_data` | `DataFrame` |  | Play-by-play DataFrame. Required: all EP columns plus `score_differential`, `game_seconds_remaining`, `spread_line`, `receive_2h_ko`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+DataFrame with the original columns plus: `wp` (naive WP) and `vegas_wp` (spread-adjusted WP).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.ep_wp import calculate_win_probability
+
+pbp = load_nfl_pbp([2023])
+pbp_wp = calculate_win_probability(pbp)
+print(pbp_wp.select("wp", "vegas_wp").head())
+```
+
+### `calculate_xyac(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_xyac}
+
+Compute expected yards after catch (XYAC) for intended pass plays.
+
+Mirrors nflfastR's four XYAC sub-models (mean yardage, median yardage,
+SD of yardage, completion probability).  Requires `ep` and `cp` to
+already be present — call `calculate_expected_points` and
+`calculate_completion_probability` before this function.
+
+Scores all intended pass plays (`air_yards` not null and `cp` + `ep`
+not null); non-pass plays receive null.  Drops and recomputes any existing
+XYAC output columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_data` | `DataFrame` |  | nflverse-format play-by-play DataFrame with `ep` and `cp` columns already computed. Required: `air_yards`, `season`, `half_seconds_remaining`, `yardline_100`, `ydstogo`, `down`, `home` (or `posteam` + `home_team`), `ep`, `cp`. Optional: `qb_hit`, `pass_location`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+DataFrame with the original columns plus: `xyac_mean_yardage`, `xyac_median_yardage`, `xyac_sd_yardage`, `xyac_prob_complete` (null for non-pass plays).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.ep_wp import (
+    calculate_expected_points,
+    calculate_completion_probability,
+    calculate_xyac,
+)
+
+pbp = load_nfl_pbp([2023])
+pbp = calculate_expected_points(pbp)
+pbp = calculate_completion_probability(pbp)
+pbp = calculate_xyac(pbp)
+print(pbp.select("xyac_mean_yardage", "xyac_prob_complete").head())
+```
+
 ### `clear_cache() -> 'None'` {#clear_cache}
 
 Clear both memory and filesystem caches.
