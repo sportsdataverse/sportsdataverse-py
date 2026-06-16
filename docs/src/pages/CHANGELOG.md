@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.62 Release: June 16, 2026](#0062-release-june-16-2026)
+  - [All sports — `espn_*_game_rosters` robust to long-tail ESPN payloads](#all-sports--espn__game_rosters-robust-to-long-tail-espn-payloads)
 - [0.0.61 Release: June 16, 2026](#0061-release-june-16-2026)
   - [CFB — `espn_cfb_game_rosters` robust to long-tail ESPN payloads](#cfb--espn_cfb_game_rosters-robust-to-long-tail-espn-payloads)
 - [0.0.60 Release: June 15, 2026](#0060-release-june-15-2026)
@@ -109,6 +111,17 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.62 Release: June 16, 2026
+
+### All sports — `espn_*_game_rosters` robust to long-tail ESPN payloads
+
+Applies the two `espn_cfb_game_rosters` robustness fixes from 0.0.61 to every sibling rosters builder — `espn_wbb_game_rosters`, `espn_wnba_game_rosters`, `espn_nba_game_rosters`, `espn_mbb_game_rosters`, `espn_nhl_game_rosters`, and `espn_nfl_game_rosters` — which were templated from the same source and shared both bugs verbatim:
+
+- **`statistics_href` strict-rename** of the competitors payload now renames only keys actually present, so older games that omit the team-level `statistics` `$ref` no longer raise `polars.exceptions.ColumnNotFoundError`.
+- **Per-team roster 404** is now tolerated: a single team's missing `/roster` (`NoESPNDataError`) no longer fails the whole game; the other team's roster is recovered, and `NoESPNDataError` is raised only when every team is empty.
+
+Adds parametrized offline regression tests across all six modules (`tests/test_sibling_game_rosters.py`).
 
 ## 0.0.61 Release: June 16, 2026
 
