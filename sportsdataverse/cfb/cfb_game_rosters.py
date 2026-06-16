@@ -4,7 +4,6 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import download, normalize_team_roster_columns, underscore
-from sportsdataverse.errors import NoESPNDataError
 
 
 def espn_cfb_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwargs) -> pl.DataFrame:
@@ -182,6 +181,8 @@ def helper_cfb_roster_items(items, summary_url, **kwargs):
             from sportsdataverse.cfb import espn_cfb_game_rosters
             rosters = espn_cfb_game_rosters(game_id=401628334)
     """
+    from sportsdataverse.errors import NoESPNDataError
+
     team_ids = list(items["team_id"])
     game_rosters = pl.DataFrame()
     for tm in team_ids:
