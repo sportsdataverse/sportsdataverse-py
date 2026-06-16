@@ -95,7 +95,12 @@ def helper_nba_game_items(summary):
     items.columns = [col.replace("$ref", "href") for col in items.columns]
 
     items.columns = [underscore(c) for c in items.columns]
-    items = items.rename({"id": "team_id", "uid": "team_uid", "statistics_href": "team_statistics_href"})
+    # Older games (e.g. pre-2021) sometimes omit the team-level ``statistics``
+    # ``$ref`` in the competitors payload, so ``statistics_href`` is absent and a
+    # strict rename raises ColumnNotFoundError (the renamed ``team_statistics_href``
+    # is not used downstream). Rename only the keys actually present.
+    rename_map = {"id": "team_id", "uid": "team_uid", "statistics_href": "team_statistics_href"}
+    items = items.rename({k: v for k, v in rename_map.items() if k in items.columns})
     items = items.with_columns(team_id=pl.col("team_id").cast(pl.Int32))
 
     return items
@@ -177,17 +182,31 @@ def helper_nba_roster_items(items, summary_url, **kwargs):
             from sportsdataverse.nba import espn_nba_game_rosters
             rosters = espn_nba_game_rosters(game_id=401585183)
     """
+    from sportsdataverse.errors import NoESPNDataError
+
     team_ids = list(items["team_id"])
     game_rosters = pl.DataFrame()
     for tm in team_ids:
         team_roster_url = "{x}/{t}/roster".format(x=summary_url, t=tm)
-        team_roster_resp = download(team_roster_url, **kwargs)
-        team_roster = pl.from_pandas(pd.json_normalize(team_roster_resp.json().get("entries", []), sep="_"))
+        try:
+            team_roster_resp = download(team_roster_url, **kwargs)
+        except NoESPNDataError:
+            # ESPN has no roster resource for this team in this game (a 404 —
+            # common for older games). Skip it so the other team's roster is
+            # still recovered instead of failing the whole game.
+            continue
+        entries = team_roster_resp.json().get("entries", [])
+        if not entries:
+            continue
+        team_roster = pl.from_pandas(pd.json_normalize(entries, sep="_"))
         team_roster.columns = [col.replace("$ref", "href") for col in team_roster.columns]
         team_roster.columns = [underscore(c) for c in team_roster.columns]
         team_roster = team_roster.with_columns(team_id=pl.lit(tm).cast(pl.Int32))
         game_rosters = pl.concat([game_rosters, team_roster], how="vertical")
-    game_rosters = game_rosters.drop(["period", "for_player_id", "active"])
+    if game_rosters.is_empty():
+        # No team in this game exposes a roster resource — genuinely no data.
+        raise NoESPNDataError(f"NoESPNDataError: No roster data found for any team at {summary_url}")
+    game_rosters = game_rosters.drop([c for c in ["period", "for_player_id", "active"] if c in game_rosters.columns])
     game_rosters = game_rosters.with_columns(
         player_id=pl.col("player_id").cast(pl.Int64),
         team_id=pl.col("team_id").cast(pl.Int32),
