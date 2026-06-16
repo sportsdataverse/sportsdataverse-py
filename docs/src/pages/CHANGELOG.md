@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.61 Release: June 16, 2026](#0061-release-june-16-2026)
+  - [CFB — `espn_cfb_game_rosters` robust to long-tail ESPN payloads](#cfb--espn_cfb_game_rosters-robust-to-long-tail-espn-payloads)
 - [0.0.60 Release: June 15, 2026](#0060-release-june-15-2026)
   - [NFL — expected points, win probability, completion probability (CP/CPOE), and expected YAC (XYAC) models](#nfl--expected-points-win-probability-completion-probability-cpcpoe-and-expected-yac-xyac-models)
   - [CFB — `espn_cfb_schedule` guards null-competitor placeholder events](#cfb--espn_cfb_schedule-guards-null-competitor-placeholder-events)
@@ -107,6 +109,17 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.61 Release: June 16, 2026
+
+### CFB — `espn_cfb_game_rosters` robust to long-tail ESPN payloads
+
+Surfaced by the 2004–2023 `cfbfastR-cfb-raw` backfill, two deterministic failures used to empty a game's rosters entirely (then get caught upstream and banked as empty "hollow" extras):
+
+- **`statistics_href` strict-rename.** Older games (e.g. pre-2021) omit the team-level `statistics` `$ref` in the competitors payload, so `statistics_href` never exists and the unconditional `items.rename({..., "statistics_href": "team_statistics_href"})` raised `polars.exceptions.ColumnNotFoundError` for the whole game. The renamed column is unused downstream, so the rename now applies only to keys actually present.
+- **Per-team roster 404.** A single team's `/roster` sub-endpoint can 404 (`NoESPNDataError`) — common for older games and FCS opponents — while the other team's roster exists. The per-team loop now skips a 404 team and recovers the other, raising `NoESPNDataError` only when *every* team is empty (genuinely no roster data).
+
+Adds offline helper unit tests (`tests/cfb/test_cfb_game_rosters.py`, no network).
 
 ## 0.0.60 Release: June 15, 2026
 
