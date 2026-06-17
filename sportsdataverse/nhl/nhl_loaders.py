@@ -160,7 +160,9 @@ def load_nhl_pbp(seasons, return_as_pandas: bool = False):
         |away_on_6                |String  |
 
     Example:
-        >>> load_nhl_pbp(seasons=2024)
+        Quick start::
+
+            load_nhl_pbp(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -246,7 +248,9 @@ def load_nhl_player_boxscore(seasons, return_as_pandas: bool = False):
         |season                                     |Int32   |
 
     Example:
-        >>> load_nhl_player_boxscore(seasons=2024)
+        Quick start::
+
+            load_nhl_player_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -310,7 +314,9 @@ def load_nhl_schedule(seasons, return_as_pandas: bool = False):
         |player_box                 |Boolean                                   |
 
     Example:
-        >>> load_nhl_schedule(seasons=2024)
+        Quick start::
+
+            load_nhl_schedule(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -364,7 +370,9 @@ def load_nhl_team_boxscore(seasons, return_as_pandas: bool = False):
         |season                   |Int32  |
 
     Example:
-        >>> load_nhl_team_boxscore(seasons=2024)
+        Quick start::
+
+            load_nhl_team_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -410,7 +418,9 @@ def load_nhl_game_info(seasons, return_as_pandas: bool = False):
         |game_state     |String |
 
     Example:
-        >>> load_nhl_game_info(seasons=2024)
+        Quick start::
+
+            load_nhl_game_info(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -457,7 +467,9 @@ def load_nhl_game_rosters(seasons, return_as_pandas: bool = False):
         |game_date      |String |
 
     Example:
-        >>> load_nhl_game_rosters(seasons=2024)
+        Quick start::
+
+            load_nhl_game_rosters(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -517,7 +529,9 @@ def load_nhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
         |game_date                   |String  |
 
     Example:
-        >>> load_nhl_goalie_boxscores(seasons=2024)
+        Quick start::
+
+            load_nhl_goalie_boxscores(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -563,7 +577,9 @@ def load_nhl_linescore(seasons, return_as_pandas: bool = False):
         |has_shootout   |Boolean |
 
     Example:
-        >>> load_nhl_linescore(seasons=2024)
+        Quick start::
+
+            load_nhl_linescore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -604,7 +620,9 @@ def load_nhl_officials(seasons, return_as_pandas: bool = False):
         |game_date |String |
 
     Example:
-        >>> load_nhl_officials(seasons=2025)
+        Quick start::
+
+            load_nhl_officials(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -693,7 +711,9 @@ def load_nhl_pbp_full(seasons, return_as_pandas: bool = False):
         |xg                       |Float64 |
 
     Example:
-        >>> load_nhl_pbp_full(seasons=2010)
+        Quick start::
+
+            load_nhl_pbp_full(seasons=2010)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -782,7 +802,9 @@ def load_nhl_pbp_lite(seasons, return_as_pandas: bool = False):
         |xg                       |Float64 |
 
     Example:
-        >>> load_nhl_pbp_lite(seasons=2010)
+        Quick start::
+
+            load_nhl_pbp_lite(seasons=2010)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -867,7 +889,9 @@ def load_nhl_penalties(seasons, return_as_pandas: bool = False):
         |servedBy.sv                         |String |
 
     Example:
-        >>> load_nhl_penalties(seasons=2024)
+        Quick start::
+
+            load_nhl_penalties(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -937,7 +961,9 @@ def load_nhl_player_boxscores(seasons, return_as_pandas: bool = False):
         |saves                       |Int32   |
 
     Example:
-        >>> load_nhl_player_boxscores(seasons=2010)
+        Quick start::
+
+            load_nhl_player_boxscores(seasons=2010)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -982,7 +1008,9 @@ def load_nhl_rosters(seasons, return_as_pandas: bool = False):
         |season         |Int32  |
 
     Example:
-        >>> load_nhl_rosters(seasons=2010)
+        Quick start::
+
+            load_nhl_rosters(seasons=2010)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1037,7 +1065,9 @@ def load_nhl_schedules(seasons, return_as_pandas: bool = False):
         |player_box     |Boolean |
 
     Example:
-        >>> load_nhl_schedules(seasons=2010)
+        Quick start::
+
+            load_nhl_schedules(seasons=2010)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1123,7 +1153,9 @@ def load_nhl_scoring(seasons, return_as_pandas: bool = False):
         |leadingTeamAbbrev.default |String  |
 
     Example:
-        >>> load_nhl_scoring(seasons=2024)
+        Quick start::
+
+            load_nhl_scoring(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1163,7 +1195,9 @@ def load_nhl_scratches(seasons, return_as_pandas: bool = False):
         |game_id   |Int32  |
 
     Example:
-        >>> load_nhl_scratches(seasons=2024)
+        Quick start::
+
+            load_nhl_scratches(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1216,7 +1250,9 @@ def load_nhl_shifts(seasons, return_as_pandas: bool = False):
         |game_date              |String |
 
     Example:
-        >>> load_nhl_shifts(seasons=2025)
+        Quick start::
+
+            load_nhl_shifts(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1280,7 +1316,9 @@ def load_nhl_shootout(seasons, return_as_pandas: bool = False):
         |lastName.sv        |String  |
 
     Example:
-        >>> load_nhl_shootout(seasons=2025)
+        Quick start::
+
+            load_nhl_shootout(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1325,7 +1363,9 @@ def load_nhl_shots_by_period(seasons, return_as_pandas: bool = False):
         |ot_periods             |Int32  |
 
     Example:
-        >>> load_nhl_shots_by_period(seasons=2025)
+        Quick start::
+
+            load_nhl_shots_by_period(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1385,7 +1425,9 @@ def load_nhl_skater_boxscores(seasons, return_as_pandas: bool = False):
         |game_date            |String  |
 
     Example:
-        >>> load_nhl_skater_boxscores(seasons=2024)
+        Quick start::
+
+            load_nhl_skater_boxscores(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1437,7 +1479,9 @@ def load_nhl_team_boxscores(seasons, return_as_pandas: bool = False):
         |goals_against    |Int32   |
 
     Example:
-        >>> load_nhl_team_boxscores(seasons=2010)
+        Quick start::
+
+            load_nhl_team_boxscores(seasons=2010)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1497,7 +1541,9 @@ def load_nhl_three_stars(seasons, return_as_pandas: bool = False):
         |name.fr             |String  |
 
     Example:
-        >>> load_nhl_three_stars(seasons=2024)
+        Quick start::
+
+            load_nhl_three_stars(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):

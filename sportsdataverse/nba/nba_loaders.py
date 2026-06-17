@@ -106,7 +106,9 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
         |type_abbreviation               |String                                                 |
 
     Example:
-        >>> load_nba_pbp(seasons=2024)
+        Quick start::
+
+            load_nba_pbp(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -198,7 +200,9 @@ def load_nba_player_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_score               |Int32                                                  |
 
     Example:
-        >>> load_nba_player_boxscore(seasons=2024)
+        Quick start::
+
+            load_nba_player_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -301,7 +305,9 @@ def load_nba_schedule(seasons, return_as_pandas: bool = False):
         |player_box                |Boolean                                                |
 
     Example:
-        >>> load_nba_schedule(seasons=2024)
+        Quick start::
+
+            load_nba_schedule(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -394,7 +400,9 @@ def load_nba_team_boxscore(seasons, return_as_pandas: bool = False):
         |largest_lead                      |String                                                 |
 
     Example:
-        >>> load_nba_team_boxscore(seasons=2024)
+        Quick start::
+
+            load_nba_team_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -452,7 +460,9 @@ def load_nba_game_rosters(seasons, return_as_pandas: bool = False):
         |reason               |String  |
 
     Example:
-        >>> load_nba_game_rosters(seasons=2002)
+        Quick start::
+
+            load_nba_game_rosters(seasons=2002)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -495,7 +505,9 @@ def load_nba_officials(seasons, return_as_pandas: bool = False):
         |official_order        |Int32  |
 
     Example:
-        >>> load_nba_officials(seasons=2002)
+        Quick start::
+
+            load_nba_officials(seasons=2002)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -546,7 +558,9 @@ def load_nba_shots(seasons, return_as_pandas: bool = False):
         |coordinate_y_raw    |Float64 |
 
     Example:
-        >>> load_nba_shots(seasons=2002)
+        Quick start::
+
+            load_nba_shots(seasons=2002)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -606,7 +620,9 @@ def load_nba_standings(seasons, return_as_pandas: bool = False):
         |value                   |Float64 |
 
     Example:
-        >>> load_nba_standings(seasons=2002)
+        Quick start::
+
+            load_nba_standings(seasons=2002)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -657,7 +673,9 @@ def load_nba_player_season_stats(seasons, return_as_pandas: bool = False):
         |value                         |Float64 |
 
     Example:
-        >>> load_nba_player_season_stats(seasons=2025)
+        Quick start::
+
+            load_nba_player_season_stats(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -709,7 +727,9 @@ def load_nba_team_season_stats(seasons, return_as_pandas: bool = False):
         |value                   |Float64 |
 
     Example:
-        >>> load_nba_team_season_stats(seasons=2025)
+        Quick start::
+
+            load_nba_team_season_stats(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -780,7 +800,9 @@ def load_nba_draft(seasons, return_as_pandas: bool = False):
         |team_logo                     |String |
 
     Example:
-        >>> load_nba_draft(seasons=2025)
+        Quick start::
+
+            load_nba_draft(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -852,7 +874,9 @@ def load_nba_rosters(seasons, return_as_pandas: bool = False):
         |status_type              |String |
 
     Example:
-        >>> load_nba_rosters(seasons=2025)
+        Quick start::
+
+            load_nba_rosters(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -940,7 +964,9 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
         |season_type_description |String  |
 
     Example:
-        >>> load_nba_stats_schedules(seasons=2025)
+        Quick start::
+
+            load_nba_stats_schedules(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):

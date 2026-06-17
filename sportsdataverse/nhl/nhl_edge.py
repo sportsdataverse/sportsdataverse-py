@@ -82,7 +82,9 @@ def nhl_edge_skater_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_skater_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -125,7 +127,9 @@ def nhl_edge_skater_comparison(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_comparison(player_id=8480801)
+        Quick start::
+
+            nhl_edge_skater_comparison(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -168,7 +172,9 @@ def nhl_edge_skater_shot_location_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_shot_location_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_skater_shot_location_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -215,7 +221,9 @@ def nhl_edge_skater_shot_location_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_shot_location_top_10(position='forwards', category='shots', sort_by='points')
+        Quick start::
+
+            nhl_edge_skater_shot_location_top_10(position='forwards', category='shots', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -258,7 +266,9 @@ def nhl_edge_skater_shot_speed_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_shot_speed_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_skater_shot_speed_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -303,7 +313,9 @@ def nhl_edge_skater_shot_speed_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='points')
+        Quick start::
+
+            nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -346,7 +358,9 @@ def nhl_edge_skater_skating_distance_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_skating_distance_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_skater_skating_distance_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -389,7 +403,9 @@ def nhl_edge_skater_skating_speed_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_skating_speed_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_skater_skating_speed_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -434,7 +450,9 @@ def nhl_edge_skater_speed_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_speed_top_10(positions='defense', sort_by='points')
+        Quick start::
+
+            nhl_edge_skater_speed_top_10(positions='defense', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -481,7 +499,9 @@ def nhl_edge_skater_distance_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_distance_top_10(positions='defense', strength='ev', sort_by='points')
+        Quick start::
+
+            nhl_edge_skater_distance_top_10(positions='defense', strength='ev', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -524,7 +544,9 @@ def nhl_edge_skater_zone_time(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_zone_time(player_id=8480801)
+        Quick start::
+
+            nhl_edge_skater_zone_time(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -571,7 +593,9 @@ def nhl_edge_skater_zone_time_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_zone_time_top_10(positions='defense', strength='ev', sort_by='points')
+        Quick start::
+
+            nhl_edge_skater_zone_time_top_10(positions='defense', strength='ev', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -612,7 +636,9 @@ def nhl_edge_skater_landing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_skater_landing()
+        Quick start::
+
+            nhl_edge_skater_landing()
     """
     season = format_nhl_season(season)
     __url = (
@@ -655,7 +681,9 @@ def nhl_edge_goalie_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_goalie_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -698,7 +726,9 @@ def nhl_edge_goalie_5v5_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_5v5_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_goalie_5v5_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -741,7 +771,9 @@ def nhl_edge_goalie_5v5_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_5v5_top_10(sort_by='points')
+        Quick start::
+
+            nhl_edge_goalie_5v5_top_10(sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -784,7 +816,9 @@ def nhl_edge_goalie_comparison(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_comparison(player_id=8480801)
+        Quick start::
+
+            nhl_edge_goalie_comparison(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -827,7 +861,9 @@ def nhl_edge_goalie_save_percentage_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_save_percentage_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_goalie_save_percentage_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -870,7 +906,9 @@ def nhl_edge_goalie_edge_save_pctg_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_edge_save_pctg_top_10(sort_by='points')
+        Quick start::
+
+            nhl_edge_goalie_edge_save_pctg_top_10(sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -913,7 +951,9 @@ def nhl_edge_goalie_shot_location_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_shot_location_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_goalie_shot_location_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -958,7 +998,9 @@ def nhl_edge_goalie_shot_location_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_shot_location_top_10(category='shots', sort_by='points')
+        Quick start::
+
+            nhl_edge_goalie_shot_location_top_10(category='shots', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -999,7 +1041,9 @@ def nhl_edge_goalie_landing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_goalie_landing()
+        Quick start::
+
+            nhl_edge_goalie_landing()
     """
     season = format_nhl_season(season)
     __url = (
@@ -1042,7 +1086,9 @@ def nhl_edge_team_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_detail(team_id=10)
+        Quick start::
+
+            nhl_edge_team_detail(team_id=10)
     """
     season = format_nhl_season(season)
     __url = (
@@ -1083,7 +1129,9 @@ def nhl_edge_team_landing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_landing()
+        Quick start::
+
+            nhl_edge_team_landing()
     """
     season = format_nhl_season(season)
     __url = (
@@ -1126,7 +1174,9 @@ def nhl_edge_team_shot_location_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_shot_location_detail(team_id=10)
+        Quick start::
+
+            nhl_edge_team_shot_location_detail(team_id=10)
     """
     season = format_nhl_season(season)
     __url = (
@@ -1173,7 +1223,9 @@ def nhl_edge_team_shot_location_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_shot_location_top_10(position='forwards', category='shots', sort_by='points')
+        Quick start::
+
+            nhl_edge_team_shot_location_top_10(position='forwards', category='shots', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -1216,7 +1268,9 @@ def nhl_edge_team_shot_speed_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_shot_speed_detail(team_id=10)
+        Quick start::
+
+            nhl_edge_team_shot_speed_detail(team_id=10)
     """
     season = format_nhl_season(season)
     __url = (
@@ -1254,7 +1308,9 @@ def nhl_edge_team_skating_distance_detail(
         The raw JSON ``Dict``.
 
     Example:
-        >>> nhl_edge_team_skating_distance_detail(team_id=10)
+        Quick start::
+
+            nhl_edge_team_skating_distance_detail(team_id=10)
     """
     season = format_nhl_season(season)
     __url = (
@@ -1299,7 +1355,9 @@ def nhl_edge_team_skating_distance_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_skating_distance_top_10(positions='defense', strength='ev', sort_by='points')
+        Quick start::
+
+            nhl_edge_team_skating_distance_top_10(positions='defense', strength='ev', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -1337,7 +1395,9 @@ def nhl_edge_team_skating_speed_detail(
         The raw JSON ``Dict``.
 
     Example:
-        >>> nhl_edge_team_skating_speed_detail(team_id=10)
+        Quick start::
+
+            nhl_edge_team_skating_speed_detail(team_id=10)
     """
     season = format_nhl_season(season)
     __url = (
@@ -1380,7 +1440,9 @@ def nhl_edge_team_skating_speed_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='points')
+        Quick start::
+
+            nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -1423,7 +1485,9 @@ def nhl_edge_team_zone_time_details(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_zone_time_details(team_id=10)
+        Quick start::
+
+            nhl_edge_team_zone_time_details(team_id=10)
     """
     season = format_nhl_season(season)
     __url = (
@@ -1468,7 +1532,9 @@ def nhl_edge_team_zone_time_top_10(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_team_zone_time_top_10(strength='ev', sort_by='points')
+        Quick start::
+
+            nhl_edge_team_zone_time_top_10(strength='ev', sort_by='points')
     """
     season = format_nhl_season(season)
     __url = (
@@ -1511,7 +1577,9 @@ def nhl_edge_cat_skater_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_cat_skater_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_cat_skater_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -1554,7 +1622,9 @@ def nhl_edge_cat_goalie_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_edge_cat_goalie_detail(player_id=8480801)
+        Quick start::
+
+            nhl_edge_cat_goalie_detail(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (

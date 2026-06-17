@@ -121,7 +121,9 @@ def _build_docstring(
         lines.append("    The raw JSON ``Dict``.")
     lines.append("")
     lines.append("Example:")
-    lines.append(f"    >>> {example_call}")
+    lines.append("    Quick start::")
+    lines.append("")
+    lines.append(f"        {example_call}")
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
@@ -952,7 +954,9 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
             lines.append(f"    |{c['name'].ljust(width)} |{c['type'].ljust(twidth)} |")
     lines.append("")
     lines.append("Example:")
-    lines.append(f"    >>> {ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})")
+    lines.append("    Quick start::")
+    lines.append("")
+    lines.append(f"        {ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})")
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 

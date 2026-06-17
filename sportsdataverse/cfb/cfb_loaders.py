@@ -406,7 +406,9 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |drive_total_yards                         |Int32   |
 
     Example:
-        >>> load_cfb_pbp(seasons=2024)
+        Quick start::
+
+            load_cfb_pbp(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -460,7 +462,9 @@ def load_cfb_rosters(seasons, return_as_pandas: bool = False):
         |season           |Int32       |
 
     Example:
-        >>> load_cfb_rosters(seasons=2024)
+        Quick start::
+
+            load_cfb_rosters(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -527,7 +531,9 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
         |notes              |String  |
 
     Example:
-        >>> load_cfb_schedule(seasons=2024)
+        Quick start::
+
+            load_cfb_schedule(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -591,7 +597,9 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         |dome             |Boolean |
 
     Example:
-        >>> load_cfb_team_info(seasons=2024)
+        Quick start::
+
+            load_cfb_team_info(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -638,7 +646,9 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
         |matched_sources    |String |
 
     Example:
-        >>> load_cfb_teams_crosswalk(seasons=2024)
+        Quick start::
+
+            load_cfb_teams_crosswalk(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -685,7 +695,9 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |matched_sources      |String |
 
     Example:
-        >>> load_cfb_schedule_crosswalk(seasons=2024)
+        Quick start::
+
+            load_cfb_schedule_crosswalk(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):

@@ -178,7 +178,9 @@ def espn_mlb_scoreboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_scoreboard(dates='20240115')
+        Quick start::
+
+            espn_mlb_scoreboard(dates='20240115')
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard",
@@ -219,7 +221,9 @@ def espn_mlb_summary(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_summary()
+        Quick start::
+
+            espn_mlb_summary()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary",
@@ -254,7 +258,9 @@ def espn_mlb_calendar(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_calendar()
+        Quick start::
+
+            espn_mlb_calendar()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/calendar",
@@ -289,7 +295,9 @@ def espn_mlb_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_news()
+        Quick start::
+
+            espn_mlb_news()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/news",
@@ -324,7 +332,9 @@ def espn_mlb_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_injuries()
+        Quick start::
+
+            espn_mlb_injuries()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/injuries",
@@ -357,7 +367,9 @@ def espn_mlb_transactions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_transactions()
+        Quick start::
+
+            espn_mlb_transactions()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/transactions",
@@ -390,7 +402,9 @@ def espn_mlb_conferences(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_conferences()
+        Quick start::
+
+            espn_mlb_conferences()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/groups",
@@ -423,7 +437,9 @@ def espn_mlb_statistics_league(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_statistics_league()
+        Quick start::
+
+            espn_mlb_statistics_league()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/statistics",
@@ -456,7 +472,9 @@ def espn_mlb_draft(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_draft()
+        Quick start::
+
+            espn_mlb_draft()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/draft",
@@ -491,7 +509,9 @@ def espn_mlb_teams_site(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_teams_site()
+        Quick start::
+
+            espn_mlb_teams_site()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams",
@@ -528,7 +548,9 @@ def espn_mlb_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team(team_id='4')
+        Quick start::
+
+            espn_mlb_team(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}",
@@ -563,7 +585,9 @@ def espn_mlb_team_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_roster(team_id='4')
+        Quick start::
+
+            espn_mlb_team_roster(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/roster",
@@ -600,7 +624,9 @@ def espn_mlb_team_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_schedule(team_id='4')
+        Quick start::
+
+            espn_mlb_team_schedule(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/schedule",
@@ -637,7 +663,9 @@ def espn_mlb_team_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_record(team_id='4')
+        Quick start::
+
+            espn_mlb_team_record(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/record",
@@ -672,7 +700,9 @@ def espn_mlb_team_depthcharts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_depthcharts(team_id='4')
+        Quick start::
+
+            espn_mlb_team_depthcharts(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/depthcharts",
@@ -707,7 +737,9 @@ def espn_mlb_team_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_injuries(team_id='4')
+        Quick start::
+
+            espn_mlb_team_injuries(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/injuries",
@@ -742,7 +774,9 @@ def espn_mlb_team_transactions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_transactions(team_id='4')
+        Quick start::
+
+            espn_mlb_team_transactions(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/transactions",
@@ -777,7 +811,9 @@ def espn_mlb_team_history(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_history(team_id='4')
+        Quick start::
+
+            espn_mlb_team_history(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/history",
@@ -814,7 +850,9 @@ def espn_mlb_team_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_news(team_id='4')
+        Quick start::
+
+            espn_mlb_team_news(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/news",
@@ -851,7 +889,9 @@ def espn_mlb_team_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_leaders(team_id='4')
+        Quick start::
+
+            espn_mlb_team_leaders(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/{team_id}/leaders",
@@ -886,7 +926,9 @@ def espn_mlb_player_info(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_info(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_info(athlete_id='4239')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/athletes/{athlete_id}",
@@ -921,7 +963,9 @@ def espn_mlb_player_bio(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_bio(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_bio(athlete_id='4239')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/athletes/{athlete_id}/bio",
@@ -956,7 +1000,9 @@ def espn_mlb_player_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_news(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_news(athlete_id='4239')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/athletes/{athlete_id}/news",
@@ -995,7 +1041,9 @@ def espn_mlb_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_standings()
+        Quick start::
+
+            espn_mlb_standings()
     """
     raw = _get(
         "https://site.api.espn.com/apis/v2/sports/baseball/mlb/standings",
@@ -1034,7 +1082,9 @@ def espn_mlb_player_overview(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_overview(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_overview(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/{athlete_id}/overview",
@@ -1071,7 +1121,9 @@ def espn_mlb_player_stats_v3(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_stats_v3(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_stats_v3(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/{athlete_id}/stats",
@@ -1110,7 +1162,9 @@ def espn_mlb_player_gamelog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_gamelog(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_gamelog(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/{athlete_id}/gamelog",
@@ -1149,7 +1203,9 @@ def espn_mlb_player_splits(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_splits(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_splits(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/{athlete_id}/splits",
@@ -1196,7 +1252,9 @@ def espn_mlb_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_leaders()
+        Quick start::
+
+            espn_mlb_leaders()
     """
     raw = _get(
         "https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/statistics/byathlete",
@@ -1236,7 +1294,9 @@ def espn_mlb_league_root(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_league_root()
+        Quick start::
+
+            espn_mlb_league_root()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb",
@@ -1269,7 +1329,9 @@ def espn_mlb_season_pointer(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_pointer()
+        Quick start::
+
+            espn_mlb_season_pointer()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/season",
@@ -1304,7 +1366,9 @@ def espn_mlb_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_seasons()
+        Quick start::
+
+            espn_mlb_seasons()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons",
@@ -1341,7 +1405,9 @@ def espn_mlb_season_info(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_info(season=2024)
+        Quick start::
+
+            espn_mlb_season_info(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}",
@@ -1376,7 +1442,9 @@ def espn_mlb_season_types(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_types(season=2024)
+        Quick start::
+
+            espn_mlb_season_types(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types",
@@ -1413,7 +1481,9 @@ def espn_mlb_season_type(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_type(season=2024, season_type=2)
+        Quick start::
+
+            espn_mlb_season_type(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}",
@@ -1452,7 +1522,9 @@ def espn_mlb_season_group(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_group(season=2024, season_type=2, group_id=80)
+        Quick start::
+
+            espn_mlb_season_group(season=2024, season_type=2, group_id=80)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/groups/{group_id}",
@@ -1489,7 +1561,9 @@ def espn_mlb_season_groups(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_groups(season=2024, season_type=2)
+        Quick start::
+
+            espn_mlb_season_groups(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/groups",
@@ -1530,7 +1604,9 @@ def espn_mlb_season_group_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_group_teams(season=2024, season_type=2, group_id=80)
+        Quick start::
+
+            espn_mlb_season_group_teams(season=2024, season_type=2, group_id=80)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
@@ -1571,7 +1647,9 @@ def espn_mlb_season_group_children(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_group_children(season=2024, season_type=2, group_id=80)
+        Quick start::
+
+            espn_mlb_season_group_children(season=2024, season_type=2, group_id=80)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/groups/{group_id}/children",
@@ -1608,7 +1686,9 @@ def espn_mlb_season_type_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_type_leaders(season=2024, season_type=2)
+        Quick start::
+
+            espn_mlb_season_type_leaders(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/leaders",
@@ -1645,7 +1725,9 @@ def espn_mlb_season_type_corrections(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_type_corrections(season=2024, season_type=2)
+        Quick start::
+
+            espn_mlb_season_type_corrections(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/corrections",
@@ -1682,7 +1764,9 @@ def espn_mlb_season_weeks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_weeks(season=2024, season_type=2)
+        Quick start::
+
+            espn_mlb_season_weeks(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/weeks",
@@ -1721,7 +1805,9 @@ def espn_mlb_season_week(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_week(season=2024, season_type=2, week=1)
+        Quick start::
+
+            espn_mlb_season_week(season=2024, season_type=2, week=1)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/weeks/{week}",
@@ -1762,7 +1848,9 @@ def espn_mlb_season_week_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_week_games(season=2024, season_type=2, week=1)
+        Quick start::
+
+            espn_mlb_season_week_games(season=2024, season_type=2, week=1)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/{season_type}/weeks/{week}/events",
@@ -1801,7 +1889,9 @@ def espn_mlb_season_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_teams(season=2024)
+        Quick start::
+
+            espn_mlb_season_teams(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/teams",
@@ -1840,7 +1930,9 @@ def espn_mlb_season_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_team(season=2024, team_id='4')
+        Quick start::
+
+            espn_mlb_season_team(season=2024, team_id='4')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/teams/{team_id}",
@@ -1879,7 +1971,9 @@ def espn_mlb_season_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_players(season=2024)
+        Quick start::
+
+            espn_mlb_season_players(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/athletes",
@@ -1919,7 +2013,9 @@ def espn_mlb_season_coaches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_coaches(season=2024)
+        Quick start::
+
+            espn_mlb_season_coaches(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/coaches",
@@ -1956,7 +2052,9 @@ def espn_mlb_season_draft(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_draft(season=2024)
+        Quick start::
+
+            espn_mlb_season_draft(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/draft",
@@ -1993,7 +2091,9 @@ def espn_mlb_season_draft_round_picks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_draft_round_picks(season=2024, round_num='1')
+        Quick start::
+
+            espn_mlb_season_draft_round_picks(season=2024, round_num='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/draft/rounds/{round_num}/picks",
@@ -2028,7 +2128,9 @@ def espn_mlb_season_futures(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_futures(season=2024)
+        Quick start::
+
+            espn_mlb_season_futures(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/futures",
@@ -2063,7 +2165,9 @@ def espn_mlb_season_freeagents(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_freeagents(season=2024)
+        Quick start::
+
+            espn_mlb_season_freeagents(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/freeagents",
@@ -2100,7 +2204,9 @@ def espn_mlb_season_powerindex(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_powerindex(season=2024)
+        Quick start::
+
+            espn_mlb_season_powerindex(season=2024)
     """
     __seg = f"/{team_id}" if team_id is not None else ""
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/powerindex" + __seg
@@ -2137,7 +2243,9 @@ def espn_mlb_season_powerindex_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_powerindex_leaders(season=2024)
+        Quick start::
+
+            espn_mlb_season_powerindex_leaders(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/powerindex/leaders",
@@ -2172,7 +2280,9 @@ def espn_mlb_season_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_season_awards(season=2024)
+        Quick start::
+
+            espn_mlb_season_awards(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/awards",
@@ -2211,7 +2321,9 @@ def espn_mlb_players_index(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_players_index()
+        Quick start::
+
+            espn_mlb_players_index()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes",
@@ -2250,7 +2362,9 @@ def espn_mlb_player_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_core(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_core(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}",
@@ -2287,7 +2401,9 @@ def espn_mlb_player_career_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_career_stats(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_career_stats(athlete_id='4239')
     """
     __seg = f"/{stat_type}" if stat_type is not None else ""
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/statistics" + __seg
@@ -2324,7 +2440,9 @@ def espn_mlb_player_statisticslog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_statisticslog(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_statisticslog(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/statisticslog",
@@ -2359,7 +2477,9 @@ def espn_mlb_player_eventlog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_eventlog(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_eventlog(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/eventlog",
@@ -2394,7 +2514,9 @@ def espn_mlb_player_contracts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_contracts(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_contracts(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/contracts",
@@ -2429,7 +2551,9 @@ def espn_mlb_player_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_awards(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_awards(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/awards",
@@ -2464,7 +2588,9 @@ def espn_mlb_player_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_seasons(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_seasons(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/seasons",
@@ -2499,7 +2625,9 @@ def espn_mlb_player_records(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_records(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_records(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/records",
@@ -2534,7 +2662,9 @@ def espn_mlb_player_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_injuries(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_injuries(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/injuries",
@@ -2569,7 +2699,9 @@ def espn_mlb_player_notes(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_notes(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_notes(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/notes",
@@ -2606,7 +2738,9 @@ def espn_mlb_player_vs_player(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_vs_player(athlete_id='4239', opp_id='5')
+        Quick start::
+
+            espn_mlb_player_vs_player(athlete_id='4239', opp_id='5')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/vsathlete/{opp_id}",
@@ -2643,7 +2777,9 @@ def espn_mlb_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_games()
+        Quick start::
+
+            espn_mlb_games()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events",
@@ -2681,7 +2817,9 @@ def espn_mlb_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game(event_id='401584793')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}",
@@ -2718,7 +2856,9 @@ def espn_mlb_game_competition(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_competition(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_competition(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}"
@@ -2757,7 +2897,9 @@ def espn_mlb_game_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_teams(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_teams(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/competitors"
@@ -2798,7 +2940,9 @@ def espn_mlb_game_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_team(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_mlb_game_team(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/competitors/{team_id}"
@@ -2839,7 +2983,9 @@ def espn_mlb_game_team_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_team_roster(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_mlb_game_team_roster(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
@@ -2880,7 +3026,9 @@ def espn_mlb_game_team_linescores(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_team_linescores(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_mlb_game_team_linescores(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
@@ -2921,7 +3069,9 @@ def espn_mlb_game_team_statistics(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_team_statistics(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_mlb_game_team_statistics(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
@@ -2962,7 +3112,9 @@ def espn_mlb_game_team_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_team_record(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_mlb_game_team_record(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
@@ -3003,7 +3155,9 @@ def espn_mlb_game_team_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_team_leaders(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_mlb_game_team_leaders(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
@@ -3042,7 +3196,9 @@ def espn_mlb_game_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_odds(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_odds(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/odds"
@@ -3083,7 +3239,9 @@ def espn_mlb_game_probabilities(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_probabilities(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_probabilities(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/probabilities"
@@ -3126,7 +3284,9 @@ def espn_mlb_game_plays(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_plays(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_plays(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = (
@@ -3171,7 +3331,9 @@ def espn_mlb_game_play(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_play(event_id='401584793', play_id='1')
+        Quick start::
+
+            espn_mlb_game_play(event_id='401584793', play_id='1')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/plays/{play_id}"
@@ -3212,7 +3374,9 @@ def espn_mlb_game_play_personnel(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_play_personnel(event_id='401584793', play_id='1')
+        Quick start::
+
+            espn_mlb_game_play_personnel(event_id='401584793', play_id='1')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
@@ -3251,7 +3415,9 @@ def espn_mlb_game_situation(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_situation(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_situation(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/situation"
@@ -3290,7 +3456,9 @@ def espn_mlb_game_status(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_status(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_status(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = (
@@ -3331,7 +3499,9 @@ def espn_mlb_game_officials(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_officials(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_officials(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/officials"
@@ -3370,7 +3540,9 @@ def espn_mlb_game_broadcasts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_broadcasts(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_broadcasts(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/broadcasts"
@@ -3409,7 +3581,9 @@ def espn_mlb_game_predictor(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_predictor(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_predictor(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/predictor"
@@ -3448,7 +3622,9 @@ def espn_mlb_game_powerindex(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_powerindex(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_powerindex(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/powerindex"
@@ -3487,7 +3663,9 @@ def espn_mlb_game_propbets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_propbets(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_propbets(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = (
@@ -3528,7 +3706,9 @@ def espn_mlb_game_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_leaders(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_leaders(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = (
@@ -3569,7 +3749,9 @@ def espn_mlb_game_scoringplays(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_scoringplays(event_id='401584793')
+        Quick start::
+
+            espn_mlb_game_scoringplays(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/scoringplays"
@@ -3610,7 +3792,9 @@ def espn_mlb_game_official_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_game_official_detail(event_id='401584793', official_id='1')
+        Quick start::
+
+            espn_mlb_game_official_detail(event_id='401584793', official_id='1')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/{event_id}/competitions/{cid}/officials/{official_id}"
@@ -3647,7 +3831,9 @@ def espn_mlb_teams_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_teams_core()
+        Quick start::
+
+            espn_mlb_teams_core()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/teams",
@@ -3684,7 +3870,9 @@ def espn_mlb_team_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_team_core(team_id='4')
+        Quick start::
+
+            espn_mlb_team_core(team_id='4')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/teams/{team_id}",
@@ -3719,7 +3907,9 @@ def espn_mlb_venues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_venues()
+        Quick start::
+
+            espn_mlb_venues()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/venues",
@@ -3756,7 +3946,9 @@ def espn_mlb_venue(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_venue(venue_id='3663')
+        Quick start::
+
+            espn_mlb_venue(venue_id='3663')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/venues/{venue_id}",
@@ -3791,7 +3983,9 @@ def espn_mlb_franchises(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_franchises()
+        Quick start::
+
+            espn_mlb_franchises()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/franchises",
@@ -3828,7 +4022,9 @@ def espn_mlb_franchise(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_franchise(franchise_id='2')
+        Quick start::
+
+            espn_mlb_franchise(franchise_id='2')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/franchises/{franchise_id}",
@@ -3863,7 +4059,9 @@ def espn_mlb_coach(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_coach(coach_id='1')
+        Quick start::
+
+            espn_mlb_coach(coach_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches/{coach_id}",
@@ -3900,7 +4098,9 @@ def espn_mlb_coach_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_coach_record(coach_id='1')
+        Quick start::
+
+            espn_mlb_coach_record(coach_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches/{coach_id}/record/{record_type}",
@@ -3937,7 +4137,9 @@ def espn_mlb_coach_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_coach_season(coach_id='1', season=2024)
+        Quick start::
+
+            espn_mlb_coach_season(coach_id='1', season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches/{coach_id}/seasons/{season}",
@@ -3970,7 +4172,9 @@ def espn_mlb_positions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_positions()
+        Quick start::
+
+            espn_mlb_positions()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions",
@@ -4005,7 +4209,9 @@ def espn_mlb_position(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_position(position_id='1')
+        Quick start::
+
+            espn_mlb_position(position_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/{position_id}",
@@ -4038,7 +4244,9 @@ def espn_mlb_tournaments(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_tournaments()
+        Quick start::
+
+            espn_mlb_tournaments()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/tournaments",
@@ -4071,7 +4279,9 @@ def espn_mlb_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_awards()
+        Quick start::
+
+            espn_mlb_awards()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/awards",
@@ -4106,7 +4316,9 @@ def espn_mlb_award(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_award(award_id='1')
+        Quick start::
+
+            espn_mlb_award(award_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/awards/{award_id}",
@@ -4139,7 +4351,9 @@ def espn_mlb_standings_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_standings_core()
+        Quick start::
+
+            espn_mlb_standings_core()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/standings",
@@ -4172,7 +4386,9 @@ def espn_mlb_leaders_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_leaders_core()
+        Quick start::
+
+            espn_mlb_leaders_core()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/leaders",
@@ -4205,7 +4421,9 @@ def espn_mlb_league_notes(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_league_notes()
+        Quick start::
+
+            espn_mlb_league_notes()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/notes",
@@ -4238,7 +4456,9 @@ def espn_mlb_talentpicks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_talentpicks()
+        Quick start::
+
+            espn_mlb_talentpicks()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/talentpicks",
@@ -4273,7 +4493,9 @@ def espn_mlb_player_hotzones(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_mlb_player_hotzones(athlete_id='4239')
+        Quick start::
+
+            espn_mlb_player_hotzones(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/{athlete_id}/hotzones",

@@ -69,7 +69,9 @@ def nfl_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_standings(season=2024, season_type='REG', week=18)
+        Quick start::
+
+            nfl_standings(season=2024, season_type='REG', week=18)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/standings",
@@ -112,7 +114,9 @@ def nfl_rosters(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_rosters(season=2024)
+        Quick start::
+
+            nfl_rosters(season=2024)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/rosters",
@@ -153,7 +157,9 @@ def nfl_teams_history(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_teams_history(season=2024)
+        Quick start::
+
+            nfl_teams_history(season=2024)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/teams/history",
@@ -192,7 +198,9 @@ def nfl_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_team(team_id='10403800-517c-7b8c-65a3-c61b95d86123')
+        Quick start::
+
+            nfl_team(team_id='10403800-517c-7b8c-65a3-c61b95d86123')
     """
     raw = _get(
         f"https://api.nfl.com/football/v2/teams/{team_id}",
@@ -230,7 +238,9 @@ def nfl_weeks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_weeks(season=2024, season_type='REG')
+        Quick start::
+
+            nfl_weeks(season=2024, season_type='REG')
     """
     raw = _get(
         f"https://api.nfl.com/football/v2/weeks/season/{season}/seasonType/{season_type}",
@@ -266,7 +276,9 @@ def nfl_weeks_by_date(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_weeks_by_date(date='2024-09-08')
+        Quick start::
+
+            nfl_weeks_by_date(date='2024-09-08')
     """
     raw = _get(
         f"https://api.nfl.com/football/v2/weeks/date/{date}",
@@ -304,7 +316,9 @@ def nfl_combine_profiles(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_combine_profiles(year=2024)
+        Quick start::
+
+            nfl_combine_profiles(year=2024)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/combine/profiles",
@@ -345,7 +359,9 @@ def nfl_draft_picks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_draft_picks(year=2024)
+        Quick start::
+
+            nfl_draft_picks(year=2024)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/draft/picks/report",
@@ -388,7 +404,9 @@ def nfl_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_injuries(season=2024, season_type='REG', week=1)
+        Quick start::
+
+            nfl_injuries(season=2024, season_type='REG', week=1)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/injuries",
@@ -432,7 +450,9 @@ def nfl_game_summaries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_game_summaries(season=2024, season_type='REG', week=1)
+        Quick start::
+
+            nfl_game_summaries(season=2024, season_type='REG', week=1)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/stats/live/game-summaries",
@@ -484,7 +504,9 @@ def nfl_weekly_game_details(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nfl_weekly_game_details(season=2024, season_type='REG', week=1)
+        Quick start::
+
+            nfl_weekly_game_details(season=2024, season_type='REG', week=1)
     """
     raw = _get(
         "https://api.nfl.com/football/v2/experience/weekly-game-details",

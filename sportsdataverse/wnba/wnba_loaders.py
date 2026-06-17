@@ -118,7 +118,9 @@ def load_wnba_pbp(seasons, return_as_pandas: bool = False):
         |type_abbreviation               |String                                                 |
 
     Example:
-        >>> load_wnba_pbp(seasons=2024)
+        Quick start::
+
+            load_wnba_pbp(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -189,7 +191,9 @@ def load_wnba_player_boxscore(seasons, return_as_pandas: bool = False):
         |athlete_headshot_href         |String  |
 
     Example:
-        >>> load_wnba_player_boxscore(seasons=2024)
+        Quick start::
+
+            load_wnba_player_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -294,7 +298,9 @@ def load_wnba_schedule(seasons, return_as_pandas: bool = False):
         |player_box                |Boolean                                                |
 
     Example:
-        >>> load_wnba_schedule(seasons=2024)
+        Quick start::
+
+            load_wnba_schedule(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -387,7 +393,9 @@ def load_wnba_team_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_score               |Int32                                                  |
 
     Example:
-        >>> load_wnba_team_boxscore(seasons=2024)
+        Quick start::
+
+            load_wnba_team_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -458,7 +466,9 @@ def load_wnba_draft(seasons, return_as_pandas: bool = False):
         |team_logo                     |String |
 
     Example:
-        >>> load_wnba_draft(seasons=2026)
+        Quick start::
+
+            load_wnba_draft(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -516,7 +526,9 @@ def load_wnba_game_rosters(seasons, return_as_pandas: bool = False):
         |reason               |String  |
 
     Example:
-        >>> load_wnba_game_rosters(seasons=2024)
+        Quick start::
+
+            load_wnba_game_rosters(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -563,7 +575,9 @@ def load_wnba_officials(seasons, return_as_pandas: bool = False):
         |position_display_name |String |
 
     Example:
-        >>> load_wnba_officials(seasons=2024)
+        Quick start::
+
+            load_wnba_officials(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -615,7 +629,9 @@ def load_wnba_player_season_stats(seasons, return_as_pandas: bool = False):
         |value                         |Float64 |
 
     Example:
-        >>> load_wnba_player_season_stats(seasons=2024)
+        Quick start::
+
+            load_wnba_player_season_stats(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -687,7 +703,9 @@ def load_wnba_rosters(seasons, return_as_pandas: bool = False):
         |status_type              |String |
 
     Example:
-        >>> load_wnba_rosters(seasons=2024)
+        Quick start::
+
+            load_wnba_rosters(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -738,7 +756,9 @@ def load_wnba_shots(seasons, return_as_pandas: bool = False):
         |coordinate_y_raw    |Float64 |
 
     Example:
-        >>> load_wnba_shots(seasons=2024)
+        Quick start::
+
+            load_wnba_shots(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -798,7 +818,9 @@ def load_wnba_standings(seasons, return_as_pandas: bool = False):
         |value                   |Float64 |
 
     Example:
-        >>> load_wnba_standings(seasons=2024)
+        Quick start::
+
+            load_wnba_standings(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -850,7 +872,9 @@ def load_wnba_team_season_stats(seasons, return_as_pandas: bool = False):
         |value                   |Float64 |
 
     Example:
-        >>> load_wnba_team_season_stats(seasons=2024)
+        Quick start::
+
+            load_wnba_team_season_stats(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -898,7 +922,9 @@ def load_wnba_stats_coaches(seasons, return_as_pandas: bool = False):
         |team_id_lookup    |Int32  |
 
     Example:
-        >>> load_wnba_stats_coaches(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_coaches(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -949,7 +975,9 @@ def load_wnba_stats_draft(seasons, return_as_pandas: bool = False):
         |season_2            |Int32  |
 
     Example:
-        >>> load_wnba_stats_draft(seasons=2025)
+        Quick start::
+
+            load_wnba_stats_draft(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -995,7 +1023,9 @@ def load_wnba_stats_game_rosters(seasons, return_as_pandas: bool = False):
         |season            |Int32  |
 
     Example:
-        >>> load_wnba_stats_game_rosters(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_game_rosters(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1126,7 +1156,9 @@ def load_wnba_stats_lineups(seasons, return_as_pandas: bool = False):
         |pie_rank          |String |
 
     Example:
-        >>> load_wnba_stats_lineups(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_lineups(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1168,7 +1200,9 @@ def load_wnba_stats_officials(seasons, return_as_pandas: bool = False):
         |season      |Int32  |
 
     Example:
-        >>> load_wnba_stats_officials(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_officials(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1289,7 +1323,9 @@ def load_wnba_stats_pbp(seasons, return_as_pandas: bool = False):
         |season                    |Int32   |
 
     Example:
-        >>> load_wnba_stats_pbp(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_pbp(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1359,7 +1395,9 @@ def load_wnba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
         |season            |Int32  |
 
     Example:
-        >>> load_wnba_stats_player_game_logs(seasons=2025)
+        Quick start::
+
+            load_wnba_stats_player_game_logs(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1604,7 +1642,9 @@ def load_wnba_stats_player_season_stats(seasons, return_as_pandas: bool = False)
         |def_ws_rank             |String |
 
     Example:
-        >>> load_wnba_stats_player_season_stats(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_player_season_stats(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1660,7 +1700,9 @@ def load_wnba_stats_rosters(seasons, return_as_pandas: bool = False):
         |team_id_lookup |Int32  |
 
     Example:
-        >>> load_wnba_stats_rosters(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_rosters(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1725,7 +1767,9 @@ def load_wnba_stats_schedules(seasons, return_as_pandas: bool = False):
         |season            |Int32  |
 
     Example:
-        >>> load_wnba_stats_schedules(seasons=2025)
+        Quick start::
+
+            load_wnba_stats_schedules(seasons=2025)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1776,7 +1820,9 @@ def load_wnba_stats_shots(seasons, return_as_pandas: bool = False):
         |points_total  |Int32  |
 
     Example:
-        >>> load_wnba_stats_shots(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_shots(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -1905,7 +1951,9 @@ def load_wnba_stats_standings(seasons, return_as_pandas: bool = False):
         |season                    |Int32  |
 
     Example:
-        >>> load_wnba_stats_standings(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_standings(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -2118,7 +2166,9 @@ def load_wnba_stats_team_season_stats(seasons, return_as_pandas: bool = False):
         |opp_pts_rank            |String |
 
     Example:
-        >>> load_wnba_stats_team_season_stats(seasons=2026)
+        Quick start::
+
+            load_wnba_stats_team_season_stats(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):

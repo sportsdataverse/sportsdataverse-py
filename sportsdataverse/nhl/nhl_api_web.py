@@ -84,7 +84,9 @@ def nhl_web_pbp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_web_pbp(game_id=2024020001)
+        Quick start::
+
+            nhl_web_pbp(game_id=2024020001)
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/play-by-play",
@@ -117,7 +119,9 @@ def nhl_boxscore(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_boxscore(game_id=2024020001)
+        Quick start::
+
+            nhl_boxscore(game_id=2024020001)
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore",
@@ -150,7 +154,9 @@ def nhl_landing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_landing(game_id=2024020001)
+        Quick start::
+
+            nhl_landing(game_id=2024020001)
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/landing",
@@ -183,7 +189,9 @@ def nhl_right_rail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_right_rail(game_id=2024020001)
+        Quick start::
+
+            nhl_right_rail(game_id=2024020001)
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/gamecenter/{game_id}/right-rail",
@@ -216,7 +224,9 @@ def nhl_web_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_web_schedule()
+        Quick start::
+
+            nhl_web_schedule()
     """
     __url = (
         "https://api-web.nhle.com/v1/schedule/now" if date is None else f"https://api-web.nhle.com/v1/schedule/{date}"
@@ -252,7 +262,9 @@ def nhl_score(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_score()
+        Quick start::
+
+            nhl_score()
     """
     __url = "https://api-web.nhle.com/v1/score/now" if date is None else f"https://api-web.nhle.com/v1/score/{date}"
     raw = _get(
@@ -286,7 +298,9 @@ def nhl_schedule_calendar(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_schedule_calendar()
+        Quick start::
+
+            nhl_schedule_calendar()
     """
     __url = (
         "https://api-web.nhle.com/v1/schedule-calendar/now"
@@ -326,7 +340,9 @@ def nhl_playoff_series(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_playoff_series(season=2025, series_letter='a')
+        Quick start::
+
+            nhl_playoff_series(season=2025, series_letter='a')
     """
     season = format_nhl_season(season)
     __url = f"https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}"
@@ -361,7 +377,9 @@ def nhl_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_standings()
+        Quick start::
+
+            nhl_standings()
     """
     __url = (
         "https://api-web.nhle.com/v1/standings/now" if date is None else f"https://api-web.nhle.com/v1/standings/{date}"
@@ -395,7 +413,9 @@ def nhl_standings_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_standings_season()
+        Quick start::
+
+            nhl_standings_season()
     """
     raw = _get(
         "https://api-web.nhle.com/v1/standings-season",
@@ -430,7 +450,9 @@ def nhl_club_schedule_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_club_schedule_season(team='TOR')
+        Quick start::
+
+            nhl_club_schedule_season(team='TOR')
     """
     season = format_nhl_season(season)
     __url = (
@@ -471,7 +493,9 @@ def nhl_club_schedule_month(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_club_schedule_month(team='TOR')
+        Quick start::
+
+            nhl_club_schedule_month(team='TOR')
     """
     __url = (
         f"https://api-web.nhle.com/v1/club-schedule/{team}/month/now"
@@ -511,7 +535,9 @@ def nhl_club_schedule_week(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_club_schedule_week(team='TOR')
+        Quick start::
+
+            nhl_club_schedule_week(team='TOR')
     """
     __url = (
         f"https://api-web.nhle.com/v1/club-schedule/{team}/week/now"
@@ -553,7 +579,9 @@ def nhl_club_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_club_stats(team='TOR')
+        Quick start::
+
+            nhl_club_stats(team='TOR')
     """
     season = format_nhl_season(season)
     __url = (
@@ -592,7 +620,9 @@ def nhl_club_stats_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_club_stats_season(team='TOR')
+        Quick start::
+
+            nhl_club_stats_season(team='TOR')
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/club-stats-season/{team}",
@@ -627,7 +657,9 @@ def nhl_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_roster(team='TOR')
+        Quick start::
+
+            nhl_roster(team='TOR')
     """
     season = format_nhl_season(season)
     __url = (
@@ -666,7 +698,9 @@ def nhl_roster_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_roster_season(team='TOR')
+        Quick start::
+
+            nhl_roster_season(team='TOR')
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/roster-season/{team}",
@@ -699,7 +733,9 @@ def nhl_player_landing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_player_landing(player_id=8480801)
+        Quick start::
+
+            nhl_player_landing(player_id=8480801)
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/player/{player_id}/landing",
@@ -736,7 +772,9 @@ def nhl_player_game_log(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_player_game_log(player_id=8480801)
+        Quick start::
+
+            nhl_player_game_log(player_id=8480801)
     """
     season = format_nhl_season(season)
     __url = (
@@ -773,7 +811,9 @@ def nhl_player_spotlight(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_player_spotlight()
+        Quick start::
+
+            nhl_player_spotlight()
     """
     raw = _get(
         "https://api-web.nhle.com/v1/player-spotlight",
@@ -808,7 +848,9 @@ def nhl_skater_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_skater_leaders()
+        Quick start::
+
+            nhl_skater_leaders()
     """
     season = format_nhl_season(season)
     __url = (
@@ -849,7 +891,9 @@ def nhl_goalie_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_goalie_leaders()
+        Quick start::
+
+            nhl_goalie_leaders()
     """
     season = format_nhl_season(season)
     __url = (
@@ -890,7 +934,9 @@ def nhl_draft_picks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_draft_picks(year=2024)
+        Quick start::
+
+            nhl_draft_picks(year=2024)
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/draft/picks/{year}/{round_}",
@@ -925,7 +971,9 @@ def nhl_draft_rankings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_draft_rankings(year=2024)
+        Quick start::
+
+            nhl_draft_rankings(year=2024)
     """
     raw = _get(
         f"https://api-web.nhle.com/v1/draft/rankings/{year}/{category}",
@@ -956,7 +1004,9 @@ def nhl_draft_picks_now(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_draft_picks_now()
+        Quick start::
+
+            nhl_draft_picks_now()
     """
     raw = _get(
         "https://api-web.nhle.com/v1/draft/picks/now",
@@ -987,7 +1037,9 @@ def nhl_draft_rankings_now(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_draft_rankings_now()
+        Quick start::
+
+            nhl_draft_rankings_now()
     """
     raw = _get(
         "https://api-web.nhle.com/v1/draft/rankings/now",
@@ -1018,7 +1070,9 @@ def nhl_draft_tracker_picks_now(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_draft_tracker_picks_now()
+        Quick start::
+
+            nhl_draft_tracker_picks_now()
     """
     raw = _get(
         "https://api-web.nhle.com/v1/draft-tracker/picks/now",
