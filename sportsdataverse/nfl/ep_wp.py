@@ -48,6 +48,8 @@ if TYPE_CHECKING:
 import numpy as np
 import polars as pl
 
+from sportsdataverse.nfl.model_vars import _EP_POINT_VALUES
+
 # ---------------------------------------------------------------------------
 # Feature lists — mirror nflfastR's ep_model_select / wp_*_model_select
 # ---------------------------------------------------------------------------
@@ -103,7 +105,7 @@ WP_SPREAD_FEATURES: list[str] = [
 ]
 
 # EP class order: TD=0, OppTD=1, FG=2, OppFG=3, Safety=4, OppSafety=5, No_Score=6
-_EP_POINT_VALUES: np.ndarray = np.array([7.0, -7.0, 3.0, -3.0, 2.0, -2.0, 0.0], dtype=np.float64)
+# _EP_POINT_VALUES is imported from model_vars at the top of this module.
 
 _EP_CLASS_NAMES: list[str] = [
     "td_prob",

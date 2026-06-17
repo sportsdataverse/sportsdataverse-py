@@ -1,3 +1,161 @@
+"""NFL model variable registries: feature-column lists, play-type vectors, and constants.
+
+This module is the single source of truth for:
+
+- ESPN feature-column lists (``ep_start_columns``, ``wp_start_columns``, …) used
+  by ``NFLPlayProcess.__process_epa`` / ``.__process_wpa`` in ``nfl_pbp.py``.
+- Shared numeric constants consumed by ``ep_wp.py`` and (in future tasks) the
+  ``enrich_nfl_pbp`` pipeline.
+- ``NFLVERSE_FRAME_CONTRACT`` — the minimal column set that ``enrich_nfl_pbp``
+  will require from any input DataFrame, documented per source.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+
+# ---------------------------------------------------------------------------
+# Shared numeric constants
+# ---------------------------------------------------------------------------
+
+#: EP class-weight array — mirrors nflfastR's ``ep_class_to_score_mapping``
+#: and the identical vector in ``ep_wp.py`` at module level.
+#: Class order: TD=0, OppTD=1, FG=2, OppFG=3, Safety=4, OppSafety=5, No_Score=6
+_EP_POINT_VALUES: np.ndarray = np.array([7.0, -7.0, 3.0, -3.0, 2.0, -2.0, 0.0], dtype=np.float64)
+
+#: Season-year boundaries for the five nflfastR era bins (upper-inclusive per era).
+#:
+#: Mapping::
+#:
+#:     era0  season <= 2001
+#:     era1  2002 .. 2005
+#:     era2  2006 .. 2013
+#:     era3  2014 .. 2017
+#:     era4  >= 2018
+#:
+#: These exact cuts are replicated in ``_make_model_mutations()`` and
+#: ``_espn_ep_features()`` / ``_espn_wp_features()`` / ``_espn_cp_features()``
+#: in ``ep_wp.py``.  If the model is ever retrained with different era bins,
+#: update this tuple and those functions together.
+ERA_SEASON_CUTS: tuple[int, int, int, int] = (2001, 2005, 2013, 2017)
+
+#: Kickoff-touchback starting yardline **before** the 2016 rule change.
+#: nflfastR canonical: the touchback was spotted at the 20-yard line, so
+#: yards-to-endzone = 80.
+TOUCHBACK_YARDLINE_PRE_2016: int = 80
+
+#: Kickoff-touchback starting yardline **2016 and later**.
+#: nflfastR canonical: the touchback was moved to the 25-yard line (2016 rule
+#: change), so yards-to-endzone = 75.
+#:
+#: Note: ``nfl_pbp.py`` currently uses an inline ``season > 2013`` boundary
+#: instead of this 2016 boundary — aligning that call site to this constant
+#: is deferred to a later task (behavior-change + parity gate).
+TOUCHBACK_YARDLINE_POST_2016: int = 75
+
+#: Exponent multiplier in the spread-time decay formula::
+#:
+#:     spread_time = spread * exp(SPREAD_TIME_DECAY_EXPONENT * elapsed_share)
+#:
+#: where ``elapsed_share = clip((3600 - game_seconds_remaining) / 3600, 0, 1)``.
+#: Mirrors the ``-4.0`` literal in ``_add_wp_aux()`` and ``_espn_wp_features()``
+#: in ``ep_wp.py``.
+SPREAD_TIME_DECAY_EXPONENT: float = -4.0
+
+# ---------------------------------------------------------------------------
+# NFLVERSE_FRAME_CONTRACT
+# ---------------------------------------------------------------------------
+
+#: Minimal column set that ``enrich_nfl_pbp`` requires from its input DataFrame.
+#:
+#: **Column source mapping**
+#:
+#: The three data paths that feed ``enrich_nfl_pbp`` use different column-naming
+#: conventions.  The contract lists the *canonical nflverse names* (snake_case,
+#: matching what ``load_nfl_pbp`` returns and what ``calculate_expected_points`` /
+#: ``calculate_win_probability`` expect).  Adapters convert the other two paths:
+#:
+#: ESPN ``start.`` / ``end.`` format (``NFLPlayProcess`` in ``nfl_pbp.py``)::
+#:
+#:     nflverse name                   ESPN column name
+#:     ─────────────────────────────   ─────────────────────────────────────
+#:     half_seconds_remaining       ←  start.TimeSecsRem
+#:     game_seconds_remaining       ←  start.adj_TimeSecsRem
+#:     yardline_100                 ←  start.yardsToEndzone
+#:     ydstogo                      ←  start.distance
+#:     down                         ←  start.down
+#:     posteam_timeouts_remaining   ←  start.posTeamTimeouts
+#:     defteam_timeouts_remaining   ←  start.defPosTeamTimeouts
+#:     score_differential           ←  pos_score_diff_start
+#:     receive_2h_ko                ←  start.pos_team_receives_2H_kickoff
+#:     spread_line                  ←  (pre-computed via __add_spread_time)
+#:     home                         ←  start.is_home (cast Int8)
+#:     posteam                      ←  homeTeamId / awayTeamId resolution
+#:     defteam                      ←  homeTeamId / awayTeamId resolution
+#:     home_team                    ←  homeTeamId
+#:
+#: Shield / native NFL API (``nfl_api_parsers.py``)::
+#:
+#:     nflverse name                   Shield / native underscore name
+#:     ─────────────────────────────   ────────────────────────────────
+#:     game_id                      ←  game_id  (nflfastR GSIS format)
+#:     play_id                      ←  play_id
+#:     posteam                      ←  posteam
+#:     defteam                      ←  defteam
+#:     home_team                    ←  home_team
+#:     season                       ←  season
+#:     game_half                    ←  game_half  ("Half1" | "Half2" | "OT")
+#:     posteam_score                ←  posteam_score
+#:     defteam_score                ←  defteam_score
+#:
+#: nflverse parquet native (``load_nfl_pbp`` output — no renaming needed)::
+#:
+#:     All columns below are already in nflverse snake_case.  The parquet
+#:     schema from nflverse/nfl-data is the reference; the contract subset
+#:     listed here is the EP/WP-pipeline minimum.
+#:
+#: The contract is a ``frozenset`` so it is immutable and hashable.
+#: Membership tests (``"col" in NFLVERSE_FRAME_CONTRACT``) are O(1).
+NFLVERSE_FRAME_CONTRACT: frozenset[str] = frozenset(
+    {
+        # ── identity ──────────────────────────────────────────────────────────
+        "game_id",
+        "play_id",
+        "season",
+        "game_half",  # "Half1" | "Half2" | "OT" — gates EPA sign-flip
+        "posteam",
+        "defteam",
+        "home_team",
+        # ── EP feature inputs (nflverse native names, _make_model_mutations) ─
+        "half_seconds_remaining",
+        "yardline_100",
+        "ydstogo",
+        "down",
+        "posteam_timeouts_remaining",
+        "defteam_timeouts_remaining",
+        # derived columns (computed from inputs; listed for contract clarity)
+        "home",  # 1 if posteam == home_team, else 0
+        "retractable",  # 1 if roof in {None, "open", "closed"}, else 0
+        "dome",  # 1 if roof == "dome", else 0
+        "outdoors",  # 1 if roof == "outdoors", else 0
+        # ── WP feature inputs ─────────────────────────────────────────────────
+        "score_differential",
+        "game_seconds_remaining",
+        "spread_line",  # None/null → wp_naive model; non-null → wp_spread
+        "receive_2h_ko",  # 1 if posteam receives 2nd-half kickoff
+        # ── EPA / WPA derivation inputs ───────────────────────────────────────
+        "posteam_score",  # score of possessing team at start of play
+        "defteam_score",  # score of defending team at start of play
+        # ── roof (source for retractable/dome/outdoors) ───────────────────────
+        "roof",  # "dome" | "outdoors" | "open" | "closed" | null
+    }
+)
+
+# ---------------------------------------------------------------------------
+# Existing dict (kept for backward compatibility — _EP_POINT_VALUES above
+# carries the same information as an ndarray for model dot-product use)
+# ---------------------------------------------------------------------------
+
 ep_class_to_score_mapping = {0: 7, 1: -7, 2: 3, 3: -3, 4: 2, 5: -2, 6: 0}
 
 wp_start_touchback_columns = [
