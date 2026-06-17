@@ -1,0 +1,48 @@
+api: mlb_statcast
+host: https://baseballsavant.mlb.com
+name_pattern: mlb_statcast_{short}
+module: mlb_statcast
+parser_module: mlb.mlb_statcast_parsers
+qualifier: ''
+passthrough_query: true
+runtime_imports:
+- _get
+endpoints:
+- short: leaderboard_expected_stats
+  summary: "GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA leaderboard (csv=true)."
+  path: /leaderboard/expected_statistics
+  extra_params:
+  - name: type
+    query_key: type
+    type: str
+  - name: year
+    query_key: year
+    type: int|str
+  - name: csv
+    query_key: csv
+    type: bool
+    default: 'true'
+  parser: parse_mlb_statcast_leaderboard
+- short: gamefeed
+  summary: "GET /gf — Savant per-game JSON feed."
+  path: /gf
+  extra_params:
+  - name: game_pk
+    query_key: game_pk
+    type: int
+  parser: parse_mlb_statcast_gamefeed
+- short: player_percentile_rankings
+  summary: "GET /leaderboard/percentile-rankings — player percentile sliders (csv=true)."
+  path: /leaderboard/percentile-rankings
+  extra_params:
+  - name: type
+    query_key: type
+    type: str
+  - name: year
+    query_key: year
+    type: int|str
+  - name: csv
+    query_key: csv
+    type: bool
+    default: 'true'
+  parser: parse_mlb_statcast_leaderboard

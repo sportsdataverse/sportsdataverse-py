@@ -1321,6 +1321,7 @@ FLAT_APIS = [
     ("nhl_stats_rest", "nhl"),
     ("nhl_records", "nhl"),
     ("mlb_api", "mlb"),
+    ("mlb_statcast", "mlb"),
     ("nfl_api", "nfl"),
 ]
 
@@ -1712,6 +1713,7 @@ _FLAT_API_DOC = {
     "nhl_stats_rest": "NHL Stats REST API",
     "nhl_records": "NHL Records API",
     "mlb_api": "MLB Stats API",
+    "mlb_statcast": "MLB Statcast (Baseball Savant)",
     "nfl_api": "NFL.com API",
 }
 

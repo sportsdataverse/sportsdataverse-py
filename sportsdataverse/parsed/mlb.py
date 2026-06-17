@@ -203,6 +203,9 @@ from sportsdataverse.mlb import mlb_api_umpires as _raw_mlb_api_umpires
 from sportsdataverse.mlb import mlb_api_venue as _raw_mlb_api_venue
 from sportsdataverse.mlb import mlb_api_venues as _raw_mlb_api_venues
 from sportsdataverse.mlb import mlb_api_win_probability as _raw_mlb_api_win_probability
+from sportsdataverse.mlb import mlb_statcast_gamefeed as _raw_mlb_statcast_gamefeed
+from sportsdataverse.mlb import mlb_statcast_leaderboard_expected_stats as _raw_mlb_statcast_leaderboard_expected_stats
+from sportsdataverse.mlb import mlb_statcast_player_percentile_rankings as _raw_mlb_statcast_player_percentile_rankings
 from sportsdataverse.mlb import download as download  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_calendar as espn_mlb_calendar  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_game_rosters as espn_mlb_game_rosters  # noqa: F401
@@ -230,6 +233,7 @@ from sportsdataverse.mlb import mlb_api_stats_streaks as mlb_api_stats_streaks  
 from sportsdataverse.mlb import mlb_api_team_leaders as mlb_api_team_leaders  # noqa: F401
 from sportsdataverse.mlb import mlb_api_team_stats as mlb_api_team_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_api_teams as mlb_api_teams  # noqa: F401
+from sportsdataverse.mlb import mlb_statcast_search as mlb_statcast_search  # noqa: F401
 from sportsdataverse.mlb import most_recent_mlb_season as most_recent_mlb_season  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_list as parse_mlb_api_list  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_person_stats as parse_mlb_api_person_stats  # noqa: F401
@@ -237,20 +241,11 @@ from sportsdataverse.mlb import parse_mlb_api_schedule as parse_mlb_api_schedule
 from sportsdataverse.mlb import parse_mlb_api_standings as parse_mlb_api_standings  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_team_roster as parse_mlb_api_team_roster  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_teams as parse_mlb_api_teams  # noqa: F401
+from sportsdataverse.mlb import parse_mlb_statcast_gamefeed as parse_mlb_statcast_gamefeed  # noqa: F401
+from sportsdataverse.mlb import parse_mlb_statcast_leaderboard as parse_mlb_statcast_leaderboard  # noqa: F401
+from sportsdataverse.mlb import parse_mlb_statcast_player as parse_mlb_statcast_player  # noqa: F401
+from sportsdataverse.mlb import parse_mlb_statcast_search as parse_mlb_statcast_search  # noqa: F401
 from sportsdataverse.mlb import parser_for_mlb_api as parser_for_mlb_api  # noqa: F401
-from sportsdataverse.mlb import statcast_gamefeed as statcast_gamefeed  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_arm_strength as statcast_leaderboard_arm_strength  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_bat_tracking as statcast_leaderboard_bat_tracking  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_catch_probability as statcast_leaderboard_catch_probability  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_custom as statcast_leaderboard_custom  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_expected_statistics as statcast_leaderboard_expected_statistics  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_outs_above_average as statcast_leaderboard_outs_above_average  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_pitch_arsenal as statcast_leaderboard_pitch_arsenal  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_poptime as statcast_leaderboard_poptime  # noqa: F401
-from sportsdataverse.mlb import statcast_leaderboard_sprint_speed as statcast_leaderboard_sprint_speed  # noqa: F401
-from sportsdataverse.mlb import statcast_player_page as statcast_player_page  # noqa: F401
-from sportsdataverse.mlb import statcast_search as statcast_search  # noqa: F401
-from sportsdataverse.mlb import statcast_search_chunked as statcast_search_chunked  # noqa: F401
 from sportsdataverse.mlb import underscore as underscore  # noqa: F401
 
 __all__ = [
@@ -461,6 +456,10 @@ __all__ = [
     "mlb_api_venue",
     "mlb_api_venues",
     "mlb_api_win_probability",
+    "mlb_statcast_gamefeed",
+    "mlb_statcast_leaderboard_expected_stats",
+    "mlb_statcast_player_percentile_rankings",
+    "mlb_statcast_search",
     "most_recent_mlb_season",
     "parse_mlb_api_list",
     "parse_mlb_api_person_stats",
@@ -468,20 +467,11 @@ __all__ = [
     "parse_mlb_api_standings",
     "parse_mlb_api_team_roster",
     "parse_mlb_api_teams",
+    "parse_mlb_statcast_gamefeed",
+    "parse_mlb_statcast_leaderboard",
+    "parse_mlb_statcast_player",
+    "parse_mlb_statcast_search",
     "parser_for_mlb_api",
-    "statcast_gamefeed",
-    "statcast_leaderboard_arm_strength",
-    "statcast_leaderboard_bat_tracking",
-    "statcast_leaderboard_catch_probability",
-    "statcast_leaderboard_custom",
-    "statcast_leaderboard_expected_statistics",
-    "statcast_leaderboard_outs_above_average",
-    "statcast_leaderboard_pitch_arsenal",
-    "statcast_leaderboard_poptime",
-    "statcast_leaderboard_sprint_speed",
-    "statcast_player_page",
-    "statcast_search",
-    "statcast_search_chunked",
     "underscore",
 ]
 
@@ -3004,3 +2994,45 @@ def mlb_api_win_probability(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_mlb_api_win_probability(*args, **kwargs)
+
+
+def mlb_statcast_gamefeed(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_gamefeed``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_gamefeed` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_gamefeed` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_gamefeed(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_expected_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_expected_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_expected_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_expected_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_expected_stats(*args, **kwargs)
+
+
+def mlb_statcast_player_percentile_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_player_percentile_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_player_percentile_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_player_percentile_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_player_percentile_rankings(*args, **kwargs)
