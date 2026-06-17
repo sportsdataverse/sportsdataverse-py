@@ -1,0 +1,6 @@
+# Hand-curated return-table column descriptions consumed at render time by
+# tools/codegen/generate.py:_table_cell_desc. Keyed by the schema YAML's
+# `schema:` field; `_global` is the table-agnostic fallback. NEVER edit
+# descriptions into schemas/**.yaml — those are overwritten blank on capture.
+# See docs/superpowers/specs/2026-06-17-sdv-py-returns-table-descriptions-design.md
+_global: {}

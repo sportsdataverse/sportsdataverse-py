@@ -270,14 +270,46 @@ def _r_col_desc(league: str | None, col: str) -> str:
     return _r_col_descs().get("_merged", {}).get(col, "") or ""
 
 
-def _table_cell_desc(stored: str, league: str | None, col: str) -> str:
-    """A return-table description cell: stored value if non-empty, else R-dict fill.
+_MANUAL_DESC_FILE = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 
-    Never overwrites a non-empty (hand-curated) stored description. The result is
+
+@functools.lru_cache(maxsize=None)
+def _manual_col_descs() -> dict:
+    """``{schema: {col: desc}, _global: {col: desc}}`` hand-curated column
+    descriptions (committed, deterministic). Empty dict when the file is absent."""
+    import yaml
+
+    if not _MANUAL_DESC_FILE.exists():
+        return {}
+    return yaml.safe_load(_MANUAL_DESC_FILE.read_text(encoding="utf-8")) or {}
+
+
+def _manual_col_desc(schema: str | None, col: str) -> str:
+    """Hand-curated description for ``col``: schema-keyed first, then ``_global``.
+
+    Resolution: ``manual[schema][col]`` -> ``manual["_global"][col]`` -> ``""``."""
+    if not col:
+        return ""
+    d = _manual_col_descs()
+    if schema:
+        v = (d.get(schema) or {}).get(col)
+        if v:
+            return v
+    return (d.get("_global") or {}).get(col, "") or ""
+
+
+def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | None = None) -> str:
+    """A return-table description cell: stored value if non-empty, else the
+    hand-curated manual dict (schema-keyed), else the R-dict fill.
+
+    Never overwrites a non-empty (captured) stored description. The result is
     pipe/newline-escaped so it is safe inside a single markdown table cell.
     reST markup (double-backtick literals, Sphinx roles) is normalised to
     standard markdown inline code."""
-    raw = stored if (stored or "").strip() else _r_col_desc(league, col)
+    if (stored or "").strip():
+        raw = stored
+    else:
+        raw = _manual_col_desc(schema, col) or _r_col_desc(league, col)
     normalized = _normalize_rst((raw or "").replace("\n", " ").strip())
     return normalized.replace("|", "\\|")
 
@@ -407,7 +439,7 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
         head = "| col_name | type | description |\n|---|---|---|\n"
         return head + "".join(
             f"| `{c['name']}` | {c.get('type', '')} | "
-            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''))} |\n"
+            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''), d.get('schema'))} |\n"
             for c in cols
         )
 
@@ -2755,7 +2787,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
         for c in return_columns:
             raw_name = str(c.get("name", ""))
-            c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name)
+            c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name, n)
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n), []).append(
