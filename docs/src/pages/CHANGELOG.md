@@ -2,6 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
+  - [All sports — `espn_*_game_rosters` diagonal per-team concat (fixes silent roster loss)](#all-sports--espn__game_rosters-diagonal-per-team-concat-fixes-silent-roster-loss)
+  - [HTTP — `download()` no longer retries a definitive 404](#http--download-no-longer-retries-a-definitive-404)
 - [0.0.62 Release: June 16, 2026](#0062-release-june-16-2026)
   - [All sports — `espn_*_game_rosters` robust to long-tail ESPN payloads](#all-sports--espn__game_rosters-robust-to-long-tail-espn-payloads)
 - [0.0.61 Release: June 16, 2026](#0061-release-june-16-2026)
@@ -111,6 +114,16 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.63 Release: June 16, 2026
+
+### All sports — `espn_*_game_rosters` diagonal per-team concat (fixes silent roster loss)
+
+The per-team roster concat in `espn_wbb/wnba/nba/mbb/nfl/cfb_game_rosters` used `pl.concat(..., how="vertical")`, which hard-fails with `polars.exceptions.ShapeError` when a game's two teams ship different roster columns (e.g. one entry list has `jersey`, the other `didNotPlay`). The whole game then errored and was discarded as empty despite having roster data. Switched to `how="diagonal"` (union + null-fill), matching `nhl_game_rosters` and the `teams`/`athletes` concats in the same modules.
+
+### HTTP — `download()` no longer retries a definitive 404
+
+`sportsdataverse.dl_utils.download` retried a `NoESPNDataError` (ESPN 404 / `code:404` body) for the full `num_retries` budget — wasting ~51s of backoff and N requests per genuinely-absent resource, amplifying load against a rate-limited host. A 404 is definitive "no data", so it now fails fast (one attempt) instead of retrying. Connection/timeout/5xx errors still retry as before.
 
 ## 0.0.62 Release: June 16, 2026
 
