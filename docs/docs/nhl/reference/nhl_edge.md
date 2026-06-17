@@ -86,7 +86,7 @@ Pull EDGE detail stats for a single skater.
 | `skating_speed_speed_max_overlay_game_type` | integer | Numeric code for the game type of the game in which the player recorded their top skating speed (e.g., 2 = regular season). |
 | `skating_speed_bursts_over20_value` | integer | Number of distinct skating speed bursts exceeding 20 mph recorded for the player across the season in NHL EDGE tracking data. |
 | `skating_speed_bursts_over20_percentile` | double | Percentile rank of the player's count of skating speed bursts exceeding 20 mph relative to all qualifying skaters in the NHL EDGE dataset. |
-| `skating_speed_bursts_over20_league_avg_value` | double | League-average number of skating speed bursts exceeding 20 mph recorded per game among qualifying skaters, for the current season. |
+| `skating_speed_bursts_over20_league_avg_value` | double | League-average season total of skating speed bursts exceeding 20 mph among qualifying skaters, the EDGE baseline comparator. |
 | `total_distance_skated_imperial` | double | Total cumulative distance skated by the player across all tracked games in the season, measured in miles (imperial). |
 | `total_distance_skated_metric` | double | Total cumulative distance skated by the player across all tracked games in the season, measured in kilometers (metric). |
 | `total_distance_skated_percentile` | double | Percentile rank of the player's total season skating distance relative to all qualifying skaters in the NHL EDGE dataset. |
@@ -564,9 +564,9 @@ Pull EDGE detail stats for a single goalie.
 | `stats_games_above900_value` | double | Goalie's own count of games in which save percentage exceeded .900, as tracked by the NHL EDGE system. |
 | `stats_games_above900_percentile` | double | Percentile rank among all NHL goalies for the 'games above .900 save percentage' EDGE metric during the season. |
 | `stats_games_above900_league_avg` | double | League-average value for the 'games above .900 save percentage' EDGE metric, used as a comparative baseline for the goalie. |
-| `stats_goal_differential_per60_value` | double | Goalie's goals-saved-above-expected differential per 60 minutes of play, as computed by the NHL EDGE system. |
+| `stats_goal_differential_per60_value` | double | Goalie's net goal differential (team goals scored minus goals allowed while in net) per 60 minutes of play, as tracked by the NHL EDGE system. |
 | `stats_goal_differential_per60_percentile` | double | Percentile rank among all NHL goalies for the goals-differential-per-60 EDGE metric during the season. |
-| `stats_goal_differential_per60_league_avg` | double | League-average goals-saved-above-expected differential per 60 minutes, used as the EDGE baseline comparator for the goalie. |
+| `stats_goal_differential_per60_league_avg` | double | League-average net goal differential (team goals scored minus goals allowed while in net) per 60 minutes, the EDGE baseline comparator for the goalie. |
 | `stats_goal_support_avg_value` | double | Average number of goals scored by the goalie's team per game while this goalie was in net, as tracked by NHL EDGE. |
 | `stats_goal_support_avg_percentile` | double | Percentile rank among all NHL goalies for average goal support received while the goalie was in net. |
 | `stats_goal_support_avg_league_avg` | double | League-average goal-support value (average goals scored for the goalie while in net), used as the EDGE baseline comparator. |

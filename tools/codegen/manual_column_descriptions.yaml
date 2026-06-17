@@ -707,9 +707,9 @@ goalie_detail:
   stats_games_above900_league_avg: League-average value for the 'games above .900 save percentage' EDGE metric, used as a comparative baseline for the goalie.
   stats_games_above900_percentile: Percentile rank among all NHL goalies for the 'games above .900 save percentage' EDGE metric during the season.
   stats_games_above900_value: Goalie's own count of games in which save percentage exceeded .900, as tracked by the NHL EDGE system.
-  stats_goal_differential_per60_league_avg: League-average goals-saved-above-expected differential per 60 minutes, used as the EDGE baseline comparator for the goalie.
+  stats_goal_differential_per60_league_avg: League-average net goal differential (team goals scored minus goals allowed while in net) per 60 minutes, the EDGE baseline comparator for the goalie.
   stats_goal_differential_per60_percentile: Percentile rank among all NHL goalies for the goals-differential-per-60 EDGE metric during the season.
-  stats_goal_differential_per60_value: Goalie's goals-saved-above-expected differential per 60 minutes of play, as computed by the NHL EDGE system.
+  stats_goal_differential_per60_value: Goalie's net goal differential (team goals scored minus goals allowed while in net) per 60 minutes of play, as tracked by the NHL EDGE system.
   stats_goal_support_avg_league_avg: League-average goal-support value (average goals scored for the goalie while in net), used as the EDGE baseline comparator.
   stats_goal_support_avg_percentile: Percentile rank among all NHL goalies for average goal support received while the goalie was in net.
   stats_goal_support_avg_value: Average number of goals scored by the goalie's team per game while this goalie was in net, as tracked by NHL EDGE.
@@ -1919,9 +1919,9 @@ nhl_scoreboard:
   tickets_link_fr: URL to the French-language ticket purchase page for the game, as provided by the NHL api-web scoreboard.
 pbp:
   details_assist1_player_id: NHL api-web player identifier for the primary (first) assist credited on a goal event in the play-by-play feed.
-  details_assist1_player_total: Running season total of points (assists) for the primary assist player at the time of the goal event in the play-by-play feed.
+  details_assist1_player_total: Running season assist total for the primary assist player at the time of the goal event in the play-by-play feed.
   details_assist2_player_id: NHL api-web player identifier for the secondary (second) assist credited on a goal event in the play-by-play feed.
-  details_assist2_player_total: Running season total of points (assists) for the secondary assist player at the time of the goal event in the play-by-play feed.
+  details_assist2_player_total: Running season assist total for the secondary assist player at the time of the goal event in the play-by-play feed.
   details_away_score: Cumulative away-team score at the moment of the play event in the NHL api-web play-by-play feed.
   details_away_sog: Cumulative shots on goal by the away team at the moment of the play event in the NHL api-web play-by-play feed.
   details_blocking_player_id: NHL api-web player identifier for the skater who blocked a shot on the blocked-shot event in the play-by-play feed.
@@ -2209,7 +2209,7 @@ skater_detail:
   player_goals: Total regular-season goals scored by the skater in the current NHL season, as returned in the EDGE skater detail.
   player_shoots_catches: Handedness indicator for the skater showing the side they shoot from ('L' for left, 'R' for right).
   seasons_with_edge_stats: Comma-separated list or serialized array of seasons for which NHL EDGE player-tracking data is available for this skater.
-  skating_speed_bursts_over20_league_avg_value: League-average number of skating speed bursts exceeding 20 mph recorded per game among qualifying skaters, for the current season.
+  skating_speed_bursts_over20_league_avg_value: League-average season total of skating speed bursts exceeding 20 mph among qualifying skaters, the EDGE baseline comparator.
   skating_speed_bursts_over20_percentile: Percentile rank of the player's count of skating speed bursts exceeding 20 mph relative to all qualifying skaters in the NHL EDGE dataset.
   skating_speed_bursts_over20_value: Number of distinct skating speed bursts exceeding 20 mph recorded for the player across the season in NHL EDGE tracking data.
   skating_speed_speed_max_imperial: Player's top recorded skating speed for the season measured in miles per hour (imperial), as captured by NHL EDGE player tracking.
@@ -2317,7 +2317,7 @@ standings:
   for: Runs/goals for.
   games_played: Matches played.
   goal_against: Total number of goals allowed by the team across all games played in the current standings snapshot.
-  goal_differential_pctg: Team's goal differential expressed as a percentage of total goals scored by both teams, used as a secondary tiebreaker in NHL standings.
+  goal_differential_pctg: Team's goal differential normalized to a per-game (or percentage) basis, as published in the NHL standings feed.
   goal_for: Total number of goals scored by the team across all games played in the current standings snapshot.
   goals_for_pctg: Team's share of total goals scored in all games involving this team, calculated as goals-for divided by (goals-for + goals-against).
   group: Conference/group/table the row belongs to, flattened from the standings children hierarchy.

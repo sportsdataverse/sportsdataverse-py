@@ -60,9 +60,9 @@ Pull the play-by-play feed for one NHL game.
 | `details_scoring_player_id` | double | NHL api-web player identifier for the skater who scored the goal on a goal event in the play-by-play feed. |
 | `details_scoring_player_total` | double | Running season goal total for the scoring player at the time of the goal event in the NHL api-web play-by-play feed. |
 | `details_assist1_player_id` | double | NHL api-web player identifier for the primary (first) assist credited on a goal event in the play-by-play feed. |
-| `details_assist1_player_total` | double | Running season total of points (assists) for the primary assist player at the time of the goal event in the play-by-play feed. |
+| `details_assist1_player_total` | double | Running season assist total for the primary assist player at the time of the goal event in the play-by-play feed. |
 | `details_assist2_player_id` | double | NHL api-web player identifier for the secondary (second) assist credited on a goal event in the play-by-play feed. |
-| `details_assist2_player_total` | double | Running season total of points (assists) for the secondary assist player at the time of the goal event in the play-by-play feed. |
+| `details_assist2_player_total` | double | Running season assist total for the secondary assist player at the time of the goal event in the play-by-play feed. |
 | `details_away_score` | double | Cumulative away-team score at the moment of the play event in the NHL api-web play-by-play feed. |
 | `details_home_score` | double | Cumulative home-team score at the moment of the play event in the NHL api-web play-by-play feed. |
 | `details_highlight_clip_sharing_url` | character | Public sharing URL for the English-language broadcast highlight clip of this play event from the NHL api-web play-by-play feed. |
@@ -545,7 +545,7 @@ Pull the NHL standings.
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games_played` | integer | Matches played. |
 | `goal_differential` | integer | Goal differential. |
-| `goal_differential_pctg` | double | Team's goal differential expressed as a percentage of total goals scored by both teams, used as a secondary tiebreaker in NHL standings. |
+| `goal_differential_pctg` | double | Team's goal differential normalized to a per-game (or percentage) basis, as published in the NHL standings feed. |
 | `goal_against` | integer | Total number of goals allowed by the team across all games played in the current standings snapshot. |
 | `goal_for` | integer | Total number of goals scored by the team across all games played in the current standings snapshot. |
 | `goals_for_pctg` | double | Team's share of total goals scored in all games involving this team, calculated as goals-for divided by (goals-for + goals-against). |
