@@ -56,3 +56,27 @@ def test_html_script_json_handles_nested_objects():
     blob2 = _html_script_json(html_no_semi, "serverVals")
     assert blob2["stats"]["hr"] == 30
     assert blob2["rows"][0]["metric"] == "xwoba"
+
+
+def test_parse_leaderboard_csv():
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_leaderboard
+
+    df = parse_mlb_statcast_leaderboard((FIX / "leaderboard_xstats.csv").read_text())
+    assert df.height == 1 and "xwoba" in df.columns
+
+
+def test_parse_gamefeed_events():
+    import json
+
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_gamefeed
+
+    payload = json.loads((FIX / "gamefeed.json").read_text())
+    df = parse_mlb_statcast_gamefeed(payload)
+    assert df.height == 2 and "pitch_type" in df.columns
+
+
+def test_parse_player_from_html():
+    from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_player
+
+    df = parse_mlb_statcast_player((FIX / "player_page.html").read_text())
+    assert df.height == 1 and "metric" in df.columns
