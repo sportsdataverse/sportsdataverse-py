@@ -45,6 +45,9 @@ def _pipe(values: Any) -> str:
         return ""
     if isinstance(values, str):
         return values if (not values or values.endswith("|")) else values + "|"
+    if not isinstance(values, (list, tuple, set)):
+        # Non-string scalar (e.g. season=2024) -> single piped value, not iterated.
+        return f"{values}|"
     parts = [str(v) for v in values if v is not None and v != ""]
     return "|".join(parts) + "|" if parts else ""
 

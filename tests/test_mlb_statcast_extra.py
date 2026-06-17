@@ -57,6 +57,18 @@ def test_translate_filters_maps_friendly_kwargs_to_savant():
     assert out["hfRO"] == "RISP|"  # unknown key forwarded verbatim
 
 
+def test_pipe_handles_non_string_scalar():
+    """A bare int (e.g. season=2024) must not raise; it pipes as a single value."""
+    from sportsdataverse.mlb.mlb_statcast_extra import _pipe, _translate_filters
+
+    assert _pipe(2024) == "2024|"
+    assert _pipe(None) == ""
+    assert _pipe("FF") == "FF|"
+    assert _pipe([1, 2]) == "1|2|"
+    # exercised end-to-end through a scalar friendly filter
+    assert _translate_filters({"season": 2024})["hfSea"] == "2024|"
+
+
 def test_search_passes_friendly_filters_through_to_savant(monkeypatch):
     from sportsdataverse.mlb import mlb_statcast_extra as ex
 
