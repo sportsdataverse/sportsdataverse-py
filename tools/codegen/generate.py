@@ -1414,24 +1414,41 @@ def build() -> list[Path]:
     return sorted(OUT.glob("*_espn_ext.py"))
 
 
-def _ensure_init_import(prefix: str) -> None:
-    """Idempotently make ``sportsdataverse/{prefix}/__init__.py`` re-export the module."""
-    init = LIVE / prefix / "__init__.py"
-    text = init.read_text(encoding="utf-8")
-    if f"{prefix}_espn_ext import *" in text:
+def _ensure_init_import(pkg_dir: Path, prefix: str, dotted: str) -> None:
+    """Idempotently make ``pkg_dir/__init__.py`` re-export the generated ext.
+
+    ``dotted`` is the import path of the ext module, e.g.
+    ``sportsdataverse.soccer.epl.epl_espn_ext`` (nested) or
+    ``sportsdataverse.nba.nba_espn_ext`` (flat).
+    """
+    init = pkg_dir / "__init__.py"
+    text = init.read_text(encoding="utf-8") if init.exists() else ""
+    line = f"from {dotted} import *\n"
+    if line.strip() in text:
         return
-    line = f"from sportsdataverse.{prefix}.{prefix}_espn_ext import *\n"
-    init.write_text(text.rstrip() + "\n" + line, encoding="utf-8", newline="\n")
+    init.write_text((text.rstrip() + "\n" + line).lstrip("\n"), encoding="utf-8", newline="\n")
 
 
 def build_live() -> list[Path]:
     """Write the concrete generated modules into the live package + wire __init__."""
+    groups = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues}
     written = []
     for name, src in _render_all().items():
         prefix = name[: -len("_espn_ext.py")]
-        dest = LIVE / prefix / f"{prefix}_espn_ext.py"
+        group = groups.get(prefix, "")
+        if group:
+            container = LIVE / group
+            container.mkdir(parents=True, exist_ok=True)
+            (container / "__init__.py").touch(exist_ok=True)  # empty container package
+            pkg_dir = container / prefix
+            dotted = f"sportsdataverse.{group}.{prefix}.{prefix}_espn_ext"
+        else:
+            pkg_dir = LIVE / prefix
+            dotted = f"sportsdataverse.{prefix}.{prefix}_espn_ext"
+        pkg_dir.mkdir(parents=True, exist_ok=True)
+        dest = pkg_dir / f"{prefix}_espn_ext.py"
         dest.write_text(src, encoding="utf-8", newline="\n")
-        _ensure_init_import(prefix)
+        _ensure_init_import(pkg_dir, prefix, dotted)
         written.append(dest)
     if written:
         subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)

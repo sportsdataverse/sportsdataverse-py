@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import tools.codegen.generate as gen
 import tools.codegen.spec as spec
 
 
@@ -26,3 +27,30 @@ def test_load_leagues_reads_group(tmp_path):
     by_prefix = {lg.prefix: lg for lg in spec.load_leagues(p).leagues}
     assert by_prefix["nba"].group == ""
     assert by_prefix["epl"].group == "soccer"
+
+
+def test_build_live_writes_grouped_league_nested(tmp_path, monkeypatch):
+    live = tmp_path / "sportsdataverse"
+    live.mkdir()
+    monkeypatch.setattr(gen, "LIVE", live)
+    src = "# GENERATED\n'''stub'''\n"
+    monkeypatch.setattr(gen, "_render_all", lambda: {"epl_espn_ext.py": src})
+    monkeypatch.setattr(
+        gen.spec,
+        "load_leagues",
+        lambda _p: type(
+            "C",
+            (),
+            {
+                "leagues": [
+                    spec.League(prefix="epl", sport="soccer", league="eng.1", scopes=["universal"], group="soccer")
+                ]
+            },
+        )(),
+    )
+    gen.build_live()
+    assert (live / "soccer" / "__init__.py").exists()  # container created
+    # ext lands nested (content asserted by substring — build_live runs ruff format on it)
+    assert "GENERATED" in (live / "soccer" / "epl" / "epl_espn_ext.py").read_text(encoding="utf-8")
+    init = (live / "soccer" / "epl" / "__init__.py").read_text(encoding="utf-8")
+    assert "from sportsdataverse.soccer.epl.epl_espn_ext import *" in init
