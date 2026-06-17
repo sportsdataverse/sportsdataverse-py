@@ -209,47 +209,156 @@ def test_end_of_game_winner_gets_wp_after_one() -> None:
 
 
 def test_no_cross_game_leak_on_lead() -> None:
-    """Game-2 row 0 must NOT consume game-1's last wp_before as its lead.
+    """Concatenated frame: per-game guards prevent WP leaking across game boundaries.
 
-    Both games are 2 plays.  In game 1, row 0 is a normal play whose
-    ``wp_after`` comes from the otherwise-branch (the model ``wp_after``).  The
-    no-leak guarantee is asserted via the change-of-possession branch: game-2
-    row 1 (last play of game 2) is end-of-game; game-1 row 1 (last play of
-    game 1) is end-of-game too.  With a per-game ``.over("game_id")`` the
-    ``game_play_number == max()`` end-of-game branch fires for BOTH last
-    plays; a global max would only fire it for the single overall-max row.
+    **Why the old 2+2 fixture was not discriminating:** both games shared
+    ``game_play_number`` spans {1, 2}, so the global ``max()`` equalled the
+    per-game ``max()`` for every row — the ``.over("game_id")`` guard was never
+    load-bearing.
+
+    **This fixture is discriminating on BOTH guards:**
+
+    Guard 1 — ``.max().over("game_id")``:
+        Game 1 ends at ``game_play_number=3``; game 2 ends at
+        ``game_play_number=5`` (the global max).  A global ``.max()`` would
+        return 5 for every row, so game-1's last play (gpn=3) would NOT satisfy
+        ``gpn == 5`` and the end-of-game branch would never fire → ``wp_after``
+        stays at 0.45 instead of the expected 1.0.  The per-game
+        ``.max().over("game_id")`` correctly returns 3 for game-1 rows, making
+        the branch fire and producing ``wp_after=1.0``.
+
+    Guard 2 — ``.shift(-1).over("game_id")``:
+        Game-1 play 1 (index 1 in the concat) is a possession change with
+        ``scoringPlay=False``.  Its ``wp_after = 1 - lead_wp_before``.  With
+        ``.over("game_id")``, ``lead_wp_before`` comes from game-1 play 2 whose
+        ``wp_before=0.45`` → ``wp_after = 1 - 0.45 = 0.55``.  Without the
+        guard, the shift borrows the globally-next row (game-2 play 0) whose
+        ``wp_before=0.60`` → ``wp_after = 1 - 0.60 = 0.40 ≠ 0.55``.
     """
+    # Game 1: 3 plays (game_play_number 1..3).
+    # Play 1 is a possession change (scoringPlay=False) — its wp_after depends
+    # on lead_wp_before, making guard-2 load-bearing.
+    # Play 2 is the end-of-game winner — its detection relies on per-game max,
+    # making guard-1 load-bearing.
     rows_g1 = [
+        # play 0 — normal mid-game play; wp_after stays at model value
         {"wp_before": 0.30, "wp_after": 0.30, "game_play_number": 1},
+        # play 1 — possession change, no score → wp_after = 1 - lead_wp_before
+        # With .over("game_id") lead_wp_before = game-1 play-2's wp_before = 0.45
+        # Without the guard:       lead_wp_before = game-2 play-0's wp_before = 0.60
         {
             "wp_before": 0.40,
-            "wp_after": 0.40,
-            "status_type_completed": True,
-            "lead_play_type": "Pass Reception",  # not null -> rely on max()
-            "pos_score_diff_end": 7,
+            "wp_after": 0.40,  # overwritten by change-of-possession branch
+            "start.pos_team.id": "H",
+            "end.pos_team.id": "A",  # possession changes
+            "scoringPlay": False,
             "game_play_number": 2,
         },
+        # play 2 — final play, completed game, offense leads → wp_after = 1.0
+        # Relies on game_play_number == max().over("game_id") (=3), NOT global max (=5).
+        {
+            "wp_before": 0.45,
+            "wp_after": 0.45,  # overwritten by end-of-game branch
+            "status_type_completed": True,
+            "lead_play_type": "Pass Reception",  # not null → relies on max() guard
+            "pos_score_diff_end": 7,
+            "game_play_number": 3,
+        },
     ]
+    # Game 2: 5 plays (game_play_number 1..5).
+    # Global max is 5; per-game max for game-1 is 3 — that's the discriminating gap.
     rows_g2 = [
-        {"wp_before": 0.55, "wp_after": 0.55, "game_play_number": 1},
+        {"wp_before": 0.60, "wp_after": 0.60, "game_play_number": 1},
+        {"wp_before": 0.61, "wp_after": 0.61, "game_play_number": 2},
+        {"wp_before": 0.62, "wp_after": 0.62, "game_play_number": 3},
+        {"wp_before": 0.63, "wp_after": 0.63, "game_play_number": 4},
         {
             "wp_before": 0.65,
-            "wp_after": 0.65,
+            "wp_after": 0.65,  # overwritten by end-of-game branch
             "status_type_completed": True,
-            "lead_play_type": "Pass Reception",  # not null -> rely on max()
+            "lead_play_type": "Pass Reception",
             "pos_score_diff_end": 7,
-            "game_play_number": 2,
+            "game_play_number": 5,
         },
     ]
     df = pl.concat([_frame("G1", rows_g1), _frame("G2", rows_g2)], how="vertical")
     out = calculate_wpa(df)
-    # Per-game max() must make BOTH last plays end-of-game winners (wp_after=1.0).
     wp_after = out["wp_after"].to_list()
-    assert wp_after[1] == pytest.approx(1.0)  # game 1 last play
-    assert wp_after[3] == pytest.approx(1.0)  # game 2 last play
-    # And game-2 row 0's lead must come from game-2 row 1, never game 1.
-    # (lead_wp_before is internal; assert via no-crash + finite wpa for g2 row 0)
-    assert out["wpa"].to_list()[2] == pytest.approx(0.0)  # 0.55 wp_after - 0.55 wp_before
+
+    # --- Guard 1: per-game max() makes BOTH final plays end-of-game winners ---
+    # Game-1 index 2 (gpn=3 == per-game max 3) → 1.0
+    assert wp_after[2] == pytest.approx(1.0), "game-1 last play must be wp_after=1.0 (per-game max guard)"
+    # Game-2 index 7 (gpn=5 == per-game max 5 == global max) → 1.0
+    assert wp_after[7] == pytest.approx(1.0), "game-2 last play must be wp_after=1.0"
+
+    # --- Guard 2: shift(-1).over("game_id") scopes lead to within game 1 ---
+    # Game-1 play 1 (index 1): possession change, scoringPlay=False.
+    # wp_after = 1 - lead_wp_before; lead_wp_before = game-1 play-2's wp_before = 0.45
+    # Expected wp_after = 1 - 0.45 = 0.55
+    assert wp_after[1] == pytest.approx(0.55), (
+        "game-1 possession-change play: wp_after must use game-1's own lead, not game-2's"
+    )
+
+    # --- No-leak: game-2 row 0's wpa is self-consistent (lead from game-2 only) ---
+    # Game-2 play 0 (index 3): normal play, wp_before=0.60, wp_after stays at 0.60 → wpa=0.0
+    assert out["wpa"].to_list()[3] == pytest.approx(0.0)
+
+
+def test_change_of_possession_scoring_branches() -> None:
+    """The last two wp_after branches: pos-team change with / without a score.
+
+    When ``start.pos_team.id != end.pos_team.id``:
+      * ``scoringPlay=False`` → ``wp_after = 1 - lead_wp_before``
+        (turnover / pick / fumble: defense now has ball, so the new offense
+        win probability is the complement of the old offense's lead wp)
+      * ``scoringPlay=True``  → ``wp_after = lead_wp_before``
+        (pick-six / fumble-TD etc.: scoring team retains the ball after the
+        score; their lead wp is taken directly as the new offense wp)
+
+    Hand-computed expected values:
+        lead_wp_before is play-1's wp_before = 0.70 in both frames.
+        non-scoring branch: wp_after = 1 - 0.70 = 0.30
+        scoring branch:     wp_after =     0.70
+    """
+    # --- scoringPlay=False: turnover / change of possession without score ---
+    df_no_score = _frame(
+        "G1",
+        [
+            {
+                "wp_before": 0.50,
+                "wp_after": 0.99,  # ignored — overwritten by pos-change branch
+                "start.pos_team.id": "H",
+                "end.pos_team.id": "A",  # possession changes
+                "scoringPlay": False,
+            },
+            # lead play — its wp_before (0.70) flows into play-0's wp_after
+            {"wp_before": 0.70, "wp_after": 0.70},
+        ],
+    )
+    out_no_score = calculate_wpa(df_no_score)
+    # wp_after = 1 - lead_wp_before = 1 - 0.70 = 0.30
+    assert out_no_score["wp_after"].to_list()[0] == pytest.approx(0.30)
+    assert out_no_score["wpa"].to_list()[0] == pytest.approx(0.30 - 0.50)
+
+    # --- scoringPlay=True: pick-six / fumble-TD style ---
+    df_score = _frame(
+        "G2",
+        [
+            {
+                "wp_before": 0.50,
+                "wp_after": 0.99,  # ignored — overwritten by pos-change branch
+                "start.pos_team.id": "H",
+                "end.pos_team.id": "A",  # possession changes (scoring team keeps ball)
+                "scoringPlay": True,
+            },
+            # lead play — its wp_before (0.70) flows into play-0's wp_after
+            {"wp_before": 0.70, "wp_after": 0.70},
+        ],
+    )
+    out_score = calculate_wpa(df_score)
+    # wp_after = lead_wp_before = 0.70
+    assert out_score["wp_after"].to_list()[0] == pytest.approx(0.70)
+    assert out_score["wpa"].to_list()[0] == pytest.approx(0.70 - 0.50)
 
 
 def test_missing_wp_columns_raises_keyerror() -> None:
