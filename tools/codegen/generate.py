@@ -1429,6 +1429,54 @@ def _ensure_init_import(pkg_dir: Path, prefix: str, dotted: str) -> None:
     init.write_text((text.rstrip() + "\n" + line).lstrip("\n"), encoding="utf-8", newline="\n")
 
 
+def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
+    """Return the deterministic body for a sport-group container ``__init__.py``.
+
+    Args:
+        group:    Sport-group name (e.g. ``"soccer"``, ``"football"``).
+        members:  Sorted list of sub-league prefixes that live under this group.
+        has_ext:  True when a ``{group}_espn_ext.py`` also lives in the container
+                  (currently only ``soccer`` doubles as a top-level league).
+
+    Returns:
+        Source text for the container ``__init__.py``.
+    """
+    lines: list[str] = ["from __future__ import annotations", ""]
+    if has_ext:
+        lines.append(f"from sportsdataverse.{group}.{group}_espn_ext import *  # noqa: F401,F403")
+        lines.append("")
+    lines.append(f"# Sub-league packages — imported so ``sportsdataverse.{group}.<leaf>`` is reachable")
+    lines.append("# as an attribute on this container module (0.0.65+).")
+    # Emit at most 4 members per import line to stay within line-length limits.
+    chunk_size = 4
+    for i in range(0, len(members), chunk_size):
+        chunk = members[i : i + chunk_size]
+        lines.append(f"from sportsdataverse.{group} import {', '.join(chunk)}  # noqa: F401,E402")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
+    """Build group → sorted-members mapping from the prefix→group dict.
+
+    Includes HockeyTech hand-written modules (ahl/ohl/whl/qmjhl) under hockey.
+    """
+    _HOCKEYTECH = ["ahl", "ohl", "qmjhl", "whl"]
+    result: dict[str, list[str]] = {}
+    for prefix, group in groups_map.items():
+        if not group:
+            continue
+        result.setdefault(group, [])
+        if prefix not in result[group]:
+            result[group].append(prefix)
+    # Add HockeyTech extras under hockey (they have no leagues.yaml entry).
+    for ht in _HOCKEYTECH:
+        result.setdefault("hockey", [])
+        if ht not in result["hockey"]:
+            result["hockey"].append(ht)
+    return {g: sorted(members) for g, members in result.items()}
+
+
 def build_live() -> list[Path]:
     """Write the concrete generated modules into the live package + wire __init__."""
     groups = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues}
@@ -1439,7 +1487,6 @@ def build_live() -> list[Path]:
         if group:
             container = LIVE / group
             container.mkdir(parents=True, exist_ok=True)
-            (container / "__init__.py").touch(exist_ok=True)  # empty container package
             pkg_dir = container / prefix
             dotted = f"sportsdataverse.{group}.{prefix}.{prefix}_espn_ext"
         else:
@@ -1450,13 +1497,20 @@ def build_live() -> list[Path]:
         dest.write_text(src, encoding="utf-8", newline="\n")
         _ensure_init_import(pkg_dir, prefix, dotted)
         written.append(dest)
+    # Write deterministic container __init__.py for each sport-group (replaces bare .touch()).
+    for group, members in _container_groups(groups).items():
+        container = LIVE / group
+        container.mkdir(parents=True, exist_ok=True)
+        has_ext = (container / f"{group}_espn_ext.py").exists()
+        body = _container_init_body(group, members, has_ext)
+        (container / "__init__.py").write_text(body, encoding="utf-8", newline="\n")
     if written:
         subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
     return sorted(written)
 
 
 def _live_stale() -> list[str]:
-    """Live ``{prefix}_espn_ext.py`` files that differ from a fresh render."""
+    """Live ``{prefix}_espn_ext.py`` and container ``__init__.py`` files that differ from a fresh render."""
     tmp = OUT / "_check_live_tmp"
     if tmp.exists():
         shutil.rmtree(tmp)
@@ -1479,6 +1533,14 @@ def _live_stale() -> list[str]:
                 encoding="utf-8",
             ):
                 stale.append(str(live_file.relative_to(ROOT)))
+        # Also check each container __init__.py against its expected body.
+        for group, members in _container_groups(groups).items():
+            container = LIVE / group
+            has_ext = (container / f"{group}_espn_ext.py").exists()
+            expected = _container_init_body(group, members, has_ext)
+            live_init = container / "__init__.py"
+            if not live_init.exists() or live_init.read_text(encoding="utf-8") != expected:
+                stale.append(str(live_init.relative_to(ROOT)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return stale

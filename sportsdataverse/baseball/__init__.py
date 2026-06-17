@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-# Sub-league packages — imported so ``sportsdataverse.baseball.college_baseball``
-# etc. are reachable as attributes on this module (0.0.65+).
+# Sub-league packages — imported so ``sportsdataverse.baseball.<leaf>`` is reachable
+# as an attribute on this container module (0.0.65+).
 from sportsdataverse.baseball import college_baseball, college_softball  # noqa: F401,E402

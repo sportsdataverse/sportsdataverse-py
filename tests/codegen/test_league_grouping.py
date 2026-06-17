@@ -54,3 +54,26 @@ def test_build_live_writes_grouped_league_nested(tmp_path, monkeypatch):
     assert "GENERATED" in (live / "soccer" / "epl" / "epl_espn_ext.py").read_text(encoding="utf-8")
     init = (live / "soccer" / "epl" / "__init__.py").read_text(encoding="utf-8")
     assert "from sportsdataverse.soccer.epl.epl_espn_ext import *" in init
+
+
+def test_build_live_generates_populated_container_init(tmp_path, monkeypatch):
+    live = tmp_path / "sportsdataverse"
+    live.mkdir()
+    monkeypatch.setattr(gen, "LIVE", live)
+    monkeypatch.setattr(gen, "_render_all", lambda: {"ufl_espn_ext.py": "# GENERATED\n"})
+    monkeypatch.setattr(
+        gen.spec,
+        "load_leagues",
+        lambda _p: type(
+            "C",
+            (),
+            {
+                "leagues": [
+                    spec.League(prefix="ufl", sport="football", league="ufl", scopes=["universal"], group="football")
+                ]
+            },
+        )(),
+    )
+    gen.build_live()
+    body = (live / "football" / "__init__.py").read_text(encoding="utf-8")
+    assert "from sportsdataverse.football import ufl" in body  # NOT empty

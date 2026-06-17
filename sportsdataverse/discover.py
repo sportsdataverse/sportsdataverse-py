@@ -38,6 +38,8 @@ import importlib
 from typing import Dict, List, Optional, Union
 
 # All league sub-modules under sportsdataverse.{league}.
+# Dotted entries (e.g. "football.ufl") are the import paths used by importlib;
+# the public API (dict keys, ``league=`` filter) uses the flat leaf ("ufl").
 _LEAGUES = (
     "cfb",
     "mbb",
@@ -75,6 +77,11 @@ _LEAGUES = (
     "baseball.college_baseball",
     "baseball.college_softball",
 )
+
+# Flat-leaf → dotted import path.  Used to key output dicts and resolve
+# ``league=<flat_leaf>`` arguments while keeping importlib happy.
+# "cfb" → "cfb", "football.ufl" → "ufl" (leaf), etc.
+_LEAF_TO_DOTTED: Dict[str, str] = {lg.rsplit(".", 1)[-1]: lg for lg in _LEAGUES}
 
 
 def _list_module(mod, prefix: Optional[str] = None) -> List[str]:
@@ -147,21 +154,22 @@ def list_functions(
         return names
 
     if league is not None:
-        league = league.lower()
-        if league not in _LEAGUES:
+        leaf = league.lower()
+        if leaf not in _LEAF_TO_DOTTED:
             raise ValueError(
-                f"Unknown league {league!r}. Choose one of {list(_LEAGUES)}.",
+                f"Unknown league {leaf!r}. Choose one of {sorted(_LEAF_TO_DOTTED)}.",
             )
-        mod = importlib.import_module(f"sportsdataverse.{league}")
+        dotted = _LEAF_TO_DOTTED[leaf]
+        mod = importlib.import_module(f"sportsdataverse.{dotted}")
         return _filter(_list_module(mod))
 
-    # Whole-package view, grouped by league
+    # Whole-package view, grouped by flat leaf (back-compat: keys never include dots)
     out: Dict[str, List[str]] = {}
-    for lg in _LEAGUES:
-        mod = importlib.import_module(f"sportsdataverse.{lg}")
+    for leaf, dotted in _LEAF_TO_DOTTED.items():
+        mod = importlib.import_module(f"sportsdataverse.{dotted}")
         names = _filter(_list_module(mod))
         if names:
-            out[lg] = names
+            out[leaf] = names
     return out
 
 
