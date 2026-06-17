@@ -19,10 +19,10 @@ ship with the package. Let's go scout some future pros!
 
 | League | Module | Level |
 |---|---|---|
-| AHL | `sportsdataverse.ahl` | Minor pro (one rung below the NHL) |
-| OHL | `sportsdataverse.ohl` | CHL major junior |
-| WHL | `sportsdataverse.whl` | CHL major junior |
-| QMJHL | `sportsdataverse.qmjhl` | CHL major junior |
+| AHL | `sportsdataverse.hockey.ahl` | Minor pro (one rung below the NHL) |
+| OHL | `sportsdataverse.hockey.ohl` | CHL major junior |
+| WHL | `sportsdataverse.hockey.whl` | CHL major junior |
+| QMJHL | `sportsdataverse.hockey.qmjhl` | CHL major junior |
 
 Every module exposes the same `<league>_*` surface. Here's the AHL kit —
 swap `ahl_` for `ohl_` / `whl_` / `qmjhl_` and it all works identically.
@@ -51,10 +51,10 @@ pip install sportsdataverse
 
 
 ```python
-import sportsdataverse.ahl as ahl
-import sportsdataverse.ohl as ohl
-import sportsdataverse.whl as whl
-import sportsdataverse.qmjhl as qmjhl
+import sportsdataverse.hockey.ahl as ahl
+import sportsdataverse.hockey.ohl as ohl
+import sportsdataverse.hockey.whl as whl
+import sportsdataverse.hockey.qmjhl as qmjhl
 
 LEAGUES = {"ahl": ahl, "ohl": ohl, "whl": whl, "qmjhl": qmjhl}
 ```
@@ -150,17 +150,20 @@ cols = ["team", "games_played", "wins", "losses", "ot_losses", "points", "goals_
 
 
 
-    shape: (2, 8)
-    ┌───────────────┬──────────────┬──────┬────────┬───────────┬────────┬───────────┬───────────────┐
-    │ team          ┆ games_played ┆ wins ┆ losses ┆ ot_losses ┆ points ┆ goals_for ┆ goals_against │
-    │ ---           ┆ ---          ┆ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---       ┆ ---           │
-    │ str           ┆ str          ┆ str  ┆ str    ┆ str       ┆ i64    ┆ str       ┆ str           │
-    ╞═══════════════╪══════════════╪══════╪════════╪═══════════╪════════╪═══════════╪═══════════════╡
-    │ Top Prospects ┆ 1            ┆ 1    ┆ 0      ┆ 0         ┆ 2      ┆ 4         ┆ 3             │
-    │ West          ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
-    │ Top Prospects ┆ 1            ┆ 0    ┆ 1      ┆ 0         ┆ 0      ┆ 3         ┆ 4             │
-    │ East          ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
-    └───────────────┴──────────────┴──────┴────────┴───────────┴────────┴───────────┴───────────────┘
+    shape: (5, 8)
+    ┌──────────────────┬──────────────┬──────┬────────┬───────────┬────────┬───────────┬───────────────┐
+    │ team             ┆ games_played ┆ wins ┆ losses ┆ ot_losses ┆ points ┆ goals_for ┆ goals_against │
+    │ ---              ┆ ---          ┆ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---       ┆ ---           │
+    │ str              ┆ str          ┆ str  ┆ str    ┆ str       ┆ i64    ┆ str       ┆ str           │
+    ╞══════════════════╪══════════════╪══════╪════════╪═══════════╪════════╪═══════════╪═══════════════╡
+    │ Val-d'Or         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Niagara IceDogs  ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ North Bay        ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Battalion        ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Brampton         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Steelheads       ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Sudbury Wolves   ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    └──────────────────┴──────────────┴──────┴────────┴───────────┴────────┴───────────┴───────────────┘
 
 
 
@@ -296,7 +299,7 @@ pl.DataFrame(rows)
     │ str    ┆ i64    ┆ i64   │
     ╞════════╪════════╪═══════╡
     │ AHL    ┆ 2026   ┆ 10000 │
-    │ OHL    ┆ 2026   ┆ 10000 │
+    │ OHL    ┆ 2027   ┆ 10000 │
     │ WHL    ┆ 2026   ┆ 10000 │
     │ QMJHL  ┆ 2027   ┆ 10000 │
     └────────┴────────┴───────┘

@@ -207,7 +207,7 @@ out
     │ blocked-shot  ┆ 32     │
     │ giveaway      ┆ 22     │
     │ takeaway      ┆ 19     │
-    │ goal          ┆ 3      │
+    │ penalty       ┆ 3      │
     │ period-end    ┆ 3      │
     └───────────────┴────────┘
 
@@ -847,6 +847,8 @@ out
 ```
 
     ✅ 2023 draft round 1
+
+
 
 
 

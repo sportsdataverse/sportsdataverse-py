@@ -328,11 +328,11 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
     │ Marie-Philip ┆ Poulin    ┆ 11    ┆ 14      ┆ 25     │
     │ Sarah        ┆ Nurse     ┆ 11    ┆ 13      ┆ 24     │
     │ Alex         ┆ Carpenter ┆ 8     ┆ 15      ┆ 23     │
-    │ Emma         ┆ Maltais   ┆ 5     ┆ 16      ┆ 21     │
     │ Taylor       ┆ Heise     ┆ 9     ┆ 12      ┆ 21     │
     │ Ella         ┆ Shelton   ┆ 7     ┆ 14      ┆ 21     │
-    │ Brianne      ┆ Jenner    ┆ 9     ┆ 11      ┆ 20     │
+    │ Emma         ┆ Maltais   ┆ 5     ┆ 16      ┆ 21     │
     │ Erin         ┆ Ambrose   ┆ 4     ┆ 16      ┆ 20     │
+    │ Brianne      ┆ Jenner    ┆ 9     ┆ 11      ┆ 20     │
     │ Grace        ┆ Zumwinkle ┆ 12    ┆ 8       ┆ 20     │
     └──────────────┴───────────┴───────┴─────────┴────────┘
 
@@ -586,9 +586,9 @@ Not every contribution shows up on the scoresheet. Sum hits and blocked shots fr
     │ Blayre     ┆ Turnbull   ┆ C        ┆ 62   ┆ 14     ┆ 76               │
     │ Allie      ┆ Munroe     ┆ LD       ┆ 44   ┆ 25     ┆ 69               │
     │ Jessica    ┆ DiGirolamo ┆ LD       ┆ 36   ┆ 31     ┆ 67               │
-    │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
-    │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
     │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
+    │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
+    │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
     │ Kelly      ┆ Pannek     ┆ C        ┆ 28   ┆ 30     ┆ 58               │
     └────────────┴────────────┴──────────┴──────┴────────┴──────────────────┘
 
@@ -660,11 +660,11 @@ top_infractions
     │ Abby           ┆ Roque         ┆ 31  ┆ 10        │
     │ Jesse          ┆ Compher       ┆ 25  ┆ 7         │
     │ Megan          ┆ Keller        ┆ 22  ┆ 11        │
-    │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
     │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
+    │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
+    │ Renata         ┆ Fast          ┆ 18  ┆ 9         │
     │ Sarah          ┆ Nurse         ┆ 18  ┆ 9         │
-    │ Jade           ┆ Downie-Landry ┆ 18  ┆ 9         │
-    │ Lee            ┆ Stecklein     ┆ 18  ┆ 9         │
+    │ Emma           ┆ Maltais       ┆ 18  ┆ 9         │
     └────────────────┴───────────────┴─────┴───────────┘
 
 
@@ -726,14 +726,14 @@ goals_by_period
     ╞═══════════════════╪══════════════════╪═══════╡
     │ Natalie           ┆ Spooner          ┆ 21    │
     │ Grace             ┆ Zumwinkle        ┆ 12    │
-    │ Sarah             ┆ Nurse            ┆ 11    │
     │ Marie-Philip      ┆ Poulin           ┆ 11    │
-    │ Daryl             ┆ Watts            ┆ 10    │
+    │ Sarah             ┆ Nurse            ┆ 11    │
     │ Laura             ┆ Stacey           ┆ 10    │
-    │ Michela           ┆ Cava             ┆ 9     │
-    │ Gabbie            ┆ Hughes           ┆ 9     │
+    │ Daryl             ┆ Watts            ┆ 10    │
     │ Taylor            ┆ Heise            ┆ 9     │
     │ Brianne           ┆ Jenner           ┆ 9     │
+    │ Gabbie            ┆ Hughes           ┆ 9     │
+    │ Michela           ┆ Cava             ┆ 9     │
     └───────────────────┴──────────────────┴───────┘
 
 
@@ -759,22 +759,22 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
 
 
     shape: (10, 3)
-    ┌──────────────┬───────────┬─────────────┐
-    │ first_name   ┆ last_name ┆ first_stars │
-    │ ---          ┆ ---       ┆ ---         │
-    │ str          ┆ str       ┆ u32         │
-    ╞══════════════╪═══════════╪═════════════╡
-    │ Natalie      ┆ Spooner   ┆ 7           │
-    │ Kristen      ┆ Campbell  ┆ 4           │
-    │ Nicole       ┆ Hensley   ┆ 4           │
-    │ Sarah        ┆ Nurse     ┆ 3           │
-    │ Marie-Philip ┆ Poulin    ┆ 3           │
-    │ Gabbie       ┆ Hughes    ┆ 3           │
-    │ Hilary       ┆ Knight    ┆ 3           │
-    │ Susanna      ┆ Tapani    ┆ 3           │
-    │ Alex         ┆ Carpenter ┆ 3           │
-    │ Michela      ┆ Cava      ┆ 2           │
-    └──────────────┴───────────┴─────────────┘
+    ┌──────────────┬───────────────┬─────────────┐
+    │ first_name   ┆ last_name     ┆ first_stars │
+    │ ---          ┆ ---           ┆ ---         │
+    │ str          ┆ str           ┆ u32         │
+    ╞══════════════╪═══════════════╪═════════════╡
+    │ Natalie      ┆ Spooner       ┆ 7           │
+    │ Nicole       ┆ Hensley       ┆ 4           │
+    │ Kristen      ┆ Campbell      ┆ 4           │
+    │ Alex         ┆ Carpenter     ┆ 3           │
+    │ Gabbie       ┆ Hughes        ┆ 3           │
+    │ Sarah        ┆ Nurse         ┆ 3           │
+    │ Hilary       ┆ Knight        ┆ 3           │
+    │ Marie-Philip ┆ Poulin        ┆ 3           │
+    │ Susanna      ┆ Tapani        ┆ 3           │
+    │ Jade         ┆ Downie-Landry ┆ 2           │
+    └──────────────┴───────────────┴─────────────┘
 
 
 
@@ -1033,8 +1033,8 @@ out
     │ ---        ┆ ---       ┆ ---         ┆ ---        │
     │ str        ┆ str       ┆ i64         ┆ u32        │
     ╞════════════╪═══════════╪═════════════╪════════════╡
-    │ Kristen    ┆ Campbell  ┆ 3600        ┆ 3          │
     │ Nicole     ┆ Hensley   ┆ 3600        ┆ 3          │
+    │ Kristen    ┆ Campbell  ┆ 3600        ┆ 3          │
     │ Jocelyne   ┆ Larocque  ┆ 1677        ┆ 29         │
     │ Renata     ┆ Fast      ┆ 1674        ┆ 28         │
     │ Sophie     ┆ Jaques    ┆ 1402        ┆ 26         │

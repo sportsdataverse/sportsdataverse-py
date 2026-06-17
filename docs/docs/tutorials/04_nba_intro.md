@@ -353,7 +353,7 @@ else:
 out
 ```
 
-    ✅ player boxscore release — 34853 rows
+    ✅ player boxscore release — 34883 rows
 
 
 
@@ -368,7 +368,7 @@ out
     │ Luka Doncic             ┆ LAL               ┆ 64  ┆ 33.5 ┆ 7.7  ┆ 8.3  │
     │ Shai Gilgeous-Alexander ┆ OKC               ┆ 83  ┆ 30.5 ┆ 4.0  ┆ 6.8  │
     │ Jaylen Brown            ┆ BOS               ┆ 78  ┆ 28.4 ┆ 6.8  ┆ 5.0  │
-    │ Kawhi Leonard           ┆ LAC               ┆ 66  ┆ 27.8 ┆ 6.4  ┆ 3.6  │
+    │ Anthony Edwards         ┆ MIN               ┆ 71  ┆ 27.8 ┆ 5.1  ┆ 3.6  │
     │ …                       ┆ …                 ┆ …   ┆ …    ┆ …    ┆ …    │
     │ Giannis Antetokounmpo   ┆ MIL               ┆ 36  ┆ 27.6 ┆ 9.8  ┆ 5.4  │
     │ Donovan Mitchell        ┆ CLE               ┆ 88  ┆ 27.5 ┆ 4.6  ┆ 5.1  │
@@ -404,7 +404,7 @@ else:
 out
 ```
 
-    ✅ team boxscore release — 2650 rows
+    ✅ team boxscore release — 2652 rows
 
 
 
@@ -418,8 +418,8 @@ out
     ╞═══════════════════╪═════╪═════════╪═════════╪══════╡
     │ OKC               ┆ 97  ┆ 118.5   ┆ 108.0   ┆ 10.5 │
     │ STARS             ┆ 3   ┆ 41.3    ┆ 32.7    ┆ 8.6  │
-    │ SA                ┆ 105 ┆ 118.4   ┆ 110.4   ┆ 8.0  │
-    │ NY                ┆ 101 ┆ 116.6   ┆ 108.6   ┆ 8.0  │
+    │ NY                ┆ 102 ┆ 116.4   ┆ 108.4   ┆ 8.0  │
+    │ SA                ┆ 106 ┆ 118.2   ┆ 110.2   ┆ 8.0  │
     │ …                 ┆ …   ┆ …       ┆ …       ┆ …    │
     │ HOU               ┆ 88  ┆ 114.1   ┆ 109.4   ┆ 4.7  │
     │ DEN               ┆ 88  ┆ 121.1   ┆ 116.6   ┆ 4.5  │
@@ -504,7 +504,7 @@ else:
 out
 ```
 
-    ✅ player boxscore release — 34853 rows
+    ✅ player boxscore release — 34883 rows
 
 
 
@@ -518,12 +518,12 @@ out
     ╞══════════════════════╪═══════════════════╪════════════════╡
     │ Karl-Anthony Towns   ┆ NY                ┆ 69             │
     │ Nikola Jokic         ┆ DEN               ┆ 61             │
-    │ Victor Wembanyama    ┆ SA                ┆ 53             │
+    │ Victor Wembanyama    ┆ SA                ┆ 54             │
     │ Jalen Johnson        ┆ ATL               ┆ 51             │
     │ …                    ┆ …                 ┆ …              │
     │ Donovan Clingan      ┆ POR               ┆ 37             │
-    │ Rudy Gobert          ┆ MIN               ┆ 37             │
     │ Alperen Sengun       ┆ HOU               ┆ 37             │
+    │ Rudy Gobert          ┆ MIN               ┆ 37             │
     │ Bam Adebayo          ┆ MIA               ┆ 35             │
     └──────────────────────┴───────────────────┴────────────────┘
 
@@ -617,7 +617,7 @@ else:
 out
 ```
 
-    ✅ shots release — 298190 rows
+    ✅ shots release — 298411 rows
 
 
 
@@ -730,7 +730,7 @@ out
     │ Chicago Bulls         ┆ 10             │
     │ Indiana Pacers        ┆ 9              │
     │ …                     ┆ …              │
-    │ Utah Jazz             ┆ 8              │
+    │ Washington Wizards    ┆ 8              │
     │ New Orleans Pelicans  ┆ 6              │
     │ Golden State Warriors ┆ 4              │
     │ Miami Heat            ┆ 4              │
@@ -905,7 +905,7 @@ cols = ['id', 'date', 'home_display_name', 'away_display_name', 'home_score', 'a
  if sched is not None and sched.height else 'schedule release unavailable')
 ```
 
-    ✅ schedule release — 1332 rows
+    ✅ schedule release — 1330 rows
 
 
 
@@ -917,11 +917,11 @@ cols = ['id', 'date', 'home_display_name', 'away_display_name', 'home_score', 'a
     │ ---       ┆ ---               ┆ ---               ┆ ---               ┆ ---        ┆ ---        │
     │ i32       ┆ str               ┆ str               ┆ str               ┆ i32        ┆ i32        │
     ╞═══════════╪═══════════════════╪═══════════════════╪═══════════════════╪════════════╪════════════╡
-    │ 401859969 ┆ 2026-06-20T00:30Z ┆ San Antonio Spurs ┆ New York Knicks   ┆ 0          ┆ 0          │
-    │ 401859968 ┆ 2026-06-17T00:30Z ┆ New York Knicks   ┆ San Antonio Spurs ┆ 0          ┆ 0          │
-    │ 401859967 ┆ 2026-06-14T00:30Z ┆ San Antonio Spurs ┆ New York Knicks   ┆ 0          ┆ 0          │
+    │ 401859967 ┆ 2026-06-14T00:30Z ┆ San Antonio Spurs ┆ New York Knicks   ┆ 90         ┆ 94         │
     │ 401859966 ┆ 2026-06-11T00:30Z ┆ New York Knicks   ┆ San Antonio Spurs ┆ 107        ┆ 106        │
     │ 401859965 ┆ 2026-06-09T00:30Z ┆ New York Knicks   ┆ San Antonio Spurs ┆ 111        ┆ 115        │
+    │ 401859964 ┆ 2026-06-06T00:30Z ┆ San Antonio Spurs ┆ New York Knicks   ┆ 104        ┆ 105        │
+    │ 401859963 ┆ 2026-06-04T00:30Z ┆ San Antonio Spurs ┆ New York Knicks   ┆ 95         ┆ 105        │
     └───────────┴───────────────────┴───────────────────┴───────────────────┴────────────┴────────────┘
 
 

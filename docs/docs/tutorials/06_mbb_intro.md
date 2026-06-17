@@ -396,10 +396,10 @@ print("player box rows:", pbox.shape)
     │ Tyler Thomas         ┆ Hofstra                 ┆ 33  ┆ 22.5 │
     │ Xavier Johnson       ┆ S Illinois              ┆ 32  ┆ 22.2 │
     │ David Jones          ┆ Memphis                 ┆ 32  ┆ 21.8 │
-    │ Tyson Acuff          ┆ E Michigan              ┆ 27  ┆ 21.7 │
     │ Dalton Knecht        ┆ Tennessee               ┆ 36  ┆ 21.7 │
-    │ Jordan Sears         ┆ UT Martin               ┆ 32  ┆ 21.6 │
+    │ Tyson Acuff          ┆ E Michigan              ┆ 27  ┆ 21.7 │
     │ Tucker DeVries       ┆ Drake                   ┆ 34  ┆ 21.6 │
+    │ Jordan Sears         ┆ UT Martin               ┆ 32  ┆ 21.6 │
     └──────────────────────┴─────────────────────────┴─────┴──────┘
 
 
@@ -546,8 +546,8 @@ Same team-box parquet, different question: sum makes and attempts across the sea
     │ Colorado Buffaloes      ┆ 254.0 ┆ 649.0 ┆ 39.1      │
     │ Northwestern Wildcats   ┆ 278.0 ┆ 713.0 ┆ 39.0      │
     │ Baylor Bears            ┆ 301.0 ┆ 773.0 ┆ 38.9      │
-    │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
     │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
+    │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
     └─────────────────────────┴───────┴───────┴───────────┘
 
 
@@ -594,8 +594,8 @@ pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
     │ Ryan Kalkbrenner     ┆ CREI              ┆ 35  ┆ 604.0 ┆ 68.9   │
     │ Cedric Coward        ┆ EWU               ┆ 32  ┆ 494.0 ┆ 68.3   │
     │ Jaylin Williams      ┆ AUB               ┆ 34  ┆ 422.0 ┆ 68.2   │
-    │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
     │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
+    │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
     └──────────────────────┴───────────────────┴─────┴───────┴────────┘
 
 
@@ -627,8 +627,6 @@ out
 
     ✅ conferences
     some conferences: ['NCAA Division I', 'Non-NCAA Division I']
-
-
     ✅ standings 2024
 
 

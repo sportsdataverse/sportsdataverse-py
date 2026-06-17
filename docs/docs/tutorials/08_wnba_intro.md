@@ -148,7 +148,7 @@ aces = safe('Aces roster', lambda: wnba.espn_wnba_team_roster(team_id=17, season
     │ 2529122    ┆ Chelsea Gray     ┆ 12     ┆ G                     ┆ 5' 11"         ┆ 33  │
     │ …          ┆ …                ┆ …      ┆ …                     ┆ …              ┆ …   │
     │ 4398776    ┆ NaLyssa Smith    ┆ 3      ┆ F                     ┆ 6' 4"          ┆ 25  │
-    │ 3099736    ┆ Stephanie Talbot ┆ 7      ┆ F                     ┆ 6' 2"          ┆ 31  │
+    │ 3099736    ┆ Stephanie Talbot ┆ 7      ┆ F                     ┆ 6' 2"          ┆ 32  │
     │ 3142086    ┆ Brianna Turner   ┆ 21     ┆ F                     ┆ 6' 3"          ┆ 29  │
     │ 3149391    ┆ A'ja Wilson      ┆ 22     ┆ C                     ┆ 6' 4"          ┆ 29  │
     │ 4065870    ┆ Jackie Young     ┆ 0      ┆ G                     ┆ 6' 0"          ┆ 28  │
@@ -611,8 +611,8 @@ double_doubles
     │ ---                  ┆ ---               ┆ ---            ┆ ---            │
     │ str                  ┆ str               ┆ u32            ┆ u32            │
     ╞══════════════════════╪═══════════════════╪════════════════╪════════════════╡
-    │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
     │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
+    │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
     │ Breanna Stewart      ┆ NY                ┆ 22             ┆ 0              │
     │ Tina Charles         ┆ ATL               ┆ 21             ┆ 1              │
     │ Napheesa Collier     ┆ MIN               ┆ 21             ┆ 0              │
@@ -845,21 +845,21 @@ position_mix
 
     shape: (12, 4)
     ┌───────────────────┬─────┬─────┬─────┐
-    │ team_abbreviation ┆ F   ┆ G   ┆ C   │
+    │ team_abbreviation ┆ G   ┆ F   ┆ C   │
     │ ---               ┆ --- ┆ --- ┆ --- │
     │ str               ┆ u32 ┆ u32 ┆ u32 │
     ╞═══════════════════╪═════╪═════╪═════╡
-    │ ATL               ┆ 4   ┆ 7   ┆ 1   │
-    │ CHI               ┆ 3   ┆ 9   ┆ 2   │
-    │ CONNECTICU        ┆ 5   ┆ 8   ┆ 2   │
-    │ DALLAS            ┆ 6   ┆ 7   ┆ 1   │
-    │ IND               ┆ 3   ┆ 8   ┆ 2   │
+    │ ATL               ┆ 7   ┆ 4   ┆ 1   │
+    │ CHI               ┆ 9   ┆ 3   ┆ 2   │
+    │ CONNECTICU        ┆ 8   ┆ 5   ┆ 2   │
+    │ DALLAS            ┆ 7   ┆ 6   ┆ 1   │
+    │ IND               ┆ 8   ┆ 3   ┆ 2   │
     │ …                 ┆ …   ┆ …   ┆ …   │
-    │ MIN               ┆ 8   ┆ 5   ┆ 1   │
-    │ NY                ┆ 5   ┆ 8   ┆ 2   │
+    │ MIN               ┆ 5   ┆ 8   ┆ 1   │
+    │ NY                ┆ 8   ┆ 5   ┆ 2   │
     │ PHX               ┆ 7   ┆ 7   ┆ 1   │
-    │ SEA               ┆ 5   ┆ 6   ┆ 3   │
-    │ WSH               ┆ 3   ┆ 9   ┆ 2   │
+    │ SEA               ┆ 6   ┆ 5   ┆ 3   │
+    │ WSH               ┆ 9   ┆ 3   ┆ 2   │
     └───────────────────┴─────┴─────┴─────┘
 
 

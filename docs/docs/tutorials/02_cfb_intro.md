@@ -249,8 +249,6 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
 ```
 
     ✅ load_cfb_pbp 2023
-
-
     ✅ load_cfb_pbp 2022
 
 
@@ -505,10 +503,10 @@ out
     │ LB       ┆ 18      │
     │ DE       ┆ 12      │
     │ DL       ┆ 12      │
-    │ RB       ┆ 11      │
     │ TE       ┆ 11      │
-    │ QB       ┆ 6       │
+    │ RB       ┆ 11      │
     │ PK       ┆ 6       │
+    │ QB       ┆ 6       │
     └──────────┴─────────┘
 
 
@@ -607,15 +605,15 @@ standings_tbl.head(10)
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
     │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
-    │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Colorado School Of Mines ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Cortland                 ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Colorado School Of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Randolph-Macon           ┆ 13   ┆ 1      ┆ 0.929   │
-    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Wartburg                 ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
 
 
@@ -713,9 +711,9 @@ gamelog.head(16) if gamelog.height else f'no games found for {team}'
     │ ---  ┆ ---           ┆ ---     ┆ ---         ┆ ---    ┆ ---          │
     │ i32  ┆ str           ┆ i32     ┆ i32         ┆ i32    ┆ bool         │
     ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
-    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
-    │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
     │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
+    │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
+    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
     │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
     │ …    ┆ …             ┆ …       ┆ …           ┆ …      ┆ …            │
@@ -950,8 +948,8 @@ out
     │ Northwestern State@LSU          ┆ LSU  ┆ -51.6      │
     │ Murray State@Georgia            ┆ UGA  ┆ -49.2      │
     │ Wofford@Clemson                 ┆ CLE  ┆ -48.5      │
-    │ Oklahoma Panhandle State@Sam H… ┆ SHS  ┆ -47.5      │
     │ Butler@North Dakota State       ┆ NDS  ┆ -47.5      │
+    │ Oklahoma Panhandle State@Sam H… ┆ SHS  ┆ -47.5      │
     │ Idaho@Penn State                ┆ PSU  ┆ -47.3      │
     └─────────────────────────────────┴──────┴────────────┘
 

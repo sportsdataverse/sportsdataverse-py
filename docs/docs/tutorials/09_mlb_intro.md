@@ -19,31 +19,31 @@ will feel right at home. Let's play ball! ⚾
 
 ## 🧰 The toolbox
 
-We **lead with the premium sources** — the **MLB Stats API** (`mlb_api_*`,
-backed by `statsapi.mlb.com`) and **Statcast** (`statcast_*`, from Baseball
+We **lead with the premium sources** — the **MLB Stats API** (`mlb_*`,
+backed by `statsapi.mlb.com`) and the **comprehensive Statcast** surface
+(`mlb_statcast_*`, from Baseball
 Savant). ESPN (`espn_mlb_*`) is a handy secondary path. Click any name for the
 full reference:
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`mlb_api_schedule`](../mlb/reference/additional.md#mlb_api_schedule) · [`parse_mlb_api_schedule`](../mlb/reference/additional.md#mlb_api_schedule) | Games for a date / range — one row per game (with `game_pk`) | 🟢 **MLB Stats API** |
-| [`mlb_api_teams`](../mlb/reference/additional.md#mlb_api_teams) · [`parse_mlb_api_teams`](../mlb/reference/additional.md#mlb_api_teams) | Every club — one row per team | 🟢 **MLB Stats API** |
-| [`mlb_api_standings`](../mlb/reference/additional.md#mlb_api_standings) · [`parse_mlb_api_standings`](../mlb/reference/additional.md#mlb_api_standings) | Division standings — wins, losses, run diff | 🟢 **MLB Stats API** |
-| [`mlb_api_team_roster`](../mlb/reference/mlb_api.md#mlb_api_team_roster) | A team's roster — one row per player | 🟢 **MLB Stats API** |
-| [`mlb_api_person`](../mlb/reference/mlb_api.md#mlb_api_person) | A player's bio (one tidy row) | 🟢 **MLB Stats API** |
-| [`mlb_api_person_stats`](../mlb/reference/additional.md#mlb_api_person_stats) · [`parse_mlb_api_person_stats`](../mlb/reference/additional.md#mlb_api_person_stats) | A player's season stat splits | 🟢 **MLB Stats API** |
-| [`mlb_api_boxscore`](../mlb/reference/mlb_api.md#mlb_api_boxscore) | Full game box score | 🟢 **MLB Stats API** |
-| [`mlb_api_play_by_play`](../mlb/reference/mlb_api.md#mlb_api_play_by_play) | Plate-appearance-level play-by-play | 🟢 **MLB Stats API** |
-| [`mlb_api_stats_leaders`](../mlb/reference/additional.md#mlb_api_stats_leaders) | League leaders for any stat (HR, AVG, ERA, …) | 🟢 **MLB Stats API** |
-| [`mlb_api_win_probability`](../mlb/reference/mlb_api.md#mlb_api_win_probability) | Per-play win probability + WPA for a game | 🟢 **MLB Stats API** |
-| [`mlb_api_awards`](../mlb/reference/mlb_api.md#mlb_api_awards) · [`mlb_api_award_recipients`](../mlb/reference/mlb_api.md#mlb_api_award_recipients) | Award catalog + season winners (MVP, Cy Young, …) | 🟢 **MLB Stats API** |
-| [`mlb_api_draft`](../mlb/reference/mlb_api.md#mlb_api_draft) | Amateur draft board — one row per pick | 🟢 **MLB Stats API** |
-| [`statcast_search`](../mlb/reference/additional.md#statcast_search) | Every pitch matching a filter — 100+ columns/pitch | 🔵 **Statcast** |
-| [`statcast_leaderboard_sprint_speed`](../mlb/reference/additional.md#statcast_leaderboard_sprint_speed) | Pre-aggregated sprint-speed leaderboard | 🔵 **Statcast** |
-| [`statcast_leaderboard_bat_tracking`](../mlb/reference/additional.md#statcast_leaderboard_bat_tracking) | Bat-speed / swing-tracking leaderboard | 🔵 **Statcast** |
-| [`statcast_leaderboard_expected_statistics`](../mlb/reference/additional.md#statcast_leaderboard_expected_statistics) | Expected stats (xBA/xSLG/xwOBA) vs. actual | 🔵 **Statcast** |
-| [`statcast_leaderboard_outs_above_average`](../mlb/reference/additional.md#statcast_leaderboard_outs_above_average) | Fielding: Outs Above Average leaderboard | 🔵 **Statcast** |
-| [`statcast_gamefeed`](../mlb/reference/additional.md#statcast_gamefeed) | Savant single-game feed | 🔵 **Statcast** |
+| [`mlb_schedule`](../mlb/reference/additional.md#mlb_schedule) · [`parse_mlb_api_schedule`](../mlb/reference/additional.md#mlb_schedule) | Games for a date / range — one row per game (with `game_pk`) | 🟢 **MLB Stats API** |
+| [`mlb_teams`](../mlb/reference/additional.md#mlb_teams) · [`parse_mlb_api_teams`](../mlb/reference/additional.md#mlb_teams) | Every club — one row per team | 🟢 **MLB Stats API** |
+| [`mlb_standings`](../mlb/reference/additional.md#mlb_standings) · [`parse_mlb_api_standings`](../mlb/reference/additional.md#mlb_standings) | Division standings — wins, losses, run diff | 🟢 **MLB Stats API** |
+| [`mlb_team_roster`](../mlb/reference/mlb_api.md#mlb_team_roster) | A team's roster — one row per player | 🟢 **MLB Stats API** |
+| [`mlb_person`](../mlb/reference/mlb_api.md#mlb_person) | A player's bio (one tidy row) | 🟢 **MLB Stats API** |
+| [`mlb_person_stats`](../mlb/reference/additional.md#mlb_person_stats) · [`parse_mlb_api_person_stats`](../mlb/reference/additional.md#mlb_person_stats) | A player's season stat splits | 🟢 **MLB Stats API** |
+| [`mlb_boxscore`](../mlb/reference/mlb_api.md#mlb_boxscore) | Full game box score | 🟢 **MLB Stats API** |
+| [`mlb_play_by_play`](../mlb/reference/mlb_api.md#mlb_play_by_play) | Plate-appearance-level play-by-play | 🟢 **MLB Stats API** |
+| [`mlb_stats_leaders`](../mlb/reference/additional.md#mlb_stats_leaders) | League leaders for any stat (HR, AVG, ERA, …) | 🟢 **MLB Stats API** |
+| [`mlb_win_probability`](../mlb/reference/mlb_api.md#mlb_win_probability) | Per-play win probability + WPA for a game | 🟢 **MLB Stats API** |
+| [`mlb_awards`](../mlb/reference/mlb_api.md#mlb_awards) · [`mlb_award_recipients`](../mlb/reference/mlb_api.md#mlb_award_recipients) | Award catalog + season winners (MVP, Cy Young, …) | 🟢 **MLB Stats API** |
+| [`mlb_draft`](../mlb/reference/mlb_api.md#mlb_draft) | Amateur draft board — one row per pick | 🟢 **MLB Stats API** |
+| [`mlb_statcast_search`](../mlb/reference/additional.md#mlb_statcast_search) | Every pitch matching a filter — ~110 cols/pitch; auto date-chunks past the 25k cap; friendly filters (`batters_lookup`, `pitch_type`, `at_bat_result`, …) | 🔵 **Statcast** |
+| [`mlb_statcast_search_minors`](../mlb/reference/additional.md#mlb_statcast_search_minors) · [`mlb_statcast_search_wbc`](../mlb/reference/additional.md#mlb_statcast_search_wbc) | Same pitch search for MiLB and the World Baseball Classic | 🔵 **Statcast** |
+| `mlb_statcast_leaderboard_*` (37 of them) — e.g. [`…_sprint_speed`](../mlb/reference/mlb_statcast.md#mlb_statcast_leaderboard_sprint_speed), [`…_expected_stats`](../mlb/reference/mlb_statcast.md#mlb_statcast_leaderboard_expected_stats), [`…_bat_tracking`](../mlb/reference/mlb_statcast.md#mlb_statcast_leaderboard_bat_tracking), [`…_outs_above_average`](../mlb/reference/mlb_statcast.md#mlb_statcast_leaderboard_outs_above_average) | Every Savant leaderboard: expected stats, sprint speed, bat tracking, pitch arsenals/movement/tempo, OAA, arm strength, catcher framing/blocking/throwing, baserunning, park factors, … | 🔵 **Statcast** |
+| [`mlb_statcast_gamefeed`](../mlb/reference/mlb_statcast.md#mlb_statcast_gamefeed) | Savant single-game feed — one tidy row per pitch | 🔵 **Statcast** |
+| [`mlb_statcast_player`](../mlb/reference/additional.md#mlb_statcast_player) | A player's Savant page metrics | 🔵 **Statcast** |
 | [`espn_mlb_teams`](../mlb/reference/additional.md#espn_mlb_teams) · [`espn_mlb_schedule`](../mlb/reference/additional.md#espn_mlb_schedule) | ESPN teams / schedule (wide frames) | ⚪ ESPN |
 | [`most_recent_mlb_season`](../mlb/reference/additional.md#most_recent_mlb_season) | Current season helper | ⚪ helper |
 
@@ -98,9 +98,9 @@ YANKEES_ID = 147            # New York Yankees team_id
 
 ## 📅 The schedule (MLB Stats API)
 
-[`mlb_api_schedule`](../mlb/reference/additional.md#mlb_api_schedule) returns the
+[`mlb_schedule`](../mlb/reference/additional.md#mlb_schedule) returns the
 raw JSON `dict`; its partner
-[`parse_mlb_api_schedule`](../mlb/reference/additional.md#mlb_api_schedule)
+[`parse_mlb_api_schedule`](../mlb/reference/additional.md#mlb_schedule)
 flattens it to **one row per game**. The most important column is `game_pk` —
 that's the id you feed to the box score and play-by-play endpoints. Pass a
 single `date=`, or a `start_date`/`end_date` range, `team_id`, or `season`.
@@ -109,7 +109,7 @@ single `date=`, or a `start_date`/`end_date` range, `team_id`, or `season`.
 ```python
 schedule = safe(
     "schedule",
-    lambda: mlb.parse_mlb_api_schedule(mlb.mlb_api_schedule(date=SAMPLE_DATE)),
+    lambda: mlb.parse_mlb_api_schedule(mlb.mlb_schedule(date=SAMPLE_DATE)),
 )
 cols = ["game_pk", "status_detailed_state",
         "teams_away_team_name", "teams_away_score",
@@ -143,9 +143,9 @@ cols = ["game_pk", "status_detailed_state",
 
 ## 🏆 Standings (MLB Stats API)
 
-[`mlb_api_standings`](../mlb/reference/additional.md#mlb_api_standings) covers
+[`mlb_standings`](../mlb/reference/additional.md#mlb_standings) covers
 both leagues by default (`league_id="103,104"`).
-[`parse_mlb_api_standings`](../mlb/reference/additional.md#mlb_api_standings)
+[`parse_mlb_api_standings`](../mlb/reference/additional.md#mlb_standings)
 returns one row per team with wins/losses, division rank, and winning
 percentage.
 
@@ -153,7 +153,7 @@ percentage.
 ```python
 standings = safe(
     "standings",
-    lambda: mlb.parse_mlb_api_standings(mlb.mlb_api_standings(season=SAMPLE_SEASON)),
+    lambda: mlb.parse_mlb_api_standings(mlb.mlb_standings(season=SAMPLE_SEASON)),
 )
 keep = ["team_name", "standings_division_name", "wins", "losses",
         "winning_percentage", "division_rank"]
@@ -190,25 +190,23 @@ keep = ["team_name", "standings_division_name", "wins", "losses",
 
 ## 🧢 Teams & rosters (MLB Stats API)
 
-[`mlb_api_teams`](../mlb/reference/additional.md#mlb_api_teams) +
-[`parse_mlb_api_teams`](../mlb/reference/additional.md#mlb_api_teams) lists every
+[`mlb_teams`](../mlb/reference/additional.md#mlb_teams) +
+[`parse_mlb_api_teams`](../mlb/reference/additional.md#mlb_teams) lists every
 club — grab a `team_id` here.
-[`mlb_api_team_roster`](../mlb/reference/mlb_api.md#mlb_api_team_roster) then
+[`mlb_team_roster`](../mlb/reference/mlb_api.md#mlb_team_roster) then
 returns a tidy frame directly (one row per player).
 
 
 ```python
 teams = safe(
     "teams",
-    lambda: mlb.parse_mlb_api_teams(mlb.mlb_api_teams(season=SAMPLE_SEASON)),
+    lambda: mlb.parse_mlb_api_teams(mlb.mlb_teams(season=SAMPLE_SEASON)),
 )
 (teams.select(["id", "name", "abbreviation", "location_name", "team_name"]).head()
  if teams is not None else "teams unavailable right now")
 ```
 
     ✅ teams
-
-
 
 
 
@@ -233,7 +231,7 @@ teams = safe(
 ```python
 roster = safe(
     "Yankees roster",
-    lambda: mlb.mlb_api_team_roster(team_id=YANKEES_ID, season=SAMPLE_SEASON),
+    lambda: mlb.mlb_team_roster(team_id=YANKEES_ID, season=SAMPLE_SEASON),
 )
 rcols = ["jersey_number", "person_id", "person_full_name",
          "position_abbreviation", "status_description"]
@@ -264,15 +262,15 @@ rcols = ["jersey_number", "person_id", "person_full_name",
 
 ## 🧍 Player bio & season stats (MLB Stats API)
 
-[`mlb_api_person`](../mlb/reference/mlb_api.md#mlb_api_person) returns a one-row
-bio frame. [`mlb_api_person_stats`](../mlb/reference/additional.md#mlb_api_person_stats)
+[`mlb_person`](../mlb/reference/mlb_api.md#mlb_person) returns a one-row
+bio frame. [`mlb_person_stats`](../mlb/reference/additional.md#mlb_person_stats)
 returns the raw stat-split `dict`;
-[`parse_mlb_api_person_stats`](../mlb/reference/additional.md#mlb_api_person_stats)
+[`parse_mlb_api_person_stats`](../mlb/reference/additional.md#mlb_person_stats)
 flattens it. Our running example is Aaron Judge (`person_id=592450`).
 
 
 ```python
-bio = safe("Judge bio", lambda: mlb.mlb_api_person(person_id=JUDGE_ID))
+bio = safe("Judge bio", lambda: mlb.mlb_person(person_id=JUDGE_ID))
 bcols = ["id", "full_name", "primary_number", "birth_date",
          "height", "weight", "mlb_debut_date"]
 (bio.select([c for c in bcols if c in bio.columns])
@@ -301,7 +299,7 @@ bcols = ["id", "full_name", "primary_number", "birth_date",
 hitting = safe(
     "Judge 2024 hitting",
     lambda: mlb.parse_mlb_api_person_stats(
-        mlb.mlb_api_person_stats(person_id=JUDGE_ID, stats="season",
+        mlb.mlb_person_stats(person_id=JUDGE_ID, stats="season",
                                  group="hitting", season=SAMPLE_SEASON)
     ),
 )
@@ -332,7 +330,7 @@ scols = ["season", "stat_games_played", "stat_home_runs", "stat_rbi",
 ## 🎯 Pitch-level Statcast (Baseball Savant)
 
 Now the fun part — **every single pitch**.
-[`statcast_search`](../mlb/reference/additional.md#statcast_search) pulls each
+[`mlb_statcast_search`](../mlb/reference/additional.md#mlb_statcast_search) pulls each
 pitch matching your filter, with 100+ columns (velocity, spin, launch angle,
 expected stats). Keep windows **small** (one player, one game, or a 1–2 day
 slice) — a full season is millions of pitches. Here's every pitch Aaron Judge
@@ -342,7 +340,7 @@ saw over a two-day window.
 ```python
 pitches = safe(
     "Judge pitches (2-day)",
-    lambda: mlb.statcast_search(start_date="2024-07-01", end_date="2024-07-02",
+    lambda: mlb.mlb_statcast_search(start_dt="2024-07-01", end_dt="2024-07-02",
                                 batters_lookup=JUDGE_ID),
 )
 if pitches is not None and pitches.height:
@@ -366,13 +364,13 @@ out
     │ game_date  ┆ player_nam ┆ pitch_type ┆ release_s ┆ launch_sp ┆ launch_an ┆ events    ┆ descripti │
     │ ---        ┆ e          ┆ ---        ┆ peed      ┆ eed       ┆ gle       ┆ ---       ┆ on        │
     │ str        ┆ ---        ┆ str        ┆ ---       ┆ ---       ┆ ---       ┆ str       ┆ ---       │
-    │            ┆ str        ┆            ┆ f64       ┆ f64       ┆ i64       ┆           ┆ str       │
+    │            ┆ str        ┆            ┆ f64       ┆ f64       ┆ f64       ┆           ┆ str       │
     ╞════════════╪════════════╪════════════╪═══════════╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 2024-07-02 ┆ Judge,     ┆ FC         ┆ 97.1      ┆ 91.0      ┆ 19        ┆ single    ┆ hit_into_ │
+    │ 2024-07-02 ┆ Judge,     ┆ FC         ┆ 97.1      ┆ 91.0      ┆ 19.0      ┆ single    ┆ hit_into_ │
     │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆ play      │
     │ 2024-07-02 ┆ Judge,     ┆ FC         ┆ 97.2      ┆ null      ┆ null      ┆ null      ┆ swinging_ │
     │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆ strike    │
-    │ 2024-07-02 ┆ Judge,     ┆ SL         ┆ 87.5      ┆ 94.3      ┆ 42        ┆ field_out ┆ hit_into_ │
+    │ 2024-07-02 ┆ Judge,     ┆ SL         ┆ 87.5      ┆ 94.3      ┆ 42.0      ┆ field_out ┆ hit_into_ │
     │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆ play      │
     │ 2024-07-02 ┆ Judge,     ┆ FC         ┆ 96.3      ┆ null      ┆ null      ┆ null      ┆ ball      │
     │            ┆ Aaron      ┆            ┆           ┆           ┆           ┆           ┆           │
@@ -389,7 +387,7 @@ A handful of recipes you'll reach for constantly — every one leads with a
 
 ### Recipe 1 — A team's schedule + where they sit in the standings 📋
 
-Pull one club's slate with `mlb_api_schedule(team_id=...)`, then find their row
+Pull one club's slate with `mlb_schedule(team_id=...)`, then find their row
 in the standings. Two premium calls, one tidy snapshot.
 
 
@@ -397,7 +395,7 @@ in the standings. Two premium calls, one tidy snapshot.
 yanks_sched = safe(
     "Yankees July schedule",
     lambda: mlb.parse_mlb_api_schedule(
-        mlb.mlb_api_schedule(team_id=YANKEES_ID,
+        mlb.mlb_schedule(team_id=YANKEES_ID,
                              start_date="2024-07-01", end_date="2024-07-07")
     ),
 )
@@ -457,7 +455,7 @@ games
 
 ### Recipe 2 — A Statcast leaderboard 🏃
 
-The `statcast_leaderboard_*` family wraps Savant's *pre-aggregated* season
+The `mlb_statcast_leaderboard_*` family wraps Savant's *pre-aggregated* season
 leaderboards — fast, because the heavy lifting happens server-side. Here's the
 2024 **sprint speed** leaderboard, fastest first.
 
@@ -465,7 +463,7 @@ leaderboards — fast, because the heavy lifting happens server-side. Here's the
 ```python
 sprint = safe(
     "sprint speed leaderboard",
-    lambda: mlb.statcast_leaderboard_sprint_speed(year=SAMPLE_SEASON, min_opp=10),
+    lambda: mlb.mlb_statcast_leaderboard_sprint_speed(year=SAMPLE_SEASON, min_opp=10),
 )
 spcols = ["last_name, first_name", "team", "position", "competitive_runs", "sprint_speed"]
 (sprint.select([c for c in spcols if c in sprint.columns])
@@ -502,14 +500,14 @@ spcols = ["last_name, first_name", "team", "position", "competitive_runs", "spri
 ### Recipe 3 — Box score for one game 📊
 
 Take a `game_pk` from any schedule and pull the full box score with
-[`mlb_api_boxscore`](../mlb/reference/mlb_api.md#mlb_api_boxscore). Asking for
+[`mlb_boxscore`](../mlb/reference/mlb_api.md#mlb_boxscore). Asking for
 `return_parsed=False` gives the raw `dict`, which carries per-team batting and
 pitching lines under `teams.home` / `teams.away`.
 
 
 ```python
 def team_line(game_pk):
-    box = mlb.mlb_api_boxscore(game_pk=game_pk, return_parsed=False)
+    box = mlb.mlb_boxscore(game_pk=game_pk, return_parsed=False)
     rows = []
     for side in ("away", "home"):
         t = box["teams"][side]
@@ -546,7 +544,7 @@ out
 
 ### Recipe 4 — Plate-appearance play-by-play + outcome mix ⚾
 
-[`mlb_api_play_by_play`](../mlb/reference/mlb_api.md#mlb_api_play_by_play)
+[`mlb_play_by_play`](../mlb/reference/mlb_api.md#mlb_play_by_play)
 returns a `dict` with an `allPlays` list — one entry per plate appearance.
 Flatten it with `pl.json_normalize` (dot-notation columns), then tally the
 plate-appearance outcomes.
@@ -554,7 +552,7 @@ plate-appearance outcomes.
 
 ```python
 def pbp_frame(game_pk):
-    raw = mlb.mlb_api_play_by_play(game_pk=game_pk, return_parsed=False)
+    raw = mlb.mlb_play_by_play(game_pk=game_pk, return_parsed=False)
     return pl.json_normalize(raw["allPlays"], separator=".", max_level=2)
 
 plays = safe(f"play-by-play {gid}", lambda: pbp_frame(gid))
@@ -605,28 +603,28 @@ out
 
 
     shape: (10, 2)
-    ┌──────────────┬───────┐
-    │ result.event ┆ count │
-    │ ---          ┆ ---   │
-    │ str          ┆ u32   │
-    ╞══════════════╪═══════╡
-    │ Strikeout    ┆ 16    │
-    │ Groundout    ┆ 14    │
-    │ Pop Out      ┆ 10    │
-    │ Flyout       ┆ 7     │
-    │ Walk         ┆ 6     │
-    │ Lineout      ┆ 4     │
-    │ Home Run     ┆ 3     │
-    │ Single       ┆ 3     │
-    │ Double       ┆ 2     │
-    │ Hit By Pitch ┆ 1     │
-    └──────────────┴───────┘
+    ┌──────────────────┬───────┐
+    │ result.event     ┆ count │
+    │ ---              ┆ ---   │
+    │ str              ┆ u32   │
+    ╞══════════════════╪═══════╡
+    │ Strikeout        ┆ 16    │
+    │ Groundout        ┆ 14    │
+    │ Pop Out          ┆ 10    │
+    │ Flyout           ┆ 7     │
+    │ Walk             ┆ 6     │
+    │ Lineout          ┆ 4     │
+    │ Single           ┆ 3     │
+    │ Home Run         ┆ 3     │
+    │ Double           ┆ 2     │
+    │ Grounded Into DP ┆ 1     │
+    └──────────────────┴───────┘
 
 
 
 ### Recipe 5 — League leaders for any stat 🥇
 
-[`mlb_api_stats_leaders`](../mlb/reference/additional.md#mlb_api_stats_leaders)
+[`mlb_stats_leaders`](../mlb/reference/additional.md#mlb_stats_leaders)
 gives you the league leaderboard for **any** category — `homeRuns`, `avg`,
 `era`, `strikeouts`, you name it. The leaders come back nested under each
 category, so we flatten the top-N into a tidy frame. Here's the 2024 home-run
@@ -635,7 +633,7 @@ race.
 
 ```python
 def hr_leaders(season, category="homeRuns", group="hitting", n=10):
-    raw = mlb.mlb_api_stats_leaders(leader_categories=category, season=season,
+    raw = mlb.mlb_stats_leaders(leader_categories=category, season=season,
                                     stat_group=group, limit=n)
     leaders = raw["leagueLeaders"][0]["leaders"]
     rows = [{"rank": l["rank"], "player": l["person"]["fullName"],
@@ -678,7 +676,7 @@ leaders if leaders is not None else "leaders unavailable right now"
 
 Statcast's expected stats ask *what should have happened* given each ball's
 exit velocity and launch angle.
-[`statcast_leaderboard_expected_statistics`](../mlb/reference/additional.md#statcast_leaderboard_expected_statistics)
+[`mlb_statcast_leaderboard_expected_stats`](../mlb/reference/mlb_statcast.md#mlb_statcast_leaderboard_expected_stats)
 hands you `ba`/`est_ba`, `slg`/`est_slg`, `woba`/`est_woba` side by side —
 sort by the diff to find the luckiest (and unluckiest) hitters.
 
@@ -686,8 +684,8 @@ sort by the diff to find the luckiest (and unluckiest) hitters.
 ```python
 xstats = safe(
     "expected stats",
-    lambda: mlb.statcast_leaderboard_expected_statistics(
-        year=SAMPLE_SEASON, type_="batter", min_="q"),
+    lambda: mlb.mlb_statcast_leaderboard_expected_stats(
+        year=SAMPLE_SEASON, type="batter", min="q"),
 )
 if xstats is not None and xstats.height and "est_woba_minus_woba_diff" in xstats.columns:
     cols = ["last_name, first_name", "pa", "woba", "est_woba",
@@ -729,7 +727,7 @@ out
 ### Recipe 7 — The fastest bats in baseball 💨
 
 Bat tracking is one of Statcast's newest toys.
-[`statcast_leaderboard_bat_tracking`](../mlb/reference/additional.md#statcast_leaderboard_bat_tracking)
+[`mlb_statcast_leaderboard_bat_tracking`](../mlb/reference/mlb_statcast.md#mlb_statcast_leaderboard_bat_tracking)
 returns average bat speed, swing length, and "hard-swing rate" per hitter —
 sort by `avg_bat_speed` to see who's swinging the hardest.
 
@@ -737,7 +735,7 @@ sort by `avg_bat_speed` to see who's swinging the hardest.
 ```python
 bats = safe(
     "bat tracking",
-    lambda: mlb.statcast_leaderboard_bat_tracking(year=SAMPLE_SEASON),
+    lambda: mlb.mlb_statcast_leaderboard_bat_tracking(year=SAMPLE_SEASON, type="batter"),
 )
 if bats is not None and bats.height and "avg_bat_speed" in bats.columns:
     cols = ["name", "swings_competitive", "avg_bat_speed",
@@ -756,29 +754,29 @@ out
 
 
     shape: (10, 5)
-    ┌────────────────────┬────────────────────┬───────────────┬─────────────────┬──────────────┐
-    │ name               ┆ swings_competitive ┆ avg_bat_speed ┆ hard_swing_rate ┆ swing_length │
-    │ ---                ┆ ---                ┆ ---           ┆ ---             ┆ ---          │
-    │ str                ┆ i64                ┆ f64           ┆ f64             ┆ f64          │
-    ╞════════════════════╪════════════════════╪═══════════════╪═════════════════╪══════════════╡
-    │ Caminero, Junior   ┆ 406                ┆ 79.947173     ┆ 0.891626        ┆ 8.55445      │
-    │ Stanton, Giancarlo ┆ 155                ┆ 79.335078     ┆ 0.929032        ┆ 8.440819     │
-    │ Walker, Jordan     ┆ 471                ┆ 79.051274     ┆ 0.857749        ┆ 8.310408     │
-    │ Cruz, Oneil        ┆ 447                ┆ 78.461902     ┆ 0.780761        ┆ 7.622225     │
-    │ Kurtz, Nick        ┆ 451                ┆ 78.099293     ┆ 0.802661        ┆ 7.770633     │
-    │ Jones, Spencer     ┆ 89                 ┆ 77.835442     ┆ 0.797753        ┆ 7.768163     │
-    │ Adell, Jo          ┆ 541                ┆ 77.258055     ┆ 0.698706        ┆ 7.744954     │
-    │ Clarke, Denzel     ┆ 88                 ┆ 77.159528     ┆ 0.738636        ┆ 7.621649     │
-    │ Smith, Cam         ┆ 436                ┆ 77.064606     ┆ 0.724771        ┆ 7.703723     │
-    │ Bolte, Henry       ┆ 126                ┆ 77.04431      ┆ 0.753968        ┆ 7.871587     │
-    └────────────────────┴────────────────────┴───────────────┴─────────────────┴──────────────┘
+    ┌───────────────────┬────────────────────┬───────────────┬─────────────────┬──────────────┐
+    │ name              ┆ swings_competitive ┆ avg_bat_speed ┆ hard_swing_rate ┆ swing_length │
+    │ ---               ┆ ---                ┆ ---           ┆ ---             ┆ ---          │
+    │ str               ┆ i64                ┆ f64           ┆ f64             ┆ f64          │
+    ╞═══════════════════╪════════════════════╪═══════════════╪═════════════════╪══════════════╡
+    │ Caminero, Junior  ┆ 433                ┆ 79.917064     ┆ 0.896074        ┆ 8.5657       │
+    │ Walker, Jordan    ┆ 506                ┆ 79.072949     ┆ 0.859684        ┆ 8.319791     │
+    │ Cruz, Oneil       ┆ 447                ┆ 78.461902     ┆ 0.780761        ┆ 7.622225     │
+    │ Kurtz, Nick       ┆ 471                ┆ 78.17323      ┆ 0.808917        ┆ 7.771097     │
+    │ Adell, Jo         ┆ 594                ┆ 77.347233     ┆ 0.703704        ┆ 7.74126      │
+    │ Smith, Cam        ┆ 470                ┆ 77.064652     ┆ 0.723404        ┆ 7.690357     │
+    │ Schwarber, Kyle   ┆ 514                ┆ 77.027339     ┆ 0.754864        ┆ 7.471818     │
+    │ Bauers, Jake      ┆ 353                ┆ 77.014821     ┆ 0.753541        ┆ 7.692569     │
+    │ Caglianone, Jac   ┆ 431                ┆ 76.845271     ┆ 0.712297        ┆ 7.914317     │
+    │ Mitchell, Garrett ┆ 333                ┆ 76.823575     ┆ 0.744745        ┆ 7.198839     │
+    └───────────────────┴────────────────────┴───────────────┴─────────────────┴──────────────┘
 
 
 
 ### Recipe 8 — The best gloves: Outs Above Average 🧤
 
 Offense is easy to measure; defense is hard. Statcast's
-[`statcast_leaderboard_outs_above_average`](../mlb/reference/additional.md#statcast_leaderboard_outs_above_average)
+[`mlb_statcast_leaderboard_outs_above_average`](../mlb/reference/mlb_statcast.md#mlb_statcast_leaderboard_outs_above_average)
 credits fielders for the plays they make *relative to expectation*. Sort by
 `outs_above_average` to find the season's best defenders.
 
@@ -786,7 +784,7 @@ credits fielders for the plays they make *relative to expectation*. Sort by
 ```python
 oaa = safe(
     "outs above average",
-    lambda: mlb.statcast_leaderboard_outs_above_average(year=SAMPLE_SEASON),
+    lambda: mlb.mlb_statcast_leaderboard_outs_above_average(year=SAMPLE_SEASON),
 )
 if oaa is not None and oaa.height and "outs_above_average" in oaa.columns:
     cols = ["last_name, first_name", "display_team_name",
@@ -828,7 +826,7 @@ out
 
 ### Recipe 9 — Find the X: the hardest-hit homers 🚀
 
-`statcast_search` isn't just for one player — point its filters at an outcome.
+`mlb_statcast_search` isn't just for one player — point its filters at an outcome.
 Pass `at_bat_result="home_run"` over a short window to pull **every homer**,
 then sort by `launch_speed` to find the ones that were absolutely crushed.
 (Keep the window small — a couple of days at a time.)
@@ -837,7 +835,7 @@ then sort by `launch_speed` to find the ones that were absolutely crushed.
 ```python
 homers = safe(
     "home runs (2-day)",
-    lambda: mlb.statcast_search(start_date="2024-07-01", end_date="2024-07-02",
+    lambda: mlb.mlb_statcast_search(start_dt="2024-07-01", end_dt="2024-07-02",
                                 at_bat_result="home_run"),
 )
 if homers is not None and homers.height and "launch_speed" in homers.columns:
@@ -878,9 +876,60 @@ out
 
 
 
+### Recipe 13 — Every pitch of a single game (Savant gamefeed) 🎮
+
+[`mlb_statcast_gamefeed`](../mlb/reference/mlb_statcast.md#mlb_statcast_gamefeed)
+pulls Baseball Savant's rich single-game feed and tidies it to **one row per
+pitch** — pitch type, velocity, plate location, and the batted-ball result —
+across both teams. Feed it any `game_pk` from a schedule.
+
+
+```python
+gf = safe(
+    f"gamefeed {gid}",
+    lambda: mlb.mlb_statcast_gamefeed(game_pk=gid),
+)
+if gf is not None and gf.height:
+    print("pitches tracked:", gf.height)
+    gcols = ["inning", "half_inning", "batter_name", "pitcher_name",
+             "pitch_type", "start_speed", "launch_speed", "events"]
+    out = gf.select([c for c in gcols if c in gf.columns]).head()
+else:
+    out = "gamefeed unavailable right now"
+out
+```
+
+    ✅ gamefeed 744914
+    pitches tracked: 244
+
+
+
+
+
+    shape: (5, 8)
+    ┌────────┬────────────┬────────────┬────────────┬────────────┬────────────┬────────────┬───────────┐
+    │ inning ┆ half_innin ┆ batter_nam ┆ pitcher_na ┆ pitch_type ┆ start_spee ┆ launch_spe ┆ events    │
+    │ ---    ┆ g          ┆ e          ┆ me         ┆ ---        ┆ d          ┆ ed         ┆ ---       │
+    │ i64    ┆ ---        ┆ ---        ┆ ---        ┆ str        ┆ ---        ┆ ---        ┆ str       │
+    │        ┆ str        ┆ str        ┆ str        ┆            ┆ f64        ┆ str        ┆           │
+    ╞════════╪════════════╪════════════╪════════════╪════════════╪════════════╪════════════╪═══════════╡
+    │ 1      ┆ top        ┆ Alex       ┆ Yariel     ┆ FF         ┆ 95.9       ┆ null       ┆ Flyout    │
+    │        ┆            ┆ Bregman    ┆ Rodríguez  ┆            ┆            ┆            ┆           │
+    │ 1      ┆ top        ┆ Alex       ┆ Yariel     ┆ FF         ┆ 94.1       ┆ null       ┆ Flyout    │
+    │        ┆            ┆ Bregman    ┆ Rodríguez  ┆            ┆            ┆            ┆           │
+    │ 1      ┆ top        ┆ Alex       ┆ Yariel     ┆ SL         ┆ 85.8       ┆ 92.9       ┆ Flyout    │
+    │        ┆            ┆ Bregman    ┆ Rodríguez  ┆            ┆            ┆            ┆           │
+    │ 1      ┆ top        ┆ Jake       ┆ Yariel     ┆ FF         ┆ 94.1       ┆ null       ┆ Strikeout │
+    │        ┆            ┆ Meyers     ┆ Rodríguez  ┆            ┆            ┆            ┆           │
+    │ 1      ┆ top        ┆ Jake       ┆ Yariel     ┆ FF         ┆ 95.4       ┆ null       ┆ Strikeout │
+    │        ┆            ┆ Meyers     ┆ Rodríguez  ┆            ┆            ┆            ┆           │
+    └────────┴────────────┴────────────┴────────────┴────────────┴────────────┴────────────┴───────────┘
+
+
+
 ### Recipe 10 — The biggest swings of a game (WPA) 📈
 
-[`mlb_api_win_probability`](../mlb/reference/mlb_api.md#mlb_api_win_probability)
+[`mlb_win_probability`](../mlb/reference/mlb_api.md#mlb_win_probability)
 returns every play with the live win-probability before and after, plus
 **Win Probability Added** (`homeTeamWinProbabilityAdded`). Sort by its absolute
 value to surface the most pivotal moments of the game.
@@ -888,7 +937,7 @@ value to surface the most pivotal moments of the game.
 
 ```python
 def wpa_swings(game_pk, n=8):
-    plays = mlb.mlb_api_win_probability(game_pk=game_pk, return_parsed=False)
+    plays = mlb.mlb_win_probability(game_pk=game_pk, return_parsed=False)
     df = pl.json_normalize(plays, separator=".", max_level=2)
     keep = ["about.inning", "about.halfInning", "result.event",
             "result.description", "homeTeamWinProbabilityAdded"]
@@ -939,8 +988,8 @@ wpa if wpa is not None else "win-probability unavailable right now"
 
 ### Recipe 11 — Season award winners (MVP, Cy Young) 🏅
 
-[`mlb_api_awards`](../mlb/reference/mlb_api.md#mlb_api_awards) is the catalog of
-every award id; [`mlb_api_award_recipients`](../mlb/reference/mlb_api.md#mlb_api_award_recipients)
+[`mlb_awards`](../mlb/reference/mlb_api.md#mlb_awards) is the catalog of
+every award id; [`mlb_award_recipients`](../mlb/reference/mlb_api.md#mlb_award_recipients)
 names the season's winner for one id. We grab the four marquee awards — AL/NL
 MVP and AL/NL Cy Young — and stack them into one tidy board.
 
@@ -949,7 +998,7 @@ MVP and AL/NL Cy Young — and stack them into one tidy board.
 def award_board(season, award_ids):
     frames = []
     for label, aid in award_ids.items():
-        df = mlb.mlb_api_award_recipients(award_id=aid, season=season)
+        df = mlb.mlb_award_recipients(award_id=aid, season=season)
         if df is not None and df.height:
             name_col = ("player_name_first_last" if "player_name_first_last"
                         in df.columns else "name")
@@ -988,14 +1037,14 @@ board if (board is not None and board.height) else "awards unavailable right now
 
 ### Recipe 12 — The first-round draft board 🎓
 
-[`mlb_api_draft`](../mlb/reference/mlb_api.md#mlb_api_draft) returns the amateur
+[`mlb_draft`](../mlb/reference/mlb_api.md#mlb_draft) returns the amateur
 draft, organized into rounds of picks. Pass `round_=1` and flatten the picks
 into one row per selection — who went where, and from which school.
 
 
 ```python
 def draft_board(year, round_=1):
-    raw = mlb.mlb_api_draft(year=year, round_=round_, return_parsed=False)
+    raw = mlb.mlb_draft(year=year, round_=round_, return_parsed=False)
     picks = raw["drafts"]["rounds"][0]["picks"]
     rows = [{
         "pick": p.get("pickNumber"),
@@ -1126,7 +1175,7 @@ ecols = ["team_id", "team_location", "team_name", "team_abbreviation", "team_dis
 ## 🎉 Where to next
 
 - Everything returns **polars** by default — pass `return_as_pandas=True` for a
-  pandas frame, or `return_parsed=False` on the `mlb_api_*` wrappers for raw JSON.
+  pandas frame, or `return_parsed=False` on the `mlb_*` wrappers for raw JSON.
 - Full reference: the **MLB** pages in the sidebar —
   [MLB Stats API + Statcast helpers](../mlb/reference/additional.md),
   [the full MLB Stats API surface](../mlb/reference/mlb_api.md),

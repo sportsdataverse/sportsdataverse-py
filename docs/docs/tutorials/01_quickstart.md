@@ -40,7 +40,7 @@ function index.
 | 🏀 **WBB** (NCAA W) | [tutorial](../tutorials/05_wbb_intro.md) · [ref](../wbb/index.md) | ✅ | — | — | `load_wbb_pbp`, `load_wbb_team_boxscore` |
 | 🏈 **NFL** | [tutorial](../tutorials/03_nfl_intro.md) · [ref](../nfl/index.md) | ✅ | 💳 `nfl_*` (`api.nfl.com`) | 💳 Next Gen Stats `nfl_ngs_*` | `load_nfl_pbp`, `load_nfl_player_stats`, `load_injuries` |
 | 🏈 **CFB** (College) | [tutorial](../tutorials/02_cfb_intro.md) · [ref](../cfb/index.md) | ✅ | `yahoo_cfb_*`, `fox_cfb_*` | — | `load_cfb_pbp` |
-| ⚾ **MLB** | [tutorial](../tutorials/09_mlb_intro.md) · [ref](../mlb/index.md) | ✅ | 💳 `mlb_api_*` (MLB Stats API) | 💳 Statcast `statcast_*` | `load_mlb_pbp`, `load_mlb_team_boxscore` |
+| ⚾ **MLB** | [tutorial](../tutorials/09_mlb_intro.md) · [ref](../mlb/index.md) | ✅ | 💳 `mlb_*` (MLB Stats API) | 💳 Statcast `mlb_statcast_*` | `load_mlb_pbp`, `load_mlb_team_boxscore` |
 | 🏒 **NHL** | [tutorial](../tutorials/07_nhl_intro.md) · [ref](../nhl/index.md) | ✅ | 💳 `nhl_*` (`api-web`) | 💳 NHL EDGE `nhl_edge_*` | `load_nhl_pbp`, `load_nhl_team_boxscore` |
 | 🏒 **PWHL** (Women's pro) | [tutorial](../tutorials/10_pwhl_intro.md) · [ref](../pwhl/index.md) | — | 💳 `pwhl_*` (HockeyTech) | corsi / shifts / TOI | `load_pwhl_schedules` |
 | 🏒 **AHL** (Minor pro) | [tutorial](../tutorials/11_junior_hockey_intro.md) · [ref](../ahl/index.md) | — | 💳 `ahl_*` (HockeyTech) | corsi / shifts / TOI | — |
@@ -61,9 +61,9 @@ once and you can read any function name in the package:
    `espn_wbb_scoreboard`). The *same* set exists for every ESPN league: teams,
    rosters, scoreboards, standings, schedules, play-by-play, box scores. 🪞
 2. **Native premium API wrappers** — the league's own feed: `nfl_*` (`api.nfl.com`),
-   `mlb_api_*` (MLB Stats API), `nhl_*` (`api-web`), `pwhl_*`/`ahl_*`/`ohl_*`/`whl_*`/`qmjhl_*`
+   `mlb_*` (MLB Stats API), `nhl_*` (`api-web`), `pwhl_*`/`ahl_*`/`ohl_*`/`whl_*`/`qmjhl_*`
    (HockeyTech), `toa_*` (The Odds API). 💳
-3. **Tracking / analytics feeds** — the *really* premium stuff: `statcast_*`
+3. **Tracking / analytics feeds** — the *really* premium stuff: `mlb_statcast_*`
    (Baseball Savant), `nhl_edge_*` (player tracking), `nfl_ngs_*` (Next Gen Stats).
 4. **Release / parquet loaders** — `load_<sport>_*()` reads a pre-built parquet
    release (fast, reliable, whole-season-at-once): `load_nba_pbp`,
@@ -104,20 +104,7 @@ import sportsdataverse.odds as odds
 
 
 
-    ['ahl',
-     'cfb',
-     'mbb',
-     'mlb',
-     'nba',
-     'nfl',
-     'nhl',
-     'odds',
-     'ohl',
-     'pwhl',
-     'qmjhl',
-     'wbb',
-     'whl',
-     'wnba']
+    ['cfb', 'mbb', 'mlb', 'nba', 'nfl', 'nhl', 'odds', 'pwhl', 'wbb', 'wnba']
 
 
 
@@ -255,10 +242,10 @@ learned all five.
 
 
 ```python
-import sportsdataverse.ahl as ahl
-import sportsdataverse.ohl as ohl
-import sportsdataverse.whl as whl
-import sportsdataverse.qmjhl as qmjhl
+import sportsdataverse.hockey.ahl as ahl
+import sportsdataverse.hockey.ohl as ohl
+import sportsdataverse.hockey.whl as whl
+import sportsdataverse.hockey.qmjhl as qmjhl
 import sportsdataverse.pwhl as pwhl
 
 HOCKEYTECH = {"ahl": ahl, "ohl": ohl, "whl": whl, "qmjhl": qmjhl, "pwhl": pwhl}
@@ -298,7 +285,7 @@ pl.DataFrame(rows)
     │ str    ┆ str              ┆ str               ┆ i64    │
     ╞════════╪══════════════════╪═══════════════════╪════════╡
     │ AHL    ┆ ahl_schedule()   ┆ ahl_standings()   ┆ 2026   │
-    │ OHL    ┆ ohl_schedule()   ┆ ohl_standings()   ┆ 2026   │
+    │ OHL    ┆ ohl_schedule()   ┆ ohl_standings()   ┆ 2027   │
     │ WHL    ┆ whl_schedule()   ┆ whl_standings()   ┆ 2026   │
     │ QMJHL  ┆ qmjhl_schedule() ┆ qmjhl_standings() ┆ 2027   │
     │ PWHL   ┆ pwhl_schedule()  ┆ pwhl_standings()  ┆ 2027   │
@@ -331,6 +318,27 @@ for lg, fns in hits.items():
      nhl: espn_nhl_scoreboard, nhl_scoreboard, parse_nhl_web_scoreboard, scoreboard_event_parsing
      wbb: espn_wbb_scoreboard, scoreboard_event_parsing
     wnba: espn_wnba_scoreboard, scoreboard_event_parsing
+    soccer: espn_soccer_scoreboard
+    cricket: espn_cricket_scoreboard
+     epl: espn_epl_scoreboard
+    laliga: espn_laliga_scoreboard
+    bundesliga: espn_bundesliga_scoreboard
+    seriea: espn_seriea_scoreboard
+    ligue1: espn_ligue1_scoreboard
+     mls: espn_mls_scoreboard
+    ligamx: espn_ligamx_scoreboard
+     ucl: espn_ucl_scoreboard
+     uel: espn_uel_scoreboard
+    nwsl: espn_nwsl_scoreboard
+     wwc: espn_wwc_scoreboard
+      wc: espn_wc_scoreboard
+     mch: espn_mch_scoreboard
+     wch: espn_wch_scoreboard
+     ufl: espn_ufl_scoreboard
+     xfl: espn_xfl_scoreboard
+     cfl: espn_cfl_scoreboard
+    college_baseball: espn_college_baseball_scoreboard
+    college_softball: espn_college_softball_scoreboard
 
 
 
@@ -344,20 +352,23 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
 
 
 
-    shape: (8, 2)
+    shape: (34, 2)
     ┌────────┬─────────────┐
     │ league ┆ n_functions │
     │ ---    ┆ ---         │
     │ str    ┆ i64         │
     ╞════════╪═════════════╡
     │ nhl    ┆ 337         │
-    │ mlb    ┆ 239         │
-    │ nfl    ┆ 233         │
-    │ cfb    ┆ 166         │
+    │ mlb    ┆ 270         │
+    │ nfl    ┆ 237         │
+    │ cfb    ┆ 169         │
     │ wnba   ┆ 162         │
-    │ mbb    ┆ 158         │
-    │ nba    ┆ 157         │
-    │ wbb    ┆ 151         │
+    │ …      ┆ …           │
+    │ pwhl   ┆ 44          │
+    │ ahl    ┆ 14          │
+    │ ohl    ┆ 14          │
+    │ qmjhl  ┆ 14          │
+    │ whl    ┆ 14          │
     └────────┴─────────────┘
 
 
@@ -438,28 +449,28 @@ sb = safe("espn_mlb_scoreboard", lambda: sdv.espn_mlb_scoreboard())
     │ game_id   ┆ uid       ┆ date      ┆ name      ┆ … ┆ away_logo ┆ away_scor ┆ away_winn ┆ away_ran │
     │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ e         ┆ er        ┆ k        │
     │ str       ┆ str       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ str       ┆ str      │
+    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ bool      ┆ str      │
     ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 401815722 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Miami     ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4018157 ┆ 2T22:40Z  ┆ Marlins   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 22        ┆           ┆ at Pittsb ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ urgh Pi…  ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815725 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Seattle   ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4018157 ┆ 2T22:45Z  ┆ Mariners  ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 25        ┆           ┆ at Washin ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ gton…     ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815724 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ San Diego ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4018157 ┆ 2T23:05Z  ┆ Padres at ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 24        ┆           ┆ Baltimore ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ …         ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815721 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Detroit   ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4018157 ┆ 2T23:10Z  ┆ Tigers at ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 21        ┆           ┆ Cleveland ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Gu…       ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815726 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Texas     ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4018157 ┆ 2T23:10Z  ┆ Rangers   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 26        ┆           ┆ at Boston ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Red So…   ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401815776 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Miami     ┆ … ┆ https://a ┆ 2         ┆ false     ┆ null     │
+    │           ┆ e:4018157 ┆ 6T22:40Z  ┆ Marlins   ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 76        ┆           ┆ at Philad ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ elphia …  ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401815775 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Kansas    ┆ … ┆ https://a ┆ 4         ┆ false     ┆ null     │
+    │           ┆ e:4018157 ┆ 6T22:45Z  ┆ City      ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 75        ┆           ┆ Royals at ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ Washingt… ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401815779 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Toronto   ┆ … ┆ https://a ┆ 6         ┆ true      ┆ null     │
+    │           ┆ e:4018157 ┆ 6T22:45Z  ┆ Blue Jays ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 79        ┆           ┆ at Boston ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ Re…       ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401815774 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Chicago   ┆ … ┆ https://a ┆ 2         ┆ false     ┆ null     │
+    │           ┆ e:4018157 ┆ 6T23:05Z  ┆ White Sox ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 74        ┆           ┆ at New    ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ York …    ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401815777 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ New York  ┆ … ┆ https://a ┆ 3         ┆ false     ┆ null     │
+    │           ┆ e:4018157 ┆ 6T23:10Z  ┆ Mets at   ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 77        ┆           ┆ Cincinnat ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ i Re…     ┆   ┆ mlo…      ┆           ┆           ┆          │
     └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
 
 
@@ -538,8 +549,6 @@ pl.DataFrame(rows)
 
     ✅ espn_nba_standings
     ✅ espn_nhl_standings
-
-
     ✅ espn_mlb_standings
 
 
@@ -572,6 +581,8 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 ```
 
     nfl  Patriots       -> New England Patriots (id=17)
+
+
     mlb  Yankees        -> New York Yankees (id=10)
 
 
@@ -732,13 +743,13 @@ cols = ["team_abbr", "team_full_name", "overall_wins", "overall_losses",
 
 ### Recipe 12 — ⚾ Premium MLB pull (MLB Stats API + parser)
 
-`mlb_api_*` wrappers return the raw `Dict`; pair them with the matching
+`mlb_*` wrappers return the raw `Dict`; pair them with the matching
 `parse_mlb_api_*` for a tidy frame. Here's division standings, parsed.
 
 
 ```python
 def mlb_standings():
-    raw = sdv.mlb.mlb_api_standings(league_id="103,104", season=2024)
+    raw = sdv.mlb.mlb_standings(league_id="103,104", season=2024)
     return sdv.mlb.parse_mlb_api_standings(raw)
 
 mlb_st = safe("MLB standings (Stats API + parser)", mlb_standings)
@@ -775,13 +786,13 @@ keep = ["standings_division_name", "team_name", "wins", "losses", "winning_perce
 
 ### Recipe 13 — ⚾ MLB Statcast — the premium tracking firehose
 
-`statcast_search()` returns one row per pitch — the raw Baseball Savant tracking
+`mlb_statcast_search()` returns one row per pitch — the raw Baseball Savant tracking
 data. Grab a single day and pull a few of the most useful columns.
 
 
 ```python
-pitches = safe("statcast_search (1 day)",
-               lambda: sdv.mlb.statcast_search(start_date="2024-07-01", end_date="2024-07-01"))
+pitches = safe("mlb_statcast_search (1 day)",
+               lambda: sdv.mlb.mlb_statcast_search(start_dt="2024-07-01", end_dt="2024-07-01"))
 show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
                     "launch_speed", "launch_angle", "events"]
         if pitches is not None and c in pitches.columns]
@@ -789,7 +800,7 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
  if pitches is not None and getattr(pitches, "height", 0) else "no Statcast rows for that day right now")
 ```
 
-    ✅ statcast_search (1 day)
+    ✅ mlb_statcast_search (1 day)
 
 
 
@@ -799,18 +810,18 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
     ┌────────────┬───────────────┬────────────┬──────────────┬──────────────┬──────────────┬───────────┐
     │ game_date  ┆ player_name   ┆ pitch_type ┆ release_spee ┆ launch_speed ┆ launch_angle ┆ events    │
     │ ---        ┆ ---           ┆ ---        ┆ d            ┆ ---          ┆ ---          ┆ ---       │
-    │ str        ┆ str           ┆ str        ┆ ---          ┆ f64          ┆ i64          ┆ str       │
+    │ str        ┆ str           ┆ str        ┆ ---          ┆ f64          ┆ f64          ┆ str       │
     │            ┆               ┆            ┆ f64          ┆              ┆              ┆           │
     ╞════════════╪═══════════════╪════════════╪══════════════╪══════════════╪══════════════╪═══════════╡
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 94.8         ┆ 78.0         ┆ 46           ┆ field_out │
+    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 94.8         ┆ 78.0         ┆ 46.0         ┆ field_out │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.6         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.3         ┆ 73.3         ┆ 20           ┆ null      │
+    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.3         ┆ 73.3         ┆ 20.0         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 97.2         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.6         ┆ null         ┆ null         ┆ null      │
+    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 97.4         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12          ┆ null      │
+    │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
@@ -962,7 +973,7 @@ pl.DataFrame(rows)
     │ str    ┆ i64    ┆ i64   │
     ╞════════╪════════╪═══════╡
     │ AHL    ┆ 2026   ┆ 10000 │
-    │ OHL    ┆ 2026   ┆ 10000 │
+    │ OHL    ┆ 2027   ┆ 10000 │
     │ WHL    ┆ 2026   ┆ 10000 │
     │ QMJHL  ┆ 2027   ┆ 10000 │
     └────────┴────────┴───────┘
@@ -1032,26 +1043,29 @@ print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
 
-    Total wrappers across the counted leagues: 1603
+    Total wrappers across the counted leagues: 4063
 
 
 
 
 
-    shape: (8, 2)
+    shape: (34, 2)
     ┌────────┬─────────────┐
     │ league ┆ n_functions │
     │ ---    ┆ ---         │
     │ str    ┆ i64         │
     ╞════════╪═════════════╡
     │ nhl    ┆ 337         │
-    │ mlb    ┆ 239         │
-    │ nfl    ┆ 233         │
-    │ cfb    ┆ 166         │
+    │ mlb    ┆ 270         │
+    │ nfl    ┆ 237         │
+    │ cfb    ┆ 169         │
     │ wnba   ┆ 162         │
-    │ mbb    ┆ 158         │
-    │ nba    ┆ 157         │
-    │ wbb    ┆ 151         │
+    │ …      ┆ …           │
+    │ pwhl   ┆ 44          │
+    │ ahl    ┆ 14          │
+    │ ohl    ┆ 14          │
+    │ qmjhl  ┆ 14          │
+    │ whl    ┆ 14          │
     └────────┴─────────────┘
 
 
