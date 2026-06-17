@@ -575,7 +575,7 @@ Pull the NHL standings.
 | `league_l10_sequence` | integer |  |
 | `league_road_sequence` | integer |  |
 | `league_sequence` | integer | Team's seeding position within the league. |
-| `losses` | integer | Matches lost. |
+| `losses` | integer | Number of matches the team has lost. |
 | `ot_losses` | integer | Overtime losses. |
 | `point_pctg` | double | Points percentage. |
 | `points` | integer | Competition points. |
@@ -600,11 +600,11 @@ Pull the NHL standings.
 | `streak_code` | character | Current streak code (W/L/OT). |
 | `streak_count` | integer | Length of the current streak. |
 | `team_logo` | character | URL to the team logo image. |
-| `ties` | integer | Matches drawn. |
+| `ties` | integer | Number of matches the team has drawn. |
 | `waivers_sequence` | integer |  |
 | `wildcard_sequence` | integer | Team's wild card seeding position. |
 | `win_pctg` | double |  |
-| `wins` | integer | Matches won. |
+| `wins` | integer | Number of matches the team has won. |
 | `place_name_default` | character |  |
 | `team_name_default` | character | Team name (default locale). |
 | `team_name_fr` | character | Team name (French locale). |

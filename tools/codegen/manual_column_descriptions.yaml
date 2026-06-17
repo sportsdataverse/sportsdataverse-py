@@ -136,3 +136,1217 @@ team_schedule:
   season_type_type: "Season type numeric code."
   season_type_name: "Season type name (e.g. Regular Season)."
   season_type_abbreviation: "Season type abbreviation."
+
+# -------------------------------------------------------------------------
+# NFL (autodoc) — nflverse / Next Gen Stats / Pro Football Reference / ESPN NFL
+# -------------------------------------------------------------------------
+espn_nfl_game_rosters:
+  athlete_href: ESPN API hyperlink reference URL for the athlete resource.
+  college_athlete_href: ESPN API hyperlink reference URL for the athlete's college profile resource.
+  contract_bonus: Signing or roster bonus amount (in dollars) associated with the player's current contract.
+  contract_href: ESPN API hyperlink reference URL for the player's full contract resource.
+  contract_season_href: ESPN API hyperlink reference URL for the specific season-level contract detail resource.
+  contract_signed_through: Final year of the player's current contract, expressed as a four-digit season year.
+  contract_team_href: ESPN API hyperlink reference URL for the team associated with the player's contract.
+  contracts_href: ESPN API hyperlink reference URL for the full list of the player's historical contract records.
+  draft_pick_href: ESPN API hyperlink reference URL for the draft-pick record associated with this player.
+  draft_team_href: ESPN API hyperlink reference URL for the team that originally drafted this player.
+  jersey_right: Secondary or alternate jersey number display string used by ESPN (e.g., for special-game uniforms).
+  position_href: ESPN API hyperlink reference URL for the player's positional classification resource.
+  projections_href: ESPN API hyperlink reference URL for the player's statistical projection resource.
+  statistics_href: ESPN API hyperlink reference URL for the player's career statistics resource.
+  team_alternate_ids_sdr: SportsDataverse SDR alternate identifier for the team, used for cross-source joins.
+espn_nfl_player_stats:
+  defensive_assist_tackles: Number of assisted tackles credited to the player (helped bring down the ball carrier but was not the primary tackler).
+  defensive_avg_interception_yards: Average yards gained per interception returned by the player.
+  defensive_avg_sack_yards: Average yards lost per sack the player recorded against the opposing quarterback.
+  defensive_avg_stuff_yards: Average yards lost per run stuff (tackle behind the line of scrimmage) recorded by the player.
+  defensive_blocked_field_goal_touchdowns: Number of touchdowns scored by the player after blocking an opponent's field goal attempt and returning it.
+  defensive_blocked_punt_ez_rec_td: Number of touchdowns scored by recovering a blocked punt in the end zone.
+  defensive_blocked_punt_touchdowns: Number of touchdowns scored by the player after blocking an opponent's punt and returning it.
+  defensive_hurries: Number of times the player pressured the quarterback into an early or errant throw without recording a sack.
+  defensive_interceptions_interception_touchdowns: Number of touchdowns scored by the player on interception returns.
+  defensive_interceptions_interception_yards: Total yards gained by the player on interception returns.
+  defensive_interceptions_interceptions: Total number of passes intercepted by the player.
+  defensive_kicks_blocked: Total number of kicks (field goals or extra points) the player blocked.
+  defensive_long_interception: Longest single interception return in yards recorded by the player.
+  defensive_misc_touchdowns: Number of defensive touchdowns scored via miscellaneous means not captured by other specific categories.
+  defensive_missed_field_goal_return_td: Number of touchdowns scored by returning a missed field goal attempt.
+  defensive_one_pt_safeties_made: Number of one-point safeties recorded by the player's defense (scored when the opposing team is downed in their own end zone during a try).
+  defensive_passes_batted_down: Number of passes the player knocked down at the line of scrimmage without recording an interception.
+  defensive_passes_defended: Total number of passes the player broke up or deflected, including both pass deflections and interceptions.
+  defensive_points_allowed: Total points allowed by the player's team during games the player appeared in.
+  defensive_qb_hits: Number of times the player legally hit the quarterback during or just after a pass attempt.
+  defensive_sack_yards: Total yards lost by the opposing offense as a result of the player's sacks.
+  defensive_safeties: Number of safeties recorded by the player (tackling the ball carrier in their own end zone).
+  defensive_solo_tackles: Number of unassisted tackles credited solely to the player.
+  defensive_stuff_yards: Total yards lost by the offense on run stuffs recorded by the player.
+  defensive_stuffs: Number of times the player tackled a ball carrier for a loss on a rushing play.
+  defensive_tackles_for_loss: Total number of tackles resulting in a loss of yards for the opposing offense.
+  defensive_tackles_yards_lost: Total yards lost by the opposing offense on the player's tackles for loss.
+  defensive_team_games_played: Number of games played by the player's team in which the player appeared on the defensive side.
+  defensive_total_tackles: Combined total of solo tackles and assisted tackles recorded by the player.
+  defensive_two_pt_returns: Number of two-point conversion attempts the player's defense returned for a defensive conversion score.
+  defensive_yards_allowed: Total yards allowed by the player's defense during games the player appeared in.
+  general_defensive_fumbles_touchdowns: Number of touchdowns scored by recovering or returning an opponent's fumble on the defensive side.
+  general_fumbles: Total number of times the player fumbled the ball regardless of who recovered it.
+  general_fumbles_forced: Number of fumbles the player forced from opposing ball carriers.
+  general_fumbles_forced_primary: Number of fumbles forced where the player was credited as the primary forcer rather than an assist.
+  general_fumbles_lost: Number of fumbles by the player that were subsequently recovered by the opposing team.
+  general_fumbles_recovered: Number of fumbles (own or opponent's) recovered by the player.
+  general_fumbles_recovered_yards: Total yards gained on fumble recoveries returned by the player.
+  general_fumbles_touchdowns: Number of touchdowns scored by the player on fumble recoveries.
+  general_offensive_fumbles_touchdowns: Number of touchdowns scored by recovering an offensive team fumble (e.g., a fumble recovered in the end zone).
+  general_offensive_two_pt_returns: Number of two-point conversion attempts the player's offense returned defensively for a score.
+  passing_adj_qbr: ESPN's Adjusted Total Quarterback Rating, which adjusts raw QBR for opponent strength and clutch situations on a 0–100 scale.
+  passing_avg_gain: Average yards gained per passing attempt including sacks.
+  passing_completion_pct: Percentage of pass attempts that resulted in a completed reception (completions divided by attempts).
+  passing_espnqb_rating: ESPN's proprietary composite quarterback rating blending efficiency, usage, and situational performance into a single metric.
+  passing_interception_pct: Percentage of pass attempts that resulted in an interception (interceptions divided by attempts).
+  passing_interceptions: Total number of passes thrown that were intercepted by the opposing defense.
+  passing_long_passing: Longest completed pass in yards recorded by the player during the period.
+  passing_net_passing_attempts: Total pass attempts minus sacks taken, representing meaningful dropbacks.
+  passing_net_passing_yards: Passing yards minus yards lost on sacks, giving a net aerial production figure.
+  passing_net_passing_yards_per_game: Net passing yards (after sack yardage deduction) per game played.
+  passing_net_total_yards: Combined net rushing and net passing yards accumulated by the player.
+  passing_net_yards_per_game: Net total offensive yards (rushing plus net passing) per game.
+  passing_net_yards_per_pass_attempt: Net passing yards divided by total pass attempts including sacks, penalizing passers for yardage lost in the pocket.
+  passing_passing_attempts: Total number of pass attempts thrown by the player.
+  passing_passing_big_plays: Number of passing plays that gained 20 or more yards.
+  passing_passing_first_downs: Number of pass completions that resulted in a first down.
+  passing_passing_fumbles: Number of times the player fumbled while in the act of passing or being sacked.
+  passing_passing_fumbles_lost: Number of passing-related fumbles that were recovered by the opposing team.
+  passing_passing_touchdown_pct: Percentage of pass attempts that resulted in a touchdown (touchdowns divided by attempts).
+  passing_passing_touchdowns: Total number of touchdown passes thrown by the player.
+  passing_passing_yards: Total aerial yards gained on completions thrown by the player.
+  passing_passing_yards_after_catch: Total yards gained by receivers after catching the ball on passes thrown by the player.
+  passing_passing_yards_at_catch: Total yards gained through the air (prior to the catch) on completions thrown by the player.
+  passing_passing_yards_per_game: Gross passing yards per game played by the quarterback.
+  passing_qb_rating: Traditional NFL passer rating computed from completion percentage, yards per attempt, touchdown percentage, and interception percentage on a roughly 0–158.3 scale.
+  passing_quarterback_rating: Alternate or supplemental quarterback rating value; may represent a different calculation context from passing_qb_rating (e.g., situational or opponent-adjusted).
+  passing_sack_yards_lost: Total yards lost by the player as a result of being sacked behind the line of scrimmage.
+  passing_sacks: Total number of times the player was sacked behind the line of scrimmage while attempting to pass.
+  passing_team_games_played: Number of games played by the player's team during which the player accumulated passing statistics.
+  passing_total_offensive_plays: Total number of offensive plays (pass attempts, rushes, and sacks) run with the player as the primary ball handler.
+  passing_total_points_per_game: Average total points scored by the player's team per game.
+  passing_total_touchdowns: Total touchdowns (passing, rushing, and receiving) scored by or credited to the player.
+  passing_total_yards: Combined total of passing, rushing, and receiving yards accumulated by the player.
+  passing_total_yards_from_scrimmage: Total yards from scrimmage (rushing plus receiving) credited to the player in addition to passing yards.
+  passing_two_point_pass_convs: Number of successful two-point conversion attempts thrown by the player.
+  passing_two_pt_pass: Number of two-point conversion passes the player successfully completed.
+  passing_two_pt_pass_attempts: Number of two-point conversion pass attempts thrown by the player regardless of outcome.
+  passing_yards_from_scrimmage_per_game: Yards from scrimmage (rushing plus receiving) per game for a player who also has passing statistics recorded.
+  passing_yards_per_completion: Average yards gained per completed pass attempt.
+  passing_yards_per_game: Gross passing yards per game (equivalent to passing_passing_yards_per_game; alternate label).
+  passing_yards_per_pass_attempt: Gross passing yards divided by total pass attempts, not penalizing for sacks.
+  receiving_avg_gain: Average yards gained per reception by the player.
+  receiving_espnwr_rating: ESPN's proprietary composite wide receiver / pass-catcher rating blending efficiency and usage metrics.
+  receiving_long_reception: Longest single reception in yards recorded by the player during the period.
+  receiving_net_total_yards: Combined net rushing and receiving yards accumulated by the player.
+  receiving_net_yards_per_game: Net total offensive yards (rushing plus receiving) per game for the player.
+  receiving_receiving_big_plays: Number of receptions that gained 20 or more yards.
+  receiving_receiving_first_downs: Number of receptions that resulted in a first down.
+  receiving_receiving_fumbles: Number of times the player fumbled after making a reception.
+  receiving_receiving_fumbles_lost: Number of post-reception fumbles by the player that were recovered by the opposing team.
+  receiving_receiving_targets: Total number of times the player was the intended target of a pass attempt.
+  receiving_receiving_touchdowns: Total number of touchdown receptions credited to the player.
+  receiving_receiving_yards: Total yards gained by the player on all receptions.
+  receiving_receiving_yards_after_catch: Total yards gained by the player after making contact with the ball (yards after catch).
+  receiving_receiving_yards_at_catch: Total air yards at the point of the catch (depth of target) on receptions by the player.
+  receiving_receiving_yards_per_game: Receiving yards per game played by the player.
+  receiving_receptions: Total number of passes successfully caught by the player.
+  receiving_team_games_played: Number of games played by the player's team during which the player accumulated receiving statistics.
+  receiving_total_offensive_plays: Total number of offensive plays run during which the player was active on the field.
+  receiving_total_points_per_game: Average total points scored by the player's team per game (context for the receiver's role).
+  receiving_total_touchdowns: Total touchdowns (rushing and receiving) scored by the player.
+  receiving_total_yards: Combined total rushing and receiving yards accumulated by the player.
+  receiving_total_yards_from_scrimmage: Total yards from scrimmage (rushing plus receiving) credited to the player.
+  receiving_two_point_rec_convs: Number of successful two-point conversion receptions caught by the player.
+  receiving_two_pt_reception: Number of two-point conversion passes the player successfully caught.
+  receiving_two_pt_reception_attempts: Number of two-point conversion targets thrown to the player regardless of outcome.
+  receiving_yards_from_scrimmage_per_game: Total yards from scrimmage per game for the player.
+  receiving_yards_per_game: Receiving yards per game (equivalent label to receiving_receiving_yards_per_game).
+  receiving_yards_per_reception: Average yards gained per reception, also known as yards per catch.
+  rushing_avg_gain: Average yards gained per rushing attempt by the player.
+  rushing_espnrb_rating: ESPN's proprietary composite running back rating blending efficiency and usage metrics.
+  rushing_long_rushing: Longest single rushing play in yards recorded by the player during the period.
+  rushing_net_total_yards: Combined net rushing and receiving yards accumulated by the player.
+  rushing_net_yards_per_game: Net total offensive yards per game for the player.
+  rushing_rushing_attempts: Total number of rushing attempts carried by the player.
+  rushing_rushing_big_plays: Number of rushing plays that gained 10 or more yards.
+  rushing_rushing_first_downs: Number of rushing attempts that resulted in a first down.
+  rushing_rushing_fumbles: Number of times the player fumbled while carrying the ball on a rushing play.
+  rushing_rushing_fumbles_lost: Number of rushing fumbles by the player that were recovered by the opposing team.
+  rushing_rushing_touchdowns: Total number of rushing touchdowns scored by the player.
+  rushing_rushing_yards: Total yards gained by the player on all rushing attempts.
+  rushing_rushing_yards_per_game: Rushing yards per game played by the player.
+  rushing_stuff_yards_lost: Total yards lost on rushing plays where the player was tackled behind the line of scrimmage (stuffed).
+  rushing_stuffs: Number of rushing attempts where the player was tackled at or behind the line of scrimmage.
+  rushing_team_games_played: Number of games played by the player's team during which the player accumulated rushing statistics.
+  rushing_total_offensive_plays: Total number of offensive plays run with the player active in a rushing role.
+  rushing_total_points_per_game: Average total points scored by the player's team per game.
+  rushing_total_touchdowns: Total touchdowns (rushing and receiving) scored by the player.
+  rushing_total_yards: Combined total rushing and receiving yards accumulated by the player.
+  rushing_total_yards_from_scrimmage: Total yards from scrimmage (rushing plus receiving) credited to the player.
+  rushing_two_point_rush_convs: Number of successful two-point conversion rushes scored by the player.
+  rushing_two_pt_rush: Number of two-point conversion rushes the player successfully converted.
+  rushing_two_pt_rush_attempts: Number of two-point conversion rush attempts by the player regardless of outcome.
+  rushing_yards_from_scrimmage_per_game: Total yards from scrimmage per game for the player.
+  rushing_yards_per_game: Rushing yards per game (equivalent label to rushing_rushing_yards_per_game).
+  rushing_yards_per_rush_attempt: Average yards gained per rushing attempt by the player.
+  scoring_defensive_points: Total points scored by the player's defense via safeties, defensive touchdowns, and blocked kick returns.
+  scoring_field_goals: Total number of field goals successfully made by the player during the period.
+  scoring_kick_extra_points: Total number of extra point attempts (PAT kicks) by the player.
+  scoring_kick_extra_points_made: Total number of extra points successfully kicked through the uprights by the player.
+  scoring_misc_points: Points scored via miscellaneous methods not captured by other scoring categories.
+  scoring_one_pt_safeties_made: Number of one-point safeties recorded, scored when the defense stops an offense that is attempting a two-point conversion in their own end zone.
+  scoring_passing_touchdowns: Total passing touchdowns thrown by the player, contributing to their total scoring line.
+  scoring_receiving_touchdowns: Total receiving touchdowns scored by the player.
+  scoring_return_touchdowns: Total touchdowns scored by the player on kick or punt returns.
+  scoring_rushing_touchdowns: Total rushing touchdowns scored by the player.
+  scoring_total_points: Total points contributed by the player across all scoring methods (touchdowns, PATs, field goals, etc.).
+  scoring_total_points_per_game: Average total points contributed by the player per game.
+  scoring_total_touchdowns: Total touchdowns scored or thrown by the player across all methods.
+  scoring_total_two_point_convs: Total number of successful two-point conversions scored or thrown by the player.
+  scoring_two_point_pass_convs: Number of successful two-point conversion passes thrown by the player.
+  scoring_two_point_rec_convs: Number of successful two-point conversion receptions caught by the player.
+  scoring_two_point_rush_convs: Number of successful two-point conversion rushes scored by the player.
+espn_nfl_schedule:
+  away_current_rank: Current AP or ESPN power ranking of the away team at the time of the game.
+  away_linescores: Comma-separated or serialized quarter-by-quarter score totals for the away team.
+  away_records: Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference).
+  home_current_rank: Current AP or ESPN power ranking of the home team at the time of the game.
+  home_linescores: Comma-separated or serialized quarter-by-quarter score totals for the home team.
+  home_records: Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference).
+  status_is_tbd_flex: Boolean flag indicating whether the game's broadcast slot is designated as a flex/TBD window.
+  venue_address_country: Two-letter ISO country code or country name for the country where the venue is located.
+load_contracts:
+  cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
+load_depth_charts:
+  club_code: Three-letter team abbreviation identifying the NFL club on the depth chart row.
+  depth_position: Positional grouping label used to place the player on the team's official depth chart (e.g., 'QB', 'WR1', 'ILB').
+  depth_team: Numeric depth rank indicating whether the player is listed as the starter (1), backup (2), or further reserve on the depth chart.
+  elias_id: Elias Sports Bureau identifier for the player, used by the NFL for official statistical tracking.
+  formation: Offensive or defensive formation context in which the depth chart position applies (e.g., 'Shotgun', 'Nickel').
+load_ftn_charting:
+  n_defense_box: Number of defenders positioned in the box at the snap, as charted by FTN Data.
+load_nfl_contracts:
+  cols: Number of contract columns returned in the contracts dataset (metadata artifact from the loader).
+load_nfl_depth_charts:
+  club_code: Three-letter team abbreviation identifying the NFL club for this depth chart entry.
+  depth_position: Specific positional slot on the depth chart (e.g., 'QB1', 'WR2') indicating where the player ranks.
+  depth_team: Numeric depth rank (1 = starter, 2 = backup, etc.) of the player at their position.
+  elias_id: Elias Sports Bureau player identifier used for official NFL record-keeping and statistics attribution.
+  formation: Offensive or defensive formation label (e.g., 'Base 3-4', 'Nickel') associated with this depth chart grouping.
+load_nfl_ftn_charting:
+  n_defense_box: Number of defenders aligned in the box at the time of the snap, as charted by FTN Data.
+load_nfl_officials:
+  game_key: Unique nflverse game identifier linking the officiating record to a specific NFL game.
+load_nfl_pfr_advstats:
+  def_times_blitzed: Number of times the defensive player sent additional rushers on a blitz during the game or season period.
+  def_times_hitqb: Number of times the defensive player made contact with the quarterback (hit on the QB) during pass rushes.
+  def_times_hurried: Number of times the defensive player hurried or pressured the quarterback without recording a sack.
+  passing_bad_throw_pct: Percentage of a passer's attempts classified as bad throws (inaccurate, off-target, or uncatchable).
+  passing_bad_throws: Total number of passes thrown by the passer that were classified as inaccurate or poor-quality throws per Pro Football Reference.
+  passing_drop_pct: Percentage of a passer's catchable targets that were dropped by the intended receiver.
+  passing_drops: Total number of catchable passes thrown by the passer that were dropped by receivers per Pro Football Reference.
+  receiving_drop: Number of catchable targets the receiver dropped during the game or season period per Pro Football Reference.
+  receiving_drop_pct: Percentage of the receiver's catchable targets that were dropped during the game or season period.
+  times_pressured_pct: Percentage of the passer's dropbacks during which they faced pressure from the opposing defense.
+  times_sacked: Total number of times the passer was sacked during the game or season period per Pro Football Reference.
+load_nfl_pfr_def:
+  air: Total air yards (depth of target) on passes thrown at the player in coverage, as tracked by Pro Football Reference.
+  bats: Number of passes batted down at the line of scrimmage by the player.
+  bltz: Number of snaps on which the player blitzed the quarterback, as recorded by Pro Football Reference.
+  cmp: Number of passes completed by the opposing quarterback when targeting the player in coverage.
+  cmp_percent: Completion percentage allowed by the player in coverage (completions divided by targets).
+  comb: Total combined tackles (solo plus assisted) recorded by the player per Pro Football Reference.
+  dadot: Depth of target air yards on defended passes — average distance downfield at the point of the throw when the player was in coverage.
+  gs: Number of games the player started during the season or period covered by this row.
+  hrry: Number of times the player hurried the opposing quarterback without recording a full sack, per Pro Football Reference.
+  loaded: Indicator or metadata field from the Pro Football Reference data load, typically flagging the data source state or row completeness.
+  m_tkl: Number of missed tackles attributed to the player by Pro Football Reference.
+  m_tkl_percent: Percentage of tackle attempts the player missed out of total tackle opportunities.
+  prss: Number of times the player pressured the quarterback (combining sacks, hits, and hurries) per Pro Football Reference.
+  qbkd: Number of times the player knocked down the quarterback, making contact after or during a pass attempt.
+  rat: Passer rating allowed by the player in coverage — the NFL passer rating of quarterbacks when targeting this defender.
+  sk: Number of sacks recorded by the player, bringing the quarterback down behind the line of scrimmage.
+  td: Number of touchdowns allowed by the player in coverage.
+  tgt: Total number of times the player was the nearest defender on a pass attempt (targets in coverage) per Pro Football Reference.
+  yac: Yards after catch allowed by the player — yards gained by receivers after the catch when the player was the nearest defender.
+  yds: Total passing yards allowed by the player in coverage.
+  yds_cmp: Average yards allowed per completion when the player was in coverage.
+  yds_tgt: Average yards allowed per target thrown at the player in coverage.
+load_nfl_pfr_pass:
+  completed_air_yards: Total air yards on completed passes only, measuring how far the ball traveled downfield through the air to the point of completion.
+  completed_air_yards_per_completion: Average air yards per completed pass, representing the passer's typical depth of target on successful throws.
+  completed_air_yards_per_pass_attempt: Average completed air yards per pass attempt (including incompletions), a rate measure of downfield passing efficiency.
+  intended_air_yards: Total air yards on all pass attempts including incompletions, measuring aggregate downfield targeting intent from Pro Football Reference.
+  intended_air_yards_per_pass_attempt: Average intended air yards per pass attempt, capturing the passer's average depth of target regardless of completion outcome.
+  pass_yards_after_catch: Total yards gained by receivers after the catch, isolating the yards generated after initial ball reception from Pro Football Reference.
+  pass_yards_after_catch_per_completion: Average yards after catch per completion, measuring how much yardage receivers generate on the ground after catching the ball.
+  scramble_yards_per_attempt: Average yards gained per scramble attempt by the quarterback, from Pro Football Reference advanced passing stats.
+  scrambles: Total number of quarterback scrambles (designed dropback converted to a run) recorded by Pro Football Reference.
+load_nfl_pfr_rec:
+  adot: Average depth of target — mean air yards at point of throw on pass attempts directed at the receiver, per Pro Football Reference.
+  brk_tkl: Number of broken tackles credited to the player after a reception, per Pro Football Reference.
+  drop: Number of catchable passes the player dropped (failed to secure after the ball reached the receiver's hands).
+  drop_percent: Percentage of catchable targets that the player dropped.
+  gs: Number of games the player started at a receiver position during the period covered.
+  loaded: Indicator or metadata field from the Pro Football Reference data load, flagging the row's data source state or completeness.
+  rat: Passer rating generated on passes thrown to the player — the NFL passer rating when the receiver is targeted.
+  rec: Total receptions made by the player during the period covered.
+  rec_br: Broken tackles per reception — rate at which the player evaded tacklers after catches, per Pro Football Reference.
+  td: Total receiving touchdowns scored by the player.
+  tgt: Total number of times the player was the intended receiver on a pass attempt.
+  x1d: Number of receptions by the player that resulted in a first down.
+  yac: Total yards gained by the player after the catch.
+  yac_r: Average yards after the catch per reception.
+  ybc: Total yards the ball traveled in the air (before the catch) on receptions by the player.
+  ybc_r: Average air yards before the catch per reception.
+  yds: Total receiving yards gained by the player on all receptions.
+load_nfl_pfr_rush:
+  att: Total rushing attempts by the player during the period covered.
+  att_br: Rushing attempts per broken tackle, measuring how often the player required contact to break free.
+  brk_tkl: Number of broken tackles recorded on rushing plays.
+  gs: Number of games started by the player during the period covered.
+  loaded: Source or load-batch identifier indicating which data file or release this row was pulled from.
+  td: Total rushing touchdowns scored during the period covered.
+  x1d: Number of first downs gained via rushing during the period covered.
+  yac: Yards after contact accumulated on rushing plays.
+  yac_att: Yards after contact per rushing attempt.
+  ybc: Yards before contact accumulated on rushing plays, measuring yards gained in open field before being touched.
+  ybc_att: Yards before contact per rushing attempt.
+  yds: Total rushing yards gained during the period covered.
+load_nfl_pfr_weekly_def:
+  def_adot: Average depth of target (in yards) against this defender on passing plays during the week.
+  def_air_yards_completed: Total air yards on completed passes allowed by the defender during the week.
+  def_completion_pct: Completion percentage allowed by the defender on targets thrown in their coverage during the week.
+  def_completions_allowed: Number of completions allowed by the defender on passes thrown into their coverage during the week.
+  def_missed_tackle_pct: Percentage of the defender's tackle opportunities that resulted in a missed tackle during the week.
+  def_missed_tackles: Number of missed tackles recorded against this defender during the week per Pro Football Reference.
+  def_passer_rating_allowed: NFL passer rating of quarterbacks when targeting this defender in coverage during the week.
+  def_pressures: Total number of quarterback pressures (hurries + hits + sacks) generated by the defender during the week.
+  def_receiving_td_allowed: Number of receiving touchdowns allowed by the defender while in coverage during the week.
+  def_tackles_combined: Total combined tackles (solo + assisted) recorded by the defender during the week per Pro Football Reference.
+  def_targets: Number of passing attempts thrown at or into the coverage area of this defender during the week.
+  def_times_blitzed: Number of times this defender was sent as a blitzer on a passing play during the week.
+  def_times_hitqb: Number of times this defender made contact with the quarterback as part of a pass rush during the week.
+  def_times_hurried: Number of times this defender hurried the quarterback on a pass rush without recording a sack during the week.
+  def_yards_after_catch: Total yards gained by receivers after the catch on completions allowed by this defender during the week.
+  def_yards_allowed: Total receiving yards allowed by this defender in coverage during the week per Pro Football Reference.
+  def_yards_allowed_per_cmp: Receiving yards allowed per completion by this defender in coverage during the week.
+  def_yards_allowed_per_tgt: Receiving yards allowed per target thrown at this defender in coverage during the week.
+load_nfl_pfr_weekly_pass:
+  def_times_blitzed: Number of pass plays on which the defense sent a blitz, as experienced by the quarterback in this weekly log.
+  def_times_hitqb: Number of times the quarterback was hit by a defender on a pass play in this weekly game log.
+  def_times_hurried: Number of times the quarterback was hurried (pressured into an early throw) without being sacked or hit.
+  passing_bad_throw_pct: Percentage of pass attempts that were charted as poor throws (inaccurate, off-target, or otherwise below expectation), per Pro Football Reference.
+  passing_bad_throws: Number of pass attempts charted as poor or inaccurate throws by the quarterback in this weekly log.
+  passing_drop_pct: Percentage of catchable targets that were dropped by receivers on passes thrown by the quarterback.
+  passing_drops: Number of catchable passes thrown by the quarterback that were dropped by receivers.
+  receiving_drop: Number of catchable targets the player (as receiver) dropped in this weekly game.
+  receiving_drop_pct: Percentage of catchable targets the player dropped in this weekly game.
+  times_pressured_pct: Percentage of pass plays on which the quarterback faced defensive pressure in this weekly game.
+  times_sacked: Number of times the quarterback was sacked in this weekly game log.
+load_nfl_pfr_weekly_rec:
+  passing_drop_pct: Percentage of pass targets that resulted in a drop, as tracked by Pro Football Reference.
+  passing_drops: Number of passes dropped by intended receivers on targeted throws.
+  receiving_broken_tackles: Number of broken tackles recorded by the receiver after the catch.
+  receiving_drop: Number of catchable passes dropped by the receiver during the week.
+  receiving_drop_pct: Percentage of catchable targets that were dropped by the receiver during the week.
+  receiving_int: Number of passes intended for the receiver that were intercepted.
+  receiving_rat: Passer rating when targeting this receiver, reflecting QB efficiency on those throws.
+  rushing_broken_tackles: Number of broken tackles recorded by the player on rushing plays during the week.
+load_nfl_pfr_weekly_rush:
+  receiving_broken_tackles: Number of broken tackles the player recorded after a reception in this weekly game log.
+  rushing_broken_tackles: Number of broken tackles the player recorded on rushing plays in this weekly game log.
+  rushing_yards_after_contact: Total rushing yards gained by the player after initial contact with a defender in this weekly game log.
+  rushing_yards_after_contact_avg: Average rushing yards gained after initial contact per rushing attempt in this weekly game log.
+  rushing_yards_before_contact: Total rushing yards gained by the player before making contact with a defender in this weekly game log.
+  rushing_yards_before_contact_avg: Average rushing yards gained before first contact per rushing attempt in this weekly game log.
+load_nfl_player_stats:
+  opponent_team: Abbreviation or name of the opposing team faced by the player in a given game or week.
+load_nfl_schedule:
+  ftn: FTN Data game identifier corresponding to this scheduled game.
+load_nfl_team_stats:
+  def_safeties: Number of safeties scored by the defense (opponent tackled in their own end zone) during the period.
+  fg_att: Total number of field goal attempts by the team's kicker during the game or season period.
+  fg_blocked: Total number of field goal attempts that were blocked by the opposing defense during the period.
+  fg_blocked_distance: Distance (in yards) of field goal attempts that were blocked by the opposing defense during the period.
+  fg_blocked_list: List of distances (in yards) of each blocked field goal attempt during the game or season period.
+  fg_long: Distance in yards of the longest successful field goal made by the team's kicker during the period.
+  fg_made_0_19: Number of successful field goals made from 0–19 yards during the game or season period.
+  fg_made_20_29: Number of successful field goals made from 20–29 yards during the game or season period.
+  fg_made_30_39: Number of successful field goals made from 30–39 yards during the game or season period.
+  fg_made_40_49: Number of successful field goals made from 40–49 yards during the game or season period.
+  fg_made_50_59: Number of successful field goals made from 50–59 yards during the game or season period.
+  fg_made_60_: Number of successful field goals made from 60 yards or longer during the game or season period.
+  fg_made_distance: Cumulative distance in yards of all successful field goals made during the game or season period.
+  fg_made_list: List of distances (in yards) of each successful field goal made during the game or season period.
+  fg_missed: Total number of field goal attempts missed (not blocked) by the team's kicker during the period.
+  fg_missed_0_19: Number of field goal attempts from 0–19 yards that were missed (not blocked) during the period.
+  fg_missed_20_29: Number of field goal attempts from 20–29 yards that were missed (not blocked) during the period.
+  fg_missed_30_39: Number of field goal attempts from 30–39 yards that were missed (not blocked) during the period.
+  fg_missed_40_49: Number of field goal attempts from 40–49 yards that were missed (not blocked) during the period.
+  fg_missed_50_59: Number of field goal attempts from 50–59 yards that were missed (not blocked) during the period.
+  fg_missed_60_: Number of field goal attempts from 60 yards or longer that were missed (not blocked) during the period.
+  fg_missed_distance: Cumulative distance in yards of all missed field goal attempts during the game or season period.
+  fg_missed_list: List of distances (in yards) of each missed field goal attempt during the game or season period.
+  fumble_recovery_opp: Number of fumbles recovered by the team that were originally lost by the opposing team.
+  fumble_recovery_own: Number of fumbles recovered by the team that were originally fumbled by their own players.
+  fumble_recovery_tds: Number of touchdowns scored by the team on fumble recoveries during the game or season period.
+  fumble_recovery_yards_opp: Total yards gained on returns of fumbles recovered from the opposing team during the period.
+  fumble_recovery_yards_own: Total yards gained (or lost) on recoveries of the team's own fumbles during the period.
+  gwfg_att: Number of game-winning field goal attempts made in the final moments to win the game.
+  gwfg_blocked: Number of game-winning field goal attempts that were blocked by the opposing defense.
+  gwfg_distance: Distance in yards of the game-winning field goal attempt (or attempts) during the period.
+  gwfg_made: Number of successful game-winning field goals made to secure a victory in the final moments.
+  gwfg_missed: Number of game-winning field goal attempts that were missed (no good) in the final moments.
+  kickoff_return_yards: Total yards gained by the team on kickoff returns during the game or season period.
+  kickoff_returns: Total number of kickoff returns recorded by the team during the game or season period.
+  misc_yards: Miscellaneous yards not attributed to passing, rushing, or standard return categories during the period.
+  opponent_team: Team abbreviation or identifier of the opposing team faced during the game or period.
+  passing_cpoe: Completion percentage over expectation (CPOE) for the team's passing attack during the period, relative to a model-based baseline.
+  passing_interceptions: Total number of interceptions thrown by the team's passers during the game or season period.
+  pat_att: Total number of point-after-touchdown (PAT / extra point) attempts by the team's kicker during the period.
+  pat_blocked: Number of point-after-touchdown attempts that were blocked by the opposing defense during the period.
+  pat_made: Total number of successful point-after-touchdown kicks made by the team's kicker during the period.
+  pat_missed: Number of point-after-touchdown attempts that were missed (not blocked) during the period.
+  pat_pct: Percentage of point-after-touchdown attempts that were successfully converted during the period.
+  sack_yards_lost: Total offensive yards lost by the team on plays where the quarterback was sacked during the period.
+  sacks_suffered: Total number of times the team's quarterback was sacked by the opposing defense during the period.
+  timeouts: Number of timeouts remaining or used by the team during the game or period.
+load_nfl_teams:
+  team_color2: Secondary brand color for the team in hexadecimal format (e.g., '#FFB612').
+  team_color3: Tertiary brand color for the team in hexadecimal format, used in alternate uniforms or accents.
+  team_color4: Quaternary brand color for the team in hexadecimal format, part of the team's full brand palette.
+  team_conf: Conference affiliation of the team (e.g., 'AFC' or 'NFC').
+  team_conference_logo: URL to the logo image for the team's conference (AFC or NFC).
+  team_division: Division affiliation of the team (e.g., 'AFC North', 'NFC West').
+  team_league_logo: URL to the NFL league logo image.
+  team_logo_espn: URL to the team's primary logo image as hosted by ESPN.
+  team_logo_squared: URL to a square-cropped version of the team's logo suitable for thumbnails and grid layouts.
+  team_logo_wikipedia: URL to the team's primary logo image as hosted on Wikimedia Commons / Wikipedia.
+  team_nick: Team nickname (e.g., 'Chiefs', 'Eagles', 'Patriots') without the city or state prefix.
+  team_wordmark: URL to the team's wordmark image (team name rendered in official typography without the primary logo mark).
+load_officials:
+  game_key: Unique numeric key assigned by the NFL to identify the specific game in official records.
+load_pfr_advstats:
+  def_times_blitzed: Number of plays on which the defensive player sent five or more pass rushers, from Pro Football Reference advanced defensive stats.
+  def_times_hitqb: Number of times the defensive player hit the quarterback on a pass play without recording a sack, from Pro Football Reference.
+  def_times_hurried: Number of times the defensive player hurried (pressured but did not sack or hit) the quarterback, from Pro Football Reference.
+  passing_bad_throw_pct: Percentage of pass attempts classified as bad throws by Pro Football Reference (passes the passer should not have attempted or severely underthreww/overthrew).
+  passing_bad_throws: Raw count of bad throws by the passer, as charted and defined by Pro Football Reference advanced passing data.
+  passing_drop_pct: Percentage of pass attempts dropped by the receiver, isolating receiver-side incompletions from passer error.
+  passing_drops: Raw count of catchable passes dropped by the intended receiver, from Pro Football Reference charting.
+  receiving_drop: Number of catchable targets dropped by the receiver in the given game or season, from Pro Football Reference advanced receiving data.
+  receiving_drop_pct: Percentage of targets that resulted in a drop by the receiver, from Pro Football Reference advanced receiving data.
+  times_pressured_pct: Percentage of pass-blocking snaps on which the lineman or back allowed the quarterback to be pressured, from Pro Football Reference.
+  times_sacked: Total number of times the defensive player recorded a sack of the quarterback, from Pro Football Reference.
+load_player_stats:
+  opponent_team: Abbreviation of the opposing team the player faced in the game or week represented by this row.
+load_schedules:
+  ftn: FTN Data game identifier used to join schedule records with FTN charting and tracking data.
+load_team_stats:
+  def_safeties: Number of safeties recorded by the team's defense (tackling an opponent in their own end zone).
+  fg_att: Total field goal attempts by the team's kicker during the period covered.
+  fg_blocked: Total number of field goal attempts that were blocked by the opposing defense.
+  fg_blocked_distance: Distance in yards of the most recent or representative blocked field goal attempt.
+  fg_blocked_list: Comma-separated list of distances (in yards) for field goal attempts blocked by or against the team.
+  fg_long: Distance in yards of the team's longest successful field goal during the period covered.
+  fg_made_0_19: Number of field goals made by the team from 0–19 yards.
+  fg_made_20_29: Number of field goals made by the team from 20–29 yards.
+  fg_made_30_39: Number of field goals made by the team from 30–39 yards.
+  fg_made_40_49: Number of field goals made by the team from 40–49 yards.
+  fg_made_50_59: Number of field goals made by the team from 50–59 yards.
+  fg_made_60_: Number of field goals made by the team from 60 yards or longer.
+  fg_made_distance: Total cumulative distance in yards of all successful field goals made by the team.
+  fg_made_list: Comma-separated list of distances (in yards) for each successful field goal made by the team.
+  fg_missed: Total number of field goal attempts that were missed (not blocked, not made) by the team's kicker.
+  fg_missed_0_19: Number of field goal attempts missed from 0–19 yards.
+  fg_missed_20_29: Number of field goal attempts missed from 20–29 yards.
+  fg_missed_30_39: Number of field goal attempts missed from 30–39 yards.
+  fg_missed_40_49: Number of field goal attempts missed from 40–49 yards.
+  fg_missed_50_59: Number of field goal attempts missed from 50–59 yards.
+  fg_missed_60_: Number of field goal attempts missed from 60 yards or longer.
+  fg_missed_distance: Total cumulative distance in yards of all missed field goal attempts by the team.
+  fg_missed_list: Comma-separated list of distances (in yards) for each missed field goal attempt by the team.
+  fumble_recovery_opp: Number of fumbles recovered by the team from the opposing offense (defensive fumble recoveries).
+  fumble_recovery_own: Number of the team's own fumbles that were recovered by the team itself.
+  fumble_recovery_tds: Number of touchdowns scored by the team on fumble recoveries (own or opponent).
+  fumble_recovery_yards_opp: Total yards gained by the team on returns of opponent fumble recoveries.
+  fumble_recovery_yards_own: Total yards gained after recovering their own fumbles.
+  gwfg_att: Number of game-winning field goal attempts (potential go-ahead kicks in the final moments).
+  gwfg_blocked: Number of game-winning field goal attempts that were blocked by the opposing defense.
+  gwfg_distance: Distance in yards of the game-winning field goal attempt(s) during the period covered.
+  gwfg_made: Number of game-winning field goals successfully converted by the team's kicker.
+  gwfg_missed: Number of game-winning field goal attempts that were missed by the team's kicker.
+  kickoff_return_yards: Total yards gained by the team on kickoff returns during the period covered.
+  kickoff_returns: Total number of kickoff return attempts by the team.
+  misc_yards: Yards gained by the team through miscellaneous means not captured in standard rushing, passing, or return categories.
+  opponent_team: Abbreviation of the opposing team the team faced in the game or week represented by this row.
+  passing_cpoe: Completion percentage over expectation for the team's passing game — how much better or worse actual completion rate was versus the model-predicted rate.
+  passing_interceptions: Total number of interceptions thrown by the team's quarterbacks during the period covered.
+  pat_att: Total number of extra point (PAT) kick attempts by the team.
+  pat_blocked: Number of extra point attempts that were blocked by the opposing defense.
+  pat_made: Total number of extra points successfully kicked by the team.
+  pat_missed: Number of extra point kick attempts that were missed (neither made nor blocked).
+  pat_pct: Extra point conversion percentage (pat_made divided by pat_att) for the team's kicker.
+  sack_yards_lost: Total yards lost by the team's offense as a result of being sacked.
+  sacks_suffered: Total number of times the team's quarterback was sacked during the period covered.
+  timeouts: Number of timeouts remaining or used by the team during the game or period covered.
+load_teams:
+  team_color2: Secondary brand color for the team, expressed as a hex color code.
+  team_color3: Tertiary brand color for the team, expressed as a hex color code.
+  team_color4: Quaternary brand color for the team, expressed as a hex color code.
+  team_conf: Conference the team belongs to (e.g., 'AFC', 'NFC').
+  team_conference_logo: URL of the conference logo image associated with the team.
+  team_division: Division within the conference the team belongs to (e.g., 'AFC East').
+  team_league_logo: URL of the NFL league logo image.
+  team_logo_espn: URL of the team's primary logo as hosted on ESPN.
+  team_logo_squared: URL of a square-format version of the team's logo.
+  team_logo_wikipedia: URL of the team's logo image as hosted on Wikipedia.
+  team_nick: Team nickname or mascot name (e.g., 'Chiefs', 'Patriots').
+  team_wordmark: URL of the team's wordmark (text-based logo) image.
+nfl_combine_profiles:
+  armLength: Arm length of the prospect measured at the NFL Combine, expressed in inches.
+  athleticismScore: Composite athleticism score assigned to the prospect based on Combine athletic drills.
+  benchPress: Raw bench press result string from the NFL Combine (reps at 225 lbs), may include designation notes.
+  benchPress_designation: Designation label for the bench press result (e.g., indicating official or pro-day measurement).
+  benchPress_repetitions: Number of repetitions completed at 225 lbs on the bench press at the NFL Combine.
+  bio: Biographical narrative text about the prospect published in the NFL Combine profile.
+  broadJump: Raw broad jump result string from the NFL Combine, may include designation notes.
+  broadJump_designation: Designation label for the broad jump result (e.g., official Combine or pro-day measurement).
+  broadJump_inches: Broad jump distance in inches recorded at the NFL Combine.
+  collegeClass: College class year of the prospect at the time of the NFL Draft (e.g., 'Senior', 'Junior').
+  combineAttendance: Indicates whether the prospect attended and participated in the NFL Scouting Combine.
+  draftGrade: Numerical draft grade assigned to the prospect by NFL evaluators.
+  draftProjection: Projected draft round or range for the prospect based on scouting evaluations.
+  fortyYardDash: Raw forty-yard dash result string from the NFL Combine, may include designation notes.
+  fortyYardDash_designation: Designation label for the forty-yard dash time (e.g., official Combine or pro-day measurement).
+  fortyYardDash_seconds: Forty-yard dash time in seconds recorded at the NFL Combine.
+  handSize: Hand size of the prospect measured at the NFL Combine, expressed in inches.
+  nflComparison: NFL player comparison cited by scouts to describe the prospect's projected pro style or ceiling.
+  overview: Scouting overview narrative providing a summary of the prospect's abilities and profile.
+  person_collegeNames: Name(s) of the college(s) attended by the prospect.
+  person_displayName: Full display name of the prospect as used in NFL Combine records.
+  person_esbId: ESPN-Elias Sports Bureau (ESB) identifier for the prospect.
+  person_firstName: First name of the prospect.
+  person_hometown: Hometown city or region of the prospect.
+  person_lastName: Last name of the prospect.
+  positionGroup: Position group the prospect is evaluated under at the NFL Combine (e.g., 'WR', 'OL').
+  proFortyYardDash: Raw pro-day forty-yard dash result string for the prospect, may include designation notes.
+  proFortyYardDash_designation: Designation label for the pro-day forty-yard dash (e.g., 'pro day' measurement).
+  proFortyYardDash_seconds: Pro-day forty-yard dash time in seconds for the prospect.
+  productionScore: Composite college production score assigned to the prospect based on statistical output.
+  profileAuthor: Name of the scout or analyst who authored the prospect's combine profile.
+  sixtyYardShuttle: Raw sixty-yard shuttle drill result string from the NFL Combine, may include designation notes.
+  sizeScore: Composite size score assigned to the prospect based on height, weight, and arm length measurements.
+  sourcesTellUs: Scouting intelligence notes from team and media sources about the prospect's draft stock or fit.
+  strengths: Narrative description of the prospect's key strengths as identified by scouts.
+  tenYardSplit: Raw ten-yard split time string from the NFL Combine, may include designation notes.
+  tenYardSplit_designation: Designation label for the ten-yard split time (e.g., official Combine or pro-day measurement).
+  tenYardSplit_seconds: Ten-yard split time in seconds recorded at the NFL Combine, measuring initial burst off the line.
+  threeConeDrill: Raw three-cone drill result string from the NFL Combine, may include designation notes.
+  threeConeDrill_designation: Designation label for the three-cone drill time (e.g., official Combine or pro-day measurement).
+  threeConeDrill_seconds: Three-cone drill time in seconds recorded at the NFL Combine, measuring change-of-direction ability.
+  twentyYardShuttle: Raw twenty-yard short shuttle result string from the NFL Combine, may include designation notes.
+  twentyYardShuttle_designation: Designation label for the twenty-yard shuttle time (e.g., official Combine or pro-day measurement).
+  twentyYardShuttle_seconds: Twenty-yard short shuttle time in seconds recorded at the NFL Combine.
+  verticalJump: Raw vertical jump result string from the NFL Combine, may include designation notes.
+  verticalJump_designation: Designation label for the vertical jump measurement (e.g., official Combine or pro-day measurement).
+  verticalJump_inches: Vertical jump height in inches recorded at the NFL Combine.
+  weaknesses: Narrative description of the prospect's key weaknesses or areas needing development as identified by scouts.
+nfl_draft_picks:
+  draftNumberOverall: Overall pick number in the NFL Draft, counting sequentially from pick 1 across all rounds.
+  draftPosition: Pick number within the draft round (e.g., the 3rd pick of round 2).
+  draftRound: Round of the NFL Draft in which the pick occurs.
+  personId: NFL.com Shield API identifier for the player associated with this draft pick.
+  pickIsIn: Indicates whether the draft pick selection has been officially submitted to the league.
+  teamId: NFL.com Shield API identifier for the team holding this draft pick.
+  tradeNote: Text note describing any trade involving this pick, if applicable.
+  tweetSent: Indicates whether an announcement tweet was sent for this draft pick selection.
+  tweetsSent: Indicates whether all scheduled announcement tweets for this pick have been sent.
+nfl_game_pbp:
+  clockTime: Game clock time at the start of the play, formatted as MM:SS within the quarter.
+  driveNetYards: Net yards gained on the current drive up to and including this play.
+  drivePlayCount: Number of offensive plays run on the current drive up to and including this play.
+  driveSequenceNumber: Sequential identifier for the drive within the game, starting at 1.
+  driveTimeOfPossession: Elapsed time of possession for the current drive, formatted as MM:SS.
+  endClockTime: Game clock time at the end of the play, formatted as MM:SS within the quarter.
+  endYardLine: Yard line where the ball was placed at the conclusion of the play.
+  firstDown: Indicates whether the play resulted in a first down.
+  goalToGo: Indicates whether the offensive team is in a goal-to-go situation at the start of the play.
+  isBigPlay: Classification label indicating whether this play is designated as a big play by the NFL.
+  latestPlay: Indicates whether this play is the most recent play recorded in the live feed.
+  nextPlayIsGoalToGo: Indicates whether the next play will begin in a goal-to-go situation.
+  nextPlayType: Play type category anticipated or assigned to the next play in sequence.
+  orderSequence: Sequential ordering value used to sort plays within the game in chronological order.
+  penaltyOnPlay: Indicates whether a penalty was called on this play.
+  playClock: Play clock value in seconds at the snap of the ball.
+  playDeleted: Indicates whether this play record has been marked as deleted or voided.
+  playDescription: Official text description of the play as provided by the NFL.
+  playDescriptionWithJerseyNumbers: Play description text augmented with player jersey numbers for participant identification.
+  playReviewStatus: Status of any official review of the play (e.g., confirmed, overturned, stands).
+  playStats: Internal NFL stat identifier linking this play to associated statistical records.
+  playType: Categorical classification of the play type (e.g., PASS, RUSH, PUNT, KICKOFF).
+  possessionTeam_abbreviation: Abbreviated team name for the team with offensive possession on this play.
+  possessionTeam_franchise_currentLogo: URL of the current primary logo for the possessing team's franchise.
+  possessionTeam_franchise_decorativeElementsColor: Decorative elements color for the possessing team's franchise branding, as a hex code.
+  possessionTeam_franchise_largeTypeColor: Large-type display color for the possessing team's franchise branding, as a hex code.
+  possessionTeam_franchise_primaryColor: Primary brand color for the possessing team's franchise, expressed as a hex color code.
+  possessionTeam_franchise_secondaryColor: Secondary brand color for the possessing team's franchise, expressed as a hex color code.
+  possessionTeam_franchise_tertiaryColor: Tertiary brand color for the possessing team's franchise, expressed as a hex color code.
+  possessionTeam_id: NFL.com Shield API identifier for the team with offensive possession on this play.
+  possessionTeam_nickName: Nickname (mascot name) of the team with offensive possession on this play.
+  prePlayByPlay: Narrative text describing the game situation or setup immediately before this play.
+  quarter: Game quarter in which the play occurred (1–4 for regulation, 5 for overtime).
+  scoringPlay: Indicates whether this play resulted in points being scored.
+  scoringPlayType: Type of scoring event on this play (e.g., TD, FG, SAFETY, PAT).
+  scoringTeam: Abbreviation or identifier of the team that scored on this play, if applicable.
+  scoringTeam_abbreviation: Abbreviated team name for the team that scored on this play.
+  scoringTeam_franchise_currentLogo: URL of the current primary logo for the scoring team's franchise.
+  scoringTeam_franchise_decorativeElementsColor: Decorative elements color for the scoring team's franchise branding, as a hex code.
+  scoringTeam_franchise_largeTypeColor: Large-type display color for the scoring team's franchise branding, as a hex code.
+  scoringTeam_franchise_primaryColor: Primary brand color for the scoring team's franchise, expressed as a hex color code.
+  scoringTeam_franchise_secondaryColor: Secondary brand color for the scoring team's franchise, expressed as a hex color code.
+  scoringTeam_franchise_tertiaryColor: Tertiary brand color for the scoring team's franchise, expressed as a hex color code.
+  scoringTeam_id: NFL.com Shield API identifier for the team that scored on this play.
+  scoringTeam_nickName: Nickname (mascot name) of the team that scored on this play.
+  shortDescription: Short narrative summary of the play outcome (e.g., 'PENALTY', 'TOUCHDOWN').
+  specialTeamsPlay: Indicates whether this play was a special teams play.
+  stPlayType: Special teams play sub-type classification (e.g., PUNT, KICKOFF, FG_ATTEMPT) when applicable.
+  timeOfDay: Wall-clock time of day when the play occurred, typically in local or Eastern time.
+  visitor_team: Abbreviation or name of the visiting (away) team in this game.
+  yardLine: Yard line on the field where the ball was placed at the start of the play.
+  yardsToGo: Number of yards needed to gain a first down at the start of the play.
+nfl_game_summaries:
+  awayTeam_hasPossession: Indicates whether the away team has offensive possession at this point in the game.
+  awayTeam_score_ot: Away team points scored in overtime.
+  awayTeam_score_q1: Away team points scored in the first quarter.
+  awayTeam_score_q2: Away team points scored in the second quarter.
+  awayTeam_score_q3: Away team points scored in the third quarter.
+  awayTeam_score_q4: Away team points scored in the fourth quarter.
+  awayTeam_score_total: Away team total points scored through the current point in the game.
+  awayTeam_teamId: NFL.com Shield API identifier for the away team in this game.
+  awayTeam_timeouts_remaining: Number of timeouts remaining for the away team at this game state snapshot.
+  awayTeam_timeouts_used: Number of timeouts used by the away team through this point in the game.
+  gameBookUrl: URL pointing to the official NFL Game Book PDF for this game.
+  gameId: NFL.com Shield API identifier for the game.
+  homeTeam_hasPossession: Indicates whether the home team has offensive possession at this point in the game.
+  homeTeam_score_ot: Home team points scored in overtime.
+  homeTeam_score_q1: Home team points scored in the first quarter.
+  homeTeam_score_q2: Home team points scored in the second quarter.
+  homeTeam_score_q3: Home team points scored in the third quarter.
+  homeTeam_score_q4: Home team points scored in the fourth quarter.
+  homeTeam_score_total: Home team total points scored through the current point in the game.
+  homeTeam_teamId: NFL.com Shield API identifier for the home team in this game.
+  homeTeam_timeouts_remaining: Number of timeouts remaining for the home team at this game state snapshot.
+  homeTeam_timeouts_used: Number of timeouts used by the home team through this point in the game.
+  isGoalToGo: Indicates whether the current offensive situation is a goal-to-go scenario.
+  isRedZone: Indicates whether the ball is inside the opponent's 20-yard line (red zone).
+  offset: Byte or record offset within the game data stream, used for incremental polling of live game state.
+  quarter: Current game quarter as a string label (e.g., '1', '2', 'OT').
+  yardLine: Current ball position on the field expressed as a yard-line string (e.g., 'OPP 35').
+nfl_injuries:
+  injuries: Structured description of the player's reported injury or injuries, typically listing affected body part(s).
+  injuryStatus: Official NFL injury status designation for the player (e.g., 'Questionable', 'Out', 'IR', 'Doubtful').
+  person_commonFirstName: Commonly used or preferred first name for the player (may differ from legal first name).
+  person_displayName: Full display name of the player as shown on official NFL roster and injury report materials.
+  person_firstName: Player's legal first name as recorded in the NFL player database.
+  person_gsisId: Global Statistical Information System (GSIS) identifier — the NFL's official unique player ID used across league data systems.
+  person_headshot: URL to the player's official NFL headshot image.
+  person_lastName: Player's last name as recorded in the NFL player database.
+  practiceDays: Comma-separated list or encoded representation of the practice days the player participated in during the injury report week.
+  practiceStatus: Player's practice participation designation for the most recent session (e.g., 'Limited Participant', 'Did Not Practice', 'Full Participant').
+  practices: Structured record of the player's weekly practice participation details used to compile the official injury report.
+  seasonType: Type of NFL season the injury report covers (e.g., 'Regular Season', 'Postseason', 'Preseason').
+  team_currentLogo: URL to the current official logo image of the player's team.
+  team_fullName: Full official name of the team the player belongs to (e.g., 'Kansas City Chiefs').
+nfl_ngs_gamecenter_overview:
+  esbId: Elias Sports Bureau identifier for the player, used to link to official NFL records and statistics.
+  gameId: Unique identifier for the NFL game in the NGS/Shield data system.
+  jerseyNumber: Jersey number worn by the player during the game.
+  passYards: Total passing yards accumulated by the player (relevant for quarterbacks) in the NGS gamecenter overview.
+  playerName: Full display name of the player as shown in the NFL Next Gen Stats gamecenter.
+  shortName: Abbreviated display name of the player (e.g., 'P.Mahomes') used in compact UI contexts.
+  teamAbbr: Two- or three-letter abbreviation identifying the player's team (e.g., 'KC', 'PHI').
+  teamId: Unique numeric identifier for the player's team in the NFL NGS/Shield data system.
+  touchdowns: Total number of touchdowns scored or thrown by the player in the NGS gamecenter overview.
+  zones: Serialized or structured representation of field zones targeted or covered by the player during the game.
+nfl_ngs_leaders:
+  leader_esbId: Elias Sports Bureau identifier for the statistical leader, used to link to official NFL records.
+  leader_firstName: First name of the statistical leader player.
+  leader_gsisId: NFL GSIS (Game Statistics and Information System) identifier for the statistical leader player.
+  leader_headshot: URL to the player's official headshot image as provided by the NFL NGS system.
+  leader_inPlayDist: Total in-play distance traveled (in yards) by the statistical leader during the highlighted play.
+  leader_jerseyNumber: Jersey number worn by the statistical leader player.
+  leader_lastName: Last name of the statistical leader player.
+  leader_maxSpeed: Maximum recorded speed (in miles per hour) reached by the statistical leader during the highlighted play.
+  leader_playerName: Full display name of the statistical leader player as shown in NFL NGS.
+  leader_position: Specific position designation of the statistical leader (e.g., 'QB', 'WR', 'CB').
+  leader_positionGroup: Broader position group of the statistical leader (e.g., 'Offense', 'Defense', 'Special Teams').
+  leader_shortName: Abbreviated display name of the statistical leader (e.g., 'P.Mahomes') for compact UI usage.
+  leader_teamAbbr: Two- or three-letter abbreviation identifying the statistical leader's team.
+  leader_teamId: Unique numeric identifier for the statistical leader's team in the NFL NGS/Shield system.
+  leader_week: NFL week number during which the statistical leader achieved the highlighted performance.
+  leader_yards: Total yards associated with the statistical leader's highlighted play or performance metric.
+  play_absoluteYardlineNumber: Absolute yard line number (1–100) on the field where the highlighted play occurred.
+  play_actualYardlineForFirstDown: Yard line the offense must reach to convert a first down on the highlighted play.
+  play_actualYardsToGo: Actual distance in yards the offense needed to gain a first down on the highlighted play.
+  play_down: Down number (1–4) on which the highlighted play occurred.
+  play_endGameClock: Game clock time (MM:SS) at the end of the highlighted play.
+  play_gameClock: Game clock time (MM:SS) at the start of the highlighted play.
+  play_gameId: Unique identifier for the NFL game in which the highlighted play occurred.
+  play_gameKey: Alternate numeric key for the NFL game in which the highlighted play occurred, used in official NFL systems.
+  play_health_ballTracking: Indicator of whether ball-tracking data from the NGS health/tracking system is available for this play.
+  play_health_playerTracking: Indicator of whether player-tracking data from the NGS health/tracking system is available for this play.
+  play_homeScore: Home team's score at the time of the highlighted play.
+  play_isBigPlay: Boolean flag indicating whether the highlighted play is classified as a 'big play' in the NGS system.
+  play_isChangeOfPossession: Boolean flag indicating whether the highlighted play resulted in a change of ball possession.
+  play_isEndQuarter: Boolean flag indicating whether the highlighted play occurred at the end of a quarter.
+  play_isGoalToGo: Boolean flag indicating whether the highlighted play occurred in a goal-to-go situation.
+  play_isPenalty: Boolean flag indicating whether the highlighted play involved a penalty.
+  play_isSTPlay: Boolean flag indicating whether the highlighted play was a special teams play.
+  play_isScoring: Boolean flag indicating whether the highlighted play resulted in a score.
+  play_playDescription: Full text description of the highlighted play as recorded by official NFL scorers.
+  play_playDirection: Direction of the highlighted play on the field (e.g., left, middle, right).
+  play_playId: Unique identifier for the specific play within the game in the NFL NGS/Shield system.
+  play_playState: State or status of the highlighted play (e.g., 'APPROVED', 'CHALLENGED') in the NGS system.
+  play_playStats: Serialized statistical outcomes or stat codes associated with the highlighted play.
+  play_playType: Text label describing the type of the highlighted play (e.g., 'PASS', 'RUSH', 'KICK').
+  play_playTypeCode: Numeric or short code identifying the play type of the highlighted play in the NGS system.
+  play_possessionTeamId: Unique identifier for the team that had possession of the ball during the highlighted play.
+  play_preSnapHomeScore: Home team's score immediately before the snap on the highlighted play.
+  play_preSnapVisitorScore: Visitor team's score immediately before the snap on the highlighted play.
+  play_quarter: Quarter (1–4, or 5 for overtime) in which the highlighted play occurred.
+  play_sequence: Sequential order number of the play within the game or drive as recorded in the NGS system.
+  play_startGameClock: Game clock time (MM:SS) at the start of the highlighted play.
+  play_timeOfDayUTC: Wall-clock timestamp in UTC representing the real-world time the highlighted play occurred.
+  play_visitorScore: Visitor team's score at the time of the highlighted play.
+  play_yardline: Formatted yard line string (e.g., 'KC 35') indicating the field position of the highlighted play.
+  play_yardlineNumber: Numeric yard line (1–50) indicating the field position of the highlighted play.
+  play_yardlineSide: Team abbreviation indicating which team's side of the field the highlighted play occurred on.
+  play_yardsToGo: Number of yards needed for a first down at the start of the highlighted play.
+nfl_ngs_league_schedule:
+  gameId: NFL Next Gen Stats integer identifier for the game.
+  gameKey: Legacy NFL game key used as an alternative identifier in the NGS scheduling system.
+  gameTime: Scheduled kickoff time for the game in local or UTC format.
+  gameTimeEastern: Scheduled kickoff time for the game expressed in Eastern Time.
+  homeDisplayName: Full display name of the home team (e.g., 'Kansas City Chiefs').
+  homeNickname: Nickname (mascot name) of the home team (e.g., 'Chiefs').
+  homeTeamAbbr: Abbreviated team name for the home team at the schedule row level.
+  homeTeamId: NFL Next Gen Stats team identifier for the home team at the schedule row level.
+  homeTeam_abbr: Abbreviated team name for the home team from the nested team object.
+  homeTeam_cityState: City and state of the home team as provided in the nested team object.
+  homeTeam_conferenceAbbr: Conference abbreviation for the home team from the nested team object (e.g., 'AFC').
+  homeTeam_divisionAbbr: Division abbreviation for the home team from the nested team object (e.g., 'AFC West').
+  homeTeam_fullName: Full official name of the home team from the nested team object.
+  homeTeam_logo: URL of the home team's logo from the nested team object.
+  homeTeam_nick: Nickname of the home team from the nested team object.
+  homeTeam_smartId: NFL Next Gen Stats smart (UUID-style) identifier for the home team.
+  homeTeam_teamId: NFL Next Gen Stats integer team identifier for the home team from the nested team object.
+  homeTeam_teamType: Classification of the home team type (e.g., 'NFL' for active franchises).
+  isoTime: Scheduled kickoff time expressed as a Unix timestamp (milliseconds since epoch).
+  liveDotsGame: Indicates whether this game has live player-tracking dot data available via NGS.
+  networkChannel: Television network or channel broadcasting this game (e.g., 'NBC', 'ESPN').
+  ngsGame: Indicates whether this game has full Next Gen Stats data collection enabled.
+  releasedToClubs: Indicates whether NGS data for this game has been released to team personnel.
+  score_homeTeamScore_pointOT: Home team points scored in overtime, from the live score sub-object.
+  score_homeTeamScore_pointQ1: Home team points scored in the first quarter, from the live score sub-object.
+  score_homeTeamScore_pointQ2: Home team points scored in the second quarter, from the live score sub-object.
+  score_homeTeamScore_pointQ3: Home team points scored in the third quarter, from the live score sub-object.
+  score_homeTeamScore_pointQ4: Home team points scored in the fourth quarter, from the live score sub-object.
+  score_homeTeamScore_pointTotal: Home team total points scored through the current game state, from the live score sub-object.
+  score_homeTeamScore_timeoutsRemaining: Number of timeouts remaining for the home team, from the live score sub-object.
+  score_phase: Current phase or status of the game as reported by the live score sub-object (e.g., 'FINAL', 'IN_PROGRESS').
+  score_time: Game clock time at the current state as reported by the live score sub-object.
+  score_visitorTeamScore_pointOT: Visitor team points scored in overtime, from the live score sub-object.
+  score_visitorTeamScore_pointQ1: Visitor team points scored in the first quarter, from the live score sub-object.
+  score_visitorTeamScore_pointQ2: Visitor team points scored in the second quarter, from the live score sub-object.
+  score_visitorTeamScore_pointQ3: Visitor team points scored in the third quarter, from the live score sub-object.
+  score_visitorTeamScore_pointQ4: Visitor team points scored in the fourth quarter, from the live score sub-object.
+  score_visitorTeamScore_pointTotal: Visitor team total points scored through the current game state, from the live score sub-object.
+  score_visitorTeamScore_timeoutsRemaining: Number of timeouts remaining for the visitor team, from the live score sub-object.
+  seasonType: Season segment in which the game occurs (e.g., 'REG' for regular season, 'POST' for playoffs).
+  site_postalCode: Postal (ZIP) code of the venue where the game is played.
+  site_roofType: Roof type of the game venue (e.g., 'OUTDOOR', 'DOME', 'RETRACTABLE').
+  site_siteCity: City where the game venue is located.
+  site_siteFullName: Full official name of the game venue (e.g., 'Arrowhead Stadium').
+  site_siteId: NFL Next Gen Stats integer identifier for the game venue.
+  site_siteState: State (or country for international games) where the game venue is located.
+  site_smartId: NFL Next Gen Stats smart (UUID-style) identifier for the game venue.
+  smartId: NFL Next Gen Stats smart (UUID-style) identifier for this scheduled game.
+  validated: Indicates whether the schedule entry has been validated and confirmed by the NFL.
+  visitorDisplayName: Full display name of the visiting (away) team (e.g., 'San Francisco 49ers').
+  visitorNickname: Nickname (mascot name) of the visiting team (e.g., '49ers').
+  visitorTeamAbbr: Abbreviated team name for the visiting team at the schedule row level.
+  visitorTeamId: NFL Next Gen Stats team identifier for the visiting team at the schedule row level.
+  visitorTeam_abbr: Abbreviated team name for the visiting team from the nested team object.
+  visitorTeam_cityState: City and state of the visiting team as provided in the nested team object.
+  visitorTeam_conferenceAbbr: Conference abbreviation for the visiting team from the nested team object (e.g., 'NFC').
+  visitorTeam_divisionAbbr: Division abbreviation for the visiting team from the nested team object (e.g., 'NFC West').
+  visitorTeam_fullName: Full official name of the visiting team from the nested team object.
+  visitorTeam_logo: URL of the visiting team's logo from the nested team object.
+  visitorTeam_nick: Nickname of the visiting team from the nested team object.
+  visitorTeam_smartId: NFL Next Gen Stats smart (UUID-style) identifier for the visiting team.
+  visitorTeam_teamId: NFL Next Gen Stats integer team identifier for the visiting team from the nested team object.
+  visitorTeam_teamType: Classification of the visiting team type (e.g., 'NFL' for active franchises).
+  weekNameAbbr: Abbreviated label for the week of the season (e.g., 'WK1', 'WC' for Wild Card).
+nfl_ngs_league_schedule_current:
+  gameId: Unique identifier for the NFL game in the NGS/Shield data system.
+  gameKey: Alternate numeric key for the NFL game used in official NFL NGS record-keeping.
+  gameTime: Scheduled kickoff time for the game in local or ET representation.
+  gameTimeEastern: Scheduled kickoff time for the game in Eastern Time (ET), as published by the NFL.
+  homeDisplayName: Full display name of the home team (e.g., 'Kansas City Chiefs') for the scheduled game.
+  homeNickname: Nickname of the home team (e.g., 'Chiefs') for the scheduled game.
+  homeTeamAbbr: Two- or three-letter abbreviation identifying the home team at the top-level game record.
+  homeTeamId: Unique numeric identifier for the home team at the top-level game record.
+  homeTeam_abbr: Two- or three-letter abbreviation for the home team (e.g., 'KC').
+  homeTeam_cityState: City and state string for the home team's primary market (e.g., 'Kansas City, MO').
+  homeTeam_conferenceAbbr: Conference abbreviation for the home team (e.g., 'AFC' or 'NFC').
+  homeTeam_divisionAbbr: Division abbreviation for the home team (e.g., 'AFC West').
+  homeTeam_fullName: Full official name of the home team (e.g., 'Kansas City Chiefs').
+  homeTeam_logo: URL to the home team's official logo image as provided in the NGS schedule feed.
+  homeTeam_nick: Short nickname of the home team (e.g., 'Chiefs') as used in the NGS system.
+  homeTeam_smartId: Smart ID (NGS/Shield internal identifier) for the home team.
+  homeTeam_teamId: Unique numeric identifier for the home team in the NFL NGS/Shield data system.
+  homeTeam_teamType: Classification of the home team type (e.g., 'NFL' for a standard league franchise).
+  isoTime: ISO 8601 formatted datetime string representing the scheduled kickoff time of the game.
+  networkChannel: Broadcast network or channel airing the game (e.g., 'NBC', 'ESPN', 'FOX').
+  ngsGame: Boolean or indicator flag marking whether this game entry is an official NGS-tracked game.
+  releasedToClubs: Boolean flag indicating whether the schedule entry has been officially released to NFL clubs.
+  score_homeTeamScore_pointOT: Home team's points scored in overtime during the game, if applicable.
+  score_homeTeamScore_pointQ1: Home team's points scored in the first quarter of the game.
+  score_homeTeamScore_pointQ2: Home team's points scored in the second quarter of the game.
+  score_homeTeamScore_pointQ3: Home team's points scored in the third quarter of the game.
+  score_homeTeamScore_pointQ4: Home team's points scored in the fourth quarter of the game.
+  score_homeTeamScore_pointTotal: Home team's total final score (sum of all quarters and overtime) for the game.
+  score_homeTeamScore_timeoutsRemaining: Number of timeouts remaining for the home team at the current game state.
+  score_phase: Current phase or status of the game (e.g., 'FINAL', 'IN_PROGRESS', 'PREGAME').
+  score_time: Game clock time or elapsed time associated with the current scoring state snapshot.
+  score_visitorTeamScore_pointOT: Visitor team's points scored in overtime during the game, if applicable.
+  score_visitorTeamScore_pointQ1: Visitor team's points scored in the first quarter of the game.
+  score_visitorTeamScore_pointQ2: Visitor team's points scored in the second quarter of the game.
+  score_visitorTeamScore_pointQ3: Visitor team's points scored in the third quarter of the game.
+  score_visitorTeamScore_pointQ4: Visitor team's points scored in the fourth quarter of the game.
+  score_visitorTeamScore_pointTotal: Visitor team's total final score (sum of all quarters and overtime) for the game.
+  score_visitorTeamScore_timeoutsRemaining: Number of timeouts remaining for the visitor team at the current game state.
+  seasonType: Season type classification for the game (e.g., 'REG' for regular season, 'POST' for playoffs, 'PRE' for preseason).
+  site_postalCode: Postal (ZIP) code of the stadium or venue where the game is scheduled to be played.
+  site_roofType: Roof type of the game venue (e.g., 'OPEN', 'DOME', 'RETRACTABLE') affecting playing conditions.
+  site_siteCity: City in which the game's venue (stadium) is located.
+  site_siteFullName: Full official name of the stadium or venue where the game is scheduled (e.g., 'Arrowhead Stadium').
+  site_siteId: Unique identifier for the venue or stadium in the NFL NGS/Shield data system.
+  site_siteState: State (or country) in which the game's venue is located.
+  site_smartId: Smart ID (NGS/Shield internal identifier) for the game venue.
+  smartId: Smart ID (NGS/Shield internal identifier) for the game record itself.
+  validated: Boolean flag indicating whether the schedule entry has been validated by NFL operations.
+  visitorDisplayName: Full display name of the visiting team (e.g., 'Philadelphia Eagles') for the scheduled game.
+  visitorNickname: Nickname of the visiting team (e.g., 'Eagles') for the scheduled game.
+  visitorTeamAbbr: Two- or three-letter abbreviation identifying the visiting team at the top-level game record.
+  visitorTeamId: Unique numeric identifier for the visiting team at the top-level game record.
+  visitorTeam_abbr: Two- or three-letter abbreviation for the visiting team (e.g., 'PHI').
+  visitorTeam_cityState: City and state string for the visiting team's primary market (e.g., 'Philadelphia, PA').
+  visitorTeam_conferenceAbbr: Conference abbreviation for the visiting team (e.g., 'AFC' or 'NFC').
+  visitorTeam_divisionAbbr: Division abbreviation for the visiting team (e.g., 'NFC East').
+  visitorTeam_fullName: Full official name of the visiting team (e.g., 'Philadelphia Eagles').
+  visitorTeam_logo: URL to the visiting team's official logo image as provided in the NGS schedule feed.
+  visitorTeam_nick: Short nickname of the visiting team (e.g., 'Eagles') as used in the NGS system.
+  visitorTeam_smartId: Smart ID (NGS/Shield internal identifier) for the visiting team.
+  visitorTeam_teamId: Unique numeric identifier for the visiting team in the NFL NGS/Shield data system.
+  visitorTeam_teamType: Classification of the visiting team type (e.g., 'NFL' for a standard league franchise).
+  weekNameAbbr: Abbreviated name or label for the NFL week (e.g., 'WK1', 'WLD' for Wild Card) in which the game is scheduled.
+nfl_ngs_league_teams:
+  abbr: Official team abbreviation used by the NFL Next Gen Stats system (e.g., 'KC', 'NE').
+  cityState: City and state where the team is based (e.g., 'Kansas City, MO').
+  conferenceAbbr: Abbreviation of the conference the team belongs to (e.g., 'AFC', 'NFC').
+  conference_fullName: Full name of the conference the team belongs to (e.g., 'American Football Conference').
+  divisionAbbr: Abbreviation of the division the team belongs to (e.g., 'AFC West').
+  division_fullName: Full name of the division the team belongs to (e.g., 'AFC West').
+  nick: Team nickname or mascot name (e.g., 'Chiefs', 'Patriots').
+  smartId: NFL Next Gen Stats smart (UUID-style) identifier for the team.
+  stadiumName: Name of the team's home stadium (e.g., 'Arrowhead Stadium').
+  teamId: NFL Next Gen Stats integer identifier for the team.
+  teamSiteTicketUrl: URL for purchasing tickets via the team's official website.
+  teamSiteUrl: URL of the team's official website.
+  teamType: Classification of the team type within the NFL system (e.g., 'NFL' for active franchises).
+  ticketPhoneNumber: Phone number for ticket sales inquiries for this team.
+  yearFound: Year the franchise was founded.
+nfl_ngs_microsite_chart:
+  completionPercentage: Completion percentage for the quarterback featured on the NGS microsite chart.
+  esbId: Elias Sports Bureau identifier for the player featured on the NGS microsite chart.
+  extraLargeImg: URL to the extra-large player image asset used on the NFL NGS microsite chart display.
+  gameId: Unique identifier for the NFL game associated with the NGS microsite chart entry.
+  imageName: Filename or label for the player image asset used on the NGS microsite chart.
+  largeImg: URL to the large player image asset used on the NFL NGS microsite chart display.
+  mediumImg: URL to the medium-sized player image asset used on the NFL NGS microsite chart display.
+  passerRating: NFL passer rating for the quarterback featured on the NGS microsite chart.
+  passingYards: Total passing yards for the player (quarterback) featured on the NGS microsite chart.
+  playerName: Full display name of the player featured on the NGS microsite chart.
+  playerNameSlug: URL-safe slug version of the player's name used in NGS microsite routing (e.g., 'patrick-mahomes').
+  receivingYards: Total receiving yards for the player (receiver) featured on the NGS microsite chart.
+  rushingYards: Total rushing yards for the player featured on the NGS microsite chart.
+  seasonType: Season type classification for the chart entry (e.g., 'REG' for regular season, 'POST' for playoffs).
+  smallImg: URL to the small player image asset used on the NFL NGS microsite chart display.
+  teamId: Unique numeric identifier for the player's team in the NFL NGS/Shield data system.
+  touchdowns: Total number of touchdowns scored or thrown by the player featured on the NGS microsite chart.
+nfl_ngs_microsite_chart_players:
+  esbId: Elias Sports Bureau identifier for the player used in NFL Next Gen Stats microsite chart data.
+  playerName: Full display name of the player as shown in NFL Next Gen Stats microsite charts.
+nfl_ngs_play_is_highlight:
+  gameId: NFL Shield API game identifier for the game this highlight record belongs to.
+  highlight_gameId: NFL Shield API game identifier associated with the specific highlight clip.
+  highlight_playId: NFL Shield API play identifier for the specific play associated with the highlight clip.
+  highlight_play_absoluteYardlineNumber: Absolute yard line number (1–100 from one end zone) of the line of scrimmage at the snap for the highlighted play.
+  highlight_play_actualYardlineForFirstDown: Actual yard line marker needed for a first down on the highlighted play.
+  highlight_play_actualYardsToGo: Exact decimal yards required for a first down on the highlighted play.
+  highlight_play_down: Down number (1–4) at the time of the highlighted play.
+  highlight_play_endGameClock: Game clock time remaining at the end of the highlighted play in MM:SS format.
+  highlight_play_gameClock: Game clock time remaining at the start of the highlighted play in MM:SS format.
+  highlight_play_gameId: NFL Shield API game identifier embedded in the play detail record for the highlight.
+  highlight_play_gameKey: NFL Shield internal game key integer used to identify the game in internal API routing.
+  highlight_play_health: Data quality or tracking health status string indicating the reliability of player/ball tracking data for this play.
+  highlight_play_homeScore: Home team's score at the end of the highlighted play.
+  highlight_play_isBigPlay: Boolean flag indicating whether the play was classified as a 'big play' (e.g., long gain or turnover) by the NFL Shield API.
+  highlight_play_isChangeOfPossession: Boolean flag indicating whether the highlighted play resulted in a change of possession.
+  highlight_play_isEndQuarter: Boolean flag indicating whether the highlighted play was the final play of a quarter.
+  highlight_play_isGoalToGo: Boolean flag indicating whether the highlighted play occurred in a goal-to-go situation.
+  highlight_play_isPenalty: Boolean flag indicating whether a penalty was assessed on the highlighted play.
+  highlight_play_isSTPlay: Boolean flag indicating whether the highlighted play was a special teams play.
+  highlight_play_isScoring: Boolean flag indicating whether the highlighted play resulted in a score.
+  highlight_play_playDescription: Official NFL text description of the highlighted play (e.g., '(12:34) T.Brady pass short right to J.Edelman for 8 yards').
+  highlight_play_playDirection: Direction of the play (left, right, middle) as recorded in the NFL Shield tracking data.
+  highlight_play_playId: NFL Shield API unique integer identifier for the specific play within the game.
+  highlight_play_playState: State or status of the play record (e.g., 'FINAL', 'LIVE') in the NFL Shield API at time of capture.
+  highlight_play_playStats: Serialized or encoded statistical detail associated with the play outcomes (e.g., yards, player ids).
+  highlight_play_playType: Text label for the type of play (e.g., 'PASS', 'RUSH', 'PUNT') as classified by the NFL Shield API.
+  highlight_play_playTypeCode: Integer code corresponding to the play type classification in the NFL Shield API.
+  highlight_play_possessionTeamId: NFL Shield team identifier for the team that had possession during the highlighted play.
+  highlight_play_preSnapHomeScore: Home team's score immediately before the snap of the highlighted play.
+  highlight_play_preSnapVisitorScore: Visitor team's score immediately before the snap of the highlighted play.
+  highlight_play_quarter: Quarter number (1–4, or 5 for overtime) during which the highlighted play occurred.
+  highlight_play_sequence: Sequential order integer of this play within the game, as used by the NFL Shield API.
+  highlight_play_startGameClock: Game clock time remaining at the start of the highlighted play in MM:SS format.
+  highlight_play_timeOfDayUTC: Wall-clock timestamp in UTC at which the highlighted play occurred during the broadcast.
+  highlight_play_visitorScore: Visiting team's score at the end of the highlighted play.
+  highlight_play_yardline: Human-readable yardline string (e.g., 'KC 35') indicating where the play began.
+  highlight_play_yardlineNumber: Numeric yard line (1–50 from nearest end zone) of the line of scrimmage at the snap.
+  highlight_play_yardlineSide: Team abbreviation indicating which team's side of the field the yardline is on.
+  highlight_play_yardsToGo: Integer yards needed for a first down on the highlighted play.
+  highlight_players: Serialized list or count of player tracking records associated with the highlight clip.
+  highlight_season: NFL season year (e.g., 2024) in which the highlighted play occurred.
+  highlight_seasonType: Season phase of the highlighted play (e.g., 'REG' for regular season, 'POST' for playoffs).
+  highlight_teamAbbr: Team abbreviation of the team featured in or associated with the highlight clip.
+  highlight_teamId: NFL Shield team identifier for the team featured in the highlight clip.
+  highlight_week: Week number within the season during which the highlighted play occurred.
+  isHighlight: Boolean flag indicating whether this play record has been designated as a highlight by the NFL Shield API.
+nfl_ngs_statboard:
+  avgAirDistance: Average air distance in yards on all pass attempts, measuring how far the ball travels through the air regardless of direction.
+  avgAirYardsDifferential: Average difference between intended air yards and completed air yards, measuring accuracy relative to target depth.
+  avgAirYardsToSticks: Average air yards relative to the first-down marker on pass attempts, where positive values indicate throws beyond the sticks.
+  avgCompletedAirYards: Average air yards on completed passes only, measuring depth of actual completions.
+  avgIntendedAirYards: Average depth of target on all pass attempts, regardless of completion.
+  avgTimeToThrow: Average time in seconds from snap to release for the passer, as tracked by NFL Next Gen Stats.
+  completionPercentage: Actual completion percentage for the passer during the period covered.
+  completionPercentageAboveExpectation: Completion percentage above the model-expected completion rate (CPAE), measuring accuracy relative to difficulty of throws attempted.
+  expectedCompletionPercentage: Model-expected completion percentage based on factors such as target depth, separation, and defensive coverage as calculated by NFL Next Gen Stats.
+  gamesPlayed: Number of games played by the passer during the period covered.
+  maxAirDistance: Maximum air distance in yards recorded on any single pass attempt during the period covered.
+  maxCompletedAirDistance: Maximum air distance in yards recorded on any single completed pass during the period covered.
+  passTouchdowns: Total passing touchdowns thrown by the passer during the period covered.
+  passYards: Total passing yards accumulated by the passer during the period covered.
+  passerRating: NFL passer rating (0–158.3 scale) for the passer during the period covered.
+  playerName: Display name of the passer as returned at the top-level statboard row.
+  player_currentTeamId: NFL Next Gen Stats team identifier for the team the player is currently rostered on.
+  player_displayName: Full display name of the player as used in NFL Next Gen Stats records.
+  player_esbId: ESPN-Elias Sports Bureau (ESB) identifier for the player.
+  player_firstName: First name of the player.
+  player_footballName: Football name used by the player, which may differ from the legal first name.
+  player_gsisId: NFL GSIS (Game Statistics and Information System) identifier, the primary nflverse player key.
+  player_gsisItId: NFL GSIS internal tracking integer identifier for the player.
+  player_jerseyNumber: Jersey number worn by the player.
+  player_lastName: Last name of the player.
+  player_ngsPosition: Player's position as classified by the NFL Next Gen Stats system.
+  player_ngsPositionGroup: Broader position group the player belongs to as classified by the NFL Next Gen Stats system.
+  player_positionGroup: Broad position group for the player (e.g., 'QB', 'WR') in the NGS player record.
+  player_season: NFL season year associated with this player's statboard record.
+  player_shortName: Shortened display name for the player (e.g., 'P.Mahomes').
+  player_smartId: NFL Next Gen Stats smart (UUID-style) identifier for the player.
+  player_status: Current roster status of the player (e.g., 'ACT' for active, 'IR' for injured reserve).
+  player_uniformNumber: Uniform number worn by the player, stored as a string to preserve leading zeros if applicable.
+  seasonType: Season segment covered by this statboard record (e.g., 'REG' for regular season, 'POST' for playoffs).
+  teamId: NFL Next Gen Stats team identifier for the passer's team at the time of this record.
+nfl_ngs_statboard_leaders:
+  avgAirDistance: Average air distance (in yards) the ball traveled on all pass attempts, from NFL Next Gen Stats.
+  avgAirYardsDifferential: Average difference between intended air yards and completed air yards per attempt, indicating whether the passer throws short or long relative to the targeted depth.
+  avgAirYardsToSticks: Average air yards relative to the first-down marker on pass attempts, from NFL Next Gen Stats (negative = short of sticks, positive = past sticks).
+  avgCompletedAirYards: Average air yards on completed passes only, from NFL Next Gen Stats.
+  avgCushion: Average distance (in yards) between the receiver and the nearest defender at the snap, from NFL Next Gen Stats receiver tracking.
+  avgExpectedYAC: Average yards after catch expected based on game situation and receiver location, from NFL Next Gen Stats models.
+  avgIntendedAirYards: Average intended air yards per pass attempt (including incompletions), from NFL Next Gen Stats.
+  avgSeparation: Average separation (in yards) between the receiver and the nearest defender at the moment of catch or incompletion, from NFL Next Gen Stats.
+  avgTimeToLos: Average time (in seconds) for the ball carrier to reach the line of scrimmage on rush attempts, from NFL Next Gen Stats.
+  avgTimeToThrow: Average time in seconds from snap to throw for the passer, from NFL Next Gen Stats.
+  avgYAC: Average yards after catch per reception, from NFL Next Gen Stats receiver tracking.
+  avgYACAboveExpectation: Average yards after catch above statistical expectation (YAC - expected YAC), from NFL Next Gen Stats models.
+  catchPercentage: Percentage of targets caught by the receiver, from NFL Next Gen Stats statboard leaders.
+  completionPercentage: Percentage of pass attempts completed by the passer, from NFL Next Gen Stats statboard leaders.
+  completionPercentageAboveExpectation: Passer's actual completion percentage minus their expected completion percentage based on target depth, coverage, and game context (CPOE), from NFL Next Gen Stats.
+  expectedCompletionPercentage: Model-predicted completion percentage for the passer based on depth of target, receiver separation, and coverage, from NFL Next Gen Stats.
+  expectedRushYards: Model-predicted rushing yards based on field position, personnel, and pre-snap alignment, from NFL Next Gen Stats.
+  gamesPlayed: Number of games played by the player in the given season or time period.
+  leader_esbId: ESB (NFL's Enterprise Subscriber Base) identifier for the player featured in the leader record.
+  leader_firstName: First name of the player featured in the leader record.
+  leader_gsisId: GSIS (Game Statistics and Information System) identifier for the player featured in the leader record.
+  leader_headshot: URL to the headshot image of the player featured in the leader record.
+  leader_inPlayDist: Distance (in yards) the player traveled while the ball was in play on the featured leader statistic.
+  leader_jerseyNumber: Jersey number of the player featured in the leader record.
+  leader_lastName: Last name of the player featured in the leader record.
+  leader_maxSpeed: Maximum speed (in yards per second or mph) recorded by the player on the featured leader statistic play.
+  leader_playerName: Full display name of the player featured in the leader record.
+  leader_position: Position designation of the player featured in the leader record (e.g., 'QB', 'WR').
+  leader_positionGroup: Broad position group of the player featured in the leader record (e.g., 'OFFENSE', 'DEFENSE').
+  leader_seasonAvg: Season-to-date average of the featured leader statistic for this player.
+  leader_shortName: Abbreviated display name of the player featured in the leader record (e.g., 'P.Mahomes').
+  leader_teamAbbr: Team abbreviation of the player featured in the leader record (e.g., 'KC').
+  leader_teamAvg: Team-level average of the featured statistic across all players on the team.
+  leader_teamId: NFL Shield team identifier for the team of the player featured in the leader record.
+  leader_time: Elapsed time value associated with the leader record, such as time of possession or time-to-throw.
+  leader_week: Week number associated with the weekly leader record.
+  leader_yards: Yardage total associated with the featured leader statistic for this player.
+  maxAirDistance: Maximum air distance (in yards) recorded on a single pass attempt by the passer, from NFL Next Gen Stats.
+  maxCompletedAirDistance: Maximum air distance on a completed pass for the passer, from NFL Next Gen Stats.
+  passTouchdowns: Total passing touchdowns recorded by the player in the given period.
+  passYards: Total passing yards recorded by the player in the given period.
+  passerRating: NFL passer rating (0–158.3 scale) for the quarterback in the given period.
+  percentShareOfIntendedAirYards: Receiver's share (as a percentage) of the team's total intended air yards, from NFL Next Gen Stats.
+  play_absoluteYardlineNumber: Absolute yard line number (1–100 from one end zone) of the line of scrimmage at the snap for this play.
+  play_actualYardlineForFirstDown: Actual yard line marker needed for a first down on this play.
+  play_actualYardsToGo: Exact decimal yards required for a first down on this play.
+  play_down: Down number (1–4) at the time of this play.
+  play_endGameClock: Game clock time remaining at the end of this play in MM:SS format.
+  play_gameClock: Game clock time remaining at the start of this play in MM:SS format.
+  play_gameId: NFL Shield API game identifier for the game this play belongs to.
+  play_gameKey: NFL Shield internal game key integer identifying the game in internal API routing.
+  play_health_ballTracking: Data quality status string for ball-tracking data on this play (e.g., 'GOOD', 'MISSING').
+  play_health_playerTracking: Data quality status string for player-tracking data on this play (e.g., 'GOOD', 'PARTIAL').
+  play_homeScore: Home team's score at the end of this play.
+  play_isBigPlay: Boolean flag indicating whether this play was classified as a 'big play' by the NFL Shield API.
+  play_isChangeOfPossession: Boolean flag indicating whether this play resulted in a change of possession.
+  play_isEndQuarter: Boolean flag indicating whether this play was the final play of a quarter.
+  play_isGoalToGo: Boolean flag indicating whether this play occurred in a goal-to-go situation.
+  play_isPenalty: Boolean flag indicating whether a penalty was assessed on this play.
+  play_isSTPlay: Boolean flag indicating whether this play was a special teams play.
+  play_isScoring: Boolean flag indicating whether this play resulted in a score.
+  play_playDescription: Official NFL text description of the play (e.g., '(2:11) J.Allen scrambles right end for 9 yards').
+  play_playDirection: Direction of the play (left, right, middle) as recorded in NFL Shield tracking data.
+  play_playId: NFL Shield API unique integer identifier for this play within the game.
+  play_playState: Status of the play record (e.g., 'FINAL', 'LIVE') in the NFL Shield API at time of capture.
+  play_playStats: Serialized or encoded statistical detail for the play outcomes (e.g., yards, player IDs).
+  play_playType: Text label classifying the play type (e.g., 'PASS', 'RUSH', 'PUNT') from the NFL Shield API.
+  play_playTypeCode: Integer code corresponding to the play type classification in the NFL Shield API.
+  play_possessionTeamId: NFL Shield team identifier for the team that had possession during this play.
+  play_preSnapHomeScore: Home team's score immediately before the snap of this play.
+  play_preSnapVisitorScore: Visiting team's score immediately before the snap of this play.
+  play_quarter: Quarter number (1–4, or 5 for overtime) in which this play occurred.
+  play_sequence: Sequential order integer of this play within the game as used by the NFL Shield API.
+  play_startGameClock: Game clock time remaining at the moment this play began, in MM:SS format.
+  play_timeOfDayUTC: Wall-clock timestamp in UTC at which this play occurred during the broadcast.
+  play_visitorScore: Visiting team's score at the end of this play.
+  play_yardline: Human-readable yardline string (e.g., 'DAL 22') indicating where this play began.
+  play_yardlineNumber: Numeric yard line (1–50 from nearest end zone) of the line of scrimmage at the snap.
+  play_yardlineSide: Team abbreviation indicating which team's side of the field the yardline is on.
+  play_yardsToGo: Integer yards needed for a first down on this play.
+  playerName: Full display name of the player associated with this NGS statboard leader record.
+  player_currentTeamId: NFL Shield team identifier for the player's current team.
+  player_displayName: Player's full display name as used by NFL Next Gen Stats (e.g., 'Patrick Mahomes').
+  player_esbId: ESB (Enterprise Subscriber Base) identifier assigned to this player by the NFL.
+  player_firstName: Player's first name as recorded in the NFL Next Gen Stats player roster.
+  player_footballName: Player's preferred football name (may differ from legal first name) used on the field and in broadcasts.
+  player_gsisId: GSIS (Game Statistics and Information System) identifier, the primary NFL player identifier used across nflverse datasets.
+  player_gsisItId: GSIS integrated tracking identifier, an alternate integer-form player ID used in the NFL Shield tracking system.
+  player_jerseyNumber: Player's jersey number as worn on the field.
+  player_lastName: Player's last name as recorded in the NFL Next Gen Stats player roster.
+  player_ngsPosition: Player's position as classified by NFL Next Gen Stats (may differ from official NFL position; e.g., NGS uses 'ILB' vs 'LB').
+  player_ngsPositionGroup: Broad position group assigned by NFL Next Gen Stats (e.g., 'QB', 'WR', 'DB', 'DL').
+  player_positionGroup: Official NFL position group for the player (e.g., 'OFFENSE', 'DEFENSE', 'SPECIAL_TEAMS').
+  player_season: NFL season year in which this player record is valid.
+  player_shortName: Abbreviated player name used in display contexts (e.g., 'P.Mahomes').
+  player_smartId: NFL Smart ID — a system-agnostic unique identifier for the player used across NFL Shield systems.
+  player_status: Player's current roster status (e.g., 'ACT' for active, 'IR' for injured reserve).
+  player_uniformNumber: Player's uniform number as a string, matching what appears on the jersey.
+  recTouchdowns: Total receiving touchdowns recorded by the player in the given period.
+  rushAttempts: Total rushing attempts by the player in the given period.
+  rushPctOverExpected: Percentage of rush attempts on which the player gained more yards than the model-predicted expectation, from NFL Next Gen Stats.
+  rushTouchdowns: Total rushing touchdowns recorded by the player in the given period.
+  rushYards: Total rushing yards recorded by the player in the given period.
+  rushYardsOverExpected: Total rushing yards gained above statistical expectation (RYOE) in the given period, from NFL Next Gen Stats.
+  rushYardsOverExpectedPerAtt: Average rushing yards over expected per attempt (RYOE/attempt), from NFL Next Gen Stats.
+  seasonType: Phase of the season for this record (e.g., 'REG' for regular season, 'POST' for playoffs).
+  teamId: NFL Shield team identifier for the team associated with this leader statistic.
+nfl_rosters:
+  persons: Number of players (persons) listed on the team's roster entry for this record.
+  seasonType: Type of NFL season the roster entry applies to (e.g., 'Regular Season', 'Preseason', 'Postseason').
+  team_conferenceAbbr: Abbreviation of the conference the team belongs to (e.g., 'AFC', 'NFC').
+  team_conferenceFullName: Full name of the conference the team belongs to (e.g., 'American Football Conference').
+  team_currentLogo: URL to the current official logo image of the team.
+  team_divisionFullName: Full name of the division within the conference that the team belongs to (e.g., 'AFC West').
+  team_fullName: Full official name of the team (e.g., 'Las Vegas Raiders').
+  team_league: League identifier confirming the team belongs to the NFL.
+  team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
+  team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_standings:
+  clinched_bye: Boolean flag indicating whether the team has clinched a first-round bye in the playoffs.
+  clinched_division: Boolean flag indicating whether the team has clinched their division title.
+  clinched_eliminated: Boolean flag indicating whether the team has been mathematically eliminated from playoff contention.
+  clinched_homeField: Boolean flag indicating whether the team has clinched home-field advantage throughout the playoffs.
+  clinched_playoff: Boolean flag indicating whether the team has clinched a berth in the NFL playoffs.
+  clinched_wildCard: Boolean flag indicating whether the team has clinched a wild card playoff berth.
+  closeGames_losses: Number of games decided by 8 points or fewer that the team lost during the season.
+  closeGames_ties: Number of games decided by 8 points or fewer that ended in a tie for the team during the season.
+  closeGames_wins: Number of games decided by 8 points or fewer that the team won during the season.
+  conference_points_against: Total points allowed by the team in conference games during the season.
+  conference_points_for: Total points scored by the team in conference games during the season.
+  conference_rank: Team's rank within their conference (AFC or NFC) based on current standings.
+  conference_winPct: Team's winning percentage in conference games during the season.
+  division_losses: Number of games the team lost against divisional opponents during the season.
+  division_points_against: Total points allowed by the team in divisional games during the season.
+  division_points_for: Total points scored by the team in divisional games during the season.
+  division_rank: Team's rank within their division based on divisional record and tiebreakers.
+  division_ties: Number of games the team tied against divisional opponents during the season.
+  division_winPct: Team's winning percentage in divisional games during the season.
+  division_wins: Number of games the team won against divisional opponents during the season.
+  home_points_against: Total points allowed by the team in home games during the season.
+  home_points_for: Total points scored by the team in home games during the season.
+  home_winPct: Team's winning percentage in home games during the season.
+  last5_losses: Number of losses the team recorded in their last five games of the season segment.
+  last5_points_against: Total points allowed by the team across their last five games.
+  last5_points_for: Total points scored by the team across their last five games.
+  last5_ties: Number of ties the team recorded in their last five games of the season segment.
+  last5_winPct: Team's winning percentage across their last five games.
+  last5_wins: Number of wins the team recorded in their last five games of the season segment.
+  overall_games: Total number of games played by the team during the current season to date.
+  overall_losses: Total number of overall losses recorded by the team during the current season.
+  overall_points_against: Total points allowed by the team across all games during the current season.
+  overall_points_for: Total points scored by the team across all games during the current season.
+  overall_streak_length: Length (number of games) of the team's current winning or losing streak.
+  overall_streak_type: Type of the team's current streak, indicating whether it is a winning ('W') or losing ('L') streak.
+  overall_ties: Total number of overall ties recorded by the team during the current season.
+  overall_winPct: Team's overall winning percentage across all games during the current season.
+  overall_wins: Total number of overall wins recorded by the team during the current season.
+  road_points_against: Total points allowed by the team in road (away) games during the season.
+  road_points_for: Total points scored by the team in road (away) games during the season.
+  road_winPct: Team's winning percentage in road (away) games during the season.
+  team_currentLogo: URL to the team's current official logo image as displayed in the standings.
+  team_fullName: Full official name of the team (e.g., 'Kansas City Chiefs') as shown in the standings.
+nfl_team:
+  bio: Official team biography or description text as published on NFL.com.
+  currentBackground: URL or resource reference for the team's current background/banner image used on NFL.com.
+  currentCoach: Full name of the team's current head coach as listed on NFL.com.
+  currentLogo: URL for the team's current primary logo image as served by the NFL Shield API.
+  nflShopUrl: URL to the team's official merchandise page on NFL Shop (nflshop.com).
+  officialWebsiteUrl: URL to the team's official website (e.g., 'https://www.chiefs.com').
+  owners: Name(s) or serialized list of the team's current principal owner(s).
+  primaryColor: Hex color code or color name for the team's primary brand color.
+  secondaryColor: Hex color code or color name for the team's secondary brand color.
+  socials: Serialized list of the team's official social media handles or URLs (Twitter/X, Instagram, Facebook, etc.).
+  teamType: Classification of the team type within the NFL Shield system (e.g., 'FRANCHISE', 'PRO_BOWL').
+  vllChannelCallsign: Local affiliate TV channel callsign for the team's video/live-local broadcast rights.
+  yearEstablished: Four-digit year in which the franchise was originally established or founded.
+nfl_teams_history:
+  conferenceAbbr: Abbreviation of the conference the team belonged to during this historical period (e.g., 'AFC', 'NFC', 'AFL').
+  conferenceFullName: Full name of the conference the team belonged to during this historical period (e.g., 'American Football Conference').
+  currentLogo: URL to the team's logo image that was current during this historical period.
+  divisionFullName: Full name of the division the team belonged to during this historical period (e.g., 'AFC West').
+  nickName: Team nickname (e.g., 'Chiefs', 'Raiders') used during this historical period.
+  teamType: Classification of the team type (e.g., 'NFL', 'AFL') indicating the league affiliation during this historical period.
+  venues: List or serialized representation of venue(s) used by the team during this historical period.
+nfl_week_games:
+  awayTeam_currentLogo: URL for the away team's current primary logo image as served by the NFL Shield API.
+  awayTeam_fullName: Full name of the away team (e.g., 'Kansas City Chiefs').
+  awayTeam_id: NFL Shield team identifier for the away team.
+  broadcastInfo_audioNetworks: Serialized list of radio networks carrying the game's audio broadcast.
+  broadcastInfo_awayNetworkChannels: Serialized list of TV/streaming channels designated as the away team's local broadcast.
+  broadcastInfo_homeNetworkChannels: Serialized list of TV/streaming channels designated as the home team's local broadcast.
+  broadcastInfo_internationalWatchOptions: Serialized list of international streaming or broadcast options for viewers outside the United States.
+  broadcastInfo_streamingNetworks: Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the game.
+  broadcastInfo_territory: Geographic territory or market designation for which this broadcast record applies.
+  extensions: Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API.
+  externalIds: Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game.
+  homeTeam_currentLogo: URL for the home team's current primary logo image as served by the NFL Shield API.
+  homeTeam_fullName: Full name of the home team (e.g., 'Dallas Cowboys').
+  homeTeam_id: NFL Shield team identifier for the home team.
+  international: Boolean flag indicating whether this game is designated as an international (outside the United States) game.
+  seasonType: Phase of the season in which this game takes place (e.g., 'REG', 'POST', 'PRE').
+  ticketUrl: URL to the official ticket purchasing page for this game.
+  ticketVendors: Serialized list of authorized ticket vendors or marketplaces for this game.
+  venue_country: Country name or ISO code indicating where the game's venue is located.
+  version: API response version integer returned by the NFL Shield API for this game record.
+  weekType: Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB').
+nfl_weekly_game_details:
+  awayTeamStandings: Serialized standings record for the away team (wins, losses, ties, division rank) at the time of this game.
+  awayTeam_currentLogo: URL for the away team's current primary logo image as served by the NFL Shield API.
+  awayTeam_fullName: Full name of the away team (e.g., 'San Francisco 49ers').
+  awayTeam_id: NFL Shield team identifier for the away team.
+  broadcastInfo_audioNetworks: Serialized list of radio networks carrying this game's audio broadcast.
+  broadcastInfo_awayNetworkChannels: Serialized list of TV/streaming channels designated as the away team's local broadcast for this game.
+  broadcastInfo_homeNetworkChannels: Serialized list of TV/streaming channels designated as the home team's local broadcast for this game.
+  broadcastInfo_internationalWatchOptions: Serialized list of international streaming or broadcast options available for this game.
+  broadcastInfo_streamingNetworks: Serialized list of streaming platforms carrying this game.
+  broadcastInfo_territory: Geographic territory or market designation for this broadcast record.
+  driveChart_drives: Total number of drives recorded in the drive chart for this game.
+  driveChart_gameId: NFL Shield game identifier as embedded in the drive chart payload for this game.
+  driveChart_offset: Pagination offset integer for the drive chart response from the NFL Shield API.
+  driveChart_plays: Total number of plays recorded across all drives in the drive chart for this game.
+  driveChart_scoringSummaries: Total number of scoring summary entries in the drive chart for this game.
+  extensions: Serialized JSON or string of additional extension metadata attached to this game record.
+  externalIds: Serialized list of external system identifiers mapped to this game across partner platforms.
+  homeTeamStandings: Serialized standings record for the home team (wins, losses, ties, division rank) at the time of this game.
+  homeTeam_currentLogo: URL for the home team's current primary logo image as served by the NFL Shield API.
+  homeTeam_fullName: Full name of the home team (e.g., 'Philadelphia Eagles').
+  homeTeam_id: NFL Shield team identifier for the home team.
+  international: Boolean flag indicating whether this game is designated as an international game played outside the United States.
+  replays: Serialized list of official game replay or condensed-game links associated with this game.
+  seasonType: Phase of the season in which this game takes place (e.g., 'REG', 'POST', 'PRE').
+  summary_attendance: Announced or official attendance figure (number of fans) at the game.
+  summary_awayTeam_hasPossession: Boolean flag indicating whether the away team had possession at the most recent play update.
+  summary_awayTeam_score: Away team's current or final score as a string.
+  summary_awayTeam_teamId: NFL Shield team identifier for the away team as embedded in the game summary payload.
+  summary_awayTeam_timeouts: Serialized or numeric representation of remaining timeouts for the away team.
+  summary_clock: Current game clock value at the time of the summary snapshot (e.g., '2:11' remaining).
+  summary_distance: Yards to go for a first down at the time of the summary snapshot.
+  summary_down: Current down (1–4) at the time of the game summary snapshot.
+  summary_gameBookUrl: URL to the official NFL gamebook PDF for this game.
+  summary_gameId: NFL Shield game identifier as embedded in the game summary payload.
+  summary_homeTeam_hasPossession: Boolean flag indicating whether the home team had possession at the most recent play update.
+  summary_homeTeam_score: Home team's current or final score as a string.
+  summary_homeTeam_teamId: NFL Shield team identifier for the home team as embedded in the game summary payload.
+  summary_homeTeam_timeouts: Serialized or numeric representation of remaining timeouts for the home team.
+  summary_isGoalToGo: Boolean flag indicating whether the current offensive situation is goal-to-go at the summary snapshot.
+  summary_isRedZone: Boolean flag indicating whether the offense is in the red zone (inside the opponent's 20-yard line) at the summary snapshot.
+  summary_offset: Pagination offset integer for the game summary response from the NFL Shield API.
+  summary_phase: Current phase of the game at the time of the summary snapshot (e.g., 'INGAME', 'FINAL', 'PREGAME').
+  summary_quarter: Current quarter of the game at the time of the summary snapshot (as a string, e.g., '4' or 'OT').
+  summary_startTime: Scheduled or actual kickoff start time of the game as an ISO-formatted datetime string.
+  summary_weather: Serialized weather conditions at game time (e.g., temperature, wind speed, precipitation).
+  summary_yardLine: Human-readable yardline string indicating field position at the time of the summary snapshot.
+  taggedVideos: Serialized list of video clips tagged to this game by the NFL Shield API (e.g., highlights, press conferences).
+  ticketUrl: URL to the official ticket purchasing page for this game.
+  ticketVendors: Serialized list of authorized ticket vendors or marketplaces for this game.
+  venue_country: Country name or ISO code indicating where this game's venue is located.
+  version: API response version integer returned by the NFL Shield API for this game detail record.
+  weekType: Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB').
+nfl_weeks:
+  byeTeams: Serialized list of team abbreviations that have a bye week during this NFL schedule week.
+  dateBegin: ISO-formatted date on which this NFL week's games begin (typically Thursday).
+  dateEnd: ISO-formatted date on which this NFL week's games conclude (typically Monday night).
+  seasonType: Phase of the season for this week (e.g., 'REG' for regular season, 'POST' for postseason).
+  weekType: Classification of the week type (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB', 'PRE').
+nfl_weeks_by_date:
+  byeTeams: Comma-separated list of team abbreviations on bye during this week.
+  dateBegin: Start date of the NFL week period in ISO 8601 format.
+  dateEnd: End date of the NFL week period in ISO 8601 format.
+  seasonType: Season segment for this week (e.g., 'REG' for regular season, 'POST' for playoffs, 'PRE' for preseason).
+  weekType: Descriptive label for the type of week (e.g., 'Regular Season', 'Wild Card', 'Super Bowl').

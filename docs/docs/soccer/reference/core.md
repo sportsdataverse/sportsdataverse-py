@@ -924,8 +924,8 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Athlete id. |
-| `display_name` | character | Athlete display name. |
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1666,13 +1666,13 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team ESPN id. |
-| `display_name` | character | Team display name. |
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `display_name` | character | Full display name of the team (e.g. 'Los Angeles Lakers'). |
 | `abbreviation` | character | Team abbreviation. |
 | `location` | character | Team location/city. |
-| `name` | character | Team short name. |
+| `name` | character | Short team name, typically the mascot (e.g. 'Lakers'). |
 | `short_display_name` | character | Short team display name. |
-| `nickname` | character | Team nickname. |
+| `nickname` | character | Alternative nickname used by ESPN for the team. |
 | `slug` | character | URL slug for the team. |
 | `uid` | character | ESPN universal id for the team. |
 | `color` | character | Primary team color (hex). |
@@ -2031,18 +2031,18 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
-| `team` | character | Team display name. |
-| `team_id` | character | Team ESPN id. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `note` | character | Standings note (e.g. qualification/relegation marker). |
 | `games_played` | double | Matches played. |
-| `losses` | double | Matches lost. |
+| `losses` | double | Number of matches the team has lost. |
 | `point_differential` | double | Goal difference (for minus against). |
 | `points` | double | Competition points. |
 | `points_against` | double | Goals conceded. |
-| `points_for` | double | Goals scored. |
-| `ties` | double | Matches drawn. |
-| `wins` | double | Matches won. |
+| `points_for` | double | Goals (or runs) scored by the team. |
+| `ties` | double | Number of matches the team has drawn. |
+| `wins` | double | Number of matches the team has won. |
 | `advanced` | double | Whether the team has advanced/qualified. |
 | `deductions` | double | Points deducted. |
 | `ppg` | double | Points per game. |

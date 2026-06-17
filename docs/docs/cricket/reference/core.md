@@ -924,8 +924,8 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Athlete id. |
-| `display_name` | character | Athlete display name. |
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2032,8 +2032,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
-| `team` | character | Team display name. |
-| `team_id` | character | Team ESPN id. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `rank` | integer | Position within the group/table. |
 | `matches_played` | integer | Matches played (cricket). |

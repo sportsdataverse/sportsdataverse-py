@@ -924,8 +924,8 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Athlete id. |
-| `display_name` | character | Athlete display name. |
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2056,7 +2056,7 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `ties` | double | Matches drawn. |
+| `ties` | double | Number of matches the team has drawn. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
 | `division_games_behind` | double |  |

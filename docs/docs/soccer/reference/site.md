@@ -39,7 +39,7 @@ ESPN endpoint.
 | `away_team_id` | character | Away team ESPN id. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
 | `status` | character | Status type name (e.g. STATUS_FINAL, STATUS_SCHEDULED, STATUS_IN_PROGRESS). |
-| `venue` | character | Venue full name. |
+| `venue` | character | Full name of the venue where the match was played. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -321,7 +321,7 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Article id. |
+| `id` | integer | ESPN numeric identifier for the article. |
 | `now_id` | character | ESPN 'now' feed id. |
 | `content_key` | character | Internal content key. |
 | `data_source_identifier` | character | Source-system identifier. |
@@ -333,10 +333,10 @@ ESPN endpoint.
 | `images` | character | Article images (list, stringified). |
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline. |
+| `byline` | character | Author byline string as published by ESPN. |
 | `links_web_href` | character | Web article URL. |
 | `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | API self link. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -365,8 +365,8 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Athlete id. |
-| `display_name` | character | Athlete display name. |
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -492,13 +492,13 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team ESPN id. |
-| `display_name` | character | Team display name. |
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `display_name` | character | Full display name of the team (e.g. 'Los Angeles Lakers'). |
 | `abbreviation` | character | Team abbreviation. |
 | `location` | character | Team location/city. |
-| `name` | character | Team short name. |
+| `name` | character | Short team name, typically the mascot (e.g. 'Lakers'). |
 | `short_display_name` | character | Short team display name. |
-| `nickname` | character | Team nickname. |
+| `nickname` | character | Alternative nickname used by ESPN for the team. |
 | `slug` | character | URL slug for the team. |
 | `uid` | character | ESPN universal id for the team. |
 | `color` | character | Primary team color (hex). |
@@ -558,13 +558,13 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `athlete_id` | character | Athlete ESPN id. |
+| `athlete_id` | character | ESPN numeric identifier for the athlete. |
 | `uid` | character | ESPN universal id for the athlete. |
-| `first_name` | character | Athlete first name. |
-| `last_name` | character | Athlete last name. |
-| `display_name` | character | Athlete display name. |
-| `short_name` | character | Athlete short name. |
-| `jersey` | character | Jersey number. |
+| `first_name` | character | Athlete's first (given) name. |
+| `last_name` | character | Athlete's last (family) name. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `short_name` | character | Athlete's abbreviated display name (e.g. 'L. James'). |
+| `jersey` | character | Athlete's jersey number as a string. |
 | `age` | integer | Athlete age in years. |
 | `date_of_birth` | character | Athlete date of birth (ISO 8601). |
 | `height` | double | Athlete height in inches. |
@@ -572,7 +572,7 @@ ESPN endpoint.
 | `weight` | double | Athlete weight in pounds. |
 | `display_weight` | character | Athlete weight, formatted for display. |
 | `position` | character | Position abbreviation. |
-| `position_name` | character | Full position name. |
+| `position_name` | character | Full position name (e.g. 'Point Guard', 'Goalkeeper'). |
 | `birth_city` | character | Athlete birth city. |
 | `birth_country` | character | Athlete birth country. |
 | `citizenship` | character | Athlete citizenship. |
@@ -608,16 +608,16 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN event id. |
+| `id` | character | ESPN numeric event identifier. |
 | `date` | character | Event timestamp (ISO 8601, UTC). |
-| `name` | character | Full event name. |
-| `short_name` | character | Abbreviated event name. |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
 | `time_valid` | logical | Whether the event time is confirmed. |
 | `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
 | `links` | character | Related links (list, stringified). |
 | `season_year` | integer | Four-digit season year. |
-| `season_display_name` | character | Season display name. |
-| `season_type_id` | character | Season type id. |
+| `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | character | ESPN numeric identifier for the season type. |
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
@@ -699,8 +699,8 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Athlete id. |
-| `display_name` | character | Athlete display name. |
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -781,7 +781,7 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Article id. |
+| `id` | integer | ESPN numeric identifier for the article. |
 | `now_id` | character | ESPN 'now' feed id. |
 | `content_key` | character | Internal content key. |
 | `data_source_identifier` | character | Source-system identifier. |
@@ -793,10 +793,10 @@ ESPN endpoint.
 | `images` | character | Article images (list, stringified). |
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline. |
+| `byline` | character | Author byline string as published by ESPN. |
 | `links_web_href` | character | Web article URL. |
 | `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | API self link. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -901,7 +901,7 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Article id. |
+| `id` | integer | ESPN numeric identifier for the article. |
 | `now_id` | character | ESPN 'now' feed id. |
 | `content_key` | character | Internal content key. |
 | `data_source_identifier` | character | Source-system identifier. |
@@ -913,10 +913,10 @@ ESPN endpoint.
 | `images` | character | Article images (list, stringified). |
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline. |
+| `byline` | character | Author byline string as published by ESPN. |
 | `links_web_href` | character | Web article URL. |
 | `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | API self link. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -949,18 +949,18 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
-| `team` | character | Team display name. |
-| `team_id` | character | Team ESPN id. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `note` | character | Standings note (e.g. qualification/relegation marker). |
 | `games_played` | double | Matches played. |
-| `losses` | double | Matches lost. |
+| `losses` | double | Number of matches the team has lost. |
 | `point_differential` | double | Goal difference (for minus against). |
 | `points` | double | Competition points. |
 | `points_against` | double | Goals conceded. |
-| `points_for` | double | Goals scored. |
-| `ties` | double | Matches drawn. |
-| `wins` | double | Matches won. |
+| `points_for` | double | Goals (or runs) scored by the team. |
+| `ties` | double | Number of matches the team has drawn. |
+| `wins` | double | Number of matches the team has won. |
 | `advanced` | double | Whether the team has advanced/qualified. |
 | `deductions` | double | Points deducted. |
 | `ppg` | double | Points per game. |

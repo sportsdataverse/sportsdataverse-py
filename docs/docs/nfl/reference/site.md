@@ -518,7 +518,7 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Article id. |
+| `id` | integer | ESPN numeric identifier for the article. |
 | `now_id` | character | ESPN 'now' feed id. |
 | `content_key` | character | Internal content key. |
 | `data_source_identifier` | character | Source-system identifier. |
@@ -530,10 +530,10 @@ ESPN endpoint.
 | `images` | character | Article images (list, stringified). |
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline. |
+| `byline` | character | Author byline string as published by ESPN. |
 | `links_web_href` | character | Web article URL. |
 | `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | API self link. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -562,8 +562,8 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Athlete id. |
-| `display_name` | character | Athlete display name. |
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -837,16 +837,16 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN event id. |
+| `id` | character | ESPN numeric event identifier. |
 | `date` | character | Event timestamp (ISO 8601, UTC). |
-| `name` | character | Full event name. |
-| `short_name` | character | Abbreviated event name. |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
 | `time_valid` | logical | Whether the event time is confirmed. |
 | `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
 | `links` | character | Related links (list, stringified). |
 | `season_year` | integer | Four-digit season year. |
-| `season_display_name` | character | Season display name. |
-| `season_type_id` | character | Season type id. |
+| `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | character | ESPN numeric identifier for the season type. |
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
@@ -930,8 +930,8 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Athlete id. |
-| `display_name` | character | Athlete display name. |
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1012,7 +1012,7 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Article id. |
+| `id` | integer | ESPN numeric identifier for the article. |
 | `now_id` | character | ESPN 'now' feed id. |
 | `content_key` | character | Internal content key. |
 | `data_source_identifier` | character | Source-system identifier. |
@@ -1024,10 +1024,10 @@ ESPN endpoint.
 | `images` | character | Article images (list, stringified). |
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline. |
+| `byline` | character | Author byline string as published by ESPN. |
 | `links_web_href` | character | Web article URL. |
 | `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | API self link. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1132,7 +1132,7 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Article id. |
+| `id` | integer | ESPN numeric identifier for the article. |
 | `now_id` | character | ESPN 'now' feed id. |
 | `content_key` | character | Internal content key. |
 | `data_source_identifier` | character | Source-system identifier. |
@@ -1144,10 +1144,10 @@ ESPN endpoint.
 | `images` | character | Article images (list, stringified). |
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
-| `byline` | character | Author byline. |
+| `byline` | character | Author byline string as published by ESPN. |
 | `links_web_href` | character | Web article URL. |
 | `links_mobile_href` | character | Mobile article URL. |
-| `links_api_self_href` | character | API self link. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1196,7 +1196,7 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `ties` | double | Matches drawn. |
+| `ties` | double | Number of matches the team has drawn. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
 | `division_losses` | double |  |
