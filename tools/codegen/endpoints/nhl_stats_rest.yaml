@@ -107,6 +107,7 @@ endpoints:
     report: summary
   parser: parse_nhl_stats_rest
 - short: leaders_goalies
+  returns_schema: native/nhl_stats_rest/leaders_goalies
   summary: Retrieve league leaders for a goalie statistical attribute.
   path: /{lang}/leaders/goalies/{attribute}
   path_params:
@@ -121,6 +122,7 @@ endpoints:
     attribute: X
   parser: parse_nhl_stats_rest
 - short: leaders_skaters
+  returns_schema: native/nhl_stats_rest/leaders_skaters
   summary: Retrieve league leaders for a skater statistical attribute.
   path: /{lang}/leaders/skaters/{attribute}
   path_params:
@@ -175,6 +177,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: shiftcharts
+  returns_schema: native/nhl_stats_rest/shiftcharts
   summary: Retrieve shift-chart data.
   path: /{lang}/shiftcharts
   path_params:

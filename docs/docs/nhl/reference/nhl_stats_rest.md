@@ -348,7 +348,25 @@ Retrieve league leaders for a goalie statistical attribute.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `save_pctg` | double | Save percentage. |
+| `player_id` | integer | Unique player identifier. |
+| `player_current_team_id` | double | Player's current team identifier. |
+| `player_first_name` | character | Player first name. |
+| `player_full_name` | character | Player full name. |
+| `player_last_name` | character | Player last name. |
+| `player_position_code` | character | Player position code. |
+| `player_sweater_number` | double | Player jersey number. |
+| `team_id` | integer | Unique team identifier. |
+| `team_franchise_id` | integer | Team franchise identifier. |
+| `team_full_name` | character | Full team name. |
+| `team_league_id` | integer | League identifier of the team. |
+| `team_logos` | character | Team logo metadata. |
+| `team_raw_tricode` | character | Team raw three-letter code. |
+| `team_tri_code` | character | Team tri-code abbreviation. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -374,7 +392,25 @@ Retrieve league leaders for a skater statistical attribute.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `goals` | integer | Goals scored. |
+| `player_id` | integer | Unique player identifier. |
+| `player_current_team_id` | character | Player's current team identifier. |
+| `player_first_name` | character | Player first name. |
+| `player_full_name` | character | Player full name. |
+| `player_last_name` | character | Player last name. |
+| `player_position_code` | character | Player position code. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `team_id` | integer | Unique team identifier. |
+| `team_franchise_id` | integer | Team franchise identifier. |
+| `team_full_name` | character | Full team name. |
+| `team_league_id` | integer | League identifier of the team. |
+| `team_logos` | character | Team logo metadata. |
+| `team_raw_tricode` | character | Team raw three-letter code. |
+| `team_tri_code` | character | Team tri-code abbreviation. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -565,7 +601,29 @@ Retrieve shift-chart data.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `detail_code` | integer |  |
+| `duration` | character | Penalty duration in minutes. |
+| `end_time` | character | End time (local). |
+| `event_description` | character | Human-readable event description. |
+| `event_details` | character |  |
+| `event_number` | integer | Event number identifier. |
+| `first_name` | character | Player first name. |
+| `game_id` | integer | Unique game identifier. |
+| `hex_value` | character |  |
+| `last_name` | character | Player last name. |
+| `period` | integer | Period number. |
+| `player_id` | integer | Unique player identifier. |
+| `shift_number` | integer |  |
+| `start_time` | character | Start time (local). |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `type_code` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example

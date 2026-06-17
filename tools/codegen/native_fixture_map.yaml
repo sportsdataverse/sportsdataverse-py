@@ -310,6 +310,12 @@ nhl_stats_rest:
   stats_rest_team.json: team
   # /team/id/10                           -> /{lang}/team/id/{team_id}
   stats_rest_team_by_id.json: team_by_id
+  # /leaders/goalies/savePctg            -> /{lang}/leaders/goalies/{attribute}
+  stats_rest_leaders_goalies.json: leaders_goalies
+  # /leaders/skaters/goals               -> /{lang}/leaders/skaters/{attribute}
+  stats_rest_leaders_skaters.json: leaders_skaters
+  # /shiftcharts?cayenneExp=gameId=...   -> /{lang}/shiftcharts
+  stats_rest_shiftcharts.json: shiftcharts
   # /skater/summary?cayenneExp=...        -> /{lang}/skater/{report} (report=summary)
   stats_rest_skater_summary_2024.json: skater_report
   # /goalie/summary?...                   -> /{lang}/goalie/{report} (report=summary)
