@@ -52,10 +52,11 @@ def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | p
 def _html_script_json(html: str, var_name: str) -> Dict:
     if not html:
         return {}
-    m = re.search(rf"var\s+{re.escape(var_name)}\s*=\s*(\{{.*?\}});", html, re.DOTALL)
+    m = re.search(rf"var\s+{re.escape(var_name)}\s*=\s*", html)
     if not m:
         return {}
     try:
-        return json.loads(m.group(1))
+        obj, _ = json.JSONDecoder().raw_decode(html, m.end())
+        return obj if isinstance(obj, dict) else {}
     except Exception:
         return {}

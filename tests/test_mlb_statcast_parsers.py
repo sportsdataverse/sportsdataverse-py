@@ -35,3 +35,24 @@ def test_html_script_json_missing_returns_empty():
     from sportsdataverse.mlb.mlb_statcast_parsers import _html_script_json
 
     assert _html_script_json("<html></html>", "serverVals") == {}
+
+
+def test_html_script_json_handles_nested_objects():
+    """Balanced-brace decoder handles nested objects and no-semicolon terminator.
+
+    The old non-greedy regex required a trailing ';' — Baseball Savant omits it
+    in some payloads, causing a silent {} return.  raw_decode handles both cases.
+    """
+    from sportsdataverse.mlb.mlb_statcast_parsers import _html_script_json
+
+    # Semicoloned form — was accidentally handled by old regex
+    html_semi = '<script>var serverVals = {"playerId": 1, "stats": {"hr": 30, "avg": 0.31}, "ok": true};</script>'
+    blob = _html_script_json(html_semi, "serverVals")
+    assert blob["stats"]["hr"] == 30
+    assert blob["ok"] is True
+
+    # No-semicolon form — old regex returned {} (silent data loss); new code must succeed
+    html_no_semi = 'var serverVals = {"playerId":592450,"stats":{"hr":30},"rows":[{"metric":"xwoba"}]}'
+    blob2 = _html_script_json(html_no_semi, "serverVals")
+    assert blob2["stats"]["hr"] == 30
+    assert blob2["rows"][0]["metric"] == "xwoba"
