@@ -147,7 +147,7 @@ ESPN endpoint.
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
 | `league_slug` | character | League slug. |
-| `league_midsize_name` | character |  |
+| `league_midsize_name` | character | Medium-length display name for the league, between the full name and the short abbreviation. |
 | `league_short_name` | character | League short name. |
 | `current_season_year` | integer | Current season year. |
 | `current_season_display_name` | character | Current season display name. |

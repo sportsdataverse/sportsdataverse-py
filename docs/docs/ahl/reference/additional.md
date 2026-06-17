@@ -73,11 +73,11 @@ AHL statistical leaders for a given season.
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
-| `team_logo_small` | character |  |
-| `stat_formatted` | character |  |
-| `type_formatted` | character |  |
+| `team_logo_small` | character | URL of the small-format team logo image for the AHL leader-board entry. |
+| `stat_formatted` | character | Human-readable string representation of the player's leading statistic value (e.g., "32G", "1.42"). |
+| `type_formatted` | character | Human-readable label for the statistical category driving the leader-board ranking (e.g., "Goals", "Points"). |
 | `photo` | character | URL to the player photo. |
-| `photo_small` | character |  |
+| `photo_small` | character | URL of the small-format headshot image for the AHL leader-board player. |
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
@@ -113,7 +113,7 @@ AHL player season stats across all seasons.
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
 | `career` | character | Whether this is a career-stats season. |
-| `sopt_track_faceoffs` | character |  |
+| `sopt_track_faceoffs` | character | Flag indicating whether faceoffs are tracked for this player's season entry in the AHL shot-on-post statistics. |
 | `max_start_date` | character | Latest game start date for the season. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran` | character | Whether the player is a veteran. |
@@ -255,11 +255,11 @@ AHL standings — one row per team.
 | `goals_for` | character | Goals for. |
 | `goals_against` | character | Goals against. |
 | `games_remaining` | character | Games remaining in the season. |
-| `percentage` | character |  |
+| `percentage` | character | Points percentage earned by the team (points divided by maximum possible points), expressed as a decimal between 0 and 1. |
 | `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
-| `past_10` | character |  |
+| `past_10` | character | Win-loss-overtime record across the team's most recent 10 games, typically formatted as W-L-OTL. |
 | `team` | character | Team name. |
 
 ### `ahl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_team_roster}

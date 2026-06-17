@@ -38,9 +38,12 @@ def test_residual_columns_have_required_fields():
 
 def test_residual_total_matches_known_baseline():
     # Baseline ratchets DOWN as buckets are filled (only ever lowered, never raised).
-    # 3352ed0: 3061 → NFL: 1903 → MLB: 1304 → NHL: 716 → CFB (Task 6): 539.
+    # 3061 → NFL 1903 → MLB 1304 → NHL 716 → CFB 539 → remaining (Task 7): 0.
+    # Terminal: every return-table column now renders a description. A NEW blank
+    # column (e.g. a newly-captured endpoint) fails this test until it is authored
+    # in tools/codegen/manual_column_descriptions.yaml.
     total = len(extract.residual_columns())
-    assert total <= 539, f"residual grew to {total} (>539) — new blank columns appeared"
+    assert total <= 0, f"residual grew to {total} (>0) — new blank columns need descriptions"
 
 
 _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)

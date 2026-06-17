@@ -2054,11 +2054,11 @@ ESPN endpoint.
 | `wins` | double | Wins. |
 | `overtime_losses` | double | Total overtime losses. |
 | `overtime_wins` | double | Overtime wins. |
-| `points_diff` | double |  |
-| `reg_losses` | double |  |
-| `reg_wins` | double |  |
-| `rot_losses` | double |  |
-| `rot_wins` | double |  |
+| `points_diff` | double | Difference between total points scored for and against the team across all games played. |
+| `reg_losses` | double | Number of losses the team has suffered in regulation time (excluding overtime and shootout losses). |
+| `reg_wins` | double | Number of wins the team has earned in regulation time (excluding overtime and shootout wins). |
+| `rot_losses` | double | Number of losses the team has suffered in overtime or the shootout (non-regulation losses). |
+| `rot_wins` | double | Number of wins the team has earned in overtime or the shootout (non-regulation wins). |
 | `shootout_losses` | double | Shootout losses. |
 | `shootout_wins` | double | Shootout wins. |
 | `overall` | character | Overall. |

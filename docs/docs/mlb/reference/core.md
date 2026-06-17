@@ -2059,19 +2059,19 @@ ESPN endpoint.
 | `ties` | double | Number of matches the team has drawn. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `division_games_behind` | double |  |
-| `division_percent` | double |  |
-| `division_tied` | double |  |
+| `division_games_behind` | double | Number of games the team trails the division leader in the standings, expressed as a decimal (e.g., 0.5 for half a game back). |
+| `division_percent` | double | The team's winning percentage in division games, calculated as division wins divided by total division games played. |
+| `division_tied` | double | Number of games the team has tied against opponents within their own division. |
 | `home_losses` | double | Home team's losses. |
 | `home_ties` | double | Total home ties. |
 | `home_wins` | double | Home team's wins. |
-| `magic_number_division` | double |  |
-| `magic_number_wildcard` | double |  |
-| `playoff_percent` | double |  |
+| `magic_number_division` | double | Combination of wins needed by the team (or losses needed by the division leader) for the team to clinch a division title. |
+| `magic_number_wildcard` | double | Combination of wins needed by the team (or losses needed by the next wildcard team) for the team to clinch a wildcard playoff berth. |
+| `playoff_percent` | double | Estimated or model-derived probability that the team will qualify for the playoffs, expressed as a decimal between 0 and 1. |
 | `road_losses` | double | Road losses. |
 | `road_ties` | double | Ties on the road. |
 | `road_wins` | double | Road wins. |
-| `wild_card_percent` | double |  |
+| `wild_card_percent` | double | The team's winning percentage in games that count toward wildcard standings positioning. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |

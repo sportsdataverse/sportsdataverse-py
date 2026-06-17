@@ -82,58 +82,58 @@ ESPN endpoint.
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
 | `competition_id` | character | Id of the primary competition (equals `event_id` for NHL). |
-| `competition_date` | character |  |
+| `competition_date` | character | Date and time of the competition as recorded in the game header. |
 | `neutral_site` | logical | Neutral site. |
 | `status_name` | character | Status label. |
 | `status_description` | character | Roster status description (e.g. 'Active'). |
-| `is_final` | character |  |
+| `is_final` | character | Boolean flag indicating whether the game has reached a final or completed status. |
 
 **matchcards_batting**
 
 | col_name | type | description |
 |---|---|---|
-| `innings_number` | character |  |
+| `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `total` | character | Total. |
-| `runs_total` | character |  |
-| `extras` | character |  |
+| `runs_total` | character | Total runs scored by the team or batting side in this innings. |
+| `extras` | character | Additional runs awarded to the batting side from wides, no-balls, byes, or leg byes in this innings. |
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `dismissal` | character |  |
+| `dismissal` | character | Method by which the batter was dismissed in this innings (e.g., caught, bowled, run out). |
 | `runs` | character | Runs scored. |
-| `balls_faced` | character |  |
-| `fours` | character |  |
-| `sixes` | character |  |
+| `balls_faced` | character | Total number of balls faced by the batter during their innings. |
+| `fours` | character | Number of boundaries hit for four runs by the batter in this innings. |
+| `sixes` | character | Number of boundaries hit for six runs by the batter in this innings. |
 
 **matchcards_bowling**
 
 | col_name | type | description |
 |---|---|---|
-| `innings_number` | character |  |
+| `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `overs` | character |  |
-| `maidens` | character |  |
-| `conceded` | character |  |
-| `wickets` | character |  |
-| `economy_rate` | character |  |
-| `nbw` | character |  |
+| `overs` | character | Number of overs bowled by the bowler in this innings. |
+| `maidens` | character | Number of maiden overs bowled by the bowler in this innings, in which no runs were conceded. |
+| `conceded` | character | Total runs conceded by the bowler during their spell in this innings. |
+| `wickets` | character | Number of wickets taken by the bowler in this innings. |
+| `economy_rate` | character | Average runs conceded per over by the bowler in this innings. |
+| `nbw` | character | Combined no-balls and wides bowled by the bowler in this innings. |
 
 **matchcards_partnerships**
 
 | col_name | type | description |
 |---|---|---|
-| `innings_number` | character |  |
+| `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `partnership_runs` | character |  |
-| `partnership_overs` | character |  |
-| `wicket_name` | character |  |
-| `fow_type` | character |  |
+| `partnership_runs` | character | Total runs scored during the batting partnership for this fall-of-wicket record. |
+| `partnership_overs` | character | Number of overs faced during the batting partnership for this fall-of-wicket record. |
+| `wicket_name` | character | Name or label identifying the wicket at which this batting partnership ended. |
+| `fow_type` | character | Type classification for this fall-of-wicket entry (e.g., caught, bowled, run out). |
 | `player1_name` | character | V2 PBP primary player name. |
-| `player1_runs` | character |  |
+| `player1_runs` | character | Runs contributed by the first player in the batting partnership. |
 | `player2_name` | character | V2 PBP secondary player name. |
-| `player2_runs` | character |  |
+| `player2_runs` | character | Runs contributed by the second player in the batting partnership. |
 
 **rosters**
 
@@ -143,11 +143,11 @@ ESPN endpoint.
 | `home_away` | character | Game venue label ('home' or 'away'). |
 | `winner` | logical | Winner. |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
-| `athlete` | character |  |
+| `athlete` | character | Reference or identifier string for the athlete associated with this row in the box score. |
 | `jersey` | character | Jersey number worn by the player. |
 | `starter` | logical | TRUE if the player was in the starting lineup; FALSE otherwise. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
-| `captain` | logical |  |
+| `captain` | logical | Indicates whether the player was designated as a team captain for this game. |
 
 **game_info**
 
@@ -155,9 +155,9 @@ ESPN endpoint.
 |---|---|---|
 | `venue_id` | character | Unique venue identifier. |
 | `venue_full_name` | character | Venue full name. |
-| `venue_short_name` | character |  |
+| `venue_short_name` | character | Abbreviated or shortened display name for the venue where the game was played. |
 | `venue_city` | character | Venue city. |
-| `venue_country` | character |  |
+| `venue_country` | character | Country name for the venue where the game was played. |
 | `attendance` | integer | Reported attendance. |
 | `officials` | character | Whether officials data is available. |
 
@@ -169,15 +169,15 @@ ESPN endpoint.
 | `team` | character | Team-side label or team identifier. |
 | `team_id` | character | Unique team identifier. |
 | `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
-| `matches_played` | integer |  |
-| `matches_won` | integer |  |
-| `matches_lost` | integer |  |
-| `noresult` | integer |  |
-| `match_points` | integer |  |
+| `matches_played` | integer | Total number of matches played by the team in the current stage or competition group. |
+| `matches_won` | integer | Total number of matches won by the team in the current stage or competition group. |
+| `matches_lost` | integer | Total number of matches lost by the team in the current stage or competition group. |
+| `noresult` | integer | Number of matches that ended without a result (e.g., rain-affected or abandoned) for the team. |
+| `match_points` | integer | Total competition points accumulated by the team based on match outcomes in the group or stage. |
 | `qualified` | integer | True/False indicator of whether or not player meets minimum play requirement |
-| `netrr` | double |  |
-| `for` | double |  |
-| `against` | double |  |
+| `netrr` | double | Net Run Rate for the team, a tiebreaker metric used in cricket group standings. |
+| `for` | double | Total runs or score accumulated by the team across all matches in the group or stage. |
+| `against` | double | Total runs or score conceded by the team across all matches in the group or stage. |
 | `total` | character | Total. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

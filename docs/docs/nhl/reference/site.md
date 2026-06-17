@@ -127,15 +127,15 @@ ESPN endpoint.
 | `takeaways` | character | Takeaways. |
 | `plus_minus` | character | Plus minus. |
 | `time_on_ice` | character | Time on ice in seconds. |
-| `power_play_time_on_ice` | character |  |
-| `short_handed_time_on_ice` | character |  |
-| `even_strength_time_on_ice` | character |  |
+| `power_play_time_on_ice` | character | Total time the player spent on the ice during power-play situations in the game. |
+| `short_handed_time_on_ice` | character | Total time the player spent on the ice while the team was at a numerical disadvantage (shorthanded) in the game. |
+| `even_strength_time_on_ice` | character | Total time the player spent on the ice during even-strength situations in the game. |
 | `shifts` | character | Number of shifts. |
 | `goals` | character | Goals scored. |
-| `ytd_goals` | character |  |
+| `ytd_goals` | character | Year-to-date goal total for the player entering or through this game. |
 | `assists` | character | Assists. |
 | `shots_total` | character | Shots on goal. |
-| `shots_missed` | character |  |
+| `shots_missed` | character | Number of shots taken by the player that did not result in a goal or save attempt in the game. |
 | `shootout_goals` | character | Shootout goals. |
 | `faceoffs_won` | character | Faceoffs won in the season. |
 | `faceoffs_lost` | character | Faceoffs lost in the season. |
@@ -146,12 +146,12 @@ ESPN endpoint.
 | `goals_against` | character | Goals against. |
 | `shots_against` | character | Shots faced. |
 | `shootout_saves` | character | Shootout saves made. |
-| `shootout_shots_against` | character |  |
+| `shootout_shots_against` | character | Number of shootout attempts faced by the goaltender in the game's shootout. |
 | `saves` | character | Saves made. |
 | `save_pct` | character | Save percentage. |
-| `even_strength_saves` | character |  |
-| `power_play_saves` | character |  |
-| `short_handed_saves` | character |  |
+| `even_strength_saves` | character | Number of saves made by the goaltender during even-strength play in the game. |
+| `power_play_saves` | character | Number of saves made by the goaltender during power-play situations in the game. |
+| `short_handed_saves` | character | Number of saves made by the goaltender while the team was shorthanded in the game. |
 
 **boxscore_team**
 
@@ -191,12 +191,12 @@ ESPN endpoint.
 | `team_id` | character | Team id. |
 | `strength_id` | character | Strength situation id (e.g. even strength, PP, SH). |
 | `strength_text` | character | Strength situation (e.g. "Even Strength", "Power Play"). |
-| `strength_abbreviation` | character |  |
+| `strength_abbreviation` | character | Abbreviated label for the strength-of-play situation at the time of the scoring event (e.g., even strength, power play). |
 | `coordinate_x` | double | Coordinate x. |
 | `coordinate_y` | double | Coordinate y. |
 | `shot_info_id` | character | Shot type identifier. |
 | `shot_info_text` | character | Shot type text (e.g. "Wrist Shot"). |
-| `shot_info_abbreviation` | character |  |
+| `shot_info_abbreviation` | character | Abbreviated description of the shot type associated with a scoring event in the box score. |
 
 **leaders**
 
@@ -224,7 +224,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state. |
-| `venue_address_country` | character |  |
+| `venue_address_country` | character | Country of the venue where the game was played. |
 | `venue_grass` | logical | Venue grass. |
 
 **officials**
@@ -247,8 +247,8 @@ ESPN endpoint.
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
-| `game_note` | character |  |
-| `standings` | character |  |
+| `game_note` | character | Optional editorial note or context annotation attached to the game in the header. |
+| `standings` | character | Condensed standings reference or link included in the game header for the relevant league. |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -299,7 +299,7 @@ ESPN endpoint.
 | `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
 | `lang` | character | Broadcast language (e.g. "en"). |
 | `region` | character | Broadcast region (e.g. "us"). |
-| `is_national` | logical |  |
+| `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
 | `type_id` | character | Type id. |
 | `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
 | `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
@@ -1110,11 +1110,11 @@ ESPN endpoint.
 | `wins` | double | Wins. |
 | `overtime_losses` | double | Total overtime losses. |
 | `overtime_wins` | double | Overtime wins. |
-| `points_diff` | double |  |
-| `reg_losses` | double |  |
-| `reg_wins` | double |  |
-| `rot_losses` | double |  |
-| `rot_wins` | double |  |
+| `points_diff` | double | Difference between total points scored for and against the team across all games played. |
+| `reg_losses` | double | Number of losses the team has suffered in regulation time (excluding overtime and shootout losses). |
+| `reg_wins` | double | Number of wins the team has earned in regulation time (excluding overtime and shootout wins). |
+| `rot_losses` | double | Number of losses the team has suffered in overtime or the shootout (non-regulation losses). |
+| `rot_wins` | double | Number of wins the team has earned in overtime or the shootout (non-regulation wins). |
 | `shootout_losses` | double | Shootout losses. |
 | `shootout_wins` | double | Shootout wins. |
 | `overall` | character | Overall. |

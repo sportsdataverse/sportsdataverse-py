@@ -2051,10 +2051,10 @@ ESPN endpoint.
 | `ties` | double | Number of matches the team has drawn. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `division_losses` | double |  |
-| `division_record` | double |  |
-| `division_ties` | double |  |
-| `division_wins` | double |  |
+| `division_losses` | double | Number of games the team has lost against opponents within their own division. |
+| `division_record` | double | The team's composite win-loss-tie record against division opponents, serialized as a numeric value. |
+| `division_ties` | double | Number of games the team has tied against opponents within their own division. |
+| `division_wins` | double | Number of games the team has won against opponents within their own division. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |

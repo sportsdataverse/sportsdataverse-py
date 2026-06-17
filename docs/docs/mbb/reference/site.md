@@ -209,7 +209,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state. |
-| `venue_address_zip_code` | character |  |
+| `venue_address_zip_code` | character | Postal zip code of the venue where the game was played. |
 | `venue_grass` | logical | Venue grass. |
 
 **officials**
@@ -233,7 +233,7 @@ ESPN endpoint.
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
 | `week` | integer | Week number. |
-| `game_note` | character |  |
+| `game_note` | character | Optional editorial note or context annotation attached to the game in the header. |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -241,7 +241,7 @@ ESPN endpoint.
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
-| `league_midsize_name` | character |  |
+| `league_midsize_name` | character | Medium-length display name for the league or competition as shown in the game header. |
 | `league_slug` | character | League slug. |
 | `league_is_tournament` | logical | League is tournament. |
 | `league_links` | character | League links. |
@@ -259,7 +259,7 @@ ESPN endpoint.
 | `team_location` | character | Team location. |
 | `overall` | character | Overall. |
 | `games_behind` | character | Games behind. |
-| `vs. conf.` | character |  |
+| `vs. conf.` | character | Team's record against conference opponents, shown as part of the standings snapshot in the box score. |
 
 **format**
 
@@ -329,10 +329,10 @@ ESPN endpoint.
 | `links_api_self_href` | character | Links api self href. |
 | `links_app_sportscenter_href` | character | Links app sportscenter href. |
 | `byline` | character | Byline. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_web_self_href` | character | URL for the canonical web page of the associated article or editorial content. |
+| `links_web_self_dsi_href` | character | Data-source-identified URL for the web page of the associated article content. |
+| `links_api_artwork_href` | character | API endpoint URL for artwork or imagery associated with the article. |
+| `links_sportscenter_href` | character | URL for the article's page on ESPN's SportsCenter platform. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -402,10 +402,10 @@ ESPN endpoint.
 | `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 | `byline` | character | Author byline string as published by ESPN. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -643,13 +643,13 @@ ESPN endpoint.
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
 | `birth_place_display_text` | character | Birth place display text. |
-| `birth_country_alternate_id` | character |  |
+| `birth_country_alternate_id` | character | Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system. |
 | `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
-| `flag_href` | character |  |
-| `flag_alt` | character |  |
-| `flag_rel` | character |  |
+| `flag_href` | character | URL of the SVG or PNG flag image representing the athlete's country of birth. |
+| `flag_alt` | character | Alt-text string for the athlete's country-of-birth flag image, typically the full country name. |
+| `flag_rel` | character | Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag"). |
 | `position_id` | character | Position id. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
@@ -708,7 +708,7 @@ ESPN endpoint.
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
 | `week_number` | integer | Week number. |
-| `week_text` | character |  |
+| `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -880,10 +880,10 @@ ESPN endpoint.
 | `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 | `byline` | character | Author byline string as published by ESPN. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1004,10 +1004,10 @@ ESPN endpoint.
 | `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 | `byline` | character | Author byline string as published by ESPN. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1062,8 +1062,8 @@ ESPN endpoint.
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `vs ap top 25` | character |  |
-| `vs usa ranked teams` | character |  |
+| `vs ap top 25` | character | The team's win-loss record against opponents ranked in the AP Top 25 poll. |
+| `vs usa ranked teams` | character | The team's win-loss record against opponents ranked in the USA Today Coaches Poll. |
 | `vs. conf.` | character | Vs. conf.. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

@@ -5,6 +5,16 @@
 # See docs/superpowers/specs/2026-06-17-sdv-py-returns-table-descriptions-design.md
 
 _global: {}
+ahl_leaders:
+  photo_small: URL of the small-format headshot image for the AHL leader-board player.
+  stat_formatted: Human-readable string representation of the player's leading statistic value (e.g., "32G", "1.42").
+  team_logo_small: URL of the small-format team logo image for the AHL leader-board entry.
+  type_formatted: Human-readable label for the statistical category driving the leader-board ranking (e.g., "Goals", "Points").
+ahl_player_stats:
+  sopt_track_faceoffs: Flag indicating whether faceoffs are tracked for this player's season entry in the AHL shot-on-post statistics.
+ahl_standings:
+  past_10: Win-loss-overtime record across the team's most recent 10 games, typically formatted as W-L-OTL.
+  percentage: Points percentage earned by the team (points divided by maximum possible points), expressed as a decimal between 0 and 1.
 boxscore:
   all_positions: All fielding positions played by the player during the game, as a list of position codes.
   game_status_is_current_batter: Indicates whether the player is currently at bat at the moment the boxscore was captured.
@@ -530,6 +540,25 @@ espn_cfb_schedule:
   home_linescores: Per-period point totals for the home team, stored as an array of quarter/overtime scores.
   home_records: Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record).
   venue_address_country: Country in which the game venue is located, as provided by ESPN's venue data.
+espn_mbb_game_rosters:
+  athlete_href: ESPN API URL pointing to the full athlete resource for this player.
+  birth_country_alternate_id: Alternate identifier for the player's birth country as provided by ESPN.
+  flag_alt: Alt-text string for the player's country flag image, typically the country name.
+  flag_href: URL to the player's country flag image as supplied by ESPN.
+  flag_rel: Relationship descriptor for the country flag link, indicating the link type (e.g., 'country-flag').
+  jersey_right: Right-justified or secondary jersey number display string for the player.
+  position_href: ESPN API URL pointing to the full position resource for this player's role.
+  statistics_href: ESPN API URL pointing to the player's statistics resource for this game.
+  team_alternate_ids_sdr: Alternate team identifier from ESPN's SDR (Sports Data Repository) system.
+espn_mbb_player_stats:
+  offensive_second_chance_points: Total points scored by the player on second-chance opportunities following an offensive rebound.
+espn_mbb_schedule:
+  away_current_rank: Current national poll ranking of the away team at the time of the game, or null if unranked.
+  away_linescores: Period-by-period scoring breakdown for the away team, serialized as a packed integer sequence.
+  away_records: Win-loss record string(s) for the away team across applicable record categories (e.g., overall, conference).
+  home_current_rank: Current national poll ranking of the home team at the time of the game, or null if unranked.
+  home_linescores: Period-by-period scoring breakdown for the home team, serialized as a packed integer sequence.
+  home_records: Win-loss record string(s) for the home team across applicable record categories (e.g., overall, conference).
 espn_mlb_player_stats:
   batting_bipa: Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact.
   batting_mlb_rating: ESPN's composite MLB rating for the batter reflecting overall offensive performance.
@@ -572,6 +601,31 @@ espn_mlb_player_stats:
   fielding_total_chances: Total fielding chances (putouts + assists + errors) offered to the player during the season.
   fielding_triple_plays: Number of triple plays in which the fielder participated during the season.
   fielding_zone_rating: Percentage of batted balls in the fielder's defined zone that were successfully converted into outs.
+espn_nba_player_stats:
+  defensive_avg48_blocks: Player's average blocked shots per 48 minutes played.
+  defensive_avg48_defensive_rebounds: Player's average defensive rebounds per 48 minutes played.
+  defensive_avg48_steals: Player's average steals per 48 minutes played.
+  general_avg48_disqualifications: Player's average disqualifications (fouling out) per 48 minutes played.
+  general_avg48_ejections: Player's average ejections per 48 minutes played.
+  general_avg48_flagrant_fouls: Player's average flagrant fouls assessed per 48 minutes played.
+  general_avg48_fouls: Player's average personal fouls committed per 48 minutes played.
+  general_avg48_rebounds: Player's average total rebounds (offensive + defensive) per 48 minutes played.
+  general_avg48_technical_fouls: Player's average technical fouls assessed per 48 minutes played.
+  offensive_avg48_assists: Player's average assists per 48 minutes played.
+  offensive_avg48_field_goals_attempted: Player's average field goal attempts per 48 minutes played.
+  offensive_avg48_field_goals_made: Player's average field goals made per 48 minutes played.
+  offensive_avg48_free_throws_attempted: Player's average free throw attempts per 48 minutes played.
+  offensive_avg48_free_throws_made: Player's average free throws made per 48 minutes played.
+  offensive_avg48_offensive_rebounds: Player's average offensive rebounds per 48 minutes played.
+  offensive_avg48_points: Player's average points scored per 48 minutes played.
+  offensive_avg48_three_point_field_goals_attempted: Player's average three-point field goal attempts per 48 minutes played.
+  offensive_avg48_three_point_field_goals_made: Player's average three-point field goals made per 48 minutes played.
+  offensive_avg48_turnovers: Player's average turnovers committed per 48 minutes played.
+espn_nba_schedule:
+  away_linescores: Period-by-period point totals for the away team, stored as a list of integer scores.
+  away_records: Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference).
+  home_linescores: Period-by-period point totals for the home team, stored as a list of integer scores.
+  home_records: Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference).
 espn_nfl_game_rosters:
   athlete_href: ESPN API hyperlink reference URL for the athlete resource.
   college_athlete_href: ESPN API hyperlink reference URL for the athlete's college profile resource.
@@ -841,6 +895,50 @@ espn_nhl_schedule:
   home_linescores: Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period.
   home_records: Serialized win-loss-overtime record string for the home team at the time of the scheduled game.
   venue_address_country: Country name or code for the country in which the game venue is located, as provided by ESPN's schedule endpoint.
+espn_wbb_game_rosters:
+  athlete_href: ESPN API resource URL for the athlete's full profile endpoint.
+  birth_country_alternate_id: Alternate identifier for the athlete's country of birth used in ESPN's country-flag system.
+  flag_alt: Alt-text string for the athlete's country-of-birth flag image, typically the country name.
+  flag_href: URL of the SVG or PNG flag image representing the athlete's country of birth.
+  flag_rel: Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag").
+  jersey_right: Jersey number displayed on the right side of the roster card, used for alternate or secondary number representations.
+  position_href: ESPN API resource URL for the athlete's position resource.
+  statistics_href: ESPN API resource URL pointing to the athlete's statistics endpoint.
+  team_alternate_ids_sdr: Alternate team identifier from ESPN's SDR (Sports Data Reference) system for the athlete's team.
+espn_wbb_player_stats:
+  offensive_second_chance_points: Points scored by the player on offensive-rebound put-back opportunities during the season.
+espn_wbb_schedule:
+  away_current_rank: Current AP/coaches poll ranking of the away team at the time of the game.
+  away_linescores: Points scored by the away team in each period or half of the game.
+  away_records: Win-loss record string for the away team at the time of the game.
+  home_current_rank: Current AP/coaches poll ranking of the home team at the time of the game.
+  home_linescores: Points scored by the home team in each period or half of the game.
+  home_records: Win-loss record string for the home team at the time of the game.
+espn_wnba_player_stats:
+  defensive_avg48_blocks: Player's blocked shots per 48 minutes of play, drawn from the defensive statistical category.
+  defensive_avg48_defensive_rebounds: Player's defensive rebounds per 48 minutes of play, drawn from the defensive statistical category.
+  defensive_avg48_steals: Player's steals per 48 minutes of play, drawn from the defensive statistical category.
+  general_avg48_disqualifications: Player's disqualifications (fouling out) per 48 minutes of play, drawn from the general statistical category.
+  general_avg48_ejections: Player's ejections per 48 minutes of play, drawn from the general statistical category.
+  general_avg48_flagrant_fouls: Player's flagrant fouls per 48 minutes of play, drawn from the general statistical category.
+  general_avg48_fouls: Player's personal fouls per 48 minutes of play, drawn from the general statistical category.
+  general_avg48_rebounds: Player's total rebounds (offensive plus defensive) per 48 minutes of play, drawn from the general statistical category.
+  general_avg48_technical_fouls: Player's technical fouls per 48 minutes of play, drawn from the general statistical category.
+  offensive_avg48_assists: Player's assists per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_field_goals_attempted: Player's field goal attempts per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_field_goals_made: Player's field goals made per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_free_throws_attempted: Player's free throw attempts per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_free_throws_made: Player's free throws made per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_offensive_rebounds: Player's offensive rebounds per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_points: Player's points scored per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_three_point_field_goals_attempted: Player's three-point field goal attempts per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_three_point_field_goals_made: Player's three-point field goals made per 48 minutes of play, drawn from the offensive statistical category.
+  offensive_avg48_turnovers: Player's turnovers per 48 minutes of play, drawn from the offensive statistical category.
+espn_wnba_schedule:
+  away_linescores: Period-by-period point totals for the away team, stored as a list of integer scores.
+  away_records: Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference).
+  home_linescores: Period-by-period point totals for the home team, stored as a list of integer scores.
+  home_records: Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference).
 game_changes:
   schedule_date: The calendar date for which schedule changes are being reported, identifying when rescheduled or suspended games occurred.
 game_pace:
@@ -1014,6 +1112,12 @@ landing:
   summary_scoring: Serialized summary of scoring events for the game, flattened from the nested NHL api-web landing payload scoring sub-object.
   summary_three_stars: Serialized representation of the three-star selections for the game, flattened from the nested NHL api-web landing payload.
   venue_location_default: Default-language display string for the city or location associated with the game's venue, as provided by the NHL api-web landing endpoint.
+leaders:
+  current_season_type_week_end_date: ISO 8601 end date of the current week within the active season type (e.g., regular season, playoffs).
+  current_season_type_week_number: Ordinal week number within the current season type.
+  current_season_type_week_start_date: ISO 8601 start date of the current week within the active season type.
+  current_season_type_week_text: Human-readable label for the current week within the active season type (e.g., 'Week 14').
+  league_midsize_name: Medium-length display name for the league, between the full name and the short abbreviation.
 leagues:
   has_playoff_points: Boolean flag indicating whether this league uses a playoff points system to determine postseason seeding.
   has_split_season: Boolean flag indicating whether this league divides its season into two halves with separate standings (as used historically in some minor leagues).
@@ -1334,10 +1438,14 @@ news:
   id: ESPN numeric identifier for the article.
   images: Article images (list, stringified).
   last_modified: Last-modified timestamp (ISO 8601).
+  links_api_artwork_href: ESPN API URL for the artwork image associated with this news article.
   links_api_self_href: ESPN API canonical self-link for the article resource.
   links_app_sportscenter_href: SportsCenter app deep link.
   links_mobile_href: Mobile article URL.
+  links_sportscenter_href: Deep-link URL to this news article within the ESPN SportsCenter app or web experience.
   links_web_href: Web article URL.
+  links_web_self_dsi_href: Alternate canonical web URL for this news article using ESPN's DSI routing.
+  links_web_self_href: Primary canonical web URL for this news article on ESPN.com.
   now_id: ESPN 'now' feed id.
   premium: Whether the article is premium/paywalled.
   published: Publish timestamp (ISO 8601).
@@ -2099,6 +2207,36 @@ nhl_scoreboard:
   series_status_top_seed_wins: Number of wins accumulated by the higher-seeded team in the current playoff series as of this scoreboard snapshot.
   tickets_link: URL to the English-language ticket purchase page for the game, as provided by the NHL api-web scoreboard.
   tickets_link_fr: URL to the French-language ticket purchase page for the game, as provided by the NHL api-web scoreboard.
+ohl_game_corsi:
+  corsi_against: Total shot attempts (goals, saves, missed shots, and blocked shots) directed against the player's team while that player was on the ice in the OHL game.
+  corsi_for: Total shot attempts (goals, saves, missed shots, and blocked shots) directed toward the opposing team while the player was on the ice in the OHL game.
+  corsi_for_pct: Share of all shot attempts while the player was on the ice that were directed toward the opponent, expressed as a percentage (Corsi For / (Corsi For + Corsi Against)).
+  corsi_for_per60: The player's Corsi For rate normalized to a 60-minute pace, enabling comparison across players with different ice times.
+  corsi_includes_missed: Boolean flag indicating whether missed shots are included in the Corsi totals for this record.
+  fenwick_against: Unblocked shot attempts (goals, saves, and missed shots only) directed against the player's team while that player was on the ice.
+  fenwick_for: Unblocked shot attempts (goals, saves, and missed shots only) directed toward the opposing team while the player was on the ice.
+  fenwick_for_pct: Share of all unblocked shot attempts while the player was on the ice that were directed toward the opponent, expressed as a percentage (Fenwick For / (Fenwick For + Fenwick Against)).
+  toi_seconds: Total time on ice for the player during the game, recorded in seconds.
+ohl_leaders:
+  photo_small: URL of a small-format headshot image of the player from the OHL HockeyTech feed.
+  stat_formatted: Human-readable string representation of the leader's statistical value for display purposes (e.g., '42', '1.85', '93.5%').
+  team_logo_small: URL of the small-format team logo image for the player's OHL club.
+  type_formatted: Human-readable label describing the statistical category for which the player appears on the leaders list (e.g., 'Points', 'Goals', 'Save Percentage').
+ohl_pbp:
+  on_ice_away: Jersey numbers or player IDs of away-team skaters on the ice at the time of this play.
+  on_ice_home: Jersey numbers or player IDs of home-team skaters on the ice at the time of this play.
+  scoring_chance: Boolean flag indicating whether this play was classified as a scoring chance by the HockeyTech data feed.
+ohl_player_stats:
+  shots_wide: Count of shot attempts by the player that missed the net wide, as tracked by OHL shot-location data.
+  sopt_track_faceoffs: Flag indicating whether faceoff tracking is enabled for this player's statistical record in the HockeyTech system.
+ohl_player_toi:
+  avg_shift_s: Average duration of the player's individual shifts during the game or season, measured in seconds.
+  num_shifts: Total number of shifts the player took during the game or tracked period.
+  toi_seconds: Total time on ice for the player during the game or tracked period, expressed in seconds.
+ohl_standings:
+  goals_diff: Net goal differential for the team (goals for minus goals against) displayed as a signed string.
+  past_10: Team record over the most recent ten games, formatted as a W-L or W-OTL-L string.
+  percentage: Team points percentage expressed as a string, calculated as points earned divided by maximum possible points.
 pbp:
   details_assist1_player_id: NHL api-web player identifier for the primary (first) assist credited on a goal event in the play-by-play feed.
   details_assist1_player_total: Running season assist total for the primary assist player at the time of the goal event in the play-by-play feed.
@@ -2317,6 +2455,124 @@ playoff_series:
   series_status_top_seed_wins: Number of wins accumulated by the higher-seeded team in this NHL playoff series to date.
   top_seed_team_abbrev: Three-letter abbreviation of the higher-seeded team in this NHL playoff series (e.g., 'TOR').
   top_seed_team_id: Unique NHL api-web identifier for the higher-seeded team in this playoff series.
+pwhl_game_corsi:
+  corsi_against: Total shot attempts (on goal, missed, and blocked) directed against this team while at the tracked strength in the PWHL game.
+  corsi_for: Total shot attempts (on goal, missed, and blocked) directed toward the opponent by this team while at the tracked strength in the PWHL game.
+  corsi_for_pct: Share of all tracked shot attempts belonging to this team, expressed as a decimal (Corsi For percentage).
+  corsi_for_per60: This team's Corsi For rate projected to a full 60 minutes of ice time.
+  corsi_includes_missed: Boolean flag indicating whether missed shots are included in the Corsi totals for this record.
+  fenwick_against: Unblocked shot attempts (on goal and missed only) directed against this team at the tracked strength in the PWHL game.
+  fenwick_for: Unblocked shot attempts (on goal and missed only) directed toward the opponent by this team at the tracked strength in the PWHL game.
+  fenwick_for_pct: Share of all unblocked shot attempts belonging to this team, expressed as a decimal (Fenwick For percentage).
+  toi_seconds: Total time on ice in seconds for this team at the tracked strength during the PWHL game.
+pwhl_game_shifts:
+  end_s: Shift end time in seconds elapsed from the start of the period.
+  goal_on_shift: Number of goals scored while this shift was active (0 or 1 in most cases).
+  penalty_on_shift: Number of penalties called while this shift was active.
+  start_s: Shift start time in seconds elapsed from the start of the period.
+pwhl_leaders:
+  photo_small: URL of the small-format headshot image for the PWHL leader-board player.
+  stat_formatted: Human-readable string representation of the player's leading statistic value (e.g., "22G", "0.95").
+  team_logo_small: URL of the small-format team logo image for the PWHL leader-board entry.
+  type_formatted: Human-readable label for the statistical category driving the leader-board ranking (e.g., "Goals", "Save Percentage").
+pwhl_player_search:
+  all_roles: Pipe- or comma-delimited string listing every positional or roster role associated with the player in the PWHL HockeyTech system.
+  last_active_date: ISO-formatted date string of the player's most recent recorded activity or roster transaction in the PWHL HockeyTech system.
+  last_team_code: Short abbreviation code for the PWHL team on which the player most recently appeared.
+  last_team_name: Full name of the PWHL team on which the player most recently appeared.
+  profile_image: URL of the player's official profile photograph from the PWHL HockeyTech feed.
+  rawbirthdate: Player's birth date as a raw string in the format returned by the PWHL HockeyTech API, typically YYYY-MM-DD.
+  role_id: Numeric identifier for the player's primary positional role in the PWHL HockeyTech system (e.g., skater, goalie).
+  role_name: Human-readable label for the player's primary positional role in the PWHL HockeyTech system (e.g., 'Forward', 'Defense', 'Goalie').
+pwhl_player_stats:
+  sopt_track_faceoffs: Flag indicating whether faceoff tracking is enabled for this player's statistical record in the HockeyTech system.
+pwhl_player_toi:
+  avg_shift_s: Average duration of a single shift for the player during the game or reporting period, measured in seconds.
+  num_shifts: Total number of shifts the player took during the game or reporting period.
+  toi_seconds: Total time on ice for the PWHL player during the game or reporting period, recorded in seconds.
+pwhl_scorebar:
+  combined_client_code: Combined league-and-client identifier string used by the HockeyTech feed to distinguish multi-tenant deployments.
+  flo_core_event_id: FloSports core event identifier linking this PWHL game to its FloSports broadcast event record.
+  flo_hockey_url: URL to the FloHockey streaming page for this PWHL game.
+  flo_live_event_id: FloSports live-stream event identifier for this PWHL game.
+  game_date_iso8601: Game date formatted as an ISO 8601 string (e.g., "2024-02-10T00:00:00") for timezone-aware parsing.
+  game_letter: Single-letter suffix appended to the game number to distinguish doubleheader or rescheduled games.
+  game_status_string: Short status label for the game's current state (e.g., "Final", "In Progress", "Scheduled").
+  game_status_string_long: Verbose status description for the game's current state, including period or overtime context.
+  game_summary_url: URL to the official PWHL game summary page for this contest.
+  home_audio_url: URL of the home-team radio or audio broadcast stream for this game.
+  home_code: Short team code (abbreviation) for the home team (e.g., "BOS", "MIN").
+  home_long_name: Full name including city and franchise for the home team (e.g., "Boston Fleet").
+  home_nickname: Franchise nickname for the home team (e.g., "Fleet", "Frost").
+  home_regulation_losses: Number of regulation losses accumulated by the home team at the time of this game in the current standings.
+  home_shootout_losses: Number of shootout losses accumulated by the home team at the time of this game in the current standings.
+  home_video_url: URL of the home-team video broadcast stream for this game.
+  home_webcast_url: URL of the home-team webcast for online viewing of this game.
+  intermission: Flag or string indicating whether the game is currently in an intermission period.
+  league_code: Short code identifying the league for this scorebar record (e.g., "PWHL").
+  ord: Ordinal sort key used by the HockeyTech scorebar feed to order games within a day.
+  period_name_long: Verbose name of the current or final game period (e.g., "Third Period", "Overtime").
+  period_name_short: Abbreviated name of the current or final game period (e.g., "3rd", "OT").
+  quick_score: Compact score string summarizing the current or final score of the game (e.g., "3-2").
+  scheduled_formatted_time: Human-readable local game start time string formatted for display (e.g., "7:00 PM ET").
+  scheduled_time: Raw scheduled start time for the game as returned by the HockeyTech feed, typically in HH:MM:SS format.
+  ticket_url: URL to the official ticketing page where fans can purchase tickets for this game.
+  timezone_short: Abbreviated timezone label for the game's scheduled start time (e.g., "ET", "CT").
+  venue_location: City and/or arena name indicating the physical location where the game is played.
+  visitor_audio_url: URL of the visiting-team radio or audio broadcast stream for this game.
+  visitor_city: City name of the visiting team (e.g., "New York", "Ottawa").
+  visitor_code: Short team code (abbreviation) for the visiting team (e.g., "NYR", "OTT").
+  visitor_goals: Number of goals scored by the visiting team at the current point in the game.
+  visitor_id: HockeyTech team identifier for the visiting team in this game.
+  visitor_logo: URL of the logo image for the visiting team.
+  visitor_long_name: Full name including city and franchise for the visiting team (e.g., "Ottawa Charge").
+  visitor_nickname: Franchise nickname for the visiting team (e.g., "Charge", "Sceptres").
+  visitor_ot_losses: Number of overtime losses accumulated by the visiting team at the time of this game in the current standings.
+  visitor_regulation_losses: Number of regulation losses accumulated by the visiting team at the time of this game in the current standings.
+  visitor_shootout_losses: Number of shootout losses accumulated by the visiting team at the time of this game in the current standings.
+  visitor_video_url: URL of the visiting-team video broadcast stream for this game.
+  visitor_webcast_url: URL of the visiting-team webcast for online viewing of this game.
+  visitor_wins: Number of wins accumulated by the visiting team at the time of this game in the current standings.
+pwhl_standings:
+  percentage: Points percentage earned by the PWHL team (points divided by maximum possible points), expressed as a decimal between 0 and 1.
+pwhl_stats:
+  player_image: URL to the player's headshot image as served by the HockeyTech/PWHL data feed.
+pwhl_team_roster:
+  birthplace: City, province/state, or country where the player was born, as recorded in the PWHL HockeyTech roster.
+  current_team: Name or identifier of the PWHL team to which the player is currently rostered.
+  draft_status: Text description of the player's draft history or eligibility status (e.g., undrafted, drafted year and round).
+  height_hyphenated: Player's height formatted as feet-inches with a hyphen separator (e.g., '5-9'), as supplied by the PWHL HockeyTech API.
+  hidden: Flag indicating whether the player's roster entry is suppressed from public-facing displays in the PWHL HockeyTech system.
+  nhlteam: Name or identifier of the NHL organization that holds the player's NHL rights, if applicable.
+  player_id_1: Alternate or secondary HockeyTech player identifier, distinct from the primary person_id and player_id fields.
+  player_image: URL of the player's official roster photograph from the PWHL HockeyTech feed.
+  rawbirthdate: Player's birth date as a raw string in the format returned by the PWHL HockeyTech API, typically YYYY-MM-DD.
+  tp_jersey_number: Jersey number assigned to the player on the current PWHL team roster, as provided by the HockeyTech feed.
+  veteran_description: Text label or descriptor indicating the player's veteran status or experience classification in the PWHL.
+qmjhl_leaders:
+  photo_small: URL of a small-format headshot image of the player from the QMJHL HockeyTech feed.
+  stat_formatted: Human-readable string representation of the leader's statistical value for display purposes (e.g., '42', '1.85', '93.5%').
+  team_logo_small: URL of the small-format team logo image for the player's QMJHL club.
+  type_formatted: Human-readable label describing the statistical category for which the player appears on the leaders list (e.g., 'Points', 'Goals', 'Save Percentage').
+qmjhl_player_stats:
+  shots_wide: Number of shots the player directed wide of the net during the season, as tracked in the QMJHL HockeyTech feed.
+  sopt_track_faceoffs: Flag or value indicating whether faceoff tracking is enabled for this player's statistical record in the QMJHL HockeyTech system.
+qmjhl_standings:
+  goals_diff: Goals-for minus goals-against differential for the team through the current point in the QMJHL season.
+  past_10: Win-loss-overtime record string for the team over its most recent ten games (e.g., "7-2-1").
+  percentage: Points percentage representing the fraction of available points earned by the team in the QMJHL standings.
+qmjhl_team_roster:
+  birthplace: Combined birthplace string (typically city and country) for the player as stored in the HockeyTech roster feed.
+  current_team: Name or identifier of the team to which the player is currently assigned within the HockeyTech system.
+  draft_status: Description of the player's NHL or league draft eligibility or draft history (e.g., "Drafted", "Eligible").
+  height_hyphenated: Player height formatted as a hyphenated feet-inches string (e.g., "6-1") as returned by the HockeyTech feed.
+  hidden: Flag indicating whether this roster entry is suppressed from public-facing displays in the HockeyTech system.
+  nhlteam: Name or abbreviation of the NHL team that holds the player's NHL rights, if applicable.
+  player_id_1: Primary alternate player identifier used by the HockeyTech system to cross-reference player records.
+  player_image: URL of the player's headshot or profile image as stored in the HockeyTech roster feed.
+  rawbirthdate: Player's date of birth as a raw string in the format returned by the HockeyTech feed (e.g., "YYYY-MM-DD").
+  tp_jersey_number: Jersey number assigned to the player on the QMJHL team's official roster (may differ from current game-night number).
+  veteran_description: Text label describing the player's veteran status or classification under QMJHL roster rules.
 schedule:
   schedule_date: Calendar date of the game in YYYY-MM-DD format as returned by the NHL api-web schedule endpoint.
   series_status_bottom_seed_team_abbrev: Three-letter team abbreviation for the lower-seeded team in the playoff series associated with this scheduled game.
@@ -2493,9 +2749,16 @@ standings:
   conference_l10_sequence: Team's rank within its conference based on performance in the last 10 games played, as reported by the NHL api-web standings endpoint.
   conference_road_sequence: Team's rank within its conference based solely on road-game results in the NHL api-web standings.
   deductions: Points deducted.
+  division_games_behind: Number of games the team trails the division leader in the standings, expressed as a decimal (e.g., 0.5 for half a game back).
   division_home_sequence: Team's rank within its division based solely on home-game results in the NHL api-web standings.
   division_l10_sequence: Team's rank within its division based on performance in the last 10 games played, as reported by the NHL api-web standings endpoint.
+  division_losses: Number of games the team has lost against opponents within their own division.
+  division_percent: The team's winning percentage in division games, calculated as division wins divided by total division games played.
+  division_record: The team's composite win-loss-tie record against division opponents, serialized as a numeric value.
   division_road_sequence: Team's rank within its division based solely on road-game results in the NHL api-web standings.
+  division_tied: Number of games the team has tied against opponents within their own division.
+  division_ties: Number of games the team has tied against opponents within their own division.
+  division_wins: Number of games the team has won against opponents within their own division.
   for: Runs/goals for.
   games_played: Matches played.
   goal_against: Total number of goals allowed by the team across all games played in the current standings snapshot.
@@ -2521,6 +2784,8 @@ standings:
   league_l10_sequence: Team's rank league-wide based on performance in the last 10 games played, as reported by the NHL api-web standings endpoint.
   league_road_sequence: Team's rank league-wide based solely on road-game results in the NHL api-web standings.
   losses: Number of matches the team has lost.
+  magic_number_division: Combination of wins needed by the team (or losses needed by the division leader) for the team to clinch a division title.
+  magic_number_wildcard: Combination of wins needed by the team (or losses needed by the next wildcard team) for the team to clinch a wildcard playoff berth.
   match_points: Competition points (cricket).
   matches_lost: Matches lost (cricket).
   matches_played: Matches played (cricket).
@@ -2531,14 +2796,18 @@ standings:
   overall: Overall record summary as published by ESPN.
   place_name_default: Default-language city or place name associated with the team's market (e.g., "Toronto"), as returned by the NHL api-web standings endpoint.
   place_name_fr: French-language city or place name associated with the team's market, as returned by the NHL api-web standings endpoint.
+  playoff_percent: Estimated or model-derived probability that the team will qualify for the playoffs, expressed as a decimal between 0 and 1.
   point_differential: Goal difference (for minus against).
   points: Competition points.
   points_against: Goals conceded.
+  points_diff: Difference between total points scored for and against the team across all games played.
   points_for: Goals (or runs) scored by the team.
   ppg: Points per game.
   qualified: Qualification flag (cricket).
   rank: Position within the group/table.
   rank_change: Change in rank versus the previous update.
+  reg_losses: Number of losses the team has suffered in regulation time (excluding overtime and shootout losses).
+  reg_wins: Number of wins the team has earned in regulation time (excluding overtime and shootout wins).
   regulation_plus_ot_win_pctg: Fraction of games won in regulation or overtime (excluding shootout decisions), used as a tiebreaker metric in NHL standings.
   regulation_win_pctg: Fraction of games won in regulation time only, used as a secondary tiebreaker in NHL standings.
   road_games_played: Number of road games the team has completed in the current season as of this standings snapshot.
@@ -2548,15 +2817,177 @@ standings:
   road_points: Total standings points earned by the team in road games during the current season.
   road_regulation_plus_ot_wins: Number of road wins achieved in regulation or overtime (excluding shootout decisions) in the current season.
   road_regulation_wins: Number of road wins achieved in regulation time (within 60 minutes) in the current season.
+  rot_losses: Number of losses the team has suffered in overtime or the shootout (non-regulation losses).
+  rot_wins: Number of wins the team has earned in overtime or the shootout (non-regulation wins).
   team: Display name of the team in this standings row.
   team_abbrev_default: Default three-letter abbreviation for the team (e.g., "TOR"), as provided by the NHL api-web standings endpoint.
   team_abbreviation: Team abbreviation.
   team_id: ESPN numeric identifier for the team.
   ties: Number of matches the team has drawn.
   total: Aggregate/summary value as published by ESPN.
+  vs ap top 25: The team's win-loss record against opponents ranked in the AP Top 25 poll.
+  vs division: The team's win-loss(-tie) record against opponents within their own division, serialized as a numeric value.
+  vs usa ranked teams: The team's win-loss record against opponents ranked in the USA Today Coaches Poll.
   waivers_sequence: Team's position in the NHL waiver-claim priority order for the current season, determined by reverse standings order.
+  wild_card_percent: The team's winning percentage in games that count toward wildcard standings positioning.
   win_pctg: Team's overall win percentage (wins divided by games played), as reported by the NHL api-web standings endpoint.
   wins: Number of matches the team has won.
+summary:
+  accurate_crosses: Number of crosses into the opponent's area completed successfully by the team.
+  accurate_long_balls: Number of long-ball passes completed successfully by the team during the match.
+  accurate_passes: Number of passes completed successfully by the team during the match.
+  adj_qbr: ESPN's Adjusted Quarterback Rating for the player, measuring overall passing efficiency on a 0-100 scale.
+  against: Total runs or score conceded by the team across all matches in the group or stage.
+  athlete: Reference or identifier string for the athlete associated with this row in the box score.
+  away_aggregate_score: Aggregate score for the away team across both legs of the two-legged tie.
+  away_shootout_score: Number of penalties scored by the away team in a shootout to decide the tie.
+  balls_faced: Total number of balls faced by the batter during their innings.
+  captain: Indicates whether the player was designated as a team captain for this game.
+  category_slug: Machine-readable slug identifying the statistical category the player entry belongs to in the box score.
+  competition_date: Date and time of the competition as recorded in the game header.
+  competition_name: Full name of the competition or tournament to which this series match belongs.
+  completions/passing_attempts: Pass completion ratio for the player in the box score, expressed as completions divided by pass attempts.
+  conceded: Total runs conceded by the bowler during their spell in this innings.
+  cross_pct: Percentage of the team's crossing attempts that were accurate during the match.
+  defensive_touchdowns: Number of touchdowns scored by the player via defensive plays such as interception or fumble returns.
+  did_score: Boolean flag indicating whether the penalty kick or shootout attempt resulted in a goal.
+  dismissal: Method by which the batter was dismissed in this innings (e.g., caught, bowled, run out).
+  display_order: Numeric order in which the team or entry is displayed within the box score table.
+  drive_sequence: Sequential position of the drive within the game's broadcast or play-by-play listing.
+  economy_rate: Average runs conceded per over by the bowler in this innings.
+  effective_clearance: Number of defensive clearances that successfully removed the ball from the danger area for the team.
+  effective_tackles: Number of tackles by the team that successfully dispossessed the opposing player.
+  end_clock_display_value: Game clock time displayed at the end of the drive or scoring sequence.
+  end_period_number: Period or quarter number in which the drive or sequence ended.
+  even_strength_saves: Number of saves made by the goaltender during even-strength play in the game.
+  even_strength_time_on_ice: Total time the player spent on the ice during even-strength situations in the game.
+  extra_points_made/extra_point_attempts: Extra point conversion ratio for the player, expressed as extra points made divided by attempts.
+  extras: Additional runs awarded to the batting side from wides, no-balls, byes, or leg byes in this innings.
+  field_goals_made/field_goal_attempts: Field goal conversion ratio for the player, expressed as field goals made divided by attempts.
+  for: Total runs or score accumulated by the team across all matches in the group or stage.
+  formation_place: Starting formation position or role assigned to the player within the team lineup for the match.
+  fouls_committed: Total number of fouls committed by the team during the match.
+  fours: Number of boundaries hit for four runs by the batter in this innings.
+  fow_type: Type classification for this fall-of-wicket entry (e.g., caught, bowled, run out).
+  full_innings.part_innings: Innings pitched expressed as full innings and fractional partial innings for the pitcher in the box score.
+  fumbles: Number of fumbles committed by the player in the box score.
+  game_note: Optional editorial note or context annotation attached to the game in the header.
+  gross_avg_punt_yards: Average gross punt distance before accounting for returns, recorded for the player in the game.
+  hits_at_bats: Hitting performance ratio expressed as hits divided by at-bats for the player in the box score.
+  home_aggregate_score: Aggregate score for the home team across both legs of the two-legged tie.
+  home_shootout_score: Number of penalties scored by the home team in a shootout to decide the tie.
+  hurries: Number of times the player pressured the opposing passer into an early or errant throw.
+  innings_number: Innings number within the match to which this batting or bowling entry belongs.
+  interception_touchdowns: Number of touchdowns scored by the player on interception return plays.
+  is_final: Boolean flag indicating whether the game has reached a final or completed status.
+  is_national: Boolean flag indicating whether the broadcast is a nationally distributed feed.
+  kick_return_touchdowns: Number of touchdowns scored on kick returns by the player in the box score.
+  league_midsize_name: Medium-length display name for the league or competition as shown in the game header.
+  links_api_artwork_href: API endpoint URL for artwork or imagery associated with the article.
+  links_sportscenter_href: URL for the article's page on ESPN's SportsCenter platform.
+  links_web_self_dsi_href: Data-source-identified URL for the web page of the associated article content.
+  links_web_self_href: URL for the canonical web page of the associated article or editorial content.
+  long_field_goal_made: Distance of the longest successful field goal kicked by the player in the game.
+  long_kick_return: Longest single kick return yardage recorded by the player in the game.
+  long_punt: Distance of the longest individual punt executed by the player in the game.
+  long_punt_return: Longest single punt return yardage recorded by the player in the game.
+  long_reception: Longest single reception recorded by the player in the game.
+  long_rushing: Longest single rushing gain recorded by the player in the game.
+  longball_pct: Percentage of long-ball attempts by the team that were accurate during the match.
+  maidens: Number of maiden overs bowled by the bowler in this innings, in which no runs were conceded.
+  main_stat_label: Human-readable label for the primary statistic displayed for the player in the box score.
+  main_stat_value: Value of the primary statistic displayed for the player in the box score.
+  match_note: Optional editorial note or special circumstance annotation attached to this match in the series.
+  match_points: Total competition points accumulated by the team based on match outcomes in the group or stage.
+  matches_lost: Total number of matches lost by the team in the current stage or competition group.
+  matches_played: Total number of matches played by the team in the current stage or competition group.
+  matches_won: Total number of matches won by the team in the current stage or competition group.
+  nbw: Combined no-balls and wides bowled by the bowler in this innings.
+  netrr: Net Run Rate for the team, a tiebreaker metric used in cricket group standings.
+  noresult: Number of matches that ended without a result (e.g., rain-affected or abandoned) for the team.
+  offsides: Total number of offside calls against the team during the match.
+  on_base_pct: Percentage of plate appearances in which the player reached base safely in the game.
+  overs: Number of overs bowled by the bowler in this innings.
+  partnership_overs: Number of overs faced during the batting partnership for this fall-of-wicket record.
+  partnership_runs: Total runs scored during the batting partnership for this fall-of-wicket record.
+  pass_pct: Percentage of passes attempted by the team that were completed successfully.
+  passes_defended: Number of pass plays disrupted or broken up by the defensive player in the game.
+  passing_touchdowns: Number of touchdown passes thrown by the player in the box score.
+  penalty_kick_goals: Number of goals scored by the team from penalty kicks during the match.
+  penalty_kick_shots: Number of penalty kick attempts taken by the team during the match.
+  perspective_team_id: ESPN identifier for the team whose perspective is used to orient the series or match result display.
+  pitches: Total number of pitches thrown or faced by the player in the box score.
+  pitches_strikes: Combined count of pitches thrown and strikes recorded for the pitcher in the box score.
+  player1_runs: Runs contributed by the first player in the batting partnership.
+  player2_runs: Runs contributed by the second player in the batting partnership.
+  possession_pct: Percentage of total ball possession time held by the team during the match.
+  power_play_saves: Number of saves made by the goaltender during power-play situations in the game.
+  power_play_time_on_ice: Total time the player spent on the ice during power-play situations in the game.
+  punt_return_touchdowns: Number of touchdowns scored on punt returns by the player in the box score.
+  punt_yards: Total yardage of all punts executed by the player in the game.
+  punts: Total number of punts executed by the player in the box score.
+  punts_inside20: Number of punts by the player that were downed or stopped inside the opposing team's 20-yard line.
+  qb_hits: Number of times the player made contact with the opposing quarterback after or during a pass attempt.
+  qb_rating: Traditional passer rating for the quarterback in the box score, calculated from completions, yards, touchdowns, and interceptions.
+  rb_is: Runs batted in and other secondary hitting statistics for the player in the box score.
+  receiving_targets: Number of passing targets directed at the receiver during the game.
+  receiving_touchdowns: Number of receiving touchdowns scored by the player in the box score.
+  red_cards: Total number of red cards received by the team during the match.
+  round_name: Name or label for the round or stage of the competition in which this series match is played.
+  runs_total: Total runs scored by the team or batting side in this innings.
+  rushing_touchdowns: Number of rushing touchdowns scored by the player in the box score.
+  sacks_sack_yards_lost: Combined sack statistics for the player, including sack count and total yards lost by the opposing offense.
+  shootout_shots_against: Number of shootout attempts faced by the goaltender in the game's shootout.
+  short_handed_saves: Number of saves made by the goaltender while the team was shorthanded in the game.
+  short_handed_time_on_ice: Total time the player spent on the ice while the team was at a numerical disadvantage (shorthanded) in the game.
+  shot_id: ESPN identifier for an individual shootout or penalty kick attempt.
+  shot_info_abbreviation: Abbreviated description of the shot type associated with a scoring event in the box score.
+  shot_number: Sequential number of the penalty kick or shootout attempt within the series.
+  shot_pct: Percentage of the team's shot attempts that were on target during the match.
+  shots_missed: Number of shots taken by the player that did not result in a goal or save attempt in the game.
+  shots_on_target: Number of the team's shot attempts that were on target, requiring a save or resulting in a goal.
+  sixes: Number of boundaries hit for six runs by the batter in this innings.
+  slug_avg: Slugging average reflecting the total bases per at-bat recorded by the player in the box score.
+  solo_tackles: Number of unassisted tackles recorded by the player in the box score.
+  standings: Condensed standings reference or link included in the game header for the relevant league.
+  start_clock_display_value: Game clock time displayed at the start of the drive or scoring sequence.
+  start_period_number: Period or quarter number in which the drive or sequence began.
+  station_key: Machine-readable key identifying the broadcasting station airing the game.
+  strength_abbreviation: Abbreviated label for the strength-of-play situation at the time of the scoring event (e.g., even strength, power play).
+  strikeouts: Number of strikeouts recorded by the player, either as a batter or pitcher, in the box score.
+  subbed_in: Indicates whether the player entered the game as a substitute, or the minute of substitution.
+  subbed_out: Indicates whether the player was substituted out of the game, or the minute of substitution.
+  sudden_death_clock: Clock duration or time limit for sudden-death overtime periods as defined in the game format.
+  sudden_death_periods: Number of sudden-death overtime periods defined in the game format rules.
+  tackle_pct: Percentage of the team's tackle attempts that were effective in winning possession.
+  team_entry_id: ESPN identifier for the team entry associated with this shootout or penalty record.
+  team_participants: Teams or participants associated with a specific drive or sequence in the broadcast record.
+  time_display: Human-readable game clock time at which a match event occurred.
+  time_elapsed_display_value: Human-readable duration of time elapsed during the drive or scoring sequence.
+  time_value: Numeric game clock value at which a match event occurred.
+  total_clearance: Total number of defensive clearances made by the team during the match.
+  total_crosses: Total number of crossing attempts made by the team during the match.
+  total_kicking_points: Total points contributed by the player through field goals and extra points in the game.
+  total_long_balls: Total number of long-ball passes attempted by the team during the match.
+  total_passes: Total number of passes attempted by the team during the match.
+  total_shots: Total number of shot attempts taken by the team during the match.
+  total_tackles: Total tackles recorded by the player, including both solo and assisted tackles.
+  touchbacks: Number of punts or kick-offs by the player that resulted in the opposing team starting from their own end zone.
+  venue_address_country: Country of the venue where the game was played.
+  venue_address_zip_code: Postal zip code of the venue where the game was played.
+  venue_country: Country name for the venue where the game was played.
+  venue_short_name: Abbreviated or shortened display name for the venue where the game was played.
+  vs. conf.: Team's record against conference opponents, shown as part of the standings snapshot in the box score.
+  walks: Number of base-on-balls (walks) recorded by the player in the box score.
+  wicket_name: Name or label identifying the wicket at which this batting partnership ended.
+  wickets: Number of wickets taken by the bowler in this innings.
+  won_corners: Total number of corner kicks earned by the team during the match.
+  yards_per_kick_return: Average yards gained per kick return by the player in the box score.
+  yards_per_pass_attempt: Average passing yards gained per pass attempt by the player in the box score.
+  yards_per_punt_return: Average yards gained per punt return by the player in the box score.
+  yards_per_reception: Average receiving yards gained per reception by the player in the box score.
+  yellow_cards: Total number of yellow cards received by the team during the match.
+  ytd_goals: Year-to-date goal total for the player entering or through this game.
 team_detail:
   distance_skated_total_imperial: Total cumulative skating distance logged by all skaters on this team across the season, expressed in miles (imperial), from NHL EDGE tracking data.
   distance_skated_total_league_avg_imperial: League-average cumulative skating distance for all teams over the same period as this team's totals, expressed in miles (imperial), from NHL EDGE tracking data.
@@ -2631,12 +3062,16 @@ team_roster:
   athlete_id: ESPN numeric identifier for the athlete.
   birth_city: Athlete birth city.
   birth_country: Athlete birth country.
+  birth_country_alternate_id: Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system.
   citizenship: Athlete citizenship.
   date_of_birth: Athlete date of birth (ISO 8601).
   display_height: Athlete height, formatted for display.
   display_name: Athlete's full display name as shown on ESPN.
   display_weight: Athlete weight, formatted for display.
   first_name: Athlete's first (given) name.
+  flag_alt: Alt-text string for the athlete's country-of-birth flag image, typically the full country name.
+  flag_href: URL of the SVG or PNG flag image representing the athlete's country of birth.
+  flag_rel: Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag").
   gender: Athlete gender.
   height: Athlete height in inches.
   jersey: Athlete's jersey number as a string.
@@ -2662,6 +3097,7 @@ team_schedule:
   season_year: Four-digit season year.
   short_name: Abbreviated event name (e.g. 'TA @ TB').
   time_valid: Whether the event time is confirmed.
+  week_text: Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API.
 teams:
   abbreviation: Team abbreviation.
   alternate_color: Secondary team color (hex).
@@ -2680,6 +3116,17 @@ teams_stats:
   exemptions: A serialized list of any statistical exemption notes or flags associated with the team's stat splits (e.g., players exempt from qualifying thresholds).
 teams_stats_leaders:
   leaders: Serialized representation of the statistical leaders entries for the team stat category returned by the MLB Stats API.
+whl_leaders:
+  photo_small: URL to a small-format headshot image of the player from the HockeyTech WHL feed.
+  stat_formatted: Formatted display string of the leader's statistical value (e.g., '42 G' or '1.23').
+  team_logo_small: URL to a small-format team logo image from the HockeyTech WHL feed.
+  type_formatted: Human-readable label for the statistical category this leader entry represents (e.g., 'Goals', 'Points').
+whl_player_stats:
+  sopt_track_faceoffs: Flag or value indicating whether faceoff tracking is enabled for this player's statistical record in the WHL HockeyTech system.
+whl_standings:
+  goals_diff: Net goal differential for the team (goals for minus goals against) displayed as a signed string.
+  past_10: Team record over the most recent ten games, formatted as a W-L or W-OTL-L string.
+  percentage: Team points percentage expressed as a string, calculated as points earned divided by maximum possible points.
 win_probability:
   about_at_bat_index: The sequential index of the at-bat within the game to which this win-probability observation belongs.
   about_captivating_index: A numeric score reflecting how compelling or exciting this plate appearance was, based on leverage and game-state context.

@@ -122,58 +122,58 @@ ESPN endpoint.
 | `did_not_play` | character | Did not play. |
 | `ejected` | character | Ejected. |
 | `reason` | character | Reason. |
-| `completions/passing_attempts` | character |  |
+| `completions/passing_attempts` | character | Pass completion ratio for the player in the box score, expressed as completions divided by pass attempts. |
 | `passing_yards` | character | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
-| `yards_per_pass_attempt` | character |  |
-| `passing_touchdowns` | character |  |
+| `yards_per_pass_attempt` | character | Average passing yards gained per pass attempt by the player in the box score. |
+| `passing_touchdowns` | character | Number of touchdown passes thrown by the player in the box score. |
 | `interceptions` | character | The number of interceptions thrown. |
-| `sacks_sack_yards_lost` | character |  |
-| `adj_qbr` | character |  |
-| `qb_rating` | character |  |
+| `sacks_sack_yards_lost` | character | Combined sack statistics for the player, including sack count and total yards lost by the opposing offense. |
+| `adj_qbr` | character | ESPN's Adjusted Quarterback Rating for the player, measuring overall passing efficiency on a 0-100 scale. |
+| `qb_rating` | character | Traditional passer rating for the quarterback in the box score, calculated from completions, yards, touchdowns, and interceptions. |
 | `rushing_attempts` | character | Team rushing attempts. |
 | `rushing_yards` | character | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
 | `yards_per_rush_attempt` | character | Team yards per rush attempt. |
-| `rushing_touchdowns` | character |  |
-| `long_rushing` | character |  |
+| `rushing_touchdowns` | character | Number of rushing touchdowns scored by the player in the box score. |
+| `long_rushing` | character | Longest single rushing gain recorded by the player in the game. |
 | `receptions` | character | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `receiving_yards` | character | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
-| `yards_per_reception` | character |  |
-| `receiving_touchdowns` | character |  |
-| `long_reception` | character |  |
-| `receiving_targets` | character |  |
-| `fumbles` | character |  |
+| `yards_per_reception` | character | Average receiving yards gained per reception by the player in the box score. |
+| `receiving_touchdowns` | character | Number of receiving touchdowns scored by the player in the box score. |
+| `long_reception` | character | Longest single reception recorded by the player in the game. |
+| `receiving_targets` | character | Number of passing targets directed at the receiver during the game. |
+| `fumbles` | character | Number of fumbles committed by the player in the box score. |
 | `fumbles_lost` | character | Fumbles lost. |
 | `fumbles_recovered` | character | Team fumbles recovered. |
-| `total_tackles` | character |  |
-| `solo_tackles` | character |  |
+| `total_tackles` | character | Total tackles recorded by the player, including both solo and assisted tackles. |
+| `solo_tackles` | character | Number of unassisted tackles recorded by the player in the box score. |
 | `sacks` | character | The Number of times sacked. |
 | `tackles_for_loss` | character | Team tackles for a loss. |
-| `passes_defended` | character |  |
-| `qb_hits` | character |  |
-| `defensive_touchdowns` | character |  |
+| `passes_defended` | character | Number of pass plays disrupted or broken up by the defensive player in the game. |
+| `qb_hits` | character | Number of times the player made contact with the opposing quarterback after or during a pass attempt. |
+| `defensive_touchdowns` | character | Number of touchdowns scored by the player via defensive plays such as interception or fumble returns. |
 | `interception_yards` | character | Interception yards. |
-| `interception_touchdowns` | character |  |
+| `interception_touchdowns` | character | Number of touchdowns scored by the player on interception return plays. |
 | `kick_returns` | character | Number of kick returns. |
 | `kick_return_yards` | character | Team kick return yards. |
-| `yards_per_kick_return` | character |  |
-| `long_kick_return` | character |  |
-| `kick_return_touchdowns` | character |  |
+| `yards_per_kick_return` | character | Average yards gained per kick return by the player in the box score. |
+| `long_kick_return` | character | Longest single kick return yardage recorded by the player in the game. |
+| `kick_return_touchdowns` | character | Number of touchdowns scored on kick returns by the player in the box score. |
 | `punt_returns` | character | Number of punt returns. |
 | `punt_return_yards` | character | Team punt return yards. |
-| `yards_per_punt_return` | character |  |
-| `long_punt_return` | character |  |
-| `punt_return_touchdowns` | character |  |
-| `punts` | character |  |
-| `punt_yards` | character |  |
-| `gross_avg_punt_yards` | character |  |
-| `touchbacks` | character |  |
-| `punts_inside20` | character |  |
-| `long_punt` | character |  |
-| `field_goals_made/field_goal_attempts` | character |  |
+| `yards_per_punt_return` | character | Average yards gained per punt return by the player in the box score. |
+| `long_punt_return` | character | Longest single punt return yardage recorded by the player in the game. |
+| `punt_return_touchdowns` | character | Number of touchdowns scored on punt returns by the player in the box score. |
+| `punts` | character | Total number of punts executed by the player in the box score. |
+| `punt_yards` | character | Total yardage of all punts executed by the player in the game. |
+| `gross_avg_punt_yards` | character | Average gross punt distance before accounting for returns, recorded for the player in the game. |
+| `touchbacks` | character | Number of punts or kick-offs by the player that resulted in the opposing team starting from their own end zone. |
+| `punts_inside20` | character | Number of punts by the player that were downed or stopped inside the opposing team's 20-yard line. |
+| `long_punt` | character | Distance of the longest individual punt executed by the player in the game. |
+| `field_goals_made/field_goal_attempts` | character | Field goal conversion ratio for the player, expressed as field goals made divided by attempts. |
 | `field_goal_pct` | character | Field goal percentage (0-1). |
-| `long_field_goal_made` | character |  |
-| `extra_points_made/extra_point_attempts` | character |  |
-| `total_kicking_points` | character |  |
+| `long_field_goal_made` | character | Distance of the longest successful field goal kicked by the player in the game. |
+| `extra_points_made/extra_point_attempts` | character | Extra point conversion ratio for the player, expressed as extra points made divided by attempts. |
+| `total_kicking_points` | character | Total points contributed by the player through field goals and extra points in the game. |
 
 **boxscore_team**
 
@@ -223,8 +223,8 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state. |
-| `venue_address_zip_code` | character |  |
-| `venue_address_country` | character |  |
+| `venue_address_zip_code` | character | Postal zip code of the venue where the game was played. |
+| `venue_address_country` | character | Country of the venue where the game was played. |
 | `venue_grass` | logical | Venue grass. |
 
 **officials**
@@ -248,7 +248,7 @@ ESPN endpoint.
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
 | `week` | integer | Season week. |
-| `game_note` | character |  |
+| `game_note` | character | Optional editorial note or context annotation attached to the game in the header. |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -290,8 +290,8 @@ ESPN endpoint.
 | `overtime_display_name` | character | Overtime display name. |
 | `overtime_slug` | character | Overtime slug. |
 | `overtime_clock` | double | Overtime clock. |
-| `sudden_death_periods` | integer |  |
-| `sudden_death_clock` | double |  |
+| `sudden_death_periods` | integer | Number of sudden-death overtime periods defined in the game format rules. |
+| `sudden_death_clock` | double | Clock duration or time limit for sudden-death overtime periods as defined in the game format. |
 
 **article**
 
@@ -383,23 +383,23 @@ ESPN endpoint.
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
 | `team_logos` | character | Team logos. |
 | `start_period_type` | character | Period type at the start of the drive (e.g. `quarter`). |
-| `start_period_number` | integer |  |
-| `start_clock_display_value` | character |  |
+| `start_period_number` | integer | Period or quarter number in which the drive or sequence began. |
+| `start_clock_display_value` | character | Game clock time displayed at the start of the drive or scoring sequence. |
 | `start_yard_line` | integer | Yard line at the start of the play. |
 | `start_text` | character | Field-position text at the start of the drive. |
 | `end_period_type` | character | Period type at the end of the drive (e.g. `quarter`). |
-| `end_period_number` | integer |  |
-| `end_clock_display_value` | character |  |
+| `end_period_number` | integer | Period or quarter number in which the drive or sequence ended. |
+| `end_clock_display_value` | character | Game clock time displayed at the end of the drive or scoring sequence. |
 | `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
 | `end_text` | character | Field-position text at the end of the drive. |
-| `time_elapsed_display_value` | character |  |
+| `time_elapsed_display_value` | character | Human-readable duration of time elapsed during the drive or scoring sequence. |
 
 **drive_plays**
 
 | col_name | type | description |
 |---|---|---|
 | `drive_id` | character | CFBD drive identifier the play belongs to. |
-| `drive_sequence` | integer |  |
+| `drive_sequence` | integer | Sequential position of the drive within the game's broadcast or play-by-play listing. |
 | `id` | character | Id. |
 | `sequence_number` | character | Sequence number. |
 | `text` | character | Text. |
@@ -409,7 +409,7 @@ ESPN endpoint.
 | `priority` | logical | `TRUE` if ESPN flags the play as a priority highlight. |
 | `modified` | character | ISO timestamp the play record was last modified. |
 | `wallclock` | character | Wallclock. |
-| `team_participants` | character |  |
+| `team_participants` | character | Teams or participants associated with a specific drive or sequence in the broadcast record. |
 | `is_penalty` | logical | `TRUE` if the play was a penalty. |
 | `stat_yardage` | integer | Yards gained or lost on the play. |
 | `is_turnover` | logical | `TRUE` if the play was a turnover. |
@@ -851,7 +851,7 @@ ESPN endpoint.
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
 | `week_number` | integer | Week number. |
-| `week_text` | character |  |
+| `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1199,10 +1199,10 @@ ESPN endpoint.
 | `ties` | double | Number of matches the team has drawn. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `division_losses` | double |  |
-| `division_record` | double |  |
-| `division_ties` | double |  |
-| `division_wins` | double |  |
+| `division_losses` | double | Number of games the team has lost against opponents within their own division. |
+| `division_record` | double | The team's composite win-loss-tie record against division opponents, serialized as a numeric value. |
+| `division_ties` | double | Number of games the team has tied against opponents within their own division. |
+| `division_wins` | double | Number of games the team has won against opponents within their own division. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |

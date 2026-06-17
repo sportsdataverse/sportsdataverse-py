@@ -73,11 +73,11 @@ WHL statistical leaders for a given season.
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
-| `team_logo_small` | character |  |
-| `stat_formatted` | character |  |
-| `type_formatted` | character |  |
+| `team_logo_small` | character | URL to a small-format team logo image from the HockeyTech WHL feed. |
+| `stat_formatted` | character | Formatted display string of the leader's statistical value (e.g., '42 G' or '1.23'). |
+| `type_formatted` | character | Human-readable label for the statistical category this leader entry represents (e.g., 'Goals', 'Points'). |
 | `photo` | character | URL to the player photo. |
-| `photo_small` | character |  |
+| `photo_small` | character | URL to a small-format headshot image of the player from the HockeyTech WHL feed. |
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
@@ -113,7 +113,7 @@ WHL player season stats across all seasons.
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
 | `career` | character | Whether this is a career-stats season. |
-| `sopt_track_faceoffs` | character |  |
+| `sopt_track_faceoffs` | character | Flag or value indicating whether faceoff tracking is enabled for this player's statistical record in the WHL HockeyTech system. |
 | `max_start_date` | character | Latest game start date for the season. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran` | character | Whether the player is a veteran. |
@@ -257,11 +257,11 @@ WHL standings — one row per team.
 | `streak` | character | Current streak value. |
 | `goals_for` | character | Goals for. |
 | `goals_against` | character | Goals against. |
-| `goals_diff` | character |  |
-| `percentage` | character |  |
+| `goals_diff` | character | Net goal differential for the team (goals for minus goals against) displayed as a signed string. |
+| `percentage` | character | Team points percentage expressed as a string, calculated as points earned divided by maximum possible points. |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
-| `past_10` | character |  |
+| `past_10` | character | Team record over the most recent ten games, formatted as a W-L or W-OTL-L string. |
 | `team` | character | Team name. |
 
 ### `whl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#whl_team_roster}

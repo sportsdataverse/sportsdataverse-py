@@ -33,15 +33,15 @@ Player-level on-ice Corsi and Fenwick for a single OHL game.
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
-| `corsi_for` | integer |  |
-| `corsi_against` | integer |  |
-| `corsi_for_pct` | double |  |
-| `fenwick_for` | integer |  |
-| `fenwick_against` | integer |  |
-| `fenwick_for_pct` | double |  |
-| `corsi_includes_missed` | logical |  |
-| `toi_seconds` | integer |  |
-| `corsi_for_per60` | double |  |
+| `corsi_for` | integer | Total shot attempts (goals, saves, missed shots, and blocked shots) directed toward the opposing team while the player was on the ice in the OHL game. |
+| `corsi_against` | integer | Total shot attempts (goals, saves, missed shots, and blocked shots) directed against the player's team while that player was on the ice in the OHL game. |
+| `corsi_for_pct` | double | Share of all shot attempts while the player was on the ice that were directed toward the opponent, expressed as a percentage (Corsi For / (Corsi For + Corsi Against)). |
+| `fenwick_for` | integer | Unblocked shot attempts (goals, saves, and missed shots only) directed toward the opposing team while the player was on the ice. |
+| `fenwick_against` | integer | Unblocked shot attempts (goals, saves, and missed shots only) directed against the player's team while that player was on the ice. |
+| `fenwick_for_pct` | double | Share of all unblocked shot attempts while the player was on the ice that were directed toward the opponent, expressed as a percentage (Fenwick For / (Fenwick For + Fenwick Against)). |
+| `corsi_includes_missed` | logical | Boolean flag indicating whether missed shots are included in the Corsi totals for this record. |
+| `toi_seconds` | integer | Total time on ice for the player during the game, recorded in seconds. |
+| `corsi_for_per60` | double | The player's Corsi For rate normalized to a 60-minute pace, enabling comparison across players with different ice times. |
 
 ### `ohl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_game_shifts}
 
@@ -89,11 +89,11 @@ OHL statistical leaders for a given season.
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
-| `team_logo_small` | character |  |
-| `stat_formatted` | character |  |
-| `type_formatted` | character |  |
+| `team_logo_small` | character | URL of the small-format team logo image for the player's OHL club. |
+| `stat_formatted` | character | Human-readable string representation of the leader's statistical value for display purposes (e.g., '42', '1.85', '93.5%'). |
+| `type_formatted` | character | Human-readable label describing the statistical category for which the player appears on the leaders list (e.g., 'Points', 'Goals', 'Save Percentage'). |
 | `photo` | character | URL to the player photo. |
-| `photo_small` | character |  |
+| `photo_small` | character | URL of a small-format headshot image of the player from the OHL HockeyTech feed. |
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
@@ -210,9 +210,9 @@ OHL play-by-play — one row per event, fully enriched.
 | `sec_from_start` | integer | Seconds elapsed since the start of the game. |
 | `shot_distance` | double | Distance of the shot from the net. |
 | `shot_angle` | double | Angle of the shot relative to the net. |
-| `scoring_chance` | logical |  |
-| `on_ice_home` | character |  |
-| `on_ice_away` | character |  |
+| `scoring_chance` | logical | Boolean flag indicating whether this play was classified as a scoring chance by the HockeyTech data feed. |
+| `on_ice_home` | character | Jersey numbers or player IDs of home-team skaters on the ice at the time of this play. |
+| `on_ice_away` | character | Jersey numbers or player IDs of away-team skaters on the ice at the time of this play. |
 
 ### `ohl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_player_stats}
 
@@ -235,7 +235,7 @@ OHL player season stats across all seasons.
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
 | `career` | character | Whether this is a career-stats season. |
-| `sopt_track_faceoffs` | character |  |
+| `sopt_track_faceoffs` | character | Flag indicating whether faceoff tracking is enabled for this player's statistical record in the HockeyTech system. |
 | `max_start_date` | character | Latest game start date for the season. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran` | character | Whether the player is a veteran. |
@@ -264,7 +264,7 @@ OHL player season stats across all seasons.
 | `faceoff_pct` | character | Faceoff win percentage. |
 | `hits` | character | Hits. |
 | `shots_on` | character | Shots on goal count. |
-| `shots_wide` | character |  |
+| `shots_wide` | character | Count of shot attempts by the player that missed the net wide, as tracked by OHL shot-location data. |
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
 | `team_city` | character | Team city. |
@@ -302,9 +302,9 @@ Per-player time-on-ice totals for a single OHL game.
 | `player_id` | integer | Unique player identifier. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
-| `toi_seconds` | integer |  |
-| `num_shifts` | integer |  |
-| `avg_shift_s` | double |  |
+| `toi_seconds` | integer | Total time on ice for the player during the game or tracked period, expressed in seconds. |
+| `num_shifts` | integer | Total number of shifts the player took during the game or tracked period. |
+| `avg_shift_s` | double | Average duration of the player's individual shifts during the game or season, measured in seconds. |
 
 ### `ohl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_schedule}
 
@@ -392,12 +392,12 @@ OHL standings — one row per team.
 | `streak` | character | Current streak value. |
 | `goals_for` | character | Goals for. |
 | `goals_against` | character | Goals against. |
-| `goals_diff` | character |  |
-| `percentage` | character |  |
+| `goals_diff` | character | Net goal differential for the team (goals for minus goals against) displayed as a signed string. |
+| `percentage` | character | Team points percentage expressed as a string, calculated as points earned divided by maximum possible points. |
 | `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
-| `past_10` | character |  |
+| `past_10` | character | Team record over the most recent ten games, formatted as a W-L or W-OTL-L string. |
 | `team` | character | Team name. |
 
 ### `ohl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_team_roster}

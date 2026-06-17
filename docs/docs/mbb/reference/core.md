@@ -2049,8 +2049,8 @@ ESPN endpoint.
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `vs ap top 25` | character |  |
-| `vs usa ranked teams` | character |  |
+| `vs ap top 25` | character | The team's win-loss record against opponents ranked in the AP Top 25 poll. |
+| `vs usa ranked teams` | character | The team's win-loss record against opponents ranked in the USA Today Coaches Poll. |
 | `vs. conf.` | character | Vs. conf.. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

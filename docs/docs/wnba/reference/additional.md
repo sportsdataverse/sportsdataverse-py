@@ -127,9 +127,9 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `defensive_avg_defensive_rebounds` | double | The average defensive rebounds per game. |
 | `defensive_avg_blocks` | double | The average blocks per game. |
 | `defensive_avg_steals` | double | The average steals per game. |
-| `defensive_avg48_defensive_rebounds` | double |  |
-| `defensive_avg48_blocks` | double |  |
-| `defensive_avg48_steals` | double |  |
+| `defensive_avg48_defensive_rebounds` | double | Player's defensive rebounds per 48 minutes of play, drawn from the defensive statistical category. |
+| `defensive_avg48_blocks` | double | Player's blocked shots per 48 minutes of play, drawn from the defensive statistical category. |
+| `defensive_avg48_steals` | double | Player's steals per 48 minutes of play, drawn from the defensive statistical category. |
 | `general_disqualifications` | double | The number of times a player reached the foul limit. |
 | `general_flagrant_fouls` | double | The number of fouls that the officials thought were unnecessary or excessive. |
 | `general_fouls` | double | The number of times a player had illegal contact with the opponent. |
@@ -156,12 +156,12 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `general_total_technical_fouls` | double | The total number of technical fouls for a team or player. |
 | `general_team_assist_turnover_ratio` | double | The number of assists per turnover for a team. |
 | `general_steal_turnover_ratio` | double | The number of steals per turnover. |
-| `general_avg48_rebounds` | double |  |
-| `general_avg48_fouls` | double |  |
-| `general_avg48_flagrant_fouls` | double |  |
-| `general_avg48_technical_fouls` | double |  |
-| `general_avg48_ejections` | double |  |
-| `general_avg48_disqualifications` | double |  |
+| `general_avg48_rebounds` | double | Player's total rebounds (offensive plus defensive) per 48 minutes of play, drawn from the general statistical category. |
+| `general_avg48_fouls` | double | Player's personal fouls per 48 minutes of play, drawn from the general statistical category. |
+| `general_avg48_flagrant_fouls` | double | Player's flagrant fouls per 48 minutes of play, drawn from the general statistical category. |
+| `general_avg48_technical_fouls` | double | Player's technical fouls per 48 minutes of play, drawn from the general statistical category. |
+| `general_avg48_ejections` | double | Player's ejections per 48 minutes of play, drawn from the general statistical category. |
+| `general_avg48_disqualifications` | double | Player's disqualifications (fouling out) per 48 minutes of play, drawn from the general statistical category. |
 | `general_games_played` | double | Games Played. |
 | `general_games_started` | double | The number of games started by an athlete. |
 | `general_double_double` | double | The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots. |
@@ -208,16 +208,16 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `offensive_two_point_field_goal_pct` | double | The percentage of 2-points fields goals made by a team or player. |
 | `offensive_shooting_efficiency` | double | The efficiency with which a team or player shoots the basketball. |
 | `offensive_scoring_efficiency` | double | The efficiency with which a team or player scores the basketball. |
-| `offensive_avg48_field_goals_made` | double |  |
-| `offensive_avg48_field_goals_attempted` | double |  |
-| `offensive_avg48_three_point_field_goals_made` | double |  |
-| `offensive_avg48_three_point_field_goals_attempted` | double |  |
-| `offensive_avg48_free_throws_made` | double |  |
-| `offensive_avg48_free_throws_attempted` | double |  |
-| `offensive_avg48_points` | double |  |
-| `offensive_avg48_offensive_rebounds` | double |  |
-| `offensive_avg48_assists` | double |  |
-| `offensive_avg48_turnovers` | double |  |
+| `offensive_avg48_field_goals_made` | double | Player's field goals made per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_field_goals_attempted` | double | Player's field goal attempts per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_three_point_field_goals_made` | double | Player's three-point field goals made per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_three_point_field_goals_attempted` | double | Player's three-point field goal attempts per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_free_throws_made` | double | Player's free throws made per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_free_throws_attempted` | double | Player's free throw attempts per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_points` | double | Player's points scored per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_offensive_rebounds` | double | Player's offensive rebounds per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_assists` | double | Player's assists per 48 minutes of play, drawn from the offensive statistical category. |
+| `offensive_avg48_turnovers` | double | Player's turnovers per 48 minutes of play, drawn from the offensive statistical category. |
 | `team_id` | integer | Unique team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_guid` | character | ESPN team GUID. |
@@ -307,8 +307,8 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Whether the home team won. |
-| `home_linescores` | integer |  |
-| `home_records` | character |  |
+| `home_linescores` | integer | Period-by-period point totals for the home team, stored as a list of integer scores. |
+| `home_records` | character | Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference). |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
@@ -323,8 +323,8 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Whether the away team won. |
-| `away_linescores` | integer |  |
-| `away_records` | character |  |
+| `away_linescores` | integer | Period-by-period point totals for the away team, stored as a list of integer scores. |
+| `away_records` | character | Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference). |
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
 | `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |

@@ -232,7 +232,7 @@ ESPN endpoint.
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
-| `game_note` | character |  |
+| `game_note` | character | Optional editorial note or context annotation attached to the game in the header. |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -358,10 +358,10 @@ ESPN endpoint.
 | `links_api_self_href` | character | Links api self href. |
 | `links_app_sportscenter_href` | character | Links app sportscenter href. |
 | `byline` | character | Byline. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_web_self_href` | character | URL for the canonical web page of the associated article or editorial content. |
+| `links_web_self_dsi_href` | character | Data-source-identified URL for the web page of the associated article content. |
+| `links_api_artwork_href` | character | API endpoint URL for artwork or imagery associated with the article. |
+| `links_sportscenter_href` | character | URL for the article's page on ESPN's SportsCenter platform. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -427,11 +427,11 @@ ESPN endpoint.
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
 | `links_web_href` | character | Web article URL. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
 | `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
 | `links_mobile_href` | character | Mobile article URL. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
@@ -917,11 +917,11 @@ ESPN endpoint.
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
 | `links_web_href` | character | Web article URL. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
 | `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
 | `links_mobile_href` | character | Mobile article URL. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
@@ -1040,11 +1040,11 @@ ESPN endpoint.
 | `categories` | character | Article categories (list, stringified). |
 | `premium` | logical | Whether the article is premium/paywalled. |
 | `links_web_href` | character | Web article URL. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
 | `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
 | `links_mobile_href` | character | Mobile article URL. |
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 
