@@ -1,0 +1,21 @@
+schema: team_by_id
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: franchise_id
+  type: integer
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: league_id
+  type: integer
+  description: ''
+- name: raw_tricode
+  type: character
+  description: ''
+- name: tri_code
+  type: character
+  description: ''

@@ -1,0 +1,13 @@
+{
+  "data": [
+    {
+      "id": 10,
+      "franchiseId": 5,
+      "fullName": "Toronto Maple Leafs",
+      "leagueId": 133,
+      "rawTricode": "TOR",
+      "triCode": "TOR"
+    }
+  ],
+  "total": 1
+}

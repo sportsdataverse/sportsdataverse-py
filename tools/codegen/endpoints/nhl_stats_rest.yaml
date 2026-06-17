@@ -52,6 +52,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: draft
+  returns_schema: native/nhl_stats_rest/draft
   summary: Retrieve draft data, optionally filtered with Cayenne expressions.
   path: /{lang}/draft
   path_params:
@@ -71,6 +72,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: game
+  returns_schema: native/nhl_stats_rest/game
   summary: Retrieve game-level data.
   path: /{lang}/game
   path_params:
@@ -133,6 +135,7 @@ endpoints:
     attribute: X
   parser: parse_nhl_stats_rest
 - short: milestones_goalies
+  returns_schema: native/nhl_stats_rest/milestones_goalies
   summary: Retrieve milestone data for goalies.
   path: /{lang}/milestones/goalies
   path_params:
@@ -142,6 +145,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: milestones_skaters
+  returns_schema: native/nhl_stats_rest/milestones_skaters
   summary: Retrieve milestone data for skaters.
   path: /{lang}/milestones/skaters
   path_params:
@@ -151,6 +155,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: players
+  returns_schema: native/nhl_stats_rest/players
   summary: Retrieve the NHL player registry.
   path: /{lang}/players
   path_params:
@@ -194,6 +199,7 @@ endpoints:
     report: summary
   parser: parse_nhl_stats_rest
 - short: team
+  returns_schema: native/nhl_stats_rest/team
   summary: Retrieve the list of all NHL teams.
   path: /{lang}/team
   path_params:
@@ -203,6 +209,7 @@ endpoints:
     default: en
   parser: parse_nhl_stats_rest
 - short: team_by_id
+  returns_schema: native/nhl_stats_rest/team_by_id
   summary: Retrieve a single team by its numeric ID.
   path: /{lang}/team/id/{team_id}
   path_params:

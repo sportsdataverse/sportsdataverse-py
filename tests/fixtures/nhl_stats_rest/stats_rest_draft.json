@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "draftYear": 1989,
+      "rounds": 12
+    },
+    {
+      "id": 2,
+      "draftYear": 1975,
+      "rounds": 18
+    },
+    {
+      "id": 3,
+      "draftYear": 2008,
+      "rounds": 7
+    },
+    {
+      "id": 4,
+      "draftYear": 2013,
+      "rounds": 7
+    },
+    {
+      "id": 5,
+      "draftYear": 2006,
+      "rounds": 7
+    }
+  ],
+  "total": 64
+}
