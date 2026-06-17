@@ -172,7 +172,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `stats_batting_triples` | double | Number of triples hit by the batter in this game. |
 | `stats_batting_home_runs` | double | Number of home runs hit by the batter in this game. |
 | `stats_batting_strike_outs` | double | Number of times the batter struck out in this game. |
-| `stats_batting_base_on_balls` | double | Number of unintentional walks drawn by the batter in this game. |
+| `stats_batting_base_on_balls` | double | Number of walks (bases on balls) drawn by the batter in this game, including intentional walks. |
 | `stats_batting_intentional_walks` | double | Number of intentional walks issued to the batter in this game. |
 | `stats_batting_hits` | double | Total number of hits recorded by the batter in this game. |
 | `stats_batting_hit_by_pitch` | double | Number of times the batter was hit by a pitch in this game. |
@@ -213,7 +213,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `season_stats_batting_triples` | integer | Season-to-date number of triples hit by the batter. |
 | `season_stats_batting_home_runs` | integer | Season-to-date number of home runs hit by the batter. |
 | `season_stats_batting_strike_outs` | integer | Season-to-date number of times the batter struck out. |
-| `season_stats_batting_base_on_balls` | integer | Season-to-date number of unintentional walks drawn by the batter. |
+| `season_stats_batting_base_on_balls` | integer | Season-to-date total walks (bases on balls) drawn by the batter, including intentional walks. |
 | `season_stats_batting_intentional_walks` | integer | Season-to-date number of intentional walks (IBB) issued to the batter. |
 | `season_stats_batting_hits` | integer | Season-to-date total number of hits recorded by the batter. |
 | `season_stats_batting_hit_by_pitch` | integer | Season-to-date number of times the batter was hit by a pitch. |
@@ -251,7 +251,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `season_stats_pitching_triples` | integer | Season-to-date number of triples allowed by the pitcher. |
 | `season_stats_pitching_home_runs` | integer | Season-to-date number of home runs allowed by the pitcher. |
 | `season_stats_pitching_strike_outs` | integer | Season-to-date number of batters struck out by the pitcher. |
-| `season_stats_pitching_base_on_balls` | integer | Season-to-date number of unintentional walks issued by the pitcher. |
+| `season_stats_pitching_base_on_balls` | integer | Season-to-date total walks (bases on balls) issued by the pitcher, including intentional walks. |
 | `season_stats_pitching_intentional_walks` | integer | Season-to-date number of intentional walks (IBB) issued by the pitcher. |
 | `season_stats_pitching_hits` | integer | Season-to-date number of hits allowed by the pitcher. |
 | `season_stats_pitching_hit_by_pitch` | integer | Season-to-date number of hit-by-pitch events while the pitcher was pitching (alternate field name for hit_batsmen). |
@@ -332,7 +332,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `stats_pitching_triples` | double | Number of triples allowed by the pitcher in this game. |
 | `stats_pitching_home_runs` | double | Number of home runs allowed by the pitcher in this game. |
 | `stats_pitching_strike_outs` | double | Number of batters struck out by the pitcher in this game. |
-| `stats_pitching_base_on_balls` | double | Number of unintentional walks issued by the pitcher in this game. |
+| `stats_pitching_base_on_balls` | double | Number of walks (bases on balls) issued by the pitcher in this game, including intentional walks. |
 | `stats_pitching_intentional_walks` | double | Number of intentional walks (IBB) issued by the pitcher in this game. |
 | `stats_pitching_hits` | double | Number of hits allowed by the pitcher in this game. |
 | `stats_pitching_hit_by_pitch` | double | Number of hit-by-pitch events while the pitcher was pitching in this game (alternate field for hit_batsmen). |

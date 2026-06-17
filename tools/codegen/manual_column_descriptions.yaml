@@ -1366,7 +1366,7 @@ boxscore:
   season_stats_batting_at_bats_per_home_run: Season-to-date ratio of at-bats per home run, reflecting the batter's home run frequency.
   season_stats_batting_avg: Season-to-date batting average (hits divided by at-bats) for the batter.
   season_stats_batting_babip: Season-to-date Batting Average on Balls In Play (BABIP), measuring batting average excluding strikeouts and home runs.
-  season_stats_batting_base_on_balls: Season-to-date number of unintentional walks drawn by the batter.
+  season_stats_batting_base_on_balls: Season-to-date total walks (bases on balls) drawn by the batter, including intentional walks.
   season_stats_batting_catchers_interference: Season-to-date number of times the batter reached base due to catcher's interference.
   season_stats_batting_caught_stealing: Season-to-date number of times the batter was caught stealing a base.
   season_stats_batting_caught_stealing_percentage: Season-to-date percentage of stolen base attempts that resulted in the batter being caught stealing.
@@ -1414,7 +1414,7 @@ boxscore:
   season_stats_pitching_at_bats: Season-to-date number of at-bats faced by the pitcher (excluding walks, HBP, and sacrifices).
   season_stats_pitching_balks: Season-to-date number of balks called against the pitcher.
   season_stats_pitching_balls: Season-to-date number of ball calls recorded against the pitcher.
-  season_stats_pitching_base_on_balls: Season-to-date number of unintentional walks issued by the pitcher.
+  season_stats_pitching_base_on_balls: Season-to-date total walks (bases on balls) issued by the pitcher, including intentional walks.
   season_stats_pitching_batters_faced: Season-to-date total number of batters faced by the pitcher.
   season_stats_pitching_blown_saves: Season-to-date number of blown save opportunities for the pitcher.
   season_stats_pitching_catchers_interference: Season-to-date number of times the pitcher benefited from a catcher's interference call.
@@ -1476,7 +1476,7 @@ boxscore:
   stats_batting_air_outs: Number of outs recorded by the batter on balls hit in the air during this game.
   stats_batting_at_bats: Number of official at-bats for the batter in this game.
   stats_batting_at_bats_per_home_run: At-bats per home run ratio for the batter in this game.
-  stats_batting_base_on_balls: Number of unintentional walks drawn by the batter in this game.
+  stats_batting_base_on_balls: Number of walks (bases on balls) drawn by the batter in this game, including intentional walks.
   stats_batting_catchers_interference: Number of times the batter reached base due to catcher's interference in this game.
   stats_batting_caught_stealing: Number of times the batter was caught stealing in this game.
   stats_batting_doubles: Number of doubles hit by the batter in this game.
@@ -1521,7 +1521,7 @@ boxscore:
   stats_pitching_at_bats: Number of at-bats faced by the pitcher (excluding walks, HBP, and sacrifices) in this game.
   stats_pitching_balks: Number of balks called against the pitcher in this game.
   stats_pitching_balls: Number of ball calls recorded against the pitcher in this game.
-  stats_pitching_base_on_balls: Number of unintentional walks issued by the pitcher in this game.
+  stats_pitching_base_on_balls: Number of walks (bases on balls) issued by the pitcher in this game, including intentional walks.
   stats_pitching_batters_faced: Total number of batters faced by the pitcher in this game.
   stats_pitching_blown_saves: Number of blown save opportunities for the pitcher in this game.
   stats_pitching_catchers_interference: Number of catcher's interference calls that occurred while the pitcher was pitching in this game.
