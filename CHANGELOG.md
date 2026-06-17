@@ -4,6 +4,7 @@
 
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
+  - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
   - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
@@ -135,6 +136,13 @@ Every generated reference page renders a `col_name | type | description` returns
 - **New hand-curated source** `tools/codegen/manual_column_descriptions.yaml`, keyed by the schema's `schema:` field (with a `_global` table-agnostic fallback), consumed at render time by `generate.py:_table_cell_desc`. Resolution order: captured-stored value → `manual[schema][col]` → `manual._global[col]` → R-dict mined fill → empty. Descriptions live **only** here (the `schemas/**.yaml` are clobbered blank on every capture), so they survive re-capture.
 - **Coverage:** NFL (1,158 — nflverse / Next Gen Stats / Pro Football Reference / ESPN), MLB (599 — Stats API + ESPN), NHL (588 — api-web / EDGE / ESPN), CFB (177 — ESPN + cfbfastR), plus the ESPN cross-league game **summary** (sport-agnostic), NBA/WNBA/MBB/WBB, PWHL + CHL junior hockey (OHL/QMJHL/WHL/AHL), and the shared `standings`/`leaders`/`team_roster`/`news`/`team_schedule` schemas.
 - **Regression guard:** `tools/codegen/extract_residual_columns.py` computes the render-blank residual; `tests/codegen/test_manual_descriptions.py` asserts it stays at **0** (a newly-captured undocumented column fails CI until authored), plus an orphan guard (no stale dict keys) and a filler-lint (rejects terse/generic descriptions). Every bucket was adversarially accuracy-reviewed; corrections included PFR `rec_br`, MLB `base_on_balls`, NHL EDGE goalie goal-differential / pbp assist totals, and the long-format `load_cfb_betting_lines` columns.
+
+### Documentation — doctest-prompt cleanup, native returns-tables, new tutorials
+
+- **No more raw `>>>` doctest prompts.** The generated ESPN-wrapper + loader docstring templates emitted `>>> call` under `Example:` (which `sphinx.ext.doctest` would try to verify); both emission sites now produce the napoleon `Quick start::` literal block, clearing ~3,559 generated hazards. The remaining ~55 hand-written prompts (NFL NGS / parsers, The Odds API, `find`/`discover`, etc.) were converted in source.
+- **78 new native returns-tables.** Wired `returns_schema` for NHL api-web (9), stats-rest (10), records (37), EDGE (15), and MLB Stats API (8) endpoints that previously rendered no return table — captured from live fixtures; the 676 new columns are fully described. (24 endpoints were skipped: off-season EDGE top-10 leaderboards, retired record paths, and auth-gated MLB endpoints.)
+- **`refresh_return_schemas` no longer writes 0-column per-league schemas** — an empty `columns: []` file shadowed and suppressed the generic `schemas/{name}.yaml` fallback, leaving some leagues with no table; it now skips them so the generic table renders.
+- **Three new intro tutorials** under `examples/notebooks/` (rendered to `docs/docs/tutorials/`): **Soccer** (`espn_soccer_*(league=)` + headline aliases), **Cricket** (`espn_cricket_*` + the 8-section matchcard summary), and **Other ESPN leagues** (UFL/XFL/CFL, college baseball/softball, NCAA M/W hockey).
 
 ## 0.0.66 Release: June 17, 2026
 

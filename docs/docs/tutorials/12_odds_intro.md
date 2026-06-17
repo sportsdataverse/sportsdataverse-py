@@ -1,7 +1,7 @@
 ---
 title: Betting odds tutorial
 sidebar_label: Betting odds
-sidebar_position: 12
+sidebar_position: 15
 ---
 
 # 🎲 Betting odds with `sportsdataverse-py`
