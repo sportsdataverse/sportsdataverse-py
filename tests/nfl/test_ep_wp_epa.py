@@ -219,6 +219,56 @@ def test_output_columns_present() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Scoring-attempt EP_start = 0.92 override
+# ---------------------------------------------------------------------------
+
+_SCORING_ATTEMPT_TYPES = [
+    ("Extra Point Good", 1),
+    ("Extra Point Missed", 0),
+    ("Two-Point Conversion Good", 2),
+    ("Two-Point Conversion Missed", 0),
+    ("Two Point Pass", 2),
+    ("Two Point Rush", 2),
+    ("Blocked PAT", 0),
+]
+
+
+@pytest.mark.parametrize("play_type,points_value", _SCORING_ATTEMPT_TYPES)
+def test_scoring_attempt_ep_start_forced_to_0_92(play_type: str, points_value: int) -> None:
+    """Scoring-attempt plays must use EP_start = 0.92 regardless of the supplied value.
+
+    The model EP_start for PAT / 2pt / Blocked-PAT plays is meaningless; EPA
+    must equal ``points_value - 0.92``.  This test supplies EP_start = 1.5
+    (deliberately != 0.92) and EP_end = <points_value> so that without the
+    override the branch would compute ``points_value - 1.5`` instead.
+
+    RED before the Critical fix; GREEN after.
+    """
+    # EP_end is set to points_value so the scoring overlay fires and returns
+    # exactly points_value (the overlay branches for Extra Point / 2pt land
+    # on 1 or 2 respectively; Blocked PAT / missed land on 0).
+    # We supply a non-0.92 EP_start to prove the override rewrites it.
+    df = _frame(
+        "G1",
+        [
+            {
+                "type.text": play_type,
+                "text": "",
+                "EP_start": 1.5,  # deliberately != 0.92 — must be overridden
+                "EP_end": float(points_value),
+                "scoring_play": True,
+            },
+        ],
+    )
+    out = calculate_epa(df)
+    expected_epa = pytest.approx(points_value - 0.92, abs=1e-9)
+    assert out["epa"].to_list()[0] == expected_epa, (
+        f"{play_type}: expected epa={points_value - 0.92:.4f} "
+        f"(points_value={points_value} - 0.92), got {out['epa'].to_list()[0]}"
+    )
+
+
+# ---------------------------------------------------------------------------
 # Multi-game no-leak invariant
 # ---------------------------------------------------------------------------
 

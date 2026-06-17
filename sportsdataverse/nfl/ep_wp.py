@@ -1036,12 +1036,17 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             :func:`calculate_expected_points`'s lowercase ``ep``).
 
     Returns:
-        The input frame with the EPA derivation applied.  ``EP_start`` /
-        ``EP_end`` are rewritten in place (overlays, sign flips, touchback),
-        ``EP_between``, ``lag_EP_end`` and ``lag_change_of_pos_team`` are
-        added, ``EPA`` is added, and lowercase nflverse aliases ``ep``
-        (``= EP_end``), ``epa`` (``= EPA``), ``ep_start`` (``= EP_start``) and
-        ``ep_end`` (``= EP_end``) are added for downstream contract parity.
+        The input frame with the EPA derivation applied.  ``EP_start`` is
+        rewritten to ``0.92`` for scoring-attempt play types (``Extra Point
+        Good``, ``Extra Point Missed``, ``Two-Point Conversion Good``,
+        ``Two-Point Conversion Missed``, ``Two Point Pass``, ``Two Point Rush``,
+        ``Blocked PAT``) before any other overlays fire.  ``EP_start`` /
+        ``EP_end`` are then rewritten in place (overlays, sign flips,
+        touchback), ``EP_between``, ``lag_EP_end`` and
+        ``lag_change_of_pos_team`` are added, ``EPA`` is added, and lowercase
+        nflverse aliases ``ep`` (``= EP_end``), ``epa`` (``= EPA``),
+        ``ep_start`` (``= EP_start``) and ``ep_end`` (``= EP_end``) are added
+        for downstream contract parity.
 
     Raises:
         KeyError: If any column in :data:`_EPA_REQUIRED_COLUMNS` is absent.
@@ -1067,6 +1072,28 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
 
     play_df = (
         df.with_columns(
+            # --- Scoring-attempt EP_start override (must precede EP_end overlays) ---
+            # PAT / 2pt / Blocked-PAT plays compute EPA as ``points_value - EP_start``;
+            # the model score for those plays is meaningless so we force EP_start = 0.92
+            # (the pre-snap expected value of a scoring attempt) before any EP_end
+            # branch fires.  Mirrors nfl_pbp.py lines 3496-3511 verbatim.
+            EP_start=pl.when(
+                pl.col("type.text").is_in(
+                    [
+                        "Extra Point Good",
+                        "Extra Point Missed",
+                        "Two-Point Conversion Good",
+                        "Two-Point Conversion Missed",
+                        "Two Point Pass",
+                        "Two Point Rush",
+                        "Blocked PAT",
+                    ],
+                ),
+            )
+            .then(0.92)
+            .otherwise(pl.col("EP_start")),
+        )
+        .with_columns(
             # --- Scoring overlays + turnover sign flips on EP_end ---
             EP_end=pl.when(
                 (pl.col("type.text").str.to_lowercase().str.contains(r"end of game")).or_(
