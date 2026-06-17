@@ -921,7 +921,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -2041,16 +2047,16 @@ ESPN endpoint.
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
 | `wins` | double | Wins. |
-| `division_losses` | double |  |
-| `division_ties` | double |  |
-| `division_wins` | double |  |
+| `division_losses` | double | Number of games the team has lost against opponents within their own division. |
+| `division_ties` | double | Number of games the team has tied against opponents within their own division. |
+| `division_wins` | double | Number of games the team has won against opponents within their own division. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `away` | character | Away team name. |
 | `vs. conf.` | character | Vs. conf.. |
-| `vs ap top 25` | character |  |
-| `vs usa ranked teams` | character |  |
-| `vs division` | double |  |
+| `vs ap top 25` | character | The team's win-loss record against opponents ranked in the AP Top 25 poll. |
+| `vs usa ranked teams` | character | The team's win-loss record against opponents ranked in the USA Today Coaches Poll. |
+| `vs division` | double | The team's win-loss(-tie) record against opponents within their own division, serialized as a numeric value. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

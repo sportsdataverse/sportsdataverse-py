@@ -1,0 +1,42 @@
+schema: teams
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: location
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: short_display_name
+  type: character
+  description: ''
+- name: nickname
+  type: character
+  description: ''
+- name: slug
+  type: character
+  description: ''
+- name: uid
+  type: character
+  description: ''
+- name: color
+  type: character
+  description: ''
+- name: alternate_color
+  type: character
+  description: ''
+- name: is_active
+  type: logical
+  description: ''
+- name: is_all_star
+  type: logical
+  description: ''

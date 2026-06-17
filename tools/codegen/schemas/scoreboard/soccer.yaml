@@ -1,0 +1,39 @@
+schema: scoreboard
+kind: dataframe
+columns:
+- name: event_id
+  type: character
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: short_name
+  type: character
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: home_team_id
+  type: character
+  description: ''
+- name: home_score
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''
+- name: away_team_id
+  type: character
+  description: ''
+- name: away_score
+  type: character
+  description: ''
+- name: status
+  type: character
+  description: ''
+- name: venue
+  type: character
+  description: ''

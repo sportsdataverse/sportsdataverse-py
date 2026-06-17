@@ -1,0 +1,7 @@
+schema: injuries
+kind: dataframe
+description: "One row per athlete on the injury report; the per-athlete injury entries are nested."
+columns:
+- {name: id, type: character, description: ''}
+- {name: display_name, type: character, description: ''}
+- {name: injuries, type: character, description: ''}

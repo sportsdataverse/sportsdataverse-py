@@ -1,0 +1,9 @@
+schema: skater_skating_distance_detail
+kind: dataframe
+columns:
+- name: skating_distance_last10
+  type: character
+  description: ''
+- name: skating_distance_details
+  type: character
+  description: ''

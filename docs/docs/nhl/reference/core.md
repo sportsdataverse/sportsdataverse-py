@@ -921,7 +921,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -2037,7 +2043,7 @@ ESPN endpoint.
 | `clincher` | double | Clincher. |
 | `differential` | double | Differential. |
 | `games_behind` | double | Games behind. |
-| `games_played` | double | Games played. |
+| `games_played` | double | Matches played. |
 | `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
 | `point_differential` | double | Point differential. |
@@ -2048,11 +2054,11 @@ ESPN endpoint.
 | `wins` | double | Wins. |
 | `overtime_losses` | double | Total overtime losses. |
 | `overtime_wins` | double | Overtime wins. |
-| `points_diff` | double |  |
-| `reg_losses` | double |  |
-| `reg_wins` | double |  |
-| `rot_losses` | double |  |
-| `rot_wins` | double |  |
+| `points_diff` | double | Difference between total points scored for and against the team across all games played. |
+| `reg_losses` | double | Number of losses the team has suffered in regulation time (excluding overtime and shootout losses). |
+| `reg_wins` | double | Number of wins the team has earned in regulation time (excluding overtime and shootout wins). |
+| `rot_losses` | double | Number of losses the team has suffered in overtime or the shootout (non-regulation losses). |
+| `rot_wins` | double | Number of wins the team has earned in overtime or the shootout (non-regulation wins). |
 | `shootout_losses` | double | Shootout losses. |
 | `shootout_wins` | double | Shootout wins. |
 | `overall` | character | Overall. |

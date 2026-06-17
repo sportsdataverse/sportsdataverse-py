@@ -1,0 +1,9 @@
+schema: team_shot_speed_detail
+kind: dataframe
+columns:
+- name: hardest_shots
+  type: character
+  description: ''
+- name: shot_speed_details
+  type: character
+  description: ''

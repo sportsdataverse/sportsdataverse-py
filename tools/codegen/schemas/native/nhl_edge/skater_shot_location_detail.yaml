@@ -1,0 +1,24 @@
+schema: skater_shot_location_detail
+kind: dataframe
+columns:
+- name: area
+  type: character
+  description: ''
+- name: sog
+  type: integer
+  description: ''
+- name: goals
+  type: integer
+  description: ''
+- name: shooting_pctg
+  type: double
+  description: ''
+- name: sog_percentile
+  type: double
+  description: ''
+- name: goals_percentile
+  type: double
+  description: ''
+- name: shooting_pctg_percentile
+  type: double
+  description: ''

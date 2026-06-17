@@ -1,0 +1,45 @@
+{
+  "data": [
+    {
+      "id": 32,
+      "franchiseId": 27,
+      "fullName": "Quebec Nordiques",
+      "leagueId": 133,
+      "rawTricode": "QUE",
+      "triCode": "QUE"
+    },
+    {
+      "id": 8,
+      "franchiseId": 1,
+      "fullName": "Montr\u00e9al Canadiens",
+      "leagueId": 133,
+      "rawTricode": "MTL",
+      "triCode": "MTL"
+    },
+    {
+      "id": 58,
+      "franchiseId": 5,
+      "fullName": "Toronto St. Patricks",
+      "leagueId": 133,
+      "rawTricode": "TSP",
+      "triCode": "TSP"
+    },
+    {
+      "id": 7,
+      "franchiseId": 19,
+      "fullName": "Buffalo Sabres",
+      "leagueId": 133,
+      "rawTricode": "BUF",
+      "triCode": "BUF"
+    },
+    {
+      "id": 46,
+      "franchiseId": 13,
+      "fullName": "Oakland Seals",
+      "leagueId": 133,
+      "rawTricode": "OAK",
+      "triCode": "OAK"
+    }
+  ],
+  "total": 62
+}

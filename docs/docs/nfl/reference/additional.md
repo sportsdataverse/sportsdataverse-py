@@ -54,18 +54,18 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `birth_place_country` | character | Birth place country. |
 | `headshot_href` | character | Link to ESPN Headshot of Player |
 | `headshot_alt` | character | Alternative-text label for the headshot. |
-| `projections_href` | character |  |
-| `contracts_href` | character |  |
+| `projections_href` | character | ESPN API hyperlink reference URL for the player's statistical projection resource. |
+| `contracts_href` | character | ESPN API hyperlink reference URL for the full list of the player's historical contract records. |
 | `experience_years` | integer | Experience years. |
-| `college_athlete_href` | character |  |
-| `contract_href` | character |  |
+| `college_athlete_href` | character | ESPN API hyperlink reference URL for the athlete's college profile resource. |
+| `contract_href` | character | ESPN API hyperlink reference URL for the player's full contract resource. |
 | `contract_option_type` | integer | Contract option type. |
 | `contract_salary` | integer | Contract salary. |
-| `contract_bonus` | integer |  |
+| `contract_bonus` | integer | Signing or roster bonus amount (in dollars) associated with the player's current contract. |
 | `contract_years_remaining` | integer | Contract years remaining. |
-| `contract_signed_through` | integer |  |
-| `contract_season_href` | character |  |
-| `contract_team_href` | character |  |
+| `contract_signed_through` | integer | Final year of the player's current contract, expressed as a four-digit season year. |
+| `contract_season_href` | character | ESPN API hyperlink reference URL for the specific season-level contract detail resource. |
+| `contract_team_href` | character | ESPN API hyperlink reference URL for the team associated with the player's contract. |
 | `contract_active` | logical | Contract active. |
 | `status_id` | character | Status identifier. |
 | `status_name` | character | Status label. |
@@ -76,19 +76,19 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `draft_round` | integer | Round that player was drafted in |
 | `draft_year` | integer | Year that player was drafted |
 | `draft_selection` | integer | Draft selection. |
-| `draft_team_href` | character |  |
-| `draft_pick_href` | character |  |
+| `draft_team_href` | character | ESPN API hyperlink reference URL for the team that originally drafted this player. |
+| `draft_pick_href` | character | ESPN API hyperlink reference URL for the draft-pick record associated with this player. |
 | `hand_type` | character | Hand type. |
 | `hand_abbreviation` | character | Hand abbreviation. |
 | `hand_display_value` | character | Hand display value. |
 | `starter` | logical | TRUE if the player was in the starting lineup; FALSE otherwise. |
-| `jersey_right` | character |  |
+| `jersey_right` | character | Secondary or alternate jersey number display string used by ESPN (e.g., for special-game uniforms). |
 | `valid` | logical | Valid. |
 | `did_not_play` | logical | TRUE if the player did not appear in the game. |
 | `display_name` | character | Full name of player |
-| `athlete_href` | character |  |
-| `position_href` | character |  |
-| `statistics_href` | character |  |
+| `athlete_href` | character | ESPN API hyperlink reference URL for the athlete resource. |
+| `position_href` | character | ESPN API hyperlink reference URL for the player's positional classification resource. |
+| `statistics_href` | character | ESPN API hyperlink reference URL for the player's career statistics resource. |
 | `team_id` | integer | Unique team identifier. |
 | `order` | integer | Display order within the result set. |
 | `home_away` | character | Game venue label ('home' or 'away'). |
@@ -106,7 +106,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
 | `is_active` | logical | Active contract |
 | `is_all_star` | logical | Is all star. |
-| `team_alternate_ids_sdr` | character |  |
+| `team_alternate_ids_sdr` | character | SportsDataverse SDR alternate identifier for the team, used for cross-source joins. |
 | `logo_href` | character | Team or league logo URL. |
 | `logo_dark_href` | character | Logo URL for dark backgrounds. |
 | `game_id` | integer | Ten digit identifier for NFL game. |
@@ -181,164 +181,164 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `college_name` | character | Official college (usually the last one attended) |
 | `status_id` | integer | Status identifier. |
 | `status_name` | character | Status label. |
-| `general_fumbles` | double |  |
-| `general_fumbles_lost` | double |  |
-| `general_fumbles_forced` | double |  |
-| `general_fumbles_forced_primary` | double |  |
-| `general_fumbles_recovered` | double |  |
-| `general_fumbles_recovered_yards` | double |  |
-| `general_fumbles_touchdowns` | double |  |
+| `general_fumbles` | double | Total number of times the player fumbled the ball regardless of who recovered it. |
+| `general_fumbles_lost` | double | Number of fumbles by the player that were subsequently recovered by the opposing team. |
+| `general_fumbles_forced` | double | Number of fumbles the player forced from opposing ball carriers. |
+| `general_fumbles_forced_primary` | double | Number of fumbles forced where the player was credited as the primary forcer rather than an assist. |
+| `general_fumbles_recovered` | double | Number of fumbles (own or opponent's) recovered by the player. |
+| `general_fumbles_recovered_yards` | double | Total yards gained on fumble recoveries returned by the player. |
+| `general_fumbles_touchdowns` | double | Number of touchdowns scored by the player on fumble recoveries. |
 | `general_games_played` | double | Games Played. |
-| `general_offensive_two_pt_returns` | double |  |
-| `general_offensive_fumbles_touchdowns` | double |  |
-| `general_defensive_fumbles_touchdowns` | double |  |
-| `passing_avg_gain` | double |  |
-| `passing_completion_pct` | double |  |
+| `general_offensive_two_pt_returns` | double | Number of two-point conversion attempts the player's offense returned defensively for a score. |
+| `general_offensive_fumbles_touchdowns` | double | Number of touchdowns scored by recovering an offensive team fumble (e.g., a fumble recovered in the end zone). |
+| `general_defensive_fumbles_touchdowns` | double | Number of touchdowns scored by recovering or returning an opponent's fumble on the defensive side. |
+| `passing_avg_gain` | double | Average yards gained per passing attempt including sacks. |
+| `passing_completion_pct` | double | Percentage of pass attempts that resulted in a completed reception (completions divided by attempts). |
 | `passing_completions` | double | Pass completions (split from CFBD's `C/ATT` field). |
-| `passing_espnqb_rating` | double |  |
-| `passing_interception_pct` | double |  |
-| `passing_interceptions` | double |  |
-| `passing_long_passing` | double |  |
-| `passing_net_passing_yards` | double |  |
-| `passing_net_passing_yards_per_game` | double |  |
-| `passing_net_total_yards` | double |  |
-| `passing_net_yards_per_game` | double |  |
-| `passing_passing_attempts` | double |  |
-| `passing_passing_big_plays` | double |  |
-| `passing_passing_first_downs` | double |  |
-| `passing_passing_fumbles` | double |  |
-| `passing_passing_fumbles_lost` | double |  |
-| `passing_passing_touchdown_pct` | double |  |
-| `passing_passing_touchdowns` | double |  |
-| `passing_passing_yards` | double |  |
-| `passing_passing_yards_after_catch` | double |  |
-| `passing_passing_yards_at_catch` | double |  |
-| `passing_passing_yards_per_game` | double |  |
-| `passing_qb_rating` | double |  |
-| `passing_sacks` | double |  |
-| `passing_sack_yards_lost` | double |  |
-| `passing_net_passing_attempts` | double |  |
-| `passing_team_games_played` | double |  |
-| `passing_total_offensive_plays` | double |  |
-| `passing_total_points_per_game` | double |  |
-| `passing_total_touchdowns` | double |  |
-| `passing_total_yards` | double |  |
-| `passing_total_yards_from_scrimmage` | double |  |
-| `passing_two_point_pass_convs` | double |  |
-| `passing_two_pt_pass` | double |  |
-| `passing_two_pt_pass_attempts` | double |  |
-| `passing_yards_from_scrimmage_per_game` | double |  |
-| `passing_yards_per_completion` | double |  |
-| `passing_yards_per_game` | double |  |
-| `passing_yards_per_pass_attempt` | double |  |
-| `passing_net_yards_per_pass_attempt` | double |  |
+| `passing_espnqb_rating` | double | ESPN's proprietary composite quarterback rating blending efficiency, usage, and situational performance into a single metric. |
+| `passing_interception_pct` | double | Percentage of pass attempts that resulted in an interception (interceptions divided by attempts). |
+| `passing_interceptions` | double | Total number of passes thrown that were intercepted by the opposing defense. |
+| `passing_long_passing` | double | Longest completed pass in yards recorded by the player during the period. |
+| `passing_net_passing_yards` | double | Passing yards minus yards lost on sacks, giving a net aerial production figure. |
+| `passing_net_passing_yards_per_game` | double | Net passing yards (after sack yardage deduction) per game played. |
+| `passing_net_total_yards` | double | Combined net rushing and net passing yards accumulated by the player. |
+| `passing_net_yards_per_game` | double | Net total offensive yards (rushing plus net passing) per game. |
+| `passing_passing_attempts` | double | Total number of pass attempts thrown by the player. |
+| `passing_passing_big_plays` | double | Number of passing plays that gained 20 or more yards. |
+| `passing_passing_first_downs` | double | Number of pass completions that resulted in a first down. |
+| `passing_passing_fumbles` | double | Number of times the player fumbled while in the act of passing or being sacked. |
+| `passing_passing_fumbles_lost` | double | Number of passing-related fumbles that were recovered by the opposing team. |
+| `passing_passing_touchdown_pct` | double | Percentage of pass attempts that resulted in a touchdown (touchdowns divided by attempts). |
+| `passing_passing_touchdowns` | double | Total number of touchdown passes thrown by the player. |
+| `passing_passing_yards` | double | Total aerial yards gained on completions thrown by the player. |
+| `passing_passing_yards_after_catch` | double | Total yards gained by receivers after catching the ball on passes thrown by the player. |
+| `passing_passing_yards_at_catch` | double | Total yards gained through the air (prior to the catch) on completions thrown by the player. |
+| `passing_passing_yards_per_game` | double | Gross passing yards per game played by the quarterback. |
+| `passing_qb_rating` | double | Traditional NFL passer rating computed from completion percentage, yards per attempt, touchdown percentage, and interception percentage on a roughly 0–158.3 scale. |
+| `passing_sacks` | double | Total number of times the player was sacked behind the line of scrimmage while attempting to pass. |
+| `passing_sack_yards_lost` | double | Total yards lost by the player as a result of being sacked behind the line of scrimmage. |
+| `passing_net_passing_attempts` | double | Total pass attempts minus sacks taken, representing meaningful dropbacks. |
+| `passing_team_games_played` | double | Number of games played by the player's team during which the player accumulated passing statistics. |
+| `passing_total_offensive_plays` | double | Total number of offensive plays (pass attempts, rushes, and sacks) run with the player as the primary ball handler. |
+| `passing_total_points_per_game` | double | Average total points scored by the player's team per game. |
+| `passing_total_touchdowns` | double | Total touchdowns (passing, rushing, and receiving) scored by or credited to the player. |
+| `passing_total_yards` | double | Combined total of passing, rushing, and receiving yards accumulated by the player. |
+| `passing_total_yards_from_scrimmage` | double | Total yards from scrimmage (rushing plus receiving) credited to the player in addition to passing yards. |
+| `passing_two_point_pass_convs` | double | Number of successful two-point conversion attempts thrown by the player. |
+| `passing_two_pt_pass` | double | Number of two-point conversion passes the player successfully completed. |
+| `passing_two_pt_pass_attempts` | double | Number of two-point conversion pass attempts thrown by the player regardless of outcome. |
+| `passing_yards_from_scrimmage_per_game` | double | Yards from scrimmage (rushing plus receiving) per game for a player who also has passing statistics recorded. |
+| `passing_yards_per_completion` | double | Average yards gained per completed pass attempt. |
+| `passing_yards_per_game` | double | Gross passing yards per game (equivalent to passing_passing_yards_per_game; alternate label). |
+| `passing_yards_per_pass_attempt` | double | Gross passing yards divided by total pass attempts, not penalizing for sacks. |
+| `passing_net_yards_per_pass_attempt` | double | Net passing yards divided by total pass attempts including sacks, penalizing passers for yardage lost in the pocket. |
 | `passing_qbr` | double | ESPN Quarterback Rating (QBR) for the player in this game. |
-| `passing_adj_qbr` | double |  |
-| `passing_quarterback_rating` | double |  |
-| `rushing_avg_gain` | double |  |
-| `rushing_espnrb_rating` | double |  |
-| `rushing_long_rushing` | double |  |
-| `rushing_net_total_yards` | double |  |
-| `rushing_net_yards_per_game` | double |  |
-| `rushing_rushing_attempts` | double |  |
-| `rushing_rushing_big_plays` | double |  |
-| `rushing_rushing_first_downs` | double |  |
-| `rushing_rushing_fumbles` | double |  |
-| `rushing_rushing_fumbles_lost` | double |  |
-| `rushing_rushing_touchdowns` | double |  |
-| `rushing_rushing_yards` | double |  |
-| `rushing_rushing_yards_per_game` | double |  |
-| `rushing_stuffs` | double |  |
-| `rushing_stuff_yards_lost` | double |  |
-| `rushing_team_games_played` | double |  |
-| `rushing_total_offensive_plays` | double |  |
-| `rushing_total_points_per_game` | double |  |
-| `rushing_total_touchdowns` | double |  |
-| `rushing_total_yards` | double |  |
-| `rushing_total_yards_from_scrimmage` | double |  |
-| `rushing_two_point_rush_convs` | double |  |
-| `rushing_two_pt_rush` | double |  |
-| `rushing_two_pt_rush_attempts` | double |  |
-| `rushing_yards_from_scrimmage_per_game` | double |  |
-| `rushing_yards_per_game` | double |  |
-| `rushing_yards_per_rush_attempt` | double |  |
-| `receiving_avg_gain` | double |  |
-| `receiving_espnwr_rating` | double |  |
-| `receiving_long_reception` | double |  |
-| `receiving_net_total_yards` | double |  |
-| `receiving_net_yards_per_game` | double |  |
-| `receiving_receiving_big_plays` | double |  |
-| `receiving_receiving_first_downs` | double |  |
-| `receiving_receiving_fumbles` | double |  |
-| `receiving_receiving_fumbles_lost` | double |  |
-| `receiving_receiving_targets` | double |  |
-| `receiving_receiving_touchdowns` | double |  |
-| `receiving_receiving_yards` | double |  |
-| `receiving_receiving_yards_after_catch` | double |  |
-| `receiving_receiving_yards_at_catch` | double |  |
-| `receiving_receiving_yards_per_game` | double |  |
-| `receiving_receptions` | double |  |
-| `receiving_team_games_played` | double |  |
-| `receiving_total_offensive_plays` | double |  |
-| `receiving_total_points_per_game` | double |  |
-| `receiving_total_touchdowns` | double |  |
-| `receiving_total_yards` | double |  |
-| `receiving_total_yards_from_scrimmage` | double |  |
-| `receiving_two_point_rec_convs` | double |  |
-| `receiving_two_pt_reception` | double |  |
-| `receiving_two_pt_reception_attempts` | double |  |
-| `receiving_yards_from_scrimmage_per_game` | double |  |
-| `receiving_yards_per_game` | double |  |
-| `receiving_yards_per_reception` | double |  |
-| `defensive_assist_tackles` | double |  |
-| `defensive_avg_interception_yards` | double |  |
-| `defensive_avg_sack_yards` | double |  |
-| `defensive_avg_stuff_yards` | double |  |
-| `defensive_blocked_field_goal_touchdowns` | double |  |
-| `defensive_blocked_punt_touchdowns` | double |  |
-| `defensive_hurries` | double |  |
-| `defensive_kicks_blocked` | double |  |
-| `defensive_long_interception` | double |  |
-| `defensive_misc_touchdowns` | double |  |
-| `defensive_passes_batted_down` | double |  |
-| `defensive_passes_defended` | double |  |
-| `defensive_qb_hits` | double |  |
-| `defensive_two_pt_returns` | double |  |
+| `passing_adj_qbr` | double | ESPN's Adjusted Total Quarterback Rating, which adjusts raw QBR for opponent strength and clutch situations on a 0–100 scale. |
+| `passing_quarterback_rating` | double | Alternate or supplemental quarterback rating value; may represent a different calculation context from passing_qb_rating (e.g., situational or opponent-adjusted). |
+| `rushing_avg_gain` | double | Average yards gained per rushing attempt by the player. |
+| `rushing_espnrb_rating` | double | ESPN's proprietary composite running back rating blending efficiency and usage metrics. |
+| `rushing_long_rushing` | double | Longest single rushing play in yards recorded by the player during the period. |
+| `rushing_net_total_yards` | double | Combined net rushing and receiving yards accumulated by the player. |
+| `rushing_net_yards_per_game` | double | Net total offensive yards per game for the player. |
+| `rushing_rushing_attempts` | double | Total number of rushing attempts carried by the player. |
+| `rushing_rushing_big_plays` | double | Number of rushing plays that gained 10 or more yards. |
+| `rushing_rushing_first_downs` | double | Number of rushing attempts that resulted in a first down. |
+| `rushing_rushing_fumbles` | double | Number of times the player fumbled while carrying the ball on a rushing play. |
+| `rushing_rushing_fumbles_lost` | double | Number of rushing fumbles by the player that were recovered by the opposing team. |
+| `rushing_rushing_touchdowns` | double | Total number of rushing touchdowns scored by the player. |
+| `rushing_rushing_yards` | double | Total yards gained by the player on all rushing attempts. |
+| `rushing_rushing_yards_per_game` | double | Rushing yards per game played by the player. |
+| `rushing_stuffs` | double | Number of rushing attempts where the player was tackled at or behind the line of scrimmage. |
+| `rushing_stuff_yards_lost` | double | Total yards lost on rushing plays where the player was tackled behind the line of scrimmage (stuffed). |
+| `rushing_team_games_played` | double | Number of games played by the player's team during which the player accumulated rushing statistics. |
+| `rushing_total_offensive_plays` | double | Total number of offensive plays run with the player active in a rushing role. |
+| `rushing_total_points_per_game` | double | Average total points scored by the player's team per game. |
+| `rushing_total_touchdowns` | double | Total touchdowns (rushing and receiving) scored by the player. |
+| `rushing_total_yards` | double | Combined total rushing and receiving yards accumulated by the player. |
+| `rushing_total_yards_from_scrimmage` | double | Total yards from scrimmage (rushing plus receiving) credited to the player. |
+| `rushing_two_point_rush_convs` | double | Number of successful two-point conversion rushes scored by the player. |
+| `rushing_two_pt_rush` | double | Number of two-point conversion rushes the player successfully converted. |
+| `rushing_two_pt_rush_attempts` | double | Number of two-point conversion rush attempts by the player regardless of outcome. |
+| `rushing_yards_from_scrimmage_per_game` | double | Total yards from scrimmage per game for the player. |
+| `rushing_yards_per_game` | double | Rushing yards per game (equivalent label to rushing_rushing_yards_per_game). |
+| `rushing_yards_per_rush_attempt` | double | Average yards gained per rushing attempt by the player. |
+| `receiving_avg_gain` | double | Average yards gained per reception by the player. |
+| `receiving_espnwr_rating` | double | ESPN's proprietary composite wide receiver / pass-catcher rating blending efficiency and usage metrics. |
+| `receiving_long_reception` | double | Longest single reception in yards recorded by the player during the period. |
+| `receiving_net_total_yards` | double | Combined net rushing and receiving yards accumulated by the player. |
+| `receiving_net_yards_per_game` | double | Net total offensive yards (rushing plus receiving) per game for the player. |
+| `receiving_receiving_big_plays` | double | Number of receptions that gained 20 or more yards. |
+| `receiving_receiving_first_downs` | double | Number of receptions that resulted in a first down. |
+| `receiving_receiving_fumbles` | double | Number of times the player fumbled after making a reception. |
+| `receiving_receiving_fumbles_lost` | double | Number of post-reception fumbles by the player that were recovered by the opposing team. |
+| `receiving_receiving_targets` | double | Total number of times the player was the intended target of a pass attempt. |
+| `receiving_receiving_touchdowns` | double | Total number of touchdown receptions credited to the player. |
+| `receiving_receiving_yards` | double | Total yards gained by the player on all receptions. |
+| `receiving_receiving_yards_after_catch` | double | Total yards gained by the player after making contact with the ball (yards after catch). |
+| `receiving_receiving_yards_at_catch` | double | Total air yards at the point of the catch (depth of target) on receptions by the player. |
+| `receiving_receiving_yards_per_game` | double | Receiving yards per game played by the player. |
+| `receiving_receptions` | double | Total number of passes successfully caught by the player. |
+| `receiving_team_games_played` | double | Number of games played by the player's team during which the player accumulated receiving statistics. |
+| `receiving_total_offensive_plays` | double | Total number of offensive plays run during which the player was active on the field. |
+| `receiving_total_points_per_game` | double | Average total points scored by the player's team per game (context for the receiver's role). |
+| `receiving_total_touchdowns` | double | Total touchdowns (rushing and receiving) scored by the player. |
+| `receiving_total_yards` | double | Combined total rushing and receiving yards accumulated by the player. |
+| `receiving_total_yards_from_scrimmage` | double | Total yards from scrimmage (rushing plus receiving) credited to the player. |
+| `receiving_two_point_rec_convs` | double | Number of successful two-point conversion receptions caught by the player. |
+| `receiving_two_pt_reception` | double | Number of two-point conversion passes the player successfully caught. |
+| `receiving_two_pt_reception_attempts` | double | Number of two-point conversion targets thrown to the player regardless of outcome. |
+| `receiving_yards_from_scrimmage_per_game` | double | Total yards from scrimmage per game for the player. |
+| `receiving_yards_per_game` | double | Receiving yards per game (equivalent label to receiving_receiving_yards_per_game). |
+| `receiving_yards_per_reception` | double | Average yards gained per reception, also known as yards per catch. |
+| `defensive_assist_tackles` | double | Number of assisted tackles credited to the player (helped bring down the ball carrier but was not the primary tackler). |
+| `defensive_avg_interception_yards` | double | Average yards gained per interception returned by the player. |
+| `defensive_avg_sack_yards` | double | Average yards lost per sack the player recorded against the opposing quarterback. |
+| `defensive_avg_stuff_yards` | double | Average yards lost per run stuff (tackle behind the line of scrimmage) recorded by the player. |
+| `defensive_blocked_field_goal_touchdowns` | double | Number of touchdowns scored by the player after blocking an opponent's field goal attempt and returning it. |
+| `defensive_blocked_punt_touchdowns` | double | Number of touchdowns scored by the player after blocking an opponent's punt and returning it. |
+| `defensive_hurries` | double | Number of times the player pressured the quarterback into an early or errant throw without recording a sack. |
+| `defensive_kicks_blocked` | double | Total number of kicks (field goals or extra points) the player blocked. |
+| `defensive_long_interception` | double | Longest single interception return in yards recorded by the player. |
+| `defensive_misc_touchdowns` | double | Number of defensive touchdowns scored via miscellaneous means not captured by other specific categories. |
+| `defensive_passes_batted_down` | double | Number of passes the player knocked down at the line of scrimmage without recording an interception. |
+| `defensive_passes_defended` | double | Total number of passes the player broke up or deflected, including both pass deflections and interceptions. |
+| `defensive_qb_hits` | double | Number of times the player legally hit the quarterback during or just after a pass attempt. |
+| `defensive_two_pt_returns` | double | Number of two-point conversion attempts the player's defense returned for a defensive conversion score. |
 | `defensive_sacks` | double | Sacks credited to the player. |
-| `defensive_sack_yards` | double |  |
-| `defensive_safeties` | double |  |
-| `defensive_solo_tackles` | double |  |
-| `defensive_stuffs` | double |  |
-| `defensive_stuff_yards` | double |  |
-| `defensive_tackles_for_loss` | double |  |
-| `defensive_tackles_yards_lost` | double |  |
-| `defensive_team_games_played` | double |  |
-| `defensive_total_tackles` | double |  |
-| `defensive_yards_allowed` | double |  |
-| `defensive_points_allowed` | double |  |
-| `defensive_one_pt_safeties_made` | double |  |
-| `defensive_missed_field_goal_return_td` | double |  |
-| `defensive_blocked_punt_ez_rec_td` | double |  |
-| `defensive_interceptions_interceptions` | double |  |
-| `defensive_interceptions_interception_touchdowns` | double |  |
-| `defensive_interceptions_interception_yards` | double |  |
-| `scoring_defensive_points` | double |  |
-| `scoring_field_goals` | double |  |
-| `scoring_kick_extra_points` | double |  |
-| `scoring_kick_extra_points_made` | double |  |
-| `scoring_misc_points` | double |  |
-| `scoring_passing_touchdowns` | double |  |
-| `scoring_receiving_touchdowns` | double |  |
-| `scoring_return_touchdowns` | double |  |
-| `scoring_rushing_touchdowns` | double |  |
-| `scoring_total_points` | double |  |
-| `scoring_total_points_per_game` | double |  |
-| `scoring_total_touchdowns` | double |  |
-| `scoring_total_two_point_convs` | double |  |
-| `scoring_two_point_pass_convs` | double |  |
-| `scoring_two_point_rec_convs` | double |  |
-| `scoring_two_point_rush_convs` | double |  |
-| `scoring_one_pt_safeties_made` | double |  |
+| `defensive_sack_yards` | double | Total yards lost by the opposing offense as a result of the player's sacks. |
+| `defensive_safeties` | double | Number of safeties recorded by the player (tackling the ball carrier in their own end zone). |
+| `defensive_solo_tackles` | double | Number of unassisted tackles credited solely to the player. |
+| `defensive_stuffs` | double | Number of times the player tackled a ball carrier for a loss on a rushing play. |
+| `defensive_stuff_yards` | double | Total yards lost by the offense on run stuffs recorded by the player. |
+| `defensive_tackles_for_loss` | double | Total number of tackles resulting in a loss of yards for the opposing offense. |
+| `defensive_tackles_yards_lost` | double | Total yards lost by the opposing offense on the player's tackles for loss. |
+| `defensive_team_games_played` | double | Number of games played by the player's team in which the player appeared on the defensive side. |
+| `defensive_total_tackles` | double | Combined total of solo tackles and assisted tackles recorded by the player. |
+| `defensive_yards_allowed` | double | Total yards allowed by the player's defense during games the player appeared in. |
+| `defensive_points_allowed` | double | Total points allowed by the player's team during games the player appeared in. |
+| `defensive_one_pt_safeties_made` | double | Number of one-point safeties recorded by the player's defense (scored when the opposing team is downed in their own end zone during a try). |
+| `defensive_missed_field_goal_return_td` | double | Number of touchdowns scored by returning a missed field goal attempt. |
+| `defensive_blocked_punt_ez_rec_td` | double | Number of touchdowns scored by recovering a blocked punt in the end zone. |
+| `defensive_interceptions_interceptions` | double | Total number of passes intercepted by the player. |
+| `defensive_interceptions_interception_touchdowns` | double | Number of touchdowns scored by the player on interception returns. |
+| `defensive_interceptions_interception_yards` | double | Total yards gained by the player on interception returns. |
+| `scoring_defensive_points` | double | Total points scored by the player's defense via safeties, defensive touchdowns, and blocked kick returns. |
+| `scoring_field_goals` | double | Total number of field goals successfully made by the player during the period. |
+| `scoring_kick_extra_points` | double | Total number of extra point attempts (PAT kicks) by the player. |
+| `scoring_kick_extra_points_made` | double | Total number of extra points successfully kicked through the uprights by the player. |
+| `scoring_misc_points` | double | Points scored via miscellaneous methods not captured by other scoring categories. |
+| `scoring_passing_touchdowns` | double | Total passing touchdowns thrown by the player, contributing to their total scoring line. |
+| `scoring_receiving_touchdowns` | double | Total receiving touchdowns scored by the player. |
+| `scoring_return_touchdowns` | double | Total touchdowns scored by the player on kick or punt returns. |
+| `scoring_rushing_touchdowns` | double | Total rushing touchdowns scored by the player. |
+| `scoring_total_points` | double | Total points contributed by the player across all scoring methods (touchdowns, PATs, field goals, etc.). |
+| `scoring_total_points_per_game` | double | Average total points contributed by the player per game. |
+| `scoring_total_touchdowns` | double | Total touchdowns scored or thrown by the player across all methods. |
+| `scoring_total_two_point_convs` | double | Total number of successful two-point conversions scored or thrown by the player. |
+| `scoring_two_point_pass_convs` | double | Number of successful two-point conversion passes thrown by the player. |
+| `scoring_two_point_rec_convs` | double | Number of successful two-point conversion receptions caught by the player. |
+| `scoring_two_point_rush_convs` | double | Number of successful two-point conversion rushes scored by the player. |
+| `scoring_one_pt_safeties_made` | double | Number of one-point safeties recorded, scored when the defense stops an offense that is attempting a two-point conversion in their own end zone. |
 | `team_id` | integer | Unique team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_guid` | character | ESPN team GUID. |
@@ -404,7 +404,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state / region. |
-| `venue_address_country` | character |  |
+| `venue_address_country` | character | Two-letter ISO country code or country name for the country where the venue is located. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
@@ -416,7 +416,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
-| `status_is_tbd_flex` | logical |  |
+| `status_is_tbd_flex` | logical | Boolean flag indicating whether the game's broadcast slot is designated as a flex/TBD window. |
 | `format_regulation_periods` | integer | Format regulation periods. |
 | `home_id` | character | Unique identifier for home. |
 | `home_uid` | character | Home team's uid. |
@@ -431,9 +431,9 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_venue_id` | character | Unique identifier for home venue. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | The number of points the home team scored. Is NA for games which haven't yet been played. |
-| `home_current_rank` | integer |  |
-| `home_linescores` | integer |  |
-| `home_records` | character |  |
+| `home_current_rank` | integer | Current AP or ESPN power ranking of the home team at the time of the game. |
+| `home_linescores` | list | Comma-separated or serialized quarter-by-quarter score totals for the home team. |
+| `home_records` | character | Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference). |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
@@ -447,9 +447,9 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_venue_id` | character | Unique identifier for away venue. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | The number of points the away team scored. Is NA for games which haven't yet been played. |
-| `away_current_rank` | integer |  |
-| `away_linescores` | integer |  |
-| `away_records` | character |  |
+| `away_current_rank` | integer | Current AP or ESPN power ranking of the away team at the time of the game. |
+| `away_linescores` | list | Comma-separated or serialized quarter-by-quarter score totals for the away team. |
+| `away_records` | character | Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference). |
 | `game_id` | integer | Ten digit identifier for NFL game. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | integer | REG or POST indicating if the timeframe belongs to regular or post season. |
@@ -563,7 +563,7 @@ Polars dataframe containing historical contracts available.
 | `draft_round` | integer | Round that player was drafted in |
 | `draft_overall` | integer | Overall draft selection number. |
 | `draft_team` | character | Team that drafted player |
-| `cols` | double |  |
+| `cols` | double | Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context. |
 
 **Example**
 
@@ -596,19 +596,19 @@ Polars dataframe containing depth chart data available for the requested seasons
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `club_code` | character |  |
+| `club_code` | character | Three-letter team abbreviation identifying the NFL club on the depth chart row. |
 | `week` | integer | Season week. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `depth_team` | character |  |
+| `depth_team` | character | Numeric depth rank indicating whether the player is listed as the starter (1), backup (2), or further reserve on the depth chart. |
 | `last_name` | character | Last name of player |
 | `first_name` | character | First name of player |
 | `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
-| `formation` | character |  |
+| `formation` | character | Offensive or defensive formation context in which the depth chart position applies (e.g., 'Shotgun', 'Nickel'). |
 | `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
 | `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
 | `position` | character | Primary position as reported by NFL.com |
-| `elias_id` | character |  |
-| `depth_position` | character |  |
+| `elias_id` | character | Elias Sports Bureau identifier for the player, used by the NFL for official statistical tracking. |
+| `depth_position` | character | Positional grouping label used to place the player on the team's official depth chart (e.g., 'QB', 'WR1', 'ILB'). |
 | `full_name` | character | Full name as per NFL.com |
 
 **Example**
@@ -1044,7 +1044,7 @@ Polars dataframe containing FTN charting data available for the requested season
 | `starting_hash` | character | hash the ball was place(L = left, M = middle, R = right) |
 | `qb_location` | character | pre-snap position of quarterback(U = under center, S = shotgun, P = pistol) |
 | `n_offense_backfield` | integer | number of players in the backfield at the snap |
-| `n_defense_box` | integer |  |
+| `n_defense_box` | integer | Number of defenders positioned in the box at the snap, as charted by FTN Data. |
 | `is_no_huddle` | logical | no huddle |
 | `is_motion` | logical | motion occurred on the play before or at the time of the snap |
 | `is_play_action` | logical | play-action pass |
@@ -1302,7 +1302,7 @@ Polars dataframe containing historical contracts available.
 | `draft_round` | integer | Round that player was drafted in |
 | `draft_overall` | integer | Overall draft selection number. |
 | `draft_team` | character | Team that drafted player |
-| `cols` | double |  |
+| `cols` | double | Number of contract columns returned in the contracts dataset (metadata artifact from the loader). |
 
 **Example**
 
@@ -1963,7 +1963,7 @@ Polars dataframe containing officials available.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Ten digit identifier for NFL game. |
-| `game_key` | character |  |
+| `game_key` | character | Unique nflverse game identifier linking the officiating record to a specific NFL game. |
 | `official_name` | character | Official name. |
 | `position` | character | Primary position as reported by NFL.com |
 | `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
@@ -2018,21 +2018,21 @@ Polars dataframe containing PFR advanced stats data for the requested `stat_type
 | `opponent` | character | Opposing team of player |
 | `pfr_player_name` | character | Player's name as recorded by PFR |
 | `pfr_player_id` | character | ID from Pro Football Reference |
-| `passing_drops` | double |  |
-| `passing_drop_pct` | double |  |
-| `receiving_drop` | double |  |
-| `receiving_drop_pct` | double |  |
-| `passing_bad_throws` | double |  |
-| `passing_bad_throw_pct` | double |  |
-| `times_sacked` | double |  |
+| `passing_drops` | double | Total number of catchable passes thrown by the passer that were dropped by receivers per Pro Football Reference. |
+| `passing_drop_pct` | double | Percentage of a passer's catchable targets that were dropped by the intended receiver. |
+| `receiving_drop` | double | Number of catchable targets the receiver dropped during the game or season period per Pro Football Reference. |
+| `receiving_drop_pct` | double | Percentage of the receiver's catchable targets that were dropped during the game or season period. |
+| `passing_bad_throws` | double | Total number of passes thrown by the passer that were classified as inaccurate or poor-quality throws per Pro Football Reference. |
+| `passing_bad_throw_pct` | double | Percentage of a passer's attempts classified as bad throws (inaccurate, off-target, or uncatchable). |
+| `times_sacked` | double | Total number of times the passer was sacked during the game or season period per Pro Football Reference. |
 | `times_blitzed` | double | Number of times blitzed |
 | `times_hurried` | double | Number of times hurried |
 | `times_hit` | double | Number of times hit |
 | `times_pressured` | double | Number of times pressured |
-| `times_pressured_pct` | double |  |
-| `def_times_blitzed` | double |  |
-| `def_times_hurried` | double |  |
-| `def_times_hitqb` | double |  |
+| `times_pressured_pct` | double | Percentage of the passer's dropbacks during which they faced pressure from the opposing defense. |
+| `def_times_blitzed` | double | Number of times the defensive player sent additional rushers on a blitz during the game or season period. |
+| `def_times_hurried` | double | Number of times the defensive player hurried or pressured the quarterback without recording a sack. |
+| `def_times_hitqb` | double | Number of times the defensive player made contact with the quarterback (hit on the QB) during pass rushes. |
 
 **Example**
 
@@ -2091,29 +2091,29 @@ Will be removed in a future release. Migrate callers to the unified
 | `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `pos` | character | Position as tracked by FP |
 | `g` | double | Goals (skaters). |
-| `gs` | double |  |
+| `gs` | double | Number of games the player started during the season or period covered by this row. |
 | `int` | double | Binary flag for an interception. |
-| `tgt` | double |  |
-| `cmp` | double |  |
-| `cmp_percent` | double |  |
-| `yds` | double |  |
-| `yds_cmp` | double |  |
-| `yds_tgt` | double |  |
-| `td` | double |  |
-| `rat` | double |  |
-| `dadot` | double |  |
-| `air` | double |  |
-| `yac` | double |  |
-| `bltz` | double |  |
-| `hrry` | double |  |
-| `qbkd` | double |  |
-| `sk` | double |  |
-| `prss` | double |  |
-| `comb` | double |  |
-| `m_tkl` | double |  |
-| `m_tkl_percent` | double |  |
-| `loaded` | character |  |
-| `bats` | double |  |
+| `tgt` | double | Total number of times the player was the nearest defender on a pass attempt (targets in coverage) per Pro Football Reference. |
+| `cmp` | double | Number of passes completed by the opposing quarterback when targeting the player in coverage. |
+| `cmp_percent` | double | Completion percentage allowed by the player in coverage (completions divided by targets). |
+| `yds` | double | Total passing yards allowed by the player in coverage. |
+| `yds_cmp` | double | Average yards allowed per completion when the player was in coverage. |
+| `yds_tgt` | double | Average yards allowed per target thrown at the player in coverage. |
+| `td` | double | Number of touchdowns allowed by the player in coverage. |
+| `rat` | double | Passer rating allowed by the player in coverage — the NFL passer rating of quarterbacks when targeting this defender. |
+| `dadot` | double | Depth of target air yards on defended passes — average distance downfield at the point of the throw when the player was in coverage. |
+| `air` | double | Total air yards (depth of target) on passes thrown at the player in coverage, as tracked by Pro Football Reference. |
+| `yac` | double | Yards after catch allowed by the player — yards gained by receivers after the catch when the player was the nearest defender. |
+| `bltz` | double | Number of snaps on which the player blitzed the quarterback, as recorded by Pro Football Reference. |
+| `hrry` | double | Number of times the player hurried the opposing quarterback without recording a full sack, per Pro Football Reference. |
+| `qbkd` | double | Number of times the player knocked down the quarterback, making contact after or during a pass attempt. |
+| `sk` | double | Number of sacks recorded by the player, bringing the quarterback down behind the line of scrimmage. |
+| `prss` | double | Number of times the player pressured the quarterback (combining sacks, hits, and hurries) per Pro Football Reference. |
+| `comb` | double | Total combined tackles (solo plus assisted) recorded by the player per Pro Football Reference. |
+| `m_tkl` | double | Number of missed tackles attributed to the player by Pro Football Reference. |
+| `m_tkl_percent` | double | Percentage of tackle attempts the player missed out of total tackle opportunities. |
+| `loaded` | character | Indicator or metadata field from the Pro Football Reference data load, typically flagging the data source state or row completeness. |
+| `bats` | double | Number of passes batted down at the line of scrimmage by the player. |
 
 **Example**
 
@@ -2170,15 +2170,15 @@ Will be removed in a future release. Migrate callers to the unified
 | `rpo_rush_yards` | double | Rushing yards on RPOs |
 | `pa_pass_att` | double | Play action pass attempts |
 | `pa_pass_yards` | double | Play action passing yards |
-| `intended_air_yards` | double |  |
-| `intended_air_yards_per_pass_attempt` | double |  |
-| `completed_air_yards` | double |  |
-| `completed_air_yards_per_completion` | double |  |
-| `completed_air_yards_per_pass_attempt` | double |  |
-| `pass_yards_after_catch` | double |  |
-| `pass_yards_after_catch_per_completion` | double |  |
-| `scrambles` | double |  |
-| `scramble_yards_per_attempt` | double |  |
+| `intended_air_yards` | double | Total air yards on all pass attempts including incompletions, measuring aggregate downfield targeting intent from Pro Football Reference. |
+| `intended_air_yards_per_pass_attempt` | double | Average intended air yards per pass attempt, capturing the passer's average depth of target regardless of completion outcome. |
+| `completed_air_yards` | double | Total air yards on completed passes only, measuring how far the ball traveled downfield through the air to the point of completion. |
+| `completed_air_yards_per_completion` | double | Average air yards per completed pass, representing the passer's typical depth of target on successful throws. |
+| `completed_air_yards_per_pass_attempt` | double | Average completed air yards per pass attempt (including incompletions), a rate measure of downfield passing efficiency. |
+| `pass_yards_after_catch` | double | Total yards gained by receivers after the catch, isolating the yards generated after initial ball reception from Pro Football Reference. |
+| `pass_yards_after_catch_per_completion` | double | Average yards after catch per completion, measuring how much yardage receivers generate on the ground after catching the ball. |
+| `scrambles` | double | Total number of quarterback scrambles (designed dropback converted to a run) recorded by Pro Football Reference. |
+| `scramble_yards_per_attempt` | double | Average yards gained per scramble attempt by the quarterback, from Pro Football Reference advanced passing stats. |
 
 **Example**
 
@@ -2214,24 +2214,24 @@ Will be removed in a future release. Migrate callers to the unified
 | `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `pos` | character | Position as tracked by FP |
 | `g` | double | Goals (skaters). |
-| `gs` | double |  |
-| `tgt` | double |  |
-| `rec` | double |  |
-| `yds` | double |  |
-| `td` | double |  |
-| `x1d` | double |  |
-| `ybc` | double |  |
-| `ybc_r` | double |  |
-| `yac` | double |  |
-| `yac_r` | double |  |
-| `adot` | double |  |
-| `brk_tkl` | double |  |
-| `rec_br` | double |  |
-| `drop` | double |  |
-| `drop_percent` | double |  |
+| `gs` | double | Number of games the player started at a receiver position during the period covered. |
+| `tgt` | double | Total number of times the player was the intended receiver on a pass attempt. |
+| `rec` | double | Total receptions made by the player during the period covered. |
+| `yds` | double | Total receiving yards gained by the player on all receptions. |
+| `td` | double | Total receiving touchdowns scored by the player. |
+| `x1d` | double | Number of receptions by the player that resulted in a first down. |
+| `ybc` | double | Total yards the ball traveled in the air (before the catch) on receptions by the player. |
+| `ybc_r` | double | Average air yards before the catch per reception. |
+| `yac` | double | Total yards gained by the player after the catch. |
+| `yac_r` | double | Average yards after the catch per reception. |
+| `adot` | double | Average depth of target — mean air yards at point of throw on pass attempts directed at the receiver, per Pro Football Reference. |
+| `brk_tkl` | double | Number of broken tackles credited to the player after a reception, per Pro Football Reference. |
+| `rec_br` | double | Receptions per broken tackle — number of receptions for each broken tackle the player forced after the catch, per Pro Football Reference. |
+| `drop` | double | Number of catchable passes the player dropped (failed to secure after the ball reached the receiver's hands). |
+| `drop_percent` | double | Percentage of catchable targets that the player dropped. |
 | `int` | double | Binary flag for an interception. |
-| `rat` | double |  |
-| `loaded` | character |  |
+| `rat` | double | Passer rating generated on passes thrown to the player — the NFL passer rating when the receiver is targeted. |
+| `loaded` | character | Indicator or metadata field from the Pro Football Reference data load, flagging the row's data source state or completeness. |
 
 **Example**
 
@@ -2267,18 +2267,18 @@ Will be removed in a future release. Migrate callers to the unified
 | `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `pos` | character | Position as tracked by FP |
 | `g` | double | Goals (skaters). |
-| `gs` | double |  |
-| `att` | double |  |
-| `yds` | double |  |
-| `td` | double |  |
-| `x1d` | double |  |
-| `ybc` | double |  |
-| `ybc_att` | double |  |
-| `yac` | double |  |
-| `yac_att` | double |  |
-| `brk_tkl` | double |  |
-| `att_br` | double |  |
-| `loaded` | character |  |
+| `gs` | double | Number of games started by the player during the period covered. |
+| `att` | double | Total rushing attempts by the player during the period covered. |
+| `yds` | double | Total rushing yards gained during the period covered. |
+| `td` | double | Total rushing touchdowns scored during the period covered. |
+| `x1d` | double | Number of first downs gained via rushing during the period covered. |
+| `ybc` | double | Yards before contact accumulated on rushing plays, measuring yards gained in open field before being touched. |
+| `ybc_att` | double | Yards before contact per rushing attempt. |
+| `yac` | double | Yards after contact accumulated on rushing plays. |
+| `yac_att` | double | Yards after contact per rushing attempt. |
+| `brk_tkl` | double | Number of broken tackles recorded on rushing plays. |
+| `att_br` | double | Rushing attempts per broken tackle, measuring how often the player required contact to break free. |
+| `loaded` | character | Source or load-batch identifier indicating which data file or release this row was pulled from. |
 
 **Example**
 
@@ -2318,25 +2318,25 @@ Will be removed in a future release. Migrate callers to the unified
 | `pfr_player_name` | character | Player's name as recorded by PFR |
 | `pfr_player_id` | character | ID from Pro Football Reference |
 | `def_ints` | double | Career interceptions |
-| `def_targets` | double |  |
-| `def_completions_allowed` | double |  |
-| `def_completion_pct` | double |  |
-| `def_yards_allowed` | double |  |
-| `def_yards_allowed_per_cmp` | double |  |
-| `def_yards_allowed_per_tgt` | double |  |
-| `def_receiving_td_allowed` | double |  |
-| `def_passer_rating_allowed` | double |  |
-| `def_adot` | double |  |
-| `def_air_yards_completed` | double |  |
-| `def_yards_after_catch` | double |  |
-| `def_times_blitzed` | double |  |
-| `def_times_hurried` | double |  |
-| `def_times_hitqb` | double |  |
+| `def_targets` | double | Number of passing attempts thrown at or into the coverage area of this defender during the week. |
+| `def_completions_allowed` | double | Number of completions allowed by the defender on passes thrown into their coverage during the week. |
+| `def_completion_pct` | double | Completion percentage allowed by the defender on targets thrown in their coverage during the week. |
+| `def_yards_allowed` | double | Total receiving yards allowed by this defender in coverage during the week per Pro Football Reference. |
+| `def_yards_allowed_per_cmp` | double | Receiving yards allowed per completion by this defender in coverage during the week. |
+| `def_yards_allowed_per_tgt` | double | Receiving yards allowed per target thrown at this defender in coverage during the week. |
+| `def_receiving_td_allowed` | double | Number of receiving touchdowns allowed by the defender while in coverage during the week. |
+| `def_passer_rating_allowed` | double | NFL passer rating of quarterbacks when targeting this defender in coverage during the week. |
+| `def_adot` | double | Average depth of target (in yards) against this defender on passing plays during the week. |
+| `def_air_yards_completed` | double | Total air yards on completed passes allowed by the defender during the week. |
+| `def_yards_after_catch` | double | Total yards gained by receivers after the catch on completions allowed by this defender during the week. |
+| `def_times_blitzed` | double | Number of times this defender was sent as a blitzer on a passing play during the week. |
+| `def_times_hurried` | double | Number of times this defender hurried the quarterback on a pass rush without recording a sack during the week. |
+| `def_times_hitqb` | double | Number of times this defender made contact with the quarterback as part of a pass rush during the week. |
 | `def_sacks` | double | Number of sacks form this player |
-| `def_pressures` | double |  |
-| `def_tackles_combined` | double |  |
-| `def_missed_tackles` | double |  |
-| `def_missed_tackle_pct` | double |  |
+| `def_pressures` | double | Total number of quarterback pressures (hurries + hits + sacks) generated by the defender during the week. |
+| `def_tackles_combined` | double | Total combined tackles (solo + assisted) recorded by the defender during the week per Pro Football Reference. |
+| `def_missed_tackles` | double | Number of missed tackles recorded against this defender during the week per Pro Football Reference. |
+| `def_missed_tackle_pct` | double | Percentage of the defender's tackle opportunities that resulted in a missed tackle during the week. |
 
 **Example**
 
@@ -2375,21 +2375,21 @@ Will be removed in a future release. Migrate callers to the unified
 | `opponent` | character | Opposing team of player |
 | `pfr_player_name` | character | Player's name as recorded by PFR |
 | `pfr_player_id` | character | ID from Pro Football Reference |
-| `passing_drops` | double |  |
-| `passing_drop_pct` | double |  |
-| `receiving_drop` | double |  |
-| `receiving_drop_pct` | double |  |
-| `passing_bad_throws` | double |  |
-| `passing_bad_throw_pct` | double |  |
-| `times_sacked` | double |  |
+| `passing_drops` | double | Number of catchable passes thrown by the quarterback that were dropped by receivers. |
+| `passing_drop_pct` | double | Percentage of catchable targets that were dropped by receivers on passes thrown by the quarterback. |
+| `receiving_drop` | double | Number of catchable targets the player (as receiver) dropped in this weekly game. |
+| `receiving_drop_pct` | double | Percentage of catchable targets the player dropped in this weekly game. |
+| `passing_bad_throws` | double | Number of pass attempts charted as poor or inaccurate throws by the quarterback in this weekly log. |
+| `passing_bad_throw_pct` | double | Percentage of pass attempts that were charted as poor throws (inaccurate, off-target, or otherwise below expectation), per Pro Football Reference. |
+| `times_sacked` | double | Number of times the quarterback was sacked in this weekly game log. |
 | `times_blitzed` | double | Number of times blitzed |
 | `times_hurried` | double | Number of times hurried |
 | `times_hit` | double | Number of times hit |
 | `times_pressured` | double | Number of times pressured |
-| `times_pressured_pct` | double |  |
-| `def_times_blitzed` | double |  |
-| `def_times_hurried` | double |  |
-| `def_times_hitqb` | double |  |
+| `times_pressured_pct` | double | Percentage of pass plays on which the quarterback faced defensive pressure in this weekly game. |
+| `def_times_blitzed` | double | Number of pass plays on which the defense sent a blitz, as experienced by the quarterback in this weekly log. |
+| `def_times_hurried` | double | Number of times the quarterback was hurried (pressured into an early throw) without being sacked or hit. |
+| `def_times_hitqb` | double | Number of times the quarterback was hit by a defender on a pass play in this weekly game log. |
 
 **Example**
 
@@ -2428,14 +2428,14 @@ Will be removed in a future release. Migrate callers to the unified
 | `opponent` | character | Opposing team of player |
 | `pfr_player_name` | character | Player's name as recorded by PFR |
 | `pfr_player_id` | character | ID from Pro Football Reference |
-| `rushing_broken_tackles` | double |  |
-| `receiving_broken_tackles` | double |  |
-| `passing_drops` | double |  |
-| `passing_drop_pct` | double |  |
-| `receiving_drop` | double |  |
-| `receiving_drop_pct` | double |  |
-| `receiving_int` | double |  |
-| `receiving_rat` | double |  |
+| `rushing_broken_tackles` | double | Number of broken tackles recorded by the player on rushing plays during the week. |
+| `receiving_broken_tackles` | double | Number of broken tackles recorded by the receiver after the catch. |
+| `passing_drops` | double | Number of passes dropped by intended receivers on targeted throws. |
+| `passing_drop_pct` | double | Percentage of pass targets that resulted in a drop, as tracked by Pro Football Reference. |
+| `receiving_drop` | double | Number of catchable passes dropped by the receiver during the week. |
+| `receiving_drop_pct` | double | Percentage of catchable targets that were dropped by the receiver during the week. |
+| `receiving_int` | double | Number of passes intended for the receiver that were intercepted. |
+| `receiving_rat` | double | Passer rating when targeting this receiver, reflecting QB efficiency on those throws. |
 
 **Example**
 
@@ -2475,12 +2475,12 @@ Will be removed in a future release. Migrate callers to the unified
 | `pfr_player_name` | character | Player's name as recorded by PFR |
 | `pfr_player_id` | character | ID from Pro Football Reference |
 | `carries` | double | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
-| `rushing_yards_before_contact` | double |  |
-| `rushing_yards_before_contact_avg` | double |  |
-| `rushing_yards_after_contact` | double |  |
-| `rushing_yards_after_contact_avg` | double |  |
-| `rushing_broken_tackles` | double |  |
-| `receiving_broken_tackles` | double |  |
+| `rushing_yards_before_contact` | double | Total rushing yards gained by the player before making contact with a defender in this weekly game log. |
+| `rushing_yards_before_contact_avg` | double | Average rushing yards gained before first contact per rushing attempt in this weekly game log. |
+| `rushing_yards_after_contact` | double | Total rushing yards gained by the player after initial contact with a defender in this weekly game log. |
+| `rushing_yards_after_contact_avg` | double | Average rushing yards gained after initial contact per rushing attempt in this weekly game log. |
+| `rushing_broken_tackles` | double | Number of broken tackles the player recorded on rushing plays in this weekly game log. |
+| `receiving_broken_tackles` | double | Number of broken tackles the player recorded after a reception in this weekly game log. |
 
 **Example**
 
@@ -2518,7 +2518,7 @@ Polars dataframe containing player stats.
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `week` | integer | Season week. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `opponent_team` | character |  |
+| `opponent_team` | character | Abbreviation or name of the opposing team faced by the player in a given game or week. |
 | `completions` | integer | The number of completed passes. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
 | `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
@@ -2686,7 +2686,7 @@ Polars dataframe containing the schedule for the requested seasons.
 | `pfr` | character | The id of the game issued by [Pro-Football-Reference](https://www.pro-football-reference.com/) |
 | `pff` | integer | The id of the game issued by [Pro Football Focus](https://www.pff.com/) |
 | `espn` | character | The id of the game issued by [ESPN](https://www.espn.com/) |
-| `ftn` | integer |  |
+| `ftn` | integer | FTN Data game identifier corresponding to this scheduled game. |
 | `away_rest` | integer | Days of rest that the away team is coming off of. |
 | `home_rest` | integer | Days of rest that the home team is coming off of. |
 | `away_moneyline` | integer | Odds for away team to win the game. |
@@ -2756,21 +2756,21 @@ Polars dataframe containing team stats available for the requested seasons.
 | `week` | integer | Season week. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `opponent_team` | character |  |
+| `opponent_team` | character | Team abbreviation or identifier of the opposing team faced during the game or period. |
 | `completions` | integer | The number of completed passes. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
 | `passing_yards` | integer | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
 | `passing_tds` | integer | The number of passing touchdowns. |
-| `passing_interceptions` | integer |  |
-| `sacks_suffered` | integer |  |
-| `sack_yards_lost` | integer |  |
+| `passing_interceptions` | integer | Total number of interceptions thrown by the team's passers during the game or season period. |
+| `sacks_suffered` | integer | Total number of times the team's quarterback was sacked by the opposing defense during the period. |
+| `sack_yards_lost` | integer | Total offensive yards lost by the team on plays where the quarterback was sacked during the period. |
 | `sack_fumbles` | integer | The number of sacks with a fumble. |
 | `sack_fumbles_lost` | integer | The number of sacks with a lost fumble. |
 | `passing_air_yards` | integer | Passing air yards (includes incomplete passes). |
 | `passing_yards_after_catch` | integer | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
 | `passing_first_downs` | integer | First downs on pass attempts. |
 | `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
-| `passing_cpoe` | double |  |
+| `passing_cpoe` | double | Completion percentage over expectation (CPOE) for the team's passing attack during the period, relative to a model-based baseline. |
 | `passing_2pt_conversions` | integer | Two-point conversion passes. |
 | `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
 | `rushing_yards` | integer | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
@@ -2806,54 +2806,54 @@ Polars dataframe containing team stats available for the requested seasons.
 | `def_pass_defended` | integer | Number of passes defended/broken up by this player |
 | `def_tds` | integer | Number of defensive touchdowns scored by this player |
 | `def_fumbles` | integer | Number of fumbles by this player |
-| `def_safeties` | integer |  |
-| `misc_yards` | integer |  |
-| `fumble_recovery_own` | integer |  |
-| `fumble_recovery_yards_own` | integer |  |
-| `fumble_recovery_opp` | integer |  |
-| `fumble_recovery_yards_opp` | integer |  |
-| `fumble_recovery_tds` | integer |  |
+| `def_safeties` | integer | Number of safeties scored by the defense (opponent tackled in their own end zone) during the period. |
+| `misc_yards` | integer | Miscellaneous yards not attributed to passing, rushing, or standard return categories during the period. |
+| `fumble_recovery_own` | integer | Number of fumbles recovered by the team that were originally fumbled by their own players. |
+| `fumble_recovery_yards_own` | integer | Total yards gained (or lost) on recoveries of the team's own fumbles during the period. |
+| `fumble_recovery_opp` | integer | Number of fumbles recovered by the team that were originally lost by the opposing team. |
+| `fumble_recovery_yards_opp` | integer | Total yards gained on returns of fumbles recovered from the opposing team during the period. |
+| `fumble_recovery_tds` | integer | Number of touchdowns scored by the team on fumble recoveries during the game or season period. |
 | `penalties` | integer | Total number of penalties. |
 | `penalty_yards` | integer | Yards gained (or lost) by the posteam from the penalty. |
-| `timeouts` | integer |  |
+| `timeouts` | integer | Number of timeouts remaining or used by the team during the game or period. |
 | `punt_returns` | integer | Number of punt returns. |
 | `punt_return_yards` | integer | Team punt return yards. |
-| `kickoff_returns` | integer |  |
-| `kickoff_return_yards` | integer |  |
+| `kickoff_returns` | integer | Total number of kickoff returns recorded by the team during the game or season period. |
+| `kickoff_return_yards` | integer | Total yards gained by the team on kickoff returns during the game or season period. |
 | `fg_made` | integer | TRUE when the field goal attempt was successful. |
-| `fg_att` | integer |  |
-| `fg_missed` | integer |  |
-| `fg_blocked` | integer |  |
-| `fg_long` | integer |  |
+| `fg_att` | integer | Total number of field goal attempts by the team's kicker during the game or season period. |
+| `fg_missed` | integer | Total number of field goal attempts missed (not blocked) by the team's kicker during the period. |
+| `fg_blocked` | integer | Total number of field goal attempts that were blocked by the opposing defense during the period. |
+| `fg_long` | integer | Distance in yards of the longest successful field goal made by the team's kicker during the period. |
 | `fg_pct` | double | Field goal percentage (0-1). |
-| `fg_made_0_19` | integer |  |
-| `fg_made_20_29` | integer |  |
-| `fg_made_30_39` | integer |  |
-| `fg_made_40_49` | integer |  |
-| `fg_made_50_59` | integer |  |
-| `fg_made_60_` | integer |  |
-| `fg_missed_0_19` | integer |  |
-| `fg_missed_20_29` | integer |  |
-| `fg_missed_30_39` | integer |  |
-| `fg_missed_40_49` | integer |  |
-| `fg_missed_50_59` | integer |  |
-| `fg_missed_60_` | integer |  |
-| `fg_made_list` | character |  |
-| `fg_missed_list` | character |  |
-| `fg_blocked_list` | character |  |
-| `fg_made_distance` | integer |  |
-| `fg_missed_distance` | integer |  |
-| `fg_blocked_distance` | integer |  |
-| `pat_made` | integer |  |
-| `pat_att` | integer |  |
-| `pat_missed` | integer |  |
-| `pat_blocked` | integer |  |
-| `pat_pct` | double |  |
-| `gwfg_made` | integer |  |
-| `gwfg_att` | integer |  |
-| `gwfg_missed` | integer |  |
-| `gwfg_blocked` | integer |  |
-| `gwfg_distance` | integer |  |
+| `fg_made_0_19` | integer | Number of successful field goals made from 0–19 yards during the game or season period. |
+| `fg_made_20_29` | integer | Number of successful field goals made from 20–29 yards during the game or season period. |
+| `fg_made_30_39` | integer | Number of successful field goals made from 30–39 yards during the game or season period. |
+| `fg_made_40_49` | integer | Number of successful field goals made from 40–49 yards during the game or season period. |
+| `fg_made_50_59` | integer | Number of successful field goals made from 50–59 yards during the game or season period. |
+| `fg_made_60_` | integer | Number of successful field goals made from 60 yards or longer during the game or season period. |
+| `fg_missed_0_19` | integer | Number of field goal attempts from 0–19 yards that were missed (not blocked) during the period. |
+| `fg_missed_20_29` | integer | Number of field goal attempts from 20–29 yards that were missed (not blocked) during the period. |
+| `fg_missed_30_39` | integer | Number of field goal attempts from 30–39 yards that were missed (not blocked) during the period. |
+| `fg_missed_40_49` | integer | Number of field goal attempts from 40–49 yards that were missed (not blocked) during the period. |
+| `fg_missed_50_59` | integer | Number of field goal attempts from 50–59 yards that were missed (not blocked) during the period. |
+| `fg_missed_60_` | integer | Number of field goal attempts from 60 yards or longer that were missed (not blocked) during the period. |
+| `fg_made_list` | character | List of distances (in yards) of each successful field goal made during the game or season period. |
+| `fg_missed_list` | character | List of distances (in yards) of each missed field goal attempt during the game or season period. |
+| `fg_blocked_list` | character | List of distances (in yards) of each blocked field goal attempt during the game or season period. |
+| `fg_made_distance` | integer | Cumulative distance in yards of all successful field goals made during the game or season period. |
+| `fg_missed_distance` | integer | Cumulative distance in yards of all missed field goal attempts during the game or season period. |
+| `fg_blocked_distance` | integer | Distance (in yards) of field goal attempts that were blocked by the opposing defense during the period. |
+| `pat_made` | integer | Total number of successful point-after-touchdown kicks made by the team's kicker during the period. |
+| `pat_att` | integer | Total number of point-after-touchdown (PAT / extra point) attempts by the team's kicker during the period. |
+| `pat_missed` | integer | Number of point-after-touchdown attempts that were missed (not blocked) during the period. |
+| `pat_blocked` | integer | Number of point-after-touchdown attempts that were blocked by the opposing defense during the period. |
+| `pat_pct` | double | Percentage of point-after-touchdown attempts that were successfully converted during the period. |
+| `gwfg_made` | integer | Number of successful game-winning field goals made to secure a victory in the final moments. |
+| `gwfg_att` | integer | Number of game-winning field goal attempts made in the final moments to win the game. |
+| `gwfg_missed` | integer | Number of game-winning field goal attempts that were missed (no good) in the final moments. |
+| `gwfg_blocked` | integer | Number of game-winning field goal attempts that were blocked by the opposing defense. |
+| `gwfg_distance` | integer | Distance in yards of the game-winning field goal attempt (or attempts) during the period. |
 
 **Example**
 
@@ -2889,19 +2889,19 @@ Polars dataframe containing teams available.
 | `team_abbr` | character | Official team abbreveation |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_id` | integer | Unique team identifier. |
-| `team_nick` | character |  |
-| `team_conf` | character |  |
-| `team_division` | character |  |
+| `team_nick` | character | Team nickname (e.g., 'Chiefs', 'Eagles', 'Patriots') without the city or state prefix. |
+| `team_conf` | character | Conference affiliation of the team (e.g., 'AFC' or 'NFC'). |
+| `team_division` | character | Division affiliation of the team (e.g., 'AFC North', 'NFC West'). |
 | `team_color` | character | Team primary color (hex without leading '#'). |
-| `team_color2` | character |  |
-| `team_color3` | character |  |
-| `team_color4` | character |  |
-| `team_logo_wikipedia` | character |  |
-| `team_logo_espn` | character |  |
-| `team_wordmark` | character |  |
-| `team_conference_logo` | character |  |
-| `team_league_logo` | character |  |
-| `team_logo_squared` | character |  |
+| `team_color2` | character | Secondary brand color for the team in hexadecimal format (e.g., '#FFB612'). |
+| `team_color3` | character | Tertiary brand color for the team in hexadecimal format, used in alternate uniforms or accents. |
+| `team_color4` | character | Quaternary brand color for the team in hexadecimal format, part of the team's full brand palette. |
+| `team_logo_wikipedia` | character | URL to the team's primary logo image as hosted on Wikimedia Commons / Wikipedia. |
+| `team_logo_espn` | character | URL to the team's primary logo image as hosted by ESPN. |
+| `team_wordmark` | character | URL to the team's wordmark image (team name rendered in official typography without the primary logo mark). |
+| `team_conference_logo` | character | URL to the logo image for the team's conference (AFC or NFC). |
+| `team_league_logo` | character | URL to the NFL league logo image. |
+| `team_logo_squared` | character | URL to a square-cropped version of the team's logo suitable for thumbnails and grid layouts. |
 
 **Example**
 
@@ -2974,7 +2974,7 @@ Polars dataframe containing officials available.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Ten digit identifier for NFL game. |
-| `game_key` | character |  |
+| `game_key` | character | Unique numeric key assigned by the NFL to identify the specific game in official records. |
 | `official_name` | character | Official name. |
 | `position` | character | Primary position as reported by NFL.com |
 | `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
@@ -3497,21 +3497,21 @@ Polars dataframe containing PFR advanced stats data for the requested `stat_type
 | `opponent` | character | Opposing team of player |
 | `pfr_player_name` | character | Player's name as recorded by PFR |
 | `pfr_player_id` | character | ID from Pro Football Reference |
-| `passing_drops` | double |  |
-| `passing_drop_pct` | double |  |
-| `receiving_drop` | double |  |
-| `receiving_drop_pct` | double |  |
-| `passing_bad_throws` | double |  |
-| `passing_bad_throw_pct` | double |  |
-| `times_sacked` | double |  |
+| `passing_drops` | double | Raw count of catchable passes dropped by the intended receiver, from Pro Football Reference charting. |
+| `passing_drop_pct` | double | Percentage of pass attempts dropped by the receiver, isolating receiver-side incompletions from passer error. |
+| `receiving_drop` | double | Number of catchable targets dropped by the receiver in the given game or season, from Pro Football Reference advanced receiving data. |
+| `receiving_drop_pct` | double | Percentage of targets that resulted in a drop by the receiver, from Pro Football Reference advanced receiving data. |
+| `passing_bad_throws` | double | Raw count of bad throws by the passer, as charted and defined by Pro Football Reference advanced passing data. |
+| `passing_bad_throw_pct` | double | Percentage of pass attempts classified as bad throws by Pro Football Reference (passes the passer should not have attempted or severely underthreww/overthrew). |
+| `times_sacked` | double | Total number of times the defensive player recorded a sack of the quarterback, from Pro Football Reference. |
 | `times_blitzed` | double | Number of times blitzed |
 | `times_hurried` | double | Number of times hurried |
 | `times_hit` | double | Number of times hit |
 | `times_pressured` | double | Number of times pressured |
-| `times_pressured_pct` | double |  |
-| `def_times_blitzed` | double |  |
-| `def_times_hurried` | double |  |
-| `def_times_hitqb` | double |  |
+| `times_pressured_pct` | double | Percentage of pass-blocking snaps on which the lineman or back allowed the quarterback to be pressured, from Pro Football Reference. |
+| `def_times_blitzed` | double | Number of plays on which the defensive player sent five or more pass rushers, from Pro Football Reference advanced defensive stats. |
+| `def_times_hurried` | double | Number of times the defensive player hurried (pressured but did not sack or hit) the quarterback, from Pro Football Reference. |
+| `def_times_hitqb` | double | Number of times the defensive player hit the quarterback on a pass play without recording a sack, from Pro Football Reference. |
 
 **Example**
 
@@ -3572,7 +3572,7 @@ Polars dataframe containing player stats.
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `week` | integer | Season week. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `opponent_team` | character |  |
+| `opponent_team` | character | Abbreviation of the opposing team the player faced in the game or week represented by this row. |
 | `completions` | integer | The number of completed passes. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
 | `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
@@ -3879,7 +3879,7 @@ Polars dataframe containing the schedule for the requested seasons.
 | `pfr` | character | The id of the game issued by [Pro-Football-Reference](https://www.pro-football-reference.com/) |
 | `pff` | integer | The id of the game issued by [Pro Football Focus](https://www.pff.com/) |
 | `espn` | character | The id of the game issued by [ESPN](https://www.espn.com/) |
-| `ftn` | integer |  |
+| `ftn` | integer | FTN Data game identifier used to join schedule records with FTN charting and tracking data. |
 | `away_rest` | integer | Days of rest that the away team is coming off of. |
 | `home_rest` | integer | Days of rest that the home team is coming off of. |
 | `away_moneyline` | integer | Odds for away team to win the game. |
@@ -3998,21 +3998,21 @@ Polars dataframe containing team stats available for the requested seasons.
 | `week` | integer | Season week. |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `opponent_team` | character |  |
+| `opponent_team` | character | Abbreviation of the opposing team the team faced in the game or week represented by this row. |
 | `completions` | integer | The number of completed passes. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
 | `passing_yards` | integer | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
 | `passing_tds` | integer | The number of passing touchdowns. |
-| `passing_interceptions` | integer |  |
-| `sacks_suffered` | integer |  |
-| `sack_yards_lost` | integer |  |
+| `passing_interceptions` | integer | Total number of interceptions thrown by the team's quarterbacks during the period covered. |
+| `sacks_suffered` | integer | Total number of times the team's quarterback was sacked during the period covered. |
+| `sack_yards_lost` | integer | Total yards lost by the team's offense as a result of being sacked. |
 | `sack_fumbles` | integer | The number of sacks with a fumble. |
 | `sack_fumbles_lost` | integer | The number of sacks with a lost fumble. |
 | `passing_air_yards` | integer | Passing air yards (includes incomplete passes). |
 | `passing_yards_after_catch` | integer | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
 | `passing_first_downs` | integer | First downs on pass attempts. |
 | `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
-| `passing_cpoe` | double |  |
+| `passing_cpoe` | double | Completion percentage over expectation for the team's passing game — how much better or worse actual completion rate was versus the model-predicted rate. |
 | `passing_2pt_conversions` | integer | Two-point conversion passes. |
 | `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
 | `rushing_yards` | integer | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
@@ -4048,54 +4048,54 @@ Polars dataframe containing team stats available for the requested seasons.
 | `def_pass_defended` | integer | Number of passes defended/broken up by this player |
 | `def_tds` | integer | Number of defensive touchdowns scored by this player |
 | `def_fumbles` | integer | Number of fumbles by this player |
-| `def_safeties` | integer |  |
-| `misc_yards` | integer |  |
-| `fumble_recovery_own` | integer |  |
-| `fumble_recovery_yards_own` | integer |  |
-| `fumble_recovery_opp` | integer |  |
-| `fumble_recovery_yards_opp` | integer |  |
-| `fumble_recovery_tds` | integer |  |
+| `def_safeties` | integer | Number of safeties recorded by the team's defense (tackling an opponent in their own end zone). |
+| `misc_yards` | integer | Yards gained by the team through miscellaneous means not captured in standard rushing, passing, or return categories. |
+| `fumble_recovery_own` | integer | Number of the team's own fumbles that were recovered by the team itself. |
+| `fumble_recovery_yards_own` | integer | Total yards gained after recovering their own fumbles. |
+| `fumble_recovery_opp` | integer | Number of fumbles recovered by the team from the opposing offense (defensive fumble recoveries). |
+| `fumble_recovery_yards_opp` | integer | Total yards gained by the team on returns of opponent fumble recoveries. |
+| `fumble_recovery_tds` | integer | Number of touchdowns scored by the team on fumble recoveries (own or opponent). |
 | `penalties` | integer | Total number of penalties. |
 | `penalty_yards` | integer | Yards gained (or lost) by the posteam from the penalty. |
-| `timeouts` | integer |  |
+| `timeouts` | integer | Number of timeouts remaining or used by the team during the game or period covered. |
 | `punt_returns` | integer | Number of punt returns. |
 | `punt_return_yards` | integer | Team punt return yards. |
-| `kickoff_returns` | integer |  |
-| `kickoff_return_yards` | integer |  |
+| `kickoff_returns` | integer | Total number of kickoff return attempts by the team. |
+| `kickoff_return_yards` | integer | Total yards gained by the team on kickoff returns during the period covered. |
 | `fg_made` | integer | TRUE when the field goal attempt was successful. |
-| `fg_att` | integer |  |
-| `fg_missed` | integer |  |
-| `fg_blocked` | integer |  |
-| `fg_long` | integer |  |
+| `fg_att` | integer | Total field goal attempts by the team's kicker during the period covered. |
+| `fg_missed` | integer | Total number of field goal attempts that were missed (not blocked, not made) by the team's kicker. |
+| `fg_blocked` | integer | Total number of field goal attempts that were blocked by the opposing defense. |
+| `fg_long` | integer | Distance in yards of the team's longest successful field goal during the period covered. |
 | `fg_pct` | double | Field goal percentage (0-1). |
-| `fg_made_0_19` | integer |  |
-| `fg_made_20_29` | integer |  |
-| `fg_made_30_39` | integer |  |
-| `fg_made_40_49` | integer |  |
-| `fg_made_50_59` | integer |  |
-| `fg_made_60_` | integer |  |
-| `fg_missed_0_19` | integer |  |
-| `fg_missed_20_29` | integer |  |
-| `fg_missed_30_39` | integer |  |
-| `fg_missed_40_49` | integer |  |
-| `fg_missed_50_59` | integer |  |
-| `fg_missed_60_` | integer |  |
-| `fg_made_list` | character |  |
-| `fg_missed_list` | character |  |
-| `fg_blocked_list` | character |  |
-| `fg_made_distance` | integer |  |
-| `fg_missed_distance` | integer |  |
-| `fg_blocked_distance` | integer |  |
-| `pat_made` | integer |  |
-| `pat_att` | integer |  |
-| `pat_missed` | integer |  |
-| `pat_blocked` | integer |  |
-| `pat_pct` | double |  |
-| `gwfg_made` | integer |  |
-| `gwfg_att` | integer |  |
-| `gwfg_missed` | integer |  |
-| `gwfg_blocked` | integer |  |
-| `gwfg_distance` | integer |  |
+| `fg_made_0_19` | integer | Number of field goals made by the team from 0–19 yards. |
+| `fg_made_20_29` | integer | Number of field goals made by the team from 20–29 yards. |
+| `fg_made_30_39` | integer | Number of field goals made by the team from 30–39 yards. |
+| `fg_made_40_49` | integer | Number of field goals made by the team from 40–49 yards. |
+| `fg_made_50_59` | integer | Number of field goals made by the team from 50–59 yards. |
+| `fg_made_60_` | integer | Number of field goals made by the team from 60 yards or longer. |
+| `fg_missed_0_19` | integer | Number of field goal attempts missed from 0–19 yards. |
+| `fg_missed_20_29` | integer | Number of field goal attempts missed from 20–29 yards. |
+| `fg_missed_30_39` | integer | Number of field goal attempts missed from 30–39 yards. |
+| `fg_missed_40_49` | integer | Number of field goal attempts missed from 40–49 yards. |
+| `fg_missed_50_59` | integer | Number of field goal attempts missed from 50–59 yards. |
+| `fg_missed_60_` | integer | Number of field goal attempts missed from 60 yards or longer. |
+| `fg_made_list` | character | Comma-separated list of distances (in yards) for each successful field goal made by the team. |
+| `fg_missed_list` | character | Comma-separated list of distances (in yards) for each missed field goal attempt by the team. |
+| `fg_blocked_list` | character | Comma-separated list of distances (in yards) for field goal attempts blocked by or against the team. |
+| `fg_made_distance` | integer | Total cumulative distance in yards of all successful field goals made by the team. |
+| `fg_missed_distance` | integer | Total cumulative distance in yards of all missed field goal attempts by the team. |
+| `fg_blocked_distance` | integer | Distance in yards of the most recent or representative blocked field goal attempt. |
+| `pat_made` | integer | Total number of extra points successfully kicked by the team. |
+| `pat_att` | integer | Total number of extra point (PAT) kick attempts by the team. |
+| `pat_missed` | integer | Number of extra point kick attempts that were missed (neither made nor blocked). |
+| `pat_blocked` | integer | Number of extra point attempts that were blocked by the opposing defense. |
+| `pat_pct` | double | Extra point conversion percentage (pat_made divided by pat_att) for the team's kicker. |
+| `gwfg_made` | integer | Number of game-winning field goals successfully converted by the team's kicker. |
+| `gwfg_att` | integer | Number of game-winning field goal attempts (potential go-ahead kicks in the final moments). |
+| `gwfg_missed` | integer | Number of game-winning field goal attempts that were missed by the team's kicker. |
+| `gwfg_blocked` | integer | Number of game-winning field goal attempts that were blocked by the opposing defense. |
+| `gwfg_distance` | integer | Distance in yards of the game-winning field goal attempt(s) during the period covered. |
 
 **Example**
 
@@ -4131,19 +4131,19 @@ Polars dataframe containing teams available.
 | `team_abbr` | character | Official team abbreveation |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_id` | integer | Unique team identifier. |
-| `team_nick` | character |  |
-| `team_conf` | character |  |
-| `team_division` | character |  |
+| `team_nick` | character | Team nickname or mascot name (e.g., 'Chiefs', 'Patriots'). |
+| `team_conf` | character | Conference the team belongs to (e.g., 'AFC', 'NFC'). |
+| `team_division` | character | Division within the conference the team belongs to (e.g., 'AFC East'). |
 | `team_color` | character | Team primary color (hex without leading '#'). |
-| `team_color2` | character |  |
-| `team_color3` | character |  |
-| `team_color4` | character |  |
-| `team_logo_wikipedia` | character |  |
-| `team_logo_espn` | character |  |
-| `team_wordmark` | character |  |
-| `team_conference_logo` | character |  |
-| `team_league_logo` | character |  |
-| `team_logo_squared` | character |  |
+| `team_color2` | character | Secondary brand color for the team, expressed as a hex color code. |
+| `team_color3` | character | Tertiary brand color for the team, expressed as a hex color code. |
+| `team_color4` | character | Quaternary brand color for the team, expressed as a hex color code. |
+| `team_logo_wikipedia` | character | URL of the team's logo image as hosted on Wikipedia. |
+| `team_logo_espn` | character | URL of the team's primary logo as hosted on ESPN. |
+| `team_wordmark` | character | URL of the team's wordmark (text-based logo) image. |
+| `team_conference_logo` | character | URL of the conference logo image associated with the team. |
+| `team_league_logo` | character | URL of the NFL league logo image. |
+| `team_logo_squared` | character | URL of a square-format version of the team's logo. |
 
 **Example**
 
@@ -4975,68 +4975,68 @@ A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has 
 |---|---|---|
 | `game_id` | character | Ten digit identifier for NFL game. |
 | `home_team` | character | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
-| `visitor_team` | character |  |
-| `clockTime` | character |  |
+| `visitor_team` | character | Abbreviation or name of the visiting (away) team in this game. |
+| `clockTime` | character | Game clock time at the start of the play, formatted as MM:SS within the quarter. |
 | `down` | integer | The down for the given play. |
-| `driveNetYards` | integer |  |
-| `drivePlayCount` | integer |  |
-| `driveSequenceNumber` | integer |  |
-| `driveTimeOfPossession` | character |  |
-| `endClockTime` | character |  |
-| `endYardLine` | character |  |
-| `firstDown` | logical |  |
-| `goalToGo` | logical |  |
-| `isBigPlay` | character |  |
-| `latestPlay` | character |  |
-| `nextPlayIsGoalToGo` | logical |  |
-| `nextPlayType` | character |  |
-| `orderSequence` | integer |  |
-| `penaltyOnPlay` | logical |  |
-| `playClock` | integer |  |
-| `playReviewStatus` | character |  |
-| `playDeleted` | logical |  |
-| `playDescription` | character |  |
-| `playDescriptionWithJerseyNumbers` | character |  |
+| `driveNetYards` | integer | Net yards gained on the current drive up to and including this play. |
+| `drivePlayCount` | integer | Number of offensive plays run on the current drive up to and including this play. |
+| `driveSequenceNumber` | integer | Sequential identifier for the drive within the game, starting at 1. |
+| `driveTimeOfPossession` | character | Elapsed time of possession for the current drive, formatted as MM:SS. |
+| `endClockTime` | character | Game clock time at the end of the play, formatted as MM:SS within the quarter. |
+| `endYardLine` | character | Yard line where the ball was placed at the conclusion of the play. |
+| `firstDown` | logical | Indicates whether the play resulted in a first down. |
+| `goalToGo` | logical | Indicates whether the offensive team is in a goal-to-go situation at the start of the play. |
+| `isBigPlay` | character | Classification label indicating whether this play is designated as a big play by the NFL. |
+| `latestPlay` | character | Indicates whether this play is the most recent play recorded in the live feed. |
+| `nextPlayIsGoalToGo` | logical | Indicates whether the next play will begin in a goal-to-go situation. |
+| `nextPlayType` | character | Play type category anticipated or assigned to the next play in sequence. |
+| `orderSequence` | integer | Sequential ordering value used to sort plays within the game in chronological order. |
+| `penaltyOnPlay` | logical | Indicates whether a penalty was called on this play. |
+| `playClock` | integer | Play clock value in seconds at the snap of the ball. |
+| `playReviewStatus` | character | Status of any official review of the play (e.g., confirmed, overturned, stands). |
+| `playDeleted` | logical | Indicates whether this play record has been marked as deleted or voided. |
+| `playDescription` | character | Official text description of the play as provided by the NFL. |
+| `playDescriptionWithJerseyNumbers` | character | Play description text augmented with player jersey numbers for participant identification. |
 | `playId` | integer | Unique play event identifier (UUID). |
-| `playStats` | integer |  |
-| `playType` | character |  |
-| `prePlayByPlay` | character |  |
-| `quarter` | integer |  |
-| `scoringPlay` | logical |  |
-| `scoringPlayType` | character |  |
-| `scoringTeam` | character |  |
-| `shortDescription` | character |  |
-| `specialTeamsPlay` | logical |  |
-| `stPlayType` | character |  |
-| `timeOfDay` | character |  |
-| `yardLine` | character |  |
+| `playStats` | integer | Internal NFL stat identifier linking this play to associated statistical records. |
+| `playType` | character | Categorical classification of the play type (e.g., PASS, RUSH, PUNT, KICKOFF). |
+| `prePlayByPlay` | character | Narrative text describing the game situation or setup immediately before this play. |
+| `quarter` | integer | Game quarter in which the play occurred (1–4 for regulation, 5 for overtime). |
+| `scoringPlay` | logical | Indicates whether this play resulted in points being scored. |
+| `scoringPlayType` | character | Type of scoring event on this play (e.g., TD, FG, SAFETY, PAT). |
+| `scoringTeam` | character | Abbreviation or identifier of the team that scored on this play, if applicable. |
+| `shortDescription` | character | Short narrative summary of the play outcome (e.g., 'PENALTY', 'TOUCHDOWN'). |
+| `specialTeamsPlay` | logical | Indicates whether this play was a special teams play. |
+| `stPlayType` | character | Special teams play sub-type classification (e.g., PUNT, KICKOFF, FG_ATTEMPT) when applicable. |
+| `timeOfDay` | character | Wall-clock time of day when the play occurred, typically in local or Eastern time. |
+| `yardLine` | character | Yard line on the field where the ball was placed at the start of the play. |
 | `yards` | integer | The number of receiving yards |
-| `yardsToGo` | integer |  |
-| `possessionTeam_id` | character |  |
-| `possessionTeam_abbreviation` | character |  |
-| `possessionTeam_nickName` | character |  |
-| `possessionTeam_franchise_primaryColor` | character |  |
-| `possessionTeam_franchise_secondaryColor` | character |  |
-| `possessionTeam_franchise_tertiaryColor` | character |  |
-| `possessionTeam_franchise_currentLogo` | character |  |
-| `possessionTeam_franchise_largeTypeColor` | character |  |
-| `possessionTeam_franchise_decorativeElementsColor` | character |  |
-| `scoringTeam_id` | character |  |
-| `scoringTeam_abbreviation` | character |  |
-| `scoringTeam_nickName` | character |  |
-| `scoringTeam_franchise_primaryColor` | character |  |
-| `scoringTeam_franchise_secondaryColor` | character |  |
-| `scoringTeam_franchise_tertiaryColor` | character |  |
-| `scoringTeam_franchise_currentLogo` | character |  |
-| `scoringTeam_franchise_largeTypeColor` | character |  |
-| `scoringTeam_franchise_decorativeElementsColor` | character |  |
+| `yardsToGo` | integer | Number of yards needed to gain a first down at the start of the play. |
+| `possessionTeam_id` | character | NFL.com Shield API identifier for the team with offensive possession on this play. |
+| `possessionTeam_abbreviation` | character | Abbreviated team name for the team with offensive possession on this play. |
+| `possessionTeam_nickName` | character | Nickname (mascot name) of the team with offensive possession on this play. |
+| `possessionTeam_franchise_primaryColor` | character | Primary brand color for the possessing team's franchise, expressed as a hex color code. |
+| `possessionTeam_franchise_secondaryColor` | character | Secondary brand color for the possessing team's franchise, expressed as a hex color code. |
+| `possessionTeam_franchise_tertiaryColor` | character | Tertiary brand color for the possessing team's franchise, expressed as a hex color code. |
+| `possessionTeam_franchise_currentLogo` | character | URL of the current primary logo for the possessing team's franchise. |
+| `possessionTeam_franchise_largeTypeColor` | character | Large-type display color for the possessing team's franchise branding, as a hex code. |
+| `possessionTeam_franchise_decorativeElementsColor` | character | Decorative elements color for the possessing team's franchise branding, as a hex code. |
+| `scoringTeam_id` | character | NFL.com Shield API identifier for the team that scored on this play. |
+| `scoringTeam_abbreviation` | character | Abbreviated team name for the team that scored on this play. |
+| `scoringTeam_nickName` | character | Nickname (mascot name) of the team that scored on this play. |
+| `scoringTeam_franchise_primaryColor` | character | Primary brand color for the scoring team's franchise, expressed as a hex color code. |
+| `scoringTeam_franchise_secondaryColor` | character | Secondary brand color for the scoring team's franchise, expressed as a hex color code. |
+| `scoringTeam_franchise_tertiaryColor` | character | Tertiary brand color for the scoring team's franchise, expressed as a hex color code. |
+| `scoringTeam_franchise_currentLogo` | character | URL of the current primary logo for the scoring team's franchise. |
+| `scoringTeam_franchise_largeTypeColor` | character | Large-type display color for the scoring team's franchise branding, as a hex code. |
+| `scoringTeam_franchise_decorativeElementsColor` | character | Decorative elements color for the scoring team's franchise branding, as a hex code. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_game_pbp
->>> pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
->>> pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
+from sportsdataverse.nfl import nfl_game_pbp
+pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
+pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
 ```
 
 ### `nfl_game_schedule(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_schedule}
@@ -5118,17 +5118,17 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 | col_name | type | description |
 |---|---|---|
 | `side` | character | "home" or "visitor" -- which team's roster the row belongs to. |
-| `gameId` | character |  |
-| `esbId` | character |  |
-| `teamId` | character |  |
-| `teamAbbr` | character |  |
-| `shortName` | character |  |
+| `gameId` | character | Unique identifier for the NFL game in the NGS/Shield data system. |
+| `esbId` | character | Elias Sports Bureau identifier for the player, used to link to official NFL records and statistics. |
+| `teamId` | character | Unique numeric identifier for the player's team in the NFL NGS/Shield data system. |
+| `teamAbbr` | character | Two- or three-letter abbreviation identifying the player's team (e.g., 'KC', 'PHI'). |
+| `shortName` | character | Abbreviated display name of the player (e.g., 'P.Mahomes') used in compact UI contexts. |
 | `position` | character | Primary position as reported by NFL.com |
-| `jerseyNumber` | integer |  |
-| `playerName` | character |  |
-| `zones` | integer |  |
-| `passYards` | integer |  |
-| `touchdowns` | integer |  |
+| `jerseyNumber` | integer | Jersey number worn by the player during the game. |
+| `playerName` | character | Full display name of the player as shown in the NFL Next Gen Stats gamecenter. |
+| `zones` | integer | Serialized or structured representation of field zones targeted or covered by the player during the game. |
+| `passYards` | integer | Total passing yards accumulated by the player (relevant for quarterbacks) in the NGS gamecenter overview. |
+| `touchdowns` | integer | Total number of touchdowns scored or thrown by the player in the NGS gamecenter overview. |
 | `interceptions` | integer | The number of interceptions thrown. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
 | `completions` | integer | The number of completed passes. |
@@ -5137,9 +5137,9 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_gamecenter_overview
->>> ov = nfl_ngs_gamecenter_overview(game_id="2024090500", group="passers")
->>> ov.select(["side", "playerName", "position"]).head()
+from sportsdataverse.nfl import nfl_ngs_gamecenter_overview
+ov = nfl_ngs_gamecenter_overview(game_id="2024090500", group="passers")
+ov.select(["side", "playerName", "position"]).head()
 ```
 
 ### `nfl_ngs_leaders(category: 'str' = 'speed', season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_leaders}
@@ -5179,66 +5179,66 @@ A polars (or pandas) `DataFrame`, one row per leader entry.
 
 | col_name | type | description |
 |---|---|---|
-| `leader_esbId` | character |  |
-| `leader_firstName` | character |  |
-| `leader_gsisId` | character |  |
-| `leader_jerseyNumber` | integer |  |
-| `leader_lastName` | character |  |
-| `leader_playerName` | character |  |
-| `leader_position` | character |  |
-| `leader_positionGroup` | character |  |
-| `leader_shortName` | character |  |
-| `leader_teamAbbr` | character |  |
-| `leader_teamId` | character |  |
-| `leader_week` | integer |  |
-| `leader_yards` | integer |  |
-| `leader_inPlayDist` | double |  |
-| `leader_maxSpeed` | double |  |
-| `leader_headshot` | character |  |
-| `play_gameId` | integer |  |
-| `play_playId` | integer |  |
-| `play_sequence` | integer |  |
-| `play_down` | integer |  |
-| `play_gameClock` | character |  |
-| `play_gameKey` | integer |  |
-| `play_health_playerTracking` | character |  |
-| `play_health_ballTracking` | character |  |
-| `play_homeScore` | integer |  |
-| `play_isBigPlay` | logical |  |
-| `play_isEndQuarter` | logical |  |
-| `play_isGoalToGo` | logical |  |
-| `play_isPenalty` | logical |  |
-| `play_isSTPlay` | logical |  |
-| `play_isScoring` | logical |  |
-| `play_playDescription` | character |  |
-| `play_playState` | character |  |
-| `play_playStats` | integer |  |
-| `play_playType` | character |  |
-| `play_playTypeCode` | integer |  |
-| `play_possessionTeamId` | character |  |
-| `play_preSnapHomeScore` | integer |  |
-| `play_preSnapVisitorScore` | integer |  |
-| `play_quarter` | integer |  |
-| `play_timeOfDayUTC` | character |  |
-| `play_visitorScore` | integer |  |
-| `play_yardline` | character |  |
-| `play_yardlineNumber` | integer |  |
-| `play_yardlineSide` | character |  |
-| `play_yardsToGo` | integer |  |
-| `play_absoluteYardlineNumber` | integer |  |
-| `play_actualYardlineForFirstDown` | double |  |
-| `play_actualYardsToGo` | double |  |
-| `play_endGameClock` | character |  |
-| `play_isChangeOfPossession` | logical |  |
-| `play_playDirection` | character |  |
-| `play_startGameClock` | character |  |
+| `leader_esbId` | character | Elias Sports Bureau identifier for the statistical leader, used to link to official NFL records. |
+| `leader_firstName` | character | First name of the statistical leader player. |
+| `leader_gsisId` | character | NFL GSIS (Game Statistics and Information System) identifier for the statistical leader player. |
+| `leader_jerseyNumber` | integer | Jersey number worn by the statistical leader player. |
+| `leader_lastName` | character | Last name of the statistical leader player. |
+| `leader_playerName` | character | Full display name of the statistical leader player as shown in NFL NGS. |
+| `leader_position` | character | Specific position designation of the statistical leader (e.g., 'QB', 'WR', 'CB'). |
+| `leader_positionGroup` | character | Broader position group of the statistical leader (e.g., 'Offense', 'Defense', 'Special Teams'). |
+| `leader_shortName` | character | Abbreviated display name of the statistical leader (e.g., 'P.Mahomes') for compact UI usage. |
+| `leader_teamAbbr` | character | Two- or three-letter abbreviation identifying the statistical leader's team. |
+| `leader_teamId` | character | Unique numeric identifier for the statistical leader's team in the NFL NGS/Shield system. |
+| `leader_week` | integer | NFL week number during which the statistical leader achieved the highlighted performance. |
+| `leader_yards` | integer | Total yards associated with the statistical leader's highlighted play or performance metric. |
+| `leader_inPlayDist` | double | Total in-play distance traveled (in yards) by the statistical leader during the highlighted play. |
+| `leader_maxSpeed` | double | Maximum recorded speed (in miles per hour) reached by the statistical leader during the highlighted play. |
+| `leader_headshot` | character | URL to the player's official headshot image as provided by the NFL NGS system. |
+| `play_gameId` | integer | Unique identifier for the NFL game in which the highlighted play occurred. |
+| `play_playId` | integer | Unique identifier for the specific play within the game in the NFL NGS/Shield system. |
+| `play_sequence` | integer | Sequential order number of the play within the game or drive as recorded in the NGS system. |
+| `play_down` | integer | Down number (1–4) on which the highlighted play occurred. |
+| `play_gameClock` | character | Game clock time (MM:SS) at the start of the highlighted play. |
+| `play_gameKey` | integer | Alternate numeric key for the NFL game in which the highlighted play occurred, used in official NFL systems. |
+| `play_health_playerTracking` | character | Indicator of whether player-tracking data from the NGS health/tracking system is available for this play. |
+| `play_health_ballTracking` | character | Indicator of whether ball-tracking data from the NGS health/tracking system is available for this play. |
+| `play_homeScore` | integer | Home team's score at the time of the highlighted play. |
+| `play_isBigPlay` | logical | Boolean flag indicating whether the highlighted play is classified as a 'big play' in the NGS system. |
+| `play_isEndQuarter` | logical | Boolean flag indicating whether the highlighted play occurred at the end of a quarter. |
+| `play_isGoalToGo` | logical | Boolean flag indicating whether the highlighted play occurred in a goal-to-go situation. |
+| `play_isPenalty` | logical | Boolean flag indicating whether the highlighted play involved a penalty. |
+| `play_isSTPlay` | logical | Boolean flag indicating whether the highlighted play was a special teams play. |
+| `play_isScoring` | logical | Boolean flag indicating whether the highlighted play resulted in a score. |
+| `play_playDescription` | character | Full text description of the highlighted play as recorded by official NFL scorers. |
+| `play_playState` | character | State or status of the highlighted play (e.g., 'APPROVED', 'CHALLENGED') in the NGS system. |
+| `play_playStats` | integer | Serialized statistical outcomes or stat codes associated with the highlighted play. |
+| `play_playType` | character | Text label describing the type of the highlighted play (e.g., 'PASS', 'RUSH', 'KICK'). |
+| `play_playTypeCode` | integer | Numeric or short code identifying the play type of the highlighted play in the NGS system. |
+| `play_possessionTeamId` | character | Unique identifier for the team that had possession of the ball during the highlighted play. |
+| `play_preSnapHomeScore` | integer | Home team's score immediately before the snap on the highlighted play. |
+| `play_preSnapVisitorScore` | integer | Visitor team's score immediately before the snap on the highlighted play. |
+| `play_quarter` | integer | Quarter (1–4, or 5 for overtime) in which the highlighted play occurred. |
+| `play_timeOfDayUTC` | character | Wall-clock timestamp in UTC representing the real-world time the highlighted play occurred. |
+| `play_visitorScore` | integer | Visitor team's score at the time of the highlighted play. |
+| `play_yardline` | character | Formatted yard line string (e.g., 'KC 35') indicating the field position of the highlighted play. |
+| `play_yardlineNumber` | integer | Numeric yard line (1–50) indicating the field position of the highlighted play. |
+| `play_yardlineSide` | character | Team abbreviation indicating which team's side of the field the highlighted play occurred on. |
+| `play_yardsToGo` | integer | Number of yards needed for a first down at the start of the highlighted play. |
+| `play_absoluteYardlineNumber` | integer | Absolute yard line number (1–100) on the field where the highlighted play occurred. |
+| `play_actualYardlineForFirstDown` | double | Yard line the offense must reach to convert a first down on the highlighted play. |
+| `play_actualYardsToGo` | double | Actual distance in yards the offense needed to gain a first down on the highlighted play. |
+| `play_endGameClock` | character | Game clock time (MM:SS) at the end of the highlighted play. |
+| `play_isChangeOfPossession` | logical | Boolean flag indicating whether the highlighted play resulted in a change of ball possession. |
+| `play_playDirection` | character | Direction of the highlighted play on the field (e.g., left, middle, right). |
+| `play_startGameClock` | character | Game clock time (MM:SS) at the start of the highlighted play. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_leaders
->>> fast = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
->>> fast.select(["leader_playerName", "leader_maxSpeed", "play_playDescription"]).head()
+from sportsdataverse.nfl import nfl_ngs_leaders
+fast = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+fast.select(["leader_playerName", "leader_maxSpeed", "play_playDescription"]).head()
 ```
 
 ### `nfl_ngs_league_schedule(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_league_schedule}
@@ -5266,81 +5266,81 @@ A polars (or pandas) `DataFrame`, one row per scheduled game.
 
 | col_name | type | description |
 |---|---|---|
-| `gameKey` | integer |  |
+| `gameKey` | integer | Legacy NFL game key used as an alternative identifier in the NGS scheduling system. |
 | `gameDate` | character | Game date-time (ISO 8601, UTC). |
-| `gameId` | integer |  |
-| `gameTime` | character |  |
-| `gameTimeEastern` | character |  |
+| `gameId` | integer | NFL Next Gen Stats integer identifier for the game. |
+| `gameTime` | character | Scheduled kickoff time for the game in local or UTC format. |
+| `gameTimeEastern` | character | Scheduled kickoff time for the game expressed in Eastern Time. |
 | `gameType` | character | Game type identifier (3 for playoffs). |
-| `homeDisplayName` | character |  |
-| `homeNickname` | character |  |
-| `homeTeamAbbr` | character |  |
-| `homeTeamId` | character |  |
-| `isoTime` | integer |  |
-| `networkChannel` | character |  |
-| `ngsGame` | logical |  |
+| `homeDisplayName` | character | Full display name of the home team (e.g., 'Kansas City Chiefs'). |
+| `homeNickname` | character | Nickname (mascot name) of the home team (e.g., 'Chiefs'). |
+| `homeTeamAbbr` | character | Abbreviated team name for the home team at the schedule row level. |
+| `homeTeamId` | character | NFL Next Gen Stats team identifier for the home team at the schedule row level. |
+| `isoTime` | integer | Scheduled kickoff time expressed as a Unix timestamp (milliseconds since epoch). |
+| `networkChannel` | character | Television network or channel broadcasting this game (e.g., 'NBC', 'ESPN'). |
+| `ngsGame` | logical | Indicates whether this game has full Next Gen Stats data collection enabled. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `smartId` | character |  |
-| `visitorDisplayName` | character |  |
-| `visitorNickname` | character |  |
-| `visitorTeamAbbr` | character |  |
-| `visitorTeamId` | character |  |
+| `seasonType` | character | Season segment in which the game occurs (e.g., 'REG' for regular season, 'POST' for playoffs). |
+| `smartId` | character | NFL Next Gen Stats smart (UUID-style) identifier for this scheduled game. |
+| `visitorDisplayName` | character | Full display name of the visiting (away) team (e.g., 'San Francisco 49ers'). |
+| `visitorNickname` | character | Nickname (mascot name) of the visiting team (e.g., '49ers'). |
+| `visitorTeamAbbr` | character | Abbreviated team name for the visiting team at the schedule row level. |
+| `visitorTeamId` | character | NFL Next Gen Stats team identifier for the visiting team at the schedule row level. |
 | `week` | integer | Season week. |
-| `weekNameAbbr` | character |  |
-| `liveDotsGame` | logical |  |
-| `validated` | logical |  |
-| `releasedToClubs` | logical |  |
-| `homeTeam_teamId` | character |  |
-| `homeTeam_smartId` | character |  |
-| `homeTeam_logo` | character |  |
-| `homeTeam_abbr` | character |  |
-| `homeTeam_cityState` | character |  |
-| `homeTeam_fullName` | character |  |
-| `homeTeam_nick` | character |  |
-| `homeTeam_teamType` | character |  |
-| `homeTeam_conferenceAbbr` | character |  |
-| `homeTeam_divisionAbbr` | character |  |
-| `site_smartId` | character |  |
-| `site_siteId` | integer |  |
-| `site_siteFullName` | character |  |
-| `site_siteCity` | character |  |
-| `site_siteState` | character |  |
-| `site_postalCode` | character |  |
-| `site_roofType` | character |  |
-| `visitorTeam_teamId` | character |  |
-| `visitorTeam_smartId` | character |  |
-| `visitorTeam_logo` | character |  |
-| `visitorTeam_abbr` | character |  |
-| `visitorTeam_cityState` | character |  |
-| `visitorTeam_fullName` | character |  |
-| `visitorTeam_nick` | character |  |
-| `visitorTeam_teamType` | character |  |
-| `visitorTeam_conferenceAbbr` | character |  |
-| `visitorTeam_divisionAbbr` | character |  |
-| `score_time` | character |  |
-| `score_phase` | character |  |
-| `score_visitorTeamScore_pointTotal` | integer |  |
-| `score_visitorTeamScore_pointQ1` | integer |  |
-| `score_visitorTeamScore_pointQ2` | integer |  |
-| `score_visitorTeamScore_pointQ3` | integer |  |
-| `score_visitorTeamScore_pointQ4` | integer |  |
-| `score_visitorTeamScore_pointOT` | integer |  |
-| `score_visitorTeamScore_timeoutsRemaining` | integer |  |
-| `score_homeTeamScore_pointTotal` | integer |  |
-| `score_homeTeamScore_pointQ1` | integer |  |
-| `score_homeTeamScore_pointQ2` | integer |  |
-| `score_homeTeamScore_pointQ3` | integer |  |
-| `score_homeTeamScore_pointQ4` | integer |  |
-| `score_homeTeamScore_pointOT` | integer |  |
-| `score_homeTeamScore_timeoutsRemaining` | integer |  |
+| `weekNameAbbr` | character | Abbreviated label for the week of the season (e.g., 'WK1', 'WC' for Wild Card). |
+| `liveDotsGame` | logical | Indicates whether this game has live player-tracking dot data available via NGS. |
+| `validated` | logical | Indicates whether the schedule entry has been validated and confirmed by the NFL. |
+| `releasedToClubs` | logical | Indicates whether NGS data for this game has been released to team personnel. |
+| `homeTeam_teamId` | character | NFL Next Gen Stats integer team identifier for the home team from the nested team object. |
+| `homeTeam_smartId` | character | NFL Next Gen Stats smart (UUID-style) identifier for the home team. |
+| `homeTeam_logo` | character | URL of the home team's logo from the nested team object. |
+| `homeTeam_abbr` | character | Abbreviated team name for the home team from the nested team object. |
+| `homeTeam_cityState` | character | City and state of the home team as provided in the nested team object. |
+| `homeTeam_fullName` | character | Full official name of the home team from the nested team object. |
+| `homeTeam_nick` | character | Nickname of the home team from the nested team object. |
+| `homeTeam_teamType` | character | Classification of the home team type (e.g., 'NFL' for active franchises). |
+| `homeTeam_conferenceAbbr` | character | Conference abbreviation for the home team from the nested team object (e.g., 'AFC'). |
+| `homeTeam_divisionAbbr` | character | Division abbreviation for the home team from the nested team object (e.g., 'AFC West'). |
+| `site_smartId` | character | NFL Next Gen Stats smart (UUID-style) identifier for the game venue. |
+| `site_siteId` | integer | NFL Next Gen Stats integer identifier for the game venue. |
+| `site_siteFullName` | character | Full official name of the game venue (e.g., 'Arrowhead Stadium'). |
+| `site_siteCity` | character | City where the game venue is located. |
+| `site_siteState` | character | State (or country for international games) where the game venue is located. |
+| `site_postalCode` | character | Postal (ZIP) code of the venue where the game is played. |
+| `site_roofType` | character | Roof type of the game venue (e.g., 'OUTDOOR', 'DOME', 'RETRACTABLE'). |
+| `visitorTeam_teamId` | character | NFL Next Gen Stats integer team identifier for the visiting team from the nested team object. |
+| `visitorTeam_smartId` | character | NFL Next Gen Stats smart (UUID-style) identifier for the visiting team. |
+| `visitorTeam_logo` | character | URL of the visiting team's logo from the nested team object. |
+| `visitorTeam_abbr` | character | Abbreviated team name for the visiting team from the nested team object. |
+| `visitorTeam_cityState` | character | City and state of the visiting team as provided in the nested team object. |
+| `visitorTeam_fullName` | character | Full official name of the visiting team from the nested team object. |
+| `visitorTeam_nick` | character | Nickname of the visiting team from the nested team object. |
+| `visitorTeam_teamType` | character | Classification of the visiting team type (e.g., 'NFL' for active franchises). |
+| `visitorTeam_conferenceAbbr` | character | Conference abbreviation for the visiting team from the nested team object (e.g., 'NFC'). |
+| `visitorTeam_divisionAbbr` | character | Division abbreviation for the visiting team from the nested team object (e.g., 'NFC West'). |
+| `score_time` | character | Game clock time at the current state as reported by the live score sub-object. |
+| `score_phase` | character | Current phase or status of the game as reported by the live score sub-object (e.g., 'FINAL', 'IN_PROGRESS'). |
+| `score_visitorTeamScore_pointTotal` | integer | Visitor team total points scored through the current game state, from the live score sub-object. |
+| `score_visitorTeamScore_pointQ1` | integer | Visitor team points scored in the first quarter, from the live score sub-object. |
+| `score_visitorTeamScore_pointQ2` | integer | Visitor team points scored in the second quarter, from the live score sub-object. |
+| `score_visitorTeamScore_pointQ3` | integer | Visitor team points scored in the third quarter, from the live score sub-object. |
+| `score_visitorTeamScore_pointQ4` | integer | Visitor team points scored in the fourth quarter, from the live score sub-object. |
+| `score_visitorTeamScore_pointOT` | integer | Visitor team points scored in overtime, from the live score sub-object. |
+| `score_visitorTeamScore_timeoutsRemaining` | integer | Number of timeouts remaining for the visitor team, from the live score sub-object. |
+| `score_homeTeamScore_pointTotal` | integer | Home team total points scored through the current game state, from the live score sub-object. |
+| `score_homeTeamScore_pointQ1` | integer | Home team points scored in the first quarter, from the live score sub-object. |
+| `score_homeTeamScore_pointQ2` | integer | Home team points scored in the second quarter, from the live score sub-object. |
+| `score_homeTeamScore_pointQ3` | integer | Home team points scored in the third quarter, from the live score sub-object. |
+| `score_homeTeamScore_pointQ4` | integer | Home team points scored in the fourth quarter, from the live score sub-object. |
+| `score_homeTeamScore_pointOT` | integer | Home team points scored in overtime, from the live score sub-object. |
+| `score_homeTeamScore_timeoutsRemaining` | integer | Number of timeouts remaining for the home team, from the live score sub-object. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_league_schedule
->>> sched = nfl_ngs_league_schedule(season=2024, season_type="REG", week=1)
->>> first_game_id = sched["gameId"][0]
+from sportsdataverse.nfl import nfl_ngs_league_schedule
+sched = nfl_ngs_league_schedule(season=2024, season_type="REG", week=1)
+first_game_id = sched["gameId"][0]
 ```
 
 ### `nfl_ngs_league_schedule_current(return_as_pandas: 'bool' = False)` {#nfl_ngs_league_schedule_current}
@@ -5362,80 +5362,80 @@ A polars (or pandas) `DataFrame`, one row per game in the current week.
 
 | col_name | type | description |
 |---|---|---|
-| `gameKey` | integer |  |
+| `gameKey` | integer | Alternate numeric key for the NFL game used in official NFL NGS record-keeping. |
 | `gameDate` | character | Game date-time (ISO 8601, UTC). |
-| `gameId` | integer |  |
-| `gameTime` | character |  |
-| `gameTimeEastern` | character |  |
+| `gameId` | integer | Unique identifier for the NFL game in the NGS/Shield data system. |
+| `gameTime` | character | Scheduled kickoff time for the game in local or ET representation. |
+| `gameTimeEastern` | character | Scheduled kickoff time for the game in Eastern Time (ET), as published by the NFL. |
 | `gameType` | character | Game type identifier (3 for playoffs). |
-| `homeDisplayName` | character |  |
-| `homeNickname` | character |  |
-| `homeTeamAbbr` | character |  |
-| `homeTeamId` | character |  |
-| `isoTime` | integer |  |
-| `networkChannel` | character |  |
-| `ngsGame` | logical |  |
+| `homeDisplayName` | character | Full display name of the home team (e.g., 'Kansas City Chiefs') for the scheduled game. |
+| `homeNickname` | character | Nickname of the home team (e.g., 'Chiefs') for the scheduled game. |
+| `homeTeamAbbr` | character | Two- or three-letter abbreviation identifying the home team at the top-level game record. |
+| `homeTeamId` | character | Unique numeric identifier for the home team at the top-level game record. |
+| `isoTime` | integer | ISO 8601 formatted datetime string representing the scheduled kickoff time of the game. |
+| `networkChannel` | character | Broadcast network or channel airing the game (e.g., 'NBC', 'ESPN', 'FOX'). |
+| `ngsGame` | logical | Boolean or indicator flag marking whether this game entry is an official NGS-tracked game. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `smartId` | character |  |
-| `visitorDisplayName` | character |  |
-| `visitorNickname` | character |  |
-| `visitorTeamAbbr` | character |  |
-| `visitorTeamId` | character |  |
+| `seasonType` | character | Season type classification for the game (e.g., 'REG' for regular season, 'POST' for playoffs, 'PRE' for preseason). |
+| `smartId` | character | Smart ID (NGS/Shield internal identifier) for the game record itself. |
+| `visitorDisplayName` | character | Full display name of the visiting team (e.g., 'Philadelphia Eagles') for the scheduled game. |
+| `visitorNickname` | character | Nickname of the visiting team (e.g., 'Eagles') for the scheduled game. |
+| `visitorTeamAbbr` | character | Two- or three-letter abbreviation identifying the visiting team at the top-level game record. |
+| `visitorTeamId` | character | Unique numeric identifier for the visiting team at the top-level game record. |
 | `week` | integer | Season week. |
-| `weekNameAbbr` | character |  |
-| `releasedToClubs` | logical |  |
-| `validated` | logical |  |
-| `homeTeam_teamId` | character |  |
-| `homeTeam_smartId` | character |  |
-| `homeTeam_logo` | character |  |
-| `homeTeam_abbr` | character |  |
-| `homeTeam_cityState` | character |  |
-| `homeTeam_fullName` | character |  |
-| `homeTeam_nick` | character |  |
-| `homeTeam_teamType` | character |  |
-| `homeTeam_conferenceAbbr` | character |  |
-| `homeTeam_divisionAbbr` | character |  |
-| `site_smartId` | character |  |
-| `site_siteId` | integer |  |
-| `site_siteFullName` | character |  |
-| `site_siteCity` | character |  |
-| `site_siteState` | character |  |
-| `site_postalCode` | character |  |
-| `site_roofType` | character |  |
-| `visitorTeam_teamId` | character |  |
-| `visitorTeam_smartId` | character |  |
-| `visitorTeam_logo` | character |  |
-| `visitorTeam_abbr` | character |  |
-| `visitorTeam_cityState` | character |  |
-| `visitorTeam_fullName` | character |  |
-| `visitorTeam_nick` | character |  |
-| `visitorTeam_teamType` | character |  |
-| `visitorTeam_conferenceAbbr` | character |  |
-| `visitorTeam_divisionAbbr` | character |  |
-| `score_time` | character |  |
-| `score_phase` | character |  |
-| `score_visitorTeamScore_pointTotal` | integer |  |
-| `score_visitorTeamScore_pointQ1` | integer |  |
-| `score_visitorTeamScore_pointQ2` | integer |  |
-| `score_visitorTeamScore_pointQ3` | integer |  |
-| `score_visitorTeamScore_pointQ4` | integer |  |
-| `score_visitorTeamScore_pointOT` | integer |  |
-| `score_visitorTeamScore_timeoutsRemaining` | integer |  |
-| `score_homeTeamScore_pointTotal` | integer |  |
-| `score_homeTeamScore_pointQ1` | integer |  |
-| `score_homeTeamScore_pointQ2` | integer |  |
-| `score_homeTeamScore_pointQ3` | integer |  |
-| `score_homeTeamScore_pointQ4` | integer |  |
-| `score_homeTeamScore_pointOT` | integer |  |
-| `score_homeTeamScore_timeoutsRemaining` | integer |  |
+| `weekNameAbbr` | character | Abbreviated name or label for the NFL week (e.g., 'WK1', 'WLD' for Wild Card) in which the game is scheduled. |
+| `releasedToClubs` | logical | Boolean flag indicating whether the schedule entry has been officially released to NFL clubs. |
+| `validated` | logical | Boolean flag indicating whether the schedule entry has been validated by NFL operations. |
+| `homeTeam_teamId` | character | Unique numeric identifier for the home team in the NFL NGS/Shield data system. |
+| `homeTeam_smartId` | character | Smart ID (NGS/Shield internal identifier) for the home team. |
+| `homeTeam_logo` | character | URL to the home team's official logo image as provided in the NGS schedule feed. |
+| `homeTeam_abbr` | character | Two- or three-letter abbreviation for the home team (e.g., 'KC'). |
+| `homeTeam_cityState` | character | City and state string for the home team's primary market (e.g., 'Kansas City, MO'). |
+| `homeTeam_fullName` | character | Full official name of the home team (e.g., 'Kansas City Chiefs'). |
+| `homeTeam_nick` | character | Short nickname of the home team (e.g., 'Chiefs') as used in the NGS system. |
+| `homeTeam_teamType` | character | Classification of the home team type (e.g., 'NFL' for a standard league franchise). |
+| `homeTeam_conferenceAbbr` | character | Conference abbreviation for the home team (e.g., 'AFC' or 'NFC'). |
+| `homeTeam_divisionAbbr` | character | Division abbreviation for the home team (e.g., 'AFC West'). |
+| `site_smartId` | character | Smart ID (NGS/Shield internal identifier) for the game venue. |
+| `site_siteId` | integer | Unique identifier for the venue or stadium in the NFL NGS/Shield data system. |
+| `site_siteFullName` | character | Full official name of the stadium or venue where the game is scheduled (e.g., 'Arrowhead Stadium'). |
+| `site_siteCity` | character | City in which the game's venue (stadium) is located. |
+| `site_siteState` | character | State (or country) in which the game's venue is located. |
+| `site_postalCode` | character | Postal (ZIP) code of the stadium or venue where the game is scheduled to be played. |
+| `site_roofType` | character | Roof type of the game venue (e.g., 'OPEN', 'DOME', 'RETRACTABLE') affecting playing conditions. |
+| `visitorTeam_teamId` | character | Unique numeric identifier for the visiting team in the NFL NGS/Shield data system. |
+| `visitorTeam_smartId` | character | Smart ID (NGS/Shield internal identifier) for the visiting team. |
+| `visitorTeam_logo` | character | URL to the visiting team's official logo image as provided in the NGS schedule feed. |
+| `visitorTeam_abbr` | character | Two- or three-letter abbreviation for the visiting team (e.g., 'PHI'). |
+| `visitorTeam_cityState` | character | City and state string for the visiting team's primary market (e.g., 'Philadelphia, PA'). |
+| `visitorTeam_fullName` | character | Full official name of the visiting team (e.g., 'Philadelphia Eagles'). |
+| `visitorTeam_nick` | character | Short nickname of the visiting team (e.g., 'Eagles') as used in the NGS system. |
+| `visitorTeam_teamType` | character | Classification of the visiting team type (e.g., 'NFL' for a standard league franchise). |
+| `visitorTeam_conferenceAbbr` | character | Conference abbreviation for the visiting team (e.g., 'AFC' or 'NFC'). |
+| `visitorTeam_divisionAbbr` | character | Division abbreviation for the visiting team (e.g., 'NFC East'). |
+| `score_time` | character | Game clock time or elapsed time associated with the current scoring state snapshot. |
+| `score_phase` | character | Current phase or status of the game (e.g., 'FINAL', 'IN_PROGRESS', 'PREGAME'). |
+| `score_visitorTeamScore_pointTotal` | integer | Visitor team's total final score (sum of all quarters and overtime) for the game. |
+| `score_visitorTeamScore_pointQ1` | integer | Visitor team's points scored in the first quarter of the game. |
+| `score_visitorTeamScore_pointQ2` | integer | Visitor team's points scored in the second quarter of the game. |
+| `score_visitorTeamScore_pointQ3` | integer | Visitor team's points scored in the third quarter of the game. |
+| `score_visitorTeamScore_pointQ4` | integer | Visitor team's points scored in the fourth quarter of the game. |
+| `score_visitorTeamScore_pointOT` | integer | Visitor team's points scored in overtime during the game, if applicable. |
+| `score_visitorTeamScore_timeoutsRemaining` | integer | Number of timeouts remaining for the visitor team at the current game state. |
+| `score_homeTeamScore_pointTotal` | integer | Home team's total final score (sum of all quarters and overtime) for the game. |
+| `score_homeTeamScore_pointQ1` | integer | Home team's points scored in the first quarter of the game. |
+| `score_homeTeamScore_pointQ2` | integer | Home team's points scored in the second quarter of the game. |
+| `score_homeTeamScore_pointQ3` | integer | Home team's points scored in the third quarter of the game. |
+| `score_homeTeamScore_pointQ4` | integer | Home team's points scored in the fourth quarter of the game. |
+| `score_homeTeamScore_pointOT` | integer | Home team's points scored in overtime during the game, if applicable. |
+| `score_homeTeamScore_timeoutsRemaining` | integer | Number of timeouts remaining for the home team at the current game state. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_league_schedule_current
->>> cur = nfl_ngs_league_schedule_current()
->>> cur.select(["gameId", "homeTeamAbbr", "visitorTeamAbbr"]).head()
+from sportsdataverse.nfl import nfl_ngs_league_schedule_current
+cur = nfl_ngs_league_schedule_current()
+cur.select(["gameId", "homeTeamAbbr", "visitorTeamAbbr"]).head()
 ```
 
 ### `nfl_ngs_league_teams(return_as_pandas: 'bool' = False)` {#nfl_ngs_league_teams}
@@ -5458,35 +5458,35 @@ A polars (or pandas) `DataFrame`, one row per team.
 
 | col_name | type | description |
 |---|---|---|
-| `abbr` | character |  |
-| `cityState` | character |  |
-| `conferenceAbbr` | character |  |
+| `abbr` | character | Official team abbreviation used by the NFL Next Gen Stats system (e.g., 'KC', 'NE'). |
+| `cityState` | character | City and state where the team is based (e.g., 'Kansas City, MO'). |
+| `conferenceAbbr` | character | Abbreviation of the conference the team belongs to (e.g., 'AFC', 'NFC'). |
 | `fullName` | character | Full name of the probable starting pitcher. |
 | `logo` | character | Team or league logo URL. |
-| `nick` | character |  |
+| `nick` | character | Team nickname or mascot name (e.g., 'Chiefs', 'Patriots'). |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `smartId` | character |  |
-| `stadiumName` | character |  |
-| `teamId` | character |  |
-| `teamSiteTicketUrl` | character |  |
-| `teamSiteUrl` | character |  |
-| `teamType` | character |  |
-| `ticketPhoneNumber` | character |  |
-| `yearFound` | integer |  |
+| `smartId` | character | NFL Next Gen Stats smart (UUID-style) identifier for the team. |
+| `stadiumName` | character | Name of the team's home stadium (e.g., 'Arrowhead Stadium'). |
+| `teamId` | character | NFL Next Gen Stats integer identifier for the team. |
+| `teamSiteTicketUrl` | character | URL for purchasing tickets via the team's official website. |
+| `teamSiteUrl` | character | URL of the team's official website. |
+| `teamType` | character | Classification of the team type within the NFL system (e.g., 'NFL' for active franchises). |
+| `ticketPhoneNumber` | character | Phone number for ticket sales inquiries for this team. |
+| `yearFound` | integer | Year the franchise was founded. |
 | `conference_id` | character | Conference identifier. |
 | `conference_abbr` | character | Conference abbreviation. |
-| `conference_fullName` | character |  |
+| `conference_fullName` | character | Full name of the conference the team belongs to (e.g., 'American Football Conference'). |
 | `division_id` | character | Division MLBAM ID. |
 | `division_abbr` | character | Division abbreviation. |
-| `division_fullName` | character |  |
-| `divisionAbbr` | character |  |
+| `division_fullName` | character | Full name of the division the team belongs to (e.g., 'AFC West'). |
+| `divisionAbbr` | character | Abbreviation of the division the team belongs to (e.g., 'AFC West'). |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_league_teams
->>> teams = nfl_ngs_league_teams()
->>> teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
+from sportsdataverse.nfl import nfl_ngs_league_teams
+teams = nfl_ngs_league_teams()
+teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
 ```
 
 ### `nfl_ngs_microsite_chart(season: 'int' = 2024, season_type: 'str' = 'REG', week=None, chart_type=None, team_id=None, limit: 'int' = 100, offset: 'int' = 0, return_as_pandas: 'bool' = False)` {#nfl_ngs_microsite_chart}
@@ -5517,43 +5517,43 @@ A polars (or pandas) `DataFrame`, one row per chart in the page.
 
 | col_name | type | description |
 |---|---|---|
-| `imageName` | character |  |
-| `esbId` | character |  |
+| `imageName` | character | Filename or label for the player image asset used on the NGS microsite chart. |
+| `esbId` | character | Elias Sports Bureau identifier for the player featured on the NGS microsite chart. |
 | `firstName` | character | Scorer first name (localized list). |
-| `gameId` | integer |  |
+| `gameId` | integer | Unique identifier for the NFL game associated with the NGS microsite chart entry. |
 | `headshot` | character | NFL headshot url for player |
 | `lastName` | character | Scorer last name (localized list). |
-| `playerName` | character |  |
+| `playerName` | character | Full display name of the player featured on the NGS microsite chart. |
 | `position` | character | Primary position as reported by NFL.com |
-| `receivingYards` | integer |  |
+| `receivingYards` | integer | Total receiving yards for the player (receiver) featured on the NGS microsite chart. |
 | `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
-| `teamId` | character |  |
+| `seasonType` | character | Season type classification for the chart entry (e.g., 'REG' for regular season, 'POST' for playoffs). |
+| `teamId` | character | Unique numeric identifier for the player's team in the NFL NGS/Shield data system. |
 | `timestamp` | integer | Response timestamp (ISO 8601). |
-| `touchdowns` | integer |  |
+| `touchdowns` | integer | Total number of touchdowns scored or thrown by the player featured on the NGS microsite chart. |
 | `type` | character | Record type / category. |
 | `week` | integer | Season week. |
-| `extraLargeImg` | character |  |
-| `playerNameSlug` | character |  |
-| `smallImg` | character |  |
-| `mediumImg` | character |  |
-| `largeImg` | character |  |
+| `extraLargeImg` | character | URL to the extra-large player image asset used on the NFL NGS microsite chart display. |
+| `playerNameSlug` | character | URL-safe slug version of the player's name used in NGS microsite routing (e.g., 'patrick-mahomes'). |
+| `smallImg` | character | URL to the small player image asset used on the NFL NGS microsite chart display. |
+| `mediumImg` | character | URL to the medium-sized player image asset used on the NFL NGS microsite chart display. |
+| `largeImg` | character | URL to the large player image asset used on the NFL NGS microsite chart display. |
 | `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
-| `rushingYards` | integer |  |
+| `rushingYards` | integer | Total rushing yards for the player featured on the NGS microsite chart. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `completionPercentage` | double |  |
+| `completionPercentage` | double | Completion percentage for the quarterback featured on the NGS microsite chart. |
 | `completions` | integer | The number of completed passes. |
 | `interceptions` | integer | The number of interceptions thrown. |
-| `passerRating` | double |  |
-| `passingYards` | integer |  |
+| `passerRating` | double | NFL passer rating for the quarterback featured on the NGS microsite chart. |
+| `passingYards` | integer | Total passing yards for the player (quarterback) featured on the NGS microsite chart. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_microsite_chart
->>> charts = nfl_ngs_microsite_chart(season=2024, season_type="REG", limit=25)
->>> charts.select(["playerName", "type", "imageName"]).head()
+from sportsdataverse.nfl import nfl_ngs_microsite_chart
+charts = nfl_ngs_microsite_chart(season=2024, season_type="REG", limit=25)
+charts.select(["playerName", "type", "imageName"]).head()
 ```
 
 ### `nfl_ngs_microsite_chart_players(season: 'int' = 2024, season_type: 'str' = 'REG', return_as_pandas: 'bool' = False)` {#nfl_ngs_microsite_chart_players}
@@ -5578,17 +5578,17 @@ A polars (or pandas) `DataFrame`, one row per player.
 
 | col_name | type | description |
 |---|---|---|
-| `esbId` | character |  |
+| `esbId` | character | Elias Sports Bureau identifier for the player used in NFL Next Gen Stats microsite chart data. |
 | `firstName` | character | Scorer first name (localized list). |
 | `lastName` | character | Scorer last name (localized list). |
-| `playerName` | character |  |
+| `playerName` | character | Full display name of the player as shown in NFL Next Gen Stats microsite charts. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_microsite_chart_players
->>> who = nfl_ngs_microsite_chart_players(season=2024, season_type="REG")
->>> who.select(["playerName", "esbId"]).head()
+from sportsdataverse.nfl import nfl_ngs_microsite_chart_players
+who = nfl_ngs_microsite_chart_players(season=2024, season_type="REG")
+who.select(["playerName", "esbId"]).head()
 ```
 
 ### `nfl_ngs_play_is_highlight(game_id, play_id, return_as_pandas: 'bool' = False)` {#nfl_ngs_play_is_highlight}
@@ -5616,62 +5616,62 @@ A one-row polars (or pandas) `DataFrame` with `gameId`, `playId`, `isHighlight` 
 
 | col_name | type | description |
 |---|---|---|
-| `gameId` | integer |  |
+| `gameId` | integer | NFL Shield API game identifier for the game this highlight record belongs to. |
 | `playId` | integer | Unique play event identifier (UUID). |
-| `isHighlight` | logical |  |
-| `highlight_gameId` | integer |  |
-| `highlight_playId` | integer |  |
-| `highlight_play_playType` | character |  |
-| `highlight_play_gameId` | integer |  |
-| `highlight_play_gameKey` | integer |  |
-| `highlight_play_yardlineSide` | character |  |
-| `highlight_play_absoluteYardlineNumber` | integer |  |
-| `highlight_play_yardlineNumber` | integer |  |
-| `highlight_play_timeOfDayUTC` | character |  |
-| `highlight_play_isPenalty` | logical |  |
-| `highlight_play_homeScore` | integer |  |
-| `highlight_play_visitorScore` | integer |  |
-| `highlight_play_playStats` | integer |  |
-| `highlight_play_playId` | integer |  |
-| `highlight_play_playDescription` | character |  |
-| `highlight_play_playTypeCode` | integer |  |
-| `highlight_play_quarter` | integer |  |
-| `highlight_play_down` | integer |  |
-| `highlight_play_yardsToGo` | integer |  |
-| `highlight_play_actualYardsToGo` | double |  |
-| `highlight_play_actualYardlineForFirstDown` | double |  |
-| `highlight_play_possessionTeamId` | character |  |
-| `highlight_play_isGoalToGo` | logical |  |
-| `highlight_play_health` | character |  |
-| `highlight_play_endGameClock` | character |  |
-| `highlight_play_startGameClock` | character |  |
-| `highlight_play_playState` | character |  |
-| `highlight_play_preSnapHomeScore` | integer |  |
-| `highlight_play_preSnapVisitorScore` | integer |  |
-| `highlight_play_sequence` | integer |  |
-| `highlight_play_gameClock` | character |  |
-| `highlight_play_yardline` | character |  |
-| `highlight_play_isScoring` | logical |  |
-| `highlight_play_isEndQuarter` | logical |  |
-| `highlight_play_isSTPlay` | logical |  |
-| `highlight_play_playDirection` | character |  |
-| `highlight_play_isBigPlay` | logical |  |
-| `highlight_play_isChangeOfPossession` | logical |  |
-| `highlight_players` | integer |  |
-| `highlight_season` | integer |  |
-| `highlight_seasonType` | character |  |
-| `highlight_teamAbbr` | character |  |
-| `highlight_teamId` | character |  |
-| `highlight_week` | integer |  |
+| `isHighlight` | logical | Boolean flag indicating whether this play record has been designated as a highlight by the NFL Shield API. |
+| `highlight_gameId` | integer | NFL Shield API game identifier associated with the specific highlight clip. |
+| `highlight_playId` | integer | NFL Shield API play identifier for the specific play associated with the highlight clip. |
+| `highlight_play_playType` | character | Text label for the type of play (e.g., 'PASS', 'RUSH', 'PUNT') as classified by the NFL Shield API. |
+| `highlight_play_gameId` | integer | NFL Shield API game identifier embedded in the play detail record for the highlight. |
+| `highlight_play_gameKey` | integer | NFL Shield internal game key integer used to identify the game in internal API routing. |
+| `highlight_play_yardlineSide` | character | Team abbreviation indicating which team's side of the field the yardline is on. |
+| `highlight_play_absoluteYardlineNumber` | integer | Absolute yard line number (1–100 from one end zone) of the line of scrimmage at the snap for the highlighted play. |
+| `highlight_play_yardlineNumber` | integer | Numeric yard line (1–50 from nearest end zone) of the line of scrimmage at the snap. |
+| `highlight_play_timeOfDayUTC` | character | Wall-clock timestamp in UTC at which the highlighted play occurred during the broadcast. |
+| `highlight_play_isPenalty` | logical | Boolean flag indicating whether a penalty was assessed on the highlighted play. |
+| `highlight_play_homeScore` | integer | Home team's score at the end of the highlighted play. |
+| `highlight_play_visitorScore` | integer | Visiting team's score at the end of the highlighted play. |
+| `highlight_play_playStats` | integer | Serialized or encoded statistical detail associated with the play outcomes (e.g., yards, player ids). |
+| `highlight_play_playId` | integer | NFL Shield API unique integer identifier for the specific play within the game. |
+| `highlight_play_playDescription` | character | Official NFL text description of the highlighted play (e.g., '(12:34) T.Brady pass short right to J.Edelman for 8 yards'). |
+| `highlight_play_playTypeCode` | integer | Integer code corresponding to the play type classification in the NFL Shield API. |
+| `highlight_play_quarter` | integer | Quarter number (1–4, or 5 for overtime) during which the highlighted play occurred. |
+| `highlight_play_down` | integer | Down number (1–4) at the time of the highlighted play. |
+| `highlight_play_yardsToGo` | integer | Integer yards needed for a first down on the highlighted play. |
+| `highlight_play_actualYardsToGo` | double | Exact decimal yards required for a first down on the highlighted play. |
+| `highlight_play_actualYardlineForFirstDown` | double | Actual yard line marker needed for a first down on the highlighted play. |
+| `highlight_play_possessionTeamId` | character | NFL Shield team identifier for the team that had possession during the highlighted play. |
+| `highlight_play_isGoalToGo` | logical | Boolean flag indicating whether the highlighted play occurred in a goal-to-go situation. |
+| `highlight_play_health` | character | Data quality or tracking health status string indicating the reliability of player/ball tracking data for this play. |
+| `highlight_play_endGameClock` | character | Game clock time remaining at the end of the highlighted play in MM:SS format. |
+| `highlight_play_startGameClock` | character | Game clock time remaining at the start of the highlighted play in MM:SS format. |
+| `highlight_play_playState` | character | State or status of the play record (e.g., 'FINAL', 'LIVE') in the NFL Shield API at time of capture. |
+| `highlight_play_preSnapHomeScore` | integer | Home team's score immediately before the snap of the highlighted play. |
+| `highlight_play_preSnapVisitorScore` | integer | Visitor team's score immediately before the snap of the highlighted play. |
+| `highlight_play_sequence` | integer | Sequential order integer of this play within the game, as used by the NFL Shield API. |
+| `highlight_play_gameClock` | character | Game clock time remaining at the start of the highlighted play in MM:SS format. |
+| `highlight_play_yardline` | character | Human-readable yardline string (e.g., 'KC 35') indicating where the play began. |
+| `highlight_play_isScoring` | logical | Boolean flag indicating whether the highlighted play resulted in a score. |
+| `highlight_play_isEndQuarter` | logical | Boolean flag indicating whether the highlighted play was the final play of a quarter. |
+| `highlight_play_isSTPlay` | logical | Boolean flag indicating whether the highlighted play was a special teams play. |
+| `highlight_play_playDirection` | character | Direction of the play (left, right, middle) as recorded in the NFL Shield tracking data. |
+| `highlight_play_isBigPlay` | logical | Boolean flag indicating whether the play was classified as a 'big play' (e.g., long gain or turnover) by the NFL Shield API. |
+| `highlight_play_isChangeOfPossession` | logical | Boolean flag indicating whether the highlighted play resulted in a change of possession. |
+| `highlight_players` | integer | Serialized list or count of player tracking records associated with the highlight clip. |
+| `highlight_season` | integer | NFL season year (e.g., 2024) in which the highlighted play occurred. |
+| `highlight_seasonType` | character | Season phase of the highlighted play (e.g., 'REG' for regular season, 'POST' for playoffs). |
+| `highlight_teamAbbr` | character | Team abbreviation of the team featured in or associated with the highlight clip. |
+| `highlight_teamId` | character | NFL Shield team identifier for the team featured in the highlight clip. |
+| `highlight_week` | integer | Week number within the season during which the highlighted play occurred. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_leaders, nfl_ngs_play_is_highlight
->>> lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
->>> gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
->>> hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
->>> hl.select(["gameId", "playId", "isHighlight"]).head()
+from sportsdataverse.nfl import nfl_ngs_leaders, nfl_ngs_play_is_highlight
+lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
+hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
+hl.select(["gameId", "playId", "isHighlight"]).head()
 ```
 
 ### `nfl_ngs_statboard(stat_type: 'str' = 'passing', season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_statboard}
@@ -5701,54 +5701,54 @@ A polars (or pandas) `DataFrame`, one row per qualifying player.
 |---|---|---|
 | `aggressiveness` | double | Aggressiveness tracks the amount of passing attempts a quarterback makes that are into tight coverage, where there is a defender within 1 yard or less of the receiver at the time of completion or incompletion. AGG is shown as a % of attempts into tight windows over all passing attempts. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `avgAirDistance` | double |  |
-| `avgAirYardsDifferential` | double |  |
-| `avgAirYardsToSticks` | double |  |
-| `avgCompletedAirYards` | double |  |
-| `avgIntendedAirYards` | double |  |
-| `avgTimeToThrow` | double |  |
-| `completionPercentage` | double |  |
-| `completionPercentageAboveExpectation` | double |  |
+| `avgAirDistance` | double | Average air distance in yards on all pass attempts, measuring how far the ball travels through the air regardless of direction. |
+| `avgAirYardsDifferential` | double | Average difference between intended air yards and completed air yards, measuring accuracy relative to target depth. |
+| `avgAirYardsToSticks` | double | Average air yards relative to the first-down marker on pass attempts, where positive values indicate throws beyond the sticks. |
+| `avgCompletedAirYards` | double | Average air yards on completed passes only, measuring depth of actual completions. |
+| `avgIntendedAirYards` | double | Average depth of target on all pass attempts, regardless of completion. |
+| `avgTimeToThrow` | double | Average time in seconds from snap to release for the passer, as tracked by NFL Next Gen Stats. |
+| `completionPercentage` | double | Actual completion percentage for the passer during the period covered. |
+| `completionPercentageAboveExpectation` | double | Completion percentage above the model-expected completion rate (CPAE), measuring accuracy relative to difficulty of throws attempted. |
 | `completions` | integer | The number of completed passes. |
-| `expectedCompletionPercentage` | double |  |
-| `gamesPlayed` | integer |  |
+| `expectedCompletionPercentage` | double | Model-expected completion percentage based on factors such as target depth, separation, and defensive coverage as calculated by NFL Next Gen Stats. |
+| `gamesPlayed` | integer | Number of games played by the passer during the period covered. |
 | `interceptions` | integer | The number of interceptions thrown. |
-| `maxAirDistance` | double |  |
-| `maxCompletedAirDistance` | double |  |
-| `passTouchdowns` | integer |  |
-| `passYards` | integer |  |
-| `passerRating` | double |  |
-| `playerName` | character |  |
+| `maxAirDistance` | double | Maximum air distance in yards recorded on any single pass attempt during the period covered. |
+| `maxCompletedAirDistance` | double | Maximum air distance in yards recorded on any single completed pass during the period covered. |
+| `passTouchdowns` | integer | Total passing touchdowns thrown by the passer during the period covered. |
+| `passYards` | integer | Total passing yards accumulated by the passer during the period covered. |
+| `passerRating` | double | NFL passer rating (0–158.3 scale) for the passer during the period covered. |
+| `playerName` | character | Display name of the passer as returned at the top-level statboard row. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
+| `seasonType` | character | Season segment covered by this statboard record (e.g., 'REG' for regular season, 'POST' for playoffs). |
 | `position` | character | Primary position as reported by NFL.com |
-| `teamId` | character |  |
-| `player_season` | integer |  |
-| `player_currentTeamId` | character |  |
-| `player_displayName` | character |  |
-| `player_esbId` | character |  |
-| `player_firstName` | character |  |
-| `player_footballName` | character |  |
-| `player_gsisId` | character |  |
-| `player_gsisItId` | integer |  |
+| `teamId` | character | NFL Next Gen Stats team identifier for the passer's team at the time of this record. |
+| `player_season` | integer | NFL season year associated with this player's statboard record. |
+| `player_currentTeamId` | character | NFL Next Gen Stats team identifier for the team the player is currently rostered on. |
+| `player_displayName` | character | Full display name of the player as used in NFL Next Gen Stats records. |
+| `player_esbId` | character | ESPN-Elias Sports Bureau (ESB) identifier for the player. |
+| `player_firstName` | character | First name of the player. |
+| `player_footballName` | character | Football name used by the player, which may differ from the legal first name. |
+| `player_gsisId` | character | NFL GSIS (Game Statistics and Information System) identifier, the primary nflverse player key. |
+| `player_gsisItId` | integer | NFL GSIS internal tracking integer identifier for the player. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_jerseyNumber` | integer |  |
-| `player_lastName` | character |  |
+| `player_jerseyNumber` | integer | Jersey number worn by the player. |
+| `player_lastName` | character | Last name of the player. |
 | `player_position` | character | Position of the player accordinng to NGS |
-| `player_positionGroup` | character |  |
-| `player_shortName` | character |  |
-| `player_smartId` | character |  |
-| `player_status` | character |  |
-| `player_uniformNumber` | character |  |
-| `player_ngsPosition` | character |  |
-| `player_ngsPositionGroup` | character |  |
+| `player_positionGroup` | character | Broad position group for the player (e.g., 'QB', 'WR') in the NGS player record. |
+| `player_shortName` | character | Shortened display name for the player (e.g., 'P.Mahomes'). |
+| `player_smartId` | character | NFL Next Gen Stats smart (UUID-style) identifier for the player. |
+| `player_status` | character | Current roster status of the player (e.g., 'ACT' for active, 'IR' for injured reserve). |
+| `player_uniformNumber` | character | Uniform number worn by the player, stored as a string to preserve leading zeros if applicable. |
+| `player_ngsPosition` | character | Player's position as classified by the NFL Next Gen Stats system. |
+| `player_ngsPositionGroup` | character | Broader position group the player belongs to as classified by the NFL Next Gen Stats system. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_statboard
->>> qb = nfl_ngs_statboard(stat_type="passing", season=2024, season_type="REG")
->>> qb.select(["playerName", "passerRating", "completionPercentageAboveExpectation"]).head()
+from sportsdataverse.nfl import nfl_ngs_statboard
+qb = nfl_ngs_statboard(stat_type="passing", season=2024, season_type="REG")
+qb.select(["playerName", "passerRating", "completionPercentageAboveExpectation"]).head()
 ```
 
 ### `nfl_ngs_statboard_leaders(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_statboard_leaders}
@@ -5778,131 +5778,131 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Broader category of player positions |
-| `leader_esbId` | character |  |
-| `leader_firstName` | character |  |
-| `leader_gsisId` | character |  |
-| `leader_jerseyNumber` | integer |  |
-| `leader_lastName` | character |  |
-| `leader_playerName` | character |  |
-| `leader_position` | character |  |
-| `leader_positionGroup` | character |  |
-| `leader_shortName` | character |  |
-| `leader_teamAbbr` | character |  |
-| `leader_teamId` | character |  |
-| `leader_week` | integer |  |
-| `leader_yards` | integer |  |
-| `leader_inPlayDist` | double |  |
-| `leader_maxSpeed` | double |  |
-| `leader_headshot` | character |  |
-| `play_gameId` | integer |  |
-| `play_playId` | integer |  |
-| `play_sequence` | integer |  |
-| `play_down` | integer |  |
-| `play_gameClock` | character |  |
-| `play_gameKey` | integer |  |
-| `play_health_playerTracking` | character |  |
-| `play_health_ballTracking` | character |  |
-| `play_homeScore` | integer |  |
-| `play_isBigPlay` | logical |  |
-| `play_isEndQuarter` | logical |  |
-| `play_isGoalToGo` | logical |  |
-| `play_isPenalty` | logical |  |
-| `play_isSTPlay` | logical |  |
-| `play_isScoring` | logical |  |
-| `play_playDescription` | character |  |
-| `play_playState` | character |  |
-| `play_playStats` | integer |  |
-| `play_playType` | character |  |
-| `play_playTypeCode` | integer |  |
-| `play_possessionTeamId` | character |  |
-| `play_preSnapHomeScore` | integer |  |
-| `play_preSnapVisitorScore` | integer |  |
-| `play_quarter` | integer |  |
-| `play_timeOfDayUTC` | character |  |
-| `play_visitorScore` | integer |  |
-| `play_yardline` | character |  |
-| `play_yardlineNumber` | integer |  |
-| `play_yardlineSide` | character |  |
-| `play_yardsToGo` | integer |  |
-| `play_absoluteYardlineNumber` | integer |  |
-| `play_actualYardlineForFirstDown` | double |  |
-| `play_actualYardsToGo` | double |  |
-| `play_endGameClock` | character |  |
-| `play_isChangeOfPossession` | logical |  |
-| `play_playDirection` | character |  |
-| `play_startGameClock` | character |  |
-| `leader_time` | double |  |
-| `leader_seasonAvg` | double |  |
-| `leader_teamAvg` | double |  |
+| `leader_esbId` | character | ESB (NFL's Enterprise Subscriber Base) identifier for the player featured in the leader record. |
+| `leader_firstName` | character | First name of the player featured in the leader record. |
+| `leader_gsisId` | character | GSIS (Game Statistics and Information System) identifier for the player featured in the leader record. |
+| `leader_jerseyNumber` | integer | Jersey number of the player featured in the leader record. |
+| `leader_lastName` | character | Last name of the player featured in the leader record. |
+| `leader_playerName` | character | Full display name of the player featured in the leader record. |
+| `leader_position` | character | Position designation of the player featured in the leader record (e.g., 'QB', 'WR'). |
+| `leader_positionGroup` | character | Broad position group of the player featured in the leader record (e.g., 'OFFENSE', 'DEFENSE'). |
+| `leader_shortName` | character | Abbreviated display name of the player featured in the leader record (e.g., 'P.Mahomes'). |
+| `leader_teamAbbr` | character | Team abbreviation of the player featured in the leader record (e.g., 'KC'). |
+| `leader_teamId` | character | NFL Shield team identifier for the team of the player featured in the leader record. |
+| `leader_week` | integer | Week number associated with the weekly leader record. |
+| `leader_yards` | integer | Yardage total associated with the featured leader statistic for this player. |
+| `leader_inPlayDist` | double | Distance (in yards) the player traveled while the ball was in play on the featured leader statistic. |
+| `leader_maxSpeed` | double | Maximum speed (in yards per second or mph) recorded by the player on the featured leader statistic play. |
+| `leader_headshot` | character | URL to the headshot image of the player featured in the leader record. |
+| `play_gameId` | integer | NFL Shield API game identifier for the game this play belongs to. |
+| `play_playId` | integer | NFL Shield API unique integer identifier for this play within the game. |
+| `play_sequence` | integer | Sequential order integer of this play within the game as used by the NFL Shield API. |
+| `play_down` | integer | Down number (1–4) at the time of this play. |
+| `play_gameClock` | character | Game clock time remaining at the start of this play in MM:SS format. |
+| `play_gameKey` | integer | NFL Shield internal game key integer identifying the game in internal API routing. |
+| `play_health_playerTracking` | character | Data quality status string for player-tracking data on this play (e.g., 'GOOD', 'PARTIAL'). |
+| `play_health_ballTracking` | character | Data quality status string for ball-tracking data on this play (e.g., 'GOOD', 'MISSING'). |
+| `play_homeScore` | integer | Home team's score at the end of this play. |
+| `play_isBigPlay` | logical | Boolean flag indicating whether this play was classified as a 'big play' by the NFL Shield API. |
+| `play_isEndQuarter` | logical | Boolean flag indicating whether this play was the final play of a quarter. |
+| `play_isGoalToGo` | logical | Boolean flag indicating whether this play occurred in a goal-to-go situation. |
+| `play_isPenalty` | logical | Boolean flag indicating whether a penalty was assessed on this play. |
+| `play_isSTPlay` | logical | Boolean flag indicating whether this play was a special teams play. |
+| `play_isScoring` | logical | Boolean flag indicating whether this play resulted in a score. |
+| `play_playDescription` | character | Official NFL text description of the play (e.g., '(2:11) J.Allen scrambles right end for 9 yards'). |
+| `play_playState` | character | Status of the play record (e.g., 'FINAL', 'LIVE') in the NFL Shield API at time of capture. |
+| `play_playStats` | integer | Serialized or encoded statistical detail for the play outcomes (e.g., yards, player IDs). |
+| `play_playType` | character | Text label classifying the play type (e.g., 'PASS', 'RUSH', 'PUNT') from the NFL Shield API. |
+| `play_playTypeCode` | integer | Integer code corresponding to the play type classification in the NFL Shield API. |
+| `play_possessionTeamId` | character | NFL Shield team identifier for the team that had possession during this play. |
+| `play_preSnapHomeScore` | integer | Home team's score immediately before the snap of this play. |
+| `play_preSnapVisitorScore` | integer | Visiting team's score immediately before the snap of this play. |
+| `play_quarter` | integer | Quarter number (1–4, or 5 for overtime) in which this play occurred. |
+| `play_timeOfDayUTC` | character | Wall-clock timestamp in UTC at which this play occurred during the broadcast. |
+| `play_visitorScore` | integer | Visiting team's score at the end of this play. |
+| `play_yardline` | character | Human-readable yardline string (e.g., 'DAL 22') indicating where this play began. |
+| `play_yardlineNumber` | integer | Numeric yard line (1–50 from nearest end zone) of the line of scrimmage at the snap. |
+| `play_yardlineSide` | character | Team abbreviation indicating which team's side of the field the yardline is on. |
+| `play_yardsToGo` | integer | Integer yards needed for a first down on this play. |
+| `play_absoluteYardlineNumber` | integer | Absolute yard line number (1–100 from one end zone) of the line of scrimmage at the snap for this play. |
+| `play_actualYardlineForFirstDown` | double | Actual yard line marker needed for a first down on this play. |
+| `play_actualYardsToGo` | double | Exact decimal yards required for a first down on this play. |
+| `play_endGameClock` | character | Game clock time remaining at the end of this play in MM:SS format. |
+| `play_isChangeOfPossession` | logical | Boolean flag indicating whether this play resulted in a change of possession. |
+| `play_playDirection` | character | Direction of the play (left, right, middle) as recorded in NFL Shield tracking data. |
+| `play_startGameClock` | character | Game clock time remaining at the moment this play began, in MM:SS format. |
+| `leader_time` | double | Elapsed time value associated with the leader record, such as time of possession or time-to-throw. |
+| `leader_seasonAvg` | double | Season-to-date average of the featured leader statistic for this player. |
+| `leader_teamAvg` | double | Team-level average of the featured statistic across all players on the team. |
 | `aggressiveness` | double | Aggressiveness tracks the amount of passing attempts a quarterback makes that are into tight coverage, where there is a defender within 1 yard or less of the receiver at the time of completion or incompletion. AGG is shown as a % of attempts into tight windows over all passing attempts. |
 | `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `avgAirDistance` | double |  |
-| `avgAirYardsDifferential` | double |  |
-| `avgAirYardsToSticks` | double |  |
-| `avgCompletedAirYards` | double |  |
-| `avgIntendedAirYards` | double |  |
-| `avgTimeToThrow` | double |  |
-| `completionPercentage` | double |  |
-| `completionPercentageAboveExpectation` | double |  |
+| `avgAirDistance` | double | Average air distance (in yards) the ball traveled on all pass attempts, from NFL Next Gen Stats. |
+| `avgAirYardsDifferential` | double | Average difference between intended air yards and completed air yards per attempt, indicating whether the passer throws short or long relative to the targeted depth. |
+| `avgAirYardsToSticks` | double | Average air yards relative to the first-down marker on pass attempts, from NFL Next Gen Stats (negative = short of sticks, positive = past sticks). |
+| `avgCompletedAirYards` | double | Average air yards on completed passes only, from NFL Next Gen Stats. |
+| `avgIntendedAirYards` | double | Average intended air yards per pass attempt (including incompletions), from NFL Next Gen Stats. |
+| `avgTimeToThrow` | double | Average time in seconds from snap to throw for the passer, from NFL Next Gen Stats. |
+| `completionPercentage` | double | Percentage of pass attempts completed by the passer, from NFL Next Gen Stats statboard leaders. |
+| `completionPercentageAboveExpectation` | double | Passer's actual completion percentage minus their expected completion percentage based on target depth, coverage, and game context (CPOE), from NFL Next Gen Stats. |
 | `completions` | integer | The number of completed passes. |
-| `expectedCompletionPercentage` | double |  |
-| `gamesPlayed` | integer |  |
+| `expectedCompletionPercentage` | double | Model-predicted completion percentage for the passer based on depth of target, receiver separation, and coverage, from NFL Next Gen Stats. |
+| `gamesPlayed` | integer | Number of games played by the player in the given season or time period. |
 | `interceptions` | integer | The number of interceptions thrown. |
-| `maxAirDistance` | double |  |
-| `maxCompletedAirDistance` | double |  |
-| `passTouchdowns` | integer |  |
-| `passYards` | integer |  |
-| `passerRating` | double |  |
-| `playerName` | character |  |
+| `maxAirDistance` | double | Maximum air distance (in yards) recorded on a single pass attempt by the passer, from NFL Next Gen Stats. |
+| `maxCompletedAirDistance` | double | Maximum air distance on a completed pass for the passer, from NFL Next Gen Stats. |
+| `passTouchdowns` | integer | Total passing touchdowns recorded by the player in the given period. |
+| `passYards` | integer | Total passing yards recorded by the player in the given period. |
+| `passerRating` | double | NFL passer rating (0–158.3 scale) for the quarterback in the given period. |
+| `playerName` | character | Full display name of the player associated with this NGS statboard leader record. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
+| `seasonType` | character | Phase of the season for this record (e.g., 'REG' for regular season, 'POST' for playoffs). |
 | `position` | character | Primary position as reported by NFL.com |
-| `teamId` | character |  |
-| `player_season` | integer |  |
-| `player_currentTeamId` | character |  |
-| `player_displayName` | character |  |
-| `player_esbId` | character |  |
-| `player_firstName` | character |  |
-| `player_footballName` | character |  |
-| `player_gsisId` | character |  |
-| `player_gsisItId` | integer |  |
-| `player_jerseyNumber` | integer |  |
-| `player_lastName` | character |  |
+| `teamId` | character | NFL Shield team identifier for the team associated with this leader statistic. |
+| `player_season` | integer | NFL season year in which this player record is valid. |
+| `player_currentTeamId` | character | NFL Shield team identifier for the player's current team. |
+| `player_displayName` | character | Player's full display name as used by NFL Next Gen Stats (e.g., 'Patrick Mahomes'). |
+| `player_esbId` | character | ESB (Enterprise Subscriber Base) identifier assigned to this player by the NFL. |
+| `player_firstName` | character | Player's first name as recorded in the NFL Next Gen Stats player roster. |
+| `player_footballName` | character | Player's preferred football name (may differ from legal first name) used on the field and in broadcasts. |
+| `player_gsisId` | character | GSIS (Game Statistics and Information System) identifier, the primary NFL player identifier used across nflverse datasets. |
+| `player_gsisItId` | integer | GSIS integrated tracking identifier, an alternate integer-form player ID used in the NFL Shield tracking system. |
+| `player_jerseyNumber` | integer | Player's jersey number as worn on the field. |
+| `player_lastName` | character | Player's last name as recorded in the NFL Next Gen Stats player roster. |
 | `player_position` | character | Position of the player accordinng to NGS |
-| `player_positionGroup` | character |  |
-| `player_shortName` | character |  |
-| `player_status` | character |  |
-| `player_uniformNumber` | character |  |
+| `player_positionGroup` | character | Official NFL position group for the player (e.g., 'OFFENSE', 'DEFENSE', 'SPECIAL_TEAMS'). |
+| `player_shortName` | character | Abbreviated player name used in display contexts (e.g., 'P.Mahomes'). |
+| `player_status` | character | Player's current roster status (e.g., 'ACT' for active, 'IR' for injured reserve). |
+| `player_uniformNumber` | character | Player's uniform number as a string, matching what appears on the jersey. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_smartId` | character |  |
-| `player_ngsPosition` | character |  |
-| `player_ngsPositionGroup` | character |  |
-| `avgCushion` | double |  |
-| `avgExpectedYAC` | double |  |
-| `avgSeparation` | double |  |
-| `avgYAC` | double |  |
-| `avgYACAboveExpectation` | double |  |
-| `catchPercentage` | double |  |
-| `percentShareOfIntendedAirYards` | double |  |
-| `recTouchdowns` | integer |  |
+| `player_smartId` | character | NFL Smart ID — a system-agnostic unique identifier for the player used across NFL Shield systems. |
+| `player_ngsPosition` | character | Player's position as classified by NFL Next Gen Stats (may differ from official NFL position; e.g., NGS uses 'ILB' vs 'LB'). |
+| `player_ngsPositionGroup` | character | Broad position group assigned by NFL Next Gen Stats (e.g., 'QB', 'WR', 'DB', 'DL'). |
+| `avgCushion` | double | Average distance (in yards) between the receiver and the nearest defender at the snap, from NFL Next Gen Stats receiver tracking. |
+| `avgExpectedYAC` | double | Average yards after catch expected based on game situation and receiver location, from NFL Next Gen Stats models. |
+| `avgSeparation` | double | Average separation (in yards) between the receiver and the nearest defender at the moment of catch or incompletion, from NFL Next Gen Stats. |
+| `avgYAC` | double | Average yards after catch per reception, from NFL Next Gen Stats receiver tracking. |
+| `avgYACAboveExpectation` | double | Average yards after catch above statistical expectation (YAC - expected YAC), from NFL Next Gen Stats models. |
+| `catchPercentage` | double | Percentage of targets caught by the receiver, from NFL Next Gen Stats statboard leaders. |
+| `percentShareOfIntendedAirYards` | double | Receiver's share (as a percentage) of the team's total intended air yards, from NFL Next Gen Stats. |
+| `recTouchdowns` | integer | Total receiving touchdowns recorded by the player in the given period. |
 | `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `targets` | integer | The number of pass plays where the player was the targeted receiver. |
 | `yards` | integer | The number of receiving yards |
-| `avgTimeToLos` | double |  |
-| `expectedRushYards` | double |  |
-| `rushAttempts` | integer |  |
-| `rushPctOverExpected` | double |  |
-| `rushTouchdowns` | integer |  |
-| `rushYards` | integer |  |
-| `rushYardsOverExpected` | double |  |
-| `rushYardsOverExpectedPerAtt` | double |  |
+| `avgTimeToLos` | double | Average time (in seconds) for the ball carrier to reach the line of scrimmage on rush attempts, from NFL Next Gen Stats. |
+| `expectedRushYards` | double | Model-predicted rushing yards based on field position, personnel, and pre-snap alignment, from NFL Next Gen Stats. |
+| `rushAttempts` | integer | Total rushing attempts by the player in the given period. |
+| `rushPctOverExpected` | double | Percentage of rush attempts on which the player gained more yards than the model-predicted expectation, from NFL Next Gen Stats. |
+| `rushTouchdowns` | integer | Total rushing touchdowns recorded by the player in the given period. |
+| `rushYards` | integer | Total rushing yards recorded by the player in the given period. |
+| `rushYardsOverExpected` | double | Total rushing yards gained above statistical expectation (RYOE) in the given period, from NFL Next Gen Stats. |
+| `rushYardsOverExpectedPerAtt` | double | Average rushing yards over expected per attempt (RYOE/attempt), from NFL Next Gen Stats. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_statboard_leaders
->>> bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
->>> bd["category"].unique().to_list()
+from sportsdataverse.nfl import nfl_ngs_statboard_leaders
+bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
+bd["category"].unique().to_list()
 ```
 
 ### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None, force_refresh: 'bool' = False) -> 'str'` {#nfl_token_gen}
@@ -5973,41 +5973,41 @@ A polars (or pandas) `DataFrame`, one row per game.
 | `date` | character | Date in YYYY-MM-DD format. |
 | `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
 | `gameType` | character | Game type identifier (3 for playoffs). |
-| `international` | logical |  |
+| `international` | logical | Boolean flag indicating whether this game is designated as an international (outside the United States) game. |
 | `neutralSite` | logical | Whether the game is at a neutral site. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `seasonType` | character |  |
+| `seasonType` | character | Phase of the season in which this game takes place (e.g., 'REG', 'POST', 'PRE'). |
 | `status` | character | Status label. |
 | `week` | integer | Season week. |
-| `weekType` | character |  |
-| `externalIds` | character |  |
-| `ticketUrl` | character |  |
-| `ticketVendors` | character |  |
-| `extensions` | character |  |
-| `version` | integer |  |
-| `homeTeam_id` | character |  |
-| `homeTeam_currentLogo` | character |  |
-| `homeTeam_fullName` | character |  |
-| `awayTeam_id` | character |  |
-| `awayTeam_currentLogo` | character |  |
-| `awayTeam_fullName` | character |  |
-| `broadcastInfo_homeNetworkChannels` | character |  |
-| `broadcastInfo_awayNetworkChannels` | character |  |
-| `broadcastInfo_internationalWatchOptions` | character |  |
-| `broadcastInfo_streamingNetworks` | character |  |
-| `broadcastInfo_territory` | character |  |
-| `broadcastInfo_audioNetworks` | character |  |
+| `weekType` | character | Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB'). |
+| `externalIds` | character | Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game. |
+| `ticketUrl` | character | URL to the official ticket purchasing page for this game. |
+| `ticketVendors` | character | Serialized list of authorized ticket vendors or marketplaces for this game. |
+| `extensions` | character | Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API. |
+| `version` | integer | API response version integer returned by the NFL Shield API for this game record. |
+| `homeTeam_id` | character | NFL Shield team identifier for the home team. |
+| `homeTeam_currentLogo` | character | URL for the home team's current primary logo image as served by the NFL Shield API. |
+| `homeTeam_fullName` | character | Full name of the home team (e.g., 'Dallas Cowboys'). |
+| `awayTeam_id` | character | NFL Shield team identifier for the away team. |
+| `awayTeam_currentLogo` | character | URL for the away team's current primary logo image as served by the NFL Shield API. |
+| `awayTeam_fullName` | character | Full name of the away team (e.g., 'Kansas City Chiefs'). |
+| `broadcastInfo_homeNetworkChannels` | character | Serialized list of TV/streaming channels designated as the home team's local broadcast. |
+| `broadcastInfo_awayNetworkChannels` | character | Serialized list of TV/streaming channels designated as the away team's local broadcast. |
+| `broadcastInfo_internationalWatchOptions` | character | Serialized list of international streaming or broadcast options for viewers outside the United States. |
+| `broadcastInfo_streamingNetworks` | character | Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the game. |
+| `broadcastInfo_territory` | character | Geographic territory or market designation for which this broadcast record applies. |
+| `broadcastInfo_audioNetworks` | character | Serialized list of radio networks carrying the game's audio broadcast. |
 | `venue_id` | character | Unique venue identifier. |
 | `venue_name` | character | Venue name. |
 | `venue_city` | character | Venue city. |
-| `venue_country` | character |  |
+| `venue_country` | character | Country name or ISO code indicating where the game's venue is located. |
 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_week_games
->>> sched = nfl_week_games(season=2024, season_type="REG", week=1)
->>> sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
+from sportsdataverse.nfl import nfl_week_games
+sched = nfl_week_games(season=2024, season_type="REG", week=1)
+sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
 ```
 
 ### `reset_config() -> 'NflConfig'` {#reset_config}

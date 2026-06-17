@@ -1,0 +1,27 @@
+{
+  "data": [
+    {
+      "id": 2316,
+      "awardedPosthumously": false,
+      "coachId": 1039,
+      "createdOn": "2021-02-17T05:34:59",
+      "detailSummary": null,
+      "fullName": "Toronto Arenas",
+      "generalManagerId": 9,
+      "imageUrl": "https://records.nhl.com/site/asset/public/images/hero/stanley-cup-winners/1918-toronto-arenas.jpg",
+      "isRookie": false,
+      "playerId": null,
+      "playerImageCaption": null,
+      "playerImageUrl": "https://records.nhl.com/site/asset/public/images/stanley-cup-champs/player-images/1918-toronto-arenas.jpg",
+      "seasonId": 19171918,
+      "status": "WINNER",
+      "summary": "<p style=\"margin:0in\"><big><b>1917-18 Toronto Arenas</b></big></p>\r\n\r\n<p style=\"margin:0in\">The National Hockey Association dissolved prior to the start of the 1917\u201118 season, and the National Hockey League took its place. The new league started out with four teams &ndash; the Montr&eacute;al Canadiens, Montreal Wanderers, Ottawa Senators and Toronto Arenas &ndash; but the Wanderers withdrew after Montreal Arena burned down.</p>\r\n\r\n<p style=\"margin:0in\">&nbsp;</p>\r\n\r\n<p style=\"margin:0in\">After capturing the first NHL title, Toronto played host to the Pacific Coast Hockey Association&rsquo;s Vancouver Millionaires in the Stanley Cup Final, which meant eastern rules would be used in Games 1, 3 and 5. Because neither team seemed comfortable playing an unfamiliar style, Toronto won the series with the advantage of playing the final game under eastern rules. <b>Alf Skinner</b> led the Arenas with eight goals in five games, while <b>Cyclone Taylor</b> paced Vancouver with nine.</p>\r\n\r\n<p style=\"margin:0in\">&nbsp;</p>\r\n\r\n<p style=\"margin:0in\"><big><b>Roster</b></big></p>\r\n\r\n<p style=\"margin:0in\"><a href=\"https://www.nhl.com/player/ken-randall-8448246\" target=\"_blank\">Ken Randall</a> (Captain), <a href=\"https://www.nhl.com/player/jack-adams-8444861\" target=\"_blank\">Jack Adams</a>, <a href=\"https://www.nhl.com/player/harry-cameron-8445314\" target=\"_blank\">Harry Cameron</a>, <a href=\"https://www.nhl.com/player/jack-coughlin-8445740\" target=\"_blank\">Jack Coughlin</a>, <a href=\"https://www.nhl.com/player/rusty-crawford-8445802\">Rusty Crawford</a>, <a href=\"https://www.nhl.com/player/corb-denneny-8445873\" target=\"_blank\">Corb Denneny</a>, <a href=\"https://www.nhl.com/player/sammy-hebert-8449990\" target=\"_blank\">Sammy Hebert</a>, <a href=\"https://www.nhl.com/player/hap-holmes-8449997\" target=\"_blank\">Hap Holmes</a>, <a href=\"https://www.nhl.com/player/jack-marks-8447616\" target=\"_blank\">Jack Marks</a>, <a href=\"https://www.nhl.com/player/harry-meeking-8447832\" target=\"_blank\">Harry Meeking</a>, <a href=\"https://www.nhl.com/player/harry-mummery-8447907\" target=\"_blank\">Harry Mummery</a>, <a href=\"https://www.nhl.com/player/reg-noble-8448013\" target=\"_blank\">Reg Noble</a>, <a href=\"https://www.nhl.com/player/alf-skinner-8449049\" target=\"_blank\">Alf Skinner</a>, Charlie Querrie (Manager), Dick Carroll (Coach), Frank Carroll (Trainer)</p>\r\n",
+      "teamId": 57,
+      "trophyCategoryId": 1,
+      "trophyId": 1,
+      "value": null,
+      "voteCount": 0
+    }
+  ],
+  "total": 1
+}

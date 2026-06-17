@@ -1,0 +1,176 @@
+{
+  "currentDraftDate": "2025-06-27",
+  "broadcastStartTimeUTC": "2025-06-27T23:00:00Z",
+  "tvBroadcasts": [
+    {
+      "id": 281,
+      "market": "N",
+      "countryCode": "CA",
+      "network": "TVAS",
+      "sequenceNumber": 120
+    },
+    {
+      "id": 282,
+      "market": "N",
+      "countryCode": "CA",
+      "network": "SN",
+      "sequenceNumber": 107
+    },
+    {
+      "id": 309,
+      "market": "N",
+      "countryCode": "US",
+      "network": "ESPN",
+      "sequenceNumber": 10
+    },
+    {
+      "id": 329,
+      "market": "N",
+      "countryCode": "US",
+      "network": "ESPN+",
+      "sequenceNumber": 16
+    }
+  ],
+  "logoUrl": "https://assets.nhle.com/special_event_season/20242025/svg/draft_second_dark_en.svg",
+  "logoFrUrl": "https://assets.nhle.com/special_event_season/20242025/svg/draft_second_dark_fr.svg",
+  "uiAccentColor": "#00B5E2",
+  "round": 1,
+  "state": "over",
+  "picks": [
+    {
+      "pickInRound": 1,
+      "overallPick": 1,
+      "teamId": 2,
+      "teamAbbrev": "NYI",
+      "teamFullName": {
+        "default": "New York Islanders",
+        "fr": "Islanders de New York"
+      },
+      "teamCommonName": {
+        "default": "Islanders"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "New York",
+        "fr": "de New York"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NYI_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+      "state": "confirmed",
+      "lastName": {
+        "default": "Schaefer"
+      },
+      "firstName": {
+        "default": "Matthew"
+      },
+      "positionCode": "D"
+    },
+    {
+      "pickInRound": 2,
+      "overallPick": 2,
+      "teamId": 28,
+      "teamAbbrev": "SJS",
+      "teamFullName": {
+        "default": "San Jose Sharks",
+        "fr": "Sharks de San Jose"
+      },
+      "teamCommonName": {
+        "default": "Sharks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "San Jose",
+        "fr": "de San Jose"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/SJS_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
+      "state": "confirmed",
+      "lastName": {
+        "default": "Misa"
+      },
+      "firstName": {
+        "default": "Michael"
+      },
+      "positionCode": "C"
+    },
+    {
+      "pickInRound": 3,
+      "overallPick": 3,
+      "teamId": 16,
+      "teamAbbrev": "CHI",
+      "teamFullName": {
+        "default": "Chicago Blackhawks",
+        "fr": "Blackhawks de Chicago"
+      },
+      "teamCommonName": {
+        "default": "Blackhawks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Chicago",
+        "fr": "de Chicago"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CHI_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+      "state": "confirmed",
+      "lastName": {
+        "default": "Frondell"
+      },
+      "firstName": {
+        "default": "Anton"
+      },
+      "positionCode": "C"
+    },
+    {
+      "pickInRound": 4,
+      "overallPick": 4,
+      "teamId": 68,
+      "teamAbbrev": "UTA",
+      "teamFullName": {
+        "default": "Utah Mammoth",
+        "fr": "Mammoth de l'Utah"
+      },
+      "teamCommonName": {
+        "default": "Mammoth"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Utah",
+        "fr": "de l'Utah"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/UTA_light.svg?season=20252026",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg?season=20252026",
+      "state": "confirmed",
+      "lastName": {
+        "default": "Desnoyers"
+      },
+      "firstName": {
+        "default": "Caleb"
+      },
+      "positionCode": "C"
+    },
+    {
+      "pickInRound": 5,
+      "overallPick": 5,
+      "teamId": 18,
+      "teamAbbrev": "NSH",
+      "teamFullName": {
+        "default": "Nashville Predators",
+        "fr": "Predators de Nashville"
+      },
+      "teamCommonName": {
+        "default": "Predators"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Nashville",
+        "fr": "de Nashville"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+      "state": "confirmed",
+      "lastName": {
+        "default": "Martin"
+      },
+      "firstName": {
+        "default": "Brady"
+      },
+      "positionCode": "C"
+    }
+  ]
+}

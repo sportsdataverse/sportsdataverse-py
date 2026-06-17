@@ -30,9 +30,9 @@ ESPN endpoint.
 |---|---|---|
 | `game_id` | character | ESPN event id. |
 | `uid` | character | ESPN UID string. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `name` | character | Display name. |
-| `short_name` | character | Short display name. |
+| `date` | character | Match start timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
 | `season_year` | integer | Season year string ('YYYY-YY' format). |
 | `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `season_slug` | character | Season slug. |
@@ -46,7 +46,7 @@ ESPN endpoint.
 | `status_clock` | double | Status clock. |
 | `status_display_clock` | character | Status display clock. |
 | `status_period` | integer | Status period. |
-| `neutral_site` | logical | Neutral site. |
+| `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance. |
 | `venue_id` | character | Unique venue identifier. |
@@ -64,7 +64,7 @@ ESPN endpoint.
 | `home_color` | character | Color code (hex) for home. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_logo` | character | Home team logo URL. |
-| `home_score` | character | Home team score at the time of the play. |
+| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
 | `home_rank` | integer | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
@@ -75,7 +75,7 @@ ESPN endpoint.
 | `away_color` | character | Color code (hex) for away. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_logo` | character | Away team logo URL. |
-| `away_score` | character | Away team score at the time of the play. |
+| `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Away team's winner. |
 | `away_rank` | integer | Away team rank (if ranked). |
 
@@ -209,7 +209,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state. |
-| `venue_address_zip_code` | character |  |
+| `venue_address_zip_code` | character | Postal zip code of the venue where the game was played. |
 | `venue_grass` | logical | Venue grass. |
 
 **officials**
@@ -233,7 +233,7 @@ ESPN endpoint.
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
 | `week` | integer | Week number. |
-| `game_note` | character |  |
+| `game_note` | character | Optional editorial note or context annotation attached to the game in the header. |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -241,7 +241,7 @@ ESPN endpoint.
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
-| `league_midsize_name` | character |  |
+| `league_midsize_name` | character | Medium-length display name for the league or competition as shown in the game header. |
 | `league_slug` | character | League slug. |
 | `league_is_tournament` | logical | League is tournament. |
 | `league_links` | character | League links. |
@@ -259,7 +259,7 @@ ESPN endpoint.
 | `team_location` | character | Team location. |
 | `overall` | character | Overall. |
 | `games_behind` | character | Games behind. |
-| `vs. conf.` | character |  |
+| `vs. conf.` | character | Team's record against conference opponents, shown as part of the standings snapshot in the box score. |
 
 **format**
 
@@ -329,10 +329,10 @@ ESPN endpoint.
 | `links_api_self_href` | character | Links api self href. |
 | `links_app_sportscenter_href` | character | Links app sportscenter href. |
 | `byline` | character | Byline. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_web_self_href` | character | URL for the canonical web page of the associated article or editorial content. |
+| `links_web_self_dsi_href` | character | Data-source-identified URL for the web page of the associated article content. |
+| `links_api_artwork_href` | character | API endpoint URL for artwork or imagery associated with the article. |
+| `links_sportscenter_href` | character | URL for the article's page on ESPN's SportsCenter platform. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -382,7 +382,31 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -406,7 +430,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -619,13 +649,13 @@ ESPN endpoint.
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
 | `birth_place_display_text` | character | Birth place display text. |
-| `birth_country_alternate_id` | character |  |
+| `birth_country_alternate_id` | character | Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system. |
 | `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
-| `flag_href` | character |  |
-| `flag_alt` | character |  |
-| `flag_rel` | character |  |
+| `flag_href` | character | URL of the SVG or PNG flag image representing the athlete's country of birth. |
+| `flag_alt` | character | Alt-text string for the athlete's country-of-birth flag image, typically the full country name. |
+| `flag_rel` | character | Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag"). |
 | `position_id` | character | Position id. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
@@ -667,7 +697,25 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_team_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric event identifier. |
+| `date` | character | Event timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `time_valid` | logical | Whether the event time is confirmed. |
+| `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
+| `links` | character | Related links (list, stringified). |
+| `season_year` | integer | Four-digit season year. |
+| `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | character | ESPN numeric identifier for the season type. |
+| `season_type_type` | integer | Season type numeric code. |
+| `season_type_name` | character | Season type name (e.g. Regular Season). |
+| `season_type_abbreviation` | character | Season type abbreviation. |
+| `week_number` | integer | Week number. |
+| `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -742,7 +790,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -818,7 +872,31 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -918,7 +996,31 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `byline` | character | Author byline string as published by ESPN. |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -972,8 +1074,8 @@ ESPN endpoint.
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `vs ap top 25` | character |  |
-| `vs usa ranked teams` | character |  |
+| `vs ap top 25` | character | The team's win-loss record against opponents ranked in the AP Top 25 poll. |
+| `vs usa ranked teams` | character | The team's win-loss record against opponents ranked in the USA Today Coaches Poll. |
 | `vs. conf.` | character | Vs. conf.. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

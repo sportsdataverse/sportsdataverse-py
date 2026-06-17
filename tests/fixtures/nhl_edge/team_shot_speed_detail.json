@@ -1,0 +1,732 @@
+{
+  "hardestShots": [
+    {
+      "player": {
+        "id": 8478042,
+        "firstName": {
+          "default": "Viktor"
+        },
+        "lastName": {
+          "default": "Arvidsson"
+        },
+        "slug": "viktor-arvidsson-8478042"
+      },
+      "gameCenterLink": "/gamecenter/cgy-vs-edm/2025/03/29/2024021167",
+      "gameDate": "2025-03-29",
+      "gameType": 2,
+      "isHomeTeam": true,
+      "shotSpeed": {
+        "imperial": 98.96,
+        "metric": 159.2607
+      },
+      "timeInPeriod": "18:05",
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Flames"
+        },
+        "placeNameWithPreposition": {
+          "default": "Calgary",
+          "fr": "de Calgary"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/CGY_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8480803,
+        "firstName": {
+          "default": "Evan"
+        },
+        "lastName": {
+          "default": "Bouchard"
+        },
+        "slug": "evan-bouchard-8480803"
+      },
+      "gameCenterLink": "/gamecenter/col-vs-edm/2025/02/07/2024020874",
+      "gameDate": "2025-02-07",
+      "gameType": 2,
+      "isHomeTeam": true,
+      "shotSpeed": {
+        "imperial": 98.83,
+        "metric": 159.0515
+      },
+      "timeInPeriod": "04:42",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Avalanche"
+        },
+        "placeNameWithPreposition": {
+          "default": "Colorado",
+          "fr": "du Colorado"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8475218,
+        "firstName": {
+          "default": "Mattias"
+        },
+        "lastName": {
+          "default": "Ekholm"
+        },
+        "slug": "mattias-ekholm-8475218"
+      },
+      "gameCenterLink": "/gamecenter/phi-vs-edm/2024/10/15/2024020056",
+      "gameDate": "2024-10-15",
+      "gameType": 2,
+      "isHomeTeam": true,
+      "shotSpeed": {
+        "imperial": 98.39,
+        "metric": 158.3434
+      },
+      "timeInPeriod": "14:46",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Flyers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Philadelphia",
+          "fr": "de Philadelphie"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8477498,
+        "firstName": {
+          "default": "Darnell"
+        },
+        "lastName": {
+          "default": "Nurse"
+        },
+        "slug": "darnell-nurse-8477498"
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-buf/2025/03/10/2024021021",
+      "gameDate": "2025-03-10",
+      "gameType": 2,
+      "isHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 98.24,
+        "metric": 158.102
+      },
+      "timeInPeriod": "09:31",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Sabres"
+        },
+        "placeNameWithPreposition": {
+          "default": "Buffalo",
+          "fr": "de Buffalo"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8478042,
+        "firstName": {
+          "default": "Viktor"
+        },
+        "lastName": {
+          "default": "Arvidsson"
+        },
+        "slug": "viktor-arvidsson-8478042"
+      },
+      "gameCenterLink": "/gamecenter/pit-vs-edm/2024/10/25/2024020121",
+      "gameDate": "2024-10-25",
+      "gameType": 2,
+      "isHomeTeam": true,
+      "shotSpeed": {
+        "imperial": 97.7,
+        "metric": 157.2329
+      },
+      "timeInPeriod": "09:46",
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Penguins"
+        },
+        "placeNameWithPreposition": {
+          "default": "Pittsburgh",
+          "fr": "de Pittsburgh"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/PIT_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8480803,
+        "firstName": {
+          "default": "Evan"
+        },
+        "lastName": {
+          "default": "Bouchard"
+        },
+        "slug": "evan-bouchard-8480803"
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-nsh/2024/10/17/2024020069",
+      "gameDate": "2024-10-17",
+      "gameType": 2,
+      "isHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 97.67,
+        "metric": 157.1846
+      },
+      "timeInPeriod": "07:28",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Predators"
+        },
+        "placeNameWithPreposition": {
+          "default": "Nashville",
+          "fr": "de Nashville"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8478013,
+        "firstName": {
+          "default": "Jake"
+        },
+        "lastName": {
+          "default": "Walman"
+        },
+        "slug": "jake-walman-8478013"
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-sea/2025/03/27/2024021151",
+      "gameDate": "2025-03-27",
+      "gameType": 2,
+      "isHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 97.51,
+        "metric": 156.9271
+      },
+      "timeInPeriod": "02:41",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Kraken"
+        },
+        "placeNameWithPreposition": {
+          "default": "Seattle",
+          "fr": "de Seattle"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8475218,
+        "firstName": {
+          "default": "Mattias"
+        },
+        "lastName": {
+          "default": "Ekholm"
+        },
+        "slug": "mattias-ekholm-8475218"
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-tor/2024/11/16/2024020274",
+      "gameDate": "2024-11-16",
+      "gameType": 2,
+      "isHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 97.28,
+        "metric": 156.557
+      },
+      "timeInPeriod": "16:30",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Maple Leafs"
+        },
+        "placeNameWithPreposition": {
+          "default": "Toronto",
+          "fr": "de Toronto"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8480803,
+        "firstName": {
+          "default": "Evan"
+        },
+        "lastName": {
+          "default": "Bouchard"
+        },
+        "slug": "evan-bouchard-8480803"
+      },
+      "gameCenterLink": "/gamecenter/ana-vs-edm/2025/01/03/2024020618",
+      "gameDate": "2025-01-03",
+      "gameType": 2,
+      "isHomeTeam": true,
+      "shotSpeed": {
+        "imperial": 97.28,
+        "metric": 156.557
+      },
+      "timeInPeriod": "03:50",
+      "periodDescriptor": {
+        "number": 3,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Ducks"
+        },
+        "placeNameWithPreposition": {
+          "default": "Anaheim",
+          "fr": "d'Anaheim"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg"
+        }
+      }
+    },
+    {
+      "player": {
+        "id": 8480803,
+        "firstName": {
+          "default": "Evan"
+        },
+        "lastName": {
+          "default": "Bouchard"
+        },
+        "slug": "evan-bouchard-8480803"
+      },
+      "gameCenterLink": "/gamecenter/edm-vs-col/2025/01/16/2024020718",
+      "gameDate": "2025-01-16",
+      "gameType": 2,
+      "isHomeTeam": false,
+      "shotSpeed": {
+        "imperial": 97.25,
+        "metric": 156.5087
+      },
+      "timeInPeriod": "11:34",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Avalanche"
+        },
+        "placeNameWithPreposition": {
+          "default": "Colorado",
+          "fr": "du Colorado"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg"
+        }
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        }
+      }
+    }
+  ],
+  "shotSpeedDetails": [
+    {
+      "position": "all",
+      "topShotSpeed": {
+        "imperial": 98.96,
+        "metric": 159.2607,
+        "rank": 18,
+        "leagueAvg": {
+          "imperial": 99.8084,
+          "metric": 160.6261
+        },
+        "overlay": {
+          "player": {
+            "firstName": {
+              "default": "Viktor"
+            },
+            "lastName": {
+              "default": "Arvidsson"
+            }
+          },
+          "gameDate": "2025-03-29",
+          "awayTeam": {
+            "abbrev": "CGY",
+            "score": 2
+          },
+          "homeTeam": {
+            "abbrev": "EDM",
+            "score": 3
+          },
+          "gameOutcome": {
+            "lastPeriodType": "OT",
+            "otPeriods": 1
+          },
+          "periodDescriptor": {
+            "maxRegulationPeriods": 3,
+            "number": 3,
+            "periodType": "REG"
+          },
+          "timeInPeriod": "18:05",
+          "gameType": 2
+        }
+      },
+      "avgShotSpeed": {
+        "imperial": 61.1464,
+        "metric": 98.4056,
+        "rank": 16,
+        "leagueAvg": {
+          "imperial": 61.1318,
+          "metric": 98.3821
+        }
+      },
+      "shotAttemptsOver100": {
+        "value": 0,
+        "rank": 14,
+        "leagueAvg": 0.75
+      },
+      "shotAttempts90To100": {
+        "value": 136,
+        "rank": 1,
+        "leagueAvg": 53.0938
+      },
+      "shotAttempts80To90": {
+        "value": 452,
+        "leagueAvg": 380.5625
+      },
+      "shotAttempts70To80": {
+        "value": 972,
+        "leagueAvg": 997.375
+      }
+    },
+    {
+      "position": "D",
+      "topShotSpeed": {
+        "imperial": 98.83,
+        "metric": 159.0515,
+        "rank": 16,
+        "leagueAvg": {
+          "imperial": 99.2831,
+          "metric": 159.7807
+        },
+        "overlay": {
+          "player": {
+            "firstName": {
+              "default": "Evan"
+            },
+            "lastName": {
+              "default": "Bouchard"
+            }
+          },
+          "gameDate": "2025-02-07",
+          "awayTeam": {
+            "abbrev": "COL",
+            "score": 5
+          },
+          "homeTeam": {
+            "abbrev": "EDM",
+            "score": 4
+          },
+          "gameOutcome": {
+            "lastPeriodType": "REG"
+          },
+          "periodDescriptor": {
+            "maxRegulationPeriods": 3,
+            "number": 2,
+            "periodType": "REG"
+          },
+          "timeInPeriod": "04:42",
+          "gameType": 2
+        }
+      },
+      "avgShotSpeed": {
+        "imperial": 70.6037,
+        "metric": 113.6256,
+        "rank": 1,
+        "leagueAvg": {
+          "imperial": 68.6133,
+          "metric": 110.4225
+        }
+      },
+      "shotAttemptsOver100": {
+        "value": 0,
+        "rank": 13,
+        "leagueAvg": 0.5938
+      },
+      "shotAttempts90To100": {
+        "value": 123,
+        "rank": 1,
+        "leagueAvg": 41.2188
+      },
+      "shotAttempts80To90": {
+        "value": 347,
+        "leagueAvg": 206.4063
+      },
+      "shotAttempts70To80": {
+        "value": 523,
+        "leagueAvg": 463.5313
+      }
+    },
+    {
+      "position": "F",
+      "topShotSpeed": {
+        "imperial": 98.96,
+        "metric": 159.2607,
+        "rank": 5,
+        "leagueAvg": {
+          "imperial": 95.7016,
+          "metric": 154.0167
+        },
+        "overlay": {
+          "player": {
+            "firstName": {
+              "default": "Viktor"
+            },
+            "lastName": {
+              "default": "Arvidsson"
+            }
+          },
+          "gameDate": "2025-03-29",
+          "awayTeam": {
+            "abbrev": "CGY",
+            "score": 2
+          },
+          "homeTeam": {
+            "abbrev": "EDM",
+            "score": 3
+          },
+          "gameOutcome": {
+            "lastPeriodType": "OT",
+            "otPeriods": 1
+          },
+          "periodDescriptor": {
+            "maxRegulationPeriods": 3,
+            "number": 3,
+            "periodType": "REG"
+          },
+          "timeInPeriod": "18:05",
+          "gameType": 2
+        }
+      },
+      "avgShotSpeed": {
+        "imperial": 54.0883,
+        "metric": 87.0466,
+        "rank": 31,
+        "leagueAvg": {
+          "imperial": 56.8527,
+          "metric": 91.4956
+        }
+      },
+      "shotAttemptsOver100": {
+        "value": 0,
+        "rank": 2,
+        "leagueAvg": 0.1563
+      },
+      "shotAttempts90To100": {
+        "value": 13,
+        "rank": 9,
+        "leagueAvg": 11.875
+      },
+      "shotAttempts80To90": {
+        "value": 105,
+        "leagueAvg": 174.1563
+      },
+      "shotAttempts70To80": {
+        "value": 449,
+        "leagueAvg": 533.8125
+      }
+    }
+  ]
+}

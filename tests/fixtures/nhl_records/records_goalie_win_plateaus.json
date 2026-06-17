@@ -1,0 +1,75 @@
+{
+  "data": [
+    {
+      "id": 234,
+      "activePlayer": false,
+      "firstName": "Murray",
+      "fortyWinSeasons": 0,
+      "franchiseId": null,
+      "lastName": "Bannerman",
+      "playerId": 8445249,
+      "seasonsPlayed": 8,
+      "teamAbbrevs": "VAN,CHI",
+      "teamNames": "Vancouver Canucks,Chicago Blackhawks",
+      "thirtyWinSeasons": 0,
+      "twentyWinSeasons": 4
+    },
+    {
+      "id": 421,
+      "activePlayer": false,
+      "firstName": "Murray",
+      "fortyWinSeasons": 0,
+      "franchiseId": 11,
+      "lastName": "Bannerman",
+      "playerId": 8445249,
+      "seasonsPlayed": 7,
+      "teamAbbrevs": "CHI",
+      "teamNames": "Chicago Blackhawks",
+      "thirtyWinSeasons": 0,
+      "twentyWinSeasons": 4
+    },
+    {
+      "id": 62,
+      "activePlayer": false,
+      "firstName": "Marco",
+      "fortyWinSeasons": 0,
+      "franchiseId": null,
+      "lastName": "Baron",
+      "playerId": 8445272,
+      "seasonsPlayed": 6,
+      "teamAbbrevs": "BOS,LAK,EDM",
+      "teamNames": "Boston Bruins,Los Angeles Kings,Edmonton Oilers",
+      "thirtyWinSeasons": 0,
+      "twentyWinSeasons": 1
+    },
+    {
+      "id": 455,
+      "activePlayer": false,
+      "firstName": "Marco",
+      "fortyWinSeasons": 0,
+      "franchiseId": 6,
+      "lastName": "Baron",
+      "playerId": 8445272,
+      "seasonsPlayed": 4,
+      "teamAbbrevs": "BOS",
+      "teamNames": "Boston Bruins",
+      "thirtyWinSeasons": 0,
+      "twentyWinSeasons": 1
+    },
+    {
+      "id": 60,
+      "activePlayer": false,
+      "firstName": "Tom",
+      "fortyWinSeasons": 1,
+      "franchiseId": null,
+      "lastName": "Barrasso",
+      "playerId": 8445275,
+      "seasonsPlayed": 19,
+      "teamAbbrevs": "BUF,PIT,OTT,CAR,TOR,STL",
+      "teamNames": "Buffalo Sabres,Pittsburgh Penguins,Ottawa Senators,Carolina Hurricanes,Toronto Maple Leafs,St. Louis Blues",
+      "thirtyWinSeasons": 2,
+      "twentyWinSeasons": 11
+    }
+  ],
+  "total": 755
+}

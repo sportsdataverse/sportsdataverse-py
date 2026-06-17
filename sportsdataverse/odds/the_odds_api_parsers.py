@@ -172,8 +172,10 @@ def parse_toa_sports(raw: List[Dict], return_as_pandas: bool = False) -> DataFra
         (``key``, ``group``, ``title``, ``description``, ``active``, ``has_outcomes``).
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports, parse_toa_sports
-        >>> parse_toa_sports(toa_sports(return_parsed=False)).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports, parse_toa_sports
+            parse_toa_sports(toa_sports(return_parsed=False)).head()
     """
     return _to_frame(raw if isinstance(raw, list) else [], return_as_pandas)
 
@@ -190,9 +192,11 @@ def parse_toa_odds(raw: List[Dict], return_as_pandas: bool = False) -> DataFrame
         event x bookmaker x market x outcome.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_odds, parse_toa_odds
-        >>> raw = toa_sports_odds(sport="americanfootball_nfl", regions="us", return_parsed=False)
-        >>> parse_toa_odds(raw).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_odds, parse_toa_odds
+            raw = toa_sports_odds(sport="americanfootball_nfl", regions="us", return_parsed=False)
+            parse_toa_odds(raw).head()
     """
     return _to_frame(_flatten_odds(raw if isinstance(raw, list) else []), return_as_pandas)
 
@@ -209,9 +213,11 @@ def parse_toa_scores(raw: List[Dict], return_as_pandas: bool = False) -> DataFra
         ``completed`` / ``scores`` / ``last_update``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_scores, parse_toa_scores
-        >>> raw = toa_sports_scores(sport="americanfootball_nfl", days_from=3, return_parsed=False)
-        >>> parse_toa_scores(raw).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_scores, parse_toa_scores
+            raw = toa_sports_scores(sport="americanfootball_nfl", days_from=3, return_parsed=False)
+            parse_toa_scores(raw).head()
     """
     return _to_frame(raw if isinstance(raw, list) else [], return_as_pandas)
 
@@ -228,8 +234,10 @@ def parse_toa_events(raw: List[Dict], return_as_pandas: bool = False) -> DataFra
         (``id``, ``sport_key``, ``commence_time``, ``home_team``, ``away_team``).
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_events, parse_toa_events
-        >>> parse_toa_events(toa_sports_events(sport="americanfootball_nfl", return_parsed=False)).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_events, parse_toa_events
+            parse_toa_events(toa_sports_events(sport="americanfootball_nfl", return_parsed=False)).head()
     """
     return _to_frame(raw if isinstance(raw, list) else [], return_as_pandas)
 
@@ -247,9 +255,11 @@ def parse_toa_event_odds(raw: Union[Dict, List], return_as_pandas: bool = False)
         bookmaker x market x outcome for the event.
 
     Example:
-        >>> from sportsdataverse.odds import toa_event_odds, parse_toa_event_odds
-        >>> raw = toa_event_odds(sport="americanfootball_nfl", event_id="...", regions="us", return_parsed=False)
-        >>> parse_toa_event_odds(raw).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_event_odds, parse_toa_event_odds
+            raw = toa_event_odds(sport="americanfootball_nfl", event_id="...", regions="us", return_parsed=False)
+            parse_toa_event_odds(raw).head()
     """
     events = raw if isinstance(raw, list) else [raw] if isinstance(raw, dict) else []
     return _to_frame(_flatten_odds(events), return_as_pandas)
@@ -268,9 +278,11 @@ def parse_toa_event_markets(raw: Union[Dict, List], return_as_pandas: bool = Fal
         event x bookmaker x available market.
 
     Example:
-        >>> from sportsdataverse.odds import toa_event_markets, parse_toa_event_markets
-        >>> raw = toa_event_markets(sport="americanfootball_nfl", event_id="...", regions="us", return_parsed=False)
-        >>> parse_toa_event_markets(raw).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_event_markets, parse_toa_event_markets
+            raw = toa_event_markets(sport="americanfootball_nfl", event_id="...", regions="us", return_parsed=False)
+            parse_toa_event_markets(raw).head()
     """
     events = raw if isinstance(raw, list) else [raw] if isinstance(raw, dict) else []
     rows: List[Dict[str, Any]] = []
@@ -311,8 +323,10 @@ def parse_toa_participants(raw: List[Dict], return_as_pandas: bool = False) -> D
         (``full_name`` plus any ids the sport exposes).
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_participants, parse_toa_participants
-        >>> parse_toa_participants(toa_sports_participants(sport="americanfootball_nfl", return_parsed=False)).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_participants, parse_toa_participants
+            parse_toa_participants(toa_sports_participants(sport="americanfootball_nfl", return_parsed=False)).head()
     """
     return _to_frame(raw if isinstance(raw, list) else [], return_as_pandas)
 
@@ -331,10 +345,12 @@ def parse_toa_odds_history(raw: Dict, return_as_pandas: bool = False) -> DataFra
         ``next_timestamp``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_odds_history, parse_toa_odds_history
-        >>> raw = toa_sports_odds_history(sport="americanfootball_nfl", regions="us",
-        ...     date="2023-11-29T22:45:00Z", return_parsed=False)
-        >>> parse_toa_odds_history(raw).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_odds_history, parse_toa_odds_history
+            raw = toa_sports_odds_history(sport="americanfootball_nfl", regions="us",
+                date="2023-11-29T22:45:00Z", return_parsed=False)
+            parse_toa_odds_history(raw).head()
     """
     data, meta = _unwrap_snapshot(raw)
     events = data if isinstance(data, list) else [data] if isinstance(data, dict) else []
@@ -355,10 +371,12 @@ def parse_toa_events_history(raw: Dict, return_as_pandas: bool = False) -> DataF
         the snapshot timestamps.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_events_history, parse_toa_events_history
-        >>> raw = toa_sports_events_history(sport="americanfootball_nfl",
-        ...     date="2023-11-29T22:45:00Z", return_parsed=False)
-        >>> parse_toa_events_history(raw).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_events_history, parse_toa_events_history
+            raw = toa_sports_events_history(sport="americanfootball_nfl",
+                date="2023-11-29T22:45:00Z", return_parsed=False)
+            parse_toa_events_history(raw).head()
     """
     data, meta = _unwrap_snapshot(raw)
     events = data if isinstance(data, list) else [data] if isinstance(data, dict) else []
@@ -379,10 +397,12 @@ def parse_toa_event_odds_history(raw: Dict, return_as_pandas: bool = False) -> D
         bookmaker x market x outcome, stamped with the snapshot timestamps.
 
     Example:
-        >>> from sportsdataverse.odds import toa_event_odds_history, parse_toa_event_odds_history
-        >>> raw = toa_event_odds_history(sport="americanfootball_nfl", event_id="...",
-        ...     regions="us", date="2023-11-29T22:45:00Z", return_parsed=False)
-        >>> parse_toa_event_odds_history(raw).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_event_odds_history, parse_toa_event_odds_history
+            raw = toa_event_odds_history(sport="americanfootball_nfl", event_id="...",
+                regions="us", date="2023-11-29T22:45:00Z", return_parsed=False)
+            parse_toa_event_odds_history(raw).head()
     """
     data, meta = _unwrap_snapshot(raw)
     events = data if isinstance(data, list) else [data] if isinstance(data, dict) else []

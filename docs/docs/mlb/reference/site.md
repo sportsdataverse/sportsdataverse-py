@@ -30,9 +30,9 @@ ESPN endpoint.
 |---|---|---|
 | `game_id` | character | ESPN event id. |
 | `uid` | character | ESPN UID string. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `name` | character | Display name. |
-| `short_name` | character | Short display name. |
+| `date` | character | Match start timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
 | `season_year` | integer | Season year string ('YYYY-YY' format). |
 | `season_type` | integer | Season-type id. |
 | `season_slug` | character | Season slug. |
@@ -46,7 +46,7 @@ ESPN endpoint.
 | `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
 | `status_period` | integer | Current period. |
-| `neutral_site` | logical | Neutral site. |
+| `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported game attendance. |
 | `venue_id` | character | MLBAM venue ID. |
@@ -64,7 +64,7 @@ ESPN endpoint.
 | `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_logo` | character | Home team logo URL. |
-| `home_score` | character | Home team run total after the play. |
+| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Whether the home team won. |
 | `home_rank` | character | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
@@ -75,7 +75,7 @@ ESPN endpoint.
 | `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_logo` | character | Away team logo URL. |
-| `away_score` | character | Away team run total after the play. |
+| `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Whether the away team won. |
 | `away_rank` | character | Away team rank (if ranked). |
 
@@ -122,21 +122,21 @@ ESPN endpoint.
 | `did_not_play` | character | Did not play. |
 | `ejected` | character | Ejected. |
 | `reason` | character | Reason. |
-| `hits_at_bats` | character |  |
+| `hits_at_bats` | character | Hitting performance ratio expressed as hits divided by at-bats for the player in the box score. |
 | `at_bats` | character | At bats. |
 | `runs` | character | Runs scored. |
 | `hits` | character | Hits. |
-| `rb_is` | character |  |
+| `rb_is` | character | Runs batted in and other secondary hitting statistics for the player in the box score. |
 | `home_runs` | character | Home runs. |
-| `walks` | character |  |
-| `strikeouts` | character |  |
-| `pitches` | character |  |
+| `walks` | character | Number of base-on-balls (walks) recorded by the player in the box score. |
+| `strikeouts` | character | Number of strikeouts recorded by the player, either as a batter or pitcher, in the box score. |
+| `pitches` | character | Total number of pitches thrown or faced by the player in the box score. |
 | `avg` | character | Batting average. |
-| `on_base_pct` | character |  |
-| `slug_avg` | character |  |
-| `full_innings.part_innings` | character |  |
+| `on_base_pct` | character | Percentage of plate appearances in which the player reached base safely in the game. |
+| `slug_avg` | character | Slugging average reflecting the total bases per at-bat recorded by the player in the box score. |
+| `full_innings.part_innings` | character | Innings pitched expressed as full innings and fractional partial innings for the pitcher in the box score. |
 | `earned_runs` | character | Earned runs allowed. |
-| `pitches_strikes` | character |  |
+| `pitches_strikes` | character | Combined count of pitches thrown and strikes recorded for the pitcher in the box score. |
 | `era` | character | Earned run average. |
 
 **boxscore_team**
@@ -224,7 +224,7 @@ ESPN endpoint.
 | `venue_short_name` | character | Venue short name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state. |
-| `venue_address_zip_code` | character |  |
+| `venue_address_zip_code` | character | Postal zip code of the venue where the game was played. |
 
 **officials**
 
@@ -245,7 +245,7 @@ ESPN endpoint.
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
 | `links` | character | Links. |
-| `game_note` | character |  |
+| `game_note` | character | Optional editorial note or context annotation attached to the game in the header. |
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
@@ -253,7 +253,7 @@ ESPN endpoint.
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
-| `league_midsize_name` | character |  |
+| `league_midsize_name` | character | Medium-length display name for the league or competition as shown in the game header. |
 | `league_slug` | character | League slug. |
 | `league_is_tournament` | logical | League is tournament. |
 | `league_links` | character | League links. |
@@ -296,10 +296,10 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
-| `station_key` | character |  |
+| `station_key` | character | Machine-readable key identifying the broadcasting station airing the game. |
 | `lang` | character | Broadcast language (e.g. "en"). |
 | `region` | character | Region label. |
-| `is_national` | logical |  |
+| `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
 | `type_id` | character | Type id. |
 | `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
 | `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
@@ -386,10 +386,10 @@ ESPN endpoint.
 | `links_mobile_href` | character | Links mobile href. |
 | `links_api_self_href` | character | Links api self href. |
 | `links_app_sportscenter_href` | character | Links app sportscenter href. |
-| `links_web_self_href` | character |  |
-| `links_web_self_dsi_href` | character |  |
-| `links_api_artwork_href` | character |  |
-| `links_sportscenter_href` | character |  |
+| `links_web_self_href` | character | URL for the canonical web page of the associated article or editorial content. |
+| `links_web_self_dsi_href` | character | Data-source-identified URL for the web page of the associated article content. |
+| `links_api_artwork_href` | character | API endpoint URL for artwork or imagery associated with the article. |
+| `links_sportscenter_href` | character | URL for the article's page on ESPN's SportsCenter platform. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -439,7 +439,30 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -463,7 +486,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -739,7 +768,25 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_team_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric event identifier. |
+| `date` | character | Event timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `time_valid` | logical | Whether the event time is confirmed. |
+| `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
+| `links` | character | Related links (list, stringified). |
+| `season_year` | integer | Four-digit season year. |
+| `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | character | ESPN numeric identifier for the season type. |
+| `season_type_type` | integer | Season type numeric code. |
+| `season_type_name` | character | Season type name (e.g. Regular Season). |
+| `season_type_abbreviation` | character | Season type abbreviation. |
+| `week_number` | double | Week number. |
+| `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -814,7 +861,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -890,7 +943,30 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -990,7 +1066,30 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | ESPN numeric identifier for the article. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+| `links_web_self_href` | character | Primary canonical web URL for this news article on ESPN.com. |
+| `links_web_self_dsi_href` | character | Alternate canonical web URL for this news article using ESPN's DSI routing. |
+| `links_api_artwork_href` | character | ESPN API URL for the artwork image associated with this news article. |
+| `links_sportscenter_href` | character | Deep-link URL to this news article within the ESPN SportsCenter app or web experience. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1036,7 +1135,7 @@ ESPN endpoint.
 | `differential` | double | Differential. |
 | `division_win_percent` | double | Division win percent. |
 | `games_behind` | double | Games behind. |
-| `games_played` | double | Games played. |
+| `games_played` | double | Matches played. |
 | `league_win_percent` | double | League win percent. |
 | `losses` | double | Losses. |
 | `playoff_seed` | double | Playoff seed. |
@@ -1045,22 +1144,22 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `ties` | double | Ties. |
+| `ties` | double | Number of matches the team has drawn. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `division_games_behind` | double |  |
-| `division_percent` | double |  |
-| `division_tied` | double |  |
+| `division_games_behind` | double | Number of games the team trails the division leader in the standings, expressed as a decimal (e.g., 0.5 for half a game back). |
+| `division_percent` | double | The team's winning percentage in division games, calculated as division wins divided by total division games played. |
+| `division_tied` | double | Number of games the team has tied against opponents within their own division. |
 | `home_losses` | double | Home team's losses. |
 | `home_ties` | double | Total home ties. |
 | `home_wins` | double | Home team's wins. |
-| `magic_number_division` | double |  |
-| `magic_number_wildcard` | double |  |
-| `playoff_percent` | double |  |
+| `magic_number_division` | double | Combination of wins needed by the team (or losses needed by the division leader) for the team to clinch a division title. |
+| `magic_number_wildcard` | double | Combination of wins needed by the team (or losses needed by the next wildcard team) for the team to clinch a wildcard playoff berth. |
+| `playoff_percent` | double | Estimated or model-derived probability that the team will qualify for the playoffs, expressed as a decimal between 0 and 1. |
 | `road_losses` | double | Road losses. |
 | `road_ties` | double | Ties on the road. |
 | `road_wins` | double | Road wins. |
-| `wild_card_percent` | double |  |
+| `wild_card_percent` | double | The team's winning percentage in games that count toward wildcard standings positioning. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |

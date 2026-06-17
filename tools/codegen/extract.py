@@ -371,6 +371,10 @@ _SCHEMA_FOR_PARSER = {
     "parse_team_roster": "team_roster",
     "parse_leaders": "leaders",
     "parse_summary": "summary",
+    # deeper-tree endpoints with stable per-parser shapes + captured fixtures
+    "parse_team_schedule": "team_schedule",
+    "parse_news": "news",
+    "parse_injuries": "injuries",
 }
 
 # polars dtype repr -> friendly (R-roxygen-style) type label, matching scoreboard.yaml

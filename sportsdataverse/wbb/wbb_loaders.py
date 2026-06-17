@@ -104,7 +104,9 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
         |media_id                        |String                                                 |
 
     Example:
-        >>> load_wbb_pbp(seasons=2024)
+        Quick start::
+
+            load_wbb_pbp(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -195,7 +197,9 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_score               |Int32                                                  |
 
     Example:
-        >>> load_wbb_player_boxscore(seasons=2024)
+        Quick start::
+
+            load_wbb_player_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -302,7 +306,9 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
         |player_box                |Boolean |
 
     Example:
-        >>> load_wbb_schedule(seasons=2024)
+        Quick start::
+
+            load_wbb_schedule(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -392,7 +398,9 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_score               |Int32                                                  |
 
     Example:
-        >>> load_wbb_team_boxscore(seasons=2024)
+        Quick start::
+
+            load_wbb_team_boxscore(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -450,7 +458,9 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
         |reason               |String  |
 
     Example:
-        >>> load_wbb_game_rosters(seasons=2026)
+        Quick start::
+
+            load_wbb_game_rosters(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -497,7 +507,9 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
         |position_display_name |String |
 
     Example:
-        >>> load_wbb_officials(seasons=2026)
+        Quick start::
+
+            load_wbb_officials(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -549,7 +561,9 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
         |value                         |Float64 |
 
     Example:
-        >>> load_wbb_player_season_stats(seasons=2026)
+        Quick start::
+
+            load_wbb_player_season_stats(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -621,7 +635,9 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
         |status_type              |String |
 
     Example:
-        >>> load_wbb_rosters(seasons=2026)
+        Quick start::
+
+            load_wbb_rosters(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -672,7 +688,9 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
         |coordinate_y_raw    |Float64 |
 
     Example:
-        >>> load_wbb_shots(seasons=2026)
+        Quick start::
+
+            load_wbb_shots(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -732,7 +750,9 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
         |value                   |Float64 |
 
     Example:
-        >>> load_wbb_standings(seasons=2026)
+        Quick start::
+
+            load_wbb_standings(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -784,7 +804,9 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
         |value                   |Float64 |
 
     Example:
-        >>> load_wbb_team_season_stats(seasons=2026)
+        Quick start::
+
+            load_wbb_team_season_stats(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):

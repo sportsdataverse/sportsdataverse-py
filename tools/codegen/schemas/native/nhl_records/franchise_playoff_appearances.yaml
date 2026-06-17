@@ -1,0 +1,27 @@
+schema: franchise_playoff_appearances
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: first_season_id
+  type: integer
+  description: ''
+- name: franchise_id
+  type: integer
+  description: ''
+- name: franchise_name
+  type: character
+  description: ''
+- name: playoff_seasons
+  type: integer
+  description: ''
+- name: stanley_cup_appearances
+  type: integer
+  description: ''
+- name: stanley_cup_wins
+  type: integer
+  description: ''
+- name: years
+  type: integer
+  description: ''

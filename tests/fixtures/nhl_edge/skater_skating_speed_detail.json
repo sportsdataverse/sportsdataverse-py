@@ -1,0 +1,522 @@
+{
+  "topSkatingSpeeds": [
+    {
+      "gameCenterLink": "/gamecenter/uta-vs-edm/2024/12/31/2024020601",
+      "gameDate": "2024-12-31",
+      "gameType": 2,
+      "playerOnHomeTeam": true,
+      "skatingSpeed": {
+        "imperial": 23.9689,
+        "metric": 38.5742
+      },
+      "timeInPeriod": "08:48",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Utah Hockey Club",
+          "fr": "Club de hockey de l'Utah"
+        },
+        "placeNameWithPreposition": {
+          "default": "Utah",
+          "fr": "de l'Utah"
+        },
+        "abbrev": "UTA",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_dark.svg"
+        },
+        "slug": "utah--hockey-club-59"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/wpg-vs-edm/2025/03/20/2024021099",
+      "gameDate": "2025-03-20",
+      "gameType": 2,
+      "playerOnHomeTeam": true,
+      "skatingSpeed": {
+        "imperial": 23.9319,
+        "metric": 38.5147
+      },
+      "timeInPeriod": "10:49",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Jets"
+        },
+        "placeNameWithPreposition": {
+          "default": "Winnipeg",
+          "fr": "de Winnipeg"
+        },
+        "abbrev": "WPG",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+        },
+        "slug": "winnipeg-jets-52"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-uta/2024/11/29/2024020375",
+      "gameDate": "2024-11-29",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "skatingSpeed": {
+        "imperial": 23.8503,
+        "metric": 38.3833
+      },
+      "timeInPeriod": "00:12",
+      "periodDescriptor": {
+        "number": 4,
+        "periodType": "OT",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Utah Hockey Club",
+          "fr": "Club de hockey de l'Utah"
+        },
+        "placeNameWithPreposition": {
+          "default": "Utah",
+          "fr": "de l'Utah"
+        },
+        "abbrev": "UTA",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_dark.svg"
+        },
+        "slug": "utah--hockey-club-59"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-tor/2024/11/16/2024020274",
+      "gameDate": "2024-11-16",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "skatingSpeed": {
+        "imperial": 23.8382,
+        "metric": 38.3639
+      },
+      "timeInPeriod": "00:12",
+      "periodDescriptor": {
+        "number": 4,
+        "periodType": "OT",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Maple Leafs"
+        },
+        "placeNameWithPreposition": {
+          "default": "Toronto",
+          "fr": "de Toronto"
+        },
+        "abbrev": "TOR",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg"
+        },
+        "slug": "toronto-maple-leafs-10"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-mtl/2024/11/18/2024020290",
+      "gameDate": "2024-11-18",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "skatingSpeed": {
+        "imperial": 23.7927,
+        "metric": 38.2906
+      },
+      "timeInPeriod": "15:21",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Canadiens"
+        },
+        "placeNameWithPreposition": {
+          "default": "Montr\u00e9al",
+          "fr": "de Montr\u00e9al"
+        },
+        "abbrev": "MTL",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg"
+        },
+        "slug": "montreal-canadiens-8"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/nsh-vs-edm/2024/11/14/2024020264",
+      "gameDate": "2024-11-14",
+      "gameType": 2,
+      "playerOnHomeTeam": true,
+      "skatingSpeed": {
+        "imperial": 23.7744,
+        "metric": 38.2612
+      },
+      "timeInPeriod": "01:44",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Predators"
+        },
+        "placeNameWithPreposition": {
+          "default": "Nashville",
+          "fr": "de Nashville"
+        },
+        "abbrev": "NSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg"
+        },
+        "slug": "nashville-predators-18"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/uta-vs-edm/2025/03/18/2024021085",
+      "gameDate": "2025-03-18",
+      "gameType": 2,
+      "playerOnHomeTeam": true,
+      "skatingSpeed": {
+        "imperial": 23.6586,
+        "metric": 38.0748
+      },
+      "timeInPeriod": "19:54",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Utah Hockey Club",
+          "fr": "Club de hockey de l'Utah"
+        },
+        "placeNameWithPreposition": {
+          "default": "Utah",
+          "fr": "de l'Utah"
+        },
+        "abbrev": "UTA",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/UTA_20242025-20242025_dark.svg"
+        },
+        "slug": "utah--hockey-club-59"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-tbl/2025/02/25/2024020921",
+      "gameDate": "2025-02-25",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "skatingSpeed": {
+        "imperial": 23.5924,
+        "metric": 37.9683
+      },
+      "timeInPeriod": "13:06",
+      "periodDescriptor": {
+        "number": 2,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Lightning"
+        },
+        "placeNameWithPreposition": {
+          "default": "Tampa Bay",
+          "fr": "de Tampa Bay"
+        },
+        "abbrev": "TBL",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/TBL_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg"
+        },
+        "slug": "tampa-bay-lightning-14"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-col/2024/11/30/2024020385",
+      "gameDate": "2024-11-30",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "skatingSpeed": {
+        "imperial": 23.5094,
+        "metric": 37.8347
+      },
+      "timeInPeriod": "17:27",
+      "periodDescriptor": {
+        "number": 1,
+        "periodType": "REG",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Avalanche"
+        },
+        "placeNameWithPreposition": {
+          "default": "Colorado",
+          "fr": "du Colorado"
+        },
+        "abbrev": "COL",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg"
+        },
+        "slug": "colorado-avalanche-21"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/edm-vs-stl/2025/02/04/2024020851",
+      "gameDate": "2025-02-04",
+      "gameType": 2,
+      "playerOnHomeTeam": false,
+      "skatingSpeed": {
+        "imperial": 23.464,
+        "metric": 37.7616
+      },
+      "timeInPeriod": "00:15",
+      "periodDescriptor": {
+        "number": 4,
+        "periodType": "OT",
+        "maxRegulationPeriods": 3
+      },
+      "homeTeam": {
+        "commonName": {
+          "default": "Blues"
+        },
+        "placeNameWithPreposition": {
+          "default": "St. Louis",
+          "fr": "de St. Louis"
+        },
+        "abbrev": "STL",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_dark.svg"
+        },
+        "slug": "st-louis-blues-19"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Oilers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Edmonton",
+          "fr": "d'Edmonton"
+        },
+        "abbrev": "EDM",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+        },
+        "slug": "edmonton-oilers-22"
+      }
+    }
+  ],
+  "skatingSpeedDetails": {
+    "maxSkatingSpeed": {
+      "imperial": 23.969,
+      "metric": 38.574,
+      "percentile": 0.9867,
+      "leagueAvg": {
+        "imperial": 22.1829,
+        "metric": 35.6998
+      },
+      "overlay": {
+        "player": {
+          "firstName": {
+            "default": "Connor"
+          },
+          "lastName": {
+            "default": "McDavid"
+          }
+        },
+        "gameDate": "2024-12-31",
+        "awayTeam": {
+          "abbrev": "UTA",
+          "score": 1
+        },
+        "homeTeam": {
+          "abbrev": "EDM",
+          "score": 4
+        },
+        "gameOutcome": {
+          "lastPeriodType": "REG"
+        },
+        "periodDescriptor": {
+          "maxRegulationPeriods": 3,
+          "number": 2,
+          "periodType": "REG"
+        },
+        "timeInPeriod": "08:49",
+        "gameType": 2
+      }
+    },
+    "burstsOver22": {
+      "value": 83,
+      "percentile": 0.9983,
+      "leagueAvg": 3.6889
+    },
+    "bursts20To22": {
+      "value": 359,
+      "percentile": 0.9967,
+      "leagueAvg": 72.7671
+    },
+    "bursts18To20": {
+      "value": 745,
+      "percentile": 0.9717,
+      "leagueAvg": 325.6473
+    }
+  }
+}

@@ -84,7 +84,9 @@ def load_pwhl_games(return_as_pandas: bool = False):
         A polars (or pandas) DataFrame of all games in the data repository.
 
     Example:
-        >>> load_pwhl_games()
+        Quick start::
+
+            load_pwhl_games()
     """
     primary = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_schedules/pwhl_games_in_data_repo.parquet"
     fallback = (

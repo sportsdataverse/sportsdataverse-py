@@ -1,0 +1,103 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "people": [
+    {
+      "id": 660271,
+      "fullName": "Shohei Ohtani",
+      "link": "/api/v1/people/660271",
+      "firstName": "Shohei",
+      "lastName": "Ohtani",
+      "primaryNumber": "17",
+      "birthDate": "1994-07-05",
+      "currentAge": 31,
+      "birthCity": "Oshu",
+      "birthCountry": "Japan",
+      "height": "6' 4\"",
+      "weight": 210,
+      "active": true,
+      "primaryPosition": {
+        "code": "Y",
+        "name": "Two-Way Player",
+        "type": "Two-Way Player",
+        "abbreviation": "TWP"
+      },
+      "useName": "Shohei",
+      "useLastName": "Ohtani",
+      "boxscoreName": "Ohtani",
+      "nickName": "Showtime",
+      "gender": "M",
+      "isPlayer": true,
+      "isVerified": false,
+      "pronunciation": "show-HEY oh-TAWN-ee",
+      "mlbDebutDate": "2018-03-29",
+      "batSide": {
+        "code": "L",
+        "description": "Left"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "Shohei Ohtani",
+      "nameSlug": "shohei-ohtani-660271",
+      "firstLastName": "Shohei Ohtani",
+      "lastFirstName": "Ohtani, Shohei",
+      "lastInitName": "Ohtani, S",
+      "initLastName": "S Ohtani",
+      "fullFMLName": "Shohei Ohtani",
+      "fullLFMName": "Ohtani, Shohei",
+      "strikeZoneTop": 3.369,
+      "strikeZoneBottom": 1.7
+    },
+    {
+      "id": 592450,
+      "fullName": "Aaron Judge",
+      "link": "/api/v1/people/592450",
+      "firstName": "Aaron",
+      "lastName": "Judge",
+      "primaryNumber": "99",
+      "birthDate": "1992-04-26",
+      "currentAge": 34,
+      "birthCity": "Linden",
+      "birthStateProvince": "CA",
+      "birthCountry": "USA",
+      "height": "6' 7\"",
+      "weight": 282,
+      "active": true,
+      "primaryPosition": {
+        "code": "9",
+        "name": "Outfielder",
+        "type": "Outfielder",
+        "abbreviation": "RF"
+      },
+      "useName": "Aaron",
+      "useLastName": "Judge",
+      "middleName": "James",
+      "boxscoreName": "Judge",
+      "nickName": "Baj",
+      "gender": "M",
+      "isPlayer": true,
+      "isVerified": true,
+      "draftYear": 2013,
+      "mlbDebutDate": "2016-08-13",
+      "batSide": {
+        "code": "R",
+        "description": "Right"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "Aaron Judge",
+      "nameSlug": "aaron-judge-592450",
+      "firstLastName": "Aaron Judge",
+      "lastFirstName": "Judge, Aaron",
+      "lastInitName": "Judge, A",
+      "initLastName": "A Judge",
+      "fullFMLName": "Aaron James Judge",
+      "fullLFMName": "Judge, Aaron James",
+      "strikeZoneTop": 3.523,
+      "strikeZoneBottom": 1.778
+    }
+  ]
+}

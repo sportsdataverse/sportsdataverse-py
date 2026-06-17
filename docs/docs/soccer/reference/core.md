@@ -921,7 +921,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1660,20 +1666,19 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
-| `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
-| `team_color` | character | Primary team color as a hex string (no leading '#'). |
-| `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
-| `team_is_active` | logical | Whether the team is currently active. |
-| `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
-| `team_location` | character | Team location / city (e.g. "Boston"). |
-| `team_logos` | character | Pipe-delimited logo image URLs. |
-| `team_name` | character | Team nickname/mascot (e.g. "Celtics"). |
-| `team_nickname` | character | Team nickname as ESPN labels it (often equals team_name). |
-| `team_short_display_name` | character | Abbreviated display name for compact UIs. |
-| `team_slug` | character | URL slug used in ESPN web paths. |
-| `team_uid` | character | ESPN global UID (encodes sport/league/team). |
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `display_name` | character | Full display name of the team (e.g. 'Los Angeles Lakers'). |
+| `abbreviation` | character | Team abbreviation. |
+| `location` | character | Team location/city. |
+| `name` | character | Short team name, typically the mascot (e.g. 'Lakers'). |
+| `short_display_name` | character | Short team display name. |
+| `nickname` | character | Alternative nickname used by ESPN for the team. |
+| `slug` | character | URL slug for the team. |
+| `uid` | character | ESPN universal id for the team. |
+| `color` | character | Primary team color (hex). |
+| `alternate_color` | character | Secondary team color (hex). |
+| `is_active` | logical | Whether the team is currently active. |
+| `is_all_star` | logical | Whether the team is an all-star side. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2025,37 +2030,25 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character | Group name. |
-| `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
-| `team_name` | character | Team name. |
+| `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
 | `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_location` | character | Team location. |
-| `team_logo` | character | Team logo. |
-| `avg_points_against` | double | Avg points against. |
-| `avg_points_for` | double | Avg points for. |
-| `clincher` | double | Clincher. |
-| `differential` | double | Differential. |
-| `division_win_percent` | double | Division win percent. |
-| `games_behind` | double | Games behind. |
-| `league_win_percent` | double | League win percent. |
-| `losses` | double | Losses. |
-| `playoff_seed` | double | Playoff seed. |
-| `point_differential` | double | Point differential. |
-| `points` | double | Points. |
-| `points_against` | double | Points against. |
-| `points_for` | double | Points for. |
-| `streak` | double | Streak. |
-| `win_percent` | double | Win percent. |
-| `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
-| `overall` | character | Overall. |
-| `home` | character | Home. |
-| `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
-| `last ten games` | character | Last ten games. |
+| `note` | character | Standings note (e.g. qualification/relegation marker). |
+| `games_played` | double | Matches played. |
+| `losses` | double | Number of matches the team has lost. |
+| `point_differential` | double | Goal difference (for minus against). |
+| `points` | double | Competition points. |
+| `points_against` | double | Goals conceded. |
+| `points_for` | double | Goals (or runs) scored by the team. |
+| `ties` | double | Number of matches the team has drawn. |
+| `wins` | double | Number of matches the team has won. |
+| `advanced` | double | Whether the team has advanced/qualified. |
+| `deductions` | double | Points deducted. |
+| `ppg` | double | Points per game. |
+| `rank` | double | Position within the group/table. |
+| `rank_change` | double | Change in rank versus the previous update. |
+| `overall` | character | Overall record summary as published by ESPN. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

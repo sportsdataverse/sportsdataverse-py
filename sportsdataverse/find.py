@@ -131,11 +131,11 @@ def find_team(
 
     Examples::
 
-        >>> find_team("lakers", league="nba")["id"]
+        find_team("lakers", league="nba")["id"]
         '13'
-        >>> find_team("LAL", league="nba")["display_name"]
+        find_team("LAL", league="nba")["display_name"]
         'Los Angeles Lakers'
-        >>> find_team("new york", league="nba", multi=True)
+        find_team("new york", league="nba", multi=True)
         [{... 'Knicks' ...}, {... 'Liberty' ...}]  # WNBA is separate
     """
     teams = _list_teams(league)
@@ -190,9 +190,9 @@ def find_athlete(
 
     Examples::
 
-        >>> find_athlete("lebron", league="nba", team="lakers")["id"]
+        find_athlete("lebron", league="nba", team="lakers")["id"]
         '1966'
-        >>> find_athlete("Aaron Judge", league="mlb", team="Yankees")["id"]
+        find_athlete("Aaron Judge", league="mlb", team="Yankees")["id"]
         '33192'
     """
     league = league.lower()
@@ -280,9 +280,9 @@ def find_event(
 
     Examples::
 
-        >>> find_event("2024-06-17", league="nba", home="Boston")["id"]
+        find_event("2024-06-17", league="nba", home="Boston")["id"]
         '401585607'
-        >>> find_event("20250209", league="nfl", away="KC")["name"]
+        find_event("20250209", league="nfl", away="KC")["name"]
         'Kansas City Chiefs at Philadelphia Eagles'
     """
     league = league.lower()

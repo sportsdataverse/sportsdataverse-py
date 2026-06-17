@@ -30,6 +30,7 @@ endpoints:
     player_id: 8480801
   parser: parse_edge_detail
 - short: skater_comparison
+  returns_schema: native/nhl_edge/skater_comparison
   summary: Pull EDGE comparison data for a single skater.
   path: /v1/edge/skater-comparison/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/skater-comparison/{player_id}/now
@@ -50,6 +51,7 @@ endpoints:
     player_id: 8480801
   parser: parse_edge_detail
 - short: skater_shot_location_detail
+  returns_schema: native/nhl_edge/skater_shot_location_detail
   summary: Pull EDGE shot-location detail for a single skater.
   path: /v1/edge/skater-shot-location-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/skater-shot-location-detail/{player_id}/now
@@ -143,6 +145,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: skater_skating_distance_detail
+  returns_schema: native/nhl_edge/skater_skating_distance_detail
   summary: Pull EDGE skating-distance detail for a single skater.
   path: /v1/edge/skater-skating-distance-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/skater-skating-distance-detail/{player_id}/now
@@ -163,6 +166,7 @@ endpoints:
     player_id: 8480801
   parser: parse_edge_detail
 - short: skater_skating_speed_detail
+  returns_schema: native/nhl_edge/skater_skating_speed_detail
   summary: Pull EDGE skating-speed detail for a single skater.
   path: /v1/edge/skater-skating-speed-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/skater-skating-speed-detail/{player_id}/now
@@ -284,6 +288,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: skater_landing
+  returns_schema: native/nhl_edge/skater_landing
   summary: Pull the EDGE skater landing page (summary across all skaters).
   path: /v1/edge/skater-landing/{season}/{game_type}
   now_variant: /v1/edge/skater-landing/now
@@ -320,6 +325,7 @@ endpoints:
     player_id: 8480801
   parser: parse_edge_detail
 - short: goalie_5v5_detail
+  returns_schema: native/nhl_edge/goalie_5v5_detail
   summary: Pull EDGE 5-on-5 detail stats for a single goalie.
   path: /v1/edge/goalie-5v5-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/goalie-5v5-detail/{player_id}/now
@@ -360,6 +366,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: goalie_comparison
+  returns_schema: native/nhl_edge/goalie_comparison
   summary: Pull EDGE comparison data for a single goalie.
   path: /v1/edge/goalie-comparison/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/goalie-comparison/{player_id}/now
@@ -380,6 +387,7 @@ endpoints:
     player_id: 8480801
   parser: parse_edge_detail
 - short: goalie_save_percentage_detail
+  returns_schema: native/nhl_edge/goalie_save_percentage_detail
   summary: Pull EDGE save-percentage detail for a single goalie.
   path: /v1/edge/goalie-save-percentage-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/edge/goalie-save-percentage-detail/{player_id}/now
@@ -465,6 +473,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: goalie_landing
+  returns_schema: native/nhl_edge/goalie_landing
   summary: Pull the EDGE goalie landing page (summary across all goalies).
   path: /v1/edge/goalie-landing/{season}/{game_type}
   now_variant: /v1/edge/goalie-landing/now
@@ -501,6 +510,7 @@ endpoints:
     team_id: 10
   parser: parse_edge_detail
 - short: team_landing
+  returns_schema: native/nhl_edge/team_landing
   summary: Pull the EDGE team landing page (summary across all teams).
   path: /v1/edge/team-landing/{season}/{game_type}
   now_variant: /v1/edge/team-landing/now
@@ -565,6 +575,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: team_shot_speed_detail
+  returns_schema: native/nhl_edge/team_shot_speed_detail
   summary: Pull EDGE shot-speed detail for a single team.
   path: /v1/edge/team-shot-speed-detail/{team_id}/{season}/{game_type}
   now_variant: /v1/edge/team-shot-speed-detail/{team_id}/now
@@ -632,6 +643,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: team_skating_speed_detail
+  returns_schema: native/nhl_edge/team_skating_speed_detail
   summary: Pull EDGE skating-speed detail for a single team.
   path: /v1/edge/team-skating-speed-detail/{team_id}/{season}/{game_type}
   now_variant: /v1/edge/team-skating-speed-detail/{team_id}/now
@@ -675,6 +687,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: team_zone_time_details
+  returns_schema: native/nhl_edge/team_zone_time_details
   summary: Pull EDGE zone-time details for a single team.
   path: /v1/edge/team-zone-time-details/{team_id}/{season}/{game_type}
   now_variant: /v1/edge/team-zone-time-details/{team_id}/now
@@ -719,6 +732,7 @@ endpoints:
     sort_by: points
   parser: parse_edge_top10
 - short: cat_skater_detail
+  returns_schema: native/nhl_edge/cat_skater_detail
   summary: Pull categorized (cat) EDGE detail stats for a single skater.
   path: /v1/cat/edge/skater-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/cat/edge/skater-detail/{player_id}/now
@@ -739,6 +753,7 @@ endpoints:
     player_id: 8480801
   parser: parse_edge_detail
 - short: cat_goalie_detail
+  returns_schema: native/nhl_edge/cat_goalie_detail
   summary: Pull categorized (cat) EDGE detail stats for a single goalie.
   path: /v1/cat/edge/goalie-detail/{player_id}/{season}/{game_type}
   now_variant: /v1/cat/edge/goalie-detail/{player_id}/now

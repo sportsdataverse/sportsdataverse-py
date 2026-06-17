@@ -1,0 +1,97 @@
+{
+  "game": {
+    "gamePk": 716390,
+    "gameGuid": "5ac97d78-946a-4fdf-9ad8-70d811316338",
+    "link": "/api/v1.1/game/716390/feed/live",
+    "gameType": "R",
+    "season": "2023",
+    "gameDate": "2023-09-29T23:05:00Z",
+    "officialDate": "2023-09-29",
+    "status": {
+      "abstractGameState": "Final",
+      "codedGameState": "F",
+      "detailedState": "Final",
+      "statusCode": "F",
+      "startTimeTBD": false,
+      "abstractGameCode": "F"
+    },
+    "teams": {
+      "away": {
+        "team": {
+          "id": 111,
+          "name": "Boston Red Sox",
+          "link": "/api/v1/teams/111"
+        },
+        "leagueRecord": {
+          "wins": 77,
+          "losses": 83,
+          "ties": 0,
+          "pct": ".481"
+        },
+        "score": 3,
+        "isWinner": true,
+        "probablePitcher": {
+          "id": 601713,
+          "fullName": "Nick Pivetta",
+          "link": "/api/v1/people/601713"
+        },
+        "splitSquad": false,
+        "seriesNumber": 52
+      },
+      "home": {
+        "team": {
+          "id": 110,
+          "name": "Baltimore Orioles",
+          "link": "/api/v1/teams/110"
+        },
+        "leagueRecord": {
+          "wins": 100,
+          "losses": 60,
+          "ties": 0,
+          "pct": ".625"
+        },
+        "score": 0,
+        "isWinner": false,
+        "probablePitcher": {
+          "id": 607644,
+          "fullName": "John Means",
+          "link": "/api/v1/people/607644"
+        },
+        "splitSquad": false,
+        "seriesNumber": 52
+      }
+    },
+    "venue": {
+      "id": 2,
+      "name": "Oriole Park at Camden Yards",
+      "link": "/api/v1/venues/2"
+    },
+    "content": {
+      "link": "/api/v1/game/716390/content"
+    },
+    "isTie": false,
+    "gameNumber": 1,
+    "publicFacing": true,
+    "doubleHeader": "N",
+    "gamedayType": "P",
+    "tiebreaker": "N",
+    "calendarEventID": "14-716390-2023-09-29",
+    "seasonDisplay": "2023",
+    "dayNight": "night",
+    "scheduledInnings": 9,
+    "reverseHomeAwayStatus": false,
+    "inningBreakLength": 120,
+    "gamesInSeries": 4,
+    "seriesGameNumber": 2,
+    "seriesDescription": "Regular Season",
+    "recordSource": "S",
+    "ifNecessary": "N",
+    "ifNecessaryDescription": "Normal Game",
+    "gameId": "2023/09/29/bosmlb-balmlb-1"
+  },
+  "leftFieldSacFlyProbability": {},
+  "centerFieldSacFlyProbability": {},
+  "rightFieldSacFlyProbability": {},
+  "awayWinProbability": 100.0,
+  "homeWinProbability": 0.0
+}

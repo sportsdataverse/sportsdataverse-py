@@ -1,0 +1,12 @@
+schema: draft
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: draft_year
+  type: integer
+  description: ''
+- name: rounds
+  type: integer
+  description: ''

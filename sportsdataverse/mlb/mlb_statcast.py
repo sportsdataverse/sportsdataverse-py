@@ -88,7 +88,9 @@ def mlb_statcast_leaderboard_expected_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_expected_stats()
+        Quick start::
+
+            mlb_statcast_leaderboard_expected_stats()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/expected_statistics",
@@ -132,7 +134,9 @@ def mlb_statcast_leaderboard_percentile_rankings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_percentile_rankings()
+        Quick start::
+
+            mlb_statcast_leaderboard_percentile_rankings()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/percentile-rankings",
@@ -176,7 +180,9 @@ def mlb_statcast_leaderboard_sprint_speed(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_sprint_speed()
+        Quick start::
+
+            mlb_statcast_leaderboard_sprint_speed()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/sprint_speed",
@@ -220,7 +226,9 @@ def mlb_statcast_leaderboard_running_splits(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_running_splits()
+        Quick start::
+
+            mlb_statcast_leaderboard_running_splits()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/running_splits",
@@ -264,7 +272,9 @@ def mlb_statcast_leaderboard_bat_tracking(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_bat_tracking()
+        Quick start::
+
+            mlb_statcast_leaderboard_bat_tracking()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/bat-tracking",
@@ -308,7 +318,9 @@ def mlb_statcast_leaderboard_swing_path(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_swing_path()
+        Quick start::
+
+            mlb_statcast_leaderboard_swing_path()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle",
@@ -352,7 +364,9 @@ def mlb_statcast_leaderboard_swing_timing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_swing_timing()
+        Quick start::
+
+            mlb_statcast_leaderboard_swing_timing()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance",
@@ -396,7 +410,9 @@ def mlb_statcast_leaderboard_swing_take(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_swing_take()
+        Quick start::
+
+            mlb_statcast_leaderboard_swing_take()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/swing-take",
@@ -440,7 +456,9 @@ def mlb_statcast_leaderboard_exit_velocity_barrels(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_exit_velocity_barrels()
+        Quick start::
+
+            mlb_statcast_leaderboard_exit_velocity_barrels()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/statcast",
@@ -484,7 +502,9 @@ def mlb_statcast_leaderboard_batted_ball(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_batted_ball()
+        Quick start::
+
+            mlb_statcast_leaderboard_batted_ball()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/batted-ball",
@@ -528,7 +548,9 @@ def mlb_statcast_leaderboard_home_runs(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_home_runs()
+        Quick start::
+
+            mlb_statcast_leaderboard_home_runs()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/home-runs",
@@ -572,7 +594,9 @@ def mlb_statcast_leaderboard_pitch_arsenals(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_pitch_arsenals()
+        Quick start::
+
+            mlb_statcast_leaderboard_pitch_arsenals()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-arsenals",
@@ -616,7 +640,9 @@ def mlb_statcast_leaderboard_pitch_arsenal_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_pitch_arsenal_stats()
+        Quick start::
+
+            mlb_statcast_leaderboard_pitch_arsenal_stats()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats",
@@ -660,7 +686,9 @@ def mlb_statcast_leaderboard_pitch_movement(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_pitch_movement()
+        Quick start::
+
+            mlb_statcast_leaderboard_pitch_movement()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-movement",
@@ -704,7 +732,9 @@ def mlb_statcast_leaderboard_pitch_tempo(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_pitch_tempo()
+        Quick start::
+
+            mlb_statcast_leaderboard_pitch_tempo()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-tempo",
@@ -748,7 +778,9 @@ def mlb_statcast_leaderboard_active_spin(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_active_spin()
+        Quick start::
+
+            mlb_statcast_leaderboard_active_spin()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/active-spin",
@@ -792,7 +824,9 @@ def mlb_statcast_leaderboard_spin_direction(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_spin_direction()
+        Quick start::
+
+            mlb_statcast_leaderboard_spin_direction()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches",
@@ -836,7 +870,9 @@ def mlb_statcast_leaderboard_arm_angles(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_arm_angles()
+        Quick start::
+
+            mlb_statcast_leaderboard_arm_angles()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles",
@@ -880,7 +916,9 @@ def mlb_statcast_leaderboard_pitcher_running_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_pitcher_running_game()
+        Quick start::
+
+            mlb_statcast_leaderboard_pitcher_running_game()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitcher-running-game",
@@ -924,7 +962,9 @@ def mlb_statcast_leaderboard_outs_above_average(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_outs_above_average()
+        Quick start::
+
+            mlb_statcast_leaderboard_outs_above_average()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/outs_above_average",
@@ -968,7 +1008,9 @@ def mlb_statcast_leaderboard_outfield_directional_oaa(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_outfield_directional_oaa()
+        Quick start::
+
+            mlb_statcast_leaderboard_outfield_directional_oaa()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average",
@@ -1012,7 +1054,9 @@ def mlb_statcast_leaderboard_outfield_jump(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_outfield_jump()
+        Quick start::
+
+            mlb_statcast_leaderboard_outfield_jump()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/outfield_jump",
@@ -1056,7 +1100,9 @@ def mlb_statcast_leaderboard_catch_probability(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_catch_probability()
+        Quick start::
+
+            mlb_statcast_leaderboard_catch_probability()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catch_probability",
@@ -1100,7 +1146,9 @@ def mlb_statcast_leaderboard_arm_strength(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_arm_strength()
+        Quick start::
+
+            mlb_statcast_leaderboard_arm_strength()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/arm-strength",
@@ -1144,7 +1192,9 @@ def mlb_statcast_leaderboard_poptime(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_poptime()
+        Quick start::
+
+            mlb_statcast_leaderboard_poptime()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/poptime",
@@ -1188,7 +1238,9 @@ def mlb_statcast_leaderboard_catcher_framing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_catcher_framing()
+        Quick start::
+
+            mlb_statcast_leaderboard_catcher_framing()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-framing",
@@ -1232,7 +1284,9 @@ def mlb_statcast_leaderboard_catcher_blocking(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_catcher_blocking()
+        Quick start::
+
+            mlb_statcast_leaderboard_catcher_blocking()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-blocking",
@@ -1276,7 +1330,9 @@ def mlb_statcast_leaderboard_catcher_throwing(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_catcher_throwing()
+        Quick start::
+
+            mlb_statcast_leaderboard_catcher_throwing()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-throwing",
@@ -1320,7 +1376,9 @@ def mlb_statcast_leaderboard_catcher_stance(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_catcher_stance()
+        Quick start::
+
+            mlb_statcast_leaderboard_catcher_stance()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/catcher-stance",
@@ -1364,7 +1422,9 @@ def mlb_statcast_leaderboard_basestealing_run_value(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_basestealing_run_value()
+        Quick start::
+
+            mlb_statcast_leaderboard_basestealing_run_value()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/basestealing-run-value",
@@ -1408,7 +1468,9 @@ def mlb_statcast_leaderboard_baserunning_run_value(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_baserunning_run_value()
+        Quick start::
+
+            mlb_statcast_leaderboard_baserunning_run_value()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/baserunning-run-value",
@@ -1452,7 +1514,9 @@ def mlb_statcast_leaderboard_baserunning(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_baserunning()
+        Quick start::
+
+            mlb_statcast_leaderboard_baserunning()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/baserunning",
@@ -1496,7 +1560,9 @@ def mlb_statcast_leaderboard_year_to_year(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_year_to_year()
+        Quick start::
+
+            mlb_statcast_leaderboard_year_to_year()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year",
@@ -1540,7 +1606,9 @@ def mlb_statcast_leaderboard_timer_infractions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_timer_infractions()
+        Quick start::
+
+            mlb_statcast_leaderboard_timer_infractions()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions",
@@ -1592,7 +1660,9 @@ def mlb_statcast_leaderboard_custom(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_custom()
+        Quick start::
+
+            mlb_statcast_leaderboard_custom()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/custom",
@@ -1638,7 +1708,9 @@ def mlb_statcast_leaderboard_fielding_run_value(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_fielding_run_value()
+        Quick start::
+
+            mlb_statcast_leaderboard_fielding_run_value()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/fielding-run-value",
@@ -1679,7 +1751,9 @@ def mlb_statcast_leaderboard_park_factors(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_leaderboard_park_factors()
+        Quick start::
+
+            mlb_statcast_leaderboard_park_factors()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/leaderboard/statcast-park-factors",
@@ -1718,7 +1792,9 @@ def mlb_statcast_gamefeed(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_gamefeed()
+        Quick start::
+
+            mlb_statcast_gamefeed()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/gf",
@@ -1754,7 +1830,9 @@ def mlb_statcast_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_schedule()
+        Quick start::
+
+            mlb_statcast_schedule()
     """
     raw = _get(
         "https://baseballsavant.mlb.com/schedule",

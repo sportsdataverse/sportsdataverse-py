@@ -73,7 +73,9 @@ def load_pwhl_game_info(seasons, return_as_pandas: bool = False):
         |boxscore_url    |String |
 
     Example:
-        >>> load_pwhl_game_info(seasons=2024)
+        Quick start::
+
+            load_pwhl_game_info(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -123,7 +125,9 @@ def load_pwhl_game_rosters(seasons, return_as_pandas: bool = False):
         |status        |String |
 
     Example:
-        >>> load_pwhl_game_rosters(seasons=2024)
+        Quick start::
+
+            load_pwhl_game_rosters(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -180,7 +184,9 @@ def load_pwhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
         |starting         |Int32   |
 
     Example:
-        >>> load_pwhl_goalie_boxscores(seasons=2024)
+        Quick start::
+
+            load_pwhl_goalie_boxscores(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -222,7 +228,9 @@ def load_pwhl_officials(seasons, return_as_pandas: bool = False):
         |official_role |String |
 
     Example:
-        >>> load_pwhl_officials(seasons=2024)
+        Quick start::
+
+            load_pwhl_officials(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -353,7 +361,9 @@ def load_pwhl_pbp(seasons, return_as_pandas: bool = False):
         |sec_from_start              |Int32   |
 
     Example:
-        >>> load_pwhl_pbp(seasons=2024)
+        Quick start::
+
+            load_pwhl_pbp(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -409,7 +419,9 @@ def load_pwhl_penalty_summary(seasons, return_as_pandas: bool = False):
         |served_by_last    |String |
 
     Example:
-        >>> load_pwhl_penalty_summary(seasons=2024)
+        Quick start::
+
+            load_pwhl_penalty_summary(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -471,7 +483,9 @@ def load_pwhl_player_boxscores(seasons, return_as_pandas: bool = False):
         |shots_against    |Int32   |
 
     Example:
-        >>> load_pwhl_player_boxscores(seasons=2024)
+        Quick start::
+
+            load_pwhl_player_boxscores(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -519,7 +533,9 @@ def load_pwhl_rosters(seasons, return_as_pandas: bool = False):
         |season        |Int32  |
 
     Example:
-        >>> load_pwhl_rosters(seasons=2024)
+        Quick start::
+
+            load_pwhl_rosters(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -584,7 +600,9 @@ def load_pwhl_schedules(seasons, return_as_pandas: bool = False):
         |shootout        |Boolean |
 
     Example:
-        >>> load_pwhl_schedules(seasons=2024)
+        Quick start::
+
+            load_pwhl_schedules(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -647,7 +665,9 @@ def load_pwhl_scoring_summary(seasons, return_as_pandas: bool = False):
         |y_location         |Boolean |
 
     Example:
-        >>> load_pwhl_scoring_summary(seasons=2024)
+        Quick start::
+
+            load_pwhl_scoring_summary(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -693,7 +713,9 @@ def load_pwhl_shootout(seasons, return_as_pandas: bool = False):
         |is_goal       |Int32  |
 
     Example:
-        >>> load_pwhl_shootout(seasons=2026)
+        Quick start::
+
+            load_pwhl_shootout(seasons=2026)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -736,7 +758,9 @@ def load_pwhl_shots_by_period(seasons, return_as_pandas: bool = False):
         |away_shots |Int32  |
 
     Example:
-        >>> load_pwhl_shots_by_period(seasons=2024)
+        Quick start::
+
+            load_pwhl_shots_by_period(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -794,7 +818,9 @@ def load_pwhl_skater_boxscores(seasons, return_as_pandas: bool = False):
         |starting         |Int32   |
 
     Example:
-        >>> load_pwhl_skater_boxscores(seasons=2024)
+        Quick start::
+
+            load_pwhl_skater_boxscores(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -853,7 +879,9 @@ def load_pwhl_team_boxscores(seasons, return_as_pandas: bool = False):
         |season_record    |String  |
 
     Example:
-        >>> load_pwhl_team_boxscores(seasons=2024)
+        Quick start::
+
+            load_pwhl_team_boxscores(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
@@ -909,7 +937,9 @@ def load_pwhl_three_stars(seasons, return_as_pandas: bool = False):
         |time_on_ice   |String |
 
     Example:
-        >>> load_pwhl_three_stars(seasons=2024)
+        Quick start::
+
+            load_pwhl_three_stars(seasons=2024)
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):

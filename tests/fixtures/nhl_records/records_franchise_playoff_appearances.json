@@ -1,0 +1,55 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "firstSeasonId": 19171918,
+      "franchiseId": 1,
+      "franchiseName": "Montr\u00e9al Canadiens",
+      "playoffSeasons": 87,
+      "stanleyCupAppearances": 33,
+      "stanleyCupWins": 23,
+      "years": 108
+    },
+    {
+      "id": 3,
+      "firstSeasonId": 19171918,
+      "franchiseId": 3,
+      "franchiseName": "St. Louis Eagles",
+      "playoffSeasons": 10,
+      "stanleyCupAppearances": 4,
+      "stanleyCupWins": 4,
+      "years": 17
+    },
+    {
+      "id": 5,
+      "firstSeasonId": 19171918,
+      "franchiseId": 5,
+      "franchiseName": "Toronto Maple Leafs",
+      "playoffSeasons": 74,
+      "stanleyCupAppearances": 21,
+      "stanleyCupWins": 13,
+      "years": 108
+    },
+    {
+      "id": 6,
+      "firstSeasonId": 19241925,
+      "franchiseId": 6,
+      "franchiseName": "Boston Bruins",
+      "playoffSeasons": 78,
+      "stanleyCupAppearances": 20,
+      "stanleyCupWins": 6,
+      "years": 101
+    },
+    {
+      "id": 7,
+      "firstSeasonId": 19241925,
+      "franchiseId": 7,
+      "franchiseName": "Montreal Maroons",
+      "playoffSeasons": 11,
+      "stanleyCupAppearances": 3,
+      "stanleyCupWins": 2,
+      "years": 13
+    }
+  ],
+  "total": 38
+}

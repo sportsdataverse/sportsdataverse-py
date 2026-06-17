@@ -204,16 +204,16 @@ def suggest_next_action(url: str) -> str | None:
 
     Examples::
 
-        >>> suggest_next_action(
-        ...   "https://site.api.espn.com/.../basketball/nba/teams/99999/roster")
+        suggest_next_action(
+            "https://site.api.espn.com/.../basketball/nba/teams/99999/roster")
         "Try `find_team(name, league='nba')` to look up a valid team_id."
 
-        >>> suggest_next_action(
-        ...   "https://site.api.espn.com/.../baseball/mlb/athletes/0/overview")
+        suggest_next_action(
+            "https://site.api.espn.com/.../baseball/mlb/athletes/0/overview")
         "Try `find_athlete(name, league='mlb', team=...)` ..."
 
-        >>> suggest_next_action(
-        ...   "https://site.api.espn.com/.../basketball/nba/summary?event=999")
+        suggest_next_action(
+            "https://site.api.espn.com/.../basketball/nba/summary?event=999")
         "Try `find_event(date, league='nba', home=..., away=...)` ..."
     """
     league = _infer_league(url) or "<league>"

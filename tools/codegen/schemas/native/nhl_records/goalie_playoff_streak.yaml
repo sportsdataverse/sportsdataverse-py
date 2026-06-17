@@ -1,0 +1,42 @@
+schema: goalie_playoff_streak
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: active_player
+  type: logical
+  description: ''
+- name: active_streak
+  type: logical
+  description: ''
+- name: consecutive_playoff_seasons
+  type: integer
+  description: ''
+- name: end_season
+  type: integer
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: franchise_id
+  type: double
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: playoff_seasons
+  type: integer
+  description: ''
+- name: stanley_cup_wins
+  type: integer
+  description: ''
+- name: start_season
+  type: integer
+  description: ''
+- name: team_abbrevs
+  type: character
+  description: ''

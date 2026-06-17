@@ -921,7 +921,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -2025,37 +2031,21 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character | Group name. |
-| `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
-| `team_name` | character | Team name. |
+| `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
 | `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_location` | character | Team location. |
-| `team_logo` | character | Team logo. |
-| `avg_points_against` | double | Avg points against. |
-| `avg_points_for` | double | Avg points for. |
-| `clincher` | double | Clincher. |
-| `differential` | double | Differential. |
-| `division_win_percent` | double | Division win percent. |
-| `games_behind` | double | Games behind. |
-| `league_win_percent` | double | League win percent. |
-| `losses` | double | Losses. |
-| `playoff_seed` | double | Playoff seed. |
-| `point_differential` | double | Point differential. |
-| `points` | double | Points. |
-| `points_against` | double | Points against. |
-| `points_for` | double | Points for. |
-| `streak` | double | Streak. |
-| `win_percent` | double | Win percent. |
-| `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
-| `overall` | character | Overall. |
-| `home` | character | Home. |
-| `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
-| `last ten games` | character | Last ten games. |
+| `rank` | integer | Position within the group/table. |
+| `matches_played` | integer | Matches played (cricket). |
+| `matches_won` | integer | Matches won (cricket). |
+| `matches_lost` | integer | Matches lost (cricket). |
+| `noresult` | integer | Matches with no result (cricket). |
+| `match_points` | integer | Competition points (cricket). |
+| `qualified` | integer | Qualification flag (cricket). |
+| `netrr` | double | Net run rate (cricket). |
+| `for` | double | Runs/goals for. |
+| `against` | double | Runs/goals against. |
+| `total` | character | Aggregate/summary value as published by ESPN. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

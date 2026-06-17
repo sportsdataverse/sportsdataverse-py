@@ -1,0 +1,50 @@
+{
+  "data": [
+    {
+      "id": 84448552,
+      "dateInducted": null,
+      "inductionCatId": 1,
+      "miscFullName": null,
+      "officeId": 2,
+      "officialId": null,
+      "playerId": 8444855
+    },
+    {
+      "id": 84450752,
+      "dateInducted": null,
+      "inductionCatId": 1,
+      "miscFullName": null,
+      "officeId": 2,
+      "officialId": null,
+      "playerId": 8445075
+    },
+    {
+      "id": 84451292,
+      "dateInducted": null,
+      "inductionCatId": 1,
+      "miscFullName": null,
+      "officeId": 2,
+      "officialId": null,
+      "playerId": 8445129
+    },
+    {
+      "id": 84451652,
+      "dateInducted": null,
+      "inductionCatId": 1,
+      "miscFullName": null,
+      "officeId": 2,
+      "officialId": null,
+      "playerId": 8445165
+    },
+    {
+      "id": 84452453,
+      "dateInducted": null,
+      "inductionCatId": 1,
+      "miscFullName": null,
+      "officeId": 3,
+      "officialId": null,
+      "playerId": 8445245
+    }
+  ],
+  "total": 761
+}

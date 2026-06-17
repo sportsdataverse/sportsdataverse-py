@@ -1,0 +1,36 @@
+schema: coach_stanley_cup
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: active_coach
+  type: logical
+  description: ''
+- name: coach_id
+  type: integer
+  description: ''
+- name: coach_name
+  type: character
+  description: ''
+- name: franchise_id
+  type: double
+  description: ''
+- name: franchise_name
+  type: character
+  description: ''
+- name: longest_streak
+  type: integer
+  description: ''
+- name: longest_streak_description
+  type: character
+  description: ''
+- name: seasons_won
+  type: character
+  description: ''
+- name: stanley_cups
+  type: integer
+  description: ''
+- name: team_abbrevs
+  type: character
+  description: ''

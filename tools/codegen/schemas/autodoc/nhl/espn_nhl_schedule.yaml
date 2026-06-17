@@ -143,7 +143,7 @@ columns:
   type: character
   description: ''
 - name: home_linescores
-  type: integer
+  type: list
   description: ''
 - name: home_records
   type: character
@@ -188,7 +188,7 @@ columns:
   type: character
   description: ''
 - name: away_linescores
-  type: integer
+  type: list
   description: ''
 - name: away_records
   type: character

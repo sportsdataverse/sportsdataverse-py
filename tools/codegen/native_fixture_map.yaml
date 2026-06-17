@@ -82,6 +82,23 @@ mlb_api:
   linescore_745282.json: linescore
   play_by_play_745282.json: play_by_play
   win_probability_745282.json: win_probability
+  # --- wave-2: additional parsered endpoints ---
+  # /api/v1.1/game/716390/feed/live       -> pbp
+  pbp_716390.json: pbp
+  # /api/v1/game/716390/contextMetrics    -> game_context_metrics
+  game_context_metrics_716390.json: game_context_metrics
+  # /api/v1/game/716390/content           -> game_content
+  game_content_716390.json: game_content
+  # /api/v1/people?personIds=...          -> people
+  people_multi.json: people
+  # /api/v1/people/660271                 -> person
+  person_660271.json: person
+  # /api/v1/people/660271/stats/game/716390 -> person_game_stats
+  person_game_stats_660271.json: person_game_stats
+  # /api/v1/leagueLeaderTypes             -> meta
+  meta_game_types.json: meta
+  # /api/v1/draft/2024                    -> draft
+  draft_2024.json: draft
 
 nhl_api_web:
   # /gamecenter/2023030417/play-by-play   -> /v1/gamecenter/{game_id}/play-by-play
@@ -116,6 +133,20 @@ nhl_api_web:
   goalie_leaders_now.json: goalie_leaders
   # /draft/picks/2024/1                   -> /v1/draft/picks/{year}/{round_}
   draft_picks_2024_r1.json: draft_picks
+  # /club-schedule/TOR/month/now          -> /v1/club-schedule/{team}/month/{month}
+  club_schedule_month_tor.json: club_schedule_month
+  # /club-schedule/TOR/week/now           -> /v1/club-schedule/{team}/week/{date}
+  club_schedule_week_tor.json: club_schedule_week
+  # /club-stats-season/TOR                -> /v1/club-stats-season/{team}
+  club_stats_season_tor.json: club_stats_season
+  # /roster-season/TOR                    -> /v1/roster-season/{team}
+  roster_season_tor.json: roster_season
+  # /draft/picks/now                      -> /v1/draft/picks/now
+  draft_picks_now.json: draft_picks_now
+  # /draft-tracker/picks/now              -> /v1/draft-tracker/picks/now
+  draft_tracker_picks_now.json: draft_tracker_picks_now
+  # /schedule-calendar/2024-06-24         -> /v1/schedule-calendar/{date}
+  schedule_calendar_2024.json: schedule_calendar
   # --- 0.0.56: parser-less prose endpoints given dedicated parsers ---
   player_spotlight.json: player_spotlight
   draft_rankings_now.json: draft_rankings_now
@@ -125,30 +156,134 @@ nhl_api_web:
 nhl_edge:
   # /edge/skater-detail/8478402/20242025/2            -> /v1/edge/skater-detail/{player_id}/{season}/{game_type}
   skater_detail.json: skater_detail
+  # /edge/skater-comparison/8478402/20242025/2        -> /v1/edge/skater-comparison/{player_id}/{season}/{game_type}
+  skater_comparison.json: skater_comparison
+  # /edge/skater-shot-location-detail/8478402/20242025/2 -> /v1/edge/skater-shot-location-detail/{player_id}/{season}/{game_type}
+  skater_shot_loc_detail.json: skater_shot_location_detail
+  # /edge/skater-skating-distance-detail/8478402/20242025/2 -> /v1/edge/skater-skating-distance-detail/{player_id}/{season}/{game_type}
+  skater_skating_distance_detail.json: skater_skating_distance_detail
+  # /edge/skater-skating-speed-detail/8478402/20242025/2 -> /v1/edge/skater-skating-speed-detail/{player_id}/{season}/{game_type}
+  skater_skating_speed_detail.json: skater_skating_speed_detail
   # /edge/skater-zone-time/8478402/20242025/2         -> /v1/edge/skater-zone-time/{player_id}/{season}/{game_type}
   skater_zone_time.json: skater_zone_time
+  # /edge/skater-landing/now                          -> /v1/edge/skater-landing/{season}/{game_type} (now_variant)
+  skater_landing.json: skater_landing
   # /edge/skater-shot-speed-detail/8478402/20242025/2 -> /v1/edge/skater-shot-speed-detail/{player_id}/{season}/{game_type}
   skater_shot_speed.json: skater_shot_speed_detail
+  # /edge/goalie-detail/8480313/20242025/2            -> /v1/edge/goalie-detail/{player_id}/{season}/{game_type}
+  goalie_detail.json: goalie_detail
+  # /edge/goalie-5v5-detail/8480313/20242025/2        -> /v1/edge/goalie-5v5-detail/{player_id}/{season}/{game_type}
+  goalie_5v5_detail.json: goalie_5v5_detail
+  # /edge/goalie-comparison/8480313/20242025/2        -> /v1/edge/goalie-comparison/{player_id}/{season}/{game_type}
+  goalie_comparison.json: goalie_comparison
+  # /edge/goalie-save-percentage-detail/8480313/20242025/2 -> /v1/edge/goalie-save-percentage-detail/{player_id}/{season}/{game_type}
+  goalie_save_pct_detail.json: goalie_save_percentage_detail
+  # /edge/goalie-shot-location-detail/8480313/20242025/2 -> /v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}
+  goalie_shot_loc.json: goalie_shot_location_detail
+  # /edge/goalie-landing/now                          -> /v1/edge/goalie-landing/{season}/{game_type} (now_variant)
+  goalie_landing.json: goalie_landing
   # /edge/team-detail/22/20242025/2                   -> /v1/edge/team-detail/{team_id}/{season}/{game_type}
   team_detail.json: team_detail
   # /edge/team-shot-location-detail/22/20242025/2     -> /v1/edge/team-shot-location-detail/{team_id}/{season}/{game_type}
   team_shot_loc.json: team_shot_location_detail
-  # /edge/goalie-detail/8480313/20242025/2            -> /v1/edge/goalie-detail/{player_id}/{season}/{game_type}
-  goalie_detail.json: goalie_detail
-  # /edge/goalie-shot-location-detail/8480313/20242025/2 -> /v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}
-  goalie_shot_loc.json: goalie_shot_location_detail
+  # /edge/team-shot-speed-detail/22/20242025/2        -> /v1/edge/team-shot-speed-detail/{team_id}/{season}/{game_type}
+  team_shot_speed_detail.json: team_shot_speed_detail
+  # /edge/team-zone-time-details/22/20242025/2        -> /v1/edge/team-zone-time-details/{team_id}/{season}/{game_type}
+  team_zone_time_details.json: team_zone_time_details
+  # /edge/team-landing/now                            -> /v1/edge/team-landing/{season}/{game_type} (now_variant)
+  team_landing.json: team_landing
+  # /cat/edge/skater-detail/8478402/20242025/2        -> /v1/cat/edge/skater-detail/{player_id}/{season}/{game_type}
+  cat_skater_detail.json: cat_skater_detail
+  # /cat/edge/goalie-detail/8480313/20242025/2        -> /v1/cat/edge/goalie-detail/{player_id}/{season}/{game_type}
+  cat_goalie_detail.json: cat_goalie_detail
+
 
 nhl_records:
   # /franchise                            -> /franchise
   records_franchise.json: franchises
   # /franchise-team-totals?limit=10       -> /franchise-team-totals
   records_franchise_team_totals.json: franchise_team_totals
+  # /franchise-season-results?limit=5     -> /franchise-season-results
+  records_franchise_season_results.json: franchise_season_results
+  # /franchise-playoff-appearances?limit=5 -> /franchise-playoff-appearances
+  records_franchise_playoff_appearances.json: franchise_playoff_appearances
+  # /franchise-totals?limit=5             -> /franchise-totals
+  records_franchise_totals.json: franchise_totals
+  # /franchise-detail?limit=5             -> /franchise-detail
+  records_franchise_detail.json: franchise_detail
+  # /all-time-record-vs-franchise?limit=5 -> /all-time-record-vs-franchise
+  records_all_time_record_vs_franchise.json: all_time_record_vs_franchise
   # /coach?limit=10                       -> /coach
   records_coach.json: coaches
+  # /coach/1                              -> /coach/{coach_id}
+  records_coach_single.json: coach
+  # /coach-career-records?limit=5         -> /coach-career-records (now_variant)
+  records_coach_career.json: coach_career
+  # /coach-career-records-regular-plus-playoffs?limit=5 -> /coach-career-records-regular-plus-playoffs
+  records_coach_career_with_playoffs.json: coach_career_with_playoffs
+  # /coach-franchise-records?limit=5      -> /coach-franchise-records (now_variant)
+  records_coach_franchise.json: coach_franchise
+  # /coach-stanley-cup-streak?limit=5     -> /coach-stanley-cup-streak
+  records_coach_stanley_cup.json: coach_stanley_cup
+  # /goalie-career-stats?limit=5          -> /goalie-career-stats
+  records_goalie_career_stats.json: goalie_career_stats
+  # /goalie_career_stats_incl_playoffs?limit=5 -> /goalie_career_stats_incl_playoffs
+  records_goalie_career_stats_with_playoffs.json: goalie_career_stats_with_playoffs
+  # /goalie-season-stats?limit=5          -> /goalie-season-stats
+  records_goalie_season_stats.json: goalie_season_stats
+  # /goalie-win-streak?limit=5            -> /goalie-win-streak
+  records_goalie_win_streak.json: goalie_win_streak
+  # /goalie-shutout-streak?limit=5        -> /goalie-shutout-streak
+  records_goalie_shutout_streak.json: goalie_shutout_streak
+  # /goalie-win-plateaus?limit=5          -> /goalie-win-plateaus
+  records_goalie_win_plateaus.json: goalie_win_plateaus
+  # /goalie-playoff-streak?limit=5        -> /goalie-playoff-streak
+  records_goalie_playoff_streak.json: goalie_playoff_streak
+  # /goalie-undefeated-streak?limit=5     -> /goalie-undefeated-streak
+  records_goalie_undefeated_streak.json: goalie_undefeated_streak
+  # /consecutive-100-point-seasons?limit=5 -> /consecutive-100-point-seasons
+  records_consecutive_100pt_seasons.json: consecutive_100pt_seasons
   # /draft?limit=10                       -> /draft (now_variant of /draft/{draft_id})
   records_draft.json: draft
+  # /draft/byTeam/10?limit=5              -> /draft/byTeam/{team_id}
+  records_draft_by_team.json: draft_by_team
+  # /draft-prospect?limit=5               -> /draft-prospect (now_variant)
+  records_draft_prospect.json: draft_prospect
+  # /draft-lottery-odds?limit=5           -> /draft-lottery-odds
+  records_draft_lottery_odds.json: draft_lottery_odds
+  # /expansion-draft-picks?limit=5        -> /expansion-draft-picks
+  records_expansion_draft_picks.json: expansion_draft_picks
+  # /all-star-skater-career-stats?limit=5 -> /all-star-skater-career-stats
+  records_allstar_skater_career.json: allstar_skater_career
+  # /all-star-goaltender-career-stats?limit=5 -> /all-star-goaltender-career-stats
+  records_allstar_goalie_career.json: allstar_goalie_career
+  # /all-star-coach-career-stats?limit=5  -> /all-star-coach-career-stats
+  records_allstar_coach_career.json: allstar_coach_career
+  # /all-star-skater-game-stats?limit=5   -> /all-star-skater-game-stats
+  records_allstar_skater_game.json: allstar_skater_game
+  # /all-star-goaltender-game-stats?limit=5 -> /all-star-goaltender-game-stats
+  records_allstar_goalie_game.json: allstar_goalie_game
+  # /award-details?limit=5                -> /award-details
+  records_awards.json: awards
+  # /award-details/1?limit=5              -> /award-details/{franchise_id}
+  records_awards_by_franchise.json: awards_by_franchise
+  # /award-details/trophy/1/season/19171918 -> /award-details/trophy/{trophy_id}/season/{season_id}
+  records_awards_trophy_season.json: awards_trophy_season
+  # /hof/players?limit=5                  -> /hof/players
+  records_hof_players.json: hof_players
+  # /hof/players/1?limit=5                -> /hof/players/{office_id}
+  records_hof_players_by_office.json: hof_players_by_office
+  # /general-manager-career-records?limit=5 -> /general-manager-career-records (now_variant)
+  records_gm_career.json: gm_career
+  # /general-manager-franchise-records?limit=5 -> /general-manager-franchise-records
+  records_gm_franchise.json: gm_franchise
+  # /home-team-record?limit=5             -> /home-team-record
+  records_home_team_record.json: home_team_record
+  # /away-team-record?limit=5             -> /away-team-record
+  records_away_team_record.json: away_team_record
   # /attendance                           -> /attendance
   records_attendance.json: attendance
+
 
 nhl_stats_rest:
   # /season                               -> /{lang}/season
@@ -161,6 +296,26 @@ nhl_stats_rest:
   stats_rest_glossary.json: glossary
   # /config                               -> /{lang}/config
   stats_rest_config.json: config
+  # /draft?limit=5                        -> /{lang}/draft
+  stats_rest_draft.json: draft
+  # /game?limit=5                         -> /{lang}/game
+  stats_rest_game.json: game
+  # /milestones/goalies?limit=5           -> /{lang}/milestones/goalies
+  stats_rest_milestones_goalies.json: milestones_goalies
+  # /milestones/skaters?limit=5           -> /{lang}/milestones/skaters
+  stats_rest_milestones_skaters.json: milestones_skaters
+  # /players?limit=5                      -> /{lang}/players
+  stats_rest_players.json: players
+  # /team?limit=5                         -> /{lang}/team
+  stats_rest_team.json: team
+  # /team/id/10                           -> /{lang}/team/id/{team_id}
+  stats_rest_team_by_id.json: team_by_id
+  # /leaders/goalies/savePctg            -> /{lang}/leaders/goalies/{attribute}
+  stats_rest_leaders_goalies.json: leaders_goalies
+  # /leaders/skaters/goals               -> /{lang}/leaders/skaters/{attribute}
+  stats_rest_leaders_skaters.json: leaders_skaters
+  # /shiftcharts?cayenneExp=gameId=...   -> /{lang}/shiftcharts
+  stats_rest_shiftcharts.json: shiftcharts
   # /skater/summary?cayenneExp=...        -> /{lang}/skater/{report} (report=summary)
   stats_rest_skater_summary_2024.json: skater_report
   # /goalie/summary?...                   -> /{lang}/goalie/{report} (report=summary)

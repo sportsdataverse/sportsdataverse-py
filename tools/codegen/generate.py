@@ -121,7 +121,9 @@ def _build_docstring(
         lines.append("    The raw JSON ``Dict``.")
     lines.append("")
     lines.append("Example:")
-    lines.append(f"    >>> {example_call}")
+    lines.append("    Quick start::")
+    lines.append("")
+    lines.append(f"        {example_call}")
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
@@ -270,14 +272,46 @@ def _r_col_desc(league: str | None, col: str) -> str:
     return _r_col_descs().get("_merged", {}).get(col, "") or ""
 
 
-def _table_cell_desc(stored: str, league: str | None, col: str) -> str:
-    """A return-table description cell: stored value if non-empty, else R-dict fill.
+_MANUAL_DESC_FILE = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
 
-    Never overwrites a non-empty (hand-curated) stored description. The result is
+
+@functools.lru_cache(maxsize=None)
+def _manual_col_descs() -> dict:
+    """``{schema: {col: desc}, _global: {col: desc}}`` hand-curated column
+    descriptions (committed, deterministic). Empty dict when the file is absent."""
+    import yaml
+
+    if not _MANUAL_DESC_FILE.exists():
+        return {}
+    return yaml.safe_load(_MANUAL_DESC_FILE.read_text(encoding="utf-8")) or {}
+
+
+def _manual_col_desc(schema: str | None, col: str) -> str:
+    """Hand-curated description for ``col``: schema-keyed first, then ``_global``.
+
+    Resolution: ``manual[schema][col]`` -> ``manual["_global"][col]`` -> ``""``."""
+    if not col:
+        return ""
+    d = _manual_col_descs()
+    if schema:
+        v = (d.get(schema) or {}).get(col)
+        if v:
+            return v
+    return (d.get("_global") or {}).get(col, "") or ""
+
+
+def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | None = None) -> str:
+    """A return-table description cell: stored value if non-empty, else the
+    hand-curated manual dict (schema-keyed), else the R-dict fill.
+
+    Never overwrites a non-empty (captured) stored description. The result is
     pipe/newline-escaped so it is safe inside a single markdown table cell.
     reST markup (double-backtick literals, Sphinx roles) is normalised to
     standard markdown inline code."""
-    raw = stored if (stored or "").strip() else _r_col_desc(league, col)
+    if (stored or "").strip():
+        raw = stored
+    else:
+        raw = _manual_col_desc(schema, col) or _r_col_desc(league, col)
     normalized = _normalize_rst((raw or "").replace("\n", " ").strip())
     return normalized.replace("|", "\\|")
 
@@ -407,7 +441,7 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
         head = "| col_name | type | description |\n|---|---|---|\n"
         return head + "".join(
             f"| `{c['name']}` | {c.get('type', '')} | "
-            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''))} |\n"
+            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''), d.get('schema'))} |\n"
             for c in cols
         )
 
@@ -920,7 +954,9 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
             lines.append(f"    |{c['name'].ljust(width)} |{c['type'].ljust(twidth)} |")
     lines.append("")
     lines.append("Example:")
-    lines.append(f"    >>> {ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})")
+    lines.append("    Quick start::")
+    lines.append("")
+    lines.append(f"        {ld.fn}(seasons={ld.example_args.get('seasons', 2024)!r})")
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
@@ -1065,6 +1101,10 @@ def _return_schema_parsers():
         "standings": (P.parse_standings, "dataframe"),
         "leaders": (P.parse_leaders, "dataframe"),
         "summary": (P.parse_summary, "frames"),
+        # deeper-tree endpoints (stable per-parser shapes; captured fixtures)
+        "team_schedule": (P.parse_team_schedule, "dataframe"),
+        "news": (P.parse_news, "dataframe"),
+        "injuries": (P.parse_injuries, "dataframe"),
     }
 
 
@@ -1110,6 +1150,96 @@ _LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"]
 _FIX = ROOT / "tests" / "fixtures" / "espn"
 
 
+# Sport-specific ESPN parsers (soccer/cricket) emit different column shapes than
+# the generic cross-league parsers, so they get their own per-prefix schema files
+# introspected from the nested tests/fixtures/espn/{sport}/{league}/site-v2/ captures
+# (unioned across captured leagues). Column descriptions are NOT written here -- like
+# every captured schema they carry name+type only and are filled at render time from
+# manual_column_descriptions.yaml (keyed by the `schema:` field). See the
+# returns-table-descriptions design.
+
+# (sport, prefix, [leagues], {endpoint(schema_key): (parser_attr, kind)})
+_SPORT_SPECIFIC_SCHEMAS = [
+    (
+        "soccer",
+        "soccer",
+        ["eng.1", "usa.1", "uefa.champions"],
+        {
+            "scoreboard": ("parse_soccer_scoreboard", "dataframe"),
+            "standings": ("parse_soccer_standings", "dataframe"),
+            "teams": ("parse_soccer_teams", "dataframe"),
+            "team_roster": ("parse_soccer_team_roster", "dataframe"),
+            "summary": ("parse_soccer_summary", "frames"),
+        },
+        "sportsdataverse.soccer.soccer_espn_parsers",
+    ),
+    (
+        "cricket",
+        "cricket",
+        ["8048"],
+        {
+            "scoreboard": ("parse_cricket_scoreboard", "dataframe"),
+            "standings": ("parse_cricket_standings", "dataframe"),
+            "summary": ("parse_cricket_summary", "frames"),
+        },
+        "sportsdataverse.cricket.cricket_espn_parsers",
+    ),
+]
+
+
+def _refresh_sport_specific_return_schemas() -> int:
+    """Emit per-prefix schemas for the soccer/cricket sport-specific parsers,
+    unioning columns/sections across the captured leagues so the schema is
+    representative (e.g. uefa.champions adds the summary `shootout` section)."""
+    import importlib
+    import json
+
+    import yaml
+
+    def cols(df) -> list:
+        return [{"name": n, "type": _pl_to_doc_type(str(t)), "description": ""} for n, t in zip(df.columns, df.dtypes)]
+
+    written = 0
+    for sport, prefix, leagues, endpoints, modpath in _SPORT_SPECIFIC_SCHEMAS:
+        pmod = importlib.import_module(modpath)
+        for schema_key, (parser_attr, kind) in endpoints.items():
+            parser = getattr(pmod, parser_attr)
+            payloads = []
+            for lg in leagues:
+                fx = _FIX / sport / lg / "site-v2" / f"{schema_key}.json"
+                if fx.exists():
+                    payloads.append(json.loads(fx.read_text(encoding="utf-8")))
+            if not payloads:
+                continue
+            if kind == "frames":
+                sections: dict = {}  # section -> {col_name: col_dict}
+                for p in payloads:
+                    for sec, df in parser(p).items():
+                        bucket = sections.setdefault(sec, {})
+                        for c in cols(df):
+                            bucket.setdefault(c["name"], c)
+                doc = {
+                    "schema": schema_key,
+                    "kind": "frames",
+                    "frames": [{"section": s, "columns": list(c.values())} for s, c in sections.items()],
+                }
+            else:
+                seen: dict = {}
+                for p in payloads:
+                    for c in cols(parser(p)):
+                        seen.setdefault(c["name"], c)
+                doc = {"schema": schema_key, "kind": "dataframe", "columns": list(seen.values())}
+            outdir = ROOT / "tools" / "codegen" / "schemas" / schema_key
+            outdir.mkdir(parents=True, exist_ok=True)
+            (outdir / f"{prefix}.yaml").write_text(
+                yaml.safe_dump(doc, sort_keys=False, width=120, allow_unicode=True),
+                encoding="utf-8",
+                newline="\n",
+            )
+            written += 1
+    return written
+
+
 def refresh_return_schemas() -> int:
     """Run each parser on every per-league captured fixture and emit per-league
     column schemas under schemas/{name}/{league}.yaml. Descriptions are merged
@@ -1138,7 +1268,14 @@ def refresh_return_schemas() -> int:
                 }
             else:
                 df = parser(payload)
-                doc = {"schema": name, "kind": "dataframe", "columns": _cols_from_frame(df, descs)}
+                cols = _cols_from_frame(df, descs)
+                # Skip 0-column captures: an empty per-league schema file would
+                # shadow (and suppress) the generic schemas/{name}.yaml fallback,
+                # leaving the league with NO return table. No file => generic applies.
+                if not cols:
+                    skipped += 1
+                    continue
+                doc = {"schema": name, "kind": "dataframe", "columns": cols}
             (outdir / f"{league}.yaml").write_text(
                 yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
             )
@@ -1171,7 +1308,11 @@ def refresh_return_schemas() -> int:
             )
             written += 1
 
-    print(f"return schemas: {written} per-league written, {skipped} skipped (no fixture)")
+    # --- sport-specific ESPN parsers (soccer/cricket) ---
+    sport_written = _refresh_sport_specific_return_schemas()
+    written += sport_written
+
+    print(f"return schemas: {written} written ({sport_written} sport-specific), {skipped} skipped (no fixture)")
     return 0
 
 
@@ -2755,7 +2896,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
         for c in return_columns:
             raw_name = str(c.get("name", ""))
-            c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name)
+            c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name, n)
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n), []).append(

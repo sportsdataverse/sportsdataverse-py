@@ -1,0 +1,439 @@
+{
+  "seasonsWithEdgeStats": [
+    {
+      "id": 20212022,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20222023,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20232024,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20242025,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20252026,
+      "gameTypes": [
+        2,
+        3
+      ]
+    }
+  ],
+  "leaders": {
+    "hardestShot": {
+      "player": {
+        "id": 8474590,
+        "firstName": {
+          "default": "John"
+        },
+        "lastName": {
+          "default": "Carlson"
+        },
+        "sweaterNumber": 74,
+        "position": "D",
+        "slug": "john-carlson-8474590",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/ANA/8474590.png",
+        "team": {
+          "commonName": {
+            "default": "Ducks"
+          },
+          "placeNameWithPreposition": {
+            "default": "Anaheim",
+            "fr": "d'Anaheim"
+          },
+          "abbrev": "ANA",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg"
+          }
+        }
+      },
+      "overlay": {
+        "player": {
+          "firstName": {
+            "default": "John"
+          },
+          "lastName": {
+            "default": "Carlson"
+          }
+        },
+        "gameDate": "2026-04-26",
+        "awayTeam": {
+          "abbrev": "EDM",
+          "score": 3
+        },
+        "homeTeam": {
+          "abbrev": "ANA",
+          "score": 4
+        },
+        "gameOutcome": {
+          "lastPeriodType": "OT",
+          "otPeriods": 1
+        },
+        "periodDescriptor": {
+          "maxRegulationPeriods": 3,
+          "number": 3,
+          "periodType": "REG"
+        },
+        "timeInPeriod": "14:57",
+        "gameType": 3
+      },
+      "shotSpeed": {
+        "imperial": 102.72,
+        "metric": 165.3118
+      }
+    },
+    "maxSkatingSpeed": {
+      "player": {
+        "id": 8480069,
+        "firstName": {
+          "default": "Cale"
+        },
+        "lastName": {
+          "default": "Makar"
+        },
+        "sweaterNumber": 8,
+        "position": "D",
+        "slug": "cale-makar-8480069",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/COL/8480069.png",
+        "team": {
+          "commonName": {
+            "default": "Avalanche"
+          },
+          "placeNameWithPreposition": {
+            "default": "Colorado",
+            "fr": "du Colorado"
+          },
+          "abbrev": "COL",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg"
+          }
+        }
+      },
+      "overlay": {
+        "player": {
+          "firstName": {
+            "default": "Cale"
+          },
+          "lastName": {
+            "default": "Makar"
+          }
+        },
+        "gameDate": "2026-04-21",
+        "awayTeam": {
+          "abbrev": "LAK",
+          "score": 1
+        },
+        "homeTeam": {
+          "abbrev": "COL",
+          "score": 2
+        },
+        "gameOutcome": {
+          "lastPeriodType": "OT",
+          "otPeriods": 1
+        },
+        "periodDescriptor": {
+          "maxRegulationPeriods": 3,
+          "number": 1,
+          "periodType": "REG"
+        },
+        "timeInPeriod": "09:33",
+        "gameType": 3
+      },
+      "skatingSpeed": {
+        "imperial": 23.9224,
+        "metric": 38.4993
+      }
+    },
+    "totalDistanceSkated": {
+      "player": {
+        "id": 8477447,
+        "firstName": {
+          "default": "Shea"
+        },
+        "lastName": {
+          "default": "Theodore"
+        },
+        "sweaterNumber": 27,
+        "position": "D",
+        "slug": "shea-theodore-8477447",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/VGK/8477447.png",
+        "team": {
+          "commonName": {
+            "default": "Golden Knights"
+          },
+          "placeNameWithPreposition": {
+            "default": "Vegas",
+            "fr": "de Vegas"
+          },
+          "abbrev": "VGK",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg"
+          }
+        }
+      },
+      "distanceSkated": {
+        "imperial": 84.7919,
+        "metric": 136.4527
+      }
+    },
+    "distanceMaxGame": {
+      "player": {
+        "id": 8480800,
+        "firstName": {
+          "default": "Quinn"
+        },
+        "lastName": {
+          "default": "Hughes"
+        },
+        "sweaterNumber": 43,
+        "position": "D",
+        "slug": "quinn-hughes-8480800",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/MIN/8480800.png",
+        "team": {
+          "commonName": {
+            "default": "Wild"
+          },
+          "placeNameWithPreposition": {
+            "default": "Minnesota",
+            "fr": "du Minnesota"
+          },
+          "abbrev": "MIN",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg"
+          }
+        }
+      },
+      "distanceSkated": {
+        "imperial": 6.3464,
+        "metric": 10.2131
+      },
+      "overlay": {
+        "player": {
+          "firstName": {
+            "default": "Quinn"
+          },
+          "lastName": {
+            "default": "Hughes"
+          }
+        },
+        "gameDate": "2026-04-22",
+        "awayTeam": {
+          "abbrev": "DAL",
+          "score": 4
+        },
+        "homeTeam": {
+          "abbrev": "MIN",
+          "score": 3
+        },
+        "gameOutcome": {
+          "lastPeriodType": "OT",
+          "otPeriods": 2
+        },
+        "periodDescriptor": {
+          "maxRegulationPeriods": 3,
+          "number": 2,
+          "periodType": "REG"
+        },
+        "gameType": 3
+      }
+    },
+    "highDangerSOG": {
+      "player": {
+        "id": 8475791,
+        "firstName": {
+          "default": "Taylor"
+        },
+        "lastName": {
+          "default": "Hall"
+        },
+        "sweaterNumber": 71,
+        "position": "L",
+        "slug": "taylor-hall-8475791",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/CAR/8475791.png",
+        "team": {
+          "commonName": {
+            "default": "Hurricanes"
+          },
+          "placeNameWithPreposition": {
+            "default": "Carolina",
+            "fr": "de la Caroline"
+          },
+          "abbrev": "CAR",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg"
+          }
+        }
+      },
+      "sog": 25,
+      "shotLocationDetails": [
+        {
+          "area": "Behind the Net",
+          "sog": 0,
+          "sogPercentile": 0.0
+        },
+        {
+          "area": "Beyond Red Line",
+          "sog": 1,
+          "sogPercentile": 0.6647
+        },
+        {
+          "area": "Center Point",
+          "sog": 3,
+          "sogPercentile": 0.8873
+        },
+        {
+          "area": "Crease",
+          "sog": 5,
+          "sogPercentile": 0.9942
+        },
+        {
+          "area": "High Slot",
+          "sog": 3,
+          "sogPercentile": 0.8555
+        },
+        {
+          "area": "L Circle",
+          "sog": 6,
+          "sogPercentile": 0.9595
+        },
+        {
+          "area": "L Corner",
+          "sog": 0,
+          "sogPercentile": 0.0
+        },
+        {
+          "area": "L Net Side",
+          "sog": 2,
+          "sogPercentile": 0.9191
+        },
+        {
+          "area": "L Point",
+          "sog": 4,
+          "sogPercentile": 0.9393
+        },
+        {
+          "area": "Low Slot",
+          "sog": 20,
+          "sogPercentile": 0.9942
+        },
+        {
+          "area": "Offensive Neutral Zone",
+          "sog": 3,
+          "sogPercentile": 0.9682
+        },
+        {
+          "area": "Outside L",
+          "sog": 3,
+          "sogPercentile": 0.9017
+        },
+        {
+          "area": "Outside R",
+          "sog": 3,
+          "sogPercentile": 0.9191
+        },
+        {
+          "area": "R Circle",
+          "sog": 1,
+          "sogPercentile": 0.4653
+        },
+        {
+          "area": "R Corner",
+          "sog": 0,
+          "sogPercentile": 0.0
+        },
+        {
+          "area": "R Net Side",
+          "sog": 1,
+          "sogPercentile": 0.7919
+        },
+        {
+          "area": "R Point",
+          "sog": 0,
+          "sogPercentile": 0.0
+        }
+      ]
+    },
+    "offensiveZoneTime": {
+      "player": {
+        "id": 8476906,
+        "firstName": {
+          "default": "Shayne"
+        },
+        "lastName": {
+          "default": "Gostisbehere"
+        },
+        "sweaterNumber": 4,
+        "position": "D",
+        "slug": "shayne-gostisbehere-8476906",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/CAR/8476906.png",
+        "team": {
+          "commonName": {
+            "default": "Hurricanes"
+          },
+          "placeNameWithPreposition": {
+            "default": "Carolina",
+            "fr": "de la Caroline"
+          },
+          "abbrev": "CAR",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg"
+          }
+        }
+      },
+      "zoneTime": 0.51573002
+    },
+    "defensiveZoneTime": {
+      "player": {
+        "id": 8482100,
+        "firstName": {
+          "default": "Alexander"
+        },
+        "lastName": {
+          "default": "Nikishin"
+        },
+        "sweaterNumber": 21,
+        "position": "D",
+        "slug": "alexander-nikishin-8482100",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/CAR/8482100.png",
+        "team": {
+          "commonName": {
+            "default": "Hurricanes"
+          },
+          "placeNameWithPreposition": {
+            "default": "Carolina",
+            "fr": "de la Caroline"
+          },
+          "abbrev": "CAR",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg"
+          }
+        }
+      },
+      "zoneTime": 0.31450706
+    }
+  }
+}

@@ -921,7 +921,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -2049,8 +2055,8 @@ ESPN endpoint.
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |
-| `vs ap top 25` | character |  |
-| `vs usa ranked teams` | character |  |
+| `vs ap top 25` | character | The team's win-loss record against opponents ranked in the AP Top 25 poll. |
+| `vs usa ranked teams` | character | The team's win-loss record against opponents ranked in the USA Today Coaches Poll. |
 | `vs. conf.` | character | Vs. conf.. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

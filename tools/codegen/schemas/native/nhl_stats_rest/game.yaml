@@ -1,0 +1,42 @@
+schema: game
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: eastern_start_time
+  type: character
+  description: ''
+- name: game_date
+  type: character
+  description: ''
+- name: game_number
+  type: integer
+  description: ''
+- name: game_schedule_state_id
+  type: integer
+  description: ''
+- name: game_state_id
+  type: integer
+  description: ''
+- name: game_type
+  type: integer
+  description: ''
+- name: home_score
+  type: integer
+  description: ''
+- name: home_team_id
+  type: integer
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: visiting_score
+  type: integer
+  description: ''
+- name: visiting_team_id
+  type: integer
+  description: ''

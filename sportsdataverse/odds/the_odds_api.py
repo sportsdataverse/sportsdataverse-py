@@ -131,9 +131,11 @@ def toa_usage(return_as_pandas: bool = False) -> DataFrameT:
         ``requests_used`` and ``last_cost`` (credits the last call consumed).
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports, toa_usage
-        >>> _ = toa_sports()
-        >>> toa_usage()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports, toa_usage
+            _ = toa_sports()
+            toa_usage()
     """
     import pandas as pd
     import polars as pl
@@ -165,8 +167,10 @@ def toa_sports(
         JSON ``list`` when ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports
-        >>> toa_sports(all_sports=True).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports
+            toa_sports(all_sports=True).head()
     """
     raw = _toa_get("sports", params={"all": _bool_str(all_sports)}, api_key=api_key, **kwargs)
     return parse_toa_sports(raw, return_as_pandas=return_as_pandas) if return_parsed else raw
@@ -219,8 +223,10 @@ def toa_sports_odds(
         ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_odds
-        >>> toa_sports_odds(sport="americanfootball_nfl", regions="us", markets="h2h,spreads").head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_odds
+            toa_sports_odds(sport="americanfootball_nfl", regions="us", markets="h2h,spreads").head()
     """
     params = {
         "regions": regions,
@@ -269,8 +275,10 @@ def toa_sports_scores(
         ``list`` when ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_scores
-        >>> toa_sports_scores(sport="americanfootball_nfl", days_from=3).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_scores
+            toa_sports_scores(sport="americanfootball_nfl", days_from=3).head()
     """
     params = {"daysFrom": days_from, "dateFormat": date_format, "eventIds": event_ids}
     raw = _toa_get(f"sports/{sport}/scores", params=params, api_key=api_key, **kwargs)
@@ -309,8 +317,10 @@ def toa_sports_events(
         ``list`` when ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_events
-        >>> toa_sports_events(sport="americanfootball_nfl").head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_events
+            toa_sports_events(sport="americanfootball_nfl").head()
     """
     params = {
         "dateFormat": date_format,
@@ -369,9 +379,11 @@ def toa_event_odds(
         ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_events, toa_event_odds
-        >>> eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
-        >>> toa_event_odds(sport="americanfootball_nfl", event_id=eid, markets="player_pass_tds").head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_events, toa_event_odds
+            eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
+            toa_event_odds(sport="americanfootball_nfl", event_id=eid, markets="player_pass_tds").head()
     """
     params = {
         "regions": regions,
@@ -420,9 +432,11 @@ def toa_event_markets(
         market) by default; raw JSON ``dict`` when ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_events, toa_event_markets
-        >>> eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
-        >>> toa_event_markets(sport="americanfootball_nfl", event_id=eid).head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_events, toa_event_markets
+            eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
+            toa_event_markets(sport="americanfootball_nfl", event_id=eid).head()
     """
     params = {"regions": regions, "bookmakers": bookmakers, "dateFormat": date_format}
     raw = _toa_get(f"sports/{sport}/events/{event_id}/markets", params=params, api_key=api_key, **kwargs)
@@ -451,8 +465,10 @@ def toa_sports_participants(
         raw JSON ``list`` when ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_participants
-        >>> toa_sports_participants(sport="americanfootball_nfl").head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_participants
+            toa_sports_participants(sport="americanfootball_nfl").head()
     """
     raw = _toa_get(f"sports/{sport}/participants", params={}, api_key=api_key, **kwargs)
     return parse_toa_participants(raw, return_as_pandas=return_as_pandas) if return_parsed else raw
@@ -497,8 +513,10 @@ def toa_sports_odds_history(
         ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_odds_history
-        >>> toa_sports_odds_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_odds_history
+            toa_sports_odds_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
     """
     params = {
         "date": date,
@@ -549,8 +567,10 @@ def toa_sports_events_history(
         ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_sports_events_history
-        >>> toa_sports_events_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_sports_events_history
+            toa_sports_events_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
     """
     params = {
         "date": date,
@@ -606,9 +626,11 @@ def toa_event_odds_history(
         default; the raw JSON snapshot ``dict`` when ``return_parsed=False``.
 
     Example:
-        >>> from sportsdataverse.odds import toa_event_odds_history
-        >>> toa_event_odds_history(sport="americanfootball_nfl", event_id="...",
-        ...     date="2023-11-29T22:45:00Z").head()
+        Quick start::
+
+            from sportsdataverse.odds import toa_event_odds_history
+            toa_event_odds_history(sport="americanfootball_nfl", event_id="...",
+                date="2023-11-29T22:45:00Z").head()
     """
     params = {
         "date": date,

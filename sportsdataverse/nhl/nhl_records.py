@@ -80,7 +80,9 @@ def nhl_records_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_awards()
+        Quick start::
+
+            nhl_records_awards()
     """
     raw = _get(
         "https://records.nhl.com/site/api/award-details",
@@ -114,7 +116,9 @@ def nhl_records_awards_by_franchise(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_awards_by_franchise(franchise_id=1)
+        Quick start::
+
+            nhl_records_awards_by_franchise(franchise_id=1)
     """
     raw = _get(
         f"https://records.nhl.com/site/api/award-details/{franchise_id}",
@@ -150,7 +154,9 @@ def nhl_records_awards_trophy_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_awards_trophy_season(trophy_id=1, season_id='X')
+        Quick start::
+
+            nhl_records_awards_trophy_season(trophy_id=1, season_id='X')
     """
     raw = _get(
         f"https://records.nhl.com/site/api/award-details/trophy/{trophy_id}/season/{season_id}",
@@ -182,7 +188,9 @@ def nhl_records_coaches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_coaches()
+        Quick start::
+
+            nhl_records_coaches()
     """
     raw = _get(
         "https://records.nhl.com/site/api/coach",
@@ -216,7 +224,9 @@ def nhl_records_coach(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_coach(coach_id='X')
+        Quick start::
+
+            nhl_records_coach(coach_id='X')
     """
     raw = _get(
         f"https://records.nhl.com/site/api/coach/{coach_id}",
@@ -250,7 +260,9 @@ def nhl_records_coach_career(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_coach_career()
+        Quick start::
+
+            nhl_records_coach_career()
     """
     __url = (
         "https://records.nhl.com/site/api/coach-career-records"
@@ -287,7 +299,9 @@ def nhl_records_coach_career_with_playoffs(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_coach_career_with_playoffs()
+        Quick start::
+
+            nhl_records_coach_career_with_playoffs()
     """
     raw = _get(
         "https://records.nhl.com/site/api/coach-career-records-regular-plus-playoffs",
@@ -321,7 +335,9 @@ def nhl_records_coach_franchise(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_coach_franchise()
+        Quick start::
+
+            nhl_records_coach_franchise()
     """
     __url = (
         "https://records.nhl.com/site/api/coach-franchise-records"
@@ -358,7 +374,9 @@ def nhl_records_coach_stanley_cup(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_coach_stanley_cup()
+        Quick start::
+
+            nhl_records_coach_stanley_cup()
     """
     raw = _get(
         "https://records.nhl.com/site/api/coach-stanley-cup-streak",
@@ -390,7 +408,9 @@ def nhl_records_franchises(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_franchises()
+        Quick start::
+
+            nhl_records_franchises()
     """
     raw = _get(
         "https://records.nhl.com/site/api/franchise",
@@ -422,7 +442,9 @@ def nhl_records_franchise_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_franchise_detail()
+        Quick start::
+
+            nhl_records_franchise_detail()
     """
     raw = _get(
         "https://records.nhl.com/site/api/franchise-detail",
@@ -454,7 +476,9 @@ def nhl_records_franchise_team_totals(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_franchise_team_totals()
+        Quick start::
+
+            nhl_records_franchise_team_totals()
     """
     raw = _get(
         "https://records.nhl.com/site/api/franchise-team-totals",
@@ -486,7 +510,9 @@ def nhl_records_franchise_season_results(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_franchise_season_results()
+        Quick start::
+
+            nhl_records_franchise_season_results()
     """
     raw = _get(
         "https://records.nhl.com/site/api/franchise-season-results",
@@ -518,7 +544,9 @@ def nhl_records_franchise_playoff_appearances(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_franchise_playoff_appearances()
+        Quick start::
+
+            nhl_records_franchise_playoff_appearances()
     """
     raw = _get(
         "https://records.nhl.com/site/api/franchise-playoff-appearances",
@@ -550,7 +578,9 @@ def nhl_records_franchise_totals(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_franchise_totals()
+        Quick start::
+
+            nhl_records_franchise_totals()
     """
     raw = _get(
         "https://records.nhl.com/site/api/franchise-totals",
@@ -582,7 +612,9 @@ def nhl_records_all_time_record_vs_franchise(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_all_time_record_vs_franchise()
+        Quick start::
+
+            nhl_records_all_time_record_vs_franchise()
     """
     raw = _get(
         "https://records.nhl.com/site/api/all-time-record-vs-franchise",
@@ -614,7 +646,9 @@ def nhl_records_skater_career_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_skater_career_stats()
+        Quick start::
+
+            nhl_records_skater_career_stats()
     """
     raw = _get(
         "https://records.nhl.com/site/api/skater-career-statistics",
@@ -646,7 +680,9 @@ def nhl_records_skater_career_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_skater_career_leaders()
+        Quick start::
+
+            nhl_records_skater_career_leaders()
     """
     raw = _get(
         "https://records.nhl.com/site/api/skater-career-leaders",
@@ -678,7 +714,9 @@ def nhl_records_consecutive_100pt_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_consecutive_100pt_seasons()
+        Quick start::
+
+            nhl_records_consecutive_100pt_seasons()
     """
     raw = _get(
         "https://records.nhl.com/site/api/consecutive-100-point-seasons",
@@ -710,7 +748,9 @@ def nhl_records_goalie_career_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_career_stats()
+        Quick start::
+
+            nhl_records_goalie_career_stats()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie-career-stats",
@@ -742,7 +782,9 @@ def nhl_records_goalie_career_stats_with_playoffs(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_career_stats_with_playoffs()
+        Quick start::
+
+            nhl_records_goalie_career_stats_with_playoffs()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie_career_stats_incl_playoffs",
@@ -774,7 +816,9 @@ def nhl_records_goalie_season_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_season_stats()
+        Quick start::
+
+            nhl_records_goalie_season_stats()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie-season-stats",
@@ -806,7 +850,9 @@ def nhl_records_goalie_win_streak(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_win_streak()
+        Quick start::
+
+            nhl_records_goalie_win_streak()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie-win-streak",
@@ -838,7 +884,9 @@ def nhl_records_goalie_shutout_streak(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_shutout_streak()
+        Quick start::
+
+            nhl_records_goalie_shutout_streak()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie-shutout-streak",
@@ -870,7 +918,9 @@ def nhl_records_goalie_win_plateaus(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_win_plateaus()
+        Quick start::
+
+            nhl_records_goalie_win_plateaus()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie-win-plateaus",
@@ -902,7 +952,9 @@ def nhl_records_goalie_playoff_streak(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_playoff_streak()
+        Quick start::
+
+            nhl_records_goalie_playoff_streak()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie-playoff-streak",
@@ -934,7 +986,9 @@ def nhl_records_goalie_undefeated_streak(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_goalie_undefeated_streak()
+        Quick start::
+
+            nhl_records_goalie_undefeated_streak()
     """
     raw = _get(
         "https://records.nhl.com/site/api/goalie-undefeated-streak",
@@ -968,7 +1022,9 @@ def nhl_records_draft(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_draft()
+        Quick start::
+
+            nhl_records_draft()
     """
     __url = (
         "https://records.nhl.com/site/api/draft"
@@ -1007,7 +1063,9 @@ def nhl_records_draft_by_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_draft_by_team(team_id=10)
+        Quick start::
+
+            nhl_records_draft_by_team(team_id=10)
     """
     raw = _get(
         f"https://records.nhl.com/site/api/draft/byTeam/{team_id}",
@@ -1041,7 +1099,9 @@ def nhl_records_draft_prospect(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_draft_prospect()
+        Quick start::
+
+            nhl_records_draft_prospect()
     """
     __url = (
         "https://records.nhl.com/site/api/draft-prospect"
@@ -1078,7 +1138,9 @@ def nhl_records_draft_lottery_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_draft_lottery_odds()
+        Quick start::
+
+            nhl_records_draft_lottery_odds()
     """
     raw = _get(
         "https://records.nhl.com/site/api/draft-lottery-odds",
@@ -1110,7 +1172,9 @@ def nhl_records_expansion_draft_picks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_expansion_draft_picks()
+        Quick start::
+
+            nhl_records_expansion_draft_picks()
     """
     raw = _get(
         "https://records.nhl.com/site/api/expansion-draft-picks",
@@ -1142,7 +1206,9 @@ def nhl_records_allstar_skater_career(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_allstar_skater_career()
+        Quick start::
+
+            nhl_records_allstar_skater_career()
     """
     raw = _get(
         "https://records.nhl.com/site/api/all-star-skater-career-stats",
@@ -1174,7 +1240,9 @@ def nhl_records_allstar_goalie_career(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_allstar_goalie_career()
+        Quick start::
+
+            nhl_records_allstar_goalie_career()
     """
     raw = _get(
         "https://records.nhl.com/site/api/all-star-goaltender-career-stats",
@@ -1206,7 +1274,9 @@ def nhl_records_allstar_coach_career(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_allstar_coach_career()
+        Quick start::
+
+            nhl_records_allstar_coach_career()
     """
     raw = _get(
         "https://records.nhl.com/site/api/all-star-coach-career-stats",
@@ -1238,7 +1308,9 @@ def nhl_records_allstar_skater_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_allstar_skater_game()
+        Quick start::
+
+            nhl_records_allstar_skater_game()
     """
     raw = _get(
         "https://records.nhl.com/site/api/all-star-skater-game-stats",
@@ -1270,7 +1342,9 @@ def nhl_records_allstar_goalie_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_allstar_goalie_game()
+        Quick start::
+
+            nhl_records_allstar_goalie_game()
     """
     raw = _get(
         "https://records.nhl.com/site/api/all-star-goaltender-game-stats",
@@ -1302,7 +1376,9 @@ def nhl_records_attendance(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_attendance()
+        Quick start::
+
+            nhl_records_attendance()
     """
     raw = _get(
         "https://records.nhl.com/site/api/attendance",
@@ -1334,7 +1410,9 @@ def nhl_records_hof_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_hof_players()
+        Quick start::
+
+            nhl_records_hof_players()
     """
     raw = _get(
         "https://records.nhl.com/site/api/hof/players",
@@ -1368,7 +1446,9 @@ def nhl_records_hof_players_by_office(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_hof_players_by_office(office_id='X')
+        Quick start::
+
+            nhl_records_hof_players_by_office(office_id='X')
     """
     raw = _get(
         f"https://records.nhl.com/site/api/hof/players/{office_id}",
@@ -1402,7 +1482,9 @@ def nhl_records_gm_career(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_gm_career()
+        Quick start::
+
+            nhl_records_gm_career()
     """
     __url = (
         "https://records.nhl.com/site/api/general-manager-career-records"
@@ -1439,7 +1521,9 @@ def nhl_records_gm_franchise(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_gm_franchise()
+        Quick start::
+
+            nhl_records_gm_franchise()
     """
     raw = _get(
         "https://records.nhl.com/site/api/general-manager-franchise-records",
@@ -1471,7 +1555,9 @@ def nhl_records_home_team_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_home_team_record()
+        Quick start::
+
+            nhl_records_home_team_record()
     """
     raw = _get(
         "https://records.nhl.com/site/api/home-team-record",
@@ -1503,7 +1589,9 @@ def nhl_records_away_team_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> nhl_records_away_team_record()
+        Quick start::
+
+            nhl_records_away_team_record()
     """
     raw = _get(
         "https://records.nhl.com/site/api/away-team-record",

@@ -1,0 +1,472 @@
+schema: summary
+kind: frames
+frames:
+- section: header
+  columns:
+  - name: id
+    type: character
+    description: ''
+  - name: uid
+    type: character
+    description: ''
+  - name: time_valid
+    type: logical
+    description: ''
+  - name: season_year
+    type: integer
+    description: ''
+  - name: season_type
+    type: integer
+    description: ''
+  - name: season_slug
+    type: character
+    description: ''
+  - name: league_id
+    type: character
+    description: ''
+  - name: league_name
+    type: character
+    description: ''
+  - name: league_abbreviation
+    type: character
+    description: ''
+  - name: competition_id
+    type: character
+    description: ''
+  - name: competition_date
+    type: character
+    description: ''
+  - name: neutral_site
+    type: logical
+    description: ''
+  - name: status_name
+    type: character
+    description: ''
+  - name: status_description
+    type: character
+    description: ''
+  - name: is_final
+    type: logical
+    description: ''
+- section: lineups
+  columns:
+  - name: team_id
+    type: character
+    description: ''
+  - name: home_away
+    type: character
+    description: ''
+  - name: athlete
+    type: character
+    description: ''
+  - name: athlete_id
+    type: character
+    description: ''
+  - name: position
+    type: character
+    description: ''
+  - name: starter
+    type: logical
+    description: ''
+  - name: jersey
+    type: character
+    description: ''
+  - name: formation_place
+    type: character
+    description: ''
+  - name: subbed_in
+    type: logical
+    description: ''
+  - name: subbed_out
+    type: logical
+    description: ''
+- section: key_events
+  columns:
+  - name: id
+    type: character
+    description: ''
+  - name: type
+    type: character
+    description: ''
+  - name: type_id
+    type: character
+    description: ''
+  - name: type_slug
+    type: character
+    description: ''
+  - name: text
+    type: character
+    description: ''
+  - name: short_text
+    type: character
+    description: ''
+  - name: clock
+    type: character
+    description: ''
+  - name: clock_value
+    type: double
+    description: ''
+  - name: period
+    type: integer
+    description: ''
+  - name: team_id
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: scoring_play
+    type: logical
+    description: ''
+  - name: athlete_id
+    type: character
+    description: ''
+  - name: athlete_name
+    type: character
+    description: ''
+  - name: wallclock
+    type: character
+    description: ''
+- section: team_stats
+  columns:
+  - name: team_id
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: team_abbreviation
+    type: character
+    description: ''
+  - name: home_away
+    type: character
+    description: ''
+  - name: fouls_committed
+    type: character
+    description: ''
+  - name: yellow_cards
+    type: character
+    description: ''
+  - name: red_cards
+    type: character
+    description: ''
+  - name: offsides
+    type: character
+    description: ''
+  - name: won_corners
+    type: character
+    description: ''
+  - name: saves
+    type: character
+    description: ''
+  - name: possession_pct
+    type: character
+    description: ''
+  - name: total_shots
+    type: character
+    description: ''
+  - name: shots_on_target
+    type: character
+    description: ''
+  - name: shot_pct
+    type: character
+    description: ''
+  - name: penalty_kick_goals
+    type: character
+    description: ''
+  - name: penalty_kick_shots
+    type: character
+    description: ''
+  - name: accurate_passes
+    type: character
+    description: ''
+  - name: total_passes
+    type: character
+    description: ''
+  - name: pass_pct
+    type: character
+    description: ''
+  - name: accurate_crosses
+    type: character
+    description: ''
+  - name: total_crosses
+    type: character
+    description: ''
+  - name: cross_pct
+    type: character
+    description: ''
+  - name: total_long_balls
+    type: character
+    description: ''
+  - name: accurate_long_balls
+    type: character
+    description: ''
+  - name: longball_pct
+    type: character
+    description: ''
+  - name: blocked_shots
+    type: character
+    description: ''
+  - name: effective_tackles
+    type: character
+    description: ''
+  - name: total_tackles
+    type: character
+    description: ''
+  - name: tackle_pct
+    type: character
+    description: ''
+  - name: interceptions
+    type: character
+    description: ''
+  - name: effective_clearance
+    type: character
+    description: ''
+  - name: total_clearance
+    type: character
+    description: ''
+- section: commentary
+  columns:
+  - name: sequence
+    type: integer
+    description: ''
+  - name: time_display
+    type: character
+    description: ''
+  - name: time_value
+    type: double
+    description: ''
+  - name: text
+    type: character
+    description: ''
+- section: leaders
+  columns:
+  - name: team_id
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: category
+    type: character
+    description: ''
+  - name: category_slug
+    type: character
+    description: ''
+  - name: athlete_id
+    type: character
+    description: ''
+  - name: athlete
+    type: character
+    description: ''
+  - name: athlete_position
+    type: character
+    description: ''
+  - name: value
+    type: character
+    description: ''
+  - name: main_stat_label
+    type: character
+    description: ''
+  - name: main_stat_value
+    type: character
+    description: ''
+  - name: summary
+    type: character
+    description: ''
+- section: standings
+  columns:
+  - name: group
+    type: character
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: team_id
+    type: character
+    description: ''
+  - name: team_uid
+    type: character
+    description: ''
+  - name: games_played
+    type: double
+    description: ''
+  - name: losses
+    type: double
+    description: ''
+  - name: point_differential
+    type: double
+    description: ''
+  - name: points
+    type: double
+    description: ''
+  - name: ties
+    type: double
+    description: ''
+  - name: wins
+    type: double
+    description: ''
+  - name: rank
+    type: double
+    description: ''
+  - name: overall
+    type: character
+    description: ''
+- section: head_to_head
+  columns:
+  - name: event_id
+    type: character
+    description: ''
+  - name: game_date
+    type: character
+    description: ''
+  - name: at_vs
+    type: character
+    description: ''
+  - name: score
+    type: character
+    description: ''
+  - name: home_team_id
+    type: character
+    description: ''
+  - name: away_team_id
+    type: character
+    description: ''
+  - name: home_team_score
+    type: character
+    description: ''
+  - name: away_team_score
+    type: character
+    description: ''
+  - name: home_aggregate_score
+    type: character
+    description: ''
+  - name: away_aggregate_score
+    type: character
+    description: ''
+  - name: home_shootout_score
+    type: character
+    description: ''
+  - name: away_shootout_score
+    type: character
+    description: ''
+  - name: game_result
+    type: character
+    description: ''
+  - name: match_note
+    type: character
+    description: ''
+  - name: competition_name
+    type: character
+    description: ''
+  - name: round_name
+    type: character
+    description: ''
+  - name: league_name
+    type: character
+    description: ''
+  - name: league_abbreviation
+    type: character
+    description: ''
+  - name: opponent
+    type: integer
+    description: ''
+  - name: perspective_team_id
+    type: character
+    description: ''
+- section: last_five
+  columns:
+  - name: team_id
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: display_order
+    type: integer
+    description: ''
+  - name: event_id
+    type: character
+    description: ''
+  - name: game_date
+    type: character
+    description: ''
+  - name: at_vs
+    type: character
+    description: ''
+  - name: score
+    type: character
+    description: ''
+  - name: home_team_id
+    type: character
+    description: ''
+  - name: away_team_id
+    type: character
+    description: ''
+  - name: home_team_score
+    type: character
+    description: ''
+  - name: away_team_score
+    type: character
+    description: ''
+  - name: game_result
+    type: character
+    description: ''
+  - name: competition_name
+    type: character
+    description: ''
+  - name: league_name
+    type: character
+    description: ''
+  - name: league_abbreviation
+    type: character
+    description: ''
+  - name: opponent
+    type: integer
+    description: ''
+- section: game_info
+  columns:
+  - name: venue_id
+    type: character
+    description: ''
+  - name: venue_full_name
+    type: character
+    description: ''
+  - name: venue_short_name
+    type: character
+    description: ''
+  - name: venue_city
+    type: character
+    description: ''
+  - name: venue_country
+    type: character
+    description: ''
+  - name: attendance
+    type: integer
+    description: ''
+  - name: officials
+    type: character
+    description: ''
+- section: shootout
+  columns:
+  - name: team_entry_id
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: shot_id
+    type: character
+    description: ''
+  - name: player_id
+    type: character
+    description: ''
+  - name: player
+    type: character
+    description: ''
+  - name: shot_number
+    type: integer
+    description: ''
+  - name: did_score
+    type: logical
+    description: ''

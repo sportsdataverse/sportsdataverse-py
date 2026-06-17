@@ -1,0 +1,80 @@
+{
+  "data": [
+    {
+      "id": 956,
+      "activePlayer": false,
+      "activeStreak": false,
+      "consecutivePlayoffSeasons": 1,
+      "endSeason": 19801981,
+      "firstName": "Steve",
+      "franchiseId": null,
+      "lastName": "Baker",
+      "playerId": 8445218,
+      "playoffSeasons": 1,
+      "stanleyCupWins": 0,
+      "startSeason": 19801981,
+      "teamAbbrevs": "NYR"
+    },
+    {
+      "id": 1820,
+      "activePlayer": false,
+      "activeStreak": false,
+      "consecutivePlayoffSeasons": 1,
+      "endSeason": 19801981,
+      "firstName": "Steve",
+      "franchiseId": 10,
+      "lastName": "Baker",
+      "playerId": 8445218,
+      "playoffSeasons": 1,
+      "stanleyCupWins": 0,
+      "startSeason": 19801981,
+      "teamAbbrevs": "NYR"
+    },
+    {
+      "id": 717,
+      "activePlayer": false,
+      "activeStreak": false,
+      "consecutivePlayoffSeasons": 5,
+      "endSeason": 19851986,
+      "firstName": "Murray",
+      "franchiseId": null,
+      "lastName": "Bannerman",
+      "playerId": 8445249,
+      "playoffSeasons": 5,
+      "stanleyCupWins": 0,
+      "startSeason": 19811982,
+      "teamAbbrevs": "CHI"
+    },
+    {
+      "id": 1992,
+      "activePlayer": false,
+      "activeStreak": false,
+      "consecutivePlayoffSeasons": 5,
+      "endSeason": 19851986,
+      "firstName": "Murray",
+      "franchiseId": 11,
+      "lastName": "Bannerman",
+      "playerId": 8445249,
+      "playoffSeasons": 5,
+      "stanleyCupWins": 0,
+      "startSeason": 19811982,
+      "teamAbbrevs": "CHI"
+    },
+    {
+      "id": 957,
+      "activePlayer": false,
+      "activeStreak": false,
+      "consecutivePlayoffSeasons": 1,
+      "endSeason": 19801981,
+      "firstName": "Marco",
+      "franchiseId": null,
+      "lastName": "Baron",
+      "playerId": 8445272,
+      "playoffSeasons": 1,
+      "stanleyCupWins": 0,
+      "startSeason": 19801981,
+      "teamAbbrevs": "BOS"
+    }
+  ],
+  "total": 1622
+}

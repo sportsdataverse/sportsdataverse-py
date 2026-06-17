@@ -435,12 +435,14 @@ def mmss_to_seconds(value: Any) -> Optional[int]:
     is responsible for any inversion logic.
 
     Examples:
-        >>> mmss_to_seconds("03:16")
-        196
-        >>> mmss_to_seconds("00:00")
-        0
-        >>> mmss_to_seconds(None) is None
-        True
+        Quick start::
+
+            mmss_to_seconds("03:16")
+            196
+            mmss_to_seconds("00:00")
+            0
+            mmss_to_seconds(None) is None
+            True
     """
     if value in (None, ""):
         return None

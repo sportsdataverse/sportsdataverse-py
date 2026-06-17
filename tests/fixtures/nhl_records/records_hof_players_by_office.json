@@ -1,0 +1,50 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "dateInducted": "1949-01-01T00:00:00",
+      "inductionCatId": 1,
+      "miscFullName": "Donald H. \"Dan\"Bain",
+      "officeId": 1,
+      "officialId": null,
+      "playerId": null
+    },
+    {
+      "id": 2,
+      "dateInducted": "1945-01-01T00:00:00",
+      "inductionCatId": 1,
+      "miscFullName": "HobartBaker",
+      "officeId": 1,
+      "officialId": null,
+      "playerId": null
+    },
+    {
+      "id": 3,
+      "dateInducted": "1952-01-01T00:00:00",
+      "inductionCatId": 1,
+      "miscFullName": "Richard R. \"Dickie\"Boon",
+      "officeId": 1,
+      "officialId": null,
+      "playerId": null
+    },
+    {
+      "id": 4,
+      "dateInducted": "1947-01-01T00:00:00",
+      "inductionCatId": 1,
+      "miscFullName": "RussellBowie",
+      "officeId": 1,
+      "officialId": null,
+      "playerId": null
+    },
+    {
+      "id": 5,
+      "dateInducted": "1950-01-01T00:00:00",
+      "inductionCatId": 1,
+      "miscFullName": "Alan M. \"Scotty\"Davidson",
+      "officeId": 1,
+      "officialId": null,
+      "playerId": null
+    }
+  ],
+  "total": 383
+}

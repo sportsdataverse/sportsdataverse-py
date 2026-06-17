@@ -460,6 +460,7 @@ endpoints:
     type: int|str
     required: true
   parser: parse_injuries
+  returns_schema: injuries
   example_args:
     athlete_id: '4239'
 - short: athlete_notes

@@ -1,0 +1,80 @@
+{
+  "data": [
+    {
+      "id": 1917020001,
+      "easternStartTime": "1917-12-19T20:00:00",
+      "gameDate": "1917-12-19",
+      "gameNumber": 1,
+      "gameScheduleStateId": 1,
+      "gameStateId": 7,
+      "gameType": 2,
+      "homeScore": 4,
+      "homeTeamId": 36,
+      "period": 3,
+      "season": 19171918,
+      "visitingScore": 7,
+      "visitingTeamId": 8
+    },
+    {
+      "id": 1917020002,
+      "easternStartTime": "1917-12-19T20:00:00",
+      "gameDate": "1917-12-19",
+      "gameNumber": 2,
+      "gameScheduleStateId": 1,
+      "gameStateId": 7,
+      "gameType": 2,
+      "homeScore": 10,
+      "homeTeamId": 41,
+      "period": 3,
+      "season": 19171918,
+      "visitingScore": 9,
+      "visitingTeamId": 57
+    },
+    {
+      "id": 1917020003,
+      "easternStartTime": "1917-12-22T20:00:00",
+      "gameDate": "1917-12-22",
+      "gameNumber": 3,
+      "gameScheduleStateId": 1,
+      "gameStateId": 7,
+      "gameType": 2,
+      "homeScore": 11,
+      "homeTeamId": 57,
+      "period": 3,
+      "season": 19171918,
+      "visitingScore": 4,
+      "visitingTeamId": 36
+    },
+    {
+      "id": 1917020004,
+      "easternStartTime": "1917-12-22T20:00:00",
+      "gameDate": "1917-12-22",
+      "gameNumber": 4,
+      "gameScheduleStateId": 1,
+      "gameStateId": 7,
+      "gameType": 2,
+      "homeScore": 2,
+      "homeTeamId": 41,
+      "period": 3,
+      "season": 19171918,
+      "visitingScore": 11,
+      "visitingTeamId": 8
+    },
+    {
+      "id": 1917020005,
+      "easternStartTime": "1917-12-26T20:00:00",
+      "gameDate": "1917-12-26",
+      "gameNumber": 5,
+      "gameScheduleStateId": 1,
+      "gameStateId": 7,
+      "gameType": 2,
+      "homeScore": 3,
+      "homeTeamId": 41,
+      "period": 3,
+      "season": 19171918,
+      "visitingScore": 6,
+      "visitingTeamId": 36
+    }
+  ],
+  "total": 74289
+}

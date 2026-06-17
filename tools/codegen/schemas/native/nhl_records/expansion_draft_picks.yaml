@@ -1,0 +1,18 @@
+schema: expansion_draft_picks
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: active
+  type: logical
+  description: ''
+- name: draft_picks
+  type: character
+  description: ''
+- name: season_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''

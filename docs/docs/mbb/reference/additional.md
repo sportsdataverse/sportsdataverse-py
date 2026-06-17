@@ -51,13 +51,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_country_alternate_id` | character |  |
+| `birth_country_alternate_id` | character | Alternate identifier for the player's birth country as provided by ESPN. |
 | `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `headshot_href` | character | Headshot image URL. |
 | `headshot_alt` | character | Alternative-text label for the headshot. |
-| `flag_href` | character |  |
-| `flag_alt` | character |  |
-| `flag_rel` | character |  |
+| `flag_href` | character | URL to the player's country flag image as supplied by ESPN. |
+| `flag_alt` | character | Alt-text string for the player's country flag image, typically the country name. |
+| `flag_rel` | character | Relationship descriptor for the country flag link, indicating the link type (e.g., 'country-flag'). |
 | `experience_years` | integer | Experience years. |
 | `experience_display_value` | character | Experience display value. |
 | `experience_abbreviation` | character | Experience abbreviation. |
@@ -69,14 +69,14 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `hand_abbreviation` | character | Hand abbreviation. |
 | `hand_display_value` | character | Hand display value. |
 | `starter` | logical | TRUE if the player was in the starting lineup; FALSE otherwise. |
-| `jersey_right` | character |  |
+| `jersey_right` | character | Right-justified or secondary jersey number display string for the player. |
 | `valid` | logical | Valid. |
 | `did_not_play` | logical | TRUE if the player did not appear in the game. |
 | `display_name` | character | Display name. |
 | `ejected` | logical | TRUE if the player was ejected from the game. |
-| `athlete_href` | character |  |
-| `position_href` | character |  |
-| `statistics_href` | character |  |
+| `athlete_href` | character | ESPN API URL pointing to the full athlete resource for this player. |
+| `position_href` | character | ESPN API URL pointing to the full position resource for this player's role. |
+| `statistics_href` | character | ESPN API URL pointing to the player's statistics resource for this game. |
 | `team_id` | integer | Unique team identifier. |
 | `order` | integer | Display order within the result set. |
 | `home_away` | character | Game venue label ('home' or 'away'). |
@@ -94,7 +94,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
 | `is_active` | logical | Is active. |
 | `is_all_star` | logical | Is all star. |
-| `team_alternate_ids_sdr` | character |  |
+| `team_alternate_ids_sdr` | character | Alternate team identifier from ESPN's SDR (Sports Data Repository) system. |
 | `logo_href` | character | Team or league logo URL. |
 | `logo_dark_href` | character | Logo URL for dark backgrounds. |
 | `game_id` | integer | Unique game identifier. |
@@ -277,7 +277,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `offensive_three_point_field_goals_made` | double | The number of times a 3pt field goal was made. |
 | `offensive_total_turnovers` | double | The number of turnovers plus team turnovers for the team. |
 | `offensive_points_in_paint` | double | The amount of points scored in the area known as "the Paint"(the rectangle between the foul line and the baseline). |
-| `offensive_second_chance_points` | double |  |
+| `offensive_second_chance_points` | double | Total points scored by the player on second-chance opportunities following an offensive rebound. |
 | `offensive_fast_break_points` | double | The number of points scored on fast breaks. |
 | `offensive_avg_field_goals_made` | double | The average field goals made per game. |
 | `offensive_avg_field_goals_attempted` | double | The average field goals attempted per game. |
@@ -395,9 +395,9 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_conference_id` | character | Unique identifier for home conference. |
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Home team's winner. |
-| `home_current_rank` | integer |  |
-| `home_linescores` | integer |  |
-| `home_records` | character |  |
+| `home_current_rank` | integer | Current national poll ranking of the home team at the time of the game, or null if unranked. |
+| `home_linescores` | list | Period-by-period scoring breakdown for the home team, serialized as a packed integer sequence. |
+| `home_records` | character | Win-loss record string(s) for the home team across applicable record categories (e.g., overall, conference). |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
@@ -413,9 +413,9 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_conference_id` | character | Unique identifier for away conference. |
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Away team's winner. |
-| `away_current_rank` | integer |  |
-| `away_linescores` | integer |  |
-| `away_records` | character |  |
+| `away_current_rank` | integer | Current national poll ranking of the away team at the time of the game, or null if unranked. |
+| `away_linescores` | list | Period-by-period scoring breakdown for the away team, serialized as a packed integer sequence. |
+| `away_records` | character | Win-loss record string(s) for the away team across applicable record categories (e.g., overall, conference). |
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season year. |
 | `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |

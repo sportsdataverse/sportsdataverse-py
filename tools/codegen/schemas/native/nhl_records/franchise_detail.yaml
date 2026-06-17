@@ -1,0 +1,42 @@
+schema: franchise_detail
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: active
+  type: logical
+  description: ''
+- name: captain_history
+  type: character
+  description: ''
+- name: coaching_history
+  type: character
+  description: ''
+- name: date_awarded
+  type: character
+  description: ''
+- name: directory_url
+  type: character
+  description: ''
+- name: first_season_id
+  type: integer
+  description: ''
+- name: general_manager_history
+  type: character
+  description: ''
+- name: hero_image_url
+  type: character
+  description: ''
+- name: most_recent_team_id
+  type: integer
+  description: ''
+- name: retired_numbers_summary
+  type: character
+  description: ''
+- name: team_abbrev
+  type: character
+  description: ''
+- name: team_full_name
+  type: character
+  description: ''

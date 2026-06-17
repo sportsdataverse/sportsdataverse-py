@@ -1,0 +1,18 @@
+schema: draft_lottery_odds
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: draft_year
+  type: integer
+  description: ''
+- name: format_content
+  type: character
+  description: ''
+- name: odds_content
+  type: character
+  description: ''
+- name: result_notes
+  type: character
+  description: ''

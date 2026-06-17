@@ -121,16 +121,16 @@ Retrieve the list of countries used in NHL data.
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Unique player identifier. |
-| `country3_code` | character |  |
+| `country3_code` | character | Three-letter ISO country code used by the NHL api-web country reference endpoint. |
 | `country_code` | character | Player country code. |
-| `country_name` | character |  |
-| `has_player_stats` | integer |  |
+| `country_name` | character | Full English display name of the country as provided by the NHL api-web country reference. |
+| `has_player_stats` | integer | Flag (1/0) indicating whether the NHL api-web tracks player statistics for this country. |
 | `image_url` | character | Player headshot URL. |
-| `ioc_code` | character |  |
+| `ioc_code` | character | International Olympic Committee three-letter country code assigned to this nation. |
 | `is_active` | integer | Whether the team is active. |
-| `nationality_name` | character |  |
-| `olympic_url` | character |  |
-| `thumbnail_url` | character |  |
+| `nationality_name` | character | Nationality label string used on player profiles in the NHL api-web (e.g., 'Canadian', 'American'). |
+| `olympic_url` | character | URL to the country's Olympic profile page linked from the NHL api-web country record. |
+| `thumbnail_url` | character | URL to a small thumbnail image representing the country's flag or emblem in the NHL api-web. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -156,7 +156,13 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `draft_year` | integer | Draft year the lottery applies to. |
+| `rounds` | integer | Number of rounds in the draft. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -213,7 +219,23 @@ Retrieve game-level data.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `eastern_start_time` | character | Game start time in Eastern time. |
+| `game_date` | character | Game date. |
+| `game_number` | integer | Game number within the schedule. |
+| `game_schedule_state_id` | integer | Schedule state identifier. |
+| `game_state_id` | integer | Game state identifier. |
+| `game_type` | integer | Game type the row belongs to. |
+| `home_score` | integer | Home team final score. |
+| `home_team_id` | integer | Home team identifier. |
+| `period` | integer | Period number. |
+| `season` | integer | Season year (echoed from arg). |
+| `visiting_score` | integer | Visiting team score. |
+| `visiting_team_id` | integer | Visiting team identifier. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -326,7 +348,25 @@ Retrieve league leaders for a goalie statistical attribute.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `save_pctg` | double | Save percentage. |
+| `player_id` | integer | Unique player identifier. |
+| `player_current_team_id` | double | Player's current team identifier. |
+| `player_first_name` | character | Player first name. |
+| `player_full_name` | character | Player full name. |
+| `player_last_name` | character | Player last name. |
+| `player_position_code` | character | Player position code. |
+| `player_sweater_number` | double | Player jersey number. |
+| `team_id` | integer | Unique team identifier. |
+| `team_franchise_id` | integer | Team franchise identifier. |
+| `team_full_name` | character | Full team name. |
+| `team_league_id` | integer | League identifier of the team. |
+| `team_logos` | character | Team logo metadata. |
+| `team_raw_tricode` | character | Team raw three-letter code. |
+| `team_tri_code` | character | Team tri-code abbreviation. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -352,7 +392,25 @@ Retrieve league leaders for a skater statistical attribute.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `goals` | integer | Goals scored. |
+| `player_id` | integer | Unique player identifier. |
+| `player_current_team_id` | character | Player's current team identifier. |
+| `player_first_name` | character | Player first name. |
+| `player_full_name` | character | Player full name. |
+| `player_last_name` | character | Player last name. |
+| `player_position_code` | character | Player position code. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `team_id` | integer | Unique team identifier. |
+| `team_franchise_id` | integer | Team franchise identifier. |
+| `team_full_name` | character | Full team name. |
+| `team_league_id` | integer | League identifier of the team. |
+| `team_logos` | character | Team logo metadata. |
+| `team_raw_tricode` | character | Team raw three-letter code. |
+| `team_tri_code` | character | Team tri-code abbreviation. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -377,7 +435,27 @@ Retrieve milestone data for goalies.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `current_team_id` | integer | Player's current team identifier. |
+| `first_name` | character | Player first name. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games_played` | integer | Games played. |
+| `last_name` | character | Player last name. |
+| `milestone` | character | Milestone category. |
+| `milestone_amount` | integer | Amount remaining to reach the milestone. |
+| `player_full_name` | character | Player full name. |
+| `player_id` | integer | Unique player identifier. |
+| `so` | integer | Shutouts. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_common_name` | character | Team common (nickname) name. |
+| `team_full_name` | character | Full team name. |
+| `team_place_name` | character | Team place (city/location) name. |
+| `toi_minutes` | integer | Time on ice in minutes. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -402,7 +480,27 @@ Retrieve milestone data for skaters.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `assists` | integer | Assists. |
+| `current_team_id` | integer | Player's current team identifier. |
+| `first_name` | character | Player first name. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games_played` | integer | Games played. |
+| `goals` | integer | Goals scored. |
+| `last_name` | character | Player last name. |
+| `milestone` | character | Milestone category. |
+| `milestone_amount` | integer | Amount remaining to reach the milestone. |
+| `player_full_name` | character | Player full name. |
+| `player_id` | integer | Unique player identifier. |
+| `points` | integer | Total points (goals + assists). |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_common_name` | character | Team common (nickname) name. |
+| `team_full_name` | character | Full team name. |
+| `team_place_name` | character | Team place (city/location) name. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -503,7 +601,29 @@ Retrieve shift-chart data.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `detail_code` | integer | Numeric code identifying the specific detail type or sub-category within the shift or event record. |
+| `duration` | character | Penalty duration in minutes. |
+| `end_time` | character | End time (local). |
+| `event_description` | character | Human-readable event description. |
+| `event_details` | character | Serialized details describing the on-ice event associated with the shift, such as play type and participants. |
+| `event_number` | integer | Event number identifier. |
+| `first_name` | character | Player first name. |
+| `game_id` | integer | Unique game identifier. |
+| `hex_value` | character | Hexadecimal color code associated with the event or team, used for display rendering. |
+| `last_name` | character | Player last name. |
+| `period` | integer | Period number. |
+| `player_id` | integer | Unique player identifier. |
+| `shift_number` | integer | Sequential number identifying the shift within the game, ordered chronologically by start time. |
+| `start_time` | character | Start time (local). |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `type_code` | integer | Numeric code identifying the high-level event type (e.g., faceoff, goal, penalty) for this shift record. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -583,7 +703,16 @@ Retrieve the list of all NHL teams.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `full_name` | character | Player full name. |
+| `league_id` | integer | League identifier of the team. |
+| `raw_tricode` | character | Team raw three-letter code. |
+| `tri_code` | character | Team three-letter code. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -609,7 +738,16 @@ Retrieve a single team by its numeric ID.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `full_name` | character | Player full name. |
+| `league_id` | integer | League identifier of the team. |
+| `raw_tricode` | character | Team raw three-letter code. |
+| `tri_code` | character | Team three-letter code. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example

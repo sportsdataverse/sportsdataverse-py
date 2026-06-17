@@ -36,9 +36,9 @@ A `polars`/`pandas` `DataFrame` (one row per bookmaker x available market) by de
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_events, toa_event_markets
->>> eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
->>> toa_event_markets(sport="americanfootball_nfl", event_id=eid).head()
+from sportsdataverse.odds import toa_sports_events, toa_event_markets
+eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
+toa_event_markets(sport="americanfootball_nfl", event_id=eid).head()
 ```
 
 ### `toa_event_odds(sport: 'str', event_id: 'str', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', bookmakers: 'Optional[str]' = None, include_links: 'Optional[bool]' = None, include_sids: 'Optional[bool]' = None, include_bet_limits: 'Optional[bool]' = None, include_multipliers: 'Optional[bool]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_event_odds}
@@ -74,9 +74,9 @@ A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outc
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_events, toa_event_odds
->>> eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
->>> toa_event_odds(sport="americanfootball_nfl", event_id=eid, markets="player_pass_tds").head()
+from sportsdataverse.odds import toa_sports_events, toa_event_odds
+eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["id"]
+toa_event_odds(sport="americanfootball_nfl", event_id=eid, markets="player_pass_tds").head()
 ```
 
 ### `toa_event_odds_history(sport: 'str', event_id: 'str', date: 'str' = '2023-11-29T22:45:00Z', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', bookmakers: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, include_multipliers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_event_odds_history}
@@ -110,9 +110,9 @@ A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outc
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_event_odds_history
->>> toa_event_odds_history(sport="americanfootball_nfl", event_id="...",
-...     date="2023-11-29T22:45:00Z").head()
+from sportsdataverse.odds import toa_event_odds_history
+toa_event_odds_history(sport="americanfootball_nfl", event_id="...",
+    date="2023-11-29T22:45:00Z").head()
 ```
 
 ### `toa_sports(all_sports: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports}
@@ -135,8 +135,8 @@ A `polars`/`pandas` `DataFrame` (one row per sport) by default; the raw JSON `li
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports
->>> toa_sports(all_sports=True).head()
+from sportsdataverse.odds import toa_sports
+toa_sports(all_sports=True).head()
 ```
 
 ### `toa_sports_events(sport: 'str' = 'americanfootball_nfl', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_events}
@@ -164,8 +164,8 @@ A `polars`/`pandas` `DataFrame` (one row per event) by default; raw JSON `list` 
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_events
->>> toa_sports_events(sport="americanfootball_nfl").head()
+from sportsdataverse.odds import toa_sports_events
+toa_sports_events(sport="americanfootball_nfl").head()
 ```
 
 ### `toa_sports_events_history(sport: 'str' = 'americanfootball_nfl', date: 'str' = '2023-11-29T22:45:00Z', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_sports_events_history}
@@ -196,8 +196,8 @@ A `polars`/`pandas` `DataFrame` (one row per event, stamped with the snapshot ti
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_events_history
->>> toa_sports_events_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
+from sportsdataverse.odds import toa_sports_events_history
+toa_sports_events_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
 ```
 
 ### `toa_sports_odds(sport: 'str' = 'americanfootball_nfl', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, bookmakers: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_links: 'Optional[bool]' = None, include_sids: 'Optional[bool]' = None, include_bet_limits: 'Optional[bool]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_odds}
@@ -232,8 +232,8 @@ A long-form `polars`/`pandas` `DataFrame` (one row per event x bookmaker x marke
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_odds
->>> toa_sports_odds(sport="americanfootball_nfl", regions="us", markets="h2h,spreads").head()
+from sportsdataverse.odds import toa_sports_odds
+toa_sports_odds(sport="americanfootball_nfl", regions="us", markets="h2h,spreads").head()
 ```
 
 ### `toa_sports_odds_history(sport: 'str' = 'americanfootball_nfl', date: 'str' = '2023-11-29T22:45:00Z', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, bookmakers: 'Optional[str]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_sports_odds_history}
@@ -265,8 +265,8 @@ A long-form `polars`/`pandas` `DataFrame` (one row per outcome, stamped with the
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_odds_history
->>> toa_sports_odds_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
+from sportsdataverse.odds import toa_sports_odds_history
+toa_sports_odds_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
 ```
 
 ### `toa_sports_participants(sport: 'str' = 'americanfootball_nfl', api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_participants}
@@ -289,8 +289,8 @@ A `polars`/`pandas` `DataFrame` (one row per participant) by default; raw JSON `
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_participants
->>> toa_sports_participants(sport="americanfootball_nfl").head()
+from sportsdataverse.odds import toa_sports_participants
+toa_sports_participants(sport="americanfootball_nfl").head()
 ```
 
 ### `toa_sports_scores(sport: 'str' = 'americanfootball_nfl', days_from: 'Optional[int]' = None, date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_scores}
@@ -316,8 +316,8 @@ A `polars`/`pandas` `DataFrame` (one row per event) by default; raw JSON `list` 
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports_scores
->>> toa_sports_scores(sport="americanfootball_nfl", days_from=3).head()
+from sportsdataverse.odds import toa_sports_scores
+toa_sports_scores(sport="americanfootball_nfl", days_from=3).head()
 ```
 
 ### `toa_usage(return_as_pandas: 'bool' = False) -> 'DataFrameT'` {#toa_usage}
@@ -341,7 +341,7 @@ A one-row `polars` (or `pandas`) `DataFrame` with `requests_remaining`, `request
 **Example**
 
 ```python
->>> from sportsdataverse.odds import toa_sports, toa_usage
->>> _ = toa_sports()
->>> toa_usage()
+from sportsdataverse.odds import toa_sports, toa_usage
+_ = toa_sports()
+toa_usage()
 ```

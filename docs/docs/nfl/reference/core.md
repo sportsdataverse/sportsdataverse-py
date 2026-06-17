@@ -921,7 +921,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN numeric identifier for the athlete. |
+| `display_name` | character | Athlete's full display name as shown on ESPN. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -2042,13 +2048,13 @@ ESPN endpoint.
 | `points_against` | double | Points against. |
 | `points_for` | double | Points for. |
 | `streak` | double | Streak. |
-| `ties` | double | Number of ties in the series. |
+| `ties` | double | Number of matches the team has drawn. |
 | `win_percent` | double | Win percent. |
 | `wins` | double | Wins. |
-| `division_losses` | double |  |
-| `division_record` | double |  |
-| `division_ties` | double |  |
-| `division_wins` | double |  |
+| `division_losses` | double | Number of games the team has lost against opponents within their own division. |
+| `division_record` | double | The team's composite win-loss-tie record against division opponents, serialized as a numeric value. |
+| `division_ties` | double | Number of games the team has tied against opponents within their own division. |
+| `division_wins` | double | Number of games the team has won against opponents within their own division. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |
 | `road` | character | Road. |

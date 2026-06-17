@@ -1,0 +1,33 @@
+schema: team_zone_time_details
+kind: dataframe
+columns:
+- name: strength_code
+  type: character
+  description: ''
+- name: offensive_zone_pctg
+  type: double
+  description: ''
+- name: offensive_zone_rank
+  type: integer
+  description: ''
+- name: offensive_zone_league_avg
+  type: double
+  description: ''
+- name: neutral_zone_pctg
+  type: double
+  description: ''
+- name: neutral_zone_rank
+  type: integer
+  description: ''
+- name: neutral_zone_league_avg
+  type: double
+  description: ''
+- name: defensive_zone_pctg
+  type: double
+  description: ''
+- name: defensive_zone_rank
+  type: integer
+  description: ''
+- name: defensive_zone_league_avg
+  type: double
+  description: ''

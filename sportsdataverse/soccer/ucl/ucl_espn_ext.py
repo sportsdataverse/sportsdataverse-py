@@ -181,7 +181,9 @@ def espn_ucl_scoreboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_scoreboard(dates='20240115')
+        Quick start::
+
+            espn_ucl_scoreboard(dates='20240115')
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard",
@@ -222,7 +224,9 @@ def espn_ucl_summary(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_summary()
+        Quick start::
+
+            espn_ucl_summary()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/summary",
@@ -257,7 +261,9 @@ def espn_ucl_calendar(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_calendar()
+        Quick start::
+
+            espn_ucl_calendar()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/calendar",
@@ -292,7 +298,9 @@ def espn_ucl_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_news()
+        Quick start::
+
+            espn_ucl_news()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/news",
@@ -327,7 +335,9 @@ def espn_ucl_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_injuries()
+        Quick start::
+
+            espn_ucl_injuries()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/injuries",
@@ -360,7 +370,9 @@ def espn_ucl_transactions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_transactions()
+        Quick start::
+
+            espn_ucl_transactions()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/transactions",
@@ -393,7 +405,9 @@ def espn_ucl_conferences(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_conferences()
+        Quick start::
+
+            espn_ucl_conferences()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/groups",
@@ -426,7 +440,9 @@ def espn_ucl_statistics_league(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_statistics_league()
+        Quick start::
+
+            espn_ucl_statistics_league()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/statistics",
@@ -459,7 +475,9 @@ def espn_ucl_draft(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_draft()
+        Quick start::
+
+            espn_ucl_draft()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/draft",
@@ -494,7 +512,9 @@ def espn_ucl_teams_site(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_teams_site()
+        Quick start::
+
+            espn_ucl_teams_site()
     """
     raw = _get(
         "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams",
@@ -531,7 +551,9 @@ def espn_ucl_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team(team_id='4')
+        Quick start::
+
+            espn_ucl_team(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}",
@@ -566,7 +588,9 @@ def espn_ucl_team_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_roster(team_id='4')
+        Quick start::
+
+            espn_ucl_team_roster(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/roster",
@@ -603,7 +627,9 @@ def espn_ucl_team_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_schedule(team_id='4')
+        Quick start::
+
+            espn_ucl_team_schedule(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/schedule",
@@ -640,7 +666,9 @@ def espn_ucl_team_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_record(team_id='4')
+        Quick start::
+
+            espn_ucl_team_record(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/record",
@@ -675,7 +703,9 @@ def espn_ucl_team_depthcharts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_depthcharts(team_id='4')
+        Quick start::
+
+            espn_ucl_team_depthcharts(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/depthcharts",
@@ -710,7 +740,9 @@ def espn_ucl_team_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_injuries(team_id='4')
+        Quick start::
+
+            espn_ucl_team_injuries(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/injuries",
@@ -745,7 +777,9 @@ def espn_ucl_team_transactions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_transactions(team_id='4')
+        Quick start::
+
+            espn_ucl_team_transactions(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/transactions",
@@ -780,7 +814,9 @@ def espn_ucl_team_history(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_history(team_id='4')
+        Quick start::
+
+            espn_ucl_team_history(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/history",
@@ -817,7 +853,9 @@ def espn_ucl_team_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_news(team_id='4')
+        Quick start::
+
+            espn_ucl_team_news(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/news",
@@ -854,7 +892,9 @@ def espn_ucl_team_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_leaders(team_id='4')
+        Quick start::
+
+            espn_ucl_team_leaders(team_id='4')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/teams/{team_id}/leaders",
@@ -889,7 +929,9 @@ def espn_ucl_player_info(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_info(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_info(athlete_id='4239')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/athletes/{athlete_id}",
@@ -924,7 +966,9 @@ def espn_ucl_player_bio(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_bio(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_bio(athlete_id='4239')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/athletes/{athlete_id}/bio",
@@ -959,7 +1003,9 @@ def espn_ucl_player_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_news(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_news(athlete_id='4239')
     """
     raw = _get(
         f"https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/athletes/{athlete_id}/news",
@@ -998,7 +1044,9 @@ def espn_ucl_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_standings()
+        Quick start::
+
+            espn_ucl_standings()
     """
     raw = _get(
         "https://site.api.espn.com/apis/v2/sports/soccer/uefa.champions/standings",
@@ -1037,7 +1085,9 @@ def espn_ucl_player_overview(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_overview(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_overview(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.champions/athletes/{athlete_id}/overview",
@@ -1074,7 +1124,9 @@ def espn_ucl_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_stats(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_stats(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.champions/athletes/{athlete_id}/stats",
@@ -1113,7 +1165,9 @@ def espn_ucl_player_gamelog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_gamelog(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_gamelog(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.champions/athletes/{athlete_id}/gamelog",
@@ -1152,7 +1206,9 @@ def espn_ucl_player_splits(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_splits(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_splits(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.champions/athletes/{athlete_id}/splits",
@@ -1199,7 +1255,9 @@ def espn_ucl_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_leaders()
+        Quick start::
+
+            espn_ucl_leaders()
     """
     raw = _get(
         "https://site.web.api.espn.com/apis/common/v3/sports/soccer/uefa.champions/statistics/byathlete",
@@ -1239,7 +1297,9 @@ def espn_ucl_league_root(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_league_root()
+        Quick start::
+
+            espn_ucl_league_root()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions",
@@ -1272,7 +1332,9 @@ def espn_ucl_season_pointer(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_pointer()
+        Quick start::
+
+            espn_ucl_season_pointer()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/season",
@@ -1307,7 +1369,9 @@ def espn_ucl_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_seasons()
+        Quick start::
+
+            espn_ucl_seasons()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons",
@@ -1344,7 +1408,9 @@ def espn_ucl_season_info(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_info(season=2024)
+        Quick start::
+
+            espn_ucl_season_info(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}",
@@ -1379,7 +1445,9 @@ def espn_ucl_season_types(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_types(season=2024)
+        Quick start::
+
+            espn_ucl_season_types(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types",
@@ -1416,7 +1484,9 @@ def espn_ucl_season_type(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_type(season=2024, season_type=2)
+        Quick start::
+
+            espn_ucl_season_type(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}",
@@ -1455,7 +1525,9 @@ def espn_ucl_season_group(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_group(season=2024, season_type=2, group_id=80)
+        Quick start::
+
+            espn_ucl_season_group(season=2024, season_type=2, group_id=80)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/groups/{group_id}",
@@ -1492,7 +1564,9 @@ def espn_ucl_season_groups(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_groups(season=2024, season_type=2)
+        Quick start::
+
+            espn_ucl_season_groups(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/groups",
@@ -1533,7 +1607,9 @@ def espn_ucl_season_group_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_group_teams(season=2024, season_type=2, group_id=80)
+        Quick start::
+
+            espn_ucl_season_group_teams(season=2024, season_type=2, group_id=80)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
@@ -1574,7 +1650,9 @@ def espn_ucl_season_group_children(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_group_children(season=2024, season_type=2, group_id=80)
+        Quick start::
+
+            espn_ucl_season_group_children(season=2024, season_type=2, group_id=80)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/groups/{group_id}/children",
@@ -1611,7 +1689,9 @@ def espn_ucl_season_type_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_type_leaders(season=2024, season_type=2)
+        Quick start::
+
+            espn_ucl_season_type_leaders(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/leaders",
@@ -1648,7 +1728,9 @@ def espn_ucl_season_type_corrections(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_type_corrections(season=2024, season_type=2)
+        Quick start::
+
+            espn_ucl_season_type_corrections(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/corrections",
@@ -1685,7 +1767,9 @@ def espn_ucl_season_weeks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_weeks(season=2024, season_type=2)
+        Quick start::
+
+            espn_ucl_season_weeks(season=2024, season_type=2)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/weeks",
@@ -1724,7 +1808,9 @@ def espn_ucl_season_week(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_week(season=2024, season_type=2, week=1)
+        Quick start::
+
+            espn_ucl_season_week(season=2024, season_type=2, week=1)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/weeks/{week}",
@@ -1765,7 +1851,9 @@ def espn_ucl_season_week_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_week_games(season=2024, season_type=2, week=1)
+        Quick start::
+
+            espn_ucl_season_week_games(season=2024, season_type=2, week=1)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/types/{season_type}/weeks/{week}/events",
@@ -1804,7 +1892,9 @@ def espn_ucl_season_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_teams(season=2024)
+        Quick start::
+
+            espn_ucl_season_teams(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/teams",
@@ -1843,7 +1933,9 @@ def espn_ucl_season_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_team(season=2024, team_id='4')
+        Quick start::
+
+            espn_ucl_season_team(season=2024, team_id='4')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/teams/{team_id}",
@@ -1882,7 +1974,9 @@ def espn_ucl_season_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_players(season=2024)
+        Quick start::
+
+            espn_ucl_season_players(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/athletes",
@@ -1922,7 +2016,9 @@ def espn_ucl_season_coaches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_coaches(season=2024)
+        Quick start::
+
+            espn_ucl_season_coaches(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/coaches",
@@ -1959,7 +2055,9 @@ def espn_ucl_season_draft(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_draft(season=2024)
+        Quick start::
+
+            espn_ucl_season_draft(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/draft",
@@ -1996,7 +2094,9 @@ def espn_ucl_season_draft_round_picks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_draft_round_picks(season=2024, round_num='1')
+        Quick start::
+
+            espn_ucl_season_draft_round_picks(season=2024, round_num='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/draft/rounds/{round_num}/picks",
@@ -2031,7 +2131,9 @@ def espn_ucl_season_futures(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_futures(season=2024)
+        Quick start::
+
+            espn_ucl_season_futures(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/futures",
@@ -2066,7 +2168,9 @@ def espn_ucl_season_freeagents(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_freeagents(season=2024)
+        Quick start::
+
+            espn_ucl_season_freeagents(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/freeagents",
@@ -2103,7 +2207,9 @@ def espn_ucl_season_powerindex(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_powerindex(season=2024)
+        Quick start::
+
+            espn_ucl_season_powerindex(season=2024)
     """
     __seg = f"/{team_id}" if team_id is not None else ""
     __url = (
@@ -2142,7 +2248,9 @@ def espn_ucl_season_powerindex_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_powerindex_leaders(season=2024)
+        Quick start::
+
+            espn_ucl_season_powerindex_leaders(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/powerindex/leaders",
@@ -2177,7 +2285,9 @@ def espn_ucl_season_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_season_awards(season=2024)
+        Quick start::
+
+            espn_ucl_season_awards(season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/seasons/{season}/awards",
@@ -2216,7 +2326,9 @@ def espn_ucl_players_index(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_players_index()
+        Quick start::
+
+            espn_ucl_players_index()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes",
@@ -2255,7 +2367,9 @@ def espn_ucl_player_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_core(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_core(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}",
@@ -2292,7 +2406,9 @@ def espn_ucl_player_career_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_career_stats(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_career_stats(athlete_id='4239')
     """
     __seg = f"/{stat_type}" if stat_type is not None else ""
     __url = (
@@ -2332,7 +2448,9 @@ def espn_ucl_player_statisticslog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_statisticslog(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_statisticslog(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/statisticslog",
@@ -2367,7 +2485,9 @@ def espn_ucl_player_eventlog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_eventlog(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_eventlog(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/eventlog",
@@ -2402,7 +2522,9 @@ def espn_ucl_player_contracts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_contracts(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_contracts(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/contracts",
@@ -2437,7 +2559,9 @@ def espn_ucl_player_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_awards(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_awards(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/awards",
@@ -2472,7 +2596,9 @@ def espn_ucl_player_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_seasons(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_seasons(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/seasons",
@@ -2507,7 +2633,9 @@ def espn_ucl_player_records(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_records(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_records(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/records",
@@ -2542,7 +2670,9 @@ def espn_ucl_player_injuries(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_injuries(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_injuries(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/injuries",
@@ -2577,7 +2707,9 @@ def espn_ucl_player_notes(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_notes(athlete_id='4239')
+        Quick start::
+
+            espn_ucl_player_notes(athlete_id='4239')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/notes",
@@ -2614,7 +2746,9 @@ def espn_ucl_player_vs_player(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_player_vs_player(athlete_id='4239', opp_id='5')
+        Quick start::
+
+            espn_ucl_player_vs_player(athlete_id='4239', opp_id='5')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes/{athlete_id}/vsathlete/{opp_id}",
@@ -2651,7 +2785,9 @@ def espn_ucl_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_games()
+        Quick start::
+
+            espn_ucl_games()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events",
@@ -2689,7 +2825,9 @@ def espn_ucl_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game(event_id='401584793')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}",
@@ -2726,7 +2864,9 @@ def espn_ucl_game_competition(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_competition(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_competition(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = (
@@ -2767,7 +2907,9 @@ def espn_ucl_game_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_teams(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_teams(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/competitors"
@@ -2808,7 +2950,9 @@ def espn_ucl_game_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_team(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_ucl_game_team(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/competitors/{team_id}"
@@ -2849,7 +2993,9 @@ def espn_ucl_game_team_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_team_roster(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_ucl_game_team_roster(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
@@ -2890,7 +3036,9 @@ def espn_ucl_game_team_linescores(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_team_linescores(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_ucl_game_team_linescores(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
@@ -2931,7 +3079,9 @@ def espn_ucl_game_team_statistics(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_team_statistics(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_ucl_game_team_statistics(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
@@ -2972,7 +3122,9 @@ def espn_ucl_game_team_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_team_record(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_ucl_game_team_record(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
@@ -3013,7 +3165,9 @@ def espn_ucl_game_team_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_team_leaders(event_id='401584793', team_id='4')
+        Quick start::
+
+            espn_ucl_game_team_leaders(event_id='401584793', team_id='4')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
@@ -3052,7 +3206,9 @@ def espn_ucl_game_odds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_odds(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_odds(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/odds"
@@ -3093,7 +3249,9 @@ def espn_ucl_game_probabilities(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_probabilities(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_probabilities(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/probabilities"
@@ -3136,7 +3294,9 @@ def espn_ucl_game_plays(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_plays(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_plays(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/plays"
@@ -3179,7 +3339,9 @@ def espn_ucl_game_play(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_play(event_id='401584793', play_id='1')
+        Quick start::
+
+            espn_ucl_game_play(event_id='401584793', play_id='1')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/plays/{play_id}"
@@ -3220,7 +3382,9 @@ def espn_ucl_game_play_personnel(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_play_personnel(event_id='401584793', play_id='1')
+        Quick start::
+
+            espn_ucl_game_play_personnel(event_id='401584793', play_id='1')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
@@ -3259,7 +3423,9 @@ def espn_ucl_game_situation(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_situation(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_situation(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/situation"
@@ -3298,7 +3464,9 @@ def espn_ucl_game_status(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_status(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_status(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/status"
@@ -3337,7 +3505,9 @@ def espn_ucl_game_officials(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_officials(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_officials(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/officials"
@@ -3376,7 +3546,9 @@ def espn_ucl_game_broadcasts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_broadcasts(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_broadcasts(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/broadcasts"
@@ -3415,7 +3587,9 @@ def espn_ucl_game_predictor(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_predictor(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_predictor(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/predictor"
@@ -3454,7 +3628,9 @@ def espn_ucl_game_powerindex(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_powerindex(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_powerindex(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/powerindex"
@@ -3493,7 +3669,9 @@ def espn_ucl_game_propbets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_propbets(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_propbets(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/propbets"
@@ -3532,7 +3710,9 @@ def espn_ucl_game_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_leaders(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_leaders(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/leaders"
@@ -3571,7 +3751,9 @@ def espn_ucl_game_scoringplays(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_scoringplays(event_id='401584793')
+        Quick start::
+
+            espn_ucl_game_scoringplays(event_id='401584793')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/scoringplays"
@@ -3612,7 +3794,9 @@ def espn_ucl_game_official_detail(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_game_official_detail(event_id='401584793', official_id='1')
+        Quick start::
+
+            espn_ucl_game_official_detail(event_id='401584793', official_id='1')
     """
     cid = cid if cid is not None else event_id
     __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/events/{event_id}/competitions/{cid}/officials/{official_id}"
@@ -3649,7 +3833,9 @@ def espn_ucl_teams_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_teams_core()
+        Quick start::
+
+            espn_ucl_teams_core()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/teams",
@@ -3686,7 +3872,9 @@ def espn_ucl_team_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_team_core(team_id='4')
+        Quick start::
+
+            espn_ucl_team_core(team_id='4')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/teams/{team_id}",
@@ -3721,7 +3909,9 @@ def espn_ucl_venues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_venues()
+        Quick start::
+
+            espn_ucl_venues()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/venues",
@@ -3758,7 +3948,9 @@ def espn_ucl_venue(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_venue(venue_id='3663')
+        Quick start::
+
+            espn_ucl_venue(venue_id='3663')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/venues/{venue_id}",
@@ -3793,7 +3985,9 @@ def espn_ucl_franchises(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_franchises()
+        Quick start::
+
+            espn_ucl_franchises()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/franchises",
@@ -3830,7 +4024,9 @@ def espn_ucl_franchise(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_franchise(franchise_id='2')
+        Quick start::
+
+            espn_ucl_franchise(franchise_id='2')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/franchises/{franchise_id}",
@@ -3865,7 +4061,9 @@ def espn_ucl_coach(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_coach(coach_id='1')
+        Quick start::
+
+            espn_ucl_coach(coach_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/coaches/{coach_id}",
@@ -3902,7 +4100,9 @@ def espn_ucl_coach_record(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_coach_record(coach_id='1')
+        Quick start::
+
+            espn_ucl_coach_record(coach_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/coaches/{coach_id}/record/{record_type}",
@@ -3939,7 +4139,9 @@ def espn_ucl_coach_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_coach_season(coach_id='1', season=2024)
+        Quick start::
+
+            espn_ucl_coach_season(coach_id='1', season=2024)
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/coaches/{coach_id}/seasons/{season}",
@@ -3972,7 +4174,9 @@ def espn_ucl_positions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_positions()
+        Quick start::
+
+            espn_ucl_positions()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/positions",
@@ -4007,7 +4211,9 @@ def espn_ucl_position(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_position(position_id='1')
+        Quick start::
+
+            espn_ucl_position(position_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/positions/{position_id}",
@@ -4040,7 +4246,9 @@ def espn_ucl_tournaments(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_tournaments()
+        Quick start::
+
+            espn_ucl_tournaments()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/tournaments",
@@ -4073,7 +4281,9 @@ def espn_ucl_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_awards()
+        Quick start::
+
+            espn_ucl_awards()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/awards",
@@ -4108,7 +4318,9 @@ def espn_ucl_award(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_award(award_id='1')
+        Quick start::
+
+            espn_ucl_award(award_id='1')
     """
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/awards/{award_id}",
@@ -4141,7 +4353,9 @@ def espn_ucl_standings_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_standings_core()
+        Quick start::
+
+            espn_ucl_standings_core()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/standings",
@@ -4174,7 +4388,9 @@ def espn_ucl_leaders_core(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_leaders_core()
+        Quick start::
+
+            espn_ucl_leaders_core()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/leaders",
@@ -4207,7 +4423,9 @@ def espn_ucl_league_notes(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_league_notes()
+        Quick start::
+
+            espn_ucl_league_notes()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/notes",
@@ -4240,7 +4458,9 @@ def espn_ucl_talentpicks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_ucl_talentpicks()
+        Quick start::
+
+            espn_ucl_talentpicks()
     """
     raw = _get(
         "https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/talentpicks",

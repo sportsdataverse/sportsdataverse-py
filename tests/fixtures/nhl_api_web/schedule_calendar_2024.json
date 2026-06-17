@@ -1,0 +1,716 @@
+{
+  "endDate": "2024-06-30",
+  "nextStartDate": "2024-09-16",
+  "previousStartDate": "2024-06-17",
+  "startDate": "2024-06-24",
+  "teams": [
+    {
+      "id": 1,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Devils"
+      },
+      "abbrev": "NJD",
+      "name": {
+        "default": "New Jersey Devils",
+        "fr": "Devils du New Jersey"
+      },
+      "placeNameWithPreposition": {
+        "default": "New Jersey",
+        "fr": "du New Jersey"
+      },
+      "placeName": {
+        "default": "New Jersey"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/NJD_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+      "french": false
+    },
+    {
+      "id": 2,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Islanders"
+      },
+      "abbrev": "NYI",
+      "name": {
+        "default": "New York Islanders",
+        "fr": "Islanders de New York"
+      },
+      "placeNameWithPreposition": {
+        "default": "New York",
+        "fr": "de New York"
+      },
+      "placeName": {
+        "default": "NY Islanders"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/NYI_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+      "french": false
+    },
+    {
+      "id": 3,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Rangers"
+      },
+      "abbrev": "NYR",
+      "name": {
+        "default": "New York Rangers",
+        "fr": "Rangers de New York"
+      },
+      "placeNameWithPreposition": {
+        "default": "New York",
+        "fr": "de New York"
+      },
+      "placeName": {
+        "default": "NY Rangers"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/NYR_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+      "french": false
+    },
+    {
+      "id": 4,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Flyers"
+      },
+      "abbrev": "PHI",
+      "name": {
+        "default": "Philadelphia Flyers",
+        "fr": "Flyers de Philadelphie"
+      },
+      "placeNameWithPreposition": {
+        "default": "Philadelphia",
+        "fr": "de Philadelphie"
+      },
+      "placeName": {
+        "default": "Philadelphia",
+        "fr": "Philadelphie"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+      "french": false
+    },
+    {
+      "id": 5,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Penguins"
+      },
+      "abbrev": "PIT",
+      "name": {
+        "default": "Pittsburgh Penguins",
+        "fr": "Penguins de Pittsburgh"
+      },
+      "placeNameWithPreposition": {
+        "default": "Pittsburgh",
+        "fr": "de Pittsburgh"
+      },
+      "placeName": {
+        "default": "Pittsburgh"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/PIT_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+      "french": false
+    },
+    {
+      "id": 6,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Bruins"
+      },
+      "abbrev": "BOS",
+      "name": {
+        "default": "Boston Bruins",
+        "fr": "Bruins de Boston"
+      },
+      "placeNameWithPreposition": {
+        "default": "Boston",
+        "fr": "de Boston"
+      },
+      "placeName": {
+        "default": "Boston"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/BOS_20232024_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/BOS_20232024_dark.svg",
+      "french": false
+    },
+    {
+      "id": 7,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Sabres"
+      },
+      "abbrev": "BUF",
+      "name": {
+        "default": "Buffalo Sabres",
+        "fr": "Sabres de Buffalo"
+      },
+      "placeNameWithPreposition": {
+        "default": "Buffalo",
+        "fr": "de Buffalo"
+      },
+      "placeName": {
+        "default": "Buffalo"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+      "french": false
+    },
+    {
+      "id": 8,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Canadiens"
+      },
+      "abbrev": "MTL",
+      "name": {
+        "default": "Montr\u00e9al Canadiens",
+        "fr": "Canadiens de Montr\u00e9al"
+      },
+      "placeNameWithPreposition": {
+        "default": "Montr\u00e9al",
+        "fr": "de Montr\u00e9al"
+      },
+      "placeName": {
+        "default": "Montr\u00e9al"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+      "french": true
+    },
+    {
+      "id": 9,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Senators",
+        "fr": "S\u00e9nateurs"
+      },
+      "abbrev": "OTT",
+      "name": {
+        "default": "Ottawa Senators",
+        "fr": "S\u00e9nateurs d'Ottawa"
+      },
+      "placeNameWithPreposition": {
+        "default": "Ottawa",
+        "fr": "d'Ottawa"
+      },
+      "placeName": {
+        "default": "Ottawa"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/OTT_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+      "french": false
+    },
+    {
+      "id": 10,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Maple Leafs"
+      },
+      "abbrev": "TOR",
+      "name": {
+        "default": "Toronto Maple Leafs",
+        "fr": "Maple Leafs de Toronto"
+      },
+      "placeNameWithPreposition": {
+        "default": "Toronto",
+        "fr": "de Toronto"
+      },
+      "placeName": {
+        "default": "Toronto"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+      "french": false
+    },
+    {
+      "id": 12,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Hurricanes"
+      },
+      "abbrev": "CAR",
+      "name": {
+        "default": "Carolina Hurricanes",
+        "fr": "Hurricanes de la Caroline"
+      },
+      "placeNameWithPreposition": {
+        "default": "Carolina",
+        "fr": "de la Caroline"
+      },
+      "placeName": {
+        "default": "Carolina",
+        "fr": "Caroline"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+      "french": false
+    },
+    {
+      "id": 13,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Panthers"
+      },
+      "abbrev": "FLA",
+      "name": {
+        "default": "Florida Panthers",
+        "fr": "Panthers de la Floride"
+      },
+      "placeNameWithPreposition": {
+        "default": "Florida",
+        "fr": "de la Floride"
+      },
+      "placeName": {
+        "default": "Florida",
+        "fr": "Floride"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+      "french": false
+    },
+    {
+      "id": 14,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Lightning"
+      },
+      "abbrev": "TBL",
+      "name": {
+        "default": "Tampa Bay Lightning",
+        "fr": "Lightning de Tampa Bay"
+      },
+      "placeNameWithPreposition": {
+        "default": "Tampa Bay",
+        "fr": "de Tampa Bay"
+      },
+      "placeName": {
+        "default": "Tampa Bay"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/TBL_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+      "french": false
+    },
+    {
+      "id": 15,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Capitals"
+      },
+      "abbrev": "WSH",
+      "name": {
+        "default": "Washington Capitals",
+        "fr": "Capitals de Washington"
+      },
+      "placeNameWithPreposition": {
+        "default": "Washington",
+        "fr": "de Washington"
+      },
+      "placeName": {
+        "default": "Washington"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg",
+      "french": false
+    },
+    {
+      "id": 16,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Blackhawks"
+      },
+      "abbrev": "CHI",
+      "name": {
+        "default": "Chicago Blackhawks",
+        "fr": "Blackhawks de Chicago"
+      },
+      "placeNameWithPreposition": {
+        "default": "Chicago",
+        "fr": "de Chicago"
+      },
+      "placeName": {
+        "default": "Chicago"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/CHI_19981999-20242025_dark.svg",
+      "french": false
+    },
+    {
+      "id": 17,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Red Wings"
+      },
+      "abbrev": "DET",
+      "name": {
+        "default": "Detroit Red Wings",
+        "fr": "Red Wings de Detroit"
+      },
+      "placeNameWithPreposition": {
+        "default": "Detroit",
+        "fr": "de Detroit"
+      },
+      "placeName": {
+        "default": "Detroit"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/DET_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+      "french": false
+    },
+    {
+      "id": 18,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Predators"
+      },
+      "abbrev": "NSH",
+      "name": {
+        "default": "Nashville Predators",
+        "fr": "Predators de Nashville"
+      },
+      "placeNameWithPreposition": {
+        "default": "Nashville",
+        "fr": "de Nashville"
+      },
+      "placeName": {
+        "default": "Nashville"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+      "french": false
+    },
+    {
+      "id": 19,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Blues"
+      },
+      "abbrev": "STL",
+      "name": {
+        "default": "St. Louis Blues",
+        "fr": "Blues de St. Louis"
+      },
+      "placeNameWithPreposition": {
+        "default": "St. Louis",
+        "fr": "de St. Louis"
+      },
+      "placeName": {
+        "default": "St. Louis"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_dark.svg",
+      "french": false
+    },
+    {
+      "id": 20,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Flames"
+      },
+      "abbrev": "CGY",
+      "name": {
+        "default": "Calgary Flames",
+        "fr": "Flames de Calgary"
+      },
+      "placeNameWithPreposition": {
+        "default": "Calgary",
+        "fr": "de Calgary"
+      },
+      "placeName": {
+        "default": "Calgary"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/CGY_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+      "french": false
+    },
+    {
+      "id": 21,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Avalanche"
+      },
+      "abbrev": "COL",
+      "name": {
+        "default": "Colorado Avalanche",
+        "fr": "Avalanche du Colorado"
+      },
+      "placeNameWithPreposition": {
+        "default": "Colorado",
+        "fr": "du Colorado"
+      },
+      "placeName": {
+        "default": "Colorado"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+      "french": false
+    },
+    {
+      "id": 22,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Oilers"
+      },
+      "abbrev": "EDM",
+      "name": {
+        "default": "Edmonton Oilers",
+        "fr": "Oilers d'Edmonton"
+      },
+      "placeNameWithPreposition": {
+        "default": "Edmonton",
+        "fr": "d'Edmonton"
+      },
+      "placeName": {
+        "default": "Edmonton"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+      "french": false
+    },
+    {
+      "id": 23,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Canucks"
+      },
+      "abbrev": "VAN",
+      "name": {
+        "default": "Vancouver Canucks",
+        "fr": "Canucks de Vancouver"
+      },
+      "placeNameWithPreposition": {
+        "default": "Vancouver",
+        "fr": "de Vancouver"
+      },
+      "placeName": {
+        "default": "Vancouver"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/VAN_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+      "french": false
+    },
+    {
+      "id": 24,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Ducks"
+      },
+      "abbrev": "ANA",
+      "name": {
+        "default": "Anaheim Ducks",
+        "fr": "Ducks d'Anaheim"
+      },
+      "placeNameWithPreposition": {
+        "default": "Anaheim",
+        "fr": "d'Anaheim"
+      },
+      "placeName": {
+        "default": "Anaheim"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/ANA_20132014-20232024_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/ANA_20132014-20232024_dark.svg",
+      "french": false
+    },
+    {
+      "id": 25,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Stars"
+      },
+      "abbrev": "DAL",
+      "name": {
+        "default": "Dallas Stars",
+        "fr": "Stars de Dallas"
+      },
+      "placeNameWithPreposition": {
+        "default": "Dallas",
+        "fr": "de Dallas"
+      },
+      "placeName": {
+        "default": "Dallas"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/DAL_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+      "french": false
+    },
+    {
+      "id": 26,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Kings"
+      },
+      "abbrev": "LAK",
+      "name": {
+        "default": "Los Angeles Kings",
+        "fr": "Kings de Los Angeles"
+      },
+      "placeNameWithPreposition": {
+        "default": "Los Angeles",
+        "fr": "de Los Angeles"
+      },
+      "placeName": {
+        "default": "Los Angeles"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/LAK_20192020-20232024_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/LAK_20192020-20232024_dark.svg",
+      "french": false
+    },
+    {
+      "id": 28,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Sharks"
+      },
+      "abbrev": "SJS",
+      "name": {
+        "default": "San Jose Sharks",
+        "fr": "Sharks de San Jose"
+      },
+      "placeNameWithPreposition": {
+        "default": "San Jose",
+        "fr": "de San Jose"
+      },
+      "placeName": {
+        "default": "San Jose"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/SJS_20082009-20232024_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/SJS_20082009-20232024_dark.svg",
+      "french": false
+    },
+    {
+      "id": 29,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Blue Jackets"
+      },
+      "abbrev": "CBJ",
+      "name": {
+        "default": "Columbus Blue Jackets",
+        "fr": "Blue Jackets de Columbus"
+      },
+      "placeNameWithPreposition": {
+        "default": "Columbus",
+        "fr": "de Columbus"
+      },
+      "placeName": {
+        "default": "Columbus"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/CBJ_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+      "french": false
+    },
+    {
+      "id": 30,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Wild"
+      },
+      "abbrev": "MIN",
+      "name": {
+        "default": "Minnesota Wild",
+        "fr": "Wild du Minnesota"
+      },
+      "placeNameWithPreposition": {
+        "default": "Minnesota",
+        "fr": "du Minnesota"
+      },
+      "placeName": {
+        "default": "Minnesota"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+      "french": false
+    },
+    {
+      "id": 52,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Jets"
+      },
+      "abbrev": "WPG",
+      "name": {
+        "default": "Winnipeg Jets",
+        "fr": "Jets de Winnipeg"
+      },
+      "placeNameWithPreposition": {
+        "default": "Winnipeg",
+        "fr": "de Winnipeg"
+      },
+      "placeName": {
+        "default": "Winnipeg"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg",
+      "french": false
+    },
+    {
+      "id": 53,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Coyotes"
+      },
+      "abbrev": "ARI",
+      "name": {
+        "default": "Arizona Coyotes",
+        "fr": "Coyotes de l'Arizona"
+      },
+      "placeNameWithPreposition": {
+        "default": "Arizona",
+        "fr": "de l'Arizona"
+      },
+      "placeName": {
+        "default": "Arizona"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/ARI_20202021-20232024_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/ARI_20202021-20232024_dark.svg",
+      "french": false
+    },
+    {
+      "id": 54,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Golden Knights"
+      },
+      "abbrev": "VGK",
+      "name": {
+        "default": "Vegas Golden Knights",
+        "fr": "Golden Knights de Vegas"
+      },
+      "placeNameWithPreposition": {
+        "default": "Vegas",
+        "fr": "de Vegas"
+      },
+      "placeName": {
+        "default": "Vegas"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+      "french": false
+    },
+    {
+      "id": 55,
+      "seasonId": 20232024,
+      "commonName": {
+        "default": "Kraken"
+      },
+      "abbrev": "SEA",
+      "name": {
+        "default": "Seattle Kraken",
+        "fr": "Kraken de Seattle"
+      },
+      "placeNameWithPreposition": {
+        "default": "Seattle",
+        "fr": "de Seattle"
+      },
+      "placeName": {
+        "default": "Seattle"
+      },
+      "logo": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg",
+      "darkLogo": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+      "french": false
+    }
+  ]
+}

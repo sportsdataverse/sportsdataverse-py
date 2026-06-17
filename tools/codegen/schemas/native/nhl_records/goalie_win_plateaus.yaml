@@ -1,0 +1,39 @@
+schema: goalie_win_plateaus
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: active_player
+  type: logical
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: forty_win_seasons
+  type: integer
+  description: ''
+- name: franchise_id
+  type: double
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: seasons_played
+  type: integer
+  description: ''
+- name: team_abbrevs
+  type: character
+  description: ''
+- name: team_names
+  type: character
+  description: ''
+- name: thirty_win_seasons
+  type: integer
+  description: ''
+- name: twenty_win_seasons
+  type: integer
+  description: ''

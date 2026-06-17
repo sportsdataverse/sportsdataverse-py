@@ -143,9 +143,11 @@ def nfl_ngs_statboard(
         A polars (or pandas) ``DataFrame``, one row per qualifying player.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_statboard
-        >>> qb = nfl_ngs_statboard(stat_type="passing", season=2024, season_type="REG")
-        >>> qb.select(["playerName", "passerRating", "completionPercentageAboveExpectation"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_statboard
+            qb = nfl_ngs_statboard(stat_type="passing", season=2024, season_type="REG")
+            qb.select(["playerName", "passerRating", "completionPercentageAboveExpectation"]).head()
     """
     params = {"season": season, "seasonType": season_type}
     if week is not None:
@@ -180,9 +182,11 @@ def nfl_ngs_statboard_leaders(
         ``category`` column. Empty frame if no lists are present.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_statboard_leaders
-        >>> bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
-        >>> bd["category"].unique().to_list()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_statboard_leaders
+            bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
+            bd["category"].unique().to_list()
     """
     import polars as pl
 
@@ -265,9 +269,11 @@ def nfl_ngs_leaders(
         ValueError: if ``category`` is not a recognized key.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_leaders
-        >>> fast = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
-        >>> fast.select(["leader_playerName", "leader_maxSpeed", "play_playDescription"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_leaders
+            fast = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+            fast.select(["leader_playerName", "leader_maxSpeed", "play_playDescription"]).head()
     """
     if category not in _LEADER_CATEGORIES:
         valid = ", ".join(sorted(_LEADER_CATEGORIES))
@@ -307,9 +313,11 @@ def nfl_ngs_league_schedule(
         A polars (or pandas) ``DataFrame``, one row per scheduled game.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_league_schedule
-        >>> sched = nfl_ngs_league_schedule(season=2024, season_type="REG", week=1)
-        >>> first_game_id = sched["gameId"][0]
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_league_schedule
+            sched = nfl_ngs_league_schedule(season=2024, season_type="REG", week=1)
+            first_game_id = sched["gameId"][0]
     """
     params = {"season": season, "seasonType": season_type}
     if week is not None:
@@ -332,9 +340,11 @@ def nfl_ngs_league_schedule_current(return_as_pandas: bool = False):
         A polars (or pandas) ``DataFrame``, one row per game in the current week.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_league_schedule_current
-        >>> cur = nfl_ngs_league_schedule_current()
-        >>> cur.select(["gameId", "homeTeamAbbr", "visitorTeamAbbr"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_league_schedule_current
+            cur = nfl_ngs_league_schedule_current()
+            cur.select(["gameId", "homeTeamAbbr", "visitorTeamAbbr"]).head()
     """
     payload = _ngs_get("/league/schedule/current")
     return _to_frame(payload.get("games", []), return_as_pandas)
@@ -354,9 +364,11 @@ def nfl_ngs_league_teams(return_as_pandas: bool = False):
         A polars (or pandas) ``DataFrame``, one row per team.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_league_teams
-        >>> teams = nfl_ngs_league_teams()
-        >>> teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_league_teams
+            teams = nfl_ngs_league_teams()
+            teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
     """
     payload = _ngs_get("/league/teams")
     return _to_frame(payload, return_as_pandas)
@@ -401,9 +413,11 @@ def nfl_ngs_gamecenter_overview(
         ValueError: if ``group`` is not a recognized key.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_gamecenter_overview
-        >>> ov = nfl_ngs_gamecenter_overview(game_id="2024090500", group="passers")
-        >>> ov.select(["side", "playerName", "position"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_gamecenter_overview
+            ov = nfl_ngs_gamecenter_overview(game_id="2024090500", group="passers")
+            ov.select(["side", "playerName", "position"]).head()
     """
     import polars as pl
 
@@ -466,9 +480,11 @@ def nfl_ngs_microsite_chart(
         A polars (or pandas) ``DataFrame``, one row per chart in the page.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_microsite_chart
-        >>> charts = nfl_ngs_microsite_chart(season=2024, season_type="REG", limit=25)
-        >>> charts.select(["playerName", "type", "imageName"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_microsite_chart
+            charts = nfl_ngs_microsite_chart(season=2024, season_type="REG", limit=25)
+            charts.select(["playerName", "type", "imageName"]).head()
     """
     params = {"season": season, "seasonType": season_type, "limit": limit, "offset": offset}
     if week is not None:
@@ -501,9 +517,11 @@ def nfl_ngs_microsite_chart_players(
         A polars (or pandas) ``DataFrame``, one row per player.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_microsite_chart_players
-        >>> who = nfl_ngs_microsite_chart_players(season=2024, season_type="REG")
-        >>> who.select(["playerName", "esbId"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_microsite_chart_players
+            who = nfl_ngs_microsite_chart_players(season=2024, season_type="REG")
+            who.select(["playerName", "esbId"]).head()
     """
     payload = _ngs_get(
         "/content/microsite/chart/players",
@@ -539,11 +557,13 @@ def nfl_ngs_play_is_highlight(
         ``isHighlight`` and (when true) flattened ``highlight_*`` columns.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_ngs_leaders, nfl_ngs_play_is_highlight
-        >>> lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
-        >>> gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
-        >>> hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
-        >>> hl.select(["gameId", "playId", "isHighlight"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ngs_leaders, nfl_ngs_play_is_highlight
+            lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+            gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
+            hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
+            hl.select(["gameId", "playId", "isHighlight"]).head()
     """
     payload = _ngs_get("/plays/isHighlight", {"gameId": game_id, "playId": play_id})
     return _to_frame([payload], return_as_pandas)

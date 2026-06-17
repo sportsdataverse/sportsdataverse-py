@@ -98,9 +98,11 @@ def parse_nfl_standings(raw: Dict, return_as_pandas: bool = False) -> DataFrameT
         across the returned week(s).
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_standings, parse_nfl_standings
-        >>> raw = nfl_standings(season=2024, season_type="REG", week=18, return_parsed=False)
-        >>> parse_nfl_standings(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_standings, parse_nfl_standings
+            raw = nfl_standings(season=2024, season_type="REG", week=18, return_parsed=False)
+            parse_nfl_standings(raw).head()
     """
     records: List = []
     for wk in raw.get("weeks", []) or []:
@@ -120,9 +122,11 @@ def parse_nfl_rosters(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
         A ``polars`` (or ``pandas``) ``DataFrame``, one row per team roster.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_rosters, parse_nfl_rosters
-        >>> raw = nfl_rosters(season=2024, return_parsed=False)
-        >>> parse_nfl_rosters(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_rosters, parse_nfl_rosters
+            raw = nfl_rosters(season=2024, return_parsed=False)
+            parse_nfl_rosters(raw).head()
     """
     return _to_frame(raw.get("rosters", []), return_as_pandas)
 
@@ -139,9 +143,11 @@ def parse_nfl_teams_history(raw: Dict, return_as_pandas: bool = False) -> DataFr
         A ``polars`` (or ``pandas``) ``DataFrame``, one row per team for a season.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_teams_history, parse_nfl_teams_history
-        >>> raw = nfl_teams_history(season=2024, return_parsed=False)
-        >>> parse_nfl_teams_history(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_teams_history, parse_nfl_teams_history
+            raw = nfl_teams_history(season=2024, return_parsed=False)
+            parse_nfl_teams_history(raw).head()
     """
     return _to_frame(raw.get("teams", []), return_as_pandas)
 
@@ -158,9 +164,11 @@ def parse_nfl_team(raw: Union[Dict, List], return_as_pandas: bool = False) -> Da
         A ``polars`` (or ``pandas``) ``DataFrame`` with a single team-detail row.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_team, parse_nfl_team
-        >>> raw = nfl_team(team_id="10403800-517c-7b8c-65a3-c61b95d86123", return_parsed=False)
-        >>> parse_nfl_team(raw)
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_team, parse_nfl_team
+            raw = nfl_team(team_id="10403800-517c-7b8c-65a3-c61b95d86123", return_parsed=False)
+            parse_nfl_team(raw)
     """
     return _to_frame([raw] if isinstance(raw, dict) else raw, return_as_pandas)
 
@@ -178,9 +186,11 @@ def parse_nfl_weeks(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
         season's week calendar.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_weeks, parse_nfl_weeks
-        >>> raw = nfl_weeks(season=2024, season_type="REG", return_parsed=False)
-        >>> parse_nfl_weeks(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_weeks, parse_nfl_weeks
+            raw = nfl_weeks(season=2024, season_type="REG", return_parsed=False)
+            parse_nfl_weeks(raw).head()
     """
     return _to_frame(raw.get("weeks", []), return_as_pandas)
 
@@ -198,9 +208,11 @@ def parse_nfl_weeks_by_date(raw: Union[Dict, List], return_as_pandas: bool = Fal
         contains the requested date.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_weeks_by_date, parse_nfl_weeks_by_date
-        >>> raw = nfl_weeks_by_date(date="2024-09-08", return_parsed=False)
-        >>> parse_nfl_weeks_by_date(raw)
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_weeks_by_date, parse_nfl_weeks_by_date
+            raw = nfl_weeks_by_date(date="2024-09-08", return_parsed=False)
+            parse_nfl_weeks_by_date(raw)
     """
     return _to_frame([raw] if isinstance(raw, dict) else raw, return_as_pandas)
 
@@ -217,9 +229,11 @@ def parse_nfl_combine_profiles(raw: Dict, return_as_pandas: bool = False) -> Dat
         A ``polars`` (or ``pandas``) ``DataFrame``, one row per combine prospect.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_combine_profiles, parse_nfl_combine_profiles
-        >>> raw = nfl_combine_profiles(year=2024, return_parsed=False)
-        >>> parse_nfl_combine_profiles(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_combine_profiles, parse_nfl_combine_profiles
+            raw = nfl_combine_profiles(year=2024, return_parsed=False)
+            parse_nfl_combine_profiles(raw).head()
     """
     return _to_frame(raw.get("combineProfiles", []), return_as_pandas)
 
@@ -236,9 +250,11 @@ def parse_nfl_draft_picks(raw: Dict, return_as_pandas: bool = False) -> DataFram
         A ``polars`` (or ``pandas``) ``DataFrame``, one row per draft pick.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_draft_picks, parse_nfl_draft_picks
-        >>> raw = nfl_draft_picks(year=2024, return_parsed=False)
-        >>> parse_nfl_draft_picks(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_draft_picks, parse_nfl_draft_picks
+            raw = nfl_draft_picks(year=2024, return_parsed=False)
+            parse_nfl_draft_picks(raw).head()
     """
     return _to_frame(raw.get("picks", []), return_as_pandas)
 
@@ -255,9 +271,11 @@ def parse_nfl_injuries(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
         A ``polars`` (or ``pandas``) ``DataFrame``, one row per injured player.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_injuries, parse_nfl_injuries
-        >>> raw = nfl_injuries(season=2024, season_type="REG", week=1, return_parsed=False)
-        >>> parse_nfl_injuries(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_injuries, parse_nfl_injuries
+            raw = nfl_injuries(season=2024, season_type="REG", week=1, return_parsed=False)
+            parse_nfl_injuries(raw).head()
     """
     return _to_frame(raw.get("injuries", []), return_as_pandas)
 
@@ -274,9 +292,11 @@ def parse_nfl_game_summaries(raw: Dict, return_as_pandas: bool = False) -> DataF
         A ``polars`` (or ``pandas``) ``DataFrame``, one row per game (live state).
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_game_summaries, parse_nfl_game_summaries
-        >>> raw = nfl_game_summaries(season=2024, season_type="REG", week=1, return_parsed=False)
-        >>> parse_nfl_game_summaries(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_game_summaries, parse_nfl_game_summaries
+            raw = nfl_game_summaries(season=2024, season_type="REG", week=1, return_parsed=False)
+            parse_nfl_game_summaries(raw).head()
     """
     return _to_frame(raw.get("data", []), return_as_pandas)
 
@@ -293,9 +313,11 @@ def parse_nfl_weekly_game_details(raw: Union[Dict, List], return_as_pandas: bool
         A ``polars`` (or ``pandas``) ``DataFrame``, one row per game.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_weekly_game_details, parse_nfl_weekly_game_details
-        >>> raw = nfl_weekly_game_details(season=2024, season_type="REG", week=1, return_parsed=False)
-        >>> parse_nfl_weekly_game_details(raw).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_weekly_game_details, parse_nfl_weekly_game_details
+            raw = nfl_weekly_game_details(season=2024, season_type="REG", week=1, return_parsed=False)
+            parse_nfl_weekly_game_details(raw).head()
     """
     records = raw if isinstance(raw, list) else raw.get("games", []) or raw.get("data", [])
     return _to_frame(records, return_as_pandas)
