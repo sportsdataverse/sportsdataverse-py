@@ -139,10 +139,20 @@ either return a usable `requests.Response` or raise
 **Source families** (orthogonal to the sport prefix above): `espn_<sport>_*` is
 the default; `fox_<sport>_*` wraps Fox Sports Bifrost (cfb/nba/mbb/nhl/mlb),
 `yahoo_cfb_*` wraps Yahoo Sports, and native-site APIs use their own prefixes
-(`nfl_*` → `api.nfl.com`, `nhl_*` / `mlb_api_*` → the league sites). Native API
-families are **codegen-generated** from `tools/codegen/endpoints/<stem>.yaml`
-(authenticated ones like NFL.com set `auth: true` + `getter_module:`); see
-`CLAUDE.md` → "Reference-docs build toolchain (codegen)".
+(`nfl_*` → `api.nfl.com`, `nhl_*` / `mlb_api_*` → the league sites,
+`mlb_statcast_*` → Baseball Savant). Native API families are
+**codegen-generated** from `tools/codegen/endpoints/<stem>.yaml` (authenticated
+ones like NFL.com set `auth: true` + `getter_module:`); see `CLAUDE.md` →
+"Reference-docs build toolchain (codegen)".
+
+**MLB Statcast (`mlb_statcast_*`, 0.0.64+):** the full ~43-endpoint Baseball
+Savant surface, named `mlb_statcast_<family>_<name>` (search / leaderboard /
+gamefeed / player), all parsed to a tidy frame by default. Savant mixes CSV /
+JSON / HTML, so the family's codegen YAML overrides `getter_module:` to a smart
+`_get` (dict for JSON, str for CSV/HTML). The pre-0.0.64 `statcast_*` names were
+renamed with no aliases — don't reintroduce them. Validate Savant parsers
+against real captured payloads (the JSON/CSV/HTML shapes are easy to guess
+wrong); see `CLAUDE.md` → "MLB — Statcast".
 
 ## NFL — nflreadpy Parity
 

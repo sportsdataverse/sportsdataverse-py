@@ -20,6 +20,7 @@
     - [NFL — nflreadpy parity](#nfl--nflreadpy-parity)
     - [CFB — `cfb_play_participants` and the 0.36-live reconciliation](#cfb--cfb_play_participants-and-the-036-live-reconciliation)
     - [CFB — offline reprocess (`odds_override`, raw allowlist, `odds_source`) (0.0.52+)](#cfb--offline-reprocess-odds_override-raw-allowlist-odds_source-0052)
+    - [MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)](#mlb--statcast-baseball-savant-comprehensive-surface-0064)
     - [HTTP / retry layer](#http--retry-layer)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
@@ -515,6 +516,37 @@ pipeline relies on. Three additive pieces:
 
 Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, odds_override=<persisted>).cfb_pbp_disk()` then `.run_processing_pipeline()`.
 
+### MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)
+
+`sportsdataverse/mlb/mlb_statcast*.py` wraps the **full ~43-endpoint Baseball
+Savant surface** (`baseballsavant.mlb.com`) under the canonical naming
+**`mlb_statcast_<family>_<name>`** (families = `search` / `leaderboard` /
+`gamefeed` / `player`). Every endpoint returns a **tidy frame by default**
+(`return_parsed=False` / `raw=True` for the raw payload). The old released
+`statcast_*` names were **renamed (no aliases)** — don't reintroduce them.
+
+- **Codegen owns the leaderboards + gamefeed + schedule** (`mlb_statcast.py`,
+  generated from `tools/codegen/endpoints/mlb_statcast.yaml`). Savant is
+  heterogeneous (CSV / JSON / HTML), so the YAML sets
+  `getter_module: sportsdataverse.mlb.mlb_statcast_runtime` — a **smart `_get`
+  that returns `dict` for JSON bodies and `str` for CSV/HTML**. The shared
+  `_codegen_runtime._get` is JSON-only and would silently return `{}` for every
+  CSV leaderboard; use the statcast runtime for any new Savant flat endpoint.
+- **Two leaderboards (`fielding-run-value`, `statcast-park-factors`) return
+  HTML even with `csv=true`** — their rows live in an embedded `const data=[...]`
+  script blob, parsed by `parse_mlb_statcast_html_leaderboard`. All other
+  leaderboards are CSV (`parse_mlb_statcast_leaderboard`).
+- **Hand-written** (`mlb_statcast_extra.py`): the 25,000-row date-chunked search
+  (`mlb_statcast_search` + `_minors` + `_wbc`, distinct `/csv` routes) with a
+  **friendly→Savant filter translation** (`_translate_filters`: `season`,
+  `pitch_type`, `at_bat_result`, `batters_lookup`, … → `hfSea`, `hfPT`, `hfAB`,
+  `batters_lookup[]`; unknown keys pass through). `mlb_statcast_player` parses
+  the page's `serverVals[section]` (default `"statcast"`) to a frame.
+- **Returns-schemas** for every frame function live in
+  `tools/codegen/schemas/native/mlb_statcast/*.yaml` (generated) +
+  `schemas/autodoc/mlb/mlb_statcast_*.yaml` (hand-written); column names match
+  the parser's snake-cased output exactly.
+
 ### HTTP / retry layer
 
 All HTTP goes through `sportsdataverse.dl_utils.download()`. As of May 2026
@@ -581,6 +613,15 @@ when `SDV_PY_LIVE_TESTS=1` is set. CI does NOT set the var; live runs are
 opt-in by contributor.
 
 ## Common Pitfalls
+
+- **Statcast parsers must be validated against REAL captures, not synthetic
+  fixtures.** Three Savant parsers shipped wrong because their hand-written
+  fixtures didn't match live payloads: the gamefeed `/gf` has no top-level
+  `events` key (pitches live under `team_home`/`team_away`); the player page's
+  `serverVals` has no `rows` key (it's a multi-table object — use a named
+  `section`); and CSV leaderboards need the content-type-aware
+  `mlb_statcast_runtime._get` (the JSON-only getter returns `{}`). When adding a
+  Savant endpoint, capture a real response and assert against it.
 
 - **`cfb_play_participants` sidecar gaps are now (mostly) backfilled.**
   ESPN's `cdn.espn.com/.../playbyplay` sidecar omits ~6 athletes per game

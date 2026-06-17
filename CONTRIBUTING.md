@@ -144,6 +144,16 @@ are intentionally migrating).
   `sportsdataverse-data` GitHub release. Match the column shape of the
   R-side loader the dataset is mirroring so downstream users can swap
   engines without changing call sites.
+- **New codegen native-API families** (a `tools/codegen/endpoints/<stem>.yaml`)
+  default to the shared JSON `_get`. If the host returns CSV / HTML (not JSON),
+  point `getter_module:` at a small module exposing a content-type-aware `_get`
+  (see `sportsdataverse/mlb/mlb_statcast_runtime.py` for the Baseball Savant
+  one) and give each endpoint a `parser:` that consumes that shape — otherwise
+  the JSON-only getter silently returns `{}`. Add a `returns_schema:` per
+  endpoint (`tools/codegen/schemas/native/<stem>/*.yaml`) so the docs render a
+  `col_name | type | description` table; column names must match the parser's
+  snake-cased output. Validate the parser against a **real captured payload**,
+  not a hand-written fixture.
 
 ## Deprecating a public API
 
