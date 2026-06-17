@@ -547,6 +547,39 @@ class CFBPlayProcess(object):
         ):
             logging.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
+        # Sparse old games can omit nested per-play objects entirely: pd.json_normalize
+        # only emits a `start.*`/`end.*`/`period.*`/`clock.*`/`type.*` column when at least
+        # one play carries that object, so a column the chain below dereferences via
+        # pl.col(...) unconditionally may not exist and would raise ColumnNotFoundError at
+        # plan time (before any fill_null / when-otherwise could substitute). Materialize any
+        # missing column as a Null literal so the existing casts/fills downstream handle it
+        # exactly as a present-but-null value. String-typed source columns are created as a
+        # String-null because the chain runs `.str.*` ops on them (split/contains/to_lowercase),
+        # which raise on an untyped Null column; the numeric/bool columns stay untyped Null so
+        # their explicit downstream `.cast(...)` owns the final dtype.
+        _required_play_cols = [
+            "period.number",
+            "clock.displayValue",
+            "type.text",
+            "id",
+            "sequenceNumber",
+            "text",
+            "scoringPlay",
+            "start.team.id",
+            "start.down",
+            "start.distance",
+            "start.yardsToEndzone",
+            "start.yardLine",
+            "start.downDistanceText",
+            "end.team.id",
+            "end.yardLine",
+        ]
+        _string_play_cols = {"clock.displayValue", "type.text", "text", "start.downDistanceText"}
+        _missing = [c for c in _required_play_cols if c not in pbp_txt["plays"].columns]
+        if _missing:
+            pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+                [(pl.lit(None, dtype=pl.String) if c in _string_play_cols else pl.lit(None)).alias(c) for c in _missing]
+            )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(

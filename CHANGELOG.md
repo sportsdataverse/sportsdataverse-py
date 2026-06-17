@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
+  - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
   - [Namespace — minor/alias leagues nested under sport-group packages](#namespace--minoralias-leagues-nested-under-sport-group-packages)
   - [All sports — `espn_*_game_rosters` vectorized logo extraction](#all-sports--espn__game_rosters-vectorized-logo-extraction)
@@ -121,6 +123,18 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.66 Release: June 17, 2026
+
+### CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)
+
+Sparse pre-2010 games (e.g. 2005 game `252440154`) crashed `CFBPlayProcess.run_processing_pipeline()` with `polars.exceptions.ColumnNotFoundError: unable to find column "end.team.id"`. The per-play `start.*`/`end.*`/`period.*`/`clock.*`/`type.*` columns are produced only by `pd.json_normalize` flattening the plays array, so when *no* play in a game carries a given nested object the column is never created — and the downstream `with_columns` chain dereferences it via `pl.col(...)` unconditionally, which raises at plan time before the existing `fill_null` / `when-otherwise` logic can substitute a value.
+
+Added a column-materialization guard in `__helper_cfb_pbp_features` (after the early-return length checks, before the main play chain) that diffs the 15 unconditionally-referenced json_normalize-origin columns against the live frame and creates any missing one as a Null literal:
+
+- String-typed source columns (`clock.displayValue`, `type.text`, `text`, `start.downDistanceText`) are created as `pl.lit(None, dtype=pl.String)` because the chain runs `.str.*` ops on them (an untyped Null column raises `SchemaError`).
+- Numeric/bool columns stay untyped `pl.lit(None)` so their explicit downstream `.cast(...)` owns the final dtype.
+- The guard is a **no-op for healthy games** — `with_columns` is skipped when nothing is missing, so output is byte-identical (verified: 5 control games reprocessed to identical 406-column frames and exact play counts). Resolves all 7 known-failing 2005 games.
 
 ## 0.0.65 Release: June 17, 2026
 
